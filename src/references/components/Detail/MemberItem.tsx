@@ -1,8 +1,8 @@
+import BoxGroupSection from "@base/BoxGroupSection";
+import Button from "@base/Button";
+import InitialIcon from "@base/InitialIcon";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import BoxGroupSection from "../../../base/BoxGroupSection";
-import Button from "../../../base/Button";
-import InitialIcon from "../../../base/InitialIcon";
 
 const StyledMemberItemIcon = styled.div`
     align-items: center;
@@ -33,16 +33,18 @@ const StyledMemberItem = styled(BoxGroupSection)`
 type MemberItemProps = {
     /** Whether the current user can modify members in the list */
     canModify: boolean;
+
     /** The unique identifier for the member */
-    id: number;
-    /** The name of the member */
-    name?: string;
-    /** The handle of the member */
-    handle?: string;
+    id: number | string;
+
+    /** The handle (user) or name of the member user or group */
+    handleOrName: string;
+
     /** Callback to initiate editing the member */
-    onEdit: (id: number) => void;
+    onEdit: (id: number | string) => void;
+
     /** Callback to initiate removing the member */
-    onRemove: (id: number) => void;
+    onRemove: (id: number | string) => void;
 };
 
 /**
@@ -50,20 +52,18 @@ type MemberItemProps = {
  */
 export default function MemberItem({
     canModify,
+    handleOrName,
     id,
-    name,
-    handle,
     onEdit,
     onRemove,
 }: MemberItemProps) {
-    const displayName = handle || name || "";
-    const handleEdit = useCallback(() => onEdit(id), [id]);
-    const handleRemove = useCallback(() => onRemove(id), [id]);
+    const handleEdit = useCallback(() => onEdit(id), [id, onEdit]);
+    const handleRemove = useCallback(() => onRemove(id), [id, onRemove]);
 
     return (
         <StyledMemberItem>
-            <MemberItemIcon handle={displayName} />
-            {displayName}
+            <MemberItemIcon handle={handleOrName} />
+            {handleOrName}
             {canModify && (
                 <MemberItemButtons>
                     <Button onClick={handleEdit} size="small">

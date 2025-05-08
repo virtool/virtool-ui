@@ -1,9 +1,9 @@
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupSection from "@base/BoxGroupSection";
+import InitialIcon from "@base/InitialIcon";
 import { map } from "lodash-es";
 import React from "react";
-import BoxGroup from "../../base/BoxGroup";
-import BoxGroupHeader from "../../base/BoxGroupHeader";
-import BoxGroupSection from "../../base/BoxGroupSection";
-import InitialIcon from "../../base/InitialIcon";
 import { UserNested } from "../../users/types";
 
 type MemberProps = {

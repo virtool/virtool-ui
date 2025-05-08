@@ -1,7 +1,7 @@
+import { useUrlSearchParam } from "@app/hooks";
+import { cn, toScientificNotation } from "@app/utils";
 import React from "react";
 import styled from "styled-components";
-import { useUrlSearchParam } from "../../../app/hooks";
-import { cn, toScientificNotation } from "../../../app/utils";
 import AccordionContent from "../../../base/AccordionContent";
 import AccordionScrollingItem from "../../../base/AccordionScrollingItem";
 import AccordionTrigger from "../../../base/AccordionTrigger";

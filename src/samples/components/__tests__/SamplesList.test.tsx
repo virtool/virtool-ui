@@ -19,7 +19,7 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../../administration/types";
+import { AdministratorRoleName } from "../../../administration/types";
 import SamplesList from "../SamplesList";
 
 describe("<SamplesList />", () => {
@@ -60,7 +60,9 @@ describe("<SamplesList />", () => {
 
     it("should render create button when [canModify=true]", async () => {
         mockApiGetAccount(
-            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+            createFakeAccount({
+                administrator_role: AdministratorRoleName.FULL,
+            }),
         );
         renderWithRouter(<SamplesList />, path);
 

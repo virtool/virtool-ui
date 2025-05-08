@@ -1,6 +1,6 @@
 import { map } from "lodash";
 import { indexOf, sortBy } from "lodash-es";
-import { OTUSegment, OTUSequence } from "./types";
+import { OtuSegment, OtuSequence } from "./types";
 
 /**
  * A hook for sorting the sequences for the active isolate
@@ -9,9 +9,9 @@ import { OTUSegment, OTUSequence } from "./types";
  * @param segments - The segments associated with the OTU
  */
 export default function sortSequencesBySegment(
-    sequences: OTUSequence[],
-    segments: OTUSegment,
-): OTUSequence[] {
+    sequences: OtuSequence[],
+    segments: OtuSegment,
+): OtuSequence[] {
     if (sequences) {
         const segmentNames = map(segments, "name");
         return sortBy(sequences, [

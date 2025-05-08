@@ -1,7 +1,7 @@
+import PseudoLabel from "@base/PseudoLabel";
+import SelectBox from "@base/SelectBox";
 import React from "react";
 import styled from "styled-components";
-import PseudoLabel from "../../../base/PseudoLabel";
-import SelectBox from "../../../base/SelectBox";
 
 const LibraryTypeSelectBoxContainer = styled.div`
     display: grid;

@@ -1,9 +1,9 @@
+import Alert from "@base/Alert";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { formatIsolateName } from "../../../app/utils";
-import Alert from "../../../base/Alert";
-import { OTUIsolate } from "../../types";
+import { OtuIsolate } from "../../types";
 
 const StyledOTUIssues = styled(Alert)`
     h5 {
@@ -18,7 +18,7 @@ const StyledOTUIssues = styled(Alert)`
 
 type OtuIssuesProps = {
     /** The isolates associated with the OTU */
-    isolates: OTUIsolate[];
+    isolates: OtuIsolate[];
     /** The issues that occurred */
     issues: { [key: string]: any } | boolean;
 };

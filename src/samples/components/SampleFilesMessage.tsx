@@ -2,12 +2,12 @@ import React from "react";
 import Alert from "../../base/Alert";
 
 type SampleFilesMessageProps = {
-    /** Indicates whether to show the alert for legacy sample files */
+    /** Indicates whether to show the alert for legacy sample uploads */
     showLegacy: boolean;
 };
 
 /**
- * Displays an alert message regarding legacy sample files
+ * Displays an alert message regarding legacy sample uploads
  */
 export default function SampleFilesMessage({
     showLegacy,

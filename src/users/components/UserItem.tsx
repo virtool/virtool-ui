@@ -1,14 +1,14 @@
+import { useCheckAdminRole } from "@administration/hooks";
+import { AdministratorRoleName } from "@administration/types";
+import { getFontSize, getFontWeight } from "@app/theme";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Icon from "@base/Icon";
+import InitialIcon from "@base/InitialIcon";
+import Label from "@base/Label";
+import Link from "@base/Link";
+import { GroupMinimal } from "@groups/types";
 import React from "react";
 import styled from "styled-components";
-import { useCheckAdminRole } from "../../administration/hooks";
-import { AdministratorRoles } from "../../administration/types";
-import { getFontSize, getFontWeight } from "../../app/theme";
-import BoxGroupSection from "../../base/BoxGroupSection";
-import Icon from "../../base/Icon";
-import InitialIcon from "../../base/InitialIcon";
-import Label from "../../base/Label";
-import Link from "../../base/Link";
-import { GroupMinimal } from "../../groups/types";
 
 const StyledUserItem = styled(BoxGroupSection)`
     display: grid;
@@ -45,7 +45,7 @@ const TagContainer = styled(UserContainer)`
 type UserItemProps = {
     /** Whether the user is active */
     active: boolean;
-    administrator_role: AdministratorRoles;
+    administrator_role: AdministratorRoleName;
     handle: string;
     id: string;
     /** The primary group assigned to the user */
@@ -64,8 +64,8 @@ export function UserItem({
 }: UserItemProps): JSX.Element {
     const { hasPermission: canEdit } = useCheckAdminRole(
         administrator_role === null
-            ? AdministratorRoles.USERS
-            : AdministratorRoles.FULL,
+            ? AdministratorRoleName.USERS
+            : AdministratorRoleName.FULL,
     );
 
     return (

@@ -3,12 +3,12 @@ import React from "react";
 import Badge from "../../../../base/Badge";
 import BoxGroup from "../../../../base/BoxGroup";
 import BoxGroupHeader from "../../../../base/BoxGroupHeader";
-import { OTUHistory } from "../../../types";
+import { OtuHistory } from "../../../types";
 import Change from "./Change";
 
 type HistoryListProps = {
     /** The history of built or unbuilt changes */
-    history: OTUHistory[];
+    history: OtuHistory[];
     /** Whether the changes are unbuilt */
     unbuilt?: boolean;
 };

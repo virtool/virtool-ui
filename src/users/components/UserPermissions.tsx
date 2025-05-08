@@ -1,7 +1,7 @@
+import BoxGroup from "@base/BoxGroup";
+import { Permissions } from "@groups/types";
 import { transform } from "lodash-es";
 import React from "react";
-import BoxGroup from "../../base/BoxGroup";
-import { Permissions } from "../../groups/types";
 import { PermissionItem } from "./Permission";
 
 type UserPermissionsProps = {

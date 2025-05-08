@@ -1,10 +1,10 @@
+import Attribution from "@base/Attribution";
 import React from "react";
 import styled from "styled-components";
 import { useCheckAdminRole } from "../../administration/hooks";
-import { AdministratorRoles } from "../../administration/types";
+import { AdministratorRoleName } from "../../administration/types";
 import { getColor, getFontSize, getFontWeight, sizes } from "../../app/theme";
 import { getWorkflowDisplayName } from "../../app/utils";
-import Attribution from "../../base/Attribution";
 import Box from "../../base/Box";
 import Icon from "../../base/Icon";
 import Link from "../../base/Link";
@@ -97,7 +97,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
         created_at,
     } = analysis;
     const { hasPermission: canModify } = useCheckAdminRole(
-        AdministratorRoles.USERS,
+        AdministratorRoleName.USERS,
     );
     const onRemove = useRemoveAnalysis(id);
 

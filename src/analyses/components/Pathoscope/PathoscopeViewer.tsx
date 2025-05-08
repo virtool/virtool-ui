@@ -1,5 +1,5 @@
+import { useUrlSearchParam } from "@app/hooks";
 import React from "react";
-import { useUrlSearchParam } from "../../../app/hooks";
 import Alert from "../../../base/Alert";
 import { Sample } from "../../../samples/types";
 import { FormattedPathoscopeAnalysis } from "../../types";

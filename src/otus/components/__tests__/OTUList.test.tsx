@@ -1,7 +1,10 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
+import {
+    createFakeSettings,
+    mockApiGetSettings,
+} from "@tests/fake/administrator";
 import { createFakeOTUMinimal, mockApiFindOtus } from "@tests/fake/otus";
 import {
     createFakeReference,
@@ -11,7 +14,7 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../../administration/types";
+import { AdministratorRoleName } from "../../../administration/types";
 import References from "../../../references/components/References";
 
 describe("<OTUsList />", () => {
@@ -73,7 +76,7 @@ describe("<OTUsList />", () => {
         it("should not render creation button when [canCreate=true]", async () => {
             const scope = mockApiFindOtus(OTUs, reference.id);
             const account = createFakeAccount({
-                administrator_role: AdministratorRoles.FULL,
+                administrator_role: AdministratorRoleName.FULL,
             });
             mockApiGetAccount(account);
             renderWithRouter(<References />, path);

@@ -1,7 +1,7 @@
+import { fileQueryKeys } from "@/uploads/queries";
 import { accountKeys } from "@account/queries";
 import { roleQueryKeys, userQueryKeys } from "@administration/queries";
 import { analysesQueryKeys } from "@analyses/queries";
-import { fileQueryKeys } from "@files/queries";
 import { groupQueryKeys } from "@groups/queries";
 import { indexQueryKeys } from "@indexes/queries";
 import { jobQueryKeys } from "@jobs/queries";

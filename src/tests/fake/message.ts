@@ -17,7 +17,7 @@ export function createFakeMessage(overrides?: CreateFakeMessage) {
         active: true,
         color: "red",
         created_at: faker.date.past(),
-        message: faker.random.word(),
+        message: faker.lorem.sentence(),
         updated_at: faker.date.past(),
         user: createFakeUserNested(),
     };

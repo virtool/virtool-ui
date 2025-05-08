@@ -1,6 +1,6 @@
+import RemoveDialog from "@base/RemoveDialog";
 import React from "react";
 import { useDialogParam, useNavigate } from "../../../app/hooks";
-import RemoveDialog from "../../../base/RemoveDialog";
 import { useRemoveOTU } from "../../queries";
 
 type RemoveOtuProps = {

@@ -1,6 +1,6 @@
 import { some } from "lodash-es";
 import { useFetchAccount } from "../account/queries";
-import { AdministratorRoles } from "../administration/types";
+import { AdministratorRoleName } from "../administration/types";
 import { hasSufficientAdminRole } from "../administration/utils";
 import { useFetchSample } from "./queries";
 
@@ -21,7 +21,7 @@ export function useCheckCanEditSample(sampleId: string) {
 
     const hasPermission =
         hasSufficientAdminRole(
-            AdministratorRoles.FULL,
+            AdministratorRoleName.FULL,
             account.administrator_role,
         ) ||
         sample.all_write ||

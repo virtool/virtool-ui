@@ -44,7 +44,7 @@ describe("<CreateSample>", () => {
         filesScope.done();
     });
 
-    it("should show loader when there are no sample files to read", async () => {
+    it("should show loader when there are no sample uploads to read", async () => {
         renderWithRouter(<CreateSample />);
         expect(await screen.findByLabelText("loading")).toBeInTheDocument();
     });

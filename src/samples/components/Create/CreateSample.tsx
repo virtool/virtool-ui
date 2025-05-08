@@ -1,26 +1,26 @@
+import { useInfiniteFindFiles } from "@/uploads/queries";
+import { Upload, UploadType } from "@/uploads/types";
+import { useFetchAccount } from "@account/queries";
+import { useNavigate } from "@app/hooks";
+import Box from "@base/Box";
+import Icon from "@base/Icon";
+import InputContainer from "@base/InputContainer";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputIconButton from "@base/InputIconButton";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import SaveButton from "@base/SaveButton";
+import ViewHeader from "@base/ViewHeader";
+import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import { RestoredAlert } from "@forms/components/RestoredAlert";
+import { usePersistentForm } from "@forms/hooks";
+import { useListGroups } from "@groups/queries";
 import { find, flatMap, toString } from "lodash-es";
 import React, { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import styled from "styled-components";
-import { useFetchAccount } from "../../../account/queries";
-import { useNavigate } from "../../../app/hooks";
-import Box from "../../../base/Box";
-import Icon from "../../../base/Icon";
-import InputContainer from "../../../base/InputContainer";
-import InputError from "../../../base/InputError";
-import InputGroup from "../../../base/InputGroup";
-import InputIconButton from "../../../base/InputIconButton";
-import InputLabel from "../../../base/InputLabel";
-import InputSimple from "../../../base/InputSimple";
-import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
-import SaveButton from "../../../base/SaveButton";
-import ViewHeader from "../../../base/ViewHeader";
-import ViewHeaderTitle from "../../../base/ViewHeaderTitle";
-import { useInfiniteFindFiles } from "../../../files/queries";
-import { FileType } from "../../../files/types";
-import { RestoredAlert } from "../../../forms/components/RestoredAlert";
-import { usePersistentForm } from "../../../forms/hooks";
-import { useListGroups } from "../../../groups/queries";
 import { useCreateSample } from "../../queries";
 import LibraryTypeSelector from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
@@ -30,15 +30,15 @@ import Sidebar from "./Sidebar";
 const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
 
 /**
- * Gets a filename without extension, given the file ID and an array of all available read files.
+ * Gets a filename without extension, given the file ID and an array of all available read uploads.
  * Used to autofill the name for a new sample based on the selected read file(s).
  *
  * @param id - the file ID
- * @param files - all available read files
+ * @param uploads - all available read uploads
  * @returns The filename without its extension
  */
-function getFileNameFromId(id: string, files: string[]): string {
-    const file = find(files, (file) => file.id === id);
+function getFileNameFromId(id: string, uploads: Upload[]): string {
+    const file = find(uploads, (file) => file.id === id);
     return file ? file.name_on_disk.match(extensionRegex)[1] : "";
 }
 
@@ -115,7 +115,7 @@ export default function CreateSample() {
         isPending: isPendingReads,
         isFetchingNextPage,
         fetchNextPage,
-    } = useInfiniteFindFiles(FileType.reads, 25);
+    } = useInfiniteFindFiles(UploadType.reads, 25);
     const {
         control,
         formState: { errors },

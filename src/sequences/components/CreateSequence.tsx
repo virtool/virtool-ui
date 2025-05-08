@@ -7,15 +7,15 @@ import DialogContent from "../../base/DialogContent";
 import DialogOverlay from "../../base/DialogOverlay";
 import DialogTitle from "../../base/DialogTitle";
 import { useCreateSequence } from "../../otus/queries";
-import { OTUSegment, OTUSequence } from "../../otus/types";
+import { OtuSegment, OtuSequence } from "../../otus/types";
 import SequenceForm from "./SequenceForm";
 
 type CreateSequenceProps = {
     isolateId: string;
     otuId: string;
     refId: string;
-    schema: OTUSegment[];
-    sequences: OTUSequence[];
+    schema: OtuSegment[];
+    sequences: OtuSequence[];
 };
 
 /**

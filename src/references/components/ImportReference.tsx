@@ -1,3 +1,4 @@
+import { UploadBar } from "@/uploads/components/UploadBar";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -10,7 +11,6 @@ import InputLabel from "../../base/InputLabel";
 import InputSimple from "../../base/InputSimple";
 import ProgressBarAffixed from "../../base/ProgressBarAffixed";
 import SaveButton from "../../base/SaveButton";
-import { UploadBar } from "../../files/components/UploadBar";
 import { useImportReference, useUploadReference } from "../queries";
 
 const ImportReferenceUpload = styled.div`

@@ -1,8 +1,7 @@
-import { JobMinimal } from "../jobs/types";
-import { SampleNested } from "../samples/types";
-import { UserNested } from "../users/types";
-
-import { SearchResult } from "../types/api";
+import { SearchResult } from "@/types/api";
+import { JobMinimal } from "@jobs/types";
+import { SampleNested } from "@samples/types";
+import { UserNested } from "@users/types";
 
 /** The measurements of individual nucleotides (percentage) */
 export type NucleotideComposition = {
@@ -75,7 +74,7 @@ export type SubtractionMinimal = SubtractionNested & {
 
 /** A complete Subtraction */
 export type Subtraction = SubtractionMinimal & {
-    /** Data files available to for download */
+    /** Data uploads available to for download */
     files: Array<SubtractionFile>;
 
     /** The ATGC ratios in the subtraction genome */
@@ -88,14 +87,7 @@ export type Subtraction = SubtractionMinimal & {
 /** A subtraction as an option for analysis */
 export type SubtractionOption = SubtractionNested & {
     isDefault?: boolean;
-
     ready: boolean;
-};
-
-/** A subtraction as an option for an analysis. */
-export type SubtractionOption = SubtractionNested & {
-    ready: boolean;
-    isDefault?: boolean;
 };
 
 /** Subtraction search results from the API */

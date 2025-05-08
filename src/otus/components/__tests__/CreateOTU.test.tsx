@@ -1,6 +1,9 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
+import {
+    createFakeSettings,
+    mockApiGetSettings,
+} from "@tests/fake/administrator";
 import {
     createFakeOTUMinimal,
     mockApiCreateOTU,

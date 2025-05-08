@@ -1,6 +1,6 @@
+import ProgressCircle from "@base/ProgressCircle";
 import React from "react";
 import { sizes } from "../../../app/theme";
-import ProgressCircle from "../../../base/ProgressCircle";
 import { JobState } from "../../types";
 import { getStateTitle } from "../../utils";
 import { JobStateIcon } from "../JobStateIcon";

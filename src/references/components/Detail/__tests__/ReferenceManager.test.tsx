@@ -1,5 +1,8 @@
 import { screen } from "@testing-library/react";
-import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
+import {
+    createFakeSettings,
+    mockApiGetSettings,
+} from "@tests/fake/administrator";
 import {
     createFakeReference,
     mockApiGetReferenceDetail,

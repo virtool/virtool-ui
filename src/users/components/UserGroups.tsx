@@ -1,13 +1,13 @@
+import { useUpdateUser } from "@administration/queries";
+import BoxGroup from "@base/BoxGroup";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NoneFoundSection from "@base/NoneFoundSection";
+import PseudoLabel from "@base/PseudoLabel";
+import { useListGroups } from "@groups/queries";
+import { GroupMinimal } from "@groups/types";
 import { map, some, xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { useUpdateUser } from "../../administration/queries";
-import BoxGroup from "../../base/BoxGroup";
-import LoadingPlaceholder from "../../base/LoadingPlaceholder";
-import NoneFoundSection from "../../base/NoneFoundSection";
-import PseudoLabel from "../../base/PseudoLabel";
-import { useListGroups } from "../../groups/queries";
-import { GroupMinimal } from "../../groups/types";
 import { UserGroup } from "./UserGroup";
 
 const UserGroupsList = styled(BoxGroup)`

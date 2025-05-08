@@ -1,25 +1,25 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { find, includes, map } from "lodash-es";
-import React from "react";
-import { useFetchAccount } from "../../../account/queries";
-import { useCheckAdminRole } from "../../../administration/hooks";
-import { AdministratorRoles } from "../../../administration/types";
-import { usePathParams } from "../../../app/hooks";
-import Box from "../../../base/Box";
-import BoxGroup from "../../../base/BoxGroup";
-import BoxGroupHeader from "../../../base/BoxGroupHeader";
-import BoxGroupSection from "../../../base/BoxGroupSection";
-import ContainerNarrow from "../../../base/ContainerNarrow";
-import InputGroup from "../../../base/InputGroup";
-import InputLabel from "../../../base/InputLabel";
-import InputSelect from "../../../base/InputSelect";
-import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
-import { useListGroups } from "../../../groups/queries";
+import { useFetchAccount } from "@account/queries";
+import { useCheckAdminRole } from "@administration/hooks";
+import { AdministratorRoleName } from "@administration/types";
+import { usePathParams } from "@app/hooks";
+import Box from "@base/Box";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupSection from "@base/BoxGroupSection";
+import ContainerNarrow from "@base/ContainerNarrow";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSelect from "@base/InputSelect";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import { useListGroups } from "@groups/queries";
 import {
     samplesQueryKeys,
     useFetchSample,
     useUpdateSampleRights,
-} from "../../queries";
+} from "@samples/queries";
+import { useQueryClient } from "@tanstack/react-query";
+import { find, includes, map } from "lodash-es";
+import React from "react";
 
 /**
  * A component managing a samples rights
@@ -27,7 +27,7 @@ import {
 export default function SampleRights() {
     const { sampleId } = usePathParams<{ sampleId: string }>();
 
-    const { hasPermission } = useCheckAdminRole(AdministratorRoles.FULL);
+    const { hasPermission } = useCheckAdminRole(AdministratorRoleName.FULL);
     const { data: sample, isPending: isPendingSample } =
         useFetchSample(sampleId);
     const { data: account, isPending: isPendingAccount } = useFetchAccount();
@@ -89,13 +89,14 @@ export default function SampleRights() {
         </option>
     ));
 
-    const selectedGroup =
-        typeof group === "number"
-            ? group
-            : find(
-                  groups,
-                  (item) => group === item.legacy_id || group === item.id,
-              )?.id;
+    let selectedGroup: number | null;
+
+    if (typeof group === "number") {
+        selectedGroup = group;
+    } else {
+        const foundGroup = find(groups, (item) => item.legacy_id === group);
+        selectedGroup = foundGroup ? foundGroup.id : null;
+    }
 
     return (
         <ContainerNarrow>

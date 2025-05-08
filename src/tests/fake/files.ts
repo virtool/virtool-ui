@@ -1,7 +1,7 @@
+import { Upload, UploadType } from "@/uploads/types";
 import { faker } from "@faker-js/faker";
 import { merge } from "lodash-es";
 import nock from "nock";
-import { File, FileType } from "../../files/types";
 import { UserNested } from "../../users/types";
 import { createFakeUserNested } from "./user";
 
@@ -15,7 +15,7 @@ type CreateFakeFileProps = {
     removed_at?: Date;
     reserved?: boolean;
     size?: number;
-    type?: FileType;
+    type?: UploadType;
     uploaded_at?: Date;
     user?: UserNested;
 };
@@ -23,7 +23,7 @@ type CreateFakeFileProps = {
 /**
  * Create a File object with fake data.
  */
-export function createFakeFile(props?: CreateFakeFileProps): File {
+export function createFakeFile(props?: CreateFakeFileProps): Upload {
     let { name, name_on_disk } = props || {};
 
     name = name === undefined ? `sample_${faker.number.int()}.fastq.gz` : name;
@@ -42,7 +42,7 @@ export function createFakeFile(props?: CreateFakeFileProps): File {
         removed_at: undefined,
         reserved: false,
         size: faker.number.int(),
-        type: FileType.reads,
+        type: UploadType.reads,
         uploaded_at: faker.date.past().toISOString(),
         user: createFakeUserNested(),
     };
@@ -53,11 +53,11 @@ export function createFakeFile(props?: CreateFakeFileProps): File {
 /**
  * Create a File object with fake data
  *
- * @param {File[]} files values to override the default automatically generated values
+ * @param {Upload[]} files values to override the default automatically generated values
  * @param {boolean} query whether to include query parameters in the request
- * @returns {File} a File object with fake data
+ * @returns {Upload} a File object with fake data
  */
-export function mockApiListFiles(files: File[], query?: boolean) {
+export function mockApiListFiles(files: Upload[], query?: boolean) {
     return nock("http://localhost")
         .get("/api/uploads")
         .query(query || true)
@@ -72,12 +72,12 @@ export function mockApiListFiles(files: File[], query?: boolean) {
 }
 
 /**
- * Creates a mocked API call for getting an unpaginated list of files.
+ * Creates a mocked API call for getting an unpaginated list of uploads.
  *
- * @param {File[]} files files to be returned from the mocked API call
+ * @param {Upload[]} files uploads to be returned from the mocked API call
  * @returns {nock.Scope} nock scope for the mocked API call
  */
-export function mockApiUnpaginatedListFiles(files: File[], query?: boolean) {
+export function mockApiUnpaginatedListFiles(files: Upload[], query?: boolean) {
     return nock("http://localhost")
         .get("/api/uploads")
         .query(query || true)

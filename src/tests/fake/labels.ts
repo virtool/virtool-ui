@@ -7,7 +7,7 @@ export function createFakeLabelNested(): LabelNested {
         color: faker.color.rgb({ casing: "upper" }),
         description: faker.lorem.lines(1),
         id: faker.number.int(),
-        name: faker.random.word(),
+        name: faker.word.noun(),
     };
 }
 

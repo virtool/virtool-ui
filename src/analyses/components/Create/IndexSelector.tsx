@@ -1,18 +1,19 @@
+import { cn } from "@app/utils";
+import Label from "@base/Label";
+import Select from "@base/Select";
+import SelectButton from "@base/SelectButton";
+import SelectContent from "@base/SelectContent";
+import { IndexMinimal } from "@indexes/types";
 import * as RadixSelect from "@radix-ui/react-select";
 import { map } from "lodash";
 import { sortBy } from "lodash-es";
 import React, { useMemo } from "react";
-import { cn } from "../../../app/utils";
-import Label from "../../../base/Label";
-import Select from "../../../base/Select";
-import SelectButton from "../../../base/SelectButton";
-import SelectContent from "../../../base/SelectContent";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
 type IndexSelectorItemProps = {
     id: string;
     name: string;
-    version: number;
+    version: number | string;
 };
 
 function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps) {
@@ -42,7 +43,7 @@ function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps) {
 }
 
 type IndexSelectorProps = {
-    indexes: object[];
+    indexes: IndexMinimal[];
     selected: string;
     onChange: (value: string) => void;
 };
@@ -55,7 +56,7 @@ export default function IndexSelector({
     selected,
     onChange,
 }: IndexSelectorProps) {
-    const sortedIndexes = useMemo(
+    const sortedIndexes = useMemo<IndexMinimal[]>(
         () => sortBy(indexes, "reference.name"),
         [indexes],
     );

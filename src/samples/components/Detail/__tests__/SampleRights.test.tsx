@@ -7,7 +7,7 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../../../administration/types";
+import { AdministratorRoleName } from "../../../../administration/types";
 import Samples from "../../Samples";
 
 describe("<SampleRights />", () => {
@@ -33,7 +33,9 @@ describe("<SampleRights />", () => {
 
     it("should render", async () => {
         mockApiGetAccount(
-            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+            createFakeAccount({
+                administrator_role: AdministratorRoleName.FULL,
+            }),
         );
         renderWithRouter(<Samples />, path);
 
@@ -51,7 +53,9 @@ describe("<SampleRights />", () => {
 
     it("should handle group change when input is changed", async () => {
         mockApiGetAccount(
-            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+            createFakeAccount({
+                administrator_role: AdministratorRoleName.FULL,
+            }),
         );
         renderWithRouter(<Samples />, path);
         expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
@@ -63,7 +67,9 @@ describe("<SampleRights />", () => {
 
     it("should handle group rights change when input is changed", async () => {
         mockApiGetAccount(
-            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+            createFakeAccount({
+                administrator_role: AdministratorRoleName.FULL,
+            }),
         );
         renderWithRouter(<Samples />, `/samples/${sample.id}/rights`);
         expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
@@ -75,7 +81,9 @@ describe("<SampleRights />", () => {
 
     it("should handle all users' rights change when input is changed", async () => {
         mockApiGetAccount(
-            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+            createFakeAccount({
+                administrator_role: AdministratorRoleName.FULL,
+            }),
         );
         renderWithRouter(<Samples />, path);
         expect(await screen.findByText("Sample Rights")).toBeInTheDocument();

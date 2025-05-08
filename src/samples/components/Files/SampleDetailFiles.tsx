@@ -1,14 +1,14 @@
+import ContainerNarrow from "@base/ContainerNarrow";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import React from "react";
 import { usePathParams } from "../../../app/hooks";
-import ContainerNarrow from "../../../base/ContainerNarrow";
-import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
 import { useFetchSample } from "../../queries";
 import SampleFileSizeWarning from "../Detail/SampleFileSizeWarning";
 import SampleFilesMessage from "../SampleFilesMessage";
 import SampleReads from "./SampleReads";
 
 /**
- * The files view in sample details
+ * The uploads view in sample details
  */
 export default function SampleDetailFiles() {
     const { sampleId } = usePathParams<{ sampleId: string }>();

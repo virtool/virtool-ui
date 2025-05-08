@@ -76,7 +76,7 @@ export type JobStatus = {
 /** A complete Job */
 export type Job = JobMinimal & {
     acquired: boolean;
-    /** Provides information on subtraction and the related files */
+    /** Provides information on subtraction and the related uploads */
     args: { [key: string]: any };
     /** Array containing status history of job */
     status: Array<JobStatus>;

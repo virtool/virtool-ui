@@ -1,10 +1,9 @@
 import { screen } from "@testing-library/react";
-import { createFakeHMM, mockApiGetHmmDetail } from "@tests/fake/hmm";
+import { createFakeHmm, mockApiGetHmmDetail } from "@tests/fake/hmm";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeHmm, mockApiGetHmmDetail } from "../../../../tests/fake/hmm";
 import HMM from "../HMM";
 
 describe("<HMMDetail />", () => {

@@ -1,6 +1,7 @@
 import { useUrlSearchParam } from "@app/hooks";
-import { useGetActiveIsolate } from "@otus/hooks";
+import { useActiveIsolate } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
+import { OtuSegment, OtuSequence } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
 import { compact, find, map, reject } from "lodash-es";
 import { useCallback, useState } from "react";
@@ -32,50 +33,33 @@ export function useExpanded(): UseExpandedResult {
 }
 
 /**
- * A hook to get the active sequence from the OTU
+ * A hook to get the active sequence.
  *
- * @returns The active sequence
+ * @returns The active sequence.
  */
-export function useGetActiveSequence() {
-    const { value: editSequenceId } = useUrlSearchParam("editSequenceId");
+export function useActiveSequence(): OtuSequence | undefined {
+    const { value: editSequenceId } =
+        useUrlSearchParam<string>("editSequenceId");
+
     const { otu } = useCurrentOtuContext();
 
-    const activeIsolate = useGetActiveIsolate(otu);
+    const activeIsolate = useActiveIsolate(otu);
     const sequences = sortSequencesBySegment(
         activeIsolate.sequences,
         otu.schema,
     );
 
     if (editSequenceId) {
-        const sequence = find(sequences, { id: editSequenceId });
-
-        if (sequence) {
-            return sequence;
-        }
+        return find(sequences, { id: editSequenceId });
     }
-
-    return {};
 }
 
 /**
  * A hook to get a list of inactive sequences
  *
- * @returns A list of inactive sequences
+ * @returns A list of inactive sequences.
  */
-export function useGetInactiveSequences() {
-    const { value: editSequenceId } = useUrlSearchParam("editSequenceId");
-
-    const { otu } = useCurrentOtuContext();
-
-    const activeIsolate = useGetActiveIsolate(otu);
-    const activeSequenceId = editSequenceId || undefined;
-    const sequences = sortSequencesBySegment(
-        activeIsolate.sequences,
-        otu.schema,
-    );
-
-    return reject(sequences, { id: activeSequenceId });
-}
+export function useGetInactiveSequences() {}
 
 /**
  * A hook to get unreferenced segments for a genome sequence
@@ -85,10 +69,21 @@ export function useGetInactiveSequences() {
 export function useGetUnreferencedSegments() {
     const { otu } = useCurrentOtuContext();
 
-    const inactiveSequences = useGetInactiveSequences();
-    const referencedSegmentNames = compact(map(inactiveSequences, "segment"));
+    const { value: editSequenceId } =
+        useUrlSearchParam<string>("editSequenceId");
+
+    const activeIsolate = useActiveIsolate(otu);
+    const activeSequenceId = editSequenceId || undefined;
+    const sequences = sortSequencesBySegment(
+        activeIsolate.sequences,
+        otu.schema,
+    );
+
+    const referencedSegmentNames = compact(
+        map(reject(sequences, { id: activeSequenceId }), "segment"),
+    );
 
     return otu.schema.filter(
-        (segment) => !referencedSegmentNames.includes(segment.name),
+        (segment: OtuSegment) => !referencedSegmentNames.includes(segment.name),
     );
 }

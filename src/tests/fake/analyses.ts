@@ -163,7 +163,7 @@ export function mockApiCreateAnalysis(
 }
 
 /**
- * Creates a mocked API call for initiating a blast for a NuVs sequence
+ * Creates a mocked API call for initiating a blast for a Nuvs sequence
  *
  * @param analysisId - The id of the analysis associated with the sequence
  * @param sequenceIndex - The index of the sequence the blast is initiating for

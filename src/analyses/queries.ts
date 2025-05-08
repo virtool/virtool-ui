@@ -1,3 +1,5 @@
+import { ErrorResponse } from "@/types/types";
+import { samplesQueryKeys } from "@samples/queries";
 import {
     keepPreviousData,
     useMutation,
@@ -5,8 +7,6 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { samplesQueryKeys } from "../samples/queries";
-import { ErrorResponse } from "../types/types";
 import {
     blastNuvs,
     createAnalysis,

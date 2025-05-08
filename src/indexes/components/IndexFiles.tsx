@@ -10,7 +10,7 @@ type IndexFilesProps = {
 };
 
 /**
- * A list of the files associated with the index
+ * A list of the uploads associated with the index
  */
 export default function IndexFiles({ files }: IndexFilesProps) {
     return (

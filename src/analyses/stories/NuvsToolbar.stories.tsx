@@ -1,5 +1,5 @@
+import NuvsToolbar from "@analyses/components/Nuvs/NuvsToolbar";
 import type { Meta, StoryObj } from "@storybook/react";
-import NuvsToolbar from "../components/NuVs/NuvsToolbar";
 import { FormattedNuvsResults } from "../types";
 
 const meta: Meta<typeof NuvsToolbar> = {
@@ -72,17 +72,24 @@ const fakeFormattedNuvsResults: FormattedNuvsResults = {
             orfs: [
                 {
                     frame: 1,
-                    hits: {
-                        pfam: {
-                            entries: [
-                                {
-                                    accession: "PF00123",
-                                    name: "Domain X",
-                                    score: 50.5,
-                                },
+                    hits: [
+                        {
+                            hit: "pzwgf4y2",
+                            best_e: 7.1e-186,
+                            full_e: 2.6e-188,
+                            best_bias: 618.0,
+                            full_bias: 37.7,
+                            best_score: 37.8,
+                            full_score: 626.1,
+                            families: { Bunyaviridae: 7 },
+                            cluster: 480,
+                            names: [
+                                "polymerase",
+                                "RNA polymerase",
+                                "RNA-dependent RNA polymerase",
                             ],
                         },
-                    },
+                    ],
                     index: 0,
                     pos: [1, 300],
                     pro: "MSKGEELFTGVVPILVELDGDVNGHKFSVSGEGEGDATYGKLTLKFICTTGKLPVPWPTLVTTFSYGVQCFSRYPDHMKQHDFFKSAMPEGYVQERTIFFKDDGNYKTRAEVKFEGDTLVNRIELKGIDFKEDGNILGHKLEYNYNSHNVYIMADKQKNGIKVNFKIRHNIEDGSVQLADHYQQNTPIGDGPVLLPDNHYLSTQSALSKDPNEKRDHMVLLEFVTAAGITHGMDELYK",
@@ -155,17 +162,24 @@ const fakeFormattedNuvsResults: FormattedNuvsResults = {
             orfs: [
                 {
                     frame: 2,
-                    hits: {
-                        pfam: {
-                            entries: [
-                                {
-                                    accession: "PF00456",
-                                    name: "Domain Y",
-                                    score: 40.2,
-                                },
+                    hits: [
+                        {
+                            hit: "pzwgf4y2",
+                            best_e: 7.1e-186,
+                            full_e: 2.6e-188,
+                            best_bias: 618.0,
+                            full_bias: 37.7,
+                            best_score: 37.8,
+                            full_score: 626.1,
+                            families: { Bunyaviridae: 7 },
+                            cluster: 480,
+                            names: [
+                                "polymerase",
+                                "RNA polymerase",
+                                "RNA-dependent RNA polymerase",
                             ],
                         },
-                    },
+                    ],
                     index: 0,
                     pos: [1, 200],
                     pro: "MPAQLISGLKLSCKALKLICDTEELLEILAQGLIYDSNHNGIKKYITKVYEVQPLNLLDKLRLTHAIQLQRFDTEVAELVQKLEQKAAIVNPIDLPELPQKDLQSRLKQLESQLS",

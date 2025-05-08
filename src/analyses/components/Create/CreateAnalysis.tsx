@@ -1,8 +1,8 @@
+import { useDialogParam } from "@app/hooks";
+import { cn } from "@app/utils";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { Tabs } from "radix-ui";
 import React from "react";
-import { useDialogParam } from "../../../app/hooks";
-import { cn } from "../../../app/utils";
 import Dialog from "../../../base/Dialog";
 import DialogOverlay from "../../../base/DialogOverlay";
 import DialogTitle from "../../../base/DialogTitle";

@@ -5,7 +5,7 @@
  */
 import { apiClient } from "../app/api";
 import { User, UserResponse } from "../users/types";
-import { AdministratorRoles, Settings } from "./types";
+import { AdministratorRoleName, Settings } from "./types";
 
 /**
  * Fetch the current settings from the server.
@@ -49,7 +49,7 @@ export function updateSettings(update: SettingsUpdate): Promise<Settings> {
  *
  * @returns - A promise resolving to the list of known administrator roles
  */
-export function fetchAdministratorRoles(): Promise<AdministratorRoles[]> {
+export function fetchAdministratorRoles(): Promise<AdministratorRoleName[]> {
     return apiClient.get("/admin/roles").then((response) => response.body);
 }
 
@@ -112,7 +112,7 @@ export type UserUpdate = {
     force_reset?: boolean;
     password?: string;
     primary_group?: string;
-    groups?: string[];
+    groups?: Array<string | number>;
 };
 
 /**

@@ -8,7 +8,7 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../../administration/types";
+import { AdministratorRoleName } from "../../../administration/types";
 import SubtractionList from "../SubtractionList";
 
 describe("<SubtractionList />", () => {
@@ -53,7 +53,7 @@ describe("<SubtractionList />", () => {
     it("should render create button when [canModify=true]", async () => {
         const scope = mockApiGetSubtractions([subtractions]);
         const account = createFakeAccount({
-            administrator_role: AdministratorRoles.FULL,
+            administrator_role: AdministratorRoleName.FULL,
         });
         mockApiGetAccount(account);
         renderWithRouter(<SubtractionList />);

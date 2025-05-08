@@ -1,8 +1,8 @@
+import BoxGroup from "@base/BoxGroup";
+import IconButton from "@base/IconButton";
 import { map } from "lodash-es";
 import React from "react";
 import { cn } from "../../../app/utils";
-import BoxGroup from "../../../base/BoxGroup";
-import IconButton from "../../../base/IconButton";
 import { StateButton } from "./StateButton";
 
 type StateCategoryProps = {

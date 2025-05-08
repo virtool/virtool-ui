@@ -1,7 +1,10 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
+import {
+    createFakeSettings,
+    mockApiGetSettings,
+} from "@tests/fake/administrator";
 import {
     createFakeOtu,
     mockApiGetOtu,
@@ -14,7 +17,7 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../../administration/types";
+import { AdministratorRoleName } from "../../../administration/types";
 import { formatPath } from "../../../app/hooks";
 import References from "../../../references/components/References";
 
@@ -33,7 +36,9 @@ describe("<RemoveSequence />", () => {
         otuScope = mockApiGetOtu(otu);
         mockApiGetSettings(createFakeSettings());
         mockApiGetAccount(
-            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+            createFakeAccount({
+                administrator_role: AdministratorRoleName.FULL,
+            }),
         );
 
         path = `/refs/${reference.id}/otus/${otu.id}/otu`;

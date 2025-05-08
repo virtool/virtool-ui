@@ -16,7 +16,7 @@ describe("<Pagination />", () => {
             storedPage: 1,
             onLoadNextPage: vi.fn(),
         };
-        path = formatPath("/samples/files", { page: 1 });
+        path = formatPath("/samples/uploads", { page: 1 });
     });
 
     it("Should render correctly when pageCount=6 and currentPage=1", () => {

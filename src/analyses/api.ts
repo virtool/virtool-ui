@@ -75,7 +75,7 @@ export function removeAnalysis(analysisId: string): Promise<null> {
  * Installs the blast information for the sequence
  *
  * @param analysisId - The id of the analysis the sequence belongs to
- * @param sequenceIndex - The index of the sequence to blast NuVs for
+ * @param sequenceIndex - The index of the sequence to blast Nuvs for
  * @returns A promise resolving to an installation of blast information
  */
 export function blastNuvs(analysisId: string, sequenceIndex: number) {

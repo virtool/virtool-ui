@@ -25,12 +25,12 @@ import {
     setIsolateAsDefault,
 } from "./api";
 import {
-    OTU,
-    OTUHistory,
-    OTUIsolate,
-    OTUSearchResult,
-    OTUSegment,
-    OTUSequence,
+    Otu,
+    OtuHistory,
+    OtuIsolate,
+    OtuSearchResult,
+    OtuSegment,
+    OtuSequence,
 } from "./types";
 
 /**
@@ -67,7 +67,7 @@ export function useListOTUs(
     term: string,
     verified?: boolean,
 ) {
-    return useQuery<OTUSearchResult>({
+    return useQuery<OtuSearchResult>({
         queryKey: OTUQueryKeys.list([page, per_page, term]),
         queryFn: () => listOTUs(refId, page, per_page, term, verified),
         placeholderData: keepPreviousData,
@@ -81,7 +81,7 @@ export function useListOTUs(
  * @returns A single OTU
  */
 export function useFetchOTU(otuId: string) {
-    return useQuery<OTU, ErrorResponse>({
+    return useQuery<Otu, ErrorResponse>({
         queryKey: OTUQueryKeys.detail(otuId),
         queryFn: () => getOTU(otuId),
         retry: (failureCount, error) => {
@@ -99,8 +99,8 @@ export function useFetchOTU(otuId: string) {
  * @param otuId - The id of the OTU to fetch
  * @returns A history list of changes for a single OTU
  */
-export function useFetchOTUHistory(otuId: string) {
-    return useQuery<OTUHistory[], ErrorResponse>({
+export function useFetchOtuHistory(otuId: string) {
+    return useQuery<OtuHistory[], ErrorResponse>({
         queryKey: OTUQueryKeys.history(otuId),
         queryFn: () => getOTUHistory(otuId),
     });
@@ -115,7 +115,7 @@ export function useCreateOTU(refId: string) {
     const queryClient = useQueryClient();
 
     return useMutation<
-        OTU,
+        Otu,
         ErrorResponse,
         { name: string; abbreviation: string }
     >({
@@ -131,7 +131,7 @@ export type UpdateOTUProps = {
     otuId: string;
     name?: string;
     abbreviation?: string;
-    schema?: OTUSegment[];
+    schema?: OtuSegment[];
 };
 
 /**
@@ -142,7 +142,7 @@ export type UpdateOTUProps = {
 export function useUpdateOTU(otuId: string) {
     const queryClient = useQueryClient();
 
-    return useMutation<OTU, ErrorResponse, UpdateOTUProps>({
+    return useMutation<Otu, ErrorResponse, UpdateOTUProps>({
         mutationFn: ({ otuId, name, abbreviation, schema }) =>
             editOTU(otuId, name, abbreviation, schema),
         onSuccess: () => {
@@ -191,7 +191,7 @@ export function useCreateIsolate(otuId: string) {
     const queryClient = useQueryClient();
 
     return useMutation<
-        OTUIsolate,
+        OtuIsolate,
         unknown,
         { otuId: string; sourceType: string; sourceName: string }
     >({
@@ -212,7 +212,7 @@ export function useCreateIsolate(otuId: string) {
  */
 export function useSetIsolateAsDefault() {
     return useMutation<
-        OTUIsolate,
+        OtuIsolate,
         ErrorResponse,
         { otuId: string; isolateId: string }
     >({
@@ -228,7 +228,7 @@ export function useSetIsolateAsDefault() {
  */
 export function useUpdateIsolate() {
     return useMutation<
-        OTUIsolate,
+        OtuIsolate,
         unknown,
         {
             otuId: string;
@@ -266,7 +266,7 @@ export function useCreateSequence(otuId: string) {
     const queryClient = useQueryClient();
 
     return useMutation<
-        OTUSequence,
+        OtuSequence,
         unknown,
         {
             isolateId: string;
@@ -315,7 +315,7 @@ export function useEditSequence(otuId: string) {
     const queryClient = useQueryClient();
 
     return useMutation<
-        OTUSequence,
+        OtuSequence,
         unknown,
         {
             sequenceId: string;

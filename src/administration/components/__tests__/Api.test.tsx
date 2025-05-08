@@ -1,6 +1,9 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeSettings, mockApiUpdateSettings } from "@tests/fake/admin";
+import {
+    createFakeSettings,
+    mockApiUpdateSettings,
+} from "@tests/fake/administrator";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";

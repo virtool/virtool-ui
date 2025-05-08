@@ -19,7 +19,7 @@ import {
     updateUser,
     UserUpdate,
 } from "./api";
-import { AdministratorRoles, Settings } from "./types";
+import { AdministratorRoleName, Settings } from "./types";
 
 /**
  * Factory object for generating settings query keys
@@ -68,7 +68,7 @@ export const roleQueryKeys = {
  * @returns A list of valid administrator roles
  */
 export function useGetAdministratorRoles() {
-    return useQuery<AdministratorRoles[]>({
+    return useQuery<AdministratorRoleName[]>({
         queryKey: roleQueryKeys.all(),
         queryFn: fetchAdministratorRoles,
     });
@@ -158,7 +158,7 @@ export function useFetchUser(userId: string) {
 }
 
 /**
- * Initializes a mutator for updating a user
+ * Initializes a mutator for updating a user.
  *
  * @returns A mutator for updating a user
  */
@@ -181,7 +181,7 @@ export function useSetAdministratorRole() {
     return useMutation<
         User,
         ErrorResponse,
-        { role: AdministratorRoles; user_id: string }
+        { role: AdministratorRoleName; user_id: string }
     >({
         mutationFn: ({ role, user_id }) => setAdministratorRole(role, user_id),
         onSuccess: () => {

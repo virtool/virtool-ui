@@ -1,9 +1,9 @@
+import { FileManager } from "@/uploads/components/FileManager";
+import { UploadType } from "@/uploads/types";
 import React from "react";
 import { Route, Switch } from "wouter";
 import Container from "../../base/Container";
 import ContainerNarrow from "../../base/ContainerNarrow";
-import { FileManager } from "../../files/components/FileManager";
-import { FileType } from "../../files/types";
 import { Labels } from "../../labels/components/Labels";
 import CreateSample from "./Create/CreateSample";
 import SampleDetail from "./Detail/SampleDetail";
@@ -11,7 +11,7 @@ import SamplesSettings from "./SampleSettings";
 import SamplesList from "./SamplesList";
 
 /**
- * Displays the file manager for samples allowing users to upload/delete files
+ * Displays the file manager for samples allowing users to upload/delete uploads
  */
 function SampleFileManager() {
     return (
@@ -26,7 +26,7 @@ function SampleFileManager() {
                     ],
                     "text/plain": [".fasta", ".fa", ".fastq", ".fq"],
                 }}
-                fileType={FileType.reads}
+                fileType={UploadType.reads}
                 message={
                     <div className="flex flex-col gap-1 items-center">
                         <span className="font-medium text-lg">

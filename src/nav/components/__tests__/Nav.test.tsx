@@ -3,12 +3,12 @@ import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../../administration/types";
+import { AdministratorRoleName } from "../../../administration/types";
 import Nav from "../Nav";
 
 describe("<Nav />", () => {
     const props = {
-        administrator_role: AdministratorRoles.FULL,
+        administrator_role: AdministratorRoleName.FULL,
         dev: false,
         handle: "Bob",
     };

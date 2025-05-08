@@ -5,7 +5,7 @@ import { cn } from "../../../../app/utils";
 import BoxGroupSection from "../../../../base/BoxGroupSection";
 import IconButton from "../../../../base/IconButton";
 import Label from "../../../../base/Label";
-import { OTUSegment } from "../../../types";
+import { OtuSegment } from "../../../types";
 
 const StyledSegment = styled(BoxGroupSection)`
     display: grid;
@@ -27,7 +27,7 @@ type SegmentProps = {
     onMoveUp: () => void;
     /** A callback function to move the segment down */
     onMoveDown: () => void;
-    segment: OTUSegment;
+    segment: OtuSegment;
 };
 
 /**

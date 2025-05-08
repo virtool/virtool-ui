@@ -17,7 +17,7 @@ import Select from "../../base/Select";
 import SelectButton from "../../base/SelectButton";
 import SelectContent from "../../base/SelectContent";
 import SelectItem from "../../base/SelectItem";
-import { OTUSegment } from "../../otus/types";
+import { OtuSegment } from "../../otus/types";
 
 const SegmentSelectContainer = styled.div`
     display: flex;
@@ -54,7 +54,7 @@ type SequenceSegmentFieldProps = {
     otuId: string;
     refId: string;
     /** A list of unreferenced segments */
-    segments: OTUSegment[];
+    segments: OtuSegment[];
 };
 
 const SequenceSegmentRequired = styled.span`

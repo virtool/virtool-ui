@@ -1,12 +1,15 @@
 import { screen, waitFor } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
-import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
+import {
+    createFakeSettings,
+    mockApiGetSettings,
+} from "@tests/fake/administrator";
 import { createFakeMessage, mockApiGetMessage } from "@tests/fake/message";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../types";
+import { AdministratorRoleName } from "../../types";
 import Settings from "../Settings";
 
 describe("<Settings />", () => {
@@ -22,7 +25,7 @@ describe("<Settings />", () => {
     });
 
     it("should render", async () => {
-        account.administrator_role = AdministratorRoles.FULL;
+        account.administrator_role = AdministratorRoleName.FULL;
         scope = nock("http://localhost")
             .get("/api/account")
             .reply(200, account);
@@ -45,7 +48,7 @@ describe("<Settings />", () => {
     });
 
     it("should render all options for full administrators", async () => {
-        account.administrator_role = AdministratorRoles.FULL;
+        account.administrator_role = AdministratorRoleName.FULL;
         scope = nock("http://localhost")
             .get("/api/account")
             .reply(200, account);
@@ -62,7 +65,7 @@ describe("<Settings />", () => {
     });
 
     it("should render only groups and users for users administrators", async () => {
-        account.administrator_role = AdministratorRoles.USERS;
+        account.administrator_role = AdministratorRoleName.USERS;
         scope = nock("http://localhost")
             .get("/api/account")
             .reply(200, account);

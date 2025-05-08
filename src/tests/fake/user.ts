@@ -1,9 +1,9 @@
+import { AdministratorRoleName } from "@administration/types";
 import { faker } from "@faker-js/faker";
+import { GroupMinimal, Permissions } from "@groups/types";
+import { User, UserNested } from "@users/types";
 import { merge, times } from "lodash-es";
 import nock from "nock";
-import { AdministratorRoles } from "../../administration/types";
-import { GroupMinimal, Permissions } from "../../groups/types";
-import { User, UserNested } from "../../users/types";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 
@@ -31,7 +31,7 @@ export function createFakeUserNested(
 
 type CreateFakeUserProps = {
     active?: boolean;
-    administrator_role?: AdministratorRoles;
+    administrator_role?: AdministratorRoleName;
     force_reset?: boolean;
     groups?: Array<GroupMinimal>;
     handle?: string;

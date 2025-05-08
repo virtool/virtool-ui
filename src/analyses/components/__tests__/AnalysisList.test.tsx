@@ -1,3 +1,4 @@
+import { formatPath } from "@app/hooks";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -11,8 +12,7 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../../administration/types";
-import { formatPath } from "../../../app/hooks";
+import { AdministratorRoleName } from "../../../administration/types";
 import Analyses from "../Analyses";
 
 describe("<AnalysesList />", () => {
@@ -46,7 +46,7 @@ describe("<AnalysesList />", () => {
             expect(
                 screen.getByText(`${analyses[0].user.handle} created`),
             ).toBeInTheDocument();
-            expect(screen.getByText("NuVs")).toBeInTheDocument();
+            expect(screen.getByText("Nuvs")).toBeInTheDocument();
             expect(
                 screen.getByText(`${analyses[1].user.handle} created`),
             ).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe("<AnalysesList />", () => {
     describe("<AnalysesToolbar />", () => {
         it("should show analysis creation when user is full admin", async () => {
             const account = createFakeAccount({
-                administrator_role: AdministratorRoles.FULL,
+                administrator_role: AdministratorRoleName.FULL,
             });
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
@@ -110,7 +110,7 @@ describe("<AnalysesList />", () => {
         it("should change state once create analysis is clicked", async () => {
             mockApiGetAccount(
                 createFakeAccount({
-                    administrator_role: AdministratorRoles.FULL,
+                    administrator_role: AdministratorRoleName.FULL,
                 }),
             );
             mockApiGetSampleDetail(sample);

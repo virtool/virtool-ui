@@ -8,7 +8,7 @@ import DialogContent from "../../../../base/DialogContent";
 import DialogOverlay from "../../../../base/DialogOverlay";
 import DialogTitle from "../../../../base/DialogTitle";
 import { useUpdateOTU } from "../../../queries";
-import { Molecule, OTUSegment } from "../../../types";
+import { Molecule, OtuSegment } from "../../../types";
 import SegmentForm from "./SegmentForm";
 
 type FormValues = {
@@ -22,7 +22,7 @@ type EditSegmentProps = {
     name: string;
     otuId: string;
     /** The segments associated with the otu */
-    schema: OTUSegment[];
+    schema: OtuSegment[];
 };
 
 /**

@@ -1,7 +1,7 @@
+import { updateSearchParam, usePageParam } from "@app/hooks";
 import { map, max, min, range } from "lodash-es";
-import React, { useEffect } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { useSearch } from "wouter";
-import { updateSearchParam, usePageParam } from "../app/hooks";
 import PaginationContent from "./PaginationContent";
 import PaginationLink from "./PaginationLink";
 import PaginationNext from "./PaginationNext";
@@ -24,8 +24,8 @@ function getPageRange(
 
 type PaginationProps = {
     children?: React.ReactNode;
-    items: any[];
-    renderRow?: (item: any) => JSX.Element;
+    items: object[];
+    renderRow?: (item: object) => ReactElement;
     storedPage: number;
     currentPage: number;
     pageCount: number;
@@ -52,7 +52,7 @@ export default function Pagination({
         if (currentPage > pageCount) {
             setPage(pageCount);
         }
-    }, [currentPage, pageCount]);
+    }, [currentPage, pageCount, setPage]);
 
     const entries = renderRow && map(items, (item) => renderRow(item));
 
@@ -61,7 +61,7 @@ export default function Pagination({
         (pageNumber) => (
             <PaginationLink
                 key={pageNumber}
-                to={updateSearchParam("page", pageNumber, search)}
+                to={updateSearchParam("page", String(pageNumber), search)}
                 active={storedPage !== pageNumber}
                 disabled={storedPage === pageNumber}
                 onClick={() => onLoadNextPage(pageNumber)}

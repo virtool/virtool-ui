@@ -1,18 +1,19 @@
+import { FormattedPathoscopeHit } from "@analyses/types";
+import { useUrlSearchParam } from "@app/hooks";
+import ScrollSyncContainer from "@base/ScrollSyncContainer";
 import { filter, maxBy } from "lodash-es";
 import React from "react";
-import { useUrlSearchParam } from "../../../app/hooks";
-import ScrollSyncContainer from "../../../base/ScrollSyncContainer";
-import { FormattedPathoscopeHit } from "../../types";
 import PathoscopeIsolate from "./PathoscopeIsolate";
 
 type PathoscopeDetailProps = {
     /** Complete information for a pathoscope hit */
     hit: FormattedPathoscopeHit;
+
     /** The total number of reads mapped to any OTU during the analysis*/
     mappedCount: number;
 };
 
-/** Detailed coverage for a single OTU hits from pathoscope analysis*/
+/** Detailed coverage for a single OTU hits from pathoscope analysis */
 export default function PathoscopeDetail({
     hit,
     mappedCount,
@@ -34,9 +35,14 @@ export default function PathoscopeDetail({
         return (
             <PathoscopeIsolate
                 key={isolate.id}
-                {...isolate}
+                coverage={isolate}
+                depth={isolate.depth}
+                maxDepth={hit.maxDepth}
                 maxGenomeLength={maxGenomeLength}
+                name={isolate.name}
+                pi={isolate.pi}
                 reads={Math.round(isolate.pi * mappedCount)}
+                sequences={isolate.sequences}
             />
         );
     });

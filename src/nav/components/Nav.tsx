@@ -1,21 +1,21 @@
+import Dropdown from "@base/Dropdown";
+import DropdownMenuContent from "@base/DropdownMenuContent";
+import DropdownMenuItem from "@base/DropdownMenuItem";
+import DropdownMenuLink from "@base/DropdownMenuLink";
+import DropdownMenuTrigger from "@base/DropdownMenuTrigger";
+import IconButton from "@base/IconButton";
+import InitialIcon from "@base/InitialIcon";
+import Logo from "@base/Logo";
 import React from "react";
 import { useLogout } from "../../account/queries";
-import { AdministratorRoles } from "../../administration/types";
+import { AdministratorRoleName } from "../../administration/types";
 import { hasSufficientAdminRole } from "../../administration/utils";
 import { useDialogParam } from "../../app/hooks";
-import Dropdown from "../../base/Dropdown";
-import DropdownMenuContent from "../../base/DropdownMenuContent";
-import DropdownMenuItem from "../../base/DropdownMenuItem";
-import DropdownMenuLink from "../../base/DropdownMenuLink";
-import DropdownMenuTrigger from "../../base/DropdownMenuTrigger";
-import IconButton from "../../base/IconButton";
-import InitialIcon from "../../base/InitialIcon";
-import Logo from "../../base/Logo";
 import { useRootQuery } from "../../wall/queries";
 import { NavLink } from "./NavLink";
 
 type NavBarProps = {
-    administrator_role: AdministratorRoles;
+    administrator_role: AdministratorRoleName;
     handle: string;
 };
 
@@ -70,7 +70,7 @@ export default function Nav({ administrator_role, handle }: NavBarProps) {
                             Account
                         </DropdownMenuLink>
                         {hasSufficientAdminRole(
-                            AdministratorRoles.USERS,
+                            AdministratorRoleName.USERS,
                             administrator_role,
                         ) && (
                             <DropdownMenuLink to="/administration">

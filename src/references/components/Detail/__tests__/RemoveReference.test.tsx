@@ -9,7 +9,7 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AdministratorRoles } from "../../../../administration/types";
+import { AdministratorRoleName } from "../../../../administration/types";
 import RemoveReference from "../RemoveReference";
 
 describe("<RemoveReference />", () => {
@@ -27,7 +27,9 @@ describe("<RemoveReference />", () => {
 
     it("should render when user has permission", async () => {
         mockApiGetAccount(
-            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+            createFakeAccount({
+                administrator_role: AdministratorRoleName.FULL,
+            }),
         );
         renderWithRouter(<RemoveReference {...props} />);
 
@@ -47,7 +49,9 @@ describe("<RemoveReference />", () => {
 
     it("should call onConfirm() when confirmed", async () => {
         mockApiGetAccount(
-            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+            createFakeAccount({
+                administrator_role: AdministratorRoleName.FULL,
+            }),
         );
         const scope = mockApiRemoveReference(reference.id);
         renderWithRouter(<RemoveReference {...props} />);

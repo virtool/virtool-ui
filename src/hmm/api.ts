@@ -4,7 +4,7 @@
  * @module hmm/api
  */
 import { apiClient } from "../app/api";
-import { HMM, HMMInstalled, HmmSearchResults } from "./types";
+import { Hmm, HMMInstalled, HmmSearchResults } from "./types";
 
 /**
  * Fetch a page of HMM search results from the API.
@@ -38,7 +38,7 @@ export function installHmm(): Promise<HMMInstalled> {
  * @param hmmId - the unique id for the HMM to fetch
  * @returns resolves to an object containing a single HMM
  */
-export function fetchHmm(hmmId: string): Promise<HMM> {
+export function fetchHmm(hmmId: string): Promise<Hmm> {
     return apiClient.get(`/hmms/${hmmId}`).then((res) => res.body);
 }
 

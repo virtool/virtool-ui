@@ -21,7 +21,7 @@ describe("<SampleFileSizeWarning />", () => {
 
         expect(
             screen.getByText(
-                "The read files in this sample are smaller than expected.",
+                "The read uploads in this sample are smaller than expected.",
             ),
         ).toBeInTheDocument();
         expect(screen.getByText("Check the file sizes")).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe("<SampleFileSizeWarning />", () => {
 
         expect(
             screen.queryByText(
-                "The read files in this sample are smaller than expected.",
+                "The read uploads in this sample are smaller than expected.",
             ),
         ).toBeNull();
     });
@@ -52,7 +52,7 @@ describe("<SampleFileSizeWarning />", () => {
 
         expect(
             screen.getByText(
-                "The read files in this sample are smaller than expected.",
+                "The read uploads in this sample are smaller than expected.",
             ),
         ).toBeInTheDocument();
         expect(screen.getByText("Check the file sizes")).toBeInTheDocument();
@@ -67,12 +67,12 @@ describe("<SampleFileSizeWarning />", () => {
         props.reads = [createFakeSampleRead({ size: 5 })];
         renderWithRouter(
             <SampleFileSizeWarning {...props} />,
-            "/samples/test/files",
+            "/samples/test/uploads",
         );
 
         expect(
             screen.getByText(
-                "The read files in this sample are smaller than expected.",
+                "The read uploads in this sample are smaller than expected.",
             ),
         ).toBeInTheDocument();
         expect(

@@ -1,5 +1,5 @@
+import Alert from "@base/Alert";
 import React from "react";
-import Alert from "../../base/Alert";
 import Icon from "../../base/Icon";
 import Link from "../../base/Link";
 

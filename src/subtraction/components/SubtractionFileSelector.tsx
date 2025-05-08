@@ -1,3 +1,5 @@
+import { useValidateFiles } from "@/uploads/hooks";
+import { FileResponse, Upload, UploadType } from "@/uploads/types";
 import { InfiniteData } from "@tanstack/react-query";
 import {
     FetchNextPageOptions,
@@ -10,8 +12,6 @@ import CompactScrollList from "../../base/CompactScrollList";
 import InputError from "../../base/InputError";
 import Link from "../../base/Link";
 import NoneFoundBox from "../../base/NoneFoundBox";
-import { useValidateFiles } from "../../files/hooks";
-import { File, FileResponse, FileType } from "../../files/types";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 const SubtractionFileSelectorError = styled(InputError)`
@@ -19,10 +19,10 @@ const SubtractionFileSelectorError = styled(InputError)`
 `;
 
 type SubtractionFileSelectorProps = {
-    /** The subtraction files */
+    /** The subtraction uploads */
     files: InfiniteData<FileResponse>;
 
-    /** The number of subtraction files */
+    /** The number of subtraction uploads */
     foundCount: number;
 
     /** The selected file id */
@@ -47,7 +47,7 @@ type SubtractionFileSelectorProps = {
 };
 
 /**
- * A list of subtraction files
+ * A list of subtraction uploads
  */
 export function SubtractionFileSelector({
     files,
@@ -59,11 +59,11 @@ export function SubtractionFileSelector({
     isPending,
     isFetchingNextPage,
 }: SubtractionFileSelectorProps) {
-    useValidateFiles(FileType.subtraction, selected, onClick);
+    useValidateFiles(UploadType.subtraction, selected, onClick);
 
     const items = flatMap(files.pages, (page) => page.items);
 
-    function renderRow(item: File) {
+    function renderRow(item: Upload) {
         return (
             <SubtractionFileItem
                 key={item.id}

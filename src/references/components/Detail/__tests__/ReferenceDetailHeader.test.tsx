@@ -7,7 +7,7 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../../../administration/types";
+import { AdministratorRoleName } from "../../../../administration/types";
 import ReferenceDetailHeader from "../ReferenceDetailHeader";
 
 describe("<ReferenceDetailHeaderIcon />", () => {
@@ -19,7 +19,9 @@ describe("<ReferenceDetailHeaderIcon />", () => {
         reference = createFakeReference();
         mockApiGetReferenceDetail(reference);
         mockApiGetAccount(
-            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+            createFakeAccount({
+                administrator_role: AdministratorRoleName.FULL,
+            }),
         );
         props = {
             createdAt: reference.created_at,
@@ -62,7 +64,9 @@ describe("<ReferenceDetailHeaderIcon />", () => {
     it("should render when [isRemote=true]", async () => {
         props.isRemote = true;
         mockApiGetAccount(
-            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+            createFakeAccount({
+                administrator_role: AdministratorRoleName.FULL,
+            }),
         );
         renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
@@ -71,7 +75,9 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 
     it("should render when [isRemote=false]", () => {
         mockApiGetAccount(
-            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+            createFakeAccount({
+                administrator_role: AdministratorRoleName.FULL,
+            }),
         );
         renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 

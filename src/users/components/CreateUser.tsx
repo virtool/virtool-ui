@@ -1,12 +1,12 @@
+import Button from "@base/Button";
+import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React from "react";
 import { useCreateUser } from "../../administration/queries";
 import { useDialogParam } from "../../app/hooks";
-import Button from "../../base/Button";
-import Dialog from "../../base/Dialog";
-import DialogContent from "../../base/DialogContent";
-import DialogOverlay from "../../base/DialogOverlay";
-import DialogTitle from "../../base/DialogTitle";
 import { CreateUserForm } from "./CreateUserForm";
 
 type NewUser = {

@@ -224,7 +224,7 @@ export function mockApiUpdateSampleRights(
  * @param host - The sample host
  * @param locale - The locale of the sample
  * @param library_type - The library type of the sample
- * @param files - The sample files used to create the sample
+ * @param files - The sample uploads used to create the sample
  * @param labels - The labels associated with the sample
  * @param subtractions - The subtractions associated with the sample
  * @param group - The group associated with the sample

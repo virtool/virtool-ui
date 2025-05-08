@@ -1,13 +1,13 @@
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
+import SaveButton from "@base/SaveButton";
+import { RestoredAlert } from "@forms/components/RestoredAlert";
+import { usePersistentForm } from "@forms/hooks";
+import { OtuSegment, OtuSequence } from "@otus/types";
 import React from "react";
 import { FormProvider } from "react-hook-form";
-import InputError from "../../base/InputError";
-import InputGroup from "../../base/InputGroup";
-import InputLabel from "../../base/InputLabel";
-import InputSimple from "../../base/InputSimple";
-import SaveButton from "../../base/SaveButton";
-import { RestoredAlert } from "../../forms/components/RestoredAlert";
-import { usePersistentForm } from "../../forms/hooks";
-import { OTUSegment, OTUSequence } from "../../otus/types";
 import Accession from "./Accession";
 import SequenceField from "./SequenceField";
 import SequenceSegmentField from "./SequenceSegmentField";
@@ -16,12 +16,14 @@ type SequenceFormValues = {
     accession: string;
     definition: string;
     host: string;
-    segment: string;
+    segment: string | null;
     sequence: string;
 };
 
 type SequenceFormProps = {
-    activeSequence?: OTUSequence;
+    /** The sequence. This is undefined when creating a new sequence. */
+    activeSequence?: OtuSequence;
+
     hasSchema: boolean;
     /** Whether the form is of type edit or add */
     noun: string;
@@ -29,11 +31,14 @@ type SequenceFormProps = {
     /** A callback function to add/edit a genome sequence  */
     onSubmit: (formValues: SequenceFormValues) => void;
 
+    /** The ID of the sequence's parent OTU. */
     otuId: string;
+
+    /** The ID of the sequence's parent reference. */
     refId: string;
 
     /** A list of unreferenced segments */
-    segments: OTUSegment[];
+    segments: OtuSegment[];
 };
 
 /**
@@ -48,8 +53,14 @@ export default function SequenceForm({
     refId,
     segments,
 }: SequenceFormProps) {
-    const { accession, definition, host, id, segment, sequence } =
-        activeSequence || {};
+    const {
+        accession,
+        definition,
+        host,
+        id = "",
+        segment = null,
+        sequence = "",
+    } = activeSequence || {};
 
     const methods = usePersistentForm<SequenceFormValues>({
         defaultValues: {

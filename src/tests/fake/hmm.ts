@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { HMM, HMMSearchResults } from "@hmm/types";
+import { Hmm, HmmSearchResults } from "@hmm/types";
 import { assign, times, toString } from "lodash-es";
 import nock from "nock";
 
@@ -105,7 +105,7 @@ export function mockApiGetHmms(hmmSearchResults: HmmSearchResults) {
  * @param statusCode - The HTTP status code to simulate in the response
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetHmmDetail(hmmDetail: HMM, statusCode?: number) {
+export function mockApiGetHmmDetail(hmmDetail: Hmm, statusCode?: number) {
     return nock("http://localhost")
         .get(`/api/hmms/${hmmDetail.id}`)
         .query(true)

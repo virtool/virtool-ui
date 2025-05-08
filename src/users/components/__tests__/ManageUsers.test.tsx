@@ -5,16 +5,16 @@ import { renderWithRouter } from "@tests/setup";
 import { forEach } from "lodash-es";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../../administration/types";
+import { AdministratorRoleName } from "../../../administration/types";
 import { ManageUsers } from "../ManageUsers";
 
 describe("<ManageUsers />", () => {
     it("should render correctly with 3 users", async () => {
         const users = createFakeUsers(3);
-        users[0].administrator_role = AdministratorRoles.FULL;
+        users[0].administrator_role = AdministratorRoleName.FULL;
         await mockApiFindUsers(users);
         const account = createFakeAccount({
-            administrator_role: AdministratorRoles.FULL,
+            administrator_role: AdministratorRoleName.FULL,
         });
         mockApiGetAccount(account);
 
@@ -32,7 +32,7 @@ describe("<ManageUsers />", () => {
 
     it("should render correctly when documents = null", async () => {
         const account = createFakeAccount({
-            administrator_role: AdministratorRoles.FULL,
+            administrator_role: AdministratorRoleName.FULL,
         });
         mockApiGetAccount(account);
 

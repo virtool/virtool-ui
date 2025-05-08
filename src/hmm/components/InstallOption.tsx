@@ -1,9 +1,9 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
+import Alert from "@base/Alert";
+import Button from "@base/Button";
 import { Permission } from "@groups/types";
 import React from "react";
 import styled from "styled-components";
-import Alert from "../../base/Alert";
-import Button from "../../base/Button";
 import { useInstallHmm } from "../queries";
 
 const InstallOptionAlert = styled(Alert)`

@@ -9,7 +9,6 @@
             "@app/*": ["./app/*"],
             "@base/*": ["./base/*"],
             "@dev/*": ["./dev/*"],
-            "@files/*": ["./files/*"],
             "@forms/*": ["./forms/*"],
             "@groups/*": ["./groups/*"],
             "@hmm/*": ["./hmm/*"],
@@ -26,6 +25,7 @@
             "@sequences/*": ["./sequences/*"],
             "@subtraction/*": ["./subtraction/*"],
             "@tests/*": ["./tests/*"],
+            "@uploads/*": ["./uploads/*"],
             "@users/*": ["./users/*"],
             "@wall/*": ["./wall/*"]
         },

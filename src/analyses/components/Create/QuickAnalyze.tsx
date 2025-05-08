@@ -1,8 +1,8 @@
+import { useDialogParam } from "@app/hooks";
+import { cn } from "@app/utils";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { Tabs } from "radix-ui";
 import React, { useEffect } from "react";
-import { useDialogParam } from "../../../app/hooks";
-import { cn } from "../../../app/utils";
 import Badge from "../../../base/Badge";
 import BoxGroupSection from "../../../base/BoxGroupSection";
 import Dialog from "../../../base/Dialog";

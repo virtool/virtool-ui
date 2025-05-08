@@ -4,7 +4,7 @@ import {
     createFakeSettings,
     mockApiGetSettings,
     mockApiUpdateSettings,
-} from "@tests/fake/admin";
+} from "@tests/fake/administrator";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import React from "react";

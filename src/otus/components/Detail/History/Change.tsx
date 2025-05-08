@@ -8,7 +8,7 @@ import IconButton from "../../../../base/IconButton";
 import Label from "../../../../base/Label";
 import { UserNested } from "../../../../users/types";
 import { useRevertOTU } from "../../../queries";
-import { OTUNested } from "../../../types";
+import { OtuNested } from "../../../types";
 
 const methodIconProps = {
     add_isolate: {
@@ -102,7 +102,7 @@ type ChangeProps = {
     createdAt: string;
     description: string;
     methodName: string;
-    otu: OTUNested;
+    otu: OtuNested;
     unbuilt: boolean;
     user: UserNested;
 };
