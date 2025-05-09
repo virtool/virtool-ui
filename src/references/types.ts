@@ -1,5 +1,5 @@
+import { UserNested } from "@users/types";
 import { SearchResult, Task } from "../types/api";
-import { UserNested } from "../users/types";
 
 export type ReferenceClonedFrom = {
     id: string;

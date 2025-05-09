@@ -1,4 +1,4 @@
-import { UserNested } from "../users/types";
+import { UserNested } from "@users/types";
 
 export type Message = {
     active: boolean;

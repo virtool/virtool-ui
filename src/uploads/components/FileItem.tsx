@@ -3,8 +3,8 @@ import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import RelativeTime from "@base/RelativeTime";
+import { UserNested } from "@users/types";
 import React, { useCallback } from "react";
-import { UserNested } from "../../users/types";
 import { useDeleteFile } from "../queries";
 
 export type FileItemProps = {

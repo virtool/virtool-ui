@@ -10,8 +10,8 @@ import DropdownMenuTrigger from "@base/DropdownMenuTrigger";
 import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
 import Logo from "@base/Logo";
+import { useRootQuery } from "@wall/queries";
 import React from "react";
-import { useRootQuery } from "../../wall/queries";
 import { NavLink } from "./NavLink";
 
 type NavBarProps = {

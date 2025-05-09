@@ -6,9 +6,9 @@
  * with sample data.
  */
 import { JobMinimal } from "@jobs/types";
+import { UserNested } from "@users/types";
 import { LabelNested } from "../labels/types";
 import { SubtractionNested } from "../subtraction/types";
-import { UserNested } from "../users/types";
 
 import { SearchResult } from "../types/api";
 
