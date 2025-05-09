@@ -10,7 +10,7 @@ import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import React from "react";
 import styled from "styled-components";
 import { useFetchJob } from "../queries";
-import { JobArgs } from "./JobArgs";
+import JobArgs from "./JobArgs";
 import JobError from "./JobError";
 import JobSteps from "./JobSteps";
 

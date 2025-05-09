@@ -12,7 +12,7 @@ import React from "react";
 import styled from "styled-components";
 import { useFindJobs } from "../queries";
 import { JobFilters } from "./Filters/JobFilters";
-import Job from "./Item/JobItem";
+import Job from "./JobItem";
 
 const JobsListViewContainer = styled.div`
     display: flex;

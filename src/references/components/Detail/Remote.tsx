@@ -8,8 +8,8 @@ import IconButton from "@base/IconButton";
 import Loader from "@base/Loader";
 import ProgressCircle from "@base/ProgressCircle";
 import RelativeTime from "@base/RelativeTime";
+import { JobState } from "@jobs/types";
 import React from "react";
-import { JobState } from "../../../jobs/types";
 import {
     useCheckReferenceUpdates,
     useUpdateRemoteReference,

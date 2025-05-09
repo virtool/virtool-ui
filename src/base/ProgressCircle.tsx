@@ -1,8 +1,8 @@
 import { getColor, sizes } from "@app/theme";
+import { JobState } from "@jobs/types";
 import { Indicator, Root } from "@radix-ui/react-progress";
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { JobState } from "../jobs/types";
 
 /**
  * Calculate the stroke width based on the total size of the progress circle

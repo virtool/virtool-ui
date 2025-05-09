@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
+import { workflows } from "@jobs/types";
 import { assign, times } from "lodash";
 import nock from "nock";
-import { workflows } from "../../jobs/types";
 import { LabelNested } from "../../labels/types";
 import { SampleRightsUpdate } from "../../samples/api";
 import {

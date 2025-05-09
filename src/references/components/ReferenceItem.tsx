@@ -5,9 +5,9 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
+import { JobState } from "@jobs/types";
 import React from "react";
 import { Permission } from "../../groups/types";
-import { JobState } from "../../jobs/types";
 import { ReferenceMinimal } from "../types";
 
 type ReferenceItemProps = {

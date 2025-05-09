@@ -2,9 +2,9 @@ import { getFontSize, getFontWeight, sizes } from "@app/theme";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
+import { JobState } from "@jobs/types";
 import React from "react";
 import styled from "styled-components";
-import { JobState } from "../../jobs/types";
 import { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
 

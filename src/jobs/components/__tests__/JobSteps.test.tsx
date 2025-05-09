@@ -1,9 +1,9 @@
+import JobSteps from "@jobs/components/JobSteps";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { JobState } from "../../types";
-import JobSteps from "../JobSteps";
 
 describe("<JobSteps />", () => {
     it("should render", () => {
@@ -21,7 +21,9 @@ describe("<JobSteps />", () => {
                 },
             ],
         };
+
         renderWithProviders(<JobSteps {...props} />);
+
         expect(screen.getByText("Waiting")).toBeInTheDocument();
         expect(
             screen.getByText("Waiting for resources to become available."),

@@ -1,6 +1,6 @@
 import { cn } from "@app/utils";
+import { IconColor } from "@jobs/types";
 import React from "react";
-import { IconColor } from "../jobs/types";
 import Tooltip from "./Tooltip";
 
 type IconButtonProps = {

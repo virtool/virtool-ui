@@ -1,13 +1,42 @@
-import { getFontSize, getFontWeight } from "@app/theme";
+import { getFontSize, getFontWeight, sizes } from "@app/theme";
 import { getWorkflowDisplayName } from "@app/utils";
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
+import ProgressCircle from "@base/ProgressCircle";
+import JobStateIcon from "@jobs/components/JobStateIcon";
+import { JobState, workflows } from "@jobs/types";
+import { getStateTitle } from "@jobs/utils";
+import { UserNested } from "@users/types";
 import React from "react";
 import styled from "styled-components";
-import { UserNested } from "../../../users/types";
-import { JobState, workflows } from "../../types";
-import { JobStatus } from "./JobStatus";
+
+type JobStatusProps = {
+    /** The state of the job */
+    state: JobState;
+    /** The progress of the job */
+    progress: number;
+};
+
+/**
+ * Displays status of job shown in the job item
+ */
+function JobStatus({ state, progress }: JobStatusProps) {
+    return (
+        <>
+            <span>{getStateTitle(state)}</span>
+            {state === "complete" ? (
+                <JobStateIcon state={state} />
+            ) : (
+                <ProgressCircle
+                    size={sizes.md}
+                    state={state}
+                    progress={progress}
+                />
+            )}
+        </>
+    );
+}
 
 const StyledJobItem = styled(BoxGroupSection)`
     align-items: center;
