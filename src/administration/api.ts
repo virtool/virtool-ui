@@ -3,8 +3,8 @@
  *
  * @module account/api
  */
-import { apiClient } from "../app/api";
-import { User, UserResponse } from "../users/types";
+import { apiClient } from "@app/api";
+import { User, UserResponse } from "@users/types";
 import { AdministratorRole, Settings } from "./types";
 
 /**

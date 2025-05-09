@@ -1,5 +1,5 @@
+import { useFetchAccount } from "@account/queries";
 import { Permission } from "@groups/types";
-import { useFetchAccount } from "../account/queries";
 import { AdministratorRoleName } from "./types";
 import {
     checkAdminRoleOrPermissionsFromAccount,

@@ -1,5 +1,5 @@
+import { Account } from "@account/types";
 import { Permission } from "@groups/types";
-import { Account } from "../account/types";
 import { AdministratorRoleName } from "./types";
 
 /**

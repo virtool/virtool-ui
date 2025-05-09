@@ -1,5 +1,5 @@
+import { ErrorResponse } from "@/types/api";
 import { useMutation } from "@tanstack/react-query";
-import { ErrorResponse } from "../types/types";
 import { postDevCommand } from "./api";
 
 /**

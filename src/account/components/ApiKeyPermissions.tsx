@@ -1,3 +1,4 @@
+import { useFetchAccount } from "@account/queries";
 import { AdministratorRoleName } from "@administration/types";
 import {
     AdministratorPermissions,
@@ -10,7 +11,6 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { Permissions } from "@groups/types";
 import { map, sortBy } from "lodash-es";
 import React from "react";
-import { useFetchAccount } from "../queries";
 
 type APIPermissionsProps = {
     className?: string;

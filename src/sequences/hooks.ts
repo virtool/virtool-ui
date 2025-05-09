@@ -55,13 +55,6 @@ export function useActiveSequence(): OtuSequence | undefined {
 }
 
 /**
- * A hook to get a list of inactive sequences
- *
- * @returns A list of inactive sequences.
- */
-export function useGetInactiveSequences() {}
-
-/**
  * A hook to get unreferenced segments for a genome sequence
  *
  * @returns A list of unreferenced segments

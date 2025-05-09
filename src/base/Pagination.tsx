@@ -9,8 +9,8 @@ import PaginationPrevious from "./PaginationPrevious";
 import PaginationRoot from "./PaginationRoot";
 
 function getPageRange(
-    pageCount,
-    storedPage,
+    pageCount: number,
+    storedPage: number,
     leftButtons = 1,
     rightButtons = 2,
 ) {
@@ -37,15 +37,14 @@ type PaginationProps = {
  */
 export default function Pagination({
     children,
+    currentPage,
     items,
+    onLoadNextPage,
+    pageCount,
     renderRow,
     storedPage,
-    currentPage,
-    pageCount,
-    onLoadNextPage,
 }: PaginationProps) {
     const search = useSearch();
-    onLoadNextPage = onLoadNextPage || (() => {});
     const { setPage } = usePageParam();
 
     useEffect(() => {
@@ -88,7 +87,11 @@ export default function Pagination({
                             )}
                             disabled={currentPage === 1}
                             active={currentPage !== 1}
-                            onClick={() => onLoadNextPage(currentPage - 1)}
+                            onClick={() => {
+                                if (onLoadNextPage) {
+                                    onLoadNextPage(currentPage - 1);
+                                }
+                            }}
                         />
                         {pageButtons}
                         <PaginationNext

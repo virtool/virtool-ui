@@ -5,10 +5,10 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
+import { useSetMessage } from "@message/queries";
+import { Message } from "@message/types";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useSetMessage } from "../../message/queries";
-import { Message } from "../../message/types";
 
 type InstanceMessageProps = {
     message: Message;

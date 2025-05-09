@@ -1,12 +1,12 @@
 import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import { useFetchMessage } from "@message/queries";
 import React from "react";
-import { useFetchMessage } from "../../message/queries";
 import { useFetchSettings } from "../queries";
 import Api from "./Api";
 import InstanceMessage from "./InstanceMessage";
 
-export function ServerSettings() {
+export default function ServerSettings() {
     const { data: message, isPending: isPendingMessage } = useFetchMessage();
     const { data: settings, isPending: isPendingSettings } = useFetchSettings();
 

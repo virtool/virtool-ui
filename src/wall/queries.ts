@@ -5,7 +5,8 @@ import { accountKeys } from "../account/queries";
 import { Account } from "../account/types";
 import { apiClient } from "../app/api";
 import { Root } from "../app/types";
-import { ErrorResponse } from "../types/types";
+
+import { ErrorResponse } from "@/types/api";
 
 /** Key factory function for the root document */
 export const rootKeys = {

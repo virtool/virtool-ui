@@ -1,12 +1,12 @@
+import { ErrorResponse } from "@/types/api";
+import { useDialogParam } from "@app/hooks";
 import {
     keepPreviousData,
     useMutation,
     useQuery,
     useQueryClient,
 } from "@tanstack/react-query";
-import { useDialogParam } from "../app/hooks";
-import { ErrorResponse } from "../types/types";
-import { User, UserResponse } from "../users/types";
+import { User, UserResponse } from "@users/types";
 import {
     createUser,
     fetchAdministratorRoles,

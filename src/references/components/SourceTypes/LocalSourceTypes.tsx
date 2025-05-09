@@ -1,27 +1,27 @@
-import { get } from "lodash-es";
-import React from "react";
-import styled from "styled-components";
-import { SettingsCheckbox } from "../../../administration/components/SettingsCheckbox";
-import { usePathParams } from "../../../app/hooks";
-import { getColor } from "../../../app/theme";
-import BoxGroup from "../../../base/BoxGroup";
-import BoxGroupDisabled from "../../../base/BoxGroupDisabled";
-import BoxGroupHeader from "../../../base/BoxGroupHeader";
-import BoxGroupSection from "../../../base/BoxGroupSection";
-import Button from "../../../base/Button";
-import IconButton from "../../../base/IconButton";
-import InputContainer from "../../../base/InputContainer";
-import InputError from "../../../base/InputError";
-import InputSimple from "../../../base/InputSimple";
-import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
-import SectionHeader from "../../../base/SectionHeader";
-import { useUpdateSourceTypes } from "../../hooks";
+import SettingsCheckbox from "@administration/components/SettingsCheckbox";
+import { usePathParams } from "@app/hooks";
+import { getColor } from "@app/theme";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupDisabled from "@base/BoxGroupDisabled";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Button from "@base/Button";
+import IconButton from "@base/IconButton";
+import InputContainer from "@base/InputContainer";
+import InputError from "@base/InputError";
+import InputSimple from "@base/InputSimple";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import SectionHeader from "@base/SectionHeader";
+import { useUpdateSourceTypes } from "@references/hooks";
 import {
     referenceQueryKeys,
     useGetReference,
     useUpdateReference,
-} from "../../queries";
-import { SourceTypeList } from "./SourceTypeList";
+} from "@references/queries";
+import { get } from "lodash-es";
+import React from "react";
+import styled from "styled-components";
+import SourceTypeList from "./SourceTypeList";
 
 const SourceTypeBoxGroupSection = styled(BoxGroupSection)`
     button {

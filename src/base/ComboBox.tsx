@@ -1,13 +1,13 @@
-import { useCombobox } from "downshift";
-import React from "react";
-import styled, { keyframes } from "styled-components";
 import {
     borderRadius,
     boxShadow,
     getBorder,
     getColor,
     getFontWeight,
-} from "../app/theme";
+} from "@app/theme";
+import { useCombobox } from "downshift";
+import React from "react";
+import styled, { keyframes } from "styled-components";
 import WrapRow from "./ComboBoxItem";
 import Icon from "./Icon";
 import InputSearch from "./InputSearch";

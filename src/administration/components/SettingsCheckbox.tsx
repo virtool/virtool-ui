@@ -1,8 +1,8 @@
+import { getFontSize } from "@app/theme";
 import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { getFontSize } from "../../app/theme";
 
 const SettingsCheckboxContainer = styled.div`
     padding: 10px;
@@ -48,7 +48,7 @@ type SettingsCheckboxProps = {
 /**
  * A checkbox allowing users to toggle API access for clients
  */
-export function SettingsCheckbox({
+export default function SettingsCheckbox({
     children,
     enabled,
     id,

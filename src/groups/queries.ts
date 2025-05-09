@@ -1,3 +1,4 @@
+import { ErrorResponse } from "@/types/api";
 import {
     keepPreviousData,
     useInfiniteQuery,
@@ -5,7 +6,6 @@ import {
     useQuery,
     useQueryClient,
 } from "@tanstack/react-query";
-import { ErrorResponse } from "../types/types";
 import {
     createGroup,
     findGroups,

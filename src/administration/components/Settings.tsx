@@ -11,9 +11,9 @@ import React from "react";
 import { Redirect, Route, Switch } from "wouter";
 import { AdministratorRoleName } from "../types";
 import { hasSufficientAdminRole } from "../utils";
-import { AdministrationTabs } from "./AdministrationTabs";
+import AdministrationTabs from "./AdministrationTabs";
 import ManageAdministrators from "./AdministratorList";
-import { ServerSettings } from "./ServerSettings";
+import ServerSettings from "./ServerSettings";
 
 export default function Settings() {
     const { data: account, isPending } = useFetchAccount();

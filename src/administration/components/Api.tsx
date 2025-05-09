@@ -2,7 +2,7 @@ import ExternalLink from "@base/ExternalLink";
 import React from "react";
 import { useUpdateSettings } from "../queries";
 import { Settings } from "../types";
-import { SettingsCheckbox } from "./SettingsCheckbox";
+import SettingsCheckbox from "./SettingsCheckbox";
 
 type ApiProps = {
     /** The settings data used for configuring the external API access */

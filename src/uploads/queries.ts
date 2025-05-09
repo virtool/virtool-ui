@@ -1,10 +1,10 @@
+import { ErrorResponse } from "@/types/api";
 import {
     keepPreviousData,
     useInfiniteQuery,
     useMutation,
     useQuery,
 } from "@tanstack/react-query";
-import { ErrorResponse } from "../types/types";
 import { findFiles, removeFile } from "./api";
 import { FileResponse, UploadType } from "./types";
 

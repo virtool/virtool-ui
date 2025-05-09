@@ -1,3 +1,4 @@
+import { ErrorResponse } from "@/types/api";
 import {
     keepPreviousData,
     useMutation,
@@ -7,7 +8,6 @@ import {
 import React, { createContext, useContext } from "react";
 import LoadingPlaceholder from "../base/LoadingPlaceholder";
 import { useGetReference } from "../references/queries";
-import { ErrorResponse } from "../types/types";
 import {
     addIsolate,
     addSequence,
