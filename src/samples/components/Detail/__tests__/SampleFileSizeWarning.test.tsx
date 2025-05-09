@@ -21,7 +21,7 @@ describe("<SampleFileSizeWarning />", () => {
 
         expect(
             screen.getByText(
-                "The read uploads in this sample are smaller than expected.",
+                "The read files in this sample are smaller than expected.",
             ),
         ).toBeInTheDocument();
         expect(screen.getByText("Check the file sizes")).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe("<SampleFileSizeWarning />", () => {
 
         expect(
             screen.queryByText(
-                "The read uploads in this sample are smaller than expected.",
+                "The read files in this sample are smaller than expected.",
             ),
         ).toBeNull();
     });
@@ -52,7 +52,7 @@ describe("<SampleFileSizeWarning />", () => {
 
         expect(
             screen.getByText(
-                "The read uploads in this sample are smaller than expected.",
+                "The read files in this sample are smaller than expected.",
             ),
         ).toBeInTheDocument();
         expect(screen.getByText("Check the file sizes")).toBeInTheDocument();
@@ -72,7 +72,7 @@ describe("<SampleFileSizeWarning />", () => {
 
         expect(
             screen.getByText(
-                "The read uploads in this sample are smaller than expected.",
+                "The read files in this sample are smaller than expected.",
             ),
         ).toBeInTheDocument();
         expect(

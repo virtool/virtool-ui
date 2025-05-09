@@ -30,7 +30,7 @@ const StyledMemberItem = styled(BoxGroupSection)`
     display: flex;
 `;
 
-type MemberItemProps = {
+export type MemberItemProps = {
     /** Whether the current user can modify members in the list */
     canModify: boolean;
 

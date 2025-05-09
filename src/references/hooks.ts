@@ -133,7 +133,6 @@ export function useCheckReferenceRight(
     right: ReferenceRight,
 ) {
     const { data: account, isPending: isPendingAccount } = useFetchAccount();
-    ("");
     const { data: reference, isPending: isPendingReference } =
         useGetReference(referenceId);
 

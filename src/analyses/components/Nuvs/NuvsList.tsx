@@ -56,7 +56,6 @@ export default function NuvsList({ detail }: NuVsListProps) {
 
     const shown = sortedHits.length;
     const total = detail.results.hits.length;
-    const itemSize = 76;
     const width = 230;
 
     const hitComponents = sortedHits.map((hit) => (

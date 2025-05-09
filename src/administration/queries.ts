@@ -19,7 +19,7 @@ import {
     updateUser,
     UserUpdate,
 } from "./api";
-import { AdministratorRoleName, Settings } from "./types";
+import { AdministratorRole, AdministratorRoleName, Settings } from "./types";
 
 /**
  * Factory object for generating settings query keys
@@ -68,7 +68,7 @@ export const roleQueryKeys = {
  * @returns A list of valid administrator roles
  */
 export function useGetAdministratorRoles() {
-    return useQuery<AdministratorRoleName[]>({
+    return useQuery<AdministratorRole[]>({
         queryKey: roleQueryKeys.all(),
         queryFn: fetchAdministratorRoles,
     });

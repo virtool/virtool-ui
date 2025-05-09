@@ -3,15 +3,16 @@ import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import MemberItem from "../MemberItem";
+import MemberItem, { MemberItemProps } from "../MemberItem";
 
 describe("<MemberItem />", () => {
-    let props;
+    let props: MemberItemProps;
 
     beforeEach(() => {
         props = {
             canModify: false,
-            handle: "bob",
+            handleOrName: "bob",
+            id: "bob",
             onEdit: vi.fn(),
             onRemove: vi.fn(),
         };

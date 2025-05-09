@@ -35,8 +35,8 @@ const UserSelectContainer = styled.div`
 `;
 
 type FormInputValues = {
+    role: AdministratorRoleName;
     user: User;
-    role: AdministratorRoleName[];
 };
 
 type AdministratorFormProps = {
@@ -55,13 +55,12 @@ export default function AdministratorForm({
     const [userSearchTerm, setUserSearchTerm] = React.useState("");
 
     const { data: users } = useFindUsers(1, 25, userSearchTerm, false);
-
     const { data: roles } = useGetAdministratorRoles();
 
-    const administratorRoleMutator = useSetAdministratorRole();
+    const mutator = useSetAdministratorRole();
 
     function onSubmit({ user, role }: FormInputValues) {
-        administratorRoleMutator.mutate({ user_id: user.id, role: role.id });
+        mutator.mutate({ user_id: user.id, role });
         onClose();
     }
 

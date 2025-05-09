@@ -38,7 +38,7 @@ describe("<SubtractionFiles />", () => {
         renderWithProviders(<SubtractionFiles {...props} />);
 
         expect(
-            screen.getByText("No subtraction uploads found"),
+            screen.getByText("No subtraction files found"),
         ).toBeInTheDocument();
     });
 
@@ -48,7 +48,7 @@ describe("<SubtractionFiles />", () => {
         expect(screen.getByText("Files")).toBeInTheDocument();
         expect(
             screen.getByText(
-                "Data uploads available to workflows using this subtraction.",
+                "Data files available to workflows using this subtraction.",
             ),
         ).toBeInTheDocument();
     });

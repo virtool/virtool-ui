@@ -55,7 +55,7 @@ export default function AdministratorItem({
             <InitialIcon handle={user.handle} size="lg" />
             <UserHandle>{user.handle}</UserHandle>
             <AdministratorRoleSelect
-                className="max-w-56"
+                id={`role-${user.id}`}
                 onChange={onChange}
                 roles={roles}
                 value={user.administrator_role}

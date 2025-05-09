@@ -1,4 +1,7 @@
-import { AdministratorRole } from "@administration/types";
+import {
+    AdministratorRole,
+    AdministratorRoleName,
+} from "@administration/types";
 import Select from "@base/Select";
 import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
@@ -6,15 +9,13 @@ import SelectItem from "@base/SelectItem";
 import React from "react";
 
 type RoleSelectProps = {
-    className?: string;
-    id?: string;
-    onChange: (value: string) => void;
+    id: string;
+    onChange: (value: AdministratorRoleName) => void;
     roles: AdministratorRole[];
-    value: string;
+    value: AdministratorRoleName;
 };
 
 export default function AdministratorRoleSelect({
-    className,
     id,
     onChange,
     roles,
@@ -23,10 +24,10 @@ export default function AdministratorRoleSelect({
     return (
         <Select value={value} onValueChange={onChange}>
             <SelectButton
-                placeholder="Select administrator role"
+                className="max-w-56"
                 icon="chevron-down"
-                className={className}
                 id={id}
+                placeholder="Select administrator role"
             />
             <SelectContent position="popper" align="start">
                 {roles.map((role) => (

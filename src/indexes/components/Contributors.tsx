@@ -21,7 +21,7 @@ export default function Contributors({ contributors }: ContributorsProps) {
         <Contributor key={contributor.id} {...contributor} />
     ));
 
-    if (contributorComponents.length > 0) {
+    if (contributorComponents.length === 0) {
         contributorComponents.push(
             <NoneFoundSection key="noneFound" noun="contributors" />,
         );

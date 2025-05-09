@@ -94,7 +94,7 @@ describe("<FileManager>", () => {
 
         expect(
             await screen.findByText(
-                "You do not have permission to upload uploads.",
+                "You do not have permission to upload files.",
             ),
         ).toBeInTheDocument();
         expect(

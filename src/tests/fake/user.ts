@@ -25,7 +25,7 @@ export function createFakeUserNested(
 
     return {
         id: id || faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        handle: handle || faker.internet.userName(),
+        handle: handle || faker.internet.username(),
     };
 }
 
@@ -54,7 +54,7 @@ export function createFakeUser(props?: CreateFakeUserProps): User {
 
     const user = {
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        handle: faker.internet.userName(),
+        handle: faker.internet.username(),
         active: true,
         force_reset: false,
         groups,

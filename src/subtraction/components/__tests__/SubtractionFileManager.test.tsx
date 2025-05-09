@@ -1,3 +1,5 @@
+import { AdministratorRoleName } from "@administration/types";
+import { formatPath } from "@app/hooks";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -5,8 +7,6 @@ import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { AdministratorRoleName } from "../../../administration/types";
-import { formatPath } from "../../../app/hooks";
 import { SubtractionFileManager } from "../SubtractionFileManager";
 
 function createFiles(fileNames) {
@@ -30,7 +30,7 @@ describe("<SubtractionFileManager />", () => {
         renderWithRouter(<SubtractionFileManager />, path);
 
         expect(
-            await screen.findByText("Drag uploads here to upload"),
+            await screen.findByText("Drag files here to upload"),
         ).toBeInTheDocument();
 
         await userEvent.upload(

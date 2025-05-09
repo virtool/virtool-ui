@@ -5,7 +5,7 @@
  */
 import { apiClient } from "../app/api";
 import { User, UserResponse } from "../users/types";
-import { AdministratorRoleName, Settings } from "./types";
+import { AdministratorRole, Settings } from "./types";
 
 /**
  * Fetch the current settings from the server.
@@ -49,8 +49,9 @@ export function updateSettings(update: SettingsUpdate): Promise<Settings> {
  *
  * @returns - A promise resolving to the list of known administrator roles
  */
-export function fetchAdministratorRoles(): Promise<AdministratorRoleName[]> {
-    return apiClient.get("/admin/roles").then((response) => response.body);
+export async function fetchAdministratorRoles(): Promise<AdministratorRole[]> {
+    const response = await apiClient.get("/admin/roles");
+    return response.body;
 }
 
 /**
