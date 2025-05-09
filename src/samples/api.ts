@@ -42,7 +42,7 @@ export function getSample(sampleId: string): Promise<Sample> {
  * @param locale - The geographical location of the virus detection
  * @param libraryType - Library type for the sample
  * @param subtractions - The id of the subtractions assigned to the sample
- * @param files - The id of the files used to create the sample
+ * @param files - The id of the uploads used to create the sample
  * @param labels - The id of the labels assigned to the sample
  * @param group - The of the group assigned to the sample
  * @returns A promise resolving to creating a sample

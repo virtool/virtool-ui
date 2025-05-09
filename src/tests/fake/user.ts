@@ -1,9 +1,9 @@
+import { AdministratorRoleName } from "@administration/types";
 import { faker } from "@faker-js/faker";
+import { GroupMinimal, Permissions } from "@groups/types";
+import { User, UserNested } from "@users/types";
 import { merge, times } from "lodash-es";
 import nock from "nock";
-import { AdministratorRoles } from "../../administration/types";
-import { GroupMinimal, Permissions } from "../../groups/types";
-import { User, UserNested } from "../../users/types";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 
@@ -21,17 +21,17 @@ type CreateFakeUserNestedProps = {
 export function createFakeUserNested(
     props?: CreateFakeUserNestedProps,
 ): UserNested {
-    let { handle, id } = props || {};
+    const { handle, id } = props || {};
 
     return {
-        id: id || faker.random.alphaNumeric(8),
-        handle: handle || faker.internet.userName(),
+        id: id || faker.string.alphanumeric({ casing: "lower", length: 8 }),
+        handle: handle || faker.internet.username(),
     };
 }
 
 type CreateFakeUserProps = {
     active?: boolean;
-    administrator_role?: AdministratorRoles;
+    administrator_role?: AdministratorRoleName;
     force_reset?: boolean;
     groups?: Array<GroupMinimal>;
     handle?: string;
@@ -53,13 +53,13 @@ export function createFakeUser(props?: CreateFakeUserProps): User {
     primary_group = primary_group === undefined ? groups[0] : primary_group;
 
     const user = {
-        id: faker.random.alphaNumeric(8),
-        handle: faker.internet.userName(),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+        handle: faker.internet.username(),
         active: true,
         force_reset: false,
         groups,
         primary_group,
-        last_password_change: faker.date.past(),
+        last_password_change: faker.date.past().toISOString(),
         permissions: createFakePermissions(permissions),
         administrator_role: null,
     };
@@ -130,7 +130,7 @@ export function mockApiGetUser(userId: string, user: User) {
 export function mockApiEditUser(
     userId: string,
     statusCode: number,
-    update: any,
+    update: object,
     user?: User,
 ) {
     return nock("http://localhost")

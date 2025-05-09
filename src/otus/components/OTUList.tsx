@@ -1,3 +1,8 @@
+import BoxGroup from "@base/BoxGroup";
+import ContainerNarrow from "@base/ContainerNarrow";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NoneFoundBox from "@base/NoneFoundBox";
+import Pagination from "@base/Pagination";
 import { map } from "lodash";
 import React from "react";
 import {
@@ -5,11 +10,6 @@ import {
     usePathParams,
     useUrlSearchParam,
 } from "../../app/hooks";
-import BoxGroup from "../../base/BoxGroup";
-import ContainerNarrow from "../../base/ContainerNarrow";
-import LoadingPlaceholder from "../../base/LoadingPlaceholder";
-import NoneFoundBox from "../../base/NoneFoundBox";
-import Pagination from "../../base/Pagination";
 import RebuildAlert from "../../indexes/components/RebuildAlert";
 import { useGetReference } from "../../references/queries";
 import { useListOTUs } from "../queries";

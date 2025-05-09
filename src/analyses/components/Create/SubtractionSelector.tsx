@@ -1,10 +1,10 @@
-import { filter, intersectionWith, xor } from "lodash-es";
+import { useFuse } from "@app/fuse";
+import { cn } from "@app/utils";
+import BoxGroup from "@base/BoxGroup";
+import PseudoLabel from "@base/PseudoLabel";
+import { Subtraction, SubtractionOption } from "@subtraction/types";
+import { intersectionWith, xor } from "lodash-es";
 import React from "react";
-import { useFuse } from "../../../app/fuse";
-import { cn } from "../../../app/utils";
-import BoxGroup from "../../../base/BoxGroup";
-import PseudoLabel from "../../../base/PseudoLabel";
-import { Subtraction } from "../../../subtraction/types";
 import CreateAnalysisField from "./CreateAnalysisField";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 import { CreateAnalysisSelectorSearch } from "./CreateAnalysisSelectorSearch";
@@ -12,19 +12,21 @@ import SubtractionSelectorItem from "./SubtractionSelectorItem";
 
 type SubtractionSelectorProps = {
     selected: string[];
-    subtractions: object[];
+    subtractions: SubtractionOption[];
     onChange: (selected: string[]) => void;
 };
 
 export default function SubtractionSelector({
-    subtractions,
     selected,
+    subtractions,
     onChange,
 }: SubtractionSelectorProps) {
-    const [results, term, setTerm] = useFuse<object>(subtractions, ["name"]);
+    console.log(subtractions);
+    const [results, term, setTerm] = useFuse<SubtractionOption>(subtractions, [
+        "name",
+    ]);
 
-    const unselectedSubtractions = filter(
-        results,
+    const unselectedSubtractions = results.filter(
         (subtraction: Subtraction) => !selected.includes(subtraction.id),
     );
 
@@ -39,13 +41,13 @@ export default function SubtractionSelector({
     }
 
     const selectedComponents = selectedSubtractions.map(
-        ({ id, name, isDefault }) => (
+        ({ id, isDefault, name }) => (
             <SubtractionSelectorItem
-                key={id}
                 id={id}
+                isDefault={isDefault}
+                key={id}
                 name={name}
                 onClick={handleClick}
-                isDefault={isDefault}
             />
         ),
     );

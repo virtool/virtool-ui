@@ -1,12 +1,12 @@
-import { axisBottom, axisLeft, line, scaleLinear } from "d3";
-import { forEach, unzip } from "lodash-es";
-import { theme } from "../../app/theme";
+import { theme } from "@app/theme";
 import {
     appendLegend,
     createSvg,
     QUALITY_CHART_HEIGHT,
     QUALITY_CHART_MARGIN,
-} from "../../samples/charting.js";
+} from "@samples/charting.js";
+import { axisBottom, axisLeft, line, scaleLinear } from "d3";
+import { forEach, unzip } from "lodash-es";
 
 const series = [
     { label: "Guanine", color: theme.color.blue },
@@ -17,7 +17,7 @@ const series = [
 
 export function drawNucleotidesChart(
     element: HTMLElement,
-    data: number[],
+    data: Array<[number, number, number, number]>,
     baseWidth: number,
 ) {
     const svg = createSvg(element, baseWidth);

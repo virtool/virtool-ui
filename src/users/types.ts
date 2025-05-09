@@ -1,4 +1,4 @@
-import { AdministratorRoles } from "../administration/types";
+import { AdministratorRoleName } from "../administration/types";
 import { GroupMinimal, Permissions } from "../groups/types";
 import { SearchResult } from "../types/api";
 
@@ -28,7 +28,7 @@ export type UserNested = {
 /** A Virtool user */
 export type User = UserNested & {
     /** Their administrator role defining what resources they can modify */
-    administrator_role: AdministratorRoles;
+    administrator_role: AdministratorRoleName;
 
     /** Indicates if user is active */
     active: boolean;

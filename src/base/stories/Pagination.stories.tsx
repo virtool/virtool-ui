@@ -1,11 +1,11 @@
+import Box from "@base/Box";
 import { faker } from "@faker-js/faker";
 import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { UserItem } from "@users/components/UserItem";
 import { map } from "lodash-es";
 import React, { useMemo } from "react";
-import { UserItem } from "../../users/components/UserItem";
-import Box from "../Box";
 import Pagination from "../Pagination";
 
 const queryClient = new QueryClient();
@@ -73,7 +73,7 @@ function fakeUserListFactory(seed: number, numItems: number) {
 
 function fakeUserFactory() {
     return {
-        id: faker.random.alphaNumeric(6),
-        handle: `${faker.name.firstName()}${faker.name.lastName()}`,
+        id: faker.string.alphanumeric(6),
+        handle: `${faker.person.firstName()}${faker.person.lastName()}`,
     };
 }

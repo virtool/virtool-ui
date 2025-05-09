@@ -20,7 +20,7 @@ export type HMMSequenceEntry = {
     organism: string;
 };
 
-export type HMM = HMMMinimal & {
+export type Hmm = HMMMinimal & {
     entries: Array<HMMSequenceEntry>;
     genera: { [key: string]: number };
     length: number;

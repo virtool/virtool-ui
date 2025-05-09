@@ -1,6 +1,6 @@
+import IconButton from "@base/IconButton";
 import React from "react";
 import { useDialogParam } from "../../../app/hooks";
-import IconButton from "../../../base/IconButton";
 import {
     ReferenceRight,
     useCheckReferenceRight,

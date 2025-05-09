@@ -1,5 +1,5 @@
 import { apiClient } from "../app/api";
-import { OTU, OTUHistory, OTUIsolate, OTUSegment, OTUSequence } from "./types";
+import { Otu, OtuHistory, OtuIsolate, OtuSegment, OtuSequence } from "./types";
 
 /**
  * Get a single OTU data from the API
@@ -17,7 +17,7 @@ export function get({ otuId }: { otuId: string }) {
  * @param otuId - The unique identifier of the OTU to fetch
  * @returns A Promise resolving to the API response containing the OTU data
  */
-export function getOTU(otuId: string): Promise<OTU> {
+export function getOTU(otuId: string): Promise<Otu> {
     return apiClient.get(`/otus/${otuId}`).then((res) => res.body);
 }
 
@@ -27,7 +27,7 @@ export function getOTU(otuId: string): Promise<OTU> {
  * @param otuId - The unique identifier of the OTU
  * @return A Promise resolving to the API response containing the OTU history
  */
-export function getOTUHistory(otuId: string): Promise<OTUHistory[]> {
+export function getOTUHistory(otuId: string): Promise<OtuHistory[]> {
     return apiClient.get(`/otus/${otuId}/history`).then((res) => res.body);
 }
 
@@ -53,7 +53,7 @@ export function createOTU(
     refId: string,
     name: string,
     abbreviation: string,
-): Promise<OTU> {
+): Promise<Otu> {
     return apiClient
         .post(`/refs/${refId}/otus`)
         .send({
@@ -76,8 +76,8 @@ export function editOTU(
     otuId: string,
     name: string,
     abbreviation: string,
-    schema: OTUSegment[],
-): Promise<OTU> {
+    schema: OtuSegment[],
+): Promise<Otu> {
     return apiClient
         .patch(`/otus/${otuId}`)
         .send({
@@ -110,7 +110,7 @@ export function addIsolate(
     otuId: string,
     sourceType: string,
     sourceName: string,
-): Promise<OTUIsolate> {
+): Promise<OtuIsolate> {
     return apiClient
         .post(`/otus/${otuId}/isolates`)
         .send({
@@ -134,7 +134,7 @@ export function editIsolate(
     isolateId: string,
     sourceType: string,
     sourceName: string,
-): Promise<OTUIsolate> {
+): Promise<OtuIsolate> {
     return apiClient
         .patch(`/otus/${otuId}/isolates/${isolateId}`)
         .send({
@@ -154,7 +154,7 @@ export function editIsolate(
 export function setIsolateAsDefault(
     otuId: string,
     isolateId: string,
-): Promise<OTUIsolate> {
+): Promise<OtuIsolate> {
     return apiClient
         .put(`/otus/${otuId}/isolates/${isolateId}/default`)
         .then((res) => res.body);
@@ -195,7 +195,7 @@ export function addSequence(
     sequence: string,
     segment: string,
     target: string,
-): Promise<OTUSequence> {
+): Promise<OtuSequence> {
     return apiClient
         .post(`/otus/${otuId}/isolates/${isolateId}/sequences`)
         .send({
@@ -233,7 +233,7 @@ export function editSequence(
     sequence: string,
     segment: string,
     target: string,
-): Promise<OTUSequence> {
+): Promise<OtuSequence> {
     return apiClient
         .patch(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`)
         .send({

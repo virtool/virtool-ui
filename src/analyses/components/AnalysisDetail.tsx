@@ -1,3 +1,4 @@
+import NuvsViewer from "@analyses/components/Nuvs/NuvsViewer";
 import React from "react";
 import styled from "styled-components";
 import { usePathParams } from "../../app/hooks";
@@ -18,7 +19,6 @@ import {
     IimiAnalysis,
 } from "../types";
 import { IimiViewer } from "./Iimi/IimiViewer";
-import NuVsViewer from "./NuVs/NuVsViewer";
 import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";
 
 const UnsupportedAnalysis = styled(Box)`
@@ -71,7 +71,7 @@ export default function AnalysisDetail() {
         );
     } else if (analysis.workflow === "nuvs") {
         content = (
-            <NuVsViewer
+            <NuvsViewer
                 detail={analysis as FormattedNuvsAnalysis}
                 sample={sample}
             />

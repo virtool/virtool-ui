@@ -13,7 +13,7 @@ import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import Settings from "../../../administration/components/Settings";
-import { AdministratorRoles } from "../../../administration/types";
+import { AdministratorRoleName } from "../../../administration/types";
 import { User } from "../../types";
 
 function formatUserPath(user: User) {
@@ -31,7 +31,7 @@ describe("<UserDetail />", () => {
         );
         user = createFakeUser({ groups, active: true });
         account = createFakeAccount({
-            administrator_role: AdministratorRoles.FULL,
+            administrator_role: AdministratorRoleName.FULL,
         });
     });
 
@@ -43,7 +43,7 @@ describe("<UserDetail />", () => {
             mockApiGetAccount(account);
 
             const userDetail = createFakeUser({
-                administrator_role: AdministratorRoles.FULL,
+                administrator_role: AdministratorRoleName.FULL,
                 groups,
             });
 

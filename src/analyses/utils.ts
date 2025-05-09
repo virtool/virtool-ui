@@ -1,3 +1,4 @@
+import { formatIsolateName } from "@app/utils";
 import {
     cloneDeep,
     compact,
@@ -21,29 +22,25 @@ import {
     uniq,
     zipWith,
 } from "lodash-es";
-import { formatIsolateName } from "../app/utils";
-import { PositionMappedReadDepths, UntrustworthyRange } from "./types";
+import {
+    FormattedPathoscopeIsolate,
+    NuvsOrf,
+    PositionMappedReadDepths,
+    UntrustworthyRange,
+} from "./types";
 
 export function calculateAnnotatedOrfCount(orfs) {
     return filter(orfs, (orf) => orf.hits.length).length;
 }
 
-function calculateORFMinimumE(hits) {
-    if (hits.length === 0) {
-        return;
+function calculateSequenceMinimumE(orfs: NuvsOrf[]) {
+    if (orfs.length) {
+        return min(
+            orfs.map((orf) =>
+                orf.hits.length ? minBy(orf.hits, "full_e").full_e : 0,
+            ),
+        );
     }
-
-    const minHit = minBy(hits, "full_e");
-    return minHit.full_e;
-}
-
-function calculateSequenceMinimumE(orfs) {
-    if (orfs.length === 0) {
-        return;
-    }
-
-    const minEValues = map(orfs, (orf) => calculateORFMinimumE(orf.hits));
-    return min(minEValues);
 }
 
 export function extractFamilies(orfs) {
@@ -143,15 +140,16 @@ export function median(values: number[]): number {
 }
 
 /**
- * Merge the coverage arrays for the given isolates. This is used to render a representative coverage chart for the
- * parent OTU.
+ * Merge the coverage arrays for the given isolates.
  *
- * @param isolates
- * @returns {Array}
+ * This is used to render a representative coverage chart for the parent OTU.
  */
-export function mergeCoverage(isolates): number[] {
+export function mergeCoverage(
+    isolates: FormattedPathoscopeIsolate[],
+): number[] {
     const longest = maxBy(isolates, (isolate) => isolate.filled.length);
     const coverages = map(isolates, (isolate) => isolate.filled);
+
     return map(longest.filled, (depth, index) =>
         max(map(coverages, (coverage) => coverage[index])),
     );
@@ -165,7 +163,7 @@ export function formatSequence(sequence, readCount) {
     };
 }
 
-export const formatPathoscopeData = (detail) => {
+export function formatPathoscopeData(detail) {
     if (detail.results === null || detail.results.hits.length === 0) {
         return detail;
     }
@@ -253,7 +251,7 @@ export const formatPathoscopeData = (detail) => {
         user,
         workflow,
     };
-};
+}
 
 export function formatData(detail) {
     if (startsWith(detail?.workflow, "pathoscope")) {

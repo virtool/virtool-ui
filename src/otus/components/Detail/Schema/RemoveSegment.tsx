@@ -3,14 +3,14 @@ import React from "react";
 import { useUrlSearchParam } from "../../../../app/hooks";
 import RemoveDialog from "../../../../base/RemoveDialog";
 import { useUpdateOTU } from "../../../queries";
-import { OTUSegment } from "../../../types";
+import { OtuSegment } from "../../../types";
 
 type RemoveSegmentProps = {
     abbreviation: string;
     name: string;
     otuId: string;
     /** List of segments associated with the OTU */
-    schema: OTUSegment[];
+    schema: OtuSegment[];
 };
 
 /**

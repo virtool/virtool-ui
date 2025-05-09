@@ -1,8 +1,8 @@
+import Icon from "@base/Icon";
+import Link from "@base/Link";
 import React from "react";
 import { useMatchPartialPath } from "../../app/hooks";
 import { cn } from "../../app/utils";
-import Icon from "../../base/Icon";
-import Link from "../../base/Link";
 
 type SidebarItemProps = {
     /** A list of routes to exclude from the sidebar */

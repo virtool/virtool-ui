@@ -41,7 +41,7 @@ export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
     return sortedHits;
 }
 
-/** Sort and filter a list of NuVs hits  */
+/** Sort and filter a list of Nuvs hits  */
 export function useSortAndFilterNuVsHits(detail) {
     let hits = detail.results.hits;
     const search = useSearch();

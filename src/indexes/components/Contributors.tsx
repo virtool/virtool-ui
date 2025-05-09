@@ -1,9 +1,9 @@
+import Badge from "@base/Badge";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import NoneFoundSection from "@base/NoneFoundSection";
 import { map, sortBy } from "lodash-es";
 import React from "react";
-import Badge from "../../base/Badge";
-import BoxGroup from "../../base/BoxGroup";
-import BoxGroupHeader from "../../base/BoxGroupHeader";
-import NoneFoundSection from "../../base/NoneFoundSection";
 import { IndexContributor } from "../types";
 import Contributor from "./Contributor";
 
@@ -17,12 +17,14 @@ type ContributorsProps = {
 export default function Contributors({ contributors }: ContributorsProps) {
     const sorted = sortBy(contributors, ["id", "count"]);
 
-    let contributorComponents = map(sorted, (contributor) => (
+    const contributorComponents = map(sorted, (contributor) => (
         <Contributor key={contributor.id} {...contributor} />
     ));
 
     if (contributorComponents.length === 0) {
-        contributorComponents = <NoneFoundSection noun="contributors" />;
+        contributorComponents.push(
+            <NoneFoundSection key="noneFound" noun="contributors" />,
+        );
     }
 
     return (

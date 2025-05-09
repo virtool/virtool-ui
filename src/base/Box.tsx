@@ -22,6 +22,7 @@ function Box({ children, className = "", onClick, ...rest }: BoxProps) {
                 "rounded-sm",
                 className,
             )}
+            onClick={onClick}
             {...rest}
         >
             {children}

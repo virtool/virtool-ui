@@ -1,4 +1,4 @@
-import { AdministratorRoles } from "@administration/types";
+import { AdministratorRoleName } from "@administration/types";
 import {
     AdministratorPermissions,
     hasSufficientAdminRole,
@@ -41,7 +41,9 @@ export default function ApiKeyPermissions({
     const rowComponents = map(sortBy(permissions, "name"), (permission) => {
         const disabled =
             !hasSufficientAdminRole(
-                AdministratorPermissions[permission.name] as AdministratorRoles,
+                AdministratorPermissions[
+                    permission.name
+                ] as AdministratorRoleName,
                 account.administrator_role,
             ) && !account.permissions[permission.name];
 

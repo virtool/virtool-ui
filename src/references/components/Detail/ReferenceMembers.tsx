@@ -1,14 +1,15 @@
+import { objectHasProperty } from "@app/common";
+import { useDialogParam, useUrlSearchParam } from "@app/hooks";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Icon from "@base/Icon";
+import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useRemoveReferenceUser } from "@references/queries";
+import { ReferenceGroup, ReferenceUser } from "@references/types";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { useDialogParam, useUrlSearchParam } from "../../../app/hooks";
-import BoxGroup from "../../../base/BoxGroup";
-import BoxGroupHeader from "../../../base/BoxGroupHeader";
-import BoxGroupSection from "../../../base/BoxGroupSection";
-import Icon from "../../../base/Icon";
-import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
-import { useRemoveReferenceUser } from "../../queries";
-import { ReferenceGroup, ReferenceUser } from "../../types";
 import AddReferenceGroup from "./AddReferenceGroup";
 import AddReferenceUser from "./AddReferenceUser";
 import EditReferenceMember from "./EditMember";
@@ -40,8 +41,10 @@ const ReferenceMembersHeader = styled(BoxGroupHeader)`
 type ReferenceMembersProps = {
     /** The list of users or groups associated with the reference */
     members: ReferenceGroup[] | ReferenceUser[];
+
     /** Whether the member is a user or a group */
     noun: string;
+
     refId: string;
 };
 
@@ -90,15 +93,22 @@ export default function ReferenceMembers({
                     <p>Manage membership and rights for reference {plural}.</p>
                 </ReferenceMembersHeader>
                 {members.length ? (
-                    map(members, (member) => (
-                        <MemberItem
-                            key={member.id}
-                            {...member}
-                            canModify={canModify}
-                            onEdit={(id) => setEditId(String(id))}
-                            onRemove={(id) => mutation.mutate({ id })}
-                        />
-                    ))
+                    map(members, (member: ReferenceGroup | ReferenceUser) => {
+                        const handleOrName = objectHasProperty(member, "handle")
+                            ? (member as ReferenceUser).handle
+                            : (member as ReferenceGroup).name;
+
+                        return (
+                            <MemberItem
+                                key={member.id}
+                                canModify={canModify}
+                                handleOrName={handleOrName}
+                                id={member.id}
+                                onEdit={(id) => setEditId(String(id))}
+                                onRemove={(id) => mutation.mutate({ id })}
+                            />
+                        );
+                    })
                 ) : (
                     <NoMembers>
                         <Icon name="exclamation-circle" /> None Found
@@ -121,7 +131,11 @@ export default function ReferenceMembers({
                 />
             )}
             <EditReferenceMember
-                member={find(members, (member) => String(member.id) === editId)}
+                member={find(
+                    members,
+                    (member: ReferenceGroup | ReferenceUser) =>
+                        member.id === editId,
+                )}
                 noun={noun}
                 refId={refId}
             />

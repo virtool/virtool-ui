@@ -44,7 +44,7 @@ export function createRandomString(length = 8) {
 
 /**
  * Download a file with the given ``filename`` with the given ``text`` content. This allows downloads of
- * dynamically generated files.
+ * dynamically generated uploads.
  */
 export function followDynamicDownload(filename: string, text: string) {
     const a = document.createElement("a");
@@ -105,7 +105,7 @@ export const workflowDisplayNames = {
     create_sample: "Create Sample",
     create_subtraction: "Create Subtraction",
     iimi: "Iimi",
-    nuvs: "NuVs",
+    nuvs: "Nuvs",
     pathoscope: "Pathoscope",
     pathoscope_bowtie: "Pathoscope",
     pathoscope_snap: "Pathoscope",

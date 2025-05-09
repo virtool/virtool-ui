@@ -24,7 +24,7 @@ type CreateNuvsProps = {
 };
 
 /**
- * Form for creating a new NuVs analysis.
+ * Form for creating a new Nuvs analysis.
  */
 export default function CreateNuvs({
     sampleCount,

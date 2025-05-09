@@ -1,6 +1,6 @@
+import InputSearch from "@base/InputSearch";
+import Toolbar from "@base/Toolbar";
 import React from "react";
-import InputSearch from "../../base/InputSearch";
-import Toolbar from "../../base/Toolbar";
 
 type HMMToolbarProps = {
     /** Current search term used for filtering */

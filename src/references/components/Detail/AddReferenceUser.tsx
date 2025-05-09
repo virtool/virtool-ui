@@ -1,20 +1,20 @@
+import { getBorder } from "@app/theme";
+import BoxGroup from "@base/BoxGroup";
+import CompactScrollList from "@base/CompactScrollList";
+import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
+import InitialIcon from "@base/InitialIcon";
+import InputSearch from "@base/InputSearch";
+import NoneFoundSection from "@base/NoneFoundSection";
+import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
+import Toolbar from "@base/Toolbar";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useInfiniteFindUsers } from "@users/queries";
 import { filter, flatMap, includes, map } from "lodash-es";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { getBorder } from "../../../app/theme";
-import BoxGroup from "../../../base/BoxGroup";
-import CompactScrollList from "../../../base/CompactScrollList";
-import Dialog from "../../../base/Dialog";
-import DialogContent from "../../../base/DialogContent";
-import DialogOverlay from "../../../base/DialogOverlay";
-import DialogTitle from "../../../base/DialogTitle";
-import InitialIcon from "../../../base/InitialIcon";
-import InputSearch from "../../../base/InputSearch";
-import NoneFoundSection from "../../../base/NoneFoundSection";
-import SelectBoxGroupSection from "../../../base/SelectBoxGroupSection";
-import Toolbar from "../../../base/Toolbar";
-import { useInfiniteFindUsers } from "../../../users/queries";
 import { useAddReferenceMember } from "../../queries";
 import { ReferenceUser } from "../../types";
 
@@ -66,7 +66,7 @@ export default function AddReferenceUser({
     }
 
     const userIds = map(users, "id");
-    const items = flatMap(data.pages, (page) => page.documents);
+    const items = flatMap(data.pages, (page) => page.items);
     const filteredItems = filter(items, (item) => !includes(userIds, item.id));
 
     function renderRow(item) {

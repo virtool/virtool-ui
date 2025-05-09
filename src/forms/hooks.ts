@@ -1,13 +1,14 @@
+import { getSessionStorage, setSessionStorage } from "@app/utils";
 import { forEach, isEqual } from "lodash-es";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import {
     FieldValues,
+    Path,
     useForm,
     UseFormProps,
     UseFormReturn,
     useWatch,
 } from "react-hook-form";
-import { getSessionStorage, setSessionStorage } from "../app/utils";
 
 /**
  * Restore form values from session storage.
@@ -28,7 +29,7 @@ function restoreFormValues<TFieldValues extends FieldValues = FieldValues>(
 
     const previousFormValues = getSessionStorage(
         `${name}FormValues`,
-    ) as TFieldValues;
+    ) as Partial<TFieldValues>;
 
     if (
         previousFormValues &&
@@ -36,7 +37,7 @@ function restoreFormValues<TFieldValues extends FieldValues = FieldValues>(
         !isDirty
     ) {
         forEach(previousFormValues, (value, key) => {
-            setValue(key, value);
+            setValue(key as Path<TFieldValues>, value);
         });
 
         setHasRestored(true);

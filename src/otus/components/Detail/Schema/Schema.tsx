@@ -11,7 +11,7 @@ import {
     useCheckReferenceRight,
 } from "../../../../references/hooks";
 import { useFetchOTU, useUpdateOTU } from "../../../queries";
-import { OTUSegment } from "../../../types";
+import { OtuSegment } from "../../../types";
 import AddSegment from "./AddSegment";
 import EditSegment from "./EditSegment";
 import RemoveSegment from "./RemoveSegment";
@@ -59,7 +59,7 @@ export default function Schema() {
         handleUpdate(updatedSchema);
     }
 
-    function handleUpdate(updatedSchema: OTUSegment[]) {
+    function handleUpdate(updatedSchema: OtuSegment[]) {
         mutation.mutate({ otuId, schema: updatedSchema });
     }
 

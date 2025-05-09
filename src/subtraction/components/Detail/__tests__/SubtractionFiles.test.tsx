@@ -13,7 +13,7 @@ describe("<SubtractionFiles />", () => {
             files: [
                 {
                     download_url:
-                        "/api/subtractions/xl8faqqz/files/subtraction.fa.gz",
+                        "/api/subtractions/xl8faqqz/uploads/subtraction.fa.gz",
                     id: 1,
                     name: "foo",
                     size: 36461731,
@@ -22,7 +22,7 @@ describe("<SubtractionFiles />", () => {
                 },
                 {
                     download_url:
-                        "/api/subtractions/k66fpdyy/files/subtraction.3.bt2",
+                        "/api/subtractions/k66fpdyy/uploads/subtraction.3.bt2",
                     id: 2,
                     name: "bar",
                     size: 3257,
@@ -33,7 +33,7 @@ describe("<SubtractionFiles />", () => {
         };
     });
 
-    it("should render NoneFound when no files are supplied", () => {
+    it("should render NoneFound when no uploads are supplied", () => {
         props.files = [];
         renderWithProviders(<SubtractionFiles {...props} />);
 

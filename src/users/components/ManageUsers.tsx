@@ -1,16 +1,16 @@
+import { useCheckAdminRole } from "@administration/hooks";
+import { AdministratorRoleName } from "@administration/types";
+import { useUrlSearchParam } from "@app/hooks";
+import Alert from "@base/Alert";
+import Icon from "@base/Icon";
+import InputSearch from "@base/InputSearch";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import ToggleGroup from "@base/ToggleGroup";
+import ToggleGroupItem from "@base/ToggleGroupItem";
+import Toolbar from "@base/Toolbar";
 import React from "react";
-import { useCheckAdminRole } from "../../administration/hooks";
-import { AdministratorRoles } from "../../administration/types";
-import { useUrlSearchParam } from "../../app/hooks";
-import Alert from "../../base/Alert";
-import Icon from "../../base/Icon";
-import InputSearch from "../../base/InputSearch";
-import LoadingPlaceholder from "../../base/LoadingPlaceholder";
-import ToggleGroup from "../../base/ToggleGroup";
-import ToggleGroupItem from "../../base/ToggleGroupItem";
-import Toolbar from "../../base/Toolbar";
 import CreateUser from "./CreateUser";
-import { UsersList } from "./UsersList";
+import UsersList from "./UsersList";
 
 /**
  * Displays a list of editable users and tools for sorting through and creating users
@@ -22,7 +22,7 @@ export function ManageUsers() {
         "active",
     );
     const { hasPermission, isPending } = useCheckAdminRole(
-        AdministratorRoles.USERS,
+        AdministratorRoleName.USERS,
     );
 
     if (isPending) {

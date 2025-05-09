@@ -1,12 +1,12 @@
+import { fontWeight, getColor, getFontSize } from "@app/theme";
+import Link from "@base/Link";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import SidebarHeader from "@base/SidebarHeader";
+import SideBarSection from "@base/SideBarSection";
+import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import { xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { fontWeight, getColor, getFontSize } from "../../../app/theme";
-import Link from "../../../base/Link";
-import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
-import SidebarHeader from "../../../base/SidebarHeader";
-import SideBarSection from "../../../base/SideBarSection";
-import { useFetchSubtractionsShortlist } from "../../../subtraction/queries";
 import SampleSidebarList from "./SampleSidebarList";
 import SampleSidebarSelector from "./SampleSidebarSelector";
 
@@ -54,7 +54,7 @@ export default function DefaultSubtractions({
                     render={({ name }) => <SubtractionInner name={name} />}
                     items={subtractionOptions}
                     selectedIds={defaultSubtractions}
-                    onUpdate={(subtractionId) => {
+                    onUpdate={(subtractionId: string) => {
                         onUpdate(xor(defaultSubtractions, [subtractionId]));
                     }}
                     selectionType="default subtractions"

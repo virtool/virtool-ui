@@ -6,15 +6,15 @@
  * Full model of an administrator role
  */
 export type AdministratorRole = {
-    id: string;
-    name: AdministratorRoles;
     description: string;
+    id: string;
+    name: AdministratorRoleName;
 };
 
 /**
  * All administrator roles
  */
-export enum AdministratorRoles {
+export enum AdministratorRoleName {
     FULL = "full",
     SETTINGS = "settings",
     SPACES = "spaces",

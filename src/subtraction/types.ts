@@ -1,8 +1,7 @@
-import { JobMinimal } from "../jobs/types";
-import { SampleNested } from "../samples/types";
-import { UserNested } from "../users/types";
-
-import { SearchResult } from "../types/api";
+import { SearchResult } from "@/types/api";
+import { JobMinimal } from "@jobs/types";
+import { SampleNested } from "@samples/types";
+import { UserNested } from "@users/types";
 
 /** The measurements of individual nucleotides (percentage) */
 export type NucleotideComposition = {
@@ -57,16 +56,16 @@ export type SubtractionMinimal = SubtractionNested & {
     /** When the subtraction was created */
     created_at: string;
 
-    /** The uploaded FASTA used to generate the subtraction */
+    /** The uploaded file */
     file: SubtractionUpload;
 
-    /** The job that created the subtraction */
+    /** The job associated with the subtraction */
     job?: JobMinimal;
 
     /** The subtraction nickname */
     nickname: string;
 
-    /**  Whether the subtraction is finalized and ready for use */
+    /**  Whether the subtraction is complete and ready to view */
     ready: boolean;
 
     /** The user who created the subtraction */
@@ -75,9 +74,10 @@ export type SubtractionMinimal = SubtractionNested & {
 
 /** A complete Subtraction */
 export type Subtraction = SubtractionMinimal & {
-    /** Data files available to for download */
+    /** Data uploads available to for download */
     files: Array<SubtractionFile>;
 
+    /** The ATGC ratios in the subtraction genome */
     gc?: NucleotideComposition;
 
     /** Samples linked to subtraction */
@@ -87,7 +87,6 @@ export type Subtraction = SubtractionMinimal & {
 /** A subtraction as an option for analysis */
 export type SubtractionOption = SubtractionNested & {
     isDefault?: boolean;
-
     ready: boolean;
 };
 

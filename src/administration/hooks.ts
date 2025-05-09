@@ -1,6 +1,6 @@
 import { Permission } from "@groups/types";
 import { useFetchAccount } from "../account/queries";
-import { AdministratorRoles } from "./types";
+import { AdministratorRoleName } from "./types";
 import {
     checkAdminRoleOrPermissionsFromAccount,
     hasSufficientAdminRole,
@@ -18,7 +18,7 @@ export type PermissionQueryResult = {
  * @returns Whether the user has the required role.
  */
 export function useCheckAdminRole(
-    requiredRole: AdministratorRoles,
+    requiredRole: AdministratorRoleName,
 ): PermissionQueryResult {
     const { data: account, isPending } = useFetchAccount();
     return {

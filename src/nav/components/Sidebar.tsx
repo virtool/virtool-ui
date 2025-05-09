@@ -1,12 +1,12 @@
 import React from "react";
 import { Route, Switch } from "wouter";
-import { AdministratorRoles } from "../../administration/types";
+import { AdministratorRoleName } from "../../administration/types";
 import { hasSufficientAdminRole } from "../../administration/utils";
 import { cn } from "../../app/utils";
 import SidebarLink from "./SidebarLink";
 
 type SidebarProps = {
-    administratorRole: AdministratorRoles;
+    administratorRole: AdministratorRoleName;
 };
 
 /**
@@ -14,7 +14,7 @@ type SidebarProps = {
  */
 export default function Sidebar({ administratorRole }: SidebarProps) {
     const fullAdministrator = hasSufficientAdminRole(
-        AdministratorRoles.FULL,
+        AdministratorRoleName.FULL,
         administratorRole,
     );
 
@@ -51,7 +51,7 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
                 <Route path="/samples/*?">
                     <SidebarLink
                         exclude={[
-                            "/samples/files",
+                            "/samples/uploads",
                             "/samples/labels",
                             "/samples/settings",
                         ]}
@@ -94,7 +94,7 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
                 </Route>
                 <Route path="/subtractions/*?">
                     <SidebarLink
-                        exclude={["/subtractions/files"]}
+                        exclude={["/subtractions/uploads"]}
                         title="Browse"
                         link="/subtractions"
                         icon="th-list"

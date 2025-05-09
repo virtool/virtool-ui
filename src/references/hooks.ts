@@ -1,13 +1,13 @@
+import { useFetchAccount } from "@account/queries";
+import { AdministratorRoleName } from "@administration/types";
+import { apiClient } from "@app/api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { difference, filter, find, includes, some, union } from "lodash-es";
+import { difference, filter, find, some, union } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Response } from "superagent";
 import * as Yup from "yup";
-import { useFetchAccount } from "../account/queries";
-import { AdministratorRoles } from "../administration/types";
-import { apiClient } from "../app/api";
 import { useGetReference } from "./queries";
 
 export function getValidationSchema(sourceTypes: string[]) {
@@ -140,7 +140,7 @@ export function useCheckReferenceRight(
         return { hasPermission: false, isPending: true };
     }
 
-    if (account.administrator_role === AdministratorRoles.FULL) {
+    if (account.administrator_role === AdministratorRoleName.FULL) {
         return { hasPermission: true, isPending: false };
     }
 
@@ -150,9 +150,12 @@ export function useCheckReferenceRight(
         return { hasPermission: true, isPending: false };
     }
 
-    // Groups in common between the user and the registered ref groups.
-    const groups = filter(reference.groups, (group) =>
-        includes(account.groups, group.id),
+    // Groups in common between the user and the reference member groups.
+    const groups = filter(reference.groups, (referenceGroup) =>
+        some(
+            account.groups,
+            (accountGroup) => accountGroup.id === referenceGroup.id,
+        ),
     );
 
     return {

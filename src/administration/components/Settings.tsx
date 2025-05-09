@@ -9,17 +9,17 @@ import { ManageUsers } from "@users/components/ManageUsers";
 import UserDetail from "@users/components/UserDetail";
 import React from "react";
 import { Redirect, Route, Switch } from "wouter";
-import { AdministratorRoles } from "../types";
+import { AdministratorRoleName } from "../types";
 import { hasSufficientAdminRole } from "../utils";
-import { AdministratorTabs } from "./AdministratorTabs";
+import { AdministrationTabs } from "./AdministrationTabs";
+import ManageAdministrators from "./AdministratorList";
 import { ServerSettings } from "./ServerSettings";
-import ManageAdministrators from "./administrators/Administrators";
 
 export default function Settings() {
     const { data: account, isPending } = useFetchAccount();
 
     const redirect = hasSufficientAdminRole(
-        AdministratorRoles.SETTINGS,
+        AdministratorRoleName.SETTINGS,
         account?.administrator_role,
     )
         ? "settings"
@@ -35,7 +35,7 @@ export default function Settings() {
                 <LoadingPlaceholder />
             ) : (
                 <>
-                    <AdministratorTabs
+                    <AdministrationTabs
                         administratorRole={account.administrator_role}
                     />
                     <ContainerNarrow>

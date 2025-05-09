@@ -1,8 +1,8 @@
+import UploadOverlay from "@/uploads/components/UploadOverlay";
 import { useFetchAccount } from "@account/queries";
 import Container from "@base/Container";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import DevDialog from "@dev/components/DeveloperDialog";
-import UploadOverlay from "@files/components/UploadOverlay";
 import MessageBanner from "@message/components/MessageBanner";
 import Nav from "@nav/components/Nav";
 import Sidebar from "@nav/components/Sidebar";

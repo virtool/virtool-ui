@@ -10,7 +10,7 @@ import InputLabel from "../../../../base/InputLabel";
 import InputSelect from "../../../../base/InputSelect";
 import InputSimple from "../../../../base/InputSimple";
 import SaveButton from "../../../../base/SaveButton";
-import { Molecule, OTUSegment } from "../../../types";
+import { Molecule, OtuSegment } from "../../../types";
 
 const moleculeTypes = [
     "",
@@ -41,7 +41,7 @@ type SegmentFormProps = {
     /** A callback function to be called when the form is submitted */
     onSubmit: (values: FormValues) => void;
     /** The segments associated with the otu */
-    schema: OTUSegment[];
+    schema: OtuSegment[];
 };
 
 /**

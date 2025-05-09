@@ -16,8 +16,8 @@ import { createFakeUserNested } from "./user";
 export function createFakeReferenceTarget(): ReferenceTarget {
     return {
         description: faker.lorem.lines(1),
-        length: faker.datatype.number(),
-        name: faker.random.word(),
+        length: faker.number.int(),
+        name: faker.word.noun(),
         required: true,
     };
 }
@@ -34,9 +34,9 @@ export function createFakeReferenceNested(
     params?: CreateFakeReferenceNestedParams,
 ) {
     return {
-        id: faker.random.alphaNumeric(8),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         data_type: "genome",
-        name: faker.random.word(),
+        name: faker.word.noun(),
         ...params,
     };
 }
@@ -56,22 +56,22 @@ export function createFakeReferenceMinimal(
     const defaultReferenceMinimal = {
         ...createFakeReferenceNested(params),
         cloned_from: {
-            id: faker.random.alphaNumeric(8),
-            name: faker.random.word(),
+            id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+            name: faker.word.noun(),
         },
         created_at: faker.date.past().toISOString(),
         imported_from: null,
-        installed: true,
-        internal_control: faker.random.word(),
-        latest_built: null,
-        organism: faker.random.word(),
-        otu_count: faker.datatype.number(),
+        installed: null,
+        internal_control: faker.word.noun(),
+        latest_build: null,
+        organism: faker.word.noun(),
+        otu_count: faker.number.int(),
         release: null,
         remotes_from: null,
         task: {
             complete: true,
         },
-        unbuilt_change_count: faker.datatype.number(),
+        unbuilt_change_count: faker.number.int(),
         updating: false,
         user: createFakeUserNested(),
     };
@@ -94,18 +94,22 @@ export function createFakeReference(
 
     const defaultReference = {
         ...createFakeReferenceMinimal(props),
-        contributors: {},
+        contributors: [],
         description: description || "",
         groups: [],
         restrict_source_types: false,
         source_types: ["isolate", "strain"],
         targets: [createFakeReferenceTarget()],
-        users: {
-            ...createFakeUserNested(),
-            modify: true,
-            remove: true,
-            modify_otu: true,
-        },
+        users: [
+            {
+                ...createFakeUserNested(),
+                build: true,
+                created_at: faker.date.past().toISOString(),
+                modify: true,
+                modify_otu: true,
+                remove: true,
+            },
+        ],
     };
 
     return assign(defaultReference, props);

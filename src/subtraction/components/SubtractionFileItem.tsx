@@ -33,7 +33,7 @@ type SubtractionFileItemProps = {
 };
 
 /**
- * A condensed file for use in a list of subtraction files
+ * A condensed file for use in a list of subtraction uploads
  */
 export function SubtractionFileItem({
     active,

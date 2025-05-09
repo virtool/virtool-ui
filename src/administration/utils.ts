@@ -1,6 +1,6 @@
 import { Permission } from "@groups/types";
 import { Account } from "../account/types";
-import { AdministratorRoles } from "./types";
+import { AdministratorRoleName } from "./types";
 
 /**
  * The permissions level of each administrator role
@@ -21,8 +21,8 @@ enum AdministratorPermissionsLevel {
  */
 
 export function hasSufficientAdminRole(
-    requiredRole: AdministratorRoles,
-    userRole: AdministratorRoles,
+    requiredRole: AdministratorRoleName,
+    userRole: AdministratorRoleName,
 ): boolean {
     return (
         AdministratorPermissionsLevel[userRole] <=
@@ -34,14 +34,14 @@ export function hasSufficientAdminRole(
  * Permissions granted to each administrator role
  */
 export enum AdministratorPermissions {
-    cancel_job = AdministratorRoles.BASE,
-    create_ref = AdministratorRoles.BASE,
-    modify_hmm = AdministratorRoles.BASE,
-    remove_job = AdministratorRoles.BASE,
-    upload_file = AdministratorRoles.FULL,
-    create_sample = AdministratorRoles.FULL,
-    modify_subtraction = AdministratorRoles.FULL,
-    remove_file = AdministratorRoles.FULL,
+    cancel_job = AdministratorRoleName.BASE,
+    create_ref = AdministratorRoleName.BASE,
+    modify_hmm = AdministratorRoleName.BASE,
+    remove_job = AdministratorRoleName.BASE,
+    upload_file = AdministratorRoleName.FULL,
+    create_sample = AdministratorRoleName.FULL,
+    modify_subtraction = AdministratorRoleName.FULL,
+    remove_file = AdministratorRoleName.FULL,
 }
 
 /**

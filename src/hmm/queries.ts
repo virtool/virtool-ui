@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { ErrorResponse } from "../types/types";
 import { fetchHmm, installHmm, listHmms } from "./api";
-import { HMM, HMMInstalled, HmmSearchResults } from "./types";
+import { Hmm, HMMInstalled, HmmSearchResults } from "./types";
 
 /**
  * Factory object for generating hmm query keys
@@ -43,7 +43,7 @@ export function useListHmms(page: number, per_page: number, term?: string) {
  * @returns A single HMM
  */
 export function useFetchHmm(hmmId: string) {
-    return useQuery<HMM, ErrorResponse>({
+    return useQuery<Hmm, ErrorResponse>({
         queryKey: hmmQueryKeys.detail(hmmId),
         queryFn: () => fetchHmm(hmmId),
         retry: (failureCount, error) => {

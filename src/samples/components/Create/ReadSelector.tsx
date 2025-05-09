@@ -1,8 +1,17 @@
+import { useValidateFiles } from "@/uploads/hooks";
+import { FileResponse, UploadType } from "@/uploads/types";
 import { getBorder, getFontWeight, theme } from "@app/theme";
+import Box from "@base/Box";
+import BoxGroup from "@base/BoxGroup";
+import Button from "@base/Button";
+import CompactScrollList from "@base/CompactScrollList";
+import Icon from "@base/Icon";
+import InputError from "@base/InputError";
+import InputSearch from "@base/InputSearch";
+import Link from "@base/Link";
+import NoneFoundSection from "@base/NoneFoundSection";
 import PseudoLabel from "@base/PseudoLabel";
 import Toolbar from "@base/Toolbar";
-import { useValidateFiles } from "@files/hooks";
-import { FileResponse, FileType } from "@files/types";
 import {
     FetchNextPageOptions,
     InfiniteData,
@@ -11,15 +20,6 @@ import {
 import { flatMap, includes, indexOf, toLower } from "lodash-es";
 import React, { ReactNode, useEffect, useState } from "react";
 import styled from "styled-components";
-import Box from "../../../base/Box";
-import BoxGroup from "../../../base/BoxGroup";
-import Button from "../../../base/Button";
-import CompactScrollList from "../../../base/CompactScrollList";
-import Icon from "../../../base/Icon";
-import InputError from "../../../base/InputError";
-import InputSearch from "../../../base/InputSearch";
-import Link from "../../../base/Link";
-import NoneFoundSection from "../../../base/NoneFoundSection";
 import ReadSelectorItem from "./ReadSelectorItem";
 
 type ReadSelectorBoxProps = {
@@ -56,7 +56,7 @@ const StyledScrollListElement = styled(CompactScrollList)`
 `;
 
 type ReadSelectorProps = {
-    /** Samples files on current page */
+    /** Samples uploads on current page */
     data: InfiniteData<FileResponse>;
     /** Whether the next page is being fetched */
     isFetchingNextPage: boolean;
@@ -70,12 +70,12 @@ type ReadSelectorProps = {
     onSelect: (selected: string[]) => void;
     /** Errors occurred on sample creation */
     error: string;
-    /** The selected files */
+    /** The selected uploads */
     selected: string[];
 };
 
 /**
- * A list of read files with option to filter by file name
+ * A list of read uploads with option to filter by file name
  */
 export default function ReadSelector({
     data,
@@ -86,7 +86,7 @@ export default function ReadSelector({
     error,
     selected,
 }: ReadSelectorProps) {
-    useValidateFiles(FileType.reads, selected, onSelect);
+    useValidateFiles(UploadType.reads, selected, onSelect);
 
     const [term, setTerm] = useState("");
     const [selectedFiles, setSelectedFiles] = useState(selected);

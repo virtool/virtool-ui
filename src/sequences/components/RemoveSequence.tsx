@@ -3,13 +3,13 @@ import React from "react";
 import { useUrlSearchParam } from "../../app/hooks";
 import RemoveDialog from "../../base/RemoveDialog";
 import { useRemoveSequence } from "../../otus/queries";
-import { OTUSequence } from "../../otus/types";
+import { OtuSequence } from "../../otus/types";
 
 type RemoveSequenceProps = {
     isolateName: string;
     isolateId: string;
     otuId: string;
-    sequences: OTUSequence[];
+    sequences: OtuSequence[];
 };
 
 /**

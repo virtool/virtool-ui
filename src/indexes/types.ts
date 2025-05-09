@@ -1,16 +1,16 @@
-import { JobMinimal } from "../jobs/types";
-import { HistoryNested, OTUNested } from "../otus/types";
-import { ReferenceNested } from "../references/types";
-import { UserNested } from "../users/types";
-
-import { SearchResult } from "../types/api";
+import { SearchResult } from "@/types/api";
+import { JobMinimal } from "@jobs/types";
+import { HistoryNested, OtuNested } from "@otus/types";
+import { ReferenceNested } from "@references/types";
+import { UserNested } from "@users/types";
 
 /** Basic data for nested representations */
 export type IndexNested = {
     /** The unique identifier */
     id: string;
+
     /** The build iteration */
-    version: number;
+    version: number | string;
 };
 
 /** Minimal index data for list views */
@@ -21,7 +21,7 @@ export type IndexMinimal = IndexNested & {
     /** The iso formatted date of creation */
     created_at: string;
 
-    /** Whether there are downloadable files */
+    /** Whether there are downloadable uploads */
     has_files: boolean;
 
     /** The job responsible for creation */
@@ -75,7 +75,7 @@ export type IndexFile = {
 export type Index = IndexMinimal & {
     /** Users who contributed to the index*/
     contributors: IndexContributor[];
-    /** Downloadable index files*/
+    /** Downloadable index uploads*/
     files: IndexFile[];
     /** The last index the OTU was included in */
     manifest: object;
@@ -85,7 +85,7 @@ export type Index = IndexMinimal & {
 
 export type UnbuiltChanges = HistoryNested & {
     index: IndexNested;
-    otu: OTUNested;
+    otu: OtuNested;
     reference: ReferenceNested;
 };
 

@@ -12,7 +12,7 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../../administration/types";
+import { AdministratorRoleName } from "../../../administration/types";
 import ApiKeys from "../ApiKeys";
 
 describe("<ApiKeys />", () => {
@@ -34,7 +34,7 @@ describe("<ApiKeys />", () => {
 
         mockApiGetAccount(
             createFakeAccount({
-                administrator_role: AdministratorRoles.FULL,
+                administrator_role: AdministratorRoleName.FULL,
             }),
         );
         mockApiGetApiKeys([]);
@@ -100,7 +100,9 @@ describe("<ApiKeys />", () => {
 
     it("should show administrator notice when appropriate", async () => {
         mockApiGetAccount(
-            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+            createFakeAccount({
+                administrator_role: AdministratorRoleName.FULL,
+            }),
         );
         mockApiGetApiKeys([]);
 

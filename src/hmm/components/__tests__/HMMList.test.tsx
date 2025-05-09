@@ -5,7 +5,7 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../../administration/types";
+import { AdministratorRoleName } from "../../../administration/types";
 import HMM from "../HMM";
 
 describe("<HMMList />", () => {
@@ -55,7 +55,7 @@ describe("<HMMList />", () => {
             });
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({
-                administrator_role: AdministratorRoles.FULL,
+                administrator_role: AdministratorRoleName.FULL,
             });
             mockApiGetAccount(account);
             renderWithRouter(<HMM />, path);
@@ -120,7 +120,7 @@ describe("<HMMList />", () => {
             });
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({
-                administrator_role: AdministratorRoles.FULL,
+                administrator_role: AdministratorRoleName.FULL,
             });
             mockApiGetAccount(account);
             renderWithRouter(<HMM />, path);

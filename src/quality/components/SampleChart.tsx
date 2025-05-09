@@ -55,7 +55,7 @@ type QualityChartProps = {
     /** A callback function to create the sample quality chart */
     createChart: (
         current: HTMLDivElement,
-        data: number[],
+        data: number[] | Array<[number, number, number, number]>,
         width: number,
     ) => void;
 

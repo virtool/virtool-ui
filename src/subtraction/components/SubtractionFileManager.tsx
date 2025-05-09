@@ -1,9 +1,9 @@
+import { FileManager } from "@/uploads/components/FileManager";
+import { UploadType } from "@/uploads/types";
 import React from "react";
-import { FileManager } from "../../files/components/FileManager";
-import { FileType } from "../../files/types";
 
 /**
- * Displays a list of subtraction files with functionality to upload/delete files
+ * Displays a list of subtraction uploads with functionality to upload/delete uploads
  */
 export function SubtractionFileManager() {
     return (
@@ -12,7 +12,7 @@ export function SubtractionFileManager() {
                 "application/gzip": [".fasta.gz", ".fa.gz"],
                 "application/text": [".fasta", ".fa"],
             }}
-            fileType={FileType.subtraction}
+            fileType={UploadType.subtraction}
             message={
                 <div className="flex flex-col gap-1 items-center">
                     <span className="font-medium text-base">

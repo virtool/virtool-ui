@@ -1,9 +1,9 @@
 import { getColor } from "@app/theme";
 import BoxGroup from "@base/BoxGroup";
+import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import { map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import SelectBoxGroupSection from "../../base/SelectBoxGroupSection";
 import { GroupMinimal } from "../types";
 
 type GroupsSelectBoxGroupSectionProps = {
@@ -40,23 +40,23 @@ export const GroupComponentsContainer = styled(BoxGroup)`
 `;
 
 type GroupSelectorProps = {
-    selectedGroup?: string;
-    setSelectedGroup: (string) => void;
+    selectedGroupId?: number | string;
+    setSelectedGroupId: (groupId: number | string) => void;
     groups: Array<GroupMinimal>;
 };
 
 export function GroupSelector({
-    selectedGroup,
-    setSelectedGroup,
+    selectedGroupId,
+    setSelectedGroupId,
     groups,
 }: GroupSelectorProps) {
     const groupComponents = map(sortBy(groups, "name"), (group) => {
         return (
             <GroupsSelectBoxGroupSection
                 selectable
-                active={selectedGroup === group.id}
+                active={selectedGroupId === group.id}
                 key={group.id}
-                onClick={() => setSelectedGroup(group.id)}
+                onClick={() => setSelectedGroupId(group.id)}
             >
                 {group.name}
             </GroupsSelectBoxGroupSection>

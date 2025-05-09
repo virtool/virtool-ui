@@ -1,8 +1,8 @@
+import Attribution from "@base/Attribution";
+import BoxGroupSection from "@base/BoxGroupSection";
+import IconButton from "@base/IconButton";
 import { reduce } from "lodash-es";
 import React from "react";
-import Attribution from "../../base/Attribution";
-import BoxGroupSection from "../../base/BoxGroupSection";
-import IconButton from "../../base/IconButton";
 import { useRemoveAPIKey } from "../queries";
 import { APIKeyMinimal } from "../types";
 import ApiKeyEdit from "./ApiKeyEdit";

@@ -4,13 +4,13 @@ import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { AdministratorRoles } from "../../../administration/types";
+import { AdministratorRoleName } from "../../../administration/types";
 import AccountProfile from "../AccountProfile";
 
 describe("<AccountProfile />", () => {
     it("should render when administrator", async () => {
         const account = createFakeAccount({
-            administrator_role: AdministratorRoles.FULL,
+            administrator_role: AdministratorRoleName.FULL,
         });
 
         mockApiGetAccount(account);
@@ -31,7 +31,7 @@ describe("<AccountProfile />", () => {
 
     it("should render with initial email", async () => {
         const account = createFakeAccount({
-            administrator_role: AdministratorRoles.FULL,
+            administrator_role: AdministratorRoleName.FULL,
             email: "virtool.devs@gmail.com",
         });
 
@@ -47,7 +47,7 @@ describe("<AccountProfile />", () => {
 
     it("should handle email changes", async () => {
         const account = createFakeAccount({
-            administrator_role: AdministratorRoles.FULL,
+            administrator_role: AdministratorRoleName.FULL,
         });
 
         mockApiGetAccount(account);
@@ -74,7 +74,7 @@ describe("<AccountProfile />", () => {
 
     it("should handle password changes", async () => {
         const account = createFakeAccount({
-            administrator_role: AdministratorRoles.FULL,
+            administrator_role: AdministratorRoleName.FULL,
         });
         mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);

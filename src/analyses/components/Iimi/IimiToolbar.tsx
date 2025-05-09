@@ -1,6 +1,6 @@
+import InputSearch from "@base/InputSearch";
 import numbro from "numbro";
 import React from "react";
-import InputSearch from "../../../base/InputSearch";
 import InputSimple from "../../../base/InputSimple";
 import Toolbar from "../../../base/Toolbar";
 

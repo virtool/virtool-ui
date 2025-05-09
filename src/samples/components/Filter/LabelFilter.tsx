@@ -1,7 +1,7 @@
+import Link from "@base/Link";
+import SidebarHeader from "@base/SidebarHeader";
+import SideBarSection from "@base/SideBarSection";
 import React from "react";
-import Link from "../../../base/Link";
-import SidebarHeader from "../../../base/SidebarHeader";
-import SideBarSection from "../../../base/SideBarSection";
 import { Label } from "../../../labels/types";
 import LabelFilterItem from "./LabelFilterItem";
 

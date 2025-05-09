@@ -1,3 +1,5 @@
+import { useInfiniteFindFiles } from "@/uploads/queries";
+import { UploadType } from "@/uploads/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import { Controller } from "react-hook-form";
@@ -15,8 +17,6 @@ import InputSimple from "../../base/InputSimple";
 import LoadingPlaceholder from "../../base/LoadingPlaceholder";
 import PseudoLabel from "../../base/PseudoLabel";
 import SaveButton from "../../base/SaveButton";
-import { useInfiniteFindFiles } from "../../files/queries";
-import { FileType } from "../../files/types";
 import { RestoredAlert } from "../../forms/components/RestoredAlert";
 import { usePersistentForm } from "../../forms/hooks";
 import { useCreateSubtraction } from "../queries";
@@ -51,7 +51,7 @@ export default function SubtractionCreate() {
         isPending,
         isFetchingNextPage,
         fetchNextPage,
-    } = useInfiniteFindFiles(FileType.subtraction, 25);
+    } = useInfiniteFindFiles(UploadType.subtraction, 25);
 
     const mutation = useCreateSubtraction();
 

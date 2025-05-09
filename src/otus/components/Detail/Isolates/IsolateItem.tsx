@@ -5,7 +5,7 @@ import { getActiveShadow } from "../../../../app/theme";
 import { formatIsolateName } from "../../../../app/utils";
 import BoxGroupSection from "../../../../base/BoxGroupSection";
 import Icon from "../../../../base/Icon";
-import { OTUIsolate } from "../../../types";
+import { OtuIsolate } from "../../../types";
 
 const StyledIsolateItem = styled(BoxGroupSection)`
     align-items: center;
@@ -27,7 +27,7 @@ const StyledIsolateItem = styled(BoxGroupSection)`
 type IsolateItemProps = {
     /** Whether the Isolate is selected */
     active: boolean;
-    isolate: OTUIsolate;
+    isolate: OtuIsolate;
 };
 
 /**

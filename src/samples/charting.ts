@@ -16,7 +16,7 @@ export function appendLegend(
     series,
     legendCircleRadius: number,
 ) {
-    map(keysIn(series), (index) => {
+    map(keysIn(series), (index: number) => {
         svg.append("circle")
             .attr("cy", index * 25)
             .attr("r", legendCircleRadius)

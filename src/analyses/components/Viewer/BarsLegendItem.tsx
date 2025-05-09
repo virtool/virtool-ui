@@ -1,6 +1,6 @@
+import { toThousand } from "@app/utils";
 import React from "react";
 import styled from "styled-components";
-import { toThousand } from "../../../app/utils";
 import Icon from "../../../base/Icon";
 import { IconColor } from "../../../jobs/types";
 

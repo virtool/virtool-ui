@@ -13,7 +13,7 @@ describe("<SubtractionFile />", () => {
 
     beforeEach(() => {
         props = {
-            downloadUrl: "/api/subtractions/xl8faqqz/files/subtraction.fa.gz",
+            downloadUrl: "/api/subtractions/xl8faqqz/uploads/subtraction.fa.gz",
             name: "foo",
             size: 36461731,
         };

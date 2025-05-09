@@ -1,25 +1,23 @@
 import { faker } from "@faker-js/faker";
+import { MlModel, MLModelMinimal, MLModelRelease } from "@ml/types";
 import { merge } from "lodash";
 import nock from "nock";
-import { MlModel, MLModelMinimal, MLModelRelease } from "../../ml/types";
 
 /**
  * Create a fake ML model release object
- *
- * @param overrides - optional properties for creating a fake ML models with specific values
- */
-export function createFakeMLModelRelease(): MLModelRelease {
-    const id = faker.datatype.number(100);
+ **/
+export function createFakeMlModelRelease(): MLModelRelease {
+    const id = faker.number.int(100);
 
     return {
         id,
         created_at: faker.date.past().toISOString(),
         download_url: `api/ml/${id}/download`,
-        github_url: `http://github.com/virtool/ml/releases/${id})}`,
-        name: `${faker.datatype.number(5)}.${faker.datatype.number(15)}.${faker.datatype.number(15)}`,
+        github_url: `https://github.com/virtool/ml/releases/${id})}`,
+        name: `${faker.number.int(5)}.${faker.number.int(15)}.${faker.number.int(15)}`,
         published_at: faker.date.past().toISOString(),
         ready: true,
-        size: faker.datatype.number(100000),
+        size: faker.number.int(100000),
     };
 }
 
@@ -36,12 +34,12 @@ export function createFakeMLModelMinimal(
     overrides?: CreateFakeMLModelOverrides,
 ): MLModelMinimal {
     return {
-        id: faker.datatype.number(100),
+        id: faker.number.int(100),
         created_at: overrides?.created_at ?? faker.date.past().toISOString(),
         description: faker.lorem.sentence(),
-        latest_release: createFakeMLModelRelease(),
+        latest_release: createFakeMlModelRelease(),
         name: `model-${faker.lorem.word()}`,
-        release_count: faker.datatype.number(10),
+        release_count: faker.number.int(10),
     };
 }
 
@@ -53,7 +51,7 @@ export function createFakeMLModelMinimal(
 export function createFakeMLModel(
     overrides?: CreateFakeMLModelOverrides,
 ): MlModel {
-    const releases = [createFakeMLModelRelease()];
+    const releases = [createFakeMlModelRelease()];
 
     const defaultModel = {
         ...createFakeMLModelMinimal(overrides),
@@ -67,13 +65,12 @@ export function createFakeMLModel(
 /**
  * Sets up a mocked API route for fetching a list of ML models
  *
- * @param MLModels - The list of ML models to be returned from the mocked API call
- * @param last_synced_at - The date the models were last synced with virtool.ca
+ * @param mlModels - The list of ML models to be returned from the mocked API call
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetModels(MLModels: MLModelMinimal[]) {
+export function mockApiGetModels(mlModels: MLModelMinimal[]) {
     return nock("http://localhost").get("/api/ml").reply(200, {
-        items: MLModels,
+        items: mlModels,
         last_synced_at: faker.date.recent().toISOString(),
     });
 }

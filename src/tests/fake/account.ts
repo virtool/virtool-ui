@@ -1,14 +1,14 @@
-import { faker } from "@faker-js/faker";
-import { merge } from "lodash";
-import nock from "nock";
 import {
     Account,
     AccountSettings,
     APIKeyMinimal,
     QuickAnalyzeWorkflow,
-} from "../../account/types";
-import { AdministratorRoles } from "../../administration/types";
-import { GroupMinimal, Permissions } from "../../groups/types";
+} from "@account/types";
+import { AdministratorRoleName } from "@administration/types";
+import { faker } from "@faker-js/faker";
+import { GroupMinimal, Permissions } from "@groups/types";
+import { merge } from "lodash";
+import nock from "nock";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 import { createFakeUser } from "./user";
@@ -21,7 +21,7 @@ const defaultSettings = {
 };
 
 type CreateFakeAccountArgs = {
-    administrator_role?: AdministratorRoles;
+    administrator_role?: AdministratorRoleName;
     email?: string;
     groups?: GroupMinimal[];
     handle?: string;
@@ -57,8 +57,8 @@ export function createFakeApiKey(props?: CreateFakeApiKeysArgs): APIKeyMinimal {
         {
             created_at: faker.date.past().toISOString(),
             groups: [createFakeGroupMinimal()],
-            id: faker.random.alphaNumeric(8),
-            name: faker.random.word(),
+            id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+            name: faker.word.noun(),
             permissions: createFakePermissions({
                 cancel_job: true,
                 create_ref: true,
@@ -100,7 +100,7 @@ export function mockApiGetApiKeys(apiKeys: APIKeyMinimal[]) {
 export function mockApiCreateApiKey(name: string, permissions: Permissions) {
     const createApiKeyResponse = {
         groups: [],
-        id: faker.random.alphaNumeric(8),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         key: "testKey",
         name,
         permissions,

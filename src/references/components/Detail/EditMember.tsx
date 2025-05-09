@@ -1,14 +1,17 @@
+import { useUrlSearchParam } from "@app/hooks";
+import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import {
+    referenceQueryKeys,
+    useUpdateReferenceMember,
+} from "@references/queries";
+import { ReferenceGroup, ReferenceUser } from "@references/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { map } from "lodash-es";
 import React from "react";
-import { useUrlSearchParam } from "../../../app/hooks";
-import Dialog from "../../../base/Dialog";
-import DialogContent from "../../../base/DialogContent";
-import DialogOverlay from "../../../base/DialogOverlay";
-import DialogTitle from "../../../base/DialogTitle";
-import { referenceQueryKeys, useUpdateReferenceMember } from "../../queries";
-import { ReferenceGroup, ReferenceUser } from "../../types";
 import { ReferenceRight } from "./ReferenceRight";
 
 const rights = ["modify_otu", "build", "modify", "remove"];

@@ -1,14 +1,20 @@
-import { forEach } from "lodash-es";
+import InputContainer from "@base/InputContainer";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputIconButton from "@base/InputIconButton";
+import InputLabel from "@base/InputLabel";
+import InputLoading from "@base/InputLoading";
+import InputSimple from "@base/InputSimple";
+import { getGenbank } from "@otus/api";
 import React, { useCallback, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import InputContainer from "../../base/InputContainer";
-import InputError from "../../base/InputError";
-import InputGroup from "../../base/InputGroup";
-import InputIconButton from "../../base/InputIconButton";
-import InputLabel from "../../base/InputLabel";
-import InputLoading from "../../base/InputLoading";
-import InputSimple from "../../base/InputSimple";
-import { getGenbank } from "../../otus/api";
+
+type FormValues = {
+    accession: string;
+    definition: string;
+    host: string;
+    sequence: string;
+};
 
 /**
  * Displays the accession field of a form for a sequence
@@ -23,15 +29,16 @@ export default function Accession() {
         getValues,
         register,
         setValue,
-    } = useFormContext<{ accession: string }>();
+    } = useFormContext<FormValues>();
 
     const accession = getValues("accession");
 
     const onAutofill = useCallback(
-        (sequenceValues) => {
-            forEach(sequenceValues, (value, key) => {
-                setValue(key, value);
-            });
+        (values: FormValues) => {
+            setValue("accession", values.accession);
+            setValue("definition", values.definition);
+            setValue("host", values.host);
+            setValue("sequence", values.sequence);
         },
         [setValue],
     );

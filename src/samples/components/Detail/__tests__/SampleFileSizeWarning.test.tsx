@@ -67,7 +67,7 @@ describe("<SampleFileSizeWarning />", () => {
         props.reads = [createFakeSampleRead({ size: 5 })];
         renderWithRouter(
             <SampleFileSizeWarning {...props} />,
-            "/samples/test/files",
+            "/samples/test/uploads",
         );
 
         expect(

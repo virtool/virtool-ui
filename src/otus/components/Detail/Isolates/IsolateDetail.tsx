@@ -9,7 +9,7 @@ import Label from "../../../../base/Label";
 import { DownloadLink } from "../../../../references/components/Detail/DownloadLink";
 import Sequences from "../../../../sequences/components/Sequences";
 import { useSetIsolateAsDefault } from "../../../queries";
-import { OTUIsolate } from "../../../types";
+import { OtuIsolate } from "../../../types";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./RemoveIsolate";
 
@@ -41,7 +41,7 @@ const StyledIsolateDetail = styled.div`
 
 type IsolateDetailProps = {
     /** The Isolate that is currently selected */
-    activeIsolate: OTUIsolate;
+    activeIsolate: OtuIsolate;
     allowedSourceTypes: string[];
     /** Whether the user has permission to modify the Isolate */
     canModify: boolean;

@@ -1,11 +1,11 @@
+import { toThousand } from "@app/utils";
+import Box from "@base/Box";
+import Label from "@base/Label";
+import Link from "@base/Link";
 import { map } from "lodash-es";
 import numbro from "numbro";
 import React from "react";
 import styled from "styled-components";
-import { toThousand } from "../../../app/utils";
-import Box from "../../../base/Box";
-import Label from "../../../base/Label";
-import Link from "../../../base/Link";
 import { Bars } from "../Viewer/Bars";
 
 const StyledAnalysisMappingReferenceTitle = styled.div`
@@ -32,7 +32,7 @@ export function AnalysisMappingSubtractionTitle({ subtractions }) {
             <Link to={`/subtractions/${subtraction.id}`}>
                 {subtraction.name}
             </Link>
-            {index !== subtractions.length - 1 ? ", " : ""}
+            {Number(index) !== subtractions.length - 1 ? ", " : ""}
         </span>
     ));
 }

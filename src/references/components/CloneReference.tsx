@@ -1,25 +1,24 @@
+import { useUrlSearchParam } from "@app/hooks";
+import Attribution from "@base/Attribution";
+import Badge from "@base/Badge";
+import Box from "@base/Box";
+import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogFooter from "@base/DialogFooter";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
+import PseudoLabel from "@base/PseudoLabel";
+import SaveButton from "@base/SaveButton";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { find } from "lodash-es";
+import { useCloneReference } from "@references/queries";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { ReferenceMinimal } from "references/types";
 import styled from "styled-components";
-import { useUrlSearchParam } from "../../app/hooks";
-import Attribution from "../../base/Attribution";
-import Badge from "../../base/Badge";
-import Box from "../../base/Box";
-import Dialog from "../../base/Dialog";
-import DialogContent from "../../base/DialogContent";
-import DialogFooter from "../../base/DialogFooter";
-import DialogOverlay from "../../base/DialogOverlay";
-import DialogTitle from "../../base/DialogTitle";
-import InputError from "../../base/InputError";
-import InputGroup from "../../base/InputGroup";
-import InputLabel from "../../base/InputLabel";
-import InputSimple from "../../base/InputSimple";
-import PseudoLabel from "../../base/PseudoLabel";
-import SaveButton from "../../base/SaveButton";
-import { useCloneReference } from "../queries";
-import { ReferenceMinimal } from "../types";
 
 const ReferenceBox = styled(Box)`
     display: flex;
@@ -49,10 +48,15 @@ export default function CloneReference({ references }: CloneReferenceProps) {
         handleSubmit,
         setValue,
     } = useForm<FormValues>();
+
     const mutation = useCloneReference();
+
     const { value: cloneReferenceId, unsetValue: unsetCloneReferenceId } =
         useUrlSearchParam("cloneReferenceId");
-    const reference = find(references, { id: cloneReferenceId || "" });
+
+    const reference = references.find(
+        (reference) => reference.id === cloneReferenceId,
+    );
 
     useEffect(() => {
         if (reference) {

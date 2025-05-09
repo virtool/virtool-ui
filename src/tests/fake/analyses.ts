@@ -30,13 +30,15 @@ export function createFakeAnalysisMinimal(
     overrides?: CreateFakeAnalysisMinimal,
 ): AnalysisMinimal {
     const defaultAnalysisMinimal = {
-        id: faker.random.alphaNumeric(8),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         created_at: faker.date.past().toISOString(),
         index: createFakeIndexNested(),
         job: createFakeJobMinimal(),
         ready: true,
         reference: createFakeReferenceNested(),
-        sample: { id: faker.random.alphaNumeric(8) },
+        sample: {
+            id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+        },
         subtractions: [createFakeSubtractionNested()],
         updated_at: faker.date.past().toISOString(),
         user: createFakeUserNested(),
@@ -61,7 +63,7 @@ export function createFakeFormattedNuVsAnalysis(
     const defaultAnalysis = {
         ...createFakeAnalysisMinimal(),
         files: [],
-        maxSequenceLength: faker.datatype.number(),
+        maxSequenceLength: faker.number.int({ min: 800, max: 20000 }),
         results: { hits: [createFakeFormattedNuVsHit()] },
         workflow: Workflows.nuvs,
     };
@@ -81,37 +83,37 @@ type FakeFormattedNuVsHit = {
  */
 export function createFakeFormattedNuVsHit(overrides?: FakeFormattedNuVsHit) {
     const nuvsHit = {
-        annotatedOrfCount: faker.datatype.number(),
+        annotatedOrfCount: faker.number.int(),
         blast: null,
-        e: faker.datatype.number(),
+        e: faker.number.float({ min: 1e-23, max: 0.001 }),
         families: [],
-        id: faker.datatype.number(),
-        index: faker.datatype.number(),
-        name: [faker.random.word()],
+        id: faker.number.int(),
+        index: faker.number.int(),
+        name: [faker.word.noun()],
         orfs: [
             {
-                frame: faker.datatype.number(),
+                frame: faker.number.int(),
                 hits: [
                     {
-                        best_bias: faker.datatype.number(),
-                        best_e: faker.datatype.number(),
-                        best_score: faker.datatype.number(),
-                        cluster: faker.datatype.number(),
+                        best_bias: faker.number.float(),
+                        best_e: faker.number.float(),
+                        best_score: faker.number.float(),
+                        cluster: faker.number.int(),
                         families: {},
-                        full_bias: faker.datatype.number(),
-                        full_e: faker.datatype.number(),
-                        full_score: faker.datatype.number(),
-                        hit: faker.random.word(),
-                        names: [faker.random.word()],
+                        full_bias: faker.number.float(),
+                        full_e: faker.number.float(),
+                        full_score: faker.number.float(),
+                        hit: faker.word.noun(),
+                        names: [faker.word.noun()],
                     },
                 ],
-                index: faker.datatype.number(),
-                pos: [faker.datatype.number(), faker.datatype.number()],
-                pro: faker.random.word(),
-                strand: faker.datatype.number(),
+                index: faker.number.int(),
+                pos: [faker.number.int(), faker.number.int()],
+                pro: faker.word.noun(),
+                strand: faker.number.int({ min: 1, max: 2 }),
             },
         ],
-        sequence: faker.random.word(),
+        sequence: faker.string.fromCharacters("ATGC", { min: 20, max: 150 }),
     };
 
     return merge(nuvsHit, overrides);
@@ -161,7 +163,7 @@ export function mockApiCreateAnalysis(
 }
 
 /**
- * Creates a mocked API call for initiating a blast for a NuVs sequence
+ * Creates a mocked API call for initiating a blast for a Nuvs sequence
  *
  * @param analysisId - The id of the analysis associated with the sequence
  * @param sequenceIndex - The index of the sequence the blast is initiating for

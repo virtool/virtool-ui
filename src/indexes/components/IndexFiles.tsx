@@ -1,8 +1,8 @@
+import { SubtractionFileItem } from "@subtraction/components/Detail/SubtractionFileItem";
 import React from "react";
 import Badge from "../../base/Badge";
 import BoxGroup from "../../base/BoxGroup";
 import BoxGroupHeader from "../../base/BoxGroupHeader";
-import { SubtractionFileItem } from "../../subtraction/components/Detail/SubtractionFileItem";
 import { IndexFile } from "../types";
 
 type IndexFilesProps = {
@@ -10,7 +10,7 @@ type IndexFilesProps = {
 };
 
 /**
- * A list of the files associated with the index
+ * A list of the uploads associated with the index
  */
 export default function IndexFiles({ files }: IndexFilesProps) {
     return (

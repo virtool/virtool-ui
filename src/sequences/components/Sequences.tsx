@@ -6,13 +6,13 @@ import Badge from "../../base/Badge";
 import BoxGroup from "../../base/BoxGroup";
 import NoneFoundSection from "../../base/NoneFoundSection";
 import { useCurrentOtuContext } from "../../otus/queries";
-import { OTUIsolate } from "../../otus/types";
+import { OtuIsolate } from "../../otus/types";
 import sortSequencesBySegment from "../../otus/utils";
 import CreateSequence from "./CreateSequence";
 import CreateSequenceLink from "./CreateSequenceLink";
-import EditSequence from "./EditSequence";
 import RemoveSequence from "./RemoveSequence";
 import Sequence from "./Sequence";
+import SequenceEdit from "./SequenceEdit";
 
 const IsolateSequencesHeader = styled.label`
     align-items: center;
@@ -27,7 +27,7 @@ const IsolateSequencesHeader = styled.label`
 
 type IsolateSequencesProps = {
     /** The Isolate that is currently selected */
-    activeIsolate: OTUIsolate;
+    activeIsolate: OtuIsolate;
     otuId: string;
 };
 
@@ -76,7 +76,7 @@ export default function Sequences({
                 sequences={sequences}
             />
 
-            <EditSequence />
+            <SequenceEdit />
             <RemoveSequence
                 isolateId={activeIsolate.id}
                 isolateName={isolateName}

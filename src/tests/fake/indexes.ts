@@ -20,8 +20,8 @@ export function createFakeIndexNested(
     props?: CreateFakeIndexNestedProps,
 ): IndexNested {
     const defaultIndexNested = {
-        id: faker.random.alphaNumeric(8),
-        version: faker.datatype.number(5),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+        version: faker.number.int({ max: 10 }),
     };
 
     return assign(defaultIndexNested, props);
@@ -43,11 +43,11 @@ export function createFakeIndexMinimal(
 ): IndexMinimal {
     const defaultIndexMinimal = {
         ...createFakeIndexNested(),
-        change_count: faker.datatype.number({ min: 2, max: 10 }),
+        change_count: faker.number.int({ min: 2, max: 10 }),
         created_at: faker.date.past().toISOString(),
         has_files: faker.datatype.boolean(),
         job: createFakeJobMinimal(),
-        modified_otu_count: faker.datatype.number({ min: 2, max: 10 }),
+        modified_otu_count: faker.number.int({ min: 2, max: 10 }),
         reference: createFakeReferenceNested(),
         user: createFakeUserNested(),
         ready: faker.datatype.boolean(),
@@ -64,11 +64,11 @@ type CreateFakeIndexFile = {
 
 export function createFakeIndexFile(props?: CreateFakeIndexFile): IndexFile {
     const defaultIndexFile = {
-        download_url: `/testUrl/${faker.random.word()}`,
-        id: faker.datatype.number(),
-        index: faker.random.alphaNumeric(8),
-        name: faker.random.word(),
-        size: faker.datatype.number(),
+        download_url: `/testUrl/${faker.word.noun()}`,
+        id: faker.number.int(),
+        index: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+        name: faker.word.noun(),
+        size: faker.number.int({ min: 20000 }),
         type: "fasta",
     };
 
