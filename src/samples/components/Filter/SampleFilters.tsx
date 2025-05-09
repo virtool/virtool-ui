@@ -1,6 +1,6 @@
+import { Label } from "@labels/types";
 import React from "react";
 import styled from "styled-components";
-import { Label } from "../../../labels/types";
 import LabelFilter from "./LabelFilter";
 import WorkflowFilter from "./WorkflowFilter";
 

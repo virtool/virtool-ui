@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
+import { LabelNested } from "@labels/types";
 import nock from "nock";
-import { LabelNested } from "../../labels/types";
 
 export function createFakeLabelNested(): LabelNested {
     return {
