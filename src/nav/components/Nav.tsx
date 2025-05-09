@@ -1,3 +1,4 @@
+import { useLogout } from "@account/queries";
 import { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import { useDialogParam } from "@app/hooks";
@@ -10,7 +11,6 @@ import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
 import Logo from "@base/Logo";
 import React from "react";
-import { useLogout } from "../../account/queries";
 import { useRootQuery } from "../../wall/queries";
 import { NavLink } from "./NavLink";
 

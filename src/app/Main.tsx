@@ -19,7 +19,7 @@ import WsConnection, {
 const Administration = lazy(
     () => import("@administration/components/Settings"),
 );
-const Account = lazy(() => import("../account/components/Account"));
+const Account = lazy(() => import("@account/components/Account"));
 const HMM = lazy(() => import("../hmm/components/HMM"));
 const Jobs = lazy(() => import("../jobs/components/Jobs"));
 const References = lazy(() => import("../references/components/References"));

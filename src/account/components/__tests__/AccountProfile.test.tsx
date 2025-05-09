@@ -1,3 +1,4 @@
+import AccountProfile from "@account/components/AccountProfile";
 import { AdministratorRoleName } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -5,7 +6,6 @@ import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import AccountProfile from "../AccountProfile";
 
 describe("<AccountProfile />", () => {
     it("should render when administrator", async () => {
