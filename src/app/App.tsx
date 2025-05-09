@@ -10,8 +10,8 @@ import { theme } from "./theme";
 import { resetClient } from "./utils";
 
 // Lazy load components
-const LazyFirstUser = React.lazy(() => import("../wall/components/FirstUser"));
-const LazyLoginWall = React.lazy(() => import("../wall/components/LoginWall"));
+const LazyFirstUser = React.lazy(() => import("@wall/components/FirstUser"));
+const LazyLoginWall = React.lazy(() => import("@wall/components/LoginWall"));
 
 /** The main application component that handles authentication and routing */
 function ConnectedApp(): React.ReactElement {
