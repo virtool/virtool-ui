@@ -1,6 +1,6 @@
+import { useUrlSearchParam } from "@app/hooks";
 import React from "react";
 import styled from "styled-components";
-import { useUrlSearchParam } from "../../app/hooks";
 import CloseButton from "../../base/CloseButton";
 import IconButton from "../../base/IconButton";
 import { useGetActiveIsolateId } from "../../otus/hooks";

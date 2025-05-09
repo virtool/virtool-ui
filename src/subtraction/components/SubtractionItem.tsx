@@ -1,6 +1,6 @@
+import { getFontSize, getFontWeight, sizes } from "@app/theme";
 import React from "react";
 import styled from "styled-components";
-import { getFontSize, getFontWeight, sizes } from "../../app/theme";
 import BoxGroupSection from "../../base/BoxGroupSection";
 import Link from "../../base/Link";
 import ProgressCircle from "../../base/ProgressCircle";

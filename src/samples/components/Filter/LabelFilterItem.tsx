@@ -1,6 +1,6 @@
+import { getRing } from "@app/theme";
 import React from "react";
 import styled from "styled-components";
-import { getRing } from "../../../app/theme";
 import Icon from "../../../base/Icon";
 import { BaseSampleLabel } from "../Label/BaseSampleLabel";
 

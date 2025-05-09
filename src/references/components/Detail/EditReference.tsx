@@ -1,7 +1,7 @@
+import { useDialogParam } from "@app/hooks";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useDialogParam } from "../../../app/hooks";
 import Dialog from "../../../base/Dialog";
 import DialogContent from "../../../base/DialogContent";
 import DialogFooter from "../../../base/DialogFooter";

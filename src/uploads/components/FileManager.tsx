@@ -1,3 +1,4 @@
+import { usePageParam } from "@app/hooks";
 import Alert from "@base/Alert";
 import BoxGroup from "@base/BoxGroup";
 import Icon from "@base/Icon";
@@ -12,7 +13,6 @@ import React from "react";
 import { Accept } from "react-dropzone";
 import { useFetchAccount } from "../../account/queries";
 import { checkAdminRoleOrPermissionsFromAccount } from "../../administration/utils";
-import { usePageParam } from "../../app/hooks";
 import ViewHeaderTitle from "../../base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "../../base/ViewHeaderTitleBadge";
 import { useListFiles } from "../queries";

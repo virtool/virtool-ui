@@ -1,7 +1,7 @@
+import { useDialogParam, usePathParams } from "@app/hooks";
 import numbro from "numbro";
 import React from "react";
 import { useCheckAdminRoleOrPermission } from "../../../administration/hooks";
-import { useDialogParam, usePathParams } from "../../../app/hooks";
 import IconButton from "../../../base/IconButton";
 import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
 import NotFound from "../../../base/NotFound";

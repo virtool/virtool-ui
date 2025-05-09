@@ -1,5 +1,5 @@
+import { usePageParam } from "@app/hooks";
 import React from "react";
-import { usePageParam } from "../../app/hooks";
 import Alert from "../../base/Alert";
 import Icon from "../../base/Icon";
 import Link from "../../base/Link";

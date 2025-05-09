@@ -1,3 +1,5 @@
+import { useListSearchParam, usePageParam } from "@app/hooks";
+import { getFontWeight } from "@app/theme";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
@@ -8,8 +10,6 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import { useListSearchParam, usePageParam } from "../../app/hooks";
-import { getFontWeight } from "../../app/theme";
 import { useFindJobs } from "../queries";
 import { JobFilters } from "./Filters/JobFilters";
 import Job from "./Item/JobItem";

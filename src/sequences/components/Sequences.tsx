@@ -1,7 +1,7 @@
+import { getFontSize } from "@app/theme";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import { getFontSize } from "../../app/theme";
 import Badge from "../../base/Badge";
 import BoxGroup from "../../base/BoxGroup";
 import NoneFoundSection from "../../base/NoneFoundSection";

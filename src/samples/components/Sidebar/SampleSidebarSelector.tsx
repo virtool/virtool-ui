@@ -1,8 +1,8 @@
+import { useFuse } from "@app/fuse";
+import { fontWeight, getFontSize } from "@app/theme";
 import BoxGroupSearch from "@base/BoxGroupSearch";
 import React from "react";
 import styled from "styled-components";
-import { useFuse } from "../../../app/fuse";
-import { fontWeight, getFontSize } from "../../../app/theme";
 import Icon from "../../../base/Icon";
 import Link from "../../../base/Link";
 import Popover from "../../../base/Popover";

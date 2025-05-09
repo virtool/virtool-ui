@@ -1,9 +1,9 @@
+import { cn } from "@app/utils";
 import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Checkbox from "@base/Checkbox";
 import Dot from "@base/Dot";
 import React from "react";
-import { cn } from "../../../app/utils";
 
 type StateButtonProps = {
     /** Whether the state is selected */

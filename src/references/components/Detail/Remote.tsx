@@ -1,5 +1,5 @@
+import { cn } from "@app/utils";
 import React from "react";
-import { cn } from "../../../app/utils";
 import BoxGroup from "../../../base/BoxGroup";
 import BoxGroupHeader from "../../../base/BoxGroupHeader";
 import BoxGroupSection from "../../../base/BoxGroupSection";

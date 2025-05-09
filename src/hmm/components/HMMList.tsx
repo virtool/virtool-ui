@@ -1,3 +1,4 @@
+import { usePageParam, useUrlSearchParam } from "@app/hooks";
 import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
@@ -7,7 +8,6 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { map } from "lodash";
 import React from "react";
-import { usePageParam, useUrlSearchParam } from "../../app/hooks";
 import { useListHmms } from "../queries";
 import { HMMInstaller } from "./HMMInstaller";
 import HMMItem from "./HMMItem";

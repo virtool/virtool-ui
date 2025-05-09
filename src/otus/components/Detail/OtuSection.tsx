@@ -1,6 +1,6 @@
+import { useDialogParam, usePathParams } from "@app/hooks";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import React from "react";
-import { useDialogParam, usePathParams } from "../../../app/hooks";
 import { useGetReference } from "../../../references/queries";
 import { CurrentOtuContextProvider, useFetchOTU } from "../../queries";
 import AddIsolate from "./Isolates/AddIsolate";

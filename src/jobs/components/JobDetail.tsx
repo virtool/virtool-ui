@@ -1,3 +1,5 @@
+import { usePathParams } from "@app/hooks";
+import { getWorkflowDisplayName } from "@app/utils";
 import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
@@ -7,8 +9,6 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import React from "react";
 import styled from "styled-components";
-import { usePathParams } from "../../app/hooks";
-import { getWorkflowDisplayName } from "../../app/utils";
 import { useFetchJob } from "../queries";
 import { JobArgs } from "./JobArgs";
 import JobError from "./JobError";

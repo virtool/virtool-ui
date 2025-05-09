@@ -1,7 +1,7 @@
+import { getFontSize, getFontWeight } from "@app/theme";
 import Icon from "@base/Icon";
 import React from "react";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../../app/theme";
 import { LibraryType } from "../../types";
 import { getLibraryTypeDisplayName } from "../../utils";
 import { BaseSampleLabel } from "./BaseSampleLabel";

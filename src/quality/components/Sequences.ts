@@ -1,7 +1,7 @@
+import { theme } from "@app/theme";
+import { toScientificNotation } from "@app/utils.js";
 import { axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { max } from "lodash-es";
-import { theme } from "../../app/theme";
-import { toScientificNotation } from "../../app/utils.js";
 import {
     createSvg,
     QUALITY_CHART_HEIGHT,

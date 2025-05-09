@@ -1,6 +1,6 @@
+import { usePageParam, useUrlSearchParam } from "@app/hooks";
 import { map } from "lodash";
 import React from "react";
-import { usePageParam, useUrlSearchParam } from "../../app/hooks";
 import BoxGroup from "../../base/BoxGroup";
 import LoadingPlaceholder from "../../base/LoadingPlaceholder";
 import NoneFoundBox from "../../base/NoneFoundBox";

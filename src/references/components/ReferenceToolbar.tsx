@@ -1,6 +1,6 @@
+import { formatSearchParams, useUrlSearchParam } from "@app/hooks";
 import React from "react";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
-import { formatSearchParams, useUrlSearchParam } from "../../app/hooks";
 import InputSearch from "../../base/InputSearch";
 import LinkButton from "../../base/LinkButton";
 import Toolbar from "../../base/Toolbar";

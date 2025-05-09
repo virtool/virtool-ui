@@ -1,12 +1,12 @@
-import { intersectionWith, union, xor } from "lodash-es";
-import React, { useState } from "react";
-import styled from "styled-components";
-import QuickAnalyze from "../../analyses/components/Create/QuickAnalyze";
 import {
     useListSearchParam,
     usePageParam,
     useUrlSearchParam,
-} from "../../app/hooks";
+} from "@app/hooks";
+import { intersectionWith, union, xor } from "lodash-es";
+import React, { useState } from "react";
+import styled from "styled-components";
+import QuickAnalyze from "../../analyses/components/Create/QuickAnalyze";
 import LoadingPlaceholder from "../../base/LoadingPlaceholder";
 import NoneFoundBox from "../../base/NoneFoundBox";
 import Pagination from "../../base/Pagination";

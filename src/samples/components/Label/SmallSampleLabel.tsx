@@ -1,5 +1,5 @@
+import { getFontSize } from "@app/theme";
 import styled from "styled-components";
-import { getFontSize } from "../../../app/theme";
 import SampleLabel from "./SampleLabel";
 
 /**

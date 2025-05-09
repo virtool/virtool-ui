@@ -1,7 +1,7 @@
+import { useDialogParam } from "@app/hooks";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { compact, map } from "lodash-es";
 import React from "react";
-import { useDialogParam } from "../../app/hooks";
 import Dialog from "../../base/Dialog";
 import DialogContent from "../../base/DialogContent";
 import DialogOverlay from "../../base/DialogOverlay";

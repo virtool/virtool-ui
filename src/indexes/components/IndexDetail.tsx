@@ -1,6 +1,6 @@
+import { usePathParams } from "@app/hooks";
 import React from "react";
 import styled from "styled-components";
-import { usePathParams } from "../../app/hooks";
 import ContainerNarrow from "../../base/ContainerNarrow";
 import LoadingPlaceholder from "../../base/LoadingPlaceholder";
 import NotFound from "../../base/NotFound";

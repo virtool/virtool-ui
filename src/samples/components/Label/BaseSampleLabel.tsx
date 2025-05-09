@@ -1,5 +1,5 @@
+import { borderRadius, getBorder } from "@app/theme";
 import styled from "styled-components";
-import { borderRadius, getBorder } from "../../../app/theme";
 
 /**
  * The base sample label component

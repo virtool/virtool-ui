@@ -1,7 +1,7 @@
+import { usePageParam, usePathParams } from "@app/hooks";
 import { map } from "lodash";
 import { find, get } from "lodash-es/lodash";
 import React from "react";
-import { usePageParam, usePathParams } from "../../app/hooks";
 import BoxGroup from "../../base/BoxGroup";
 import LoadingPlaceholder from "../../base/LoadingPlaceholder";
 import NoneFoundBox from "../../base/NoneFoundBox";

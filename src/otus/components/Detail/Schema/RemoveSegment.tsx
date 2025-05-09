@@ -1,6 +1,6 @@
+import { useUrlSearchParam } from "@app/hooks";
 import { reject } from "lodash-es";
 import React from "react";
-import { useUrlSearchParam } from "../../../../app/hooks";
 import RemoveDialog from "../../../../base/RemoveDialog";
 import { useUpdateOTU } from "../../../queries";
 import { OtuSegment } from "../../../types";

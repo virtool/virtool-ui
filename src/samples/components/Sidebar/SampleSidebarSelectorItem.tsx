@@ -1,7 +1,7 @@
+import { getFontSize } from "@app/theme";
 import BoxGroupSection from "@base/BoxGroupSection";
 import React from "react";
 import styled from "styled-components";
-import { getFontSize } from "../../../app/theme";
 import Icon from "../../../base/Icon";
 
 const StyledSampleSidebarSelectorItem = styled(BoxGroupSection)`

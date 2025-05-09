@@ -1,7 +1,7 @@
+import { useDialogParam } from "@app/hooks";
 import { endsWith } from "lodash-es";
 import React from "react";
 import { useLocation } from "wouter";
-import { useDialogParam } from "../../../app/hooks";
 import Icon from "../../../base/Icon";
 import IconButton from "../../../base/IconButton";
 import ViewHeader from "../../../base/ViewHeader";

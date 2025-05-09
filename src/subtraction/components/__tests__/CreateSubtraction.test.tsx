@@ -1,4 +1,6 @@
 import { UploadType } from "@/uploads/types";
+import { formatPath } from "@app/hooks";
+import { getSessionStorage, setSessionStorage } from "@app/utils";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
@@ -6,8 +8,6 @@ import { mockApiCreateSubtraction } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { afterEach, describe, expect, it } from "vitest";
-import { formatPath } from "../../../app/hooks";
-import { getSessionStorage, setSessionStorage } from "../../../app/utils";
 import SubtractionCreate from "../SubtractionCreate";
 
 describe("<SubtractionCreate />", () => {

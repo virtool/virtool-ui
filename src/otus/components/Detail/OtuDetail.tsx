@@ -1,3 +1,5 @@
+import { usePathParams } from "@app/hooks";
+import { cn } from "@app/utils";
 import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
@@ -9,8 +11,6 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import React from "react";
 import styled from "styled-components";
 import { Redirect, Route, Switch } from "wouter";
-import { usePathParams } from "../../../app/hooks";
-import { cn } from "../../../app/utils";
 import { useGetReference } from "../../../references/queries";
 import { useFetchOTU } from "../../queries";
 import History from "./History/OtuHistory";

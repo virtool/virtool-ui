@@ -1,7 +1,7 @@
+import { updateSearchParam } from "@app/hooks";
 import React from "react";
 import { useSearch } from "wouter";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
-import { updateSearchParam } from "../../app/hooks";
 import InputSearch from "../../base/InputSearch";
 import LinkButton from "../../base/LinkButton";
 import Toolbar from "../../base/Toolbar";

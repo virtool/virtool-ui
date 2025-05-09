@@ -1,7 +1,7 @@
+import { useDialogParam, usePathParams } from "@app/hooks";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import { useDialogParam, usePathParams } from "../../../../app/hooks";
 import BoxGroup from "../../../../base/BoxGroup";
 import Button from "../../../../base/Button";
 import LoadingPlaceholder from "../../../../base/LoadingPlaceholder";

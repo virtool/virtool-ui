@@ -1,9 +1,9 @@
+import { getBorder } from "@app/theme";
 import { useInfiniteFindGroups } from "@groups/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { filter, flatMap, includes, map } from "lodash-es";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { getBorder } from "../../../app/theme";
 import BoxGroup from "../../../base/BoxGroup";
 import CompactScrollList from "../../../base/CompactScrollList";
 import Dialog from "../../../base/Dialog";

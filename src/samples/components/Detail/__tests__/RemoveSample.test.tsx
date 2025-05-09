@@ -1,10 +1,10 @@
+import { formatPath } from "@app/hooks";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiRemoveSample } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { formatPath } from "../../../../app/hooks";
 import RemoveSample from "../RemoveSample";
 
 describe("<RemoveSample />", () => {

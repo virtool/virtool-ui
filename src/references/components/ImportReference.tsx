@@ -1,8 +1,8 @@
 import { UploadBar } from "@/uploads/components/UploadBar";
+import { useNavigate } from "@app/hooks";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import { useNavigate } from "../../app/hooks";
 import Alert from "../../base/Alert";
 import DialogFooter from "../../base/DialogFooter";
 import InputError from "../../base/InputError";

@@ -1,6 +1,6 @@
+import { theme } from "@app/theme";
 import { area, axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { forEach, map, min, values } from "lodash-es";
-import { theme } from "../../app/theme";
 import {
     appendLegend,
     createSvg,

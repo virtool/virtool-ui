@@ -1,9 +1,9 @@
 import { useInfiniteFindFiles } from "@/uploads/queries";
 import { UploadType } from "@/uploads/types";
+import { useDialogParam } from "@app/hooks";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import { Controller } from "react-hook-form";
-import { useDialogParam } from "../../app/hooks";
 import Dialog from "../../base/Dialog";
 import DialogContent from "../../base/DialogContent";
 import DialogDescription from "../../base/DialogDescription";

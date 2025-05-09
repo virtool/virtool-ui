@@ -1,8 +1,8 @@
 import NuvsViewer from "@analyses/components/Nuvs/NuvsViewer";
+import { usePathParams } from "@app/hooks";
+import { getWorkflowDisplayName } from "@app/utils";
 import React from "react";
 import styled from "styled-components";
-import { usePathParams } from "../../app/hooks";
-import { getWorkflowDisplayName } from "../../app/utils";
 import Box from "../../base/Box";
 import Icon from "../../base/Icon";
 import LoadingPlaceholder from "../../base/LoadingPlaceholder";

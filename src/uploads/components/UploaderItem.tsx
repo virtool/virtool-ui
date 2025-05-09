@@ -1,8 +1,8 @@
+import { byteSize, cn } from "@app/utils";
 import IconButton from "@base/IconButton";
 import Loader from "@base/Loader";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import React from "react";
-import { byteSize, cn } from "../../app/utils";
 import { useUploaderStore } from "../uploader";
 
 type UploadItemProps = {

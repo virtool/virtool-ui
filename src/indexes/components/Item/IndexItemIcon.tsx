@@ -1,7 +1,7 @@
+import { sizes } from "@app/theme";
 import Icon from "@base/Icon";
 import ProgressCircle from "@base/ProgressCircle";
 import React from "react";
-import { sizes } from "../../../app/theme";
 import { JobMinimal, JobState } from "../../../jobs/types";
 
 type IndexItemIconProps = {

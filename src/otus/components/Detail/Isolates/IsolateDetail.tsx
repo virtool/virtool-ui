@@ -1,7 +1,7 @@
+import { useDialogParam } from "@app/hooks";
+import { formatIsolateName } from "@app/utils";
 import React from "react";
 import styled from "styled-components";
-import { useDialogParam } from "../../../../app/hooks";
-import { formatIsolateName } from "../../../../app/utils";
 import Box from "../../../../base/Box";
 import Icon from "../../../../base/Icon";
 import IconButton from "../../../../base/IconButton";

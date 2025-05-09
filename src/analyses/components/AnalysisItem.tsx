@@ -1,10 +1,10 @@
+import { getColor, getFontSize, getFontWeight, sizes } from "@app/theme";
+import { getWorkflowDisplayName } from "@app/utils";
 import Attribution from "@base/Attribution";
 import React from "react";
 import styled from "styled-components";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoleName } from "../../administration/types";
-import { getColor, getFontSize, getFontWeight, sizes } from "../../app/theme";
-import { getWorkflowDisplayName } from "../../app/utils";
 import Box from "../../base/Box";
 import Icon from "../../base/Icon";
 import Link from "../../base/Link";
