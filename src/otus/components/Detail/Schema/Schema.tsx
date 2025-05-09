@@ -3,13 +3,10 @@ import BoxGroup from "@base/BoxGroup";
 import Button from "@base/Button";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
+import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import {
-    ReferenceRight,
-    useCheckReferenceRight,
-} from "../../../../references/hooks";
 import { useFetchOTU, useUpdateOTU } from "../../../queries";
 import { OtuSegment } from "../../../types";
 import AddSegment from "./AddSegment";

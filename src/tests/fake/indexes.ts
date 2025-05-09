@@ -1,10 +1,10 @@
 import { faker } from "@faker-js/faker";
 import { JobMinimal } from "@jobs/types";
+import { ReferenceNested } from "@references/types";
 import { merge } from "lodash";
 import { assign } from "lodash-es";
 import nock from "nock";
 import { IndexFile, IndexMinimal, IndexNested } from "../../indexes/types";
-import { ReferenceNested } from "../../references/types";
 import { UserNested } from "../../users/types";
 import { createFakeJobMinimal } from "./jobs";
 import { createFakeReferenceNested } from "./references";

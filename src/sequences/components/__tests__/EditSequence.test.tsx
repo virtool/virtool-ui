@@ -1,5 +1,6 @@
 import { AdministratorRoleName } from "@administration/types";
 import { formatPath } from "@app/hooks";
+import References from "@references/components/References";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -20,7 +21,6 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import References from "../../../references/components/References";
 
 describe("<SequenceEdit>", () => {
     let props;

@@ -1,10 +1,10 @@
+import { Task } from "@/types/api";
 import { hmmQueryKeys } from "@hmm/queries";
 import { HmmSearchResults } from "@hmm/types";
+import { referenceQueryKeys } from "@references/queries";
+import { ReferenceSearchResult } from "@references/types";
 import { InfiniteData, QueryClient } from "@tanstack/react-query";
 import { assign, cloneDeep, forEach, get } from "lodash-es/lodash";
-import { referenceQueryKeys } from "../../references/queries";
-import { ReferenceSearchResult } from "../../references/types";
-import { Task } from "../../types/api";
 
 interface TaskObject {
     task: Task;
