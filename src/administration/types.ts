@@ -1,5 +1,5 @@
 /**
- * Exports types related to managing Virtool.
+ * Types related to administrative management of Virtool.
  */
 
 /**

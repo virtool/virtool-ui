@@ -1,3 +1,4 @@
+import { cn } from "@app/utils";
 import BoxGroup from "@base/BoxGroup";
 import ExternalLink from "@base/ExternalLink";
 import Link from "@base/Link";
@@ -5,7 +6,6 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import { map } from "lodash-es";
 import React from "react";
-import { cn } from "../../app/utils";
 import { useFetchAPIKeys } from "../queries";
 import ApiKey from "./ApiKey";
 import ApiKeyCreate from "./ApiKeyCreate";

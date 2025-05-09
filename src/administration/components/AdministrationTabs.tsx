@@ -7,7 +7,8 @@ import { hasSufficientAdminRole } from "../utils";
 type AdministratorTabsProps = {
     administratorRole: AdministratorRoleName;
 };
-export function AdministrationTabs({
+
+export default function AdministrationTabs({
     administratorRole,
 }: AdministratorTabsProps) {
     const tabs = [];

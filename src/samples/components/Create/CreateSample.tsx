@@ -145,7 +145,7 @@ export default function CreateSample() {
 
     useEffect(() => {
         setValue("group", toString(account?.primary_group?.id));
-    }, [account]);
+    }, [account, setValue]);
 
     if (isPendingReads || isPendingGroups || isPendingAccount) {
         return <LoadingPlaceholder className="mt-9" />;

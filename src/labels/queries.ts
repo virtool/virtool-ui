@@ -1,5 +1,5 @@
+import { ErrorResponse } from "@/types/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ErrorResponse } from "../types/types";
 import { createLabel, fetchLabels, removeLabel, updateLabel } from "./api";
 import { Label } from "./types";
 

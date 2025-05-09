@@ -1,4 +1,4 @@
-import { ErrorResponse } from "@/types/types";
+import { ErrorResponse } from "@/types/api";
 import { samplesQueryKeys } from "@samples/queries";
 import {
     keepPreviousData,

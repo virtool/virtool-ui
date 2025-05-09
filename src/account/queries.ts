@@ -1,8 +1,9 @@
+import { ErrorResponse } from "@/types/api";
+import { Account, APIKeyMinimal } from "@account/types";
+import { resetClient } from "@app/utils";
 import { Permissions } from "@groups/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { resetClient } from "../app/utils";
-import { ErrorResponse } from "../types/types";
-import { User } from "../users/types";
+import { User } from "@users/types";
 import {
     AccountUpdate,
     changePassword,
@@ -14,7 +15,6 @@ import {
     updateAccount,
     updateAPIKey,
 } from "./api";
-import { Account, APIKeyMinimal } from "./types";
 
 /**
  * Factory object for generating account query keys

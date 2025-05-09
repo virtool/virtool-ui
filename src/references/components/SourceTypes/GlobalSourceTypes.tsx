@@ -11,7 +11,7 @@ import InputSimple from "../../../base/InputSimple";
 import SectionHeader from "../../../base/SectionHeader";
 import Toolbar from "../../../base/Toolbar";
 import { useUpdateSourceTypes } from "../../hooks";
-import { SourceTypeList } from "./SourceTypeList";
+import SourceTypeList from "./SourceTypeList";
 
 type GlobalSourceTypesProps = {
     sourceTypes: string[];

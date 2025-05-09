@@ -1,8 +1,3 @@
-/**
- * Functions for requesting account data for the current user from backend
- *
- * @module account/api
- */
 import { apiClient } from "@app/api";
 import { Permissions } from "@groups/types";
 import { User } from "@users/types";

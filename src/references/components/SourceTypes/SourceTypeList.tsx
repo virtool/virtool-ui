@@ -6,7 +6,10 @@ interface SourceTypeListProps {
     onRemove: (sourceType: string) => void;
 }
 
-export function SourceTypeList({ sourceTypes, onRemove }: SourceTypeListProps) {
+export default function SourceTypeList({
+    sourceTypes,
+    onRemove,
+}: SourceTypeListProps) {
     return (
         <>
             {sourceTypes.map((sourceType) => (

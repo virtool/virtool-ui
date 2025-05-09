@@ -23,10 +23,10 @@ export default function NuvsList({ detail }: NuVsListProps) {
     const { value: activeHit, setValue: setActiveHit } =
         useUrlSearchParam<string>("activeHit");
 
-    let nextId;
-    let nextIndex;
-    let previousId;
-    let previousIndex;
+    let nextId: string;
+    let nextIndex: number;
+    let previousId: string;
+    let previousIndex: number;
 
     if (activeHit) {
         const windowIndex = findIndex(sortedHits, { id: activeHit });

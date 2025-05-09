@@ -1,13 +1,4 @@
 import { useDialogParam } from "@app/hooks";
-import { useCreateAPIKey } from "../queries";
-import ApiKeyPermissions from "./ApiKeyPermissions";
-
-import InputError from "@base/InputError";
-import InputGroup from "@base/InputGroup";
-import InputLabel from "@base/InputLabel";
-import InputSimple from "@base/InputSimple";
-import SaveButton from "@base/SaveButton";
-
 import { cn } from "@app/utils";
 import Button from "@base/Button";
 import Dialog from "@base/Dialog";
@@ -16,12 +7,19 @@ import DialogDescription from "@base/DialogDescription";
 import DialogFooter from "@base/DialogFooter";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
 import PseudoLabel from "@base/PseudoLabel";
+import SaveButton from "@base/SaveButton";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useCreateAPIKey } from "../queries";
 import CreateAPIKeyInfo from "./ApiKeyAdministratorInfo";
+import ApiKeyPermissions from "./ApiKeyPermissions";
 
 type FormValues = {
     name: string;
