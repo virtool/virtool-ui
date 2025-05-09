@@ -1,3 +1,5 @@
+import { useCheckAdminRole } from "@administration/hooks";
+import { AdministratorRoleName } from "@administration/types";
 import { getColor, getFontSize, getFontWeight, sizes } from "@app/theme";
 import { getWorkflowDisplayName } from "@app/utils";
 import Attribution from "@base/Attribution";
@@ -8,8 +10,6 @@ import ProgressCircle from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
 import React from "react";
 import styled from "styled-components";
-import { useCheckAdminRole } from "../../administration/hooks";
-import { AdministratorRoleName } from "../../administration/types";
 import { JobState } from "../../jobs/types";
 import { useRemoveAnalysis } from "../queries";
 import { AnalysisMinimal } from "../types";

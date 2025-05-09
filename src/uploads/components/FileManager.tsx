@@ -1,3 +1,4 @@
+import { checkAdminRoleOrPermissionsFromAccount } from "@administration/utils";
 import { usePageParam } from "@app/hooks";
 import Alert from "@base/Alert";
 import BoxGroup from "@base/BoxGroup";
@@ -14,7 +15,6 @@ import { capitalize } from "lodash-es";
 import React from "react";
 import { Accept } from "react-dropzone";
 import { useFetchAccount } from "../../account/queries";
-import { checkAdminRoleOrPermissionsFromAccount } from "../../administration/utils";
 import { useListFiles } from "../queries";
 import { UploadType } from "../types";
 import { upload } from "../uploader";

@@ -1,3 +1,4 @@
+import { useUpdateUser } from "@administration/queries";
 import Button from "@base/Button";
 import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
@@ -7,7 +8,6 @@ import DialogTitle from "@base/DialogTitle";
 import { DialogClose, DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import styled from "styled-components";
-import { useUpdateUser } from "../../administration/queries";
 
 const CapitalizedTitle = styled(DialogTitle)`
     text-transform: capitalize;

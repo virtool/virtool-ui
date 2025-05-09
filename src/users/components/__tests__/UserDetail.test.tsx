@@ -1,3 +1,5 @@
+import Settings from "@administration/components/Settings";
+import { AdministratorRoleName } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -12,8 +14,6 @@ import { times } from "lodash-es";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import Settings from "../../../administration/components/Settings";
-import { AdministratorRoleName } from "../../../administration/types";
 import { User } from "../../types";
 
 function formatUserPath(user: User) {

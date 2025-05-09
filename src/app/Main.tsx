@@ -17,7 +17,7 @@ import WsConnection, {
 } from "./websocket/WsConnection";
 
 const Administration = lazy(
-    () => import("../administration/components/Settings"),
+    () => import("@administration/components/Settings"),
 );
 const Account = lazy(() => import("../account/components/Account"));
 const HMM = lazy(() => import("../hmm/components/HMM"));

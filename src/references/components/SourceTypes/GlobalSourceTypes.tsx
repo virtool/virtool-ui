@@ -1,3 +1,4 @@
+import { settingsQueryKeys } from "@administration/queries";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
@@ -9,7 +10,6 @@ import InputSimple from "@base/InputSimple";
 import SectionHeader from "@base/SectionHeader";
 import Toolbar from "@base/Toolbar";
 import React from "react";
-import { settingsQueryKeys } from "../../../administration/queries";
 import { useUpdateSourceTypes } from "../../hooks";
 import SourceTypeList from "./SourceTypeList";
 

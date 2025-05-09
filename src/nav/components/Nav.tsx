@@ -1,3 +1,5 @@
+import { AdministratorRoleName } from "@administration/types";
+import { hasSufficientAdminRole } from "@administration/utils";
 import { useDialogParam } from "@app/hooks";
 import Dropdown from "@base/Dropdown";
 import DropdownMenuContent from "@base/DropdownMenuContent";
@@ -9,8 +11,6 @@ import InitialIcon from "@base/InitialIcon";
 import Logo from "@base/Logo";
 import React from "react";
 import { useLogout } from "../../account/queries";
-import { AdministratorRoleName } from "../../administration/types";
-import { hasSufficientAdminRole } from "../../administration/utils";
 import { useRootQuery } from "../../wall/queries";
 import { NavLink } from "./NavLink";
 

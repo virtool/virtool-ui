@@ -1,3 +1,4 @@
+import { AdministratorRoleName } from "@administration/types";
 import { formatPath } from "@app/hooks";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -12,7 +13,6 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AdministratorRoleName } from "../../../administration/types";
 import Analyses from "../Analyses";
 
 describe("<AnalysesList />", () => {

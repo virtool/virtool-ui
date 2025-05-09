@@ -1,4 +1,4 @@
-import { AdministratorRoleName } from "../administration/types";
+import { AdministratorRoleName } from "@administration/types";
 import { GroupMinimal, Permissions } from "../groups/types";
 import { SearchResult } from "../types/api";
 
