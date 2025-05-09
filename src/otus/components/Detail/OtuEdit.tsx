@@ -3,12 +3,12 @@ import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
+import { useUpdateOTU } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
-import { useUpdateOTU } from "../../queries";
 import { OTUForm } from "../OTUForm";
 
-type EditOTUProps = {
+type OtuEditProps = {
     abbreviation: string;
     name: string;
     otuId: string;
@@ -17,7 +17,7 @@ type EditOTUProps = {
 /**
  * Displays a dialog for editing an OTU
  */
-export default function OtuEdit({ abbreviation, name, otuId }: EditOTUProps) {
+export default function OtuEdit({ abbreviation, name, otuId }: OtuEditProps) {
     const { open: openEditOTU, setOpen: setOpenEditOTU } =
         useDialogParam("openEditOTU");
 
