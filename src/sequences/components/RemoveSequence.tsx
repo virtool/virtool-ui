@@ -1,9 +1,9 @@
+import { useUrlSearchParam } from "@app/hooks";
+import RemoveDialog from "@base/RemoveDialog";
+import { useRemoveSequence } from "@otus/queries";
+import { OtuSequence } from "@otus/types";
 import { find } from "lodash-es";
 import React from "react";
-import { useUrlSearchParam } from "../../app/hooks";
-import RemoveDialog from "../../base/RemoveDialog";
-import { useRemoveSequence } from "../../otus/queries";
-import { OtuSequence } from "../../otus/types";
 
 type RemoveSequenceProps = {
     isolateName: string;

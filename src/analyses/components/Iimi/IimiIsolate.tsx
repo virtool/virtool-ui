@@ -1,8 +1,8 @@
+import { convertRleToCoverage } from "@analyses/utils";
+import Box from "@base/Box";
 import { sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import Box from "../../../base/Box";
-import { convertRleToCoverage } from "../../utils";
 import { CoverageChart } from "../Charts/CoverageChart";
 import { IimiDetectionTag } from "./IimiDetectionTag";
 

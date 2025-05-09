@@ -7,7 +7,7 @@ import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import FileItem, { FileItemProps } from "../FileItem.js";
 
-vi.mock("../../../administration/utils.ts");
+vi.mock("@administration/utils.ts");
 
 describe("<File />", () => {
     let props: FileItemProps;

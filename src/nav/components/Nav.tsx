@@ -1,3 +1,7 @@
+import { useLogout } from "@account/queries";
+import { AdministratorRoleName } from "@administration/types";
+import { hasSufficientAdminRole } from "@administration/utils";
+import { useDialogParam } from "@app/hooks";
 import Dropdown from "@base/Dropdown";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
@@ -6,12 +10,8 @@ import DropdownMenuTrigger from "@base/DropdownMenuTrigger";
 import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
 import Logo from "@base/Logo";
+import { useRootQuery } from "@wall/queries";
 import React from "react";
-import { useLogout } from "../../account/queries";
-import { AdministratorRoleName } from "../../administration/types";
-import { hasSufficientAdminRole } from "../../administration/utils";
-import { useDialogParam } from "../../app/hooks";
-import { useRootQuery } from "../../wall/queries";
 import { NavLink } from "./NavLink";
 
 type NavBarProps = {

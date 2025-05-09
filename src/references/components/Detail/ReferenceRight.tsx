@@ -1,6 +1,6 @@
+import Checkbox from "@base/Checkbox";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import Checkbox from "../../../base/Checkbox";
 
 const descriptions = {
     build: "Can build new indexes for the reference.",

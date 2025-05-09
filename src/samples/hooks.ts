@@ -1,7 +1,7 @@
+import { useFetchAccount } from "@account/queries";
+import { AdministratorRoleName } from "@administration/types";
+import { hasSufficientAdminRole } from "@administration/utils";
 import { some } from "lodash-es";
-import { useFetchAccount } from "../account/queries";
-import { AdministratorRoleName } from "../administration/types";
-import { hasSufficientAdminRole } from "../administration/utils";
 import { useFetchSample } from "./queries";
 
 /**

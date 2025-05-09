@@ -1,3 +1,4 @@
+import { AdministratorRoleName } from "@administration/types";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -13,7 +14,6 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
-import { AdministratorRoleName } from "../../types";
 import ManageAdministrators from "../AdministratorList";
 
 describe("<Administrators>", () => {

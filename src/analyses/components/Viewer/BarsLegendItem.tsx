@@ -1,8 +1,8 @@
 import { toThousand } from "@app/utils";
+import Icon from "@base/Icon";
+import { IconColor } from "@jobs/types";
 import React from "react";
 import styled from "styled-components";
-import Icon from "../../../base/Icon";
-import { IconColor } from "../../../jobs/types";
 
 const StyledBarsLegendItem = styled.div`
     align-items: center;

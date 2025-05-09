@@ -1,3 +1,5 @@
+import { usePathParams } from "@app/hooks";
+import { cn } from "@app/utils";
 import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
@@ -6,13 +8,11 @@ import TabsLink from "@base/TabsLink";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import { useFetchOTU } from "@otus/queries";
+import { useFetchReference } from "@references/queries";
 import React from "react";
 import styled from "styled-components";
 import { Redirect, Route, Switch } from "wouter";
-import { usePathParams } from "../../../app/hooks";
-import { cn } from "../../../app/utils";
-import { useGetReference } from "../../../references/queries";
-import { useFetchOTU } from "../../queries";
 import History from "./History/OtuHistory";
 import { OtuHeaderIcons } from "./OtuHeaderIcons";
 import OtuSection from "./OtuSection";
@@ -40,7 +40,7 @@ export default function OtuDetail() {
     const { otuId, refId } = usePathParams<{ otuId: string; refId: string }>();
     const { data: otu, isPending: isPendingOtu, isError } = useFetchOTU(otuId);
     const { data: reference, isPending: isPendingReference } =
-        useGetReference(refId);
+        useFetchReference(refId);
 
     if (isError) {
         return <NotFound />;

@@ -1,7 +1,7 @@
+import JobStep from "@jobs/components/JobStep";
+import { JobState } from "@jobs/types";
 import type { Meta } from "@storybook/react";
 import React from "react";
-import { JobStep } from "../components/JobStep";
-import { JobState } from "../types";
 
 const meta: Meta<typeof JobStep> = {
     title: "jobs/Step",

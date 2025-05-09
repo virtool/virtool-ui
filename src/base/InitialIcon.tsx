@@ -1,7 +1,7 @@
+import { getColor, getFontWeight, theme } from "@app/theme";
 import { reduce } from "lodash-es";
 import React, { useMemo } from "react";
 import styled from "styled-components";
-import { getColor, getFontWeight, theme } from "../app/theme";
 
 const iconSize = {
     xs: "12px",

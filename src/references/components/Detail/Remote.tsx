@@ -1,19 +1,19 @@
-import React from "react";
-import { cn } from "../../../app/utils";
-import BoxGroup from "../../../base/BoxGroup";
-import BoxGroupHeader from "../../../base/BoxGroupHeader";
-import BoxGroupSection from "../../../base/BoxGroupSection";
-import Button from "../../../base/Button";
-import Icon from "../../../base/Icon";
-import IconButton from "../../../base/IconButton";
-import Loader from "../../../base/Loader";
-import ProgressCircle from "../../../base/ProgressCircle";
-import RelativeTime from "../../../base/RelativeTime";
-import { JobState } from "../../../jobs/types";
+import { cn } from "@app/utils";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Button from "@base/Button";
+import Icon from "@base/Icon";
+import IconButton from "@base/IconButton";
+import Loader from "@base/Loader";
+import ProgressCircle from "@base/ProgressCircle";
+import RelativeTime from "@base/RelativeTime";
+import { JobState } from "@jobs/types";
 import {
     useCheckReferenceUpdates,
     useUpdateRemoteReference,
-} from "../../queries";
+} from "@references/queries";
+import React from "react";
 
 function Release({ release, checking, updating, onCheckUpdates, onUpdate }) {
     const hasUpdate = !updating && release.newer;

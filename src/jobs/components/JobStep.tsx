@@ -6,7 +6,7 @@ import React from "react";
 import styled from "styled-components";
 import { JobStatus } from "../types";
 import { getStepDescription } from "../utils";
-import { JobStateIcon } from "./JobStateIcon";
+import JobStateIcon from "./JobStateIcon";
 
 const JobStepLoader = styled(Loader)`
     padding: 0 1.5px;
@@ -56,7 +56,7 @@ const StyledJobStep = styled(BoxGroupSection)`
     display: flex;
 `;
 
-type JobStepProps = {
+export type JobStepProps = {
     complete: boolean;
     step: JobStatus;
 };
@@ -64,7 +64,7 @@ type JobStepProps = {
 /**
  * A condensed job step for use in a list of job steps
  */
-export function JobStep({ complete, step }: JobStepProps) {
+export default function JobStep({ complete, step }: JobStepProps) {
     const { description, title } = getStepDescription(step);
 
     return (

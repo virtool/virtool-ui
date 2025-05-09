@@ -1,11 +1,11 @@
-import { filter, map, sortBy, unzip } from "lodash-es";
-import React from "react";
-import { IimiIsolate, IimiSequence } from "../../types";
+import { IimiIsolate, IimiSequence } from "@analyses/types";
 import {
     combineUntrustworthyRegions,
     convertRleToCoverage,
     maxSequences,
-} from "../../utils";
+} from "@analyses/utils";
+import { filter, map, sortBy, unzip } from "lodash-es";
+import React from "react";
 import { SummaryChart } from "../Charts/SummaryChart";
 
 /** A graph of averaged Iimi analysis sequence coverage */

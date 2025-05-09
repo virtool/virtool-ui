@@ -1,14 +1,14 @@
+import { BlastHit } from "@analyses/types";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupTable from "@base/BoxGroupTable";
+import Button from "@base/Button";
+import ExternalLink from "@base/ExternalLink";
+import Icon from "@base/Icon";
 import { map } from "lodash";
 import numbro from "numbro";
 import React from "react";
 import styled from "styled-components";
-import BoxGroup from "../../../base/BoxGroup";
-import BoxGroupHeader from "../../../base/BoxGroupHeader";
-import BoxGroupTable from "../../../base/BoxGroupTable";
-import Button from "../../../base/Button";
-import ExternalLink from "../../../base/ExternalLink";
-import Icon from "../../../base/Icon";
-import { BlastHit } from "../../types";
 
 const StyledBLASTResultsHeader = styled(BoxGroupHeader)`
     display: flex;

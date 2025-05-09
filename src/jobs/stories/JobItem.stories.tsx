@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react";
 import React from "react";
-import JobItem from "../components/Item/JobItem";
+import JobItem from "../components/JobItem";
 import { JobState, workflows } from "../types";
 
 const meta: Meta<typeof JobItem> = {

@@ -1,8 +1,8 @@
 import { Upload, UploadType } from "@/uploads/types";
 import { faker } from "@faker-js/faker";
+import { UserNested } from "@users/types";
 import { merge } from "lodash-es";
 import nock from "nock";
-import { UserNested } from "../../users/types";
 import { createFakeUserNested } from "./user";
 
 type CreateFakeFileProps = {

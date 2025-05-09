@@ -1,5 +1,5 @@
+import { getFontSize, getFontWeight } from "@app/theme";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../app/theme";
 
 const ViewHeaderSubtitle = styled.p`
     color: ${(props) => props.theme.color.greyDarkest};

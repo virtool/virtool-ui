@@ -1,9 +1,9 @@
+import { useCompatibleIndexes, useSubtractionOptions } from "@analyses/hooks";
+import { useCreateAnalysis } from "@analyses/queries";
+import { Workflows } from "@analyses/types";
+import Button from "@base/Button";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import Button from "../../../base/Button";
-import { useCompatibleIndexes, useSubtractionOptions } from "../../hooks";
-import { useCreateAnalysis } from "../../queries";
-import { Workflows } from "../../types";
 import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
 import { CreateAnalysisInputError } from "./CreateAnalysisInputError";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";

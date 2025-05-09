@@ -1,3 +1,4 @@
+import { useDialogParam } from "@app/hooks";
 import Button from "@base/Button";
 import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
@@ -6,7 +7,6 @@ import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import styled from "styled-components";
-import { useDialogParam } from "../../app/hooks";
 import { usePostDevCommand } from "../queries";
 
 export const DeveloperCommand = styled.div`

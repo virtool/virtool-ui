@@ -1,9 +1,9 @@
+import { UntrustworthyRange } from "@analyses/types";
+import { deriveTrustworthyRegions } from "@analyses/utils";
 import { theme } from "@app/theme";
 import { area, axisBottom, axisLeft, format, scaleLinear, select } from "d3";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
-import { UntrustworthyRange } from "../../types";
-import { deriveTrustworthyRegions } from "../../utils";
 
 function draw(element, data, length, yMax, untrustworthyRanges) {
     select(element).append("svg");

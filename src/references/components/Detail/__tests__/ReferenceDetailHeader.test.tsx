@@ -1,3 +1,4 @@
+import { AdministratorRoleName } from "@administration/types";
 import { screen } from "@testing-library/react";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import {
@@ -7,7 +8,6 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AdministratorRoleName } from "../../../../administration/types";
 import ReferenceDetailHeader from "../ReferenceDetailHeader";
 
 describe("<ReferenceDetailHeaderIcon />", () => {

@@ -169,7 +169,7 @@ function JobArgsRows({ workflow, args }: JobArgsRowsProps) {
 }
 
 /** A table of arguments used to run a job. */
-export function JobArgs({ workflow, args }) {
+export default function JobArgs({ workflow, args }) {
     return (
         <BoxGroup>
             <BoxGroupHeader>

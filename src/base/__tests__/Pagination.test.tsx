@@ -1,8 +1,8 @@
+import { formatPath } from "@app/hooks";
 import { screen } from "@testing-library/react";
 import { renderWithRouter } from "@tests/setup.js";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { formatPath } from "../../app/hooks";
 import Pagination from "../Pagination";
 
 describe("<Pagination />", () => {

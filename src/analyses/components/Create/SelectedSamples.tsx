@@ -1,8 +1,8 @@
 import { cn } from "@app/utils";
+import Badge from "@base/Badge";
+import BoxGroupSection from "@base/BoxGroupSection";
+import { SampleMinimal } from "@samples/types";
 import React from "react";
-import Badge from "../../../base/Badge";
-import BoxGroupSection from "../../../base/BoxGroupSection";
-import { SampleMinimal } from "../../../samples/types";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
 type SelectedSamplesProps = {

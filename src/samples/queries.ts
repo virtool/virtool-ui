@@ -1,4 +1,5 @@
 import { ErrorResponse } from "@/types/api";
+import { Label } from "@labels/types";
 import {
     keepPreviousData,
     useMutation,
@@ -6,7 +7,6 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import { forEach, map, reject, union } from "lodash-es/lodash";
-import { Label } from "../labels/types";
 import {
     createSample,
     getSample,

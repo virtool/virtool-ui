@@ -1,8 +1,8 @@
+import { getFontSize, getFontWeight } from "@app/theme";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import React from "react";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../app/theme";
 
 const OTUItemName = styled(Link)`
     font-size: ${getFontSize("lg")};
@@ -25,7 +25,7 @@ const StyledOTUItem = styled(BoxGroupSection)`
     grid-template-columns: 5fr 2fr 1fr;
 `;
 
-type OTUItemProps = {
+type OtuItemProps = {
     abbreviation: string;
     id: string;
     name: string;
@@ -36,13 +36,13 @@ type OTUItemProps = {
 /**
  * A condensed OTU item for use in a list of OTUs
  */
-export default function OTUItem({
+export default function OtuItem({
     abbreviation,
     id,
     name,
     refId,
     verified,
-}: OTUItemProps) {
+}: OtuItemProps) {
     return (
         <StyledOTUItem key={id}>
             <OTUItemName to={`/refs/${refId}/otus/${id}`}>{name}</OTUItemName>

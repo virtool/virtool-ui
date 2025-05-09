@@ -1,12 +1,12 @@
-import { area, axisBottom, axisLeft, line, scaleLinear } from "d3";
-import { forEach, map, min, values } from "lodash-es";
-import { theme } from "../../app/theme";
+import { theme } from "@app/theme";
 import {
     appendLegend,
     createSvg,
     QUALITY_CHART_HEIGHT,
     QUALITY_CHART_MARGIN,
-} from "../../samples/charting.js";
+} from "@samples/charting.js";
+import { area, axisBottom, axisLeft, line, scaleLinear } from "d3";
+import { forEach, map, min, values } from "lodash-es";
 
 const series = [
     { label: "Mean", color: theme.color.red },

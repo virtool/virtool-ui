@@ -1,5 +1,5 @@
+import { JobCounts } from "@jobs/types";
 import React from "react";
-import { JobCounts } from "../../types";
 import StateFilter from "./StateFilter";
 
 type StateFilterProps = {

@@ -1,3 +1,4 @@
+import References from "@references/components/References";
 import { screen } from "@testing-library/react";
 import {
     createFakeSettings,
@@ -10,7 +11,6 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import References from "../../References";
 
 describe("<ReferenceManager />", () => {
     let reference;

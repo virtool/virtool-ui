@@ -1,4 +1,4 @@
-import { apiClient } from "../app/api";
+import { apiClient } from "@app/api";
 import {
     Subtraction,
     SubtractionOption,

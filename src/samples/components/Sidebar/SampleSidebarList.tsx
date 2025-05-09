@@ -1,7 +1,7 @@
+import { Label } from "@labels/types";
+import { SubtractionOption } from "@subtraction/types";
 import React from "react";
 import styled from "styled-components";
-import { Label } from "../../../labels/types";
-import { SubtractionOption } from "../../../subtraction/types";
 import SampleLabel from "../Label/SampleLabel";
 
 const SampleSidebarListItem = styled(SampleLabel)`

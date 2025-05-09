@@ -1,13 +1,13 @@
+import { Workflows } from "@analyses/types";
+import { useUrlSearchParam } from "@app/hooks";
+import { getFontSize, getFontWeight } from "@app/theme";
 import Attribution from "@base/Attribution";
 import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
 import Link from "@base/Link";
+import { SampleMinimal } from "@samples/types";
 import React from "react";
 import styled from "styled-components";
-import { Workflows } from "../../../analyses/types";
-import { useUrlSearchParam } from "../../../app/hooks";
-import { getFontSize, getFontWeight } from "../../../app/theme";
-import { SampleMinimal } from "../../types";
 import SampleLibraryTypeLabel from "../Label/SampleLibraryTypeLabel";
 import SmallSampleLabel from "../Label/SmallSampleLabel";
 import WorkflowTags from "../Tag/WorkflowTags";

@@ -1,3 +1,4 @@
+import { useUpdateUser } from "@administration/queries";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
@@ -11,7 +12,6 @@ import SaveButton from "@base/SaveButton";
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { useUpdateUser } from "../../administration/queries";
 
 const PasswordFooter = styled.div`
     align-items: center;

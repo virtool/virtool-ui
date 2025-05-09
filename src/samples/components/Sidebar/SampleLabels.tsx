@@ -1,12 +1,12 @@
+import { fontWeight, getColor, getFontSize } from "@app/theme";
 import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SidebarHeader from "@base/SidebarHeader";
 import SideBarSection from "@base/SideBarSection";
+import { useFetchLabels } from "@labels/queries";
 import { xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { fontWeight, getColor, getFontSize } from "../../../app/theme";
-import { useFetchLabels } from "../../../labels/queries";
 import SampleLabelInner from "./SampleLabelInner";
 import SampleSidebarList from "./SampleSidebarList";
 import SampleSidebarSelector from "./SampleSidebarSelector";

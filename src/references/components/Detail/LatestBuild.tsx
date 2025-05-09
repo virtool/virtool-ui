@@ -1,10 +1,10 @@
+import BoxGroupSection from "@base/BoxGroupSection";
+import Link from "@base/Link";
+import NoneFoundSection from "@base/NoneFoundSection";
+import RelativeTime from "@base/RelativeTime";
+import { ReferenceBuild } from "@references/types";
 import React from "react";
 import styled from "styled-components";
-import BoxGroupSection from "../../../base/BoxGroupSection";
-import Link from "../../../base/Link";
-import NoneFoundSection from "../../../base/NoneFoundSection";
-import RelativeTime from "../../../base/RelativeTime";
-import { ReferenceBuild } from "../../types";
 
 const StyledLatestBuild = styled(BoxGroupSection)`
     align-items: center;

@@ -1,7 +1,7 @@
 import { getBorder } from "@app/theme";
+import Icon from "@base/Icon";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import Icon from "../../../base/Icon";
 
 const StyledPathoscopeViewerScroller = styled.div`
     align-items: center;

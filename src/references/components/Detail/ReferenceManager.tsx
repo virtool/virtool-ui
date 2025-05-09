@@ -1,13 +1,13 @@
+import { usePathParams } from "@app/hooks";
+import { cn } from "@app/utils";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupTable from "@base/BoxGroupTable";
+import ContainerNarrow from "@base/ContainerNarrow";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import Contributors from "@indexes/components/Contributors";
+import { useFetchReference } from "@references/queries";
 import React from "react";
-import { usePathParams } from "../../../app/hooks";
-import { cn } from "../../../app/utils";
-import BoxGroup from "../../../base/BoxGroup";
-import BoxGroupHeader from "../../../base/BoxGroupHeader";
-import BoxGroupTable from "../../../base/BoxGroupTable";
-import ContainerNarrow from "../../../base/ContainerNarrow";
-import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
-import Contributors from "../../../indexes/components/Contributors";
-import { useGetReference } from "../../queries";
 import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";
 import RemoteReference from "./Remote";
@@ -17,7 +17,7 @@ import RemoteReference from "./Remote";
  */
 export default function ReferenceManager() {
     const { refId } = usePathParams<{ refId: string }>();
-    const { data: reference, isPending } = useGetReference(refId);
+    const { data: reference, isPending } = useFetchReference(refId);
 
     if (isPending) {
         return <LoadingPlaceholder />;

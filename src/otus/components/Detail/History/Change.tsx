@@ -1,14 +1,14 @@
+import Attribution from "@base/Attribution";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Icon from "@base/Icon";
+import IconButton from "@base/IconButton";
+import Label from "@base/Label";
+import { useRevertOTU } from "@otus/queries";
+import { OtuNested } from "@otus/types";
+import { UserNested } from "@users/types";
 import { get } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import Attribution from "../../../../base/Attribution";
-import BoxGroupSection from "../../../../base/BoxGroupSection";
-import Icon from "../../../../base/Icon";
-import IconButton from "../../../../base/IconButton";
-import Label from "../../../../base/Label";
-import { UserNested } from "../../../../users/types";
-import { useRevertOTU } from "../../../queries";
-import { OtuNested } from "../../../types";
 
 const methodIconProps = {
     add_isolate: {

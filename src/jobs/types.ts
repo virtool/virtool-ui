@@ -1,4 +1,4 @@
-import { UserNested } from "../users/types";
+import { UserNested } from "@users/types";
 
 import { SearchResult } from "../types/api";
 

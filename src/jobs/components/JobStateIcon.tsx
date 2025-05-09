@@ -36,11 +36,11 @@ function getIconColor(state: JobState): IconColor {
     }
 }
 
-interface JobStateIconProps {
+type JobStateIconProps = {
     state: JobState;
-}
+};
 
-export function JobStateIcon({ state }: JobStateIconProps) {
+export default function JobStateIcon({ state }: JobStateIconProps) {
     return (
         <Icon
             name={getIconName(state)}

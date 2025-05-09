@@ -1,4 +1,5 @@
 import { ErrorResponse } from "@/types/api";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import {
     keepPreviousData,
     useMutation,
@@ -6,8 +7,7 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import React, { createContext, useContext } from "react";
-import LoadingPlaceholder from "../base/LoadingPlaceholder";
-import { useGetReference } from "../references/queries";
+import { useFetchReference } from "../references/queries";
 import {
     addIsolate,
     addSequence,
@@ -409,7 +409,7 @@ export function CurrentOtuContextProvider({
 }: CurrentOtuContextProviderProps) {
     const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
     const { data: reference, isPending: isPendingReference } =
-        useGetReference(refId);
+        useFetchReference(refId);
 
     if (isPendingOTU || isPendingReference) {
         return <LoadingPlaceholder />;

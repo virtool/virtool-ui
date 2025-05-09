@@ -1,9 +1,9 @@
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
+import { Read } from "@samples/types";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Read } from "../../types";
 import ReadItem from "./ReadItem";
 
 const SampleReadsTitle = styled.h2`

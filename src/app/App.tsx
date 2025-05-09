@@ -1,17 +1,17 @@
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthentication, useRootQuery } from "@wall/queries";
 import React, { Suspense } from "react";
 import { ThemeProvider } from "styled-components";
 import { Router } from "wouter";
 import { useBrowserLocation } from "wouter/use-browser-location";
-import LoadingPlaceholder from "../base/LoadingPlaceholder";
 import Main from "./Main";
 import { theme } from "./theme";
 import { resetClient } from "./utils";
 
 // Lazy load components
-const LazyFirstUser = React.lazy(() => import("../wall/components/FirstUser"));
-const LazyLoginWall = React.lazy(() => import("../wall/components/LoginWall"));
+const LazyFirstUser = React.lazy(() => import("@wall/components/FirstUser"));
+const LazyLoginWall = React.lazy(() => import("@wall/components/LoginWall"));
 
 /** The main application component that handles authentication and routing */
 function ConnectedApp(): React.ReactElement {

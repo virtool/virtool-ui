@@ -1,5 +1,5 @@
+import { fontWeight, getFontSize } from "@app/theme";
 import styled, { DefaultTheme } from "styled-components";
-import { fontWeight, getFontSize } from "../app/theme";
 import SidebarHeaderButton from "./SidebarHeaderButton";
 
 type SidebarHeaderProps = {

@@ -1,12 +1,9 @@
+import { useDialogParam } from "@app/hooks";
 import IconButton from "@base/IconButton";
+import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import React from "react";
-import { useDialogParam } from "../../../app/hooks";
-import {
-    ReferenceRight,
-    useCheckReferenceRight,
-} from "../../../references/hooks";
-import OtuEdit from "./OtuEdit";
-import OtuRemove from "./OtuRemove";
+import OtuEdit from "../OtuEdit";
+import OtuRemove from "../OtuRemove";
 
 type OTUHeaderEndIconsProps = {
     id: string;

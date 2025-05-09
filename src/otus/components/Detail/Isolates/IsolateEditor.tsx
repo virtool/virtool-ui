@@ -1,18 +1,15 @@
+import { useDialogParam, useNaiveUrlSearchParam } from "@app/hooks";
+import { getFontSize, getFontWeight } from "@app/theme";
+import NoneFoundBox from "@base/NoneFoundBox";
+import ScrollArea from "@base/ScrollArea";
+import SubviewHeader from "@base/SubviewHeader";
+import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
+import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
+import { useCurrentOtuContext } from "@otus/queries";
+import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { useDialogParam, useNaiveUrlSearchParam } from "../../../../app/hooks";
-import { getFontSize, getFontWeight } from "../../../../app/theme";
-import NoneFoundBox from "../../../../base/NoneFoundBox";
-import ScrollArea from "../../../../base/ScrollArea";
-import SubviewHeader from "../../../../base/SubviewHeader";
-import SubviewHeaderTitle from "../../../../base/SubviewHeaderTitle";
-import ViewHeaderTitleBadge from "../../../../base/ViewHeaderTitleBadge";
-import {
-    ReferenceRight,
-    useCheckReferenceRight,
-} from "../../../../references/hooks";
-import { useCurrentOtuContext } from "../../../queries";
 import IsolateDetail from "./IsolateDetail";
 import IsolateItem from "./IsolateItem";
 

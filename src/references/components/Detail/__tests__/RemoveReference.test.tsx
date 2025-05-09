@@ -1,3 +1,4 @@
+import { AdministratorRoleName } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -9,7 +10,6 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AdministratorRoleName } from "../../../../administration/types";
 import RemoveReference from "../RemoveReference";
 
 describe("<RemoveReference />", () => {

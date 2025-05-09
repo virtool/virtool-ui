@@ -1,25 +1,29 @@
+import { formatSearchParams } from "@app/hooks";
 import InputSearch from "@base/InputSearch";
 import LinkButton from "@base/LinkButton";
 import Toolbar from "@base/Toolbar";
+import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { ReferenceRemotesFrom } from "@references/types";
 import React, { ChangeEvent } from "react";
-import { formatSearchParams } from "../../app/hooks";
-import { ReferenceRight, useCheckReferenceRight } from "../../references/hooks";
-import { ReferenceRemotesFrom } from "../../references/types";
 
 type OtuToolbarProps = {
     /** Current search term used for filtering */
     term: string;
+
     /** A callback function to handle changes in search input */
     onChange: (term: ChangeEvent<HTMLInputElement>) => void;
+
+    /** ID of the OTU's parent reference */
     refId: string;
-    /** Whether the reference is installed remotely */
+
+    /** Whether the reference is installed from a remote. */
     remotesFrom: ReferenceRemotesFrom | null;
 };
 
 /**
  * A toolbar which allows the OTUs to be filtered by their names
  */
-export default function OTUToolbar({
+export default function OtuToolbar({
     term,
     onChange,
     refId,

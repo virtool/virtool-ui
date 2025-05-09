@@ -1,10 +1,10 @@
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupSection from "@base/BoxGroupSection";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { map, sortBy } from "lodash-es";
 import React, { ReactNode } from "react";
 import styled from "styled-components";
-import BoxGroupHeader from "../../base/BoxGroupHeader";
-import BoxGroupSection from "../../base/BoxGroupSection";
-import LoadingPlaceholder from "../../base/LoadingPlaceholder";
 
 const StyledRebuildHistoryItem = styled(BoxGroupSection)`
     display: grid;

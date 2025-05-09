@@ -1,8 +1,8 @@
 import InputSearch from "@base/InputSearch";
+import InputSimple from "@base/InputSimple";
+import Toolbar from "@base/Toolbar";
 import numbro from "numbro";
 import React from "react";
-import InputSimple from "../../../base/InputSimple";
-import Toolbar from "../../../base/Toolbar";
 
 type IimiToolbarProps = {
     minimumProbability: number;

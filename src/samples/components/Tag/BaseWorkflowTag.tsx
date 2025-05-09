@@ -1,5 +1,5 @@
+import { borderRadius, getFontSize } from "@app/theme";
 import styled from "styled-components";
-import { borderRadius, getFontSize } from "../../../app/theme";
 
 /**
  * Base workflow tag component.

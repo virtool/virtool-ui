@@ -1,11 +1,11 @@
+import Badge from "@base/Badge";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import TextArea from "@base/TextArea";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import styled from "styled-components";
-import Badge from "../../base/Badge";
-import InputError from "../../base/InputError";
-import InputGroup from "../../base/InputGroup";
-import InputLabel from "../../base/InputLabel";
-import TextArea from "../../base/TextArea";
 
 const SequenceFieldTextArea = styled(TextArea)`
     font-family: ${(props) => props.theme.fontFamily.monospace};

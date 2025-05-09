@@ -3,7 +3,7 @@
  *
  * @module files/api
  */
-import { apiClient } from "../app/api";
+import { apiClient } from "@app/api";
 import { FileResponse, UploadType } from "./types";
 
 export function findFiles(

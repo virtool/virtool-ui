@@ -1,6 +1,6 @@
+import { getColorProps, getFontWeight } from "@app/theme";
 import { get } from "lodash-es";
 import styled from "styled-components";
-import { getColorProps, getFontWeight } from "../app/theme";
 
 function getAlertBackgroundColor({ color, theme }: getColorProps) {
     return get(theme, ["color", `${color}Lightest`], theme.color.greyLightest);

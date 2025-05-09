@@ -1,12 +1,12 @@
+import { useDialogParam } from "@app/hooks";
 import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
-import { useDialogParam } from "../../app/hooks";
 import { useCreateOTU } from "../queries";
-import { OTUForm } from "./OTUForm";
+import OtuForm from "./OtuForm";
 
 type CreateOTUProps = {
     refId: string;
@@ -15,7 +15,7 @@ type CreateOTUProps = {
 /**
  * Displays a dialog to create an OTU
  */
-export default function CreateOTU({ refId }: CreateOTUProps) {
+export default function OtuCreate({ refId }: CreateOTUProps) {
     const { open: openCreateOtu, setOpen: setOpenCreateOtu } =
         useDialogParam("openCreateOTU");
 
@@ -43,7 +43,7 @@ export default function CreateOTU({ refId }: CreateOTUProps) {
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>Create OTU</DialogTitle>
-                    <OTUForm
+                    <OtuForm
                         onSubmit={handleSubmit}
                         error={
                             mutation.isError &&

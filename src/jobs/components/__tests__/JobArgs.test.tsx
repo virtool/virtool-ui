@@ -3,7 +3,7 @@ import { renderWithRouter } from "@tests/setup";
 import { forEach } from "lodash-es";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { JobArgs } from "../JobArgs";
+import JobArgs from "../JobArgs";
 
 const sample_id = "test_sample_id";
 const analysis_id = "test_analysis-id";

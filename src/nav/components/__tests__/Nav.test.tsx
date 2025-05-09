@@ -1,9 +1,9 @@
+import { AdministratorRoleName } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { AdministratorRoleName } from "../../../administration/types";
 import Nav from "../Nav";
 
 describe("<Nav />", () => {

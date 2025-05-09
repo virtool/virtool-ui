@@ -1,3 +1,5 @@
+import { formatPath } from "@app/hooks";
+import References from "@references/components/References";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
@@ -16,8 +18,6 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { formatPath } from "../../../app/hooks";
-import References from "../../../references/components/References";
 
 describe("<OTUForm />", () => {
     let path;

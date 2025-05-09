@@ -1,15 +1,15 @@
+import { usePathParams } from "@app/hooks";
+import ContainerNarrow from "@base/ContainerNarrow";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NotFound from "@base/NotFound";
+import RelativeTime from "@base/RelativeTime";
+import SubviewHeader from "@base/SubviewHeader";
+import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
+import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
+import { DownloadLink } from "@references/components/Detail/DownloadLink";
+import { useFetchReference } from "@references/queries";
 import React from "react";
 import styled from "styled-components";
-import { usePathParams } from "../../app/hooks";
-import ContainerNarrow from "../../base/ContainerNarrow";
-import LoadingPlaceholder from "../../base/LoadingPlaceholder";
-import NotFound from "../../base/NotFound";
-import RelativeTime from "../../base/RelativeTime";
-import SubviewHeader from "../../base/SubviewHeader";
-import SubviewHeaderAttribution from "../../base/SubviewHeaderAttribution";
-import SubviewHeaderTitle from "../../base/SubviewHeaderTitle";
-import { DownloadLink } from "../../references/components/Detail/DownloadLink";
-import { useGetReference } from "../../references/queries";
 import { useFetchIndex } from "../queries";
 import Contributors from "./Contributors";
 import Files from "./IndexFiles";
@@ -38,7 +38,7 @@ export default function IndexDetail() {
         isError,
     } = useFetchIndex(indexId);
     const { data: reference, isPending: isPendingReference } =
-        useGetReference(refId);
+        useFetchReference(refId);
 
     if (isError) {
         return <NotFound />;

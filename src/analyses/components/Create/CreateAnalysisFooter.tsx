@@ -1,5 +1,5 @@
+import DialogFooter from "@base/DialogFooter";
 import styled from "styled-components";
-import DialogFooter from "../../../base/DialogFooter";
 
 export const CreateAnalysisFooter = styled(DialogFooter)`
     align-items: center;
