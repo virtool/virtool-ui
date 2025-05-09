@@ -1,6 +1,6 @@
+import { cn } from "@app/utils";
 import { marked } from "marked";
 import React from "react";
-import { cn } from "../app/utils";
 import NoneFound from "./NoneFound";
 
 type MarkdownProps = {

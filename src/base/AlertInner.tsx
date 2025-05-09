@@ -1,5 +1,5 @@
+import { getColor } from "@app/theme";
 import styled, { DefaultTheme } from "styled-components";
-import { getColor } from "../app/theme";
 
 type AlertInnerProps = {
     block?: boolean;

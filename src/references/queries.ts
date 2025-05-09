@@ -1,4 +1,5 @@
 import { ErrorResponse } from "@/types/api";
+import { apiClient } from "@app/api";
 import {
     keepPreviousData,
     useMutation,
@@ -6,7 +7,6 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import { useState } from "react";
-import { apiClient } from "../app/api";
 import {
     addReferenceGroup,
     addReferenceUser,

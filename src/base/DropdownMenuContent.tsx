@@ -1,6 +1,6 @@
+import { cn } from "@app/utils";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import React from "react";
-import { cn } from "../app/utils";
 
 type DropdownMenuContentProps = {
     children: React.ReactNode;

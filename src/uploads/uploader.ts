@@ -1,10 +1,10 @@
 /**
  * Initiate and track uploads using Zustand.
  */
+import { apiClient } from "@app/api";
+import { createRandomString } from "@app/utils";
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
-import { apiClient } from "../app/api";
-import { createRandomString } from "../app/utils";
 import { UploadInProgress, UploadType } from "./types";
 
 interface UploaderState {

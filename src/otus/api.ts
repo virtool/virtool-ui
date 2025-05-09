@@ -1,4 +1,4 @@
-import { apiClient } from "../app/api";
+import { apiClient } from "@app/api";
 import { Otu, OtuHistory, OtuIsolate, OtuSegment, OtuSequence } from "./types";
 
 /**

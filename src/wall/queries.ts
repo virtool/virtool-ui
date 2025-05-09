@@ -1,10 +1,10 @@
+import { apiClient } from "@app/api";
+import { Root } from "@app/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Response } from "superagent";
 import { fetchAccount, login, resetPassword } from "../account/api";
 import { accountKeys } from "../account/queries";
 import { Account } from "../account/types";
-import { apiClient } from "../app/api";
-import { Root } from "../app/types";
 
 import { ErrorResponse } from "@/types/api";
 

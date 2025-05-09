@@ -3,7 +3,7 @@
  *
  * @module hmm/api
  */
-import { apiClient } from "../app/api";
+import { apiClient } from "@app/api";
 import { Hmm, HMMInstalled, HmmSearchResults } from "./types";
 
 /**

@@ -1,4 +1,4 @@
-import { getColor, theme } from "../app/theme";
+import { getColor, theme } from "@app/theme";
 
 type getBadgeOrLabelColorProps = {
     color?: string;

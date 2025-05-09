@@ -1,5 +1,5 @@
+import { cn } from "@app/utils";
 import React from "react";
-import { cn } from "../app/utils";
 import Table from "./Table";
 
 type BoxGroupTableProps = {
