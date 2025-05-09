@@ -6,7 +6,7 @@ import DialogTitle from "@base/DialogTitle";
 import { useUpdateOTU } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
-import { OTUForm } from "../OTUForm";
+import OtuForm from "./OtuForm";
 
 type OtuEditProps = {
     abbreviation: string;
@@ -45,7 +45,7 @@ export default function OtuEdit({ abbreviation, name, otuId }: OtuEditProps) {
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>Edit OTU</DialogTitle>
-                    <OTUForm
+                    <OtuForm
                         name={name}
                         abbreviation={abbreviation}
                         error={

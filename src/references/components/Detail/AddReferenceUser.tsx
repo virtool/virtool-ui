@@ -11,12 +11,12 @@ import NoneFoundSection from "@base/NoneFoundSection";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import Toolbar from "@base/Toolbar";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useAddReferenceMember } from "@references/queries";
+import { ReferenceUser } from "@references/types";
 import { useInfiniteFindUsers } from "@users/queries";
 import { filter, flatMap, includes, map } from "lodash-es";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useAddReferenceMember } from "../../queries";
-import { ReferenceUser } from "../../types";
 
 const StyledAddUserItem = styled(SelectBoxGroupSection)`
     display: flex;

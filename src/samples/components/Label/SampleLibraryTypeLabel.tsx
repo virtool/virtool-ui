@@ -1,9 +1,9 @@
 import { getFontSize, getFontWeight } from "@app/theme";
 import Icon from "@base/Icon";
+import { LibraryType } from "@samples/types";
+import { getLibraryTypeDisplayName } from "@samples/utils";
 import React from "react";
 import styled from "styled-components";
-import { LibraryType } from "../../types";
-import { getLibraryTypeDisplayName } from "../../utils";
 import { BaseSampleLabel } from "./BaseSampleLabel";
 
 const StyledSampleLibraryTypeLabel = styled(BaseSampleLabel)`

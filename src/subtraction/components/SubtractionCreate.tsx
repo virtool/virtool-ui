@@ -14,11 +14,11 @@ import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
+import { RestoredAlert } from "@forms/components/RestoredAlert";
+import { usePersistentForm } from "@forms/hooks";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import { Controller } from "react-hook-form";
-import { RestoredAlert } from "../../forms/components/RestoredAlert";
-import { usePersistentForm } from "../../forms/hooks";
 import { useCreateSubtraction } from "../queries";
 import { SubtractionFileSelector } from "./SubtractionFileSelector";
 

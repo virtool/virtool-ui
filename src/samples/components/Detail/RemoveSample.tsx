@@ -1,7 +1,7 @@
 import { useDialogParam } from "@app/hooks";
 import RemoveDialog from "@base/RemoveDialog";
+import { useRemoveSample } from "@samples/queries";
 import React from "react";
-import { useRemoveSample } from "../../queries";
 
 type RemoveSampleProps = {
     /** The id of the sample being removed */

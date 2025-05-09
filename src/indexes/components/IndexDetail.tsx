@@ -7,7 +7,7 @@ import SubviewHeader from "@base/SubviewHeader";
 import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
 import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
-import { useGetReference } from "@references/queries";
+import { useFetchReference } from "@references/queries";
 import React from "react";
 import styled from "styled-components";
 import { useFetchIndex } from "../queries";
@@ -38,7 +38,7 @@ export default function IndexDetail() {
         isError,
     } = useFetchIndex(indexId);
     const { data: reference, isPending: isPendingReference } =
-        useGetReference(refId);
+        useFetchReference(refId);
 
     if (isError) {
         return <NotFound />;

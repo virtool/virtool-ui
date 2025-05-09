@@ -9,8 +9,8 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SectionHeader from "@base/SectionHeader";
 import Toolbar from "@base/Toolbar";
+import { useUpdateSourceTypes } from "@references/hooks";
 import React from "react";
-import { useUpdateSourceTypes } from "../../hooks";
 import SourceTypeList from "./SourceTypeList";
 
 type GlobalSourceTypesProps = {

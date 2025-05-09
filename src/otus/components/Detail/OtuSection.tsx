@@ -1,11 +1,11 @@
 import { useDialogParam, usePathParams } from "@app/hooks";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import { useGetReference } from "@references/queries";
+import { CurrentOtuContextProvider, useFetchOTU } from "@otus/queries";
+import { useFetchReference } from "@references/queries";
 import React from "react";
-import { CurrentOtuContextProvider, useFetchOTU } from "../../queries";
+import OtuIssues from "../OtuIssues";
 import AddIsolate from "./Isolates/AddIsolate";
 import IsolateEditor from "./Isolates/IsolateEditor";
-import OtuIssues from "./OtuIssues";
 
 /**
  * Displays a component for managing the OTU
@@ -16,7 +16,7 @@ export default function OtuSection() {
         useDialogParam("openAddIsolate");
 
     const { data: reference, isPending: isPendingReference } =
-        useGetReference(refId);
+        useFetchReference(refId);
     const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
 
     if (isPendingReference || isPendingOTU) {

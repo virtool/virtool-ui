@@ -4,12 +4,12 @@ import Box from "@base/Box";
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
+import { useSetIsolateAsDefault } from "@otus/queries";
+import { OtuIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
+import Sequences from "@sequences/components/Sequences";
 import React from "react";
 import styled from "styled-components";
-import Sequences from "../../../../sequences/components/Sequences";
-import { useSetIsolateAsDefault } from "../../../queries";
-import { OtuIsolate } from "../../../types";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./RemoveIsolate";
 

@@ -1,3 +1,4 @@
+import { AdministratorRoleName } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
 import {
@@ -9,7 +10,6 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AdministratorRoleName } from "../../types";
 import Settings from "../Settings";
 
 describe("<Settings />", () => {

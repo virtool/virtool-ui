@@ -10,11 +10,11 @@ import {
     mockApiGetUser,
 } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
+import { User } from "@users/types";
 import { times } from "lodash-es";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { User } from "../../types";
 
 function formatUserPath(user: User) {
     return `/administration/users/${user.id}`;

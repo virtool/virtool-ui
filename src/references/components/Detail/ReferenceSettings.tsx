@@ -1,9 +1,9 @@
 import { usePathParams } from "@app/hooks";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SectionHeader from "@base/SectionHeader";
+import { useFetchReference } from "@references/queries";
 import { sortBy } from "lodash-es";
 import React from "react";
-import { useGetReference } from "../../queries";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
 import ReferenceMembers from "./ReferenceMembers";
 import RemoveReference from "./RemoveReference";
@@ -13,7 +13,7 @@ import RemoveReference from "./RemoveReference";
  */
 export default function ReferenceSettings() {
     const { refId } = usePathParams<{ refId: string }>();
-    const { data, isPending } = useGetReference(refId);
+    const { data, isPending } = useFetchReference(refId);
 
     if (isPending) {
         return <LoadingPlaceholder />;

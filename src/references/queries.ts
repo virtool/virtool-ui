@@ -291,7 +291,7 @@ export function useRemoveReferenceUser(refId: string, noun: string) {
  * @param refId - The id of the reference to get
  * @returns Query results containing the reference
  */
-export function useGetReference(refId: string) {
+export function useFetchReference(refId: string) {
     return useQuery<Reference>({
         queryKey: referenceQueryKeys.detail(refId),
         queryFn: () => getReference(refId),

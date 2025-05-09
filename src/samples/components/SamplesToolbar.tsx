@@ -2,8 +2,8 @@ import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import InputSearch from "@base/InputSearch";
 import LinkButton from "@base/LinkButton";
 import Toolbar from "@base/Toolbar";
+import { Permission } from "@groups/types";
 import React from "react";
-import { Permission } from "../../groups/types";
 import SampleSelectionToolbar from "./SampleSelectionToolbar";
 
 function SampleSearchToolbar({ onChange, term }) {

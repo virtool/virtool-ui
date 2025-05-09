@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Response } from "superagent";
 import * as Yup from "yup";
-import { useGetReference } from "./queries";
+import { useFetchReference } from "./queries";
 
 export function getValidationSchema(sourceTypes: string[]) {
     return Yup.object({
@@ -134,7 +134,7 @@ export function useCheckReferenceRight(
 ) {
     const { data: account, isPending: isPendingAccount } = useFetchAccount();
     const { data: reference, isPending: isPendingReference } =
-        useGetReference(referenceId);
+        useFetchReference(referenceId);
 
     if (isPendingAccount || isPendingReference) {
         return { hasPermission: false, isPending: true };

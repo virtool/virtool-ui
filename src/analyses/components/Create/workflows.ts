@@ -1,4 +1,4 @@
-import { Workflows } from "../../types";
+import { Workflows } from "@analyses/types";
 
 export type workflow = {
     id: string;

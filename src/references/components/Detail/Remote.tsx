@@ -9,11 +9,11 @@ import Loader from "@base/Loader";
 import ProgressCircle from "@base/ProgressCircle";
 import RelativeTime from "@base/RelativeTime";
 import { JobState } from "@jobs/types";
-import React from "react";
 import {
     useCheckReferenceUpdates,
     useUpdateRemoteReference,
-} from "../../queries";
+} from "@references/queries";
+import React from "react";
 
 function Release({ release, checking, updating, onCheckUpdates, onUpdate }) {
     const hasUpdate = !updating && release.newer;

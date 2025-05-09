@@ -4,25 +4,25 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
-import { useGetReference } from "@references/queries";
+import RebuildAlert from "@indexes/components/RebuildAlert";
+import { useListOTUs } from "@otus/queries";
+import { useFetchReference } from "@references/queries";
 import { map } from "lodash";
 import React from "react";
-import RebuildAlert from "../../indexes/components/RebuildAlert";
-import { useListOTUs } from "../queries";
-import CreateOTU from "./CreateOTU";
-import OTUItem from "./OTUItem";
-import OTUToolbar from "./OTUToolbar";
+import OtuCreate from "./OtuCreate";
+import OtuItem from "./OtuItem";
+import OtuToolbar from "./OtuToolbar";
 
 /**
  * A list of OTUs with filtering
  */
-export default function OTUList() {
+export default function OtuList() {
     const { refId } = usePathParams<{ refId: string }>();
     const { value: term, setValue: setTerm } =
         useUrlSearchParam<string>("find");
     const { page } = usePageParam();
     const { data: reference, isPending: isPendingReference } =
-        useGetReference(refId);
+        useFetchReference(refId);
     const { data: otus, isPending: isPendingOTUs } = useListOTUs(
         refId,
         page,
@@ -39,13 +39,13 @@ export default function OTUList() {
     return (
         <ContainerNarrow>
             <RebuildAlert refId={refId} />
-            <OTUToolbar
+            <OtuToolbar
                 term={term}
                 onChange={(e) => setTerm(e.target.value)}
                 refId={refId}
                 remotesFrom={reference.remotes_from}
             />
-            <CreateOTU refId={refId} />
+            <OtuCreate refId={refId} />
 
             {documents.length ? (
                 <Pagination
@@ -56,7 +56,7 @@ export default function OTUList() {
                 >
                     <BoxGroup>
                         {map(documents, (document) => (
-                            <OTUItem
+                            <OtuItem
                                 key={document.id}
                                 {...document}
                                 refId={refId}

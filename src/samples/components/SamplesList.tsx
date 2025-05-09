@@ -1,3 +1,4 @@
+import QuickAnalyze from "@analyses/components/Create/QuickAnalyze";
 import {
     useListSearchParam,
     usePageParam,
@@ -9,14 +10,13 @@ import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
+import { useListIndexes } from "@indexes/queries";
 import { useFetchLabels } from "@labels/queries";
+import { useListSamples } from "@samples/queries";
+import { SampleMinimal } from "@samples/types";
 import { intersectionWith, union, xor } from "lodash-es";
 import React, { useState } from "react";
 import styled from "styled-components";
-import QuickAnalyze from "../../analyses/components/Create/QuickAnalyze";
-import { useListIndexes } from "../../indexes/queries";
-import { useListSamples } from "../queries";
-import { SampleMinimal } from "../types";
 import SampleFilters from "./Filter/SampleFilters";
 import SampleItem from "./Item/SampleItem";
 import SampleToolbar from "./SamplesToolbar";

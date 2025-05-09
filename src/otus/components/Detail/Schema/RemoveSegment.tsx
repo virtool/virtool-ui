@@ -1,9 +1,9 @@
 import { useUrlSearchParam } from "@app/hooks";
 import RemoveDialog from "@base/RemoveDialog";
+import { useUpdateOTU } from "@otus/queries";
+import { OtuSegment } from "@otus/types";
 import { reject } from "lodash-es";
 import React from "react";
-import { useUpdateOTU } from "../../../queries";
-import { OtuSegment } from "../../../types";
 
 type RemoveSegmentProps = {
     abbreviation: string;

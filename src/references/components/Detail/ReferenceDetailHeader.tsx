@@ -5,10 +5,10 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { endsWith } from "lodash-es";
 import React from "react";
 import { useLocation } from "wouter";
-import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 
 type ReferenceDetailHeaderProps = {
     createdAt: string;

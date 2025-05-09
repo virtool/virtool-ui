@@ -12,11 +12,11 @@ import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import Toolbar from "@base/Toolbar";
 import { useInfiniteFindGroups } from "@groups/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useAddReferenceMember } from "@references/queries";
+import { ReferenceGroup } from "@references/types";
 import { filter, flatMap, includes, map } from "lodash-es";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useAddReferenceMember } from "../../queries";
-import { ReferenceGroup } from "../../types";
 
 const StyledAddGroupItem = styled(SelectBoxGroupSection)`
     display: flex;

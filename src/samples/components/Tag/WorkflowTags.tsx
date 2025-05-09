@@ -1,8 +1,8 @@
 import { getWorkflowDisplayName } from "@app/utils";
+import { SampleWorkflows, WorkflowState } from "@samples/types";
 import { reduce } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { SampleWorkflows, WorkflowState } from "../../types";
 import WorkflowTag from "./WorkflowTag";
 import WorkflowTagLink from "./WorkflowTagLink";
 import WorkflowTagNone from "./WorkflowTagNone";

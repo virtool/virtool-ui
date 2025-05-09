@@ -4,10 +4,10 @@ import Box from "@base/Box";
 import Icon from "@base/Icon";
 import SidebarHeader from "@base/SidebarHeader";
 import SideBarSection from "@base/SideBarSection";
+import { WorkflowStates } from "@samples/utils";
 import { xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { WorkflowStates } from "../../utils";
 
 const WorkflowFilterLabel = styled.div`
     padding: 4px 8px;

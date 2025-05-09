@@ -2,13 +2,13 @@ import { usePathParams } from "@app/hooks";
 import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
+import IndexDetail from "@indexes/components/IndexDetail";
+import Indexes from "@indexes/components/Indexes";
 import OtuDetail from "@otus/components/Detail/OtuDetail";
-import OTUList from "@otus/components/OTUList";
+import OtuList from "@otus/components/OtuList";
+import { useFetchReference } from "@references/queries";
 import React from "react";
 import { Redirect, Route, Switch } from "wouter";
-import IndexDetail from "../../../indexes/components/IndexDetail";
-import Indexes from "../../../indexes/components/Indexes";
-import { useGetReference } from "../../queries";
 import EditReference from "./EditReference";
 import ReferenceDetailHeader from "./ReferenceDetailHeader";
 import ReferenceDetailTabs from "./ReferenceDetailTabs";
@@ -20,7 +20,7 @@ import ReferenceSettings from "./ReferenceSettings";
  */
 export default function ReferenceDetail() {
     const { refId } = usePathParams<{ refId: string }>();
-    const { data, isPending, isError } = useGetReference(refId);
+    const { data, isPending, isError } = useFetchReference(refId);
 
     if (isError) {
         return <NotFound />;
@@ -62,7 +62,7 @@ export default function ReferenceDetail() {
                         path="/refs/:refId/otus/:otuId/*?"
                         component={OtuDetail}
                     />
-                    <Route path="/refs/:refId/otus" component={OTUList} />
+                    <Route path="/refs/:refId/otus" component={OtuList} />
                     <Route
                         path="/refs/:refId/indexes/:indexId"
                         component={IndexDetail}

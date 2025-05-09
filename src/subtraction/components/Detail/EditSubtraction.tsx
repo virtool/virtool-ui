@@ -9,10 +9,10 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useUpdateSubtraction } from "@subtraction/queries";
+import { Subtraction } from "@subtraction/types";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useUpdateSubtraction } from "../../queries";
-import { Subtraction } from "../../types";
 
 type EditSubtractionProps = {
     /** The subtraction data */

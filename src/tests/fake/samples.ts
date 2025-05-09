@@ -10,9 +10,9 @@ import {
     SampleMinimal,
     WorkflowState,
 } from "@samples/types";
+import { SubtractionNested } from "@subtraction/types";
 import { assign, times } from "lodash";
 import nock from "nock";
-import { SubtractionNested } from "../../subtraction/types";
 import { createFakeJobMinimal } from "./jobs";
 import { createFakeLabelNested } from "./labels";
 import { createFakeSubtractionNested } from "./subtractions";

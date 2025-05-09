@@ -15,7 +15,7 @@ import SectionHeader from "@base/SectionHeader";
 import { useUpdateSourceTypes } from "@references/hooks";
 import {
     referenceQueryKeys,
-    useGetReference,
+    useFetchReference,
     useUpdateReference,
 } from "@references/queries";
 import { get } from "lodash-es";
@@ -67,7 +67,7 @@ const SourceTypesUndo = styled(BoxGroupSection)`
 export function LocalSourceTypes() {
     const { refId } = usePathParams<{ refId: string }>();
 
-    const { data, isPending } = useGetReference(refId);
+    const { data, isPending } = useFetchReference(refId);
 
     const { mutation: updateReferenceMutation } = useUpdateReference(refId);
 

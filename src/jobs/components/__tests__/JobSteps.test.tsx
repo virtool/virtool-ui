@@ -1,9 +1,9 @@
 import JobSteps from "@jobs/components/JobSteps";
+import { JobState } from "@jobs/types";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { JobState } from "../../types";
 
 describe("<JobSteps />", () => {
     it("should render", () => {
