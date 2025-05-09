@@ -1,11 +1,11 @@
+import Dropdown from "@base/Dropdown";
+import DropdownButton from "@base/DropdownButton";
+import DropdownMenuContent from "@base/DropdownMenuContent";
+import DropdownMenuItem from "@base/DropdownMenuItem";
+import Icon from "@base/Icon";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import Dropdown from "../../../base/Dropdown";
-import DropdownButton from "../../../base/DropdownButton";
-import DropdownMenuContent from "../../../base/DropdownMenuContent";
-import DropdownMenuItem from "../../../base/DropdownMenuItem";
-import Icon from "../../../base/Icon";
 
 const sortKeys = {
     pathoscope: ["coverage", "depth", "weight"],

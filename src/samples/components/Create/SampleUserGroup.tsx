@@ -1,9 +1,9 @@
 import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSelect from "@base/InputSelect";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import InputLabel from "../../../base/InputLabel";
-import InputSelect from "../../../base/InputSelect";
 import { GroupMinimal } from "../../../groups/types";
 
 const SampleUserGroupItem = styled.option`

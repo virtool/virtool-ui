@@ -3,16 +3,16 @@ import {
     usePageParam,
     useUrlSearchParam,
 } from "@app/hooks";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NoneFoundBox from "@base/NoneFoundBox";
+import Pagination from "@base/Pagination";
+import ViewHeader from "@base/ViewHeader";
+import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { intersectionWith, union, xor } from "lodash-es";
 import React, { useState } from "react";
 import styled from "styled-components";
 import QuickAnalyze from "../../analyses/components/Create/QuickAnalyze";
-import LoadingPlaceholder from "../../base/LoadingPlaceholder";
-import NoneFoundBox from "../../base/NoneFoundBox";
-import Pagination from "../../base/Pagination";
-import ViewHeader from "../../base/ViewHeader";
-import ViewHeaderTitle from "../../base/ViewHeaderTitle";
-import ViewHeaderTitleBadge from "../../base/ViewHeaderTitleBadge";
 import { useListIndexes } from "../../indexes/queries";
 import { useFetchLabels } from "../../labels/queries";
 import { useListSamples } from "../queries";

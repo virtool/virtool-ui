@@ -1,12 +1,12 @@
 import { useFuse } from "@app/fuse";
 import { fontWeight, getFontSize } from "@app/theme";
 import BoxGroupSearch from "@base/BoxGroupSearch";
+import Icon from "@base/Icon";
+import Link from "@base/Link";
+import Popover from "@base/Popover";
+import SidebarHeaderButton from "@base/SidebarHeaderButton";
 import React from "react";
 import styled from "styled-components";
-import Icon from "../../../base/Icon";
-import Link from "../../../base/Link";
-import Popover from "../../../base/Popover";
-import SidebarHeaderButton from "../../../base/SidebarHeaderButton";
 import { Label } from "../../../labels/types";
 import { SubtractionOption } from "../../../subtraction/types";
 import SampleSidebarSelectorItem from "./SampleSidebarSelectorItem";

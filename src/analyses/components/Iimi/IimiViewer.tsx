@@ -1,8 +1,8 @@
 import { useFuse } from "@app/fuse";
 import Accordion from "@base/Accordion";
+import Box from "@base/Box";
+import Icon from "@base/Icon";
 import React from "react";
-import Box from "../../../base/Box";
-import Icon from "../../../base/Icon";
 import { IimiAnalysis, IimiHit } from "../../types";
 import { IimiOtu } from "./IimiOtu";
 import IimiToolbar from "./IimiToolbar";

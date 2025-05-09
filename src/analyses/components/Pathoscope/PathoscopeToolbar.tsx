@@ -1,14 +1,14 @@
 import { useUrlSearchParam } from "@app/hooks";
+import ButtonToggle from "@base/ButtonToggle";
+import Dropdown from "@base/Dropdown";
+import DropdownButton from "@base/DropdownButton";
+import DropdownMenuContent from "@base/DropdownMenuContent";
+import DropdownMenuDownload from "@base/DropdownMenuDownload";
+import Icon from "@base/Icon";
+import InputSearch from "@base/InputSearch";
+import Toolbar from "@base/Toolbar";
+import Tooltip from "@base/Tooltip";
 import React from "react";
-import ButtonToggle from "../../../base/ButtonToggle";
-import Dropdown from "../../../base/Dropdown";
-import DropdownButton from "../../../base/DropdownButton";
-import DropdownMenuContent from "../../../base/DropdownMenuContent";
-import DropdownMenuDownload from "../../../base/DropdownMenuDownload";
-import Icon from "../../../base/Icon";
-import InputSearch from "../../../base/InputSearch";
-import Toolbar from "../../../base/Toolbar";
-import Tooltip from "../../../base/Tooltip";
 import { AnalysisViewerSort } from "../Viewer/Sort";
 
 type PathoscopeToolbarProps = {

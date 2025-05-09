@@ -1,11 +1,11 @@
 import { usePathParams } from "@app/hooks";
 import { cn } from "@app/utils";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupTable from "@base/BoxGroupTable";
+import ContainerNarrow from "@base/ContainerNarrow";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import React from "react";
-import BoxGroup from "../../../base/BoxGroup";
-import BoxGroupHeader from "../../../base/BoxGroupHeader";
-import BoxGroupTable from "../../../base/BoxGroupTable";
-import ContainerNarrow from "../../../base/ContainerNarrow";
-import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
 import Contributors from "../../../indexes/components/Contributors";
 import { useGetReference } from "../../queries";
 import { Clone } from "./Clone";

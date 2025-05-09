@@ -1,7 +1,7 @@
+import Box from "@base/Box";
+import Button from "@base/Button";
+import Icon from "@base/Icon";
 import React from "react";
-import Box from "../../../base/Box";
-import Button from "../../../base/Button";
-import Icon from "../../../base/Icon";
 
 export default function NuvsBlastError({ error, onBlast }) {
     return (

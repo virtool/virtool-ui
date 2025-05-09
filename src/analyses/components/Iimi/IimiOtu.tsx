@@ -1,10 +1,10 @@
 import { formatIsolateName } from "@app/utils";
 import AccordionContent from "@base/AccordionContent";
+import AccordionScrollingItem from "@base/AccordionScrollingItem";
+import AccordionTrigger from "@base/AccordionTrigger";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import AccordionScrollingItem from "../../../base/AccordionScrollingItem";
-import AccordionTrigger from "../../../base/AccordionTrigger";
 import { IimiHit, IimiIsolate as IimiIsolateData } from "../../types";
 import { IimiCondensedCoverage } from "./IimiCondensedCoverage";
 import { IimiDetectionTag } from "./IimiDetectionTag";

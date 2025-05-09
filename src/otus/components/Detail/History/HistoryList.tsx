@@ -1,8 +1,8 @@
+import Badge from "@base/Badge";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import { map, reverse, sortBy } from "lodash-es";
 import React from "react";
-import Badge from "../../../../base/Badge";
-import BoxGroup from "../../../../base/BoxGroup";
-import BoxGroupHeader from "../../../../base/BoxGroupHeader";
 import { OtuHistory } from "../../../types";
 import Change from "./Change";
 

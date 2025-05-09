@@ -1,5 +1,5 @@
+import Label from "@base/Label";
 import React from "react";
-import Label from "../../../base/Label";
 
 type IimiDetectionTagProps = {
     probability: number;

@@ -1,8 +1,8 @@
 import { useNavigate } from "@app/hooks";
+import Button from "@base/Button";
+import DialogFooter from "@base/DialogFooter";
 import React from "react";
 import { useForm } from "react-hook-form";
-import Button from "../../base/Button";
-import DialogFooter from "../../base/DialogFooter";
 import { useCreateReference } from "../queries";
 import { ReferenceForm, ReferenceFormMode } from "./ReferenceForm";
 

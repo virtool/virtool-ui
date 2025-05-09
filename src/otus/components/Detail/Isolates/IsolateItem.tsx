@@ -1,10 +1,10 @@
 import { useUrlSearchParam } from "@app/hooks";
 import { getActiveShadow } from "@app/theme";
 import { formatIsolateName } from "@app/utils";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Icon from "@base/Icon";
 import React from "react";
 import styled from "styled-components";
-import BoxGroupSection from "../../../../base/BoxGroupSection";
-import Icon from "../../../../base/Icon";
 import { OtuIsolate } from "../../../types";
 
 const StyledIsolateItem = styled(BoxGroupSection)`

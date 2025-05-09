@@ -1,8 +1,8 @@
+import Button from "@base/Button";
+import Icon from "@base/Icon";
+import LinkButton from "@base/LinkButton";
 import React from "react";
 import styled from "styled-components";
-import Button from "../../base/Button";
-import Icon from "../../base/Icon";
-import LinkButton from "../../base/LinkButton";
 
 const SampleSelectionToolbarTop = styled.div`
     align-items: center;

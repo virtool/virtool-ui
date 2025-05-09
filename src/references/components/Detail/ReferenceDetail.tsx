@@ -1,9 +1,9 @@
 import { usePathParams } from "@app/hooks";
+import ContainerNarrow from "@base/ContainerNarrow";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NotFound from "@base/NotFound";
 import React from "react";
 import { Redirect, Route, Switch } from "wouter";
-import ContainerNarrow from "../../../base/ContainerNarrow";
-import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
-import NotFound from "../../../base/NotFound";
 import IndexDetail from "../../../indexes/components/IndexDetail";
 import Indexes from "../../../indexes/components/Indexes";
 import OtuDetail from "../../../otus/components/Detail/OtuDetail";

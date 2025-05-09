@@ -1,11 +1,11 @@
 import { useDialogParam } from "@app/hooks";
+import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { compact, map } from "lodash-es";
 import React from "react";
-import Dialog from "../../base/Dialog";
-import DialogContent from "../../base/DialogContent";
-import DialogOverlay from "../../base/DialogOverlay";
-import DialogTitle from "../../base/DialogTitle";
 import { useCreateSequence } from "../../otus/queries";
 import { OtuSegment, OtuSequence } from "../../otus/types";
 import SequenceForm from "./SequenceForm";

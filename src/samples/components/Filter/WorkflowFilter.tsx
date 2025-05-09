@@ -2,11 +2,11 @@ import { getBorder, getFontSize } from "@app/theme";
 import { getWorkflowDisplayName } from "@app/utils";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
+import SidebarHeader from "@base/SidebarHeader";
+import SideBarSection from "@base/SideBarSection";
 import { xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import SidebarHeader from "../../../base/SidebarHeader";
-import SideBarSection from "../../../base/SideBarSection";
 import { WorkflowStates } from "../../utils";
 
 const WorkflowFilterLabel = styled.div`

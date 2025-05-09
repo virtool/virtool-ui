@@ -1,10 +1,10 @@
 import { getFontSize } from "@app/theme";
+import Badge from "@base/Badge";
+import BoxGroup from "@base/BoxGroup";
+import NoneFoundSection from "@base/NoneFoundSection";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import Badge from "../../base/Badge";
-import BoxGroup from "../../base/BoxGroup";
-import NoneFoundSection from "../../base/NoneFoundSection";
 import { useCurrentOtuContext } from "../../otus/queries";
 import { OtuIsolate } from "../../otus/types";
 import sortSequencesBySegment from "../../otus/utils";

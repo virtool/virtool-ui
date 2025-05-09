@@ -1,8 +1,8 @@
 import { useUrlSearchParam } from "@app/hooks";
+import CloseButton from "@base/CloseButton";
+import IconButton from "@base/IconButton";
 import React from "react";
 import styled from "styled-components";
-import CloseButton from "../../base/CloseButton";
-import IconButton from "../../base/IconButton";
 import { useGetActiveIsolateId } from "../../otus/hooks";
 import { useCurrentOtuContext } from "../../otus/queries";
 import { DownloadLink } from "../../references/components/Detail/DownloadLink";

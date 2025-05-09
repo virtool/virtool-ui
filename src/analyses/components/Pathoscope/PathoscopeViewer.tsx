@@ -1,6 +1,6 @@
 import { useUrlSearchParam } from "@app/hooks";
+import Alert from "@base/Alert";
 import React from "react";
-import Alert from "../../../base/Alert";
 import { Sample } from "../../../samples/types";
 import { FormattedPathoscopeAnalysis } from "../../types";
 import { PathoscopeList } from "./PathoscopeList";

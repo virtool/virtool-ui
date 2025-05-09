@@ -1,11 +1,11 @@
 import { useDialogParam } from "@app/hooks";
 import { cn } from "@app/utils";
+import Dialog from "@base/Dialog";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { Tabs } from "radix-ui";
 import React from "react";
-import Dialog from "../../../base/Dialog";
-import DialogOverlay from "../../../base/DialogOverlay";
-import DialogTitle from "../../../base/DialogTitle";
 import { HmmSearchResults } from "../../../hmm/types";
 import HMMAlert from "../HMMAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";

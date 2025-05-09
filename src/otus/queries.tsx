@@ -6,7 +6,7 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import React, { createContext, useContext } from "react";
-import LoadingPlaceholder from "../base/LoadingPlaceholder";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { useGetReference } from "../references/queries";
 import {
     addIsolate,

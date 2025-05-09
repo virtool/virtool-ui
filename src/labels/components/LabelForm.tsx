@@ -5,11 +5,11 @@ import Color from "@base/Color";
 import DialogFooter from "@base/DialogFooter";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import InputLabel from "../../base/InputLabel";
-import InputSimple from "../../base/InputSimple";
 import SampleLabel from "../../samples/components/Label/SampleLabel";
 
 const LabelFormPreview = styled(Box)`

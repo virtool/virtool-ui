@@ -1,6 +1,6 @@
+import Button from "@base/Button";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import Button from "../../../base/Button";
 import { useCompatibleIndexes, useSubtractionOptions } from "../../hooks";
 import { useCreateAnalysis } from "../../queries";
 import { Workflows } from "../../types";

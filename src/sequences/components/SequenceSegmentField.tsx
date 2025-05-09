@@ -1,17 +1,17 @@
 import { fontWeight, getColor, getFontSize, getFontWeight } from "@app/theme";
+import Box from "@base/Box";
+import Icon from "@base/Icon";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import Link from "@base/Link";
+import Select from "@base/Select";
+import SelectButton from "@base/SelectButton";
+import SelectContent from "@base/SelectContent";
+import SelectItem from "@base/SelectItem";
 import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import styled from "styled-components";
-import Box from "../../base/Box";
-import Icon from "../../base/Icon";
-import InputGroup from "../../base/InputGroup";
-import InputLabel from "../../base/InputLabel";
-import Link from "../../base/Link";
-import Select from "../../base/Select";
-import SelectButton from "../../base/SelectButton";
-import SelectContent from "../../base/SelectContent";
-import SelectItem from "../../base/SelectItem";
 import { OtuSegment } from "../../otus/types";
 
 const SegmentSelectContainer = styled.div`

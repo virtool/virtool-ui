@@ -1,13 +1,13 @@
 import { useDialogParam } from "@app/hooks";
 import { cn } from "@app/utils";
+import Badge from "@base/Badge";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Dialog from "@base/Dialog";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { Tabs } from "radix-ui";
 import React, { useEffect } from "react";
-import Badge from "../../../base/Badge";
-import BoxGroupSection from "../../../base/BoxGroupSection";
-import Dialog from "../../../base/Dialog";
-import DialogOverlay from "../../../base/DialogOverlay";
-import DialogTitle from "../../../base/DialogTitle";
 import { useListHmms } from "../../../hmm/queries";
 import { SampleMinimal } from "../../../samples/types";
 import HMMAlert from "../HMMAlert";

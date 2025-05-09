@@ -1,11 +1,11 @@
 import { useUrlSearchParam } from "@app/hooks";
+import Attribution from "@base/Attribution";
+import BoxGroupSection from "@base/BoxGroupSection";
+import IconButton from "@base/IconButton";
+import Link from "@base/Link";
+import ProgressCircle from "@base/ProgressCircle";
 import React from "react";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
-import Attribution from "../../base/Attribution";
-import BoxGroupSection from "../../base/BoxGroupSection";
-import IconButton from "../../base/IconButton";
-import Link from "../../base/Link";
-import ProgressCircle from "../../base/ProgressCircle";
 import { Permission } from "../../groups/types";
 import { JobState } from "../../jobs/types";
 import { ReferenceMinimal } from "../types";

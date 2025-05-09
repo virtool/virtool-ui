@@ -1,8 +1,8 @@
+import Badge from "@base/Badge";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Link from "@base/Link";
 import React from "react";
 import styled from "styled-components";
-import Badge from "../../base/Badge";
-import BoxGroupSection from "../../base/BoxGroupSection";
-import Link from "../../base/Link";
 
 const StyledIndexOTU = styled(BoxGroupSection)`
     display: flex;

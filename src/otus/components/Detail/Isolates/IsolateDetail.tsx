@@ -1,11 +1,11 @@
 import { useDialogParam } from "@app/hooks";
 import { formatIsolateName } from "@app/utils";
+import Box from "@base/Box";
+import Icon from "@base/Icon";
+import IconButton from "@base/IconButton";
+import Label from "@base/Label";
 import React from "react";
 import styled from "styled-components";
-import Box from "../../../../base/Box";
-import Icon from "../../../../base/Icon";
-import IconButton from "../../../../base/IconButton";
-import Label from "../../../../base/Label";
 import { DownloadLink } from "../../../../references/components/Detail/DownloadLink";
 import Sequences from "../../../../sequences/components/Sequences";
 import { useSetIsolateAsDefault } from "../../../queries";

@@ -1,11 +1,11 @@
 import { useDialogParam, usePathParams } from "@app/hooks";
+import BoxGroup from "@base/BoxGroup";
+import Button from "@base/Button";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NoneFoundBox from "@base/NoneFoundBox";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import BoxGroup from "../../../../base/BoxGroup";
-import Button from "../../../../base/Button";
-import LoadingPlaceholder from "../../../../base/LoadingPlaceholder";
-import NoneFoundBox from "../../../../base/NoneFoundBox";
 import {
     ReferenceRight,
     useCheckReferenceRight,
