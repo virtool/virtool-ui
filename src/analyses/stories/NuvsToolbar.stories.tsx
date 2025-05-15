@@ -7,6 +7,7 @@ const meta: Meta<typeof NuvsToolbar> = {
     component: NuvsToolbar,
     tags: ["autodocs"],
 };
+
 const fakeFormattedNuvsResults: FormattedNuvsResults = {
     hits: [
         {
@@ -191,6 +192,7 @@ const fakeFormattedNuvsResults: FormattedNuvsResults = {
         },
     ],
 };
+
 export default meta;
 
 type Story = StoryObj<typeof meta>;

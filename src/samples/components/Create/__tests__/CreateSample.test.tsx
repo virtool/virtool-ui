@@ -1,9 +1,9 @@
 import { LibraryType } from "@samples/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mockApiListGroups } from "@tests/api/groups";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
-import { mockApiListGroups } from "@tests/fake/groups";
 import { createFakeLabelNested, mockApiGetLabels } from "@tests/fake/labels";
 import { mockApiCreateSample } from "@tests/fake/samples";
 import {

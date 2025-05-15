@@ -1,4 +1,5 @@
 import { StorybookConfig } from "@storybook/react-vite";
+import { mergeConfig } from "vite";
 
 const config: StorybookConfig = {
     stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
@@ -20,5 +21,9 @@ const config: StorybookConfig = {
         reactDocgen: "react-docgen-typescript",
     },
 };
+
+export async function viteFinal(config) {
+    return mergeConfig(config, { process: { env: {} } });
+}
 
 export default config;
