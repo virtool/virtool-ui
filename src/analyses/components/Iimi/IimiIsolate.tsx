@@ -4,7 +4,7 @@ import { sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { CoverageChart } from "../Charts/CoverageChart";
-import { IimiDetectionTag } from "./IimiDetectionTag";
+import { IimiDetection } from "./IimiDetection";
 
 const CoveragePanel = styled.div`
     align-items: center;
@@ -23,7 +23,7 @@ export function IimiIsolate({ name, sequences }) {
                 {sorted.map((sequence) => (
                     <Box key={sequence.id}>
                         <p>
-                            <IimiDetectionTag
+                            <IimiDetection
                                 probability={sequence.probability}
                                 result={sequence.result}
                             />

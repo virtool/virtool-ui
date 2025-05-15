@@ -1,6 +1,7 @@
+import AnalysisValue from "@analyses/components/AnalysisValue";
 import { FormattedPathoscopeHit } from "@analyses/types";
 import { useUrlSearchParam } from "@app/hooks";
-import { cn, toScientificNotation } from "@app/utils";
+import { toScientificNotation } from "@app/utils";
 import AccordionContent from "@base/AccordionContent";
 import AccordionScrollingItem from "@base/AccordionScrollingItem";
 import AccordionTrigger from "@base/AccordionTrigger";
@@ -8,26 +9,6 @@ import React from "react";
 import styled from "styled-components";
 import PathoscopeDetail from "./PathoscopeDetail";
 import PathoscopeOtuCoverage from "./PathoscopeOtuCoverage";
-
-function PathoscopeItemValue({ color, label, value }) {
-    return (
-        <div className="flex flex-col w-22" color={color}>
-            <span
-                className={cn(
-                    {
-                        "text-blue-700": color === "blue",
-                        "text-green-700": color === "green",
-                        "text-red-700": color === "red",
-                    },
-                    "font-bold",
-                )}
-            >
-                {value}
-            </span>
-            <small className="font-medium mt-1.5 text-gray-500">{label}</small>
-        </div>
-    );
-}
 
 const PathoscopeAccordionTrigger = styled(AccordionTrigger)`
     display: flex;
@@ -71,17 +52,17 @@ export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
                         </span>
                     </header>
                     <div className="flex gap-4">
-                        <PathoscopeItemValue
+                        <AnalysisValue
                             color="green"
                             label={showReads ? "READS" : "WEIGHT"}
                             value={piValue}
                         />
-                        <PathoscopeItemValue
+                        <AnalysisValue
                             color="red"
                             label="DEPTH"
                             value={depth}
                         />
-                        <PathoscopeItemValue
+                        <AnalysisValue
                             color="blue"
                             label="COVERAGE"
                             value={coverage.toFixed(3)}
