@@ -2,8 +2,9 @@ import Settings from "@administration/components/Settings";
 import { AdministratorRoleName } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mockApiListGroups } from "@tests/api/groups";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeGroupMinimal, mockApiListGroups } from "@tests/fake/groups";
+import { createFakeGroupMinimal } from "@tests/fake/groups";
 import {
     createFakeUser,
     mockApiEditUser,
