@@ -12,9 +12,7 @@ export function IimiViewer({ detail }: { detail: IimiAnalysis }) {
         "name",
     ]);
 
-    const [minimumProbability, setMinimumProbability] = React.useState(0.98);
-
-    console.log(minimumProbability);
+    const [minimumProbability, setMinimumProbability] = React.useState(0.5);
 
     const itemsWithProbabilities = React.useMemo(() => {
         return items.map((item) => {
