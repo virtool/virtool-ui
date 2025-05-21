@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import FileItem from "../components/FileItem";
+import UploadItem, { UploadItemProps } from "../components/UploadItem";
 
-const meta: Meta<typeof FileItem> = {
-    title: "Files/FileItem",
-    component: FileItem,
+const meta: Meta<typeof UploadItem> = {
+    title: "Files/UploadItem",
+    component: UploadItem,
     argTypes: {
         canDelete: {
             control: {
@@ -29,6 +29,7 @@ type Story = StoryObj<typeof meta>;
 const Template: Story = {
     args: {
         canDelete: true,
+        failed: false,
         id: "babbdbhd",
         name: "sample_189a.fq.gz",
         size: 94209313,
@@ -39,7 +40,7 @@ const Template: Story = {
         },
     },
 
-    render: (args) => <FileItem {...args} />,
+    render: (args: UploadItemProps) => <UploadItem {...args} />,
 };
 
 export const Default: Story = Template;

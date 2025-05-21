@@ -5,7 +5,7 @@ import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import React from "react";
 import { useUploaderStore } from "../uploader";
 
-type UploadItemProps = {
+export type UploaderItemProps = {
     /* Whether the upload failed */
     failed: boolean;
 
@@ -31,7 +31,7 @@ export function UploaderItem({
     name,
     progress,
     size,
-}: UploadItemProps): JSX.Element {
+}: UploaderItemProps) {
     const removeUpload = useUploaderStore((state) => state.removeUpload);
 
     let end: React.ReactNode;

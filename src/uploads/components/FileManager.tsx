@@ -18,8 +18,8 @@ import { Accept } from "react-dropzone";
 import { useListFiles } from "../queries";
 import { UploadType } from "../types";
 import { upload } from "../uploader";
-import FileItem from "./FileItem";
 import { UploadBar } from "./UploadBar";
+import UploadItem from "./UploadItem";
 
 export type FileManagerProps = {
     /* The MIME-types and extensions to accept. */
@@ -109,7 +109,7 @@ export function FileManager({
                 >
                     <BoxGroup>
                         {map(files.items, (item) => (
-                            <FileItem
+                            <UploadItem
                                 {...item}
                                 canDelete={canDelete}
                                 key={item.id}

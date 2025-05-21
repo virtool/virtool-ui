@@ -1,10 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-    createFakeGroup,
-    mockApiGetGroup,
-    mockApiListGroups,
-} from "@tests/fake/groups";
+import { mockApiGetGroup, mockApiListGroups } from "@tests/api/groups";
+import { createFakeGroup } from "@tests/fake/groups";
 import { createFakePermissions } from "@tests/fake/permissions";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
