@@ -9,7 +9,7 @@ import { Label } from "./types";
 export function fetchLabels(): Promise<Label[]> {
     return apiClient.get("/labels").then((res) => res.body);
 }
-createFa;
+
 /**
  * Creates a label
  *

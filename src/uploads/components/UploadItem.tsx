@@ -7,7 +7,7 @@ import { UserNested } from "@users/types";
 import React, { useCallback } from "react";
 import { useDeleteFile } from "../queries";
 
-export type FileItemProps = {
+export type UploadItemProps = {
     canDelete: boolean;
     id: string;
     name: string;
@@ -16,14 +16,14 @@ export type FileItemProps = {
     user: UserNested;
 };
 
-export default function FileItem({
+export default function UploadItem({
     canDelete,
     id,
     name,
     size,
     uploaded_at,
     user,
-}: FileItemProps) {
+}: UploadItemProps) {
     const { mutate: handleRemove } = useDeleteFile();
 
     const handleDelete = useCallback(() => {

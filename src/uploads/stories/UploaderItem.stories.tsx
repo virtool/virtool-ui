@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import { UploaderItem } from "../components/UploaderItem";
+import { UploaderItem, UploaderItemProps } from "../components/UploaderItem";
 
 const meta: Meta<typeof UploaderItem> = {
     title: "Files/UploaderItem",
@@ -43,7 +43,7 @@ const Template: Story = {
         size: 94209313,
     },
 
-    render: (args) => (
+    render: (args: UploaderItemProps) => (
         <div className="bg-white w-1/2">
             <UploaderItem {...args} />
         </div>
