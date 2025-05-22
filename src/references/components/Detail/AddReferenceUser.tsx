@@ -66,7 +66,7 @@ export default function AddReferenceUser({
     }
 
     const userIds = map(users, "id");
-    const items = flatMap(data.pages, (page) => page.items);
+    const items = flatMap(data.pages, (page) => page.documents);
     const filteredItems = filter(items, (item) => !includes(userIds, item.id));
 
     function renderRow(item) {
