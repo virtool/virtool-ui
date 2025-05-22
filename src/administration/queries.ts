@@ -6,7 +6,7 @@ import {
     useQuery,
     useQueryClient,
 } from "@tanstack/react-query";
-import { User, UserResponse } from "@users/types";
+import { User, AdminUserResponse } from "@users/types";
 import {
     createUser,
     fetchAdministratorRoles,
@@ -106,7 +106,7 @@ export function useFindUsers(
     administrator?: boolean,
     active?: boolean,
 ) {
-    return useQuery<UserResponse>({
+    return useQuery<AdminUserResponse>({
         queryKey: userQueryKeys.list([
             page,
             per_page,

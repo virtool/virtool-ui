@@ -4,7 +4,7 @@
  * @module account/api
  */
 import { apiClient } from "@app/api";
-import { User, UserResponse } from "@users/types";
+import { User, AdminUserResponse } from "@users/types";
 import { AdministratorRole, Settings } from "./types";
 
 /**
@@ -70,7 +70,7 @@ export function findUsers(
     term: string,
     administrator: boolean,
     active: boolean,
-): Promise<UserResponse> {
+): Promise<AdminUserResponse> {
     return apiClient
         .get("/admin/users")
         .query({ page, per_page, term, administrator, active })

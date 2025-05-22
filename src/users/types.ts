@@ -65,7 +65,13 @@ export type User = UserNested & {
 };
 
 /** User search results from the API */
-export type UserResponse = SearchResult & {
+export type AdminUserResponse = SearchResult & {
     /** The page of users */
     items: Array<User>;
+};
+
+/** User search results from the API */
+export type UserResponse = SearchResult & {
+    /** The page of users */
+    documents: Array<User>;
 };
