@@ -6,7 +6,7 @@ import {
     useQuery,
     useQueryClient,
 } from "@tanstack/react-query";
-import { User, AdminUserResponse } from "@users/types";
+import { AdminUserResponse, User } from "@users/types";
 import {
     createUser,
     fetchAdministratorRoles,

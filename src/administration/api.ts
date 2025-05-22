@@ -4,7 +4,7 @@
  * @module account/api
  */
 import { apiClient } from "@app/api";
-import { User, AdminUserResponse } from "@users/types";
+import { AdminUserResponse, User } from "@users/types";
 import { AdministratorRole, Settings } from "./types";
 
 /**
