@@ -1,4 +1,4 @@
-import { useDialogParam } from "@app/hooks";
+import { useDialogParam, useUrlSearchParam } from "@app/hooks";
 import { cn } from "@app/utils";
 import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
@@ -42,15 +42,24 @@ type QuickAnalyzeProps = {
  */
 export default function QuickAnalyze({ samples }: QuickAnalyzeProps) {
     const { open, setOpen } = useDialogParam("openQuickAnalyze");
-
+    const { unsetValue: unsetQuickAnalysisType } =
+        useUrlSearchParam("quickAnalysisType");
     const { data: hmms, isPending } = useListHmms(1, 1, "");
 
     // The dialog should close when all selected samples have been analyzed and deselected.
     useEffect(() => {
         if (samples.length === 0) {
             setOpen(false);
+            unsetQuickAnalysisType();
         }
     }, [samples, setOpen]);
+
+    function onOpenChange(open: boolean) {
+        setOpen(open);
+        if (!open) {
+            unsetQuickAnalysisType();
+        }
+    }
 
     if (isPending) {
         return null;
@@ -61,7 +70,7 @@ export default function QuickAnalyze({ samples }: QuickAnalyzeProps) {
     const sampleIds = samples.map((sample) => sample.id);
 
     return (
-        <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
