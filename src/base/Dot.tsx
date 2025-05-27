@@ -2,7 +2,7 @@ import { cn } from "@app/utils";
 import React from "react";
 
 type DotProps = {
-    color: string;
+    color: "blue" | "green" | "gray" | "red";
 };
 
 export default function Dot({ color }: DotProps) {
@@ -12,7 +12,7 @@ export default function Dot({ color }: DotProps) {
                 {
                     "bg-blue-500": color === "blue",
                     "bg-green-600": color === "green",
-                    "bg-gray-600": color === "gray",
+                    "bg-gray-400": color === "gray",
                     "bg-red-600": color === "red",
                 },
                 "margin-full",
