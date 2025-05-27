@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:24-alpine AS base
 WORKDIR /build
 COPY package.json package-lock.json tailwind.config.js tsconfig.json vite.config.js ./
 RUN npm i
@@ -12,7 +12,7 @@ FROM base AS build
 WORKDIR /build
 RUN npx vite build
 
-FROM node:20-alpine AS dist
+FROM node:24-alpine AS dist
 WORKDIR /ui
 COPY --from=build /build/dist ./dist
 COPY --from=build /build/package.json ./
