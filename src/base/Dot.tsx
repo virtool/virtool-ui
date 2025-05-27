@@ -1,8 +1,10 @@
 import { cn } from "@app/utils";
 import React from "react";
 
+export type DotColor = "blue" | "green" | "gray" | "red";
+
 type DotProps = {
-    color: "blue" | "green" | "gray" | "red";
+    color: DotColor;
 };
 
 export default function Dot({ color }: DotProps) {
