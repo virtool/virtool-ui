@@ -1,8 +1,10 @@
+import { updateSearchParam } from "@app/hooks";
 import Button from "@base/Button";
 import Icon from "@base/Icon";
 import LinkButton from "@base/LinkButton";
 import React from "react";
 import styled from "styled-components";
+import { useSearch } from "wouter";
 
 const SampleSelectionToolbarTop = styled.div`
     align-items: center;
@@ -36,12 +38,16 @@ export default function SampleSelectionToolbar({
     onClear,
     selected,
 }: SampleSelectionToolbarProps) {
+    const search = useSearch();
     return (
         <SampleSelectionToolbarTop>
             <Button onClick={onClear}>
                 Clear selection of {selected.length} samples
             </Button>
-            <LinkButton color="green" to="?openQuickAnalyze=true">
+            <LinkButton
+                color="green"
+                to={updateSearchParam("openQuickAnalyze", "true", search)}
+            >
                 <Icon name="chart-area" /> Quick Analyze
             </LinkButton>
         </SampleSelectionToolbarTop>

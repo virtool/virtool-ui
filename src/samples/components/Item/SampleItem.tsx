@@ -1,5 +1,5 @@
 import { Workflows } from "@analyses/types";
-import { useUrlSearchParam } from "@app/hooks";
+import { useDialogParam, useUrlSearchParam } from "@app/hooks";
 import { getFontSize, getFontWeight } from "@app/theme";
 import Attribution from "@base/Attribution";
 import Box from "@base/Box";
@@ -97,10 +97,12 @@ export default function SampleItem({
 }: SampleItemProps) {
     const { setValue: setQuickAnalysisType } =
         useUrlSearchParam<string>("quickAnalysisType");
+    const { setOpen } = useDialogParam("openQuickAnalyze");
 
     function onQuickAnalyze() {
         setQuickAnalysisType(Workflows.pathoscope_bowtie);
         selectOnQuickAnalyze();
+        setOpen(true);
     }
 
     return (
