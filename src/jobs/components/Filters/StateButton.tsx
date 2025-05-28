@@ -2,7 +2,7 @@ import { cn } from "@app/utils";
 import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Checkbox from "@base/Checkbox";
-import Dot from "@base/Dot";
+import Dot, { DotColor } from "@base/Dot";
 import React from "react";
 
 type StateButtonProps = {
@@ -13,7 +13,7 @@ type StateButtonProps = {
     count: number;
 
     /** The state color */
-    color: string;
+    color: DotColor;
 
     /** The name of the state */
     label: string;

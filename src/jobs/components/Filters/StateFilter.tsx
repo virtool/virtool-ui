@@ -63,7 +63,7 @@ export default function StateFilter({ counts }: StateFilterProps) {
                 states={[
                     {
                         active: states.includes("waiting"),
-                        color: "grey",
+                        color: "gray",
                         count: availableCounts.waiting,
                         state: "waiting",
                         label: "waiting",
@@ -73,7 +73,7 @@ export default function StateFilter({ counts }: StateFilterProps) {
                         count: availableCounts.preparing,
                         state: "preparing",
                         label: "preparing",
-                        color: "grey",
+                        color: "gray",
                     },
                     {
                         active: states.includes("running"),
