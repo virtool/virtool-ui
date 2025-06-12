@@ -18,7 +18,7 @@ import {
     useUpdateSampleRights,
 } from "@samples/queries";
 import { useQueryClient } from "@tanstack/react-query";
-import { find, includes, map } from "lodash-es";
+import { includes, map } from "lodash-es";
 import React from "react";
 
 /**
@@ -46,7 +46,8 @@ export default function SampleRights() {
     const { group, group_read, group_write, all_read, all_write } = sample;
 
     function handleChangeGroup(e) {
-        const value = e.target.value === "" ? null : parseInt(e.target.value, 10);
+        const value =
+            e.target.value === "" ? null : parseInt(e.target.value, 10);
         mutation.mutate(
             { update: { group: value } },
             {
@@ -86,7 +87,6 @@ export default function SampleRights() {
 
     const selectedGroupId: string = group ? group.id.toString() : "";
 
-
     return (
         <ContainerNarrow>
             <BoxGroup>
@@ -109,7 +109,10 @@ export default function SampleRights() {
                                 None
                             </option>
                             {map(groups, (group) => (
-                                <option key={group.id} value={group.id.toString()}>
+                                <option
+                                    key={group.id}
+                                    value={group.id.toString()}
+                                >
                                     {group.name}
                                 </option>
                             ))}

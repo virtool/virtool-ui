@@ -10,6 +10,7 @@ import { LabelNested } from "@labels/types";
 import { UserNested } from "@users/types";
 import { SubtractionNested } from "../subtraction/types";
 
+import { GroupMinimal } from "@groups/types";
 import { SearchResult } from "../types/api";
 
 /* All workflow states */
@@ -108,7 +109,7 @@ export type Sample = SampleMinimal & {
     all_write: boolean;
     artifacts: Array<SampleArtifact>;
     format: string;
-    group: number | string | null;
+    group: GroupMinimal | null;
     group_read: boolean;
     group_write: boolean;
     hold: boolean;
