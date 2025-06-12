@@ -46,8 +46,9 @@ export default function SampleRights() {
     const { group, group_read, group_write, all_read, all_write } = sample;
 
     function handleChangeGroup(e) {
+        const value = e.target.value === "" ? null : parseInt(e.target.value, 10);
         mutation.mutate(
-            { update: { group: e.target.value } },
+            { update: { group: value } },
             {
                 onSuccess: () => {
                     queryClient.invalidateQueries({
@@ -83,20 +84,8 @@ export default function SampleRights() {
     const groupRights = (group_read ? "r" : "") + (group_write ? "w" : "");
     const allRights = (all_read ? "r" : "") + (all_write ? "w" : "");
 
-    const groupOptionComponents = map(groups, (group) => (
-        <option key={group.id} value={group.id}>
-            {group.name}
-        </option>
-    ));
+    const selectedGroupId: string = group ? group.id.toString() : "";
 
-    let selectedGroup: number | null;
-
-    if (typeof group === "number") {
-        selectedGroup = group;
-    } else {
-        const foundGroup = find(groups, (item) => item.legacy_id === group);
-        selectedGroup = foundGroup ? foundGroup.id : null;
-    }
 
     return (
         <ContainerNarrow>
@@ -113,11 +102,17 @@ export default function SampleRights() {
                         <InputLabel htmlFor="group">Group</InputLabel>
                         <InputSelect
                             id="group"
-                            value={selectedGroup}
+                            value={selectedGroupId}
                             onChange={handleChangeGroup}
                         >
-                            <option value="none">None</option>
-                            {groupOptionComponents}
+                            <option key="none" value="">
+                                None
+                            </option>
+                            {map(groups, (group) => (
+                                <option key={group.id} value={group.id.toString()}>
+                                    {group.name}
+                                </option>
+                            ))}
                         </InputSelect>
                     </InputGroup>
 
