@@ -1,3 +1,4 @@
+import { formatData } from "@analyses/utils";
 import type { Meta, StoryObj } from "@storybook/react";
 import { IimiViewer } from "../components/Iimi/IimiViewer";
 import { Workflows } from "../types";
@@ -1201,5 +1202,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: { detail },
+    args: { detail: formatData(detail) },
 };

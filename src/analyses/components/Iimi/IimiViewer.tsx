@@ -1,39 +1,40 @@
-import { IimiAnalysis, IimiHit } from "@analyses/types";
+import { FormattedIimiAnalysis, FormattedIimiHit } from "@analyses/types";
 import { useFuse } from "@app/fuse";
+import { useUrlSearchParam } from "@app/hooks";
 import Accordion from "@base/Accordion";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
+import { orderBy } from "lodash-es";
 import React from "react";
 import { IimiOtu } from "./IimiOtu";
 import IimiToolbar from "./IimiToolbar";
 
-export function IimiViewer({ detail }: { detail: IimiAnalysis }) {
-    const [items, term, setTerm] = useFuse<IimiHit>(detail.results.hits, [
-        "name",
-    ]);
+type sortKey = {
+    key: string;
+    order: "desc" | "asc";
+};
+
+const sortKeys: { [key: string]: sortKey } = {
+    probability: { key: "probability", order: "desc" },
+    coverage: { key: "coverage", order: "desc" },
+    name: { key: "name", order: "asc" },
+};
+
+export function IimiViewer({ detail }: { detail: FormattedIimiAnalysis }) {
+    const [items, term, setTerm] = useFuse<FormattedIimiHit>(
+        detail.results.hits,
+        ["name"],
+    );
+
+    const { value: sort } = useUrlSearchParam("sort", "probability");
 
     const [minimumProbability, setMinimumProbability] = React.useState(0.5);
 
-    const itemsWithProbabilities = React.useMemo(() => {
-        return items.map((item) => {
-            const maxProbability = Math.max(
-                ...item.isolates.flatMap((isolate) =>
-                    isolate.sequences.map(
-                        (sequence) => sequence.probability || 0,
-                    ),
-                ),
-            );
-
-            return {
-                ...item,
-                probability: maxProbability > 0 ? maxProbability : null,
-            };
-        });
-    }, [items]);
-
-    const hits = itemsWithProbabilities.filter(
+    const hits = items.filter(
         (item) => item.probability && item.probability >= minimumProbability,
     );
+
+    const sortedHits = orderBy(hits, sortKeys[sort].key, sortKeys[sort].order);
 
     return (
         <>
@@ -59,7 +60,7 @@ export function IimiViewer({ detail }: { detail: IimiAnalysis }) {
                 setTerm={setTerm}
             />
             <Accordion type="single" collapsible>
-                {hits.map((hit) => (
+                {sortedHits.map((hit) => (
                     <IimiOtu
                         hit={hit}
                         key={hit.id}

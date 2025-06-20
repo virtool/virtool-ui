@@ -342,10 +342,36 @@ export type IimiHit = {
     result: boolean;
 };
 
+/** Complete iimi prediction results*/
 export type IimiAnalysis = AnalysisMinimal & {
     files: Array<AnalysisFile>;
     results: {
         hits: IimiHit[];
     };
     workflow: Workflows;
+};
+
+/** iimi prediction results for a segment of virus formatted for display */
+export type FormattedIimiSequence = Omit<IimiSequence, "coverage"> & {
+    maxDepth: number;
+    coverage: PositionMappedReadDepths;
+};
+
+/** iimi prediction results for a virus isolate formatted for display */
+export type FormattedIimiIsolate = Omit<IimiIsolate, "sequences"> & {
+    sequences: FormattedIimiSequence[];
+};
+
+/** iimi prediction results for a complete virus formatted for display */
+export type FormattedIimiHit = Omit<IimiHit, "isolates"> & {
+    probability: number;
+    coverage: number;
+    isolates: FormattedIimiIsolate[];
+};
+
+/** Complete iimi prediction results formatted for display*/
+export type FormattedIimiAnalysis = Omit<IimiAnalysis, "results"> & {
+    results: {
+        hits: FormattedIimiHit[];
+    };
 };

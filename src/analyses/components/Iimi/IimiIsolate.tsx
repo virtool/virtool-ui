@@ -1,4 +1,3 @@
-import { convertRleToCoverage } from "@analyses/utils";
 import Box from "@base/Box";
 import { sortBy } from "lodash-es";
 import React from "react";
@@ -29,12 +28,9 @@ export function IimiIsolate({ name, sequences }) {
                             />
                         </p>
                         <CoverageChart
-                            data={convertRleToCoverage(
-                                sequence.coverage.lengths,
-                                sequence.coverage.values,
-                            )}
+                            data={sequence.coverage}
                             id={sequence.id}
-                            yMax={Math.max(...sequence.coverage.values, 10)}
+                            yMax={Math.max(sequence.maxDepth, 10)}
                             untrustworthyRanges={sequence.untrustworthy_ranges}
                         />
                     </Box>

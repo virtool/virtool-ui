@@ -1,9 +1,5 @@
-import { IimiIsolate, IimiSequence } from "@analyses/types";
-import {
-    combineUntrustworthyRegions,
-    convertRleToCoverage,
-    maxSequences,
-} from "@analyses/utils";
+import { FormattedIimiIsolate } from "@analyses/types";
+import { combineUntrustworthyRegions, maxSequences } from "@analyses/utils";
 import { filter, map, sortBy, unzip } from "lodash-es";
 import React from "react";
 import { SummaryChart } from "../Charts/SummaryChart";
@@ -12,21 +8,18 @@ import { SummaryChart } from "../Charts/SummaryChart";
 export function IimiCondensedCoverage({
     isolates,
 }: {
-    isolates: IimiIsolate[];
+    isolates: FormattedIimiIsolate[];
 }) {
     const sequences = sortBy(
         unzip(map(isolates, "sequences")),
         (seqs) => seqs[0]?.length,
     );
 
-    const charts = map(sequences, (seqs: IimiSequence[]) => {
+    const charts = map(sequences, (seqs) => {
         const filteredSeqs = filter(seqs);
         const avgSeq = maxSequences(
-            map(filteredSeqs, (seq: IimiSequence) => {
-                return convertRleToCoverage(
-                    seq.coverage.lengths,
-                    seq.coverage.values,
-                );
+            map(filteredSeqs, (seq) => {
+                return seq.coverage;
             }),
         );
 

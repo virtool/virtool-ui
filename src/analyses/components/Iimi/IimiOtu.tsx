@@ -1,15 +1,13 @@
 import AnalysisValue from "@analyses/components/AnalysisValue";
 import {
-    IimiHit,
+    FormattedIimiHit,
     IimiIsolate as IimiIsolateData,
-    IimiSequence,
 } from "@analyses/types";
-import { convertRleToCoverage, maxSequences } from "@analyses/utils";
 import { formatIsolateName } from "@app/utils";
 import AccordionContent from "@base/AccordionContent";
 import AccordionScrollingItem from "@base/AccordionScrollingItem";
 import AccordionTrigger from "@base/AccordionTrigger";
-import { filter, map, sortBy, sum, unzip } from "lodash-es";
+import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { IimiCondensedCoverage } from "./IimiCondensedCoverage";
@@ -30,45 +28,15 @@ const IimiAccordionTrigger = styled(AccordionTrigger)`
 `;
 
 type IimiOtuProps = {
-    hit: IimiHit;
+    hit: FormattedIimiHit;
     probability: number;
 };
 
 /** Collapsible results of an Iimi analysis for a single otu */
 export function IimiOtu({
-    hit: { id, isolates, name, result },
+    hit: { id, isolates, name, result, coverage },
     probability,
 }: IimiOtuProps) {
-    const sequences = sortBy(
-        unzip(map(isolates, "sequences")),
-        (seqs) => seqs[0]?.length,
-    );
-
-    const composited = map(sequences, (seqs: IimiSequence[]) => {
-        const filteredSeqs = filter(seqs);
-        return maxSequences(
-            map(filteredSeqs, (seq: IimiSequence) => {
-                return convertRleToCoverage(
-                    seq.coverage.lengths,
-                    seq.coverage.values,
-                );
-            }),
-        );
-    });
-
-    const totalSequenceLength = map(composited, (seq) => seq.length).reduce(
-        (a, b) => a + b,
-        0,
-    );
-
-    const totalCoveredPositions = sum(
-        map(composited, (seq) => {
-            return seq.filter((pos) => pos > 0).length;
-        }),
-    );
-
-    const coverage = (totalCoveredPositions / totalSequenceLength).toFixed(4);
-
     return (
         <AccordionScrollingItem value={id}>
             <IimiAccordionTrigger>
@@ -81,7 +49,7 @@ export function IimiOtu({
                         />
                         <AnalysisValue
                             color="blue"
-                            value={coverage}
+                            value={coverage.toFixed(4)}
                             label="COVERAGE"
                         />
                     </div>
