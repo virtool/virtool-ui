@@ -12,6 +12,9 @@ const CoveragePanel = styled.div`
     overflow-x: scroll;
 `;
 
+/**
+ * a single iimi isolate item
+ */
 export function IimiIsolate({ name, sequences }) {
     const sorted = sortBy(sequences, (sequence) => sequence.length);
 

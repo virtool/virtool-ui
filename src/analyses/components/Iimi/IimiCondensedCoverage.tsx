@@ -4,7 +4,7 @@ import { filter, map, sortBy, unzip } from "lodash-es";
 import React from "react";
 import { SummaryChart } from "../Charts/SummaryChart";
 
-/** A graph of averaged Iimi analysis sequence coverage */
+/** A graph of maximum Iimi analysis sequence coverage */
 export function IimiCondensedCoverage({
     isolates,
 }: {

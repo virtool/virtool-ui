@@ -20,6 +20,9 @@ const sortKeys: { [key: string]: sortKey } = {
     name: { key: "name", order: "asc" },
 };
 
+/**
+ * Complete results of an iimi analysis run
+ */
 export function IimiViewer({ detail }: { detail: FormattedIimiAnalysis }) {
     const [items, term, setTerm] = useFuse<FormattedIimiHit>(
         detail.results.hits,

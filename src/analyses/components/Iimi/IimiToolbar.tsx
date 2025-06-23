@@ -13,6 +13,9 @@ type IimiToolbarProps = {
     setTerm: (value: string) => void;
 };
 
+/**
+ * Toolbar for filtering and sorting iimi results
+ */
 export default function IimiToolbar({
     minimumProbability,
     term,
