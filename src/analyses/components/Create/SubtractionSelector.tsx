@@ -21,7 +21,6 @@ export default function SubtractionSelector({
     subtractions,
     onChange,
 }: SubtractionSelectorProps) {
-    console.log(subtractions);
     const [results, term, setTerm] = useFuse<SubtractionOption>(subtractions, [
         "name",
     ]);
