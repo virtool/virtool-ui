@@ -6,6 +6,9 @@ type IimiDetectionTagProps = {
     result: boolean;
 };
 
+/**
+ * tag showing the detection results for an isolate or sequence
+ */
 export function IimiDetection({ probability, result }: IimiDetectionTagProps) {
     if (probability === undefined) {
         return (

@@ -14,9 +14,9 @@ import React from "react";
 import styled from "styled-components";
 import { useGetAnalysis } from "../queries";
 import {
+    FormattedIimiAnalysis,
     FormattedNuvsAnalysis,
     FormattedPathoscopeAnalysis,
-    IimiAnalysis,
 } from "../types";
 import { IimiViewer } from "./Iimi/IimiViewer";
 import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";
@@ -77,7 +77,7 @@ export default function AnalysisDetail() {
             />
         );
     } else if (analysis.workflow === "iimi") {
-        content = <IimiViewer detail={analysis as IimiAnalysis} />;
+        content = <IimiViewer detail={analysis as FormattedIimiAnalysis} />;
     } else {
         return (
             <UnsupportedAnalysis>

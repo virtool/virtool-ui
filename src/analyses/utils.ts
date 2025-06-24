@@ -14,16 +14,27 @@ import {
     maxBy,
     min,
     minBy,
+    reduce,
     reject,
     sortBy,
     startsWith,
+    sum,
     sumBy,
     toNumber,
     uniq,
+    unzip,
     zipWith,
 } from "lodash-es";
 import {
+    FormattedIimiAnalysis,
+    FormattedIimiHit,
+    FormattedIimiIsolate,
+    FormattedIimiSequence,
     FormattedPathoscopeIsolate,
+    IimiAnalysis,
+    IimiHit,
+    IimiIsolate,
+    IimiSequence,
     NuvsOrf,
     PositionMappedReadDepths,
     UntrustworthyRange,
@@ -262,6 +273,10 @@ export function formatData(detail) {
         return formatNuvsData(detail);
     }
 
+    if (detail?.workflow === "iimi") {
+        return formatIimiData(detail);
+    }
+
     return detail;
 }
 
@@ -269,6 +284,85 @@ const supportedWorkflows = ["pathoscope_bowtie", "nuvs", "iimi"];
 
 export function checkSupportedWorkflow(workflow) {
     return includes(supportedWorkflows, workflow);
+}
+
+/**
+ * Take an iimi otu and add exrta blargh fix later, hiiiii ian
+ *
+ * @param iimiOTU - the raw otu to be processed before display
+ *
+ * @returns Iimi otu with derived values for display
+ */
+function formatIimiData(detail: IimiAnalysis): FormattedIimiAnalysis {
+    const hits = map(detail.results.hits, (hit: IimiHit): FormattedIimiHit => {
+        const isolates = map(
+            hit.isolates,
+            (isolate: IimiIsolate): FormattedIimiIsolate => {
+                const sequences = map(
+                    isolate.sequences,
+                    (sequence: IimiSequence): FormattedIimiSequence => {
+                        const maxDepth = Math.max(...sequence.coverage.values);
+                        const coverage = convertRleToCoverage(
+                            sequence.coverage.lengths,
+                            sequence.coverage.values,
+                        );
+                        return { ...sequence, maxDepth, coverage };
+                    },
+                );
+
+                return { ...isolate, sequences };
+            },
+        );
+
+        const probability = reduce(
+            hit.isolates,
+            (result: number, isolate: IimiIsolate) => {
+                return max([
+                    result,
+                    ...map(
+                        isolate.sequences,
+                        (sequence: IimiSequence) => sequence.probability,
+                    ),
+                ]);
+            },
+            0,
+        );
+
+        const coverage = calculateCombinedCoveragePercent(isolates);
+
+        return { ...hit, coverage, probability, isolates };
+    });
+
+    return { ...detail, results: { hits } };
+}
+
+function calculateCombinedCoveragePercent(isolates: FormattedIimiIsolate[]) {
+    const combined_sequences = sortBy(
+        unzip(map(isolates, "sequences")),
+        (seqs) => seqs[0]?.length,
+    );
+
+    const compositedCoverage = map(combined_sequences, (seqs) => {
+        const filteredSeqs = filter(seqs);
+        return maxSequences(
+            map(filteredSeqs, (seq: FormattedIimiSequence) => {
+                return seq.coverage;
+            }),
+        );
+    });
+
+    const totalSequenceLength = map(
+        compositedCoverage,
+        (seq) => seq.length,
+    ).reduce((a, b) => a + b, 0);
+
+    const totalCoveredPositions = sum(
+        map(compositedCoverage, (seq) => {
+            return seq.filter((pos) => pos > 0).length;
+        }),
+    );
+
+    return totalCoveredPositions / totalSequenceLength;
 }
 
 /**
@@ -282,7 +376,7 @@ export function checkSupportedWorkflow(workflow) {
 export function convertRleToCoverage(
     lengths: Array<number>,
     rle: Array<number>,
-) {
+): PositionMappedReadDepths {
     const coverage = [];
 
     for (let sharedIndex = 0; sharedIndex < lengths.length; sharedIndex++) {
@@ -296,12 +390,14 @@ export function convertRleToCoverage(
 }
 
 /**
- * Average the read depths of an array of sequences.
+ * get the largest read depths of an array of sequences.
  *
  * @param sequences - the sequences to average
  * @returns An averaged sequence
  */
-export function maxSequences(sequences: PositionMappedReadDepths[]) {
+export function maxSequences(
+    sequences: PositionMappedReadDepths[],
+): PositionMappedReadDepths {
     return zipWith(...sequences, (...args) => max(args));
 }
 

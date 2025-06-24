@@ -10,6 +10,7 @@ import styled from "styled-components";
 const sortKeys = {
     pathoscope: ["coverage", "depth", "weight"],
     nuvs: ["length", "e", "orfs"],
+    iimi: ["name", "probability", "coverage"],
 };
 
 const sortTitles = {
@@ -20,11 +21,14 @@ const sortTitles = {
     orfs: "ORFs",
     weight: "Weight",
     identity: "Identity",
+    name: "Name",
+    probability: "PScore",
 };
 
 const sortWidths = {
     nuvs: "110px",
     pathoscope: "122px",
+    iimi: "180px",
 };
 
 type SortDropdownButtonProps = {

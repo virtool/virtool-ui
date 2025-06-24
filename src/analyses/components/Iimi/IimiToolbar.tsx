@@ -1,3 +1,5 @@
+import { AnalysisViewerSort } from "@analyses/components/Viewer/Sort";
+import { useUrlSearchParam } from "@app/hooks";
 import InputSearch from "@base/InputSearch";
 import InputSimple from "@base/InputSimple";
 import Toolbar from "@base/Toolbar";
@@ -11,6 +13,9 @@ type IimiToolbarProps = {
     setTerm: (value: string) => void;
 };
 
+/**
+ * Toolbar for filtering and sorting iimi results
+ */
 export default function IimiToolbar({
     minimumProbability,
     term,
@@ -18,11 +23,22 @@ export default function IimiToolbar({
     setTerm,
 }: IimiToolbarProps) {
     const value = numbro(minimumProbability).format("0.000");
+
+    const { value: sortKey, setValue: setSortKey } = useUrlSearchParam<string>(
+        "sort",
+        "probability",
+    );
+
     return (
         <Toolbar>
             <InputSearch
                 value={term}
                 onChange={(e) => setTerm(e.target.value)}
+            />
+            <AnalysisViewerSort
+                workflow="iimi"
+                sortKey={sortKey}
+                onSelect={setSortKey}
             />
             <form>
                 <InputSimple
