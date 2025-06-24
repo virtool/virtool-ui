@@ -10,7 +10,7 @@ import styled from "styled-components";
 const sortKeys = {
     pathoscope: ["coverage", "depth", "weight"],
     nuvs: ["length", "e", "orfs"],
-    iimi: ["name", "probability", "coverage"]
+    iimi: ["name", "probability", "coverage"],
 };
 
 const sortTitles = {
@@ -22,7 +22,7 @@ const sortTitles = {
     weight: "Weight",
     identity: "Identity",
     name: "Name",
-    probability: "PScore"
+    probability: "PScore",
 };
 
 const sortWidths = {

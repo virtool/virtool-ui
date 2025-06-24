@@ -179,8 +179,12 @@ describe("<IimiViewer />", () => {
 
         // Initially should show high (0.9) and medium (0.7) probability hits (both >= 0.5 default threshold)
         expect(screen.getByText("High Probability Virus")).toBeInTheDocument();
-        expect(screen.getByText("Medium Probability Virus")).toBeInTheDocument();
-        expect(screen.queryByText("Low Probability Virus")).not.toBeInTheDocument();
+        expect(
+            screen.getByText("Medium Probability Virus"),
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText("Low Probability Virus"),
+        ).not.toBeInTheDocument();
 
         // Change threshold to 0.8 to filter out medium probability hit
         const probabilityInput = screen.getByDisplayValue("0.500");
@@ -189,8 +193,12 @@ describe("<IimiViewer />", () => {
 
         // Now should only show high probability hit
         expect(screen.getByText("High Probability Virus")).toBeInTheDocument();
-        expect(screen.queryByText("Medium Probability Virus")).not.toBeInTheDocument();
-        expect(screen.queryByText("Low Probability Virus")).not.toBeInTheDocument();
+        expect(
+            screen.queryByText("Medium Probability Virus"),
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText("Low Probability Virus"),
+        ).not.toBeInTheDocument();
 
         // Change threshold to 0.2 to show all hits
         await userEvent.clear(probabilityInput);
@@ -198,7 +206,9 @@ describe("<IimiViewer />", () => {
 
         // Now should show all three hits
         expect(screen.getByText("High Probability Virus")).toBeInTheDocument();
-        expect(screen.getByText("Medium Probability Virus")).toBeInTheDocument();
+        expect(
+            screen.getByText("Medium Probability Virus"),
+        ).toBeInTheDocument();
         expect(screen.getByText("Low Probability Virus")).toBeInTheDocument();
     });
 });
