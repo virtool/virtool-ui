@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { fn } from "storybook/test";
 import React from "react";
+import { fn } from "storybook/test";
 import BoxGroup from "../BoxGroup";
 import BoxGroupHeader from "../BoxGroupHeader";
 import BoxGroupSection from "../BoxGroupSection";
