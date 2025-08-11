@@ -1,5 +1,5 @@
 import AccountGroups from "@account/components/AccountGroups";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { createFakeGroup } from "@tests/fake/groups";
 
 const meta: Meta<typeof AccountGroups> = {

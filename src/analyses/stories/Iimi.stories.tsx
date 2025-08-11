@@ -1,5 +1,5 @@
 import { formatData } from "@analyses/utils";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { IimiViewer } from "../components/Iimi/IimiViewer";
 import { Workflows } from "../types";
 

@@ -1,7 +1,7 @@
 import Box from "@base/Box";
 import { faker } from "@faker-js/faker";
-import { useArgs } from "@storybook/preview-api";
-import type { Meta, StoryObj } from "@storybook/react";
+import { useArgs } from "storybook/preview-api";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { UserItem } from "@users/components/UserItem";
 import { map } from "lodash-es";

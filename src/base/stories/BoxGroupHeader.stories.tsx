@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import BoxGroup from "../BoxGroup";
 import BoxGroupHeader from "../BoxGroupHeader";

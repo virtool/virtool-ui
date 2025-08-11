@@ -1,5 +1,5 @@
 import { JobState } from "@jobs/types";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import ProgressCircle from "../ProgressCircle";
 
 const meta: Meta<typeof ProgressCircle> = {
