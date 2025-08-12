@@ -20,38 +20,26 @@
         "process": true,
         "window": true
     },
-    "ignorePatterns": [
-        "**/tests/setup.tsx",
-        "dist/**"
-    ],
+    "ignorePatterns": ["**/tests/setup.tsx", "dist/**"],
     "overrides": [
         // Only warn about missing props validation.
         // TODO: Remove this override once all components are in TS.
         {
-            "files": [
-                "*.tsx"
-            ],
+            "files": ["*.tsx"],
             "rules": {
                 "react/prop-types": "off"
             }
         },
         // We want to change built-ins in some tests.
         {
-            "files": [
-                "*.test.tsx",
-                "*.test.ts",
-                "*.test.js",
-                "*.test.jsx"
-            ],
+            "files": ["*.test.tsx", "*.test.ts", "*.test.js", "*.test.jsx"],
             "rules": {
                 "no-global-assign": "off"
             }
         },
         // Webpack nonce is defined in the HTML template.
         {
-            "files": [
-                "nonce.js"
-            ],
+            "files": ["nonce.js"],
             "rules": {
                 "no-undef": "off"
             }
@@ -74,10 +62,7 @@
         }
     },
     "rules": {
-        "curly": [
-            "warn",
-            "all"
-        ],
+        "curly": ["warn", "all"],
         "func-style": [
             "warn",
             "declaration",
