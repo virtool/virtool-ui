@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { map } from "lodash";
 import React, { useState } from "react";
 import BoxGroupSearch from "../BoxGroupSearch";

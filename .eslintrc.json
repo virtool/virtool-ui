@@ -8,7 +8,8 @@
         "plugin:react/recommended",
         "plugin:react-hooks/recommended",
         "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:storybook/recommended"
     ],
     "globals": {
         "console": true,
@@ -62,7 +63,13 @@
     },
     "rules": {
         "curly": ["warn", "all"],
-        "func-style": ["warn", "declaration", { "allowArrowFunctions": false }],
+        "func-style": [
+            "warn",
+            "declaration",
+            {
+                "allowArrowFunctions": false
+            }
+        ],
         "no-else-return": "warn",
         "no-prototype-builtins": "warn",
         "prefer-arrow-callback": "warn",

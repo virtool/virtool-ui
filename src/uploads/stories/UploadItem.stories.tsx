@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import UploadItem, { UploadItemProps } from "../components/UploadItem";
 
@@ -29,7 +29,6 @@ type Story = StoryObj<typeof meta>;
 const Template: Story = {
     args: {
         canDelete: true,
-        failed: false,
         id: "babbdbhd",
         name: "sample_189a.fq.gz",
         size: 94209313,

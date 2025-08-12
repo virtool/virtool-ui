@@ -1,5 +1,5 @@
 import NuvsToolbar from "@analyses/components/Nuvs/NuvsToolbar";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FormattedNuvsResults } from "../types";
 
 const meta: Meta<typeof NuvsToolbar> = {
