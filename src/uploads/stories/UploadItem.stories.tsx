@@ -29,7 +29,6 @@ type Story = StoryObj<typeof meta>;
 const Template: Story = {
     args: {
         canDelete: true,
-        failed: false,
         id: "babbdbhd",
         name: "sample_189a.fq.gz",
         size: 94209313,
