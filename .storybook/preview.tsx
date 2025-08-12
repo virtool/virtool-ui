@@ -1,6 +1,6 @@
-import { fn } from "storybook/test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
+import { fn } from "storybook/test";
 import { ThemeProvider } from "styled-components";
 import { Router } from "wouter";
 import "../src/app/style.css";
