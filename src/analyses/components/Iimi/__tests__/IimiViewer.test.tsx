@@ -60,7 +60,7 @@ describe("<IimiViewer />", () => {
         ).toBeInTheDocument();
         expect(
             screen.getByText(
-                /This analysis could become inaccessbile at any time/,
+                /This analysis could become inaccessible at any time/,
             ),
         ).toBeInTheDocument();
     });

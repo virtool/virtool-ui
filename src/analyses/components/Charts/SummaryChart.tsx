@@ -1,7 +1,12 @@
-import { UntrustworthyRange } from "@analyses/types";
-import { deriveTrustworthyRegions } from "@analyses/utils";
+import { FormattedIimiSequence } from "@analyses/types";
+import {
+    combineUntrustworthyRegions,
+    deriveTrustworthyRegions,
+    maxSequences,
+} from "@analyses/utils";
 import { theme } from "@app/theme";
 import { area, scaleLinear, select } from "d3";
+import { filter, map, max } from "lodash-es";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
 
@@ -99,26 +104,34 @@ const StyledIimiCoverageChart = styled.div<StyledIimiCoverageChartProps>`
 
 interface IimiCoverageChartProps {
     /** The data to be graphed */
-    data: number[];
-    /** The unique identifier of the data being graphed */
-    id: string;
-    /** The maximum number of reads that will be shown on the y axis */
-    yMax: number;
-    /** regions of the sequence that are untrustworthy annotated by bp position*/
-    untrustworthyRanges: UntrustworthyRange[];
+    seqs: FormattedIimiSequence[];
 }
 
-export function SummaryChart({
-    data,
-    id,
-    yMax,
-    untrustworthyRanges,
-}: IimiCoverageChartProps) {
+export function SummaryChart({ seqs }: IimiCoverageChartProps) {
     const chartEl = useRef(null);
 
     useEffect(() => {
-        draw(chartEl.current, data, data.length, yMax, untrustworthyRanges);
-    }, [data, id, yMax]);
+        const filteredSeqs = filter(seqs);
+        const avgSeq = maxSequences(
+            map(filteredSeqs, (seq) => {
+                return seq.coverage;
+            }),
+        );
+
+        const untrustworthyRanges = combineUntrustworthyRegions(
+            map(seqs, (sequence) =>
+                sequence ? sequence.untrustworthy_ranges : [],
+            ),
+        );
+
+        draw(
+            chartEl.current,
+            avgSeq,
+            avgSeq.length,
+            max([...avgSeq, 10]),
+            untrustworthyRanges,
+        );
+    }, [seqs]);
 
     return <StyledIimiCoverageChart ref={chartEl} />;
 }
