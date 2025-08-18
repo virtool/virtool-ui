@@ -10,7 +10,7 @@ function generateCspScriptSrc(nonce) {
 }
 
 function generateCspStyleSrc(nonce) {
-    return `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com ${fontAwesomeUrl}`;
+    return `style-src 'self' 'nonce-${nonce}' ${fontAwesomeUrl}`;
 }
 
 function generateCspConnectSrc() {
