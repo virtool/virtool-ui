@@ -51,7 +51,7 @@ export function IimiViewer({ detail }: { detail: FormattedIimiAnalysis }) {
                 <ul className="list-disc list-inside pl-4">
                     <li>We do not guarantee the accuracy of the results.</li>
                     <li>
-                        This analysis could become inaccessbile at any time as
+                        This analysis could become inaccessible at any time as
                         the workflow changes.
                     </li>
                 </ul>
