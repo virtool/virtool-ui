@@ -62,7 +62,7 @@ export default function JobDetail() {
                     </JobDetailBadge>
                 </ViewHeaderTitle>
                 <ViewHeaderAttribution
-                    time={data.status[0].timestamp}
+                    time={data.created_at}
                     user={data.user.handle}
                 />
             </ViewHeader>
