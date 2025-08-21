@@ -35,7 +35,7 @@ export default function PathoscopeDetail({
         return (
             <PathoscopeIsolate
                 key={isolate.id}
-                coverage={isolate}
+                coverage={isolate.coverage}
                 depth={isolate.depth}
                 maxDepth={hit.maxDepth}
                 maxGenomeLength={maxGenomeLength}
