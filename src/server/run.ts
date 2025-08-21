@@ -19,7 +19,7 @@ async function main() {
     app.locals.delimiter = "#";
 
     app.get(
-        /\.(?:js|map|ico|svg|css)$/,
+        /\.(?:js|map|ico|svg|css|ttf)$/,
         express.static(path.join("dist"), {
             maxAge: 31536000000,
         }),
