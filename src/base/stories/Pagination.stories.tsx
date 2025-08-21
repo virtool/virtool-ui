@@ -41,11 +41,7 @@ function Template(args) {
 
     return (
         <Box>
-            <Pagination
-                renderRow={UserItem}
-                items={items}
-                {...args}
-            />
+            <Pagination renderRow={UserItem} items={items} {...args} />
         </Box>
     );
 }
