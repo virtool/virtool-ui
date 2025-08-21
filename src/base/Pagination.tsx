@@ -29,7 +29,6 @@ type PaginationProps = {
     storedPage: number;
     currentPage: number;
     pageCount: number;
-    onLoadNextPage?: (pageNumber: number) => void;
 };
 
 /**
@@ -39,7 +38,6 @@ export default function Pagination({
     children,
     currentPage,
     items,
-    onLoadNextPage,
     pageCount,
     renderRow,
     storedPage,
@@ -63,7 +61,6 @@ export default function Pagination({
                 to={updateSearchParam("page", String(pageNumber), search)}
                 active={storedPage !== pageNumber}
                 disabled={storedPage === pageNumber}
-                onClick={() => onLoadNextPage(pageNumber)}
             >
                 {pageNumber}
             </PaginationLink>
@@ -87,11 +84,6 @@ export default function Pagination({
                             )}
                             disabled={currentPage === 1}
                             active={currentPage !== 1}
-                            onClick={() => {
-                                if (onLoadNextPage) {
-                                    onLoadNextPage(currentPage - 1);
-                                }
-                            }}
                         />
                         {pageButtons}
                         <PaginationNext

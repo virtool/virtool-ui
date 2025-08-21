@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { UserItem } from "@users/components/UserItem";
 import { map } from "lodash-es";
 import React, { useMemo } from "react";
-import { useArgs } from "storybook/preview-api";
 import Pagination from "../Pagination";
 
 const queryClient = new QueryClient();
@@ -35,23 +34,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function Template(args) {
-    const [, updateArgs] = useArgs();
     const items = useMemo(
         () => fakeUserListFactory(args.storedPage, 7),
         [args.storedPage],
     );
-    function onLoadNextPage(page) {
-        updateArgs({ currentPage: page, storedPage: page });
-    }
 
     return (
         <Box>
-            <Pagination
-                onLoadNextPage={onLoadNextPage}
-                renderRow={UserItem}
-                items={items}
-                {...args}
-            />
+            <Pagination renderRow={UserItem} items={items} {...args} />
         </Box>
     );
 }
