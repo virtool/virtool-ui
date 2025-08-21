@@ -151,15 +151,16 @@ export type FormattedPathoscopeHit = {
 
 /** Mapping data for a single pathoscope reference isolate */
 export type FormattedPathoscopeIsolate = {
+    coverage: number;
     default: boolean;
     depth: number;
-    id: string;
     filled: number[];
+    id: string;
     name: string;
     pi: number;
+    sequences: FormattedPathoscopeSequence[];
     source_name: string;
     source_type: string;
-    sequences: FormattedPathoscopeSequence[];
 };
 
 /** The mapping data for a single pathoscope reference sequence*/
