@@ -17,11 +17,6 @@ export const administratorRoles = [
         name: "Settings",
     },
     {
-        description: "Manage users in any space. Delete any space.",
-        id: "spaces",
-        name: "Spaces",
-    },
-    {
         description:
             "Create user accounts. Control activation of user accounts.",
         id: "users",
