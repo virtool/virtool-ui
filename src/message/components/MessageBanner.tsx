@@ -1,14 +1,6 @@
-import { getColor, getFontWeight } from "@app/theme";
+import { cn } from "@/app/utils";
 import React from "react";
-import styled from "styled-components";
 import { useFetchMessage } from "../queries";
-
-export const StyledMessageBanner = styled.div`
-    background-color: ${getColor};
-    color: ${(props) => props.theme.color.white};
-    font-weight: ${getFontWeight("thick")};\
-    padding: 5px 15px;
-`;
 
 /**
  * Displays the banner containing the instance message
@@ -17,8 +9,17 @@ export default function MessageBanner() {
     const { data, isPending } = useFetchMessage();
 
     return !isPending && data?.message ? (
-        <StyledMessageBanner color={data.color}>
+        <div
+            className={cn(
+                "bg-red-500",
+                "font-medium",
+                "px-3",
+                "py-1",
+                "text-white",
+                "text-lg",
+            )}
+        >
             {data.message}
-        </StyledMessageBanner>
+        </div>
     ) : null;
 }
