@@ -5,7 +5,6 @@ import DropdownMenuItem from "@base/DropdownMenuItem";
 import Icon from "@base/Icon";
 import { map } from "lodash-es";
 import React from "react";
-import styled from "styled-components";
 
 const sortKeys = {
     pathoscope: ["coverage", "depth", "weight"],
@@ -25,31 +24,12 @@ const sortTitles = {
     probability: "PScore",
 };
 
-const sortWidths = {
-    nuvs: "110px",
-    pathoscope: "122px",
-    iimi: "180px",
-};
-
-type SortDropdownButtonProps = {
-    workflow: string;
-};
-
-const SortDropdownButton = styled(DropdownButton)<SortDropdownButtonProps>`
-    align-items: center;
-    display: flex;
-    width: ${(props) => sortWidths[props.workflow]};
-
-    i {
-        margin-left: auto;
-    }
-`;
-
 interface AnalysisViewerSortProps {
     workflow: string;
     sortKey: string;
     onSelect: (key: string) => void;
 }
+
 export function AnalysisViewerSort({
     workflow,
     sortKey,
@@ -57,12 +37,12 @@ export function AnalysisViewerSort({
 }: AnalysisViewerSortProps) {
     return (
         <Dropdown>
-            <SortDropdownButton workflow={workflow}>
+            <DropdownButton className="flex items-center">
                 <span>
                     <Icon name="sort" /> Sort: {sortTitles[sortKey]}
                 </span>
                 <Icon name="caret-down" />
-            </SortDropdownButton>
+            </DropdownButton>
             <DropdownMenuContent>
                 {map(sortKeys[workflow], (key) => (
                     <DropdownMenuItem key={key} onSelect={() => onSelect(key)}>

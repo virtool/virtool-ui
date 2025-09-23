@@ -4,14 +4,15 @@ import BoxGroupTable from "@base/BoxGroupTable";
 import Link from "@base/Link";
 import { map } from "lodash";
 import React, { ReactNode } from "react";
-import styled from "styled-components";
 import { workflows } from "../types";
 
 type JobArgsRowProps = {
     /** What to display as the value of the argument */
     children: ReactNode;
+
     /** The name of the job argument */
     title: string;
+
     /** An optional class name to apply to the row */
     className?: string;
 };
@@ -29,6 +30,7 @@ function JobArgsRow({ children, title, className }: JobArgsRowProps) {
 type AnalysisRowsProps = {
     /** The unique identified of the sample analysed */
     sample_id: string;
+
     /** The unique identified of the created analysis  */
     analysis_id: string;
 };
@@ -52,6 +54,7 @@ function AnalysisRows({ sample_id, analysis_id }: AnalysisRowsProps) {
 type BuildIndexRowsProps = {
     /** The unique identifier of the index being built */
     index_id: string;
+
     /** The unique identifier of the reference the index is based on */
     ref_id: string;
 };
@@ -100,13 +103,6 @@ function CreateSubtractionRows({ subtraction_id }: CreateSubtractionRowsProps) {
     );
 }
 
-const UnsupportedJobArgsRow = styled(JobArgsRow)`
-    th {
-        font-weight: normal;
-        font-family: monospace;
-    }
-`;
-
 type UnknownJobRows = {
     /** The list of arguments used to run the job */
     args: object;
@@ -119,9 +115,13 @@ function UnknownJobRows({ args }: UnknownJobRows) {
             {map(args, (value, key): ReactNode => {
                 if (typeof value === "string" || typeof value === "number") {
                     return (
-                        <UnsupportedJobArgsRow key={key} title={key}>
+                        <JobArgsRow
+                            className="font-mono font-normal"
+                            key={key}
+                            title={key}
+                        >
                             {value}
-                        </UnsupportedJobArgsRow>
+                        </JobArgsRow>
                     );
                 }
                 return null;
