@@ -60,27 +60,25 @@ export function MemoryRouter({
         hook = memoryLocation({ path }).hook;
     }
 
+    // Create the location hook function that follows React hooks rules
+    const locationHook = (): [string, (path: Path, ...args: any[]) => any] => {
+        const [location, navigate] = hook();
+        // Split off search params to get just the pathname
+        const pathname = location.split("?")[0] || "";
+        return [pathname, navigate];
+    };
+
+    // Create the search hook function that follows React hooks rules
+    const searchHook = () => {
+        const [location] = hook();
+        return location.split("?")[1] || "";
+    };
+
     return (
-        <Router
-            hook={() => useMemoryLocation(hook)}
-            searchHook={() => useMemorySearch(hook)}
-        >
+        <Router hook={locationHook} searchHook={searchHook}>
             {children}
         </Router>
     );
-}
-
-export function useMemoryLocation(
-    baseHook: BaseLocationHook,
-): [string, (path: Path, ...args: any[]) => any] {
-    let [location, rest] = baseHook();
-    location = location.split("?")[0] || "";
-    return [location, rest];
-}
-
-export function useMemorySearch(baseHook) {
-    const [location] = baseHook();
-    return location.split("?")[1] || "";
 }
 
 //mocks HTML element prototypes that are not implemented in jsdom
