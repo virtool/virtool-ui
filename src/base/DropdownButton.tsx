@@ -7,6 +7,13 @@ type DropdownButtonProps = {
     className?: string;
 };
 
-export default function DropdownButton({ children, className }: DropdownButtonProps) {
-    return <Button as={DropdownMenu.Trigger} className={className}>{children}</Button>;
+export default function DropdownButton({
+    children,
+    className,
+}: DropdownButtonProps) {
+    return (
+        <Button as={DropdownMenu.Trigger} className={className}>
+            {children}
+        </Button>
+    );
 }
