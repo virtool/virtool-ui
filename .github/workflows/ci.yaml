@@ -1,4 +1,4 @@
-name: ci
+name: CI
 
 on:
     push:
@@ -24,8 +24,8 @@ jobs:
                   target: dist
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-    static-commit:
-        name: Static / Commit
+    check-commit:
+        name: Check / Commit
         runs-on: ubuntu-22.04
         if: github.event_name == 'pull_request'
         steps:
@@ -35,8 +35,8 @@ jobs:
                   fetch-depth: 0
             - name: Lint
               uses: wagoid/commitlint-github-action@v6
-    static-eslint:
-        name: Static / ESLint
+    check-eslint:
+        name: Check / ESLint
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -45,8 +45,8 @@ jobs:
               run: npm i
             - name: Run ESLint
               run: npx eslint --quiet .
-    static-prettier:
-        name: Static / Prettier
+    check-prettier:
+        name: Check / Prettier
         runs-on: ubuntu-22.04
         steps:
             - name: Checkout
@@ -55,8 +55,8 @@ jobs:
               run: npm i
             - name: Run Prettier
               run: npx prettier -l .
-    static-typescript:
-        name: Static / Typescript
+    check-typescript:
+        name: Check / Typescript
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
