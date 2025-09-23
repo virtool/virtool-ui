@@ -37,7 +37,7 @@ export function AnalysisViewerSort({
 }: AnalysisViewerSortProps) {
     return (
         <Dropdown>
-            <DropdownButton className="flex items-center" workflow={workflow}>
+            <DropdownButton className="flex items-center">
                 <span>
                     <Icon name="sort" /> Sort: {sortTitles[sortKey]}
                 </span>

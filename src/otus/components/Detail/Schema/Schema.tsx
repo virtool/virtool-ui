@@ -1,6 +1,6 @@
+import Button from "@/base/Button";
 import { useDialogParam, usePathParams } from "@app/hooks";
 import BoxGroup from "@base/BoxGroup";
-import Button from "@base/Button";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
@@ -8,16 +8,10 @@ import { OtuSegment } from "@otus/types";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { map } from "lodash";
 import React from "react";
-import styled from "styled-components";
 import AddSegment from "./AddSegment";
 import EditSegment from "./EditSegment";
 import RemoveSegment from "./RemoveSegment";
 import Segment from "./Segment";
-
-const AddButton = styled(Button)`
-    margin-bottom: 10px;
-    width: 100%;
-`;
 
 /**
  * Displays a component allowing users to manage the otu schema
@@ -62,11 +56,16 @@ export default function Schema() {
 
     return (
         <div>
-            {canModify && (
-                <AddButton color="blue" onClick={() => setOpenAddSegment(true)}>
-                    Add Segment
-                </AddButton>
-            )}
+            <div className="flex justify-end mb-3">
+                {canModify && (
+                    <Button
+                        color="blue"
+                        onClick={() => setOpenAddSegment(true)}
+                    >
+                        Add Segment
+                    </Button>
+                )}
+            </div>
             {schema.length ? (
                 <BoxGroup>
                     {map(schema, (segment, index) => (
