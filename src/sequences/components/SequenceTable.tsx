@@ -2,18 +2,6 @@ import { cn } from "@app/utils";
 import Badge from "@base/Badge";
 import Table from "@base/Table";
 import React from "react";
-import styled from "styled-components";
-
-const SequenceCell = styled.td`
-    padding: 0 !important;
-    font-family: ${(props) => props.theme.fontFamily.monospace};
-
-    textarea {
-        width: 100%;
-        padding: 5px;
-        border: none;
-    }
-`;
 
 type SequenceTableProps = {
     definition: string;
@@ -32,7 +20,7 @@ export default function SequenceTable({
     sequence,
 }: SequenceTableProps) {
     return (
-        <Table className={cn("mt-2.5", "table-fixed", "[&_th]:w-32.5")}>
+        <Table className={cn("mt-2.5", "table-fixed")}>
             <tbody>
                 <tr>
                     <th>Definition</th>
@@ -50,9 +38,14 @@ export default function SequenceTable({
                     <th>
                         Sequence <Badge>{sequence.length}</Badge>
                     </th>
-                    <SequenceCell>
-                        <textarea rows={5} value={sequence} readOnly />
-                    </SequenceCell>
+                    <td className="font-mono !p-0">
+                        <textarea
+                            className="w-full p-2"
+                            rows={5}
+                            value={sequence}
+                            readOnly
+                        />
+                    </td>
                 </tr>
             </tbody>
         </Table>
