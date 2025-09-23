@@ -2,12 +2,6 @@ import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import React from "react";
-import styled from "styled-components";
-
-const StyledIndexOTU = styled(BoxGroupSection)`
-    display: flex;
-    justify-content: space-between;
-`;
 
 type IndexOTUProps = {
     refId: string;
@@ -27,11 +21,11 @@ export default function IndexOTU({
     name,
 }: IndexOTUProps) {
     return (
-        <StyledIndexOTU>
+        <BoxGroupSection className="flex justify-between">
             <Link to={`/refs/${refId}/otus/${id}`}>{name}</Link>
             <Badge>
                 {changeCount} {`change${changeCount > 1 ? "s" : ""}`}
             </Badge>
-        </StyledIndexOTU>
+        </BoxGroupSection>
     );
 }
