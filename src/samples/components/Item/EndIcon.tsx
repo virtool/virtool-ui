@@ -1,21 +1,8 @@
+import { cn } from "@/app/utils";
 import IconButton from "@base/IconButton";
 import ProgressCircle from "@base/ProgressCircle";
 import { JobMinimal, JobState } from "@jobs/types";
 import React from "react";
-import styled from "styled-components";
-
-const StyledSampleItemEndIcon = styled.div`
-    align-items: center;
-    background: none;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    margin-left: auto;
-
-    strong {
-        margin-left: 5px;
-    }
-`;
 
 interface SampleItemEndIconProps {
     /** Callback to handle click event */
@@ -24,6 +11,8 @@ interface SampleItemEndIconProps {
     ready: boolean;
     /** The job responsible for creating the sample */
     job: JobMinimal;
+    /** Additional class names */
+    className?: string;
 }
 
 /**
@@ -33,10 +22,16 @@ export default function SampleItemEndIcon({
     onClick,
     ready,
     job,
+    className,
 }: SampleItemEndIconProps) {
+    const containerClasses = cn(
+        "flex items-center justify-center ml-auto [&_strong]:ml-1",
+        className,
+    );
+
     if (ready || job?.state === "complete") {
         return (
-            <StyledSampleItemEndIcon>
+            <div className={containerClasses}>
                 <IconButton
                     className="text-lg"
                     color="green"
@@ -45,16 +40,16 @@ export default function SampleItemEndIcon({
                     tipPlacement="left"
                     onClick={onClick}
                 />
-            </StyledSampleItemEndIcon>
+            </div>
         );
     }
     return (
-        <StyledSampleItemEndIcon>
+        <div className={containerClasses}>
             <ProgressCircle
                 progress={job?.progress || 0}
                 state={job?.state || JobState.waiting}
             />
             <strong>Creating</strong>
-        </StyledSampleItemEndIcon>
+        </div>
     );
 }

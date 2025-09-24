@@ -1,22 +1,19 @@
+import { cn } from "@/app/utils";
 import React from "react";
-import styled from "styled-components";
 import BoxGroupSection from "./BoxGroupSection";
 import Icon from "./Icon";
 import { noneFoundStyle } from "./noneFoundStyle";
 
-const StyledNoneFoundSection = styled(BoxGroupSection)`
-    ${noneFoundStyle}
-    justify-content: center;
-`;
-
 type NoneFoundSectionProps = {
     children?: React.ReactNode;
     noun: string;
+    className?: string;
 };
 
 export default function NoneFoundSection({
     children,
     noun,
+    className,
 }: NoneFoundSectionProps) {
     let childrenContainer;
 
@@ -25,8 +22,10 @@ export default function NoneFoundSection({
     }
 
     return (
-        <StyledNoneFoundSection>
+        <BoxGroupSection
+            className={cn(noneFoundStyle, "justify-center", className)}
+        >
             <Icon name="info-circle" /> No {noun} found{childrenContainer}
-        </StyledNoneFoundSection>
+        </BoxGroupSection>
     );
 }

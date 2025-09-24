@@ -26,10 +26,6 @@ const AnalysisItemTag = styled.span`
     display: inline-flex;
     margin-right: 15px;
 
-    ${SlashList} {
-        margin: 0;
-    }
-
     i {
         margin-right: 5px;
     }
@@ -135,7 +131,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
             <AnalysisItemTags>
                 <AnalysisItemTag key="reference">
                     <Icon name="equals" />
-                    <SlashList>
+                    <SlashList className="m-0">
                         <li>
                             <Link to={`/refs/${reference.id}`}>
                                 {reference.name}

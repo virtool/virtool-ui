@@ -1,11 +1,1 @@
-import { css } from "styled-components";
-
-export const noneFoundStyle = css`
-    align-items: center;
-    display: flex;
-    justify-content: center;
-
-    i.fas {
-        margin-right: 5px;
-    }
-`;
+export const noneFoundStyle = "flex items-center justify-center [&_i.fas]:mr-1";
