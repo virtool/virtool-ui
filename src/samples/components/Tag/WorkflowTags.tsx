@@ -1,24 +1,13 @@
 import { getWorkflowDisplayName } from "@app/utils";
+import Icon from "@base/Icon";
 import { SampleWorkflows, WorkflowState } from "@samples/types";
 import { reduce } from "lodash-es";
 import React from "react";
-import styled from "styled-components";
+import { Link } from "wouter";
+import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import WorkflowTag from "./WorkflowTag";
-import WorkflowTagLink from "./WorkflowTagLink";
-import WorkflowTagNone from "./WorkflowTagNone";
 
-const StyledSampleWorkflowTags = styled.div`
-    align-items: center;
-    display: flex;
-    flex: 2;
-`;
-
-const SampleItemWorkflowTagsContainer = styled.div`
-    align-items: stretch;
-    display: flex;
-`;
-
-type SampleItemWorkflowTagsProps = {
+type WorkflowTagsProps = {
     id: string;
     workflows: SampleWorkflows;
 };
@@ -33,10 +22,7 @@ type SampleItemWorkflowTagsProps = {
  * @param workflows - the workflows object for the sample
  * @returns The workflow tags for a sample.
  */
-export default function WorkflowTags({
-    id,
-    workflows,
-}: SampleItemWorkflowTagsProps) {
+export default function WorkflowTags({ id, workflows }: WorkflowTagsProps) {
     const workflowTags = reduce(
         workflows,
         (tags, value, key) => {
@@ -57,12 +43,23 @@ export default function WorkflowTags({
         [],
     );
     return (
-        <StyledSampleWorkflowTags>
-            <SampleItemWorkflowTagsContainer>
-                <WorkflowTagLink id={id} />
-                {!workflowTags.length && <WorkflowTagNone />}
+        <div className="flex items-center">
+            <div className="flex items-stretch">
+                <BaseWorkflowTag
+                    as={Link}
+                    className="bg-purple-400 border-purple-400 border-l-0"
+                    to={`/samples/${id}/analyses`}
+                >
+                    View
+                </BaseWorkflowTag>
+                {!workflowTags.length && (
+                    <BaseWorkflowTag className="bg-purple-50 border border-purple-400 text-purple-900 gap-3 [&_span:last-child]:ml-0">
+                        <Icon name="times-circle" fixedWidth />
+                        <span>No Analyses</span>
+                    </BaseWorkflowTag>
+                )}
                 {workflowTags}
-            </SampleItemWorkflowTagsContainer>
-        </StyledSampleWorkflowTags>
+            </div>
+        </div>
     );
 }

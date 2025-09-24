@@ -122,7 +122,7 @@ export function CoverageChart({
     useEffect(() => {
         const length = data.length;
         draw(chartEl.current, data, length, yMax, untrustworthyRanges);
-    }, [data, id, yMax]);
+    }, [data, id, yMax, untrustworthyRanges]);
 
     return <StyledIimiCoverageChart ref={chartEl} />;
 }

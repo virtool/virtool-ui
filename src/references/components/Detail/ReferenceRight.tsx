@@ -45,7 +45,10 @@ type MemberRightProps = {
  * Displays the rights for the group/user with options to modify the rights
  */
 export function ReferenceRight({ right, enabled, onToggle }: MemberRightProps) {
-    const handleClick = useCallback(() => onToggle(right, !enabled), [enabled]);
+    const handleClick = useCallback(
+        () => onToggle(right, !enabled),
+        [right, enabled, onToggle],
+    );
 
     return (
         <StyledMemberRight>

@@ -29,7 +29,7 @@ export function useKeyNavigation(
                 onSetActiveId(nextId);
             }
         },
-        [activeId, nextId, previousId],
+        [nextId, previousId, nextIndex, onSetActiveId, previousIndex, scroll],
     );
 
     useEffect(() => {

@@ -1,6 +1,6 @@
 import { getBorder } from "@app/theme";
 import * as RadixAccordion from "@radix-ui/react-accordion";
-import React, { createRef, useEffect } from "react";
+import React, { createRef, useEffect, useMemo } from "react";
 import styled from "styled-components";
 
 const StyledAccordionItem = styled(RadixAccordion.Item)`
@@ -12,8 +12,10 @@ const StyledAccordionItem = styled(RadixAccordion.Item)`
 /** Composed radix accordion item for handling scroll logic  */
 function ComposedScrollingAccordionItem(props) {
     const ref = createRef<HTMLDivElement>();
+    const dataState = useMemo(() => props["data-state"], [props]);
+
     useEffect(() => {
-        if (props["data-state"] === "open" && ref?.current) {
+        if (dataState === "open" && ref?.current) {
             const position = ref.current.getBoundingClientRect().top;
             const offset = window.scrollY;
             window.scrollTo({
@@ -21,7 +23,7 @@ function ComposedScrollingAccordionItem(props) {
                 behavior: "smooth",
             });
         }
-    }, [props["data-state"]]);
+    }, [dataState, ref]);
 
     return <div {...props} ref={ref} />;
 }

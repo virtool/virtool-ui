@@ -54,7 +54,7 @@ export default function SettingsCheckbox({
     id,
     onToggle,
 }: SettingsCheckboxProps) {
-    const handleClick = useCallback(() => onToggle(), [enabled, onToggle]);
+    const handleClick = useCallback(() => onToggle(), [onToggle]);
 
     return (
         <StyledSettingsCheckbox>

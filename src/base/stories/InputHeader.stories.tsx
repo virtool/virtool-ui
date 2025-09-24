@@ -22,7 +22,7 @@ function Template(args) {
     );
 }
 
-export const inputHeader: Story = {
+export const Default: Story = {
     args: { value: "Header 1" },
     render: Template,
 };

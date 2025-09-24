@@ -1,29 +1,68 @@
 import { cn } from "@/app/utils";
+import { cva, VariantProps } from "class-variance-authority";
 import React from "react";
 
-interface BaseSampleLabelProps {
+const baseSampleLabelVariants = cva(
+    "inline-flex items-center border rounded-md [&_i.fas]:mr-1 [&_i.fas]:text-[var(--user-color)]",
+    {
+        variants: {
+            size: {
+                sm: "text-sm font-semibold px-1.5 py-0.5 [&_i.fas]:mr-0.5",
+                md: "text-base px-2 py-1",
+            },
+            variant: {
+                default: "bg-white border-gray-300",
+                library:
+                    "bg-gray-200 border-gray-300 text-sm font-semibold px-1.5 py-0.5 [&_i.fas]:mr-0.5",
+            },
+        },
+        defaultVariants: {
+            size: "md",
+            variant: "default",
+        },
+    },
+);
+
+interface BaseSampleLabelProps
+    extends VariantProps<typeof baseSampleLabelVariants> {
     children: React.ReactNode;
     className?: string;
     color?: string;
+    as?: React.ElementType;
 }
 
 /**
- * The base sample label component
+ * The base sample label component with variants
  */
 export function BaseSampleLabel({
     children,
     className,
     color,
-}: BaseSampleLabelProps) {
+    size,
+    variant,
+    as: Component = "span",
+    ...props
+}: BaseSampleLabelProps & React.ComponentPropsWithoutRef<"span" | "button">) {
+    const formattedColor = color?.startsWith("#")
+        ? color
+        : color
+          ? `#${color}`
+          : undefined;
+
     return (
-        <span
+        <Component
             className={cn(
-                "inline-flex items-center bg-white border border-gray-300 rounded-md px-2 py-1 [&_i.fas]:mr-1",
-                color && `[&_i.fas]:text-[${color}]`,
+                baseSampleLabelVariants({ size, variant }),
                 className,
             )}
+            style={
+                {
+                    "--user-color": formattedColor,
+                } as React.CSSProperties
+            }
+            {...props}
         >
             {children}
-        </span>
+        </Component>
     );
 }

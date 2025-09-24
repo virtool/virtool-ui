@@ -9,9 +9,9 @@ type LabelFilterProps = {
     /** A list of labels */
     labels: Label[];
     /** Handles click event when label is clicked */
-    onClick: (value: string) => void;
+    onClick: (value: number) => void;
     /** A list of selected labels */
-    selected: string[];
+    selected: number[];
 };
 
 /**
@@ -31,7 +31,7 @@ export default function LabelFilter({
                 <LabelFilterItem
                     key={label.id}
                     {...label}
-                    pressed={selected.includes(label.id.toString())}
+                    pressed={selected.includes(label.id)}
                     onClick={onClick}
                 />
             ))}

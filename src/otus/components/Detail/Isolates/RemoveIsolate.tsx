@@ -36,7 +36,7 @@ export default function RemoveIsolate({
                 },
             },
         );
-    }, [otuId, id]);
+    }, [otuId, id, mutation, onHide]);
 
     return (
         <RemoveDialog

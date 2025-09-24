@@ -36,7 +36,7 @@ export default function RemoveReference({ id, name }: RemoveReferenceProps) {
                     },
                 },
             ),
-        ["id"],
+        [id, mutation, navigate],
     );
 
     return (

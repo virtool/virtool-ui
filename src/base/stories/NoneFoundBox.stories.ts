@@ -11,7 +11,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const noneFoundBox: Story = {
+export const Default: Story = {
     args: {
         noun: "items",
     },

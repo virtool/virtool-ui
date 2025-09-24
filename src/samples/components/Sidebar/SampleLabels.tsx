@@ -7,7 +7,7 @@ import { useFetchLabels } from "@labels/queries";
 import { xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import SampleLabelInner from "./SampleLabelInner";
+import SampleLabel from "../Label/SampleLabel";
 import SampleSidebarList from "./SampleSidebarList";
 import SampleSidebarSelector from "./SampleSidebarSelector";
 
@@ -47,7 +47,7 @@ export default function SampleLabels({
                 Labels
                 <SampleSidebarSelector
                     render={({ name, color }) => (
-                        <SampleLabelInner name={name} color={color} />
+                        <SampleLabel name={name} color={color} size="sm" />
                     )}
                     items={data}
                     selectedIds={sampleLabels}
