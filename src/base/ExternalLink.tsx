@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import styled from "styled-components";
 
 type ExternalLinkProps = {
     children: ReactNode;
@@ -7,8 +6,8 @@ type ExternalLinkProps = {
     href: string;
 };
 
-const ExternalLink = styled(
-    ({ children, className = "", href }: ExternalLinkProps) => (
+function ExternalLink({ children, className = "", href }: ExternalLinkProps) {
+    return (
         <a
             className={className}
             href={href}
@@ -17,8 +16,8 @@ const ExternalLink = styled(
         >
             {children}
         </a>
-    ),
-)``;
+    );
+}
 
 ExternalLink.displayName = "ExternalLink";
 

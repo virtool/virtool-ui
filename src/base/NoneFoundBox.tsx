@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import { cn } from "@/app/utils";
 import Box from "./Box";
 import Icon from "./Icon";
 import { noneFoundStyle } from "./noneFoundStyle";
@@ -10,19 +10,14 @@ interface NoneFoundBoxProps {
     noun: string;
 }
 
-const StyledNoneFoundBox = styled(Box)`
-    ${noneFoundStyle}
-    min-height: 30px;
-`;
-
 export default function NoneFoundBox({
     className,
     noun,
     children,
 }: NoneFoundBoxProps) {
     return (
-        <StyledNoneFoundBox as={Box} className={className}>
+        <Box className={cn(noneFoundStyle, "min-h-[30px]", className)}>
             <Icon name="info-circle" /> No {noun} found. &nbsp; {children}
-        </StyledNoneFoundBox>
+        </Box>
     );
 }

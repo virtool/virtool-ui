@@ -1,39 +1,28 @@
-import { borderRadius, getFontSize } from "@app/theme";
-import styled from "styled-components";
+import React from "react";
+import { cn } from "@/app/utils";
+
+interface BaseWorkflowTagProps {
+    children: React.ReactNode;
+    className?: string;
+}
 
 /**
  * Base workflow tag component.
  *
  * @returns A base WorkflowTag component.
  */
-export const BaseWorkflowTag = styled.div`
-    align-items: center;
-    background-color: ${(props) => props.theme.color.purpleDarkest};
-    color: ${(props) => props.theme.color.white};
-    display: flex;
-    font-size: ${getFontSize("sm")};
-    font-weight: bold;
-    padding: 3px 8px;
-
-    &:first-child {
-        border-top-left-radius: ${borderRadius.sm};
-        border-bottom-left-radius: ${borderRadius.sm};
-    }
-
-    &:last-child {
-        border-top-right-radius: ${borderRadius.sm};
-        border-bottom-right-radius: ${borderRadius.sm};
-    }
-
-    &:not(:last-child) {
-        border-right: 2px solid ${(props) => props.theme.color.purple};
-    }
-
-    i.fas {
-        line-height: inherit;
-    }
-
-    span:last-child {
-        margin-left: 3px;
-    }
-`;
+export function BaseWorkflowTag({ children, className }: BaseWorkflowTagProps) {
+    return (
+        <div
+            className={cn(
+                "flex items-center bg-purple-800 text-white text-xs font-bold px-2 py-0.5",
+                "first:rounded-l-sm last:rounded-r-sm",
+                "[&:not(:last-child)]:border-r-2 [&:not(:last-child)]:border-purple-400",
+                "[&_i.fas]:leading-[inherit] [&_span:last-child]:ml-0.5",
+                className
+            )}
+        >
+            {children}
+        </div>
+    );
+}
