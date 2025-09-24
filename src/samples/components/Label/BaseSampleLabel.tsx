@@ -1,5 +1,5 @@
-import React from "react";
 import { cn } from "@/app/utils";
+import React from "react";
 
 interface BaseSampleLabelProps {
     children: React.ReactNode;
@@ -10,13 +10,17 @@ interface BaseSampleLabelProps {
 /**
  * The base sample label component
  */
-export function BaseSampleLabel({ children, className, color }: BaseSampleLabelProps) {
+export function BaseSampleLabel({
+    children,
+    className,
+    color,
+}: BaseSampleLabelProps) {
     return (
         <span
             className={cn(
                 "inline-flex items-center bg-white border border-gray-300 rounded-md px-2 py-1 [&_i.fas]:mr-1",
                 color && `[&_i.fas]:text-[${color}]`,
-                className
+                className,
             )}
         >
             {children}

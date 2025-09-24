@@ -1,8 +1,8 @@
+import { cn } from "@/app/utils";
 import IconButton from "@base/IconButton";
 import ProgressCircle from "@base/ProgressCircle";
 import { JobMinimal, JobState } from "@jobs/types";
 import React from "react";
-import { cn } from "@/app/utils";
 
 interface SampleItemEndIconProps {
     /** Callback to handle click event */
@@ -24,7 +24,10 @@ export default function SampleItemEndIcon({
     job,
     className,
 }: SampleItemEndIconProps) {
-    const containerClasses = cn("flex items-center justify-center ml-auto [&_strong]:ml-1", className);
+    const containerClasses = cn(
+        "flex items-center justify-center ml-auto [&_strong]:ml-1",
+        className,
+    );
 
     if (ready || job?.state === "complete") {
         return (

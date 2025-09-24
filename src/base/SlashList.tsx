@@ -1,5 +1,5 @@
-import React from "react";
 import { cn } from "@/app/utils";
+import React from "react";
 
 type SlashListProps = {
     children: React.ReactNode;
@@ -8,7 +8,12 @@ type SlashListProps = {
 
 function SlashList({ children, className }: SlashListProps) {
     return (
-        <ul className={cn("flex items-center list-none p-0 [&_li+li:before]:content-['/'] [&_li+li:before]:px-1", className)}>
+        <ul
+            className={cn(
+                "flex items-center list-none p-0 [&_li+li:before]:content-['/'] [&_li+li:before]:px-1",
+                className,
+            )}
+        >
             {children}
         </ul>
     );

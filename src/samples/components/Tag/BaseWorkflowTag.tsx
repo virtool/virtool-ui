@@ -1,5 +1,5 @@
-import React from "react";
 import { cn } from "@/app/utils";
+import React from "react";
 
 interface BaseWorkflowTagProps {
     children: React.ReactNode;
@@ -19,7 +19,7 @@ export function BaseWorkflowTag({ children, className }: BaseWorkflowTagProps) {
                 "first:rounded-l-sm last:rounded-r-sm",
                 "[&:not(:last-child)]:border-r-2 [&:not(:last-child)]:border-purple-400",
                 "[&_i.fas]:leading-[inherit] [&_span:last-child]:ml-0.5",
-                className
+                className,
             )}
         >
             {children}

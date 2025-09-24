@@ -1,5 +1,5 @@
-import React from "react";
 import { cn } from "@/app/utils";
+import React from "react";
 import BoxGroupSection from "./BoxGroupSection";
 import Icon from "./Icon";
 import { noneFoundStyle } from "./noneFoundStyle";
@@ -22,7 +22,9 @@ export default function NoneFoundSection({
     }
 
     return (
-        <BoxGroupSection className={cn(noneFoundStyle, "justify-center", className)}>
+        <BoxGroupSection
+            className={cn(noneFoundStyle, "justify-center", className)}
+        >
             <Icon name="info-circle" /> No {noun} found{childrenContainer}
         </BoxGroupSection>
     );

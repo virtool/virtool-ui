@@ -1,5 +1,5 @@
-import React from "react";
 import { cn } from "@/app/utils";
+import React from "react";
 
 type ViewHeaderTitleProps = {
     children: React.ReactNode;
@@ -8,7 +8,12 @@ type ViewHeaderTitleProps = {
 
 function ViewHeaderTitle({ children, className }: ViewHeaderTitleProps) {
     return (
-        <h1 className={cn("flex items-center text-3xl font-bold m-0", className)}>
+        <h1
+            className={cn(
+                "flex items-center text-3xl font-bold m-0",
+                className,
+            )}
+        >
             {children}
         </h1>
     );
