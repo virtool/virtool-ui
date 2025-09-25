@@ -2,7 +2,7 @@ import Icon from "@base/Icon";
 import React from "react";
 import { BaseSampleLabel } from "./BaseSampleLabel";
 
-type SampleMultiSelectLabel = {
+type SampleMultiSelectLabelProps = {
     /** The class name being used for the component */
     className?: string;
     /** The color assigned to the label */
@@ -11,6 +11,8 @@ type SampleMultiSelectLabel = {
     name: string;
     /** Whether all selected samples have the label assigned */
     partiallySelected: boolean;
+    /** The size variant */
+    size?: "sm" | "md";
 };
 
 /**
@@ -21,9 +23,10 @@ export default function SampleMultiSelectLabel({
     color,
     name,
     partiallySelected,
-}: SampleMultiSelectLabel) {
+    size = "md",
+}: SampleMultiSelectLabelProps) {
     return (
-        <BaseSampleLabel className={className} color={color}>
+        <BaseSampleLabel className={className} color={color} size={size}>
             {color && <Icon name={partiallySelected ? "adjust" : "circle"} />}
             {name}
         </BaseSampleLabel>

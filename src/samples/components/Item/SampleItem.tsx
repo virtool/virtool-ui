@@ -8,8 +8,8 @@ import Link from "@base/Link";
 import { SampleMinimal } from "@samples/types";
 import React from "react";
 import styled from "styled-components";
+import SampleLabel from "../Label/SampleLabel";
 import SampleLibraryTypeLabel from "../Label/SampleLibraryTypeLabel";
-import SmallSampleLabel from "../Label/SmallSampleLabel";
 import WorkflowTags from "../Tag/WorkflowTags";
 import EndIcon from "./EndIcon";
 
@@ -124,7 +124,7 @@ export default function SampleItem({
                 <SampleItemLabels>
                     <SampleLibraryTypeLabel libraryType={sample.library_type} />
                     {sample.labels.map((label) => (
-                        <SmallSampleLabel {...label} key={label.id} />
+                        <SampleLabel {...label} key={label.id} size="sm" />
                     ))}
                 </SampleItemLabels>
             </SampleItemData>
