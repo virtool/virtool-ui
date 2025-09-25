@@ -15,7 +15,7 @@ const ComboBoxItem = styled.li`
 ComboBoxItem.displayName = "ComboBoxItem";
 
 export default function WrapRow(renderRow, getItemProps) {
-    return (item, index) => {
+    function WrappedRow(item, index) {
         return (
             <ComboBoxItem
                 key={item.id}
@@ -27,5 +27,6 @@ export default function WrapRow(renderRow, getItemProps) {
                 {renderRow(item)}
             </ComboBoxItem>
         );
-    };
+    }
+    return WrappedRow;
 }

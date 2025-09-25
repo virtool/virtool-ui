@@ -15,9 +15,10 @@ import CreateAnalysis from "./Create/CreateAnalysis";
 import AnalysisHMMAlert from "./HMMAlert";
 
 function renderRow() {
-    return function (document: AnalysisMinimal) {
+    function AnalysisRow(document: AnalysisMinimal) {
         return <AnalysisItem key={document.id} analysis={document} />;
-    };
+    }
+    return AnalysisRow;
 }
 
 /**

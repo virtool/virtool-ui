@@ -21,7 +21,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const linkButton: Story = {
+export const Default: Story = {
     args: {
         children: "Link",
         color: "blue",

@@ -47,7 +47,8 @@ type CreateFakeUserProps = {
  * @returns {User} a User object with fake data
  */
 export function createFakeUser(props?: CreateFakeUserProps): User {
-    let { permissions, groups, primary_group, ...userProps } = props || {};
+    const { permissions, ...userProps } = props || {};
+    let { groups, primary_group } = props || {};
 
     groups = groups === undefined ? [createFakeGroupMinimal()] : groups;
     primary_group = primary_group === undefined ? groups[0] : primary_group;

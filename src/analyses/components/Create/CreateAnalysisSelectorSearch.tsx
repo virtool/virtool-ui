@@ -7,15 +7,17 @@ interface CreateAnalysisSelectorSearchProps {
     onChange: (value: string) => void;
 }
 
-export const CreateAnalysisSelectorSearch = ({
+export function CreateAnalysisSelectorSearch({
     label,
     term,
     onChange,
-}: CreateAnalysisSelectorSearchProps) => (
-    <BoxGroupSearch
-        value={term}
-        placeholder={label}
-        label={label}
-        onChange={(value) => onChange(value)}
-    />
-);
+}: CreateAnalysisSelectorSearchProps) {
+    return (
+        <BoxGroupSearch
+            value={term}
+            placeholder={label}
+            label={label}
+            onChange={(value) => onChange(value)}
+        />
+    );
+}
