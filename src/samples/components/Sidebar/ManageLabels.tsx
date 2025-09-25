@@ -8,7 +8,7 @@ import { SampleMinimal } from "@samples/types";
 import { filter, flatMap, groupBy, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import SampleLabelInner from "./SampleLabelInner";
+import SampleLabel from "../Label/SampleLabel";
 import SampleSidebarMultiselectList from "./SampleSidebarMultiselectList";
 import SampleSidebarSelector from "./SampleSidebarSelector";
 
@@ -79,7 +79,7 @@ export default function ManageLabels({
                     )}
                     selectionType="labels"
                     render={({ name, color }) => (
-                        <SampleLabelInner color={color} name={name} />
+                        <SampleLabel color={color} name={name} size="sm" />
                     )}
                 />
             </SidebarHeader>

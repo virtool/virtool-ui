@@ -1,43 +1,39 @@
-import { getRing } from "@app/theme";
+import { cn } from "@/app/utils";
 import Icon from "@base/Icon";
 import React from "react";
-import styled from "styled-components";
 import { BaseSampleLabel } from "../Label/BaseSampleLabel";
 
-type StyledLabelFilterItemProps = {
-    pressed?: boolean;
-    theme: object;
+type LabelFilterItemProps = {
+    color: string;
+    id: number;
+    name: string;
+    pressed: boolean;
+    onClick: (id: string) => void;
 };
 
-const StyledLabelFilterItem = styled(
-    BaseSampleLabel,
-)<StyledLabelFilterItemProps>`
-    ${(props) => props.pressed && `border-color: ${props.theme.color.blue};`};
-    box-shadow: ${(props) => (props.pressed ? getRing("blueLight")(props) : "none")};
-    cursor: pointer;
-    margin: 4px 0; 
-  
-      &:not(:last-child) {
-        margin-right: 8px;
-      }
-
-    &:focus {
-        border-color: ${(props) => props.theme.color.blueLight}
-        outline: none;
-    }
-`;
-
-export default function LabelFilterItem({ color, id, name, pressed, onClick }) {
+export default function LabelFilterItem({
+    color,
+    id,
+    name,
+    pressed,
+    onClick,
+}: LabelFilterItemProps) {
     return (
-        <StyledLabelFilterItem
+        <BaseSampleLabel
             as="button"
-            aria-pressed={pressed}
             color={color}
-            pressed={pressed}
-            onClick={() => onClick(id)}
+            className={cn(
+                "cursor-pointer my-1 mr-2 last:mr-0",
+                "hover:bg-gray-50 hover:border-blue-300",
+                "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
+                pressed && "border-blue-500 ring-2 ring-blue-200",
+                pressed && "bg-blue-50", // Add a background color to make it more visible
+            )}
+            aria-pressed={pressed}
+            onClick={() => onClick(id.toString())}
         >
             <Icon name="circle" />
             {name}
-        </StyledLabelFilterItem>
+        </BaseSampleLabel>
     );
 }

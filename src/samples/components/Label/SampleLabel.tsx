@@ -9,6 +9,8 @@ type SampleLabelProps = {
     color: string;
     /** The name of the label */
     name: string;
+    /** The size variant */
+    size?: "sm" | "md";
 };
 
 /**
@@ -18,9 +20,10 @@ export default function SampleLabel({
     className,
     color,
     name,
+    size = "md",
 }: SampleLabelProps) {
     return (
-        <BaseSampleLabel className={className} color={color}>
+        <BaseSampleLabel className={className} color={color} size={size}>
             {color && <Icon name="circle" />}
             {name}
         </BaseSampleLabel>
