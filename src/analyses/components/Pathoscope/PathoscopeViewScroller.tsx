@@ -34,12 +34,12 @@ export function PathoscopeViewerScroller() {
 
     const handleScroll = useCallback(() => {
         setShow(window.scrollY > 0);
-    }, []);
+    }, [setShow]);
 
     useEffect(() => {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [handleScroll]);
 
     if (show) {
         return (

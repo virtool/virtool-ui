@@ -51,7 +51,7 @@ export default function NuvsOrf({
 
     useEffect(
         () => draw(chartEl.current, maxSequenceLength, pos, strand),
-        [index],
+        [index, maxSequenceLength, pos, strand],
     );
 
     const hmm = hits[0];

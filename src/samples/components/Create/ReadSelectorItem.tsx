@@ -65,7 +65,7 @@ export default function ReadSelectorItem({
 }: ReadSelectorItemProps) {
     const select = useCallback(() => {
         onSelect(id);
-    }, []);
+    }, [id, onSelect]);
 
     return (
         <StyledReadSelectorItem onClick={select} active={selected}>

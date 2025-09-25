@@ -17,7 +17,7 @@ export function useFuse<T extends object>(
     collection: T[],
     keys: string[],
 ): [T[], string, (value: ((prevState: string) => string) | string) => void] {
-    const memoizedKeys = useMemo(() => keys, []);
+    const memoizedKeys = useMemo(() => keys, [keys]);
 
     const [fuse, setFuse] = useState(createFuse(collection, memoizedKeys));
     const [term, setTerm] = useState("");

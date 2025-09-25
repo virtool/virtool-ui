@@ -32,5 +32,5 @@ export function useValidateFiles(
                 setSelected([]);
             }
         }
-    }, [data]);
+    }, [data, fetchNextPage, hasNextPage, isPending, selected, setSelected]);
 }

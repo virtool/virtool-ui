@@ -52,7 +52,7 @@ export default function QuickAnalyze({ samples }: QuickAnalyzeProps) {
             setOpen(false);
             unsetQuickAnalysisType();
         }
-    }, [samples, setOpen]);
+    }, [samples, setOpen, unsetQuickAnalysisType]);
 
     function onOpenChange(open: boolean) {
         setOpen(open);

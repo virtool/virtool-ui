@@ -90,7 +90,7 @@ export function useGetAnalysis(analysisId: string) {
             ...queryResult,
             data: formatData(queryResult.data) as Analysis,
         }),
-        [queryResult.data, queryResult.error],
+        [queryResult],
     );
 }
 

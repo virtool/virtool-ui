@@ -45,7 +45,7 @@ function useRelativeTime(time) {
         return () => {
             window.clearInterval(interval);
         };
-    }, [time]);
+    }, [time, timeString]);
 
     return timeString;
 }

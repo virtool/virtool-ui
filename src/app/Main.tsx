@@ -56,7 +56,7 @@ export default function Main() {
         if (data) {
             setupWebSocket(queryClient);
         }
-    }, [data]);
+    }, [data, queryClient]);
 
     if (isPending) {
         return <LoadingPlaceholder />;
