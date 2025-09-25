@@ -3,7 +3,7 @@ import React from "react";
 
 export default function AnalysisValue({ color, label, value }) {
     return (
-        <div className="flex flex-col w-22" color={color}>
+        <div className="flex flex-col w-22">
             <span
                 className={cn(
                     {
