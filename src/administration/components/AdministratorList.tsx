@@ -12,9 +12,10 @@ import AdministratorCreate from "./AdministratorCreate";
 import AdministratorItem from "./AdministratorItem";
 
 function renderRow(roles) {
-    return (item) => (
-        <AdministratorItem key={item.id} user={item} roles={roles} />
-    );
+    function AdministratorRow(item) {
+        return <AdministratorItem key={item.id} user={item} roles={roles} />;
+    }
+    return AdministratorRow;
 }
 
 export default function ManageAdministrators() {
