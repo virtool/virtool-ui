@@ -25,7 +25,7 @@ function Template(args) {
     );
 }
 
-export const scrollArea: Story = {
+export const Default: Story = {
     render: Template,
     args: {
         className: "h-52",
