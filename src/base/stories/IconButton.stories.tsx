@@ -11,7 +11,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const iconButton: Story = {
+export const Default: Story = {
     args: {
         name: "trash",
         color: "red",
