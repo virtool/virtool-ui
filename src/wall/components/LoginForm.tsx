@@ -18,9 +18,9 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
     const { control, handleSubmit, register } = useForm();
     const loginMutation = useLoginMutation();
 
-    function onSubmit({ username, password, remember }) {
+    function onSubmit({ handle, password, remember }) {
         loginMutation.mutate(
-            { username, password, remember },
+            { handle, password, remember },
             {
                 onSuccess: (data) => {
                     if (data.body.reset_code) {
@@ -42,10 +42,10 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <InputGroup>
-                    <InputLabel htmlFor="username">Username</InputLabel>
+                    <InputLabel htmlFor="handle">Username</InputLabel>
                     <InputSimple
-                        id="username"
-                        {...register("username", { required: true })}
+                        id="handle"
+                        {...register("handle", { required: true })}
                         autoFocus
                     />
                 </InputGroup>

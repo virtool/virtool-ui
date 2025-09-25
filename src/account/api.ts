@@ -136,7 +136,7 @@ export function removeAPIKey(keyId: string): Promise<null> {
 /**
  * Log in using the provided credentials.
  *
- * @param username - The username to log in with
+ * @param handle - The user handle to log in with
  * @param password - The password to log in with
  * @param remember - Whether the sessions should be remembered for a
  * longer period of time
@@ -144,16 +144,16 @@ export function removeAPIKey(keyId: string): Promise<null> {
  * password must be reset and required information if it needs to be.
  */
 export function login({
-    username,
+    handle,
     password,
     remember,
 }: {
-    username: string;
+    handle: string;
     password: string;
     remember: boolean;
 }): Promise<Response> {
     return apiClient.post("/account/login").send({
-        username,
+        handle,
         password,
         remember,
     });
