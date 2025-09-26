@@ -47,7 +47,7 @@ export default function SamplesList() {
         useUrlSearchParam<string>("term");
 
     const { values: filterLabels, setValues: setFilterLabels } =
-        useListSearchParam<string>("labels");
+        useListSearchParam<number>("labels");
 
     const { values: filterWorkflows, setValues: setFilterWorkflows } =
         useListSearchParam<string>("workflows");
@@ -145,7 +145,7 @@ export default function SamplesList() {
                     <SampleFilters
                         labels={labels}
                         onClickLabels={(e) =>
-                            setFilterLabels(xor(filterLabels, [e.toString()]))
+                            setFilterLabels(xor(filterLabels, [e]))
                         }
                         selectedLabels={filterLabels}
                         selectedWorkflows={filterWorkflows}

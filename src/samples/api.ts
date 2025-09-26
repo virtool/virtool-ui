@@ -14,7 +14,7 @@ export function listSamples(
     page: number,
     per_page: number,
     term: string,
-    labels: string[],
+    labels: number[],
     workflows: string[],
 ): Promise<SampleSearchResult> {
     return apiClient

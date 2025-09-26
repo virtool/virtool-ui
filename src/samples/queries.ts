@@ -31,7 +31,7 @@ export type SampleLabel = Label & {
 export const samplesQueryKeys = {
     all: () => ["samples"] as const,
     lists: () => ["samples", "list"] as const,
-    list: (filters: Array<string | number | boolean | string[]>) =>
+    list: (filters: Array<string | number | boolean | string[] | number[]>) =>
         ["samples", "list", ...filters] as const,
     details: () => ["samples", "details"] as const,
     detail: (sampleId: string) => ["samples", "details", sampleId] as const,
@@ -50,7 +50,7 @@ export function useListSamples(
     page: number,
     per_page: number,
     term?: string,
-    labels?: string[],
+    labels?: number[],
     workflows?: string[],
 ) {
     return useQuery<SampleSearchResult, ErrorResponse>({

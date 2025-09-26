@@ -1,23 +1,25 @@
 import { cn } from "@/app/utils";
 import Icon from "@base/Icon";
-import React from "react";
+import React, { useCallback } from "react";
 import { BaseSampleLabel } from "../Label/BaseSampleLabel";
 
 type LabelFilterItemProps = {
     color: string;
     id: number;
     name: string;
+    onClick: (id: number) => void;
     pressed: boolean;
-    onClick: (id: string) => void;
 };
 
 export default function LabelFilterItem({
     color,
     id,
     name,
-    pressed,
     onClick,
+    pressed,
 }: LabelFilterItemProps) {
+    const handleClick = useCallback(() => onClick(id), [id, onClick]);
+
     return (
         <BaseSampleLabel
             as="button"
@@ -30,7 +32,7 @@ export default function LabelFilterItem({
                 pressed && "bg-blue-50", // Add a background color to make it more visible
             )}
             aria-pressed={pressed}
-            onClick={() => onClick(id.toString())}
+            onClick={handleClick}
         >
             <Icon name="circle" />
             {name}
