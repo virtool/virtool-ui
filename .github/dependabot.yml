@@ -1,0 +1,42 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "igboyes"
+    assignees:
+      - "igboyes"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    groups:
+      radix-ui:
+        patterns:
+          - "@radix-ui/*"
+      types:
+        patterns:
+          - "@types/*"
+      testing:
+        patterns:
+          - "@testing-library/*"
+          - "vitest"
+          - "jsdom"
+      storybook:
+        patterns:
+          - "@storybook/*"
+          - "storybook"
+      eslint:
+        patterns:
+          - "eslint*"
+          - "@typescript-eslint/*"
+      dev-tools:
+        patterns:
+          - "prettier*"
+          - "typescript"
+          - "vite*"
+          - "@vitejs/*"
