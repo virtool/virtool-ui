@@ -13,6 +13,7 @@ permissions:
 
 env:
     REGISTRY: ghcr.io
+    NODE_VERSION: 22
 
 jobs:
     build:
@@ -29,7 +30,7 @@ jobs:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
     check-commit:
         name: Check / Commit
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         if: github.event_name == 'pull_request'
         steps:
             - name: Checkout
@@ -40,51 +41,67 @@ jobs:
               uses: wagoid/commitlint-github-action@v6
     check-eslint:
         name: Check / ESLint
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-            - name: Install
-              run: npm i
-            - name: Run ESLint
-              run: npx eslint --quiet .
-    check-prettier:
-        name: Check / Prettier
-        runs-on: ubuntu-22.04
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-            - name: Install
-              run: npm i
-            - name: Run Prettier
-              run: npx prettier -l .
-    check-typescript:
-        name: Check / Typescript
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-            - name: Install
-              run: npm i
-            - name: tsc
-              run: npx tsc --noEmit
-    test:
-        name: Test
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         steps:
             - name: Checkout
               uses: actions/checkout@v4
             - name: Setup NodeJS
               uses: actions/setup-node@v4
               with:
-                  node-version: 20
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
+            - name: Install
+              run: npm ci
+            - name: Run ESLint
+              run: npx eslint --quiet .
+    check-prettier:
+        name: Check / Prettier
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup NodeJS
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
+            - name: Install
+              run: npm ci
+            - name: Run Prettier
+              run: npm run prettier
+    check-typescript:
+        name: Check / Typescript
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup NodeJS
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
+            - name: Install
+              run: npm ci
+            - name: tsc
+              run: npx tsc --noEmit
+    test:
+        name: Test
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup NodeJS
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
+            - name: Install
+              run: npm ci
             - name: Test
-              run: |
-                  npm i
-                  npm run test
+              run: npm run test
     release:
         name: Publish / Release
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         needs: [test, build]
         if: github.event_name == 'push'
         outputs:
@@ -97,7 +114,8 @@ jobs:
             - name: Setup NodeJS
               uses: actions/setup-node@v4
               with:
-                  node-version: 20
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: npm
             - name: Install semantic-release
               run: npm i semantic-release@v23.0.7 @semantic-release/exec@v6.0.3 conventional-changelog-conventionalcommits@7.0.2
             - name: Run semantic-release
@@ -107,7 +125,7 @@ jobs:
               run: npx semantic-release
     publish-ghcr:
         name: Publish / GHCR
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         if: github.repository_owner == 'Virtool' && github.event_name == 'push' && needs.release.outputs.git-tag != ''
         needs: [release]
         permissions:
