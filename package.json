@@ -40,7 +40,7 @@
     "semver": "^7.6.3",
     "styled-components": "^6.1.13",
     "superagent": "^8.0.9",
-    "tailwind-merge": "^2.5.2",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.20.6",
     "winston": "^3.17.0",
