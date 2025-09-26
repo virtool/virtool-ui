@@ -6,12 +6,14 @@ import React from "react";
 import LabelFilterItem from "./LabelFilterItem";
 
 type LabelFilterProps = {
-    /** A list of labels */
+    /** A list of all available labels. */
     labels: Label[];
+
     /** Handles click event when label is clicked */
-    onClick: (value: string) => void;
-    /** A list of selected labels */
-    selected: string[];
+    onClick: (value: number) => void;
+
+    /** Selected label IDs. */
+    selected: number[];
 };
 
 /**
@@ -31,7 +33,7 @@ export default function LabelFilter({
                 <LabelFilterItem
                     key={label.id}
                     {...label}
-                    pressed={selected.includes(label.id.toString())}
+                    pressed={selected.includes(label.id)}
                     onClick={onClick}
                 />
             ))}

@@ -14,10 +14,10 @@ type SampleFilterProps = {
     labels: Label[];
 
     /** Handles click event when label is clicked */
-    onClickLabels: (value: string) => void;
+    onClickLabels: (value: number) => void;
 
     /** A list of selected labels */
-    selectedLabels: string[];
+    selectedLabels: number[];
 
     /** Handles click event when workflow is clicked */
     onClickWorkflows: (value: string[]) => void;
