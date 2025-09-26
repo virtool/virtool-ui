@@ -51,8 +51,8 @@
   "devDependencies": {
     "@faker-js/faker": "^9.6.0",
     "@sentry/vite-plugin": "^3.2.1",
-    "@storybook/addon-links": "^9.1.2",
-    "@storybook/react-vite": "^9.1.2",
+    "@storybook/addon-links": "^9.1.8",
+    "@storybook/react-vite": "^9.1.8",
     "@tailwindcss/vite": "^4.0.8",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^16.0.1",
@@ -84,7 +84,7 @@
     "vite-plugin-html": "^3.2.2",
     "vitest": "^3.0.6",
     "eslint-plugin-storybook": "9.1.2",
-    "@storybook/addon-docs": "^9.1.2"
+    "@storybook/addon-docs": "^9.1.8"
   },
   "scripts": {
     "build": "vite build",
