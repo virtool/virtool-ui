@@ -7,7 +7,6 @@ import { useRevertOTU } from "@otus/queries";
 import { OtuNested } from "@otus/types";
 import { UserNested } from "@users/types";
 import { get } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 
 const methodIconProps = {

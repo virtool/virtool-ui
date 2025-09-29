@@ -1,4 +1,4 @@
-import React from "react";
+import { ReactNode } from "react";
 import styled, { DefaultTheme } from "styled-components";
 import BoxGroupSection from "./BoxGroupSection";
 
@@ -24,7 +24,7 @@ const StyledSelectBoxGroupSection = styled(
 
 type BoxGroupSectionSelectProps = {
     active?: boolean;
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
     onClick?: () => void;
 };

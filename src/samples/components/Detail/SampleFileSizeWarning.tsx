@@ -3,7 +3,6 @@ import Icon from "@base/Icon";
 import Link from "@base/Link";
 import { Read } from "@samples/types";
 import { endsWith, some } from "lodash-es";
-import React from "react";
 import { Route, useLocation } from "wouter";
 
 type SampleFileSizeWarningProps = {

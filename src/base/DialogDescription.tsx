@@ -1,9 +1,9 @@
 import { cn } from "@app/utils";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import React from "react";
+import { ReactNode } from "react";
 
 type DialogDescriptionProps = {
-    children: React.ReactNode;
+    children: ReactNode;
 };
 
 export default function DialogDescription({

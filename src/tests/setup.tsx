@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@testing-library/jest-dom";
 import { fireEvent, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
 import { BaseLocationHook, Router } from "wouter";
@@ -52,7 +52,7 @@ export function MemoryRouter({
     path,
     hook,
 }: {
-    children: React.ReactNode;
+    children: ReactNode;
     path?: string;
     hook?: BaseLocationHook;
 }) {
@@ -101,6 +101,5 @@ attachResizeObserver();
 // Globals are defined here to limit import redundancies.
 global.fireEvent = fireEvent;
 global.userEvent = userEvent;
-global.React = React;
 global.renderWithProviders = renderWithProviders;
 global.wrapWithProviders = wrapWithProviders;

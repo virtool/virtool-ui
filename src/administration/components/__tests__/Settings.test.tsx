@@ -8,7 +8,6 @@ import {
 import { createFakeMessage, mockApiGetMessage } from "@tests/fake/message";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
-import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import Settings from "../Settings";
 

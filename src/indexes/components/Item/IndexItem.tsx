@@ -2,7 +2,6 @@ import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import { IndexMinimal } from "@indexes/types";
-import React from "react";
 import { IndexItemDescription } from "./IndexItemDescription";
 import { IndexItemIcon } from "./IndexItemIcon";
 

@@ -19,7 +19,6 @@ import {
 } from "@samples/queries";
 import { useQueryClient } from "@tanstack/react-query";
 import { includes, map } from "lodash-es";
-import React from "react";
 
 /**
  * A component managing a samples rights

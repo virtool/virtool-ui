@@ -3,7 +3,6 @@ import { UploadType } from "@/uploads/types";
 import Container from "@base/Container";
 import ContainerNarrow from "@base/ContainerNarrow";
 import { Labels } from "@labels/components/Labels";
-import React from "react";
 import { Route, Switch } from "wouter";
 import CreateSample from "./Create/CreateSample";
 import SampleDetail from "./Detail/SampleDetail";

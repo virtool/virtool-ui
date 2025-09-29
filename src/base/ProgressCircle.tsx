@@ -1,7 +1,6 @@
 import { getColor, sizes } from "@app/theme";
 import { JobState } from "@jobs/types";
 import { Indicator, Root } from "@radix-ui/react-progress";
-import React from "react";
 import styled, { keyframes } from "styled-components";
 
 /**

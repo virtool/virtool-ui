@@ -1,11 +1,11 @@
 import { cn } from "@app/utils";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import React from "react";
+import { ReactNode } from "react";
 
 type PopoverProps = {
     align?: "center" | "start" | "end";
-    children: React.ReactNode;
-    trigger: React.ReactNode;
+    children: ReactNode;
+    trigger: ReactNode;
 };
 
 /**

@@ -5,7 +5,6 @@ import {
     mockApiRemoveSubtraction,
 } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
-import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import RemoveSubtraction from "../RemoveSubtraction";
 

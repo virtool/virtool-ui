@@ -6,7 +6,6 @@ import DialogFooter from "@base/DialogFooter";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
 import { DialogClose, DialogPortal } from "@radix-ui/react-dialog";
-import React from "react";
 import styled from "styled-components";
 
 const CapitalizedTitle = styled(DialogTitle)`

@@ -3,7 +3,6 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import NoneFoundSection from "@base/NoneFoundSection";
 import { map, sortBy } from "lodash-es";
-import React from "react";
 import { IndexContributor } from "../types";
 import Contributor from "./Contributor";
 

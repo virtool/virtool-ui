@@ -5,7 +5,6 @@ import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
 import { useUpdateOTU } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import React from "react";
 import OtuForm from "./OtuForm";
 
 type OtuEditProps = {

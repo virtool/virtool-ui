@@ -1,6 +1,6 @@
 import { cn } from "@/app/utils";
 import Icon from "@base/Icon";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { BaseSampleLabel } from "../Label/BaseSampleLabel";
 
 type LabelFilterItemProps = {

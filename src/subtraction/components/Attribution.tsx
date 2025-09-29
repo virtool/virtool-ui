@@ -1,7 +1,6 @@
 import { getColor, getFontSize, theme } from "@app/theme";
 import Attribution from "@base/Attribution";
 import AttributionWithName from "@base/AttributionWithName";
-import React from "react";
 import styled from "styled-components";
 
 /**

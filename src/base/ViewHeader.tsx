@@ -1,4 +1,4 @@
-import React from "react";
+import { ReactNode } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import styled from "styled-components";
 
@@ -10,7 +10,7 @@ const StyledViewHeader = styled.header`
 StyledViewHeader.displayName = "StyledViewHeader";
 
 type ViewHeaderProps = {
-    children?: React.ReactNode;
+    children?: ReactNode;
     className?: string;
     title: string;
 };

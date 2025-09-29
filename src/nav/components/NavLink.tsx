@@ -1,6 +1,5 @@
 import { useMatchPartialPath } from "@app/hooks";
 import { cn } from "@app/utils";
-import React from "react";
 import { Link } from "wouter";
 
 const baseClassName = cn(

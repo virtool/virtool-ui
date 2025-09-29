@@ -1,9 +1,9 @@
 import { cn } from "@app/utils";
 import * as RadixToggleGroup from "@radix-ui/react-toggle-group";
-import React from "react";
+import { ReactNode } from "react";
 
 type ToggleGroupProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
     onValueChange: (value: string) => void;
     value: string;

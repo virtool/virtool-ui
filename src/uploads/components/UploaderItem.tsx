@@ -2,7 +2,7 @@ import { byteSize, cn } from "@app/utils";
 import IconButton from "@base/IconButton";
 import Loader from "@base/Loader";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
-import React from "react";
+import { ReactNode } from "react";
 import { useUploaderStore } from "../uploader";
 
 export type UploaderItemProps = {
@@ -34,7 +34,7 @@ export function UploaderItem({
 }: UploaderItemProps) {
     const removeUpload = useUploaderStore((state) => state.removeUpload);
 
-    let end: React.ReactNode;
+    let end: ReactNode;
 
     if (failed) {
         end = (

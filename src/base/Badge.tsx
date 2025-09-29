@@ -1,8 +1,8 @@
 import { cn } from "@app/utils";
-import React from "react";
+import { ReactNode } from "react";
 
 type BadgeProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
     color?: "blue" | "green" | "gray" | "orange" | "purple" | "red";
 };

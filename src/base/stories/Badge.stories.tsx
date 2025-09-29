@@ -1,5 +1,4 @@
 import { Meta, type StoryObj } from "@storybook/react-vite";
-import React from "react";
 import styled from "styled-components";
 import Badge from "../Badge";
 

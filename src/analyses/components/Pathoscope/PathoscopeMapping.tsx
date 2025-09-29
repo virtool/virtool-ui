@@ -4,7 +4,6 @@ import Label from "@base/Label";
 import Link from "@base/Link";
 import { map } from "lodash-es";
 import numbro from "numbro";
-import React from "react";
 import styled from "styled-components";
 import { Bars } from "../Viewer/Bars";
 

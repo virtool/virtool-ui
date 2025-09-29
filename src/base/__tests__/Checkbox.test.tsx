@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
-import React, { useState } from "react";
+import { useState } from "react";
 import { describe, expect, it } from "vitest";
 import Checkbox from "../Checkbox";
 

@@ -1,10 +1,10 @@
 import { cn } from "@app/utils";
-import React from "react";
+import { ElementType, ReactNode } from "react";
 
 type BoxGroupSectionProps = {
     active?: boolean;
-    as?: React.ElementType;
-    children?: React.ReactNode;
+    as?: ElementType;
+    children?: ReactNode;
     className?: string;
     disabled?: boolean;
     onClick?: () => void;

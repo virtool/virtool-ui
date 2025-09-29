@@ -1,5 +1,4 @@
 import AnalysisValue from "@analyses/components/AnalysisValue";
-import React from "react";
 
 type IimiDetectionTagProps = {
     probability: number;

@@ -2,7 +2,6 @@ import { useDialogParam, usePathParams } from "@app/hooks";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { CurrentOtuContextProvider, useFetchOTU } from "@otus/queries";
 import { useFetchReference } from "@references/queries";
-import React from "react";
 import OtuIssues from "../OtuIssues";
 import AddIsolate from "./Isolates/AddIsolate";
 import IsolateEditor from "./Isolates/IsolateEditor";

@@ -1,9 +1,9 @@
 import { cn } from "@app/utils";
 import * as Toggle from "@radix-ui/react-toggle";
-import React, { forwardRef } from "react";
+import { forwardRef, ReactNode } from "react";
 
 type ButtonToggleProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     onPressedChange: (pressed: boolean) => void;
     pressed: boolean;
 };

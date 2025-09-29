@@ -8,7 +8,6 @@ import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useRemoveReferenceUser } from "@references/queries";
 import { ReferenceGroup, ReferenceUser } from "@references/types";
 import { find, map } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 import AddReferenceGroup from "./AddReferenceGroup";
 import AddReferenceUser from "./AddReferenceUser";

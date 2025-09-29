@@ -1,5 +1,4 @@
 import Logo from "@base/Logo";
-import React from "react";
 
 type WallTitleProps = {
     subtitle: string;

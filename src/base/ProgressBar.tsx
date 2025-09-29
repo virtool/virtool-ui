@@ -1,4 +1,3 @@
-import React from "react";
 import { StyledProgress } from "./styled/StyledProgress";
 
 interface ProgressBarProps {

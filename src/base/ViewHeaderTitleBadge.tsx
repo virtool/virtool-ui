@@ -1,9 +1,9 @@
 import { cn } from "@app/utils";
-import React from "react";
+import { ReactNode } from "react";
 import Badge from "./Badge";
 
 type ViewHeaderTitleBadge = {
-    children?: React.ReactNode;
+    children?: ReactNode;
     className?: string;
     color?: "blue" | "green" | "gray" | "orange" | "purple" | "red";
 };

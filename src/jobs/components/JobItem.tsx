@@ -8,7 +8,6 @@ import JobStateIcon from "@jobs/components/JobStateIcon";
 import { JobState, workflows } from "@jobs/types";
 import { getStateTitle } from "@jobs/utils";
 import { UserNested } from "@users/types";
-import React from "react";
 import styled from "styled-components";
 
 type JobStatusProps = {

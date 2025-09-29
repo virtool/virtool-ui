@@ -1,7 +1,6 @@
 import { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import { cn } from "@app/utils";
-import React from "react";
 import { Route, Switch } from "wouter";
 import SidebarLink from "./SidebarLink";
 

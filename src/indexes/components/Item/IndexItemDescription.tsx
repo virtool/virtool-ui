@@ -1,5 +1,3 @@
-import React from "react";
-
 type IndexItemDescriptionProps = {
     changeCount: number;
     modifiedCount: number;

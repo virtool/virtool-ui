@@ -1,5 +1,5 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
-import React from "react";
+import { ReactNode } from "react";
 import Button from "./Button";
 import Dialog from "./Dialog";
 import DialogContent from "./DialogContent";
@@ -9,7 +9,7 @@ import DialogTitle from "./DialogTitle";
 
 type RemoveDialogProps = {
     /** A message to override the default one displayed in the dialog body */
-    message?: React.ReactNode;
+    message?: ReactNode;
     /** The display name for the item to be removed */
     name: string;
     /** The type of document being removed (e.g. OTU) */

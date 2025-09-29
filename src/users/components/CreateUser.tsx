@@ -6,7 +6,6 @@ import DialogContent from "@base/DialogContent";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import React from "react";
 import { CreateUserForm } from "./CreateUserForm";
 
 type NewUser = {

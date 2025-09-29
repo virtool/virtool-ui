@@ -2,7 +2,6 @@ import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import { map } from "lodash-es";
-import React from "react";
 import { IndexOTU as OTU } from "../types";
 import IndexOTU from "./IndexOTU";
 

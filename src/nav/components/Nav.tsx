@@ -11,7 +11,6 @@ import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
 import Logo from "@base/Logo";
 import { useRootQuery } from "@wall/queries";
-import React from "react";
 import { NavLink } from "./NavLink";
 
 type NavBarProps = {

@@ -5,7 +5,6 @@ import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
 import { useCurrentOtuContext, useEditSequence } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import React from "react";
 import { useActiveSequence, useGetUnreferencedSegments } from "../hooks";
 import SequenceForm from "./SequenceForm";
 

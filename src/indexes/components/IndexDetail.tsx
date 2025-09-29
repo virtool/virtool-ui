@@ -8,7 +8,6 @@ import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
 import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { useFetchReference } from "@references/queries";
-import React from "react";
 import styled from "styled-components";
 import { useFetchIndex } from "../queries";
 import Contributors from "./Contributors";

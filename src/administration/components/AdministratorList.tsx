@@ -6,7 +6,7 @@ import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
 import Toolbar from "@base/Toolbar";
 import { filter } from "lodash-es";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useFindUsers, useGetAdministratorRoles } from "../queries";
 import AdministratorCreate from "./AdministratorCreate";
 import AdministratorItem from "./AdministratorItem";

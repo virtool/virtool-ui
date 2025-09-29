@@ -5,7 +5,7 @@ import Accordion from "@base/Accordion";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import { orderBy } from "lodash-es";
-import React from "react";
+import { useState } from "react";
 import { IimiOtu } from "./IimiOtu";
 import IimiToolbar from "./IimiToolbar";
 
@@ -31,7 +31,7 @@ export function IimiViewer({ detail }: { detail: FormattedIimiAnalysis }) {
 
     const { value: sort } = useUrlSearchParam("sort", "probability");
 
-    const [minimumProbability, setMinimumProbability] = React.useState(0.5);
+    const [minimumProbability, setMinimumProbability] = useState(0.5);
 
     const hits = items.filter(
         (item) => item.probability && item.probability >= minimumProbability,

@@ -1,6 +1,5 @@
 import { borderRadius, getBorder, getColor, getFontWeight } from "@app/theme";
 import * as RadixSelect from "@radix-ui/react-select";
-import React from "react";
 import styled from "styled-components";
 import Icon from "./Icon";
 

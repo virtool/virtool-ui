@@ -5,7 +5,7 @@ import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
 import Icon from "@base/Icon";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useUpdateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
 

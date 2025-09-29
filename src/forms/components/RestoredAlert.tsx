@@ -1,6 +1,6 @@
 import Alert from "@base/Alert";
 import IconButton from "@base/IconButton";
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 const StyledRestoredAlert = styled(Alert)`

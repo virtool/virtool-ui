@@ -3,7 +3,6 @@ import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Checkbox from "@base/Checkbox";
 import Dot, { DotColor } from "@base/Dot";
-import React from "react";
 
 type StateButtonProps = {
     /** Whether the state is selected */

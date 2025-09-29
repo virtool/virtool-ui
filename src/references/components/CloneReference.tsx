@@ -15,7 +15,7 @@ import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useCloneReference } from "@references/queries";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { ReferenceMinimal } from "references/types";
 import styled from "styled-components";

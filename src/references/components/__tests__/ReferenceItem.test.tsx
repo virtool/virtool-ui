@@ -1,7 +1,6 @@
 import { screen } from "@testing-library/react";
 import { createFakeReferenceMinimal } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
-import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { ReferenceItem } from "../ReferenceItem";
 

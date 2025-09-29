@@ -3,7 +3,6 @@ import InputLabel from "@base/InputLabel";
 import InputSelect from "@base/InputSelect";
 import InputSimple from "@base/InputSimple";
 import { capitalize, map } from "lodash-es";
-import React from "react";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
 
 type IsolateFormValues = {

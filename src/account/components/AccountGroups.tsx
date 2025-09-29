@@ -4,7 +4,6 @@ import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import NoneFound from "@base/NoneFound";
 import { GroupMinimal } from "@groups/types";
-import React from "react";
 
 type AccountGroupsProps = {
     /** A list of groups associated with the account */

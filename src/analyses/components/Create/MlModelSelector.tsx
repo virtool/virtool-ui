@@ -4,7 +4,6 @@ import SelectContent from "@base/SelectContent";
 import SelectItem from "@base/SelectItem";
 import { MLModelMinimal } from "@ml/types";
 import { map } from "lodash";
-import React from "react";
 import styled from "styled-components";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 

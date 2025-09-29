@@ -6,7 +6,6 @@ import { useCurrentOtuContext } from "@otus/queries";
 import { OtuIsolate } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
 import { map } from "lodash";
-import React from "react";
 import styled from "styled-components";
 import CreateSequence from "./CreateSequence";
 import CreateSequenceLink from "./CreateSequenceLink";

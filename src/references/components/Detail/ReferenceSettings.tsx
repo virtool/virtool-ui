@@ -3,7 +3,6 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SectionHeader from "@base/SectionHeader";
 import { useFetchReference } from "@references/queries";
 import { sortBy } from "lodash-es";
-import React from "react";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
 import ReferenceMembers from "./ReferenceMembers";
 import RemoveReference from "./RemoveReference";

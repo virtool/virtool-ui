@@ -4,7 +4,6 @@ import Button from "@base/Button";
 import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
 import { Permission } from "@groups/types";
-import React from "react";
 import styled from "styled-components";
 import { useRemoteReference } from "../queries";
 

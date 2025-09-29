@@ -6,7 +6,6 @@ import DialogTitle from "@base/DialogTitle";
 import Tabs from "@base/Tabs";
 import TabsLink from "@base/TabsLink";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import React from "react";
 import EmptyReference from "./EmptyReference";
 import ImportReference from "./ImportReference";
 

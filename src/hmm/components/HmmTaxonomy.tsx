@@ -3,7 +3,6 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { map, sortBy } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 
 const HmmTaxonomyItem = styled(BoxGroupSection)`

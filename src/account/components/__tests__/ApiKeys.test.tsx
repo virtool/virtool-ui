@@ -11,7 +11,6 @@ import {
 import { createFakePermissions } from "@tests/fake/permissions";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
-import React from "react";
 import { describe, expect, it } from "vitest";
 import ApiKeys from "../ApiKeys";
 

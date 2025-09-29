@@ -1,5 +1,4 @@
 import Container from "@base/Container";
-import React from "react";
 import { Route, Switch } from "wouter";
 import { MLModels } from "./MLModels";
 

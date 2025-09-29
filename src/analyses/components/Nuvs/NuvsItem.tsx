@@ -5,7 +5,6 @@ import { cn } from "@app/utils";
 import Badge from "@base/Badge";
 import Box from "@base/Box";
 import numbro from "numbro";
-import React from "react";
 import "./NuvsItem.css";
 
 type NuVsItemProps = {

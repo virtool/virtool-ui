@@ -1,7 +1,6 @@
 import Icon from "@base/Icon";
 import { LibraryType } from "@samples/types";
 import { getLibraryTypeDisplayName } from "@samples/utils";
-import React from "react";
 import { BaseSampleLabel } from "./BaseSampleLabel";
 
 type SampleLibraryTypeLabelProps = {

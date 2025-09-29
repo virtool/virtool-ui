@@ -1,7 +1,6 @@
 import { formatIsolateName } from "@app/utils";
 import Alert from "@base/Alert";
 import { find, map } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 import { OtuIsolate } from "../types";
 

@@ -1,6 +1,5 @@
 import { SampleLabel } from "@samples/queries";
 import { map } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 import SampleMultiSelectLabel from "../Label/SampleMultiSelectLabel";
 

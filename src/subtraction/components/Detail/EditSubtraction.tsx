@@ -11,7 +11,6 @@ import SaveButton from "@base/SaveButton";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useUpdateSubtraction } from "@subtraction/queries";
 import { Subtraction } from "@subtraction/types";
-import React from "react";
 import { useForm } from "react-hook-form";
 
 type EditSubtractionProps = {

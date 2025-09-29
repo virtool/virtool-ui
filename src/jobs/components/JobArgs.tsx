@@ -3,7 +3,7 @@ import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";
 import Link from "@base/Link";
 import { map } from "lodash";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { workflows } from "../types";
 
 type JobArgsRowProps = {

@@ -1,7 +1,6 @@
 import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
-import React from "react";
 
 type IndexOTUProps = {
     refId: string;

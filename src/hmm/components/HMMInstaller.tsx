@@ -5,7 +5,6 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import { useQueryClient } from "@tanstack/react-query";
 import { replace } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 import { hmmQueryKeys, useListHmms } from "../queries";
 import InstallOption from "./InstallOption";

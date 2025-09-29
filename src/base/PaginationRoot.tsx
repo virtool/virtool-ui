@@ -1,8 +1,8 @@
 import { cn } from "@app/utils";
-import * as React from "react";
+import { ReactNode } from "react";
 
 type PaginationRootProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
 };
 

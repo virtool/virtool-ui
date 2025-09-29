@@ -15,7 +15,7 @@ import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useCreateAPIKey } from "../queries";
 import CreateAPIKeyInfo from "./ApiKeyAdministratorInfo";

@@ -7,7 +7,6 @@ import { useCreateSequence } from "@otus/queries";
 import { OtuSegment, OtuSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { compact, map } from "lodash-es";
-import React from "react";
 import SequenceForm from "./SequenceForm";
 
 type CreateSequenceProps = {

@@ -7,7 +7,6 @@ import Indexes from "@indexes/components/Indexes";
 import OtuDetail from "@otus/components/Detail/OtuDetail";
 import OtuList from "@otus/components/OtuList";
 import { useFetchReference } from "@references/queries";
-import React from "react";
 import { Redirect, Route, Switch } from "wouter";
 import EditReference from "./EditReference";
 import ReferenceDetailHeader from "./ReferenceDetailHeader";

@@ -7,7 +7,6 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
-import React from "react";
 import styled from "styled-components";
 import { useFetchJob } from "../queries";
 import JobArgs from "./JobArgs";

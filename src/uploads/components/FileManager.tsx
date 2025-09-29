@@ -13,7 +13,7 @@ import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { Permission } from "@groups/types";
 import { map } from "lodash";
 import { capitalize } from "lodash-es";
-import React from "react";
+import { ReactNode } from "react";
 import { Accept } from "react-dropzone";
 import { useListFiles } from "../queries";
 import { UploadType } from "../types";
@@ -29,7 +29,7 @@ export type FileManagerProps = {
     fileType: UploadType;
 
     /* A message to display in the upload toolbar. */
-    message?: React.ReactNode;
+    message?: ReactNode;
 
     /* A regular expression to validate file names. */
     regex?: RegExp;

@@ -4,7 +4,6 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
 import { OtuSegment } from "@otus/types";
-import React from "react";
 import styled from "styled-components";
 
 const StyledSegment = styled(BoxGroupSection)`

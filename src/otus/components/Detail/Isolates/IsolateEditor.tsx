@@ -8,7 +8,6 @@ import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useCurrentOtuContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { find, map } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 import IsolateDetail from "./IsolateDetail";
 import IsolateItem from "./IsolateItem";

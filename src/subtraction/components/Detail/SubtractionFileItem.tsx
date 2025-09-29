@@ -1,7 +1,6 @@
 import { fontWeight } from "@app/theme";
 import { byteSize } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
-import React from "react";
 import styled from "styled-components";
 
 const StyledSubtractionFile = styled(BoxGroupSection)`

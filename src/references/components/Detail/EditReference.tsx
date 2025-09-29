@@ -8,7 +8,6 @@ import SaveButton from "@base/SaveButton";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useUpdateReference } from "@references/queries";
 import { Reference } from "@references/types";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { ReferenceForm, ReferenceFormMode } from "../ReferenceForm";
 

@@ -1,7 +1,6 @@
 import { LabelNested } from "@labels/types";
 import { useUpdateSample } from "@samples/queries";
 import { SubtractionNested } from "@subtraction/types";
-import React from "react";
 import styled from "styled-components";
 import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
 import SampleLabels from "../Sidebar/SampleLabels";

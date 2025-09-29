@@ -11,7 +11,6 @@ import {
 import { ReferenceGroup, ReferenceUser } from "@references/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { map } from "lodash-es";
-import React from "react";
 import { ReferenceRight } from "./ReferenceRight";
 
 const rights = ["modify_otu", "build", "modify", "remove"];

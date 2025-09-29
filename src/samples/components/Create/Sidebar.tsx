@@ -1,5 +1,4 @@
 import ContainerSide from "@base/ContainerSide";
-import React from "react";
 import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
 import SampleLabels from "../Sidebar/SampleLabels";
 

@@ -1,5 +1,5 @@
 import { area, axisBottom, axisLeft, format, scaleLinear, select } from "d3";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 type DrawParams = {
     element: HTMLElement;

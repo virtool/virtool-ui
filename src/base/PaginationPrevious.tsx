@@ -1,5 +1,4 @@
 import { cn } from "@app/utils";
-import * as React from "react";
 import PaginationLink from "./PaginationLink";
 
 type PaginationPreviousProps = {

@@ -7,7 +7,7 @@ import {
 import { theme } from "@app/theme";
 import { area, scaleLinear, select } from "d3";
 import { filter, map, max } from "lodash-es";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
 
 function draw(

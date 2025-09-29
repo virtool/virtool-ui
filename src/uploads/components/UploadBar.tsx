@@ -1,14 +1,14 @@
 import { cn } from "@app/utils";
 import Button from "@base/Button";
 import Icon from "@base/Icon";
-import React, { useCallback } from "react";
+import { ReactNode, useCallback } from "react";
 import { Accept, FileError, useDropzone } from "react-dropzone";
 
 type UploadBarProps = {
     accept?: Accept;
 
     /** The message to display in the upload bar */
-    message?: React.ReactNode;
+    message?: ReactNode;
 
     /** Whether multiple uploads can be uploaded */
     multiple?: boolean;

@@ -8,7 +8,6 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import SaveButton from "@base/SaveButton";
-import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { useImportReference, useUploadReference } from "../queries";

@@ -1,7 +1,7 @@
 import { getFontSize } from "@app/theme";
 import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
-import React, { useCallback } from "react";
+import { ReactNode, useCallback } from "react";
 import styled from "styled-components";
 
 const SettingsCheckboxContainer = styled.div`
@@ -33,7 +33,7 @@ const StyledSettingsCheckbox = styled(Box)`
 
 type SettingsCheckboxProps = {
     /** Content to be rendered within the checkbox */
-    children: React.ReactNode;
+    children: ReactNode;
 
     /** Whether the external API access is enabled */
     enabled: boolean;

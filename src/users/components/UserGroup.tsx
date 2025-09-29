@@ -1,6 +1,5 @@
 import Checkbox from "@base/Checkbox";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
-import React from "react";
 import styled from "styled-components";
 
 const StyledUserGroup = styled(SelectBoxGroupSection)`

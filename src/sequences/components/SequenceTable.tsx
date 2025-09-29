@@ -1,7 +1,6 @@
 import { cn } from "@app/utils";
 import Badge from "@base/Badge";
 import Table from "@base/Table";
-import React from "react";
 
 type SequenceTableProps = {
     definition: string;

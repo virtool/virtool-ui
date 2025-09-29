@@ -1,4 +1,3 @@
-import React from "react";
 import { SourceTypeItem } from "./SourceTypeItem";
 
 interface SourceTypeListProps {

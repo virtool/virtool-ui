@@ -1,5 +1,3 @@
-import React from "react";
-
 type NuVsValuesProps = {
     e: string;
     orfCount: number;

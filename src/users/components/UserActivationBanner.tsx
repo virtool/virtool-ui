@@ -1,6 +1,5 @@
 import Alert from "@base/Alert";
 import Button from "@base/Button";
-import React from "react";
 import styled from "styled-components";
 
 const ActivationBanner = styled(Alert)`

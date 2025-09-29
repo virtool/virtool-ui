@@ -1,4 +1,4 @@
-import React from "react";
+import { ReactNode } from "react";
 import styled from "styled-components";
 import AlertInner from "./AlertInner";
 import AlertOuter from "./AlertOuter";
@@ -6,7 +6,7 @@ import Icon from "./Icon";
 
 type AlertProps = {
     block?: boolean;
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
     color?: string;
     icon?: string;

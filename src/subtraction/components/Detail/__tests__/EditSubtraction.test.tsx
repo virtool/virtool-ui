@@ -5,7 +5,6 @@ import {
     mockApiEditSubtraction,
 } from "@tests/fake/subtractions";
 import { renderWithProviders } from "@tests/setup";
-import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import EditSubtraction from "../EditSubtraction";
 

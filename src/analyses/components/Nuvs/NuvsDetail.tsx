@@ -5,7 +5,6 @@ import { useUrlSearchParam } from "@app/hooks";
 import { getBorder } from "@app/theme";
 import Badge from "@base/Badge";
 import { filter, map, sortBy } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 import NuvsBlast from "./NuvsBlast";
 import NuvsOrf from "./NuvsOrf";

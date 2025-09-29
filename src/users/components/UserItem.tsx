@@ -7,7 +7,6 @@ import InitialIcon from "@base/InitialIcon";
 import Label from "@base/Label";
 import Link from "@base/Link";
 import { GroupMinimal } from "@groups/types";
-import React from "react";
 import styled from "styled-components";
 
 const StyledUserItem = styled(BoxGroupSection)`

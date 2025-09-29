@@ -1,12 +1,12 @@
 import { cn } from "@app/utils";
 import * as RadixCheckbox from "@radix-ui/react-checkbox";
-import React from "react";
+import { ReactNode } from "react";
 import Icon from "./Icon";
 
 type CheckboxProps = {
     checked?: boolean;
     label?: string;
-    labelComponent?: React.ReactNode;
+    labelComponent?: ReactNode;
     disabled?: boolean;
     id: string;
     onClick?: () => void;

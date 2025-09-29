@@ -8,7 +8,6 @@ import { createFakeGroup } from "@tests/fake/groups";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
-import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<SampleRights />", () => {

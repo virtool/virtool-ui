@@ -9,7 +9,6 @@ import Icon from "@base/Icon";
 import InitialIcon from "@base/InitialIcon";
 import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import React from "react";
 import styled from "styled-components";
 import Password from "./Password";
 import PrimaryGroup from "./PrimaryGroup";

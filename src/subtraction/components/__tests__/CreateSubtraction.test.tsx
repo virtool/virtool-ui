@@ -6,7 +6,6 @@ import userEvent from "@testing-library/user-event";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { mockApiCreateSubtraction } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
-import React from "react";
 import { afterEach, describe, expect, it } from "vitest";
 import SubtractionCreate from "../SubtractionCreate";
 

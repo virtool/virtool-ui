@@ -10,7 +10,6 @@ import SelectContent from "@base/SelectContent";
 import SelectItem from "@base/SelectItem";
 import { OtuSegment } from "@otus/types";
 import * as RadixSelect from "@radix-ui/react-select";
-import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import styled from "styled-components";
 

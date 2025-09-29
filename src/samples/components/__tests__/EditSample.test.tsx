@@ -3,7 +3,6 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeSample, mockApiEditSample } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
-import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import EditSample from "../EditSample";
 

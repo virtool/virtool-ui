@@ -1,8 +1,8 @@
 import { cn } from "@app/utils";
-import React from "react";
+import { ReactNode } from "react";
 
 type BoxProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
     onClick?: () => void;
 };

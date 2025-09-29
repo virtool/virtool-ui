@@ -1,6 +1,5 @@
 import Box from "@base/Box";
 import { sortBy } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 import { CoverageChart } from "../Charts/CoverageChart";
 import { IimiDetection } from "./IimiDetection";

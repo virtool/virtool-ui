@@ -1,7 +1,7 @@
 import { getFontSize } from "@app/theme";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";
-import React from "react";
+import { ReactNode } from "react";
 import styled from "styled-components";
 
 const StyledSampleSidebarSelectorItem = styled(BoxGroupSection)`
@@ -30,7 +30,7 @@ const SampleSidebarSelectorItemContents = styled.div`
 `;
 
 type SampleSidebarSelectorItemProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     id: string | number;
     name: string;
     /** A callback function to handle item selection */

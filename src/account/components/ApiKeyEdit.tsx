@@ -7,7 +7,6 @@ import IconButton from "@base/IconButton";
 import SaveButton from "@base/SaveButton";
 import { Permissions } from "@groups/types";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useUpdateApiKey } from "../queries";
 import ApiKeyPermissions from "./ApiKeyPermissions";

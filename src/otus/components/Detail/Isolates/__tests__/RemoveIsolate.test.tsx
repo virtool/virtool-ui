@@ -2,7 +2,6 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiRemoveIsolate } from "@tests/fake/otus";
 import { renderWithProviders } from "@tests/setup";
-import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import RemoveIsolate from "../RemoveIsolate";
 

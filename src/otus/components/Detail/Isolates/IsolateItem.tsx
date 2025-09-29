@@ -4,7 +4,6 @@ import { formatIsolateName } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";
 import { OtuIsolate } from "@otus/types";
-import React from "react";
 import styled from "styled-components";
 
 const StyledIsolateItem = styled(BoxGroupSection)`

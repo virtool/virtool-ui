@@ -2,7 +2,6 @@ import { getWorkflowDisplayName } from "@app/utils";
 import Icon from "@base/Icon";
 import { SampleWorkflows, WorkflowState } from "@samples/types";
 import { reduce } from "lodash-es";
-import React from "react";
 import { Link } from "wouter";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import WorkflowTag from "./WorkflowTag";
