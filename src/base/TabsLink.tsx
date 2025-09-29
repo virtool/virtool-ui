@@ -1,10 +1,10 @@
 import { useMatchPartialPath } from "@app/hooks";
 import { cn } from "@app/utils";
-import React from "react";
+import { ReactNode } from "react";
 import { Link } from "wouter";
 
 type TabsLinkProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
     isActive?: boolean;
     to: string;

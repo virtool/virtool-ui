@@ -1,6 +1,6 @@
 import { formatDistanceStrict, isAfter } from "date-fns";
 import { includes } from "lodash-es";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Create a human-readable relative time.

@@ -8,7 +8,6 @@ import InputLabel from "@base/InputLabel";
 import InputPassword from "@base/InputPassword";
 import RelativeTime from "@base/RelativeTime";
 import SaveButton from "@base/SaveButton";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { useChangePassword } from "../queries";
 

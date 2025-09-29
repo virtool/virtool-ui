@@ -1,7 +1,6 @@
 import { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import Alert from "@base/Alert";
-import React from "react";
 import { useFetchAccount } from "../queries";
 
 /**

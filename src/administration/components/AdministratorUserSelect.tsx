@@ -2,7 +2,6 @@ import { getFontSize, getFontWeight } from "@app/theme";
 import ComboBox from "@base/ComboBox";
 import InitialIcon from "@base/InitialIcon";
 import { User } from "@users/types";
-import React from "react";
 import styled from "styled-components";
 
 const UserItem = styled.div`

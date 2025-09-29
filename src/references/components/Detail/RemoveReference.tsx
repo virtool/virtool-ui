@@ -3,7 +3,7 @@ import RemoveBanner from "@base/RemoveBanner";
 import RemoveDialog from "@base/RemoveDialog";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useRemoveReference } from "@references/queries";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 
 type RemoveReferenceProps = {
     /** The id of the reference to remove */

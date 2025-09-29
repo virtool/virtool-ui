@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { mockApiCreateIsolate } from "@tests/fake/otus";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
-import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AddIsolate from "../AddIsolate";
 

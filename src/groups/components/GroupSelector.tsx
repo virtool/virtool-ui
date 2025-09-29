@@ -2,7 +2,6 @@ import { getColor } from "@app/theme";
 import BoxGroup from "@base/BoxGroup";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import { map, sortBy } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 import { GroupMinimal } from "../types";
 

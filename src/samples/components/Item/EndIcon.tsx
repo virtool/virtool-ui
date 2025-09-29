@@ -2,7 +2,6 @@ import { cn } from "@/app/utils";
 import IconButton from "@base/IconButton";
 import ProgressCircle from "@base/ProgressCircle";
 import { JobMinimal, JobState } from "@jobs/types";
-import React from "react";
 
 interface SampleItemEndIconProps {
     /** Callback to handle click event */

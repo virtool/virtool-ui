@@ -2,7 +2,6 @@ import { FormattedPathoscopeAnalysis } from "@analyses/types";
 import { useUrlSearchParam } from "@app/hooks";
 import Alert from "@base/Alert";
 import { Sample } from "@samples/types";
-import React from "react";
 import { PathoscopeList } from "./PathoscopeList";
 import { AnalysisMapping } from "./PathoscopeMapping";
 import { PathoscopeToolbar } from "./PathoscopeToolbar";

@@ -1,11 +1,11 @@
 import { cn } from "@app/utils";
-import * as React from "react";
+import { ReactNode } from "react";
 import Link from "./Link";
 import PaginationItem from "./PaginationItem";
 
 type PaginationLinkProps = {
     active?: boolean;
-    children?: React.ReactNode;
+    children?: ReactNode;
     className?: string;
     disabled?: boolean;
     onClick?: () => void;

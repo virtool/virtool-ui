@@ -1,5 +1,4 @@
 import ExternalLink from "@base/ExternalLink";
-import React from "react";
 import { useUpdateSettings } from "../queries";
 import { Settings } from "../types";
 import SettingsCheckbox from "./SettingsCheckbox";

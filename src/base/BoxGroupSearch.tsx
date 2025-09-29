@@ -1,4 +1,3 @@
-import React from "react";
 import BoxGroupSection from "./BoxGroupSection";
 import Input from "./Input";
 import InputContainer from "./InputContainer";

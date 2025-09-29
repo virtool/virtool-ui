@@ -1,5 +1,4 @@
 import Icon from "@base/Icon";
-import React from "react";
 import { IconColor, JobState } from "../types";
 
 function getIconName(state: JobState): string {

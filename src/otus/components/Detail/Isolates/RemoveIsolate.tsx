@@ -1,6 +1,6 @@
 import RemoveDialog from "@base/RemoveDialog";
 import { useRemoveIsolate } from "@otus/queries";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 
 type RemoveIsolateProps = {
     /** The id of the isolate being deleted */

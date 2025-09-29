@@ -1,5 +1,4 @@
 import { Label } from "@labels/types";
-import React from "react";
 import styled from "styled-components";
 import LabelFilter from "./LabelFilter";
 import WorkflowFilter from "./WorkflowFilter";

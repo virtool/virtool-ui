@@ -2,7 +2,6 @@ import { updateSearchParam } from "@app/hooks";
 import Button from "@base/Button";
 import Icon from "@base/Icon";
 import LinkButton from "@base/LinkButton";
-import React from "react";
 import styled from "styled-components";
 import { useSearch } from "wouter";
 

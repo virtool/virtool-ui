@@ -19,7 +19,6 @@ import {
     useUpdateReference,
 } from "@references/queries";
 import { get } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 import SourceTypeList from "./SourceTypeList";
 

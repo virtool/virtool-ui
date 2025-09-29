@@ -1,7 +1,6 @@
 import JobStep from "@jobs/components/JobStep";
 import { JobState } from "@jobs/types";
 import type { Meta } from "@storybook/react-vite";
-import React from "react";
 
 const meta: Meta<typeof JobStep> = {
     title: "jobs/Step",

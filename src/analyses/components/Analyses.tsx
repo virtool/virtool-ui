@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Switch } from "wouter";
 import AnalysisDetail from "./AnalysisDetail";
 import AnalysesList from "./AnalysisList";

@@ -6,7 +6,7 @@ import InputLabel from "@base/InputLabel";
 import InputLoading from "@base/InputLoading";
 import InputSimple from "@base/InputSimple";
 import { getGenbank } from "@otus/api";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 type FormValues = {

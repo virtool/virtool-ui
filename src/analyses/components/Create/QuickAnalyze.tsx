@@ -9,7 +9,7 @@ import { useListHmms } from "@hmm/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { SampleMinimal } from "@samples/types";
 import { Tabs } from "radix-ui";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import HMMAlert from "../HMMAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";

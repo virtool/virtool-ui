@@ -7,7 +7,7 @@ import { IndexMinimal } from "@indexes/types";
 import * as RadixSelect from "@radix-ui/react-select";
 import { map } from "lodash";
 import { sortBy } from "lodash-es";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
 type IndexSelectorItemProps = {

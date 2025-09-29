@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { ReactNode, useState } from "react";
 import ScrollSyncContext from "./ScrollSyncContext";
 
 type ScrollSyncProps = {
-    children: React.ReactNode;
+    children: ReactNode;
 };
 
 /**

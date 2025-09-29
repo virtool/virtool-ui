@@ -1,5 +1,4 @@
 import { cn } from "@app/utils";
-import React from "react";
 
 export default function AnalysisValue({ color, label, value }) {
     return (

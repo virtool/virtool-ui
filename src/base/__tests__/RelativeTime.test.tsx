@@ -1,6 +1,5 @@
 import { act, screen } from "@testing-library/react";
 import { renderWithProviders } from "@tests/setup";
-import React from "react";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import RelativeTime from "../RelativeTime";
 

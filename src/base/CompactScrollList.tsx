@@ -4,7 +4,7 @@ import {
     InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
 import { map } from "lodash-es";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import LoadingPlaceholder from "./LoadingPlaceholder";
 
 function getScrollRatio(scrollListElement: HTMLElement): number {

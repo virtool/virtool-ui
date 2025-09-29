@@ -8,7 +8,7 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
 import Toolbar from "@base/Toolbar";
-import React from "react";
+import { useState } from "react";
 import CreateUser from "./CreateUser";
 import UsersList from "./UsersList";
 
@@ -16,7 +16,7 @@ import UsersList from "./UsersList";
  * Displays a list of editable users and tools for sorting through and creating users
  */
 export function ManageUsers() {
-    const [term, setTerm] = React.useState("");
+    const [term, setTerm] = useState("");
     const { value: status, setValue: setStatus } = useUrlSearchParam<string>(
         "status",
         "active",

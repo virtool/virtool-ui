@@ -13,7 +13,6 @@ import {
 } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
-import React from "react";
 import ManageAdministrators from "../AdministratorList";
 
 describe("<Administrators>", () => {

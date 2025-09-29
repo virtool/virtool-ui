@@ -6,7 +6,6 @@ import DialogTitle from "@base/DialogTitle";
 import { HmmSearchResults } from "@hmm/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { Tabs } from "radix-ui";
-import React from "react";
 import HMMAlert from "../HMMAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
 import CreateIimi from "./CreateIimi";

@@ -8,7 +8,6 @@ import RebuildAlert from "@indexes/components/RebuildAlert";
 import { useListOTUs } from "@otus/queries";
 import { useFetchReference } from "@references/queries";
 import { map } from "lodash";
-import React from "react";
 import OtuCreate from "./OtuCreate";
 import OtuItem from "./OtuItem";
 import OtuToolbar from "./OtuToolbar";

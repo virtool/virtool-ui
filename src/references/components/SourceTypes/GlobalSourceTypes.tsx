@@ -10,7 +10,6 @@ import InputSimple from "@base/InputSimple";
 import SectionHeader from "@base/SectionHeader";
 import Toolbar from "@base/Toolbar";
 import { useUpdateSourceTypes } from "@references/hooks";
-import React from "react";
 import SourceTypeList from "./SourceTypeList";
 
 type GlobalSourceTypesProps = {

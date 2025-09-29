@@ -1,5 +1,5 @@
 import { cn } from "@app/utils";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import Box from "./Box";
 
 type BoxGroupProps = {

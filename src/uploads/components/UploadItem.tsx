@@ -4,7 +4,7 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import RelativeTime from "@base/RelativeTime";
 import { UserNested } from "@users/types";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { useDeleteFile } from "../queries";
 
 export type UploadItemProps = {

@@ -1,7 +1,7 @@
 import { map } from "lodash";
 import { split, trimEnd } from "lodash-es";
 import { forEach } from "lodash-es/lodash";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams, useSearch } from "wouter";
 
 function getSize(ref) {

@@ -1,4 +1,4 @@
-import React from "react";
+import { ElementType, forwardRef, ReactNode } from "react";
 import styled from "styled-components";
 import Input from "./Input";
 
@@ -10,8 +10,8 @@ const StyledTextArea = styled(Input)`
 
 type InputProps = {
     "aria-label"?: string;
-    as?: React.ElementType;
-    children?: React.ReactNode;
+    as?: ElementType;
+    children?: ReactNode;
     className?: string;
     error?: string;
     id?: string;
@@ -22,11 +22,9 @@ type InputProps = {
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const TextArea = React.forwardRef<HTMLInputElement, InputProps>(
-    (props, ref) => {
-        return <StyledTextArea as="textarea" {...props} ref={ref} />;
-    },
-);
+const TextArea = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+    return <StyledTextArea as="textarea" {...props} ref={ref} />;
+});
 
 TextArea.displayName = "TextArea";
 

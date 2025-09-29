@@ -1,5 +1,4 @@
 import Alert from "@base/Alert";
-import React from "react";
 
 type SampleFilesMessageProps = {
     /** Indicates whether to show the alert for legacy sample uploads */

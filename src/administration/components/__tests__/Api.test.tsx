@@ -5,7 +5,6 @@ import {
     mockApiUpdateSettings,
 } from "@tests/fake/administrator";
 import { renderWithProviders } from "@tests/setup";
-import React from "react";
 import { describe, expect, it } from "vitest";
 import Api from "../Api";
 

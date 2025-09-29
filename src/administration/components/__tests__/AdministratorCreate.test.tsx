@@ -10,7 +10,6 @@ import {
 import { createFakeUsers, mockApiFindUsers } from "@tests/fake/user";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
-import React from "react";
 
 describe("<AdministratorCreate>", () => {
     it("should render form", async () => {

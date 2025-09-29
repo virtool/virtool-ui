@@ -6,7 +6,6 @@ import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
 import Link from "@base/Link";
 import { SampleMinimal } from "@samples/types";
-import React from "react";
 import styled from "styled-components";
 import SampleLabel from "../Label/SampleLabel";
 import SampleLibraryTypeLabel from "../Label/SampleLibraryTypeLabel";

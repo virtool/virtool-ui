@@ -7,7 +7,6 @@ import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
 import { map } from "lodash";
 import numbro from "numbro";
-import React from "react";
 import styled from "styled-components";
 
 const StyledBLASTResultsHeader = styled(BoxGroupHeader)`

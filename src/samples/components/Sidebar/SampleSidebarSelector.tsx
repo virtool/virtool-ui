@@ -7,7 +7,7 @@ import Popover from "@base/Popover";
 import SidebarHeaderButton from "@base/SidebarHeaderButton";
 import { Label } from "@labels/types";
 import { SubtractionOption } from "@subtraction/types";
-import React from "react";
+import { ReactNode } from "react";
 import styled from "styled-components";
 import SampleSidebarSelectorItem from "./SampleSidebarSelectorItem";
 
@@ -46,7 +46,7 @@ type SampleSidebarSelectorProps = {
         color?: string;
         description?: string;
         name: string;
-    }) => React.ReactNode;
+    }) => ReactNode;
 
     /** A list of labels or default subtractions */
     items: Label[] | SubtractionOption[];

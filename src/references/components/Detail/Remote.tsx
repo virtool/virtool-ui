@@ -13,7 +13,6 @@ import {
     useCheckReferenceUpdates,
     useUpdateRemoteReference,
 } from "@references/queries";
-import React from "react";
 
 function Release({ release, checking, updating, onCheckUpdates, onUpdate }) {
     const hasUpdate = !updating && release.newer;

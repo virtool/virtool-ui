@@ -1,9 +1,9 @@
 import { cn } from "@app/utils";
-import React from "react";
+import { ReactNode } from "react";
 
 type KeyProps = {
     className?: string;
-    children: React.ReactNode;
+    children: ReactNode;
 };
 
 /** A keyboard key */

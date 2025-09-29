@@ -6,7 +6,6 @@ import SidebarHeader from "@base/SidebarHeader";
 import SideBarSection from "@base/SideBarSection";
 import { WorkflowStates } from "@samples/utils";
 import { xor } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 
 const WorkflowFilterLabel = styled.div`

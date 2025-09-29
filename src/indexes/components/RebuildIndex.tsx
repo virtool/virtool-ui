@@ -6,7 +6,6 @@ import DialogFooter from "@base/DialogFooter";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import React from "react";
 import { useCreateIndex, useFetchUnbuiltChanges } from "../queries";
 import RebuildHistory from "./History";
 import RebuildIndexError from "./RebuildIndexError";

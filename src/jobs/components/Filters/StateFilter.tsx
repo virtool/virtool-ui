@@ -4,7 +4,6 @@ import SideBarSection from "@base/SideBarSection";
 import { JobCounts } from "@jobs/types";
 import { difference, union, xor } from "lodash-es";
 import { mapValues, reduce } from "lodash-es/lodash";
-import React from "react";
 import styled from "styled-components";
 import { StateCategory } from "./StateCategory";
 

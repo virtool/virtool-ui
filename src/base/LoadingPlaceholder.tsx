@@ -1,5 +1,4 @@
 import { cn } from "@app/utils";
-import React from "react";
 import Loader from "./Loader";
 
 type LoadingPlaceholderProps = {

@@ -3,7 +3,6 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import React from "react";
 import SampleRights from "./SampleRights";
 
 export default function SamplesSettings() {

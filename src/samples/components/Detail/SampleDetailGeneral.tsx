@@ -10,7 +10,6 @@ import JobItem from "@jobs/components/JobItem";
 import { useFetchSample } from "@samples/queries";
 import { getLibraryTypeDisplayName } from "@samples/utils";
 import numbro from "numbro";
-import React from "react";
 import styled from "styled-components";
 import EditSample from "../EditSample";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";

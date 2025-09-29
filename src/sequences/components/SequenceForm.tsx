@@ -6,7 +6,6 @@ import SaveButton from "@base/SaveButton";
 import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { OtuSegment, OtuSequence } from "@otus/types";
-import React from "react";
 import { FormProvider } from "react-hook-form";
 import Accession from "./Accession";
 import SequenceField from "./SequenceField";

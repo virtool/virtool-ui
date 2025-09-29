@@ -2,7 +2,7 @@ import { getFontSize, getFontWeight } from "@app/theme";
 import { byteSize } from "@app/utils";
 import Icon from "@base/Icon";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import styled from "styled-components";
 
 const ReadIcon = styled.span`

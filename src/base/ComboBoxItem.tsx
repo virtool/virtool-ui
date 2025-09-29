@@ -1,5 +1,4 @@
 import { getColor } from "@app/theme";
-import React from "react";
 import styled from "styled-components";
 
 const ComboBoxItem = styled.li`

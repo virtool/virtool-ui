@@ -10,7 +10,6 @@ import Checkbox from "@base/Checkbox";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { Permissions } from "@groups/types";
 import { map, sortBy } from "lodash-es";
-import React from "react";
 
 type APIPermissionsProps = {
     className?: string;

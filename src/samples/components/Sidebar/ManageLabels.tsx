@@ -6,7 +6,6 @@ import { Label } from "@labels/types";
 import { useUpdateLabel } from "@samples/queries";
 import { SampleMinimal } from "@samples/types";
 import { filter, flatMap, groupBy, map } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 import SampleLabel from "../Label/SampleLabel";
 import SampleSidebarMultiselectList from "./SampleSidebarMultiselectList";

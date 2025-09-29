@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
 import UploadItem, { UploadItemProps } from "../components/UploadItem";
 
 const meta: Meta<typeof UploadItem> = {

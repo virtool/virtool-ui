@@ -3,7 +3,6 @@ import BoxGroupHeader from "@base/BoxGroupHeader";
 import NoneFound from "@base/NoneFound";
 import { SubtractionFile } from "@subtraction/types";
 import { sortBy } from "lodash-es";
-import React from "react";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 export type SubtractionFilesProps = {

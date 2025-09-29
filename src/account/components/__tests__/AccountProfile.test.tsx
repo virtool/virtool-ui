@@ -4,7 +4,6 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { renderWithProviders } from "@tests/setup";
-import React from "react";
 import { describe, expect, it } from "vitest";
 
 describe("<AccountProfile />", () => {

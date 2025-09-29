@@ -11,7 +11,6 @@ import { Permission } from "@groups/types";
 import { useFetchSubtraction } from "@subtraction/queries";
 import { NucleotideComposition } from "@subtraction/types";
 import numbro from "numbro";
-import React from "react";
 import { SubtractionAttribution } from "../Attribution";
 import EditSubtraction from "./EditSubtraction";
 import RemoveSubtraction from "./RemoveSubtraction";

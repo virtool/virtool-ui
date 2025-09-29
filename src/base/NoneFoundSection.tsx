@@ -1,11 +1,11 @@
 import { cn } from "@/app/utils";
-import React from "react";
+import { ReactNode } from "react";
 import BoxGroupSection from "./BoxGroupSection";
 import Icon from "./Icon";
 import { noneFoundStyle } from "./noneFoundStyle";
 
 type NoneFoundSectionProps = {
-    children?: React.ReactNode;
+    children?: ReactNode;
     noun: string;
     className?: string;
 };

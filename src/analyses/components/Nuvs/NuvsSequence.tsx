@@ -1,5 +1,5 @@
 import { axisTop, scaleLinear, select } from "d3";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 function draw(element: HTMLElement, maxLength: number, sequenceLength: number) {
     element.innerHTML = "";

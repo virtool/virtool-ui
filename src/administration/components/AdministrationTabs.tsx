@@ -1,6 +1,5 @@
 import Tabs from "@base/Tabs";
 import TabsLink from "@base/TabsLink";
-import React from "react";
 import { AdministratorRoleName } from "../types";
 import { hasSufficientAdminRole } from "../utils";
 

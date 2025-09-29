@@ -1,7 +1,6 @@
 import { screen } from "@testing-library/react";
 import { createFakeIndexFile } from "@tests/fake/indexes";
 import { renderWithProviders } from "@tests/setup";
-import React from "react";
 import { describe, expect, it } from "vitest";
 import IndexFiles from "../IndexFiles";
 

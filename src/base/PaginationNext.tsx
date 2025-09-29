@@ -1,5 +1,4 @@
 import { cn } from "@app/utils";
-import * as React from "react";
 import LinkButton from "./LinkButton";
 import PaginationItem from "./PaginationItem";
 

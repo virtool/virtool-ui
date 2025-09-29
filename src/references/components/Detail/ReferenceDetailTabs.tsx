@@ -1,7 +1,6 @@
 import Badge from "@base/Badge";
 import Tabs from "@base/Tabs";
 import TabsLink from "@base/TabsLink";
-import React from "react";
 
 type ReferenceDetailTabsProps = {
     id: string;

@@ -1,6 +1,5 @@
 import Alert from "@base/Alert";
 import { map } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 
 const StyledJobError = styled(Alert)`

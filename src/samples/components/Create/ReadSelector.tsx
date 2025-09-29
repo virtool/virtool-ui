@@ -18,7 +18,7 @@ import {
     InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
 import { flatMap, includes, indexOf, toLower } from "lodash-es";
-import React, { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import styled from "styled-components";
 import ReadSelectorItem from "./ReadSelectorItem";
 

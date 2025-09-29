@@ -9,7 +9,6 @@ import InputGroup from "@base/InputGroup";
 import InputSimple from "@base/InputSimple";
 import RelativeTime from "@base/RelativeTime";
 import SaveButton from "@base/SaveButton";
-import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 

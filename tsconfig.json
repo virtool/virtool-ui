@@ -33,7 +33,7 @@
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": false,
         "isolatedModules": true,
-        "jsx": "react",
+        "jsx": "react-jsx",
         "lib": ["DOM", "ESNext", "DOM.Iterable"],
         "module": "ESNext",
         "moduleResolution": "node",

@@ -3,7 +3,6 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SampleFileSizeWarning from "@samples/components/Detail/SampleFileSizeWarning";
 import { useFetchSample } from "@samples/queries";
-import React from "react";
 import SampleFilesMessage from "../SampleFilesMessage";
 import SampleReads from "./SampleReads";
 

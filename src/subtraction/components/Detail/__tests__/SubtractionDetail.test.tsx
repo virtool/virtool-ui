@@ -9,7 +9,6 @@ import {
 } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
-import React from "react";
 import { describe, expect, it } from "vitest";
 
 function formatSubtractionPath(subtraction: SubtractionMinimal) {

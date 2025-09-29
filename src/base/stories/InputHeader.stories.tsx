@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React, { useState } from "react";
+import { useState } from "react";
 import InputHeader from "../InputHeader";
 
 const meta: Meta<typeof InputHeader> = {

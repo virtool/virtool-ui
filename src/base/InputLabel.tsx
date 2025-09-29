@@ -1,7 +1,6 @@
-import React from "react";
-
+import { ReactNode } from "react";
 type InputLabelProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     htmlFor?: string;
 };
 

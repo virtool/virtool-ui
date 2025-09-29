@@ -7,7 +7,6 @@ import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import { OtuSegment } from "@otus/types";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { map } from "lodash";
-import React from "react";
 import AddSegment from "./AddSegment";
 import EditSegment from "./EditSegment";
 import RemoveSegment from "./RemoveSegment";

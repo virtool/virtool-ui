@@ -3,7 +3,6 @@ import { useCreateAnalysis } from "@analyses/queries";
 import { Workflows } from "@analyses/types";
 import Button from "@base/Button";
 import { useFindModels } from "@ml/queries";
-import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
 import { CreateAnalysisInputError } from "./CreateAnalysisInputError";

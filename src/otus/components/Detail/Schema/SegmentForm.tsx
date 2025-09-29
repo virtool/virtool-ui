@@ -8,7 +8,6 @@ import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import { Molecule, OtuSegment } from "@otus/types";
 import { find, map } from "lodash-es";
-import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 

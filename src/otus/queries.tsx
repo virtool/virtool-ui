@@ -6,7 +6,7 @@ import {
     useQuery,
     useQueryClient,
 } from "@tanstack/react-query";
-import React, { createContext, useContext } from "react";
+import { createContext, ReactNode, useContext } from "react";
 import { useFetchReference } from "../references/queries";
 import {
     addIsolate,
@@ -392,7 +392,7 @@ export function useCurrentOtuContext() {
 }
 
 type CurrentOtuContextProviderProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     otuId: string;
     refId: string;
 };

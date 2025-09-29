@@ -1,9 +1,9 @@
-import React from "react";
+import { ReactNode } from "react";
 import DropdownMenuItem from "./DropdownMenuItem";
 import Link from "./Link";
 
 type DropdownMenuLinkProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
     to: string;
     target?: string;

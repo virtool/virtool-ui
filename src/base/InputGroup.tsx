@@ -1,9 +1,9 @@
 import { cn } from "@app/utils";
-import React from "react";
+import { ReactNode } from "react";
 import InputContext from "./InputContext";
 
 type InputGroupProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
     error?: string;
 };

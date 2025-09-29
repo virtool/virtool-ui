@@ -4,7 +4,6 @@ import { mockApiGetGroup, mockApiListGroups } from "@tests/api/groups";
 import { createFakeGroup } from "@tests/fake/groups";
 import { createFakePermissions } from "@tests/fake/permissions";
 import { renderWithRouter } from "@tests/setup";
-import React from "react";
 import { describe, expect, it } from "vitest";
 import Groups from "../Groups";
 

@@ -9,7 +9,7 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import SaveButton from "@base/SaveButton";
 import { User } from "@users/types";
-import React from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 import AdministratorRoleSelect from "./AdministratorRoleSelect";
@@ -52,7 +52,7 @@ export default function AdministratorForm({
         control,
     } = useForm<FormInputValues>();
 
-    const [userSearchTerm, setUserSearchTerm] = React.useState("");
+    const [userSearchTerm, setUserSearchTerm] = useState("");
 
     const { data: users } = useFindUsers(1, 25, userSearchTerm, false);
     const { data: roles } = useGetAdministratorRoles();

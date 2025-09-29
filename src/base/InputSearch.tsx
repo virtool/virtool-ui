@@ -1,4 +1,4 @@
-import React from "react";
+import { forwardRef, ReactNode } from "react";
 import Input from "./Input";
 import InputContainer from "./InputContainer";
 import InputIcon from "./InputIcon";
@@ -11,7 +11,7 @@ type InputHandle = {
 interface InputProps {
     "aria-label"?: string;
     autoFocus?: boolean;
-    children?: React.ReactNode;
+    children?: ReactNode;
     className?: string;
     disabled?: boolean;
     error?: string;
@@ -29,7 +29,7 @@ interface InputProps {
     onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-const InputSearch = React.forwardRef<InputHandle, InputProps>((props, ref) => (
+const InputSearch = forwardRef<InputHandle, InputProps>((props, ref) => (
     <InputContainer align="left" className="flex-grow">
         <Input {...props} ref={ref} />
         <InputIcon name="search" />

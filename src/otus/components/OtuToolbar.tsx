@@ -4,7 +4,7 @@ import LinkButton from "@base/LinkButton";
 import Toolbar from "@base/Toolbar";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { ReferenceRemotesFrom } from "@references/types";
-import React, { ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 
 type OtuToolbarProps = {
     /** Current search term used for filtering */

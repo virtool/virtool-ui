@@ -8,7 +8,7 @@ import ProgressCircle from "@base/ProgressCircle";
 import { Permission } from "@groups/types";
 import { JobState } from "@jobs/types";
 import { ReferenceMinimal } from "@references/types";
-import React from "react";
+import { ReactNode } from "react";
 
 type ReferenceItemProps = {
     reference: ReferenceMinimal;
@@ -27,7 +27,7 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
         Permission.create_ref,
     );
 
-    let end: React.ReactNode = null;
+    let end: ReactNode = null;
 
     if (task && !task.complete) {
         end = (

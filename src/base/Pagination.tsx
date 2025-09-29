@@ -1,6 +1,6 @@
 import { updateSearchParam, usePageParam } from "@app/hooks";
 import { map, max, min, range } from "lodash-es";
-import React, { ReactElement, useEffect } from "react";
+import { ReactElement, ReactNode, useEffect } from "react";
 import { useSearch } from "wouter";
 import PaginationContent from "./PaginationContent";
 import PaginationLink from "./PaginationLink";
@@ -23,7 +23,7 @@ function getPageRange(
 }
 
 type PaginationProps = {
-    children?: React.ReactNode;
+    children?: ReactNode;
     items: object[];
     renderRow?: (item: object) => ReactElement;
     storedPage: number;

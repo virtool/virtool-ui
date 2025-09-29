@@ -6,7 +6,6 @@ import Box from "@base/Box";
 import BoxTitle from "@base/BoxTitle";
 import Button from "@base/Button";
 import Icon from "@base/Icon";
-import React from "react";
 import NuvsBlastError from "./NuvsBlastError";
 import NuvsBlastPending from "./NuvsBlastPending";
 

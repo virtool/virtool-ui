@@ -1,6 +1,6 @@
 import { getBorder } from "@app/theme";
 import * as RadixAccordion from "@radix-ui/react-accordion";
-import React, { createRef, useEffect } from "react";
+import { createRef, ReactNode, useEffect } from "react";
 import styled from "styled-components";
 
 const StyledAccordionItem = styled(RadixAccordion.Item)`
@@ -27,7 +27,7 @@ function ComposedScrollingAccordionItem(props) {
 }
 
 type AccordionScrollingItemProps = {
-    children: React.ReactNode;
+    children: ReactNode;
 
     /** The identifying value associated with the item */
     value: string;

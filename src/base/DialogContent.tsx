@@ -1,9 +1,9 @@
 import { cn } from "@app/utils";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import React from "react";
+import { ReactNode } from "react";
 
 type DialogContentProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
     size?: "sm" | "lg";
 };

@@ -9,7 +9,6 @@ import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
 import { JobState } from "@jobs/types";
-import React from "react";
 import styled from "styled-components";
 import { useRemoveAnalysis } from "../queries";
 import { AnalysisMinimal } from "../types";

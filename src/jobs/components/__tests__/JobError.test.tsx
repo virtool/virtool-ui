@@ -1,7 +1,6 @@
 import JobError from "@jobs/components/JobError";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "@tests/setup";
-import React from "react";
 import { describe, expect, it } from "vitest";
 
 describe("<JobError />", () => {

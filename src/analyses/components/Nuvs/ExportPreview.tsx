@@ -1,7 +1,6 @@
 import { getBorder } from "@app/theme";
 import Table from "@base/Table";
 import { replace } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 
 const ExportPreviewCode = styled.div`

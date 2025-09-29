@@ -19,7 +19,7 @@ import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import { useCreateSample } from "@samples/queries";
 import { find, flatMap, toString } from "lodash-es";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import styled from "styled-components";
 import LibraryTypeSelector from "./LibraryTypeSelector";

@@ -8,7 +8,7 @@ import Nav from "@nav/components/Nav";
 import Sidebar from "@nav/components/Sidebar";
 import { useQueryClient } from "@tanstack/react-query";
 import { includes } from "lodash-es";
-import React, { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Redirect, Route, Switch } from "wouter";
 import WsConnection, {

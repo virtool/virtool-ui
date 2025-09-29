@@ -1,4 +1,4 @@
-import React, { useImperativeHandle } from "react";
+import { forwardRef, ReactNode, useImperativeHandle, useRef } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import styled from "styled-components";
 
@@ -14,7 +14,7 @@ type InputHandle = {
 interface InputProps {
     "aria-label"?: string;
     autoFocus?: boolean;
-    children?: React.ReactNode;
+    children?: ReactNode;
     className?: string;
     disabled?: boolean;
     error?: string;
@@ -33,7 +33,7 @@ interface InputProps {
     onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-const UnstyledInput = React.forwardRef<InputHandle, InputProps>(
+const UnstyledInput = forwardRef<InputHandle, InputProps>(
     (props: InputProps, ref) => {
         const {
             autoFocus = false,
@@ -56,7 +56,7 @@ const UnstyledInput = React.forwardRef<InputHandle, InputProps>(
 
         const ariaLabel = props["aria-label"];
 
-        const inputRef = React.useRef<HTMLInputElement>(null);
+        const inputRef = useRef<HTMLInputElement>(null);
 
         useImperativeHandle(ref, () => ({
             blur: () => {

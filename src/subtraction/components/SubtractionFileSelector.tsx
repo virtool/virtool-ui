@@ -10,7 +10,6 @@ import {
     InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
 import { flatMap } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 

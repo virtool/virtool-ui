@@ -1,9 +1,9 @@
 import { cn } from "@app/utils";
-import React from "react";
+import { ReactNode } from "react";
 import Link from "./Link";
 
 interface LinkButtonProps {
-    children?: React.ReactNode;
+    children?: ReactNode;
     className?: string;
     color?: "blue" | "gray" | "green" | "red";
     replace?: boolean;

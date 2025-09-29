@@ -4,7 +4,6 @@ import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeUsers, mockApiFindUsers } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
 import { forEach } from "lodash-es";
-import React from "react";
 import { describe, expect, it } from "vitest";
 import { ManageUsers } from "../ManageUsers";
 

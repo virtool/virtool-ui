@@ -4,7 +4,6 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import InitialIcon from "@base/InitialIcon";
 import { UserNested } from "@users/types";
 import { map } from "lodash-es";
-import React from "react";
 
 type MemberProps = {
     members: UserNested[];

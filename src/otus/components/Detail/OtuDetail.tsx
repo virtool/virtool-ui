@@ -10,7 +10,6 @@ import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useFetchOTU } from "@otus/queries";
 import { useFetchReference } from "@references/queries";
-import React from "react";
 import styled from "styled-components";
 import { Redirect, Route, Switch } from "wouter";
 import History from "./History/OtuHistory";

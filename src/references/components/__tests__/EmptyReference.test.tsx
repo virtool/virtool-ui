@@ -2,7 +2,6 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiCreateReference } from "@tests/fake/references";
 import { renderWithProviders } from "@tests/setup";
-import React from "react";
 import { describe, expect, it } from "vitest";
 import EmptyReference from "../EmptyReference";
 

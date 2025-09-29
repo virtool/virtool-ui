@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { map } from "lodash";
-import React, { useState } from "react";
+import { useState } from "react";
 import BoxGroupSearch from "../BoxGroupSearch";
 import BoxGroupSection from "../BoxGroupSection";
 import Button from "../Button";

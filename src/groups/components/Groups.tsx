@@ -6,7 +6,7 @@ import InputHeader from "@base/InputHeader";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import RemoveBanner from "@base/RemoveBanner";
 import { find, sortBy } from "lodash-es";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
     useFetchGroup,

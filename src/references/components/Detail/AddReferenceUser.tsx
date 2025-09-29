@@ -15,7 +15,7 @@ import { useAddReferenceMember } from "@references/queries";
 import { ReferenceUser } from "@references/types";
 import { useInfiniteFindUsers } from "@users/queries";
 import { filter, flatMap, includes, map } from "lodash-es";
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 const StyledAddUserItem = styled(SelectBoxGroupSection)`

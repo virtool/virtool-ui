@@ -7,7 +7,6 @@ import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { endsWith } from "lodash-es";
-import React from "react";
 import { useLocation } from "wouter";
 
 type ReferenceDetailHeaderProps = {

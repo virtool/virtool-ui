@@ -9,7 +9,6 @@ import InputSelect from "@base/InputSelect";
 import PseudoLabel from "@base/PseudoLabel";
 import SelectBox from "@base/SelectBox";
 import { includes, map } from "lodash-es";
-import React from "react";
 import styled from "styled-components";
 
 const rights = [

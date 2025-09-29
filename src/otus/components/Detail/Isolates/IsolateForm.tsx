@@ -5,7 +5,6 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
-import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { SourceType } from "./SourceType";

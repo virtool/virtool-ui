@@ -7,7 +7,6 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Contributors from "@indexes/components/Contributors";
 import { useFetchReference } from "@references/queries";
-import React from "react";
 import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";
 import RemoteReference from "./Remote";

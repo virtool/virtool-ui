@@ -1,7 +1,6 @@
 import { formatRoundedDuration } from "@app/utils";
 import Badge from "@base/Badge";
 import numbro from "numbro";
-import React from "react";
 import { UploadInProgress } from "../types";
 import { UploaderItem } from "./UploaderItem";
 

@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { UserItem } from "@users/components/UserItem";
 import { map } from "lodash-es";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import Pagination from "../Pagination";
 
 const queryClient = new QueryClient();

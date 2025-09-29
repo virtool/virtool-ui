@@ -4,7 +4,6 @@ import BoxGroup from "@base/BoxGroup";
 import PseudoLabel from "@base/PseudoLabel";
 import { Subtraction, SubtractionOption } from "@subtraction/types";
 import { intersectionWith, xor } from "lodash-es";
-import React from "react";
 import CreateAnalysisField from "./CreateAnalysisField";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 import { CreateAnalysisSelectorSearch } from "./CreateAnalysisSelectorSearch";

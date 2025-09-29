@@ -7,7 +7,6 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import Groups from "@groups/components/Groups";
 import { ManageUsers } from "@users/components/ManageUsers";
 import UserDetail from "@users/components/UserDetail";
-import React from "react";
 import { Redirect, Route, Switch } from "wouter";
 import { AdministratorRoleName } from "../types";
 import { hasSufficientAdminRole } from "../utils";

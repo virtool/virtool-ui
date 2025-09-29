@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
 import { useArgs } from "storybook/preview-api";
 import BoxGroup from "../BoxGroup";
 import SelectBoxGroupSection from "../SelectBoxGroupSection";

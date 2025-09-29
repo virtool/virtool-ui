@@ -7,7 +7,6 @@ import Pagination from "@base/Pagination";
 import { useListHmms } from "@hmm/queries";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
-import React from "react";
 import { useListAnalyses } from "../queries";
 import { AnalysisMinimal } from "../types";
 import AnalysisItem from "./AnalysisItem";

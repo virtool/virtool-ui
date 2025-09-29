@@ -1,6 +1,6 @@
 import { cn } from "@/app/utils";
 import { cva, VariantProps } from "class-variance-authority";
-import React from "react";
+import { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 
 const baseSampleLabelVariants = cva(
     "inline-flex items-center border rounded-md [&_i.fas]:mr-1 [&_i.fas]:text-[var(--user-color)]",
@@ -25,10 +25,10 @@ const baseSampleLabelVariants = cva(
 
 interface BaseSampleLabelProps
     extends VariantProps<typeof baseSampleLabelVariants> {
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
     color?: string;
-    as?: React.ElementType;
+    as?: ElementType;
 }
 
 /**
@@ -42,7 +42,7 @@ export function BaseSampleLabel({
     variant,
     as: Component = "span",
     ...props
-}: BaseSampleLabelProps & React.ComponentPropsWithoutRef<"span" | "button">) {
+}: BaseSampleLabelProps & ComponentPropsWithoutRef<"span" | "button">) {
     const formattedColor = color?.startsWith("#")
         ? color
         : color

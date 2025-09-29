@@ -1,7 +1,6 @@
 import { screen } from "@testing-library/react";
 import { renderWithRouter } from "@tests/setup";
 import { forEach } from "lodash-es";
-import React from "react";
 import { describe, expect, it } from "vitest";
 import JobArgs from "../JobArgs";
 

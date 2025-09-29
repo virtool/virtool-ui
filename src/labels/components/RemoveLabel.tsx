@@ -5,7 +5,7 @@ import DialogContent from "@base/DialogContent";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { useRemoveLabel } from "../queries";
 

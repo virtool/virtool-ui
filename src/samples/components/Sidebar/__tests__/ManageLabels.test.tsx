@@ -1,6 +1,5 @@
 import { screen, waitFor } from "@testing-library/react";
 import { renderWithRouter } from "@tests/setup";
-import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import ManageLabels from "../ManageLabels";
 

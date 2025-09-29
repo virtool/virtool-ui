@@ -10,7 +10,6 @@ import SubviewHeader from "@base/SubviewHeader";
 import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
 import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import { useFetchSample } from "@samples/queries";
-import React from "react";
 import styled from "styled-components";
 import { useGetAnalysis } from "../queries";
 import {

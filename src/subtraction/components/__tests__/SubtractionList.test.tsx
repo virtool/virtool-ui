@@ -7,7 +7,6 @@ import {
     mockApiGetSubtractions,
 } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
-import React from "react";
 import { describe, expect, it } from "vitest";
 import SubtractionList from "../SubtractionList";
 

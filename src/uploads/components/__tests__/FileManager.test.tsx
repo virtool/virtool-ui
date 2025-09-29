@@ -7,7 +7,6 @@ import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { renderWithRouter } from "@tests/setup";
 import { UploadType } from "@uploads/types";
 import { upload } from "@uploads/uploader";
-import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FileManager, FileManagerProps } from "../FileManager";
 

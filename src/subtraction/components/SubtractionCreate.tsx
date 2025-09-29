@@ -17,7 +17,6 @@ import SaveButton from "@base/SaveButton";
 import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import React from "react";
 import { Controller } from "react-hook-form";
 import { useCreateSubtraction } from "../queries";
 import { SubtractionFileSelector } from "./SubtractionFileSelector";

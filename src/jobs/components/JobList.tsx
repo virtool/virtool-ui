@@ -8,7 +8,6 @@ import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { map } from "lodash";
-import React from "react";
 import styled from "styled-components";
 import { useFindJobs } from "../queries";
 import { JobFilters } from "./Filters/JobFilters";

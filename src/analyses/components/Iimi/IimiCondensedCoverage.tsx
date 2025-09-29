@@ -1,6 +1,6 @@
 import { FormattedIimiIsolate } from "@analyses/types";
 import { map, sortBy, unzip } from "lodash-es";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { SummaryChart } from "../Charts/SummaryChart";
 
 /** A graph of maximum Iimi analysis sequence coverage */

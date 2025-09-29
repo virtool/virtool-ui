@@ -1,5 +1,4 @@
 import BoxGroupSection from "@base/BoxGroupSection";
-import React from "react";
 import { useExpanded } from "../hooks";
 import SequenceButtons from "./SequenceButtons";
 import SequenceTable from "./SequenceTable";

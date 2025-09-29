@@ -1,8 +1,8 @@
-import React, { forwardRef } from "react";
+import { forwardRef, ReactNode } from "react";
 import Input from "./Input";
 
 type InputSelectProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     id?: string;
     name?: string;
     value?: string | number;

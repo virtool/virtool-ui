@@ -1,5 +1,5 @@
 import Checkbox from "@base/Checkbox";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import styled from "styled-components";
 
 const descriptions = {

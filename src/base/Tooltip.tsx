@@ -1,6 +1,6 @@
 import { boxShadow } from "@app/theme";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import React from "react";
+import { ReactNode } from "react";
 import styled, { keyframes } from "styled-components";
 
 const slideUpAndFade = keyframes`
@@ -79,9 +79,9 @@ const TooltipContent = styled(TooltipPrimitive.Content)`
 `;
 
 type TooltipProps = {
-    children: React.ReactNode;
+    children: ReactNode;
     position?: "top" | "right" | "bottom" | "left";
-    tip: React.ReactNode;
+    tip: ReactNode;
 };
 
 export default function Tooltip({

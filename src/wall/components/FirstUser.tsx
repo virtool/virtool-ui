@@ -4,7 +4,6 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import { useCreateFirstUser } from "@users/queries";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { WallContainer } from "./WallContainer";
 import { WallTitle } from "./WallTitle";

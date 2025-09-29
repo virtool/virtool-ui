@@ -1,5 +1,4 @@
 import Icon from "@base/Icon";
-import React from "react";
 import { BaseSampleLabel } from "./BaseSampleLabel";
 
 type SampleMultiSelectLabelProps = {

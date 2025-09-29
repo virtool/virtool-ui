@@ -12,7 +12,7 @@ import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { forEach, map, reduce, replace } from "lodash-es";
-import React, { useState } from "react";
+import { useState } from "react";
 import NuvsExportPreview from "./NuvsExportPreview";
 
 function getBestHit(items) {

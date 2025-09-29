@@ -1,5 +1,4 @@
 import type { Meta } from "@storybook/react-vite";
-import React from "react";
 import JobItem from "../components/JobItem";
 import { JobState, workflows } from "../types";
 

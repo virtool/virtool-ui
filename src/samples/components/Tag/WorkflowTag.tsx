@@ -1,7 +1,6 @@
 import Icon from "@base/Icon";
 import Loader from "@base/Loader";
 import { WorkflowState } from "@samples/types";
-import React from "react";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import { WorkflowLabelIcon } from "./WorkflowLabelIcon";
 

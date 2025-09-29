@@ -7,7 +7,6 @@ import { getFontSize, getFontWeight } from "@app/theme";
 import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
 import { User } from "@users/types";
-import React from "react";
 import styled from "styled-components";
 import AdministratorRoleSelect from "./AdministratorRoleSelect";
 

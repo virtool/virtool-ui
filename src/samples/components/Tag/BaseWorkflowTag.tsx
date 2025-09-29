@@ -1,9 +1,9 @@
 import { cn } from "@/app/utils";
-import React from "react";
+import { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 
-interface BaseWorkflowTagProps<T extends React.ElementType = "div"> {
+interface BaseWorkflowTagProps<T extends ElementType = "div"> {
     as?: T;
-    children: React.ReactNode;
+    children: ReactNode;
     className?: string;
 }
 
@@ -12,13 +12,13 @@ interface BaseWorkflowTagProps<T extends React.ElementType = "div"> {
  *
  * @returns A base WorkflowTag component.
  */
-export function BaseWorkflowTag<T extends React.ElementType = "div">({
+export function BaseWorkflowTag<T extends ElementType = "div">({
     as,
     children,
     className,
     ...props
 }: BaseWorkflowTagProps<T> &
-    Omit<React.ComponentPropsWithoutRef<T>, keyof BaseWorkflowTagProps<T>>) {
+    Omit<ComponentPropsWithoutRef<T>, keyof BaseWorkflowTagProps<T>>) {
     const Component = as || "div";
 
     return (

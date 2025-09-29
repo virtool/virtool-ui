@@ -6,7 +6,6 @@ import { FormattedNuvsAnalysis } from "@analyses/types";
 import { useUrlSearchParam } from "@app/hooks";
 import Key from "@base/Key";
 import { findIndex } from "lodash-es";
-import React from "react";
 import { FixedSizeList } from "react-window";
 
 type NuVsListProps = {

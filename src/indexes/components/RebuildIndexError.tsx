@@ -1,5 +1,4 @@
 import Alert from "@base/Alert";
-import React from "react";
 
 type RebuildIndexErrorProps = {
     error?: string;

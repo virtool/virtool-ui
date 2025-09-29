@@ -1,6 +1,5 @@
 import { FileManager } from "@/uploads/components/FileManager";
 import { UploadType } from "@/uploads/types";
-import React from "react";
 
 /**
  * Displays a list of subtraction uploads with functionality to upload/delete uploads
