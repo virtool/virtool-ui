@@ -51,7 +51,7 @@
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@faker-js/faker": "^9.6.0",
-    "@sentry/vite-plugin": "^3.2.1",
+    "@sentry/vite-plugin": "^4.3.0",
     "@storybook/addon-docs": "^9.1.10",
     "@storybook/addon-links": "^9.1.10",
     "@storybook/react-vite": "^9.1.10",
