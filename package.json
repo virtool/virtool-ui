@@ -23,7 +23,7 @@
     "d3": "^7.9.0",
     "date-fns": "^3.6.0",
     "downshift": "^7.6.2",
-    "express": "^4.21.0",
+    "express": "^5.1.0",
     "fuse.js": "^7.1.0",
     "history": "^4.10.1",
     "lodash-es": "^4.17.21",
