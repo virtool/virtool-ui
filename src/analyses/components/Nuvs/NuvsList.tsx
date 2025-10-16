@@ -19,8 +19,9 @@ type NuVsListProps = {
 export default function NuvsList({ detail }: NuVsListProps) {
     const sortedHits = useSortAndFilterNuVsHits(detail);
 
+    const firstHitId = sortedHits[0]?.id ? String(sortedHits[0].id) : undefined;
     const { value: activeHit, setValue: setActiveHit } =
-        useUrlSearchParam<string>("activeHit");
+        useUrlSearchParam<string>("activeHit", firstHitId);
 
     let nextId: string;
     let nextIndex: number;
@@ -28,7 +29,7 @@ export default function NuvsList({ detail }: NuVsListProps) {
     let previousIndex: number;
 
     if (activeHit) {
-        const windowIndex = findIndex(sortedHits, { id: activeHit });
+        const windowIndex = findIndex(sortedHits, { id: Number(activeHit) });
 
         if (windowIndex > 0) {
             previousIndex = windowIndex - 1;

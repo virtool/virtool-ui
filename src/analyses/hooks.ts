@@ -71,19 +71,13 @@ export function useSortAndFilterNuVsHits(detail) {
 }
 
 export function useGetActiveHit(matches) {
-    const { value: activeHit, setValue: setActiveHit } =
-        useUrlSearchParam<string>("activeHit");
+    const { value: activeHit } = useUrlSearchParam<string>("activeHit");
 
     if (activeHit !== null) {
-        const hit = find(matches, { id: Number(activeHit) });
-
-        if (hit) {
-            return hit;
-        }
+        return find(matches, { id: Number(activeHit) }) || null;
     }
 
-    setActiveHit(matches[0].id);
-    return matches[0] || null;
+    return null;
 }
 
 type UseCompatibleIndexesResult = {
