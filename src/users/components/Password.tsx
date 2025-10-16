@@ -78,6 +78,7 @@ export default function Password({
                                 aria-label="password"
                                 id="password"
                                 type="password"
+                                autoComplete="off"
                                 {...register("password", {
                                     required:
                                         "Password does not meet minimum length requirement (8)",

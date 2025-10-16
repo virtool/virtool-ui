@@ -6,6 +6,7 @@ import InputIconButton from "./InputIconButton";
 type InputPasswordProps = {
     id: string;
     name: string;
+    autoComplete?: string;
 };
 
 const InputPassword = forwardRef<HTMLInputElement, InputPasswordProps>(

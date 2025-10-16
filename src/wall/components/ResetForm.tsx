@@ -37,6 +37,7 @@ export default function ResetForm({ resetCode }: ResetFormProps) {
                     <InputSimple
                         id="password"
                         type="password"
+                        autoComplete="new-password"
                         {...register("password")}
                     />
                     {isError && (

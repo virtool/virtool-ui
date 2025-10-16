@@ -42,6 +42,7 @@ export default function FirstUser() {
                     <InputSimple
                         aria-label="username"
                         id="username"
+                        autoComplete="username"
                         {...register("username", { required: true })}
                     />
                 </InputGroup>
@@ -51,6 +52,7 @@ export default function FirstUser() {
                         aria-label="password"
                         id="password"
                         type="password"
+                        autoComplete="new-password"
                         {...register("password", {
                             required:
                                 "Password does not meet minimum length requirement (8)",

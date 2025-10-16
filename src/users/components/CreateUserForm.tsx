@@ -51,7 +51,7 @@ export function CreateUserForm({
                 <InputLabel htmlFor="handle">Username</InputLabel>
                 <InputSimple
                     id="handle"
-                    autoComplete="username"
+                    autoComplete="off"
                     {...register("handle", {
                         required: "Please specify a username",
                     })}
@@ -63,7 +63,7 @@ export function CreateUserForm({
                 <InputSimple
                     id="password"
                     type="password"
-                    autoComplete="new-password"
+                    autoComplete="off"
                     {...register("password", {
                         required:
                             "Password does not meet minimum length requirement (8)",

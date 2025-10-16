@@ -54,6 +54,7 @@ export default function AccountPassword({
                         <InputContainer>
                             <InputPassword
                                 id="oldPassword"
+                                autoComplete="current-password"
                                 {...register("oldPassword", {
                                     required:
                                         "Please provide your old password",
@@ -78,6 +79,7 @@ export default function AccountPassword({
                         <InputContainer>
                             <InputPassword
                                 id="newPassword"
+                                autoComplete="new-password"
                                 {...register("newPassword", {
                                     required: "Please provide a new password",
                                     minLength: {
