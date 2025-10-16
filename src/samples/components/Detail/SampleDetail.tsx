@@ -15,7 +15,7 @@ import { useFetchSample } from "@samples/queries";
 import { Redirect, Route, Switch, useLocation } from "wouter";
 import SampleDetailFiles from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
-import RemoveSample from "./RemoveSample";
+import DeleteSample from "./DeleteSample";
 import General from "./SampleDetailGeneral";
 import Rights from "./SampleRights";
 
@@ -28,7 +28,6 @@ export default function SampleDetail() {
     const { data, isPending, isError } = useFetchSample(sampleId);
     const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
     const { setOpen: setOpenEditSample } = useDialogParam("openEditSample");
-    const { setOpen: setOpenRemoveSample } = useDialogParam("openRemoveSample");
 
     if (isError) {
         return <NotFound />;
@@ -36,38 +35,6 @@ export default function SampleDetail() {
 
     if (isPending) {
         return <LoadingPlaceholder />;
-    }
-
-    let editIcon;
-    let removeIcon;
-    let rightsTabLink;
-
-    if (canModify) {
-        if (location.endsWith("/general")) {
-            editIcon = (
-                <IconButton
-                    color="grayDark"
-                    name="pen"
-                    tip="modify"
-                    onClick={() => setOpenEditSample(true)}
-                />
-            );
-
-            removeIcon = (
-                <IconButton
-                    color="red"
-                    name="trash"
-                    tip="remove"
-                    onClick={() => setOpenRemoveSample(true)}
-                />
-            );
-        }
-
-        rightsTabLink = (
-            <TabsLink to={`/samples/${sampleId}/rights`}>
-                <Icon name="key" />
-            </TabsLink>
-        );
     }
 
     const { created_at, name, user } = data;
@@ -78,8 +45,22 @@ export default function SampleDetail() {
                 <ViewHeaderTitle>
                     {name}
                     <ViewHeaderIcons>
-                        {editIcon}
-                        {removeIcon}
+                        {canModify && location.endsWith("/general") && (
+                            <>
+                                <IconButton
+                                    color="grayDark"
+                                    name="pen"
+                                    tip="modify"
+                                    onClick={() => setOpenEditSample(true)}
+                                />
+                                <DeleteSample
+                                    id={sampleId}
+                                    name={data.name}
+                                    ready={data.ready}
+                                    job={data.job}
+                                />
+                            </>
+                        )}
                     </ViewHeaderIcons>
                 </ViewHeaderTitle>
                 <ViewHeaderAttribution time={created_at} user={user.handle} />
@@ -98,7 +79,11 @@ export default function SampleDetail() {
                         <TabsLink to={`/samples/${sampleId}/analyses`}>
                             Analyses
                         </TabsLink>
-                        {rightsTabLink}
+                        {canModify && (
+                            <TabsLink to={`/samples/${sampleId}/rights`}>
+                                <Icon name="key" />
+                            </TabsLink>
+                        )}
                     </>
                 )}
             </Tabs>
@@ -122,8 +107,6 @@ export default function SampleDetail() {
                     )}
                 />
             </Switch>
-
-            <RemoveSample id={sampleId} name={name} />
         </>
     );
 }
