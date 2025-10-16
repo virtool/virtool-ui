@@ -20,10 +20,12 @@ export default function NuvsItem({ hit }: NuVsItemProps) {
 
     const { annotatedOrfCount, e, id, index, sequence } = hit;
 
+    const isActive = activeHit !== null && Number(activeHit) === id;
+
     return (
         <Box
             className={cn(
-                { "bg-slate-100": activeHit.toString() === hit.id.toString() },
+                { "bg-slate-100": isActive },
                 "border-none",
                 "nuvs-item",
                 "rounded-none",
