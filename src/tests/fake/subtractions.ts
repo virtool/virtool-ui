@@ -22,7 +22,7 @@ export function createFakeSubtractionFile(): SubtractionFile {
     return {
         download_url: faker.internet.url(),
         id: faker.number.int(),
-        name: `${faker.word.noun()}s.fa`,
+        name: `${faker.word.noun({ strategy: "any-length" })}s.fa`,
         size: faker.number.int({ min: 20000 }),
         subtraction: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         type: "fasta",
@@ -42,7 +42,7 @@ export function createFakeSubtractionNested(
 ) {
     const defaultSubtractionNested = {
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        name: faker.word.noun(),
+        name: faker.word.noun({ strategy: "any-length" }),
     };
 
     return merge(defaultSubtractionNested, props);
@@ -70,10 +70,10 @@ export function createFakeSubtractionMinimal(
         created_at: faker.date.past().toISOString(),
         file: {
             id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-            name: `${faker.word.noun()}s.fa`,
+            name: `${faker.word.noun({ strategy: "any-length" })}s.fa`,
         },
         job: null,
-        nickname: faker.word.noun(),
+        nickname: faker.word.noun({ strategy: "any-length" }),
         ready: true,
         user: createFakeUserNested(),
     };

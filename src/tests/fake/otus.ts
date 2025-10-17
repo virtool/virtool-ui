@@ -41,13 +41,13 @@ type CreateFakeOTUSequenceProps = {
  */
 export function createFakeOTUSequence(overrides?: CreateFakeOTUSequenceProps) {
     const sequence = {
-        accession: faker.word.noun(),
-        definition: faker.word.noun(),
-        host: faker.word.noun(),
+        accession: faker.word.noun({ strategy: "any-length" }),
+        definition: faker.word.noun({ strategy: "any-length" }),
+        host: faker.word.noun({ strategy: "any-length" }),
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         remote: null,
         segment: null,
-        sequence: faker.word.noun(),
+        sequence: faker.word.noun({ strategy: "any-length" }),
         target: null,
     };
 
@@ -62,8 +62,8 @@ export function createFakeOTUIsolate(): OtuIsolate {
         default: false,
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         sequences: [createFakeOTUSequence()],
-        source_name: faker.word.noun(),
-        source_type: faker.word.noun(),
+        source_name: faker.word.noun({ strategy: "any-length" }),
+        source_type: faker.word.noun({ strategy: "any-length" }),
     };
 }
 
@@ -73,7 +73,7 @@ export function createFakeOTUIsolate(): OtuIsolate {
 export function createFakeOtuSegment(): OtuSegment {
     return {
         molecule: null,
-        name: faker.word.noun(),
+        name: faker.word.noun({ strategy: "any-length" }),
         required: false,
     };
 }
@@ -93,7 +93,7 @@ export function createFakeOTUMinimal(
     const defaultOTUMinimal = {
         abbreviation: `${faker.string.fromCharacters("AHJKYUIQWE", { min: 2, max: 4 })}V`,
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        name: faker.word.noun(),
+        name: faker.word.noun({ strategy: "any-length" }),
         reference: createFakeReferenceNested(),
         verified: true,
         version: faker.number.int({ max: 10 }),

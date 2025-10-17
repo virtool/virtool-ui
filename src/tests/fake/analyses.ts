@@ -96,7 +96,7 @@ export function createFakeFormattedNuVsHit(overrides?: FakeFormattedNuVsHit) {
         families: [],
         id: faker.number.int(),
         index: faker.number.int(),
-        name: [faker.word.noun()],
+        name: [faker.word.noun({ strategy: "any-length" })],
         orfs: [
             {
                 frame: faker.number.int(),
@@ -110,13 +110,13 @@ export function createFakeFormattedNuVsHit(overrides?: FakeFormattedNuVsHit) {
                         full_bias: faker.number.float(),
                         full_e: faker.number.float(),
                         full_score: faker.number.float(),
-                        hit: faker.word.noun(),
-                        names: [faker.word.noun()],
+                        hit: faker.word.noun({ strategy: "any-length" }),
+                        names: [faker.word.noun({ strategy: "any-length" })],
                     },
                 ],
                 index: faker.number.int(),
                 pos: [faker.number.int(), faker.number.int()],
-                pro: faker.word.noun(),
+                pro: faker.word.noun({ strategy: "any-length" }),
                 strand: faker.number.int({ min: 1, max: 2 }),
             },
         ],
@@ -220,7 +220,7 @@ export function createFakeIimiHit(): IimiHit {
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         abbreviation: faker.string.alpha({ casing: "upper", length: 3 }),
         isolates: [createFakeIimiIsolate()],
-        name: faker.word.noun(),
+        name: faker.word.noun({ strategy: "any-length" }),
         result: faker.datatype.boolean(),
     };
 }
@@ -232,7 +232,7 @@ export function createFakeIimiIsolate(): IimiIsolate {
     return {
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         sequences: [createFakeIimiSequence()],
-        source_name: faker.word.noun(),
+        source_name: faker.word.noun({ strategy: "any-length" }),
         source_type: faker.helpers.arrayElement([
             "isolate",
             "strain",

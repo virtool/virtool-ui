@@ -64,10 +64,10 @@ type CreateFakeIndexFile = {
 
 export function createFakeIndexFile(props?: CreateFakeIndexFile): IndexFile {
     const defaultIndexFile = {
-        download_url: `/testUrl/${faker.word.noun()}`,
+        download_url: `/testUrl/${faker.word.noun({ strategy: "any-length" })}`,
         id: faker.number.int(),
         index: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        name: faker.word.noun(),
+        name: faker.word.noun({ strategy: "any-length" }),
         size: faker.number.int({ min: 20000 }),
         type: "fasta",
     };

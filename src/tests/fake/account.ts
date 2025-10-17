@@ -58,7 +58,7 @@ export function createFakeApiKey(props?: CreateFakeApiKeysArgs): APIKeyMinimal {
             created_at: faker.date.past().toISOString(),
             groups: [createFakeGroupMinimal()],
             id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-            name: faker.word.noun(),
+            name: faker.word.noun({ strategy: "any-length" }),
             permissions: createFakePermissions({
                 cancel_job: true,
                 create_ref: true,
