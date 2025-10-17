@@ -27,7 +27,10 @@ export function getLibraryTypeDisplayName(libraryType: LibraryType) {
 /**
  * Check if a sample can be deleted based on its state
  */
-export function checkCanDeleteSample(ready: boolean, job?: JobMinimal): boolean {
+export function checkCanDeleteSample(
+    ready: boolean,
+    job?: JobMinimal,
+): boolean {
     if (ready) {
         return true;
     }

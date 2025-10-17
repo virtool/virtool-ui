@@ -7,9 +7,9 @@ import DialogTitle from "@base/DialogTitle";
 import IconButton from "@base/IconButton";
 import { JobMinimal } from "@jobs/types";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import { useState } from "react";
 import { useRemoveSample } from "@samples/queries";
 import { checkCanDeleteSample } from "@samples/utils";
+import { useState } from "react";
 
 type DeleteSampleProps = {
     /** The id of the sample being deleted */
@@ -25,7 +25,12 @@ type DeleteSampleProps = {
 /**
  * Displays a dialog for deleting a sample
  */
-export default function DeleteSample({ id, name, ready, job }: DeleteSampleProps) {
+export default function DeleteSample({
+    id,
+    name,
+    ready,
+    job,
+}: DeleteSampleProps) {
     const [open, setOpen] = useState(false);
     const mutation = useRemoveSample();
 

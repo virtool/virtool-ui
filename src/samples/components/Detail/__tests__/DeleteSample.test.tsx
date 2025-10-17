@@ -32,7 +32,11 @@ describe("<DeleteSample />", () => {
 
     it("does not render when sample has running job", () => {
         renderWithRouter(
-            <DeleteSample {...props} ready={false} job={{ state: "running" }} />,
+            <DeleteSample
+                {...props}
+                ready={false}
+                job={{ state: "running" }}
+            />,
         );
 
         expect(screen.queryByRole("button")).toBeNull();
