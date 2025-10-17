@@ -11,7 +11,7 @@ import {
 import { createFakePermissions } from "@tests/fake/permissions";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import ApiKeys from "../ApiKeys";
 
 describe("<ApiKeys />", () => {

@@ -14,7 +14,7 @@ import {
 } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("<OTUsList />", () => {
     let reference;
