@@ -13,6 +13,7 @@ import {
 } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
+import { describe, expect, it } from "vitest";
 import ManageAdministrators from "../AdministratorList";
 
 describe("<Administrators>", () => {

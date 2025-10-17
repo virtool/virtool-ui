@@ -14,7 +14,7 @@ import { renderWithRouter } from "@tests/setup";
 import { User } from "@users/types";
 import { times } from "lodash-es";
 import nock from "nock";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 function formatUserPath(user: User) {
     return `/administration/users/${user.id}`;
