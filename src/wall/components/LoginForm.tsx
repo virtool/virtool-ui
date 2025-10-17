@@ -44,6 +44,7 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
                     <InputLabel htmlFor="handle">Username</InputLabel>
                     <InputSimple
                         id="handle"
+                        autoComplete="username"
                         {...register("handle", { required: true })}
                         autoFocus
                     />
@@ -53,6 +54,7 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
                     <InputSimple
                         id="password"
                         type="password"
+                        autoComplete="current-password"
                         {...register("password", { required: true })}
                     />
                 </InputGroup>

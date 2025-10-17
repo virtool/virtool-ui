@@ -1,5 +1,4 @@
 import { byteSize } from "@app/utils";
-import "@testing-library/jest-dom/extend-expect";
 import { renderWithProviders } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 import {

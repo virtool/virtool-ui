@@ -7,7 +7,7 @@ import {
 } from "@tests/fake/administrator";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import SampleSettings from "../SampleSettings";
 
 describe("<SampleSettings />", () => {

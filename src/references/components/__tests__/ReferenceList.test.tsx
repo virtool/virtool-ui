@@ -9,7 +9,7 @@ import {
 } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import ReferenceList from "../ReferenceList";
 
 describe("<ReferenceList />", () => {

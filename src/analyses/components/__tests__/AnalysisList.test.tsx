@@ -11,7 +11,7 @@ import { createFakeHMMSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import Analyses from "../Analyses";
 
 describe("<AnalysesList />", () => {
