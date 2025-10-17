@@ -46,7 +46,7 @@ type CreateFakeSettings = {
  */
 export function createFakeSettings(overrides?: CreateFakeSettings): Settings {
     const defaultSettings = {
-        default_source_types: [faker.word.noun()],
+        default_source_types: [faker.word.noun({ strategy: "any-length" })],
         enable_api: faker.datatype.boolean(),
         enable_sentry: faker.datatype.boolean(),
         hmm_slug: "virtool/virtool-hmm",

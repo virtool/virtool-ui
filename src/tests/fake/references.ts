@@ -17,7 +17,7 @@ export function createFakeReferenceTarget(): ReferenceTarget {
     return {
         description: faker.lorem.lines(1),
         length: faker.number.int(),
-        name: faker.word.noun(),
+        name: faker.word.noun({ strategy: "any-length" }),
         required: true,
     };
 }
@@ -36,7 +36,7 @@ export function createFakeReferenceNested(
     return {
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         data_type: "genome",
-        name: faker.word.noun(),
+        name: faker.word.noun({ strategy: "any-length" }),
         ...params,
     };
 }
@@ -57,14 +57,14 @@ export function createFakeReferenceMinimal(
         ...createFakeReferenceNested(params),
         cloned_from: {
             id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-            name: faker.word.noun(),
+            name: faker.word.noun({ strategy: "any-length" }),
         },
         created_at: faker.date.past().toISOString(),
         imported_from: null,
         installed: null,
-        internal_control: faker.word.noun(),
+        internal_control: faker.word.noun({ strategy: "any-length" }),
         latest_build: null,
-        organism: faker.word.noun(),
+        organism: faker.word.noun({ strategy: "any-length" }),
         otu_count: faker.number.int(),
         release: null,
         remotes_from: null,

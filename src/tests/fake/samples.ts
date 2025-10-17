@@ -37,10 +37,10 @@ export function createFakeSampleMinimal(
 ): SampleMinimal {
     const defaultSampleMinimal = {
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        name: `${faker.word.noun()} ${faker.number.int()}`,
+        name: `${faker.word.noun({ strategy: "any-length" })} ${faker.number.int()}`,
         created_at: faker.date.past().toISOString(),
-        host: faker.word.noun(),
-        isolate: faker.word.noun(),
+        host: faker.word.noun({ strategy: "any-length" }),
+        isolate: faker.word.noun({ strategy: "any-length" }),
         job: createFakeJobMinimal({ workflow: workflows.create_sample }),
         labels: [createFakeLabelNested()],
         library_type: LibraryType.normal,
@@ -69,11 +69,11 @@ export function createFakeSampleRead(
     overrides?: CreateFakeSampleReadProps,
 ): Read {
     const defaultRead = {
-        download_url: faker.word.noun(),
+        download_url: faker.word.noun({ strategy: "any-length" }),
         id: faker.number.int(),
-        name: faker.word.noun(),
-        name_on_disk: faker.word.noun(),
-        sample: faker.word.noun(),
+        name: faker.word.noun({ strategy: "any-length" }),
+        name_on_disk: faker.word.noun({ strategy: "any-length" }),
+        sample: faker.word.noun({ strategy: "any-length" }),
         size: faker.number.int(),
         upload: null,
         uploaded_at: faker.date.past().toISOString(),

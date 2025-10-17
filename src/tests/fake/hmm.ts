@@ -15,7 +15,7 @@ export function createFakeHmmMinimal() {
             Papillomaviridae: faker.number.int(),
         },
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        names: [faker.name.lastName()],
+        names: [faker.person.lastName()],
     };
 }
 
@@ -25,9 +25,9 @@ export function createFakeHmmMinimal() {
 export function createFakeHmm() {
     function entries() {
         return {
-            accession: `${faker.word.noun()}.1`,
+            accession: `${faker.word.noun({ strategy: "any-length" })}.1`,
             gi: faker.number.int({ min: 10000, max: 100000 }).toString(),
-            name: faker.word.noun(),
+            name: faker.word.noun({ strategy: "any-length" }),
             organism: faker.animal.type(),
         };
     }
