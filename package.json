@@ -90,6 +90,7 @@
   "scripts": {
     "build": "vite build",
     "build-storybook": "storybook build",
+    "check-version": "npx tsx src/server/check-version.ts",
     "develop": "vite serve",
     "eslint": "eslint src",
     "prettier": "prettier -l .",

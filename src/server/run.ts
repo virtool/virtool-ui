@@ -25,7 +25,7 @@ async function main() {
         }),
     );
 
-    app.get("*", createDefaultRouteHandler(options));
+    app.get("/:path*", createDefaultRouteHandler(options));
 
     app.listen(options.port, options.host, () => {
         logger.log("info", "listening for requests", {
