@@ -14,29 +14,3 @@ updates:
       commit-message:
           prefix: "chore"
           include: "scope"
-      groups:
-          radix-ui:
-              patterns:
-                  - "@radix-ui/*"
-          types:
-              patterns:
-                  - "@types/*"
-          testing:
-              patterns:
-                  - "@testing-library/*"
-                  - "vitest"
-                  - "jsdom"
-          storybook:
-              patterns:
-                  - "@storybook/*"
-                  - "storybook"
-          eslint:
-              patterns:
-                  - "eslint*"
-                  - "@typescript-eslint/*"
-          dev-tools:
-              patterns:
-                  - "prettier*"
-                  - "typescript"
-                  - "vite*"
-                  - "@vitejs/*"
