@@ -25,7 +25,9 @@ async function main() {
         }),
     );
 
-    app.get("/:path*", createDefaultRouteHandler(options));
+    const defaultHandler = createDefaultRouteHandler(options);
+    app.get("/", defaultHandler);
+    app.get("/*splat", defaultHandler);
 
     app.listen(options.port, options.host, () => {
         logger.log("info", "listening for requests", {
