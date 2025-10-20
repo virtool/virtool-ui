@@ -74,7 +74,7 @@
     "eslint-plugin-react-hooks": "^6.1.1",
     "eslint-plugin-storybook": "9.1.10",
     "globals": "^16.4.0",
-    "jsdom": "^27.0.0",
+    "jsdom": "^27.0.1",
     "nock": "^13.5.5",
     "prettier": "^3.5.2",
     "prettier-plugin-organize-imports": "^4.1.0",
