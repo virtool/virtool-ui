@@ -1,4 +1,3 @@
-import { IPublicClientApplication } from "@azure/msal-browser";
 import { QueryClientConfig } from "@tanstack/react-query";
 
 export type VirtoolState = {
@@ -15,7 +14,6 @@ export type WebSocket = {
 declare global {
     interface Window {
         captureException?: (error: Error) => void;
-        msalInstance: IPublicClientApplication;
         virtool: VirtoolState;
         ws: WebSocket;
     }
