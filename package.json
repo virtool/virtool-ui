@@ -75,7 +75,7 @@
     "jsdom": "^27.0.1",
     "nock": "^13.5.5",
     "prettier": "^3.5.2",
-    "prettier-plugin-organize-imports": "^4.1.0",
+    "prettier-plugin-organize-imports": "^4.3.0",
     "react-test-renderer": "^18.3.1",
     "storybook": "^9.1.2",
     "tailwindcss": "^4.1.14",
