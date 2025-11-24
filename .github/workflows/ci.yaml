@@ -23,7 +23,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v6
             - name: Build and Push
-              uses: docker/build-push-action@v5
+              uses: docker/build-push-action@v6
               with:
                   target: dist
               env:
@@ -151,7 +151,7 @@ jobs:
                   context: git
                   images: ${{ env.REGISTRY }}/virtool/ui
             - name: Build & Push
-              uses: docker/build-push-action@v5
+              uses: docker/build-push-action@v6
               with:
                   context: .
                   push: true
