@@ -21,7 +21,7 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
             - name: Build and Push
               uses: docker/build-push-action@v5
               with:
@@ -34,7 +34,7 @@ jobs:
         if: github.event_name == 'pull_request'
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                   fetch-depth: 0
             - name: Lint
@@ -44,7 +44,7 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
             - name: Setup NodeJS
               uses: actions/setup-node@v6
               with:
@@ -59,7 +59,7 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
             - name: Setup NodeJS
               uses: actions/setup-node@v6
               with:
@@ -74,7 +74,7 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
             - name: Setup NodeJS
               uses: actions/setup-node@v6
               with:
@@ -89,7 +89,7 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
             - name: Setup NodeJS
               uses: actions/setup-node@v6
               with:
@@ -110,7 +110,7 @@ jobs:
             contents: write
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
             - name: Setup NodeJS
               uses: actions/setup-node@v6
               with:
@@ -133,7 +133,7 @@ jobs:
             packages: write
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
               with:
                   ref: ${{ needs.release.outputs.git-tag }}
             - name: Write VERSION file
