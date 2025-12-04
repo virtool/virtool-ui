@@ -24,7 +24,7 @@ import { SubtractionFileSelector } from "./SubtractionFileSelector";
 type FormValues = {
     name: string;
     nickname: string;
-    uploadId: string[];
+    uploadId: number[];
 };
 
 /**

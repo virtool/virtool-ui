@@ -37,7 +37,7 @@ const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
  * @param uploads - all available read uploads
  * @returns The filename without its extension
  */
-function getFileNameFromId(id: string, uploads: Upload[]): string {
+function getFileNameFromId(id: number, uploads: Upload[]): string {
     const file = find(uploads, (file) => file.id === id);
     return file ? file.name_on_disk.match(extensionRegex)[1] : "";
 }
@@ -97,7 +97,7 @@ type FormValues = {
     host: string;
     locale: string;
     libraryType: string;
-    readFiles: string[];
+    readFiles: number[];
     group: string;
     sidebar: { labels: number[]; subtractionIds: string[] };
 };
@@ -153,7 +153,7 @@ export default function CreateSample() {
 
     const reads = flatMap(readsResponse.pages, (page) => page.items);
 
-    function autofill(selected: string[]) {
+    function autofill(selected: number[]) {
         const fileName = getFileNameFromId(selected[0], reads);
         if (fileName) {
             setValue("name", fileName);

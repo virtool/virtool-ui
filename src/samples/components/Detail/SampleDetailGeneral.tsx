@@ -1,3 +1,4 @@
+import { JobMinimal } from "@/jobs/types";
 import { usePathParams } from "@app/hooks";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
@@ -10,26 +11,15 @@ import JobItem from "@jobs/components/JobItem";
 import { useFetchSample } from "@samples/queries";
 import { getLibraryTypeDisplayName } from "@samples/utils";
 import numbro from "numbro";
-import styled from "styled-components";
 import EditSample from "../EditSample";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";
 import Sidebar from "./Sidebar";
-
-const StyledSampleDetailGeneral = styled.div`
-    align-items: stretch;
-    display: flex;
-
-    th {
-        width: 220px;
-    }
-`;
 
 /**
  * The general view in sample details
  */
 export default function SampleDetailGeneral() {
     const { sampleId } = usePathParams<{ sampleId: string }>();
-
     const { data, isPending } = useFetchSample(sampleId);
 
     if (isPending) {
@@ -38,17 +28,19 @@ export default function SampleDetailGeneral() {
 
     const { quality } = data;
 
+    const job = data?.job ? JobMinimal.parse(data.job) : undefined;
+
     return (
-        <StyledSampleDetailGeneral>
+        <div className="flex items-stretch">
             <ContainerNarrow>
                 {!data.ready && (
                     <BoxGroup>
                         <JobItem
                             id={data.job.id}
-                            workflow={data.job.workflow}
-                            state={data.job?.state}
-                            progress={data.job?.progress}
-                            created_at={data.created_at}
+                            workflow={job?.workflow}
+                            state={job?.state}
+                            progress={job?.progress}
+                            createdAt={job?.createdAt}
                             user={data.user}
                         />
                     </BoxGroup>
@@ -147,6 +139,6 @@ export default function SampleDetailGeneral() {
             </ContainerSide>
 
             <EditSample sample={data} />
-        </StyledSampleDetailGeneral>
+        </div>
     );
 }

@@ -1,6 +1,5 @@
 import { useCompatibleIndexes, useSubtractionOptions } from "@analyses/hooks";
 import { useCreateAnalysis } from "@analyses/queries";
-import { Workflows } from "@analyses/types";
 import Button from "@base/Button";
 import { Controller, useForm } from "react-hook-form";
 import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
@@ -67,7 +66,7 @@ export default function CreatePathoscope({
                 refId,
                 sampleId,
                 subtractionIds,
-                workflow: Workflows.pathoscope_bowtie,
+                workflow: "pathoscope_bowtie",
             }),
         );
     }

@@ -18,7 +18,7 @@ type UserGroupsType = {
     memberGroups: GroupMinimal[];
 
     /** The unique user id */
-    userId: string;
+    userId: number;
 };
 
 /**

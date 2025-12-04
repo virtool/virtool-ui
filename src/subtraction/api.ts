@@ -16,7 +16,7 @@ import {
 export function createSubtraction(
     name: string,
     nickname: string,
-    uploadId: string,
+    uploadId: number,
 ): Promise<Subtraction> {
     return apiClient
         .post("/subtractions")

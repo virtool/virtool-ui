@@ -6,7 +6,6 @@ import IconButton from "@base/IconButton";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import { Permission } from "@groups/types";
-import { JobState } from "@jobs/types";
 import { ReferenceMinimal } from "@references/types";
 import { ReactNode } from "react";
 
@@ -33,7 +32,7 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
         end = (
             <ProgressCircle
                 progress={task.progress || 0}
-                state={task.complete ? JobState.complete : JobState.running}
+                state={task.complete ? "succeeded" : "running"}
             />
         );
     } else if (canCreate) {

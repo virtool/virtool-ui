@@ -1,44 +1,42 @@
 import type { Meta } from "@storybook/react-vite";
 import JobItem from "../components/JobItem";
-import { JobState, workflows } from "../types";
 
 const meta: Meta<typeof JobItem> = {
     title: "jobs/Item",
     component: JobItem,
 };
 
+export default meta;
+
 const user = {
-    id: "foo",
+    id: 1,
     handle: "Foo Bar",
 };
 
-export default meta;
+const createdAt = new Date();
 
-const timeElapsed = Date.now();
-const today = new Date(timeElapsed);
-
-export function Waiting() {
+export function Pending() {
     return (
         <JobItem
             id="foo"
-            created_at={today.toDateString()}
+            createdAt={createdAt}
             progress={0}
             user={user}
-            workflow={workflows.nuvs}
-            state={JobState.waiting}
+            workflow="nuvs"
+            state="pending"
         />
     );
 }
 
-export function Complete() {
+export function Succeeded() {
     return (
         <JobItem
             id="foo"
-            created_at={today.toDateString()}
-            progress={23}
+            createdAt={createdAt}
+            progress={100}
             user={user}
-            workflow={workflows.nuvs}
-            state={JobState.complete}
+            workflow="nuvs"
+            state="succeeded"
         />
     );
 }
@@ -47,24 +45,24 @@ export function Running() {
     return (
         <JobItem
             id="foo"
-            created_at={today.toDateString()}
+            createdAt={createdAt}
             progress={23}
             user={user}
-            workflow={workflows.nuvs}
-            state={JobState.running}
+            workflow="nuvs"
+            state="running"
         />
     );
 }
 
-export function Timeout() {
+export function Failed() {
     return (
         <JobItem
             id="foo"
-            created_at={today.toDateString()}
+            createdAt={createdAt}
             progress={23}
             user={user}
-            workflow={workflows.nuvs}
-            state={JobState.timeout}
+            workflow="nuvs"
+            state="failed"
         />
     );
 }

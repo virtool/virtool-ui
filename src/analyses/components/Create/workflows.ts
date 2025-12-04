@@ -1,22 +1,20 @@
-import { Workflows } from "@analyses/types";
-
 export type workflow = {
     id: string;
     name: string;
 };
 
 export const pathoscopeWorkflow = {
-    id: Workflows.pathoscope_bowtie,
+    id: "pathoscope_bowtie",
     name: "Pathoscope",
 };
 
 export const nuvsWorkflow = {
-    id: Workflows.nuvs,
+    id: "nuvs",
     name: "NuVs",
 };
 
 export const iimiWorkflow = {
-    id: Workflows.iimi,
+    id: "iimi",
     name: "Iimi",
 };
 
@@ -28,7 +26,7 @@ export const workflows = [
 
 export function getCompatibleWorkflows(hasHmm: boolean): workflow[] {
     return workflows.filter((workflow) => {
-        if (workflow.id === Workflows.nuvs) {
+        if (workflow.id === "nuvs") {
             return hasHmm;
         }
 

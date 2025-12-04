@@ -16,7 +16,7 @@ type UserActivationProps = {
     /** The human interpretable name of the user */
     handle: string;
     /** The users unique identifier */
-    id: string;
+    id: number;
     /** noun indicating if the user is being activated or deactivated */
     noun: string;
     /** callback for closing the dialog */

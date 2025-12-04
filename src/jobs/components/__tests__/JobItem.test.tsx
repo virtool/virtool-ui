@@ -1,17 +1,20 @@
+import { JobState } from "@jobs/types";
 import { screen } from "@testing-library/react";
 import { createFakeUserNested } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
-import JobItem from "../JobItem";
+import JobItem, { JobItemProps } from "../JobItem";
 
 describe("<JobItem />", () => {
-    let props;
+    let props: JobItemProps;
 
     beforeEach(() => {
         props = {
             id: "foo",
             workflow: "build_index",
-            created_at: "2022-12-22T21:37:49.429000Z",
+            createdAt: new Date("2022-12-22T21:37:49.429000Z"),
+            progress: 0,
+            state: "pending",
             user: createFakeUserNested(),
         };
     });
@@ -28,20 +31,19 @@ describe("<JobItem />", () => {
     });
 
     describe("<JobStatus />", () => {
-        it.each([
-            ["waiting", 0],
-            ["preparing", 0],
+        it.each<[JobState, number]>([
+            ["pending", 0],
+            ["running", 0],
             ["running", 40],
             ["cancelled", 45],
-            ["error", 25],
-        ])("and [state=%p]", (state, progress) => {
+            ["failed", 25],
+        ])("should render state=%s with progress=%s", (state, progress) => {
             props.state = state;
             props.progress = progress;
-            const capitalizedState =
-                state.charAt(0).toUpperCase() + state.slice(1);
+
             renderWithRouter(<JobItem {...props} />);
 
-            expect(screen.getByText(capitalizedState)).toBeInTheDocument();
+            expect(screen.getByText(state)).toBeInTheDocument();
             expect(screen.getByRole("progressbar")).toHaveAttribute(
                 "data-value",
                 `${progress}`,
@@ -49,13 +51,12 @@ describe("<JobItem />", () => {
         });
 
         it("should render properly when job is complete", () => {
-            props.state = "complete";
+            props.state = "succeeded";
             props.progress = 100;
-            const capitalizedState =
-                props.state.charAt(0).toUpperCase() + props.state.slice(1);
+
             renderWithRouter(<JobItem {...props} />);
 
-            expect(screen.getByText(capitalizedState)).toBeInTheDocument();
+            expect(screen.getByText("succeeded")).toBeInTheDocument();
             expect(screen.queryByRole("progressbar")).toBeNull();
         });
     });

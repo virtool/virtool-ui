@@ -11,8 +11,8 @@ import { UploadType } from "./types";
  */
 export function useValidateFiles(
     type: UploadType,
-    selected: string[],
-    setSelected: (selected: string[]) => void,
+    selected: number[],
+    setSelected: (selected: number[]) => void,
 ) {
     const { data, isPending, fetchNextPage, hasNextPage } =
         useInfiniteFindFiles(type, 25);

@@ -57,7 +57,7 @@ const UserDetailTitle = styled.div`
  */
 export default function UserDetail() {
     const { userId } = usePathParams<{ userId: string }>();
-    const { data, isPending } = useFetchUser(userId);
+    const { data, isPending } = useFetchUser(Number(userId));
     const { hasPermission: canEdit } = useCheckAdminRole(
         data?.administrator_role === null
             ? AdministratorRoleName.USERS

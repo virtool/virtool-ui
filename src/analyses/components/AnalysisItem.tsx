@@ -1,3 +1,4 @@
+import { JobMinimal } from "@/jobs/types";
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoleName } from "@administration/types";
 import { getColor, getFontSize, getFontWeight, sizes } from "@app/theme";
@@ -8,7 +9,7 @@ import Icon from "@base/Icon";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
-import { JobState } from "@jobs/types";
+import { Equal } from "lucide-react";
 import styled from "styled-components";
 import { useRemoveAnalysis } from "../queries";
 import { AnalysisMinimal } from "../types";
@@ -84,7 +85,6 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
         id,
         workflow,
         ready,
-        job,
         user,
         reference,
         index,
@@ -107,6 +107,8 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
         </UnsupportedAnalysisTitle>
     );
 
+    const job = analysis.job && JobMinimal.parse(analysis.job);
+
     return (
         <StyledAnalysisItem>
             <AnalysisItemTop>
@@ -120,8 +122,8 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
                         />
                     ) : (
                         <ProgressCircle
-                            progress={job?.progress || 0}
-                            state={job?.state || JobState.waiting}
+                            progress={job.progress || 0}
+                            state={job.state || "pending"}
                             size={sizes.md}
                         />
                     )}
@@ -129,7 +131,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
             </AnalysisItemTop>
             <AnalysisItemTags>
                 <AnalysisItemTag key="reference">
-                    <Icon name="equals" />
+                    <Equal size={18} />
                     <SlashList className="m-0">
                         <li>
                             <Link to={`/refs/${reference.id}`}>

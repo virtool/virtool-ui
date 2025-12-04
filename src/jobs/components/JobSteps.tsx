@@ -1,22 +1,26 @@
 import BoxGroup from "@base/BoxGroup";
-import { map } from "lodash-es";
-import { JobStatus } from "../types";
-import JobStep from "./JobStep";
+import type { JobState, JobStep } from "../types";
+import JobStepItem from "./JobStep";
 
 type JobStepsProps = {
-    /** The list of status's the job has had */
-    status: JobStatus[];
+    state: JobState;
+    steps: JobStep[];
 };
 
-/**
- * A list showing the steps that a job has gone through.
- */
-export default function JobSteps({ status }: JobStepsProps) {
-    const currentIndex = status.length - 1;
+export default function JobSteps({ state, steps }: JobStepsProps) {
+    if (steps.length === 0) {
+        return null;
+    }
 
-    const stepComponents = map(status, (step, index) => (
-        <JobStep key={index} complete={index < currentIndex} step={step} />
-    ));
-
-    return <BoxGroup>{stepComponents}</BoxGroup>;
+    return (
+        <BoxGroup>
+            {steps.map((step, index) => (
+                <JobStepItem
+                    key={index}
+                    step={step}
+                    state={index === steps.length - 1 ? state : "succeeded"}
+                />
+            ))}
+        </BoxGroup>
+    );
 }

@@ -85,6 +85,7 @@ export function useGetAnalysis(analysisId: string) {
         queryKey: analysesQueryKeys.detail(analysisId),
         queryFn: () => getAnalysis({ analysisId }),
     });
+
     return useMemo(
         () => ({
             ...queryResult,

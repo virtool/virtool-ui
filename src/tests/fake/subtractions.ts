@@ -1,15 +1,11 @@
 import { faker } from "@faker-js/faker";
-import { JobMinimal } from "@jobs/types";
-import { SampleNested } from "@samples/types";
 import {
-    NucleotideComposition,
     Subtraction,
     SubtractionFile,
     SubtractionMinimal,
+    SubtractionNested,
     SubtractionOption,
-    SubtractionUpload,
 } from "@subtraction/types";
-import { UserNested } from "@users/types";
 import { merge, pick } from "lodash";
 import { assign } from "lodash-es";
 import nock from "nock";
@@ -29,40 +25,25 @@ export function createFakeSubtractionFile(): SubtractionFile {
     };
 }
 
-type CreateFakeSubtractionNestedProps = {
-    id?: string;
-    name?: string;
-};
-
 /**
  * Create a fake subtraction nested
  */
 export function createFakeSubtractionNested(
-    props?: CreateFakeSubtractionNestedProps,
-) {
+    overrides?: Partial<SubtractionNested>,
+): SubtractionNested {
     const defaultSubtractionNested = {
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         name: faker.word.noun({ strategy: "any-length" }),
     };
 
-    return merge(defaultSubtractionNested, props);
+    return merge(defaultSubtractionNested, overrides);
 }
-
-type CreateFakeSubtractionMinimal = CreateFakeSubtractionNestedProps & {
-    count?: number;
-    created_at?: string;
-    file?: SubtractionUpload;
-    job?: JobMinimal;
-    nickname?: string;
-    ready?: boolean;
-    user?: UserNested;
-};
 
 /**
  * Create a fake minimal subtraction
  */
 export function createFakeSubtractionMinimal(
-    overrides?: CreateFakeSubtractionMinimal,
+    overrides?: Partial<SubtractionMinimal>,
 ): SubtractionMinimal {
     const defaultSubtractionMinimal = {
         ...createFakeSubtractionNested(),
@@ -81,17 +62,11 @@ export function createFakeSubtractionMinimal(
     return assign(defaultSubtractionMinimal, overrides);
 }
 
-type CreateFakeSubtraction = CreateFakeSubtractionMinimal & {
-    files?: Array<SubtractionFile>;
-    gc?: NucleotideComposition;
-    linked_samples?: Array<SampleNested>;
-};
-
 /**
  * Create a fake subtraction
  */
 export function createFakeSubtraction(
-    overrides?: CreateFakeSubtraction,
+    overrides?: Partial<Subtraction>,
 ): Subtraction {
     const { files, gc, linked_samples, ...props } = overrides || {};
     return {
@@ -178,7 +153,7 @@ export function mockApiEditSubtraction(
 export function mockApiCreateSubtraction(
     name: string,
     nickname: string,
-    uploadId: string,
+    uploadId: number,
 ) {
     return nock("http://localhost")
         .post("/api/subtractions", { name, nickname, upload_id: uploadId })

@@ -85,7 +85,7 @@ export function findUsers(
  * @param userId - The id of the user to fetch
  * @returns A promise resolving to a single user
  */
-export function getUser(userId: string): Promise<User> {
+export function getUser(userId: number): Promise<User> {
     return apiClient.get(`/admin/users/${userId}`).then((res) => res.body);
 }
 
@@ -123,7 +123,7 @@ export type UserUpdate = {
  * @param update - The update to apply to the user
  * @returns A promise resolving to a response containing the updated user's data
  */
-export function updateUser(userId: string, update: UserUpdate): Promise<User> {
+export function updateUser(userId: number, update: UserUpdate): Promise<User> {
     return apiClient
         .patch(`/admin/users/${userId}`)
         .send(update)
@@ -139,7 +139,7 @@ export function updateUser(userId: string, update: UserUpdate): Promise<User> {
  */
 export function setAdministratorRole(
     role: string,
-    user_id: string,
+    user_id: number,
 ): Promise<User> {
     return apiClient
         .put(`/admin/users/${user_id}/role`)

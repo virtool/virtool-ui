@@ -1,71 +1,47 @@
-import { AdministratorRoleName } from "@administration/types";
 import { faker } from "@faker-js/faker";
-import { GroupMinimal, Permissions } from "@groups/types";
 import { User, UserNested } from "@users/types";
-import { merge, times } from "lodash-es";
 import nock from "nock";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 
-type CreateFakeUserNestedProps = {
-    handle?: string;
-    id?: string;
-};
-
 /**
  * Returns a UserNested object populated with fake data
  *
- * @param props - values to override automatically generated values
  * @returns a UserNested object with fake data
  */
-export function createFakeUserNested(
-    props?: CreateFakeUserNestedProps,
-): UserNested {
-    const { handle, id } = props || {};
-
+export function createFakeUserNested(): UserNested {
     return {
-        id: id || faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        handle: handle || faker.internet.username(),
+        id: faker.number.int(),
+        handle: faker.internet.username(),
     };
 }
-
-type CreateFakeUserProps = {
-    active?: boolean;
-    administrator_role?: AdministratorRoleName;
-    force_reset?: boolean;
-    groups?: Array<GroupMinimal>;
-    handle?: string;
-    id?: string;
-    permissions?: Permissions;
-    primary_group?: GroupMinimal;
-};
 
 /**
  * Returns a User object populated with fake data
  *
- * @param {CreateFakeUserProps} props values to override the default automatically generated values
- * @returns {User} a User object with fake data
+ * @param overrides values to override the default automatically generated values
+ * @returns a User object with fake data
  */
-export function createFakeUser(props?: CreateFakeUserProps): User {
-    const { permissions, ...userProps } = props || {};
-    let { groups, primary_group } = props || {};
+export function createFakeUser(overrides?: Partial<User>): User {
+    const {
+        groups: overrideGroups,
+        permissions,
+        primary_group,
+        ...rest
+    } = overrides || {};
+    const groups = overrideGroups ?? [createFakeGroupMinimal()];
 
-    groups = groups === undefined ? [createFakeGroupMinimal()] : groups;
-    primary_group = primary_group === undefined ? groups[0] : primary_group;
-
-    const user = {
-        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        handle: faker.internet.username(),
+    return {
+        ...createFakeUserNested(),
         active: true,
+        administrator_role: null,
         force_reset: false,
         groups,
-        primary_group,
         last_password_change: faker.date.past().toISOString(),
         permissions: createFakePermissions(permissions),
-        administrator_role: null,
+        primary_group: primary_group === undefined ? groups[0] : primary_group,
+        ...rest,
     };
-
-    return merge(user, userProps);
 }
 
 /**
@@ -75,14 +51,14 @@ export function createFakeUser(props?: CreateFakeUserProps): User {
  * @returns An array of User objects populated with fake data
  */
 export function createFakeUsers(count: number): Array<User> {
-    return times(count || 1, () => createFakeUser());
+    return Array.from({ length: count || 1 }, createFakeUser);
 }
 
 type FindUsersQuery = {
+    administrator: boolean;
     page: number;
     per_page: number;
     term: string;
-    administrator: boolean;
 };
 
 /**
@@ -113,7 +89,7 @@ export function mockApiFindUsers(users: Array<User>, query?: FindUsersQuery) {
  * @param user - The details of the user
  * @returns A nock scope for the mocked API call
  */
-export function mockApiGetUser(userId: string, user: User) {
+export function mockApiGetUser(userId: number, user: User) {
     return nock("http://localhost")
         .get(`/api/admin/users/${userId}`)
         .reply(200, user);
@@ -129,7 +105,7 @@ export function mockApiGetUser(userId: string, user: User) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiEditUser(
-    userId: string,
+    userId: number,
     statusCode: number,
     update: object,
     user?: User,

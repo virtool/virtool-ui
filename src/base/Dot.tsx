@@ -1,6 +1,6 @@
 import { cn } from "@app/utils";
 
-export type DotColor = "blue" | "green" | "gray" | "red";
+export type DotColor = "blue" | "green" | "gray" | "orange" | "purple" | "red";
 
 type DotProps = {
     color: DotColor;
@@ -14,6 +14,8 @@ export default function Dot({ color }: DotProps) {
                     "bg-blue-500": color === "blue",
                     "bg-green-600": color === "green",
                     "bg-gray-400": color === "gray",
+                    "bg-amber-600": color === "orange",
+                    "bg-purple-600": color === "purple",
                     "bg-red-600": color === "red",
                 },
                 "margin-full",

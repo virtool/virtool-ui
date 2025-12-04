@@ -1,6 +1,5 @@
 import { useCompatibleIndexes } from "@analyses/hooks";
 import { useCreateAnalysis } from "@analyses/queries";
-import { Workflows } from "@analyses/types";
 import Button from "@base/Button";
 import { useFindModels } from "@ml/queries";
 import { Controller, useForm } from "react-hook-form";
@@ -56,7 +55,7 @@ export default function CreateIimi({
                 mlModel,
                 refId,
                 sampleId,
-                workflow: Workflows.iimi,
+                workflow: "iimi",
             }),
         );
     }

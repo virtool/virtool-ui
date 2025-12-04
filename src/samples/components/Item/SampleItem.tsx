@@ -1,4 +1,4 @@
-import { Workflows } from "@analyses/types";
+import { JobMinimal } from "@/jobs/types";
 import { useDialogParam, useUrlSearchParam } from "@app/hooks";
 import { getFontSize, getFontWeight } from "@app/theme";
 import Attribution from "@base/Attribution";
@@ -77,10 +77,13 @@ const StyledSampleItem = styled(Box)`
 type SampleItemProps = {
     /** Minimal sample data */
     sample: SampleMinimal;
+
     /** Whether the sample is selected */
     checked: boolean;
+
     /** Callback to handle sample selection */
     handleSelect: () => void;
+
     /** Callback to handle sample selection on end icon quick analysis */
     selectOnQuickAnalyze: () => void;
 };
@@ -99,10 +102,12 @@ export default function SampleItem({
     const { setOpen } = useDialogParam("openQuickAnalyze");
 
     function onQuickAnalyze() {
-        setQuickAnalysisType(Workflows.pathoscope_bowtie);
+        setQuickAnalysisType("pathoscope_bowtie");
         selectOnQuickAnalyze();
         setOpen(true);
     }
+
+    const job = sample.job && JobMinimal.parse(sample.job);
 
     return (
         <StyledSampleItem>
@@ -134,7 +139,7 @@ export default function SampleItem({
             </SampleItemWorkflows>
             <SampleItemIcon>
                 <EndIcon
-                    job={sample.job}
+                    job={job}
                     onClick={onQuickAnalyze}
                     ready={sample.ready}
                 />

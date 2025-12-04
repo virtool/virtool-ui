@@ -13,7 +13,7 @@ export type FileResponse = SearchResult & {
 };
 
 export type Upload = {
-    id: string;
+    id: number;
     created_at: string;
     name: string;
     name_on_disk: string;

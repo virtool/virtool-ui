@@ -1,6 +1,4 @@
 import { faker } from "@faker-js/faker";
-import { workflows } from "@jobs/types";
-import { LabelNested } from "@labels/types";
 import { SampleRightsUpdate } from "@samples/api";
 import {
     LibraryType,
@@ -10,22 +8,12 @@ import {
     SampleMinimal,
     WorkflowState,
 } from "@samples/types";
-import { SubtractionNested } from "@subtraction/types";
-import { assign, times } from "lodash";
+import { assign } from "lodash";
 import nock from "nock";
-import { createFakeJobMinimal } from "./jobs";
+import { createFakeServerJobMinimal } from "./jobs";
 import { createFakeLabelNested } from "./labels";
 import { createFakeSubtractionNested } from "./subtractions";
 import { createFakeUserNested } from "./user";
-
-export type CreateFakeSampleMinimal = {
-    name?: string;
-    labels?: LabelNested[] | number[];
-    host?: string;
-    isolate?: string;
-    library_type?: LibraryType;
-    ready?: boolean;
-};
 
 /**
  * Create a fake sample minimal object
@@ -33,7 +21,7 @@ export type CreateFakeSampleMinimal = {
  * @param overrides - optional properties for creating a sample minimal with specific values
  */
 export function createFakeSampleMinimal(
-    overrides?: CreateFakeSampleMinimal,
+    overrides?: Partial<SampleMinimal>,
 ): SampleMinimal {
     const defaultSampleMinimal = {
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
@@ -41,7 +29,7 @@ export function createFakeSampleMinimal(
         created_at: faker.date.past().toISOString(),
         host: faker.word.noun({ strategy: "any-length" }),
         isolate: faker.word.noun({ strategy: "any-length" }),
-        job: createFakeJobMinimal({ workflow: workflows.create_sample }),
+        job: createFakeServerJobMinimal({ workflow: "create_sample" }),
         labels: [createFakeLabelNested()],
         library_type: LibraryType.normal,
         notes: faker.lorem.lines(5),
@@ -58,16 +46,10 @@ export function createFakeSampleMinimal(
     return assign(defaultSampleMinimal, overrides);
 }
 
-type CreateFakeSampleReadProps = {
-    size?: number;
-};
-
 /**
  * Create a fake sample read object
  */
-export function createFakeSampleRead(
-    overrides?: CreateFakeSampleReadProps,
-): Read {
+export function createFakeSampleRead(overrides?: Partial<Read>): Read {
     const defaultRead = {
         download_url: faker.word.noun({ strategy: "any-length" }),
         id: faker.number.int(),
@@ -84,31 +66,20 @@ export function createFakeSampleRead(
 
 export function createFakeSampleQuality(): Quality {
     return {
-        bases: [times(6, () => faker.number.int())],
-        composition: [times(4, () => faker.number.int())],
+        bases: [Array.from({ length: 6 }, () => faker.number.int())],
+        composition: [Array.from({ length: 4 }, () => faker.number.int())],
         count: faker.number.int(),
         encoding: "Sanger / Illumina 1.9",
         gc: faker.number.int(),
         length: [faker.number.int(), faker.number.int()],
-        sequences: times(10, () => faker.number.int()),
+        sequences: Array.from({ length: 10 }, () => faker.number.int()),
     };
 }
-
-type CreateFakeSample = CreateFakeSampleMinimal & {
-    all_read?: boolean;
-    all_write?: boolean;
-    group?: number | string | null;
-    group_read?: boolean;
-    group_write?: boolean;
-    paired?: boolean;
-    locale?: string;
-    subtractions?: Array<SubtractionNested>;
-};
 
 /**
  * Create a fake sample object
  */
-export function createFakeSample(overrides?: CreateFakeSample): Sample {
+export function createFakeSample(overrides?: Partial<Sample>): Sample {
     const defaultSample = {
         ...createFakeSampleMinimal(),
         all_read: faker.datatype.boolean(),
@@ -236,7 +207,7 @@ export function mockApiCreateSample(
     host: string,
     locale: string,
     library_type: LibraryType,
-    files: string[],
+    files: number[],
     labels: number[],
     subtractions: string[],
     group: string | null,
@@ -247,9 +218,7 @@ export function mockApiCreateSample(
         host,
         locale,
         library_type,
-        labels,
         subtractions: [createFakeSubtractionNested({ id: subtractions[0] })],
-        group,
     });
 
     return nock("http://localhost")

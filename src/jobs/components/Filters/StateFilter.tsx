@@ -1,130 +1,86 @@
 import { useListSearchParam } from "@app/hooks";
+import BoxGroup from "@base/BoxGroup";
 import SidebarHeader from "@base/SidebarHeader";
 import SideBarSection from "@base/SideBarSection";
-import { JobCounts } from "@jobs/types";
-import { difference, union, xor } from "lodash-es";
-import { mapValues, reduce } from "lodash-es/lodash";
-import styled from "styled-components";
-import { StateCategory } from "./StateCategory";
+import { JobCounts, JobState, jobStateToLegacy } from "@jobs/types";
+import { xor } from "lodash-es";
+import { reduce } from "lodash-es/lodash";
+import { StateButton } from "./StateButton";
 
-const active = ["waiting", "preparing", "running"];
-const inactive = ["complete", "cancelled", "error", "terminated", "timeout"];
-
-function filterStatesByCategory(category, selected) {
-    const options = category === "active" ? active : inactive;
-    const diff = difference(selected, options);
-
-    if (
-        selected.length - difference(selected, options).length ===
-        options.length
-    ) {
-        return diff;
+function getCount(counts: JobCounts, state: JobState): number {
+    if (!counts) {
+        return 0;
     }
 
-    return union(selected, options);
-}
+    const legacyStates = jobStateToLegacy[state];
 
-const StyledStatusFilter = styled(SideBarSection)`
-    align-items: center;
-    width: 320px;
-    margin: 0;
-    position: relative;
-    z-index: 0;
-`;
+    return legacyStates.reduce((sum, legacy) => {
+        const workflowCounts = counts[legacy];
+
+        if (workflowCounts) {
+            return (
+                sum +
+                reduce(
+                    workflowCounts,
+                    (result, value) => result + (value ?? 0),
+                    0,
+                )
+            );
+        }
+        return sum;
+    }, 0);
+}
 
 type StateFilterProps = {
     counts: JobCounts;
 };
 
 /**
- * Displays the categories of state filtering for jobs
+ * Displays the state filtering for jobs
  */
 export default function StateFilter({ counts }: StateFilterProps) {
     const { values: states, setValues: setStates } =
-        useListSearchParam("state");
-    const availableCounts = mapValues(counts, (workflowCounts) =>
-        reduce(workflowCounts, (result, value) => (result += value), 0),
-    );
+        useListSearchParam<JobState>("state");
 
-    function handleClick(value) {
-        setStates(
-            value === "active" || value === "inactive"
-                ? filterStatesByCategory(value, states)
-                : xor(states, [value]),
-        );
+    function handleClick(state: JobState) {
+        setStates(xor(states, [state]));
     }
 
     return (
-        <StyledStatusFilter>
+        <SideBarSection className="items-center m-0 relative z-0">
             <SidebarHeader>State</SidebarHeader>
-            <StateCategory
-                label="Active"
-                states={[
-                    {
-                        active: states.includes("waiting"),
-                        color: "gray",
-                        count: availableCounts.waiting,
-                        state: "waiting",
-                        label: "waiting",
-                    },
-                    {
-                        active: states.includes("preparing"),
-                        count: availableCounts.preparing,
-                        state: "preparing",
-                        label: "preparing",
-                        color: "gray",
-                    },
-                    {
-                        active: states.includes("running"),
-                        count: availableCounts.running,
-                        state: "running",
-                        label: "running",
-                        color: "blue",
-                    },
-                ]}
-                onClick={handleClick}
-            />
-            <StateCategory
-                label="Inactive"
-                states={[
-                    {
-                        active: states.includes("complete"),
-                        count: availableCounts.complete,
-                        state: "complete",
-                        label: "complete",
-                        color: "green",
-                    },
-                    {
-                        active: states.includes("cancelled"),
-                        count: availableCounts.cancelled,
-                        state: "cancelled",
-                        label: "cancelled",
-                        color: "red",
-                    },
-                    {
-                        active: states.includes("error"),
-                        count: availableCounts.error,
-                        state: "error",
-                        label: "errored",
-                        color: "red",
-                    },
-                    {
-                        active: states.includes("terminated"),
-                        count: availableCounts.terminated,
-                        state: "terminated",
-                        label: "terminated",
-                        color: "red",
-                    },
-                    {
-                        active: states.includes("timeout"),
-                        count: availableCounts.timeout,
-                        state: "timeout",
-                        label: "timed out",
-                        color: "red",
-                    },
-                ]}
-                onClick={handleClick}
-            />
-        </StyledStatusFilter>
+            <BoxGroup>
+                <StateButton
+                    active={states.includes("pending")}
+                    count={getCount(counts, "pending")}
+                    label="pending"
+                    onClick={() => handleClick("pending")}
+                />
+                <StateButton
+                    active={states.includes("running")}
+                    count={getCount(counts, "running")}
+                    label="running"
+                    onClick={() => handleClick("running")}
+                />
+                <StateButton
+                    active={states.includes("succeeded")}
+                    count={getCount(counts, "succeeded")}
+                    label="succeeded"
+                    onClick={() => handleClick("succeeded")}
+                />
+                <StateButton
+                    active={states.includes("cancelled")}
+                    count={getCount(counts, "cancelled")}
+                    label="cancelled"
+                    onClick={() => handleClick("cancelled")}
+                />
+                <StateButton
+                    active={states.includes("failed")}
+                    count={getCount(counts, "failed")}
+                    label="failed"
+                    onClick={() => handleClick("failed")}
+                />
+            </BoxGroup>
+        </SideBarSection>
     );
 }

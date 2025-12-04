@@ -1,42 +1,21 @@
 import { Upload, UploadType } from "@/uploads/types";
 import { faker } from "@faker-js/faker";
-import { UserNested } from "@users/types";
-import { merge } from "lodash-es";
 import nock from "nock";
 import { createFakeUserNested } from "./user";
-
-type CreateFakeFileProps = {
-    id?: string;
-    created_at?: Date;
-    name?: string;
-    name_on_disk?: string;
-    ready?: boolean;
-    removed?: boolean;
-    removed_at?: Date;
-    reserved?: boolean;
-    size?: number;
-    type?: UploadType;
-    uploaded_at?: Date;
-    user?: UserNested;
-};
 
 /**
  * Create a File object with fake data.
  */
-export function createFakeFile(props?: CreateFakeFileProps): Upload {
-    let { name, name_on_disk } = props || {};
+export function createFakeFile(overrides?: Partial<Upload>): Upload {
+    const name = overrides?.name ?? `sample_${faker.number.int()}.fastq.gz`;
+    const name_on_disk =
+        overrides?.name_on_disk ?? `${faker.number.int()}-${name}`;
 
-    name = name === undefined ? `sample_${faker.number.int()}.fastq.gz` : name;
-    name_on_disk =
-        name_on_disk === undefined
-            ? `${faker.number.int()}-${name}`
-            : name_on_disk;
-
-    const defaultFile = {
+    return {
         id: faker.number.int(),
         created_at: faker.date.past().toISOString(),
         name,
-        name_on_disk: name_on_disk,
+        name_on_disk,
         ready: true,
         removed: false,
         removed_at: undefined,
@@ -45,9 +24,8 @@ export function createFakeFile(props?: CreateFakeFileProps): Upload {
         type: UploadType.reads,
         uploaded_at: faker.date.past().toISOString(),
         user: createFakeUserNested(),
+        ...overrides,
     };
-
-    return merge(defaultFile, props);
 }
 
 /**
@@ -89,9 +67,9 @@ export function mockApiUnpaginatedListFiles(files: Upload[], query?: boolean) {
 /**
  * Creates a mocked API call for deleting a file.
  *
- * @param {string} fileId id of the file that is expected to be deleted
+ * @param {number} fileId id of the file that is expected to be deleted
  * @returns {nock.Scope} nock scope for the mocked API call
  */
-export function mockApiDeleteFile(fileId: string) {
+export function mockApiDeleteFile(fileId: number) {
     return nock("http://localhost").delete(`/api/uploads/${fileId}`).reply(200);
 }

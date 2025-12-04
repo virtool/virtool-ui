@@ -1,6 +1,5 @@
-import { JobState, workflows } from "@jobs/types";
 import { screen, waitFor } from "@testing-library/react";
-import { createFakeJobMinimal, mockApiGetJobs } from "@tests/fake/jobs";
+import { createFakeServerJobMinimal, mockApiGetJobs } from "@tests/fake/jobs";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import { afterEach, describe, expect, it } from "vitest";
@@ -10,13 +9,14 @@ describe("<JobsList />", () => {
     afterEach(() => nock.cleanAll());
 
     it("should render", async () => {
-        const jobs = createFakeJobMinimal({
-            progress: 100,
-            stage: "",
-            state: JobState.complete,
-            workflow: workflows.create_sample,
-        });
-        const scope = mockApiGetJobs([jobs]);
+        const scope = mockApiGetJobs([
+            createFakeServerJobMinimal({
+                progress: 100,
+                state: "complete",
+                workflow: "create_sample",
+            }),
+        ]);
+
         renderWithRouter(<JobsList />);
 
         await waitFor(() =>
@@ -29,7 +29,6 @@ describe("<JobsList />", () => {
 
     it("should show spinner while loading", () => {
         renderWithRouter(<JobsList />);
-
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
     });
 
@@ -46,12 +45,11 @@ describe("<JobsList />", () => {
     });
 
     it("should show message when no jobs match filters", async () => {
-        const jobs = createFakeJobMinimal({
-            progress: 100,
-            stage: "",
-            state: JobState.complete,
-        });
-        const scope = mockApiGetJobs([jobs], 0);
+        const scope = mockApiGetJobs(
+            [createFakeServerJobMinimal({ progress: 100, state: "complete" })],
+            0,
+        );
+
         renderWithRouter(<JobsList />);
 
         await waitFor(() =>

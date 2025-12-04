@@ -25,10 +25,10 @@ type SubtractionFileSelectorProps = {
     foundCount: number;
 
     /** The selected file id */
-    selected: string[];
+    selected: number[];
 
     /** A callback function to handle file selection */
-    onClick: (selected: string[]) => void;
+    onClick: (selected: number[]) => void;
 
     /** Errors occurred on sample creation */
     error: string;

@@ -16,15 +16,15 @@ describe("<DeleteSample />", () => {
         };
     });
 
-    it("renders delete button when sample is ready", () => {
+    it("should render delete button when sample is ready", () => {
         renderWithRouter(<DeleteSample {...props} />);
 
         expect(screen.getByRole("button")).toBeInTheDocument();
     });
 
-    it("renders delete button when sample has failed job", () => {
+    it("should render delete button when sample has failed job", () => {
         renderWithRouter(
-            <DeleteSample {...props} ready={false} job={{ state: "error" }} />,
+            <DeleteSample {...props} job={{ state: "failed" }} ready={false} />,
         );
 
         expect(screen.getByRole("button")).toBeInTheDocument();

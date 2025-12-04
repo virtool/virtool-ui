@@ -13,7 +13,7 @@ const StyledContributor = styled(BoxGroupSection)`
 `;
 
 type ContributorProps = {
-    id: string;
+    id: number;
     count: number;
     handle: string;
 };

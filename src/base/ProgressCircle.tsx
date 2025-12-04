@@ -129,14 +129,14 @@ const ProgressCircleTrack = styled(
     ProgressCircleBase,
 )<ProgressCircleTrackProps>`
     stroke-dashoffset: ${(props) =>
-        props.state === "waiting"
+        props.state === "pending"
             ? `${calculateStrokeDashOffset({ progress: 0.75, size: props.size })}px`
             : "0px"};
     transform-box: fill-box;
     transform-origin: center;
     animation: ${rotate} 0.75s linear infinite;
     animation-play-state: ${(props) =>
-        props.state === "waiting" ? "running" : "paused"};
+        props.state === "pending" ? "running" : "paused"};
 `;
 
 const fade = keyframes`
@@ -162,7 +162,7 @@ const ProgressCircleCenter = styled.circle<ProgressCircleTrackProps>`
     cy: ${(props) => props.size / 2}px;
     r: ${(props) => calculateProgressCircleRadius(props) / 2.5}px;
     fill: ${(props) => getColor({ theme: props.theme, color: "blue" })};
-    opacity: ${(props) => (props.state === "waiting" ? 0 : 1)};
+    opacity: ${(props) => (props.state === "pending" ? 0 : 1)};
     animation: ${fade} 1.25s ease-in-out infinite alternate;
     vector-effect: non-scaling-stroke;
     transform-box: fill-box;
@@ -184,14 +184,13 @@ const progressCircleSizes = {
  * @param state - The current state of the job or task
  * @returns The color of the progress circle
  */
-function determineProgressColour(state: JobState): string {
+function getProgressColor(state: JobState): string {
     switch (state) {
-        case "complete":
+        case "succeeded":
             return "green";
-        case "preparing":
         case "running":
             return "blue";
-        case "waiting":
+        case "pending":
             return "grey";
         default:
             return "red";
@@ -215,10 +214,10 @@ type ProgressCircleProps = {
 export default function ProgressCircle({
     progress,
     size = sizes.md,
-    state = JobState.waiting,
+    state = "pending",
 }: ProgressCircleProps) {
     const circleSize = progressCircleSizes[size];
-    const color = determineProgressColour(state);
+    const color = getProgressColor(state);
 
     return (
         <Root value={progress} asChild>
@@ -230,7 +229,7 @@ export default function ProgressCircle({
                     size={circleSize}
                     state={state}
                 />
-                {(state === "preparing" || state === "running") && (
+                {state === "running" && (
                     <ProgressCircleCenter
                         color={color}
                         size={circleSize}

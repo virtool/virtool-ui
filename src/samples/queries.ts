@@ -95,7 +95,7 @@ export function useCreateSample() {
             locale: string;
             libraryType: string;
             subtractions: string[];
-            files: string[];
+            files: number[];
             labels: number[];
             group: string;
         }

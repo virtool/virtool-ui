@@ -47,6 +47,7 @@ describe("<AccountProfile />", () => {
     it("should handle email changes", async () => {
         const account = createFakeAccount({
             administrator_role: AdministratorRoleName.FULL,
+            email: "",
         });
 
         mockApiGetAccount(account);

@@ -20,11 +20,11 @@ type SubtractionFileItemProps = {
     /** Error message to be displayed */
     error: string;
     /** The unique identifier */
-    id: string;
+    id: number;
     /** The name of the file */
     name: string;
     /** A callback function to handle file selection */
-    onClick: (selected: string[]) => void;
+    onClick: (selected: number[]) => void;
     /** The iso formatted date of upload */
     uploaded_at: string;
     /** The user who created the file */

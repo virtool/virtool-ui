@@ -2,7 +2,6 @@ import { cn } from "@app/utils";
 import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Checkbox from "@base/Checkbox";
-import Dot, { DotColor } from "@base/Dot";
 
 type StateButtonProps = {
     /** Whether the state is selected */
@@ -10,9 +9,6 @@ type StateButtonProps = {
 
     /** The number of jobs associated with the state */
     count: number;
-
-    /** The state color */
-    color: DotColor;
 
     /** The name of the state */
     label: string;
@@ -26,24 +22,17 @@ type StateButtonProps = {
  */
 export function StateButton({
     active,
-    count = 0,
-    color,
+    count,
     label,
     onClick,
 }: StateButtonProps) {
-    const labelComponent = (
-        <>
-            <Dot color={color} />
-            {label}
-        </>
-    );
-
     return (
         <BoxGroupSection
             className={cn(
+                "bg-white",
                 "capitalize",
                 "flex",
-                "gap-2",
+                "gap-6",
                 "items-center",
                 "justify-between",
                 "relative",
@@ -53,7 +42,6 @@ export function StateButton({
                 checked={active}
                 id={`JobStateCheckbox-${label}`}
                 label={label}
-                labelComponent={labelComponent}
                 onClick={onClick}
             />
             <Badge className="ml-auto">{count}</Badge>

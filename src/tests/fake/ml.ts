@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
 import { MlModel, MLModelMinimal, MLModelRelease } from "@ml/types";
-import { merge } from "lodash";
 import nock from "nock";
 
 /**
@@ -21,17 +20,13 @@ export function createFakeMlModelRelease(): MLModelRelease {
     };
 }
 
-type CreateFakeMLModelOverrides = {
-    created_at?: string;
-};
-
 /**
  * Create a fake minimal ML model
  *
  * @param overrides - optional properties for creating a fake ML models with specific values
  */
 export function createFakeMLModelMinimal(
-    overrides?: CreateFakeMLModelOverrides,
+    overrides?: Partial<MLModelMinimal>,
 ): MLModelMinimal {
     return {
         id: faker.number.int(100),
@@ -48,18 +43,15 @@ export function createFakeMLModelMinimal(
  *
  * @param overrides - optional properties for creating a fake ML models with specific values
  */
-export function createFakeMLModel(
-    overrides?: CreateFakeMLModelOverrides,
-): MlModel {
+export function createFakeMLModel(overrides?: Partial<MlModel>): MlModel {
     const releases = [createFakeMlModelRelease()];
 
-    const defaultModel = {
+    return {
         ...createFakeMLModelMinimal(overrides),
         latest_release: releases[0],
         releases,
+        ...overrides,
     };
-
-    return merge(defaultModel, overrides);
 }
 
 /**

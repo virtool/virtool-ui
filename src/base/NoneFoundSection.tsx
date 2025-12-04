@@ -1,7 +1,7 @@
 import { cn } from "@/app/utils";
+import { CircleAlert } from "lucide-react";
 import { ReactNode } from "react";
 import BoxGroupSection from "./BoxGroupSection";
-import Icon from "./Icon";
 import { noneFoundStyle } from "./noneFoundStyle";
 
 type NoneFoundSectionProps = {
@@ -25,7 +25,7 @@ export default function NoneFoundSection({
         <BoxGroupSection
             className={cn(noneFoundStyle, "justify-center", className)}
         >
-            <Icon name="info-circle" /> No {noun} found{childrenContainer}
+            <CircleAlert size={18} /> No {noun} found{childrenContainer}
         </BoxGroupSection>
     );
 }

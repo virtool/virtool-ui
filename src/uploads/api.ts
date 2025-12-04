@@ -25,6 +25,6 @@ export function findFiles(
         .then((res) => res.body);
 }
 
-export function removeFile(id: string): Promise<null> {
+export function removeFile(id: number): Promise<null> {
     return apiClient.delete(`/uploads/${id}`).then((res) => res.body);
 }

@@ -14,7 +14,7 @@ type PrimaryGroupProps = {
     /** The groups associated with the user */
     groups: GroupMinimal[];
     /** The users unique id */
-    id: string;
+    id: number;
     /** The users primary group */
     primaryGroup: GroupMinimal;
 };

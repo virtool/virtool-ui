@@ -2,7 +2,7 @@ import { AdministratorRoleName } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeHMMSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
+import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import {
     createFakeIndexMinimal,
     mockApiListIndexes,
@@ -28,7 +28,7 @@ describe("<SamplesList />", () => {
     beforeEach(() => {
         samples = [createFakeSampleMinimal(), createFakeSampleMinimal()];
         mockApiGetSamples(samples);
-        mockApiGetHmms(createFakeHMMSearchResults());
+        mockApiGetHmms(createFakeHmmSearchResults());
         mockApiListIndexes([createFakeIndexMinimal()]);
         mockApiGetLabels([createFakeLabelNested()]);
         mockApiGetModels([createFakeMLModelMinimal()]);

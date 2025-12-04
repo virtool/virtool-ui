@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
 import { Hmm, HmmSearchResults } from "@hmm/types";
-import { assign, times, toString } from "lodash-es";
 import nock from "nock";
 
 /**
@@ -34,7 +33,7 @@ export function createFakeHmm() {
 
     return {
         ...createFakeHmmMinimal(),
-        entries: times(2, () => entries()),
+        entries: Array.from({ length: 2 }, entries),
         genera: {
             Curtovirus: faker.number.int(),
             Begomovirus: faker.number.int(),
@@ -48,41 +47,32 @@ export function createFakeHmm() {
     };
 }
 
-type CreateFakeHMMSearchResults = {
-    documents?: string[];
-    status?: { [key: string]: any };
-    total_count?: number;
-};
-
 /**
- * Create a fake HMM search result
+ * Create a fake Hmm search result
  *
- * @param overrides - optional properties for creating a fake HHM search result with specific values
+ * @param overrides - optional properties for creating a fake Hmm search result with specific values
  */
-export function createFakeHMMSearchResults(
-    overrides?: CreateFakeHMMSearchResults,
+export function createFakeHmmSearchResults(
+    overrides?: Partial<HmmSearchResults>,
 ): HmmSearchResults {
-    const defaultStatus = {
-        errors: [toString(faker.internet.httpStatusCode())],
-        installed: {
-            ready: faker.datatype.boolean(),
+    return {
+        documents: Array.from({ length: 5 }, createFakeHmmMinimal),
+        status: {
+            errors: [faker.internet.httpStatusCode().toString()],
+            installed: {
+                ready: faker.datatype.boolean(),
+            },
+            task: {
+                complete: true,
+            },
         },
-        task: {
-            complete: true,
-        },
-    };
-
-    const defaultHMMSearchResult = {
-        documents: times(5, () => createFakeHmmMinimal()),
-        status: defaultStatus,
         found_count: faker.number.int(),
         page: faker.number.int(),
         page_count: faker.number.int(),
         per_page: faker.number.int(),
         total_count: faker.number.int(),
+        ...overrides,
     };
-
-    return assign(defaultHMMSearchResult, overrides);
 }
 
 /**

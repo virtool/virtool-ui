@@ -1,7 +1,7 @@
 import { cn } from "@/app/utils";
+import { CircleAlert } from "lucide-react";
 import { ReactNode } from "react";
 import Box from "./Box";
-import Icon from "./Icon";
 import { noneFoundStyle } from "./noneFoundStyle";
 
 interface NoneFoundBoxProps {
@@ -17,7 +17,7 @@ export default function NoneFoundBox({
 }: NoneFoundBoxProps) {
     return (
         <Box className={cn(noneFoundStyle, "min-h-[30px]", className)}>
-            <Icon name="info-circle" /> No {noun} found. &nbsp; {children}
+            <CircleAlert size={18} /> No {noun} found. &nbsp; {children}
         </Box>
     );
 }

@@ -6,10 +6,10 @@ import {
     Otu,
     OtuIsolate,
     OtuMinimal,
-    OtuRemote,
     OtuSegment,
+    OtuSequence,
 } from "@otus/types";
-import { assign, merge, times } from "lodash";
+import { assign, merge } from "lodash";
 import nock from "nock";
 import { createFakeReferenceNested } from "./references";
 import { createFakeUserNested } from "./user";
@@ -27,19 +27,12 @@ export function createFakeHistoryNested(): HistoryNested {
     };
 }
 
-type CreateFakeOTUSequenceProps = {
-    accession?: string;
-    definition?: string;
-    host?: string;
-    segment?: string;
-    sequence?: string;
-    target?: string;
-};
-
 /**
  * Create a fake OTU sequence
  */
-export function createFakeOTUSequence(overrides?: CreateFakeOTUSequenceProps) {
+export function createFakeOTUSequence(
+    overrides?: Partial<OtuSequence>,
+): OtuSequence {
     const sequence = {
         accession: faker.word.noun({ strategy: "any-length" }),
         definition: faker.word.noun({ strategy: "any-length" }),
@@ -78,17 +71,11 @@ export function createFakeOtuSegment(): OtuSegment {
     };
 }
 
-type CreateFakeOtuMinimalParams = {
-    abbreviation?: string;
-    name?: string;
-    verified?: boolean;
-};
-
 /**
  * Create a fake minimal OTU
  */
 export function createFakeOTUMinimal(
-    overrides?: CreateFakeOtuMinimalParams,
+    overrides?: Partial<OtuMinimal>,
 ): OtuMinimal {
     const defaultOTUMinimal = {
         abbreviation: `${faker.string.fromCharacters("AHJKYUIQWE", { min: 2, max: 4 })}V`,
@@ -102,16 +89,10 @@ export function createFakeOTUMinimal(
     return assign(defaultOTUMinimal, overrides);
 }
 
-type CreateFakeOTU = CreateFakeOtuMinimalParams & {
-    isolates?: Array<OtuIsolate>;
-    issues?: { [key: string]: any };
-    remote?: OtuRemote;
-};
-
 /**
  * Create a fake OTU object.
  */
-export function createFakeOtu(overrides?: CreateFakeOTU): Otu {
+export function createFakeOtu(overrides?: Partial<Otu>): Otu {
     const { isolates, issues, remote, ...props } = overrides || {};
     return {
         ...createFakeOTUMinimal(props),
@@ -119,7 +100,7 @@ export function createFakeOtu(overrides?: CreateFakeOTU): Otu {
         issues: issues || null,
         last_indexed_version: null,
         most_recent_change: createFakeHistoryNested(),
-        schema: times(2, createFakeOtuSegment),
+        schema: Array.from({ length: 2 }, createFakeOtuSegment),
         remote: remote || null,
     };
 }

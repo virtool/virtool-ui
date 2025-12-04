@@ -1,56 +1,50 @@
 import { screen } from "@testing-library/react";
 import { renderWithRouter } from "@tests/setup";
-import { forEach } from "lodash-es";
 import { describe, expect, it } from "vitest";
 import JobArgs from "../JobArgs";
 
-const sample_id = "test_sample_id";
-const analysis_id = "test_analysis-id";
-const ref_id = "test_reference-id";
-const index_id = "test_index-id";
-const subtraction_id = "test_subtraction-id";
-
-const sample_url = { id: sample_id, url: `/samples/${sample_id}` };
-const analysis_url = {
-    id: analysis_id,
-    url: `/samples/${sample_id}/analyses/${analysis_id}`,
-};
-const reference_url = { id: ref_id, url: `/refs/${ref_id}` };
-const index_url = { id: index_id, url: `/refs/${ref_id}/indexes/${index_id}` };
-const subtraction_url = {
-    id: subtraction_id,
-    url: `/subtractions/${subtraction_id}`,
-};
-
-const workflowTests = [
+const workflows = [
     {
         workflow: "build_index",
-        args: { index_id, ref_id },
-        urls: [index_url, reference_url],
+        args: { index_id: "idx1", ref_id: "ref1" },
+        links: [
+            { name: "idx1", href: "/refs/ref1/indexes/idx1" },
+            { name: "ref1", href: "/refs/ref1" },
+        ],
     },
-    { workflow: "create_sample", args: { sample_id }, urls: [sample_url] },
+    {
+        workflow: "create_sample",
+        args: { sample_id: "smp1" },
+        links: [{ name: "smp1", href: "/samples/smp1" }],
+    },
     {
         workflow: "create_subtraction",
-        args: { subtraction_id },
-        urls: [subtraction_url],
+        args: { subtraction_id: "sub1" },
+        links: [{ name: "sub1", href: "/subtractions/sub1" }],
     },
     {
-        workflow: "pathoscope_bowtie",
-        args: { sample_id, analysis_id },
-        urls: [sample_url, analysis_url],
+        workflow: "pathoscope",
+        args: { sample_id: "smp1", analysis_id: "anl1" },
+        links: [
+            { name: "smp1", href: "/samples/smp1" },
+            { name: "anl1", href: "/samples/smp1/analyses/anl1" },
+        ],
     },
     {
         workflow: "nuvs",
-        args: { sample_id, analysis_id },
-        urls: [sample_url, analysis_url],
+        args: { sample_id: "smp1", analysis_id: "anl1" },
+        links: [
+            { name: "smp1", href: "/samples/smp1" },
+            { name: "anl1", href: "/samples/smp1/analyses/anl1" },
+        ],
     },
 ];
 
 describe("<JobArgs />", () => {
-    it("Should render basics correctly", () => {
+    it("should render basics correctly", () => {
         renderWithRouter(
             <JobArgs
-                workflow={"create_sample"}
+                workflow="create_sample"
                 args={{ sample_id: "test_sample_id" }}
             />,
         );
@@ -61,9 +55,9 @@ describe("<JobArgs />", () => {
         ).toBeInTheDocument();
     });
 
-    it.each(workflowTests)(
-        "Should render $workflow jobs correctly",
-        ({ workflow, args, urls }) => {
+    it.each(workflows)(
+        "should render $workflow jobs correctly",
+        ({ workflow, args, links }) => {
             renderWithRouter(
                 <JobArgs
                     workflow={workflow}
@@ -71,20 +65,20 @@ describe("<JobArgs />", () => {
                 />,
             );
 
-            forEach(urls, ({ id, url }) => {
-                expect(screen.getByRole("link", { name: id })).toHaveAttribute(
+            for (const { name, href } of links) {
+                expect(screen.getByRole("link", { name })).toHaveAttribute(
                     "href",
-                    url,
+                    href,
                 );
-            });
+            }
             expect(screen.queryByText("extra_param")).not.toBeInTheDocument();
         },
     );
 
-    it("Should render correctly render unknown workflows", () => {
+    it("should render unknown workflows", () => {
         renderWithRouter(
             <JobArgs
-                workflow={"unknown_workflow"}
+                workflow="unknown_workflow"
                 args={{
                     sample_id: "test_sample_id",
                     extra_param: "extra_param_id",

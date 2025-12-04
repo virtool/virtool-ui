@@ -111,12 +111,12 @@ describe("<SubtractionDetail />", () => {
 
     it("should render file id when name not defined", async () => {
         const subtraction = createFakeSubtraction({
-            file: { id: "test", name: null },
+            file: { id: 999, name: null },
         });
         const scope = mockApiGetSubtractionDetail(subtraction);
         renderWithRouter(<Subtraction />, formatSubtractionPath(subtraction));
 
-        expect(await screen.findByText("test")).toBeInTheDocument();
+        expect(await screen.findByText("999")).toBeInTheDocument();
 
         scope.done();
     });

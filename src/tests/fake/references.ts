@@ -1,9 +1,8 @@
-import { Task } from "@/types/api";
 import { faker } from "@faker-js/faker";
 import {
     Reference,
-    ReferenceClonedFrom,
     ReferenceMinimal,
+    ReferenceNested,
     ReferenceTarget,
 } from "@references/types";
 import { assign } from "lodash-es";
@@ -22,39 +21,28 @@ export function createFakeReferenceTarget(): ReferenceTarget {
     };
 }
 
-type CreateFakeReferenceNestedParams = {
-    id?: string;
-    name?: string;
-};
-
 /**
  * Create a fake reference nested
  */
 export function createFakeReferenceNested(
-    params?: CreateFakeReferenceNestedParams,
-) {
+    overrides?: Partial<ReferenceNested>,
+): ReferenceNested {
     return {
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         data_type: "genome",
         name: faker.word.noun({ strategy: "any-length" }),
-        ...params,
+        ...overrides,
     };
 }
-
-type CreateFakeReferenceMinimalParams = CreateFakeReferenceNestedParams & {
-    cloned_from?: ReferenceClonedFrom | null;
-    organism?: string;
-    task?: Task;
-};
 
 /**
  * Create a fake reference minimal
  */
 export function createFakeReferenceMinimal(
-    params?: CreateFakeReferenceMinimalParams,
+    overrides?: Partial<ReferenceMinimal>,
 ): ReferenceMinimal {
     const defaultReferenceMinimal = {
-        ...createFakeReferenceNested(params),
+        ...createFakeReferenceNested(overrides),
         cloned_from: {
             id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
             name: faker.word.noun({ strategy: "any-length" }),
@@ -76,20 +64,13 @@ export function createFakeReferenceMinimal(
         user: createFakeUserNested(),
     };
 
-    return assign(defaultReferenceMinimal, params);
+    return assign(defaultReferenceMinimal, overrides);
 }
-
-type CreateFakeReferenceParams = CreateFakeReferenceMinimalParams & {
-    description?: string;
-    targets?: ReferenceTarget[];
-};
 
 /**
  * Create a fake reference
  */
-export function createFakeReference(
-    overrides?: CreateFakeReferenceParams,
-): Reference {
+export function createFakeReference(overrides?: Partial<Reference>): Reference {
     const { description, ...props } = overrides || {};
 
     const defaultReference = {

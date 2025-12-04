@@ -28,12 +28,12 @@ type Story = StoryObj<typeof meta>;
 const Template: Story = {
     args: {
         canDelete: true,
-        id: "babbdbhd",
+        id: 1,
         name: "sample_189a.fq.gz",
         size: 94209313,
         uploaded_at: new Date().toISOString(),
         user: {
-            id: "23",
+            id: 23,
             handle: "Bill",
         },
     },

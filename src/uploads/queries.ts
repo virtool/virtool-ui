@@ -50,7 +50,7 @@ export function useInfiniteFindFiles(
  * @returns A mutator for deleting a file
  */
 export function useDeleteFile() {
-    return useMutation<null, unknown, { id: string }>({
+    return useMutation<null, unknown, { id: number }>({
         mutationFn: ({ id }) => removeFile(id),
     });
 }

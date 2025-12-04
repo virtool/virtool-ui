@@ -1,3 +1,4 @@
+import { JobMinimal } from "@/jobs/types";
 import Analyses from "@analyses/components/Analyses";
 import { useDialogParam, usePathParams } from "@app/hooks";
 import Icon from "@base/Icon";
@@ -39,6 +40,8 @@ export default function SampleDetail() {
 
     const { created_at, name, user } = data;
 
+    const job = data.job && JobMinimal.parse(data.job);
+
     return (
         <>
             <ViewHeader title={name}>
@@ -57,7 +60,7 @@ export default function SampleDetail() {
                                     id={sampleId}
                                     name={data.name}
                                     ready={data.ready}
-                                    job={data.job}
+                                    job={job}
                                 />
                             </>
                         )}

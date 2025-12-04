@@ -54,7 +54,7 @@ export function createSample(
     locale: string,
     libraryType: string,
     subtractions: string[],
-    files: string[],
+    files: number[],
     labels: number[],
     group: string,
 ): Promise<Sample> {
