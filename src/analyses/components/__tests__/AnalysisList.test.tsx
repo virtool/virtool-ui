@@ -7,7 +7,7 @@ import {
     createFakeAnalysisMinimal,
     mockApiGetAnalyses,
 } from "@tests/fake/analyses";
-import { createFakeHMMSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
+import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
@@ -30,7 +30,7 @@ describe("<AnalysesList />", () => {
             }),
         ];
         mockApiGetAnalyses(analyses);
-        mockApiGetHmms(createFakeHMMSearchResults());
+        mockApiGetHmms(createFakeHmmSearchResults());
         basePath = `/samples/${sample.id}/analyses/`;
     });
 

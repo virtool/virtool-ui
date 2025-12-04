@@ -1,6 +1,6 @@
 import { SearchResult } from "@/types/api";
 import { IndexNested } from "@indexes/types";
-import { JobMinimal } from "@jobs/types";
+import { ServerJobMinimal } from "@jobs/types";
 import { ReferenceNested } from "@references/types";
 import { SubtractionNested } from "@subtraction/types";
 import { UserNested } from "@users/types";
@@ -22,7 +22,7 @@ export type AnalysisMinimal = {
     index: IndexNested;
 
     /** The job that ran the analysis workflow */
-    job?: JobMinimal;
+    job?: ServerJobMinimal;
 
     /** Whether the analysis is complete and ready to view */
     ready: boolean;
@@ -43,7 +43,7 @@ export type AnalysisMinimal = {
     user: UserNested;
 
     /** Workflow used to generate the analysis */
-    workflow: string;
+    workflow: AnalysisWorkflow;
 };
 
 /** An analysis file */
@@ -81,7 +81,7 @@ export type GenericAnalysis = AnalysisMinimal & {
     /** The results of the analysis that will be presented to the user */
     results?: { [key: string]: any };
 
-    workflow: Workflows;
+    workflow: AnalysisWorkflow;
 };
 
 export type Analysis =
@@ -93,7 +93,7 @@ export type Analysis =
 export type FormattedPathoscopeAnalysis = AnalysisMinimal & {
     files: AnalysisFile[];
     results: FormattedPathoscopeResults;
-    workflow: Workflows.pathoscope_bowtie;
+    workflow: "pathoscope_bowtie";
 };
 
 /** All results for a pathoscope analysis*/
@@ -196,7 +196,7 @@ export type FormattedNuvsAnalysis = AnalysisMinimal & {
     files: Array<AnalysisFile>;
     maxSequenceLength: number;
     results: FormattedNuvsResults;
-    workflow: Workflows.nuvs;
+    workflow: "nuvs";
 };
 
 /** All results for a Nuvs analysis */
@@ -287,11 +287,7 @@ export type AnalysisSearchResult = SearchResult & {
     documents: AnalysisMinimal[];
 };
 
-export enum Workflows {
-    iimi = "iimi",
-    pathoscope_bowtie = "pathoscope_bowtie",
-    nuvs = "nuvs",
-}
+export type AnalysisWorkflow = "iimi" | "pathoscope_bowtie" | "nuvs";
 
 /** Read depths of a sequence mapped by position to an array */
 export type PositionMappedReadDepths = number[];
@@ -349,7 +345,7 @@ export type IimiAnalysis = AnalysisMinimal & {
     results: {
         hits: IimiHit[];
     };
-    workflow: Workflows;
+    workflow: AnalysisWorkflow;
 };
 
 /** iimi prediction results for a segment of virus formatted for display */

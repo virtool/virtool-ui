@@ -67,11 +67,11 @@ type ReadSelectorProps = {
     /** Whether the data is fetched */
     isPending: boolean;
     /** A callback function to handle file selection */
-    onSelect: (selected: string[]) => void;
+    onSelect: (selected: number[]) => void;
     /** Errors occurred on sample creation */
     error: string;
     /** The selected uploads */
-    selected: string[];
+    selected: number[];
 };
 
 /**
@@ -93,7 +93,7 @@ export default function ReadSelector({
 
     const { total_count } = data.pages[0];
 
-    function handleSelect(selectedId: string) {
+    function handleSelect(selectedId: number) {
         setSelectedFiles((prevArray) => {
             if (prevArray.includes(selectedId)) {
                 const newArray = prevArray.filter((id) => id !== selectedId);

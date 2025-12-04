@@ -8,10 +8,12 @@ import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { map } from "lodash";
+import { ReactElement } from "react";
 import styled from "styled-components";
 import { useFindJobs } from "../queries";
+import { JobState } from "../types";
 import { JobFilters } from "./Filters/JobFilters";
-import Job from "./JobItem";
+import JobItem from "./JobItem";
 
 const JobsListViewContainer = styled.div`
     display: flex;
@@ -31,13 +33,13 @@ const JobsListEmpty = styled(Box)`
     }
 `;
 
-const initialState = ["preparing", "running"];
+const initialState: JobState[] = ["pending", "running"];
 
-/**
- * A list of jobs with filtering options
- */
 export default function JobsList() {
-    const { values: states } = useListSearchParam("state", initialState);
+    const { values: states } = useListSearchParam<JobState>(
+        "state",
+        initialState,
+    );
     const { page } = usePageParam();
     const { data, isPending } = useFindJobs(page, 25, states);
 
@@ -54,7 +56,7 @@ export default function JobsList() {
         total_count,
     } = data;
 
-    let inner;
+    let inner: ReactElement;
 
     if (total_count === 0) {
         inner = (
@@ -78,7 +80,7 @@ export default function JobsList() {
             >
                 <BoxGroup>
                     {map(documents, (document) => (
-                        <Job key={document.id} {...document} />
+                        <JobItem key={document.id} {...document} />
                     ))}
                 </BoxGroup>
             </Pagination>

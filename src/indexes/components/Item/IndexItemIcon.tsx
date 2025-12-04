@@ -1,7 +1,7 @@
 import { sizes } from "@app/theme";
-import Icon from "@base/Icon";
 import ProgressCircle from "@base/ProgressCircle";
-import { JobMinimal, JobState } from "@jobs/types";
+import { JobMinimal } from "@jobs/types";
+import { CircleCheck } from "lucide-react";
 
 type IndexItemIconProps = {
     activeId: string;
@@ -32,11 +32,11 @@ export function IndexItemIcon({
     return (
         <div className="flex items-center justify-end gap-1.5">
             {ready ? (
-                <Icon name="check" color="green" />
+                <CircleCheck className="stroke-green-600" size={18} />
             ) : (
                 <ProgressCircle
                     progress={job?.progress || 0}
-                    state={job?.state || JobState.waiting}
+                    state={job?.state || "pending"}
                     size={sizes.md}
                 />
             )}

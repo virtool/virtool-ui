@@ -1,5 +1,5 @@
 import { cn } from "@app/utils";
-import { IconColor } from "@jobs/types";
+import { IconColor } from "./Icon";
 import Tooltip from "./Tooltip";
 
 type IconButtonProps = {

@@ -1,7 +1,6 @@
 import { formatData } from "@analyses/utils";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { IimiViewer } from "../components/Iimi/IimiViewer";
-import { Workflows } from "../types";
 
 const meta: Meta<typeof IimiViewer> = {
     title: "analyses/IimiViewer",
@@ -1190,11 +1189,11 @@ const detail = {
     },
     subtractions: null,
     updated_at: "2021-09-29T14:00:00Z",
-    workflow: Workflows.iimi,
     user: {
         handle: "bob",
         id: "200",
     },
+    workflow: "iimi",
 };
 
 export default meta;

@@ -1,32 +1,33 @@
 import JobSteps from "@jobs/components/JobSteps";
-import { JobState } from "@jobs/types";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 
 describe("<JobSteps />", () => {
     it("should render", () => {
-        const props = {
-            status: [
-                {
-                    state: "waiting" as JobState,
-                    timestamp: "2024-04-12T21:50:19.108000Z",
-                    progress: 40,
-                },
-                {
-                    state: "running" as JobState,
-                    timestamp: "2024-04-12T21:50:19.108000Z",
-                    progress: 40,
-                },
-            ],
-        };
+        renderWithProviders(
+            <JobSteps
+                state="running"
+                steps={[
+                    {
+                        name: "Download files",
+                        description: "Downloading reference files",
+                        startedAt: new Date("2024-04-12T21:50:19.108000Z"),
+                    },
+                    {
+                        name: "Build index",
+                        description: "Building search index",
+                        startedAt: new Date("2024-04-12T21:51:19.108000Z"),
+                    },
+                ]}
+            />,
+        );
 
-        renderWithProviders(<JobSteps {...props} />);
-
-        expect(screen.getByText("Waiting")).toBeInTheDocument();
+        expect(screen.getByText("Download files")).toBeInTheDocument();
         expect(
-            screen.getByText("Waiting for resources to become available."),
+            screen.getByText("Downloading reference files"),
         ).toBeInTheDocument();
-        expect(screen.getByText("Running")).toBeInTheDocument();
+        expect(screen.getByText("Build index")).toBeInTheDocument();
+        expect(screen.getByText("Building search index")).toBeInTheDocument();
     });
 });

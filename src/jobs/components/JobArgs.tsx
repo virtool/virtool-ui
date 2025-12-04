@@ -4,7 +4,6 @@ import BoxGroupTable from "@base/BoxGroupTable";
 import Link from "@base/Link";
 import { map } from "lodash";
 import { ReactNode } from "react";
-import { workflows } from "../types";
 
 type JobArgsRowProps = {
     /** What to display as the value of the argument */
@@ -136,31 +135,25 @@ type GenericJobArgsProps<workflowType, argsType> = {
 };
 
 type JobArgsRowsProps =
-    | GenericJobArgsProps<
-          workflows.pathoscope_bowtie | workflows.nuvs,
-          AnalysisRowsProps
-      >
-    | GenericJobArgsProps<workflows.build_index, BuildIndexRowsProps>
-    | GenericJobArgsProps<workflows.create_sample, CreateSampleRowsProps>
-    | GenericJobArgsProps<
-          workflows.create_subtraction,
-          CreateSubtractionRowsProps
-      >;
+    | GenericJobArgsProps<"pathoscope" | "nuvs", AnalysisRowsProps>
+    | GenericJobArgsProps<"build_index", BuildIndexRowsProps>
+    | GenericJobArgsProps<"create_sample", CreateSampleRowsProps>
+    | GenericJobArgsProps<"create_subtraction", CreateSubtractionRowsProps>;
 
 /**  The table rows containing arguments used to run a job. */
 function JobArgsRows({ workflow, args }: JobArgsRowsProps) {
     switch (workflow) {
-        case workflows.build_index:
+        case "build_index":
             return <BuildIndexRows {...args} />;
 
-        case workflows.create_sample:
+        case "create_sample":
             return <CreateSampleRows {...args} />;
 
-        case workflows.create_subtraction:
+        case "create_subtraction":
             return <CreateSubtractionRows {...args} />;
 
-        case workflows.nuvs:
-        case workflows.pathoscope_bowtie:
+        case "nuvs":
+        case "pathoscope":
             return <AnalysisRows {...args} />;
 
         default:

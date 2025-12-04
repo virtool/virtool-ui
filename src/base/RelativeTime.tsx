@@ -2,6 +2,10 @@ import { formatDistanceStrict, isAfter } from "date-fns";
 import { includes } from "lodash-es";
 import { useEffect, useState } from "react";
 
+type RelativeTimeOptions = {
+    addSuffix?: boolean;
+};
+
 /**
  * Create a human-readable relative time.
  *
@@ -10,9 +14,13 @@ import { useEffect, useState } from "react";
  * string 'just now'.
  *
  * @param time {string} the ISO formatted time
+ * @param options.addSuffix whether to add "ago" suffix (default: true)
  * @returns {string}
  */
-function createTimeString(time) {
+function createTimeString(
+    time: string | Date,
+    { addSuffix = true }: RelativeTimeOptions = {},
+) {
     const now = Date.now();
     const serverDate = new Date(time);
     const clientDate = new Date();
@@ -20,20 +28,27 @@ function createTimeString(time) {
     const currentTime = isAfter(serverDate, clientDate)
         ? clientDate
         : serverDate;
+
     const timeString = formatDistanceStrict(currentTime, now, {
-        addSuffix: true,
+        addSuffix,
     });
+
     return includes(timeString, "in a") || includes(timeString, "a few")
         ? "just now"
         : timeString;
 }
 
-function useRelativeTime(time) {
-    const [timeString, setTimeString] = useState(createTimeString(time));
+export function useRelativeTime(
+    time: string | Date,
+    options: RelativeTimeOptions = {},
+) {
+    const [timeString, setTimeString] = useState(
+        createTimeString(time, options),
+    );
 
     useEffect(() => {
         function updateTimeString() {
-            const newTimeString = createTimeString(time);
+            const newTimeString = createTimeString(time, options);
 
             if (newTimeString !== timeString) {
                 setTimeString(newTimeString);
@@ -51,7 +66,7 @@ function useRelativeTime(time) {
 }
 
 type RelativeTimeProps = {
-    time: string;
+    time: string | Date;
 };
 
 /**

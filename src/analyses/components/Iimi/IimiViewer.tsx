@@ -3,8 +3,8 @@ import { useFuse } from "@app/fuse";
 import { useUrlSearchParam } from "@app/hooks";
 import Accordion from "@base/Accordion";
 import Box from "@base/Box";
-import Icon from "@base/Icon";
 import { orderBy } from "lodash-es";
+import { CircleAlert } from "lucide-react";
 import { useState } from "react";
 import { IimiOtu } from "./IimiOtu";
 import IimiToolbar from "./IimiToolbar";
@@ -44,7 +44,7 @@ export function IimiViewer({ detail }: { detail: FormattedIimiAnalysis }) {
             <Box className="bg-amber-100 border-amber-300 text-amber-900">
                 <header>
                     <h5 className="flex items-center gap-2 text-lg">
-                        <Icon name="exclamation-circle" />
+                        <CircleAlert size={18} />
                         Iimi is an experimental workflow.
                     </h5>
                 </header>

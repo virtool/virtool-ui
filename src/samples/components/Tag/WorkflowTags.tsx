@@ -1,5 +1,4 @@
 import { getWorkflowDisplayName } from "@app/utils";
-import Icon from "@base/Icon";
 import { SampleWorkflows, WorkflowState } from "@samples/types";
 import { reduce } from "lodash-es";
 import { Link } from "wouter";
@@ -53,8 +52,7 @@ export default function WorkflowTags({ id, workflows }: WorkflowTagsProps) {
                 </BaseWorkflowTag>
                 {!workflowTags.length && (
                     <BaseWorkflowTag className="bg-purple-50 border border-purple-400 text-purple-900 gap-3 [&_span:last-child]:ml-0">
-                        <Icon name="times-circle" fixedWidth />
-                        <span>No Analyses</span>
+                        No Analyses
                     </BaseWorkflowTag>
                 )}
                 {workflowTags}

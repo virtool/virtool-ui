@@ -11,25 +11,14 @@ const defaultPermissions = {
     upload_file: false,
 };
 
-type CreateFakePermissionsProps = {
-    cancel_job?: boolean;
-    create_ref?: boolean;
-    create_sample?: boolean;
-    modify_hmm?: boolean;
-    modify_subtraction?: boolean;
-    remove_file?: boolean;
-    remove_job?: boolean;
-    upload_file?: boolean;
-};
-
 /**
  * Create permissions object with default false values
  *
- * @param {CreateFakePermissionsProps} permissions values to override the default automatically generated values
- * @returns {Permissions} Permissions object with fake data
+ * @param permissions values to override the default automatically generated values
+ * @returns Permissions object with fake data
  */
 export function createFakePermissions(
-    permissions?: CreateFakePermissionsProps,
+    permissions?: Partial<Permissions>,
 ): Permissions {
     return {
         ...defaultPermissions,

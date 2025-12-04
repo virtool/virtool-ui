@@ -1,22 +1,16 @@
 import { faker } from "@faker-js/faker";
-import { Group, GroupMinimal, Permissions } from "@groups/types";
-import { UserNested } from "@users/types";
+import { Group, GroupMinimal } from "@groups/types";
 import { merge } from "lodash-es";
 import { createFakePermissions } from "./permissions";
-
-type CreateFakeGroupMinimalProps = {
-    id?: string;
-    name?: string;
-};
 
 /**
  * Create a GroupMinimal object with fake data.
  *
- * @param  props values to override the default automatically generated values
- * @returns {GroupMinimal} GroupMinimal object with fake data
+ * @param overrides values to override the default automatically generated values
+ * @returns GroupMinimal object with fake data
  */
 export function createFakeGroupMinimal(
-    props?: CreateFakeGroupMinimalProps,
+    overrides?: Partial<GroupMinimal>,
 ): GroupMinimal {
     const defaultGroupMinimal = {
         id: faker.number.int(),
@@ -24,24 +18,17 @@ export function createFakeGroupMinimal(
         legacy_id: null,
     };
 
-    return merge(defaultGroupMinimal, props);
+    return merge(defaultGroupMinimal, overrides);
 }
-
-type CreateFakeGroupProps = {
-    id?: string;
-    name?: string;
-    permissions?: Permissions;
-    users?: UserNested[];
-};
 
 /**
  * Create Group object with fake data.
  *
- * @param {createFakeGroup} props values to override the default automatically generated values
- * @returns {Group} Group object with fake data
+ * @param overrides values to override the default automatically generated values
+ * @returns Group object with fake data
  */
-export function createFakeGroup(props?: CreateFakeGroupProps): Group {
-    const { name, permissions, users, id } = props || {};
+export function createFakeGroup(overrides?: Partial<Group>): Group {
+    const { name, permissions, users, id } = overrides || {};
     return {
         ...createFakeGroupMinimal({ name, id }),
         permissions: createFakePermissions(permissions),

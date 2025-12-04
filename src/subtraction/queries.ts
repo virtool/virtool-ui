@@ -44,7 +44,7 @@ export function useCreateSubtraction() {
     return useMutation<
         Subtraction,
         unknown,
-        { name: string; nickname: string; uploadId: string }
+        { name: string; nickname: string; uploadId: number }
     >({
         mutationFn: ({ name, nickname, uploadId }) =>
             createSubtraction(name, nickname, uploadId),

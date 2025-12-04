@@ -1,6 +1,6 @@
 import Alert from "@base/Alert";
-import Icon from "@base/Icon";
 import Link from "@base/Link";
+import { CircleAlert } from "lucide-react";
 
 interface AnalysisHMMAlertProps {
     installed: boolean;
@@ -13,13 +13,15 @@ export default function AnalysisHMMAlert({ installed }: AnalysisHMMAlertProps) {
     }
 
     return (
-        <Alert color="orange" level>
-            <Icon name="info-circle" />
-            <span>
-                <strong>HMM data is not installed. </strong>
-                <Link to="/hmm">Install HMMs</Link>
-                <span> to run NuV analyses.</span>
-            </span>
+        <Alert color="orange">
+            <div className="flex gap-2 items-center">
+                <CircleAlert size={18} />
+                <span>
+                    <strong>HMM data is not installed. </strong>
+                    <Link to="/hmm">Install HMMs</Link>
+                    <span> to run NuV analyses.</span>
+                </span>
+            </div>
         </Alert>
     );
 }

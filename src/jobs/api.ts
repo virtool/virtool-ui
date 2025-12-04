@@ -1,5 +1,17 @@
 import { apiClient } from "@app/api";
-import { Job, JobSearchResult } from "./types";
+import {
+    JobMinimal,
+    JobSearchResult,
+    JobState,
+    jobStateToLegacy,
+} from "./types";
+
+/**
+ * Convert new job states to legacy states for API queries.
+ */
+function convertToLegacyJobStates(states: JobState[]): string[] {
+    return states.flatMap((state) => jobStateToLegacy[state]);
+}
 
 /**
  * Fetch a page of job search results
@@ -9,15 +21,19 @@ import { Job, JobSearchResult } from "./types";
  * @param states - The states to filter the jobs by
  * @returns A promise resolving to a page of job search results
  */
-export function findJobs(
+export async function findJobs(
     page: number,
     per_page: number,
-    states: string[],
+    states: JobState[],
 ): Promise<JobSearchResult> {
-    return apiClient
+    const response = await apiClient
         .get("/jobs")
-        .query({ page, per_page, state: states })
-        .then((res) => res.body);
+        .query({ page, per_page, state: convertToLegacyJobStates(states) });
+
+    return {
+        ...response.body,
+        documents: response.body.documents.map(JobMinimal.parse),
+    };
 }
 
 /**
@@ -26,6 +42,7 @@ export function findJobs(
  * @param jobId - The id of the job to fetch
  * @returns A promise resolving to a single job
  */
-export function getJob(jobId: string): Promise<Job> {
-    return apiClient.get(`/jobs/${jobId}`).then((res) => res.body);
+export async function fetchJob(jobId: string): Promise<unknown> {
+    const response = await apiClient.get(`/jobs/${jobId}`);
+    return response.body;
 }

@@ -7,15 +7,15 @@ import { formatData } from "../../../utils";
 import { IimiViewer } from "../IimiViewer";
 
 describe("<IimiViewer />", () => {
-    let iimiAnalysis;
     let formattedIimiAnalysis;
     let predefinedHits;
 
     beforeEach(() => {
-        iimiAnalysis = createFakeIimiAnalysis();
-        iimiAnalysis.workflow = "iimi";
-        iimiAnalysis.ready = true;
-        formattedIimiAnalysis = formatData(iimiAnalysis);
+        formattedIimiAnalysis = formatData({
+            ...createFakeIimiAnalysis(),
+            ready: true,
+            workflow: "iimi",
+        });
 
         // Define three hits with known values for testing
         predefinedHits = [
@@ -46,7 +46,7 @@ describe("<IimiViewer />", () => {
         ];
     });
 
-    it("should render IIMI viewer with experimental workflow warning", async () => {
+    it("should render", async () => {
         renderWithRouter(<IimiViewer detail={formattedIimiAnalysis} />);
 
         expect(
@@ -62,13 +62,15 @@ describe("<IimiViewer />", () => {
                 /This analysis could become inaccessible at any time/,
             ),
         ).toBeInTheDocument();
-    });
 
-    it("should render IIMI toolbar with probability filter and search", () => {
-        renderWithRouter(<IimiViewer detail={formattedIimiAnalysis} />);
-
+        // Check probability  filter and search inputs.
         expect(screen.getByDisplayValue("0.500")).toBeInTheDocument();
         expect(screen.getByText("Sort: PScore")).toBeInTheDocument();
+
+        // Make sure first hit is open.
+        expect(
+            screen.getByText(formattedIimiAnalysis.results.hits[0].name),
+        ).toBeInTheDocument();
     });
 
     it.each([
@@ -115,14 +117,6 @@ describe("<IimiViewer />", () => {
             });
         },
     );
-
-    it("should render IIMI hits in accordion format", () => {
-        renderWithRouter(<IimiViewer detail={formattedIimiAnalysis} />);
-
-        expect(
-            screen.getByText(formattedIimiAnalysis.results.hits[0].name),
-        ).toBeInTheDocument();
-    });
 
     it("should filter hits by minimum probability", () => {
         const testAnalysis = {

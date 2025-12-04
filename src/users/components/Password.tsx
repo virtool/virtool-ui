@@ -23,7 +23,7 @@ const PasswordFooter = styled.div`
 
 type PasswordProps = {
     /** The users unique id */
-    id: string;
+    id: number;
     /** Whether the user will be forced to reset their password on next login */
     forceReset: boolean;
     /** The iso formatted date of their last password change */

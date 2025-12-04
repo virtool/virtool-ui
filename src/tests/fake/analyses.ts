@@ -1,7 +1,6 @@
 import {
     Analysis,
     AnalysisMinimal,
-    AnalysisSample,
     Blast,
     FormattedNuvsResults,
     IimiAnalysis,
@@ -10,23 +9,15 @@ import {
     IimiIsolate,
     IimiSequence,
     UntrustworthyRange,
-    Workflows,
 } from "@analyses/types";
 import { faker } from "@faker-js/faker";
-import { JobMinimal } from "@jobs/types";
-import { assign, merge } from "lodash";
+import { merge } from "lodash";
 import nock from "nock";
 import { createFakeIndexNested } from "./indexes";
-import { createFakeJobMinimal } from "./jobs";
+import { createFakeServerJobMinimal } from "./jobs";
 import { createFakeReferenceNested } from "./references";
 import { createFakeSubtractionNested } from "./subtractions";
 import { createFakeUserNested } from "./user";
-
-export type CreateFakeAnalysisMinimal = {
-    job?: JobMinimal;
-    sample?: AnalysisSample;
-    workflow?: string;
-};
 
 /**
  * Create a fake analysis minimal object
@@ -34,13 +25,13 @@ export type CreateFakeAnalysisMinimal = {
  * @param overrides - optional properties for creating an analysis minimal with specific values
  */
 export function createFakeAnalysisMinimal(
-    overrides?: CreateFakeAnalysisMinimal,
+    overrides?: Partial<AnalysisMinimal>,
 ): AnalysisMinimal {
-    const defaultAnalysisMinimal = {
+    return {
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         created_at: faker.date.past().toISOString(),
         index: createFakeIndexNested(),
-        job: createFakeJobMinimal(),
+        job: createFakeServerJobMinimal(),
         ready: true,
         reference: createFakeReferenceNested(),
         sample: {
@@ -50,9 +41,8 @@ export function createFakeAnalysisMinimal(
         updated_at: faker.date.past().toISOString(),
         user: createFakeUserNested(),
         workflow: "pathoscope_bowtie",
+        ...overrides,
     };
-
-    return assign(defaultAnalysisMinimal, overrides);
 }
 
 type FakeFormattedNuVsAnalysis = FakeFormattedNuVsHit & {
@@ -72,7 +62,7 @@ export function createFakeFormattedNuVsAnalysis(
         files: [],
         maxSequenceLength: faker.number.int({ min: 800, max: 20000 }),
         results: { hits: [createFakeFormattedNuVsHit()] },
-        workflow: Workflows.nuvs,
+        workflow: "nuvs",
     };
 
     return merge(defaultAnalysis, overrides);
@@ -208,7 +198,7 @@ export function createFakeIimiAnalysis(): IimiAnalysis {
         results: {
             hits: [createFakeIimiHit()],
         },
-        workflow: Workflows.iimi,
+        workflow: "iimi",
     };
 }
 
@@ -250,7 +240,7 @@ export function createFakeIimiSequence(): IimiSequence {
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         coverage: createFakeIimiCoverage(),
         length,
-        probability: faker.number.float({ min: 0, max: 1 }),
+        probability: faker.number.float({ min: 0.5, max: 1 }),
         result: faker.datatype.boolean(),
         untrustworthy_ranges: Array.from(
             { length: faker.number.int({ min: 0, max: 3 }) },

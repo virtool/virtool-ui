@@ -5,7 +5,7 @@ import RelativeTime from "./RelativeTime";
 
 type AttributionProps = {
     className?: string;
-    time: string;
+    time: string | Date;
     user?: string;
     verb?: string;
 };

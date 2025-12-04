@@ -1,5 +1,5 @@
+import { ServerJobMinimal } from "@/jobs/types";
 import { SearchResult } from "@/types/api";
-import { JobMinimal } from "@jobs/types";
 import { SampleNested } from "@samples/types";
 import { UserNested } from "@users/types";
 
@@ -44,7 +44,7 @@ export type SubtractionNested = {
 
 /** Subtraction file being uploaded */
 export type SubtractionUpload = {
-    id: number | string;
+    id: number;
     name: string;
 };
 
@@ -60,7 +60,7 @@ export type SubtractionMinimal = SubtractionNested & {
     file: SubtractionUpload;
 
     /** The job associated with the subtraction */
-    job?: JobMinimal;
+    job?: ServerJobMinimal;
 
     /** The subtraction nickname */
     nickname: string;

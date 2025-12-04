@@ -1,38 +1,45 @@
-import { cn } from "@app/utils";
+import { cn } from "@/app/utils";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Button from "@base/Button";
-import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import Loader from "@base/Loader";
 import ProgressCircle from "@base/ProgressCircle";
 import RelativeTime from "@base/RelativeTime";
-import { JobState } from "@jobs/types";
 import {
     useCheckReferenceUpdates,
     useUpdateRemoteReference,
 } from "@references/queries";
+import {
+    CircleCheck,
+    CircleFadingArrowUp,
+    GitFork,
+    HardDrive,
+} from "lucide-react";
 
 function Release({ release, checking, updating, onCheckUpdates, onUpdate }) {
     const hasUpdate = !updating && release.newer;
-
-    const colorClassname = cn({
-        "text-green-600": release.newer,
-        "text-blue-600": !release.newer,
-    });
 
     return (
         <BoxGroupSection>
             <div className="flex items-center justify-between gap-1.5">
                 <div className="flex items-center gap-1.5">
-                    <Icon
-                        className={colorClassname}
-                        name={release.newer ? "arrow-alt-circle-up" : "check"}
-                    />
-                    <strong className={colorClassname}>
-                        {release.newer ? "Update Available" : "Up-to-date"}
-                    </strong>
+                    <div
+                        className={cn("flex items-center gap-1.5", {
+                            "text-blue-600": !hasUpdate,
+                            "text-green-600": hasUpdate,
+                        })}
+                    >
+                        {release.newer ? (
+                            <CircleFadingArrowUp size={18} />
+                        ) : (
+                            <CircleCheck size={18} />
+                        )}
+                        <strong>
+                            {release.newer ? "Update Available" : "Up-to-date"}
+                        </strong>
+                    </div>
 
                     {hasUpdate && (
                         <>
@@ -80,7 +87,7 @@ function Release({ release, checking, updating, onCheckUpdates, onUpdate }) {
 function Upgrade({ progress }) {
     return (
         <BoxGroupSection className="flex gap-1.5 items-center text-blue-600">
-            <ProgressCircle progress={progress} state={JobState.running} />
+            <ProgressCircle progress={progress} state="pending" />
             <strong>Updating</strong>
         </BoxGroupSection>
     );
@@ -103,27 +110,26 @@ export default function Remote({ detail }) {
                 <h2 className="flex items-center justify-between">
                     Remote Reference
                     <a
-                        className="text-base"
+                        className="flex gap-1 items-center text-base"
                         href={`https://github.com/${slug}`}
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <Icon faStyle="fab" name="github" /> {slug}
+                        <GitFork size={18} />
+                        {slug}
                     </a>
                 </h2>
             </BoxGroupHeader>
 
             {installed && (
-                <BoxGroupSection>
-                    <div className="flex items-center gap-1.5">
-                        <Icon name="hdd" />
-                        <strong>Installed Version</strong>
-                        <span>/</span>
-                        <span>{installed.name}</span>
-                        <span>/</span>
-                        <span>Published</span>
-                        <RelativeTime time={installed.published_at} />
-                    </div>
+                <BoxGroupSection className="flex items-center gap-1.5">
+                    <HardDrive size={18} />
+                    <strong>Installed Version</strong>
+                    <span>/</span>
+                    <span>{installed.name}</span>
+                    <span>/</span>
+                    <span>Published</span>
+                    <RelativeTime time={installed.published_at} />
                 </BoxGroupSection>
             )}
 

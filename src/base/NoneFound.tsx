@@ -1,5 +1,5 @@
 import { cn } from "@/app/utils";
-import Icon from "./Icon";
+import { CircleAlert } from "lucide-react";
 import { noneFoundStyle } from "./noneFoundStyle";
 
 /**
@@ -17,7 +17,7 @@ interface NoneFoundProps {
 export default function NoneFound({ noun, className }: NoneFoundProps) {
     return (
         <div className={cn(noneFoundStyle, className)}>
-            <Icon name="info-circle" /> No {noun} found
+            <CircleAlert size={18} /> No {noun} found
         </div>
     );
 }

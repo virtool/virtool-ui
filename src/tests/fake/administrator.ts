@@ -30,21 +30,12 @@ export const administratorRoles = [
     },
 ];
 
-type CreateFakeSettings = {
-    enable_api?: boolean;
-    sample_group?: string;
-    sample_group_read?: boolean;
-    sample_group_write?: boolean;
-    sample_all_read?: boolean;
-    sample_all_write?: boolean;
-};
-
 /**
  * Create fake settings
  *
  * @param overrides - optional properties for creating fake settings with specific values
  */
-export function createFakeSettings(overrides?: CreateFakeSettings): Settings {
+export function createFakeSettings(overrides?: Partial<Settings>): Settings {
     const defaultSettings = {
         default_source_types: [faker.word.noun({ strategy: "any-length" })],
         enable_api: faker.datatype.boolean(),

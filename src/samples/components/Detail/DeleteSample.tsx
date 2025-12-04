@@ -14,12 +14,15 @@ import { useState } from "react";
 type DeleteSampleProps = {
     /** The id of the sample being deleted */
     id: string;
-    /** The name of the sample being deleted */
-    name: string;
-    /** Whether the sample is ready */
-    ready: boolean;
+
     /** The sample's job if it exists */
     job?: JobMinimal;
+
+    /** The name of the sample being deleted */
+    name: string;
+
+    /** Whether the sample is ready */
+    ready: boolean;
 };
 
 /**
@@ -27,9 +30,9 @@ type DeleteSampleProps = {
  */
 export default function DeleteSample({
     id,
+    job,
     name,
     ready,
-    job,
 }: DeleteSampleProps) {
     const [open, setOpen] = useState(false);
     const mutation = useRemoveSample();

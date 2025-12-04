@@ -1,5 +1,15 @@
 import { cn } from "@app/utils";
-import { IconColor } from "@jobs/types";
+
+export type IconColor =
+    | "black"
+    | "blue"
+    | "green"
+    | "gray"
+    | "grayDark"
+    | "grey"
+    | "red"
+    | "orange"
+    | "purple";
 
 type IconProps = {
     "aria-label"?: string;

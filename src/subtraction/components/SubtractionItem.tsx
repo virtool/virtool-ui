@@ -2,7 +2,7 @@ import { getFontSize, getFontWeight, sizes } from "@app/theme";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
-import { JobState } from "@jobs/types";
+import { JobMinimal } from "@jobs/types";
 import styled from "styled-components";
 import { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
@@ -50,6 +50,8 @@ export function SubtractionItem({
     ready,
     user,
 }: SubtractionMinimal) {
+    const parsedJob = job && JobMinimal.parse(job);
+
     return (
         <StyledSubtractionItem>
             <SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
@@ -60,12 +62,12 @@ export function SubtractionItem({
                     time={created_at}
                 />
             </Attribution>
-            {!ready && (
+            {!ready && job && (
                 <ProgressTag>
                     <ProgressCircle
                         size={sizes.md}
-                        progress={job?.progress ?? 0}
-                        state={job?.state ?? JobState.waiting}
+                        progress={parsedJob.progress}
+                        state={parsedJob.state ?? "pending"}
                     />
                 </ProgressTag>
             )}

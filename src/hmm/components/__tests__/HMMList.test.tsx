@@ -1,7 +1,7 @@
 import { AdministratorRoleName } from "@administration/types";
 import { screen } from "@testing-library/react";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeHMMSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
+import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -12,7 +12,7 @@ describe("<HMMList />", () => {
     let path;
 
     beforeEach(() => {
-        fakeHMMData = createFakeHMMSearchResults();
+        fakeHMMData = createFakeHmmSearchResults();
         path = "/hmm";
     });
 
@@ -36,7 +36,7 @@ describe("<HMMList />", () => {
     });
 
     it("should render correctly when no documents exist", async () => {
-        const fakeHMMData = createFakeHMMSearchResults({ documents: [] });
+        const fakeHMMData = createFakeHmmSearchResults({ documents: [] });
         const scope = mockApiGetHmms(fakeHMMData);
         renderWithRouter(<HMM />, path);
 
@@ -48,7 +48,7 @@ describe("<HMMList />", () => {
 
     describe("<HMMInstaller />", () => {
         it("should render correctly when installed = false and user has permission to install", async () => {
-            const fakeHMMData = createFakeHMMSearchResults({
+            const fakeHMMData = createFakeHmmSearchResults({
                 documents: [],
                 total_count: 0,
             });
@@ -79,7 +79,7 @@ describe("<HMMList />", () => {
         });
 
         it("should render correctly when installed = false and user does not have permission to install", async () => {
-            const fakeHMMData = createFakeHMMSearchResults({
+            const fakeHMMData = createFakeHmmSearchResults({
                 documents: [],
                 total_count: 0,
             });
@@ -105,7 +105,7 @@ describe("<HMMList />", () => {
         });
 
         it("should render correctly when installed = false, user has permission to install and task !== undefined", async () => {
-            const fakeHMMData = createFakeHMMSearchResults({
+            const fakeHMMData = createFakeHmmSearchResults({
                 documents: [],
                 total_count: 0,
                 status: {

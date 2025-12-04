@@ -2,8 +2,8 @@ import Dropdown from "@base/Dropdown";
 import DropdownButton from "@base/DropdownButton";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
-import Icon from "@base/Icon";
 import { map } from "lodash-es";
+import { ArrowUpDown, ChevronDown } from "lucide-react";
 
 const sortKeys = {
     pathoscope: ["coverage", "depth", "weight"],
@@ -38,9 +38,10 @@ export function AnalysisViewerSort({
         <Dropdown>
             <DropdownButton className="flex items-center">
                 <span>
-                    <Icon name="sort" /> Sort: {sortTitles[sortKey]}
+                    <ArrowUpDown className="size-1" /> Sort:{" "}
+                    {sortTitles[sortKey]}
                 </span>
-                <Icon name="caret-down" />
+                <ChevronDown size={18} />
             </DropdownButton>
             <DropdownMenuContent>
                 {map(sortKeys[workflow], (key) => (

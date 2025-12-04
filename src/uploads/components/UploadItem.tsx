@@ -9,7 +9,7 @@ import { useDeleteFile } from "../queries";
 
 export type UploadItemProps = {
     canDelete: boolean;
-    id: string;
+    id: number;
     name: string;
     size: number;
     uploaded_at: string;
@@ -33,7 +33,9 @@ export default function UploadItem({
     return (
         <BoxGroupSection>
             <div className="grid grid-cols-3">
-                <div className="font-medium text-lg">{name}</div>
+                <div className="flex font-medium items-center text-lg">
+                    {name}
+                </div>
                 <div className="flex">
                     {user === null ? (
                         <span>
@@ -49,8 +51,8 @@ export default function UploadItem({
                         </>
                     )}
                 </div>
-                <div className="flex font-medium gap-6 justify-end text-lg">
-                    <span>{byteSize(size, true)}</span>
+                <div className="flex font-medium items-center gap-6 justify-end text-lg">
+                    <div>{byteSize(size, true)}</div>
                     {canDelete && (
                         <IconButton
                             color="red"

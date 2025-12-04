@@ -1,18 +1,21 @@
 import { cn } from "@/app/utils";
 import IconButton from "@base/IconButton";
 import ProgressCircle from "@base/ProgressCircle";
-import { JobMinimal, JobState } from "@jobs/types";
+import { JobMinimal } from "@jobs/types";
 
-interface SampleItemEndIconProps {
-    /** Callback to handle click event */
-    onClick: () => void;
-    /** Whether the sample is ready */
-    ready: boolean;
+type SampleItemEndIconProps = {
     /** The job responsible for creating the sample */
     job: JobMinimal;
+
+    /** Callback to handle click event */
+    onClick: () => void;
+
+    /** Whether the sample is ready */
+    ready: boolean;
+
     /** Additional class names */
     className?: string;
-}
+};
 
 /**
  * Icon indicating the status of sample
@@ -28,7 +31,7 @@ export default function SampleItemEndIcon({
         className,
     );
 
-    if (ready || job?.state === "complete") {
+    if (ready || job?.state === "succeeded") {
         return (
             <div className={containerClasses}>
                 <IconButton
@@ -46,7 +49,7 @@ export default function SampleItemEndIcon({
         <div className={containerClasses}>
             <ProgressCircle
                 progress={job?.progress || 0}
-                state={job?.state || JobState.waiting}
+                state={job?.state || "pending"}
             />
             <strong>Creating</strong>
         </div>

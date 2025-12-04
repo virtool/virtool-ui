@@ -5,16 +5,16 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import JobStateIcon from "@jobs/components/JobStateIcon";
-import { JobState, workflows } from "@jobs/types";
-import { getStateTitle } from "@jobs/utils";
+import { JobState, Workflow } from "@jobs/types";
 import { UserNested } from "@users/types";
 import styled from "styled-components";
 
 type JobStatusProps = {
-    /** The state of the job */
-    state: JobState;
     /** The progress of the job */
     progress: number;
+
+    /** The state of the job */
+    state: JobState;
 };
 
 /**
@@ -23,8 +23,8 @@ type JobStatusProps = {
 function JobStatus({ state, progress }: JobStatusProps) {
     return (
         <>
-            <span>{getStateTitle(state)}</span>
-            {state === "complete" ? (
+            <span className="capitalize">{state}</span>
+            {state === "succeeded" ? (
                 <JobStateIcon state={state} />
             ) : (
                 <ProgressCircle
@@ -59,19 +59,24 @@ const JobItemHeaderRight = styled.div`
     font-weight: ${getFontWeight("thick")};
 `;
 
-type JobItemProps = {
+export type JobItemProps = {
     /** The job id */
     id: string;
-    /** The workflow of the job */
-    workflow: workflows;
-    /** The state of the job */
-    state: JobState;
+
+    /** When the job was created */
+    createdAt: Date;
+
     /** The progress of the job */
     progress: number;
-    /** When the job was created */
-    created_at: string;
+
+    /** The state of the job */
+    state: JobState;
+
     /** The user who created the job */
     user: UserNested;
+
+    /** The workflow of the job */
+    workflow: Workflow;
 };
 
 /**
@@ -79,18 +84,18 @@ type JobItemProps = {
  */
 export default function JobItem({
     id,
-    workflow,
-    state,
+    createdAt,
     progress,
-    created_at,
+    state,
     user,
+    workflow,
 }: JobItemProps) {
     return (
         <StyledJobItem>
             <JobLink to={`/jobs/${id}`}>
                 {getWorkflowDisplayName(workflow)}
             </JobLink>
-            <Attribution time={created_at} user={user.handle} />
+            <Attribution time={createdAt} user={user.handle} />
             <JobItemHeaderRight>
                 <JobStatus state={state} progress={progress} />
             </JobItemHeaderRight>

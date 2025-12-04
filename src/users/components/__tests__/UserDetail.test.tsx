@@ -1,10 +1,12 @@
+import { Account } from "@/account/types";
+import { Group } from "@/groups/types";
 import Settings from "@administration/components/Settings";
 import { AdministratorRoleName } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiListGroups } from "@tests/api/groups";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeGroupMinimal } from "@tests/fake/groups";
+import { createFakeGroup } from "@tests/fake/groups";
 import {
     createFakeUser,
     mockApiEditUser,
@@ -12,7 +14,6 @@ import {
 } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
 import { User } from "@users/types";
-import { times } from "lodash-es";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -21,15 +22,22 @@ function formatUserPath(user: User) {
 }
 
 describe("<UserDetail />", () => {
-    let groups;
-    let user;
-    let account;
+    let groups: Group[];
+    let user: User;
+    let account: Account;
 
     beforeEach(() => {
-        groups = times(5, (index) =>
-            createFakeGroupMinimal({ name: `group${index}` }),
+        groups = Array.from({ length: 5 }, (_, index) =>
+            createFakeGroup({ name: `Group ${index}` }),
         );
-        user = createFakeUser({ groups, active: true });
+        user = createFakeUser({
+            groups: groups.map(({ id, name, legacy_id }) => ({
+                id,
+                name,
+                legacy_id,
+            })),
+            active: true,
+        });
         account = createFakeAccount({
             administrator_role: AdministratorRoleName.FULL,
         });
@@ -65,20 +73,20 @@ describe("<UserDetail />", () => {
             expect(screen.getByText("Change Password")).toBeInTheDocument();
 
             expect(await screen.findByText("Groups")).toBeInTheDocument();
-            expect(screen.getByText("Group0")).toBeInTheDocument();
-            expect(screen.getByText("Group1")).toBeInTheDocument();
-            expect(screen.getByText("Group2")).toBeInTheDocument();
-            expect(screen.getByText("Group3")).toBeInTheDocument();
+            expect(screen.getByText("Group 0")).toBeInTheDocument();
+            expect(screen.getByText("Group 1")).toBeInTheDocument();
+            expect(screen.getByText("Group 2")).toBeInTheDocument();
+            expect(screen.getByText("Group 3")).toBeInTheDocument();
 
             expect(screen.getByText("Primary Group")).toBeInTheDocument();
             expect(
                 screen.getByRole("option", { name: "None" }),
             ).toBeInTheDocument();
             expect(
-                screen.getByRole("option", { name: "Group1" }),
+                screen.getByRole("option", { name: "Group 1" }),
             ).toBeInTheDocument();
             expect(
-                screen.getByRole("option", { name: "Group4" }),
+                screen.getByRole("option", { name: "Group 4" }),
             ).toBeInTheDocument();
 
             expect(screen.getByText("Permissions")).toBeInTheDocument();
@@ -114,7 +122,7 @@ describe("<UserDetail />", () => {
 
             expect(screen.queryByLabelText("admin")).not.toBeInTheDocument();
             expect(screen.queryByText("User Role")).not.toBeInTheDocument();
-            expect(screen.getByText("Group4")).toBeInTheDocument();
+            expect(screen.getByText("Group 4")).toBeInTheDocument();
             expect(screen.getByText("create_sample")).toBeInTheDocument();
 
             scope.done();
@@ -157,8 +165,8 @@ describe("<UserDetail />", () => {
                 groupScope.done();
             });
 
-            expect(await screen.findByLabelText("group1")).toBeInTheDocument();
-            expect(screen.getByLabelText("group3")).toBeInTheDocument();
+            expect(await screen.findByLabelText("Group 1")).toBeInTheDocument();
+            expect(screen.getByLabelText("Group 3")).toBeInTheDocument();
         });
         it("should render loading when groups haven't loaded", async () => {
             mockApiGetAccount(account);
@@ -171,8 +179,8 @@ describe("<UserDetail />", () => {
             ).toBeInTheDocument();
 
             expect(screen.getByLabelText("loading")).toBeInTheDocument();
-            expect(screen.queryByLabelText("Group1")).not.toBeInTheDocument();
-            expect(screen.queryByLabelText("Group3")).not.toBeInTheDocument();
+            expect(screen.queryByLabelText("Group 1")).not.toBeInTheDocument();
+            expect(screen.queryByLabelText("Group 3")).not.toBeInTheDocument();
             expect(screen.getByText("Permissions")).toBeInTheDocument();
 
             scope.done();

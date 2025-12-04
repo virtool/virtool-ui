@@ -1,68 +1,44 @@
 import { faker } from "@faker-js/faker";
-import { JobMinimal, JobState, workflows } from "@jobs/types";
-import { UserNested } from "@users/types";
-import { merge } from "lodash";
+import { ServerJobMinimal, ServerJobState } from "@jobs/types";
 import nock from "nock";
 import { createFakeUserNested } from "./user";
 
-const jobStates = [
-    "complete",
-    "cancelled",
-    "error",
-    "preparing",
-    "running",
-    "terminated",
-    "timeout",
-    "waiting",
-];
-
-type CreateJobNestedProps = {
-    id?: string;
-};
-
-export function createFakeJobNested(props?: CreateJobNestedProps) {
-    const defaultJobNested = {
+/**
+ * Creates a fake job minimal object in server response shape.
+ * Use this for HTTP mocks.
+ */
+export function createFakeServerJobMinimal(
+    overrides?: Partial<ServerJobMinimal>,
+): ServerJobMinimal {
+    return {
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-    };
-
-    return merge(defaultJobNested, props);
-}
-
-type CreateJobMinimalProps = {
-    archived?: boolean;
-    created_at?: string;
-    progress?: number;
-    stage?: string;
-    state?: JobState;
-    user?: UserNested;
-    workflow?: string;
-};
-
-export function createFakeJobMinimal(
-    props?: CreateJobMinimalProps,
-): JobMinimal {
-    const defaultJobMinimal = {
-        ...createFakeJobNested(),
-        archived: false,
         created_at: faker.date.past().toISOString(),
         progress: faker.number.int({ min: 0, max: 100 }),
         stage: "waiting",
-        state: faker.helpers.arrayElement(jobStates) as JobState,
+        state: faker.helpers.arrayElement<ServerJobState>([
+            "cancelled",
+            "complete",
+            "error",
+            "running",
+            "waiting",
+        ]),
         user: createFakeUserNested(),
-        workflow: workflows.pathoscope_bowtie,
+        workflow: "pathoscope_bowtie",
+        ...overrides,
     };
-
-    return merge(defaultJobMinimal, props);
 }
 
 /**
  * Sets up a mocked API route for fetching a list of jobs
  *
- * @param jobs - The documents for jobs
+ * @param jobs - The documents for jobs (server shape)
  * @param found_count - The number of jobs found
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetJobs(jobs: JobMinimal[], found_count?: number) {
+export function mockApiGetJobs(
+    jobs: ReturnType<typeof createFakeServerJobMinimal>[],
+    found_count?: number,
+) {
     return nock("http://localhost").get("/api/jobs").query(true).reply(200, {
         documents: jobs,
         counts: null,

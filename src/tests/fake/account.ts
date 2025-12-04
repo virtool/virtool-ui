@@ -1,13 +1,6 @@
-import {
-    Account,
-    AccountSettings,
-    APIKeyMinimal,
-    QuickAnalyzeWorkflow,
-} from "@account/types";
-import { AdministratorRoleName } from "@administration/types";
+import { Account, APIKeyMinimal, QuickAnalyzeWorkflow } from "@account/types";
 import { faker } from "@faker-js/faker";
-import { GroupMinimal, Permissions } from "@groups/types";
-import { merge } from "lodash";
+import { Permissions } from "@groups/types";
 import nock from "nock";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
@@ -20,52 +13,35 @@ const defaultSettings = {
     skip_quick_analyze_dialog: true,
 };
 
-type CreateFakeAccountArgs = {
-    administrator_role?: AdministratorRoleName;
-    email?: string;
-    groups?: GroupMinimal[];
-    handle?: string;
-    permissions?: Permissions;
-    primary_group?: GroupMinimal;
-    settings?: AccountSettings;
-};
-
-export function createFakeAccount(props?: CreateFakeAccountArgs): Account {
-    const { settings, email, ...userProps } = props || {};
+export function createFakeAccount(overrides?: Partial<Account>): Account {
+    const { settings, email, ...userProps } = overrides || {};
 
     return {
-        email: email === undefined ? faker.internet.email() : email,
+        email: email ?? faker.internet.email(),
         settings: { ...defaultSettings, ...settings },
-        ...{ settings, email },
         ...createFakeUser(userProps),
     };
 }
 
-type CreateFakeApiKeysArgs = {
-    name?: string;
-    groups?: Array<GroupMinimal>;
-    permissions?: Permissions;
-};
-
 /**
  * Create a fake API key
  *
- * @param props - optional properties for creating a fake API key with specific values
+ * @param overrides - optional properties for creating a fake API key with specific values
  */
-export function createFakeApiKey(props?: CreateFakeApiKeysArgs): APIKeyMinimal {
-    return merge(
-        {
-            created_at: faker.date.past().toISOString(),
-            groups: [createFakeGroupMinimal()],
-            id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-            name: faker.word.noun({ strategy: "any-length" }),
-            permissions: createFakePermissions({
-                cancel_job: true,
-                create_ref: true,
-            }),
-        },
-        props,
-    );
+export function createFakeApiKey(
+    overrides?: Partial<APIKeyMinimal>,
+): APIKeyMinimal {
+    return {
+        created_at: faker.date.past().toISOString(),
+        groups: [createFakeGroupMinimal()],
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+        name: faker.word.noun({ strategy: "any-length" }),
+        permissions: createFakePermissions({
+            cancel_job: true,
+            create_ref: true,
+        }),
+        ...overrides,
+    };
 }
 
 /**

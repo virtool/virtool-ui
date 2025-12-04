@@ -46,7 +46,7 @@ type UserItemProps = {
     active: boolean;
     administrator_role: AdministratorRoleName;
     handle: string;
-    id: string;
+    id: number;
     /** The primary group assigned to the user */
     primary_group: GroupMinimal;
 };

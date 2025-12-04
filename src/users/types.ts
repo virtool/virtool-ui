@@ -20,7 +20,8 @@ type UserB2c = {
 /** A user with the essential information */
 export type UserNested = {
     /** The unique identifier */
-    id: string;
+    id: number;
+
     /** The user's handle or username */
     handle: string;
 };

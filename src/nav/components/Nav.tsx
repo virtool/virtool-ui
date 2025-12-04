@@ -34,7 +34,7 @@ export default function Nav({ administrator_role, handle }: NavBarProps) {
         <nav className="bg-virtool flex justify-between text-white">
             <div className="flex items-center">
                 <Logo className="pb-2.5 pl-10 pr-4" color="white" />
-                <NavLink to="/jobs?state=preparing&state=running">Jobs</NavLink>
+                <NavLink to="/jobs?state=running">Jobs</NavLink>
                 <NavLink to="/samples">Samples</NavLink>
                 <NavLink to="/refs">References</NavLink>
                 <NavLink to="/hmm">HMM</NavLink>

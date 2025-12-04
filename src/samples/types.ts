@@ -5,7 +5,7 @@
  * Types in this file represent the data returned from the API, or are useful for working
  * with sample data.
  */
-import { JobMinimal } from "@jobs/types";
+import { ServerJobMinimal } from "@jobs/types";
 import { LabelNested } from "@labels/types";
 import { UserNested } from "@users/types";
 import { SubtractionNested } from "../subtraction/types";
@@ -61,7 +61,7 @@ export type SampleMinimal = SampleNested & {
     host: string;
     isolate: string;
     /* Information about the job associated with the sample */
-    job?: JobMinimal;
+    job?: ServerJobMinimal;
     /* Label associated with the sample */
     labels: Array<LabelNested>;
     library_type: LibraryType;

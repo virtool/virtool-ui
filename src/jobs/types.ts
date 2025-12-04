@@ -1,96 +1,155 @@
-import { UserNested } from "@users/types";
-
+import z from "zod";
 import { SearchResult } from "../types/api";
 
-export enum JobState {
-    complete = "complete",
-    cancelled = "cancelled",
-    error = "error",
-    preparing = "preparing",
-    running = "running",
-    terminated = "terminated",
-    timeout = "timeout",
-    waiting = "waiting",
-}
+const ServerJobStateSchema = z.enum([
+    "cancelled",
+    "complete",
+    "error",
+    "preparing",
+    "running",
+    "terminated",
+    "timeout",
+    "waiting",
+]);
+export type ServerJobState = z.infer<typeof ServerJobStateSchema>;
 
-export type IconColor =
-    | "black"
-    | "blue"
-    | "green"
-    | "gray"
-    | "grayDark"
-    | "grey"
-    | "red"
-    | "orange"
-    | "purple";
+const JobStateSchema = z.enum([
+    "cancelled",
+    "failed",
+    "pending",
+    "running",
+    "succeeded",
+]);
+export type JobState = z.infer<typeof JobStateSchema>;
 
-/** A Job with essential information */
-export type JobNested = {
-    id: string;
+const serverToClientState: Record<ServerJobState, JobState> = {
+    cancelled: "cancelled",
+    complete: "succeeded",
+    error: "failed",
+    preparing: "running",
+    running: "running",
+    terminated: "failed",
+    timeout: "failed",
+    waiting: "pending",
 };
 
-export enum workflows {
-    pathoscope_bowtie = "pathoscope_bowtie",
-    nuvs = "nuvs",
-    build_index = "build_index",
-    create_sample = "create_sample",
-    create_subtraction = "create_subtraction",
-}
+const JobStateParsed = ServerJobStateSchema.transform(
+    (val) => serverToClientState[val],
+);
 
-/** Minimal Job used for websocket messages and resource listings */
-export type JobMinimal = JobNested & {
-    archived: boolean;
-    /*** The iso formatted date of creation */
-    created_at: string;
-    progress: number;
-    stage?: string;
-    state: JobState;
-    user: UserNested;
-    workflow: workflows;
+export const jobStates: JobState[] = JobStateSchema.options;
+
+export const jobStateToLegacy: Record<JobState, ServerJobState[]> = {
+    cancelled: ["cancelled"],
+    failed: ["error", "terminated", "timeout"],
+    pending: ["waiting"],
+    running: ["preparing", "running"],
+    succeeded: ["complete"],
 };
 
-/** Provides information on when a Job was pinged */
-export type JobPing = {
-    pinged_at: Date;
-};
+export const Workflow = z.preprocess(
+    (val) => (val === "pathoscope_bowtie" ? "pathoscope" : val),
+    z.enum([
+        "build_index",
+        "create_sample",
+        "create_subtraction",
+        "nuvs",
+        "pathoscope",
+    ]),
+);
+export type Workflow = z.infer<typeof Workflow>;
+export type ServerWorkflow = z.input<typeof Workflow>;
 
-/** Provides Job error information */
-export type JobError = {
-    details: Array<string>;
-    traceback: Array<string>;
-    type: string;
-};
+export const JobMinimal = z
+    .object({
+        id: z.string(),
+        created_at: z.coerce.date(),
+        progress: z.int(),
+        stage: z.string().nullable(),
+        state: JobStateParsed,
+        user: z.object({
+            id: z.int(),
+            handle: z.string(),
+        }),
+        workflow: Workflow,
+    })
+    .transform(
+        ({ created_at, id, progress, stage, state, user, workflow }) => ({
+            createdAt: created_at,
+            id,
+            progress,
+            state,
+            step: stage,
+            user,
+            workflow,
+        }),
+    );
 
-/** Provides Job Status information */
-export type JobStatus = {
-    error?: JobError | null;
-    progress: number;
-    /** Stage description for job */
-    stage?: string | null;
-    state: JobState;
-    step_description?: string | null;
-    step_name?: string | null;
-    timestamp: string;
-};
+export type ServerJobMinimal = z.input<typeof JobMinimal>;
+export type JobMinimal = z.infer<typeof JobMinimal>;
 
-/** A complete Job */
-export type Job = JobMinimal & {
-    acquired: boolean;
-    /** Provides information on subtraction and the related uploads */
-    args: { [key: string]: any };
-    /** Array containing status history of job */
-    status: Array<JobStatus>;
-    ping?: JobPing;
-};
+const JobStep = z
+    .object({
+        stage: z.string(),
+        step_name: z.string(),
+        step_description: z.string(),
+        timestamp: z.coerce.date(),
+    })
+    .transform((data) => ({
+        name: data.step_name || data.stage,
+        description: data.step_description,
+        startedAt: data.timestamp,
+    }));
 
-/** Gives information about number of jobs in each state */
+export type ServerJobStep = z.input<typeof JobStep>;
+export type JobStep = z.infer<typeof JobStep>;
+
+const terminalStates = ["cancelled", "failed", "succeeded"];
+
+export const Job = z
+    .object({
+        args: z.record(z.string(), z.unknown()),
+        id: z.string(),
+        acquired: z.boolean(),
+        created_at: z.coerce.date(),
+        progress: z.int(),
+        stage: z.preprocess(
+            (val) => (val === "" ? null : val),
+            z.string().nullable(),
+        ),
+        status: z.array(
+            z.looseObject({ state: z.string(), timestamp: z.coerce.date() }),
+        ),
+        state: z.nullable(JobStateParsed),
+        user: z.object({
+            id: z.int(),
+            handle: z.string(),
+        }),
+        workflow: Workflow,
+    })
+    .transform(({ created_at, stage, state, status, ...rest }) => ({
+        ...rest,
+        createdAt: created_at,
+        step: stage,
+        finishedAt: terminalStates.includes(state)
+            ? status[status.length - 1]?.timestamp
+            : undefined,
+        state,
+        steps: status
+            .filter((s) => s.state === "running")
+            .map((s) => JobStep.parse(s)),
+    }));
+
+export type ServerJob = z.input<typeof Job>;
+export type Job = z.infer<typeof Job>;
+
 export type JobCounts = {
     [state in JobState]?: { [key: string]: number | null };
 };
 
-/** Job search results from the API */
 export type JobSearchResult = SearchResult & {
     counts: JobCounts;
+
     /** Gives information about each job */
     documents: Array<JobMinimal>;
 };

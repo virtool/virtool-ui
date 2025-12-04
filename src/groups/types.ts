@@ -4,7 +4,7 @@ import { UserNested } from "@users/types";
 export type GroupMinimal = {
     id: number;
     legacy_id: string | null;
-    name?: string;
+    name: string;
 };
 
 export type Group = GroupMinimal & {

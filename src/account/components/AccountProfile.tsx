@@ -1,7 +1,7 @@
-import Icon from "@base/Icon";
 import InitialIcon from "@base/InitialIcon";
 import Label from "@base/Label";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import { ShieldUser } from "lucide-react";
 import { useFetchAccount } from "../queries";
 import AccountEmail from "./AccountEmail";
 import AccountGroups from "./AccountGroups";
@@ -35,8 +35,8 @@ export default function AccountProfile() {
                             className="capitalize text-base ml-auto"
                             color="purple"
                         >
-                            <Icon name="user-shield" /> {administrator_role}{" "}
-                            Administrator
+                            <ShieldUser />
+                            {administrator_role} Administrator
                         </Label>
                     )}
                 </div>

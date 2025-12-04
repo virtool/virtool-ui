@@ -2,7 +2,6 @@ import NuvsViewer from "@analyses/components/Nuvs/NuvsViewer";
 import { usePathParams } from "@app/hooks";
 import { getWorkflowDisplayName } from "@app/utils";
 import Box from "@base/Box";
-import Icon from "@base/Icon";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
 import RelativeTime from "@base/RelativeTime";
@@ -10,6 +9,7 @@ import SubviewHeader from "@base/SubviewHeader";
 import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
 import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import { useFetchSample } from "@samples/queries";
+import { CircleAlert } from "lucide-react";
 import styled from "styled-components";
 import { useGetAnalysis } from "../queries";
 import {
@@ -80,8 +80,8 @@ export default function AnalysisDetail() {
     } else {
         return (
             <UnsupportedAnalysis>
-                <Icon name={"info-circle"} />
-                Workflow not yet supported.
+                <CircleAlert />
+                Workflow not supported.
             </UnsupportedAnalysis>
         );
     }

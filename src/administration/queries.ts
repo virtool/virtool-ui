@@ -86,7 +86,7 @@ export const userQueryKeys = {
     infiniteList: (filters: Array<string | number | boolean>) =>
         ["users", "infiniteList", ...filters] as const,
     details: () => ["users", "details"] as const,
-    detail: (user_id: string) => ["users", "details", user_id] as const,
+    detail: (user_id: number) => ["users", "details", user_id] as const,
 };
 
 /**
@@ -150,7 +150,7 @@ export function useCreateUser() {
  * @param userId - The id of the user to fetch
  * @returns A single user
  */
-export function useFetchUser(userId: string) {
+export function useFetchUser(userId: number) {
     return useQuery<User>({
         queryKey: userQueryKeys.detail(userId),
         queryFn: () => getUser(userId),
@@ -164,7 +164,7 @@ export function useFetchUser(userId: string) {
  */
 export function useUpdateUser() {
     const queryClient = useQueryClient();
-    return useMutation<User, unknown, { userId: string; update: UserUpdate }>({
+    return useMutation<User, unknown, { userId: number; update: UserUpdate }>({
         mutationFn: ({ userId, update }) => updateUser(userId, update),
         onSuccess: (result) =>
             queryClient.setQueryData(userQueryKeys.detail(result.id), result),
@@ -181,7 +181,7 @@ export function useSetAdministratorRole() {
     return useMutation<
         User,
         ErrorResponse,
-        { role: AdministratorRoleName; user_id: string }
+        { role: AdministratorRoleName; user_id: number }
     >({
         mutationFn: ({ role, user_id }) => setAdministratorRole(role, user_id),
         onSuccess: () => {
