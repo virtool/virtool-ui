@@ -6,22 +6,14 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSelect from "@base/InputSelect";
-import PseudoLabel from "@base/PseudoLabel";
-import SelectBox from "@base/SelectBox";
+import { SelectBox, SelectBoxItem } from "@base/SelectBox";
 import { includes, map } from "lodash-es";
-import styled from "styled-components";
 
 const rights = [
     { label: "None", value: "" },
     { label: "Read", value: "r" },
     { label: "Read & write", value: "rw" },
 ];
-
-const SampleRightsGroup = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: ${(props) => props.theme.gap.column};
-`;
 
 type SampleRightsProps = {
     /** The settings data used for configuring sample rights */
@@ -62,49 +54,36 @@ export default function SampleRights({ settings }: SampleRightsProps) {
                 </p>
             </BoxGroupHeader>
             <BoxGroupSection>
-                <PseudoLabel>Sample Group</PseudoLabel>
-                <SampleRightsGroup>
-                    <SelectBox
-                        onClick={() =>
-                            mutation.mutate({ sample_group: "none" })
-                        }
-                        active={sample_group === "none"}
-                    >
+                <SelectBox
+                    className="grid-cols-3"
+                    label="Sample Group"
+                    onValueChange={(value) =>
+                        mutation.mutate({ sample_group: value })
+                    }
+                    value={sample_group}
+                >
+                    <SelectBoxItem value="none">
                         <strong>None</strong>
                         <p>
                             Samples are assigned no group and only
                             <em> all {"users'"}</em> rights apply
                         </p>
-                    </SelectBox>
-
-                    <SelectBox
-                        onClick={() =>
-                            mutation.mutate({ sample_group: "force_choice" })
-                        }
-                        active={sample_group === "force_choice"}
-                    >
+                    </SelectBoxItem>
+                    <SelectBoxItem value="force_choice">
                         <strong>Force choice</strong>
                         <p>
                             Samples are automatically assigned the creating
                             {"user's"} primary group
                         </p>
-                    </SelectBox>
-
-                    <SelectBox
-                        onClick={() =>
-                            mutation.mutate({
-                                sample_group: "users_primary_group",
-                            })
-                        }
-                        active={sample_group === "users_primary_group"}
-                    >
+                    </SelectBoxItem>
+                    <SelectBoxItem value="users_primary_group">
                         <strong>{"User's"} primary group</strong>
                         <p>
                             Samples are assigned by the user in the creation
                             form
                         </p>
-                    </SelectBox>
-                </SampleRightsGroup>
+                    </SelectBoxItem>
+                </SelectBox>
 
                 <InputGroup>
                     <InputLabel htmlFor="group">Group Rights</InputLabel>

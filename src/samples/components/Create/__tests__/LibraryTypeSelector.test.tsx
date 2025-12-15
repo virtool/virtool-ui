@@ -1,37 +1,32 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import LibraryTypeSelector from "../LibraryTypeSelector";
 
 describe("<LibraryTypeSelector>", () => {
-    let props;
-    beforeEach(() => {
-        props = {
-            onSelect: vi.fn(),
-            libraryType: "normal",
-        };
+    it("should call onSelect when selection changes", async () => {
+        const onSelect = vi.fn();
+        renderWithProviders(
+            <LibraryTypeSelector libraryType="normal" onSelect={onSelect} />,
+        );
+
+        await userEvent.click(screen.getByRole("radio", { name: /sRNA/i }));
+        expect(onSelect).toHaveBeenCalledWith("srna");
     });
 
-    it("should have Normal selected [libraryType='normal']", async () => {
-        renderWithProviders(<LibraryTypeSelector {...props} />);
-
-        await userEvent.click(
-            screen.getByRole("button", {
-                name: "Normal Search against whole genome references using normal reads.",
-            }),
+    it("should show Normal as selected when libraryType is 'normal'", () => {
+        renderWithProviders(
+            <LibraryTypeSelector libraryType="normal" onSelect={vi.fn()} />,
         );
-        expect(props.onSelect).toHaveBeenCalledWith("normal");
-    });
 
-    it("should have sRNA selected when [libraryType='srna']", async () => {
-        renderWithProviders(<LibraryTypeSelector {...props} />);
-
-        await userEvent.click(
-            screen.getByRole("button", {
-                name: "sRNA Search against whole genome references using sRNA reads",
-            }),
+        expect(screen.getByRole("radio", { name: /Normal/i })).toHaveAttribute(
+            "data-state",
+            "on",
         );
-        expect(props.onSelect).toHaveBeenCalledWith("srna");
+        expect(screen.getByRole("radio", { name: /sRNA/i })).toHaveAttribute(
+            "data-state",
+            "off",
+        );
     });
 });
