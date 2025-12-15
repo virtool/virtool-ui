@@ -6,7 +6,7 @@ import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
-import { map } from "lodash";
+import { map } from "lodash-es";
 import { useFindSubtractions } from "../queries";
 import { SubtractionItem } from "./SubtractionItem";
 import SubtractionToolbar from "./SubtractionToolbar";

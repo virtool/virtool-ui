@@ -5,8 +5,7 @@ import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
 import { IndexMinimal } from "@indexes/types";
 import * as RadixSelect from "@radix-ui/react-select";
-import { map } from "lodash";
-import { sortBy } from "lodash-es";
+import { map, sortBy } from "lodash-es";
 import { useMemo } from "react";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 

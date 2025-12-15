@@ -6,8 +6,7 @@ import {
     SubtractionNested,
     SubtractionOption,
 } from "@subtraction/types";
-import { merge, pick } from "lodash";
-import { assign } from "lodash-es";
+import { assign, merge, pick } from "lodash-es";
 import nock from "nock";
 import { createFakeUserNested } from "./user";
 

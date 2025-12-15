@@ -8,7 +8,7 @@ import {
     SampleMinimal,
     WorkflowState,
 } from "@samples/types";
-import { assign } from "lodash";
+import { assign } from "lodash-es";
 import nock from "nock";
 import { createFakeServerJobMinimal } from "./jobs";
 import { createFakeLabelNested } from "./labels";

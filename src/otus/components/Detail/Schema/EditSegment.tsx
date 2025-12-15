@@ -6,8 +6,7 @@ import DialogTitle from "@base/DialogTitle";
 import { useUpdateOTU } from "@otus/queries";
 import { Molecule, OtuSegment } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { map } from "lodash";
-import { find } from "lodash-es";
+import { find, map } from "lodash-es";
 import SegmentForm from "./SegmentForm";
 
 type FormValues = {

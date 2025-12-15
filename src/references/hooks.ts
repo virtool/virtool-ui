@@ -1,26 +1,28 @@
 import { useFetchAccount } from "@account/queries";
 import { AdministratorRoleName } from "@administration/types";
 import { apiClient } from "@app/api";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { difference, filter, find, some, union } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Response } from "superagent";
-import * as Yup from "yup";
+import z from "zod";
 import { useFetchReference } from "./queries";
 
 export function getValidationSchema(sourceTypes: string[]) {
-    return Yup.object({
-        sourceType: Yup.string()
-            .lowercase()
-            .notOneOf(sourceTypes, "Source type already exists")
-            .test(
-                "containsNoSpaces",
+    return z.object({
+        sourceType: z
+            .string()
+            .transform((val) => val.toLowerCase().trim())
+            .refine(
+                (val) => !val.includes(" "),
                 "Source types may not contain spaces",
-                (value) => !value.includes(" "),
             )
-            .trim(),
+            .refine(
+                (val) => !sourceTypes.includes(val),
+                "Source type already exists",
+            ),
     });
 }
 
@@ -32,7 +34,7 @@ export function useSourceTypesForm(sourceTypes: string[]) {
         reset,
     } = useForm({
         defaultValues: { sourceType: "" },
-        resolver: yupResolver(getValidationSchema(sourceTypes)),
+        resolver: zodResolver(getValidationSchema(sourceTypes)),
     });
 
     return { errors, handleSubmit, register, reset };

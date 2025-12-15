@@ -1,6 +1,4 @@
-import { map } from "lodash";
-import { split, trimEnd } from "lodash-es";
-import { forEach } from "lodash-es/lodash";
+import { forEach, map, split, trimEnd } from "lodash-es";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams, useSearch } from "wouter";
 
@@ -72,10 +70,10 @@ export function formatSearchParams(
     forEach(params, (value, key) => {
         if (Array.isArray(value)) {
             forEach(value, (arrayValue) =>
-                searchParams.append(key, arrayValue),
+                searchParams.append(key, String(arrayValue)),
             );
         } else {
-            searchParams.set(key, value);
+            searchParams.set(key, String(value));
         }
     });
 
@@ -150,7 +148,7 @@ function updateUrlSearchParamsList(
     const params = new URLSearchParams(search);
 
     params.delete(key);
-    forEach(values, (value) => params.append(key, value));
+    forEach(values, (value) => params.append(key, String(value)));
 
     search = `?${params.toString()}`;
     navigate(search);

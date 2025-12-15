@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { IndexFile, IndexMinimal, IndexNested } from "@indexes/types";
-import { merge } from "lodash";
-import { assign } from "lodash-es";
+import { assign, merge } from "lodash-es";
 import nock from "nock";
 import { createFakeServerJobMinimal } from "./jobs";
 import { createFakeReferenceNested } from "./references";

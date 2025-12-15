@@ -11,7 +11,7 @@ import {
     UntrustworthyRange,
 } from "@analyses/types";
 import { faker } from "@faker-js/faker";
-import { merge } from "lodash";
+import { merge } from "lodash-es";
 import nock from "nock";
 import { createFakeIndexNested } from "./indexes";
 import { createFakeServerJobMinimal } from "./jobs";

@@ -5,7 +5,7 @@ import BoxGroupTable from "@base/BoxGroupTable";
 import Button from "@base/Button";
 import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
-import { map } from "lodash";
+import { map } from "lodash-es";
 import numbro from "numbro";
 import styled from "styled-components";
 

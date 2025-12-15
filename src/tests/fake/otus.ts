@@ -9,7 +9,7 @@ import {
     OtuSegment,
     OtuSequence,
 } from "@otus/types";
-import { assign, merge } from "lodash";
+import { assign, merge } from "lodash-es";
 import nock from "nock";
 import { createFakeReferenceNested } from "./references";
 import { createFakeUserNested } from "./user";

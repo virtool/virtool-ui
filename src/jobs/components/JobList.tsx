@@ -7,7 +7,7 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import { map } from "lodash";
+import { map } from "lodash-es";
 import { ReactElement } from "react";
 import styled from "styled-components";
 import { useFindJobs } from "../queries";

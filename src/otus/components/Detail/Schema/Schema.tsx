@@ -6,7 +6,7 @@ import NoneFoundBox from "@base/NoneFoundBox";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import { OtuSegment } from "@otus/types";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { map } from "lodash";
+import { map } from "lodash-es";
 import AddSegment from "./AddSegment";
 import EditSegment from "./EditSegment";
 import RemoveSegment from "./RemoveSegment";
