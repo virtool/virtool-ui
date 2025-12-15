@@ -1,16 +1,7 @@
-import PseudoLabel from "@base/PseudoLabel";
-import SelectBox from "@base/SelectBox";
-import styled from "styled-components";
-
-const LibraryTypeSelectBoxContainer = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: ${(props) => props.theme.gap.column};
-`;
+import { SelectBox, SelectBoxItem } from "@base/SelectBox";
 
 type LibraryTypeSelectorProps = {
     libraryType: string;
-    /** A callback function to handle library type selection */
     onSelect: (libraryType: string) => void;
 };
 
@@ -22,29 +13,24 @@ export default function LibraryTypeSelector({
     onSelect,
 }: LibraryTypeSelectorProps) {
     return (
-        <>
-            <PseudoLabel>Library Type</PseudoLabel>
-            <LibraryTypeSelectBoxContainer>
-                <SelectBox
-                    onClick={() => onSelect("normal")}
-                    active={libraryType === "normal"}
-                >
-                    <div>Normal</div>
-                    <span>
-                        Search against whole genome references using normal
-                        reads.
-                    </span>
-                </SelectBox>
-                <SelectBox
-                    onClick={() => onSelect("srna")}
-                    active={libraryType === "srna"}
-                >
-                    <div>sRNA</div>
-                    <span>
-                        Search against whole genome references using sRNA reads
-                    </span>
-                </SelectBox>
-            </LibraryTypeSelectBoxContainer>
-        </>
+        <SelectBox
+            className="grid-cols-3 mb-6"
+            label="Library Type"
+            onValueChange={onSelect}
+            value={libraryType}
+        >
+            <SelectBoxItem value="normal">
+                <div>Normal</div>
+                <span>
+                    Search against whole genome references using normal reads.
+                </span>
+            </SelectBoxItem>
+            <SelectBoxItem value="srna">
+                <div>sRNA</div>
+                <span>
+                    Search against whole genome references using sRNA reads
+                </span>
+            </SelectBoxItem>
+        </SelectBox>
     );
 }

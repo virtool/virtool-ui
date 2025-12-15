@@ -25,14 +25,12 @@ describe("<SampleSettings />", () => {
         );
 
         expect(screen.getByText("Sample Group")).toBeInTheDocument();
+        expect(screen.getByRole("radio", { name: /None/ })).toBeInTheDocument();
         expect(
-            screen.getByRole("button", { name: /None/ }),
+            screen.getByRole("radio", { name: /Force choice/ }),
         ).toBeInTheDocument();
         expect(
-            screen.getByRole("button", { name: /Force choice/ }),
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole("button", { name: /User's primary group/ }),
+            screen.getByRole("radio", { name: /User's primary group/ }),
         ).toBeInTheDocument();
         expect(screen.getByText("Group Rights")).toBeInTheDocument();
         expect(screen.getByLabelText("Group Rights")).toBeInTheDocument();
@@ -40,20 +38,7 @@ describe("<SampleSettings />", () => {
         expect(screen.getByLabelText("All Users' Rights")).toBeInTheDocument();
     });
 
-    it("should call update settings mutator when none SelectBox is clicked", async () => {
-        const settings = createFakeSettings({ sample_group: "none" });
-        const scope = mockApiUpdateSettings(settings);
-        renderWithProviders(<SampleSettings />);
-
-        await waitFor(() =>
-            expect(screen.getByText("Sample Settings")).toBeInTheDocument(),
-        );
-        await userEvent.click(screen.getByRole("button", { name: /None/ }));
-
-        scope.done();
-    });
-
-    it("should call update settings mutator when force choice SelectBox is clicked", async () => {
+    it("should update settings when force choice is selected", async () => {
         const settings = createFakeSettings({ sample_group: "force_choice" });
         const scope = mockApiUpdateSettings(settings);
         renderWithProviders(<SampleSettings />);
@@ -62,13 +47,13 @@ describe("<SampleSettings />", () => {
             expect(screen.getByText("Sample Settings")).toBeInTheDocument(),
         );
         await userEvent.click(
-            screen.getByRole("button", { name: /Force choice/ }),
+            screen.getByRole("radio", { name: /Force choice/ }),
         );
 
         scope.done();
     });
 
-    it("should call update settings mutator when users primary group SelectBox is clicked", async () => {
+    it("should update settings when users primary group is selected", async () => {
         const settings = createFakeSettings({
             sample_group: "users_primary_group",
         });
@@ -79,13 +64,13 @@ describe("<SampleSettings />", () => {
             expect(screen.getByText("Sample Settings")).toBeInTheDocument(),
         );
         await userEvent.click(
-            screen.getByRole("button", { name: /User's primary group/ }),
+            screen.getByRole("radio", { name: /User's primary group/ }),
         );
 
         scope.done();
     });
 
-    it("should call update settings mutator when group input changes", async () => {
+    it("should update settings when group rights change", async () => {
         const settings = createFakeSettings({
             sample_group_read: true,
             sample_group_write: true,
@@ -104,7 +89,7 @@ describe("<SampleSettings />", () => {
         scope.done();
     });
 
-    it("should call update settings mutator when all input changes", async () => {
+    it("should update settings when all users rights change", async () => {
         const settings = createFakeSettings({
             sample_all_read: true,
             sample_all_write: true,
