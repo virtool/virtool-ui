@@ -7,7 +7,7 @@ import Pagination from "@base/Pagination";
 import RebuildAlert from "@indexes/components/RebuildAlert";
 import { useListOTUs } from "@otus/queries";
 import { useFetchReference } from "@references/queries";
-import { map } from "lodash";
+import { map } from "lodash-es";
 import OtuCreate from "./OtuCreate";
 import OtuItem from "./OtuItem";
 import OtuToolbar from "./OtuToolbar";

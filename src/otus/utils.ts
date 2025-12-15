@@ -1,5 +1,4 @@
-import { map } from "lodash";
-import { indexOf, sortBy } from "lodash-es";
+import { indexOf, map, sortBy } from "lodash-es";
 import { OtuSegment, OtuSequence } from "./types";
 
 /**

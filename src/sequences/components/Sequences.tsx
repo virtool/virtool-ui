@@ -5,7 +5,7 @@ import NoneFoundSection from "@base/NoneFoundSection";
 import { useCurrentOtuContext } from "@otus/queries";
 import { OtuIsolate } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
-import { map } from "lodash";
+import { map } from "lodash-es";
 import styled from "styled-components";
 import CreateSequence from "./CreateSequence";
 import CreateSequenceLink from "./CreateSequenceLink";

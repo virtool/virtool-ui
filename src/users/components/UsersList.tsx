@@ -4,7 +4,7 @@ import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
-import { map } from "lodash";
+import { map } from "lodash-es";
 import { User } from "../types";
 import { UserItem } from "./UserItem";
 

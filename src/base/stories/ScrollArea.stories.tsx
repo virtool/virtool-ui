@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { map } from "lodash";
+import { map } from "lodash-es";
 import BoxGroupSection from "../BoxGroupSection";
 import ScrollArea from "../ScrollArea";
 

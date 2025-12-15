@@ -2,7 +2,7 @@ import { Settings } from "@/types/api";
 import { AdministratorRoleName } from "@administration/types";
 import { faker } from "@faker-js/faker";
 import { User } from "@users/types";
-import { assign } from "lodash";
+import { assign } from "lodash-es";
 import nock from "nock";
 
 export const administratorRoles = [

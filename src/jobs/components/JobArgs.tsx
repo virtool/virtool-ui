@@ -2,7 +2,7 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";
 import Link from "@base/Link";
-import { map } from "lodash";
+import { map } from "lodash-es";
 import { ReactNode } from "react";
 
 type JobArgsRowProps = {
