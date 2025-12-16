@@ -1,7 +1,6 @@
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
-import { reduce } from "lodash-es";
 import { useRemoveAPIKey } from "../queries";
 import { APIKeyMinimal } from "../types";
 import ApiKeyEdit from "./ApiKeyEdit";
@@ -14,8 +13,7 @@ type ApiKeyProps = {
  * Display a condensed API key for use in a list of API keys
  */
 export default function ApiKey({ apiKey }: ApiKeyProps) {
-    const permissionCount = reduce(
-        apiKey.permissions,
+    const permissionCount = Object.values(apiKey.permissions).reduce(
         (result, value) => result + (value ? 1 : 0),
         0,
     );

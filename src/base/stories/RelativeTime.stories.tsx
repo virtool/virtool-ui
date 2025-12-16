@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { toString } from "lodash-es";
 import RelativeTime from "../RelativeTime";
 
 const currentDate = new Date();
@@ -15,13 +14,13 @@ type Story = StoryObj<typeof meta>;
 
 export const CurrentRelativeTime: Story = {
     args: {
-        time: toString(currentDate),
+        time: String(currentDate),
     },
 };
 
 export const FutureRelativeTime: Story = {
     args: {
-        time: toString(
+        time: String(
             new Date(
                 currentDate.getFullYear(),
                 currentDate.getMonth(),
@@ -33,7 +32,7 @@ export const FutureRelativeTime: Story = {
 
 export const PastRelativeTime: Story = {
     args: {
-        time: toString(
+        time: String(
             new Date(
                 currentDate.getFullYear(),
                 currentDate.getMonth(),

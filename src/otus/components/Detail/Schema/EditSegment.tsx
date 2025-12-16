@@ -6,7 +6,6 @@ import DialogTitle from "@base/DialogTitle";
 import { useUpdateOTU } from "@otus/queries";
 import { Molecule, OtuSegment } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { find, map } from "lodash-es";
 import SegmentForm from "./SegmentForm";
 
 type FormValues = {
@@ -36,10 +35,10 @@ export default function EditSegment({
         useUrlSearchParam<string>("editSegmentName");
     const mutation = useUpdateOTU(otuId);
 
-    const segment = find(schema, { name: editSegmentName });
+    const segment = schema.find((s) => s.name === editSegmentName);
 
     function handleSubmit({ segmentName, molecule, required }: FormValues) {
-        const newArray = map(schema, (item) => {
+        const newArray = schema.map((item) => {
             return item.name === editSegmentName
                 ? { name: segmentName, molecule, required }
                 : item;

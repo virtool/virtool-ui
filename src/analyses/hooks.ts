@@ -5,12 +5,16 @@ import { IndexMinimal } from "@indexes/types";
 import { useFetchSample } from "@samples/queries";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import { SubtractionOption } from "@subtraction/types";
-import { find, groupBy, map, maxBy, reject, sortBy } from "lodash-es/lodash";
+import { groupBy, maxBy, sortBy } from "es-toolkit";
 import { useMemo } from "react";
 import { useSearch } from "wouter";
+import { FormattedNuvsAnalysis, FormattedPathoscopeAnalysis } from "./types";
 
 /** Sort and filter a list of pathoscope hits  */
-export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
+export function useSortAndFilterPathoscopeHits(
+    detail: FormattedPathoscopeAnalysis,
+    maxReadLength: number,
+) {
     let hits = detail.results.hits;
     const search = useSearch();
     const searchParams = new URLSearchParams(search);
@@ -20,19 +24,21 @@ export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
     }, [hits]);
 
     if (searchParams.get("find")) {
-        hits = map(fuse.search(searchParams.get("find")), "item");
+        hits = fuse
+            .search(searchParams.get("find"))
+            .map((result) => result.item);
     }
 
     if (searchParams.get("filterOtus") === "true") {
-        hits = reject(hits, (hit) => {
-            return (
-                hit.pi * detail.results.readCount <
-                (hit.length * 0.8) / maxReadLength
-            );
-        });
+        hits = hits.filter(
+            (hit) =>
+                hit.pi * detail.results.readCount >=
+                (hit.length * 0.8) / maxReadLength,
+        );
     }
 
-    const sortedHits = sortBy(hits, searchParams.get("sort"));
+    const sortKey = searchParams.get("sort");
+    const sortedHits = sortBy(hits, [(hit) => hit[sortKey]]);
 
     if (searchParams.get("sortDesc") === "true") {
         sortedHits.reverse();
@@ -42,30 +48,30 @@ export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
 }
 
 /** Sort and filter a list of Nuvs hits  */
-export function useSortAndFilterNuVsHits(detail) {
-    let hits = detail.results.hits;
+export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
     const search = useSearch();
     const searchParams = new URLSearchParams(search);
+
+    let hits = detail.results.hits;
 
     const fuse = useMemo(() => {
         return createFuse(hits, ["name", "families"]);
     }, [hits]);
 
     if (searchParams.get("find")) {
-        hits = map(fuse.search(searchParams.get("find")), "item");
+        hits = fuse
+            .search(searchParams.get("find"))
+            .map((result) => result.item);
     }
 
     if (searchParams.get("filterSequences") === "true") {
-        hits = reject(hits, (hit) => hit.e === undefined);
+        hits = hits.filter((hit) => hit.e !== undefined);
     }
 
-    let sortedHits;
-
-    if (searchParams.get("sort") === "orfs") {
-        sortedHits = sortBy(hits, "annotatedOrfCount").reverse();
-    } else {
-        sortedHits = sortBy(hits, searchParams.get("sort"));
-    }
+    const sortedHits =
+        searchParams.get("sort") === "orfs"
+            ? sortBy(hits, [(hit) => hit.annotatedOrfCount]).reverse()
+            : sortBy(hits, [(hit) => hit[searchParams.get("sort")]]);
 
     return sortedHits;
 }
@@ -74,7 +80,7 @@ export function useGetActiveHit(matches) {
     const { value: activeHit } = useUrlSearchParam<string>("activeHit");
 
     if (activeHit !== null) {
-        return find(matches, { id: Number(activeHit) }) || null;
+        return matches.find((match) => match.id === Number(activeHit)) || null;
     }
 
     return null;
@@ -88,9 +94,11 @@ type UseCompatibleIndexesResult = {
 export function useCompatibleIndexes(): UseCompatibleIndexesResult {
     const { data, isPending } = useListIndexes(true);
 
-    const indexes = map(groupBy(data, "reference.id"), (group) =>
-        maxBy(group, "version"),
-    );
+    const indexes = Object.values(
+        groupBy(data ?? [], (item) => item.reference.id),
+    )
+        .map((group) => maxBy(group, (item) => Number(item.version)))
+        .filter((index): index is IndexMinimal => index !== undefined);
 
     return { indexes, isPending };
 }

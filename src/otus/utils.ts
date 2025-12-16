@@ -1,4 +1,4 @@
-import { indexOf, map, sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit";
 import { OtuSegment, OtuSequence } from "./types";
 
 /**
@@ -9,13 +9,13 @@ import { OtuSegment, OtuSequence } from "./types";
  */
 export default function sortSequencesBySegment(
     sequences: OtuSequence[],
-    segments: OtuSegment,
+    segments: OtuSegment[],
 ): OtuSequence[] {
     if (sequences) {
-        const segmentNames = map(segments, "name");
+        const segmentNames = segments.map((s) => s.name);
         return sortBy(sequences, [
             (entry) => {
-                const index = indexOf(segmentNames, entry.segment);
+                const index = segmentNames.indexOf(entry.segment);
                 return index !== -1 ? index : segmentNames.length;
             },
         ]);

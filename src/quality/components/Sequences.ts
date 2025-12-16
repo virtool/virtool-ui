@@ -6,7 +6,7 @@ import {
     QUALITY_CHART_MARGIN,
 } from "@samples/charting.js";
 import { axisBottom, axisLeft, line, scaleLinear } from "d3";
-import { max } from "lodash-es";
+import { max } from "es-toolkit/compat";
 
 export function drawSequencesChart(element, data, baseWidth) {
     const svg = createSvg(element, baseWidth);

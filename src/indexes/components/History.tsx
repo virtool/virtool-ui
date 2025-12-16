@@ -2,9 +2,15 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import { map, sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit";
 import { ReactNode } from "react";
 import styled from "styled-components";
+
+type HistoryDocument = {
+    id: string;
+    description: string;
+    otu: { name: string };
+};
 
 const StyledRebuildHistoryItem = styled(BoxGroupSection)`
     display: grid;
@@ -46,16 +52,16 @@ export default function RebuildHistory({ unbuilt }) {
     if (unbuilt === null) {
         content = <LoadingPlaceholder className="mt-5" />;
     } else {
-        const historyComponents = map(
-            sortBy(unbuilt.documents, "otu.name"),
-            (change) => (
-                <RebuildHistoryItem
-                    key={change.id}
-                    description={change.description}
-                    otuName={change.otu.name}
-                />
-            ),
-        );
+        const historyComponents = sortBy(
+            (unbuilt.documents ?? []) as HistoryDocument[],
+            [(doc) => doc.otu.name],
+        ).map((change) => (
+            <RebuildHistoryItem
+                key={change.id}
+                description={change.description}
+                otuName={change.otu.name}
+            />
+        ));
 
         content = (
             <RebuildHistoryContent>

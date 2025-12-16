@@ -1,6 +1,5 @@
 import { formatIsolateName } from "@app/utils";
 import Alert from "@base/Alert";
-import { find, map } from "lodash-es";
 import styled from "styled-components";
 import { OtuIsolate } from "../types";
 
@@ -50,9 +49,9 @@ export default function OtuIssues({ isolates, issues }: OtuIssuesProps) {
     // One or more isolates have no sequences associated with them.
     if (typeof issues === "object" && issues.empty_isolate) {
         // The empty_isolate property is an array of isolate_ids of empty isolates.
-        const emptyIsolates = map(issues.empty_isolate, (isolateId, index) => {
+        const emptyIsolates = issues.empty_isolate.map((isolateId, index) => {
             // Get the entire isolate identified by isolate_id from the detail data.
-            const isolate = find(isolates, { id: isolateId });
+            const isolate = isolates.find((i) => i.id === isolateId);
 
             return <li key={index}>{formatIsolateName(isolate)}</li>;
         });
@@ -68,11 +67,12 @@ export default function OtuIssues({ isolates, issues }: OtuIssuesProps) {
     // One or more sequence documents have no sequence field.
     if (typeof issues === "object" && issues.empty_sequence) {
         // Make a list of sequences that have no defined sequence field.
-        const emptySequences = map(
-            issues.empty_sequence,
+        const emptySequences = issues.empty_sequence.map(
             (errorObject, index) => {
                 // Get the entire isolate object identified by the isolate_id.
-                const isolate = find(isolates, { id: errorObject.isolate_id });
+                const isolate = isolates.find(
+                    (i) => i.id === errorObject.isolate_id,
+                );
                 return (
                     <li key={index}>
                         <span>

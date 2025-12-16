@@ -5,7 +5,6 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
 import Toolbar from "@base/Toolbar";
-import { filter } from "lodash-es";
 import { useState } from "react";
 import { useFindUsers, useGetAdministratorRoles } from "../queries";
 import AdministratorCreate from "./AdministratorCreate";
@@ -37,7 +36,7 @@ export default function ManageAdministrators() {
         return <LoadingPlaceholder />;
     }
 
-    const filteredUsers = filter(users.items, (user) => user.id !== account.id);
+    const filteredUsers = users.items.filter((user) => user.id !== account.id);
 
     return (
         <>

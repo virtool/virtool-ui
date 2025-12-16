@@ -7,7 +7,6 @@ import Icon from "@base/Icon";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useRemoveReferenceUser } from "@references/queries";
 import { ReferenceGroup, ReferenceUser } from "@references/types";
-import { find, map } from "lodash-es";
 import styled from "styled-components";
 import AddReferenceGroup from "./AddReferenceGroup";
 import AddReferenceUser from "./AddReferenceUser";
@@ -92,7 +91,7 @@ export default function ReferenceMembers({
                     <p>Manage membership and rights for reference {plural}.</p>
                 </ReferenceMembersHeader>
                 {members.length ? (
-                    map(members, (member: ReferenceGroup | ReferenceUser) => {
+                    members.map((member: ReferenceGroup | ReferenceUser) => {
                         const handleOrName = objectHasProperty(member, "handle")
                             ? (member as ReferenceUser).handle
                             : (member as ReferenceGroup).name;
@@ -130,8 +129,7 @@ export default function ReferenceMembers({
                 />
             )}
             <EditReferenceMember
-                member={find(
-                    members,
+                member={members.find(
                     (member: ReferenceGroup | ReferenceUser) =>
                         member.id === editId,
                 )}

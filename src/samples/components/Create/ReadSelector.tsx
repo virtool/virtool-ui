@@ -17,7 +17,6 @@ import {
     InfiniteData,
     InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
-import { flatMap, includes, indexOf, toLower } from "lodash-es";
 import { ReactNode, useEffect, useState } from "react";
 import styled from "styled-components";
 import ReadSelectorItem from "./ReadSelectorItem";
@@ -122,15 +121,15 @@ export default function ReadSelector({
         onSelect([]);
     }
 
-    const loweredFilter = toLower(term);
+    const loweredFilter = term.toLowerCase();
 
-    const items = flatMap(data.pages, (page) => page.items);
+    const items = data.pages.flatMap((page) => page.items);
     const files = items.filter(
-        (file) => !term || includes(toLower(file.name), loweredFilter),
+        (file) => !term || file.name.toLowerCase().includes(loweredFilter),
     );
 
     function renderRow(item) {
-        const index = indexOf(selectedFiles, item.id);
+        const index = selectedFiles.indexOf(item.id);
 
         return (
             <ReadSelectorItem

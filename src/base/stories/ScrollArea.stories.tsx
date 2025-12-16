@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { map } from "lodash-es";
 import BoxGroupSection from "../BoxGroupSection";
 import ScrollArea from "../ScrollArea";
 
@@ -17,7 +16,7 @@ function Template(args) {
 
     return (
         <ScrollArea className={args.className}>
-            {map(items, (item, index) => (
+            {items.map((item, index) => (
                 <BoxGroupSection key={index}>{item}</BoxGroupSection>
             ))}
         </ScrollArea>

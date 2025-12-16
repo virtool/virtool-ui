@@ -5,7 +5,6 @@ import {
     ReferenceNested,
     ReferenceTarget,
 } from "@references/types";
-import { assign } from "lodash-es";
 import nock from "nock";
 import { createFakeUserNested } from "./user";
 
@@ -58,13 +57,19 @@ export function createFakeReferenceMinimal(
         remotes_from: null,
         task: {
             complete: true,
+            created_at: faker.date.past(),
+            error: null,
+            id: faker.number.int(),
+            progress: 100,
+            step: "done",
+            type: "clone_reference",
         },
         unbuilt_change_count: faker.number.int(),
         updating: false,
         user: createFakeUserNested(),
     };
 
-    return assign(defaultReferenceMinimal, overrides);
+    return { ...defaultReferenceMinimal, ...overrides };
 }
 
 /**
@@ -93,7 +98,7 @@ export function createFakeReference(overrides?: Partial<Reference>): Reference {
         ],
     };
 
-    return assign(defaultReference, props);
+    return { ...defaultReference, ...props };
 }
 
 /**

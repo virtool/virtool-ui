@@ -18,7 +18,6 @@ import {
     useFetchReference,
     useUpdateReference,
 } from "@references/queries";
-import { get } from "lodash-es";
 import styled from "styled-components";
 import SourceTypeList from "./SourceTypeList";
 
@@ -70,8 +69,8 @@ export function LocalSourceTypes() {
 
     const { mutation: updateReferenceMutation } = useUpdateReference(refId);
 
-    const sourceTypes = get(data, "source_types", []);
-    const restrictSourceTypes = get(data, "restrict_source_types", false);
+    const sourceTypes = data?.source_types ?? [];
+    const restrictSourceTypes = data?.restrict_source_types ?? false;
 
     const {
         error,

@@ -5,7 +5,7 @@ import SideBarSection from "@base/SideBarSection";
 import { Label } from "@labels/types";
 import { useUpdateLabel } from "@samples/queries";
 import { SampleMinimal } from "@samples/types";
-import { filter, flatMap, groupBy, map } from "lodash-es";
+import { groupBy } from "es-toolkit";
 import styled from "styled-components";
 import SampleLabel from "../Label/SampleLabel";
 import SampleSidebarMultiselectList from "./SampleSidebarMultiselectList";
@@ -28,17 +28,13 @@ const StyledSideBarSection = styled(SideBarSection)`
 `;
 
 function getSelectedLabels(document: SampleMinimal[]) {
-    const selectedLabelsCount = map(
-        groupBy(flatMap(document, "labels"), "id"),
-        (labels) => ({
-            ...labels[0],
-            count: labels.length,
-        }),
-    );
+    const allLabels = document.flatMap((d) => d.labels);
+    const grouped = groupBy(allLabels, (label) => label.id);
 
-    return map(selectedLabelsCount, ({ count, ...label }) => ({
-        ...label,
-        allLabeled: count === document.length,
+    return Object.values(grouped).map((labels) => ({
+        ...labels[0],
+        count: labels.length,
+        allLabeled: labels.length === document.length,
     }));
 }
 
@@ -55,9 +51,9 @@ export default function ManageLabels({
     selectedSamples,
 }: ManageLabelsProps) {
     const selectedLabels = getSelectedLabels(selectedSamples);
-    const partiallySelectedLabels = filter(selectedLabels, {
-        allLabeled: false,
-    });
+    const partiallySelectedLabels = selectedLabels.filter(
+        (label) => !label.allLabeled,
+    );
     const onUpdateLabel = useUpdateLabel(selectedLabels, selectedSamples);
 
     return (
@@ -68,14 +64,10 @@ export default function ManageLabels({
                     items={labels}
                     manageLink={"/samples/labels"}
                     onUpdate={onUpdateLabel}
-                    partiallySelectedItems={map(
-                        partiallySelectedLabels,
-                        (label: Label) => label.id,
+                    partiallySelectedItems={partiallySelectedLabels.map(
+                        (label) => label.id,
                     )}
-                    selectedIds={map(
-                        selectedLabels,
-                        (label: Label) => label.id,
-                    )}
+                    selectedIds={selectedLabels.map((label) => label.id)}
                     selectionType="labels"
                     render={({ name, color }) => (
                         <SampleLabel color={color} name={name} size="sm" />

@@ -6,7 +6,6 @@ import Label from "@base/Label";
 import { useRevertOTU } from "@otus/queries";
 import { OtuNested } from "@otus/types";
 import { UserNested } from "@users/types";
-import { get } from "lodash-es";
 import styled from "styled-components";
 
 const methodIconProps = {
@@ -69,10 +68,10 @@ const methodIconProps = {
 };
 
 function getMethodIcon(methodName: string) {
-    const props = get(methodIconProps, methodName, {
+    const props = methodIconProps[methodName] ?? {
         name: "exclamation-triangle",
         color: "red",
-    });
+    };
 
     return <Icon {...props} />;
 }

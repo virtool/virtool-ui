@@ -6,7 +6,7 @@ import {
     useQuery,
     useQueryClient,
 } from "@tanstack/react-query";
-import { forEach, map, reject, union } from "lodash-es/lodash";
+import { union } from "es-toolkit";
 import {
     createSample,
     getSample,
@@ -194,8 +194,8 @@ export function useUpdateLabel(
     });
 
     function onUpdate(label: number) {
-        forEach(selectedSamples, (sample) => {
-            const sampleLabelIds = map(sample.labels, (label) => label.id);
+        selectedSamples.forEach((sample) => {
+            const sampleLabelIds = sample.labels.map((l) => l.id);
             const labelExists = selectedLabels.some(
                 (item) => item.id === label,
             );
@@ -212,7 +212,7 @@ export function useUpdateLabel(
                 mutation.mutate({
                     sampleId: sample.id,
                     update: {
-                        labels: reject(sampleLabelIds, (id) => label === id),
+                        labels: sampleLabelIds.filter((id) => label !== id),
                     },
                 });
             }

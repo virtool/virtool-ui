@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { map } from "lodash-es";
 import { useState } from "react";
 import BoxGroupSearch from "../BoxGroupSearch";
 import BoxGroupSection from "../BoxGroupSection";
@@ -32,8 +31,8 @@ function Template(args) {
                     onChange={setTerm}
                 />
                 <div className="overflow-y-auto flex flex-col">
-                    {map(items, (item) => (
-                        <BoxGroupSection>{item}</BoxGroupSection>
+                    {items.map((item) => (
+                        <BoxGroupSection key={item}>{item}</BoxGroupSection>
                     ))}
                 </div>
             </Popover>

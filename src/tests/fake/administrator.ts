@@ -2,7 +2,6 @@ import { Settings } from "@/types/api";
 import { AdministratorRoleName } from "@administration/types";
 import { faker } from "@faker-js/faker";
 import { User } from "@users/types";
-import { assign } from "lodash-es";
 import nock from "nock";
 
 export const administratorRoles = [
@@ -50,7 +49,7 @@ export function createFakeSettings(overrides?: Partial<Settings>): Settings {
         sample_unique_names: faker.datatype.boolean(),
     };
 
-    return assign(defaultSettings, overrides);
+    return { ...defaultSettings, ...overrides };
 }
 
 export function mockGetAdministratorRoles() {

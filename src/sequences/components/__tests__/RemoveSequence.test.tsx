@@ -1,5 +1,6 @@
 import { AdministratorRoleName } from "@administration/types";
 import { formatPath } from "@app/hooks";
+import { faker } from "@faker-js/faker";
 import References from "@references/components/References";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -19,6 +20,8 @@ import {
 } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
+
+faker.seed(684329);
 
 describe("<RemoveSequence />", () => {
     let path;

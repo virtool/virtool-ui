@@ -5,7 +5,7 @@ import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
 import { IndexMinimal } from "@indexes/types";
 import * as RadixSelect from "@radix-ui/react-select";
-import { map, sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit";
 import { useMemo } from "react";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
@@ -56,11 +56,11 @@ export default function IndexSelector({
     onChange,
 }: IndexSelectorProps) {
     const sortedIndexes = useMemo<IndexMinimal[]>(
-        () => sortBy(indexes, "reference.name"),
+        () => sortBy(indexes, [(index) => index.reference.name]),
         [indexes],
     );
 
-    const indexItems = map(sortedIndexes, ({ reference, version, id }) => (
+    const indexItems = sortedIndexes.map(({ reference, version, id }) => (
         <IndexSelectorItem
             key={id}
             id={id}

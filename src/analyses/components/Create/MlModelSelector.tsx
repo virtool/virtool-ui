@@ -3,7 +3,6 @@ import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
 import SelectItem from "@base/SelectItem";
 import { MLModelMinimal } from "@ml/types";
-import { map } from "lodash-es";
 import styled from "styled-components";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
@@ -31,18 +30,15 @@ export default function MlModelSelector({
     onChange,
     selected,
 }: MLModelSelectorProps) {
-    const mlModelItems = map(
-        models,
-        ({ latest_release, name, description }) => (
-            <SelectItem
-                value={latest_release.id.toString()}
-                key={latest_release.id}
-                description={description}
-            >
-                {name}
-            </SelectItem>
-        ),
-    );
+    const mlModelItems = models.map(({ latest_release, name, description }) => (
+        <SelectItem
+            value={latest_release.id.toString()}
+            key={latest_release.id}
+            description={description}
+        >
+            {name}
+        </SelectItem>
+    ));
 
     return (
         <StyledMLModelSelector>

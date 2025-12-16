@@ -6,7 +6,7 @@ import {
     QUALITY_CHART_MARGIN,
 } from "@samples/charting.js";
 import { axisBottom, axisLeft, line, scaleLinear } from "d3";
-import { forEach, unzip } from "lodash-es";
+import { unzip } from "es-toolkit";
 
 const series = [
     { label: "Guanine", color: theme.color.blue },
@@ -34,7 +34,7 @@ export function drawNucleotidesChart(
         .y((d) => y(d));
 
     // Append the four plot lines to the SVG.
-    forEach(unzip(data), (set: number[], index: number) => {
+    unzip(data).forEach((set: number[], index: number) => {
         svg.append("path")
             .attr("class", "graph-line")
             .attr("d", () => lineDrawer(set))

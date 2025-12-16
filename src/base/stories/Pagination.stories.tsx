@@ -3,7 +3,6 @@ import { faker } from "@faker-js/faker";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { UserItem } from "@users/components/UserItem";
-import { map } from "lodash-es";
 import { useMemo } from "react";
 import Pagination from "../Pagination";
 
@@ -58,7 +57,7 @@ export const SamplePagination: Story = {
 function fakeUserListFactory(seed: number, numItems: number) {
     faker.seed(seed);
     const userList = Array(numItems);
-    return map(userList, () => fakeUserFactory());
+    return userList.map(() => fakeUserFactory());
 }
 
 function fakeUserFactory() {
