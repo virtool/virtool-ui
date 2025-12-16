@@ -6,7 +6,6 @@ import {
 } from "@analyses/utils";
 import { theme } from "@app/theme";
 import { area, scaleLinear, select } from "d3";
-import { filter, map, max } from "lodash-es";
 import { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
 
@@ -111,15 +110,11 @@ export function SummaryChart({ seqs }: IimiCoverageChartProps) {
     const chartEl = useRef(null);
 
     useEffect(() => {
-        const filteredSeqs = filter(seqs);
-        const avgSeq = maxSequences(
-            map(filteredSeqs, (seq) => {
-                return seq.coverage;
-            }),
-        );
+        const filteredSeqs = seqs.filter(Boolean);
+        const avgSeq = maxSequences(filteredSeqs.map((seq) => seq.coverage));
 
         const untrustworthyRanges = combineUntrustworthyRegions(
-            map(seqs, (sequence) =>
+            seqs.map((sequence) =>
                 sequence ? sequence.untrustworthy_ranges : [],
             ),
         );
@@ -128,7 +123,7 @@ export function SummaryChart({ seqs }: IimiCoverageChartProps) {
             chartEl.current,
             avgSeq,
             avgSeq.length,
-            max([...avgSeq, 10]),
+            Math.max(...avgSeq, 10),
             untrustworthyRanges,
         );
     }, [seqs]);

@@ -2,7 +2,6 @@ import { getFontSize, getFontWeight } from "@app/theme";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Label from "@base/Label";
 import Link from "@base/Link";
-import { keys, map, reject } from "lodash-es";
 import styled from "styled-components";
 import { HMMMinimal } from "../types";
 
@@ -37,14 +36,13 @@ type HMMItemProps = {
  * A condensed hmm item for use in a list of hmms
  */
 export default function HMMItem({ hmm }: HMMItemProps) {
-    const filteredFamilies = reject(
-        keys(hmm.families),
-        (family) => family === "None",
+    const filteredFamilies = Object.keys(hmm.families).filter(
+        (family) => family !== "None",
     );
 
-    const labelComponents = map(filteredFamilies.slice(0, 3), (family, i) => (
-        <Label key={i}>{family}</Label>
-    ));
+    const labelComponents = filteredFamilies
+        .slice(0, 3)
+        .map((family, i) => <Label key={i}>{family}</Label>);
 
     return (
         <StyledHMMItem>

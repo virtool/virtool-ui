@@ -1,5 +1,5 @@
 import { cn } from "@app/utils";
-import { capitalize } from "lodash-es";
+import { capitalize } from "es-toolkit";
 import InitialIcon from "./InitialIcon";
 import RelativeTime from "./RelativeTime";
 

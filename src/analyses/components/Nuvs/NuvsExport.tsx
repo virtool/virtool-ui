@@ -11,13 +11,11 @@ import PseudoLabel from "@base/PseudoLabel";
 import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import { forEach, map, reduce, replace } from "lodash-es";
 import { useState } from "react";
 import NuvsExportPreview from "./NuvsExportPreview";
 
 function getBestHit(items) {
-    return reduce(
-        items,
+    return items.reduce(
         (best, hit) => {
             if (hit.full_e < best.e) {
                 best.e = hit.full_e;
@@ -31,48 +29,40 @@ function getBestHit(items) {
 }
 
 function exportContigData(hits: FormattedNuvsHit[], sampleName: string) {
-    return map(hits, (result) => {
-        const orfNames = reduce(
-            result.orfs,
-            (names, orf) => {
-                // Get the best hit for the current ORF.
-                if (orf.hits.length) {
-                    const bestHit = getBestHit(orf.hits);
+    return hits.map((result) => {
+        const orfNames = result.orfs.reduce((names, orf) => {
+            // Get the best hit for the current ORF.
+            if (orf.hits.length) {
+                const bestHit = getBestHit(orf.hits);
 
-                    if (bestHit.name) {
-                        names.push(bestHit.name);
-                    }
+                if (bestHit.name) {
+                    names.push(bestHit.name);
                 }
+            }
 
-                return names;
-            },
-            [],
-        );
+            return names;
+        }, []);
         return `>sequence_${result.index}|${sampleName}|${orfNames.join("|")}\n${result.sequence}`;
     });
 }
 
 function exportOrfData(hits: FormattedNuvsHit[], sampleName: string) {
-    return reduce(
-        hits,
-        (lines, result) => {
-            forEach(result.orfs, (orf) => {
-                // Get the best hit for the current ORF.
-                if (orf.hits.length) {
-                    const bestHit = getBestHit(orf.hits);
+    return hits.reduce((lines, result) => {
+        result.orfs.forEach((orf) => {
+            // Get the best hit for the current ORF.
+            if (orf.hits.length) {
+                const bestHit = getBestHit(orf.hits);
 
-                    if (bestHit.name) {
-                        lines.push(
-                            `>orf_${result.index}_${orf.index}|${sampleName}|${bestHit.name}\n${orf.pro}`,
-                        );
-                    }
+                if (bestHit.name) {
+                    lines.push(
+                        `>orf_${result.index}_${orf.index}|${sampleName}|${bestHit.name}\n${orf.pro}`,
+                    );
                 }
-            });
+            }
+        });
 
-            return lines;
-        },
-        [],
-    );
+        return lines;
+    }, []);
 }
 
 function downloadData(
@@ -82,7 +72,7 @@ function downloadData(
     suffix: string,
 ) {
     return followDynamicDownload(
-        `nuvs.${replace(sampleName, " ", "_")}.${analysisId}.${suffix}.fa`,
+        `nuvs.${sampleName.replace(" ", "_")}.${analysisId}.${suffix}.fa`,
         content.join("\n"),
     );
 }

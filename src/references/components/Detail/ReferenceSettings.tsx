@@ -2,7 +2,7 @@ import { usePathParams } from "@app/hooks";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SectionHeader from "@base/SectionHeader";
 import { useFetchReference } from "@references/queries";
-import { sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
 import ReferenceMembers from "./ReferenceMembers";
 import RemoveReference from "./RemoveReference";
@@ -27,12 +27,12 @@ export default function ReferenceSettings() {
             </SectionHeader>
             <ReferenceMembers
                 noun="user"
-                members={sortBy(data.users, "id")}
+                members={sortBy(data.users, ["id"])}
                 refId={refId}
             />
             <ReferenceMembers
                 noun="group"
-                members={sortBy(data.groups, "id")}
+                members={sortBy(data.groups, ["id"])}
                 refId={refId}
             />
             <RemoveReference id={data.id} name={data.name} />

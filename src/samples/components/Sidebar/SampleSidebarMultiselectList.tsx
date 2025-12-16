@@ -1,5 +1,4 @@
 import { SampleLabel } from "@samples/queries";
-import { map } from "lodash-es";
 import styled from "styled-components";
 import SampleMultiSelectLabel from "../Label/SampleMultiSelectLabel";
 
@@ -29,8 +28,7 @@ type SampleSidebarMultiselectList = {
 export default function SampleSidebarMultiselectList({
     items,
 }: SampleSidebarMultiselectList) {
-    const sampleItemComponents = map(
-        items,
+    const sampleItemComponents = items.map(
         ({ id, color, name, allLabeled }) => (
             <SampleSidebarMultiSelectListItem
                 key={id}

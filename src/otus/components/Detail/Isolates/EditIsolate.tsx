@@ -4,7 +4,7 @@ import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
 import { useUpdateIsolate } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { capitalize } from "lodash-es";
+import { capitalize } from "es-toolkit";
 import IsolateForm from "./IsolateForm";
 
 type EditIsolateProps = {

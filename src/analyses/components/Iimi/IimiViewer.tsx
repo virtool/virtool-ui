@@ -3,7 +3,7 @@ import { useFuse } from "@app/fuse";
 import { useUrlSearchParam } from "@app/hooks";
 import Accordion from "@base/Accordion";
 import Box from "@base/Box";
-import { orderBy } from "lodash-es";
+import { orderBy } from "es-toolkit";
 import { CircleAlert } from "lucide-react";
 import { useState } from "react";
 import { IimiOtu } from "./IimiOtu";
@@ -37,7 +37,11 @@ export function IimiViewer({ detail }: { detail: FormattedIimiAnalysis }) {
         (item) => item.probability && item.probability >= minimumProbability,
     );
 
-    const sortedHits = orderBy(hits, sortKeys[sort].key, sortKeys[sort].order);
+    const sortedHits = orderBy(
+        hits,
+        [sortKeys[sort].key],
+        [sortKeys[sort].order],
+    );
 
     return (
         <>

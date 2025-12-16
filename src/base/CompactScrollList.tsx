@@ -3,7 +3,6 @@ import {
     FetchNextPageOptions,
     InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
-import { map } from "lodash-es";
 import { ReactElement } from "react";
 import LoadingPlaceholder from "./LoadingPlaceholder";
 
@@ -54,7 +53,7 @@ export default function CompactScrollList({
         }
     }
 
-    const entries = map(items, (item) => renderRow(item));
+    const entries = items.map((item) => renderRow(item));
 
     return (
         <div

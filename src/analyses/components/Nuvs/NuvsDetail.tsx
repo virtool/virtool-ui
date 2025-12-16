@@ -4,7 +4,7 @@ import { calculateAnnotatedOrfCount } from "@analyses/utils";
 import { useUrlSearchParam } from "@app/hooks";
 import { getBorder } from "@app/theme";
 import Badge from "@base/Badge";
-import { filter, map, sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit";
 import styled from "styled-components";
 import NuvsBlast from "./NuvsBlast";
 import NuvsOrf from "./NuvsOrf";
@@ -98,12 +98,12 @@ export default function NuvsDetail({
     let filtered;
 
     if (filterORFs) {
-        filtered = filter(orfs, (orf) => orf.hits.length);
+        filtered = orfs.filter((orf) => orf.hits.length);
     }
 
-    filtered = sortBy(filtered || orfs, (orf) => orf.hits.length).reverse();
+    filtered = sortBy(filtered || orfs, [(orf) => orf.hits.length]).reverse();
 
-    const orfComponents = map(filtered, (orf, index) => (
+    const orfComponents = filtered.map((orf, index) => (
         <NuvsOrf
             key={index}
             index={index}

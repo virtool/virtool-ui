@@ -2,7 +2,7 @@ import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
-import { map, sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit";
 import styled from "styled-components";
 
 const HmmTaxonomyItem = styled(BoxGroupSection)`
@@ -28,11 +28,11 @@ type HmmTaxonomyProps = {
  */
 export function HmmTaxonomy({ counts, title }: HmmTaxonomyProps) {
     const sorted = sortBy(
-        map(counts, (count, name) => ({ name, count })),
-        "name",
+        Object.entries(counts).map(([name, count]) => ({ name, count })),
+        ["name"],
     );
 
-    const components = map(sorted, ({ name, count }) => (
+    const components = sorted.map(({ name, count }) => (
         <HmmTaxonomyItem key={name}>
             {name} <Badge>{count}</Badge>
         </HmmTaxonomyItem>

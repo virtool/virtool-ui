@@ -6,7 +6,7 @@ import DialogTitle from "@base/DialogTitle";
 import { useCreateSequence } from "@otus/queries";
 import { OtuSegment, OtuSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { compact, map } from "lodash-es";
+import { compact } from "es-toolkit";
 import SequenceForm from "./SequenceForm";
 
 type CreateSequenceProps = {
@@ -33,7 +33,10 @@ export default function CreateSequence({
     const mutation = useCreateSequence(otuId);
 
     const segments = schema.filter(
-        (segment) => !compact(map(sequences, "segment")).includes(segment.name),
+        (segment) =>
+            !compact(sequences.map((seq) => seq.segment)).includes(
+                segment.name,
+            ),
     );
 
     function onSubmit({ accession, definition, host, sequence, segment }) {

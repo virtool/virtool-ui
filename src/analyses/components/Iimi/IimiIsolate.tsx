@@ -1,5 +1,5 @@
 import Box from "@base/Box";
-import { sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit";
 import styled from "styled-components";
 import { CoverageChart } from "../Charts/CoverageChart";
 import { IimiDetection } from "./IimiDetection";
@@ -15,7 +15,7 @@ const CoveragePanel = styled.div`
  * a single iimi isolate item
  */
 export function IimiIsolate({ name, sequences }) {
-    const sorted = sortBy(sequences, (sequence) => sequence.length);
+    const sorted = sortBy(sequences, [(sequence) => sequence.length]);
 
     return (
         <div>
