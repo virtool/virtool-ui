@@ -3,14 +3,13 @@ import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import InitialIcon from "@base/InitialIcon";
 import { UserNested } from "@users/types";
-import { map } from "lodash-es";
 
 type MemberProps = {
     members: UserNested[];
 };
 
 export function GroupMembers({ members }: MemberProps) {
-    const memberComponents = map(members, (member: UserNested) => (
+    const memberComponents = members.map((member: UserNested) => (
         <BoxGroupSection key={member.id}>
             <div className="flex gap-2.5">
                 <InitialIcon handle={member.handle} size="md" />

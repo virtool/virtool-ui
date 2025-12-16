@@ -4,7 +4,6 @@ import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
-import { map } from "lodash-es";
 import { User } from "../types";
 import { UserItem } from "./UserItem";
 
@@ -41,7 +40,7 @@ export default function UsersList({ term }: UsersListProps) {
             pageCount={page_count}
         >
             <BoxGroup>
-                {map(items, (item: User) => (
+                {items.map((item: User) => (
                     <UserItem key={item.id} {...item} />
                 ))}
             </BoxGroup>

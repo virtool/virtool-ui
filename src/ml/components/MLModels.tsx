@@ -4,7 +4,6 @@ import NoneFoundBox from "@base/NoneFoundBox";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
-import { map } from "lodash-es";
 import { useFindModels } from "../queries";
 import { MLModelMinimal } from "../types";
 import { MlModel } from "./MlModel";
@@ -33,7 +32,7 @@ export function MLModels() {
     }
 
     const models = data.items.length ? (
-        map(data.items, renderRow)
+        data.items.map(renderRow)
     ) : (
         <NoneFoundBox noun={"machine learning models"} />
     );

@@ -3,7 +3,7 @@ import { AdministratorRoleName } from "@administration/types";
 import { apiClient } from "@app/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { difference, filter, find, some, union } from "lodash-es";
+import { difference, union } from "es-toolkit/array";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Response } from "superagent";
@@ -146,22 +146,21 @@ export function useCheckReferenceRight(
         return { hasPermission: true, isPending: false };
     }
 
-    const user = find(reference.users, { id: account.id });
+    const user = reference.users.find((u) => u.id === account.id);
 
     if (user?.[right]) {
         return { hasPermission: true, isPending: false };
     }
 
     // Groups in common between the user and the reference member groups.
-    const groups = filter(reference.groups, (referenceGroup) =>
-        some(
-            account.groups,
+    const groups = reference.groups.filter((referenceGroup) =>
+        account.groups.some(
             (accountGroup) => accountGroup.id === referenceGroup.id,
         ),
     );
 
     return {
-        hasPermission: groups && some(groups, { [right]: true }),
+        hasPermission: groups && groups.some((g) => g[right] === true),
         isPending: false,
     };
 }

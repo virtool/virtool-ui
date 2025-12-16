@@ -10,7 +10,7 @@ import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import TextArea from "@base/TextArea";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { pick } from "lodash-es";
+import { pick } from "es-toolkit/object";
 import { useForm } from "react-hook-form";
 import { useUpdateSample } from "../queries";
 import { Sample } from "../types";

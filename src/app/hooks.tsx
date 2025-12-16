@@ -1,4 +1,3 @@
-import { forEach, map, split, trimEnd } from "lodash-es";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams, useSearch } from "wouter";
 
@@ -67,9 +66,9 @@ export function formatSearchParams(
 ) {
     const searchParams = new URLSearchParams();
 
-    forEach(params, (value, key) => {
+    Object.entries(params).forEach(([key, value]) => {
         if (Array.isArray(value)) {
-            forEach(value, (arrayValue) =>
+            value.forEach((arrayValue) =>
                 searchParams.append(key, String(arrayValue)),
             );
         } else {
@@ -148,7 +147,7 @@ function updateUrlSearchParamsList(
     const params = new URLSearchParams(search);
 
     params.delete(key);
-    forEach(values, (value) => params.append(key, String(value)));
+    values.forEach((value) => params.append(key, String(value)));
 
     search = `?${params.toString()}`;
     navigate(search);
@@ -333,7 +332,7 @@ function createUseUrlSearchParam(): [
         }
 
         return {
-            values: map(values, castSearchParamValue) as T[],
+            values: values.map(castSearchParamValue) as T[],
             setValues,
         };
     }
@@ -413,5 +412,5 @@ export function useMatchPartialPath(path: string, exclude?: string[]) {
         return false;
     }
 
-    return location.startsWith(trimEnd(split(path, "?")[0], "/"));
+    return location.startsWith(path.split("?")[0].replace(/\/+$/, ""));
 }

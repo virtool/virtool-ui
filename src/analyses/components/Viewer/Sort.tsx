@@ -2,7 +2,6 @@ import Dropdown from "@base/Dropdown";
 import DropdownButton from "@base/DropdownButton";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
-import { map } from "lodash-es";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 
 const sortKeys = {
@@ -44,7 +43,7 @@ export function AnalysisViewerSort({
                 <ChevronDown size={18} />
             </DropdownButton>
             <DropdownMenuContent>
-                {map(sortKeys[workflow], (key) => (
+                {sortKeys[workflow].map((key) => (
                     <DropdownMenuItem key={key} onSelect={() => onSelect(key)}>
                         {sortTitles[key]}
                     </DropdownMenuItem>

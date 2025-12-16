@@ -4,7 +4,7 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SidebarHeader from "@base/SidebarHeader";
 import SideBarSection from "@base/SideBarSection";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
-import { xor } from "lodash-es";
+import { xor } from "es-toolkit/array";
 import styled from "styled-components";
 import SampleSidebarList from "./SampleSidebarList";
 import SampleSidebarSelector from "./SampleSidebarSelector";

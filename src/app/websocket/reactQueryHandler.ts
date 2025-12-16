@@ -9,7 +9,7 @@ import { modelQueryKeys } from "@ml/queries";
 import { referenceQueryKeys } from "@references/queries";
 import { samplesQueryKeys } from "@samples/queries";
 import { QueryClient } from "@tanstack/react-query";
-import { forEach, get } from "lodash-es";
+import { get } from "es-toolkit/compat";
 import { taskUpdaters } from "./updaters";
 
 /** Get affected resource query keys by workflow name  */
@@ -30,7 +30,7 @@ const workflowQueries = {
 function jobUpdater(queryClient, data) {
     const queryKeys = workflowQueries[data.workflow];
 
-    forEach(queryKeys, (queryKey) => {
+    queryKeys?.forEach((queryKey) => {
         queryClient.invalidateQueries({ queryKey });
     });
 }

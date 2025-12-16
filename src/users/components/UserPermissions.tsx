@@ -1,6 +1,5 @@
 import BoxGroup from "@base/BoxGroup";
 import { Permissions } from "@groups/types";
-import { transform } from "lodash-es";
 import { PermissionItem } from "./Permission";
 
 type UserPermissionsProps = {
@@ -21,18 +20,13 @@ export default function UserPermissions({ permissions }: UserPermissionsProps) {
                 </small>
             </div>
             <BoxGroup>
-                {transform(
-                    permissions,
-                    (acc, value, permission) =>
-                        acc.push(
-                            <PermissionItem
-                                key={permission}
-                                permission={permission}
-                                value={value}
-                            />,
-                        ),
-                    [],
-                )}
+                {Object.entries(permissions).map(([permission, value]) => (
+                    <PermissionItem
+                        key={permission}
+                        permission={permission}
+                        value={value}
+                    />
+                ))}
             </BoxGroup>
         </div>
     );
