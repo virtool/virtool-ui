@@ -8,23 +8,24 @@ import { PathoscopeToolbar } from "./PathoscopeToolbar";
 import { PathoscopeViewerScroller } from "./PathoscopeViewScroller";
 
 type PathoscopeViewerProps = {
-    /** Complete pathoscope analysis details */
-    detail: FormattedPathoscopeAnalysis;
+    /** A pathoscope analysis. */
+    analysis: FormattedPathoscopeAnalysis;
+
     /** The sample that was analysed */
     sample: Sample;
 };
 
 /** Detailed breakdown of the results of a pathoscope analysis */
-export function PathoscopeViewer({ detail, sample }: PathoscopeViewerProps) {
+export function PathoscopeViewer({ analysis, sample }: PathoscopeViewerProps) {
     const { value: showReads } = useUrlSearchParam<boolean>("reads");
 
     return (
         <>
             <AnalysisMapping
-                detail={detail}
+                detail={analysis}
                 totalReads={sample.quality.count}
             />
-            <PathoscopeToolbar analysisId={detail.id} />
+            <PathoscopeToolbar analysisId={analysis.id} />
             {showReads && (
                 <Alert color="orange" level>
                     <div>
@@ -40,7 +41,7 @@ export function PathoscopeViewer({ detail, sample }: PathoscopeViewerProps) {
                     </div>
                 </Alert>
             )}
-            <PathoscopeList detail={detail} sample={sample} />
+            <PathoscopeList analysis={analysis} sample={sample} />
             <PathoscopeViewerScroller />
         </>
     );

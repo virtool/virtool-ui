@@ -18,7 +18,6 @@ import {
     useUpdateSampleRights,
 } from "@samples/queries";
 import { useQueryClient } from "@tanstack/react-query";
-import { includes, map } from "lodash-es";
 
 /**
  * A component managing a samples rights
@@ -63,8 +62,8 @@ export default function SampleRights() {
         mutation.mutate(
             {
                 update: {
-                    [`${scope}_read`]: includes(e.target.value, "r"),
-                    [`${scope}_write`]: includes(e.target.value, "w"),
+                    [`${scope}_read`]: e.target.value.includes("r"),
+                    [`${scope}_write`]: e.target.value.includes("w"),
                 },
             },
             {
@@ -107,7 +106,7 @@ export default function SampleRights() {
                             <option key="none" value="">
                                 None
                             </option>
-                            {map(groups, (group) => (
+                            {groups.map((group) => (
                                 <option
                                     key={group.id}
                                     value={group.id.toString()}

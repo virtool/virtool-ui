@@ -18,7 +18,6 @@ import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import { useCreateSample } from "@samples/queries";
-import { find, flatMap, toString } from "lodash-es";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import styled from "styled-components";
@@ -38,7 +37,7 @@ const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
  * @returns The filename without its extension
  */
 function getFileNameFromId(id: number, uploads: Upload[]): string {
-    const file = find(uploads, (file) => file.id === id);
+    const file = uploads.find((file) => file.id === id);
     return file ? file.name_on_disk.match(extensionRegex)[1] : "";
 }
 
@@ -144,14 +143,14 @@ export default function CreateSample() {
     const mutation = useCreateSample();
 
     useEffect(() => {
-        setValue("group", toString(account?.primary_group?.id));
+        setValue("group", String(account?.primary_group?.id ?? ""));
     }, [account, setValue]);
 
     if (isPendingReads || isPendingGroups || isPendingAccount) {
         return <LoadingPlaceholder className="mt-9" />;
     }
 
-    const reads = flatMap(readsResponse.pages, (page) => page.items);
+    const reads = readsResponse.pages.flatMap((page) => page.items);
 
     function autofill(selected: number[]) {
         const fileName = getFileNameFromId(selected[0], reads);

@@ -7,7 +7,6 @@ import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useCurrentOtuContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { find, map } from "lodash-es";
 import styled from "styled-components";
 import IsolateDetail from "./IsolateDetail";
 import IsolateItem from "./IsolateItem";
@@ -56,10 +55,10 @@ export default function IsolateEditor() {
     );
 
     const activeIsolate = isolates.length
-        ? find(isolates, { id: activeIsolateId || isolates[0]?.id })
+        ? isolates.find((i) => i.id === (activeIsolateId || isolates[0]?.id))
         : null;
 
-    const isolateComponents = map(isolates, (isolate, index) => (
+    const isolateComponents = isolates.map((isolate, index) => (
         <IsolateItem
             key={index}
             isolate={isolate}

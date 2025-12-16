@@ -9,7 +9,6 @@ import {
     OtuSegment,
     OtuSequence,
 } from "@otus/types";
-import { assign, merge } from "lodash-es";
 import nock from "nock";
 import { createFakeReferenceNested } from "./references";
 import { createFakeUserNested } from "./user";
@@ -44,7 +43,7 @@ export function createFakeOTUSequence(
         target: null,
     };
 
-    return merge(sequence, overrides);
+    return { ...sequence, ...overrides };
 }
 
 /**
@@ -86,7 +85,7 @@ export function createFakeOTUMinimal(
         version: faker.number.int({ max: 10 }),
     };
 
-    return assign(defaultOTUMinimal, overrides);
+    return { ...defaultOTUMinimal, ...overrides };
 }
 
 /**

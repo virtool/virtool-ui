@@ -7,7 +7,6 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSelect from "@base/InputSelect";
 import { SelectBox, SelectBoxItem } from "@base/SelectBox";
-import { includes, map } from "lodash-es";
 
 const rights = [
     { label: "None", value: "" },
@@ -38,7 +37,7 @@ export default function SampleRights({ settings }: SampleRightsProps) {
         (sample_group_read ? "r" : "") + (sample_group_write ? "w" : "");
     const all = (sample_all_read ? "r" : "") + (sample_all_write ? "w" : "");
 
-    const options = map(rights, (entry, index) => (
+    const options = rights.map((entry, index) => (
         <option key={index} value={entry.value}>
             {entry.label}
         </option>
@@ -92,14 +91,9 @@ export default function SampleRights({ settings }: SampleRightsProps) {
                         value={group}
                         onChange={(e) =>
                             mutation.mutate({
-                                sample_group_read: includes(
-                                    e.target.value,
-                                    "r",
-                                ),
-                                sample_group_write: includes(
-                                    e.target.value,
-                                    "w",
-                                ),
+                                sample_group_read: e.target.value.includes("r"),
+                                sample_group_write:
+                                    e.target.value.includes("w"),
                             })
                         }
                     >
@@ -114,8 +108,8 @@ export default function SampleRights({ settings }: SampleRightsProps) {
                         value={all}
                         onChange={(e) =>
                             mutation.mutate({
-                                sample_all_read: includes(e.target.value, "r"),
-                                sample_all_write: includes(e.target.value, "w"),
+                                sample_all_read: e.target.value.includes("r"),
+                                sample_all_write: e.target.value.includes("w"),
                             })
                         }
                     >

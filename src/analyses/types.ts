@@ -102,10 +102,10 @@ export type FormattedPathoscopeResults = {
     hits: FormattedPathoscopeHit[];
 
     /** The total number of reads mapped to the reference during the analysis*/
-    read_count: number;
+    readCount: number;
 
     /** The number of reads that were mapped to subtractions*/
-    subtracted_count: number;
+    subtractedCount: number;
 };
 
 /** Mapping data for a single pathoscope hit*/

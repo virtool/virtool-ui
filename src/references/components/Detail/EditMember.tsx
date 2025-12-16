@@ -10,7 +10,6 @@ import {
 } from "@references/queries";
 import { ReferenceGroup, ReferenceUser } from "@references/types";
 import { useQueryClient } from "@tanstack/react-query";
-import { map } from "lodash-es";
 import { ReferenceRight } from "./ReferenceRight";
 
 const rights = ["modify_otu", "build", "modify", "remove"];
@@ -53,7 +52,7 @@ export default function EditReferenceMember({
         );
     }
 
-    const rightComponents = map(rights, (right) => (
+    const rightComponents = rights.map((right) => (
         <ReferenceRight
             key={right}
             right={right}

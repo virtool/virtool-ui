@@ -14,7 +14,6 @@ import { useInfiniteFindGroups } from "@groups/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useAddReferenceMember } from "@references/queries";
 import { ReferenceGroup } from "@references/types";
-import { filter, flatMap, includes, map } from "lodash-es";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -65,9 +64,9 @@ export default function AddReferenceGroup({
         return null;
     }
 
-    const groupIds = map(groups, "id");
-    const items = flatMap(data.pages, (page) => page.items);
-    const filteredItems = filter(items, (item) => !includes(groupIds, item.id));
+    const groupIds = groups.map((g) => g.id);
+    const items = data.pages.flatMap((page) => page.items);
+    const filteredItems = items.filter((item) => !groupIds.includes(item.id));
 
     function renderRow(item) {
         return (

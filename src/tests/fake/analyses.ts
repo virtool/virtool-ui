@@ -11,7 +11,6 @@ import {
     UntrustworthyRange,
 } from "@analyses/types";
 import { faker } from "@faker-js/faker";
-import { merge } from "lodash-es";
 import nock from "nock";
 import { createFakeIndexNested } from "./indexes";
 import { createFakeServerJobMinimal } from "./jobs";
@@ -65,7 +64,7 @@ export function createFakeFormattedNuVsAnalysis(
         workflow: "nuvs",
     };
 
-    return merge(defaultAnalysis, overrides);
+    return { ...defaultAnalysis, ...overrides };
 }
 
 type FakeFormattedNuVsHit = {
@@ -113,7 +112,7 @@ export function createFakeFormattedNuVsHit(overrides?: FakeFormattedNuVsHit) {
         sequence: faker.string.fromCharacters("ATGC", { min: 20, max: 150 }),
     };
 
-    return merge(nuvsHit, overrides);
+    return { ...nuvsHit, ...overrides };
 }
 
 /**

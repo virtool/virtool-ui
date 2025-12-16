@@ -2,7 +2,6 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSelect from "@base/InputSelect";
 import { GroupMinimal } from "@groups/types";
-import { map } from "lodash-es";
 import styled from "styled-components";
 
 const SampleUserGroupItem = styled.option`
@@ -24,7 +23,7 @@ export default function SampleUserGroup({
     groups,
     onChange,
 }: SampleUserGroupProps) {
-    const groupComponents = map(groups, (group) => (
+    const groupComponents = groups.map((group) => (
         <SampleUserGroupItem key={group.id} value={group.id}>
             {group.name}
         </SampleUserGroupItem>

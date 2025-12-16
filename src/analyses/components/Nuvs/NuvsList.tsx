@@ -34,12 +34,12 @@ export default function NuvsList({ detail }: NuVsListProps) {
 
         if (windowIndex > 0) {
             previousIndex = windowIndex - 1;
-            previousId = sortedHits[previousIndex].id;
+            previousId = String(sortedHits[previousIndex].id);
         }
 
         if (windowIndex < sortedHits.length - 1) {
             nextIndex = windowIndex + 1;
-            nextId = sortedHits[nextIndex].id;
+            nextId = String(sortedHits[nextIndex].id);
         }
     }
 

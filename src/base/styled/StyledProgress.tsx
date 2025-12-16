@@ -1,4 +1,3 @@
-import { get } from "lodash-es";
 import styled, { DefaultTheme } from "styled-components";
 
 interface StyledProgressProps {
@@ -7,7 +6,7 @@ interface StyledProgressProps {
 }
 
 function getProgressColor({ color, theme }: StyledProgressProps) {
-    return get(theme, ["color", color], theme.color.blue);
+    return theme.color[color] ?? theme.color.blue;
 }
 
 export const StyledProgress = styled.progress<StyledProgressProps>`

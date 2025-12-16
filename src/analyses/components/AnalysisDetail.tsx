@@ -64,7 +64,7 @@ export default function AnalysisDetail() {
     if (analysis.workflow === "pathoscope_bowtie") {
         content = (
             <PathoscopeViewer
-                detail={analysis as FormattedPathoscopeAnalysis}
+                analysis={analysis as FormattedPathoscopeAnalysis}
                 sample={sample}
             />
         );

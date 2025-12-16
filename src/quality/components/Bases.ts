@@ -6,7 +6,7 @@ import {
     QUALITY_CHART_MARGIN,
 } from "@samples/charting.js";
 import { area, axisBottom, axisLeft, line, scaleLinear } from "d3";
-import { forEach, map, min, values } from "lodash-es";
+import { min } from "es-toolkit/compat";
 
 const series = [
     { label: "Mean", color: theme.color.red },
@@ -25,8 +25,8 @@ function getArea(name: string, areaX, y, a, b) {
     };
 }
 
-function getMinQuality(data) {
-    return min(map(data, (document) => min(values(document))));
+function getMinQuality(data): number | undefined {
+    return min(data.map((document) => min(Object.values(document))));
 }
 
 /**
@@ -54,7 +54,7 @@ export function drawBasesChart(element: HTMLElement, data, baseWidth: number) {
     // Set up scales and axes.
     const y = scaleLinear()
         .range([QUALITY_CHART_HEIGHT, 0])
-        .domain([getMinQuality(data) - 5, 48]);
+        .domain([(getMinQuality(data) ?? 0) - 5, 48]);
 
     const x = scaleLinear().range([0, width]).domain([0, data.length]);
 
@@ -71,7 +71,7 @@ export function drawBasesChart(element: HTMLElement, data, baseWidth: number) {
     ];
 
     // Append the areas to the chart.
-    forEach(areas, (a) => {
+    areas.forEach((a) => {
         svg.append("path")
             .attr("d", a.func(data))
             .attr("class", "graph-line")

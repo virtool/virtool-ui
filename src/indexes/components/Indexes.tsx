@@ -3,7 +3,6 @@ import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
-import { find, get, map } from "lodash-es";
 import { useFindIndexes } from "../queries";
 import { IndexItem } from "./Item/IndexItem";
 import RebuildAlert from "./RebuildAlert";
@@ -35,17 +34,16 @@ export default function Indexes() {
                     pageCount={page_count}
                 >
                     <BoxGroup>
-                        {map(documents, (document) => (
+                        {documents.map((document) => (
                             <IndexItem
+                                key={document.id}
                                 index={document}
                                 refId={refId}
-                                activeId={get(
-                                    find(documents, {
-                                        ready: true,
-                                        has_files: true,
-                                    }),
-                                    "id",
-                                )}
+                                activeId={
+                                    documents.find(
+                                        (doc) => doc.ready && doc.has_files,
+                                    )?.id
+                                }
                             />
                         ))}
                     </BoxGroup>

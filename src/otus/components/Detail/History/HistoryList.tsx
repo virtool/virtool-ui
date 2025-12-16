@@ -2,7 +2,7 @@ import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import { OtuHistory } from "@otus/types";
-import { map, reverse, sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit";
 import Change from "./Change";
 
 type HistoryListProps = {
@@ -16,9 +16,9 @@ type HistoryListProps = {
  * Displays a history list of changes with options to revert the OTU
  */
 export default function HistoryList({ history, unbuilt }: HistoryListProps) {
-    const changes = reverse(sortBy(history, "otu.version"));
+    const changes = sortBy(history, [(h) => h.otu.version]).reverse();
 
-    const changeComponents = map(changes, (change, index) => (
+    const changeComponents = changes.map((change, index) => (
         <Change
             key={index}
             id={change.id}

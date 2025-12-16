@@ -14,7 +14,6 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { useAddReferenceMember } from "@references/queries";
 import { ReferenceUser } from "@references/types";
 import { useInfiniteFindUsers } from "@users/queries";
-import { filter, flatMap, includes, map } from "lodash-es";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -65,9 +64,9 @@ export default function AddReferenceUser({
         return null;
     }
 
-    const userIds = map(users, "id");
-    const items = flatMap(data.pages, (page) => page.documents);
-    const filteredItems = filter(items, (item) => !includes(userIds, item.id));
+    const userIds = users.map((u) => u.id);
+    const items = data.pages.flatMap((page) => page.documents);
+    const filteredItems = items.filter((item) => !userIds.includes(item.id));
 
     function renderRow(item) {
         return (

@@ -6,7 +6,7 @@ import {
     SubtractionNested,
     SubtractionOption,
 } from "@subtraction/types";
-import { assign, merge, pick } from "lodash-es";
+import { pick } from "es-toolkit";
 import nock from "nock";
 import { createFakeUserNested } from "./user";
 
@@ -35,7 +35,7 @@ export function createFakeSubtractionNested(
         name: faker.word.noun({ strategy: "any-length" }),
     };
 
-    return merge(defaultSubtractionNested, overrides);
+    return { ...defaultSubtractionNested, ...overrides };
 }
 
 /**
@@ -49,7 +49,7 @@ export function createFakeSubtractionMinimal(
         count: faker.number.int({ max: 15 }),
         created_at: faker.date.past().toISOString(),
         file: {
-            id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+            id: faker.number.int(),
             name: `${faker.word.noun({ strategy: "any-length" })}s.fa`,
         },
         job: null,
@@ -58,7 +58,7 @@ export function createFakeSubtractionMinimal(
         user: createFakeUserNested(),
     };
 
-    return assign(defaultSubtractionMinimal, overrides);
+    return { ...defaultSubtractionMinimal, ...overrides };
 }
 
 /**

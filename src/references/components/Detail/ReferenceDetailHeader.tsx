@@ -6,7 +6,6 @@ import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { endsWith } from "lodash-es";
 import { useLocation } from "wouter";
 
 type ReferenceDetailHeaderProps = {
@@ -36,7 +35,7 @@ export default function ReferenceDetailHeader({
         ReferenceRight.modify,
     );
 
-    const showIcons = endsWith(location, "/manage");
+    const showIcons = location.endsWith("/manage");
 
     return (
         <ViewHeader title={name}>

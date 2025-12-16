@@ -4,7 +4,6 @@ import ExternalLink from "@base/ExternalLink";
 import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
-import { map } from "lodash-es";
 import { useFetchAPIKeys } from "../queries";
 import ApiKey from "./ApiKey";
 import ApiKeyCreate from "./ApiKeyCreate";
@@ -20,7 +19,7 @@ export default function ApiKeys() {
     }
 
     const keyComponents =
-        data.length && map(data, (key) => <ApiKey key={key.id} apiKey={key} />);
+        data.length && data.map((key) => <ApiKey key={key.id} apiKey={key} />);
 
     return (
         <div>

@@ -3,7 +3,7 @@ import { cn } from "@app/utils";
 import BoxGroup from "@base/BoxGroup";
 import PseudoLabel from "@base/PseudoLabel";
 import { Subtraction, SubtractionOption } from "@subtraction/types";
-import { intersectionWith, xor } from "lodash-es";
+import { intersectionWith, xor } from "es-toolkit";
 import CreateAnalysisField from "./CreateAnalysisField";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 import { CreateAnalysisSelectorSearch } from "./CreateAnalysisSelectorSearch";

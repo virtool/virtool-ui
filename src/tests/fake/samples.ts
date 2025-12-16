@@ -8,7 +8,6 @@ import {
     SampleMinimal,
     WorkflowState,
 } from "@samples/types";
-import { assign } from "lodash-es";
 import nock from "nock";
 import { createFakeServerJobMinimal } from "./jobs";
 import { createFakeLabelNested } from "./labels";
@@ -43,7 +42,7 @@ export function createFakeSampleMinimal(
         },
     };
 
-    return assign(defaultSampleMinimal, overrides);
+    return { ...defaultSampleMinimal, ...overrides };
 }
 
 /**
@@ -61,7 +60,7 @@ export function createFakeSampleRead(overrides?: Partial<Read>): Read {
         uploaded_at: faker.date.past().toISOString(),
     };
 
-    return assign(defaultRead, overrides);
+    return { ...defaultRead, ...overrides };
 }
 
 export function createFakeSampleQuality(): Quality {
@@ -98,7 +97,7 @@ export function createFakeSample(overrides?: Partial<Sample>): Sample {
         subtractions: [createFakeSubtractionNested()],
     };
 
-    return assign(defaultSample, overrides);
+    return { ...defaultSample, ...overrides };
 }
 
 /**

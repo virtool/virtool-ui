@@ -7,7 +7,6 @@ import InputSelect from "@base/InputSelect";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import { Molecule, OtuSegment } from "@otus/types";
-import { find, map } from "lodash-es";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -66,7 +65,7 @@ export default function SegmentForm({
         },
     });
 
-    const molecules = map(moleculeTypes, (molecule) => (
+    const molecules = moleculeTypes.map((molecule) => (
         <option key={molecule} value={molecule}>
             {molecule || "None"}
         </option>
@@ -82,7 +81,7 @@ export default function SegmentForm({
                         {...register("segmentName", {
                             required: "Name required",
                             validate: (value) =>
-                                find(schema, { name: value }) &&
+                                schema.find((s) => s.name === value) &&
                                 "Segment names must be unique. This name is currently in use.",
                         })}
                     />

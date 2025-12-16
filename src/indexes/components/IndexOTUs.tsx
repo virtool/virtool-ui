@@ -1,7 +1,6 @@
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
-import { map } from "lodash-es";
 import { IndexOTU as OTU } from "../types";
 import IndexOTU from "./IndexOTU";
 
@@ -14,7 +13,7 @@ type IndexOTUsProps = {
  * A list of OTUs associated with the index
  */
 export default function IndexOTUs({ otus, refId }: IndexOTUsProps) {
-    const otuComponents = map(otus, (otu) => (
+    const otuComponents = otus.map((otu) => (
         <IndexOTU
             key={otu.id}
             refId={refId}

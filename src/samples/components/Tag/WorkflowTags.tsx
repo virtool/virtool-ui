@@ -1,6 +1,5 @@
 import { getWorkflowDisplayName } from "@app/utils";
 import { SampleWorkflows, WorkflowState } from "@samples/types";
-import { reduce } from "lodash-es";
 import { Link } from "wouter";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import WorkflowTag from "./WorkflowTag";
@@ -21,9 +20,8 @@ type WorkflowTagsProps = {
  * @returns The workflow tags for a sample.
  */
 export default function WorkflowTags({ id, workflows }: WorkflowTagsProps) {
-    const workflowTags = reduce(
-        workflows,
-        (tags, value, key) => {
+    const workflowTags = Object.entries(workflows).reduce(
+        (tags, [key, value]) => {
             if (
                 value === WorkflowState.COMPLETE ||
                 value === WorkflowState.PENDING

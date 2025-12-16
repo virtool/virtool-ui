@@ -2,7 +2,6 @@ import { useUrlSearchParam } from "@app/hooks";
 import RemoveDialog from "@base/RemoveDialog";
 import { useUpdateOTU } from "@otus/queries";
 import { OtuSegment } from "@otus/types";
-import { reject } from "lodash-es";
 
 type RemoveSegmentProps = {
     abbreviation: string;
@@ -31,7 +30,7 @@ export default function RemoveSegment({
                 otuId,
                 name,
                 abbreviation,
-                schema: reject(schema, { name: removeSegmentName }),
+                schema: schema.filter((s) => s.name !== removeSegmentName),
             },
             {
                 onSuccess: () => {

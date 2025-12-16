@@ -2,7 +2,7 @@ import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import NoneFoundSection from "@base/NoneFoundSection";
-import { map, sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit";
 import { IndexContributor } from "../types";
 import Contributor from "./Contributor";
 
@@ -14,9 +14,9 @@ type ContributorsProps = {
  * A list of contributors for the index
  */
 export default function Contributors({ contributors }: ContributorsProps) {
-    const sorted = sortBy(contributors, ["id", "count"]);
+    const sorted = sortBy(contributors, [(c) => c.id, (c) => c.count]);
 
-    const contributorComponents = map(sorted, (contributor) => (
+    const contributorComponents = sorted.map((contributor) => (
         <Contributor key={contributor.id} {...contributor} />
     ));
 

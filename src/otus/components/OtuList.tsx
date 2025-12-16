@@ -7,7 +7,6 @@ import Pagination from "@base/Pagination";
 import RebuildAlert from "@indexes/components/RebuildAlert";
 import { useListOTUs } from "@otus/queries";
 import { useFetchReference } from "@references/queries";
-import { map } from "lodash-es";
 import OtuCreate from "./OtuCreate";
 import OtuItem from "./OtuItem";
 import OtuToolbar from "./OtuToolbar";
@@ -54,7 +53,7 @@ export default function OtuList() {
                     pageCount={page_count}
                 >
                     <BoxGroup>
-                        {map(documents, (document) => (
+                        {documents.map((document) => (
                             <OtuItem
                                 key={document.id}
                                 {...document}

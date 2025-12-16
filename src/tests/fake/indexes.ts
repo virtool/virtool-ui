@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { IndexFile, IndexMinimal, IndexNested } from "@indexes/types";
-import { assign, merge } from "lodash-es";
+import { merge } from "es-toolkit";
 import nock from "nock";
-import { createFakeServerJobMinimal } from "./jobs";
+import { createFakeJobMinimal } from "./jobs";
 import { createFakeReferenceNested } from "./references";
 import { createFakeUserNested } from "./user";
 import { BaseFakeSearchResultOptions } from "./utils";
@@ -15,7 +15,7 @@ export function createFakeIndexNested(
         version: faker.number.int({ max: 10 }),
     };
 
-    return assign(defaultIndexNested, overrides);
+    return { ...defaultIndexNested, ...overrides };
 }
 
 export function createFakeIndexMinimal(
@@ -26,14 +26,14 @@ export function createFakeIndexMinimal(
         change_count: faker.number.int({ min: 2, max: 10 }),
         created_at: faker.date.past().toISOString(),
         has_files: faker.datatype.boolean(),
-        job: createFakeServerJobMinimal(),
+        job: createFakeJobMinimal(),
         modified_otu_count: faker.number.int({ min: 2, max: 10 }),
         reference: createFakeReferenceNested(),
         user: createFakeUserNested(),
         ready: faker.datatype.boolean(),
     };
 
-    return assign(defaultIndexMinimal, overrides);
+    return { ...defaultIndexMinimal, ...overrides };
 }
 
 export function createFakeIndexFile(overrides?: Partial<IndexFile>): IndexFile {
@@ -46,7 +46,7 @@ export function createFakeIndexFile(overrides?: Partial<IndexFile>): IndexFile {
         type: "fasta",
     };
 
-    return assign(defaultIndexFile, overrides);
+    return { ...defaultIndexFile, ...overrides };
 }
 
 type IndexSearchResults = BaseFakeSearchResultOptions & {

@@ -18,6 +18,7 @@ import {
     FormattedIimiHit,
     FormattedIimiIsolate,
     FormattedIimiSequence,
+    FormattedPathoscopeAnalysis,
     FormattedPathoscopeIsolate,
     IimiAnalysis,
     IimiHit,
@@ -103,10 +104,9 @@ export function formatNuvsData(detail) {
         hit.sequence.length > (longest?.sequence?.length ?? 0) ? hit : longest,
     );
 
-    const { cache, created_at, id, ready, user, workflow } = detail;
+    const { created_at, id, ready, user, workflow } = detail;
 
     return {
-        cache,
         created_at,
         id,
         ready,
@@ -164,13 +164,12 @@ export function formatSequence(sequence, readCount) {
     };
 }
 
-export function formatPathoscopeData(detail) {
+export function formatPathoscopeData(detail): FormattedPathoscopeAnalysis {
     if (detail.results === null || detail.results.hits.length === 0) {
         return detail;
     }
 
     const {
-        cache,
         created_at,
         results,
         id,
@@ -255,7 +254,7 @@ export function formatPathoscopeData(detail) {
     });
 
     return {
-        cache,
+        ...detail,
         created_at,
         id,
         index,
