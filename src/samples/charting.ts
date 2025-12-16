@@ -1,5 +1,4 @@
 import { select } from "d3";
-import { keysIn, map } from "lodash-es";
 
 export const QUALITY_CHART_HEIGHT = 300;
 
@@ -16,7 +15,8 @@ export function appendLegend(
     series,
     legendCircleRadius: number,
 ) {
-    map(keysIn(series), (index: number) => {
+    Object.keys(series).forEach((key) => {
+        const index = Number(key);
         svg.append("circle")
             .attr("cy", index * 25)
             .attr("r", legendCircleRadius)

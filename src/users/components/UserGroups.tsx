@@ -5,7 +5,7 @@ import NoneFoundSection from "@base/NoneFoundSection";
 import PseudoLabel from "@base/PseudoLabel";
 import { useListGroups } from "@groups/queries";
 import { GroupMinimal } from "@groups/types";
-import { map, some, xor } from "lodash-es";
+import { xor } from "es-toolkit/array";
 import styled from "styled-components";
 import { UserGroup } from "./UserGroup";
 
@@ -35,7 +35,12 @@ export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
     function handleEdit(groupId: number) {
         mutation.mutate({
             userId,
-            update: { groups: xor(map(memberGroups, "id"), [groupId]) },
+            update: {
+                groups: xor(
+                    memberGroups.map((g) => g.id),
+                    [groupId],
+                ),
+            },
         });
     }
 
@@ -44,12 +49,12 @@ export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
             <PseudoLabel>Groups</PseudoLabel>
             <UserGroupsList>
                 {data.length ? (
-                    map(data, ({ id, name }) => (
+                    data.map(({ id, name }) => (
                         <UserGroup
                             key={id}
                             id={id}
                             name={name}
-                            toggled={some(memberGroups, { id })}
+                            toggled={memberGroups.some((g) => g.id === id)}
                             onClick={handleEdit}
                         />
                     ))

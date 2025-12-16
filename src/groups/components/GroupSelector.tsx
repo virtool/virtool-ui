@@ -1,7 +1,7 @@
 import { getColor } from "@app/theme";
 import BoxGroup from "@base/BoxGroup";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
-import { map, sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit/compat";
 import styled from "styled-components";
 import { GroupMinimal } from "../types";
 
@@ -49,18 +49,16 @@ export function GroupSelector({
     setSelectedGroupId,
     groups,
 }: GroupSelectorProps) {
-    const groupComponents = map(sortBy(groups, "name"), (group) => {
-        return (
-            <GroupsSelectBoxGroupSection
-                selectable
-                active={selectedGroupId === group.id}
-                key={group.id}
-                onClick={() => setSelectedGroupId(group.id)}
-            >
-                {group.name}
-            </GroupsSelectBoxGroupSection>
-        );
-    });
+    const groupComponents = sortBy(groups, (g) => g.name).map((group) => (
+        <GroupsSelectBoxGroupSection
+            selectable
+            active={selectedGroupId === group.id}
+            key={group.id}
+            onClick={() => setSelectedGroupId(group.id)}
+        >
+            {group.name}
+        </GroupsSelectBoxGroupSection>
+    ));
 
     return (
         <GroupComponentsContainer>{groupComponents}</GroupComponentsContainer>

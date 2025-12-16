@@ -5,7 +5,7 @@ import Button from "@base/Button";
 import InputHeader from "@base/InputHeader";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import RemoveBanner from "@base/RemoveBanner";
-import { find, sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit/compat";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
@@ -60,8 +60,8 @@ export default function Groups() {
     const { data: selectedGroup } = useFetchGroup(selectedGroupId);
 
     useEffect(() => {
-        if (groups && !find(groups, { id: selectedGroupId })) {
-            setSelectedGroupId(sortBy(groups, "name")[0]?.id);
+        if (groups && !groups.find((g) => g.id === selectedGroupId)) {
+            setSelectedGroupId(sortBy(groups, (g) => g.name)[0]?.id);
         }
     }, [groups, selectedGroupId]);
 

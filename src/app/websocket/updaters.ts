@@ -3,8 +3,9 @@ import { hmmQueryKeys } from "@hmm/queries";
 import { HmmSearchResults } from "@hmm/types";
 import { referenceQueryKeys } from "@references/queries";
 import { ReferenceSearchResult } from "@references/types";
-import { InfiniteData, QueryClient } from "@tanstack/react-query";
-import { assign, cloneDeep, forEach, get } from "lodash-es/lodash";
+import { QueryClient } from "@tanstack/react-query";
+import { get } from "es-toolkit/compat";
+import { cloneDeep } from "es-toolkit/object";
 
 interface TaskObject {
     task: Task;
@@ -33,14 +34,14 @@ function listItemUpdater<T extends Document>(
     task: Task,
     selector: (cache: TaskObject) => Task,
 ) {
-    return function (cache: InfiniteData<T>): InfiniteData<T> {
+    return function (cache: T): T {
         const newCache = cloneDeep(cache);
 
         const items = "items" in newCache ? newCache.items : newCache.documents;
-        forEach(items, (item: { task: Task }) => {
+        items.forEach((item: { task: Task }) => {
             const previousTask = selector(item);
             if (previousTask && item.task.id === task.id) {
-                assign(previousTask, task);
+                Object.assign(previousTask, task);
             }
         });
 
@@ -61,7 +62,7 @@ export function updater<T>(task: Task, selector: (cache: T) => Task) {
         const previousTask = selector(newCache);
 
         if (previousTask && previousTask.id === task.id) {
-            assign(previousTask, task);
+            Object.assign(previousTask, task);
             return newCache;
         }
     };

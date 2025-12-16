@@ -1,5 +1,5 @@
 import { updateSearchParam, usePageParam } from "@app/hooks";
-import { map, max, min, range } from "lodash-es";
+import { range } from "es-toolkit/math";
 import { ReactElement, ReactNode, useEffect } from "react";
 import { useSearch } from "wouter";
 import PaginationContent from "./PaginationContent";
@@ -15,9 +15,9 @@ function getPageRange(
     rightButtons = 2,
 ) {
     const totalButtons = leftButtons + rightButtons;
-    let maxVal = min([pageCount, storedPage + rightButtons]);
-    const minVal = max([1, maxVal - totalButtons]);
-    maxVal = min([pageCount, minVal + totalButtons]);
+    let maxVal = Math.min(pageCount, storedPage + rightButtons);
+    const minVal = Math.max(1, maxVal - totalButtons);
+    maxVal = Math.min(pageCount, minVal + totalButtons);
 
     return range(minVal, maxVal + 1);
 }
@@ -51,10 +51,9 @@ export default function Pagination({
         }
     }, [currentPage, pageCount, setPage]);
 
-    const entries = renderRow && map(items, (item) => renderRow(item));
+    const entries = renderRow && items.map((item) => renderRow(item));
 
-    const pageButtons = map(
-        getPageRange(pageCount, storedPage),
+    const pageButtons = getPageRange(pageCount, storedPage).map(
         (pageNumber) => (
             <PaginationLink
                 key={pageNumber}

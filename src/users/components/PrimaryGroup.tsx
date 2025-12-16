@@ -3,7 +3,7 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSelect from "@base/InputSelect";
 import { GroupMinimal } from "@groups/types";
-import { capitalize, map } from "lodash-es";
+import { capitalize } from "es-toolkit/string";
 import styled from "styled-components";
 
 export const PrimaryGroupOption = styled.option`
@@ -49,7 +49,7 @@ export default function PrimaryGroup({
                 <option key="none" value="none">
                     None
                 </option>
-                {map(groups, ({ id, name }) => (
+                {groups.map(({ id, name }) => (
                     <PrimaryGroupOption key={id} value={id}>
                         {capitalize(name)}
                     </PrimaryGroupOption>

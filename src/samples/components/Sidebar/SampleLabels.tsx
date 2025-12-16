@@ -4,7 +4,7 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SidebarHeader from "@base/SidebarHeader";
 import SideBarSection from "@base/SideBarSection";
 import { useFetchLabels } from "@labels/queries";
-import { xor } from "lodash-es";
+import { xor } from "es-toolkit/array";
 import styled from "styled-components";
 import SampleLabel from "../Label/SampleLabel";
 import SampleSidebarList from "./SampleSidebarList";

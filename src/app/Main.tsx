@@ -7,7 +7,6 @@ import MessageBanner from "@message/components/MessageBanner";
 import Nav from "@nav/components/Nav";
 import Sidebar from "@nav/components/Sidebar";
 import { useQueryClient } from "@tanstack/react-query";
-import { includes } from "lodash-es";
 import { lazy, Suspense, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Redirect, Route, Switch } from "wouter";
@@ -31,7 +30,7 @@ function setupWebSocket(queryClient) {
     if (!window.ws) {
         window.ws = new WsConnection(queryClient);
     }
-    if (includes([ABANDONED, INITIALIZING], window.ws.connectionStatus)) {
+    if ([ABANDONED, INITIALIZING].includes(window.ws.connectionStatus)) {
         window.ws.establishConnection();
     }
 }

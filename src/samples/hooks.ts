@@ -1,7 +1,6 @@
 import { useFetchAccount } from "@account/queries";
 import { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
-import { some } from "lodash-es";
 import { useFetchSample } from "./queries";
 
 /**
@@ -26,7 +25,8 @@ export function useCheckCanEditSample(sampleId: string) {
         ) ||
         sample.all_write ||
         sample.user.id === account.id ||
-        (sample.group_write && some(account.groups, { id: sample.group }));
+        (sample.group_write &&
+            account.groups.some((g) => g.id === sample.group?.id));
 
     return { hasPermission, isPending: false };
 }

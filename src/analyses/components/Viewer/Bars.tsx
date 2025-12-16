@@ -1,5 +1,4 @@
 import { getBorder, getColor } from "@app/theme";
-import { map } from "lodash-es";
 import styled from "styled-components";
 import { BarsLegendItem } from "./BarsLegendItem";
 
@@ -36,7 +35,7 @@ export function Bars({ empty, items }) {
     return (
         <StyledBars>
             <Bar>
-                {map(items, ({ color, count }) => (
+                {items.map(({ color, count }) => (
                     <BarItem key={color} color={color} size={count} />
                 ))}
                 {empty && (
@@ -44,7 +43,7 @@ export function Bars({ empty, items }) {
                 )}
             </Bar>
             <div>
-                {map(items, ({ color, count, title }) => (
+                {items.map(({ color, count, title }) => (
                     <BarsLegendItem
                         key={color}
                         color={color}

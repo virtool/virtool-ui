@@ -1,30 +1,18 @@
 import { formatIsolateName } from "@app/utils";
+import { compact, uniq, unzip } from "es-toolkit/array";
 import {
-    cloneDeep,
-    compact,
-    fill,
-    filter,
     flatMap,
-    fromPairs,
     has,
-    includes,
-    keys,
-    map,
     max,
     maxBy,
     min,
     minBy,
-    reduce,
     reject,
     sortBy,
-    startsWith,
     sum,
     sumBy,
-    toNumber,
-    uniq,
-    unzip,
-    zipWith,
-} from "lodash-es";
+} from "es-toolkit/compat";
+import { cloneDeep } from "es-toolkit/object";
 import {
     FormattedIimiAnalysis,
     FormattedIimiHit,
@@ -41,7 +29,7 @@ import {
 } from "./types";
 
 export function calculateAnnotatedOrfCount(orfs) {
-    return filter(orfs, (orf) => orf.hits.length).length;
+    return orfs.filter((orf) => orf.hits.length).length;
 }
 
 function calculateSequenceMinimumE(orfs: NuvsOrf[]) {
@@ -56,7 +44,9 @@ function calculateSequenceMinimumE(orfs: NuvsOrf[]) {
 
 export function extractFamilies(orfs) {
     const families = uniq(
-        flatMap(orfs, (orf) => flatMap(orf.hits, (hit) => keys(hit.families))),
+        flatMap(orfs, (orf) =>
+            flatMap(orf.hits, (hit) => Object.keys(hit.families)),
+        ),
     );
     return reject(families, (f) => f === "None");
 }
@@ -78,17 +68,15 @@ type FillAlignParams = {
  * @param length - the length of the generated flat array
  */
 export function fillAlign({ align, length }: FillAlignParams) {
-    const filled = Array(length);
-
     if (!align) {
-        return fill(filled, 0);
+        return Array(length).fill(0);
     }
 
-    const coords = fromPairs(align);
+    const coords = Object.fromEntries(align);
 
     let prev = 0;
 
-    return map(filled, (depth, i) => {
+    return Array.from({ length }, (_, i) => {
         if (has(coords, i)) {
             prev = coords[i];
         }
@@ -102,16 +90,18 @@ export function formatNuvsData(detail) {
         return detail;
     }
 
-    const hits = map(detail.results.hits, (hit) => ({
+    const hits = detail.results.hits.map((hit) => ({
         ...hit,
-        id: toNumber(hit.index),
+        id: Number(hit.index),
         annotatedOrfCount: calculateAnnotatedOrfCount(hit.orfs),
         e: calculateSequenceMinimumE(hit.orfs),
         families: extractFamilies(hit.orfs),
         names: extractNames(hit.orfs),
     }));
 
-    const longestSequence = maxBy(hits, (hit) => hit.sequence.length);
+    const longestSequence = hits.reduce((longest, hit) =>
+        hit.sequence.length > (longest?.sequence?.length ?? 0) ? hit : longest,
+    );
 
     const { cache, created_at, id, ready, user, workflow } = detail;
 
@@ -159,10 +149,10 @@ export function mergeCoverage(
     isolates: FormattedPathoscopeIsolate[],
 ): number[] {
     const longest = maxBy(isolates, (isolate) => isolate.filled.length);
-    const coverages = map(isolates, (isolate) => isolate.filled);
+    const coverages = isolates.map((isolate) => isolate.filled);
 
-    return map(longest.filled, (depth, index) =>
-        max(map(coverages, (coverage) => coverage[index])),
+    return longest.filled.map((depth, index) =>
+        max(coverages.map((coverage) => coverage[index])),
     );
 }
 
@@ -194,25 +184,25 @@ export function formatPathoscopeData(detail) {
 
     const readCount = results.read_count;
 
-    const hits = map(results.hits, (otu) => {
+    const hits = results.hits.map((otu) => {
         const isolateNames = [];
 
         // Go through each isolate associated with the OTU, adding properties for weight, read count,
         // median depth, and coverage. These values will be calculated from the sequences owned by each isolate.
-        const isolates = map(otu.isolates, (isolate) => {
+        const isolates = otu.isolates.map((isolate) => {
             // Make a name for the isolate by joining the source type and name, eg. "Isolate" + "Q47".
             const name = formatIsolateName(isolate);
 
             isolateNames.push(name);
 
             const sequences = sortBy(
-                map(isolate.sequences, (sequence) =>
+                isolate.sequences.map((sequence) =>
                     formatSequence(sequence, readCount),
                 ),
                 "length",
             );
 
-            const filled = flatMap(sequences, "filled");
+            const filled = sequences.flatMap((seq) => seq.filled);
 
             // Coverage is the number of non-zero depth positions divided by the total number of positions.
             const coverage =
@@ -227,24 +217,39 @@ export function formatPathoscopeData(detail) {
                 coverage,
                 sequences,
                 maxDepth: max(filled),
-                pi: sumBy(sequences, "pi"),
+                pi: sumBy(sequences, (seq) => seq.pi),
                 depth: median(filled),
             };
         });
 
         const filled = mergeCoverage(isolates);
-        const pi = sumBy(isolates, "pi");
+        const pi = isolates.reduce((sum, isolate) => sum + isolate.pi, 0);
+
+        const maxCoverageIsolate = isolates.reduce((maxIsolate, isolate) =>
+            isolate.coverage > maxIsolate.coverage ? isolate : maxIsolate,
+        );
+        const maxFilledLengthIsolate = isolates.reduce((maxIsolate, isolate) =>
+            isolate.filled.length > maxIsolate.filled.length
+                ? isolate
+                : maxIsolate,
+        );
+        const maxDepthIsolate = isolates.reduce((maxIsolate, isolate) =>
+            isolate.maxDepth > maxIsolate.maxDepth ? isolate : maxIsolate,
+        );
 
         return {
             ...otu,
             filled,
             pi,
-            isolates: sortBy(isolates, "coverage").reverse(),
-            coverage: maxBy(isolates, "coverage").coverage,
+            isolates: sortBy(isolates, (i) => i.coverage).reverse(),
+            coverage: maxCoverageIsolate.coverage,
             depth: median(filled),
-            isolateNames: reject(uniq(isolateNames), "Unnamed Isolate"),
-            maxGenomeLength: maxBy(isolates, "filled.length").length,
-            maxDepth: maxBy(isolates, "maxDepth").maxDepth,
+            isolateNames: reject(
+                uniq(isolateNames),
+                (name) => name === "Unnamed Isolate",
+            ),
+            maxGenomeLength: maxFilledLengthIsolate.filled.length,
+            maxDepth: maxDepthIsolate.maxDepth,
             reads: pi * readCount,
         };
     });
@@ -268,7 +273,7 @@ export function formatPathoscopeData(detail) {
 }
 
 export function formatData(detail) {
-    if (startsWith(detail?.workflow, "pathoscope")) {
+    if (detail?.workflow?.startsWith("pathoscope")) {
         return formatPathoscopeData(detail);
     }
 
@@ -286,7 +291,7 @@ export function formatData(detail) {
 const supportedWorkflows = ["pathoscope_bowtie", "nuvs", "iimi"];
 
 export function checkSupportedWorkflow(workflow) {
-    return includes(supportedWorkflows, workflow);
+    return supportedWorkflows.includes(workflow);
 }
 
 /**
@@ -297,12 +302,10 @@ export function checkSupportedWorkflow(workflow) {
  * @returns Iimi otu with derived values for display
  */
 function formatIimiData(detail: IimiAnalysis): FormattedIimiAnalysis {
-    const hits = map(detail.results.hits, (hit: IimiHit): FormattedIimiHit => {
-        const isolates = map(
-            hit.isolates,
+    const hits = detail.results.hits.map((hit: IimiHit): FormattedIimiHit => {
+        const isolates = hit.isolates.map(
             (isolate: IimiIsolate): FormattedIimiIsolate => {
-                const sequences = map(
-                    isolate.sequences,
+                const sequences = isolate.sequences.map(
                     (sequence: IimiSequence): FormattedIimiSequence => {
                         const maxDepth = Math.max(...sequence.coverage.values);
                         const coverage = convertRleToCoverage(
@@ -317,13 +320,11 @@ function formatIimiData(detail: IimiAnalysis): FormattedIimiAnalysis {
             },
         );
 
-        const probability = reduce(
-            hit.isolates,
+        const probability = hit.isolates.reduce(
             (result: number, isolate: IimiIsolate) => {
                 return max([
                     result,
-                    ...map(
-                        isolate.sequences,
+                    ...isolate.sequences.map(
                         (sequence: IimiSequence) => sequence.probability,
                     ),
                 ]);
@@ -341,26 +342,25 @@ function formatIimiData(detail: IimiAnalysis): FormattedIimiAnalysis {
 
 function calculateCombinedCoveragePercent(isolates: FormattedIimiIsolate[]) {
     const combined_sequences = sortBy(
-        unzip(map(isolates, "sequences")),
+        unzip(isolates.map((isolate) => isolate.sequences)),
         (seqs) => seqs[0]?.length,
     );
 
-    const compositedCoverage = map(combined_sequences, (seqs) => {
-        const filteredSeqs = filter(seqs);
+    const compositedCoverage = combined_sequences.map((seqs) => {
+        const filteredSeqs = seqs.filter(Boolean);
         return maxSequences(
-            map(filteredSeqs, (seq: FormattedIimiSequence) => {
+            filteredSeqs.map((seq: FormattedIimiSequence) => {
                 return seq.coverage;
             }),
         );
     });
 
-    const totalSequenceLength = map(
-        compositedCoverage,
-        (seq) => seq.length,
-    ).reduce((a, b) => a + b, 0);
+    const totalSequenceLength = compositedCoverage
+        .map((seq) => seq.length)
+        .reduce((a, b) => a + b, 0);
 
     const totalCoveredPositions = sum(
-        map(compositedCoverage, (seq) => {
+        compositedCoverage.map((seq) => {
             return seq.filter((pos) => pos > 0).length;
         }),
     );
@@ -401,7 +401,11 @@ export function convertRleToCoverage(
 export function maxSequences(
     sequences: PositionMappedReadDepths[],
 ): PositionMappedReadDepths {
-    return zipWith(...sequences, (...args) => max(args));
+    if (sequences.length === 0) return [];
+    const maxLength = Math.max(...sequences.map((s) => s.length));
+    return Array.from({ length: maxLength }, (_, i) =>
+        Math.max(...sequences.map((s) => s[i] ?? 0)),
+    );
 }
 
 /**

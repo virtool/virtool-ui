@@ -14,7 +14,7 @@ import { useListIndexes } from "@indexes/queries";
 import { useFetchLabels } from "@labels/queries";
 import { useListSamples } from "@samples/queries";
 import { SampleMinimal } from "@samples/types";
-import { intersectionWith, union, xor } from "lodash-es";
+import { intersectionWith, union, xor } from "es-toolkit/array";
 import { useState } from "react";
 import styled from "styled-components";
 import SampleFilters from "./Filter/SampleFilters";

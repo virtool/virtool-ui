@@ -1,5 +1,5 @@
 import { getSessionStorage, setSessionStorage } from "@app/utils";
-import { forEach, isEqual } from "lodash-es";
+import { isEqual } from "es-toolkit/predicate";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import {
     FieldValues,
@@ -36,7 +36,7 @@ function restoreFormValues<TFieldValues extends FieldValues = FieldValues>(
         !isEqual(previousFormValues, defaultValues) &&
         !isDirty
     ) {
-        forEach(previousFormValues, (value, key) => {
+        Object.entries(previousFormValues).forEach(([key, value]) => {
             setValue(key as Path<TFieldValues>, value);
         });
 

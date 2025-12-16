@@ -3,7 +3,7 @@
  */
 import clsx, { ClassValue } from "clsx";
 import { formatDuration, intervalToDuration } from "date-fns";
-import { get, sampleSize, startCase } from "lodash-es";
+import { get, sampleSize, startCase } from "es-toolkit/compat";
 import numbro from "numbro";
 import { twMerge } from "tailwind-merge";
 import { capitalize } from "./common";

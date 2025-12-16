@@ -5,7 +5,7 @@ import Icon from "@base/Icon";
 import SidebarHeader from "@base/SidebarHeader";
 import SideBarSection from "@base/SideBarSection";
 import { WorkflowStates } from "@samples/utils";
-import { xor } from "lodash-es";
+import { xor } from "es-toolkit/array";
 import styled from "styled-components";
 
 const WorkflowFilterLabel = styled.div`

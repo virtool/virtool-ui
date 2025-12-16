@@ -1,5 +1,4 @@
 import { formatDistanceStrict, isAfter } from "date-fns";
-import { includes } from "lodash-es";
 import { useEffect, useState } from "react";
 
 type RelativeTimeOptions = {
@@ -33,7 +32,7 @@ function createTimeString(
         addSuffix,
     });
 
-    return includes(timeString, "in a") || includes(timeString, "a few")
+    return timeString.includes("in a") || timeString.includes("a few")
         ? "just now"
         : timeString;
 }
