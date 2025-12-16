@@ -4,7 +4,6 @@ import Icon from "@base/Icon";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import { useQueryClient } from "@tanstack/react-query";
-import { replace } from "lodash-es";
 import styled from "styled-components";
 import { hmmQueryKeys, useListHmms } from "../queries";
 import InstallOption from "./InstallOption";
@@ -61,7 +60,7 @@ export function HMMInstaller() {
 
     if (task && !installed) {
         const progress = task.progress;
-        const step = replace(task.step, "_", " ");
+        const step = task.step.replace("_", " ");
 
         return (
             <HMMInstalling>

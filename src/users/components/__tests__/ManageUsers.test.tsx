@@ -3,7 +3,6 @@ import { screen } from "@testing-library/react";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeUsers, mockApiFindUsers } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
-import { forEach } from "lodash-es";
 import { describe, expect, it } from "vitest";
 import { ManageUsers } from "../ManageUsers";
 
@@ -24,7 +23,7 @@ describe("<ManageUsers />", () => {
             screen.getByRole("button", { name: "Create" }),
         ).toBeInTheDocument();
         expect(await screen.findByText(/Administrator/)).toBeInTheDocument();
-        forEach(users, (user) => {
+        users.forEach((user) => {
             expect(screen.getByText(user.handle)).toBeInTheDocument();
         });
     });

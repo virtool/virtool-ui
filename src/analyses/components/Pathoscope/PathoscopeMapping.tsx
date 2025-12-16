@@ -2,7 +2,6 @@ import { toThousand } from "@app/utils";
 import Box from "@base/Box";
 import Label from "@base/Label";
 import Link from "@base/Link";
-import { map } from "lodash-es";
 import numbro from "numbro";
 import styled from "styled-components";
 import { Bars } from "../Viewer/Bars";
@@ -26,12 +25,12 @@ export function AnalysisMappingReferenceTitle({ index, reference }) {
 }
 
 export function AnalysisMappingSubtractionTitle({ subtractions }) {
-    return map(subtractions, (subtraction, index) => (
+    return subtractions.map((subtraction, index) => (
         <span key={subtraction.id}>
             <Link to={`/subtractions/${subtraction.id}`}>
                 {subtraction.name}
             </Link>
-            {Number(index) !== subtractions.length - 1 ? ", " : ""}
+            {index !== subtractions.length - 1 ? ", " : ""}
         </span>
     ));
 }

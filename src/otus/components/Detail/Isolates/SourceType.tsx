@@ -2,7 +2,7 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSelect from "@base/InputSelect";
 import InputSimple from "@base/InputSimple";
-import { capitalize, map } from "lodash-es";
+import { capitalize } from "es-toolkit";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
 
 type IsolateFormValues = {
@@ -30,7 +30,7 @@ export function SourceType({
     watch,
 }: SourceTypeProps) {
     if (restrictSourceTypes) {
-        const optionComponents = map(allowedSourceTypes, (sourceType) => (
+        const optionComponents = allowedSourceTypes.map((sourceType) => (
             <option key={sourceType} value={capitalize(sourceType)}>
                 {capitalize(sourceType)}
             </option>

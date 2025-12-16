@@ -1,5 +1,5 @@
 import { FormattedIimiIsolate } from "@analyses/types";
-import { map, sortBy, unzip } from "lodash-es";
+import { sortBy, unzip } from "es-toolkit";
 import { useMemo } from "react";
 import { SummaryChart } from "../Charts/SummaryChart";
 
@@ -11,14 +11,13 @@ export function IimiCondensedCoverage({
 }) {
     const sequences = useMemo(
         () =>
-            sortBy(
-                unzip(map(isolates, "sequences")),
+            sortBy(unzip(isolates.map((isolate) => isolate.sequences)), [
                 (seqs) => seqs[0]?.length,
-            ),
+            ]),
         [isolates],
     );
 
-    const charts = map(sequences, (seqs) => {
+    const charts = sequences.map((seqs) => {
         return <SummaryChart key={seqs[0].id} seqs={seqs} />;
     });
 

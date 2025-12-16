@@ -1,7 +1,6 @@
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import { Read } from "@samples/types";
-import { map } from "lodash-es";
 import styled from "styled-components";
 import ReadItem from "./ReadItem";
 
@@ -23,7 +22,7 @@ type SampleReadsProps = {
  * Displays a list of reads used to create the sample
  */
 export default function SampleReads({ reads }: SampleReadsProps) {
-    const fileComponents = map(reads, (file) => (
+    const fileComponents = reads.map((file) => (
         <ReadItem
             key={file.name}
             name={file.name}

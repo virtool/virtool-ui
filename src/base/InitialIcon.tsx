@@ -1,5 +1,4 @@
 import { getColor, getFontWeight, theme } from "@app/theme";
-import { reduce } from "lodash-es";
 import { useMemo } from "react";
 import styled from "styled-components";
 
@@ -64,7 +63,7 @@ type InitialIconProps = {
 
 export default function InitialIcon({ handle, size }: InitialIconProps) {
     const hash = useMemo(
-        () => reduce(handle.split(""), hashColor, 0) % 360,
+        () => handle.split("").reduce(hashColor, 0) % 360,
         [handle],
     );
 

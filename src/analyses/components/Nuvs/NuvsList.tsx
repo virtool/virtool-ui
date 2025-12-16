@@ -5,7 +5,6 @@ import { useSortAndFilterNuVsHits } from "@analyses/hooks";
 import { FormattedNuvsAnalysis } from "@analyses/types";
 import { useUrlSearchParam } from "@app/hooks";
 import Key from "@base/Key";
-import { findIndex } from "lodash-es";
 import { FixedSizeList } from "react-window";
 
 type NuVsListProps = {
@@ -29,7 +28,9 @@ export default function NuvsList({ detail }: NuVsListProps) {
     let previousIndex: number;
 
     if (activeHit) {
-        const windowIndex = findIndex(sortedHits, { id: Number(activeHit) });
+        const windowIndex = sortedHits.findIndex(
+            (hit) => hit.id === Number(activeHit),
+        );
 
         if (windowIndex > 0) {
             previousIndex = windowIndex - 1;

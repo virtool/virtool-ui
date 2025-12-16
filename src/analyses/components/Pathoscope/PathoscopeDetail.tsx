@@ -1,7 +1,7 @@
 import { FormattedPathoscopeHit } from "@analyses/types";
 import { useUrlSearchParam } from "@app/hooks";
 import ScrollSyncContainer from "@base/ScrollSyncContainer";
-import { filter, maxBy } from "lodash-es";
+import { maxBy } from "es-toolkit";
 import PathoscopeIsolate from "./PathoscopeIsolate";
 
 type PathoscopeDetailProps = {
@@ -22,13 +22,12 @@ export default function PathoscopeDetail({
 
     const { isolates, pi } = hit;
 
-    const filtered = filter(
-        isolates,
+    const filtered = isolates.filter(
         (isolate) => !filterIsolates || isolate.pi >= 0.03 * pi,
     );
 
-    const maxGenomeLength = maxBy(filtered, (item) => item.filled.length).filled
-        .length;
+    const maxGenomeLength = maxBy(filtered, (item) => item.filled.length)!
+        .filled.length;
 
     const isolateComponents = filtered.map((isolate) => {
         return (

@@ -1,4 +1,4 @@
-import { capitalize } from "lodash-es";
+import { capitalize } from "es-toolkit";
 import styled from "styled-components";
 import InitialIcon from "./InitialIcon";
 

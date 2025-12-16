@@ -3,8 +3,7 @@ import BoxGroup from "@base/BoxGroup";
 import SidebarHeader from "@base/SidebarHeader";
 import SideBarSection from "@base/SideBarSection";
 import { JobCounts, JobState, jobStateToLegacy } from "@jobs/types";
-import { xor } from "lodash-es";
-import { reduce } from "lodash-es/lodash";
+import { xor } from "es-toolkit";
 import { StateButton } from "./StateButton";
 
 function getCount(counts: JobCounts, state: JobState): number {
@@ -20,8 +19,7 @@ function getCount(counts: JobCounts, state: JobState): number {
         if (workflowCounts) {
             return (
                 sum +
-                reduce(
-                    workflowCounts,
+                Object.values(workflowCounts).reduce(
                     (result, value) => result + (value ?? 0),
                     0,
                 )

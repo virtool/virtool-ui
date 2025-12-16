@@ -3,21 +3,21 @@ import { useFuse } from "@app/fuse";
 import { useUrlSearchParam } from "@app/hooks";
 import Accordion from "@base/Accordion";
 import Box from "@base/Box";
-import { orderBy } from "lodash-es";
+import { orderBy } from "es-toolkit";
 import { CircleAlert } from "lucide-react";
 import { useState } from "react";
 import { IimiOtu } from "./IimiOtu";
 import IimiToolbar from "./IimiToolbar";
 
-type sortKey = {
-    key: string;
+type SortConfig = {
+    getValue: (item: FormattedIimiHit) => unknown;
     order: "desc" | "asc";
 };
 
-const sortKeys: { [key: string]: sortKey } = {
-    probability: { key: "probability", order: "desc" },
-    coverage: { key: "coverage", order: "desc" },
-    name: { key: "name", order: "asc" },
+const sortConfigs: Record<string, SortConfig> = {
+    probability: { getValue: (item) => item.probability, order: "desc" },
+    coverage: { getValue: (item) => item.coverage, order: "desc" },
+    name: { getValue: (item) => item.name, order: "asc" },
 };
 
 /**
@@ -37,7 +37,11 @@ export function IimiViewer({ detail }: { detail: FormattedIimiAnalysis }) {
         (item) => item.probability && item.probability >= minimumProbability,
     );
 
-    const sortedHits = orderBy(hits, sortKeys[sort].key, sortKeys[sort].order);
+    const sortedHits = orderBy(
+        hits,
+        [sortConfigs[sort].getValue],
+        [sortConfigs[sort].order],
+    );
 
     return (
         <>

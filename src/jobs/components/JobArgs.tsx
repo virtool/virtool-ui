@@ -2,7 +2,6 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";
 import Link from "@base/Link";
-import { map } from "lodash-es";
 import { ReactNode } from "react";
 
 type JobArgsRowProps = {
@@ -111,7 +110,7 @@ type UnknownJobRows = {
 function UnknownJobRows({ args }: UnknownJobRows) {
     return (
         <>
-            {map(args, (value, key): ReactNode => {
+            {Object.entries(args).map(([key, value]): ReactNode => {
                 if (typeof value === "string" || typeof value === "number") {
                     return (
                         <JobArgsRow

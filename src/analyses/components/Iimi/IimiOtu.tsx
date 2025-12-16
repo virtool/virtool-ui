@@ -1,13 +1,9 @@
 import AnalysisValue from "@analyses/components/AnalysisValue";
-import {
-    FormattedIimiHit,
-    IimiIsolate as IimiIsolateData,
-} from "@analyses/types";
+import { FormattedIimiHit, FormattedIimiIsolate } from "@analyses/types";
 import { formatIsolateName } from "@app/utils";
 import AccordionContent from "@base/AccordionContent";
 import AccordionScrollingItem from "@base/AccordionScrollingItem";
 import AccordionTrigger from "@base/AccordionTrigger";
-import { map } from "lodash-es";
 import styled from "styled-components";
 import { IimiCondensedCoverage } from "./IimiCondensedCoverage";
 import { IimiDetection } from "./IimiDetection";
@@ -56,7 +52,7 @@ export function IimiOtu({
                 <IimiCondensedCoverage isolates={isolates} />
             </IimiAccordionTrigger>
             <AccordionContent>
-                {map(isolates, (isolate: IimiIsolateData) => (
+                {isolates.map((isolate: FormattedIimiIsolate) => (
                     <IimiIsolate
                         name={formatIsolateName(isolate)}
                         sequences={isolate.sequences}

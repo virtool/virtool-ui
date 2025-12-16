@@ -9,7 +9,6 @@ import {
     FetchNextPageOptions,
     InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
-import { flatMap } from "lodash-es";
 import styled from "styled-components";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
@@ -60,7 +59,7 @@ export function SubtractionFileSelector({
 }: SubtractionFileSelectorProps) {
     useValidateFiles(UploadType.subtraction, selected, onClick);
 
-    const items = flatMap(files.pages, (page) => page.items);
+    const items = files.pages.flatMap((page) => page.items);
 
     function renderRow(item: Upload) {
         return (

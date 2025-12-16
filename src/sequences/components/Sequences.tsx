@@ -5,7 +5,6 @@ import NoneFoundSection from "@base/NoneFoundSection";
 import { useCurrentOtuContext } from "@otus/queries";
 import { OtuIsolate } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
-import { map } from "lodash-es";
 import styled from "styled-components";
 import CreateSequence from "./CreateSequence";
 import CreateSequenceLink from "./CreateSequenceLink";
@@ -44,7 +43,7 @@ export default function Sequences({
         otu.schema,
     );
 
-    let sequenceComponents = map(sequences, (sequence) => (
+    let sequenceComponents = sequences.map((sequence) => (
         <Sequence key={sequence.id} {...sequence} />
     ));
 

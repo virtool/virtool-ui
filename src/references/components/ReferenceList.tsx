@@ -6,7 +6,6 @@ import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
-import { map } from "lodash-es";
 import { useFindReferences } from "../queries";
 import Clone from "./CloneReference";
 import { CreateReference } from "./CreateReference";
@@ -56,7 +55,7 @@ export default function ReferenceList() {
                         pageCount={page_count}
                     >
                         <BoxGroup>
-                            {map(documents, (document) => (
+                            {documents.map((document) => (
                                 <ReferenceItem
                                     key={document.id}
                                     reference={document}

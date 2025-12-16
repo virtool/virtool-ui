@@ -7,7 +7,6 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import { map } from "lodash-es";
 import { ReactElement } from "react";
 import styled from "styled-components";
 import { useFindJobs } from "../queries";
@@ -79,7 +78,7 @@ export default function JobsList() {
                 pageCount={page_count}
             >
                 <BoxGroup>
-                    {map(documents, (document) => (
+                    {documents.map((document) => (
                         <JobItem key={document.id} {...document} />
                     ))}
                 </BoxGroup>

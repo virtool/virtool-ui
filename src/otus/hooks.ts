@@ -1,5 +1,4 @@
 import { useNaiveUrlSearchParam, useUrlSearchParam } from "@app/hooks";
-import { find } from "lodash-es";
 import { Otu, OtuIsolate } from "./types";
 
 /**
@@ -10,7 +9,9 @@ import { Otu, OtuIsolate } from "./types";
  */
 export function useActiveIsolate(otu: Otu): OtuIsolate | undefined {
     const { value: activeIsolate } = useNaiveUrlSearchParam("activeIsolate");
-    return find(otu.isolates, { id: activeIsolate || otu.isolates[0]?.id });
+    return otu.isolates.find(
+        (isolate) => isolate.id === (activeIsolate || otu.isolates[0]?.id),
+    );
 }
 
 /**

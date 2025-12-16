@@ -2,7 +2,6 @@ import { useUrlSearchParam } from "@app/hooks";
 import RemoveDialog from "@base/RemoveDialog";
 import { useRemoveSequence } from "@otus/queries";
 import { OtuSequence } from "@otus/types";
-import { find } from "lodash-es";
 
 type RemoveSequenceProps = {
     isolateName: string;
@@ -25,7 +24,7 @@ export default function RemoveSequence({
 
     const mutation = useRemoveSequence(otuId);
 
-    const sequence = find(sequences, { id: removeSequenceId });
+    const sequence = sequences.find((seq) => seq.id === removeSequenceId);
 
     function handleConfirm() {
         mutation.mutate(

@@ -1,5 +1,6 @@
+import { FormattedIimiSequence } from "@analyses/types";
 import Box from "@base/Box";
-import { sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit";
 import styled from "styled-components";
 import { CoverageChart } from "../Charts/CoverageChart";
 import { IimiDetection } from "./IimiDetection";
@@ -11,11 +12,16 @@ const CoveragePanel = styled.div`
     overflow-x: scroll;
 `;
 
+type IimiIsolateProps = {
+    name: string;
+    sequences: FormattedIimiSequence[];
+};
+
 /**
  * a single iimi isolate item
  */
-export function IimiIsolate({ name, sequences }) {
-    const sorted = sortBy(sequences, (sequence) => sequence.length);
+export function IimiIsolate({ name, sequences }: IimiIsolateProps) {
+    const sorted = sortBy(sequences, [(sequence) => sequence.length]);
 
     return (
         <div>

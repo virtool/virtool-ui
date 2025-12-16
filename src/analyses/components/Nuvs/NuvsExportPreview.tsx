@@ -1,6 +1,5 @@
 import { getBorder } from "@app/theme";
 import Table from "@base/Table";
-import { replace } from "lodash-es";
 import styled from "styled-components";
 
 const ExportPreviewCode = styled.div`
@@ -46,7 +45,7 @@ export default function NuvsExportPreview({ mode }: NuVsExportPreviewProps) {
         barName = "best annotation";
         barExample = "RNA Polymerase";
 
-        previewHeader = replace(previewHeader, "sequence_1", "orf_1_1");
+        previewHeader = previewHeader.replace("sequence_1", "orf_1_1");
         previewSequence =
             "ELREECRSLRSRCDQLEERVSAMEDEMNEMKREGKFREKRIKRNEQSLQEIWDYVKRPNLRLIGVPESDGENGTKLENTFREKSAME";
     }

@@ -10,7 +10,6 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import { map } from "lodash-es";
 import styled from "styled-components";
 import { useFetchHmm } from "../queries";
 import { ClusterMember } from "./ClusterMember";
@@ -41,8 +40,7 @@ export default function HmmDetail() {
         return <LoadingPlaceholder className="mt-32" />;
     }
 
-    const clusterMembers = map(
-        data.entries,
+    const clusterMembers = data.entries.map(
         ({ name, accession, organism }, index) => (
             <ClusterMember
                 name={name}
@@ -54,7 +52,7 @@ export default function HmmDetail() {
         ),
     );
 
-    const names = map(data.names, (name, index) => (
+    const names = data.names.map((name, index) => (
         <Label className="mr-1" key={index}>
             {name}
         </Label>

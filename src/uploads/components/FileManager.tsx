@@ -11,7 +11,7 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { Permission } from "@groups/types";
-import { capitalize, map } from "lodash-es";
+import { capitalize } from "es-toolkit";
 import { ReactNode } from "react";
 import { Accept } from "react-dropzone";
 import { useListFiles } from "../queries";
@@ -107,7 +107,7 @@ export function FileManager({
                     pageCount={files.page_count}
                 >
                     <BoxGroup>
-                        {map(files.items, (item) => (
+                        {files.items.map((item) => (
                             <UploadItem
                                 {...item}
                                 canDelete={canDelete}

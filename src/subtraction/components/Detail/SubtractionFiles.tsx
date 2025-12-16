@@ -2,14 +2,14 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import NoneFound from "@base/NoneFound";
 import { SubtractionFile } from "@subtraction/types";
-import { sortBy } from "lodash-es";
+import { sortBy } from "es-toolkit";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 export type SubtractionFilesProps = {
     files: SubtractionFile[];
 };
 
-export default function SubtractionFiles({ files }) {
+export default function SubtractionFiles({ files }: SubtractionFilesProps) {
     return (
         <BoxGroup>
             <BoxGroupHeader>
@@ -17,7 +17,7 @@ export default function SubtractionFiles({ files }) {
                 <p>Data files available to workflows using this subtraction.</p>
             </BoxGroupHeader>
             {files.length ? (
-                sortBy(files).map((file: SubtractionFile) => (
+                sortBy(files, [(f) => f.name]).map((file: SubtractionFile) => (
                     <SubtractionFileItem
                         downloadUrl={file.download_url}
                         name={file.name}

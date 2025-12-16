@@ -144,7 +144,7 @@ export type ServerJob = z.input<typeof Job>;
 export type Job = z.infer<typeof Job>;
 
 export type JobCounts = {
-    [state in JobState]?: { [key: string]: number | null };
+    [state in ServerJobState]?: { [key: string]: number | null };
 };
 
 export type JobSearchResult = SearchResult & {

@@ -3,7 +3,7 @@ import { useActiveIsolate } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
 import { OtuSegment, OtuSequence } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
-import { compact, find, map, reject } from "lodash-es";
+import { compact } from "es-toolkit";
 import { useCallback, useState } from "react";
 
 type UseExpandedResult = {
@@ -50,7 +50,7 @@ export function useActiveSequence(): OtuSequence | undefined {
     );
 
     if (editSequenceId) {
-        return find(sequences, { id: editSequenceId });
+        return sequences.find((seq) => seq.id === editSequenceId);
     }
 }
 
@@ -73,7 +73,9 @@ export function useGetUnreferencedSegments() {
     );
 
     const referencedSegmentNames = compact(
-        map(reject(sequences, { id: activeSequenceId }), "segment"),
+        sequences
+            .filter((seq) => seq.id !== activeSequenceId)
+            .map((seq) => seq.segment),
     );
 
     return otu.schema.filter(

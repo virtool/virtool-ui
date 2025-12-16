@@ -6,7 +6,6 @@ import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
-import { map } from "lodash-es";
 import { useListHmms } from "../queries";
 import { HMMInstaller } from "./HMMInstaller";
 import HMMItem from "./HMMItem";
@@ -61,7 +60,7 @@ export default function HMMList() {
                             pageCount={page_count}
                         >
                             <BoxGroup>
-                                {map(documents, (document) => (
+                                {documents.map((document) => (
                                     <HMMItem key={document.id} hmm={document} />
                                 ))}
                             </BoxGroup>
