@@ -26,7 +26,7 @@ export default function PathoscopeDetail({
         (isolate) => !filterIsolates || isolate.pi >= 0.03 * pi,
     );
 
-    const maxGenomeLength = maxBy(filtered, [(item) => item.filled.length])
+    const maxGenomeLength = maxBy(filtered, (item) => item.filled.length)!
         .filled.length;
 
     const isolateComponents = filtered.map((isolate) => {

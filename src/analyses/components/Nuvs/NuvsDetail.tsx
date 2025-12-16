@@ -1,5 +1,5 @@
 import { useGetActiveHit } from "@analyses/hooks";
-import { FormattedNuvsHit } from "@analyses/types";
+import { FormattedNuvsHit, NuvsOrf as NuvsOrfType } from "@analyses/types";
 import { calculateAnnotatedOrfCount } from "@analyses/utils";
 import { useUrlSearchParam } from "@app/hooks";
 import { getBorder } from "@app/theme";
@@ -95,13 +95,13 @@ export default function NuvsDetail({
 
     const { e, families, orfs, sequence, index } = hit;
 
-    let filtered;
+    let filtered: NuvsOrfType[] = orfs;
 
     if (filterORFs) {
         filtered = orfs.filter((orf) => orf.hits.length);
     }
 
-    filtered = sortBy(filtered || orfs, [(orf) => orf.hits.length]).reverse();
+    filtered = sortBy(filtered, [(orf) => orf.hits.length]).reverse();
 
     const orfComponents = filtered.map((orf, index) => (
         <NuvsOrf

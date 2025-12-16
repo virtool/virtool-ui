@@ -9,7 +9,7 @@ export type SubtractionFilesProps = {
     files: SubtractionFile[];
 };
 
-export default function SubtractionFiles({ files }) {
+export default function SubtractionFiles({ files }: SubtractionFilesProps) {
     return (
         <BoxGroup>
             <BoxGroupHeader>

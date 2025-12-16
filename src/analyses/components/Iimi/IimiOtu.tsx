@@ -1,8 +1,5 @@
 import AnalysisValue from "@analyses/components/AnalysisValue";
-import {
-    FormattedIimiHit,
-    IimiIsolate as IimiIsolateData,
-} from "@analyses/types";
+import { FormattedIimiHit, FormattedIimiIsolate } from "@analyses/types";
 import { formatIsolateName } from "@app/utils";
 import AccordionContent from "@base/AccordionContent";
 import AccordionScrollingItem from "@base/AccordionScrollingItem";
@@ -55,7 +52,7 @@ export function IimiOtu({
                 <IimiCondensedCoverage isolates={isolates} />
             </IimiAccordionTrigger>
             <AccordionContent>
-                {isolates.map((isolate: IimiIsolateData) => (
+                {isolates.map((isolate: FormattedIimiIsolate) => (
                     <IimiIsolate
                         name={formatIsolateName(isolate)}
                         sequences={isolate.sequences}
