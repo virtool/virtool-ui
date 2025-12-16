@@ -20,7 +20,7 @@
     "commander": "^12.1.0",
     "d3": "^7.9.0",
     "date-fns": "^3.6.0",
-    "downshift": "^7.6.2",
+    "downshift": "^9.0.13",
     "es-toolkit": "^1.43.0",
     "express": "^5.1.0",
     "fuse.js": "^7.1.0",

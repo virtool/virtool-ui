@@ -74,6 +74,7 @@ describe("<AdministratorCreate>", () => {
         );
 
         //Check user dropdown
+        await userEvent.click(screen.getByRole("button", { name: "User" }));
         await userEvent.click(
             await screen.findByRole("option", { name: users[0].handle }),
         );
@@ -119,6 +120,8 @@ describe("<AdministratorCreate>", () => {
         await userEvent.click(
             await screen.findByRole("button", { name: "Create" }),
         );
+
+        await userEvent.click(screen.getByRole("button", { name: "User" }));
 
         expect(
             await screen.findByRole("option", { name: users[0].handle }),
