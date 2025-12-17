@@ -15,7 +15,7 @@ import InputSimple from "@base/InputSimple";
 import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
 import { Permissions } from "@groups/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useCreateAPIKey } from "../queries";
 import CreateAPIKeyInfo from "./ApiKeyAdministratorInfo";
@@ -32,7 +32,6 @@ type FormValues = {
 export default function ApiKeyCreate() {
     const [copied, setCopied] = useState(false);
     const [newKey, setNewKey] = useState("");
-    const [showCreated, setShowCreated] = useState(false);
     const mutation = useCreateAPIKey();
     const { open: openCreateKey, setOpen: setOpenCreateKey } =
         useDialogParam("openCreateKey");
@@ -58,16 +57,12 @@ export default function ApiKeyCreate() {
         },
     });
 
-    useEffect(() => {
-        if (!showCreated && newKey) {
-            setShowCreated(true);
-        }
-    }, [newKey, showCreated]);
+    const showCreated = Boolean(newKey);
 
     function handleHide() {
         setCopied(false);
         setOpenCreateKey(false);
-        setShowCreated(false);
+        setNewKey("");
     }
 
     function onSubmit({ name, permissions }: FormValues) {
