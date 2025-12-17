@@ -1,5 +1,5 @@
 import { cn } from "@app/utils";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { DropdownMenu } from "radix-ui";
 import { ReactNode } from "react";
 
 type DropdownMenuContentProps = {

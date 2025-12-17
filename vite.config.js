@@ -9,6 +9,13 @@ export default defineConfig({
     build: {
         outDir: "../dist",
         sourcemap: true,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    sentry: ["@sentry/react"],
+                },
+            },
+        },
     },
     resolve: {
         alias: {

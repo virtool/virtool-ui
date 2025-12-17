@@ -1,9 +1,10 @@
 import Button from "@base/Button";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
-import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogTrigger,
+} from "@base/Dialog";
 import { useState } from "react";
 import { useCreateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
@@ -37,19 +38,15 @@ export function CreateLabel() {
             <Button as={DialogTrigger} color="blue">
                 Create
             </Button>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Create a Label</DialogTitle>
-                    <LabelForm
-                        error={
-                            mutation.isError &&
-                            mutation.error.response.body.message
-                        }
-                        onSubmit={handleSubmit}
-                    />
-                </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+                <DialogTitle>Create a Label</DialogTitle>
+                <LabelForm
+                    error={
+                        mutation.isError && mutation.error.response.body.message
+                    }
+                    onSubmit={handleSubmit}
+                />
+            </DialogContent>
         </Dialog>
     );
 }

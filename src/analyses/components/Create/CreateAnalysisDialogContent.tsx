@@ -1,5 +1,5 @@
 import { cn } from "@app/utils";
-import DialogContent from "@base/DialogContent";
+import { DialogContent } from "@base/Dialog";
 
 /**
  * A styled dialog content for use in an analysis creation dialog

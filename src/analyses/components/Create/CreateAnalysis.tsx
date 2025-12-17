@@ -1,10 +1,7 @@
 import { useDialogParam } from "@app/hooks";
 import { cn } from "@app/utils";
-import Dialog from "@base/Dialog";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import { Dialog, DialogTitle } from "@base/Dialog";
 import { HmmSearchResults } from "@hmm/types";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import { Tabs } from "radix-ui";
 import HMMAlert from "../HMMAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
@@ -55,71 +52,68 @@ export default function CreateAnalysis({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogPortal>
-                <DialogOverlay />
-                <CreateAnalysisDialogContent>
-                    <DialogTitle>Analyze</DialogTitle>
-                    <HMMAlert installed={hmms.status.task?.complete} />
-                    <Tabs.Root defaultValue="pathoscope_bowtie">
-                        <Tabs.List
-                            className={cn(
-                                "bg-gray-100",
-                                "flex",
-                                "h-12",
-                                "items-center",
-                                "justify-center",
-                                "p-1",
-                                "rounded-lg",
-                                "inset-1",
-                                "text-lg",
-                                "text-muted-foreground",
-                            )}
-                        >
-                            {compatibleWorkflows.map((workflow) => (
-                                <Tabs.Trigger
-                                    className={cn(
-                                        "font-medium",
-                                        "inline-flex",
-                                        "items-center",
-                                        "justify-center",
-                                        "px-3",
-                                        "py-1",
-                                        "rounded-md",
-                                        "ring-offset-background",
-                                        "transition-all",
-                                        "focus-visible:outline-none",
-                                        "focus-visible:ring-2",
-                                        "focus-visible:ring-ring",
-                                        "focus-visible:ring-offset-2",
-                                        "disabled:pointer-events-none",
-                                        "disabled:opacity-50",
-                                        "data-[state=active]:bg-white",
-                                        "data-[state=active]:text-foreground",
-                                        "data-[state=active]:shadow",
-                                        "whitespace-nowrap",
-                                    )}
-                                    key={workflow.id}
-                                    value={workflow.id}
-                                >
-                                    {workflow.name}
-                                </Tabs.Trigger>
-                            ))}
-                        </Tabs.List>
-                        <Content value="iimi">
-                            <CreateIimi sampleCount={1} sampleIds={sampleIds} />
-                        </Content>
-                        <Content value="nuvs">
-                            <CreateNuvs sampleCount={1} sampleIds={sampleIds} />
-                        </Content>
-                        <Content value="pathoscope_bowtie">
-                            <CreatePathoscope
-                                sampleCount={1}
-                                sampleIds={sampleIds}
-                            />
-                        </Content>
-                    </Tabs.Root>
-                </CreateAnalysisDialogContent>
-            </DialogPortal>
+            <CreateAnalysisDialogContent>
+                <DialogTitle>Analyze</DialogTitle>
+                <HMMAlert installed={hmms.status.task?.complete} />
+                <Tabs.Root defaultValue="pathoscope_bowtie">
+                    <Tabs.List
+                        className={cn(
+                            "bg-gray-100",
+                            "flex",
+                            "h-12",
+                            "items-center",
+                            "justify-center",
+                            "p-1",
+                            "rounded-lg",
+                            "inset-1",
+                            "text-lg",
+                            "text-muted-foreground",
+                        )}
+                    >
+                        {compatibleWorkflows.map((workflow) => (
+                            <Tabs.Trigger
+                                className={cn(
+                                    "font-medium",
+                                    "inline-flex",
+                                    "items-center",
+                                    "justify-center",
+                                    "px-3",
+                                    "py-1",
+                                    "rounded-md",
+                                    "ring-offset-background",
+                                    "transition-all",
+                                    "focus-visible:outline-none",
+                                    "focus-visible:ring-2",
+                                    "focus-visible:ring-ring",
+                                    "focus-visible:ring-offset-2",
+                                    "disabled:pointer-events-none",
+                                    "disabled:opacity-50",
+                                    "data-[state=active]:bg-white",
+                                    "data-[state=active]:text-foreground",
+                                    "data-[state=active]:shadow",
+                                    "whitespace-nowrap",
+                                )}
+                                key={workflow.id}
+                                value={workflow.id}
+                            >
+                                {workflow.name}
+                            </Tabs.Trigger>
+                        ))}
+                    </Tabs.List>
+                    <Content value="iimi">
+                        <CreateIimi sampleCount={1} sampleIds={sampleIds} />
+                    </Content>
+                    <Content value="nuvs">
+                        <CreateNuvs sampleCount={1} sampleIds={sampleIds} />
+                    </Content>
+                    <Content value="pathoscope_bowtie">
+                        <CreatePathoscope
+                            sampleCount={1}
+                            sampleIds={sampleIds}
+                        />
+                    </Content>
+                </Tabs.Root>
+            </CreateAnalysisDialogContent>
         </Dialog>
     );
 }

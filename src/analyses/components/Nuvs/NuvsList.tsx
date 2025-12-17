@@ -5,7 +5,8 @@ import { useSortAndFilterNuVsHits } from "@analyses/hooks";
 import { FormattedNuvsAnalysis } from "@analyses/types";
 import { useUrlSearchParam } from "@app/hooks";
 import Key from "@base/Key";
-import { FixedSizeList } from "react-window";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useRef } from "react";
 
 type NuVsListProps = {
     /** Complete Nuvs analysis details */
@@ -22,10 +23,10 @@ export default function NuvsList({ detail }: NuVsListProps) {
     const { value: activeHit, setValue: setActiveHit } =
         useUrlSearchParam<string>("activeHit", firstHitId);
 
-    let nextId: string;
-    let nextIndex: number;
-    let previousId: string;
-    let previousIndex: number;
+    let nextId: string | undefined;
+    let nextIndex: number | undefined;
+    let previousId: string | undefined;
+    let previousIndex: number | undefined;
 
     if (activeHit) {
         const windowIndex = sortedHits.findIndex(
@@ -43,21 +44,27 @@ export default function NuvsList({ detail }: NuVsListProps) {
         }
     }
 
-    const activeId = Number(activeHit);
+    const shown = sortedHits.length;
+    const total = detail.results.hits.length;
+    const width = 230;
 
-    const ref = useKeyNavigation(
-        activeId,
+    const parentRef = useRef<HTMLDivElement>(null);
+
+    const virtualizer = useVirtualizer({
+        count: shown,
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => 75,
+        overscan: 5,
+    });
+
+    useKeyNavigation(
+        virtualizer,
         nextId,
         nextIndex,
         previousId,
         previousIndex,
-        true,
         (id) => setActiveHit(id),
     );
-
-    const shown = sortedHits.length;
-    const total = detail.results.hits.length;
-    const width = 230;
 
     const hitComponents = sortedHits.map((hit) => (
         <NuvsItem key={hit.id} hit={hit} />
@@ -73,18 +80,29 @@ export default function NuvsList({ detail }: NuVsListProps) {
                     <div className="bg-gray-300 py-3 px-4 shadow-sm z-10">
                         Showing {shown} of {total}
                     </div>
-                    <FixedSizeList
-                        ref={ref}
-                        className=""
-                        height={500}
-                        width={width}
-                        itemCount={shown}
-                        itemSize={75}
+                    <div
+                        ref={parentRef}
+                        className="h-[500px] overflow-auto"
+                        style={{ width }}
                     >
-                        {({ index, style }) => (
-                            <div style={style}>{hitComponents[index]}</div>
-                        )}
-                    </FixedSizeList>
+                        <div
+                            className="relative w-full"
+                            style={{ height: virtualizer.getTotalSize() }}
+                        >
+                            {virtualizer.getVirtualItems().map((virtualRow) => (
+                                <div
+                                    key={virtualRow.key}
+                                    className="absolute left-0 top-0 w-full"
+                                    style={{
+                                        height: virtualRow.size,
+                                        transform: `translateY(${virtualRow.start}px)`,
+                                    }}
+                                >
+                                    {hitComponents[virtualRow.index]}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
                 <div className="p-4 text-sm text-center">
                     Use <Key>w</Key> and <Key>s</Key> to move

@@ -1,11 +1,7 @@
 import { useDialogParam } from "@app/hooks";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useUpdateOTU } from "@otus/queries";
 import { Molecule, OtuSegment } from "@otus/types";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import SegmentForm from "./SegmentForm";
 
 type FormValues = {
@@ -56,13 +52,10 @@ export default function AddSegment({
             open={openAddSegment}
             onOpenChange={() => setOpenAddSegment(false)}
         >
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Add Segment</DialogTitle>
-                    <SegmentForm onSubmit={handleSubmit} schema={schema} />
-                </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+                <DialogTitle>Add Segment</DialogTitle>
+                <SegmentForm onSubmit={handleSubmit} schema={schema} />
+            </DialogContent>
         </Dialog>
     );
 }

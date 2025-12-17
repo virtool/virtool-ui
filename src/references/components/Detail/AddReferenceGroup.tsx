@@ -1,17 +1,13 @@
 import { getBorder } from "@app/theme";
 import BoxGroup from "@base/BoxGroup";
 import CompactScrollList from "@base/CompactScrollList";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import InitialIcon from "@base/InitialIcon";
 import InputSearch from "@base/InputSearch";
 import NoneFoundSection from "@base/NoneFoundSection";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import Toolbar from "@base/Toolbar";
 import { useInfiniteFindGroups } from "@groups/queries";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import { useAddReferenceMember } from "@references/queries";
 import { ReferenceGroup } from "@references/types";
 import { useState } from "react";
@@ -87,32 +83,29 @@ export default function AddReferenceGroup({
 
     return (
         <Dialog open={show} onOpenChange={onOpenChange}>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <AddReferenceGroupHeader>Add Group</AddReferenceGroupHeader>
-                    <Toolbar>
-                        <InputSearch
-                            name="search"
-                            value={term}
-                            onChange={(e) => setTerm(e.target.value)}
-                        />
-                    </Toolbar>
-                    {filteredItems.length ? (
-                        <StyledScrollList
-                            fetchNextPage={fetchNextPage}
-                            isFetchingNextPage={isFetchingNextPage}
-                            isPending={isPending}
-                            items={filteredItems}
-                            renderRow={renderRow}
-                        />
-                    ) : (
-                        <BoxGroup>
-                            <NoneFoundSection noun="other groups" />
-                        </BoxGroup>
-                    )}
-                </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+                <AddReferenceGroupHeader>Add Group</AddReferenceGroupHeader>
+                <Toolbar>
+                    <InputSearch
+                        name="search"
+                        value={term}
+                        onChange={(e) => setTerm(e.target.value)}
+                    />
+                </Toolbar>
+                {filteredItems.length ? (
+                    <StyledScrollList
+                        fetchNextPage={fetchNextPage}
+                        isFetchingNextPage={isFetchingNextPage}
+                        isPending={isPending}
+                        items={filteredItems}
+                        renderRow={renderRow}
+                    />
+                ) : (
+                    <BoxGroup>
+                        <NoneFoundSection noun="other groups" />
+                    </BoxGroup>
+                )}
+            </DialogContent>
         </Dialog>
     );
 }

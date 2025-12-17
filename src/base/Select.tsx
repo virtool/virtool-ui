@@ -1,5 +1,5 @@
-import * as RadixSelect from "@radix-ui/react-select";
+import { Select as SelectPrimitive } from "radix-ui";
 
-const Select = RadixSelect.Root;
+const Select = SelectPrimitive.Root;
 
 export default Select;

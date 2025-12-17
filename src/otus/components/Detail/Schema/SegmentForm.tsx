@@ -1,5 +1,5 @@
 import Checkbox from "@base/Checkbox";
-import DialogFooter from "@base/DialogFooter";
+import { DialogFooter } from "@base/Dialog";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";

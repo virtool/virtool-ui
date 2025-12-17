@@ -1,9 +1,9 @@
 import { borderRadius, getBorder, getColor, getFontWeight } from "@app/theme";
-import * as RadixSelect from "@radix-ui/react-select";
+import { Select as SelectPrimitive } from "radix-ui";
 import styled from "styled-components";
 import Icon from "./Icon";
 
-const SelectTrigger = styled(RadixSelect.Trigger)`
+const SelectTrigger = styled(SelectPrimitive.Trigger)`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -34,7 +34,7 @@ export default function SelectButton({
 }: SelectButtonProps) {
     return (
         <SelectTrigger className={className} id={id}>
-            <RadixSelect.Value placeholder={placeholder} />
+            <SelectPrimitive.Value placeholder={placeholder} />
             {icon ? <Icon name={icon} /> : null}
         </SelectTrigger>
     );

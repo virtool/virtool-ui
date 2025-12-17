@@ -1,16 +1,17 @@
 import { FormattedNuvsHit, FormattedNuvsResults } from "@analyses/types";
 import { followDynamicDownload } from "@app/utils";
 import Button from "@base/Button";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogFooter from "@base/DialogFooter";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogTitle,
+    DialogTrigger,
+} from "@base/Dialog";
 import Icon from "@base/Icon";
 import PseudoLabel from "@base/PseudoLabel";
 import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
-import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import NuvsExportPreview from "./NuvsExportPreview";
 
@@ -120,36 +121,30 @@ export default function NuvsExport({
             <Button as={DialogTrigger} color="gray">
                 Export
             </Button>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Export Analysis</DialogTitle>
-                    <form onSubmit={onSubmit}>
-                        <PseudoLabel>Scope</PseudoLabel>
-                        <ToggleGroup
-                            className="flex mb-3"
-                            value={mode}
-                            onValueChange={setMode}
-                        >
-                            <ToggleGroupItem value="contigs">
-                                Contigs
-                            </ToggleGroupItem>
-                            <ToggleGroupItem value="orfs">ORFs</ToggleGroupItem>
-                        </ToggleGroup>
+            <DialogContent>
+                <DialogTitle>Export Analysis</DialogTitle>
+                <form onSubmit={onSubmit}>
+                    <PseudoLabel>Scope</PseudoLabel>
+                    <ToggleGroup
+                        className="flex mb-3"
+                        value={mode}
+                        onValueChange={setMode}
+                    >
+                        <ToggleGroupItem value="contigs">
+                            Contigs
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="orfs">ORFs</ToggleGroupItem>
+                    </ToggleGroup>
 
-                        <NuvsExportPreview mode={mode} />
+                    <NuvsExportPreview mode={mode} />
 
-                        <DialogFooter>
-                            <Button
-                                type="submit"
-                                className="inline-flex gap-1.5"
-                            >
-                                <Icon name="download" /> Download
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </DialogPortal>
+                    <DialogFooter>
+                        <Button type="submit" className="inline-flex gap-1.5">
+                            <Icon name="download" /> Download
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
         </Dialog>
     );
 }

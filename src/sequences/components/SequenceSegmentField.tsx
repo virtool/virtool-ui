@@ -9,7 +9,7 @@ import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
 import SelectItem from "@base/SelectItem";
 import { OtuSegment } from "@otus/types";
-import * as RadixSelect from "@radix-ui/react-select";
+import { Select as SelectPrimitive } from "radix-ui";
 import { Controller, useFormContext } from "react-hook-form";
 import styled from "styled-components";
 
@@ -61,7 +61,7 @@ const SequenceSegmentRequired = styled.span`
     }
 `;
 
-const StyledSelectItem = styled(RadixSelect.Item)`
+const StyledSelectItem = styled(SelectPrimitive.Item)`
     font-size: ${getFontSize("md")};
     font-weight: ${getFontWeight("thick")};
     padding: 5px 35px 5px 25px;
@@ -97,7 +97,7 @@ type SequenceSegmentProps = {
 function SequenceSegment({ name, required }: SequenceSegmentProps) {
     return (
         <StyledSelectItem value={name} key={name}>
-            <RadixSelect.ItemText>
+            <SelectPrimitive.ItemText>
                 <StyledSequenceSegment>
                     <span>{name}</span>
 
@@ -108,7 +108,7 @@ function SequenceSegment({ name, required }: SequenceSegmentProps) {
                         </SequenceSegmentRequired>
                     )}
                 </StyledSequenceSegment>
-            </RadixSelect.ItemText>
+            </SelectPrimitive.ItemText>
         </StyledSelectItem>
     );
 }

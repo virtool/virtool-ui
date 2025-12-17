@@ -1,10 +1,11 @@
 import Button from "@base/Button";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import {
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogTrigger,
+} from "@base/Dialog";
 import Icon from "@base/Icon";
-import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { useUpdateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
@@ -47,18 +48,15 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
                 <Icon name="pen" />
                 <span>Edit</span>
             </Button>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Edit a label</DialogTitle>
-                    <LabelForm
-                        color={color}
-                        description={description}
-                        name={name}
-                        onSubmit={handleSubmit}
-                    />
-                </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+                <DialogTitle>Edit a label</DialogTitle>
+                <LabelForm
+                    color={color}
+                    description={description}
+                    name={name}
+                    onSubmit={handleSubmit}
+                />
+            </DialogContent>
         </Dialog>
     );
 }

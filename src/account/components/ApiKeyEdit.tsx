@@ -1,12 +1,13 @@
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogDescription from "@base/DialogDescription";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogTitle,
+    DialogTrigger,
+} from "@base/Dialog";
 import IconButton from "@base/IconButton";
 import SaveButton from "@base/SaveButton";
 import { Permissions } from "@groups/types";
-import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { Controller, useForm } from "react-hook-form";
 import { useUpdateApiKey } from "../queries";
 import ApiKeyPermissions from "./ApiKeyPermissions";
@@ -36,32 +37,29 @@ export default function ApiKeyEdit({ id, permissions }: ApiKeyEditProps) {
             <DialogTrigger asChild>
                 <IconButton name="pen" tip="Edit" />
             </DialogTrigger>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Edit API Key</DialogTitle>
-                    <DialogDescription>
-                        Modify the permissions for an existing API key.
-                    </DialogDescription>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <Controller
-                            control={control}
-                            render={({ field: { onChange, value } }) => (
-                                <ApiKeyPermissions
-                                    className="mt-4"
-                                    keyPermissions={value}
-                                    onChange={onChange}
-                                />
-                            )}
-                            name="permissions"
-                        />
+            <DialogContent>
+                <DialogTitle>Edit API Key</DialogTitle>
+                <DialogDescription>
+                    Modify the permissions for an existing API key.
+                </DialogDescription>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Controller
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                            <ApiKeyPermissions
+                                className="mt-4"
+                                keyPermissions={value}
+                                onChange={onChange}
+                            />
+                        )}
+                        name="permissions"
+                    />
 
-                        <div className="flex items-center justify-end mb-2.5 gap-1.5">
-                            <SaveButton />
-                        </div>
-                    </form>
-                </DialogContent>
-            </DialogPortal>
+                    <div className="flex items-center justify-end mb-2.5 gap-1.5">
+                        <SaveButton />
+                    </div>
+                </form>
+            </DialogContent>
         </Dialog>
     );
 }

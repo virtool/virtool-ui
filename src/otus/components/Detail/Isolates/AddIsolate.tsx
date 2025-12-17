@@ -1,9 +1,5 @@
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useCreateIsolate } from "@otus/queries";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import IsolateForm from "./IsolateForm";
 
 type AddIsolateProps = {
@@ -42,17 +38,14 @@ export default function AddIsolate({
 
     return (
         <Dialog open={show} onOpenChange={onHide}>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Add Isolate</DialogTitle>
-                    <IsolateForm
-                        allowedSourceTypes={allowedSourceTypes}
-                        restrictSourceTypes={restrictSourceTypes}
-                        onSubmit={handleSubmit}
-                    />
-                </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+                <DialogTitle>Add Isolate</DialogTitle>
+                <IsolateForm
+                    allowedSourceTypes={allowedSourceTypes}
+                    restrictSourceTypes={restrictSourceTypes}
+                    onSubmit={handleSubmit}
+                />
+            </DialogContent>
         </Dialog>
     );
 }

@@ -1,5 +1,5 @@
 import { formatIsolateName } from "@app/utils";
-import DialogFooter from "@base/DialogFooter";
+import { DialogFooter } from "@base/Dialog";
 import Input from "@base/Input";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";

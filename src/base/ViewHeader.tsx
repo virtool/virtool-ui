@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { Helmet, HelmetProvider } from "react-helmet-async";
 import styled from "styled-components";
 
 const StyledViewHeader = styled.header`
@@ -22,12 +21,8 @@ export default function ViewHeader({
 }: ViewHeaderProps) {
     return (
         <StyledViewHeader className={className}>
-            <HelmetProvider>
-                <Helmet>
-                    <title>{title}</title>
-                </Helmet>
-                {children}
-            </HelmetProvider>
+            <title>{title}</title>
+            {children}
         </StyledViewHeader>
     );
 }

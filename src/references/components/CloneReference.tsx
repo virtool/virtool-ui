@@ -2,18 +2,13 @@ import { useUrlSearchParam } from "@app/hooks";
 import Attribution from "@base/Attribution";
 import Badge from "@base/Badge";
 import Box from "@base/Box";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogFooter from "@base/DialogFooter";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@base/Dialog";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import { useCloneReference } from "@references/queries";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -84,43 +79,40 @@ export default function CloneReference({ references }: CloneReferenceProps) {
             onOpenChange={() => unsetCloneReferenceId()}
             open={Boolean(cloneReferenceId)}
         >
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Clone Reference</DialogTitle>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <PseudoLabel>Selected reference</PseudoLabel>
-                        {reference && (
-                            <ReferenceBox>
-                                <strong>{reference.name}</strong>
-                                <Badge className="ml-1.5">
-                                    {reference.otu_count} OTUs
-                                </Badge>
-                                <Attribution
-                                    time={reference.created_at}
-                                    user={reference.user.handle}
-                                />
-                            </ReferenceBox>
-                        )}
-                        <InputGroup>
-                            <InputLabel htmlFor="name">Name</InputLabel>
-                            <InputSimple
-                                id="name"
-                                {...register("name", {
-                                    required: "Required Field",
-                                })}
+            <DialogContent>
+                <DialogTitle>Clone Reference</DialogTitle>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <PseudoLabel>Selected reference</PseudoLabel>
+                    {reference && (
+                        <ReferenceBox>
+                            <strong>{reference.name}</strong>
+                            <Badge className="ml-1.5">
+                                {reference.otu_count} OTUs
+                            </Badge>
+                            <Attribution
+                                time={reference.created_at}
+                                user={reference.user.handle}
                             />
-                            <InputError>{errors.name?.message}</InputError>
-                        </InputGroup>
-                        <DialogFooter>
-                            <SaveButton
-                                disabled={!references.length}
-                                altText="Clone"
-                            />
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </DialogPortal>
+                        </ReferenceBox>
+                    )}
+                    <InputGroup>
+                        <InputLabel htmlFor="name">Name</InputLabel>
+                        <InputSimple
+                            id="name"
+                            {...register("name", {
+                                required: "Required Field",
+                            })}
+                        />
+                        <InputError>{errors.name?.message}</InputError>
+                    </InputGroup>
+                    <DialogFooter>
+                        <SaveButton
+                            disabled={!references.length}
+                            altText="Clone"
+                        />
+                    </DialogFooter>
+                </form>
+            </DialogContent>
         </Dialog>
     );
 }

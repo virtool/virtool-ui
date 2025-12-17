@@ -1,10 +1,6 @@
 import { useDialogParam } from "@app/hooks";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useUpdateOTU } from "@otus/queries";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import OtuForm from "./OtuForm";
 
 type OtuEditProps = {
@@ -40,21 +36,17 @@ export default function OtuEdit({ abbreviation, name, otuId }: OtuEditProps) {
 
     return (
         <Dialog open={openEditOTU} onOpenChange={onHide}>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Edit OTU</DialogTitle>
-                    <OtuForm
-                        name={name}
-                        abbreviation={abbreviation}
-                        error={
-                            mutation.isError &&
-                            mutation.error.response.body.message
-                        }
-                        onSubmit={handleSubmit}
-                    />
-                </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+                <DialogTitle>Edit OTU</DialogTitle>
+                <OtuForm
+                    name={name}
+                    abbreviation={abbreviation}
+                    error={
+                        mutation.isError && mutation.error.response.body.message
+                    }
+                    onSubmit={handleSubmit}
+                />
+            </DialogContent>
         </Dialog>
     );
 }

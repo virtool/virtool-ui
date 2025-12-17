@@ -1,5 +1,5 @@
 import { cn } from "@app/utils";
-import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
+import { ScrollArea as ScrollAreaPrimitive } from "radix-ui";
 import { ReactNode } from "react";
 
 type ScrollAreaProps = {

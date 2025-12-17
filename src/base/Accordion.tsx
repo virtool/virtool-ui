@@ -1,6 +1,6 @@
-import * as RadixAccordion from "@radix-ui/react-accordion";
+import { Accordion as AccordionPrimitive } from "radix-ui";
 
 /** the base accordion container */
-const Accordion = RadixAccordion.Root;
+const Accordion = AccordionPrimitive.Root;
 
 export default Accordion;

@@ -2,7 +2,7 @@ import { getFontWeight } from "@app/theme";
 import Box from "@base/Box";
 import Button from "@base/Button";
 import Color from "@base/Color";
-import DialogFooter from "@base/DialogFooter";
+import { DialogFooter } from "@base/Dialog";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";

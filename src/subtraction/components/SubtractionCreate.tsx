@@ -1,12 +1,13 @@
 import { useInfiniteFindFiles } from "@/uploads/queries";
 import { UploadType } from "@/uploads/types";
 import { useDialogParam } from "@app/hooks";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogDescription from "@base/DialogDescription";
-import DialogFooter from "@base/DialogFooter";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogTitle,
+} from "@base/Dialog";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
@@ -16,7 +17,6 @@ import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
 import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import { Controller } from "react-hook-form";
 import { useCreateSubtraction } from "../queries";
 import { SubtractionFileSelector } from "./SubtractionFileSelector";
@@ -68,68 +68,63 @@ export default function SubtractionCreate() {
 
     return (
         <Dialog open={open} onOpenChange={() => setOpen(false)}>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent size="lg">
-                    <DialogTitle>Create Subtraction</DialogTitle>
-                    <DialogDescription>
-                        Create a new subtraction from a FASTA file.
-                    </DialogDescription>
-                    {isPending ? (
-                        <LoadingPlaceholder className="mt-9" />
-                    ) : (
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <RestoredAlert
-                                hasRestored={hasRestored}
-                                name="subtraction"
-                                resetForm={reset}
+            <DialogContent size="lg">
+                <DialogTitle>Create Subtraction</DialogTitle>
+                <DialogDescription>
+                    Create a new subtraction from a FASTA file.
+                </DialogDescription>
+                {isPending ? (
+                    <LoadingPlaceholder className="mt-9" />
+                ) : (
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <RestoredAlert
+                            hasRestored={hasRestored}
+                            name="subtraction"
+                            resetForm={reset}
+                        />
+                        <InputGroup>
+                            <InputLabel htmlFor="name">Name</InputLabel>
+                            <InputSimple
+                                id="name"
+                                {...register("name", {
+                                    required: "A name is required",
+                                })}
                             />
-                            <InputGroup>
-                                <InputLabel htmlFor="name">Name</InputLabel>
-                                <InputSimple
-                                    id="name"
-                                    {...register("name", {
-                                        required: "A name is required",
-                                    })}
-                                />
-                                <InputError>{errors.name?.message}</InputError>
-                            </InputGroup>
+                            <InputError>{errors.name?.message}</InputError>
+                        </InputGroup>
 
-                            <InputGroup>
-                                <InputLabel htmlFor="nickname">
-                                    Nickname
-                                </InputLabel>
-                                <InputSimple
-                                    id="nickname"
-                                    {...register("nickname")}
-                                />
-                            </InputGroup>
-
-                            <PseudoLabel>Files</PseudoLabel>
-                            <Controller
-                                name="uploadId"
-                                control={control}
-                                render={({ field: { onChange, value } }) => (
-                                    <SubtractionFileSelector
-                                        onClick={onChange}
-                                        error={errors.uploadId?.message}
-                                        files={files}
-                                        isFetchingNextPage={isFetchingNextPage}
-                                        fetchNextPage={fetchNextPage}
-                                        isPending={isPending}
-                                        foundCount={files.pages[0].found_count}
-                                        selected={value}
-                                    />
-                                )}
-                                rules={{ required: "Please select a file" }}
+                        <InputGroup>
+                            <InputLabel htmlFor="nickname">Nickname</InputLabel>
+                            <InputSimple
+                                id="nickname"
+                                {...register("nickname")}
                             />
-                            <DialogFooter>
-                                <SaveButton />
-                            </DialogFooter>
-                        </form>
-                    )}
-                </DialogContent>
-            </DialogPortal>
+                        </InputGroup>
+
+                        <PseudoLabel>Files</PseudoLabel>
+                        <Controller
+                            name="uploadId"
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                                <SubtractionFileSelector
+                                    onClick={onChange}
+                                    error={errors.uploadId?.message}
+                                    files={files}
+                                    isFetchingNextPage={isFetchingNextPage}
+                                    fetchNextPage={fetchNextPage}
+                                    isPending={isPending}
+                                    foundCount={files.pages[0].found_count}
+                                    selected={value}
+                                />
+                            )}
+                            rules={{ required: "Please select a file" }}
+                        />
+                        <DialogFooter>
+                            <SaveButton />
+                        </DialogFooter>
+                    </form>
+                )}
+            </DialogContent>
         </Dialog>
     );
 }

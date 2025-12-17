@@ -1,11 +1,7 @@
 import { useDialogParam } from "@app/hooks";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useCreateSequence } from "@otus/queries";
 import { OtuSegment, OtuSequence } from "@otus/types";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import { compact } from "es-toolkit";
 import SequenceForm from "./SequenceForm";
 
@@ -62,20 +58,17 @@ export default function CreateSequence({
             open={openCreateSequence}
             onOpenChange={() => setOpenCreateSequence(false)}
         >
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent className="top-1/2">
-                    <DialogTitle>Create Sequence</DialogTitle>
-                    <SequenceForm
-                        hasSchema={schema.length > 0}
-                        noun="create"
-                        onSubmit={onSubmit}
-                        otuId={otuId}
-                        refId={refId}
-                        segments={segments}
-                    />
-                </DialogContent>
-            </DialogPortal>
+            <DialogContent className="top-1/2">
+                <DialogTitle>Create Sequence</DialogTitle>
+                <SequenceForm
+                    hasSchema={schema.length > 0}
+                    noun="create"
+                    onSubmit={onSubmit}
+                    otuId={otuId}
+                    refId={refId}
+                    segments={segments}
+                />
+            </DialogContent>
         </Dialog>
     );
 }

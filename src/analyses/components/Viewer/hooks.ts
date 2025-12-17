@@ -1,35 +1,36 @@
-import { useCallback, useEffect, useRef } from "react";
+import { Virtualizer } from "@tanstack/react-virtual";
+import { useCallback, useEffect } from "react";
 
 export function useKeyNavigation(
-    activeId,
-    nextId,
-    nextIndex,
-    previousId,
-    previousIndex,
-    scroll,
-    onSetActiveId,
+    virtualizer: Virtualizer<HTMLDivElement, Element>,
+    nextId: string | undefined,
+    nextIndex: number | undefined,
+    previousId: string | undefined,
+    previousIndex: number | undefined,
+    onSetActiveId: (id: string) => void,
 ) {
-    const ref = useRef(null);
-
     const handleKeyPress = useCallback(
-        (e) => {
+        (e: KeyboardEvent) => {
             if (e.target !== window.document.body) {
                 return;
             }
 
-            if (e.key === "w" && previousIndex > -1) {
-                if (scroll) {
-                    ref.current.scrollToItem(previousIndex);
-                }
+            if (e.key === "w" && previousIndex !== undefined) {
+                virtualizer.scrollToIndex(previousIndex);
                 onSetActiveId(previousId);
-            } else if (e.key === "s" && nextIndex > -1) {
-                if (scroll) {
-                    ref.current.scrollToItem(nextIndex);
-                }
+            } else if (e.key === "s" && nextIndex !== undefined) {
+                virtualizer.scrollToIndex(nextIndex);
                 onSetActiveId(nextId);
             }
         },
-        [activeId, nextId, previousId],
+        [
+            virtualizer,
+            nextId,
+            nextIndex,
+            previousId,
+            previousIndex,
+            onSetActiveId,
+        ],
     );
 
     useEffect(() => {
@@ -37,7 +38,5 @@ export function useKeyNavigation(
         return () => {
             window.removeEventListener("keydown", handleKeyPress, true);
         };
-    });
-
-    return ref;
+    }, [handleKeyPress]);
 }

@@ -1,6 +1,6 @@
 import { getColor, sizes } from "@app/theme";
 import { JobState } from "@jobs/types";
-import { Indicator, Root } from "@radix-ui/react-progress";
+import { Progress } from "radix-ui";
 import styled, { keyframes } from "styled-components";
 
 /**
@@ -220,7 +220,7 @@ export default function ProgressCircle({
     const color = getProgressColor(state);
 
     return (
-        <Root value={progress} asChild>
+        <Progress.Root value={progress} asChild>
             <StyledProgressCircle size={circleSize}>
                 <ProgressCircleTrack
                     color={
@@ -236,14 +236,14 @@ export default function ProgressCircle({
                         state={state}
                     />
                 )}
-                <Indicator asChild>
+                <Progress.Indicator asChild>
                     <ProgressCircleIndicator
                         color={color}
                         size={circleSize}
                         progress={progress / 100}
                     />
-                </Indicator>
+                </Progress.Indicator>
             </StyledProgressCircle>
-        </Root>
+        </Progress.Root>
     );
 }

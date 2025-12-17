@@ -1,14 +1,11 @@
-import UploadOverlay from "@/uploads/components/UploadOverlay";
 import { useFetchAccount } from "@account/queries";
 import Container from "@base/Container";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import DevDialog from "@dev/components/DeveloperDialog";
 import MessageBanner from "@message/components/MessageBanner";
 import Nav from "@nav/components/Nav";
 import Sidebar from "@nav/components/Sidebar";
 import { useQueryClient } from "@tanstack/react-query";
 import { lazy, Suspense, useEffect } from "react";
-import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Redirect, Route, Switch } from "wouter";
 import WsConnection, {
     ABANDONED,
@@ -25,6 +22,8 @@ const References = lazy(() => import("../references/components/References"));
 const Samples = lazy(() => import("@samples/components/Samples"));
 const Subtraction = lazy(() => import("../subtraction/components/Subtraction"));
 const ML = lazy(() => import("../ml/components/ML"));
+const DevDialog = lazy(() => import("@dev/components/DeveloperDialog"));
+const UploadOverlay = lazy(() => import("@/uploads/components/UploadOverlay"));
 
 function setupWebSocket(queryClient) {
     if (!window.ws) {
@@ -63,12 +62,8 @@ export default function Main() {
 
     return (
         <>
-            <HelmetProvider>
-                <Helmet>
-                    <title>Virtool</title>
-                    <meta charSet="utf-8" />
-                </Helmet>
-            </HelmetProvider>
+            <title>Virtool</title>
+            <meta charSet="utf-8" />
 
             <div className="bg-transparent fixed top-0 w-full z-50">
                 <MessageBanner />
@@ -105,8 +100,10 @@ export default function Main() {
 
             <Sidebar administratorRole={data.administrator_role} />
 
-            <DevDialog />
-            <UploadOverlay />
+            <Suspense fallback={null}>
+                <DevDialog />
+                <UploadOverlay />
+            </Suspense>
         </>
     );
 }

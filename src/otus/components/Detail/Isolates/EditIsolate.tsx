@@ -1,9 +1,11 @@
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import {
+    Dialog,
+    DialogContent,
+    DialogOverlay,
+    DialogPortal,
+    DialogTitle,
+} from "@base/Dialog";
 import { useUpdateIsolate } from "@otus/queries";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import { capitalize } from "es-toolkit";
 import IsolateForm from "./IsolateForm";
 
