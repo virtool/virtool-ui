@@ -1,9 +1,9 @@
+import { addSeconds, formatDistanceStrict } from "@/app/date";
 import Box from "@base/Box";
 import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
 import Loader from "@base/Loader";
 import RelativeTime from "@base/RelativeTime";
-import { addSeconds, formatDistanceStrict } from "date-fns";
 import styled from "styled-components";
 
 const ridRoot =

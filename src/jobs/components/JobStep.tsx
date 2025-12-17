@@ -1,6 +1,6 @@
+import { formatDate, formatTime } from "@/app/date";
 import Badge from "@/base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
-import { format } from "date-fns";
 import { Calendar, Clock } from "lucide-react";
 import { marked } from "marked";
 import type { JobState, JobStep } from "../types";
@@ -32,11 +32,11 @@ export default function JobStepItem({ step, state }: JobStepProps) {
                 <div className="flex gap-4">
                     <Badge className="flex gap-1.5 items-center">
                         <Clock size={16} />
-                        {format(new Date(step.startedAt), "HH:mm:ss")}
+                        {formatTime(new Date(step.startedAt))}
                     </Badge>
                     <Badge className="flex gap-1.5 items-center">
                         <Calendar size={16} />
-                        {format(new Date(step.startedAt), "yyyy-MM-dd")}
+                        {formatDate(new Date(step.startedAt))}
                     </Badge>
                 </div>
             </div>

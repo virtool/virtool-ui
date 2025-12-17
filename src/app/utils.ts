@@ -2,11 +2,11 @@
  * General utility constants and functions.
  */
 import clsx, { ClassValue } from "clsx";
-import { formatDuration, intervalToDuration } from "date-fns";
 import { get, sampleSize, startCase } from "es-toolkit/compat";
 import numbro from "numbro";
 import { twMerge } from "tailwind-merge";
 import { capitalize } from "./common";
+export { formatRoundedDuration } from "./date";
 
 /**
  * A string containing all alphanumeric digits in both cases.
@@ -71,31 +71,6 @@ export function formatIsolateName(isolate: object): string {
     return sourceType === "unknown"
         ? "Unnamed"
         : `${capitalize(sourceType)} ${sourceName}`;
-}
-
-/**
- * Return an English string describing a duration given a number of seconds.
- */
-export function formatRoundedDuration(seconds: number) {
-    const duration = intervalToDuration({ start: 0, end: seconds * 1000 });
-
-    const units = [
-        "years",
-        "months",
-        "weeks",
-        "days",
-        "hours",
-        "minutes",
-        "seconds",
-    ];
-
-    for (const unit of units) {
-        if (duration[unit]) {
-            return formatDuration({ [unit]: duration[unit] }, { zero: false });
-        }
-    }
-
-    return "less than a second";
 }
 
 /**
