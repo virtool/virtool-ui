@@ -1,12 +1,13 @@
 import Button from "@base/Button";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogFooter from "@base/DialogFooter";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogTitle,
+    DialogTrigger,
+} from "@base/Dialog";
 import IconButton from "@base/IconButton";
 import { JobMinimal } from "@jobs/types";
-import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { useRemoveSample } from "@samples/queries";
 import { checkCanDeleteSample } from "@samples/utils";
 import { useState } from "react";
@@ -57,21 +58,18 @@ export default function DeleteSample({
             <DialogTrigger asChild>
                 <IconButton color="red" name="trash" tip="delete" />
             </DialogTrigger>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Delete Sample</DialogTitle>
-                    <span>
-                        Are you sure you want to delete <strong>{name}</strong>?
-                    </span>
+            <DialogContent>
+                <DialogTitle>Delete Sample</DialogTitle>
+                <span>
+                    Are you sure you want to delete <strong>{name}</strong>?
+                </span>
 
-                    <DialogFooter>
-                        <Button color="red" onClick={handleConfirm}>
-                            Confirm
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </DialogPortal>
+                <DialogFooter>
+                    <Button color="red" onClick={handleConfirm}>
+                        Confirm
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
         </Dialog>
     );
 }

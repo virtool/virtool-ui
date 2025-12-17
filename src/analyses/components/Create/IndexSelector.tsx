@@ -4,8 +4,8 @@ import Select from "@base/Select";
 import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
 import { IndexMinimal } from "@indexes/types";
-import * as RadixSelect from "@radix-ui/react-select";
 import { sortBy } from "es-toolkit";
+import { Select as SelectPrimitive } from "radix-ui";
 import { useMemo } from "react";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
@@ -17,7 +17,7 @@ type IndexSelectorItemProps = {
 
 function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps) {
     return (
-        <RadixSelect.Item
+        <SelectPrimitive.Item
             className={cn(
                 "capitalize",
                 "flex",
@@ -31,13 +31,13 @@ function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps) {
             key={id}
             value={id}
         >
-            <RadixSelect.ItemText className="whitespace-nowrap">
+            <SelectPrimitive.ItemText className="whitespace-nowrap">
                 {name}
-            </RadixSelect.ItemText>
+            </SelectPrimitive.ItemText>
             <span>
                 Index Version <Label>{version}</Label>
             </span>
-        </RadixSelect.Item>
+        </SelectPrimitive.Item>
     );
 }
 

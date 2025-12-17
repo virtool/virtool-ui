@@ -1,11 +1,6 @@
 import { useDialogParam } from "@app/hooks";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogFooter from "@base/DialogFooter";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@base/Dialog";
 import SaveButton from "@base/SaveButton";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import { useUpdateReference } from "@references/queries";
 import { Reference } from "@references/types";
 import { useForm } from "react-hook-form";
@@ -51,26 +46,23 @@ export default function EditReference({ detail }: EditReferenceProps) {
             open={openEditReference}
             onOpenChange={() => setOpenEditReference(false)}
         >
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Edit Reference</DialogTitle>
-                    <form
-                        onSubmit={handleSubmit((values) =>
-                            handleEdit({ ...values }),
-                        )}
-                    >
-                        <ReferenceForm
-                            errors={errors}
-                            mode={ReferenceFormMode.edit}
-                            register={register}
-                        />
-                        <DialogFooter>
-                            <SaveButton />
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+                <DialogTitle>Edit Reference</DialogTitle>
+                <form
+                    onSubmit={handleSubmit((values) =>
+                        handleEdit({ ...values }),
+                    )}
+                >
+                    <ReferenceForm
+                        errors={errors}
+                        mode={ReferenceFormMode.edit}
+                        register={register}
+                    />
+                    <DialogFooter>
+                        <SaveButton />
+                    </DialogFooter>
+                </form>
+            </DialogContent>
         </Dialog>
     );
 }

@@ -1,9 +1,9 @@
 import { getBorder } from "@app/theme";
-import * as RadixAccordion from "@radix-ui/react-accordion";
+import { Accordion as AccordionPrimitive } from "radix-ui";
 import { createRef, ReactNode, useEffect } from "react";
 import styled from "styled-components";
 
-const StyledAccordionItem = styled(RadixAccordion.Item)`
+const StyledAccordionItem = styled(AccordionPrimitive.Item)`
     border: ${getBorder};
     margin-bottom: 10px;
     scroll-margin-top: 50px;

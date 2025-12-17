@@ -1,11 +1,6 @@
-import { DialogPortal } from "@radix-ui/react-dialog";
 import { ReactNode } from "react";
 import Button from "./Button";
-import Dialog from "./Dialog";
-import DialogContent from "./DialogContent";
-import DialogFooter from "./DialogFooter";
-import DialogOverlay from "./DialogOverlay";
-import DialogTitle from "./DialogTitle";
+import { Dialog, DialogContent, DialogFooter, DialogTitle } from "./Dialog";
 
 type RemoveDialogProps = {
     /** A message to override the default one displayed in the dialog body */
@@ -35,24 +30,20 @@ export default function RemoveDialog({
 }: RemoveDialogProps) {
     return (
         <Dialog open={show} onOpenChange={onHide}>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>{`Remove ${noun}`}</DialogTitle>
-                    {message || (
-                        <span>
-                            Are you sure you want to remove{" "}
-                            <strong>{name}</strong>?
-                        </span>
-                    )}
+            <DialogContent>
+                <DialogTitle>{`Remove ${noun}`}</DialogTitle>
+                {message || (
+                    <span>
+                        Are you sure you want to remove <strong>{name}</strong>?
+                    </span>
+                )}
 
-                    <DialogFooter>
-                        <Button color="red" onClick={onConfirm}>
-                            Confirm
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </DialogPortal>
+                <DialogFooter>
+                    <Button color="red" onClick={onConfirm}>
+                        Confirm
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
         </Dialog>
     );
 }

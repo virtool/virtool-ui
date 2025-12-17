@@ -1,4 +1,4 @@
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { DropdownMenu } from "radix-ui";
 
 const Dropdown = DropdownMenu.Root;
 

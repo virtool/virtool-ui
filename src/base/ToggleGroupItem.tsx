@@ -1,5 +1,5 @@
 import { cn } from "@app/utils";
-import * as RadixToggleGroup from "@radix-ui/react-toggle-group";
+import { ToggleGroup as ToggleGroupPrimitive } from "radix-ui";
 import { ReactNode } from "react";
 
 type ToggleGroupItemProps = {
@@ -12,7 +12,7 @@ export default function ToggleGroupItem({
     value,
 }: ToggleGroupItemProps) {
     return (
-        <RadixToggleGroup.Item
+        <ToggleGroupPrimitive.Item
             className={cn(
                 "bg-gray-200",
                 "cursor-pointer",
@@ -32,6 +32,6 @@ export default function ToggleGroupItem({
             value={value}
         >
             {children}
-        </RadixToggleGroup.Item>
+        </ToggleGroupPrimitive.Item>
     );
 }

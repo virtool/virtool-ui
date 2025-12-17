@@ -1,11 +1,7 @@
 import { formatSearchParams, useUrlSearchParam } from "@app/hooks";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import Tabs from "@base/Tabs";
 import TabsLink from "@base/TabsLink";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import EmptyReference from "./EmptyReference";
 import ImportReference from "./ImportReference";
 
@@ -23,36 +19,33 @@ export function CreateReference() {
                 unsetCreateReferenceType();
             }}
         >
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent size="lg">
-                    <DialogTitle>Create Reference</DialogTitle>
-                    <Tabs>
-                        <TabsLink
-                            to={formatSearchParams({
-                                createReferenceType: "empty",
-                            })}
-                            isActive={createReferenceType === "empty"}
-                        >
-                            Empty
-                        </TabsLink>
-                        <TabsLink
-                            to={formatSearchParams({
-                                createReferenceType: "import",
-                            })}
-                            isActive={createReferenceType === "import"}
-                        >
-                            Import
-                        </TabsLink>
-                    </Tabs>
+            <DialogContent size="lg">
+                <DialogTitle>Create Reference</DialogTitle>
+                <Tabs>
+                    <TabsLink
+                        to={formatSearchParams({
+                            createReferenceType: "empty",
+                        })}
+                        isActive={createReferenceType === "empty"}
+                    >
+                        Empty
+                    </TabsLink>
+                    <TabsLink
+                        to={formatSearchParams({
+                            createReferenceType: "import",
+                        })}
+                        isActive={createReferenceType === "import"}
+                    >
+                        Import
+                    </TabsLink>
+                </Tabs>
 
-                    {createReferenceType === "import" ? (
-                        <ImportReference />
-                    ) : (
-                        <EmptyReference />
-                    )}
-                </DialogContent>
-            </DialogPortal>
+                {createReferenceType === "import" ? (
+                    <ImportReference />
+                ) : (
+                    <EmptyReference />
+                )}
+            </DialogContent>
         </Dialog>
     );
 }

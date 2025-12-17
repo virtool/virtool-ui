@@ -1,8 +1,8 @@
 import { getColor, getFontSize, getFontWeight } from "@app/theme";
-import * as RadixSelect from "@radix-ui/react-select";
+import { Select as SelectPrimitive } from "radix-ui";
 import styled from "styled-components";
 
-const StyledSelectItem = styled(RadixSelect.Item)`
+const StyledSelectItem = styled(SelectPrimitive.Item)`
     font-size: ${getFontSize("md")};
     font-weight: ${getFontWeight("thick")};
     display: flex;
@@ -32,7 +32,7 @@ const Description = styled.div`
 export default function SelectItem({ value, children, description }) {
     return (
         <StyledSelectItem value={value} key={value}>
-            <RadixSelect.ItemText>{children}</RadixSelect.ItemText>
+            <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
             {description && <Description>{description}</Description>}
         </StyledSelectItem>
     );

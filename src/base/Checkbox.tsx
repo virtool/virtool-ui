@@ -1,5 +1,5 @@
 import { cn } from "@app/utils";
-import * as RadixCheckbox from "@radix-ui/react-checkbox";
+import { Checkbox as CheckboxPrimitive } from "radix-ui";
 import { ReactNode } from "react";
 import Icon from "./Icon";
 
@@ -21,7 +21,7 @@ function Checkbox({
 }: CheckboxProps) {
     return (
         <div className="inline-flex items-center gap-3">
-            <RadixCheckbox.Root
+            <CheckboxPrimitive.Root
                 aria-label={label || "checkbox"}
                 checked={checked}
                 className={cn(
@@ -43,13 +43,13 @@ function Checkbox({
                 id={id}
                 onClick={onClick}
             >
-                <RadixCheckbox.Indicator>
+                <CheckboxPrimitive.Indicator>
                     <Icon
                         className={cn({ invisible: !checked }, "text-white")}
                         name="check"
                     />
-                </RadixCheckbox.Indicator>
-            </RadixCheckbox.Root>
+                </CheckboxPrimitive.Indicator>
+            </CheckboxPrimitive.Root>
             {label && (
                 <label
                     className="flex gap-2 items-center font-normal m-0 select-none"

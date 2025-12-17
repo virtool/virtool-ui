@@ -1,10 +1,6 @@
 import { useUrlSearchParam } from "@app/hooks";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useCurrentOtuContext, useEditSequence } from "@otus/queries";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import { useActiveSequence, useGetUnreferencedSegments } from "../hooks";
 import SequenceForm from "./SequenceForm";
 
@@ -49,21 +45,18 @@ export default function SequenceEdit() {
             open={Boolean(editSequenceId)}
             onOpenChange={() => unsetEditSequenceId()}
         >
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent className="top-1/2">
-                    <DialogTitle>Edit Sequence</DialogTitle>
-                    <SequenceForm
-                        activeSequence={activeSequence}
-                        hasSchema={hasSchema}
-                        noun="edit"
-                        onSubmit={onSubmit}
-                        otuId={otu.id}
-                        refId={reference.id}
-                        segments={segments}
-                    />
-                </DialogContent>
-            </DialogPortal>
+            <DialogContent className="top-1/2">
+                <DialogTitle>Edit Sequence</DialogTitle>
+                <SequenceForm
+                    activeSequence={activeSequence}
+                    hasSchema={hasSchema}
+                    noun="edit"
+                    onSubmit={onSubmit}
+                    otuId={otu.id}
+                    refId={reference.id}
+                    segments={segments}
+                />
+            </DialogContent>
         </Dialog>
     );
 }

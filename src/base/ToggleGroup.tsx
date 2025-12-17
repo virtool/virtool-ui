@@ -1,5 +1,5 @@
 import { cn } from "@app/utils";
-import * as RadixToggleGroup from "@radix-ui/react-toggle-group";
+import { ToggleGroup as ToggleGroupPrimitive } from "radix-ui";
 import { ReactNode } from "react";
 
 type ToggleGroupProps = {
@@ -22,13 +22,13 @@ export default function ToggleGroup({
     }
 
     return (
-        <RadixToggleGroup.Root
+        <ToggleGroupPrimitive.Root
             className={cn("inline-flex", className)}
             onValueChange={handleValueChange}
             type="single"
             value={value}
         >
             {children}
-        </RadixToggleGroup.Root>
+        </ToggleGroupPrimitive.Root>
     );
 }

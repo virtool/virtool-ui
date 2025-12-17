@@ -1,7 +1,7 @@
 import { UploadBar } from "@/uploads/components/UploadBar";
 import { useNavigate } from "@app/hooks";
 import Alert from "@base/Alert";
-import DialogFooter from "@base/DialogFooter";
+import { DialogFooter } from "@base/Dialog";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";

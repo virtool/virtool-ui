@@ -1,11 +1,7 @@
 import { useUrlSearchParam } from "@app/hooks";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useUpdateOTU } from "@otus/queries";
 import { Molecule, OtuSegment } from "@otus/types";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import SegmentForm from "./SegmentForm";
 
 type FormValues = {
@@ -59,19 +55,16 @@ export default function EditSegment({
             open={Boolean(editSegmentName)}
             onOpenChange={() => unsetEditSegmentName()}
         >
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Edit Segment</DialogTitle>
-                    <SegmentForm
-                        segmentName={editSegmentName}
-                        molecule={segment?.molecule}
-                        required={segment?.required}
-                        onSubmit={handleSubmit}
-                        schema={schema}
-                    />
-                </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+                <DialogTitle>Edit Segment</DialogTitle>
+                <SegmentForm
+                    segmentName={editSegmentName}
+                    molecule={segment?.molecule}
+                    required={segment?.required}
+                    onSubmit={handleSubmit}
+                    schema={schema}
+                />
+            </DialogContent>
         </Dialog>
     );
 }

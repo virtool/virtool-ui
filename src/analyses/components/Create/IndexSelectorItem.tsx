@@ -1,6 +1,6 @@
 import { cn } from "@app/utils";
 import Label from "@base/Label";
-import * as RadixSelect from "@radix-ui/react-select";
+import { Select as SelectPrimitive } from "radix-ui";
 
 type IndexSelectorItemProps = {
     id: string;
@@ -17,7 +17,7 @@ export default function IndexSelectorItem({
     version,
 }: IndexSelectorItemProps) {
     return (
-        <RadixSelect.Item
+        <SelectPrimitive.Item
             className={cn(
                 "capitalize",
                 "flex",
@@ -32,12 +32,12 @@ export default function IndexSelectorItem({
             key={id}
             value={id}
         >
-            <RadixSelect.ItemText className="whitespace-nowrap">
+            <SelectPrimitive.ItemText className="whitespace-nowrap">
                 {name}
-            </RadixSelect.ItemText>
+            </SelectPrimitive.ItemText>
             <span className={cn()}>
                 Index Version <Label>{version}</Label>
             </span>
-        </RadixSelect.Item>
+        </SelectPrimitive.Item>
     );
 }

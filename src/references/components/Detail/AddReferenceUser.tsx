@@ -1,16 +1,12 @@
 import { getBorder } from "@app/theme";
 import BoxGroup from "@base/BoxGroup";
 import CompactScrollList from "@base/CompactScrollList";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
+import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import InitialIcon from "@base/InitialIcon";
 import InputSearch from "@base/InputSearch";
 import NoneFoundSection from "@base/NoneFoundSection";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import Toolbar from "@base/Toolbar";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import { useAddReferenceMember } from "@references/queries";
 import { ReferenceUser } from "@references/types";
 import { useInfiniteFindUsers } from "@users/queries";
@@ -87,34 +83,31 @@ export default function AddReferenceUser({
 
     return (
         <Dialog open={show} onOpenChange={onOpenChange}>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <AddReferenceUserHeader>Add User</AddReferenceUserHeader>
-                    <Toolbar>
-                        <div className="flex-grow">
-                            <InputSearch
-                                name="search"
-                                value={term}
-                                onChange={(e) => setTerm(e.target.value)}
-                            />
-                        </div>
-                    </Toolbar>
-                    {filteredItems.length ? (
-                        <StyledScrollList
-                            fetchNextPage={fetchNextPage}
-                            isFetchingNextPage={isFetchingNextPage}
-                            isPending={isPending}
-                            items={filteredItems}
-                            renderRow={renderRow}
+            <DialogContent>
+                <AddReferenceUserHeader>Add User</AddReferenceUserHeader>
+                <Toolbar>
+                    <div className="flex-grow">
+                        <InputSearch
+                            name="search"
+                            value={term}
+                            onChange={(e) => setTerm(e.target.value)}
                         />
-                    ) : (
-                        <BoxGroup>
-                            <NoneFoundSection noun="other users" />
-                        </BoxGroup>
-                    )}
-                </DialogContent>
-            </DialogPortal>
+                    </div>
+                </Toolbar>
+                {filteredItems.length ? (
+                    <StyledScrollList
+                        fetchNextPage={fetchNextPage}
+                        isFetchingNextPage={isFetchingNextPage}
+                        isPending={isPending}
+                        items={filteredItems}
+                        renderRow={renderRow}
+                    />
+                ) : (
+                    <BoxGroup>
+                        <NoneFoundSection noun="other users" />
+                    </BoxGroup>
+                )}
+            </DialogContent>
         </Dialog>
     );
 }

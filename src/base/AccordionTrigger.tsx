@@ -1,9 +1,9 @@
 import { getColor } from "@app/theme";
-import * as RadixAccordion from "@radix-ui/react-accordion";
+import { Accordion as AccordionPrimitive } from "radix-ui";
 import styled from "styled-components";
 
 /** button for toggling the display of accordion contents  */
-const AccordionTrigger = styled(RadixAccordion.Trigger)`
+const AccordionTrigger = styled(AccordionPrimitive.Trigger)`
     align-items: center;
     background-color: ${(props) => props.theme.color.white};
     border: none;

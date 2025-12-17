@@ -1,5 +1,5 @@
 import { boxShadow } from "@app/theme";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { Tooltip as TooltipPrimitive } from "radix-ui";
 import { ReactNode } from "react";
 import styled, { keyframes } from "styled-components";
 

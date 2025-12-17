@@ -1,10 +1,11 @@
 import { getFontSize } from "@app/theme";
 import Button from "@base/Button";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
-import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogTrigger,
+} from "@base/Dialog";
 import { useState } from "react";
 import styled from "styled-components";
 import { useRemoveLabel } from "../queries";
@@ -46,25 +47,18 @@ export function RemoveLabel({ id, name }: RemoveLabelProps) {
             <Button as={DialogTrigger} color="red" size="small">
                 Delete
             </Button>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Delete Label</DialogTitle>
-                    <RemoveLabelQuestion>
-                        Are you sure you want to delete the label{" "}
-                        <strong>{name}</strong>?
-                    </RemoveLabelQuestion>
-                    <RemoveLabelFooter>
-                        <Button
-                            type="button"
-                            color="red"
-                            onClick={handleSubmit}
-                        >
-                            Delete
-                        </Button>
-                    </RemoveLabelFooter>
-                </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+                <DialogTitle>Delete Label</DialogTitle>
+                <RemoveLabelQuestion>
+                    Are you sure you want to delete the label{" "}
+                    <strong>{name}</strong>?
+                </RemoveLabelQuestion>
+                <RemoveLabelFooter>
+                    <Button type="button" color="red" onClick={handleSubmit}>
+                        Delete
+                    </Button>
+                </RemoveLabelFooter>
+            </DialogContent>
         </Dialog>
     );
 }

@@ -1,9 +1,5 @@
 import { useUrlSearchParam } from "@app/hooks";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
-import { DialogPortal } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import {
     referenceQueryKeys,
     useUpdateReferenceMember,
@@ -63,17 +59,14 @@ export default function EditReferenceMember({
 
     return (
         <Dialog open={Boolean(editId)} onOpenChange={() => unsetEditId()}>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>
-                        Modify Rights for{" "}
-                        {(member as ReferenceUser)?.handle ||
-                            (member as ReferenceGroup)?.name}
-                    </DialogTitle>
-                    {rightComponents}
-                </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+                <DialogTitle>
+                    Modify Rights for{" "}
+                    {(member as ReferenceUser)?.handle ||
+                        (member as ReferenceGroup)?.name}
+                </DialogTitle>
+                {rightComponents}
+            </DialogContent>
         </Dialog>
     );
 }
