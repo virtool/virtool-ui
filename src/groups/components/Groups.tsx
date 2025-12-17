@@ -6,7 +6,7 @@ import InputHeader from "@base/InputHeader";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import RemoveBanner from "@base/RemoveBanner";
 import { sortBy } from "es-toolkit/compat";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import {
     useFetchGroup,
@@ -55,15 +55,18 @@ export default function Groups() {
 
     const { setOpen: setOpenCreateGroup } = useDialogParam("openCreateGroup");
     const [selectedGroupId, setSelectedGroupId] = useState(null);
+    const [prevGroups, setPrevGroups] = useState(null);
 
     const { data: groups, isPending: isPendingGroups } = useListGroups();
-    const { data: selectedGroup } = useFetchGroup(selectedGroupId);
 
-    useEffect(() => {
+    if (groups !== prevGroups) {
+        setPrevGroups(groups);
         if (groups && !groups.find((g) => g.id === selectedGroupId)) {
             setSelectedGroupId(sortBy(groups, (g) => g.name)[0]?.id);
         }
-    }, [groups, selectedGroupId]);
+    }
+
+    const { data: selectedGroup } = useFetchGroup(selectedGroupId);
 
     if (isPendingGroups || (groups.length && !selectedGroup)) {
         return <LoadingPlaceholder className="mt-32" />;

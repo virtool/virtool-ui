@@ -1,5 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useLocation, useParams, useSearch } from "wouter";
+
+function subscribeToTime(callback: () => void) {
+    const interval = setInterval(callback, 1000);
+    return () => clearInterval(interval);
+}
+
+/**
+ * Subscribe to the current time, updating every second.
+ *
+ * Uses useSyncExternalStore for React Compiler compatibility.
+ */
+export function useNow() {
+    return useSyncExternalStore(subscribeToTime, Date.now, Date.now);
+}
 
 function getSize(ref) {
     return {
@@ -18,16 +32,13 @@ export function useElementSize<T extends HTMLElement>(): [
     Size,
 ] {
     const ref = useRef(null);
-
-    const [size, setSize] = useState<{ height: number; width: number }>(
-        getSize(ref),
-    );
-
-    function handleResize() {
-        setSize(getSize(ref));
-    }
+    const [size, setSize] = useState<Size>({ height: 0, width: 0 });
 
     useEffect(() => {
+        function handleResize() {
+            setSize(getSize(ref));
+        }
+
         handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -214,134 +225,96 @@ function castSearchParamValue(value: string) {
     return value;
 }
 
-function createUseUrlSearchParam(): [
-    (
-        key: string,
-        defaultValue?: SearchParam,
-    ) => {
-        value: string;
-        setValue: (value: SearchParam) => void;
-        unsetValue: () => void;
-    },
-    <T extends SearchParam>(
-        key: string,
-        defaultValues?: T[],
-    ) => { values: T[]; setValues: (newValue: T[]) => void },
-] {
-    const cache = { search: "" };
+/**
+ * Store and retrieve stringified component state in a URL search parameter
+ *
+ * @param key - The search parameter key to be managed
+ * @param defaultValue - The default value to use when the search parameter key is not present in the URL
+ * @returns The current value and a functions for setting the URL search parameter
+ */
+export function useNaiveUrlSearchParam(
+    key: string,
+    defaultValue?: SearchParam,
+): {
+    value: string;
+    setValue: (value: SearchParam) => void;
+    unsetValue: () => void;
+} {
+    const search = useSearch();
+    const [location] = useLocation();
+    const navigate = useNavigate();
 
-    /**
-     * Store and retrieve stringified component state in a URL search parameter
-     *
-     * @param key - The search parameter key to be managed
-     * @param defaultValue - The default value to use when the search parameter key is not present in the URL
-     * @returns The current value and a functions for setting the URL search parameter
-     */
-    function useNaiveUrlSearchParam(
-        key: string,
-        defaultValue?: SearchParam,
-    ): {
-        value: string;
-        setValue: (value: SearchParam) => void;
-        unsetValue: () => void;
-    } {
-        cache.search = useSearch();
-        const [location] = useLocation();
+    const value = new URLSearchParams(search).get(key);
 
-        const navigate = useNavigate();
-        const firstRender = useRef(true);
-
-        let value = new URLSearchParams(cache.search).get(key);
-
-        if (firstRender.current && defaultValue && !value) {
-            firstRender.current = false;
-            value = String(defaultValue);
-            cache.search = updateUrlSearchParams(
+    useEffect(() => {
+        if (
+            defaultValue !== undefined &&
+            !new URLSearchParams(search).has(key)
+        ) {
+            updateUrlSearchParams(
                 String(defaultValue),
                 key,
                 navigate,
-                cache.search,
+                search,
                 location,
             );
         }
+    }, []);
 
-        firstRender.current = false;
-
-        function setURLSearchParam(value) {
-            cache.search = updateUrlSearchParams(
-                value,
-                key,
-                navigate,
-                cache.search,
-                location,
-            );
-        }
-
-        function unsetValue() {
-            cache.search = unsetUrlSearchParam(
-                key,
-                navigate,
-                cache.search,
-                location,
-            );
-        }
-
-        return {
-            value,
-            setValue: (value: SearchParam) => setURLSearchParam(String(value)),
-            unsetValue,
-        };
+    function setURLSearchParam(newValue: string) {
+        updateUrlSearchParams(newValue, key, navigate, search, location);
     }
 
-    /**
-     * Hook for managing and synchronizing a list of URL search parameters with a component's state
-     *
-     * @param key - The search parameter key to be managed
-     * @param defaultValues - The default values to use when the search parameter key is not present in the URL
-     * @returns The current values and a function to set the URL search parameter
-     */
-    function useListSearchParam<T extends SearchParam>(
-        key: string,
-        defaultValues?: T[],
-    ): { values: T[]; setValues: (newValue: T[]) => void } {
-        cache.search = useSearch();
-        const navigate = useNavigate();
-        const firstRender = useRef(true);
-
-        let values = new URLSearchParams(cache.search).getAll(key);
-
-        if (firstRender.current && defaultValues && !values.length) {
-            values = defaultValues as string[];
-            cache.search = updateUrlSearchParamsList(
-                key,
-                navigate,
-                cache.search,
-                values,
-            );
-        }
-
-        firstRender.current = false;
-
-        function setValues(values: T[]) {
-            cache.search = updateUrlSearchParamsList(
-                key,
-                navigate,
-                cache.search,
-                values,
-            );
-        }
-
-        return {
-            values: values.map(castSearchParamValue) as T[],
-            setValues,
-        };
+    function unsetValue() {
+        unsetUrlSearchParam(key, navigate, search, location);
     }
 
-    return [useNaiveUrlSearchParam, useListSearchParam];
+    return {
+        value:
+            value ?? (defaultValue !== undefined ? String(defaultValue) : null),
+        setValue: (value: SearchParam) => setURLSearchParam(String(value)),
+        unsetValue,
+    };
 }
 
-export const [useNaiveUrlSearchParam, useListSearchParam] =
-    createUseUrlSearchParam();
+/**
+ * Hook for managing and synchronizing a list of URL search parameters with a component's state
+ *
+ * @param key - The search parameter key to be managed
+ * @param defaultValues - The default values to use when the search parameter key is not present in the URL
+ * @returns The current values and a function to set the URL search parameter
+ */
+export function useListSearchParam<T extends SearchParam>(
+    key: string,
+    defaultValues?: T[],
+): { values: T[]; setValues: (newValue: T[]) => void } {
+    const search = useSearch();
+    const navigate = useNavigate();
+
+    const values = new URLSearchParams(search).getAll(key);
+
+    useEffect(() => {
+        if (
+            defaultValues?.length &&
+            !new URLSearchParams(search).getAll(key).length
+        ) {
+            updateUrlSearchParamsList(key, navigate, search, defaultValues);
+        }
+    }, []);
+
+    function setValues(newValues: T[]) {
+        updateUrlSearchParamsList(key, navigate, search, newValues);
+    }
+
+    const effectiveValues = values.length
+        ? values
+        : ((defaultValues as string[]) ?? []);
+
+    return {
+        values: effectiveValues.map(castSearchParamValue) as T[],
+        setValues,
+    };
+}
 
 /**
  * Store and retrieve component state in a URL search parameter

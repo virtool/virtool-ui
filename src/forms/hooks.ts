@@ -1,6 +1,6 @@
 import { getSessionStorage, setSessionStorage } from "@app/utils";
 import { isEqual } from "es-toolkit/predicate";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     FieldValues,
     Path,
@@ -10,17 +10,41 @@ import {
     useWatch,
 } from "react-hook-form";
 
-/**
- * Restore form values from session storage.
- *
- * @param name - the name of the form
- * @param methods - collection of methods for updating the form
- * @param setHasRestored - set the state of the form restoration
- */
+type usePersistentFormProps<TFieldValues extends FieldValues> =
+    UseFormProps<TFieldValues> & {
+        /** the form name used as the key for get and setting session storage*/
+        formName: string;
+    };
+
+/** A custom hook for creating a form that persists data in session storage. */
+export function usePersistentForm<TFieldValues extends FieldValues>({
+    formName,
+    ...props
+}: usePersistentFormProps<TFieldValues>) {
+    const methods = useForm<TFieldValues>(props);
+    const [hasRestored, setHasRestored] = useState(false);
+    const initialized = useRef(false);
+
+    const values = useWatch({ control: methods.control });
+
+    useEffect(() => {
+        restoreFormValues(formName, methods, setHasRestored);
+        initialized.current = true;
+    }, []);
+
+    useEffect(() => {
+        if (initialized.current) {
+            setSessionStorage(`${formName}FormValues`, methods.getValues());
+        }
+    }, [values, formName]);
+
+    return { ...methods, hasRestored };
+}
+
 function restoreFormValues<TFieldValues extends FieldValues = FieldValues>(
     name: string,
     methods: UseFormReturn<TFieldValues>,
-    setHasRestored: Dispatch<SetStateAction<boolean>>,
+    setHasRestored: (value: boolean) => void,
 ) {
     const {
         formState: { defaultValues, isDirty },
@@ -42,33 +66,4 @@ function restoreFormValues<TFieldValues extends FieldValues = FieldValues>(
 
         setHasRestored(true);
     }
-}
-
-type usePersistentFormProps<TFieldValues extends FieldValues> =
-    UseFormProps<TFieldValues> & {
-        /** the form name used as the key for get and setting session storage*/
-        formName: string;
-    };
-
-/** A custom hook for creating a form that persists data in session storage. */
-export function usePersistentForm<TFieldValues extends FieldValues>({
-    formName,
-    ...props
-}: usePersistentFormProps<TFieldValues>) {
-    const methods = useForm<TFieldValues>(props);
-
-    const firstRender = useRef(true);
-    const [hasRestored, setHasRestored] = useState(false);
-
-    useWatch({ control: methods.control });
-
-    if (firstRender.current) {
-        restoreFormValues(formName, methods, setHasRestored);
-    } else {
-        const values = methods.getValues();
-        setSessionStorage(`${formName}FormValues`, values);
-    }
-
-    firstRender.current = false;
-    return { ...methods, hasRestored };
 }

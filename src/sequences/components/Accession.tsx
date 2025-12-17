@@ -6,7 +6,7 @@ import InputLabel from "@base/InputLabel";
 import InputLoading from "@base/InputLoading";
 import InputSimple from "@base/InputSimple";
 import { getGenbank } from "@otus/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 type FormValues = {
@@ -21,7 +21,6 @@ type FormValues = {
  */
 export default function Accession() {
     const [pending, setPending] = useState(false);
-    const [sent, setSent] = useState(false);
     const [notFound, setNotFound] = useState(false);
 
     const {
@@ -31,33 +30,27 @@ export default function Accession() {
         setValue,
     } = useFormContext<FormValues>();
 
-    const accession = getValues("accession");
+    function handleAutoFill() {
+        setPending(true);
 
-    useEffect(() => {
-        if (pending && !sent) {
-            setSent(true);
+        getGenbank(getValues("accession")).then(
+            (resp) => {
+                setValue("accession", resp.accession);
+                setValue("definition", resp.definition);
+                setValue("host", resp.host);
+                setValue("sequence", resp.sequence);
 
-            getGenbank(accession).then(
-                (resp) => {
-                    setValue("accession", resp.accession);
-                    setValue("definition", resp.definition);
-                    setValue("host", resp.host);
-                    setValue("sequence", resp.sequence);
+                setPending(false);
+                setNotFound(false);
+            },
+            (err) => {
+                setPending(false);
+                setNotFound(err.status === 404);
 
-                    setPending(false);
-                    setSent(false);
-                    setNotFound(false);
-                },
-                (err) => {
-                    setPending(false);
-                    setSent(true);
-                    setNotFound(err.status === 404);
-
-                    return err;
-                },
-            );
-        }
-    }, [accession, notFound, pending, sent, setValue]);
+                return err;
+            },
+        );
+    }
 
     return (
         <InputGroup>
@@ -76,7 +69,7 @@ export default function Accession() {
                     <InputIconButton
                         name="magic"
                         tip="Auto Fill"
-                        onClick={() => setPending(true)}
+                        onClick={handleAutoFill}
                     />
                 )}
             </InputContainer>

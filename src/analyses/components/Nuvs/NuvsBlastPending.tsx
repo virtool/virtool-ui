@@ -1,4 +1,5 @@
 import { addSeconds, formatDistanceStrict } from "@/app/date";
+import { useNow } from "@/app/hooks";
 import Box from "@base/Box";
 import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
@@ -29,12 +30,11 @@ function RidLink({ rid }) {
 }
 
 function RidTiming({ interval, lastCheckedAt }) {
+    const now = useNow();
+
     if (lastCheckedAt) {
         const nextCheckAt = addSeconds(new Date(lastCheckedAt), interval);
-        const relativeNext = formatDistanceStrict(
-            new Date(nextCheckAt),
-            Date.now(),
-        );
+        const relativeNext = formatDistanceStrict(new Date(nextCheckAt), now);
 
         return (
             <div className="ml-auto text-gray-700">
