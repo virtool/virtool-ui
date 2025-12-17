@@ -5,7 +5,6 @@ import { useFetchReference } from "@references/queries";
 import { sortBy } from "es-toolkit";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
 import ReferenceMembers from "./ReferenceMembers";
-import RemoveReference from "./RemoveReference";
 
 /**
  * The reference settings view allowing users to manage the reference
@@ -35,7 +34,6 @@ export default function ReferenceSettings() {
                 members={sortBy(data.groups, ["id"])}
                 refId={refId}
             />
-            <RemoveReference id={data.id} name={data.name} />
         </>
     );
 }

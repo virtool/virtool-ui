@@ -190,15 +190,3 @@ export function mockApiCreateReference(
         .post("/api/refs", { data_type: "genome", description, name, organism })
         .reply(201, reference);
 }
-
-/**
- * Sets up a mocked API route for deleting a reference
- *
- * @param referenceId - The reference to be removed
- * @returns A nock scope for the mocked API call
- */
-export function mockApiRemoveReference(referenceId: string) {
-    return nock("http://localhost")
-        .delete(`/api/refs/${referenceId}`)
-        .reply(200);
-}
