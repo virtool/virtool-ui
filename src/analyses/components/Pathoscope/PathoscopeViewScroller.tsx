@@ -1,6 +1,6 @@
 import { getBorder } from "@app/theme";
 import Icon from "@base/Icon";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const StyledPathoscopeViewerScroller = styled.div`
@@ -28,22 +28,17 @@ const StyledPathoscopeViewerScroller = styled.div`
 export function PathoscopeViewerScroller() {
     const [show, setShow] = useState(false);
 
-    const handleClick = useCallback(() => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }, []);
-
-    const handleScroll = useCallback(() => {
-        setShow(window.scrollY > 0);
-    }, []);
-
     useEffect(() => {
+        const handleScroll = () => setShow(window.scrollY > 0);
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     if (show) {
         return (
-            <StyledPathoscopeViewerScroller onClick={handleClick}>
+            <StyledPathoscopeViewerScroller
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
                 <Icon name="arrow-up" />
             </StyledPathoscopeViewerScroller>
         );

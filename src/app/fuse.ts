@@ -1,5 +1,5 @@
 import Fuse from "fuse.js";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Create a Fuse object.
@@ -17,9 +17,12 @@ export function useFuse<T extends object>(
     collection: T[],
     keys: string[],
 ): [T[], string, (value: ((prevState: string) => string) | string) => void] {
-    const memoizedKeys = useMemo(() => keys, []);
+    // Serialize keys to a string for stable dependency comparison. Callers
+    // typically pass inline array literals (e.g., ["name"]) which create new
+    // references each render.
+    const serializedKeys = keys.join(",");
 
-    const [fuse, setFuse] = useState(createFuse(collection, memoizedKeys));
+    const [fuse, setFuse] = useState(createFuse(collection, keys));
     const [term, setTerm] = useState("");
 
     useEffect(() => {
@@ -27,8 +30,8 @@ export function useFuse<T extends object>(
     }, [collection]);
 
     useEffect(() => {
-        setFuse(createFuse(collection, memoizedKeys));
-    }, [collection, memoizedKeys]);
+        setFuse(createFuse(collection, keys));
+    }, [collection, serializedKeys]);
 
     const items = term
         ? fuse.search(term).map((result) => result.item)

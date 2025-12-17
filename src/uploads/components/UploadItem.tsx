@@ -4,7 +4,6 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import RelativeTime from "@base/RelativeTime";
 import { UserNested } from "@users/types";
-import { useCallback } from "react";
 import { useDeleteFile } from "../queries";
 
 export type UploadItemProps = {
@@ -25,10 +24,6 @@ export default function UploadItem({
     user,
 }: UploadItemProps) {
     const { mutate: handleRemove } = useDeleteFile();
-
-    const handleDelete = useCallback(() => {
-        handleRemove({ id });
-    }, [handleRemove, id]);
 
     return (
         <BoxGroupSection>
@@ -58,7 +53,7 @@ export default function UploadItem({
                             color="red"
                             name="trash"
                             tip="remove"
-                            onClick={handleDelete}
+                            onClick={() => handleRemove({ id })}
                         />
                     )}
                 </div>

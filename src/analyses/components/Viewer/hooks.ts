@@ -1,5 +1,5 @@
 import { Virtualizer } from "@tanstack/react-virtual";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
 export function useKeyNavigation(
     virtualizer: Virtualizer<HTMLDivElement, Element>,
@@ -9,8 +9,8 @@ export function useKeyNavigation(
     previousIndex: number | undefined,
     onSetActiveId: (id: string) => void,
 ) {
-    const handleKeyPress = useCallback(
-        (e: KeyboardEvent) => {
+    useEffect(() => {
+        const handleKeyPress = (e: KeyboardEvent) => {
             if (e.target !== window.document.body) {
                 return;
             }
@@ -22,21 +22,18 @@ export function useKeyNavigation(
                 virtualizer.scrollToIndex(nextIndex);
                 onSetActiveId(nextId);
             }
-        },
-        [
-            virtualizer,
-            nextId,
-            nextIndex,
-            previousId,
-            previousIndex,
-            onSetActiveId,
-        ],
-    );
+        };
 
-    useEffect(() => {
         window.addEventListener("keydown", handleKeyPress, true);
         return () => {
             window.removeEventListener("keydown", handleKeyPress, true);
         };
-    }, [handleKeyPress]);
+    }, [
+        virtualizer,
+        nextId,
+        nextIndex,
+        previousId,
+        previousIndex,
+        onSetActiveId,
+    ]);
 }

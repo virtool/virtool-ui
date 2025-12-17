@@ -1,7 +1,6 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import Button from "@base/Button";
 import InitialIcon from "@base/InitialIcon";
-import { useCallback } from "react";
 import styled from "styled-components";
 
 const StyledMemberItemIcon = styled.div`
@@ -57,19 +56,20 @@ export default function MemberItem({
     onEdit,
     onRemove,
 }: MemberItemProps) {
-    const handleEdit = useCallback(() => onEdit(id), [id, onEdit]);
-    const handleRemove = useCallback(() => onRemove(id), [id, onRemove]);
-
     return (
         <StyledMemberItem>
             <MemberItemIcon handle={handleOrName} />
             {handleOrName}
             {canModify && (
                 <MemberItemButtons>
-                    <Button onClick={handleEdit} size="small">
+                    <Button onClick={() => onEdit(id)} size="small">
                         Edit
                     </Button>
-                    <Button onClick={handleRemove} size="small" color="red">
+                    <Button
+                        onClick={() => onRemove(id)}
+                        size="small"
+                        color="red"
+                    >
                         Remove
                     </Button>
                 </MemberItemButtons>

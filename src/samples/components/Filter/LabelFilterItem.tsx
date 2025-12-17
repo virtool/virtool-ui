@@ -1,6 +1,5 @@
 import { cn } from "@/app/utils";
 import Icon from "@base/Icon";
-import { useCallback } from "react";
 import { BaseSampleLabel } from "../Label/BaseSampleLabel";
 
 type LabelFilterItemProps = {
@@ -18,8 +17,6 @@ export default function LabelFilterItem({
     onClick,
     pressed,
 }: LabelFilterItemProps) {
-    const handleClick = useCallback(() => onClick(id), [id, onClick]);
-
     return (
         <BaseSampleLabel
             as="button"
@@ -29,10 +26,10 @@ export default function LabelFilterItem({
                 "hover:bg-gray-50 hover:border-blue-300",
                 "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
                 pressed && "border-blue-500 ring-2 ring-blue-200",
-                pressed && "bg-blue-50", // Add a background color to make it more visible
+                pressed && "bg-blue-50",
             )}
             aria-pressed={pressed}
-            onClick={handleClick}
+            onClick={() => onClick(id)}
         >
             <Icon name="circle" />
             {name}

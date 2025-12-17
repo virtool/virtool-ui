@@ -1,6 +1,6 @@
 import { useElementSize } from "@app/hooks";
 import { area, max, scaleLinear, select } from "d3";
-import React, { useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import "./area.css";
 
 function draw(element: HTMLElement, data: number[], width: number) {
@@ -34,14 +34,10 @@ type OtuCoverageProps = {
     filled: number[];
 };
 
-const PathoscopeOtuCoverage = React.memo<OtuCoverageProps>(({ filled }) => {
+export default function PathoscopeOtuCoverage({ filled }: OtuCoverageProps) {
     const [ref, { width }] = useElementSize<HTMLDivElement>();
 
     useLayoutEffect(() => draw(ref.current, filled, width));
 
     return <div className="bg-blue-50 pt-2" ref={ref} />;
-});
-
-PathoscopeOtuCoverage.displayName = "PathoscopeOtuCoverage";
-
-export default PathoscopeOtuCoverage;
+}

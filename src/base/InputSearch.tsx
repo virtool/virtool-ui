@@ -1,4 +1,4 @@
-import { forwardRef, ReactNode } from "react";
+import { ReactNode, Ref } from "react";
 import Input from "./Input";
 import InputContainer from "./InputContainer";
 import InputIcon from "./InputIcon";
@@ -8,7 +8,7 @@ type InputHandle = {
     focus: () => void;
 };
 
-interface InputProps {
+interface InputSearchProps {
     "aria-label"?: string;
     autoFocus?: boolean;
     children?: ReactNode;
@@ -21,6 +21,7 @@ interface InputProps {
     name?: string;
     placeholder?: string;
     readOnly?: boolean;
+    ref?: Ref<InputHandle>;
     step?: number;
     type?: string;
     value: string | number;
@@ -29,13 +30,11 @@ interface InputProps {
     onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-const InputSearch = forwardRef<InputHandle, InputProps>((props, ref) => (
-    <InputContainer align="left" className="flex-grow">
-        <Input {...props} ref={ref} />
-        <InputIcon name="search" />
-    </InputContainer>
-));
-
-InputSearch.displayName = "InputSearch";
-
-export default InputSearch;
+export default function InputSearch({ ref, ...props }: InputSearchProps) {
+    return (
+        <InputContainer align="left" className="flex-grow">
+            <Input {...props} ref={ref} />
+            <InputIcon name="search" />
+        </InputContainer>
+    );
+}

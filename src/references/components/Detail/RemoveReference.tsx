@@ -3,7 +3,6 @@ import RemoveBanner from "@base/RemoveBanner";
 import RemoveDialog from "@base/RemoveDialog";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useRemoveReference } from "@references/queries";
-import { useCallback } from "react";
 
 type RemoveReferenceProps = {
     /** The id of the reference to remove */
@@ -26,18 +25,15 @@ export default function RemoveReference({ id, name }: RemoveReferenceProps) {
     );
     const mutation = useRemoveReference();
 
-    const handleClick = useCallback(
-        () =>
-            mutation.mutate(
-                { refId: id },
-                {
-                    onSuccess: () => {
-                        navigate("/refs");
-                    },
+    const handleConfirm = () =>
+        mutation.mutate(
+            { refId: id },
+            {
+                onSuccess: () => {
+                    navigate("/refs");
                 },
-            ),
-        ["id"],
-    );
+            },
+        );
 
     return (
         canRemove && (
@@ -51,7 +47,7 @@ export default function RemoveReference({ id, name }: RemoveReferenceProps) {
                     name={name}
                     noun="Reference"
                     show={openRemoveReference}
-                    onConfirm={handleClick}
+                    onConfirm={handleConfirm}
                     onHide={() => setOpenRemoveReference(false)}
                 />
             </>

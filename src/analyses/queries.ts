@@ -6,7 +6,6 @@ import {
     useQuery,
     useQueryClient,
 } from "@tanstack/react-query";
-import { useMemo } from "react";
 import {
     blastNuvs,
     createAnalysis,
@@ -86,13 +85,10 @@ export function useGetAnalysis(analysisId: string) {
         queryFn: () => getAnalysis({ analysisId }),
     });
 
-    return useMemo(
-        () => ({
-            ...queryResult,
-            data: formatData(queryResult.data) as Analysis,
-        }),
-        [queryResult.data, queryResult.error],
-    );
+    return {
+        ...queryResult,
+        data: formatData(queryResult.data) as Analysis,
+    };
 }
 
 export type CreateAnalysisParams = {

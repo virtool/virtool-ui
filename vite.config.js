@@ -49,6 +49,9 @@ export default defineConfig({
     plugins: [
         react({
             include: "**/*.{tsx}",
+            babel: {
+                plugins: ["babel-plugin-react-compiler"],
+            },
         }),
         sentryVitePlugin({
             org: "cfia-virtool",

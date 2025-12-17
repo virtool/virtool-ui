@@ -6,7 +6,6 @@ import SelectContent from "@base/SelectContent";
 import { IndexMinimal } from "@indexes/types";
 import { sortBy } from "es-toolkit";
 import { Select as SelectPrimitive } from "radix-ui";
-import { useMemo } from "react";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
 type IndexSelectorItemProps = {
@@ -55,10 +54,7 @@ export default function IndexSelector({
     selected,
     onChange,
 }: IndexSelectorProps) {
-    const sortedIndexes = useMemo<IndexMinimal[]>(
-        () => sortBy(indexes, [(index) => index.reference.name]),
-        [indexes],
-    );
+    const sortedIndexes = sortBy(indexes, [(index) => index.reference.name]);
 
     const indexItems = sortedIndexes.map(({ reference, version, id }) => (
         <IndexSelectorItem

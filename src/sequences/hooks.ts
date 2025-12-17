@@ -4,7 +4,7 @@ import { useCurrentOtuContext } from "@otus/queries";
 import { OtuSegment, OtuSequence } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
 import { compact } from "es-toolkit";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 type UseExpandedResult = {
     expanded: boolean;
@@ -25,9 +25,9 @@ export function useExpanded(): UseExpandedResult {
         setExpanded(true);
     }
 
-    const collapse = useCallback(() => {
+    function collapse() {
         setExpanded(false);
-    }, []);
+    }
 
     return { expanded, expand, collapse };
 }
