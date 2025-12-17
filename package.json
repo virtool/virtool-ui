@@ -11,7 +11,7 @@
     "d3": "^7.9.0",
     "downshift": "^9.0.13",
     "es-toolkit": "^1.43.0",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "fuse.js": "^7.1.0",
     "history": "^5.3.0",
     "lucide-react": "^0.555.0",
@@ -37,7 +37,7 @@
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@faker-js/faker": "^10.0.0",
-    "@sentry/vite-plugin": "^4.4.0",
+    "@sentry/vite-plugin": "^4.6.1",
     "@storybook/addon-docs": "^9.1.15",
     "@storybook/addon-links": "^9.1.10",
     "@storybook/react-vite": "^9.1.10",
