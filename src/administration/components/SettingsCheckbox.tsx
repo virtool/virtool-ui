@@ -1,7 +1,7 @@
 import { getFontSize } from "@app/theme";
 import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
-import { ReactNode, useCallback } from "react";
+import { ReactNode } from "react";
 import styled from "styled-components";
 
 const SettingsCheckboxContainer = styled.div`
@@ -54,13 +54,11 @@ export default function SettingsCheckbox({
     id,
     onToggle,
 }: SettingsCheckboxProps) {
-    const handleClick = useCallback(() => onToggle(), [enabled, onToggle]);
-
     return (
         <StyledSettingsCheckbox>
             <SettingsCheckboxChildren>{children}</SettingsCheckboxChildren>
             <SettingsCheckboxContainer>
-                <Checkbox checked={enabled} id={id} onClick={handleClick} />
+                <Checkbox checked={enabled} id={id} onClick={onToggle} />
             </SettingsCheckboxContainer>
         </StyledSettingsCheckbox>
     );

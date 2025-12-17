@@ -1,7 +1,6 @@
 import { cn } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Label from "@base/Label";
-import { useCallback } from "react";
 
 type SubtractionSelectorItemProps = {
     id: string;
@@ -16,8 +15,6 @@ export default function SubtractionSelectorItem({
     name,
     onClick,
 }: SubtractionSelectorItemProps) {
-    const handleClick = useCallback(() => onClick(id), [id, onClick]);
-
     return (
         <BoxGroupSection
             as="button"
@@ -30,7 +27,7 @@ export default function SubtractionSelectorItem({
                 "text-ellipsis",
                 "text-nowrap",
             )}
-            onClick={handleClick}
+            onClick={() => onClick(id)}
         >
             <span className="overflow-hidden">{name}</span>
             {isDefault ? <Label>Default</Label> : null}

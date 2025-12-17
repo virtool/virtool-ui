@@ -1,6 +1,5 @@
 import RemoveDialog from "@base/RemoveDialog";
 import { useRemoveIsolate } from "@otus/queries";
-import { useCallback } from "react";
 
 type RemoveIsolateProps = {
     /** The id of the isolate being deleted */
@@ -27,7 +26,7 @@ export default function RemoveIsolate({
 }: RemoveIsolateProps) {
     const mutation = useRemoveIsolate();
 
-    const handleConfirm = useCallback(() => {
+    const handleConfirm = () =>
         mutation.mutate(
             { otuId, isolateId: id },
             {
@@ -36,7 +35,6 @@ export default function RemoveIsolate({
                 },
             },
         );
-    }, [otuId, id]);
 
     return (
         <RemoveDialog

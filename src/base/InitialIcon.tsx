@@ -1,5 +1,4 @@
 import { getColor, getFontWeight, theme } from "@app/theme";
-import { useMemo } from "react";
 import styled from "styled-components";
 
 const iconSize = {
@@ -62,10 +61,7 @@ type InitialIconProps = {
 };
 
 export default function InitialIcon({ handle, size }: InitialIconProps) {
-    const hash = useMemo(
-        () => handle.split("").reduce(hashColor, 0) % 360,
-        [handle],
-    );
+    const hash = handle.split("").reduce(hashColor, 0) % 360;
 
     return (
         <StyledInitialIcon size={size} hash={hash} className="InitialIcon">

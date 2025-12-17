@@ -1,4 +1,4 @@
-import { ElementType, forwardRef, ReactNode } from "react";
+import { ElementType, ReactNode, Ref } from "react";
 import styled from "styled-components";
 import Input from "./Input";
 
@@ -8,7 +8,7 @@ const StyledTextArea = styled(Input)`
     overflow-y: scroll;
 `;
 
-type InputProps = {
+type TextAreaProps = {
     "aria-label"?: string;
     as?: ElementType;
     children?: ReactNode;
@@ -17,15 +17,12 @@ type InputProps = {
     id?: string;
     name?: string;
     readOnly?: boolean;
+    ref?: Ref<HTMLInputElement>;
     value?: string | number;
     onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const TextArea = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+export default function TextArea({ ref, ...props }: TextAreaProps) {
     return <StyledTextArea as="textarea" {...props} ref={ref} />;
-});
-
-TextArea.displayName = "TextArea";
-
-export default TextArea;
+}

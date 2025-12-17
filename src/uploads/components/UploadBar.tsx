@@ -1,7 +1,7 @@
 import { cn } from "@app/utils";
 import Button from "@base/Button";
 import Icon from "@base/Icon";
-import { ReactNode, useCallback } from "react";
+import { ReactNode } from "react";
 import { Accept, FileError, useDropzone } from "react-dropzone";
 
 type UploadBarProps = {
@@ -34,13 +34,6 @@ export function UploadBar({
     onDrop,
     regex,
 }: UploadBarProps) {
-    const handleDrop = useCallback(
-        (acceptedFiles: File[]) => {
-            onDrop(acceptedFiles);
-        },
-        [onDrop],
-    );
-
     function validator(file: File): FileError {
         if (regex && !regex.test(file.name)) {
             return {
@@ -59,7 +52,7 @@ export function UploadBar({
         open,
     } = useDropzone({
         accept,
-        onDrop: handleDrop,
+        onDrop,
         validator,
     });
 

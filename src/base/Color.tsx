@@ -1,5 +1,4 @@
 import { cn } from "@app/utils";
-import { useCallback } from "react";
 import Input from "./Input";
 
 const colors: string[] = [
@@ -55,13 +54,11 @@ type ColorSquareProps = {
  * A color square that updates the color input when clicked
  */
 function ColorSquare({ color, onClick }: ColorSquareProps) {
-    const handleClick = useCallback(() => onClick(color), [color, onClick]);
-
     return (
         <button
             type="button"
             title={color}
-            onClick={handleClick}
+            onClick={() => onClick(color)}
             className={cn(
                 "flex-1",
                 "h-full",

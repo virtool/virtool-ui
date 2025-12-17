@@ -2,7 +2,6 @@ import { getFontSize, getFontWeight } from "@app/theme";
 import { byteSize } from "@app/utils";
 import Icon from "@base/Icon";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
-import { useCallback } from "react";
 import styled from "styled-components";
 
 const ReadIcon = styled.span`
@@ -63,12 +62,8 @@ export default function ReadSelectorItem({
     size,
     onSelect,
 }: ReadSelectorItemProps) {
-    const select = useCallback(() => {
-        onSelect(id);
-    }, []);
-
     return (
-        <StyledReadSelectorItem onClick={select} active={selected}>
+        <StyledReadSelectorItem onClick={() => onSelect(id)} active={selected}>
             <ReadTitle>
                 <ReadIcon>
                     <Icon name="file" />

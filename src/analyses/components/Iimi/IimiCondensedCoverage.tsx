@@ -1,6 +1,5 @@
 import { FormattedIimiIsolate } from "@analyses/types";
 import { sortBy, unzip } from "es-toolkit";
-import { useMemo } from "react";
 import { SummaryChart } from "../Charts/SummaryChart";
 
 /** A graph of maximum Iimi analysis sequence coverage */
@@ -9,12 +8,9 @@ export function IimiCondensedCoverage({
 }: {
     isolates: FormattedIimiIsolate[];
 }) {
-    const sequences = useMemo(
-        () =>
-            sortBy(unzip(isolates.map((isolate) => isolate.sequences)), [
-                (seqs) => seqs[0]?.length,
-            ]),
-        [isolates],
+    const sequences = sortBy(
+        unzip(isolates.map((isolate) => isolate.sequences)),
+        [(seqs) => seqs[0]?.length],
     );
 
     const charts = sequences.map((seqs) => {

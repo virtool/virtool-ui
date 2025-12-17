@@ -1,4 +1,4 @@
-import { forwardRef, ReactNode, useImperativeHandle, useRef } from "react";
+import { ReactNode, Ref, useImperativeHandle, useRef } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import styled from "styled-components";
 
@@ -24,6 +24,7 @@ interface InputProps {
     name?: string;
     placeholder?: string;
     readOnly?: boolean;
+    ref?: Ref<InputHandle>;
     register?: UseFormRegisterReturn;
     step?: number;
     type?: string;
@@ -33,67 +34,61 @@ interface InputProps {
     onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-const UnstyledInput = forwardRef<InputHandle, InputProps>(
-    (props: InputProps, ref) => {
-        const {
-            autoFocus = false,
-            children,
-            className = "",
-            disabled = false,
-            id,
-            max,
-            min,
-            name,
-            placeholder,
-            readOnly = false,
-            step,
-            type,
-            value,
-            onBlur,
-            onChange,
-            onFocus,
-        } = props;
+function UnstyledInput({
+    "aria-label": ariaLabel,
+    autoFocus = false,
+    children,
+    className = "",
+    disabled = false,
+    id,
+    max,
+    min,
+    name,
+    placeholder,
+    readOnly = false,
+    ref,
+    step,
+    type,
+    value,
+    onBlur,
+    onChange,
+    onFocus,
+}: InputProps) {
+    const inputRef = useRef<HTMLInputElement>(null);
 
-        const ariaLabel = props["aria-label"];
+    useImperativeHandle(ref, () => ({
+        blur: () => {
+            inputRef.current.blur();
+        },
+        focus: () => {
+            inputRef.current.focus();
+        },
+    }));
 
-        const inputRef = useRef<HTMLInputElement>(null);
-
-        useImperativeHandle(ref, () => ({
-            blur: () => {
-                inputRef.current.blur();
-            },
-            focus: () => {
-                inputRef.current.focus();
-            },
-        }));
-
-        return (
-            <input
-                aria-label={ariaLabel}
-                ref={inputRef}
-                autoFocus={autoFocus}
-                className={className}
-                disabled={disabled}
-                id={id}
-                max={max}
-                min={min}
-                name={name}
-                placeholder={placeholder}
-                readOnly={readOnly}
-                step={step}
-                type={type}
-                value={value}
-                onBlur={onBlur}
-                onChange={onChange}
-                onFocus={onFocus}
-            >
-                {children}
-            </input>
-        );
-    },
-);
-
-UnstyledInput.displayName = "UnstyledInput";
+    return (
+        <input
+            aria-label={ariaLabel}
+            ref={inputRef}
+            autoFocus={autoFocus}
+            className={className}
+            disabled={disabled}
+            id={id}
+            max={max}
+            min={min}
+            name={name}
+            placeholder={placeholder}
+            readOnly={readOnly}
+            step={step}
+            type={type}
+            value={value}
+            onBlur={onBlur}
+            onChange={onChange}
+            onFocus={onFocus}
+        >
+            {children}
+        </input>
+    );
+}
 
 const Input = styled(UnstyledInput)<InputProps>`
     background-color: ${(props) => props.theme.color.white};

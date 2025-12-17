@@ -1,12 +1,14 @@
 import { cn } from "@app/utils";
-import { ComponentProps, forwardRef } from "react";
+import { ComponentProps, Ref } from "react";
 
-const PaginationItem = forwardRef<HTMLLIElement, ComponentProps<"li">>(
-    ({ className, ...props }, ref) => (
-        <li ref={ref} className={cn("m-1.5", className)} {...props} />
-    ),
-);
+type PaginationItemProps = ComponentProps<"li"> & {
+    ref?: Ref<HTMLLIElement>;
+};
 
-PaginationItem.displayName = "PaginationItem";
-
-export default PaginationItem;
+export default function PaginationItem({
+    className,
+    ref,
+    ...props
+}: PaginationItemProps) {
+    return <li ref={ref} className={cn("m-1.5", className)} {...props} />;
+}

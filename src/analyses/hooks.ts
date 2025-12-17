@@ -6,7 +6,6 @@ import { useFetchSample } from "@samples/queries";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import { SubtractionOption } from "@subtraction/types";
 import { groupBy, maxBy, sortBy } from "es-toolkit";
-import { useMemo } from "react";
 import { useSearch } from "wouter";
 import { FormattedNuvsAnalysis, FormattedPathoscopeAnalysis } from "./types";
 
@@ -19,9 +18,7 @@ export function useSortAndFilterPathoscopeHits(
     const search = useSearch();
     const searchParams = new URLSearchParams(search);
 
-    const fuse = useMemo(() => {
-        return createFuse(hits, ["name", "abbreviation"]);
-    }, [hits]);
+    const fuse = createFuse(hits, ["name", "abbreviation"]);
 
     if (searchParams.get("find")) {
         hits = fuse
@@ -54,9 +51,7 @@ export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 
     let hits = detail.results.hits;
 
-    const fuse = useMemo(() => {
-        return createFuse(hits, ["name", "families"]);
-    }, [hits]);
+    const fuse = createFuse(hits, ["name", "families"]);
 
     if (searchParams.get("find")) {
         hits = fuse

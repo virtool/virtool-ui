@@ -6,7 +6,7 @@ import InputLabel from "@base/InputLabel";
 import InputLoading from "@base/InputLoading";
 import InputSimple from "@base/InputSimple";
 import { getGenbank } from "@otus/api";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 type FormValues = {
@@ -33,30 +33,16 @@ export default function Accession() {
 
     const accession = getValues("accession");
 
-    const onAutofill = useCallback(
-        (values: FormValues) => {
-            setValue("accession", values.accession);
-            setValue("definition", values.definition);
-            setValue("host", values.host);
-            setValue("sequence", values.sequence);
-        },
-        [setValue],
-    );
-
     useEffect(() => {
         if (pending && !sent) {
             setSent(true);
 
             getGenbank(accession).then(
                 (resp) => {
-                    const { accession, definition, host, sequence } = resp;
-
-                    onAutofill({
-                        accession,
-                        definition,
-                        host,
-                        sequence,
-                    });
+                    setValue("accession", resp.accession);
+                    setValue("definition", resp.definition);
+                    setValue("host", resp.host);
+                    setValue("sequence", resp.sequence);
 
                     setPending(false);
                     setSent(false);
@@ -71,7 +57,7 @@ export default function Accession() {
                 },
             );
         }
-    }, [accession, notFound, onAutofill, pending, sent]);
+    }, [accession, notFound, pending, sent, setValue]);
 
     return (
         <InputGroup>
