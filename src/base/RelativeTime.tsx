@@ -1,4 +1,4 @@
-import { formatDistanceStrict, isAfter } from "date-fns";
+import { formatDistanceStrict } from "@/app/date";
 import { useEffect, useState } from "react";
 
 type RelativeTimeOptions = {
@@ -9,12 +9,12 @@ type RelativeTimeOptions = {
  * Create a human-readable relative time.
  *
  * It is possible that the relative time could be in the future if the browser time lags behind the server time. If this
- * is the case the string will contain the substring 'in a'. If this substring is present, return the alternative time
+ * is the case the string will contain the substring 'in'. If this substring is present, return the alternative time
  * string 'just now'.
  *
- * @param time {string} the ISO formatted time
- * @param options.addSuffix whether to add "ago" suffix (default: true)
- * @returns {string}
+ * @param time - the ISO formatted time
+ * @param options.addSuffix - whether to add "ago" suffix (default: true)
+ * @returns a human-readable relative time string
  */
 function createTimeString(
     time: string | Date,
@@ -24,17 +24,13 @@ function createTimeString(
     const serverDate = new Date(time);
     const clientDate = new Date();
 
-    const currentTime = isAfter(serverDate, clientDate)
-        ? clientDate
-        : serverDate;
+    const currentTime = serverDate > clientDate ? clientDate : serverDate;
 
     const timeString = formatDistanceStrict(currentTime, now, {
         addSuffix,
     });
 
-    return timeString.includes("in a") || timeString.includes("a few")
-        ? "just now"
-        : timeString;
+    return timeString.startsWith("in ") ? "just now" : timeString;
 }
 
 export function useRelativeTime(
