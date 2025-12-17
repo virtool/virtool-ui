@@ -19,7 +19,6 @@ import {
     getReference,
     importReference,
     remoteReference,
-    removeReference,
     removeReferenceGroup,
     removeReferenceUser,
     updateRemoteReference,
@@ -168,17 +167,6 @@ export function useCreateReference() {
     >({
         mutationFn: ({ name, description, organism }) =>
             createReference(name, description, organism),
-    });
-}
-
-/**
- * Initializes a mutator for removing a reference
- *
- * @returns A mutator for removing a reference
- */
-export function useRemoveReference() {
-    return useMutation<null, unknown, { refId: string }>({
-        mutationFn: ({ refId }) => removeReference(refId),
     });
 }
 

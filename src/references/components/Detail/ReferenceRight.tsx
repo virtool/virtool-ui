@@ -5,7 +5,6 @@ const descriptions = {
     build: "Can build new indexes for the reference.",
     modify: "Can modify reference properties and settings.",
     modify_otu: "Can modify OTU records in the reference.",
-    remove: "Can remove the reference from Virtool.",
 };
 
 export const MemberRightCheckbox = styled(Checkbox)`

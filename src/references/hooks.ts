@@ -120,7 +120,6 @@ export enum ReferenceRight {
     build = "build",
     modify = "modify",
     modify_otu = "modify_otu",
-    remove = "remove",
 }
 
 /**
