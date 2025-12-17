@@ -25,7 +25,6 @@ function sanitizeFileName(name: string): string {
 
 type ReadItemProps = {
     download_url: string;
-    name: string;
     sampleName: string;
     side: number;
     /** The size of the read file in bytes */
@@ -37,7 +36,6 @@ type ReadItemProps = {
  */
 export default function ReadItem({
     download_url,
-    name,
     sampleName,
     side,
     size,
@@ -49,7 +47,7 @@ export default function ReadItem({
             <ReadItemMain>
                 <div>
                     <a href={`/api/${download_url}`} download={downloadName}>
-                        {name}
+                        {downloadName}
                     </a>
                 </div>
             </ReadItemMain>

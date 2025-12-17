@@ -36,7 +36,6 @@ export default function SampleReads({ reads, sampleName }: SampleReadsProps) {
         <ReadItem
             key={file.name}
             download_url={file.download_url}
-            name={file.name}
             sampleName={sampleName}
             side={extractReadSide(file.name)}
             size={file.size}
