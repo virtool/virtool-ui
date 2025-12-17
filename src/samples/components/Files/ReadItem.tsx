@@ -15,9 +15,19 @@ const StyledReadItem = styled(BoxGroupSection)`
     justify-content: space-between;
 `;
 
+/**
+ * Sanitize a string for use as a filename by replacing invalid characters
+ * with underscores.
+ */
+function sanitizeFileName(name: string): string {
+    return name.replace(/[/\\:*?"<>|\s]/g, "_");
+}
+
 type ReadItemProps = {
-    name: string;
     download_url: string;
+    name: string;
+    sampleName: string;
+    side: number;
     /** The size of the read file in bytes */
     size: number;
 };
@@ -25,12 +35,20 @@ type ReadItemProps = {
 /**
  * A condensed read item for use in a list of reads
  */
-export default function ReadItem({ name, download_url, size }: ReadItemProps) {
+export default function ReadItem({
+    download_url,
+    name,
+    sampleName,
+    side,
+    size,
+}: ReadItemProps) {
+    const downloadName = `${sanitizeFileName(sampleName)}_${side}.fq.gz`;
+
     return (
         <StyledReadItem>
             <ReadItemMain>
                 <div>
-                    <a href={`/api/${download_url}`} download>
+                    <a href={`/api/${download_url}`} download={downloadName}>
                         {name}
                     </a>
                 </div>
