@@ -42,15 +42,11 @@ export function useRelativeTime(
     );
 
     useEffect(() => {
-        function updateTimeString() {
-            const newTimeString = createTimeString(time, options);
+        setTimeString(createTimeString(time, options));
 
-            if (newTimeString !== timeString) {
-                setTimeString(newTimeString);
-            }
-        }
-
-        const interval = window.setInterval(updateTimeString, 8000);
+        const interval = window.setInterval(() => {
+            setTimeString(createTimeString(time, options));
+        }, 8000);
 
         return () => {
             window.clearInterval(interval);
