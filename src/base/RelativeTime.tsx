@@ -37,27 +37,19 @@ export function useRelativeTime(
     time: string | Date,
     options: RelativeTimeOptions = {},
 ) {
-    const [timeString, setTimeString] = useState(
-        createTimeString(time, options),
-    );
+    const [, setTick] = useState(0);
 
     useEffect(() => {
-        function updateTimeString() {
-            const newTimeString = createTimeString(time, options);
-
-            if (newTimeString !== timeString) {
-                setTimeString(newTimeString);
-            }
-        }
-
-        const interval = window.setInterval(updateTimeString, 8000);
+        const interval = window.setInterval(() => {
+            setTick((t) => t + 1);
+        }, 8000);
 
         return () => {
             window.clearInterval(interval);
         };
     }, [time]);
 
-    return timeString;
+    return createTimeString(time, options);
 }
 
 type RelativeTimeProps = {

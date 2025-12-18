@@ -1,3 +1,4 @@
+import Alert from "@base/Alert";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
@@ -8,6 +9,7 @@ import InputLabel from "@base/InputLabel";
 import InputPassword from "@base/InputPassword";
 import RelativeTime from "@base/RelativeTime";
 import SaveButton from "@base/SaveButton";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useChangePassword } from "../queries";
 
@@ -31,10 +33,21 @@ export default function AccountPassword({
         formState: { errors },
         handleSubmit,
         register,
+        reset,
     } = useForm<FormValues>({
         defaultValues: { oldPassword: "", newPassword: "" },
     });
     const mutation = useChangePassword();
+
+    useEffect(() => {
+        if (mutation.isSuccess) {
+            reset();
+            const timer = setTimeout(() => {
+                mutation.reset();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [mutation.isSuccess]);
 
     function onSubmit({ oldPassword, newPassword }: FormValues) {
         mutation.mutate({ old_password: oldPassword, password: newPassword });
@@ -94,12 +107,20 @@ export default function AccountPassword({
                             </InputError>
                         </InputContainer>
                     </InputGroup>
+                    {mutation.isSuccess && (
+                        <Alert color="green" icon="check">
+                            Password changed successfully
+                        </Alert>
+                    )}
                     <div className="flex items-center justify-between mb-4">
                         <span>
                             Last changed{" "}
                             <RelativeTime time={lastPasswordChange} />
                         </span>
-                        <SaveButton altText="Change" />
+                        <SaveButton
+                            altText="Change"
+                            disabled={mutation.isPending}
+                        />
                     </div>
                 </BoxGroupSection>
             </form>

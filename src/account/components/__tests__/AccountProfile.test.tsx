@@ -1,8 +1,12 @@
 import AccountProfile from "@account/components/AccountProfile";
 import { AdministratorRoleName } from "@administration/types";
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import {
+    createFakeAccount,
+    mockApiChangePassword,
+    mockApiGetAccount,
+} from "@tests/fake/account";
 import { renderWithProviders } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 
@@ -107,5 +111,35 @@ describe("<AccountProfile />", () => {
                 "Password does not meet minimum length requirement (8)",
             ),
         ).toBeInTheDocument();
+    });
+
+    it("should show success message after password change", async () => {
+        const account = createFakeAccount({
+            administrator_role: AdministratorRoleName.FULL,
+        });
+
+        mockApiGetAccount(account);
+        mockApiChangePassword(account);
+
+        renderWithProviders(<AccountProfile />);
+
+        await screen.findByText("Password");
+
+        const button = screen.getAllByRole("button", { name: "Change" })[0];
+        const oldPasswordInput = screen.getByLabelText("Old Password");
+        const newPasswordInput = screen.getByLabelText("New Password");
+
+        await userEvent.type(oldPasswordInput, "old_password_123");
+        await userEvent.type(newPasswordInput, "new_password_123");
+        await userEvent.click(button);
+
+        await waitFor(() => {
+            expect(
+                screen.getByText("Password changed successfully"),
+            ).toBeInTheDocument();
+        });
+
+        expect(oldPasswordInput).toHaveValue("");
+        expect(newPasswordInput).toHaveValue("");
     });
 });
