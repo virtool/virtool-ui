@@ -41,26 +41,25 @@ function ConnectedApp(): ReactElement {
     return <Main />;
 }
 
-// Query client setup with default options and error handling
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            retry: (failureCount: number, error: any) => {
-                if ([403, 404].includes(error.response?.status)) {
-                    return false;
-                }
-                if (error.response?.status === 401) {
-                    resetClient();
-                }
-                return failureCount <= 3;
-            },
-            staleTime: 2000,
-        },
-    },
-});
-
 /** The root App component that provides theme, query client, and routing setup */
 export default function App(): ReactElement {
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                retry: (failureCount: number, error: any) => {
+                    if ([403, 404].includes(error.response?.status)) {
+                        return false;
+                    }
+                    if (error.response?.status === 401) {
+                        resetClient();
+                    }
+                    return failureCount <= 3;
+                },
+                staleTime: 2000,
+            },
+        },
+    });
+
     return (
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>

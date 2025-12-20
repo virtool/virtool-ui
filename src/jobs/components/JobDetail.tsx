@@ -1,5 +1,6 @@
 import Alert from "@/base/Alert";
-import RelativeTime, { useRelativeTime } from "@/base/RelativeTime";
+import RelativeTime from "@/base/RelativeTime";
+import { useRelativeTime } from "@/base/useRelativeTime";
 import { usePathParams } from "@app/hooks";
 import { getWorkflowDisplayName } from "@app/utils";
 import ContainerNarrow from "@base/ContainerNarrow";

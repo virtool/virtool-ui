@@ -2,7 +2,7 @@ import { getFontSize } from "@app/theme";
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import NoneFoundSection from "@base/NoneFoundSection";
-import { useCurrentOtuContext } from "@otus/queries";
+import { useCurrentOtuContext } from "@otus/CurrentOtuContext";
 import { OtuIsolate } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
 import styled from "styled-components";
