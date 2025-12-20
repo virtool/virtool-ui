@@ -48,7 +48,6 @@ export default defineConfig({
     },
     plugins: [
         react({
-            include: "**/*.{tsx}",
             babel: {
                 plugins: ["babel-plugin-react-compiler"],
             },
@@ -62,5 +61,11 @@ export default defineConfig({
     root: "src",
     server: {
         allowedHosts: ["virtool.local"],
+        hmr: {
+            host: "virtool.local",
+        },
+        watch: {
+            usePolling: true,
+        },
     },
 });

@@ -1,6 +1,6 @@
 import { useUrlSearchParam } from "@app/hooks";
 import { useActiveIsolate } from "@otus/hooks";
-import { useCurrentOtuContext } from "@otus/queries";
+import { useCurrentOtuContext } from "@otus/CurrentOtuContext";
 import { OtuSegment, OtuSequence } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
 import { compact } from "es-toolkit";

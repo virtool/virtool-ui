@@ -1,11 +1,10 @@
-import Button from "@base/Button";
+import IconButton from "@/base/IconButton";
 import {
     Dialog,
     DialogContent,
     DialogTitle,
     DialogTrigger,
 } from "@base/Dialog";
-import Icon from "@base/Icon";
 import { useState } from "react";
 import { useUpdateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
@@ -44,10 +43,9 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
 
     return (
         <Dialog open={show} onOpenChange={(show) => setShow(show)}>
-            <Button as={DialogTrigger} size="small">
-                <Icon name="pen" />
-                <span>Edit</span>
-            </Button>
+            <DialogTrigger asChild>
+                <IconButton name="pen" tip="Edit" />
+            </DialogTrigger>
             <DialogContent>
                 <DialogTitle>Edit a label</DialogTitle>
                 <LabelForm

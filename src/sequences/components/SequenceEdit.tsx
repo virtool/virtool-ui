@@ -1,6 +1,7 @@
 import { useUrlSearchParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import { useCurrentOtuContext, useEditSequence } from "@otus/queries";
+import { useCurrentOtuContext } from "@otus/CurrentOtuContext";
+import { useEditSequence } from "@otus/queries";
 import { useActiveSequence, useGetUnreferencedSegments } from "../hooks";
 import SequenceForm from "./SequenceForm";
 

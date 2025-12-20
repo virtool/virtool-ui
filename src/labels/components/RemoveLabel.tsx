@@ -1,3 +1,4 @@
+import IconButton from "@/base/IconButton";
 import { getFontSize } from "@app/theme";
 import Button from "@base/Button";
 import {
@@ -27,7 +28,7 @@ type RemoveLabelProps = {
 /**
  * Displays a dialog for removing a label
  */
-export function RemoveLabel({ id, name }: RemoveLabelProps) {
+export function DeleteLabel({ id, name }: RemoveLabelProps) {
     const [open, setOpen] = useState(false);
     const mutation = useRemoveLabel();
 
@@ -44,9 +45,9 @@ export function RemoveLabel({ id, name }: RemoveLabelProps) {
 
     return (
         <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-            <Button as={DialogTrigger} color="red" size="small">
-                Delete
-            </Button>
+            <DialogTrigger asChild>
+                <IconButton color="red" name="trash" tip="Delete" />
+            </DialogTrigger>
             <DialogContent>
                 <DialogTitle>Delete Label</DialogTitle>
                 <RemoveLabelQuestion>
