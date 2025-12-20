@@ -5,7 +5,7 @@ import ScrollArea from "@base/ScrollArea";
 import SubviewHeader from "@base/SubviewHeader";
 import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
-import { useCurrentOtuContext } from "@otus/queries";
+import { useCurrentOtuContext } from "@otus/CurrentOtuContext";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import styled from "styled-components";
 import IsolateDetail from "./IsolateDetail";

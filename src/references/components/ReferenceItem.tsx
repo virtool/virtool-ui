@@ -7,7 +7,6 @@ import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import { Permission } from "@groups/types";
 import { ReferenceMinimal } from "@references/types";
-import { ReactNode } from "react";
 
 type ReferenceItemProps = {
     reference: ReferenceMinimal;
@@ -26,25 +25,7 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
         Permission.create_ref,
     );
 
-    let end: ReactNode = null;
-
-    if (task && !task.complete) {
-        end = (
-            <ProgressCircle
-                progress={task.progress || 0}
-                state={task.complete ? "succeeded" : "running"}
-            />
-        );
-    } else if (canCreate) {
-        end = (
-            <IconButton
-                name="clone"
-                tip="clone"
-                color="blue"
-                onClick={() => setCloneReferenceId(id)}
-            />
-        );
-    }
+    const isTaskRunning = task && !task.complete;
 
     return (
         <BoxGroupSection className="grid grid-cols-3 items-center">
@@ -52,7 +33,23 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
                 {name}
             </Link>
             <Attribution time={created_at} user={user.handle} />
-            <div className="flex justify-end">{end}</div>
+            <div className="flex justify-end">
+                <div className="flex items-center justify-center w-10">
+                    {isTaskRunning ? (
+                        <ProgressCircle
+                            progress={task.progress || 0}
+                            state="running"
+                        />
+                    ) : canCreate ? (
+                        <IconButton
+                            name="clone"
+                            tip="clone"
+                            color="blue"
+                            onClick={() => setCloneReferenceId(id)}
+                        />
+                    ) : null}
+                </div>
+            </div>
         </BoxGroupSection>
     );
 }

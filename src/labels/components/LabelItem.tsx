@@ -2,16 +2,7 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import SampleLabel from "@samples/components/Label/SampleLabel";
 import styled from "styled-components";
 import { EditLabel } from "./EditLabel";
-import { RemoveLabel } from "./RemoveLabel";
-
-const LabelItemBox = styled(BoxGroupSection)`
-    align-items: center;
-    display: flex;
-`;
-
-const LabelItemExampleContainer = styled.div`
-    min-width: 30%;
-`;
+import { DeleteLabel } from "./RemoveLabel";
 
 const LabelItemButtons = styled.div`
     align-items: center;
@@ -41,10 +32,10 @@ type ItemProps = {
  */
 export function LabelItem({ name, color, description, id }: ItemProps) {
     return (
-        <LabelItemBox>
-            <LabelItemExampleContainer>
+        <BoxGroupSection className="flex items-center">
+            <div className="min-w-1/3">
                 <SampleLabel name={name} color={color} />
-            </LabelItemExampleContainer>
+            </div>
             {description}
             <LabelItemButtons>
                 <EditLabel
@@ -53,8 +44,8 @@ export function LabelItem({ name, color, description, id }: ItemProps) {
                     description={description}
                     name={name}
                 />
-                <RemoveLabel id={id} name={name} />
+                <DeleteLabel id={id} name={name} />
             </LabelItemButtons>
-        </LabelItemBox>
+        </BoxGroupSection>
     );
 }

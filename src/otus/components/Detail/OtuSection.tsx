@@ -1,6 +1,7 @@
 import { useDialogParam, usePathParams } from "@app/hooks";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import { CurrentOtuContextProvider, useFetchOTU } from "@otus/queries";
+import { CurrentOtuContextProvider } from "@otus/CurrentOtuContext";
+import { useFetchOTU } from "@otus/queries";
 import { useFetchReference } from "@references/queries";
 import OtuIssues from "../OtuIssues";
 import AddIsolate from "./Isolates/AddIsolate";
