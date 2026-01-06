@@ -36,7 +36,7 @@
         "jsx": "react-jsx",
         "lib": ["DOM", "ESNext", "DOM.Iterable"],
         "module": "ESNext",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "noEmit": true,
         "outDir": "./build/",
         "rootDir": "./src",

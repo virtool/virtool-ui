@@ -9,7 +9,6 @@ import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
 import { BaseLocationHook, Router } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
-import { Path } from "wouter/types/location-hook";
 
 process.env.TZ = "UTC";
 
@@ -61,7 +60,10 @@ export function MemoryRouter({
     }
 
     // Create the location hook function that follows React hooks rules
-    const locationHook = (): [string, (path: Path, ...args: any[]) => any] => {
+    const locationHook = (): [
+        string,
+        (path: string, ...args: any[]) => any,
+    ] => {
         const [location, navigate] = hook();
         // Split off search params to get just the pathname
         const pathname = location.split("?")[0] || "";
