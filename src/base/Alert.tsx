@@ -11,11 +11,20 @@ type AlertProps = {
     color?: string;
     icon?: string;
     level?: boolean;
+    outerClassName?: string;
 };
 
 const Alert = styled(
-    ({ block, children, className, color, icon, level }: AlertProps) => (
-        <AlertOuter color={color}>
+    ({
+        block,
+        children,
+        className,
+        color,
+        icon,
+        level,
+        outerClassName,
+    }: AlertProps) => (
+        <AlertOuter className={outerClassName} color={color}>
             <AlertInner
                 className={className}
                 block={block}

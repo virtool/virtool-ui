@@ -64,8 +64,7 @@ describe("<UserDetail />", () => {
             ).toBeInTheDocument();
 
             expect(screen.getByText(userDetail.handle)).toBeInTheDocument();
-            expect(screen.getByLabelText("admin")).toBeInTheDocument();
-            expect(screen.getByText("Back To List")).toBeInTheDocument();
+            expect(screen.getByLabelText("Administrator")).toBeInTheDocument();
 
             expect(
                 screen.getByText("Force user to reset password on next login"),
@@ -119,8 +118,9 @@ describe("<UserDetail />", () => {
             expect(
                 await screen.findByText("Change Password"),
             ).toBeInTheDocument();
-
-            expect(screen.queryByLabelText("admin")).not.toBeInTheDocument();
+            expect(
+                screen.queryByLabelText("Administrator"),
+            ).not.toBeInTheDocument();
             expect(screen.queryByText("User Role")).not.toBeInTheDocument();
             expect(screen.getByText("Group 4")).toBeInTheDocument();
             expect(screen.getByText("create_sample")).toBeInTheDocument();

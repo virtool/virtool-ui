@@ -20,18 +20,20 @@ const StyledRemoveBanner = styled(Alert)<StyledRemoveBannerProps>`
 `;
 
 type RemoveBannerProps = {
-    message: string;
     buttonText: string;
+    message: string;
     onClick: () => void;
+    outerClassName?: string;
 };
 
 export default function RemoveBanner({
-    message,
     buttonText,
+    message,
     onClick,
+    outerClassName,
 }: RemoveBannerProps) {
     return (
-        <StyledRemoveBanner color="red">
+        <StyledRemoveBanner outerClassName={outerClassName} color="red">
             <strong>{message}</strong>
             <Button color="red" onClick={onClick}>
                 {buttonText}

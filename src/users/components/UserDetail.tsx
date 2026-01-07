@@ -1,56 +1,19 @@
+import Label from "@/base/Label";
 import { useCheckAdminRole } from "@administration/hooks";
 import { useFetchUser } from "@administration/queries";
 import { AdministratorRoleName } from "@administration/types";
 import { useDialogParam, usePathParams } from "@app/hooks";
-import { getFontSize, getFontWeight } from "@app/theme";
 import Alert from "@base/Alert";
-import { device } from "@base/device";
 import Icon from "@base/Icon";
 import InitialIcon from "@base/InitialIcon";
-import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import styled from "styled-components";
+import { ShieldUserIcon } from "lucide-react";
 import Password from "./Password";
 import PrimaryGroup from "./PrimaryGroup";
 import { UserActivation } from "./UserActivation";
 import { UserActivationBanner } from "./UserActivationBanner";
 import UserGroups from "./UserGroups";
 import UserPermissions from "./UserPermissions";
-
-const AdminIcon = styled(Icon)`
-    padding-left: 10px;
-`;
-
-const UserDetailGroups = styled.div`
-    margin-bottom: 15px;
-
-    @media (min-width: ${device.tablet}) {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-column-gap: ${(props) => props.theme.gap.column};
-    }
-`;
-
-const UserDetailHeader = styled.div`
-    display: flex;
-    margin-bottom: 20px;
-`;
-
-const UserDetailTitle = styled.div`
-    align-items: center;
-    display: flex;
-    flex: 1 0 auto;
-    font-size: ${getFontSize("xl")};
-    font-weight: ${getFontWeight("bold")};
-    margin-left: 15px;
-    .InitialIcon {
-        margin-right: 8px;
-    }
-    a {
-        font-size: ${getFontSize("md")};
-        margin-left: auto;
-    }
-`;
 
 /**
  * The detailed view of a user
@@ -100,20 +63,18 @@ export default function UserDetail() {
 
     return (
         <div>
-            <UserDetailHeader>
-                <UserDetailTitle>
+            <header className="flex items-center justify-between mb-5">
+                <h2 className="flex items-center text-2xl gap-3">
                     <InitialIcon size="xl" handle={handle} />
                     <span>{handle}</span>
-                    {administrator_role ? (
-                        <AdminIcon
-                            aria-label="admin"
-                            name="user-shield"
-                            color="blue"
-                        />
-                    ) : null}
-                    <Link to="/administration/users">Back To List</Link>
-                </UserDetailTitle>
-            </UserDetailHeader>
+                </h2>
+                {administrator_role && (
+                    <Label>
+                        <ShieldUserIcon aria-label="Administrator" size={18} />
+                        Administrator
+                    </Label>
+                )}
+            </header>
 
             <Password
                 key={id}
@@ -122,7 +83,7 @@ export default function UserDetail() {
                 forceReset={force_reset}
             />
 
-            <UserDetailGroups>
+            <div className="mb-4 md:grid md:grid-cols-2 md:gap-x-4">
                 <div>
                     <UserGroups userId={id} memberGroups={groups} />
                     <PrimaryGroup
@@ -132,7 +93,7 @@ export default function UserDetail() {
                     />
                 </div>
                 <UserPermissions permissions={permissions} />
-            </UserDetailGroups>
+            </div>
 
             {data.active ? (
                 <UserActivationBanner
