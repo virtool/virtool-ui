@@ -25,7 +25,12 @@ const Alert = styled(
         outerClassName,
     }: AlertProps) => (
         <AlertOuter className={outerClassName} color={color}>
-            <AlertInner className={className} block={block} color={color} level={level}>
+            <AlertInner
+                className={className}
+                block={block}
+                color={color}
+                level={level}
+            >
                 {icon ? <Icon name={icon} /> : null}
                 {children}
             </AlertInner>
