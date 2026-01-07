@@ -26,7 +26,7 @@ export default function RemoveIsolate({
 }: RemoveIsolateProps) {
     const mutation = useRemoveIsolate();
 
-    const handleConfirm = () =>
+    function handleConfirm() {
         mutation.mutate(
             { otuId, isolateId: id },
             {
@@ -35,6 +35,7 @@ export default function RemoveIsolate({
                 },
             },
         );
+    }
 
     return (
         <RemoveDialog

@@ -1,47 +1,13 @@
-import { getColor } from "@app/theme";
-import BoxGroup from "@base/BoxGroup";
+import { cn } from "@app/utils";
+import ScrollArea from "@base/ScrollArea";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import { sortBy } from "es-toolkit/compat";
-import styled from "styled-components";
 import { GroupMinimal } from "../types";
 
-type GroupsSelectBoxGroupSectionProps = {
-    selectable?: boolean;
-};
-
-export const GroupsSelectBoxGroupSection = styled(
-    SelectBoxGroupSection,
-)<GroupsSelectBoxGroupSectionProps>`
-    outline: 1px solid
-        ${(props) => getColor({ color: "greyLight", theme: props.theme })};
-    background-color: ${(props) =>
-        getColor({
-            color: props.active ? "blue" : "white",
-            theme: props.theme,
-        })};
-    cursor: ${(props) => (props.selectable ? "pointer" : "default")};
-    &:hover {
-        background-color: ${(props) =>
-            getColor({
-                theme: props.theme,
-                color: props.selectable ? "greyLightest" : "white",
-            })};
-    }
-`;
-
-export const GroupComponentsContainer = styled(BoxGroup)`
-    height: 514px;
-    overflow-y: auto;
-    background-color: ${(props) =>
-        getColor({ theme: props.theme, color: "greyLightest" })};
-    border-bottom: 1px solid
-        ${(props) => getColor({ theme: props.theme, color: "greyLight" })};
-`;
-
 type GroupSelectorProps = {
+    groups: Array<GroupMinimal>;
     selectedGroupId?: number | string;
     setSelectedGroupId: (groupId: number | string) => void;
-    groups: Array<GroupMinimal>;
 };
 
 export function GroupSelector({
@@ -49,18 +15,27 @@ export function GroupSelector({
     setSelectedGroupId,
     groups,
 }: GroupSelectorProps) {
+    function isActive(id: number | string) {
+        return selectedGroupId === id;
+    }
+
     const groupComponents = sortBy(groups, (g) => g.name).map((group) => (
-        <GroupsSelectBoxGroupSection
-            selectable
-            active={selectedGroupId === group.id}
+        <SelectBoxGroupSection
+            active={isActive(group.id)}
+            className={cn(
+                "outline-1 outline-gray-300 font-medium",
+                !isActive(group.id) && "hover:bg-gray-100",
+            )}
             key={group.id}
             onClick={() => setSelectedGroupId(group.id)}
         >
             {group.name}
-        </GroupsSelectBoxGroupSection>
+        </SelectBoxGroupSection>
     ));
 
     return (
-        <GroupComponentsContainer>{groupComponents}</GroupComponentsContainer>
+        <ScrollArea className="col-span-1 w-full h-full bg-gray-100 border-b border-gray-300 mr-0">
+            {groupComponents}
+        </ScrollArea>
     );
 }

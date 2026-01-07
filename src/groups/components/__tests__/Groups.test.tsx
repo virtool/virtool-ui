@@ -11,7 +11,7 @@ describe("Groups", () => {
     it("should render correctly when loading = true", () => {
         renderWithRouter(<Groups />);
 
-        expect(screen.queryByText("No Groups Found")).not.toBeInTheDocument();
+        expect(screen.queryByText("No Groups Exist")).not.toBeInTheDocument();
         expect(screen.queryByText("cancel_job")).not.toBeInTheDocument();
         expect(screen.queryByText("No Group Members")).not.toBeInTheDocument();
         expect(
@@ -23,7 +23,7 @@ describe("Groups", () => {
         mockApiListGroups([]);
         renderWithRouter(<Groups />);
 
-        expect(await screen.findByText("No Groups Found")).toBeInTheDocument();
+        expect(await screen.findByText("No Groups Exist")).toBeInTheDocument();
         expect(
             screen.queryByRole("button", { name: "Delete" }),
         ).not.toBeInTheDocument();

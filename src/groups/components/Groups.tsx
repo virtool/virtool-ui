@@ -1,13 +1,10 @@
 import { useDialogParam } from "@app/hooks";
-import { getColor } from "@app/theme";
-import BoxGroup from "@base/BoxGroup";
 import Button from "@base/Button";
 import InputHeader from "@base/InputHeader";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import RemoveBanner from "@base/RemoveBanner";
 import { sortBy } from "es-toolkit/compat";
 import { useState } from "react";
-import styled from "styled-components";
 import {
     useFetchGroup,
     useListGroups,
@@ -18,36 +15,6 @@ import Create from "./CreateGroup";
 import { GroupMembers } from "./GroupMembers";
 import { GroupPermissions } from "./GroupPermissions";
 import { GroupSelector } from "./GroupSelector";
-
-const ManageGroupsContainer = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    column-gap: 15px;
-`;
-
-const GroupsHeader = styled.div`
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-`;
-
-const NoneSelectedContainer = styled(BoxGroup)`
-    display: flex;
-    flex-direction: column;
-    background-color: ${(props) =>
-        getColor({ theme: props.theme, color: "greyLightest" })};
-    flex: 1 1 auto;
-    height: 300px;
-`;
-
-export const NoneSelected = styled.div`
-    color: ${(props) => props.theme.color.greyDarkest};
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-`;
 
 export default function Groups() {
     const updateGroupMutation = useUpdateGroup();
@@ -74,21 +41,21 @@ export default function Groups() {
 
     return (
         <>
-            <GroupsHeader>
+            <header className="flex items-center justify-between mb-5">
                 <h2>Groups</h2>
                 <Button color="blue" onClick={() => setOpenCreateGroup(true)}>
                     Create
                 </Button>
-            </GroupsHeader>
+            </header>
 
             {groups.length ? (
-                <ManageGroupsContainer>
+                <div className="gap-x-4 grid grid-cols-4">
                     <GroupSelector
                         groups={groups}
                         selectedGroupId={selectedGroupId}
                         setSelectedGroupId={setSelectedGroupId}
                     />
-                    <div>
+                    <div className="col-span-3">
                         <InputHeader
                             id="name"
                             value={selectedGroup.name}
@@ -102,6 +69,7 @@ export default function Groups() {
                         <GroupPermissions selectedGroup={selectedGroup} />
                         <GroupMembers members={selectedGroup.users} />
                         <RemoveBanner
+                            outerClassName="!mb-0"
                             message="Permanently delete this group."
                             buttonText="Delete"
                             onClick={() =>
@@ -109,11 +77,11 @@ export default function Groups() {
                             }
                         />
                     </div>
-                </ManageGroupsContainer>
+                </div>
             ) : (
-                <NoneSelectedContainer>
-                    <NoneSelected>No Groups Found</NoneSelected>
-                </NoneSelectedContainer>
+                <div className="bg-gray-200 flex items-center h-48 justify-center rounded-md text-gray-600">
+                    No Groups Exist
+                </div>
             )}
 
             <Create />
