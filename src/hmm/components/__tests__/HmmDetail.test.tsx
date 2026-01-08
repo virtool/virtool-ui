@@ -30,17 +30,16 @@ describe("<HmmDetail />", () => {
             renderWithRouter(<HMM />, path);
 
             expect(screen.getByLabelText("loading")).toBeInTheDocument();
-            expect(screen.queryByText("General")).not.toBeInTheDocument();
-            expect(screen.queryByText("Cluster")).not.toBeInTheDocument();
+            expect(
+                screen.queryByText("Cluster Members"),
+            ).not.toBeInTheDocument();
         });
 
-        it("should render General table correctly", async () => {
+        it("should render details correctly", async () => {
             const scope = mockApiGetHmmDetail(hmmDetail);
             renderWithRouter(<HMM />, path);
 
-            expect(await screen.findByText("General")).toBeInTheDocument();
-
-            expect(screen.getByText("Cluster")).toBeInTheDocument();
+            expect(await screen.findByText("Cluster")).toBeInTheDocument();
             expect(screen.getByText(hmmDetail.cluster)).toBeInTheDocument();
 
             expect(screen.getByText("Names")).toBeInTheDocument();
@@ -60,9 +59,9 @@ describe("<HmmDetail />", () => {
             const scope = mockApiGetHmmDetail(hmmDetail);
             renderWithRouter(<HMM />, path);
 
-            expect(await screen.findByText("General")).toBeInTheDocument();
-
-            expect(screen.getByText("Cluster Members")).toBeInTheDocument();
+            expect(
+                await screen.findByText("Cluster Members"),
+            ).toBeInTheDocument();
             expect(
                 screen.getByText(hmmDetail.entries.length),
             ).toBeInTheDocument();
