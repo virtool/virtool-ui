@@ -1,5 +1,5 @@
 import { SearchResult } from "@/types/api";
-import { JobMinimal } from "@jobs/types";
+import { JobNested } from "@jobs/types";
 import { HistoryNested, OtuNested } from "@otus/types";
 import { ReferenceNested } from "@references/types";
 import { UserNested } from "@users/types";
@@ -25,7 +25,7 @@ export type IndexMinimal = IndexNested & {
     has_files: boolean;
 
     /** The job responsible for creation */
-    job?: JobMinimal;
+    job?: JobNested;
 
     /** A count of individual OTUs changed */
     modified_otu_count: number;

@@ -1,4 +1,4 @@
-import { JobMinimal } from "@/jobs/types";
+import { JobNested } from "@/jobs/types";
 import { usePathParams } from "@app/hooks";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
@@ -28,7 +28,7 @@ export default function SampleDetailGeneral() {
 
     const { quality } = data;
 
-    const job = data?.job ? JobMinimal.parse(data.job) : undefined;
+    const job = data?.job ? JobNested.parse(data.job) : undefined;
 
     return (
         <div className="flex items-stretch">

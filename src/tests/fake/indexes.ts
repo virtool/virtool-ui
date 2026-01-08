@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import { IndexFile, IndexMinimal, IndexNested } from "@indexes/types";
 import { merge } from "es-toolkit";
 import nock from "nock";
-import { createFakeJobMinimal } from "./jobs";
+import { createFakeJobNested } from "./jobs";
 import { createFakeReferenceNested } from "./references";
 import { createFakeUserNested } from "./user";
 import { BaseFakeSearchResultOptions } from "./utils";
@@ -26,7 +26,7 @@ export function createFakeIndexMinimal(
         change_count: faker.number.int({ min: 2, max: 10 }),
         created_at: faker.date.past().toISOString(),
         has_files: faker.datatype.boolean(),
-        job: createFakeJobMinimal(),
+        job: createFakeJobNested(),
         modified_otu_count: faker.number.int({ min: 2, max: 10 }),
         reference: createFakeReferenceNested(),
         user: createFakeUserNested(),

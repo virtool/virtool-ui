@@ -1,4 +1,4 @@
-import { JobMinimal } from "@/jobs/types";
+import { JobNested } from "@/jobs/types";
 import Analyses from "@analyses/components/Analyses";
 import { useDialogParam, usePathParams } from "@app/hooks";
 import Icon from "@base/Icon";
@@ -40,7 +40,7 @@ export default function SampleDetail() {
 
     const { created_at, name, user } = data;
 
-    const job = data.job && JobMinimal.parse(data.job);
+    const job = data.job && JobNested.parse(data.job);
 
     return (
         <>

@@ -1,6 +1,6 @@
 import { SearchResult } from "@/types/api";
 import { IndexNested } from "@indexes/types";
-import { ServerJobMinimal } from "@jobs/types";
+import { ServerJobNested } from "@jobs/types";
 import { ReferenceNested } from "@references/types";
 import { SubtractionNested } from "@subtraction/types";
 import { UserNested } from "@users/types";
@@ -22,7 +22,7 @@ export type AnalysisMinimal = {
     index: IndexNested;
 
     /** The job that ran the analysis workflow */
-    job?: ServerJobMinimal;
+    job?: ServerJobNested;
 
     /** Whether the analysis is complete and ready to view */
     ready: boolean;

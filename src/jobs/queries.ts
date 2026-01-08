@@ -27,10 +27,11 @@ export function useFindJobs(
     per_page: number,
     states: JobState[],
 ) {
-    return useQuery<JobSearchResult>({
+    return useQuery({
         queryKey: jobQueryKeys.list([page, per_page, ...states]),
         queryFn: () => findJobs(page, per_page, states),
         placeholderData: keepPreviousData,
+        select: JobSearchResult.parse,
     });
 }
 

@@ -13,7 +13,7 @@ import {
 import { faker } from "@faker-js/faker";
 import nock from "nock";
 import { createFakeIndexNested } from "./indexes";
-import { createFakeServerJobMinimal } from "./jobs";
+import { createFakeServerJobNested } from "./jobs";
 import { createFakeReferenceNested } from "./references";
 import { createFakeSubtractionNested } from "./subtractions";
 import { createFakeUserNested } from "./user";
@@ -30,7 +30,7 @@ export function createFakeAnalysisMinimal(
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         created_at: faker.date.past().toISOString(),
         index: createFakeIndexNested(),
-        job: createFakeServerJobMinimal(),
+        job: createFakeServerJobNested(),
         ready: true,
         reference: createFakeReferenceNested(),
         sample: {

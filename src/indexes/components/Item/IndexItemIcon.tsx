@@ -1,13 +1,13 @@
 import { sizes } from "@app/theme";
 import ProgressCircle from "@base/ProgressCircle";
-import { JobMinimal } from "@jobs/types";
+import { JobNested } from "@jobs/types";
 import { CircleCheck } from "lucide-react";
 
 type IndexItemIconProps = {
     activeId: string;
     id: string;
     ready: boolean;
-    job?: JobMinimal;
+    job?: JobNested;
 };
 
 /**

@@ -1,4 +1,4 @@
-import { JobMinimal } from "@/jobs/types";
+import { JobNested } from "@/jobs/types";
 import { useDialogParam, useUrlSearchParam } from "@app/hooks";
 import { getFontSize, getFontWeight } from "@app/theme";
 import Attribution from "@base/Attribution";
@@ -107,7 +107,7 @@ export default function SampleItem({
         setOpen(true);
     }
 
-    const job = sample.job && JobMinimal.parse(sample.job);
+    const job = sample.job && JobNested.parse(sample.job);
 
     return (
         <StyledSampleItem>

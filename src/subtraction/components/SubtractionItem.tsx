@@ -2,7 +2,7 @@ import { getFontSize, getFontWeight, sizes } from "@app/theme";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
-import { JobMinimal } from "@jobs/types";
+import { JobNested } from "@jobs/types";
 import styled from "styled-components";
 import { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
@@ -50,7 +50,7 @@ export function SubtractionItem({
     ready,
     user,
 }: SubtractionMinimal) {
-    const parsedJob = job && JobMinimal.parse(job);
+    const parsedJob = job && JobNested.parse(job);
 
     return (
         <StyledSubtractionItem>

@@ -1,4 +1,3 @@
-import { ServerJobState } from "@/jobs/types";
 import { SubtractionMinimal } from "@/subtraction/types";
 import { createFakeUserNested } from "@/tests/fake/user";
 import { screen } from "@testing-library/react";
@@ -25,7 +24,6 @@ describe("<SubtractionItem />", () => {
                 id: "foobar",
                 created_at: createdAt.toISOString(),
                 progress: 50,
-                stage: "Build Index",
                 state: "running",
                 workflow: "create_subtraction",
                 user: createFakeUserNested(),
@@ -48,9 +46,9 @@ describe("<SubtractionItem />", () => {
         );
     });
 
-    it.each(["waiting", "running", "error"])(
+    it.each(["waiting", "running", "error"] as const)(
         "should render progress bar for ",
-        (state: ServerJobState) => {
+        (state) => {
             props.job.state = state;
 
             renderWithRouter(<SubtractionItem {...props} />);

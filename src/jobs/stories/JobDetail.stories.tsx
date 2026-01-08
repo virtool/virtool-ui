@@ -4,7 +4,7 @@ import { Route, Router } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
 import JobDetail from "../components/JobDetail";
 import { jobQueryKeys } from "../queries";
-import type { ServerJob, ServerWorkflow } from "../types";
+import type { ServerJob, ServerJobStep, ServerWorkflow } from "../types";
 
 const meta: Meta<typeof JobDetail> = {
     title: "jobs/Detail",
@@ -20,50 +20,49 @@ const user = {
     handle: "bob",
 };
 
-type CreateServerJobOverrides = Partial<
-    Omit<ServerJob, "status"> & { status?: ServerJob["status"] }
->;
+type CreateServerJobOverrides = Partial<ServerJob>;
 
 function createServerJob(overrides: CreateServerJobOverrides = {}): ServerJob {
     const now = new Date();
 
-    const status: ServerJob["status"] = [
+    const steps: ServerJobStep[] = [
         {
-            state: "waiting",
-            timestamp: new Date(now.getTime() - 120000).toISOString(),
+            id: "mk_sample_dir",
+            name: "Make sample directory",
+            description: "Create the sample directory structure",
+            started_at: new Date(now.getTime() - 60000).toISOString(),
         },
         {
-            state: "running",
-            stage: "mk_sample_dir",
-            step_name: "Make sample directory",
-            step_description: "Create the sample directory structure",
-            timestamp: new Date(now.getTime() - 60000).toISOString(),
+            id: "copy_files",
+            name: "Copy files",
+            description: "Copy read files to sample directory",
+            started_at: new Date(now.getTime() - 45000).toISOString(),
         },
         {
-            state: "running",
-            stage: "copy_files",
-            step_name: "Copy files",
-            step_description: "Copy read files to sample directory",
-            timestamp: new Date(now.getTime() - 45000).toISOString(),
-        },
-        {
-            state: "running",
-            stage: "compute_quality",
-            step_name: "Compute quality",
-            step_description: "Calculate quality metrics for reads",
-            timestamp: new Date(now.getTime() - 30000).toISOString(),
+            id: "compute_quality",
+            name: "Compute quality",
+            description: "Calculate quality metrics for reads",
+            started_at: new Date(now.getTime() - 30000).toISOString(),
         },
     ];
 
     return {
-        id: "abc123xy",
-        acquired: true,
+        id: "13",
         args: { sample_id: "sample123" },
+        claim: {
+            cpu: 4,
+            image: "virtool/workflow:latest",
+            mem: 8,
+            runner_id: "runner-1",
+            runtime_version: "1.0.0",
+            workflow_version: "1.0.0",
+        },
+        claimed_at: new Date(now.getTime() - 115000).toISOString(),
         created_at: new Date(now.getTime() - 120000).toISOString(),
+        finished_at: null,
         progress: 75,
-        stage: "compute_quality",
         state: "running",
-        status,
+        steps,
         user,
         workflow: "create_sample",
         ...overrides,
@@ -119,37 +118,26 @@ export const Succeeded: Story = {
         return (
             <JobDetailStory
                 job={createServerJob({
-                    state: "complete",
+                    state: "succeeded",
                     progress: 100,
-                    status: [
+                    finished_at: now.toISOString(),
+                    steps: [
                         {
-                            state: "waiting",
-                            timestamp: new Date(
-                                now.getTime() - 120000,
-                            ).toISOString(),
-                        },
-                        {
-                            state: "running",
-                            stage: "mk_sample_dir",
-                            step_name: "Make sample directory",
-                            step_description:
+                            id: "mk_sample_dir",
+                            name: "Make sample directory",
+                            description:
                                 "Create the sample directory structure",
-                            timestamp: new Date(
+                            started_at: new Date(
                                 now.getTime() - 60000,
                             ).toISOString(),
                         },
                         {
-                            state: "running",
-                            stage: "finalize",
-                            step_name: "Finalize sample",
-                            step_description: "Complete sample creation",
-                            timestamp: new Date(
+                            id: "finalize",
+                            name: "Finalize sample",
+                            description: "Complete sample creation",
+                            started_at: new Date(
                                 now.getTime() - 30000,
                             ).toISOString(),
-                        },
-                        {
-                            state: "complete",
-                            timestamp: now.toISOString(),
                         },
                     ],
                 })}
@@ -164,27 +152,17 @@ export const Failed: Story = {
         return (
             <JobDetailStory
                 job={createServerJob({
-                    state: "error",
-                    status: [
+                    state: "failed",
+                    finished_at: now.toISOString(),
+                    steps: [
                         {
-                            state: "waiting",
-                            timestamp: new Date(
-                                now.getTime() - 120000,
-                            ).toISOString(),
-                        },
-                        {
-                            state: "running",
-                            stage: "mk_sample_dir",
-                            step_name: "Make sample directory",
-                            step_description:
+                            id: "mk_sample_dir",
+                            name: "Make sample directory",
+                            description:
                                 "Create the sample directory structure",
-                            timestamp: new Date(
+                            started_at: new Date(
                                 now.getTime() - 60000,
                             ).toISOString(),
-                        },
-                        {
-                            state: "error",
-                            timestamp: now.toISOString(),
                         },
                     ],
                 })}
@@ -195,19 +173,14 @@ export const Failed: Story = {
 
 export const Pending: Story = {
     render: () => {
-        const now = new Date();
         return (
             <JobDetailStory
                 job={createServerJob({
-                    state: "waiting",
-                    stage: null,
+                    state: "pending",
+                    claim: null,
+                    claimed_at: null,
                     progress: 0,
-                    status: [
-                        {
-                            state: "waiting",
-                            timestamp: now.toISOString(),
-                        },
-                    ],
+                    steps: null,
                 })}
             />
         );

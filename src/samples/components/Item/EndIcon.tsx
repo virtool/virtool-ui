@@ -1,11 +1,11 @@
 import { cn } from "@/app/utils";
 import IconButton from "@base/IconButton";
 import ProgressCircle from "@base/ProgressCircle";
-import { JobMinimal } from "@jobs/types";
+import { JobNested } from "@jobs/types";
 
 type SampleItemEndIconProps = {
     /** The job responsible for creating the sample */
-    job: JobMinimal;
+    job: JobNested;
 
     /** Callback to handle click event */
     onClick: () => void;
