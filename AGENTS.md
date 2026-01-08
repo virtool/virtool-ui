@@ -1,0 +1,2 @@
+- Run typecheck with npm run typecheck.
+- Don't use arbitrary Tailwind classes like max-h-[210px].

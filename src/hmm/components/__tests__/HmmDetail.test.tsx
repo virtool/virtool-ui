@@ -3,9 +3,9 @@ import { createFakeHmm, mockApiGetHmmDetail } from "@tests/fake/hmm";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import HMM from "../HMM";
+import HMM from "../Hmm";
 
-describe("<HMMDetail />", () => {
+describe("<HmmDetail />", () => {
     const hmmDetail = createFakeHmm();
     let path;
 
@@ -15,7 +15,7 @@ describe("<HMMDetail />", () => {
 
     afterEach(() => nock.cleanAll());
 
-    describe("<HMMDetail />", () => {
+    describe("<HmmDetail />", () => {
         it("should render correctly when query has an error", async () => {
             const scope = mockApiGetHmmDetail(hmmDetail, 404);
             renderWithRouter(<HMM />, path);
@@ -43,7 +43,7 @@ describe("<HMMDetail />", () => {
             expect(screen.getByText("Cluster")).toBeInTheDocument();
             expect(screen.getByText(hmmDetail.cluster)).toBeInTheDocument();
 
-            expect(screen.getByText("Best Definitions")).toBeInTheDocument();
+            expect(screen.getByText("Names")).toBeInTheDocument();
 
             expect(screen.getByText("Length")).toBeInTheDocument();
             expect(screen.getByText(hmmDetail.length)).toBeInTheDocument();
