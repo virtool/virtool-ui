@@ -1,8 +1,8 @@
 import Label from "@/base/Label";
 import { useCheckAdminRole } from "@administration/hooks";
-import { useFetchUser } from "@administration/queries";
+import { useFetchUser, useUpdateUser } from "@administration/queries";
 import { AdministratorRoleName } from "@administration/types";
-import { useDialogParam, usePathParams } from "@app/hooks";
+import { usePathParams } from "@app/hooks";
 import Alert from "@base/Alert";
 import Icon from "@base/Icon";
 import InitialIcon from "@base/InitialIcon";
@@ -10,7 +10,6 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { ShieldUserIcon } from "lucide-react";
 import Password from "./Password";
 import PrimaryGroup from "./PrimaryGroup";
-import { UserActivation } from "./UserActivation";
 import { UserActivationBanner } from "./UserActivationBanner";
 import UserGroups from "./UserGroups";
 import UserPermissions from "./UserPermissions";
@@ -27,10 +26,7 @@ export default function UserDetail() {
             : AdministratorRoleName.FULL,
     );
 
-    const { open: openActivateUser, setOpen: setOpenActivateUser } =
-        useDialogParam("openActivateUser");
-    const { open: openDeactivateUser, setOpen: setOpenDeactivateUser } =
-        useDialogParam("openDeactivateUser");
+    const mutation = useUpdateUser();
 
     if (isPending) {
         return <LoadingPlaceholder />;
@@ -95,33 +91,14 @@ export default function UserDetail() {
                 <UserPermissions permissions={permissions} />
             </div>
 
-            {data.active ? (
-                <UserActivationBanner
-                    buttonText="Deactivate"
-                    noun="deactivate"
-                    onClick={() => setOpenDeactivateUser(true)}
-                />
-            ) : (
-                <UserActivationBanner
-                    buttonText="Activate"
-                    noun="activate"
-                    onClick={() => setOpenActivateUser(true)}
-                />
-            )}
-
-            <UserActivation
-                handle={data.handle}
-                id={data.id}
-                noun="deactivate"
-                onHide={() => setOpenDeactivateUser(false)}
-                show={openDeactivateUser}
-            />
-            <UserActivation
-                handle={data.handle}
-                id={data.id}
-                noun="activate"
-                onHide={() => setOpenActivateUser(false)}
-                show={openActivateUser}
+            <UserActivationBanner
+                onClick={() =>
+                    mutation.mutate({
+                        userId: id,
+                        update: { active: !data.active },
+                    })
+                }
+                verb={data.active ? "deactivate" : "activate"}
             />
         </div>
     );
