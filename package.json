@@ -75,7 +75,7 @@
     "check-version": "npx tsx src/server/check-version.ts",
     "develop": "vite serve",
     "eslint": "eslint src",
-    "format": "prettier -w .",
+    "format": "prettier -w --cache .",
     "prettier": "prettier -l .",
     "server": "npx tsx  src/server/run.ts",
     "storybook": "storybook dev -p 6006",
