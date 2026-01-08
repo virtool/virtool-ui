@@ -1,51 +1,38 @@
 import Alert from "@base/Alert";
 import Button from "@base/Button";
-import styled from "styled-components";
-
-const ActivationBanner = styled(Alert)`
-    align-items: center;
-    justify-content: space-between;
-
-    span:first-child {
-        font-weight: ${(props) => props.theme.fontWeight.thick};
-
-        strong {
-            font-weight: ${(props) => props.theme.fontWeight.bold};
-        }
-    }
-`;
+import { capitalize } from "es-toolkit";
 
 type UserActivationBannerProps = {
-    /** Whether it is a deactivation or reactivation */
-    noun: string;
-    buttonText: string;
-    /** A callback function to open respective dialog */
+    /** A callback function to activate or deactivate the user */
     onClick: () => void;
+
+    /** Whether it is a deactivation or reactivation */
+    verb: string;
 };
 
 /**
  * A styled banner for deactivating or reactivating a user
  */
 export function UserActivationBanner({
-    buttonText,
-    noun,
+    verb,
     onClick,
 }: UserActivationBannerProps) {
     return (
-        <ActivationBanner color={noun === "deactivate" ? "red" : "green"}>
-            <div>
-                <div>
-                    {noun === "deactivate"
-                        ? "Disable access to the application for this user."
-                        : "Restore access to Virtool for this user. Their account is currently deactivated."}
-                </div>
-            </div>
+        <Alert
+            className="flex !items-center justify-between"
+            color={verb === "deactivate" ? "red" : "green"}
+        >
+            <span>
+                {verb === "deactivate"
+                    ? "Disable access to the application for this user."
+                    : "Restore access to Virtool for this user. Their account is currently deactivated."}
+            </span>
             <Button
-                color={noun === "deactivate" ? "red" : "green"}
+                color={verb === "deactivate" ? "red" : "green"}
                 onClick={onClick}
             >
-                {buttonText}
+                {capitalize(verb)}
             </Button>
-        </ActivationBanner>
+        </Alert>
     );
 }

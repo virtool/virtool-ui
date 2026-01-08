@@ -150,6 +150,37 @@ describe("<UserDetail />", () => {
 
             scope.done();
         });
+
+        it("should handle user deactivation", async () => {
+            mockApiGetAccount(account);
+            mockApiListGroups(groups);
+            mockApiGetUser(user.id, user);
+            const scope = mockApiEditUser(user.id, 200, { active: false });
+            renderWithRouter(<Settings />, formatUserPath(user));
+
+            await userEvent.click(
+                await screen.findByRole("button", { name: "Deactivate" }),
+            );
+
+            scope.done();
+        });
+
+        it("should handle user reactivation", async () => {
+            mockApiGetAccount(account);
+            mockApiListGroups(groups);
+            const inactiveUser = createFakeUser({ active: false });
+            mockApiGetUser(inactiveUser.id, inactiveUser);
+            const scope = mockApiEditUser(inactiveUser.id, 200, {
+                active: true,
+            });
+            renderWithRouter(<Settings />, formatUserPath(inactiveUser));
+
+            await userEvent.click(
+                await screen.findByRole("button", { name: "Activate" }),
+            );
+
+            scope.done();
+        });
     });
 
     describe("<UserGroups />", () => {
@@ -351,61 +382,6 @@ describe("<UserDetail />", () => {
             expect(
                 screen.getByLabelText("upload_file:false"),
             ).toBeInTheDocument();
-
-            scope.done();
-        });
-    });
-
-    describe("<UserActivation />", () => {
-        it("should render activation correctly", async () => {
-            mockApiGetAccount(account);
-            mockApiListGroups(groups);
-            mockApiGetUser(user.id, user);
-            renderWithRouter(<Settings />, formatUserPath(user));
-
-            expect(
-                await screen.findByText(
-                    "Disable access to the application for this user.",
-                ),
-            ).toBeInTheDocument();
-            expect(
-                screen.getByRole("button", { name: "Deactivate" }),
-            ).toBeInTheDocument();
-        });
-
-        it("should handle user deactivation", async () => {
-            mockApiGetAccount(account);
-            mockApiListGroups(groups);
-            mockApiGetUser(user.id, user);
-            const scope = mockApiEditUser(user.id, 200, { active: true });
-            renderWithRouter(<Settings />, formatUserPath(user));
-
-            expect(
-                await screen.findByRole("button", { name: "Deactivate" }),
-            ).toBeInTheDocument();
-            await userEvent.click(
-                screen.getByRole("button", { name: "Deactivate" }),
-            );
-            await userEvent.click(screen.getByText("Confirm"));
-
-            scope.done();
-        });
-
-        it("should handle user reactivation", async () => {
-            mockApiGetAccount(account);
-            mockApiListGroups(groups);
-            const user = createFakeUser({ force_reset: true, active: false });
-            mockApiGetUser(user.id, user);
-            const scope = mockApiEditUser(user.id, 200, { active: false });
-            renderWithRouter(<Settings />, formatUserPath(user));
-
-            expect(
-                await screen.findByRole("button", { name: "Activate" }),
-            ).toBeInTheDocument();
-            await userEvent.click(
-                screen.getByRole("button", { name: "Activate" }),
-            );
-            await userEvent.click(screen.getByText("Confirm"));
 
             scope.done();
         });
