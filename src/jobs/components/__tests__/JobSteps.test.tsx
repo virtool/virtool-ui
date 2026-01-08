@@ -10,11 +10,13 @@ describe("<JobSteps />", () => {
                 state="running"
                 steps={[
                     {
+                        id: "download_files",
                         name: "Download files",
                         description: "Downloading reference files",
                         startedAt: new Date("2024-04-12T21:50:19.108000Z"),
                     },
                     {
+                        id: "build_index",
                         name: "Build index",
                         description: "Building search index",
                         startedAt: new Date("2024-04-12T21:51:19.108000Z"),

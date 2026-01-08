@@ -1,17 +1,4 @@
 import z from "zod";
-import { SearchResult } from "../types/api";
-
-const ServerJobStateSchema = z.enum([
-    "cancelled",
-    "complete",
-    "error",
-    "preparing",
-    "running",
-    "terminated",
-    "timeout",
-    "waiting",
-]);
-export type ServerJobState = z.infer<typeof ServerJobStateSchema>;
 
 const JobStateSchema = z.enum([
     "cancelled",
@@ -22,7 +9,19 @@ const JobStateSchema = z.enum([
 ]);
 export type JobState = z.infer<typeof JobStateSchema>;
 
-const serverToClientState: Record<ServerJobState, JobState> = {
+const JobStateV1Schema = z.enum([
+    "cancelled",
+    "complete",
+    "error",
+    "preparing",
+    "running",
+    "terminated",
+    "timeout",
+    "waiting",
+]);
+type JobStateV1 = z.infer<typeof JobStateV1Schema>;
+
+const V1_TO_V2_STATE: Record<JobStateV1, JobState> = {
     cancelled: "cancelled",
     complete: "succeeded",
     error: "failed",
@@ -31,20 +30,6 @@ const serverToClientState: Record<ServerJobState, JobState> = {
     terminated: "failed",
     timeout: "failed",
     waiting: "pending",
-};
-
-const JobStateParsed = ServerJobStateSchema.transform(
-    (val) => serverToClientState[val],
-);
-
-export const jobStates: JobState[] = JobStateSchema.options;
-
-export const jobStateToLegacy: Record<JobState, ServerJobState[]> = {
-    cancelled: ["cancelled"],
-    failed: ["error", "terminated", "timeout"],
-    pending: ["waiting"],
-    running: ["preparing", "running"],
-    succeeded: ["complete"],
 };
 
 export const Workflow = z.preprocess(
@@ -60,96 +45,178 @@ export const Workflow = z.preprocess(
 export type Workflow = z.infer<typeof Workflow>;
 export type ServerWorkflow = z.input<typeof Workflow>;
 
+export const JobNested = z
+    .object({
+        created_at: z.coerce.date(),
+        id: z.string(),
+        progress: z.int(),
+        state: JobStateV1Schema,
+        user: z.object({
+            handle: z.string(),
+            id: z.int(),
+        }),
+        workflow: Workflow,
+    })
+    .transform(({ created_at, id, progress, state, user, workflow }) => ({
+        createdAt: created_at,
+        id,
+        progress,
+        state: V1_TO_V2_STATE[state],
+        user,
+        workflow,
+    }));
+export type ServerJobNested = z.input<typeof JobNested>;
+export type JobNested = z.infer<typeof JobNested>;
+
 export const JobMinimal = z
     .object({
         id: z.string(),
         created_at: z.coerce.date(),
         progress: z.int(),
-        stage: z.string().nullable(),
-        state: JobStateParsed,
+        state: JobStateSchema,
         user: z.object({
             id: z.int(),
             handle: z.string(),
         }),
         workflow: Workflow,
     })
-    .transform(
-        ({ created_at, id, progress, stage, state, user, workflow }) => ({
-            createdAt: created_at,
-            id,
-            progress,
-            state,
-            step: stage,
-            user,
-            workflow,
-        }),
-    );
+    .transform(({ created_at, id, progress, state, user, workflow }) => ({
+        createdAt: created_at,
+        id,
+        progress,
+        state,
+        user,
+        workflow,
+    }));
 
 export type ServerJobMinimal = z.input<typeof JobMinimal>;
 export type JobMinimal = z.infer<typeof JobMinimal>;
 
 const JobStep = z
     .object({
-        stage: z.string(),
-        step_name: z.string(),
-        step_description: z.string(),
-        timestamp: z.coerce.date(),
+        description: z.string(),
+        id: z.string(),
+        name: z.string(),
+        started_at: z.preprocess(
+            (val) => (val ? new Date(val as string) : null),
+            z.date().nullable(),
+        ),
     })
-    .transform((data) => ({
-        name: data.step_name || data.stage,
-        description: data.step_description,
-        startedAt: data.timestamp,
+    .transform(({ id, name, description, started_at }) => ({
+        id,
+        name,
+        description,
+        startedAt: started_at,
     }));
-
 export type ServerJobStep = z.input<typeof JobStep>;
 export type JobStep = z.infer<typeof JobStep>;
 
-const terminalStates = ["cancelled", "failed", "succeeded"];
+const JobClaim = z
+    .object({
+        cpu: z.number(),
+        image: z.string(),
+        mem: z.number(),
+        runner_id: z.string(),
+        runtime_version: z.string(),
+        workflow_version: z.string(),
+    })
+    .transform(
+        ({
+            cpu,
+            image,
+            mem,
+            runner_id,
+            runtime_version,
+            workflow_version,
+        }) => ({
+            cpu,
+            image,
+            mem,
+            runnerId: runner_id,
+            runtimeVersion: runtime_version,
+            workflowVersion: workflow_version,
+        }),
+    );
+export type ServerJobClaim = z.input<typeof JobClaim>;
+export type JobClaim = z.infer<typeof JobClaim>;
 
 export const Job = z
     .object({
         args: z.record(z.string(), z.unknown()),
         id: z.string(),
-        acquired: z.boolean(),
+        claim: JobClaim.nullish(),
+        claimed_at: z.preprocess(
+            (val) => (val ? new Date(val as string) : null),
+            z.date().nullable(),
+        ),
         created_at: z.coerce.date(),
+        finished_at: z.preprocess(
+            (val) => (val ? new Date(val as string) : null),
+            z.date().nullable(),
+        ),
         progress: z.int(),
-        stage: z.preprocess(
-            (val) => (val === "" ? null : val),
-            z.string().nullable(),
-        ),
-        status: z.array(
-            z.looseObject({ state: z.string(), timestamp: z.coerce.date() }),
-        ),
-        state: z.nullable(JobStateParsed),
+        steps: z.array(JobStep).nullable(),
+        state: JobStateSchema,
         user: z.object({
             id: z.int(),
             handle: z.string(),
         }),
         workflow: Workflow,
     })
-    .transform(({ created_at, stage, state, status, ...rest }) => ({
+    .transform(({ claimed_at, created_at, finished_at, state, ...rest }) => ({
         ...rest,
+        claimedAt: claimed_at,
         createdAt: created_at,
-        step: stage,
-        finishedAt: terminalStates.includes(state)
-            ? status[status.length - 1]?.timestamp
-            : undefined,
+        finishedAt: finished_at,
         state,
-        steps: status
-            .filter((s) => s.state === "running")
-            .map((s) => JobStep.parse(s)),
     }));
-
 export type ServerJob = z.input<typeof Job>;
 export type Job = z.infer<typeof Job>;
 
-export type JobCounts = {
-    [state in ServerJobState]?: { [key: string]: number | null };
-};
+const JobCountsSchema = z
+    .record(z.string(), z.record(z.string(), z.number()))
+    .transform((counts) => {
+        const result: Partial<Record<JobState, number>> = {};
+        for (const state of Object.keys(counts) as JobState[]) {
+            result[state] = Object.values(counts[state]).reduce(
+                (sum, count) => sum + count,
+                0,
+            );
+        }
+        return result as Record<JobState, number>;
+    });
 
-export type JobSearchResult = SearchResult & {
-    counts: JobCounts;
+export type JobCounts = z.infer<typeof JobCountsSchema>;
 
-    /** Gives information about each job */
-    documents: Array<JobMinimal>;
-};
+export const JobSearchResult = z
+    .object({
+        counts: JobCountsSchema,
+        found_count: z.number(),
+        items: z.array(JobMinimal),
+        page: z.number(),
+        page_count: z.number(),
+        per_page: z.number(),
+        total_count: z.number(),
+    })
+    .transform(
+        ({
+            counts,
+            found_count,
+            items,
+            page,
+            page_count,
+            per_page,
+            total_count,
+        }) => ({
+            counts,
+            foundCount: found_count,
+            items,
+            page,
+            pageCount: page_count,
+            perPage: per_page,
+            totalCount: total_count,
+        }),
+    );
+
+export type ServerJobSearchResult = z.input<typeof JobSearchResult>;
+export type JobSearchResult = z.infer<typeof JobSearchResult>;

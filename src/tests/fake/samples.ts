@@ -9,7 +9,7 @@ import {
     WorkflowState,
 } from "@samples/types";
 import nock from "nock";
-import { createFakeServerJobMinimal } from "./jobs";
+import { createFakeServerJobNested } from "./jobs";
 import { createFakeLabelNested } from "./labels";
 import { createFakeSubtractionNested } from "./subtractions";
 import { createFakeUserNested } from "./user";
@@ -28,7 +28,7 @@ export function createFakeSampleMinimal(
         created_at: faker.date.past().toISOString(),
         host: faker.word.noun({ strategy: "any-length" }),
         isolate: faker.word.noun({ strategy: "any-length" }),
-        job: createFakeServerJobMinimal({ workflow: "create_sample" }),
+        job: createFakeServerJobNested({ workflow: "create_sample" }),
         labels: [createFakeLabelNested()],
         library_type: LibraryType.normal,
         notes: faker.lorem.lines(5),

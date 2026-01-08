@@ -40,30 +40,34 @@ export default function JobsList() {
         initialState,
     );
     const { page } = usePageParam();
-    const { data, isPending } = useFindJobs(page, 25, states);
+    const result = useFindJobs(page, 25, states);
 
-    if (isPending) {
+    console.log("useFindJobs result:", result);
+
+    const { data, isPending } = result;
+
+    if (isPending || !data) {
         return <LoadingPlaceholder />;
     }
 
     const {
-        documents,
+        items,
         page: storedPage,
-        page_count,
+        pageCount,
         counts,
-        found_count,
-        total_count,
+        foundCount,
+        totalCount,
     } = data;
 
     let inner: ReactElement;
 
-    if (total_count === 0) {
+    if (totalCount === 0) {
         inner = (
             <JobsListEmpty>
                 <h3>No jobs found</h3>
             </JobsListEmpty>
         );
-    } else if (found_count === 0) {
+    } else if (foundCount === 0) {
         inner = (
             <JobsListEmpty>
                 <h3>No jobs matching filters</h3>
@@ -72,14 +76,14 @@ export default function JobsList() {
     } else {
         inner = (
             <Pagination
-                items={documents}
+                items={items}
                 storedPage={storedPage}
                 currentPage={page}
-                pageCount={page_count}
+                pageCount={pageCount}
             >
                 <BoxGroup>
-                    {documents.map((document) => (
-                        <JobItem key={document.id} {...document} />
+                    {items.map((item) => (
+                        <JobItem key={item.id} {...item} />
                     ))}
                 </BoxGroup>
             </Pagination>

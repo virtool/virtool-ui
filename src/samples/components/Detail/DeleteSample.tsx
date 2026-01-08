@@ -7,7 +7,7 @@ import {
     DialogTrigger,
 } from "@base/Dialog";
 import IconButton from "@base/IconButton";
-import { JobMinimal } from "@jobs/types";
+import { JobNested } from "@jobs/types";
 import { useRemoveSample } from "@samples/queries";
 import { checkCanDeleteSample } from "@samples/utils";
 import { useState } from "react";
@@ -17,7 +17,7 @@ type DeleteSampleProps = {
     id: string;
 
     /** The sample's job if it exists */
-    job?: JobMinimal;
+    job?: JobNested;
 
     /** The name of the sample being deleted */
     name: string;

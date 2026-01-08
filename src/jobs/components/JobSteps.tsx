@@ -8,7 +8,7 @@ type JobStepsProps = {
 };
 
 export default function JobSteps({ state, steps }: JobStepsProps) {
-    if (steps.length === 0) {
+    if (steps === null || steps.length === 0) {
         return null;
     }
 
@@ -16,7 +16,7 @@ export default function JobSteps({ state, steps }: JobStepsProps) {
         <BoxGroup>
             {steps.map((step, index) => (
                 <JobStepItem
-                    key={index}
+                    key={step.id}
                     step={step}
                     state={index === steps.length - 1 ? state : "succeeded"}
                 />

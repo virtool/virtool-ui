@@ -12,7 +12,7 @@ describe("<JobsList />", () => {
         const scope = mockApiGetJobs([
             createFakeServerJobMinimal({
                 progress: 100,
-                state: "complete",
+                state: "succeeded",
                 workflow: "create_sample",
             }),
         ]);
@@ -46,7 +46,7 @@ describe("<JobsList />", () => {
 
     it("should show message when no jobs match filters", async () => {
         const scope = mockApiGetJobs(
-            [createFakeServerJobMinimal({ progress: 100, state: "complete" })],
+            [createFakeServerJobMinimal({ progress: 100, state: "succeeded" })],
             0,
         );
 

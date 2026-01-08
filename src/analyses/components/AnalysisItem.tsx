@@ -1,4 +1,4 @@
-import { JobMinimal } from "@/jobs/types";
+import { JobNested } from "@/jobs/types";
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoleName } from "@administration/types";
 import { getColor, getFontSize, getFontWeight, sizes } from "@app/theme";
@@ -107,7 +107,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
         </UnsupportedAnalysisTitle>
     );
 
-    const job = analysis.job && JobMinimal.parse(analysis.job);
+    const job = analysis.job && JobNested.parse(analysis.job);
 
     return (
         <StyledAnalysisItem>

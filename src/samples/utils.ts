@@ -1,4 +1,4 @@
-import { JobMinimal } from "@jobs/types";
+import { JobNested } from "@jobs/types";
 import { LibraryType } from "./types";
 
 export const WorkflowStates = {
@@ -20,10 +20,7 @@ export function getLibraryTypeDisplayName(libraryType: LibraryType) {
 /**
  * Check if a sample can be deleted based on its state
  */
-export function checkCanDeleteSample(
-    ready: boolean,
-    job?: JobMinimal,
-): boolean {
+export function checkCanDeleteSample(ready: boolean, job?: JobNested): boolean {
     if (ready) {
         return true;
     }

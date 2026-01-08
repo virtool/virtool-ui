@@ -1,17 +1,5 @@
 import { apiClient } from "@app/api";
-import {
-    JobMinimal,
-    JobSearchResult,
-    JobState,
-    jobStateToLegacy,
-} from "./types";
-
-/**
- * Convert new job states to legacy states for API queries.
- */
-function convertToLegacyJobStates(states: JobState[]): string[] {
-    return states.flatMap((state) => jobStateToLegacy[state]);
-}
+import { JobState, ServerJob, ServerJobSearchResult } from "./types";
 
 /**
  * Fetch a page of job search results
@@ -25,15 +13,12 @@ export async function findJobs(
     page: number,
     per_page: number,
     states: JobState[],
-): Promise<JobSearchResult> {
+): Promise<ServerJobSearchResult> {
     const response = await apiClient
-        .get("/jobs")
-        .query({ page, per_page, state: convertToLegacyJobStates(states) });
+        .get("/jobs/v2")
+        .query({ page, per_page, state: states });
 
-    return {
-        ...response.body,
-        documents: response.body.documents.map(JobMinimal.parse),
-    };
+    return response.body;
 }
 
 /**
@@ -42,7 +27,7 @@ export async function findJobs(
  * @param jobId - The id of the job to fetch
  * @returns A promise resolving to a single job
  */
-export async function fetchJob(jobId: string): Promise<unknown> {
-    const response = await apiClient.get(`/jobs/${jobId}`);
+export async function fetchJob(jobId: string): Promise<ServerJob> {
+    const response = await apiClient.get(`/jobs/v2/${jobId}`);
     return response.body;
 }

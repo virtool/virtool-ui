@@ -1,13 +1,25 @@
 import { faker } from "@faker-js/faker";
 import {
     JobMinimal,
+    JobNested,
     JobState,
     ServerJobMinimal,
-    ServerJobState,
+    ServerJobNested,
     Workflow,
 } from "@jobs/types";
 import nock from "nock";
 import { createFakeUserNested } from "./user";
+
+/** V1 job states used by the server for nested jobs */
+type ServerJobState =
+    | "cancelled"
+    | "complete"
+    | "error"
+    | "preparing"
+    | "running"
+    | "terminated"
+    | "timeout"
+    | "waiting";
 
 /**
  * Creates a fake job minimal object in server response shape.
@@ -20,13 +32,12 @@ export function createFakeServerJobMinimal(
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         created_at: faker.date.past().toISOString(),
         progress: faker.number.int({ min: 0, max: 100 }),
-        stage: "waiting",
-        state: faker.helpers.arrayElement<ServerJobState>([
+        state: faker.helpers.arrayElement<JobState>([
             "cancelled",
-            "complete",
-            "error",
+            "failed",
+            "pending",
             "running",
-            "waiting",
+            "succeeded",
         ]),
         user: createFakeUserNested(),
         workflow: "pathoscope_bowtie",
@@ -42,10 +53,9 @@ export function createFakeJobMinimal(
     overrides?: Partial<JobMinimal>,
 ): JobMinimal {
     return {
-        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         createdAt: faker.date.past(),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         progress: faker.number.int({ min: 0, max: 100 }),
-        step: "waiting",
         state: faker.helpers.arrayElement<JobState>([
             "cancelled",
             "failed",
@@ -54,8 +64,66 @@ export function createFakeJobMinimal(
             "succeeded",
         ]),
         user: {
-            id: faker.number.int(),
             handle: faker.internet.username(),
+            id: faker.number.int(),
+        },
+        workflow: faker.helpers.arrayElement<Workflow>([
+            "build_index",
+            "create_sample",
+            "create_subtraction",
+            "nuvs",
+            "pathoscope",
+        ]),
+        ...overrides,
+    };
+}
+
+/**
+ * Creates a fake nested job object in server response shape (V1 states).
+ * Use this for HTTP mocks of resources with nested jobs (samples, analyses, etc).
+ */
+export function createFakeServerJobNested(
+    overrides?: Partial<ServerJobNested>,
+): ServerJobNested {
+    return {
+        created_at: faker.date.past().toISOString(),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+        progress: faker.number.int({ min: 0, max: 100 }),
+        state: faker.helpers.arrayElement<ServerJobState>([
+            "cancelled",
+            "complete",
+            "error",
+            "preparing",
+            "running",
+            "terminated",
+            "timeout",
+            "waiting",
+        ]),
+        user: createFakeUserNested(),
+        workflow: "pathoscope_bowtie",
+        ...overrides,
+    };
+}
+
+/**
+ * Creates a fake nested job object in client shape (transformed with V2 states).
+ * Use this for components that expect the transformed JobNested type.
+ */
+export function createFakeJobNested(overrides?: Partial<JobNested>): JobNested {
+    return {
+        createdAt: faker.date.past(),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+        progress: faker.number.int({ min: 0, max: 100 }),
+        state: faker.helpers.arrayElement<JobState>([
+            "cancelled",
+            "failed",
+            "pending",
+            "running",
+            "succeeded",
+        ]),
+        user: {
+            handle: faker.internet.username(),
+            id: faker.number.int(),
         },
         workflow: faker.helpers.arrayElement<Workflow>([
             "build_index",
@@ -79,14 +147,16 @@ export function mockApiGetJobs(
     jobs: ReturnType<typeof createFakeServerJobMinimal>[],
     found_count?: number,
 ) {
-    return nock("http://localhost").get("/api/jobs").query(true).reply(200, {
-        documents: jobs,
-        counts: null,
-        found_count,
-        page: 1,
-        page_count: 1,
-        per_page: 25,
-        ready_count: jobs.length,
-        total_count: jobs.length,
-    });
+    return nock("http://localhost")
+        .get("/api/jobs/v2")
+        .query(true)
+        .reply(200, {
+            items: jobs,
+            counts: {},
+            found_count: found_count ?? jobs.length,
+            page: 1,
+            page_count: 1,
+            per_page: 25,
+            total_count: jobs.length,
+        });
 }
