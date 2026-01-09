@@ -10,16 +10,6 @@ import InputSimple from "@base/InputSimple";
 import RelativeTime from "@base/RelativeTime";
 import SaveButton from "@base/SaveButton";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
-
-const PasswordFooter = styled.div`
-    align-items: center;
-    display: flex;
-
-    button {
-        margin-left: auto;
-    }
-`;
 
 type PasswordProps = {
     /** The users unique id */
@@ -93,7 +83,7 @@ export default function Password({
                         </InputContainer>
                     </InputGroup>
 
-                    <PasswordFooter>
+                    <div className="flex items-center justify-between">
                         <Checkbox
                             checked={forceReset}
                             id="ForceReset"
@@ -101,7 +91,7 @@ export default function Password({
                             onClick={handleSetForceReset}
                         />
                         <SaveButton />
-                    </PasswordFooter>
+                    </div>
                 </form>
             </BoxGroupSection>
         </BoxGroup>

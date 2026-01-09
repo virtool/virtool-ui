@@ -5,14 +5,6 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import { Controller, useForm } from "react-hook-form";
-import styled from "styled-components";
-
-const DialogFooter = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-`;
 
 interface CreateUserFormProps {
     /** The user's handle or username */
@@ -77,7 +69,7 @@ export function CreateUserForm({
                 <InputError>{errors.password?.message || error}</InputError>
             </InputGroup>
 
-            <DialogFooter>
+            <div className="flex justify-between items-center mb-2.5">
                 <Controller
                     name="forceReset"
                     control={control}
@@ -91,7 +83,7 @@ export function CreateUserForm({
                     )}
                 />
                 <SaveButton />
-            </DialogFooter>
+            </div>
         </form>
     );
 }

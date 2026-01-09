@@ -6,12 +6,7 @@ import PseudoLabel from "@base/PseudoLabel";
 import { useListGroups } from "@groups/queries";
 import { GroupMinimal } from "@groups/types";
 import { xor } from "es-toolkit/array";
-import styled from "styled-components";
 import { UserGroup } from "./UserGroup";
-
-const UserGroupsList = styled(BoxGroup)`
-    margin-bottom: 15px;
-`;
 
 type UserGroupsType = {
     /** The groups associated with the user */
@@ -47,7 +42,7 @@ export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
     return (
         <div>
             <PseudoLabel>Groups</PseudoLabel>
-            <UserGroupsList>
+            <BoxGroup className="mb-4">
                 {data.length ? (
                     data.map(({ id, name }) => (
                         <UserGroup
@@ -61,7 +56,7 @@ export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
                 ) : (
                     <NoneFoundSection key="noneFound" noun="groups" />
                 )}
-            </UserGroupsList>
+            </BoxGroup>
         </div>
     );
 }
