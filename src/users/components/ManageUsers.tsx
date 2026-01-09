@@ -2,12 +2,12 @@ import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoleName } from "@administration/types";
 import { useUrlSearchParam } from "@app/hooks";
 import Alert from "@base/Alert";
-import Icon from "@base/Icon";
 import InputSearch from "@base/InputSearch";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
 import Toolbar from "@base/Toolbar";
+import { CircleAlert } from "lucide-react";
 import { useState } from "react";
 import CreateUser from "./CreateUser";
 import UsersList from "./UsersList";
@@ -57,7 +57,7 @@ export function ManageUsers() {
 
     return (
         <Alert color="orange" level>
-            <Icon name="exclamation-circle" />
+            <CircleAlert />
             <span>
                 <strong>You do not have permission to manage users.</strong>
                 <span> Contact an administrator.</span>

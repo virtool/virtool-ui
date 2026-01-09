@@ -1,11 +1,5 @@
 import Checkbox from "@base/Checkbox";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
-import styled from "styled-components";
-
-const StyledUserGroup = styled(SelectBoxGroupSection)`
-    text-transform: capitalize;
-    user-select: none;
-`;
 
 type UserGroupTypes = {
     /** The group unique id */
@@ -26,12 +20,16 @@ type UserGroupTypes = {
  */
 export function UserGroup({ id, name, toggled, onClick }: UserGroupTypes) {
     return (
-        <StyledUserGroup active={toggled} onClick={() => onClick(id)}>
+        <SelectBoxGroupSection
+            active={toggled}
+            onClick={() => onClick(id)}
+            className="capitalize select-none"
+        >
             <Checkbox
                 checked={toggled}
                 id={`UserGroupCheckbox-${id}`}
                 label={name}
             />
-        </StyledUserGroup>
+        </SelectBoxGroupSection>
     );
 }

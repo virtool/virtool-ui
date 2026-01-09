@@ -34,6 +34,7 @@ function Checkbox({
                         "border-gray-300": !checked,
                         "border-cyan-700": checked,
                     },
+                    "cursor-pointer",
                     "inline-flex",
                     "items-center",
                     "justify-center",
@@ -43,7 +44,7 @@ function Checkbox({
                 id={id}
                 onClick={onClick}
             >
-                <CheckboxPrimitive.Indicator>
+                <CheckboxPrimitive.Indicator forceMount>
                     <Icon
                         className={cn({ invisible: !checked }, "text-white")}
                         name="check"
@@ -52,7 +53,7 @@ function Checkbox({
             </CheckboxPrimitive.Root>
             {label && (
                 <label
-                    className="flex gap-2 items-center font-normal m-0 select-none"
+                    className="flex gap-2 items-center font-normal m-0 select-none cursor-pointer"
                     htmlFor={id}
                 >
                     {labelComponent || label}

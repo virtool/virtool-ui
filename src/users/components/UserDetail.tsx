@@ -4,10 +4,9 @@ import { useFetchUser, useUpdateUser } from "@administration/queries";
 import { AdministratorRoleName } from "@administration/types";
 import { usePathParams } from "@app/hooks";
 import Alert from "@base/Alert";
-import Icon from "@base/Icon";
 import InitialIcon from "@base/InitialIcon";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import { ShieldUserIcon } from "lucide-react";
+import { CircleAlert, ShieldUserIcon } from "lucide-react";
 import Password from "./Password";
 import PrimaryGroup from "./PrimaryGroup";
 import { UserActivationBanner } from "./UserActivationBanner";
@@ -35,7 +34,7 @@ export default function UserDetail() {
     if (!canEdit) {
         return (
             <Alert color="orange" level>
-                <Icon name="exclamation-circle" />
+                <CircleAlert />
                 <span>
                     <strong>
                         You do not have permission to manage this user.

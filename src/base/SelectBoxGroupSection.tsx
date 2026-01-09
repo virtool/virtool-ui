@@ -10,9 +10,6 @@ type SelectBoxGroupSectionProps = {
 const StyledSelectBoxGroupSection = styled(
     BoxGroupSection,
 )<SelectBoxGroupSectionProps>`
-    background-color: ${(props) =>
-        props.active ? props.theme.color.blue : "transparent"};
-    color: ${(props) => (props.active ? props.theme.color.white : "inherit")};
     cursor: pointer;
     width: 100%;
 

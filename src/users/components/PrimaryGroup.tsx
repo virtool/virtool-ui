@@ -4,11 +4,6 @@ import InputLabel from "@base/InputLabel";
 import InputSelect from "@base/InputSelect";
 import { GroupMinimal } from "@groups/types";
 import { capitalize } from "es-toolkit/string";
-import styled from "styled-components";
-
-export const PrimaryGroupOption = styled.option`
-    text-transform: capitalize;
-`;
 
 type PrimaryGroupProps = {
     /** The groups associated with the user */
@@ -50,9 +45,9 @@ export default function PrimaryGroup({
                     None
                 </option>
                 {groups.map(({ id, name }) => (
-                    <PrimaryGroupOption key={id} value={id}>
+                    <option key={id} value={id} className="capitalize">
                         {capitalize(name)}
-                    </PrimaryGroupOption>
+                    </option>
                 ))}
             </InputSelect>
         </InputGroup>
