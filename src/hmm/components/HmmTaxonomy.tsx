@@ -1,51 +1,41 @@
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
-import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
+import ScrollArea from "@base/ScrollArea";
 import { sortBy } from "es-toolkit";
-import styled from "styled-components";
-
-const HmmTaxonomyItem = styled(BoxGroupSection)`
-    display: flex;
-    justify-content: space-between;
-`;
-
-const StyledHmmTaxonomy = styled(BoxGroupSection)`
-    max-height: 210px;
-    overflow-y: auto;
-    padding: 0;
-`;
 
 type HmmTaxonomyProps = {
     /** The names and corresponding counts of the taxonomy items */
     counts: { [key: string]: number };
-    /** The title to be displayed */
-    title: string;
+    /** The subtitle to be displayed */
+    subtitle: string;
 };
 
 /**
  * Displays a list of taxonomy items
  */
-export function HmmTaxonomy({ counts, title }: HmmTaxonomyProps) {
+export function HmmTaxonomy({ counts, subtitle }: HmmTaxonomyProps) {
     const sorted = sortBy(
         Object.entries(counts).map(([name, count]) => ({ name, count })),
         ["name"],
     );
 
     const components = sorted.map(({ name, count }) => (
-        <HmmTaxonomyItem key={name}>
+        <BoxGroupSection key={name} className="flex justify-between">
             {name} <Badge>{count}</Badge>
-        </HmmTaxonomyItem>
+        </BoxGroupSection>
     ));
 
     return (
-        <div>
+        <section>
+            <header className="mb-4">
+                <h4 className="font-medium">{subtitle}</h4>
+            </header>
             <BoxGroup>
-                <BoxGroupHeader>
-                    <h2>{title}</h2>
-                </BoxGroupHeader>
-                <StyledHmmTaxonomy>{components}</StyledHmmTaxonomy>
+                <ScrollArea className="w-full h-52 border-none rounded-none mr-0">
+                    {components}
+                </ScrollArea>
             </BoxGroup>
-        </div>
+        </section>
     );
 }

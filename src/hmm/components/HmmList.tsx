@@ -7,14 +7,14 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useListHmms } from "../queries";
-import { HMMInstaller } from "./HMMInstaller";
-import HMMItem from "./HMMItem";
-import HMMToolbar from "./HMMToolbar";
+import { HmmInstall } from "./HmmInstall";
+import HmmItem from "./HmmItem";
+import HmmToolbar from "./HmmToolbar";
 
 /**
  * A list of HMMs with filtering options
  */
-export default function HMMList() {
+export default function HmmList() {
     const { page } = usePageParam();
     const { value: term, setValue: setTerm } =
         useUrlSearchParam<string>("find");
@@ -48,7 +48,7 @@ export default function HMMList() {
 
             {total_count ? (
                 <>
-                    <HMMToolbar
+                    <HmmToolbar
                         term={term}
                         onChange={(e) => setTerm(e.target.value)}
                     />
@@ -61,7 +61,7 @@ export default function HMMList() {
                         >
                             <BoxGroup>
                                 {documents.map((document) => (
-                                    <HMMItem key={document.id} hmm={document} />
+                                    <HmmItem key={document.id} hmm={document} />
                                 ))}
                             </BoxGroup>
                         </Pagination>
@@ -70,7 +70,7 @@ export default function HMMList() {
                     )}
                 </>
             ) : (
-                <HMMInstaller />
+                <HmmInstall />
             )}
         </div>
     );

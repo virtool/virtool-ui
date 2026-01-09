@@ -5,9 +5,9 @@ import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import HMM from "../HMM";
+import HMM from "../Hmm";
 
-describe("<HMMList />", () => {
+describe("<HmmList />", () => {
     let fakeHMMData;
     let path;
 
@@ -23,7 +23,7 @@ describe("<HMMList />", () => {
         renderWithRouter(<HMM />, path);
 
         expect(await screen.findByText("HMMs")).toBeInTheDocument();
-        expect(screen.getByPlaceholderText("Definition")).toBeInTheDocument();
+        expect(screen.getByPlaceholderText("Name")).toBeInTheDocument();
 
         expect(
             screen.getByText(fakeHMMData.documents[0].cluster),
@@ -46,7 +46,7 @@ describe("<HMMList />", () => {
         scope.done();
     });
 
-    describe("<HMMInstaller />", () => {
+    describe("<HmmInstall />", () => {
         it("should render correctly when installed = false and user has permission to install", async () => {
             const fakeHMMData = createFakeHmmSearchResults({
                 documents: [],
@@ -62,14 +62,11 @@ describe("<HMMList />", () => {
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 
             expect(
-                screen.getByText("No HMM data available."),
+                screen.getByText("HMM profiles not installed."),
             ).toBeInTheDocument();
             expect(
-                screen.getByText(
-                    /You can download and install the official HMM data automatically from our/,
-                ),
+                screen.getByText(/HMM profiles are required for NuVs analysis/),
             ).toBeInTheDocument();
-            expect(screen.getByText("GitHub repository")).toBeInTheDocument();
 
             expect(
                 await screen.findByRole("button", { name: "Install" }),
@@ -91,10 +88,7 @@ describe("<HMMList />", () => {
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 
             expect(
-                screen.getByText("You do not have permission to install HMMs."),
-            ).toBeInTheDocument();
-            expect(
-                screen.getByText("Contact an administrator."),
+                screen.getByText("Contact an administrator to install HMMs."),
             ).toBeInTheDocument();
 
             expect(
@@ -130,7 +124,7 @@ describe("<HMMList />", () => {
             expect(screen.getByText("decompress")).toBeInTheDocument();
 
             expect(
-                screen.queryByText("No HMM data available."),
+                screen.queryByText("HMM profiles not installed."),
             ).not.toBeInTheDocument();
             expect(
                 screen.queryByRole("button", { name: "Install" }),

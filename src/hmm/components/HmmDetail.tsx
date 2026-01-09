@@ -1,29 +1,17 @@
 import { usePathParams } from "@app/hooks";
-import { cn } from "@app/utils";
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
-import BoxGroupHeader from "@base/BoxGroupHeader";
-import BoxGroupTable from "@base/BoxGroupTable";
-import { device } from "@base/device";
+import BoxGroupSection from "@base/BoxGroupSection";
+import ExternalLink from "@base/ExternalLink";
 import Label from "@base/Label";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
+import ScrollArea from "@base/ScrollArea";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import styled from "styled-components";
 import { useFetchHmm } from "../queries";
-import { ClusterMember } from "./ClusterMember";
+import { HmmEntropyIndicator } from "./HmmEntropyIndicator";
 import { HmmTaxonomy } from "./HmmTaxonomy";
-
-const TaxonomyGrid = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: ${(props) => props.theme.gap.column};
-
-    @media (max-width: ${device.tablet}) {
-        grid-template-columns: 1fr;
-    }
-`;
 
 /**
  * The HMM detailed view
@@ -42,13 +30,15 @@ export default function HmmDetail() {
 
     const clusterMembers = data.entries.map(
         ({ name, accession, organism }, index) => (
-            <ClusterMember
-                name={name}
-                accession={accession}
-                organism={organism}
-                key={index}
-                index={index}
-            />
+            <BoxGroupSection key={index} className="grid grid-cols-3">
+                <ExternalLink
+                    href={`http://www.ncbi.nlm.nih.gov/protein/${accession}`}
+                >
+                    {accession}
+                </ExternalLink>
+                <span>{name}</span>
+                <span>{organism}</span>
+            </BoxGroupSection>
         ),
     );
 
@@ -67,83 +57,79 @@ export default function HmmDetail() {
             </ViewHeader>
 
             <BoxGroup>
-                <BoxGroupHeader>
-                    <h2>General</h2>
-                </BoxGroupHeader>
-
-                <BoxGroupTable>
-                    <tbody>
-                        <tr>
-                            <th>Cluster</th>
-                            <td>{data.cluster}</td>
-                        </tr>
-
-                        <tr>
-                            <th>Best Definitions</th>
-                            <td>{names}</td>
-                        </tr>
-
-                        <tr>
-                            <th>Length</th>
-                            <td>{data.length}</td>
-                        </tr>
-
-                        <tr>
-                            <th>Mean Entropy</th>
-                            <td>{data.mean_entropy}</td>
-                        </tr>
-
-                        <tr>
-                            <th>Total Entropy</th>
-                            <td>{data.total_entropy}</td>
-                        </tr>
-                    </tbody>
-                </BoxGroupTable>
+                <BoxGroupSection className="flex items-center justify-between">
+                    <div>
+                        <span className="font-medium">Cluster</span>
+                        <p className="m-0 text-gray-500">
+                            Unique identifier for this profile
+                        </p>
+                    </div>
+                    <span>{data.cluster}</span>
+                </BoxGroupSection>
+                <BoxGroupSection className="flex items-center justify-between">
+                    <div>
+                        <span className="font-medium">Names</span>
+                        <p className="m-0 text-gray-500">
+                            Common names derived from cluster members
+                        </p>
+                    </div>
+                    <div>{names}</div>
+                </BoxGroupSection>
+                <BoxGroupSection className="flex items-center justify-between">
+                    <div>
+                        <span className="font-medium">Length</span>
+                        <p className="m-0 text-gray-500">
+                            Number of consensus positions in the model
+                        </p>
+                    </div>
+                    <span>{data.length}</span>
+                </BoxGroupSection>
+                <BoxGroupSection className="flex items-center justify-between">
+                    <div>
+                        <span className="font-medium">Mean Entropy</span>
+                        <p className="m-0 text-gray-500">
+                            Average variability per position. Lower is more
+                            conserved.
+                        </p>
+                    </div>
+                    <HmmEntropyIndicator entropy={data.mean_entropy} />
+                </BoxGroupSection>
             </BoxGroup>
 
-            <BoxGroup>
-                <BoxGroupHeader>
-                    <h2 className="flex items-center gap-2">
+            <section>
+                <header className="mb-4">
+                    <h3 className="font-medium text-lg flex items-center gap-2">
                         Cluster Members
                         <Badge>{data.entries.length}</Badge>
-                    </h2>
-                </BoxGroupHeader>
-                <BoxGroupTable
-                    className={cn(
-                        "border-none",
-                        "flex",
-                        "flex-col",
-                        "h-80",
-                        "m-0",
-                        "w-full",
-                        "[&_thead]:flex-none",
-                        "[&_thead]:w-[calc(100%-0.9em)]",
-                        "[&_thead_th]:border-b-0",
-                        "[&_tbody]:flex-auto",
-                        "[&_tbody]:block",
-                        "[&_tbody]:overflow-y-auto",
-                        "[&_tbody]:border-t",
-                        "[&_tbody_tr]:w-full",
-                        "[&_tbody_tr:first-child_td]:border-t-0",
-                        "[&_thead,&_tbody_tr]:table",
-                        "[&_thead,&_tbody_tr]:table-fixed",
-                    )}
-                >
-                    <thead>
-                        <tr>
-                            <th>Accession</th>
-                            <th>Name</th>
-                            <th>Organism</th>
-                        </tr>
-                    </thead>
-                    <tbody>{clusterMembers}</tbody>
-                </BoxGroupTable>
-            </BoxGroup>
+                    </h3>
+                    <p className="m-0 text-gray-600">
+                        Protein sequences included in this cluster.
+                    </p>
+                </header>
+                <BoxGroup>
+                    <div className="grid grid-cols-3 font-medium bg-gray-100 py-2 px-6 border-b border-gray-300">
+                        <span>Accession</span>
+                        <span>Name</span>
+                        <span>Organism</span>
+                    </div>
+                    <ScrollArea className="w-full h-72 border-none rounded-none mr-0">
+                        {clusterMembers}
+                    </ScrollArea>
+                </BoxGroup>
+            </section>
 
-            <TaxonomyGrid>
-                <HmmTaxonomy title="Families" counts={data.families} />
-                <HmmTaxonomy title="Genera" counts={data.genera} />
-            </TaxonomyGrid>
+            <section>
+                <header className="mb-4">
+                    <h3 className="font-medium text-lg">Taxonomy</h3>
+                    <p className="m-0 text-gray-600">
+                        Taxonomic distribution of cluster member organisms.
+                    </p>
+                </header>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <HmmTaxonomy subtitle="Families" counts={data.families} />
+                    <HmmTaxonomy subtitle="Genera" counts={data.genera} />
+                </div>
+            </section>
         </div>
     );
 }

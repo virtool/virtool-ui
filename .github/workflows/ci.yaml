@@ -68,7 +68,7 @@ jobs:
             - name: Install
               run: npm ci
             - name: Run Prettier
-              run: npm run prettier
+              run: npx prettier . -l
     check-typescript:
         name: Check / Typescript
         runs-on: ubuntu-24.04
