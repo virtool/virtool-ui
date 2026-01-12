@@ -14,7 +14,7 @@ function generateCspStyleSrc(nonce) {
 }
 
 function generateCspConnectSrc() {
-    return `connect-src 'self' *.sentry.io : ""} `;
+    return `connect-src 'self' *.sentry.io`;
 }
 
 /**
