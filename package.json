@@ -2,7 +2,7 @@
   "type": "module",
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@sentry/react": "^10.32.1",
+    "@sentry/react": "^10.33.0",
     "@tanstack/react-query": "^5.90.16",
     "@tanstack/react-virtual": "^3.13.13",
     "class-variance-authority": "^0.7.1",
