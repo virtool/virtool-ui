@@ -1,3 +1,4 @@
+import { Middleware } from "@/server/types";
 import * as crypto from "node:crypto";
 
 const defaultSrc = "default-src 'self'";
@@ -18,21 +19,11 @@ function generateCspConnectSrc() {
 }
 
 /**
- * Arguments for the createCspMiddleware function.
- *
- * @typedef {Object} CspMiddlewareArgs
- * @property {CspMiddleware} req - An express request object.
- * @property {CspMiddleware} res - An express response object to which the CSP header will be applied.
- * @property {CspMiddleware} next - A function that passes control to the next middleware.
- */
-type CspMiddleware = (req: any, res: any, next: any) => void;
-
-/**
  * Applies CSP header to response object
  *
  * @func
  */
-export function createCspMiddleware(): CspMiddleware {
+export function createCspMiddleware(): Middleware {
     return (req, res, next) => {
         const nonce = crypto.randomBytes(32).toString("base64");
         res.locals.nonce = nonce;
