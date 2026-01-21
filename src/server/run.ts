@@ -4,6 +4,7 @@ import { createCspMiddleware } from "./csp";
 import { logger, loggingMiddleware } from "./logging.js";
 import { parseOptions } from "./options";
 import { createDefaultRouteHandler } from "./routes";
+import { ApplySecurityHeadersMiddleware } from "./securityHeaders";
 import { verifyApiVersion } from "./version";
 
 async function main() {
@@ -14,7 +15,11 @@ async function main() {
     const app = express();
 
     app.disable("x-powered-by");
-    app.use([createCspMiddleware(), loggingMiddleware]);
+    app.use([
+        createCspMiddleware(),
+        loggingMiddleware,
+        ApplySecurityHeadersMiddleware,
+    ]);
     app.set("views", path.join("dist"));
     app.locals.delimiter = "#";
 
