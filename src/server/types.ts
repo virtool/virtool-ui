@@ -8,4 +8,8 @@ import { NextFunction, Request, Response } from "express";
  * @property {Response} res - An express response object to which the CSP header will be applied.
  * @property {NextFunction} next - A function that passes control to the next middleware.
  */
-export type Middleware = (req: Request, res: Response, next: NextFunction) => void;
+export type Middleware = (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => void;
