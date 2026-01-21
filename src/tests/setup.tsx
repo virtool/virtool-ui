@@ -7,7 +7,7 @@ import userEvent from "@testing-library/user-event";
 import { ReactNode } from "react";
 import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
-import { BaseLocationHook, Router } from "wouter";
+import { Router } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
 
 process.env.TZ = "UTC";
@@ -44,7 +44,13 @@ export function renderWithRouter(ui: ReactNode, path?: string) {
     return { ...result, history };
 }
 
-export function MemoryRouter({ children, path }: { children: ReactNode; path?: string }) {
+export function MemoryRouter({
+    children,
+    path,
+}: {
+    children: ReactNode;
+    path?: string;
+}) {
     return (
         <Router hook={memoryLocation({ path }).hook} key={path?.length}>
             {children}
