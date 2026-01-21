@@ -7,7 +7,7 @@ import userEvent from "@testing-library/user-event";
 import { ReactNode } from "react";
 import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
-import { BaseLocationHook, Router } from "wouter";
+import { Router } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
 
 process.env.TZ = "UTC";
@@ -39,9 +39,7 @@ export function renderWithProviders(ui: ReactNode) {
 export function renderWithRouter(ui: ReactNode, path?: string) {
     const { hook, history } = memoryLocation({ path, record: true });
 
-    const result = renderWithProviders(
-        <MemoryRouter hook={hook}>{ui}</MemoryRouter>,
-    );
+    const result = renderWithProviders(<Router hook={hook}>{ui}</Router>);
 
     return { ...result, history };
 }
@@ -49,35 +47,12 @@ export function renderWithRouter(ui: ReactNode, path?: string) {
 export function MemoryRouter({
     children,
     path,
-    hook,
 }: {
     children: ReactNode;
     path?: string;
-    hook?: BaseLocationHook;
 }) {
-    if (!hook) {
-        hook = memoryLocation({ path }).hook;
-    }
-
-    // Create the location hook function that follows React hooks rules
-    const locationHook = (): [
-        string,
-        (path: string, ...args: any[]) => any,
-    ] => {
-        const [location, navigate] = hook();
-        // Split off search params to get just the pathname
-        const pathname = location.split("?")[0] || "";
-        return [pathname, navigate];
-    };
-
-    // Create the search hook function that follows React hooks rules
-    const searchHook = () => {
-        const [location] = hook();
-        return location.split("?")[1] || "";
-    };
-
     return (
-        <Router hook={locationHook} searchHook={searchHook}>
+        <Router hook={memoryLocation({ path }).hook} key={path?.length}>
             {children}
         </Router>
     );

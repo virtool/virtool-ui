@@ -30,7 +30,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.20.6",
     "winston": "^3.19.0",
-    "wouter": "^3.3.5",
+    "wouter": "^3.9.0",
     "zod": "^4.3.5",
     "zustand": "^5.0.10"
   },
