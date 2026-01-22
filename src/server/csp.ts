@@ -2,6 +2,10 @@ import { Middleware } from "@/server/types";
 import * as crypto from "node:crypto";
 
 const defaultSrc = "default-src 'self'";
+const baseUri = "base-uri 'self'";
+const objectSrc = "object-src 'none'";
+const formAction = "form-action 'self'";
+const frameAncestors = "frame-ancestors 'none'";
 const fontAwesomeUrl = "https://use.fontawesome.com";
 const fontSrc = `font-src 'self' ${fontAwesomeUrl}`;
 const imgSrc = "img-src 'self' data:";
@@ -30,6 +34,10 @@ export function createCspMiddleware(): Middleware {
 
         const csp = [
             defaultSrc,
+            baseUri,
+            objectSrc,
+            formAction,
+            frameAncestors,
             fontSrc,
             imgSrc,
             generateCspConnectSrc(),
