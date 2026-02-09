@@ -23,8 +23,9 @@ const baseSampleLabelVariants = cva(
     },
 );
 
-interface BaseSampleLabelProps
-    extends VariantProps<typeof baseSampleLabelVariants> {
+interface BaseSampleLabelProps extends VariantProps<
+    typeof baseSampleLabelVariants
+> {
     children: ReactNode;
     className?: string;
     color?: string;
