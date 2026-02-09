@@ -40,6 +40,7 @@ export const Workflow = z.preprocess(
         "create_subtraction",
         "nuvs",
         "pathoscope",
+        "iimi",
     ]),
 );
 export type Workflow = z.infer<typeof Workflow>;
