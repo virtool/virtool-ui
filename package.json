@@ -20,7 +20,7 @@
     "numbro": "^2.5.0",
     "radix-ui": "^1.4.3",
     "react": "^19.2.3",
-    "react-dom": "^19.2.3",
+    "react-dom": "^19.2.4",
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.71.1",
     "semver": "^7.7.3",
