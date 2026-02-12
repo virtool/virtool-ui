@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import IconButton from "./IconButton";
 
 type CloseButtonProps = {
@@ -5,5 +6,5 @@ type CloseButtonProps = {
 };
 
 export default function CloseButton({ onClick }: CloseButtonProps) {
-    return <IconButton name="times" tip="close" onClick={onClick} />;
+    return <IconButton IconComponent={X} tip="close" onClick={onClick} />;
 }

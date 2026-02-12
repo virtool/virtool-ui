@@ -5,6 +5,7 @@ import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { Pencil, Trash } from "lucide-react";
 import styled from "styled-components";
 
 const SequenceHeaderButtons = styled.span`
@@ -52,13 +53,13 @@ export default function SequenceButtons({ id, onCollapse }) {
             {canModify && (
                 <>
                     <IconButton
-                        name="pen"
+                        IconComponent={Pencil}
                         color="grayDark"
                         tip="Edit"
                         onClick={() => setOpenEditSequence(id)}
                     />
                     <IconButton
-                        name="trash"
+                        IconComponent={Trash}
                         color="red"
                         tip="Remove"
                         onClick={() => setOpenRemoveSequence(id)}

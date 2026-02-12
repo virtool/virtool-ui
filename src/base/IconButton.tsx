@@ -1,13 +1,14 @@
 import { cn } from "@app/utils";
+import { LucideIcon } from "lucide-react";
 import { IconColor } from "./Icon";
 import Tooltip from "./Tooltip";
 
-type IconButtonProps = {
+export type IconButtonProps = {
     className?: string;
     color?: IconColor;
-    faStyle?: "fas" | "far" | "fal" | "fab";
-    name: string;
+    IconComponent: LucideIcon;
     onClick?: () => void;
+    size?: number;
     tip: string;
     tipPlacement?: "top" | "right" | "bottom" | "left";
 };
@@ -18,17 +19,16 @@ type IconButtonProps = {
 export default function IconButton({
     className,
     color = "black",
-    faStyle = "fas",
-    name,
+    IconComponent,
     onClick,
+    size = 20,
     tip,
     tipPlacement,
 }: IconButtonProps) {
-    const icon = (
+    const iconButton = (
         <button
             className={cn(
-                faStyle,
-                `fa-${name}`,
+                "ml-auto",
                 "bg-inherit",
                 "border-none",
                 "cursor-pointer",
@@ -63,12 +63,14 @@ export default function IconButton({
             aria-label={tip}
             type="button"
             onClick={onClick}
-        />
+        >
+            <IconComponent size={size} />
+        </button>
     );
 
     return (
         <Tooltip position={tipPlacement || "top"} tip={tip}>
-            {icon}
+            {iconButton}
         </Tooltip>
     );
 }

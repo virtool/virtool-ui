@@ -7,6 +7,7 @@ import { getFontSize, getFontWeight } from "@app/theme";
 import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
 import { User } from "@users/types";
+import { Trash } from "lucide-react";
 import styled from "styled-components";
 import AdministratorRoleSelect from "./AdministratorRoleSelect";
 
@@ -60,7 +61,7 @@ export default function AdministratorItem({
                 value={user.administrator_role}
             />
             <IconButton
-                name="trash"
+                IconComponent={Trash}
                 color="red"
                 tip="remove administrator role"
                 onClick={() => onChange(null)}

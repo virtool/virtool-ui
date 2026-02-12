@@ -4,6 +4,7 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
 import { OtuSegment } from "@otus/types";
+import { ChevronDown, ChevronUp, Pencil, Trash } from "lucide-react";
 import styled from "styled-components";
 
 const StyledSegment = styled(BoxGroupSection)`
@@ -57,13 +58,13 @@ export default function Segment({
             {canModify && (
                 <div className={cn("text-lg", "m-2")}>
                     <IconButton
-                        name="trash"
+                        IconComponent={Trash}
                         color="red"
                         tip="remove segment"
                         onClick={() => setRemoveSegmentName(segment.name)}
                     />
                     <IconButton
-                        name="pen"
+                        IconComponent={Pencil}
                         color="grayDark"
                         tip="edit segment"
                         onClick={() => setEditSegmentName(segment.name)}
@@ -85,7 +86,7 @@ export default function Segment({
                         hidden: first,
                         flex: !first,
                     })}
-                    name="caret-up"
+                    IconComponent={ChevronUp}
                     tip="move up"
                     onClick={onMoveUp}
                 />
@@ -94,7 +95,7 @@ export default function Segment({
                         hidden: last,
                         flex: !last,
                     })}
-                    name="caret-down"
+                    IconComponent={ChevronDown}
                     tip="move down"
                     onClick={onMoveDown}
                 />

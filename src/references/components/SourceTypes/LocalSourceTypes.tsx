@@ -18,6 +18,7 @@ import {
     useFetchReference,
     useUpdateReference,
 } from "@references/queries";
+import { Undo2 } from "lucide-react";
 import styled from "styled-components";
 import SourceTypeList from "./SourceTypeList";
 
@@ -132,7 +133,7 @@ export function LocalSourceTypes() {
                                 was just removed.
                             </span>
                             <IconButton
-                                name="undo"
+                                IconComponent={Undo2}
                                 tip="undo"
                                 onClick={handleUndo}
                             />

@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import BoxGroupSection from "./BoxGroupSection";
 import Input from "./Input";
 import InputContainer from "./InputContainer";
@@ -32,7 +33,7 @@ export default function BoxGroupSearch({
                 />
                 <InputIconButton
                     className="flex justify-center justify-items-center absolute ml-auto"
-                    name="times fa-fw"
+                    IconComponent={X}
                     tip="Clear"
                     color="grayDark"
                     onClick={() => onChange("")}

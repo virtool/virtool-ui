@@ -7,6 +7,7 @@ import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import { Permission } from "@groups/types";
 import { ReferenceMinimal } from "@references/types";
+import { Copy } from "lucide-react";
 import { ReactNode } from "react";
 
 type ReferenceItemProps = {
@@ -38,7 +39,7 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
     } else if (canCreate) {
         end = (
             <IconButton
-                name="clone"
+                IconComponent={Copy}
                 tip="clone"
                 color="blue"
                 onClick={() => setCloneReferenceId(id)}

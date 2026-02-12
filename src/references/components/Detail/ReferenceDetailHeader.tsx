@@ -6,6 +6,7 @@ import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { Pencil } from "lucide-react";
 import { useLocation } from "wouter";
 
 type ReferenceDetailHeaderProps = {
@@ -49,7 +50,7 @@ export default function ReferenceDetailHeader({
                         {!isRemote && canModify && (
                             <IconButton
                                 color="grayDark"
-                                name="pen"
+                                IconComponent={Pencil}
                                 tip="modify"
                                 onClick={() => setOpenEditReference(true)}
                             />

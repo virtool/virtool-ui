@@ -10,6 +10,7 @@ import IconButton from "@base/IconButton";
 import { JobNested } from "@jobs/types";
 import { useRemoveSample } from "@samples/queries";
 import { checkCanDeleteSample } from "@samples/utils";
+import { Trash } from "lucide-react";
 import { useState } from "react";
 
 type DeleteSampleProps = {
@@ -56,7 +57,7 @@ export default function DeleteSample({
     return (
         <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
             <DialogTrigger asChild>
-                <IconButton color="red" name="trash" tip="delete" />
+                <IconButton color="red" IconComponent={Trash} tip="delete" />
             </DialogTrigger>
             <DialogContent>
                 <DialogTitle>Delete Sample</DialogTitle>

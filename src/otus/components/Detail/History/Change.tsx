@@ -6,6 +6,7 @@ import Label from "@base/Label";
 import { useRevertOTU } from "@otus/queries";
 import { OtuNested } from "@otus/types";
 import { UserNested } from "@users/types";
+import { History } from "lucide-react";
 import styled from "styled-components";
 
 const methodIconProps = {
@@ -134,7 +135,7 @@ export default function Change({
 
             {unbuilt && (
                 <IconButton
-                    name="history"
+                    IconComponent={History}
                     tip="revert"
                     onClick={() =>
                         unbuilt ? mutation.mutate({ changeId: id }) : null

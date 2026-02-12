@@ -1,5 +1,5 @@
 import { getBorder } from "@app/theme";
-import Icon from "@base/Icon";
+import { ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -39,7 +39,7 @@ export function PathoscopeViewerScroller() {
             <StyledPathoscopeViewerScroller
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
-                <Icon name="arrow-up" />
+                <ArrowUp />
             </StyledPathoscopeViewerScroller>
         );
     }

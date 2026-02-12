@@ -1,5 +1,6 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
+import { Trash } from "lucide-react";
 import styled from "styled-components";
 
 interface StyledSourceTypeItemProps {
@@ -37,7 +38,7 @@ export function SourceTypeItem({
             <span>{sourceType}</span>
             {disabled ? null : (
                 <IconButton
-                    name="trash"
+                    IconComponent={Trash}
                     color="red"
                     tip="remove"
                     onClick={() => onRemove(sourceType)}

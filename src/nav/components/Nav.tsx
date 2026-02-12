@@ -11,6 +11,7 @@ import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
 import Logo from "@base/Logo";
 import { useRootQuery } from "@wall/queries";
+import { Bug } from "lucide-react";
 import { NavLink } from "./NavLink";
 
 type NavBarProps = {
@@ -46,7 +47,7 @@ export default function Nav({ administrator_role, handle }: NavBarProps) {
                 {data?.dev && (
                     <IconButton
                         onClick={() => setOpenDev(true)}
-                        name="bug"
+                        IconComponent={Bug}
                         tip="dev tools"
                         color="red"
                     />

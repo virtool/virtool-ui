@@ -1,5 +1,6 @@
 import Alert from "@base/Alert";
 import IconButton from "@base/IconButton";
+import { Undo2, X } from "lucide-react";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -46,13 +47,13 @@ export function RestoredAlert({
             <StyledRestoredAlert>
                 <span>Resumed editing draft {name}.</span>
                 <IconButton
-                    name="undo"
+                    IconComponent={Undo2}
                     color="gray"
                     tip="undo restore"
                     onClick={onUndoRestore}
                 />
                 <IconButton
-                    name="times"
+                    IconComponent={X}
                     color="gray"
                     tip="close"
                     onClick={() => setDismissed(true)}

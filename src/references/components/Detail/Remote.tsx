@@ -16,6 +16,7 @@ import {
     CircleFadingArrowUp,
     GitFork,
     HardDrive,
+    RefreshCw,
 } from "lucide-react";
 
 function Release({ release, checking, updating, onCheckUpdates, onUpdate }) {
@@ -65,7 +66,7 @@ function Release({ release, checking, updating, onCheckUpdates, onUpdate }) {
                         <Loader size="14px" />
                     ) : (
                         <IconButton
-                            name="sync"
+                            IconComponent={RefreshCw}
                             onClick={onCheckUpdates}
                             tip="Refresh"
                         />

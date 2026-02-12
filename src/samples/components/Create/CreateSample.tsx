@@ -18,6 +18,7 @@ import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import { useCreateSample } from "@samples/queries";
+import { WandSparkles } from "lucide-react";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import styled from "styled-components";
@@ -219,7 +220,7 @@ export default function CreateSample() {
                         />
                         {Boolean(watch("readFiles").length) && (
                             <InputIconButton
-                                name="magic"
+                                IconComponent={WandSparkles}
                                 aria-label="Auto Fill"
                                 tip="Auto Fill"
                                 onClick={() => autofill(watch("readFiles"))}

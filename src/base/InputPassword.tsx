@@ -1,3 +1,4 @@
+import { Eye, EyeOff } from "lucide-react";
 import { Ref, useState } from "react";
 import Input from "./Input";
 import InputContainer from "./InputContainer";
@@ -14,7 +15,7 @@ export default function InputPassword({ ref, ...props }: InputPasswordProps) {
     const [show, setShow] = useState(false);
 
     return (
-        <InputContainer>
+        <InputContainer className="flex">
             <Input
                 as="input"
                 {...props}
@@ -23,7 +24,8 @@ export default function InputPassword({ ref, ...props }: InputPasswordProps) {
             />
             <InputIconButton
                 tip={show ? "Hide" : "Show"}
-                name={show ? "eye-slash" : "eye"}
+                IconComponent={show ? Eye : EyeOff}
+                size={16}
                 onClick={() => setShow((prevShow) => !prevShow)}
             />
         </InputContainer>

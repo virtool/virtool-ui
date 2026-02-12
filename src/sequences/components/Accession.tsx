@@ -6,6 +6,7 @@ import InputLabel from "@base/InputLabel";
 import InputLoading from "@base/InputLoading";
 import InputSimple from "@base/InputSimple";
 import { getGenbank } from "@otus/api";
+import { WandSparkles } from "lucide-react";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -67,7 +68,7 @@ export default function Accession() {
                     <InputLoading />
                 ) : (
                     <InputIconButton
-                        name="magic"
+                        IconComponent={WandSparkles}
                         tip="Auto Fill"
                         onClick={handleAutoFill}
                     />
