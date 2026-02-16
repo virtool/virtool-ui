@@ -5,6 +5,7 @@ import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
 import { IndexMinimal } from "@indexes/types";
 import { sortBy } from "es-toolkit";
+import { ChevronDown } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
@@ -72,7 +73,7 @@ export default function IndexSelector({
                 <SelectButton
                     className={cn("flex", "w-full")}
                     placeholder="Select a reference"
-                    icon="chevron-down"
+                    icon={ChevronDown}
                 />
                 <SelectContent position="popper" align="start">
                     {indexItems}

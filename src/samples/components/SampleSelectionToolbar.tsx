@@ -2,6 +2,7 @@ import { updateSearchParam } from "@app/hooks";
 import Button from "@base/Button";
 import Icon from "@base/Icon";
 import LinkButton from "@base/LinkButton";
+import { AreaChart } from "lucide-react";
 import styled from "styled-components";
 import { useSearch } from "wouter";
 
@@ -47,7 +48,7 @@ export default function SampleSelectionToolbar({
                 color="green"
                 to={updateSearchParam("openQuickAnalyze", "true", search)}
             >
-                <Icon name="chart-area" /> Quick Analyze
+                <Icon icon={AreaChart} /> Quick Analyze
             </LinkButton>
         </SampleSelectionToolbarTop>
     );

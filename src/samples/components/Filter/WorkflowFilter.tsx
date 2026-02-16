@@ -6,6 +6,7 @@ import SidebarHeader from "@base/SidebarHeader";
 import SideBarSection from "@base/SideBarSection";
 import { WorkflowStates } from "@samples/utils";
 import { xor } from "es-toolkit/array";
+import { Check, LucideIcon, Play, X } from "lucide-react";
 import styled from "styled-components";
 
 const WorkflowFilterLabel = styled.div`
@@ -50,7 +51,7 @@ type WorkflowFilterControlButtonProps = {
     /* Indicates if the button is active */
     active: boolean;
     /* Icon to display on the button */
-    icon: string;
+    icon: LucideIcon;
     /* The value to pass to the onClick handler */
     value: string;
     /* Handles click event when icon is clicked */
@@ -68,7 +69,7 @@ function WorkflowFilterControlButton({
             aria-pressed={active}
             onClick={() => onClick(value)}
         >
-            <Icon name={icon} />
+            <Icon icon={icon} />
         </StyledWorkflowFilterControlButton>
     );
 }
@@ -117,21 +118,21 @@ function WorkflowFilterControl({
             <WorkflowFilterControlButtons>
                 <WorkflowFilterControlButton
                     active={states.includes(WorkflowStates.NONE)}
-                    icon="times"
+                    icon={X}
                     value={WorkflowStates.NONE}
                     onClick={handleClick}
                 />
                 <WorkflowFilterControlPath />
                 <WorkflowFilterControlButton
                     active={states.includes(WorkflowStates.PENDING)}
-                    icon="running"
+                    icon={Play}
                     value={WorkflowStates.PENDING}
                     onClick={handleClick}
                 />
                 <WorkflowFilterControlPath />
                 <WorkflowFilterControlButton
                     active={states.includes(WorkflowStates.READY)}
-                    icon="check"
+                    icon={Check}
                     value={WorkflowStates.READY}
                     onClick={handleClick}
                 />

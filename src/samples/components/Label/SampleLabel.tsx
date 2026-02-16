@@ -1,4 +1,5 @@
 import Icon from "@base/Icon";
+import { Circle } from "lucide-react";
 import { BaseSampleLabel } from "./BaseSampleLabel";
 
 type SampleLabelProps = {
@@ -23,7 +24,7 @@ export default function SampleLabel({
 }: SampleLabelProps) {
     return (
         <BaseSampleLabel className={className} color={color} size={size}>
-            {color && <Icon name="circle" />}
+            {color && <Icon icon={Circle} />}
             {name}
         </BaseSampleLabel>
     );

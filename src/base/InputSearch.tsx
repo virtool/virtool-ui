@@ -1,3 +1,4 @@
+import { Search } from "lucide-react";
 import { ReactNode, Ref } from "react";
 import Input from "./Input";
 import InputContainer from "./InputContainer";
@@ -34,7 +35,7 @@ export default function InputSearch({ ref, ...props }: InputSearchProps) {
     return (
         <InputContainer align="left" className="flex-grow">
             <Input {...props} ref={ref} />
-            <InputIcon name="search" />
+            <InputIcon size={18} icon={Search} />
         </InputContainer>
     );
 }

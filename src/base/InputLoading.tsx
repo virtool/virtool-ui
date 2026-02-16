@@ -3,7 +3,7 @@ import Loader from "./Loader";
 
 export default function InputLoading() {
     return (
-        <InputIcon name="loading" as="div">
+        <InputIcon>
             <Loader size="14px" />
         </InputIcon>
     );

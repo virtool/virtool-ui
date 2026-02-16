@@ -17,6 +17,7 @@ import {
     InfiniteData,
     InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
+import { Repeat, Undo } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import styled from "styled-components";
 import ReadSelectorItem from "./ReadSelectorItem";
@@ -180,14 +181,14 @@ export default function ReadSelector({
                         />
                     </div>
                     <Button className="inline-flex gap-2" onClick={reset}>
-                        <Icon name="undo" /> Reset
+                        <Icon icon={Undo} /> Reset
                     </Button>
                     <Button
                         className="inline-flex gap-2"
                         type="button"
                         onClick={swap}
                     >
-                        <Icon name="retweet" /> Swap
+                        <Icon icon={Repeat} /> Swap
                     </Button>
                 </Toolbar>
                 {noneFound || (

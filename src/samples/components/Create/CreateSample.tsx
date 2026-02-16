@@ -18,7 +18,7 @@ import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import { useCreateSample } from "@samples/queries";
-import { WandSparkles } from "lucide-react";
+import { Clock, WandSparkles } from "lucide-react";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import styled from "styled-components";
@@ -58,6 +58,12 @@ const CreateSampleButtonArea = styled(Box)`
         margin: 0 0 0 auto;
         padding-left: 15px;
         text-align: center;
+        display: flex;
+        align-items: center;
+
+        svg {
+            margin-right: 5px;
+        }
     }
 `;
 
@@ -211,7 +217,7 @@ export default function CreateSample() {
                 </AlertContainer>
                 <CreateSampleName>
                     <InputLabel htmlFor="name">Name</InputLabel>
-                    <InputContainer align="right">
+                    <InputContainer align="right" className="flex">
                         <InputSimple
                             id="name"
                             {...register("name", {
@@ -296,7 +302,7 @@ export default function CreateSample() {
                 <CreateSampleButtonArea>
                     <SaveButton altText="Create" />
                     <p>
-                        <Icon name="clock" /> This will take some time.
+                        <Icon icon={Clock} /> This will take some time.
                     </p>
                 </CreateSampleButtonArea>
 

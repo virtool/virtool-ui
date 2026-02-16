@@ -2,11 +2,12 @@ import { useMatchPartialPath } from "@app/hooks";
 import { cn } from "@app/utils";
 import Icon from "@base/Icon";
 import Link from "@base/Link";
+import { LucideIcon } from "lucide-react";
 
 type SidebarItemProps = {
     /** A list of routes to exclude from the sidebar */
     exclude?: string[];
-    icon: string;
+    icon: LucideIcon;
     link: string;
     title: string;
 };
@@ -46,7 +47,7 @@ export default function SidebarLink({
                 active || isActive ? activeClassName : baseClassName
             }
         >
-            <Icon name={icon} className="text-lg" />
+            <Icon icon={icon} className="text-lg" />
             <p className="block text-md my-2">{title}</p>
         </Link>
     );

@@ -36,11 +36,6 @@ const SourceTypeBoxGroupSection = styled(BoxGroupSection)`
         display: block;
         margin-bottom: 3px;
     }
-
-    ${InputContainer} {
-        display: flex;
-        margin-bottom: 5px;
-    }
 `;
 
 const SourceTypeInput = styled.span`
@@ -142,7 +137,7 @@ export function LocalSourceTypes() {
                     <SourceTypeBoxGroupSection>
                         <form onSubmit={handleSubmit}>
                             <label htmlFor="sourceType">Add Source Type </label>
-                            <InputContainer>
+                            <InputContainer className="flex mb-[5px]">
                                 <SourceTypeInput>
                                     <InputSimple
                                         id="sourceType"

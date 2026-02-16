@@ -2,6 +2,7 @@ import Alert from "@base/Alert";
 import Icon from "@base/Icon";
 import Link from "@base/Link";
 import { Read } from "@samples/types";
+import { AlertTriangle } from "lucide-react";
 import { Route, useLocation } from "wouter";
 
 type SampleFileSizeWarningProps = {
@@ -29,8 +30,7 @@ export default function SampleFileSizeWarning({
         );
 
         return (
-            <Alert color="orange" level>
-                <Icon name="exclamation-triangle" />
+            <Alert color="orange" level icon={AlertTriangle}>
                 <Route path="~/samples/:sampleId/files"> test route</Route>
                 <span>
                     <strong>

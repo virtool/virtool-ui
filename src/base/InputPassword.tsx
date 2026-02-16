@@ -25,7 +25,6 @@ export default function InputPassword({ ref, ...props }: InputPasswordProps) {
             <InputIconButton
                 tip={show ? "Hide" : "Show"}
                 IconComponent={show ? Eye : EyeOff}
-                size={16}
                 onClick={() => setShow((prevShow) => !prevShow)}
             />
         </InputContainer>

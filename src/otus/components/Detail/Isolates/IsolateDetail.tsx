@@ -95,7 +95,7 @@ export default function IsolateDetail({
                 <div>
                     {activeIsolate.default && (
                         <Label color="green">
-                            <Icon name="star" /> Default Isolate
+                            <Icon icon={Star} /> Default Isolate
                         </Label>
                     )}
                     {canModify && (

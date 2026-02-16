@@ -6,6 +6,7 @@ import {
     DialogTrigger,
 } from "@base/Dialog";
 import Icon from "@base/Icon";
+import { Pen } from "lucide-react";
 import { useState } from "react";
 import { useUpdateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
@@ -45,7 +46,7 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
     return (
         <Dialog open={show} onOpenChange={(show) => setShow(show)}>
             <Button as={DialogTrigger} size="small">
-                <Icon name="pen" />
+                <Icon icon={Pen} />
                 <span>Edit</span>
             </Button>
             <DialogContent>

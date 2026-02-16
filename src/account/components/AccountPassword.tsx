@@ -9,6 +9,7 @@ import InputLabel from "@base/InputLabel";
 import InputPassword from "@base/InputPassword";
 import RelativeTime from "@base/RelativeTime";
 import SaveButton from "@base/SaveButton";
+import { Check } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useChangePassword } from "../queries";
@@ -64,7 +65,7 @@ export default function AccountPassword({
                         <InputLabel htmlFor="oldPassword">
                             Old Password
                         </InputLabel>
-                        <InputContainer>
+                        <InputContainer align="right">
                             <InputPassword
                                 id="oldPassword"
                                 autoComplete="current-password"
@@ -108,7 +109,7 @@ export default function AccountPassword({
                         </InputContainer>
                     </InputGroup>
                     {mutation.isSuccess && (
-                        <Alert color="green" icon="check">
+                        <Alert color="green" icon={Check}>
                             Password changed successfully
                         </Alert>
                     )}

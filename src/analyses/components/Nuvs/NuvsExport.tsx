@@ -12,6 +12,7 @@ import Icon from "@base/Icon";
 import PseudoLabel from "@base/PseudoLabel";
 import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
+import { Download } from "lucide-react";
 import { useState } from "react";
 import NuvsExportPreview from "./NuvsExportPreview";
 
@@ -140,7 +141,7 @@ export default function NuvsExport({
 
                     <DialogFooter>
                         <Button type="submit" className="inline-flex gap-1.5">
-                            <Icon name="download" /> Download
+                            <Icon icon={Download} /> Download
                         </Button>
                     </DialogFooter>
                 </form>

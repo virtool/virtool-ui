@@ -1,5 +1,6 @@
 import { cn } from "@/app/utils";
 import Icon from "@base/Icon";
+import { Circle } from "lucide-react";
 import { BaseSampleLabel } from "../Label/BaseSampleLabel";
 
 type LabelFilterItemProps = {
@@ -31,7 +32,7 @@ export default function LabelFilterItem({
             aria-pressed={pressed}
             onClick={() => onClick(id)}
         >
-            <Icon name="circle" />
+            <Icon icon={Circle} />
             {name}
         </BaseSampleLabel>
     );

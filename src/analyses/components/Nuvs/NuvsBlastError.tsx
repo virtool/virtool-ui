@@ -1,6 +1,7 @@
 import Box from "@base/Box";
 import Button from "@base/Button";
 import Icon from "@base/Icon";
+import { Redo2 } from "lucide-react";
 
 export default function NuvsBlastError({ error, onBlast }) {
     return (
@@ -10,7 +11,7 @@ export default function NuvsBlastError({ error, onBlast }) {
                 <span> {error}</span>
             </span>
             <Button onClick={onBlast} color="blue">
-                <Icon name="redo" /> Retry
+                <Icon icon={Redo2} /> Retry
             </Button>
         </Box>
     );

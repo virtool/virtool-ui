@@ -1,6 +1,7 @@
 import Icon from "@base/Icon";
 import Loader from "@base/Loader";
 import { WorkflowState } from "@samples/types";
+import { CheckCircle } from "lucide-react";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import { WorkflowLabelIcon } from "./WorkflowLabelIcon";
 
@@ -26,11 +27,7 @@ export default function WorkflowTag({
                 {workflowState === WorkflowState.PENDING ? (
                     <Loader size="10px" color="white" />
                 ) : (
-                    <Icon
-                        name="check-circle"
-                        style={{ lineHeight: "inherit" }}
-                        fixedWidth
-                    />
+                    <Icon icon={CheckCircle} size={14} />
                 )}
             </WorkflowLabelIcon>
             <span>{displayName}</span>

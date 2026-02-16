@@ -1,7 +1,7 @@
 import { cn } from "@app/utils";
 import { LucideIcon } from "lucide-react";
-import { IconColor } from "./Icon";
 import Tooltip from "./Tooltip";
+import { IconColor } from "./types";
 
 export type IconButtonProps = {
     className?: string;
@@ -28,7 +28,6 @@ export default function IconButton({
     const iconButton = (
         <button
             className={cn(
-                "ml-auto",
                 "bg-inherit",
                 "border-none",
                 "cursor-pointer",

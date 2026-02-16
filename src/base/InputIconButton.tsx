@@ -3,14 +3,16 @@ import IconButton, { IconButtonProps } from "./IconButton";
 
 export default function InputIconButton({
     className,
+    size = 16,
     ...props
 }: IconButtonProps) {
     return (
         <IconButton
             className={cn(
-                "absolute top-[6px] mx-[6px] flex items-center justify-center",
+                "absolute mx-[6px] flex items-center justify-center",
                 className,
             )}
+            size={size}
             {...props}
         />
     );

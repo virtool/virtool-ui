@@ -1,3 +1,4 @@
+import { LucideIcon } from "lucide-react";
 import { ReactNode } from "react";
 import styled from "styled-components";
 import AlertInner from "./AlertInner";
@@ -9,7 +10,7 @@ type AlertProps = {
     children: ReactNode;
     className?: string;
     color?: string;
-    icon?: string;
+    icon?: LucideIcon;
     level?: boolean;
     outerClassName?: string;
 };
@@ -31,7 +32,7 @@ const Alert = styled(
                 color={color}
                 level={level}
             >
-                {icon ? <Icon name={icon} /> : null}
+                {icon ? <Icon icon={icon} /> : null}
                 {children}
             </AlertInner>
         </AlertOuter>

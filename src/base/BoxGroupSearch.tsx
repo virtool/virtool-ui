@@ -21,7 +21,7 @@ export default function BoxGroupSearch({
 }: BoxGroupSearchProps) {
     return (
         <BoxGroupSection>
-            <InputContainer align="right">
+            <InputContainer align="right" className="flex align-items-center">
                 <Input
                     value={value}
                     placeholder={placeholder}
@@ -32,7 +32,7 @@ export default function BoxGroupSearch({
                     autoFocus={autoFocus}
                 />
                 <InputIconButton
-                    className="flex justify-center justify-items-center absolute ml-auto"
+                    className="flex justify-center justify-items-center absolute"
                     IconComponent={X}
                     tip="Clear"
                     color="grayDark"

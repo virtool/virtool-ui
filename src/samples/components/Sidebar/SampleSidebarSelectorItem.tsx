@@ -1,6 +1,7 @@
 import { getFontSize } from "@app/theme";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";
+import { Check, Minus } from "lucide-react";
 import { ReactNode } from "react";
 import styled from "styled-components";
 
@@ -59,7 +60,7 @@ export default function SampleSidebarSelectorItem({
         >
             <SampleSidebarSelectorItemCheck>
                 {selected && (
-                    <Icon name={partiallySelected ? "minus" : "check"} />
+                    <Icon icon={partiallySelected ? Minus : Check} />
                 )}
             </SampleSidebarSelectorItemCheck>
             <SampleSidebarSelectorItemContents>

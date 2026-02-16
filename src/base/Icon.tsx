@@ -1,39 +1,23 @@
 import { cn } from "@app/utils";
+import { LucideIcon } from "lucide-react";
+import { IconColor } from "./types";
 
-export type IconColor =
-    | "black"
-    | "blue"
-    | "green"
-    | "gray"
-    | "grayDark"
-    | "grey"
-    | "red"
-    | "orange"
-    | "purple";
-
-type IconProps = {
-    "aria-label"?: string;
+export type IconProps = {
     color?: IconColor;
-    name: string;
+    icon: LucideIcon;
     className?: string;
-    faStyle?: "fas" | "far" | "fal" | "fab";
-    fixedWidth?: boolean;
-    style?: any;
-    title?: string;
+    size?: number;
 };
 
 export default function Icon({
     color,
-    faStyle = "fas",
-    fixedWidth = false,
-    style,
-    title,
+    icon: LucideIcon,
+    className,
+    size = 18,
     ...props
 }: IconProps) {
-    const className = `${props.className ? props.className + " " : ""} ${faStyle} fa-${props.name}`;
-
     return (
-        <i
+        <LucideIcon
             className={cn(
                 "bg-inherit",
                 "border-none",
@@ -48,12 +32,10 @@ export default function Icon({
                     "text-orange-500": color === "orange",
                     "text-purple-500": color === "purple",
                 },
-                { "w-2 text-center inline-block": fixedWidth },
                 className,
             )}
-            aria-label={props["aria-label"]}
-            style={style}
-            title={title}
+            size={size}
+            {...props}
         />
     );
 }

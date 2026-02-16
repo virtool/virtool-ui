@@ -4,6 +4,7 @@ import { formatIsolateName } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";
 import { OtuIsolate } from "@otus/types";
+import { Star } from "lucide-react";
 import styled from "styled-components";
 
 const StyledIsolateItem = styled(BoxGroupSection)`
@@ -42,7 +43,7 @@ export default function IsolateItem({ active, isolate }: IsolateItemProps) {
             onClick={() => setActiveIsolate(isolate.id)}
         >
             <span>{formatIsolateName(isolate)}</span>
-            {isolate.default && <Icon name="star" />}
+            {isolate.default && <Icon icon={Star} />}
         </StyledIsolateItem>
     );
 }

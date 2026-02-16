@@ -7,6 +7,7 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import { Permission } from "@groups/types";
 import { useQueryClient } from "@tanstack/react-query";
+import { Info } from "lucide-react";
 import { useEffect } from "react";
 import { hmmQueryKeys, useInstallHmm, useListHmms } from "../queries";
 
@@ -55,7 +56,7 @@ export function HmmInstall() {
     return (
         <Box className="flex justify-center py-9">
             <Icon
-                name="info-circle"
+                icon={Info}
                 className="text-3xl text-blue-500 mt-0.5 mx-2.5"
             />
             <div>
