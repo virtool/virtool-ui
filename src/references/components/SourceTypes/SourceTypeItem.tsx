@@ -1,26 +1,6 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import { Trash } from "lucide-react";
-import styled from "styled-components";
-
-interface StyledSourceTypeItemProps {
-    disabled: boolean;
-}
-
-const StyledSourceTypeItem = styled(BoxGroupSection)<StyledSourceTypeItemProps>`
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    text-transform: capitalize;
-
-    span:first-child {
-        margin-right: 5px;
-    }
-
-    button.fas {
-        margin-left: auto;
-    }
-`;
 
 interface SourceTypeItemProps {
     disabled?: boolean;
@@ -34,16 +14,20 @@ export function SourceTypeItem({
     disabled = false,
 }: SourceTypeItemProps) {
     return (
-        <StyledSourceTypeItem disabled={disabled}>
-            <span>{sourceType}</span>
+        <BoxGroupSection
+            className="flex items-center capitalize"
+            disabled={disabled}
+        >
+            <span className="mr-[5px]">{sourceType}</span>
             {disabled ? null : (
                 <IconButton
+                    className="ml-auto"
                     IconComponent={Trash}
                     color="red"
                     tip="remove"
                     onClick={() => onRemove(sourceType)}
                 />
             )}
-        </StyledSourceTypeItem>
+        </BoxGroupSection>
     );
 }

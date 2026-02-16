@@ -65,7 +65,7 @@ export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
                             IconComponent={Undo2}
                             tip="undo"
                             onClick={handleUndo}
-                        />{" "}
+                        />
                     </BoxGroupSection>
                 )}
 
