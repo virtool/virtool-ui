@@ -21,7 +21,6 @@ import { useCreateSample } from "@samples/queries";
 import { Clock, WandSparkles } from "lucide-react";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
-import styled from "styled-components";
 import LibraryTypeSelector from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
 import SampleUserGroup from "./SampleUserGroup";
@@ -41,61 +40,6 @@ function getFileNameFromId(id: number, uploads: Upload[]): string {
     const file = uploads.find((file) => file.id === id);
     return file ? file.name_on_disk.match(extensionRegex)[1] : "";
 }
-
-const CreateSampleButtonArea = styled(Box)`
-    align-items: center;
-    background-color: #bfdbfe;
-    border: none;
-    display: flex;
-    grid-column: 2;
-    grid-row: 2;
-    margin-top: 25px;
-    padding: 15px;
-
-    p {
-        color: #1e40af;
-        font-weight: ${(props) => props.theme.fontWeight.thick};
-        margin: 0 0 0 auto;
-        padding-left: 15px;
-        text-align: center;
-        display: flex;
-        align-items: center;
-
-        svg {
-            margin-right: 5px;
-        }
-    }
-`;
-
-const CreateSampleFields = styled.div`
-    grid-row: 3;
-`;
-
-const CreateSampleInputError = styled(InputError)`
-    text-align: left;
-`;
-
-const CreateSampleInputs = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 15px;
-`;
-
-const CreateSampleForm = styled.form`
-    display: grid;
-    grid-template-columns: minmax(auto, 1150px) max(320px, 10%);
-    grid-column-gap: ${(props) => props.theme.gap.column};
-`;
-
-const CreateSampleName = styled(InputGroup)`
-    grid-column: 1;
-    grid-row: 2;
-`;
-
-const AlertContainer = styled.div`
-    grid-column: 1 / 3;
-    grid-row: 1;
-`;
 
 type FormValues = {
     name: string;
@@ -203,19 +147,22 @@ export default function CreateSample() {
         <>
             <ViewHeader title="Create Sample">
                 <ViewHeaderTitle>Create Sample</ViewHeaderTitle>
-                <CreateSampleInputError>
+                <InputError className="text-left">
                     {mutation.isError && mutation.error.response?.body.message}
-                </CreateSampleInputError>
+                </InputError>
             </ViewHeader>
-            <CreateSampleForm onSubmit={handleSubmit(onSubmit)}>
-                <AlertContainer>
+            <form
+                className="grid grid-cols-[minmax(0,1150px)_max(320px,10%)] gap-x-[15px]"
+                onSubmit={handleSubmit(onSubmit)}
+            >
+                <div className="col-span-2 row-start-1">
                     <RestoredAlert
                         hasRestored={hasRestored}
                         name="sample"
                         resetForm={reset}
                     />
-                </AlertContainer>
-                <CreateSampleName>
+                </div>
+                <InputGroup className="col-start-1 row-start-2">
                     <InputLabel htmlFor="name">Name</InputLabel>
                     <InputContainer align="right" className="flex">
                         <InputSimple
@@ -234,9 +181,9 @@ export default function CreateSample() {
                         )}
                     </InputContainer>
                     <InputError>{errors.name?.message}</InputError>
-                </CreateSampleName>
-                <CreateSampleFields>
-                    <CreateSampleInputs>
+                </InputGroup>
+                <div className="row-start-3">
+                    <div className="grid grid-cols-2 gap-x-[15px]">
                         <Controller
                             control={control}
                             render={({ field: { onChange, value } }) => (
@@ -265,7 +212,7 @@ export default function CreateSample() {
                             <InputLabel htmlFor="host">Host</InputLabel>
                             <InputSimple id="host" {...register("host")} />
                         </InputGroup>
-                    </CreateSampleInputs>
+                    </div>
 
                     <Controller
                         control={control}
@@ -297,14 +244,15 @@ export default function CreateSample() {
                                 "At least one read file must be attached to the sample",
                         }}
                     />
-                </CreateSampleFields>
+                </div>
 
-                <CreateSampleButtonArea>
+                <Box className="flex items-center bg-blue-200 border-none col-start-2 row-start-2 mt-6 p-[15px]">
                     <SaveButton altText="Create" />
-                    <p>
-                        <Icon icon={Clock} /> This will take some time.
+                    <p className="text-blue-800 font-medium ml-auto pl-4 text-center flex items-center mb-0">
+                        <Icon icon={Clock} className="mr-[5px]" /> This will
+                        take some time.
                     </p>
-                </CreateSampleButtonArea>
+                </Box>
 
                 <Controller
                     control={control}
@@ -317,7 +265,7 @@ export default function CreateSample() {
                     )}
                     name="sidebar"
                 />
-            </CreateSampleForm>
+            </form>
         </>
     );
 }
