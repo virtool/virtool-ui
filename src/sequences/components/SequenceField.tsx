@@ -22,7 +22,7 @@ export default function SequenceField() {
     } = useFormContext<{ sequence: string }>();
 
     return (
-        <InputGroup>
+        <InputGroup className="flex flex-col">
             <InputLabel htmlFor="sequence">
                 Sequence <Badge>{watch("sequence")?.length}</Badge>
             </InputLabel>

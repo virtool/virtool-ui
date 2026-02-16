@@ -15,6 +15,7 @@ export default function InputContainer({
     return (
         <div
             className={cn(
+                "flex",
                 "relative",
                 {
                     "[&>input]:!pl-10": align === "left",
