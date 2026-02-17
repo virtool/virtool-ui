@@ -1,5 +1,4 @@
-import Icon from "@base/Icon";
-import { Circle, CircleDot } from "lucide-react";
+import Circle from "@base/Circle";
 import { BaseSampleLabel } from "./BaseSampleLabel";
 
 type SampleMultiSelectLabelProps = {
@@ -27,7 +26,7 @@ export default function SampleMultiSelectLabel({
 }: SampleMultiSelectLabelProps) {
     return (
         <BaseSampleLabel className={className} color={color} size={size}>
-            {color && <Icon icon={partiallySelected ? CircleDot : Circle} />}
+            {color && <Circle fill={partiallySelected ? "half" : "full"} />}
             {name}
         </BaseSampleLabel>
     );

@@ -15,7 +15,7 @@ export default function InputPassword({ ref, ...props }: InputPasswordProps) {
     const [show, setShow] = useState(false);
 
     return (
-        <InputContainer className="flex">
+        <InputContainer className="flex flex-grow-1">
             <Input
                 as="input"
                 {...props}

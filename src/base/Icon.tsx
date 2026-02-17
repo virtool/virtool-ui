@@ -14,13 +14,11 @@ export default function Icon({
     icon: LucideIcon,
     className,
     size = 18,
-    fill = false,
     ...props
 }: IconProps) {
     return (
         <LucideIcon
             className={cn(
-                "icon",
                 "bg-inherit",
                 "border-none",
                 "text-inherit",
