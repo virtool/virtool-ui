@@ -23,7 +23,7 @@ const StyledTriggerButton = styled.button`
     font-weight: ${getFontWeight("thick")};
     text-transform: capitalize;
     width: 100%;
-    i.fas {
+    svg {
         margin-left: 5px;
     }
 `;

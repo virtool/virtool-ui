@@ -1,9 +1,9 @@
 import { cn } from "@app/utils";
 import React from "react";
 
-export interface InputSimpleProps
-    extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputSimpleProps extends React.InputHTMLAttributes<HTMLInputElement> {
     className?: string;
+    as?: string;
 }
 
 const InputSimple = React.forwardRef<HTMLInputElement, InputSimpleProps>(

@@ -50,7 +50,7 @@ const SourceTypesUndo = styled(BoxGroupSection)`
     background: ${(props) =>
         getColor({ color: "greyHover", theme: props.theme })};
     align-items: center;
-    i.fas {
+    svg {
         margin-left: auto;
     }
     span > strong {

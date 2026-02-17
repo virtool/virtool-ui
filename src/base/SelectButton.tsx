@@ -15,7 +15,7 @@ const SelectTrigger = styled(SelectPrimitive.Trigger)`
     font-weight: ${getFontWeight("thick")};
     text-transform: capitalize;
 
-    i.fas {
+    svg {
         margin-left: 5px;
     }
 `;

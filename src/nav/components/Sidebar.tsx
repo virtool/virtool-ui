@@ -18,17 +18,6 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
         administratorRole,
     );
 
-    // const StyledSidebar = styled.nav`
-    //     align-items: center;
-    //     top: 45px;
-    //     left: 0;
-    //     bottom: 0;
-    //     display: flex;
-    //     flex-direction: column;
-    //     width: 78px;
-    //     padding: 45px 0 0 15px;
-    // `;
-
     return (
         <div
             className={cn(

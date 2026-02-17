@@ -24,7 +24,7 @@ const IsolateDetailHeader = styled(Box)`
         font-weight: bold;
     }
 
-    i.fas {
+    svg {
         padding-left: 5px;
     }
 

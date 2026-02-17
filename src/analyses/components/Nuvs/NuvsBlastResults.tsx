@@ -16,7 +16,7 @@ const StyledBLASTResultsHeader = styled(BoxGroupHeader)`
     justify-content: space-between;
     padding: 10px 15px 7px 15px;
 
-    i.fas {
+    svg {
         margin-right: 5px;
     }
 `;

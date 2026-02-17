@@ -61,7 +61,7 @@ const AnalysisAttribution = styled(Attribution)`
 
 const UnsupportedAnalysisTitle = styled.div`
     color: ${(props) => props.theme.color.black};
-    i.fas {
+    svg {
         margin-left: 5px;
     }
     span {

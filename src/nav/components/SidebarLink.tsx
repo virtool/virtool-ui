@@ -16,7 +16,7 @@ const baseClassName = cn(
     "text-gray-500",
     "cursor-pointer",
     "pb-5",
-    "text-center",
+    "flex flex-col items-center",
     "w-full",
     "hover:text-gray-700",
 );
