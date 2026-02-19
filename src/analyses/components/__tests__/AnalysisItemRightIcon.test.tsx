@@ -12,9 +12,7 @@ describe("<AnalysisItemRightIcon />", () => {
             <AnalysisItemRightIcon canModify={true} onRemove={onRemove} />,
         );
 
-        const button = screen.getByRole("button");
-
-        expect(button).toHaveClass("fas fa-trash");
+        const button = screen.getByRole("button", { name: "remove" });
 
         await userEvent.click(button);
 

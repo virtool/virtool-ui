@@ -1,19 +1,7 @@
 import { cn } from "@app/utils";
-import {
-    ElementType,
-    ReactNode,
-    Ref,
-    useContext,
-    useImperativeHandle,
-    useRef,
-} from "react";
+import { ElementType, ReactNode, Ref, useContext } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import InputContext from "./InputContext";
-
-type InputHandle = {
-    blur: () => void;
-    focus: () => void;
-};
 
 export interface InputProps {
     "aria-label"?: string;
@@ -29,7 +17,7 @@ export interface InputProps {
     name?: string;
     placeholder?: string;
     readOnly?: boolean;
-    ref?: Ref<InputHandle>;
+    ref?: Ref<any>;
     register?: UseFormRegisterReturn;
     step?: number;
     type?: string;
@@ -54,7 +42,6 @@ export default function Input({
     placeholder,
     readOnly = false,
     ref,
-    register,
     step,
     type,
     value,
@@ -65,21 +52,10 @@ export default function Input({
     const errorContext = useContext(InputContext);
     const error = errorProp || errorContext;
 
-    const inputRef = useRef<HTMLInputElement>(null);
-
-    useImperativeHandle(ref, () => ({
-        blur: () => {
-            inputRef.current?.blur();
-        },
-        focus: () => {
-            inputRef.current?.focus();
-        },
-    }));
-
     return (
         <Component
             aria-label={ariaLabel}
-            ref={inputRef}
+            ref={ref}
             autoFocus={autoFocus}
             className={cn(
                 "bg-white border rounded-[3px] shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] block text-sm h-auto outline-none py-2 px-2.5 relative transition-all duration-150 ease-in-out w-full",
@@ -104,7 +80,6 @@ export default function Input({
             onBlur={onBlur}
             onChange={onChange}
             onFocus={onFocus}
-            {...register}
         >
             {children}
         </Component>

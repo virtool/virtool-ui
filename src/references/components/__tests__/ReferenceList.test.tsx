@@ -67,7 +67,9 @@ describe("<ReferenceList />", () => {
             renderWithRouter(<ReferenceList />);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
-            expect(screen.queryByLabelText("plus-square fa-fw")).toBeNull();
+            expect(
+                screen.queryByRole("link", { name: "Create" }),
+            ).not.toBeInTheDocument();
 
             scope.done();
         });
