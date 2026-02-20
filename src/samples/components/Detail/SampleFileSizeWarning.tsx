@@ -1,5 +1,4 @@
 import Alert from "@base/Alert";
-import Icon from "@base/Icon";
 import Link from "@base/Link";
 import { Read } from "@samples/types";
 import { AlertTriangle } from "lucide-react";

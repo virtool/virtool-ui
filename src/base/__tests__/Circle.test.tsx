@@ -1,5 +1,4 @@
 import { render } from "@testing-library/react";
-import React from "react";
 import { describe, expect, it } from "vitest";
 import Circle from "../Circle";
 
@@ -33,15 +32,24 @@ describe("Circle", () => {
     it("should render full fill by default", () => {
         const { container } = render(<Circle />);
         expect(container.querySelector("circle")).toBeInTheDocument();
-        expect(container.querySelector("circle")).toHaveAttribute("fill", "currentColor");
+        expect(container.querySelector("circle")).toHaveAttribute(
+            "fill",
+            "currentColor",
+        );
     });
 
     it("should render half fill", () => {
         const { container } = render(<Circle fill="half" />);
         expect(container.querySelector("path")).toBeInTheDocument();
-        expect(container.querySelector("path")).toHaveAttribute("d", "M 5 0.5 A 4.5 4.5 0 0 0 5 9.5 Z");
+        expect(container.querySelector("path")).toHaveAttribute(
+            "d",
+            "M 5 0.5 A 4.5 4.5 0 0 0 5 9.5 Z",
+        );
         expect(container.querySelector("circle")).toBeInTheDocument();
-        expect(container.querySelector("circle")).toHaveAttribute("fill", "none");
+        expect(container.querySelector("circle")).toHaveAttribute(
+            "fill",
+            "none",
+        );
     });
 
     it("should render empty fill", () => {

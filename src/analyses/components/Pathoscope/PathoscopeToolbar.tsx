@@ -59,7 +59,9 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
                 onPressedChange={(active) => setSortDesc(active)}
                 pressed={Boolean(sortDesc)}
             >
-                <Icon icon={sortDesc ? ArrowDownWideNarrow : ArrowUpWideNarrow} />
+                <Icon
+                    icon={sortDesc ? ArrowDownWideNarrow : ArrowUpWideNarrow}
+                />
             </ButtonToggle>
             <Tooltip tip="Show read pseudo-counts instead of weight">
                 <ButtonToggle

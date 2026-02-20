@@ -3,7 +3,6 @@ import { checkAdminRoleOrPermissionsFromAccount } from "@administration/utils";
 import { usePageParam } from "@app/hooks";
 import Alert from "@base/Alert";
 import BoxGroup from "@base/BoxGroup";
-import Icon from "@base/Icon";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";

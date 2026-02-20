@@ -32,7 +32,7 @@ const Alert = styled(
                 color={color}
                 level={level}
             >
-                {icon ? <Icon icon={icon} /> : null}
+                {icon ? <Icon icon={icon} size={30} /> : null}
                 {children}
             </AlertInner>
         </AlertOuter>

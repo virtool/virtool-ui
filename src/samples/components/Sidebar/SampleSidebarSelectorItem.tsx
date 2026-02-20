@@ -59,9 +59,7 @@ export default function SampleSidebarSelectorItem({
             aria-label={name}
         >
             <SampleSidebarSelectorItemCheck>
-                {selected && (
-                    <Icon icon={partiallySelected ? Minus : Check} />
-                )}
+                {selected && <Icon icon={partiallySelected ? Minus : Check} />}
             </SampleSidebarSelectorItemCheck>
             <SampleSidebarSelectorItemContents>
                 {children}
