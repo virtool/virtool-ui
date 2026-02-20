@@ -6,70 +6,84 @@ import Label from "@base/Label";
 import { useRevertOTU } from "@otus/queries";
 import { OtuNested } from "@otus/types";
 import { UserNested } from "@users/types";
+import {
+    AlertTriangle,
+    ArrowUpCircle,
+    Copy,
+    Dna,
+    FileUp,
+    FlaskConical,
+    History,
+    Link,
+    Pencil,
+    PlusSquare,
+    Star,
+    Trash,
+} from "lucide-react";
 import styled from "styled-components";
 
 const methodIconProps = {
     add_isolate: {
-        name: "flask",
+        icon: FlaskConical,
         color: "blue",
     },
     create: {
-        name: "plus-square",
+        icon: PlusSquare,
         color: "blue",
     },
     create_sequence: {
-        name: "dna",
+        icon: Dna,
         color: "blue",
     },
     edit: {
-        name: "pencil-alt",
+        icon: Pencil,
         color: "orange",
     },
     edit_isolate: {
-        name: "flask",
+        icon: FlaskConical,
         color: "orange",
     },
     edit_sequence: {
-        name: "dna",
+        icon: Dna,
         color: "orange",
     },
     clone: {
-        name: "clone",
+        icon: Copy,
         color: "blue",
     },
     import: {
-        name: "file-import",
+        icon: FileUp,
         color: "blue",
     },
     remote: {
-        name: "link",
+        icon: Link,
         color: "blue",
     },
     remove: {
-        name: "trash",
+        icon: Trash,
         color: "red",
     },
     remove_isolate: {
-        name: "flask",
+        icon: FlaskConical,
         color: "red",
     },
     remove_sequence: {
-        name: "dna",
+        icon: Dna,
         color: "red",
     },
     set_as_default: {
-        name: "star",
+        icon: Star,
         color: "orange",
     },
     update: {
-        name: "arrow-alt-circle-up",
+        icon: ArrowUpCircle,
         color: "orange",
     },
 };
 
 function getMethodIcon(methodName: string) {
     const props = methodIconProps[methodName] ?? {
-        name: "exclamation-triangle",
+        icon: AlertTriangle,
         color: "red",
     };
 
@@ -134,7 +148,7 @@ export default function Change({
 
             {unbuilt && (
                 <IconButton
-                    name="history"
+                    IconComponent={History}
                     tip="revert"
                     onClick={() =>
                         unbuilt ? mutation.mutate({ changeId: id }) : null

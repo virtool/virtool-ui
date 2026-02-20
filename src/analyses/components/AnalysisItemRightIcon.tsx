@@ -1,4 +1,5 @@
 import IconButton from "@base/IconButton";
+import { Trash } from "lucide-react";
 
 type AnalysisItemRightIconProps = {
     /** Whether the user has permission to remove an analysis */
@@ -15,6 +16,11 @@ export function AnalysisItemRightIcon({
     onRemove,
 }: AnalysisItemRightIconProps) {
     return canModify ? (
-        <IconButton name="trash" color="red" tip="remove" onClick={onRemove} />
+        <IconButton
+            IconComponent={Trash}
+            color="red"
+            tip="remove"
+            onClick={onRemove}
+        />
     ) : null;
 }

@@ -1,6 +1,7 @@
 import { useDialogParam } from "@app/hooks";
 import IconButton from "@base/IconButton";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { Pencil, Trash } from "lucide-react";
 import OtuEdit from "../OtuEdit";
 import OtuRemove from "../OtuRemove";
 
@@ -32,14 +33,14 @@ export function OtuHeaderIcons({
             <IconButton
                 key="edit-icon"
                 color="grayDark"
-                name="pen"
+                IconComponent={Pencil}
                 tip="edit OTU"
                 onClick={() => setOpenEditOTU(true)}
             />
             <IconButton
                 key="remove-icon"
                 color="red"
-                name="trash"
+                IconComponent={Trash}
                 tip="remove OTU"
                 onClick={() => setOpenRemoveOTU(true)}
             />

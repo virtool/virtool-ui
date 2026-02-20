@@ -1,27 +1,9 @@
 import { useUrlSearchParam } from "@app/hooks";
-import { getActiveShadow } from "@app/theme";
-import { formatIsolateName } from "@app/utils";
+import { cn, formatIsolateName } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";
 import { OtuIsolate } from "@otus/types";
-import styled from "styled-components";
-
-const StyledIsolateItem = styled(BoxGroupSection)`
-    align-items: center;
-    border: none;
-    box-shadow: ${getActiveShadow};
-    display: flex;
-
-    & > span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    i.fas {
-        margin-left: auto;
-    }
-`;
+import { Star } from "lucide-react";
 
 type IsolateItemProps = {
     /** Whether the Isolate is selected */
@@ -37,12 +19,14 @@ export default function IsolateItem({ active, isolate }: IsolateItemProps) {
         useUrlSearchParam<string>("activeIsolate");
 
     return (
-        <StyledIsolateItem
-            active={active}
+        <BoxGroupSection
+            className={cn("flex items-center border-none", {
+                "shadow-[inset_3px_0_0_var(--color-virtool)]": active,
+            })}
             onClick={() => setActiveIsolate(isolate.id)}
         >
-            <span>{formatIsolateName(isolate)}</span>
-            {isolate.default && <Icon name="star" />}
-        </StyledIsolateItem>
+            <span className="truncate">{formatIsolateName(isolate)}</span>
+            {isolate.default && <Icon icon={Star} className="ml-auto" />}
+        </BoxGroupSection>
     );
 }

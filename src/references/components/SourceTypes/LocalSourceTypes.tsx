@@ -18,6 +18,7 @@ import {
     useFetchReference,
     useUpdateReference,
 } from "@references/queries";
+import { Undo2 } from "lucide-react";
 import styled from "styled-components";
 import SourceTypeList from "./SourceTypeList";
 
@@ -35,11 +36,6 @@ const SourceTypeBoxGroupSection = styled(BoxGroupSection)`
         display: block;
         margin-bottom: 3px;
     }
-
-    ${InputContainer} {
-        display: flex;
-        margin-bottom: 5px;
-    }
 `;
 
 const SourceTypeInput = styled.span`
@@ -54,7 +50,7 @@ const SourceTypesUndo = styled(BoxGroupSection)`
     background: ${(props) =>
         getColor({ color: "greyHover", theme: props.theme })};
     align-items: center;
-    i.fas {
+    svg {
         margin-left: auto;
     }
     span > strong {
@@ -132,7 +128,7 @@ export function LocalSourceTypes() {
                                 was just removed.
                             </span>
                             <IconButton
-                                name="undo"
+                                IconComponent={Undo2}
                                 tip="undo"
                                 onClick={handleUndo}
                             />
@@ -141,7 +137,7 @@ export function LocalSourceTypes() {
                     <SourceTypeBoxGroupSection>
                         <form onSubmit={handleSubmit}>
                             <label htmlFor="sourceType">Add Source Type </label>
-                            <InputContainer>
+                            <InputContainer className="flex mb-[5px]">
                                 <SourceTypeInput>
                                     <InputSimple
                                         id="sourceType"

@@ -1,8 +1,8 @@
 import { usePageParam } from "@app/hooks";
 import Alert from "@base/Alert";
-import Icon from "@base/Icon";
 import Link from "@base/Link";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { AlertCircle, Info } from "lucide-react";
 import { useFindIndexes } from "../queries";
 
 type RebuildAlertProps = {
@@ -28,8 +28,7 @@ export default function RebuildAlert({ refId }: RebuildAlertProps) {
 
     if (total_otu_count === 0 && hasRights) {
         return (
-            <Alert color="orange" level>
-                <Icon name="exclamation-circle" />
+            <Alert color="orange" level icon={AlertCircle}>
                 <strong>
                     At least one OTU must be added to the database before an
                     index can be built.
@@ -40,8 +39,7 @@ export default function RebuildAlert({ refId }: RebuildAlertProps) {
 
     if (change_count && hasRights) {
         return (
-            <Alert color="orange" level>
-                <Icon name="info-circle" />
+            <Alert color="orange" level icon={Info}>
                 <span>
                     <span>There are unbuilt changes. </span>
                     <Link to={`/refs/${refId}/indexes?openRebuild=true`}>

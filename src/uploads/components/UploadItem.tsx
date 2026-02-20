@@ -4,6 +4,7 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import RelativeTime from "@base/RelativeTime";
 import { UserNested } from "@users/types";
+import { Trash } from "lucide-react";
 import { useDeleteFile } from "../queries";
 
 export type UploadItemProps = {
@@ -51,7 +52,7 @@ export default function UploadItem({
                     {canDelete && (
                         <IconButton
                             color="red"
-                            name="trash"
+                            IconComponent={Trash}
                             tip="remove"
                             onClick={() => handleRemove({ id })}
                         />

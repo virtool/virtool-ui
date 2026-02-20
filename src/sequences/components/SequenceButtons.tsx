@@ -5,32 +5,20 @@ import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import styled from "styled-components";
+import { Pencil, Trash } from "lucide-react";
 
-const SequenceHeaderButtons = styled.span`
-    align-items: center;
-    display: flex;
-    margin-left: auto;
-    padding-left: 20px;
-
-    button {
-        margin-left: 2px;
-    }
-
-    i.fas {
-        font-size: ${(props) => props.theme.fontSize.lg};
-        margin-right: 5px;
-    }
-
-    > &:last-child {
-        margin-left: 20px;
-    }
-`;
+type SequenceButtonsProps = {
+    id: string;
+    onCollapse: () => void;
+};
 
 /**
  * Displays icons for the sequence item to close, edit, or remove
  */
-export default function SequenceButtons({ id, onCollapse }) {
+export default function SequenceButtons({
+    id,
+    onCollapse,
+}: SequenceButtonsProps) {
     const { setValue: setOpenEditSequence } =
         useUrlSearchParam<string>("editSequenceId");
 
@@ -48,25 +36,29 @@ export default function SequenceButtons({ id, onCollapse }) {
     const href = `/api/otus/${otu.id}/isolates/${isolateId}/sequences/${id}.fa`;
 
     return (
-        <SequenceHeaderButtons>
+        <span className="flex items-center ml-auto pl-5">
             {canModify && (
                 <>
                     <IconButton
-                        name="pen"
+                        IconComponent={Pencil}
                         color="grayDark"
                         tip="Edit"
                         onClick={() => setOpenEditSequence(id)}
+                        className="ml-0.5"
                     />
                     <IconButton
-                        name="trash"
+                        IconComponent={Trash}
                         color="red"
                         tip="Remove"
                         onClick={() => setOpenRemoveSequence(id)}
+                        className="ml-0.5"
                     />
                 </>
             )}
-            <DownloadLink href={href}>FASTA</DownloadLink>
+            <div className="ml-4 mr-1">
+                <DownloadLink href={href}>FASTA</DownloadLink>
+            </div>
             <CloseButton onClick={onCollapse} />
-        </SequenceHeaderButtons>
+        </span>
     );
 }

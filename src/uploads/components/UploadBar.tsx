@@ -1,6 +1,7 @@
 import { cn } from "@app/utils";
 import Button from "@base/Button";
 import Icon from "@base/Icon";
+import { Upload } from "lucide-react";
 import { ReactNode } from "react";
 import { Accept, FileError, useDropzone } from "react-dropzone";
 
@@ -101,7 +102,7 @@ export function UploadBar({
                 </div>
                 <div className="col-span-5 flex items-center justify-start">
                     <Button color="blue" onBlur={onBlur} onClick={open}>
-                        <Icon name="upload" /> Browse Files
+                        <Icon icon={Upload} /> Browse Files
                     </Button>
                 </div>
             </div>

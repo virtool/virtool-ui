@@ -8,6 +8,7 @@ import {
 import IconButton from "@base/IconButton";
 import SaveButton from "@base/SaveButton";
 import { Permissions } from "@groups/types";
+import { Pencil } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useUpdateApiKey } from "../queries";
 import ApiKeyPermissions from "./ApiKeyPermissions";
@@ -35,7 +36,7 @@ export default function ApiKeyEdit({ id, permissions }: ApiKeyEditProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <IconButton name="pen" tip="Edit" />
+                <IconButton IconComponent={Pencil} tip="Edit" />
             </DialogTrigger>
             <DialogContent>
                 <DialogTitle>Edit API Key</DialogTitle>

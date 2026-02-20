@@ -1,6 +1,7 @@
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
+import { Trash } from "lucide-react";
 import { useRemoveAPIKey } from "../queries";
 import { APIKeyMinimal } from "../types";
 import ApiKeyEdit from "./ApiKeyEdit";
@@ -36,7 +37,7 @@ export default function ApiKey({ apiKey }: ApiKeyProps) {
                     />
                     <IconButton
                         color="red"
-                        name="trash"
+                        IconComponent={Trash}
                         onClick={() =>
                             removeMutation.mutate({ keyId: apiKey.id })
                         }

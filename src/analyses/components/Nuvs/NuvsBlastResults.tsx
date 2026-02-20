@@ -5,6 +5,7 @@ import BoxGroupTable from "@base/BoxGroupTable";
 import Button from "@base/Button";
 import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
+import { Redo2 } from "lucide-react";
 import numbro from "numbro";
 import styled from "styled-components";
 
@@ -15,7 +16,7 @@ const StyledBLASTResultsHeader = styled(BoxGroupHeader)`
     justify-content: space-between;
     padding: 10px 15px 7px 15px;
 
-    i.fas {
+    svg {
         margin-right: 5px;
     }
 `;
@@ -52,7 +53,7 @@ export default function NuvsBlastResults({ hits, onBlast }: BLASTResultsProps) {
             <StyledBLASTResultsHeader>
                 <strong>NCBI BLAST</strong>
                 <Button onClick={onBlast}>
-                    <Icon name="redo" />
+                    <Icon icon={Redo2} />
                     Retry
                 </Button>
             </StyledBLASTResultsHeader>

@@ -4,6 +4,7 @@ import Button from "@base/Button";
 import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
 import { Permission } from "@groups/types";
+import { CloudDownload } from "lucide-react";
 import styled from "styled-components";
 import { useRemoteReference } from "../queries";
 
@@ -62,7 +63,7 @@ export default function ReferenceOfficial({
                     })
                 }
             >
-                <Icon name="cloud-download-alt" /> Install
+                <Icon icon={CloudDownload} /> Install
             </Button>
         </StyledReferenceOfficial>
     ) : null;

@@ -5,6 +5,7 @@ import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
 import Loader from "@base/Loader";
 import RelativeTime from "@base/RelativeTime";
+import { ExternalLink as ExternalLinkIcon } from "lucide-react";
 import styled from "styled-components";
 
 const ridRoot =
@@ -19,7 +20,7 @@ function RidLink({ rid }) {
                 <ExternalLink href={ridRoot + rid}>
                     {rid}{" "}
                     <sup>
-                        <Icon name="new-tab" />
+                        <Icon icon={ExternalLinkIcon} />
                     </sup>
                 </ExternalLink>
             </span>

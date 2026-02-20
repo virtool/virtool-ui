@@ -10,6 +10,7 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { Permission } from "@groups/types";
 import { useFetchSubtraction } from "@subtraction/queries";
 import { NucleotideComposition } from "@subtraction/types";
+import { Pencil, Trash } from "lucide-react";
 import numbro from "numbro";
 import { SubtractionAttribution } from "../Attribution";
 import EditSubtraction from "./EditSubtraction";
@@ -60,13 +61,13 @@ export default function SubtractionDetail() {
                     {canModify && (
                         <ViewHeaderIcons>
                             <IconButton
-                                name="pen"
+                                IconComponent={Pencil}
                                 color="grayDark"
                                 tip="modify"
                                 onClick={() => setOpenEditSubtraction(true)}
                             />
                             <IconButton
-                                name="trash"
+                                IconComponent={Trash}
                                 color="red"
                                 tip="remove"
                                 onClick={() => setOpenRemoveSubtraction(true)}

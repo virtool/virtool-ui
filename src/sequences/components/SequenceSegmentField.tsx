@@ -9,6 +9,7 @@ import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
 import SelectItem from "@base/SelectItem";
 import { OtuSegment } from "@otus/types";
+import { ChevronDown, CircleAlert } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
 import { Controller, useFormContext } from "react-hook-form";
 import styled from "styled-components";
@@ -103,7 +104,7 @@ function SequenceSegment({ name, required }: SequenceSegmentProps) {
 
                     {required && (
                         <SequenceSegmentRequired>
-                            <Icon name="exclamation-circle" />
+                            <Icon icon={CircleAlert} />
                             <span>Required</span>
                         </SequenceSegmentRequired>
                     )}
@@ -158,7 +159,7 @@ export default function SequenceSegmentField({
                                         )
                                     }
                                 >
-                                    <SelectButton icon="chevron-down" />
+                                    <SelectButton icon={ChevronDown} />
                                     <SelectContent
                                         position="popper"
                                         align="start"

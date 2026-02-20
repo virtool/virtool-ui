@@ -7,6 +7,7 @@ import Icon from "@base/Icon";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useRemoveReferenceUser } from "@references/queries";
 import { ReferenceGroup, ReferenceUser } from "@references/types";
+import { AlertCircle } from "lucide-react";
 import styled from "styled-components";
 import AddReferenceGroup from "./AddReferenceGroup";
 import AddReferenceUser from "./AddReferenceUser";
@@ -109,7 +110,7 @@ export default function ReferenceMembers({
                     })
                 ) : (
                     <NoMembers>
-                        <Icon name="exclamation-circle" /> None Found
+                        <Icon icon={AlertCircle} /> None Found
                     </NoMembers>
                 )}
             </BoxGroup>

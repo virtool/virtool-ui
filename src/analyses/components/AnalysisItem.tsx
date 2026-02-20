@@ -9,7 +9,7 @@ import Icon from "@base/Icon";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
-import { Equal } from "lucide-react";
+import { Equal, EqualNot } from "lucide-react";
 import styled from "styled-components";
 import { useRemoveAnalysis } from "../queries";
 import { AnalysisMinimal } from "../types";
@@ -61,7 +61,7 @@ const AnalysisAttribution = styled(Attribution)`
 
 const UnsupportedAnalysisTitle = styled.div`
     color: ${(props) => props.theme.color.black};
-    i.fas {
+    svg {
         margin-left: 5px;
     }
     span {
@@ -149,7 +149,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
                 </AnalysisItemTag>
                 {subtractions.map((subtraction) => (
                     <AnalysisItemTag key={subtraction.id}>
-                        <Icon name="not-equal" />
+                        <Icon icon={EqualNot} />
                         <Link to={`/subtractions/${subtraction.id}`}>
                             {subtraction.name}
                         </Link>

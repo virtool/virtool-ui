@@ -1,4 +1,4 @@
-import Icon from "@base/Icon";
+import Circle from "@base/Circle";
 import { BaseSampleLabel } from "./BaseSampleLabel";
 
 type SampleMultiSelectLabelProps = {
@@ -26,7 +26,7 @@ export default function SampleMultiSelectLabel({
 }: SampleMultiSelectLabelProps) {
     return (
         <BaseSampleLabel className={className} color={color} size={size}>
-            {color && <Icon name={partiallySelected ? "adjust" : "circle"} />}
+            {color && <Circle fill={partiallySelected ? "half" : "full"} />}
             {name}
         </BaseSampleLabel>
     );

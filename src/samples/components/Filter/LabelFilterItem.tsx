@@ -1,5 +1,5 @@
 import { cn } from "@/app/utils";
-import Icon from "@base/Icon";
+import Circle from "@base/Circle";
 import { BaseSampleLabel } from "../Label/BaseSampleLabel";
 
 type LabelFilterItemProps = {
@@ -31,7 +31,7 @@ export default function LabelFilterItem({
             aria-pressed={pressed}
             onClick={() => onClick(id)}
         >
-            <Icon name="circle" />
+            <Circle />
             {name}
         </BaseSampleLabel>
     );

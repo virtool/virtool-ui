@@ -24,10 +24,6 @@ const UnsupportedAnalysis = styled(Box)`
     display: flex;
     justify-content: center;
     align-items: center;
-
-    i.fas {
-        margin-right: 5px;
-    }
 `;
 
 /** Base component viewing all supported analysis */
@@ -80,7 +76,7 @@ export default function AnalysisDetail() {
     } else {
         return (
             <UnsupportedAnalysis>
-                <CircleAlert />
+                <CircleAlert className="mr-1" />
                 Workflow not supported.
             </UnsupportedAnalysis>
         );

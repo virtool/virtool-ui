@@ -8,6 +8,13 @@ import Icon from "@base/Icon";
 import InputSearch from "@base/InputSearch";
 import Toolbar from "@base/Toolbar";
 import Tooltip from "@base/Tooltip";
+import {
+    ArrowDownWideNarrow,
+    ArrowUpWideNarrow,
+    ChevronDown,
+    File,
+    FileDown,
+} from "lucide-react";
 import { AnalysisViewerSort } from "../Viewer/Sort";
 
 type PathoscopeToolbarProps = {
@@ -52,7 +59,9 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
                 onPressedChange={(active) => setSortDesc(active)}
                 pressed={Boolean(sortDesc)}
             >
-                <Icon name={sortDesc ? "sort-amount-down" : "sort-amount-up"} />
+                <Icon
+                    icon={sortDesc ? ArrowDownWideNarrow : ArrowUpWideNarrow}
+                />
             </ButtonToggle>
             <Tooltip tip="Show read pseudo-counts instead of weight">
                 <ButtonToggle
@@ -81,20 +90,20 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
             <Dropdown>
                 <DropdownButton>
                     <span>
-                        <Icon name="file-download" /> Export{" "}
-                        <Icon name="caret-down" />
+                        <Icon icon={FileDown} /> Export{" "}
+                        <Icon icon={ChevronDown} />
                     </span>
                 </DropdownButton>
                 <DropdownMenuContent>
                     <DropdownMenuDownload
                         href={`/api/analyses/documents/${analysisId}.csv`}
                     >
-                        <Icon name="file-csv" /> CSV
+                        <Icon icon={File} /> CSV
                     </DropdownMenuDownload>
                     <DropdownMenuDownload
                         href={`/api/analyses/documents/${analysisId}.xlsx`}
                     >
-                        <Icon name="file-excel" /> Excel
+                        <Icon icon={File} /> Excel
                     </DropdownMenuDownload>
                 </DropdownMenuContent>
             </Dropdown>

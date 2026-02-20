@@ -1,30 +1,27 @@
-import styled from "styled-components";
+import { cn } from "@app/utils";
+import React from "react";
 
-const InputSimple = styled.input`
-    background-color: ${(props) => props.theme.color.white};
-    border: 1px solid ${(props) => props.theme.color.greyLight};
-    border-radius: ${(props) => props.theme.borderRadius.sm};
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    display: block;
-    font-size: ${(props) => props.theme.fontSize.md};
-    height: auto;
-    outline: none;
-    padding: 8px 10px;
-    position: relative;
-    transition:
-        border-color ease-in-out 150ms,
-        box-shadow ease-in-out 150ms;
-    width: 100%;
+export interface InputSimpleProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    className?: string;
+    as?: string;
+}
 
-    &:focus {
-        border-color: ${(props) => props.theme.color.blue};
-        box-shadow: 0 0 0 2px rgba(43, 108, 176, 0.5);
-    }
-
-    &:not(select):read-only {
-        background-color: ${(props) => props.theme.color.greyLightest};
-    }
-`;
+const InputSimple = React.forwardRef<HTMLInputElement, InputSimpleProps>(
+    ({ className, ...props }, ref) => {
+        return (
+            <input
+                ref={ref}
+                className={cn(
+                    "bg-white border border-gray-300 rounded-[3px] shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] block text-sm h-auto outline-none py-2 px-2.5 relative transition-all duration-150 ease-in-out w-full",
+                    "focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50",
+                    "read-only:bg-gray-100",
+                    className,
+                )}
+                {...props}
+            />
+        );
+    },
+);
 
 InputSimple.displayName = "InputSimple";
 

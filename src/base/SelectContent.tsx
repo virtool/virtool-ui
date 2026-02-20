@@ -1,4 +1,5 @@
 import { borderRadius, boxShadow, getColor } from "@app/theme";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
 import styled, { keyframes } from "styled-components";
 import Icon from "./Icon";
@@ -48,11 +49,11 @@ export default function SelectContent({ children, position, align }) {
                 avoidCollisions={false}
             >
                 <ScrollSection>
-                    <Icon name="chevron-up" />
+                    <Icon icon={ChevronUp} />
                 </ScrollSection>
                 <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
                 <ScrollSection as={SelectPrimitive.ScrollDownButton}>
-                    <Icon name="chevron-down" />
+                    <Icon icon={ChevronDown} />
                 </ScrollSection>
             </StyledContent>
         </SelectPrimitive.Portal>

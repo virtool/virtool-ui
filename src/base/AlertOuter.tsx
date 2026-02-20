@@ -19,7 +19,7 @@ const AlertOuter = styled.div`
     margin-bottom: 16px;
     overflow: hidden;
 
-    i.fas:first-child {
+    svg:first-child {
         color: currentColor;
         padding-right: 5px;
     }

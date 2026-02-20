@@ -2,6 +2,7 @@ import { byteSize, cn } from "@app/utils";
 import IconButton from "@base/IconButton";
 import Loader from "@base/Loader";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
+import { Trash } from "lucide-react";
 import { ReactNode } from "react";
 import { useUploaderStore } from "../uploader";
 
@@ -41,7 +42,7 @@ export function UploaderItem({
             <span className="flex font-medium gap-2">
                 <span>Failed</span>
                 <IconButton
-                    name="trash"
+                    IconComponent={Trash}
                     color="red"
                     tip="remove"
                     onClick={() => removeUpload(localId)}

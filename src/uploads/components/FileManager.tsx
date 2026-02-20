@@ -3,7 +3,6 @@ import { checkAdminRoleOrPermissionsFromAccount } from "@administration/utils";
 import { usePageParam } from "@app/hooks";
 import Alert from "@base/Alert";
 import BoxGroup from "@base/BoxGroup";
-import Icon from "@base/Icon";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
@@ -12,6 +11,7 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { Permission } from "@groups/types";
 import { capitalize } from "es-toolkit";
+import { AlertCircle } from "lucide-react";
 import { ReactNode } from "react";
 import { Accept } from "react-dropzone";
 import { useListFiles } from "../queries";
@@ -86,8 +86,7 @@ export function FileManager({
                     regex={regex}
                 />
             ) : (
-                <Alert color="orange" level>
-                    <Icon name="exclamation-circle" />
+                <Alert color="orange" level icon={AlertCircle}>
                     <span>
                         <strong>
                             You do not have permission to upload files.

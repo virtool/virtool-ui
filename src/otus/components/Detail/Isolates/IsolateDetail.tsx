@@ -8,6 +8,7 @@ import { useSetIsolateAsDefault } from "@otus/queries";
 import { OtuIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import Sequences from "@sequences/components/Sequences";
+import { Pencil, Star, Trash } from "lucide-react";
 import styled from "styled-components";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./RemoveIsolate";
@@ -23,7 +24,7 @@ const IsolateDetailHeader = styled(Box)`
         font-weight: bold;
     }
 
-    i.fas {
+    svg {
         padding-left: 5px;
     }
 
@@ -94,20 +95,20 @@ export default function IsolateDetail({
                 <div>
                     {activeIsolate.default && (
                         <Label color="green">
-                            <Icon name="star" /> Default Isolate
+                            <Icon icon={Star} /> Default Isolate
                         </Label>
                     )}
                     {canModify && (
                         <>
                             <IconButton
-                                name="pen"
+                                IconComponent={Pencil}
                                 color="grayDark"
                                 tip="edit isolate"
                                 onClick={() => setOpenEditIsolate(true)}
                             />
                             {!activeIsolate.default && (
                                 <IconButton
-                                    name="star"
+                                    IconComponent={Star}
                                     color="green"
                                     tip="set as default"
                                     onClick={() =>
@@ -119,7 +120,7 @@ export default function IsolateDetail({
                                 />
                             )}
                             <IconButton
-                                name="trash"
+                                IconComponent={Trash}
                                 color="red"
                                 tip="remove isolate"
                                 onClick={() => setOpenRemoveIsolate(true)}

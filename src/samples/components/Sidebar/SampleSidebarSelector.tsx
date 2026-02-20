@@ -7,6 +7,7 @@ import Popover from "@base/Popover";
 import SidebarHeaderButton from "@base/SidebarHeaderButton";
 import { Label } from "@labels/types";
 import { SubtractionOption } from "@subtraction/types";
+import { Pen } from "lucide-react";
 import { ReactNode } from "react";
 import styled from "styled-components";
 import SampleSidebarSelectorItem from "./SampleSidebarSelectorItem";
@@ -96,7 +97,7 @@ export default function SampleSidebarSelector({
                         aria-label={`select ${selectionType}`}
                         type="button"
                     >
-                        <Icon name="pen" />
+                        <Icon icon={Pen} />
                     </SidebarHeaderButton>
                 )
             }

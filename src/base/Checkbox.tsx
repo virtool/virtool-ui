@@ -1,4 +1,5 @@
 import { cn } from "@app/utils";
+import { Check } from "lucide-react";
 import { Checkbox as CheckboxPrimitive } from "radix-ui";
 import { ReactNode } from "react";
 import Icon from "./Icon";
@@ -47,7 +48,7 @@ function Checkbox({
                 <CheckboxPrimitive.Indicator forceMount>
                     <Icon
                         className={cn({ invisible: !checked }, "text-white")}
-                        name="check"
+                        icon={Check}
                     />
                 </CheckboxPrimitive.Indicator>
             </CheckboxPrimitive.Root>

@@ -3,17 +3,17 @@ import { cva, VariantProps } from "class-variance-authority";
 import { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 
 const baseSampleLabelVariants = cva(
-    "inline-flex items-center border rounded-md [&_i.fas]:mr-1 [&_i.fas]:text-[var(--user-color)]",
+    "inline-flex items-center border rounded-md [&_svg]:mr-1 [&_svg]:text-[var(--user-color)]",
     {
         variants: {
             size: {
-                sm: "text-sm font-semibold px-1.5 py-0.5 [&_i.fas]:mr-0.5",
+                sm: "text-sm font-semibold px-1.5 py-0.5 [&_svg]:mr-0.5",
                 md: "text-base px-2 py-1",
             },
             variant: {
                 default: "bg-white border-gray-300",
                 library:
-                    "bg-gray-200 border-gray-300 text-sm font-semibold px-1.5 py-0.5 [&_i.fas]:mr-0.5",
+                    "bg-gray-200 border-gray-300 text-sm font-semibold px-1.5 py-0.5 [&_svg]:mr-0.5",
             },
         },
         defaultVariants: {

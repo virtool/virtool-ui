@@ -1,6 +1,7 @@
 import Icon from "@base/Icon";
 import { LibraryType } from "@samples/types";
 import { getLibraryTypeDisplayName } from "@samples/utils";
+import { Dna } from "lucide-react";
 import { BaseSampleLabel } from "./BaseSampleLabel";
 
 type SampleLibraryTypeLabelProps = {
@@ -16,7 +17,7 @@ export default function SampleLibraryTypeLabel({
 }: SampleLibraryTypeLabelProps) {
     return (
         <BaseSampleLabel variant="library">
-            <Icon name="dna" />
+            <Icon icon={Dna} />
             <span>{getLibraryTypeDisplayName(libraryType)}</span>
         </BaseSampleLabel>
     );

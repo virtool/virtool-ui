@@ -3,6 +3,7 @@ import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
 import SelectItem from "@base/SelectItem";
 import { MLModelMinimal } from "@ml/types";
+import { ChevronDown } from "lucide-react";
 import styled from "styled-components";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
@@ -46,7 +47,7 @@ export default function MlModelSelector({
             <Select value={selected} onValueChange={onChange}>
                 <MLModelSelectButton
                     placeholder="Select a model"
-                    icon="chevron-down"
+                    icon={ChevronDown}
                 />
                 <SelectContent position="popper" align="start">
                     {mlModelItems}

@@ -13,6 +13,7 @@ import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
+import { Key, Pencil } from "lucide-react";
 import { Redirect, Route, Switch, useLocation } from "wouter";
 import SampleDetailFiles from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
@@ -52,7 +53,7 @@ export default function SampleDetail() {
                             <>
                                 <IconButton
                                     color="grayDark"
-                                    name="pen"
+                                    IconComponent={Pencil}
                                     tip="modify"
                                     onClick={() => setOpenEditSample(true)}
                                 />
@@ -84,7 +85,7 @@ export default function SampleDetail() {
                         </TabsLink>
                         {canModify && (
                             <TabsLink to={`/samples/${sampleId}/rights`}>
-                                <Icon name="key" />
+                                <Icon icon={Key} />
                             </TabsLink>
                         )}
                     </>

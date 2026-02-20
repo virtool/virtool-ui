@@ -25,6 +25,7 @@ const SampleItemLabels = styled.div`
     & > *:not(:last-child) {
         margin-right: 5px;
     }
+    display: flex;
 `;
 
 const SampleItemData = styled.div`

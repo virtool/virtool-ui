@@ -1,6 +1,7 @@
 import { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import { cn } from "@app/utils";
+import { FolderOpen, List, Settings, Tag } from "lucide-react";
 import { Route, Switch } from "wouter";
 import SidebarLink from "./SidebarLink";
 
@@ -16,17 +17,6 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
         AdministratorRoleName.FULL,
         administratorRole,
     );
-
-    // const StyledSidebar = styled.nav`
-    //     align-items: center;
-    //     top: 45px;
-    //     left: 0;
-    //     bottom: 0;
-    //     display: flex;
-    //     flex-direction: column;
-    //     width: 78px;
-    //     padding: 45px 0 0 15px;
-    // `;
 
     return (
         <div
@@ -44,7 +34,7 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
                         exclude={["/jobs/settings"]}
                         title="Browse"
                         link="/jobs"
-                        icon="th-list"
+                        icon={List}
                     />
                 </Route>
                 <Route path="/samples/*?">
@@ -56,23 +46,23 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
                         ]}
                         title="Browse"
                         link="/samples"
-                        icon="th-list"
+                        icon={List}
                     />
                     <SidebarLink
                         title="Files"
                         link="/samples/files"
-                        icon="folder-open"
+                        icon={FolderOpen}
                     />
                     <SidebarLink
                         title="Labels"
                         link="/samples/labels"
-                        icon="fas fa-tag"
+                        icon={Tag}
                     />
                     {fullAdministrator ? (
                         <SidebarLink
                             title="Settings"
                             link="/samples/settings"
-                            icon="cogs"
+                            icon={Settings}
                         />
                     ) : null}
                 </Route>
@@ -81,13 +71,13 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
                         exclude={["/refs/settings"]}
                         title="Browse"
                         link="/refs"
-                        icon="th-list"
+                        icon={List}
                     />
                     {fullAdministrator ? (
                         <SidebarLink
                             title="Settings"
                             link="/refs/settings"
-                            icon="cogs"
+                            icon={Settings}
                         />
                     ) : null}
                 </Route>
@@ -96,12 +86,12 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
                         exclude={["/subtractions/uploads"]}
                         title="Browse"
                         link="/subtractions"
-                        icon="th-list"
+                        icon={List}
                     />
                     <SidebarLink
                         title="Files"
                         link="/subtractions/files?page=1"
-                        icon="folder-open"
+                        icon={FolderOpen}
                     />
                 </Route>
                 <Route path="/hmm/*?">
@@ -109,11 +99,11 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
                         exclude={["/hmm/settings"]}
                         title="Browse"
                         link="/hmm"
-                        icon="th-list"
+                        icon={List}
                     />
                 </Route>
                 <Route path="/ml/*?">
-                    <SidebarLink title="Browse" link="/ml" icon="th-list" />
+                    <SidebarLink title="Browse" link="/ml" icon={List} />
                 </Route>
             </Switch>
         </div>

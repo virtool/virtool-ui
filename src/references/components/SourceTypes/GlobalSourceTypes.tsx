@@ -10,6 +10,7 @@ import InputSimple from "@base/InputSimple";
 import SectionHeader from "@base/SectionHeader";
 import Toolbar from "@base/Toolbar";
 import { useUpdateSourceTypes } from "@references/hooks";
+import { Undo2 } from "lucide-react";
 import SourceTypeList from "./SourceTypeList";
 
 type GlobalSourceTypesProps = {
@@ -61,7 +62,7 @@ export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
                             was just removed.
                         </span>
                         <IconButton
-                            name="undo"
+                            IconComponent={Undo2}
                             tip="undo"
                             onClick={handleUndo}
                         />

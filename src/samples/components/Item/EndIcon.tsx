@@ -2,6 +2,7 @@ import { cn } from "@/app/utils";
 import IconButton from "@base/IconButton";
 import ProgressCircle from "@base/ProgressCircle";
 import { JobNested } from "@jobs/types";
+import { ChartArea } from "lucide-react";
 
 type SampleItemEndIconProps = {
     /** The job responsible for creating the sample */
@@ -37,7 +38,7 @@ export default function SampleItemEndIcon({
                 <IconButton
                     className="text-lg"
                     color="green"
-                    name="chart-area"
+                    IconComponent={ChartArea}
                     tip="quick analyze"
                     tipPlacement="left"
                     onClick={onClick}

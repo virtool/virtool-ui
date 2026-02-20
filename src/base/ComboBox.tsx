@@ -6,6 +6,7 @@ import {
     getFontWeight,
 } from "@app/theme";
 import { useCombobox } from "downshift";
+import { ChevronDown } from "lucide-react";
 import styled, { keyframes } from "styled-components";
 import WrapRow from "./ComboBoxItem";
 import Icon from "./Icon";
@@ -22,7 +23,7 @@ const StyledTriggerButton = styled.button`
     font-weight: ${getFontWeight("thick")};
     text-transform: capitalize;
     width: 100%;
-    i.fas {
+    svg {
         margin-left: 5px;
     }
 `;
@@ -36,7 +37,7 @@ function ComboboxTriggerButton({
     return (
         <StyledTriggerButton {...TriggerButtonProps} id={id} type="button">
             {selectedItem ? renderRow(selectedItem) : "Select user"}
-            <Icon name="chevron-down" />
+            <Icon icon={ChevronDown} />
         </StyledTriggerButton>
     );
 }
