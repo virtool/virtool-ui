@@ -42,16 +42,10 @@ export default function CreateAnalysis({
         Boolean(hmms.total_count),
     );
 
-    function onOpenChange(open) {
-        if (!open) {
-            setOpen(false);
-        }
-    }
-
     const sampleIds = [sampleId];
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={setOpen}>
             <CreateAnalysisDialogContent>
                 <DialogTitle>Analyze</DialogTitle>
                 <HMMAlert installed={hmms.status.task?.complete} />

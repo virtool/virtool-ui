@@ -1,5 +1,5 @@
 import { JobNested } from "@/jobs/types";
-import { useDialogParam, useUrlSearchParam } from "@app/hooks";
+import { useDialogParam } from "@app/hooks";
 import { getFontSize, getFontWeight } from "@app/theme";
 import Attribution from "@base/Attribution";
 import Box from "@base/Box";
@@ -98,12 +98,9 @@ export default function SampleItem({
     handleSelect,
     selectOnQuickAnalyze,
 }: SampleItemProps) {
-    const { setValue: setQuickAnalysisType } =
-        useUrlSearchParam<string>("quickAnalysisType");
     const { setOpen } = useDialogParam("openQuickAnalyze");
 
     function onQuickAnalyze() {
-        setQuickAnalysisType("pathoscope_bowtie");
         selectOnQuickAnalyze();
         setOpen(true);
     }
