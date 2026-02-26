@@ -40,7 +40,7 @@
     "@sentry/vite-plugin": "^4.6.1",
     "@storybook/addon-docs": "^10.1.11",
     "@storybook/addon-links": "^10.2.0",
-    "@storybook/react-vite": "^10.1.11",
+    "@storybook/react-vite": "^10.2.11",
     "@tailwindcss/vite": "^4.1.18",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
