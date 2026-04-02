@@ -139,7 +139,7 @@ jobs:
             - name: Write VERSION file
               run: echo ${{ needs.release.outputs.git-tag }} > VERSION
             - name: Login
-              uses: docker/login-action@v3
+              uses: docker/login-action@v4
               with:
                   registry: ${{ env.REGISTRY }}
                   username: ${{ github.actor }}
