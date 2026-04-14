@@ -83,6 +83,13 @@ each module's `api.ts`. API errors have the shape `error.response?.body.message`
   colors or spacing values.
 - Tailwind theme customization is in `src/app/style.css` via `@theme`.
 
+## Linear
+
+- **Team**: Virtool
+- **Team ID**: `76cf3c46-c5d9-4df4-b457-0fc053d402f7`
+- **Issue prefix**: `VIR`
+- **Default label**: Frontend
+
 ## Code Style
 
 - **Functions:** Use function declarations, not arrow functions (`func-style`
