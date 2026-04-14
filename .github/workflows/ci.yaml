@@ -39,8 +39,8 @@ jobs:
                   fetch-depth: 0
             - name: Lint
               uses: wagoid/commitlint-github-action@v6
-    check-eslint:
-        name: Check / ESLint
+    check-biome:
+        name: Check / Biome
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout
@@ -52,23 +52,8 @@ jobs:
                   cache: npm
             - name: Install
               run: npm ci
-            - name: Run ESLint
-              run: npx eslint --quiet .
-    check-prettier:
-        name: Check / Prettier
-        runs-on: ubuntu-24.04
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v6
-            - name: Setup NodeJS
-              uses: actions/setup-node@v6
-              with:
-                  node-version: ${{ env.NODE_VERSION }}
-                  cache: npm
-            - name: Install
-              run: npm ci
-            - name: Run Prettier
-              run: npx prettier . -l
+            - name: Run Biome
+              run: npm run check
     check-typescript:
         name: Check / Typescript
         runs-on: ubuntu-24.04
