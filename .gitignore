@@ -13,7 +13,7 @@ coverage
 /misc
 /watch
 config.json
-settings.json
+/settings.json
 *.log*
 .coverage.cog*
 .coverage
