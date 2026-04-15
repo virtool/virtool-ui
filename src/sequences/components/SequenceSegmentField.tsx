@@ -34,7 +34,7 @@ type SequenceSegmentProps = {
 function SequenceSegment({ name, required }: SequenceSegmentProps) {
 	return (
 		<SelectPrimitive.Item
-			className="text-sm font-medium py-1 px-6 pl-6 relative select-none mb-1 capitalize hover:bg-gray-50 hover:border-0"
+			className="text-sm font-medium py-1 pl-6 pr-9 relative select-none mb-1 capitalize hover:bg-gray-50 hover:border-0"
 			value={name}
 			key={name}
 		>

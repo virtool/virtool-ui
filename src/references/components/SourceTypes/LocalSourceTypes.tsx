@@ -104,13 +104,18 @@ export function LocalSourceTypes() {
 									<InputSimple id="sourceType" {...register("sourceType")} />
 									<InputError>{error}</InputError>
 								</span>
-								<Button
-									className="w-15 h-8.5 ml-auto text-center justify-center mr-1"
-									color="green"
-									type="submit"
+								<div
+									className="ml-auto mr-1"
+									style={{ width: "60px", height: "34px" }}
 								>
-									Add
-								</Button>
+									<Button
+										className="w-full h-full text-center justify-center"
+										color="green"
+										type="submit"
+									>
+										Add
+									</Button>
+								</div>
 							</InputContainer>
 						</form>
 					</BoxGroupSection>
