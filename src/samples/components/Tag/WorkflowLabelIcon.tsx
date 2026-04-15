@@ -1,9 +1,6 @@
-import styled from "styled-components";
-
 /**
  * The icon in a workflow tag.
  */
-export const WorkflowLabelIcon = styled.span`
-    margin-right: 3px;
-    width: 12px;
-`;
+export function WorkflowLabelIcon({ children }: { children: React.ReactNode }) {
+	return <span className="mr-0.5 w-3">{children}</span>;
+}

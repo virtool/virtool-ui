@@ -1,5 +1,4 @@
-import { getBorder, getFontSize } from "@app/theme";
-import { getWorkflowDisplayName } from "@app/utils";
+import { cn, getWorkflowDisplayName } from "@app/utils";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import SideBarSection from "@base/SideBarSection";
@@ -7,45 +6,6 @@ import SidebarHeader from "@base/SidebarHeader";
 import { WorkflowStates } from "@samples/utils";
 import { xor } from "es-toolkit/array";
 import { Check, type LucideIcon, Play, X } from "lucide-react";
-import styled from "styled-components";
-
-const WorkflowFilterLabel = styled.div`
-    padding: 4px 8px;
-`;
-
-const StyledWorkflowFilterControlButton = styled.button`
-    align-items: center;
-    background-color: ${(props) =>
-			props.theme.color[
-				props["aria-pressed"] === true ? "purple" : "purpleLightest"
-			]};
-    color: ${(props) =>
-			props.theme.color[
-				props["aria-pressed"] === true ? "white" : "purpleDark"
-			]};
-
-    border: 2px solid ${(props) => props.theme.color.purple};
-    border-radius: 20px;
-    cursor: pointer;
-    justify-content: center;
-    display: flex;
-    height: 30px;
-    transform: scale(
-        ${(props) => (props["aria-pressed"] === "true" ? 1 : 0.95)}
-    );
-    width: 30px;
-
-    i {
-        font-size: ${getFontSize("md")};
-    }
-
-    &[aria-pressed="false"]:hover,
-    &[aria-pressed="false"]:focus {
-        background-color: ${(props) => props.theme.color.purpleLight};
-        color: ${(props) => props.theme.color.purpleDarkest};
-        outline: none;
-    }
-`;
 
 type WorkflowFilterControlButtonProps = {
 	/* Indicates if the button is active */
@@ -65,32 +25,21 @@ function WorkflowFilterControlButton({
 	onClick,
 }: WorkflowFilterControlButtonProps) {
 	return (
-		<StyledWorkflowFilterControlButton
+		<button
+			className={cn(
+				"flex items-center justify-center border-2 border-purple-400 rounded-full cursor-pointer h-8 w-8 [&_i]:text-sm",
+				active
+					? "bg-purple-400 text-white"
+					: "bg-purple-50 text-purple-600 scale-95 hover:bg-purple-300 hover:text-purple-800 hover:outline-none focus:bg-purple-300 focus:text-purple-800 focus:outline-none",
+			)}
 			aria-pressed={active}
 			onClick={() => onClick(value)}
+			type="button"
 		>
 			<Icon icon={icon} />
-		</StyledWorkflowFilterControlButton>
+		</button>
 	);
 }
-
-const WorkflowFilterControlPath = styled.div`
-    border: ${getBorder};
-    flex: 1 0 auto;
-    height: 2px;
-`;
-
-const WorkflowFilterControlButtons = styled.div`
-    align-items: center;
-    display: flex;
-    justify-content: stretch;
-    padding: 4px 8px 8px;
-`;
-
-const StyledWorkflowFilterControl = styled(Box)`
-    background: ${(props) => props.theme.color.white};
-    padding: 0;
-`;
 
 type WorkflowFilterControlProps = {
 	/* The workflow to filter */
@@ -111,33 +60,31 @@ function WorkflowFilterControl({
 	}
 
 	return (
-		<StyledWorkflowFilterControl>
-			<WorkflowFilterLabel>
-				{getWorkflowDisplayName(workflow)}
-			</WorkflowFilterLabel>
-			<WorkflowFilterControlButtons>
+		<Box className="bg-white p-0">
+			<div className="px-2 py-1">{getWorkflowDisplayName(workflow)}</div>
+			<div className="flex items-center justify-stretch px-2 pt-1 pb-2">
 				<WorkflowFilterControlButton
 					active={states.includes(WorkflowStates.NONE)}
 					icon={X}
 					value={WorkflowStates.NONE}
 					onClick={handleClick}
 				/>
-				<WorkflowFilterControlPath />
+				<div className="border border-gray-300 flex-auto h-0.5" />
 				<WorkflowFilterControlButton
 					active={states.includes(WorkflowStates.PENDING)}
 					icon={Play}
 					value={WorkflowStates.PENDING}
 					onClick={handleClick}
 				/>
-				<WorkflowFilterControlPath />
+				<div className="border border-gray-300 flex-auto h-0.5" />
 				<WorkflowFilterControlButton
 					active={states.includes(WorkflowStates.READY)}
 					icon={Check}
 					value={WorkflowStates.READY}
 					onClick={handleClick}
 				/>
-			</WorkflowFilterControlButtons>
-		</StyledWorkflowFilterControl>
+			</div>
+		</Box>
 	);
 }
 

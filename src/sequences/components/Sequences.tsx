@@ -43,7 +43,7 @@ export default function Sequences({
 	return (
 		<>
 			<label className="flex items-center font-medium">
-				<strong className="pr-1 text-base">Sequences</strong>
+				<strong className="text-base pr-1">Sequences</strong>
 				<Badge>{sequences.length}</Badge>
 				<CreateSequenceLink refId={reference.id} />
 			</label>

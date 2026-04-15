@@ -1,21 +1,5 @@
 import type { SampleLabel } from "@samples/queries";
-import styled from "styled-components";
 import SampleMultiSelectLabel from "../Label/SampleMultiSelectLabel";
-
-const StyledSampleSidebarList = styled.div`
-    display: flex;
-    flex-flow: wrap;
-`;
-
-const SampleSidebarMultiSelectListItem = styled(SampleMultiSelectLabel)`
-    background-color: ${(props) => props.theme.color.white};
-    display: inline;
-    margin: 4px 0;
-
-    &:not(:last-child) {
-        margin-right: 8px;
-    }
-`;
 
 type SampleSidebarMultiselectList = {
 	/** List of labels that can be used to filter samples */
@@ -29,7 +13,8 @@ export default function SampleSidebarMultiselectList({
 	items,
 }: SampleSidebarMultiselectList) {
 	const sampleItemComponents = items.map(({ id, color, name, allLabeled }) => (
-		<SampleSidebarMultiSelectListItem
+		<SampleMultiSelectLabel
+			className="bg-white inline my-1 last:mr-0 mr-2"
 			key={id}
 			color={color}
 			name={name}
@@ -37,7 +22,5 @@ export default function SampleSidebarMultiselectList({
 		/>
 	));
 
-	return (
-		<StyledSampleSidebarList>{sampleItemComponents}</StyledSampleSidebarList>
-	);
+	return <div className="flex flex-wrap">{sampleItemComponents}</div>;
 }

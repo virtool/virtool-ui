@@ -1,19 +1,5 @@
-import { fontWeight } from "@app/theme";
 import { byteSize } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
-import styled from "styled-components";
-
-const ReadItemMain = styled.div`
-    align-items: center;
-    display: flex;
-`;
-
-const StyledReadItem = styled(BoxGroupSection)`
-    align-items: flex-start;
-    display: flex;
-    font-weight: ${fontWeight.thick};
-    justify-content: space-between;
-`;
 
 /**
  * Sanitize a string for use as a filename by replacing invalid characters
@@ -43,15 +29,15 @@ export default function ReadItem({
 	const downloadName = `${sanitizeFileName(sampleName)}_${side}.fq.gz`;
 
 	return (
-		<StyledReadItem>
-			<ReadItemMain>
+		<BoxGroupSection className="flex items-start font-medium justify-between">
+			<div className="flex items-center">
 				<div>
 					<a href={`/api/${download_url}`} download={downloadName}>
 						{downloadName}
 					</a>
 				</div>
-			</ReadItemMain>
+			</div>
 			{byteSize(size, true)}
-		</StyledReadItem>
+		</BoxGroupSection>
 	);
 }

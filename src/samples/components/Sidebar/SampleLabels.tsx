@@ -1,24 +1,12 @@
-import { fontWeight, getColor, getFontSize } from "@app/theme";
 import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SideBarSection from "@base/SideBarSection";
 import SidebarHeader from "@base/SidebarHeader";
 import { useFetchLabels } from "@labels/queries";
 import { xor } from "es-toolkit/array";
-import styled from "styled-components";
 import SampleLabel from "../Label/SampleLabel";
 import SampleSidebarList from "./SampleSidebarList";
 import SampleSidebarSelector from "./SampleSidebarSelector";
-
-const SampleLabelsFooter = styled.div`
-    display: flex;
-    color: ${(props) => getColor({ theme: props.theme, color: "greyDarkest" })};
-    a {
-        margin-left: 5px;
-        font-size: ${getFontSize("md")};
-        font-weight: ${fontWeight.thick};
-    }
-`;
 
 type SampleLabelsProps = {
 	/** List of label ids associated with the sample */
@@ -61,9 +49,9 @@ export default function SampleLabels({
 				items={data.filter((item) => sampleLabels.includes(item.id))}
 			/>
 			{Boolean(data.length) || (
-				<SampleLabelsFooter>
+				<div className="flex text-gray-600 [&_a]:ml-1 [&_a]:text-sm [&_a]:font-medium">
 					No labels found. <Link to="/samples/labels">Create one</Link>.
-				</SampleLabelsFooter>
+				</div>
 			)}
 		</SideBarSection>
 	);

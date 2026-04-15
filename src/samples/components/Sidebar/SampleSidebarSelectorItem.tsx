@@ -1,34 +1,6 @@
-import { getFontSize } from "@app/theme";
-import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";
 import { Check, Minus } from "lucide-react";
 import type { ReactNode } from "react";
-import styled from "styled-components";
-
-const StyledSampleSidebarSelectorItem = styled(BoxGroupSection)`
-    align-items: stretch;
-    display: flex;
-    padding: 10px 10px 10px 5px;
-
-    p {
-        font-size: ${getFontSize("md")};
-        margin: 5px 0 0;
-    }
-`;
-
-const SampleSidebarSelectorItemCheck = styled.div`
-    align-items: center;
-    color: ${(props) => props.theme.color.greyDark};
-    display: flex;
-    justify-content: center;
-    margin-right: 5px;
-    width: 32px;
-`;
-
-const SampleSidebarSelectorItemContents = styled.div`
-    display: flex;
-    align-items: center;
-`;
 
 type SampleSidebarSelectorItemProps = {
 	children: ReactNode;
@@ -52,18 +24,16 @@ export default function SampleSidebarSelectorItem({
 	selected,
 }: SampleSidebarSelectorItemProps) {
 	return (
-		<StyledSampleSidebarSelectorItem
-			as="button"
-			type={"button"}
+		<button
+			className="bg-transparent block border-gray-300 not-last:border-b-1 py-2.5 pr-2.5 pl-1 relative text-inherit w-full flex items-stretch [&_p]:text-sm [&_p]:mt-1 [&_p]:mb-0"
+			type="button"
 			onClick={() => onClick(id)}
 			aria-label={name}
 		>
-			<SampleSidebarSelectorItemCheck>
+			<div className="flex items-center justify-center text-gray-500 mr-1 w-8">
 				{selected && <Icon icon={partiallySelected ? Minus : Check} />}
-			</SampleSidebarSelectorItemCheck>
-			<SampleSidebarSelectorItemContents>
-				{children}
-			</SampleSidebarSelectorItemContents>
-		</StyledSampleSidebarSelectorItem>
+			</div>
+			<div className="flex items-center">{children}</div>
+		</button>
 	);
 }

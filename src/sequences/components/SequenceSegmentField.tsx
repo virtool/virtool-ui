@@ -34,16 +34,16 @@ type SequenceSegmentProps = {
 function SequenceSegment({ name, required }: SequenceSegmentProps) {
 	return (
 		<SelectPrimitive.Item
-			className="relative mb-1 cursor-default py-1 pr-9 pl-6 text-sm font-medium capitalize select-none hover:border-0 hover:bg-gray-50"
+			className="text-sm font-medium py-1 pl-6 pr-9 relative select-none mb-1 capitalize hover:bg-gray-50 hover:border-0"
 			value={name}
 			key={name}
 		>
 			<SelectPrimitive.ItemText>
-				<div className="flex w-full items-center font-medium">
+				<div className="flex items-center font-medium w-full">
 					<span>{name}</span>
 
 					{required && (
-						<span className="ml-auto flex items-center">
+						<span className="flex items-center ml-auto">
 							<Icon icon={CircleAlert} />
 							<span className="ml-1">Required</span>
 						</span>
@@ -77,7 +77,7 @@ export default function SequenceSegmentField({
 		return (
 			<InputGroup>
 				<InputLabel htmlFor="segment">Segment</InputLabel>
-				<div className="flex flex-col [&>button]:grow [&>button]:p-2.5">
+				<div className="flex flex-col [&_button]:grow [&_button]:p-2.5">
 					<Controller
 						control={control}
 						render={({ field: { onChange, value } }) => {
@@ -116,16 +116,23 @@ export default function SequenceSegmentField({
 	return (
 		<InputGroup>
 			<InputLabel>Segment</InputLabel>
-			<Box className="flex items-center justify-between [&_a]:font-medium [&_h5]:mb-1 [&_h5]:mt-0 [&_h5]:font-medium [&_p]:m-0">
+			<Box className="flex items-center justify-between">
 				<div>
-					<h5>No schema is defined for this OTU.</h5>
-					<p>
+					<h5 className="font-medium mt-0 mb-1">
+						No schema is defined for this OTU.
+					</h5>
+					<p className="m-0">
 						A schema defines the sequence segments that should be present in
 						isolates of the OTU.{" "}
 					</p>
 				</div>
 				<div>
-					<Link to={`/refs/${refId}/otus/${otuId}/schema`}>Add a Schema</Link>
+					<Link
+						className="font-medium"
+						to={`/refs/${refId}/otus/${otuId}/schema`}
+					>
+						Add a Schema
+					</Link>
 				</div>
 			</Box>
 		</InputGroup>

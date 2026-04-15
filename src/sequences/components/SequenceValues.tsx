@@ -1,37 +1,25 @@
-import { cn } from "@app/utils";
-
-type SequenceValueProps = {
-	className?: string;
-	children: React.ReactNode;
-};
-
-function SequenceValue({ className, children }: SequenceValueProps) {
-	return (
-		<div
-			className={cn(
-				"flex min-w-0 flex-col [&>p]:m-0 [&>p]:overflow-hidden [&>p]:text-ellipsis [&>p]:whitespace-nowrap [&>small]:m-0 [&>small]:overflow-hidden [&>small]:text-ellipsis [&>small]:whitespace-nowrap [&>small]:text-xs [&>small]:font-bold [&>small]:uppercase [&>small]:text-gray-500",
-				className,
-			)}
-		>
-			{children}
-		</div>
-	);
-}
-
 export function SequenceTitleValue({ label, value }) {
 	return (
-		<SequenceValue className="flex-1">
-			<p>{value}</p>
-			<small>{label}</small>
-		</SequenceValue>
+		<div className="flex flex-col min-w-0 flex-1">
+			<p className="m-0 overflow-hidden text-ellipsis whitespace-nowrap">
+				{value}
+			</p>
+			<small className="m-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-500 text-xs font-bold uppercase">
+				{label}
+			</small>
+		</div>
 	);
 }
 
 export function SequenceAccessionValue({ accession }) {
 	return (
-		<SequenceValue className="mr-5 w-25">
-			<p>{accession}</p>
-			<small>ACCESSION</small>
-		</SequenceValue>
+		<div className="flex flex-col min-w-0 w-24 mr-5">
+			<p className="m-0 overflow-hidden text-ellipsis whitespace-nowrap">
+				{accession}
+			</p>
+			<small className="m-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-500 text-xs font-bold uppercase">
+				ACCESSION
+			</small>
+		</div>
 	);
 }

@@ -3,26 +3,7 @@ import Button from "@base/Button";
 import Icon from "@base/Icon";
 import LinkButton from "@base/LinkButton";
 import { AreaChart } from "lucide-react";
-import styled from "styled-components";
 import { useSearch } from "wouter";
-
-const SampleSelectionToolbarTop = styled.div`
-    align-items: center;
-    display: flex;
-    margin-bottom: 15px;
-
-    button {
-        height: 38px;
-    }
-
-    button:first-child {
-        align-items: center;
-        display: flex;
-        flex: 1;
-        justify-content: flex-start;
-        margin-right: 3px;
-    }
-`;
 
 type SampleSelectionToolbarProps = {
 	/** A callback function to clear selected samples */
@@ -40,7 +21,7 @@ export default function SampleSelectionToolbar({
 }: SampleSelectionToolbarProps) {
 	const search = useSearch();
 	return (
-		<SampleSelectionToolbarTop>
+		<div className="flex items-center mb-4 [&_button]:h-10 [&_button:first-child]:flex [&_button:first-child]:flex-1 [&_button:first-child]:items-center [&_button:first-child]:justify-start [&_button:first-child]:mr-0.5">
 			<Button onClick={onClear}>
 				Clear selection of {selected.length} samples
 			</Button>
@@ -50,6 +31,6 @@ export default function SampleSelectionToolbar({
 			>
 				<Icon icon={AreaChart} /> Quick Analyze
 			</LinkButton>
-		</SampleSelectionToolbarTop>
+		</div>
 	);
 }

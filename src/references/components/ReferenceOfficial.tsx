@@ -5,23 +5,7 @@ import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
 import { Permission } from "@groups/types";
 import { CloudDownload } from "lucide-react";
-import styled from "styled-components";
 import { useRemoteReference } from "../queries";
-
-const StyledReferenceOfficial = styled(Box)`
-    align-items: center;
-    display: flex;
-
-    h5 {
-        font-size: ${(props) => props.theme.fontSize.lg};
-        font-weight: ${(props) => props.theme.fontWeight.thick};
-    }
-
-    button {
-        margin-left: auto;
-        min-width: 83px;
-    }
-`;
 
 type ReferenceOfficialProps = {
 	officialInstalled: boolean;
@@ -40,9 +24,9 @@ export default function ReferenceOfficial({
 	const show = !officialInstalled && hasPermission;
 
 	return show ? (
-		<StyledReferenceOfficial>
+		<Box className="flex items-center">
 			<div>
-				<h5>Official Reference</h5>
+				<h5 className="text-base font-medium">Official Reference</h5>
 				<p>
 					<span>We have published an official </span>
 					<ExternalLink href="https://github.com/virtool/ref-plant-viruses">
@@ -56,6 +40,7 @@ export default function ReferenceOfficial({
 				</p>
 			</div>
 			<Button
+				className="ml-auto"
 				color="blue"
 				onClick={() =>
 					mutation.mutate({
@@ -65,6 +50,6 @@ export default function ReferenceOfficial({
 			>
 				<Icon icon={CloudDownload} /> Install
 			</Button>
-		</StyledReferenceOfficial>
+		</Box>
 	) : null;
 }

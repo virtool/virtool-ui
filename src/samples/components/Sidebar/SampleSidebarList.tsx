@@ -1,13 +1,6 @@
 import type { Label } from "@labels/types";
 import type { SubtractionOption } from "@subtraction/types";
-import styled from "styled-components";
 import SampleLabel from "../Label/SampleLabel";
-
-const SampleSidebarListItem = styled(SampleLabel)`
-    background-color: ${(props) => props.theme.color.white};
-    display: inline;
-    margin: 0 5px 5px 0;
-`;
 
 type SampleSidebarListProps = {
 	/** List of labels or subtractions associated with the sample */
@@ -19,7 +12,12 @@ type SampleSidebarListProps = {
  */
 export default function SampleSidebarList({ items }: SampleSidebarListProps) {
 	const sampleItemComponents = items.map((item) => (
-		<SampleSidebarListItem key={item.id} color={item.color} name={item.name} />
+		<SampleLabel
+			className="bg-white inline m-0 mr-1 mb-1"
+			key={item.id}
+			color={item.color}
+			name={item.name}
+		/>
 	));
 
 	return <div className="flex flex-wrap">{sampleItemComponents}</div>;

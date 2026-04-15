@@ -6,14 +6,7 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
 import { SourceType } from "./SourceType";
-
-const IsolateFormFields = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: ${(props) => props.theme.gap.column};
-`;
 
 type IsolateFormValues = {
 	sourceName: string;
@@ -49,7 +42,7 @@ export default function IsolateForm({
 
 	return (
 		<form onSubmit={handleSubmit((values) => onSubmit({ ...values }))}>
-			<IsolateFormFields>
+			<div className="grid grid-cols-2 gap-4">
 				<SourceType
 					restrictSourceTypes={restrictSourceTypes}
 					allowedSourceTypes={allowedSourceTypes}
@@ -65,7 +58,7 @@ export default function IsolateForm({
 						disabled={watch("sourceType").toLowerCase() === "unknown"}
 					/>
 				</InputGroup>
-			</IsolateFormFields>
+			</div>
 
 			<InputGroup>
 				<InputLabel htmlFor="isolateName">Isolate Name</InputLabel>

@@ -1,28 +1,5 @@
-import { getFontSize, getFontWeight } from "@app/theme";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
-import styled from "styled-components";
-
-const OTUItemName = styled(Link)`
-    font-size: ${getFontSize("lg")};
-    font-weight: ${getFontWeight("thick")};
-`;
-
-const OTUItemUnverified = styled.span`
-    display: flex;
-    justify-content: flex-end;
-`;
-
-const OTUItemAbbreviation = styled.span`
-    display: flex;
-    justify-content: flex-start;
-`;
-
-const StyledOTUItem = styled(BoxGroupSection)`
-    align-items: center;
-    display: grid;
-    grid-template-columns: 5fr 2fr 1fr;
-`;
 
 type OtuItemProps = {
 	abbreviation: string;
@@ -43,10 +20,15 @@ export default function OtuItem({
 	verified,
 }: OtuItemProps) {
 	return (
-		<StyledOTUItem key={id}>
-			<OTUItemName to={`/refs/${refId}/otus/${id}`}>{name}</OTUItemName>
-			<OTUItemAbbreviation>{abbreviation}</OTUItemAbbreviation>
-			{verified || <OTUItemUnverified>Unverified</OTUItemUnverified>}
-		</StyledOTUItem>
+		<BoxGroupSection
+			className="grid items-center"
+			style={{ gridTemplateColumns: "5fr 2fr 1fr" }}
+		>
+			<Link className="text-base font-medium" to={`/refs/${refId}/otus/${id}`}>
+				{name}
+			</Link>
+			<span className="flex justify-start">{abbreviation}</span>
+			{verified || <span className="flex justify-end">Unverified</span>}
+		</BoxGroupSection>
 	);
 }

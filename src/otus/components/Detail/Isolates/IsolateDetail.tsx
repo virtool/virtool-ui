@@ -9,35 +9,8 @@ import type { OtuIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import Sequences from "@sequences/components/Sequences";
 import { Pencil, Star, Trash } from "lucide-react";
-import styled from "styled-components";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./RemoveIsolate";
-
-const IsolateDetailHeader = styled(Box)`
-    align-items: center;
-    display: flex;
-    font-size: ${(props) => props.theme.fontSize.lg};
-    flex-direction: row;
-    justify-content: space-between;
-
-    div:first-child {
-        font-weight: bold;
-    }
-
-    svg {
-        padding-left: 5px;
-    }
-
-    a:last-child {
-        margin-left: 5px;
-    }
-`;
-
-const StyledIsolateDetail = styled.div`
-    flex: 1;
-    min-height: 0;
-    min-width: 0;
-`;
 
 type IsolateDetailProps = {
 	/** The Isolate that is currently selected */
@@ -69,7 +42,7 @@ export default function IsolateDetail({
 	const mutation = useSetIsolateAsDefault();
 
 	return (
-		<StyledIsolateDetail>
+		<div className="flex-1 min-h-0 min-w-0">
 			<EditIsolate
 				key={activeIsolate.id}
 				otuId={otuId}
@@ -90,17 +63,18 @@ export default function IsolateDetail({
 				show={openRemoveIsolate}
 			/>
 
-			<IsolateDetailHeader>
-				<div>{formatIsolateName(activeIsolate)}</div>
+			<Box className="flex items-center text-base justify-between">
+				<div className="font-bold">{formatIsolateName(activeIsolate)}</div>
 				<div>
 					{activeIsolate.default && (
 						<Label color="green">
-							<Icon icon={Star} /> Default Isolate
+							<Icon className="pl-1" icon={Star} /> Default Isolate
 						</Label>
 					)}
 					{canModify && (
 						<>
 							<IconButton
+								className="pl-1"
 								IconComponent={Pencil}
 								color="grayDark"
 								tip="edit isolate"
@@ -108,6 +82,7 @@ export default function IsolateDetail({
 							/>
 							{!activeIsolate.default && (
 								<IconButton
+									className="pl-1"
 									IconComponent={Star}
 									color="green"
 									tip="set as default"
@@ -120,6 +95,7 @@ export default function IsolateDetail({
 								/>
 							)}
 							<IconButton
+								className="pl-1"
 								IconComponent={Trash}
 								color="red"
 								tip="remove isolate"
@@ -128,14 +104,15 @@ export default function IsolateDetail({
 						</>
 					)}
 					<DownloadLink
+						className="ml-1"
 						href={`/api/otus/${otuId}/isolates/${activeIsolate.id}.fa`}
 					>
 						FASTA
 					</DownloadLink>
 				</div>
-			</IsolateDetailHeader>
+			</Box>
 
 			<Sequences otuId={otuId} activeIsolate={activeIsolate} />
-		</StyledIsolateDetail>
+		</div>
 	);
 }
