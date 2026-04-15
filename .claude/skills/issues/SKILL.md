@@ -1,3 +1,9 @@
+---
+name: issues
+description: Create Linear issues for a project based on Interview decisions
+argument-hint: "[project-identifier]"
+---
+
 # Create issues for a Linear project
 
 ## Input

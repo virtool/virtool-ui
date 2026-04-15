@@ -1,3 +1,8 @@
+---
+name: pr
+description: Create a pull request using gh CLI
+---
+
 # Make a PR using gh
 
 - Command should look like: git push -u origin HEAD && gh pr create ...

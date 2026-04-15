@@ -1,3 +1,9 @@
+---
+name: discovery
+description: Run Discovery research on a Linear project to gather facts and surface options
+argument-hint: "[project-identifier]"
+---
+
 # Run Discovery on a Linear project
 
 ## Input

@@ -1,3 +1,9 @@
+---
+name: interview
+description: Walk through Discovery decisions for a Linear project and record chosen directions
+argument-hint: "[project-identifier]"
+---
+
 # Interview: decide on a Linear project's direction
 
 ## Input
