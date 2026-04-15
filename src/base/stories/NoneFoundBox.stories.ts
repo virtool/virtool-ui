@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import NoneFoundBox from "../NoneFoundBox";
 
 const meta: Meta<typeof NoneFoundBox> = {
-    title: "base/NoneFound/NoneFoundBox",
-    component: NoneFoundBox,
-    tags: ["autodocs"],
+	title: "base/NoneFound/NoneFoundBox",
+	component: NoneFoundBox,
+	tags: ["autodocs"],
 };
 
 export default meta;
@@ -12,7 +12,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: {
-        noun: "items",
-    },
+	args: {
+		noun: "items",
+	},
 };

@@ -5,18 +5,18 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useFindModels } from "../queries";
-import { MLModelMinimal } from "../types";
+import type { MLModelMinimal } from "../types";
 import { MlModel } from "./MlModel";
 
 function renderRow({ created_at, name, latest_release, id }: MLModelMinimal) {
-    return (
-        <MlModel
-            created_at={created_at}
-            name={name}
-            latest_release={latest_release}
-            key={id}
-        />
-    );
+	return (
+		<MlModel
+			created_at={created_at}
+			name={name}
+			latest_release={latest_release}
+			key={id}
+		/>
+	);
 }
 
 /**
@@ -25,29 +25,27 @@ function renderRow({ created_at, name, latest_release, id }: MLModelMinimal) {
  * @returns A list of MLModels
  */
 export function MLModels() {
-    const { data, isPending } = useFindModels();
+	const { data, isPending } = useFindModels();
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    const models = data.items.length ? (
-        data.items.map(renderRow)
-    ) : (
-        <NoneFoundBox noun={"machine learning models"} />
-    );
+	const models = data.items.length ? (
+		data.items.map(renderRow)
+	) : (
+		<NoneFoundBox noun={"machine learning models"} />
+	);
 
-    return (
-        <ContainerNarrow>
-            <ViewHeader title="ML Models">
-                <ViewHeaderTitle>
-                    ML Models{" "}
-                    <ViewHeaderTitleBadge>
-                        {data.items.length}
-                    </ViewHeaderTitleBadge>
-                </ViewHeaderTitle>
-            </ViewHeader>
-            {models}
-        </ContainerNarrow>
-    );
+	return (
+		<ContainerNarrow>
+			<ViewHeader title="ML Models">
+				<ViewHeaderTitle>
+					ML Models{" "}
+					<ViewHeaderTitleBadge>{data.items.length}</ViewHeaderTitleBadge>
+				</ViewHeaderTitle>
+			</ViewHeader>
+			{models}
+		</ContainerNarrow>
+	);
 }

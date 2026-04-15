@@ -1,33 +1,33 @@
 import { cn } from "@app/utils";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type BoxProps = {
-    children: ReactNode;
-    className?: string;
-    onClick?: () => void;
+	children: ReactNode;
+	className?: string;
+	onClick?: () => void;
 };
 
 function Box({ children, className = "", onClick, ...rest }: BoxProps) {
-    return (
-        <div
-            className={cn(
-                { "hover:bg-gray-100": onClick },
-                "border-1",
-                "border-gray-300",
-                { "cursor-pointer": onClick },
-                "mb-6",
-                "py-4",
-                "px-4",
-                "relative",
-                "rounded-sm",
-                className,
-            )}
-            onClick={onClick}
-            {...rest}
-        >
-            {children}
-        </div>
-    );
+	return (
+		<div
+			className={cn(
+				{ "hover:bg-gray-100": onClick },
+				"border-1",
+				"border-gray-300",
+				{ "cursor-pointer": onClick },
+				"mb-6",
+				"py-4",
+				"px-4",
+				"relative",
+				"rounded-sm",
+				className,
+			)}
+			onClick={onClick}
+			{...rest}
+		>
+			{children}
+		</div>
+	);
 }
 
 export default Box;

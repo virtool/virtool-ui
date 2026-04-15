@@ -1,14 +1,14 @@
-import { Task } from "@/types/api";
 import { hmmQueryKeys } from "@hmm/queries";
-import { HmmSearchResults } from "@hmm/types";
+import type { HmmSearchResults } from "@hmm/types";
 import { referenceQueryKeys } from "@references/queries";
-import { ReferenceSearchResult } from "@references/types";
-import { QueryClient } from "@tanstack/react-query";
+import type { ReferenceSearchResult } from "@references/types";
+import type { QueryClient } from "@tanstack/react-query";
 import { get } from "es-toolkit/compat";
 import { cloneDeep } from "es-toolkit/object";
+import type { Task } from "@/types/api";
 
 interface TaskObject {
-    task: Task;
+	task: Task;
 }
 
 /**
@@ -18,7 +18,7 @@ interface TaskObject {
  * @returns The task located at the root of the cached item
  */
 function taskSelector<T extends TaskObject>(cache: T): Task {
-    return cache?.task;
+	return cache?.task;
 }
 
 type Document = { items: TaskObject[] } | { documents: TaskObject[] };
@@ -31,22 +31,22 @@ type Document = { items: TaskObject[] } | { documents: TaskObject[] };
  * @returns A function that updates the task in the cache
  */
 function listItemUpdater<T extends Document>(
-    task: Task,
-    selector: (cache: TaskObject) => Task,
+	task: Task,
+	selector: (cache: TaskObject) => Task,
 ) {
-    return function (cache: T): T {
-        const newCache = cloneDeep(cache);
+	return (cache: T): T => {
+		const newCache = cloneDeep(cache);
 
-        const items = "items" in newCache ? newCache.items : newCache.documents;
-        items.forEach((item: { task: Task }) => {
-            const previousTask = selector(item);
-            if (previousTask && item.task.id === task.id) {
-                Object.assign(previousTask, task);
-            }
-        });
+		const items = "items" in newCache ? newCache.items : newCache.documents;
+		items.forEach((item: { task: Task }) => {
+			const previousTask = selector(item);
+			if (previousTask && item.task.id === task.id) {
+				Object.assign(previousTask, task);
+			}
+		});
 
-        return newCache;
-    };
+		return newCache;
+	};
 }
 
 /**
@@ -57,25 +57,25 @@ function listItemUpdater<T extends Document>(
  * @returns A function that updates the task in the cache
  */
 export function updater<T>(task: Task, selector: (cache: T) => Task) {
-    return function (cache: T): T {
-        const newCache = cloneDeep(cache);
-        const previousTask = selector(newCache);
+	return (cache: T): T => {
+		const newCache = cloneDeep(cache);
+		const previousTask = selector(newCache);
 
-        if (previousTask && previousTask.id === task.id) {
-            Object.assign(previousTask, task);
-            return newCache;
-        }
-    };
+		if (previousTask && previousTask.id === task.id) {
+			Object.assign(previousTask, task);
+			return newCache;
+		}
+	};
 }
 
 /**
  * `taskUpdaters` contains functions to update tasks in the cache.
  */
 export const taskUpdaters = {
-    clone_reference: referenceUpdater,
-    remote_reference: referenceUpdater,
-    update_remote_reference: referenceUpdater,
-    install_hmms: HMMStatusUpdater,
+	clone_reference: referenceUpdater,
+	remote_reference: referenceUpdater,
+	update_remote_reference: referenceUpdater,
+	install_hmms: HMMStatusUpdater,
 };
 
 /**
@@ -85,14 +85,14 @@ export const taskUpdaters = {
  * @param task - The new task data to use for the update
  */
 function referenceUpdater(queryClient: QueryClient, task: Task) {
-    queryClient.setQueriesData(
-        { queryKey: referenceQueryKeys.lists() },
-        listItemUpdater<ReferenceSearchResult>(task, taskSelector),
-    );
-    queryClient.setQueriesData(
-        { queryKey: referenceQueryKeys.details() },
-        updater(task, taskSelector),
-    );
+	queryClient.setQueriesData(
+		{ queryKey: referenceQueryKeys.lists() },
+		listItemUpdater<ReferenceSearchResult>(task, taskSelector),
+	);
+	queryClient.setQueriesData(
+		{ queryKey: referenceQueryKeys.details() },
+		updater(task, taskSelector),
+	);
 }
 
 /**
@@ -102,8 +102,8 @@ function referenceUpdater(queryClient: QueryClient, task: Task) {
  * @param task - The new task data to use for the update
  */
 function HMMStatusUpdater(queryClient: QueryClient, task: Task) {
-    queryClient.setQueriesData(
-        { queryKey: hmmQueryKeys.lists() },
-        updater<HmmSearchResults>(task, (item) => get(item, "status.task")),
-    );
+	queryClient.setQueriesData(
+		{ queryKey: hmmQueryKeys.lists() },
+		updater<HmmSearchResults>(task, (item) => get(item, "status.task")),
+	);
 }

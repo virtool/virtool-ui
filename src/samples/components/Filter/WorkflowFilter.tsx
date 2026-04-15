@@ -2,11 +2,11 @@ import { getBorder, getFontSize } from "@app/theme";
 import { getWorkflowDisplayName } from "@app/utils";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
-import SidebarHeader from "@base/SidebarHeader";
 import SideBarSection from "@base/SideBarSection";
+import SidebarHeader from "@base/SidebarHeader";
 import { WorkflowStates } from "@samples/utils";
 import { xor } from "es-toolkit/array";
-import { Check, LucideIcon, Play, X } from "lucide-react";
+import { Check, type LucideIcon, Play, X } from "lucide-react";
 import styled from "styled-components";
 
 const WorkflowFilterLabel = styled.div`
@@ -16,13 +16,13 @@ const WorkflowFilterLabel = styled.div`
 const StyledWorkflowFilterControlButton = styled.button`
     align-items: center;
     background-color: ${(props) =>
-        props.theme.color[
-            props["aria-pressed"] === true ? "purple" : "purpleLightest"
-        ]};
+			props.theme.color[
+				props["aria-pressed"] === true ? "purple" : "purpleLightest"
+			]};
     color: ${(props) =>
-        props.theme.color[
-            props["aria-pressed"] === true ? "white" : "purpleDark"
-        ]};
+			props.theme.color[
+				props["aria-pressed"] === true ? "white" : "purpleDark"
+			]};
 
     border: 2px solid ${(props) => props.theme.color.purple};
     border-radius: 20px;
@@ -48,30 +48,30 @@ const StyledWorkflowFilterControlButton = styled.button`
 `;
 
 type WorkflowFilterControlButtonProps = {
-    /* Indicates if the button is active */
-    active: boolean;
-    /* Icon to display on the button */
-    icon: LucideIcon;
-    /* The value to pass to the onClick handler */
-    value: string;
-    /* Handles click event when icon is clicked */
-    onClick: (value: string) => void;
+	/* Indicates if the button is active */
+	active: boolean;
+	/* Icon to display on the button */
+	icon: LucideIcon;
+	/* The value to pass to the onClick handler */
+	value: string;
+	/* Handles click event when icon is clicked */
+	onClick: (value: string) => void;
 };
 
 function WorkflowFilterControlButton({
-    active,
-    icon,
-    value,
-    onClick,
+	active,
+	icon,
+	value,
+	onClick,
 }: WorkflowFilterControlButtonProps) {
-    return (
-        <StyledWorkflowFilterControlButton
-            aria-pressed={active}
-            onClick={() => onClick(value)}
-        >
-            <Icon icon={icon} />
-        </StyledWorkflowFilterControlButton>
-    );
+	return (
+		<StyledWorkflowFilterControlButton
+			aria-pressed={active}
+			onClick={() => onClick(value)}
+		>
+			<Icon icon={icon} />
+		</StyledWorkflowFilterControlButton>
+	);
 }
 
 const WorkflowFilterControlPath = styled.div`
@@ -93,100 +93,100 @@ const StyledWorkflowFilterControl = styled(Box)`
 `;
 
 type WorkflowFilterControlProps = {
-    /* The workflow to filter */
-    workflow: string;
-    /* Active states of filter buttons */
-    states: string[];
-    /* Handles click event when filter button is clicked */
-    onChange: (workflow: string, state: string) => void;
+	/* The workflow to filter */
+	workflow: string;
+	/* Active states of filter buttons */
+	states: string[];
+	/* Handles click event when filter button is clicked */
+	onChange: (workflow: string, state: string) => void;
 };
 
 function WorkflowFilterControl({
-    workflow,
-    states,
-    onChange,
+	workflow,
+	states,
+	onChange,
 }: WorkflowFilterControlProps) {
-    function handleClick(state) {
-        onChange(workflow, state);
-    }
+	function handleClick(state) {
+		onChange(workflow, state);
+	}
 
-    return (
-        <StyledWorkflowFilterControl>
-            <WorkflowFilterLabel>
-                {getWorkflowDisplayName(workflow)}
-            </WorkflowFilterLabel>
-            <WorkflowFilterControlButtons>
-                <WorkflowFilterControlButton
-                    active={states.includes(WorkflowStates.NONE)}
-                    icon={X}
-                    value={WorkflowStates.NONE}
-                    onClick={handleClick}
-                />
-                <WorkflowFilterControlPath />
-                <WorkflowFilterControlButton
-                    active={states.includes(WorkflowStates.PENDING)}
-                    icon={Play}
-                    value={WorkflowStates.PENDING}
-                    onClick={handleClick}
-                />
-                <WorkflowFilterControlPath />
-                <WorkflowFilterControlButton
-                    active={states.includes(WorkflowStates.READY)}
-                    icon={Check}
-                    value={WorkflowStates.READY}
-                    onClick={handleClick}
-                />
-            </WorkflowFilterControlButtons>
-        </StyledWorkflowFilterControl>
-    );
+	return (
+		<StyledWorkflowFilterControl>
+			<WorkflowFilterLabel>
+				{getWorkflowDisplayName(workflow)}
+			</WorkflowFilterLabel>
+			<WorkflowFilterControlButtons>
+				<WorkflowFilterControlButton
+					active={states.includes(WorkflowStates.NONE)}
+					icon={X}
+					value={WorkflowStates.NONE}
+					onClick={handleClick}
+				/>
+				<WorkflowFilterControlPath />
+				<WorkflowFilterControlButton
+					active={states.includes(WorkflowStates.PENDING)}
+					icon={Play}
+					value={WorkflowStates.PENDING}
+					onClick={handleClick}
+				/>
+				<WorkflowFilterControlPath />
+				<WorkflowFilterControlButton
+					active={states.includes(WorkflowStates.READY)}
+					icon={Check}
+					value={WorkflowStates.READY}
+					onClick={handleClick}
+				/>
+			</WorkflowFilterControlButtons>
+		</StyledWorkflowFilterControl>
+	);
 }
 
 function getWorkflowsFromURL(workflows) {
-    return workflows.reduce(
-        (acc, item) => {
-            const [workflow, state] = item.split(":");
+	return workflows.reduce(
+		(acc, item) => {
+			const [workflow, state] = item.split(":");
 
-            acc[workflow] = acc[workflow] || [];
+			acc[workflow] = acc[workflow] || [];
 
-            acc[workflow].push(state);
-            return acc;
-        },
-        { pathoscope: [], nuvs: [] },
-    );
+			acc[workflow].push(state);
+			return acc;
+		},
+		{ pathoscope: [], nuvs: [] },
+	);
 }
 
 type WorkflowFilterProps = {
-    /* List of selected workflows */
-    selected: string[];
-    /* Handles click event when filter control is clicked */
-    onClick: (selected: string[]) => void;
+	/* List of selected workflows */
+	selected: string[];
+	/* Handles click event when filter control is clicked */
+	onClick: (selected: string[]) => void;
 };
 
 export default function WorkflowFilter({
-    selected,
-    onClick,
+	selected,
+	onClick,
 }: WorkflowFilterProps) {
-    function handleClick(workflow, state) {
-        onClick(xor(selected, [`${workflow}:${state}`]));
-    }
+	function handleClick(workflow, state) {
+		onClick(xor(selected, [`${workflow}:${state}`]));
+	}
 
-    const workflows = getWorkflowsFromURL(selected);
+	const workflows = getWorkflowsFromURL(selected);
 
-    const { nuvs, pathoscope } = workflows;
+	const { nuvs, pathoscope } = workflows;
 
-    return (
-        <SideBarSection>
-            <SidebarHeader>Workflows</SidebarHeader>
-            <WorkflowFilterControl
-                workflow="pathoscope"
-                states={pathoscope}
-                onChange={handleClick}
-            />
-            <WorkflowFilterControl
-                workflow="nuvs"
-                states={nuvs}
-                onChange={handleClick}
-            />
-        </SideBarSection>
-    );
+	return (
+		<SideBarSection>
+			<SidebarHeader>Workflows</SidebarHeader>
+			<WorkflowFilterControl
+				workflow="pathoscope"
+				states={pathoscope}
+				onChange={handleClick}
+			/>
+			<WorkflowFilterControl
+				workflow="nuvs"
+				states={nuvs}
+				onChange={handleClick}
+			/>
+		</SideBarSection>
+	);
 }

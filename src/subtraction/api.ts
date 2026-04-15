@@ -1,8 +1,8 @@
 import { apiClient } from "@app/api";
-import {
-    Subtraction,
-    SubtractionOption,
-    SubtractionSearchResult,
+import type {
+	Subtraction,
+	SubtractionOption,
+	SubtractionSearchResult,
 } from "./types";
 
 /**
@@ -14,18 +14,18 @@ import {
  * @returns A promise resolving to creating a subtraction
  */
 export function createSubtraction(
-    name: string,
-    nickname: string,
-    uploadId: number,
+	name: string,
+	nickname: string,
+	uploadId: number,
 ): Promise<Subtraction> {
-    return apiClient
-        .post("/subtractions")
-        .send({
-            name,
-            nickname,
-            upload_id: uploadId,
-        })
-        .then((response) => response.body);
+	return apiClient
+		.post("/subtractions")
+		.send({
+			name,
+			nickname,
+			upload_id: uploadId,
+		})
+		.then((response) => response.body);
 }
 
 /**
@@ -37,14 +37,14 @@ export function createSubtraction(
  * @returns A promise resolving to a page of subtraction search results
  */
 export function findSubtractions(
-    page: number,
-    per_page: number,
-    term: string,
+	page: number,
+	per_page: number,
+	term: string,
 ): Promise<SubtractionSearchResult> {
-    return apiClient
-        .get("/subtractions")
-        .query({ page, per_page, find: term })
-        .then((response) => response.body);
+	return apiClient
+		.get("/subtractions")
+		.query({ page, per_page, find: term })
+		.then((response) => response.body);
 }
 
 /**
@@ -54,9 +54,9 @@ export function findSubtractions(
  * @returns A promise resolving to a single subtraction
  */
 export function getSubtraction(subtractionId: string): Promise<Subtraction> {
-    return apiClient
-        .get(`/subtractions/${subtractionId}`)
-        .then((response) => response.body);
+	return apiClient
+		.get(`/subtractions/${subtractionId}`)
+		.then((response) => response.body);
 }
 
 /**
@@ -68,14 +68,14 @@ export function getSubtraction(subtractionId: string): Promise<Subtraction> {
  * @returns A promise resolving to updating a subtraction
  */
 export function updateSubtraction(
-    subtractionId: string,
-    name: string,
-    nickname: string,
+	subtractionId: string,
+	name: string,
+	nickname: string,
 ): Promise<Subtraction> {
-    return apiClient
-        .patch(`/subtractions/${subtractionId}`)
-        .send({ name, nickname })
-        .then((response) => response.body);
+	return apiClient
+		.patch(`/subtractions/${subtractionId}`)
+		.send({ name, nickname })
+		.then((response) => response.body);
 }
 
 /**
@@ -85,9 +85,9 @@ export function updateSubtraction(
  * @returns A promise resolving to removing a subtraction
  */
 export function removeSubtraction(subtractionId: string): Promise<Response> {
-    return apiClient
-        .delete(`/subtractions/${subtractionId}`)
-        .then((response) => response.body);
+	return apiClient
+		.delete(`/subtractions/${subtractionId}`)
+		.then((response) => response.body);
 }
 
 /**
@@ -96,10 +96,10 @@ export function removeSubtraction(subtractionId: string): Promise<Response> {
  * @returns A promise resolving to list of shortlisted subtractions
  */
 export function fetchSubtractionShortlist(
-    ready: boolean,
+	ready: boolean,
 ): Promise<SubtractionOption[]> {
-    return apiClient
-        .get("/subtractions")
-        .query({ short: true, ready })
-        .then((response) => response.body);
+	return apiClient
+		.get("/subtractions")
+		.query({ short: true, ready })
+		.then((response) => response.body);
 }

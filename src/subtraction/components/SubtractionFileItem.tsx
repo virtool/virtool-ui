@@ -1,56 +1,56 @@
 import Attribution from "@base/Attribution";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
-import { UserNested } from "@users/types";
+import type { UserNested } from "@users/types";
 import styled from "styled-components";
 
 type StyledSubtractionFileItemProps = {
-    error: string;
+	error: string;
 };
 
 const StyledSubtractionFileItem = styled(
-    SelectBoxGroupSection,
+	SelectBoxGroupSection,
 )<StyledSubtractionFileItemProps>`
     display: flex;
     justify-content: space-between;
 `;
 
 type SubtractionFileItemProps = {
-    /** Whether the file is selected */
-    active: boolean;
-    /** Error message to be displayed */
-    error: string;
-    /** The unique identifier */
-    id: number;
-    /** The name of the file */
-    name: string;
-    /** A callback function to handle file selection */
-    onClick: (selected: number[]) => void;
-    /** The iso formatted date of upload */
-    uploaded_at: string;
-    /** The user who created the file */
-    user: UserNested;
+	/** Whether the file is selected */
+	active: boolean;
+	/** Error message to be displayed */
+	error: string;
+	/** The unique identifier */
+	id: number;
+	/** The name of the file */
+	name: string;
+	/** A callback function to handle file selection */
+	onClick: (selected: number[]) => void;
+	/** The iso formatted date of upload */
+	uploaded_at: string;
+	/** The user who created the file */
+	user: UserNested;
 };
 
 /**
  * A condensed file for use in a list of subtraction uploads
  */
 export function SubtractionFileItem({
-    active,
-    error,
-    id,
-    name,
-    onClick,
-    uploaded_at,
-    user,
+	active,
+	error,
+	id,
+	name,
+	onClick,
+	uploaded_at,
+	user,
 }: SubtractionFileItemProps) {
-    return (
-        <StyledSubtractionFileItem
-            active={active}
-            onClick={() => onClick([id])}
-            error={error}
-        >
-            <strong>{name}</strong>
-            <Attribution user={user.handle} time={uploaded_at} />
-        </StyledSubtractionFileItem>
-    );
+	return (
+		<StyledSubtractionFileItem
+			active={active}
+			onClick={() => onClick([id])}
+			error={error}
+		>
+			<strong>{name}</strong>
+			<Attribution user={user.handle} time={uploaded_at} />
+		</StyledSubtractionFileItem>
+	);
 }

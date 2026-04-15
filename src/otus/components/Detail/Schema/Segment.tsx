@@ -3,7 +3,7 @@ import { cn } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
-import { OtuSegment } from "@otus/types";
+import type { OtuSegment } from "@otus/types";
 import { ChevronDown, ChevronUp, Pencil, Trash } from "lucide-react";
 import styled from "styled-components";
 
@@ -17,89 +17,89 @@ const StyledSegment = styled(BoxGroupSection)`
 `;
 
 type SegmentProps = {
-    /** Whether the user has permission to modify the otu */
-    canModify: boolean;
-    /** Whether the segment is the first in the list */
-    first: boolean;
-    /** Whether the segment is the last in the list */
-    last: boolean;
-    /** A callback function to move the segment up */
-    onMoveUp: () => void;
-    /** A callback function to move the segment down */
-    onMoveDown: () => void;
-    segment: OtuSegment;
+	/** Whether the user has permission to modify the otu */
+	canModify: boolean;
+	/** Whether the segment is the first in the list */
+	first: boolean;
+	/** Whether the segment is the last in the list */
+	last: boolean;
+	/** A callback function to move the segment up */
+	onMoveUp: () => void;
+	/** A callback function to move the segment down */
+	onMoveDown: () => void;
+	segment: OtuSegment;
 };
 
 /**
  * A condensed segment item for use in a list of segments
  */
 export default function Segment({
-    canModify,
-    first,
-    last,
-    onMoveUp,
-    onMoveDown,
-    segment,
+	canModify,
+	first,
+	last,
+	onMoveUp,
+	onMoveDown,
+	segment,
 }: SegmentProps) {
-    const { setValue: setRemoveSegmentName } =
-        useUrlSearchParam<string>("removeSegmentName");
-    const { setValue: setEditSegmentName } =
-        useUrlSearchParam<string>("editSegmentName");
+	const { setValue: setRemoveSegmentName } =
+		useUrlSearchParam<string>("removeSegmentName");
+	const { setValue: setEditSegmentName } =
+		useUrlSearchParam<string>("editSegmentName");
 
-    return (
-        <StyledSegment>
-            <strong>{segment.name}</strong>
+	return (
+		<StyledSegment>
+			<strong>{segment.name}</strong>
 
-            {segment.required ? (
-                <Label color="purple">Required</Label>
-            ) : (
-                <Label>Optional</Label>
-            )}
-            {canModify && (
-                <div className={cn("text-lg", "m-2")}>
-                    <IconButton
-                        IconComponent={Trash}
-                        color="red"
-                        tip="remove segment"
-                        onClick={() => setRemoveSegmentName(segment.name)}
-                    />
-                    <IconButton
-                        IconComponent={Pencil}
-                        color="grayDark"
-                        tip="edit segment"
-                        onClick={() => setEditSegmentName(segment.name)}
-                    />
-                </div>
-            )}
+			{segment.required ? (
+				<Label color="purple">Required</Label>
+			) : (
+				<Label>Optional</Label>
+			)}
+			{canModify && (
+				<div className={cn("text-lg", "m-2")}>
+					<IconButton
+						IconComponent={Trash}
+						color="red"
+						tip="remove segment"
+						onClick={() => setRemoveSegmentName(segment.name)}
+					/>
+					<IconButton
+						IconComponent={Pencil}
+						color="grayDark"
+						tip="edit segment"
+						onClick={() => setEditSegmentName(segment.name)}
+					/>
+				</div>
+			)}
 
-            <div
-                className={cn(
-                    "flex",
-                    "justify-center",
-                    "ml-auto",
-                    "font-bold",
-                    "text-2xl",
-                )}
-            >
-                <IconButton
-                    className={cn("leading-none", {
-                        hidden: first,
-                        flex: !first,
-                    })}
-                    IconComponent={ChevronUp}
-                    tip="move up"
-                    onClick={onMoveUp}
-                />
-                <IconButton
-                    className={cn("leading-none", {
-                        hidden: last,
-                        flex: !last,
-                    })}
-                    IconComponent={ChevronDown}
-                    tip="move down"
-                    onClick={onMoveDown}
-                />
-            </div>
-        </StyledSegment>
-    );
+			<div
+				className={cn(
+					"flex",
+					"justify-center",
+					"ml-auto",
+					"font-bold",
+					"text-2xl",
+				)}
+			>
+				<IconButton
+					className={cn("leading-none", {
+						hidden: first,
+						flex: !first,
+					})}
+					IconComponent={ChevronUp}
+					tip="move up"
+					onClick={onMoveUp}
+				/>
+				<IconButton
+					className={cn("leading-none", {
+						hidden: last,
+						flex: !last,
+					})}
+					IconComponent={ChevronDown}
+					tip="move down"
+					onClick={onMoveDown}
+				/>
+			</div>
+		</StyledSegment>
+	);
 }

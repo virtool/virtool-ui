@@ -4,8 +4,8 @@
  * @module account/api
  */
 import { apiClient } from "@app/api";
-import { AdminUserResponse, User } from "@users/types";
-import { AdministratorRole, Settings } from "./types";
+import type { AdminUserResponse, User } from "@users/types";
+import type { AdministratorRole, Settings } from "./types";
 
 /**
  * Fetch the current settings from the server.
@@ -13,23 +13,23 @@ import { AdministratorRole, Settings } from "./types";
  * @returns - A promise resolving to the current server settings.
  */
 export function fetchSettings(): Promise<Settings> {
-    return apiClient.get("/settings").then((response) => {
-        return response.body;
-    });
+	return apiClient.get("/settings").then((response) => {
+		return response.body;
+	});
 }
 
 export type SettingsUpdate = {
-    default_source_types?: string[];
-    enable_api?: boolean;
-    enable_sentry?: boolean;
-    hmm_slug?: string;
-    minimum_password_length?: number;
-    sample_all_read?: boolean;
-    sample_all_write?: boolean;
-    sample_group?: string;
-    sample_group_read?: boolean;
-    sample_group_write?: boolean;
-    sample_unique_names?: boolean;
+	default_source_types?: string[];
+	enable_api?: boolean;
+	enable_sentry?: boolean;
+	hmm_slug?: string;
+	minimum_password_length?: number;
+	sample_all_read?: boolean;
+	sample_all_write?: boolean;
+	sample_group?: string;
+	sample_group_read?: boolean;
+	sample_group_write?: boolean;
+	sample_unique_names?: boolean;
 };
 
 /**
@@ -38,10 +38,10 @@ export type SettingsUpdate = {
  * @returns - A promise resolving to the complete response containing the updated settings.
  */
 export function updateSettings(update: SettingsUpdate): Promise<Settings> {
-    return apiClient
-        .patch("/settings")
-        .send(update)
-        .then((response) => response.body);
+	return apiClient
+		.patch("/settings")
+		.send(update)
+		.then((response) => response.body);
 }
 
 /**
@@ -50,8 +50,8 @@ export function updateSettings(update: SettingsUpdate): Promise<Settings> {
  * @returns - A promise resolving to the list of known administrator roles
  */
 export async function fetchAdministratorRoles(): Promise<AdministratorRole[]> {
-    const response = await apiClient.get("/admin/roles");
-    return response.body;
+	const response = await apiClient.get("/admin/roles");
+	return response.body;
 }
 
 /**
@@ -65,18 +65,18 @@ export async function fetchAdministratorRoles(): Promise<AdministratorRole[]> {
  * @returns A promise resolving to a page of user search results
  */
 export function findUsers(
-    page: number,
-    per_page: number,
-    term: string,
-    administrator: boolean,
-    active: boolean,
+	page: number,
+	per_page: number,
+	term: string,
+	administrator: boolean,
+	active: boolean,
 ): Promise<AdminUserResponse> {
-    return apiClient
-        .get("/admin/users")
-        .query({ page, per_page, term, administrator, active })
-        .then((response) => {
-            return response.body;
-        });
+	return apiClient
+		.get("/admin/users")
+		.query({ page, per_page, term, administrator, active })
+		.then((response) => {
+			return response.body;
+		});
 }
 
 /**
@@ -86,7 +86,7 @@ export function findUsers(
  * @returns A promise resolving to a single user
  */
 export function getUser(userId: number): Promise<User> {
-    return apiClient.get(`/admin/users/${userId}`).then((res) => res.body);
+	return apiClient.get(`/admin/users/${userId}`).then((res) => res.body);
 }
 
 /**
@@ -98,22 +98,22 @@ export function getUser(userId: number): Promise<User> {
  * @returns A promise resolving to creating a user
  */
 export function createUser({ handle, password, forceReset }): Promise<User> {
-    return apiClient
-        .post("/admin/users")
-        .send({
-            handle,
-            password,
-            force_reset: forceReset,
-        })
-        .then((res) => res.body);
+	return apiClient
+		.post("/admin/users")
+		.send({
+			handle,
+			password,
+			force_reset: forceReset,
+		})
+		.then((res) => res.body);
 }
 
 export type UserUpdate = {
-    active?: boolean;
-    force_reset?: boolean;
-    password?: string;
-    primary_group?: string;
-    groups?: Array<string | number>;
+	active?: boolean;
+	force_reset?: boolean;
+	password?: string;
+	primary_group?: string;
+	groups?: Array<string | number>;
 };
 
 /**
@@ -124,10 +124,10 @@ export type UserUpdate = {
  * @returns A promise resolving to a response containing the updated user's data
  */
 export function updateUser(userId: number, update: UserUpdate): Promise<User> {
-    return apiClient
-        .patch(`/admin/users/${userId}`)
-        .send(update)
-        .then((res) => res.body);
+	return apiClient
+		.patch(`/admin/users/${userId}`)
+		.send(update)
+		.then((res) => res.body);
 }
 
 /**
@@ -138,11 +138,11 @@ export function updateUser(userId: number, update: UserUpdate): Promise<User> {
  * @returns A promise resolving to the complete response containing the updated user
  */
 export function setAdministratorRole(
-    role: string,
-    user_id: number,
+	role: string,
+	user_id: number,
 ): Promise<User> {
-    return apiClient
-        .put(`/admin/users/${user_id}/role`)
-        .send({ role })
-        .then((res) => res.body);
+	return apiClient
+		.put(`/admin/users/${user_id}/role`)
+		.send({ role })
+		.then((res) => res.body);
 }

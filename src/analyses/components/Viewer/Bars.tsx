@@ -13,7 +13,7 @@ const Bar = styled.div`
 `;
 
 type BarItemProps = {
-    size: number;
+	size: number;
 };
 
 const BarItem = styled.div<BarItemProps>`
@@ -32,26 +32,24 @@ const StyledBars = styled.div`
 `;
 
 export function Bars({ empty, items }) {
-    return (
-        <StyledBars>
-            <Bar>
-                {items.map(({ color, count }) => (
-                    <BarItem key={color} color={color} size={count} />
-                ))}
-                {empty && (
-                    <EmptyBarItem key="empty" color="white" size={empty} />
-                )}
-            </Bar>
-            <div>
-                {items.map(({ color, count, title }) => (
-                    <BarsLegendItem
-                        key={color}
-                        color={color}
-                        count={count}
-                        title={title}
-                    />
-                ))}
-            </div>
-        </StyledBars>
-    );
+	return (
+		<StyledBars>
+			<Bar>
+				{items.map(({ color, count }) => (
+					<BarItem key={color} color={color} size={count} />
+				))}
+				{empty && <EmptyBarItem key="empty" color="white" size={empty} />}
+			</Bar>
+			<div>
+				{items.map(({ color, count, title }) => (
+					<BarsLegendItem
+						key={color}
+						color={color}
+						count={count}
+						title={title}
+					/>
+				))}
+			</div>
+		</StyledBars>
+	);
 }

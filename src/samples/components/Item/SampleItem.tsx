@@ -1,12 +1,12 @@
-import { JobNested } from "@/jobs/types";
 import { useDialogParam } from "@app/hooks";
 import { getFontSize, getFontWeight } from "@app/theme";
 import Attribution from "@base/Attribution";
 import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
 import Link from "@base/Link";
-import { SampleMinimal } from "@samples/types";
+import type { SampleMinimal } from "@samples/types";
 import styled from "styled-components";
+import { JobNested } from "@/jobs/types";
 import SampleLabel from "../Label/SampleLabel";
 import SampleLibraryTypeLabel from "../Label/SampleLibraryTypeLabel";
 import WorkflowTags from "../Tag/WorkflowTags";
@@ -76,72 +76,65 @@ const StyledSampleItem = styled(Box)`
 `;
 
 type SampleItemProps = {
-    /** Minimal sample data */
-    sample: SampleMinimal;
+	/** Minimal sample data */
+	sample: SampleMinimal;
 
-    /** Whether the sample is selected */
-    checked: boolean;
+	/** Whether the sample is selected */
+	checked: boolean;
 
-    /** Callback to handle sample selection */
-    handleSelect: () => void;
+	/** Callback to handle sample selection */
+	handleSelect: () => void;
 
-    /** Callback to handle sample selection on end icon quick analysis */
-    selectOnQuickAnalyze: () => void;
+	/** Callback to handle sample selection on end icon quick analysis */
+	selectOnQuickAnalyze: () => void;
 };
 
 /**
  * A condensed sample item for use in a list of samples
  */
 export default function SampleItem({
-    sample,
-    checked,
-    handleSelect,
-    selectOnQuickAnalyze,
+	sample,
+	checked,
+	handleSelect,
+	selectOnQuickAnalyze,
 }: SampleItemProps) {
-    const { setOpen } = useDialogParam("openQuickAnalyze");
+	const { setOpen } = useDialogParam("openQuickAnalyze");
 
-    function onQuickAnalyze() {
-        selectOnQuickAnalyze();
-        setOpen(true);
-    }
+	function onQuickAnalyze() {
+		selectOnQuickAnalyze();
+		setOpen(true);
+	}
 
-    const job = sample.job && JobNested.parse(sample.job);
+	const job = sample.job && JobNested.parse(sample.job);
 
-    return (
-        <StyledSampleItem>
-            <SampleItemCheckboxContainer onClick={handleSelect}>
-                <Checkbox checked={checked} id={`SampleCheckbox${sample.id}`} />
-            </SampleItemCheckboxContainer>
+	return (
+		<StyledSampleItem>
+			<SampleItemCheckboxContainer onClick={handleSelect}>
+				<Checkbox checked={checked} id={`SampleCheckbox${sample.id}`} />
+			</SampleItemCheckboxContainer>
 
-            <SampleItemData>
-                <SampleItemMain>
-                    <SampleItemTitle>
-                        <Link to={`/samples/${sample.id}`}>{sample.name}</Link>
-                        <Attribution
-                            time={sample.created_at}
-                            user={sample.user.handle}
-                        />
-                    </SampleItemTitle>
-                </SampleItemMain>
-                <SampleItemLabels>
-                    <SampleLibraryTypeLabel libraryType={sample.library_type} />
-                    {sample.labels.map((label) => (
-                        <SampleLabel {...label} key={label.id} size="sm" />
-                    ))}
-                </SampleItemLabels>
-            </SampleItemData>
-            <SampleItemWorkflows>
-                {sample.ready && (
-                    <WorkflowTags id={sample.id} workflows={sample.workflows} />
-                )}
-            </SampleItemWorkflows>
-            <SampleItemIcon>
-                <EndIcon
-                    job={job}
-                    onClick={onQuickAnalyze}
-                    ready={sample.ready}
-                />
-            </SampleItemIcon>
-        </StyledSampleItem>
-    );
+			<SampleItemData>
+				<SampleItemMain>
+					<SampleItemTitle>
+						<Link to={`/samples/${sample.id}`}>{sample.name}</Link>
+						<Attribution time={sample.created_at} user={sample.user.handle} />
+					</SampleItemTitle>
+				</SampleItemMain>
+				<SampleItemLabels>
+					<SampleLibraryTypeLabel libraryType={sample.library_type} />
+					{sample.labels.map((label) => (
+						<SampleLabel {...label} key={label.id} size="sm" />
+					))}
+				</SampleItemLabels>
+			</SampleItemData>
+			<SampleItemWorkflows>
+				{sample.ready && (
+					<WorkflowTags id={sample.id} workflows={sample.workflows} />
+				)}
+			</SampleItemWorkflows>
+			<SampleItemIcon>
+				<EndIcon job={job} onClick={onQuickAnalyze} ready={sample.ready} />
+			</SampleItemIcon>
+		</StyledSampleItem>
+	);
 }

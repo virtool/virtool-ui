@@ -1,4 +1,3 @@
-import { JobNested } from "@/jobs/types";
 import Analyses from "@analyses/components/Analyses";
 import { useDialogParam, usePathParams } from "@app/hooks";
 import Icon from "@base/Icon";
@@ -15,6 +14,7 @@ import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
 import { Key, Pencil } from "lucide-react";
 import { Redirect, Route, Switch, useLocation } from "wouter";
+import { JobNested } from "@/jobs/types";
 import SampleDetailFiles from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
 import DeleteSample from "./DeleteSample";
@@ -25,92 +25,80 @@ import Rights from "./SampleRights";
  * The detailed view for managing samples
  */
 export default function SampleDetail() {
-    const [location] = useLocation();
-    const { sampleId } = usePathParams<{ sampleId: string }>();
-    const { data, isPending, isError } = useFetchSample(sampleId);
-    const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
-    const { setOpen: setOpenEditSample } = useDialogParam("openEditSample");
+	const [location] = useLocation();
+	const { sampleId } = usePathParams<{ sampleId: string }>();
+	const { data, isPending, isError } = useFetchSample(sampleId);
+	const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
+	const { setOpen: setOpenEditSample } = useDialogParam("openEditSample");
 
-    if (isError) {
-        return <NotFound />;
-    }
+	if (isError) {
+		return <NotFound />;
+	}
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    const { created_at, name, user } = data;
+	const { created_at, name, user } = data;
 
-    const job = data.job && JobNested.parse(data.job);
+	const job = data.job && JobNested.parse(data.job);
 
-    return (
-        <>
-            <ViewHeader title={name}>
-                <ViewHeaderTitle>
-                    {name}
-                    <ViewHeaderIcons>
-                        {canModify && location.endsWith("/general") && (
-                            <>
-                                <IconButton
-                                    color="grayDark"
-                                    IconComponent={Pencil}
-                                    tip="modify"
-                                    onClick={() => setOpenEditSample(true)}
-                                />
-                                <DeleteSample
-                                    id={sampleId}
-                                    name={data.name}
-                                    ready={data.ready}
-                                    job={job}
-                                />
-                            </>
-                        )}
-                    </ViewHeaderIcons>
-                </ViewHeaderTitle>
-                <ViewHeaderAttribution time={created_at} user={user.handle} />
-            </ViewHeader>
+	return (
+		<>
+			<ViewHeader title={name}>
+				<ViewHeaderTitle>
+					{name}
+					<ViewHeaderIcons>
+						{canModify && location.endsWith("/general") && (
+							<>
+								<IconButton
+									color="grayDark"
+									IconComponent={Pencil}
+									tip="modify"
+									onClick={() => setOpenEditSample(true)}
+								/>
+								<DeleteSample
+									id={sampleId}
+									name={data.name}
+									ready={data.ready}
+									job={job}
+								/>
+							</>
+						)}
+					</ViewHeaderIcons>
+				</ViewHeaderTitle>
+				<ViewHeaderAttribution time={created_at} user={user.handle} />
+			</ViewHeader>
 
-            <Tabs>
-                <TabsLink to={`/samples/${sampleId}/general`}>General</TabsLink>
-                {data.ready && (
-                    <>
-                        <TabsLink to={`/samples/${sampleId}/files`}>
-                            Files
-                        </TabsLink>
-                        <TabsLink to={`/samples/${sampleId}/quality`}>
-                            Quality
-                        </TabsLink>
-                        <TabsLink to={`/samples/${sampleId}/analyses`}>
-                            Analyses
-                        </TabsLink>
-                        {canModify && (
-                            <TabsLink to={`/samples/${sampleId}/rights`}>
-                                <Icon icon={Key} />
-                            </TabsLink>
-                        )}
-                    </>
-                )}
-            </Tabs>
+			<Tabs>
+				<TabsLink to={`/samples/${sampleId}/general`}>General</TabsLink>
+				{data.ready && (
+					<>
+						<TabsLink to={`/samples/${sampleId}/files`}>Files</TabsLink>
+						<TabsLink to={`/samples/${sampleId}/quality`}>Quality</TabsLink>
+						<TabsLink to={`/samples/${sampleId}/analyses`}>Analyses</TabsLink>
+						{canModify && (
+							<TabsLink to={`/samples/${sampleId}/rights`}>
+								<Icon icon={Key} />
+							</TabsLink>
+						)}
+					</>
+				)}
+			</Tabs>
 
-            <Switch>
-                <Route path="/samples/:sampleId/general" component={General} />
-                <Route
-                    path="/samples/:sampleId/files"
-                    component={SampleDetailFiles}
-                />
-                <Route path="/samples/:sampleId/quality" component={Quality} />
-                <Route
-                    path="/samples/:sampleId/analyses/*?"
-                    component={Analyses}
-                />
-                <Route path="/samples/:sampleId/rights" component={Rights} />
-                <Route
-                    path="/samples/:sampleId/"
-                    component={() => (
-                        <Redirect to={`/samples/${sampleId}/general`} replace />
-                    )}
-                />
-            </Switch>
-        </>
-    );
+			<Switch>
+				<Route path="/samples/:sampleId/general" component={General} />
+				<Route path="/samples/:sampleId/files" component={SampleDetailFiles} />
+				<Route path="/samples/:sampleId/quality" component={Quality} />
+				<Route path="/samples/:sampleId/analyses/*?" component={Analyses} />
+				<Route path="/samples/:sampleId/rights" component={Rights} />
+				<Route
+					path="/samples/:sampleId/"
+					component={() => (
+						<Redirect to={`/samples/${sampleId}/general`} replace />
+					)}
+				/>
+			</Switch>
+		</>
+	);
 }

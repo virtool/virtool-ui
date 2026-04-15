@@ -6,7 +6,7 @@ const ComboBoxItem = styled.li`
 
     &:hover {
         background-color: ${({ theme }) =>
-            getColor({ color: "greyHover", theme })};
+					getColor({ color: "greyHover", theme })};
         border: 0;
     }
 `;
@@ -14,18 +14,18 @@ const ComboBoxItem = styled.li`
 ComboBoxItem.displayName = "ComboBoxItem";
 
 export default function WrapRow(renderRow, getItemProps) {
-    function WrappedRow(item, index) {
-        return (
-            <ComboBoxItem
-                key={item.id}
-                {...getItemProps({
-                    item: item.id,
-                    index,
-                })}
-            >
-                {renderRow(item)}
-            </ComboBoxItem>
-        );
-    }
-    return WrappedRow;
+	function WrappedRow(item, index) {
+		return (
+			<ComboBoxItem
+				key={item.id}
+				{...getItemProps({
+					item: item.id,
+					index,
+				})}
+			>
+				{renderRow(item)}
+			</ComboBoxItem>
+		);
+	}
+	return WrappedRow;
 }

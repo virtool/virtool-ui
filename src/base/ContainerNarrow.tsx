@@ -1,23 +1,21 @@
 import { cn } from "@app/utils";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type ContainerNarrowProps = {
-    children: ReactNode;
-    className?: string;
+	children: ReactNode;
+	className?: string;
 };
 
 /**
  * Smaller page content container such as for file managers and settings
  */
 export default function ContainerNarrow({
-    children,
-    className,
+	children,
+	className,
 }: ContainerNarrowProps) {
-    return (
-        <div
-            className={cn("flex-grow", "flex-shrink-0", "max-w-6xl", className)}
-        >
-            {children}
-        </div>
-    );
+	return (
+		<div className={cn("flex-grow", "flex-shrink-0", "max-w-6xl", className)}>
+			{children}
+		</div>
+	);
 }

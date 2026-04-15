@@ -10,55 +10,52 @@ import { Lock, Pencil } from "lucide-react";
 import { useLocation } from "wouter";
 
 type ReferenceDetailHeaderProps = {
-    createdAt: string;
-    /** Whether the reference is installed remotely */
-    isRemote: boolean;
-    name: string;
-    refId: string;
-    userHandle: string;
+	createdAt: string;
+	/** Whether the reference is installed remotely */
+	isRemote: boolean;
+	name: string;
+	refId: string;
+	userHandle: string;
 };
 
 /**
  * Displays header for reference with option to edit reference
  */
 export default function ReferenceDetailHeader({
-    createdAt,
-    isRemote,
-    name,
-    refId,
-    userHandle,
+	createdAt,
+	isRemote,
+	name,
+	refId,
+	userHandle,
 }: ReferenceDetailHeaderProps) {
-    const [location] = useLocation();
-    const { setOpen: setOpenEditReference } =
-        useDialogParam("openEditReference");
-    const { hasPermission: canModify } = useCheckReferenceRight(
-        refId,
-        ReferenceRight.modify,
-    );
+	const [location] = useLocation();
+	const { setOpen: setOpenEditReference } = useDialogParam("openEditReference");
+	const { hasPermission: canModify } = useCheckReferenceRight(
+		refId,
+		ReferenceRight.modify,
+	);
 
-    const showIcons = location.endsWith("/manage");
+	const showIcons = location.endsWith("/manage");
 
-    return (
-        <ViewHeader title={name}>
-            <ViewHeaderTitle>
-                {name}
-                {showIcons && (
-                    <ViewHeaderIcons>
-                        {isRemote && (
-                            <Icon color="grey" icon={Lock} aria-label="lock" />
-                        )}
-                        {!isRemote && canModify && (
-                            <IconButton
-                                color="grayDark"
-                                IconComponent={Pencil}
-                                tip="modify"
-                                onClick={() => setOpenEditReference(true)}
-                            />
-                        )}
-                    </ViewHeaderIcons>
-                )}
-            </ViewHeaderTitle>
-            <ViewHeaderAttribution time={createdAt} user={userHandle} />
-        </ViewHeader>
-    );
+	return (
+		<ViewHeader title={name}>
+			<ViewHeaderTitle>
+				{name}
+				{showIcons && (
+					<ViewHeaderIcons>
+						{isRemote && <Icon color="grey" icon={Lock} aria-label="lock" />}
+						{!isRemote && canModify && (
+							<IconButton
+								color="grayDark"
+								IconComponent={Pencil}
+								tip="modify"
+								onClick={() => setOpenEditReference(true)}
+							/>
+						)}
+					</ViewHeaderIcons>
+				)}
+			</ViewHeaderTitle>
+			<ViewHeaderAttribution time={createdAt} user={userHandle} />
+		</ViewHeader>
+	);
 }

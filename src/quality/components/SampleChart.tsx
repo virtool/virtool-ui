@@ -52,31 +52,31 @@ const StyledQualityChart = styled.div`
 `;
 
 type QualityChartProps = {
-    /** A callback function to create the sample quality chart */
-    createChart: (
-        current: HTMLDivElement,
-        data: number[] | Array<[number, number, number, number]>,
-        width: number,
-    ) => void;
+	/** A callback function to create the sample quality chart */
+	createChart: (
+		current: HTMLDivElement,
+		data: number[] | Array<[number, number, number, number]>,
+		width: number,
+	) => void;
 
-    /** The data to be used in the chart */
-    data: number[];
+	/** The data to be used in the chart */
+	data: number[];
 
-    /** The width of the chart */
-    width: number;
+	/** The width of the chart */
+	width: number;
 };
 
 /**
  * Creates and displays charts for sample quality
  */
 export function SampleChart({ createChart, data, width }: QualityChartProps) {
-    const ref = useRef(null);
+	const ref = useRef(null);
 
-    useEffect(() => {
-        if (ref.current) {
-            createChart(ref.current, data, width);
-        }
-    }, [createChart, data, width]);
+	useEffect(() => {
+		if (ref.current) {
+			createChart(ref.current, data, width);
+		}
+	}, [createChart, data, width]);
 
-    return <StyledQualityChart ref={ref} />;
+	return <StyledQualityChart ref={ref} />;
 }

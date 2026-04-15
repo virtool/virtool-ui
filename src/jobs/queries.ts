@@ -1,17 +1,17 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { fetchJob, findJobs } from "./api";
-import { Job, JobSearchResult, JobState } from "./types";
+import { Job, JobSearchResult, type JobState } from "./types";
 
 /**
  * Factory object for generating job query keys
  */
 export const jobQueryKeys = {
-    all: () => ["job"] as const,
-    lists: () => ["job", "list"] as const,
-    list: (filters: Array<string | number | boolean>) =>
-        ["job", "list", ...filters] as const,
-    details: () => ["job", "details"] as const,
-    detail: (jobId: string) => ["job", "details", jobId] as const,
+	all: () => ["job"] as const,
+	lists: () => ["job", "list"] as const,
+	list: (filters: Array<string | number | boolean>) =>
+		["job", "list", ...filters] as const,
+	details: () => ["job", "details"] as const,
+	detail: (jobId: string) => ["job", "details", jobId] as const,
 };
 
 /**
@@ -23,16 +23,16 @@ export const jobQueryKeys = {
  * @returns A page of job search results
  */
 export function useFindJobs(
-    page: number,
-    per_page: number,
-    states: JobState[],
+	page: number,
+	per_page: number,
+	states: JobState[],
 ) {
-    return useQuery({
-        queryKey: jobQueryKeys.list([page, per_page, ...states]),
-        queryFn: () => findJobs(page, per_page, states),
-        placeholderData: keepPreviousData,
-        select: JobSearchResult.parse,
-    });
+	return useQuery({
+		queryKey: jobQueryKeys.list([page, per_page, ...states]),
+		queryFn: () => findJobs(page, per_page, states),
+		placeholderData: keepPreviousData,
+		select: JobSearchResult.parse,
+	});
 }
 
 /**
@@ -42,9 +42,9 @@ export function useFindJobs(
  * @returns Query results containing the job
  */
 export function useFetchJob(jobId: string) {
-    return useQuery({
-        queryKey: jobQueryKeys.detail(jobId),
-        queryFn: () => fetchJob(jobId),
-        select: Job.parse,
-    });
+	return useQuery({
+		queryKey: jobQueryKeys.detail(jobId),
+		queryFn: () => fetchJob(jobId),
+		select: Job.parse,
+	});
 }

@@ -1,45 +1,43 @@
 import { cn } from "@app/utils";
 import { Popover as PopoverPrimitive } from "radix-ui";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type PopoverProps = {
-    align?: "center" | "start" | "end";
-    children: ReactNode;
-    trigger: ReactNode;
+	align?: "center" | "start" | "end";
+	children: ReactNode;
+	trigger: ReactNode;
 };
 
 /**
  * A styled popover component
  */
 export default function Popover({
-    align = "end",
-    children,
-    trigger,
+	align = "end",
+	children,
+	trigger,
 }: PopoverProps) {
-    return (
-        <PopoverPrimitive.Root>
-            <PopoverPrimitive.Trigger asChild>
-                {trigger}
-            </PopoverPrimitive.Trigger>
-            <PopoverPrimitive.Portal>
-                <PopoverPrimitive.Content
-                    className={cn(
-                        "bg-white",
-                        "rounded-lg",
-                        "border",
-                        "border-gray-300",
-                        "shadow-lg",
-                        "m-1.5",
-                        "w-[320px]",
-                        "z-10",
-                    )}
-                    sideOffset={15}
-                    align={align}
-                    alignOffset={-20}
-                >
-                    {children}
-                </PopoverPrimitive.Content>
-            </PopoverPrimitive.Portal>
-        </PopoverPrimitive.Root>
-    );
+	return (
+		<PopoverPrimitive.Root>
+			<PopoverPrimitive.Trigger asChild>{trigger}</PopoverPrimitive.Trigger>
+			<PopoverPrimitive.Portal>
+				<PopoverPrimitive.Content
+					className={cn(
+						"bg-white",
+						"rounded-lg",
+						"border",
+						"border-gray-300",
+						"shadow-lg",
+						"m-1.5",
+						"w-[320px]",
+						"z-10",
+					)}
+					sideOffset={15}
+					align={align}
+					alignOffset={-20}
+				>
+					{children}
+				</PopoverPrimitive.Content>
+			</PopoverPrimitive.Portal>
+		</PopoverPrimitive.Root>
+	);
 }

@@ -1,10 +1,10 @@
 import { getFontSize } from "@app/theme";
 import Button from "@base/Button";
 import {
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    DialogTrigger,
+	Dialog,
+	DialogContent,
+	DialogTitle,
+	DialogTrigger,
 } from "@base/Dialog";
 import { useState } from "react";
 import styled from "styled-components";
@@ -20,45 +20,44 @@ const RemoveLabelFooter = styled.footer`
 `;
 
 type RemoveLabelProps = {
-    id: number;
-    name: string;
+	id: number;
+	name: string;
 };
 
 /**
  * Displays a dialog for removing a label
  */
 export function RemoveLabel({ id, name }: RemoveLabelProps) {
-    const [open, setOpen] = useState(false);
-    const mutation = useRemoveLabel();
+	const [open, setOpen] = useState(false);
+	const mutation = useRemoveLabel();
 
-    function handleSubmit() {
-        mutation.mutate(
-            { labelId: id },
-            {
-                onSuccess: () => {
-                    setOpen(false);
-                },
-            },
-        );
-    }
+	function handleSubmit() {
+		mutation.mutate(
+			{ labelId: id },
+			{
+				onSuccess: () => {
+					setOpen(false);
+				},
+			},
+		);
+	}
 
-    return (
-        <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-            <Button as={DialogTrigger} color="red" size="small">
-                Delete
-            </Button>
-            <DialogContent>
-                <DialogTitle>Delete Label</DialogTitle>
-                <RemoveLabelQuestion>
-                    Are you sure you want to delete the label{" "}
-                    <strong>{name}</strong>?
-                </RemoveLabelQuestion>
-                <RemoveLabelFooter>
-                    <Button type="button" color="red" onClick={handleSubmit}>
-                        Delete
-                    </Button>
-                </RemoveLabelFooter>
-            </DialogContent>
-        </Dialog>
-    );
+	return (
+		<Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+			<Button as={DialogTrigger} color="red" size="small">
+				Delete
+			</Button>
+			<DialogContent>
+				<DialogTitle>Delete Label</DialogTitle>
+				<RemoveLabelQuestion>
+					Are you sure you want to delete the label <strong>{name}</strong>?
+				</RemoveLabelQuestion>
+				<RemoveLabelFooter>
+					<Button type="button" color="red" onClick={handleSubmit}>
+						Delete
+					</Button>
+				</RemoveLabelFooter>
+			</DialogContent>
+		</Dialog>
+	);
 }

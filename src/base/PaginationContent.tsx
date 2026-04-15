@@ -1,20 +1,20 @@
 import { cn } from "@app/utils";
-import { ComponentProps, Ref } from "react";
+import type { ComponentProps, Ref } from "react";
 
 type PaginationContentProps = ComponentProps<"ul"> & {
-    ref?: Ref<HTMLUListElement>;
+	ref?: Ref<HTMLUListElement>;
 };
 
 export default function PaginationContent({
-    className,
-    ref,
-    ...props
+	className,
+	ref,
+	...props
 }: PaginationContentProps) {
-    return (
-        <ul
-            ref={ref}
-            className={cn("flex flex-row items-center gap-1", className)}
-            {...props}
-        />
-    );
+	return (
+		<ul
+			ref={ref}
+			className={cn("flex flex-row items-center gap-1", className)}
+			{...props}
+		/>
+	);
 }

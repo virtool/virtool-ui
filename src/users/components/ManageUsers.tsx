@@ -16,52 +16,50 @@ import UsersList from "./UsersList";
  * Displays a list of editable users and tools for sorting through and creating users
  */
 export function ManageUsers() {
-    const [term, setTerm] = useState("");
-    const { value: status, setValue: setStatus } = useUrlSearchParam<string>(
-        "status",
-        "active",
-    );
-    const { hasPermission, isPending } = useCheckAdminRole(
-        AdministratorRoleName.USERS,
-    );
+	const [term, setTerm] = useState("");
+	const { value: status, setValue: setStatus } = useUrlSearchParam<string>(
+		"status",
+		"active",
+	);
+	const { hasPermission, isPending } = useCheckAdminRole(
+		AdministratorRoleName.USERS,
+	);
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    if (hasPermission) {
-        return (
-            <>
-                <Toolbar>
-                    <div className="flex-grow">
-                        <InputSearch
-                            name="search"
-                            aria-label="search"
-                            value={term}
-                            onChange={(e) => setTerm(e.target.value)}
-                        />
-                    </div>
-                    <ToggleGroup value={status} onValueChange={setStatus}>
-                        <ToggleGroupItem value="active">Active</ToggleGroupItem>
-                        <ToggleGroupItem value="deactivated">
-                            Deactivated
-                        </ToggleGroupItem>
-                    </ToggleGroup>
-                    <CreateUser />
-                </Toolbar>
+	if (hasPermission) {
+		return (
+			<>
+				<Toolbar>
+					<div className="flex-grow">
+						<InputSearch
+							name="search"
+							aria-label="search"
+							value={term}
+							onChange={(e) => setTerm(e.target.value)}
+						/>
+					</div>
+					<ToggleGroup value={status} onValueChange={setStatus}>
+						<ToggleGroupItem value="active">Active</ToggleGroupItem>
+						<ToggleGroupItem value="deactivated">Deactivated</ToggleGroupItem>
+					</ToggleGroup>
+					<CreateUser />
+				</Toolbar>
 
-                <UsersList term={term} />
-            </>
-        );
-    }
+				<UsersList term={term} />
+			</>
+		);
+	}
 
-    return (
-        <Alert color="orange" level>
-            <CircleAlert />
-            <span>
-                <strong>You do not have permission to manage users.</strong>
-                <span> Contact an administrator.</span>
-            </span>
-        </Alert>
-    );
+	return (
+		<Alert color="orange" level>
+			<CircleAlert />
+			<span>
+				<strong>You do not have permission to manage users.</strong>
+				<span> Contact an administrator.</span>
+			</span>
+		</Alert>
+	);
 }

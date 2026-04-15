@@ -17,55 +17,50 @@ import ReferenceToolbar from "./ReferenceToolbar";
  * A list of references with filtering options
  */
 export default function ReferenceList() {
-    const { page } = usePageParam();
-    const { value: term } = useUrlSearchParam<string>("find");
-    const { data, isPending } = useFindReferences(page, 25, term);
+	const { page } = usePageParam();
+	const { value: term } = useUrlSearchParam<string>("find");
+	const { data, isPending } = useFindReferences(page, 25, term);
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    const {
-        documents,
-        page: storedPage,
-        page_count,
-        total_count,
-        official_installed,
-    } = data;
+	const {
+		documents,
+		page: storedPage,
+		page_count,
+		total_count,
+		official_installed,
+	} = data;
 
-    return (
-        <>
-            <ContainerNarrow>
-                <ViewHeader title="References">
-                    <ViewHeaderTitle>
-                        References{" "}
-                        <ViewHeaderTitleBadge>
-                            {total_count}
-                        </ViewHeaderTitleBadge>
-                    </ViewHeaderTitle>
-                </ViewHeader>
-                <ReferenceToolbar />
-                <CreateReference />
-                <ReferenceOfficial officialInstalled={official_installed} />
-                {total_count !== 0 && (
-                    <Pagination
-                        items={documents}
-                        storedPage={storedPage}
-                        currentPage={page}
-                        pageCount={page_count}
-                    >
-                        <BoxGroup>
-                            {documents.map((document) => (
-                                <ReferenceItem
-                                    key={document.id}
-                                    reference={document}
-                                />
-                            ))}
-                        </BoxGroup>
-                    </Pagination>
-                )}
-            </ContainerNarrow>
-            <Clone references={documents} />
-        </>
-    );
+	return (
+		<>
+			<ContainerNarrow>
+				<ViewHeader title="References">
+					<ViewHeaderTitle>
+						References{" "}
+						<ViewHeaderTitleBadge>{total_count}</ViewHeaderTitleBadge>
+					</ViewHeaderTitle>
+				</ViewHeader>
+				<ReferenceToolbar />
+				<CreateReference />
+				<ReferenceOfficial officialInstalled={official_installed} />
+				{total_count !== 0 && (
+					<Pagination
+						items={documents}
+						storedPage={storedPage}
+						currentPage={page}
+						pageCount={page_count}
+					>
+						<BoxGroup>
+							{documents.map((document) => (
+								<ReferenceItem key={document.id} reference={document} />
+							))}
+						</BoxGroup>
+					</Pagination>
+				)}
+			</ContainerNarrow>
+			<Clone references={documents} />
+		</>
+	);
 }

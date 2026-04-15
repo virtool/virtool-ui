@@ -14,7 +14,7 @@ const AccordionTrigger = styled(AccordionPrimitive.Trigger)`
 
     &:hover {
         background-color: ${(props) =>
-            getColor({ color: "greyHover", theme: props.theme })};
+					getColor({ color: "greyHover", theme: props.theme })};
     }
 `;
 

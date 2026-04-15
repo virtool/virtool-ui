@@ -7,90 +7,87 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import EditSample from "../EditSample";
 
 describe("<Editsample />", () => {
-    let sample;
-    let props;
-    let path;
-    let searchParams;
+	let sample;
+	let props;
+	let path;
+	let searchParams;
 
-    beforeEach(() => {
-        sample = createFakeSample();
-        props = {
-            sample,
-            show: true,
-            onHide: vi.fn(),
-        };
-        path = `/samples/${props.sample.id}/general`;
-        searchParams = { openEditSample: true };
-    });
+	beforeEach(() => {
+		sample = createFakeSample();
+		props = {
+			sample,
+			show: true,
+			onHide: vi.fn(),
+		};
+		path = `/samples/${props.sample.id}/general`;
+		searchParams = { openEditSample: true };
+	});
 
-    it("should render when [show=false]", () => {
-        props.show = false;
+	it("should render when [show=false]", () => {
+		props.show = false;
 
-        renderWithRouter(<EditSample {...props} />, path);
+		renderWithRouter(<EditSample {...props} />, path);
 
-        expect(screen.queryByRole("textbox", { name: "Name" })).toBeNull();
-        expect(screen.queryByRole("textbox", { name: "Isolate" })).toBeNull();
-        expect(screen.queryByRole("textbox", { name: "Host" })).toBeNull();
-        expect(screen.queryByRole("textbox", { name: "Locale" })).toBeNull();
-        expect(screen.queryByRole("textbox", { name: "Notes" })).toBeNull();
-        expect(screen.queryByText("Save")).toBeNull();
-    });
+		expect(screen.queryByRole("textbox", { name: "Name" })).toBeNull();
+		expect(screen.queryByRole("textbox", { name: "Isolate" })).toBeNull();
+		expect(screen.queryByRole("textbox", { name: "Host" })).toBeNull();
+		expect(screen.queryByRole("textbox", { name: "Locale" })).toBeNull();
+		expect(screen.queryByRole("textbox", { name: "Notes" })).toBeNull();
+		expect(screen.queryByText("Save")).toBeNull();
+	});
 
-    it.each(["Name", "Isolate", "Host", "Locale", "Notes"])(
-        "should render changed data for",
-        async (inputLabel) => {
-            renderWithRouter(
-                <EditSample {...props} />,
-                formatPath(path, searchParams),
-            );
+	it.each([
+		"Name",
+		"Isolate",
+		"Host",
+		"Locale",
+		"Notes",
+	])("should render changed data for", async (inputLabel) => {
+		renderWithRouter(<EditSample {...props} />, formatPath(path, searchParams));
 
-            const inputBox = screen.getByLabelText(inputLabel);
-            expect(inputBox).toBeInTheDocument();
-            expect(inputBox).toHaveValue(sample[inputLabel.toLowerCase()]);
+		const inputBox = screen.getByLabelText(inputLabel);
+		expect(inputBox).toBeInTheDocument();
+		expect(inputBox).toHaveValue(sample[inputLabel.toLowerCase()]);
 
-            await userEvent.clear(inputBox);
-            expect(inputBox).toHaveValue("");
+		await userEvent.clear(inputBox);
+		expect(inputBox).toHaveValue("");
 
-            await userEvent.type(inputBox, "test");
-            expect(inputBox).toHaveValue("test");
-        },
-    );
+		await userEvent.type(inputBox, "test");
+		expect(inputBox).toHaveValue("test");
+	});
 
-    it("should update sample when form is submitted", async () => {
-        const scope = mockApiEditSample(
-            sample,
-            "newName",
-            "newIsolate",
-            "newHost",
-            "newLocale",
-            "newNotes",
-        );
-        renderWithRouter(
-            <EditSample {...props} />,
-            formatPath(path, searchParams),
-        );
+	it("should update sample when form is submitted", async () => {
+		const scope = mockApiEditSample(
+			sample,
+			"newName",
+			"newIsolate",
+			"newHost",
+			"newLocale",
+			"newNotes",
+		);
+		renderWithRouter(<EditSample {...props} />, formatPath(path, searchParams));
 
-        const nameInput = screen.getByLabelText("Name");
-        await userEvent.clear(nameInput);
-        await userEvent.type(nameInput, "newName");
+		const nameInput = screen.getByLabelText("Name");
+		await userEvent.clear(nameInput);
+		await userEvent.type(nameInput, "newName");
 
-        const isolateInput = screen.getByLabelText("Isolate");
-        await userEvent.clear(isolateInput);
-        await userEvent.type(isolateInput, "newIsolate");
+		const isolateInput = screen.getByLabelText("Isolate");
+		await userEvent.clear(isolateInput);
+		await userEvent.type(isolateInput, "newIsolate");
 
-        const hostInput = screen.getByLabelText("Host");
-        await userEvent.clear(hostInput);
-        await userEvent.type(hostInput, "newHost");
+		const hostInput = screen.getByLabelText("Host");
+		await userEvent.clear(hostInput);
+		await userEvent.type(hostInput, "newHost");
 
-        const localeInput = screen.getByLabelText("Locale");
-        await userEvent.clear(localeInput);
-        await userEvent.type(localeInput, "newLocale");
+		const localeInput = screen.getByLabelText("Locale");
+		await userEvent.clear(localeInput);
+		await userEvent.type(localeInput, "newLocale");
 
-        const notesInput = screen.getByLabelText("Notes");
-        await userEvent.clear(notesInput);
-        await userEvent.type(notesInput, "newNotes");
+		const notesInput = screen.getByLabelText("Notes");
+		await userEvent.clear(notesInput);
+		await userEvent.type(notesInput, "newNotes");
 
-        await userEvent.click(screen.getByText("Save"));
-        scope.done();
-    });
+		await userEvent.click(screen.getByText("Save"));
+		scope.done();
+	});
 });

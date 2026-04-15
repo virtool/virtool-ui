@@ -7,8 +7,8 @@ import { apiClient } from "@app/api";
  * @returns A promise resolving to executing a developer command
  */
 export function postDevCommand(command: string) {
-    return apiClient
-        .post("/dev")
-        .send({ command })
-        .then((res) => res.body);
+	return apiClient
+		.post("/dev")
+		.send({ command })
+		.then((res) => res.body);
 }

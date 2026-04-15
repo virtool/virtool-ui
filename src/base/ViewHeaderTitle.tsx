@@ -1,22 +1,17 @@
+import type { ReactNode } from "react";
 import { cn } from "@/app/utils";
-import { ReactNode } from "react";
 
 type ViewHeaderTitleProps = {
-    children: ReactNode;
-    className?: string;
+	children: ReactNode;
+	className?: string;
 };
 
 function ViewHeaderTitle({ children, className }: ViewHeaderTitleProps) {
-    return (
-        <h1
-            className={cn(
-                "flex items-center text-3xl font-bold m-0",
-                className,
-            )}
-        >
-            {children}
-        </h1>
-    );
+	return (
+		<h1 className={cn("flex items-center text-3xl font-bold m-0", className)}>
+			{children}
+		</h1>
+	);
 }
 
 ViewHeaderTitle.displayName = "ViewHeaderTitle";

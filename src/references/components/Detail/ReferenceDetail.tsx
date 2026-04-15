@@ -18,63 +18,49 @@ import ReferenceSettings from "./ReferenceSettings";
  * The detailed view for a reference
  */
 export default function ReferenceDetail() {
-    const { refId } = usePathParams<{ refId: string }>();
-    const { data, isPending, isError } = useFetchReference(refId);
+	const { refId } = usePathParams<{ refId: string }>();
+	const { data, isPending, isError } = useFetchReference(refId);
 
-    if (isError) {
-        return <NotFound />;
-    }
+	if (isError) {
+		return <NotFound />;
+	}
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    return (
-        <>
-            <Switch>
-                <Route path="/refs/:refId/otus/:otuId/*?" />
-                <Route path="/refs/:refId/*?">
-                    <ReferenceDetailHeader
-                        createdAt={data.created_at}
-                        isRemote={Boolean(data.remotes_from)}
-                        name={data.name}
-                        userHandle={data.user.handle}
-                        refId={refId}
-                    />
-                    <ReferenceDetailTabs id={refId} otuCount={data.otu_count} />
-                </Route>
-            </Switch>
+	return (
+		<>
+			<Switch>
+				<Route path="/refs/:refId/otus/:otuId/*?" />
+				<Route path="/refs/:refId/*?">
+					<ReferenceDetailHeader
+						createdAt={data.created_at}
+						isRemote={Boolean(data.remotes_from)}
+						name={data.name}
+						userHandle={data.user.handle}
+						refId={refId}
+					/>
+					<ReferenceDetailTabs id={refId} otuCount={data.otu_count} />
+				</Route>
+			</Switch>
 
-            <ContainerNarrow>
-                <Switch>
-                    <Route
-                        path="/refs/:refId/"
-                        component={() => (
-                            <Redirect to={`/refs/${refId}/manage`} replace />
-                        )}
-                    />
-                    <Route
-                        path="/refs/:refId/manage"
-                        component={ReferenceManager}
-                    />
-                    <Route
-                        path="/refs/:refId/otus/:otuId/*?"
-                        component={OtuDetail}
-                    />
-                    <Route path="/refs/:refId/otus" component={OtuList} />
-                    <Route
-                        path="/refs/:refId/indexes/:indexId"
-                        component={IndexDetail}
-                    />
-                    <Route path="/refs/:refId/indexes" component={Indexes} />
-                    <Route
-                        path="/refs/:refId/settings"
-                        component={ReferenceSettings}
-                    />
-                </Switch>
-            </ContainerNarrow>
+			<ContainerNarrow>
+				<Switch>
+					<Route
+						path="/refs/:refId/"
+						component={() => <Redirect to={`/refs/${refId}/manage`} replace />}
+					/>
+					<Route path="/refs/:refId/manage" component={ReferenceManager} />
+					<Route path="/refs/:refId/otus/:otuId/*?" component={OtuDetail} />
+					<Route path="/refs/:refId/otus" component={OtuList} />
+					<Route path="/refs/:refId/indexes/:indexId" component={IndexDetail} />
+					<Route path="/refs/:refId/indexes" component={Indexes} />
+					<Route path="/refs/:refId/settings" component={ReferenceSettings} />
+				</Switch>
+			</ContainerNarrow>
 
-            <EditReference detail={data} />
-        </>
-    );
+			<EditReference detail={data} />
+		</>
+	);
 }

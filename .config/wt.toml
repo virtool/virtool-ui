@@ -1,0 +1,5 @@
+pre-start = "npm ci"
+post-start = "npm run develop"
+
+[list]
+url = "http://localhost:{{ branch | hash_port }}"

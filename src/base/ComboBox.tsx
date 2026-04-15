@@ -1,9 +1,9 @@
 import {
-    borderRadius,
-    boxShadow,
-    getBorder,
-    getColor,
-    getFontWeight,
+	borderRadius,
+	boxShadow,
+	getBorder,
+	getColor,
+	getFontWeight,
 } from "@app/theme";
 import { useCombobox } from "downshift";
 import { ChevronDown } from "lucide-react";
@@ -29,17 +29,17 @@ const StyledTriggerButton = styled.button`
 `;
 
 function ComboboxTriggerButton({
-    TriggerButtonProps,
-    selectedItem,
-    renderRow,
-    id,
+	TriggerButtonProps,
+	selectedItem,
+	renderRow,
+	id,
 }) {
-    return (
-        <StyledTriggerButton {...TriggerButtonProps} id={id} type="button">
-            {selectedItem ? renderRow(selectedItem) : "Select user"}
-            <Icon icon={ChevronDown} />
-        </StyledTriggerButton>
-    );
+	return (
+		<StyledTriggerButton {...TriggerButtonProps} id={id} type="button">
+			{selectedItem ? renderRow(selectedItem) : "Select user"}
+			<Icon icon={ChevronDown} />
+		</StyledTriggerButton>
+	);
 }
 
 const ComboBoxContentOpen = keyframes`  
@@ -52,7 +52,7 @@ const ComboBoxContentOpen = keyframes`
 `;
 
 interface Content {
-    $isOpen: boolean;
+	$isOpen: boolean;
 }
 
 const Content = styled.ul<Content>`
@@ -88,73 +88,73 @@ const InputSearchContainer = styled.div`
 `;
 
 function ComboBoxSearch({ getInputProps }) {
-    return (
-        <InputSearchContainer>
-            <InputSearch {...getInputProps()} />
-        </InputSearchContainer>
-    );
+	return (
+		<InputSearchContainer>
+			<InputSearch {...getInputProps()} />
+		</InputSearchContainer>
+	);
 }
 
 type ComboBoxProps = {
-    items: unknown[];
-    selectedItem?: unknown;
-    term: string;
-    renderRow: (item: unknown) => JSX.Element;
-    onFilter: (term: string) => void;
-    onChange: (item: unknown) => void;
-    itemToString?: (item: unknown) => string;
-    id?: string;
+	items: unknown[];
+	selectedItem?: unknown;
+	term: string;
+	renderRow: (item: unknown) => JSX.Element;
+	onFilter: (term: string) => void;
+	onChange: (item: unknown) => void;
+	itemToString?: (item: unknown) => string;
+	id?: string;
 };
 
 function defaultToString(item: string) {
-    return item;
+	return item;
 }
 
 export default function ComboBox({
-    items,
-    selectedItem,
-    term,
-    renderRow,
-    onFilter,
-    onChange,
-    itemToString,
-    id,
+	items,
+	selectedItem,
+	term,
+	renderRow,
+	onFilter,
+	onChange,
+	itemToString,
+	id,
 }: ComboBoxProps) {
-    itemToString = itemToString || defaultToString;
+	itemToString = itemToString || defaultToString;
 
-    const {
-        getToggleButtonProps,
-        getMenuProps,
-        getItemProps,
-        getInputProps,
-        isOpen,
-    } = useCombobox({
-        items,
-        selectedItem,
-        inputValue: term,
-        onInputValueChange: ({ inputValue }) => {
-            onFilter(inputValue);
-        },
-        onSelectedItemChange: ({ selectedItem }) => {
-            onChange(selectedItem);
-        },
-        itemToString,
-    });
+	const {
+		getToggleButtonProps,
+		getMenuProps,
+		getItemProps,
+		getInputProps,
+		isOpen,
+	} = useCombobox({
+		items,
+		selectedItem,
+		inputValue: term,
+		onInputValueChange: ({ inputValue }) => {
+			onFilter(inputValue);
+		},
+		onSelectedItemChange: ({ selectedItem }) => {
+			onChange(selectedItem);
+		},
+		itemToString,
+	});
 
-    const rows = items.map(WrapRow(renderRow, getItemProps));
+	const rows = items.map(WrapRow(renderRow, getItemProps));
 
-    return (
-        <ComboBoxContainer>
-            <ComboboxTriggerButton
-                TriggerButtonProps={getToggleButtonProps()}
-                selectedItem={selectedItem}
-                renderRow={renderRow}
-                id={id}
-            />
-            <Content {...getMenuProps()} $isOpen={isOpen}>
-                <ComboBoxSearch getInputProps={getInputProps} />
-                {isOpen && rows}
-            </Content>
-        </ComboBoxContainer>
-    );
+	return (
+		<ComboBoxContainer>
+			<ComboboxTriggerButton
+				TriggerButtonProps={getToggleButtonProps()}
+				selectedItem={selectedItem}
+				renderRow={renderRow}
+				id={id}
+			/>
+			<Content {...getMenuProps()} $isOpen={isOpen}>
+				<ComboBoxSearch getInputProps={getInputProps} />
+				{isOpen && rows}
+			</Content>
+		</ComboBoxContainer>
+	);
 }

@@ -1,23 +1,20 @@
 import { cn } from "@app/utils";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import Box from "./Box";
 
 type BoxGroupProps = {
-    children: ReactNode;
-    className?: string;
+	children: ReactNode;
+	className?: string;
 };
 
 export default function BoxGroup({
-    children,
-    className = "",
-    ...rest
+	children,
+	className = "",
+	...rest
 }: BoxGroupProps) {
-    return (
-        <Box
-            className={cn("p-0", "relative", "rounded-sm", className)}
-            {...rest}
-        >
-            {children}
-        </Box>
-    );
+	return (
+		<Box className={cn("p-0", "relative", "rounded-sm", className)} {...rest}>
+			{children}
+		</Box>
+	);
 }

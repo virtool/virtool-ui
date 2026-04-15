@@ -3,8 +3,8 @@ import { useState } from "react";
 import InputHeader from "../InputHeader";
 
 const meta: Meta<typeof InputHeader> = {
-    title: "base/InputHeader",
-    component: InputHeader,
+	title: "base/InputHeader",
+	component: InputHeader,
 };
 
 export default meta;
@@ -12,17 +12,17 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function Template(args) {
-    const [value, setValue] = useState(args.value);
-    return (
-        <InputHeader
-            id="name"
-            value={value}
-            onSubmit={(value) => setValue(value)}
-        />
-    );
+	const [value, setValue] = useState(args.value);
+	return (
+		<InputHeader
+			id="name"
+			value={value}
+			onSubmit={(value) => setValue(value)}
+		/>
+	);
 }
 
 export const Default: Story = {
-    args: { value: "Header 1" },
-    render: Template,
+	args: { value: "Header 1" },
+	render: Template,
 };

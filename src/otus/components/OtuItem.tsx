@@ -25,28 +25,28 @@ const StyledOTUItem = styled(BoxGroupSection)`
 `;
 
 type OtuItemProps = {
-    abbreviation: string;
-    id: string;
-    name: string;
-    refId: string;
-    verified: boolean;
+	abbreviation: string;
+	id: string;
+	name: string;
+	refId: string;
+	verified: boolean;
 };
 
 /**
  * A condensed OTU item for use in a list of OTUs
  */
 export default function OtuItem({
-    abbreviation,
-    id,
-    name,
-    refId,
-    verified,
+	abbreviation,
+	id,
+	name,
+	refId,
+	verified,
 }: OtuItemProps) {
-    return (
-        <StyledOTUItem key={id}>
-            <OTUItemName to={`/refs/${refId}/otus/${id}`}>{name}</OTUItemName>
-            <OTUItemAbbreviation>{abbreviation}</OTUItemAbbreviation>
-            {verified || <OTUItemUnverified>Unverified</OTUItemUnverified>}
-        </StyledOTUItem>
-    );
+	return (
+		<StyledOTUItem key={id}>
+			<OTUItemName to={`/refs/${refId}/otus/${id}`}>{name}</OTUItemName>
+			<OTUItemAbbreviation>{abbreviation}</OTUItemAbbreviation>
+			{verified || <OTUItemUnverified>Unverified</OTUItemUnverified>}
+		</StyledOTUItem>
+	);
 }

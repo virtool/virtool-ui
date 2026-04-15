@@ -2,19 +2,19 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import LinkButton from "../LinkButton";
 
 const meta: Meta<typeof LinkButton> = {
-    title: "base/LinkButton",
-    component: LinkButton,
-    parameters: {
-        controls: {
-            exclude: ["replace"],
-        },
-    },
-    argTypes: {
-        children: { type: "string" },
-        color: {
-            control: { type: "radio" },
-        },
-    },
+	title: "base/LinkButton",
+	component: LinkButton,
+	parameters: {
+		controls: {
+			exclude: ["replace"],
+		},
+	},
+	argTypes: {
+		children: { type: "string" },
+		color: {
+			control: { type: "radio" },
+		},
+	},
 };
 
 export default meta;
@@ -22,9 +22,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: {
-        children: "Link",
-        color: "blue",
-        to: "#",
-    },
+	args: {
+		children: "Link",
+		color: "blue",
+		to: "#",
+	},
 };

@@ -12,7 +12,7 @@ import SaveButton from "@base/SaveButton";
 import { useCloneReference } from "@references/queries";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { ReferenceMinimal } from "references/types";
+import type { ReferenceMinimal } from "references/types";
 import styled from "styled-components";
 
 const ReferenceBox = styled(Box)`
@@ -25,94 +25,89 @@ const ReferenceBox = styled(Box)`
 `;
 
 type FormValues = {
-    name: string;
+	name: string;
 };
 
 type CloneReferenceProps = {
-    /** A list of minimal references */
-    references: ReferenceMinimal[];
+	/** A list of minimal references */
+	references: ReferenceMinimal[];
 };
 
 /**
  * Displays a form used for creating a clone of a reference
  */
 export default function CloneReference({ references }: CloneReferenceProps) {
-    const {
-        formState: { errors },
-        register,
-        handleSubmit,
-        setValue,
-    } = useForm<FormValues>();
+	const {
+		formState: { errors },
+		register,
+		handleSubmit,
+		setValue,
+	} = useForm<FormValues>();
 
-    const mutation = useCloneReference();
+	const mutation = useCloneReference();
 
-    const { value: cloneReferenceId, unsetValue: unsetCloneReferenceId } =
-        useUrlSearchParam("cloneReferenceId");
+	const { value: cloneReferenceId, unsetValue: unsetCloneReferenceId } =
+		useUrlSearchParam("cloneReferenceId");
 
-    const reference = references.find(
-        (reference) => reference.id === cloneReferenceId,
-    );
+	const reference = references.find(
+		(reference) => reference.id === cloneReferenceId,
+	);
 
-    useEffect(() => {
-        if (reference) {
-            setValue("name", `Clone of ${reference.name}`);
-        }
-    }, [reference, setValue]);
+	useEffect(() => {
+		if (reference) {
+			setValue("name", `Clone of ${reference.name}`);
+		}
+	}, [reference, setValue]);
 
-    function onSubmit({ name }: FormValues) {
-        mutation.mutate(
-            {
-                name,
-                description: `Cloned from ${reference.name}`,
-                refId: reference.id,
-            },
-            {
-                onSuccess: () => {
-                    unsetCloneReferenceId();
-                },
-            },
-        );
-    }
+	function onSubmit({ name }: FormValues) {
+		mutation.mutate(
+			{
+				name,
+				description: `Cloned from ${reference.name}`,
+				refId: reference.id,
+			},
+			{
+				onSuccess: () => {
+					unsetCloneReferenceId();
+				},
+			},
+		);
+	}
 
-    return (
-        <Dialog
-            onOpenChange={() => unsetCloneReferenceId()}
-            open={Boolean(cloneReferenceId)}
-        >
-            <DialogContent>
-                <DialogTitle>Clone Reference</DialogTitle>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <PseudoLabel>Selected reference</PseudoLabel>
-                    {reference && (
-                        <ReferenceBox>
-                            <strong>{reference.name}</strong>
-                            <Badge className="ml-1.5">
-                                {reference.otu_count} OTUs
-                            </Badge>
-                            <Attribution
-                                time={reference.created_at}
-                                user={reference.user.handle}
-                            />
-                        </ReferenceBox>
-                    )}
-                    <InputGroup>
-                        <InputLabel htmlFor="name">Name</InputLabel>
-                        <InputSimple
-                            id="name"
-                            {...register("name", {
-                                required: "Required Field",
-                            })}
-                        />
-                        <InputError>{errors.name?.message}</InputError>
-                    </InputGroup>
-                    <DialogFooter>
-                        <SaveButton
-                            disabled={!references.length}
-                            altText="Clone"
-                        />
-                    </DialogFooter>
-                </form>
-            </DialogContent>
-        </Dialog>
-    );
+	return (
+		<Dialog
+			onOpenChange={() => unsetCloneReferenceId()}
+			open={Boolean(cloneReferenceId)}
+		>
+			<DialogContent>
+				<DialogTitle>Clone Reference</DialogTitle>
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<PseudoLabel>Selected reference</PseudoLabel>
+					{reference && (
+						<ReferenceBox>
+							<strong>{reference.name}</strong>
+							<Badge className="ml-1.5">{reference.otu_count} OTUs</Badge>
+							<Attribution
+								time={reference.created_at}
+								user={reference.user.handle}
+							/>
+						</ReferenceBox>
+					)}
+					<InputGroup>
+						<InputLabel htmlFor="name">Name</InputLabel>
+						<InputSimple
+							id="name"
+							{...register("name", {
+								required: "Required Field",
+							})}
+						/>
+						<InputError>{errors.name?.message}</InputError>
+					</InputGroup>
+					<DialogFooter>
+						<SaveButton disabled={!references.length} altText="Clone" />
+					</DialogFooter>
+				</form>
+			</DialogContent>
+		</Dialog>
+	);
 }

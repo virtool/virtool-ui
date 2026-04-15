@@ -10,55 +10,54 @@ import { useForm } from "react-hook-form";
 import { useUpdateAccount } from "../queries";
 
 type FormValues = {
-    email: string;
+	email: string;
 };
 
 type EmailProps = {
-    /** The users current email address */
-    email: string;
+	/** The users current email address */
+	email: string;
 };
 
 /**
  * A component to update the accounts email address
  */
 export default function AccountEmail({ email }: EmailProps) {
-    const {
-        formState: { errors },
-        handleSubmit,
-        register,
-    } = useForm<FormValues>({ defaultValues: { email: email || "" } });
-    const mutation = useUpdateAccount();
+	const {
+		formState: { errors },
+		handleSubmit,
+		register,
+	} = useForm<FormValues>({ defaultValues: { email: email || "" } });
+	const mutation = useUpdateAccount();
 
-    function onSubmit({ email }: FormValues) {
-        mutation.mutate({ update: { email } });
-    }
+	function onSubmit({ email }: FormValues) {
+		mutation.mutate({ update: { email } });
+	}
 
-    return (
-        <BoxGroup>
-            <BoxGroupHeader>
-                <h2>Email</h2>
-            </BoxGroupHeader>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <BoxGroupSection>
-                    <InputGroup>
-                        <InputLabel htmlFor="email">Email Address</InputLabel>
-                        <InputSimple
-                            id="email"
-                            {...register("email", {
-                                pattern: {
-                                    value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                                    message:
-                                        "Please provide a valid email address",
-                                },
-                            })}
-                        />
-                        <InputError>{errors.email?.message}</InputError>
-                    </InputGroup>
-                    <footer className="flex items-center justify-end mb-4">
-                        <SaveButton altText="Change" />
-                    </footer>
-                </BoxGroupSection>
-            </form>
-        </BoxGroup>
-    );
+	return (
+		<BoxGroup>
+			<BoxGroupHeader>
+				<h2>Email</h2>
+			</BoxGroupHeader>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<BoxGroupSection>
+					<InputGroup>
+						<InputLabel htmlFor="email">Email Address</InputLabel>
+						<InputSimple
+							id="email"
+							{...register("email", {
+								pattern: {
+									value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+									message: "Please provide a valid email address",
+								},
+							})}
+						/>
+						<InputError>{errors.email?.message}</InputError>
+					</InputGroup>
+					<footer className="flex items-center justify-end mb-4">
+						<SaveButton altText="Change" />
+					</footer>
+				</BoxGroupSection>
+			</form>
+		</BoxGroup>
+	);
 }

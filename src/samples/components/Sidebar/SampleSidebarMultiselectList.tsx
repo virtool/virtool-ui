@@ -1,4 +1,4 @@
-import { SampleLabel } from "@samples/queries";
+import type { SampleLabel } from "@samples/queries";
 import styled from "styled-components";
 import SampleMultiSelectLabel from "../Label/SampleMultiSelectLabel";
 
@@ -18,30 +18,26 @@ const SampleSidebarMultiSelectListItem = styled(SampleMultiSelectLabel)`
 `;
 
 type SampleSidebarMultiselectList = {
-    /** List of labels that can be used to filter samples */
-    items: SampleLabel[];
+	/** List of labels that can be used to filter samples */
+	items: SampleLabel[];
 };
 
 /**
  * Displays a list of labels to filter samples by
  */
 export default function SampleSidebarMultiselectList({
-    items,
+	items,
 }: SampleSidebarMultiselectList) {
-    const sampleItemComponents = items.map(
-        ({ id, color, name, allLabeled }) => (
-            <SampleSidebarMultiSelectListItem
-                key={id}
-                color={color}
-                name={name}
-                partiallySelected={!allLabeled}
-            />
-        ),
-    );
+	const sampleItemComponents = items.map(({ id, color, name, allLabeled }) => (
+		<SampleSidebarMultiSelectListItem
+			key={id}
+			color={color}
+			name={name}
+			partiallySelected={!allLabeled}
+		/>
+	));
 
-    return (
-        <StyledSampleSidebarList>
-            {sampleItemComponents}
-        </StyledSampleSidebarList>
-    );
+	return (
+		<StyledSampleSidebarList>{sampleItemComponents}</StyledSampleSidebarList>
+	);
 }

@@ -1,10 +1,10 @@
-import styled, { DefaultTheme } from "styled-components";
+import styled, { type DefaultTheme } from "styled-components";
 
 type AlertInnerProps = {
-    block?: boolean;
-    color?: string;
-    level?: boolean;
-    theme?: DefaultTheme;
+	block?: boolean;
+	color?: string;
+	level?: boolean;
+	theme?: DefaultTheme;
 };
 
 const AlertInner = styled.div<AlertInnerProps>`

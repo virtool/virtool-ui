@@ -3,28 +3,28 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 
 type IndexOTUProps = {
-    refId: string;
-    /** The quantity of changes made to this otu since last index build */
-    changeCount: number;
-    id: string;
-    name: string;
+	refId: string;
+	/** The quantity of changes made to this otu since last index build */
+	changeCount: number;
+	id: string;
+	name: string;
 };
 
 /**
  * A condensed index OTU item for use in a list of index OTUs
  */
 export default function IndexOTU({
-    refId,
-    changeCount,
-    id,
-    name,
+	refId,
+	changeCount,
+	id,
+	name,
 }: IndexOTUProps) {
-    return (
-        <BoxGroupSection className="flex justify-between">
-            <Link to={`/refs/${refId}/otus/${id}`}>{name}</Link>
-            <Badge>
-                {changeCount} {`change${changeCount > 1 ? "s" : ""}`}
-            </Badge>
-        </BoxGroupSection>
-    );
+	return (
+		<BoxGroupSection className="flex justify-between">
+			<Link to={`/refs/${refId}/otus/${id}`}>{name}</Link>
+			<Badge>
+				{changeCount} {`change${changeCount > 1 ? "s" : ""}`}
+			</Badge>
+		</BoxGroupSection>
+	);
 }

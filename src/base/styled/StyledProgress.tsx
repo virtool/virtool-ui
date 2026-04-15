@@ -1,12 +1,12 @@
-import styled, { DefaultTheme } from "styled-components";
+import styled, { type DefaultTheme } from "styled-components";
 
 interface StyledProgressProps {
-    color?: string;
-    theme: DefaultTheme;
+	color?: string;
+	theme: DefaultTheme;
 }
 
 function getProgressColor({ color, theme }: StyledProgressProps) {
-    return theme.color[color] ?? theme.color.blue;
+	return theme.color[color] ?? theme.color.blue;
 }
 
 export const StyledProgress = styled.progress<StyledProgressProps>`

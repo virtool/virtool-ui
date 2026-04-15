@@ -1,7 +1,7 @@
-import styled, { DefaultTheme } from "styled-components";
+import styled, { type DefaultTheme } from "styled-components";
 
 type ViewHeaderIconsProps = {
-    theme: DefaultTheme;
+	theme: DefaultTheme;
 };
 
 const ViewHeaderIcons = styled.div<ViewHeaderIconsProps>`

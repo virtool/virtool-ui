@@ -26,23 +26,23 @@ const StyledPathoscopeViewerScroller = styled.div`
 
 /** Button that scrolls the user to the top of the page */
 export function PathoscopeViewerScroller() {
-    const [show, setShow] = useState(false);
+	const [show, setShow] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => setShow(window.scrollY > 0);
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+	useEffect(() => {
+		const handleScroll = () => setShow(window.scrollY > 0);
+		window.addEventListener("scroll", handleScroll);
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, []);
 
-    if (show) {
-        return (
-            <StyledPathoscopeViewerScroller
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            >
-                <ArrowUp />
-            </StyledPathoscopeViewerScroller>
-        );
-    }
+	if (show) {
+		return (
+			<StyledPathoscopeViewerScroller
+				onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+			>
+				<ArrowUp />
+			</StyledPathoscopeViewerScroller>
+		);
+	}
 
-    return null;
+	return null;
 }

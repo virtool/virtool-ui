@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMessage, setMessage } from "./api";
-import { Message } from "./types";
+import type { Message } from "./types";
 
 /**
  * Factory for generating react-query keys for message related queries.
  */
 export const messageQueryKeys = {
-    all: () => ["message"] as const,
+	all: () => ["message"] as const,
 };
 
 /**
@@ -15,10 +15,10 @@ export const messageQueryKeys = {
  * @returns The instance message
  */
 export function useFetchMessage() {
-    return useQuery<Message>({
-        queryKey: messageQueryKeys.all(),
-        queryFn: getMessage,
-    });
+	return useQuery<Message>({
+		queryKey: messageQueryKeys.all(),
+		queryFn: getMessage,
+	});
 }
 
 /**
@@ -27,11 +27,11 @@ export function useFetchMessage() {
  * @returns A mutator for updating the instance message
  */
 export function useSetMessage() {
-    const queryClient = useQueryClient();
-    return useMutation<Message, unknown, { message: string }>({
-        mutationFn: ({ message }) => setMessage(message),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: messageQueryKeys.all() });
-        },
-    });
+	const queryClient = useQueryClient();
+	return useMutation<Message, unknown, { message: string }>({
+		mutationFn: ({ message }) => setMessage(message),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: messageQueryKeys.all() });
+		},
+	});
 }

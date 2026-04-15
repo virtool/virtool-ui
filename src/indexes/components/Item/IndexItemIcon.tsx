@@ -1,13 +1,13 @@
 import { sizes } from "@app/theme";
 import ProgressCircle from "@base/ProgressCircle";
-import { JobNested } from "@jobs/types";
+import type { JobNested } from "@jobs/types";
 import { CircleCheck } from "lucide-react";
 
 type IndexItemIconProps = {
-    activeId: string;
-    id: string;
-    ready: boolean;
-    job?: JobNested;
+	activeId: string;
+	id: string;
+	ready: boolean;
+	job?: JobNested;
 };
 
 /**
@@ -20,27 +20,27 @@ type IndexItemIconProps = {
  * @returns The index item's icon
  */
 export function IndexItemIcon({
-    activeId,
-    id,
-    ready,
-    job,
+	activeId,
+	id,
+	ready,
+	job,
 }: IndexItemIconProps) {
-    if (ready && id !== activeId) {
-        return null;
-    }
+	if (ready && id !== activeId) {
+		return null;
+	}
 
-    return (
-        <div className="flex items-center justify-end gap-1.5">
-            {ready ? (
-                <CircleCheck className="stroke-green-600" size={18} />
-            ) : (
-                <ProgressCircle
-                    progress={job?.progress || 0}
-                    state={job?.state || "pending"}
-                    size={sizes.md}
-                />
-            )}
-            <span className="font-medium">{ready ? "Active" : "Building"}</span>
-        </div>
-    );
+	return (
+		<div className="flex items-center justify-end gap-1.5">
+			{ready ? (
+				<CircleCheck className="stroke-green-600" size={18} />
+			) : (
+				<ProgressCircle
+					progress={job?.progress || 0}
+					state={job?.state || "pending"}
+					size={sizes.md}
+				/>
+			)}
+			<span className="font-medium">{ready ? "Active" : "Building"}</span>
+		</div>
+	);
 }

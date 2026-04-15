@@ -1,7 +1,7 @@
 import { getFontSize } from "@app/theme";
 import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import styled from "styled-components";
 
 const SettingsCheckboxContainer = styled.div`
@@ -32,34 +32,34 @@ const StyledSettingsCheckbox = styled(Box)`
 `;
 
 type SettingsCheckboxProps = {
-    /** Content to be rendered within the checkbox */
-    children: ReactNode;
+	/** Content to be rendered within the checkbox */
+	children: ReactNode;
 
-    /** Whether the external API access is enabled */
-    enabled: boolean;
+	/** Whether the external API access is enabled */
+	enabled: boolean;
 
-    /** An HTML id for the checkbox */
-    id: string;
+	/** An HTML id for the checkbox */
+	id: string;
 
-    /** A callback function to handle checkbox toggling */
-    onToggle: () => void;
+	/** A callback function to handle checkbox toggling */
+	onToggle: () => void;
 };
 
 /**
  * A checkbox allowing users to toggle API access for clients
  */
 export default function SettingsCheckbox({
-    children,
-    enabled,
-    id,
-    onToggle,
+	children,
+	enabled,
+	id,
+	onToggle,
 }: SettingsCheckboxProps) {
-    return (
-        <StyledSettingsCheckbox>
-            <SettingsCheckboxChildren>{children}</SettingsCheckboxChildren>
-            <SettingsCheckboxContainer>
-                <Checkbox checked={enabled} id={id} onClick={onToggle} />
-            </SettingsCheckboxContainer>
-        </StyledSettingsCheckbox>
-    );
+	return (
+		<StyledSettingsCheckbox>
+			<SettingsCheckboxChildren>{children}</SettingsCheckboxChildren>
+			<SettingsCheckboxContainer>
+				<Checkbox checked={enabled} id={id} onClick={onToggle} />
+			</SettingsCheckboxContainer>
+		</StyledSettingsCheckbox>
+	);
 }

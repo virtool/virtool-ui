@@ -1,12 +1,12 @@
 import { getWorkflowDisplayName } from "@app/utils";
-import { SampleWorkflows, WorkflowState } from "@samples/types";
+import { type SampleWorkflows, WorkflowState } from "@samples/types";
 import { Link } from "wouter";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import WorkflowTag from "./WorkflowTag";
 
 type WorkflowTagsProps = {
-    id: string;
-    workflows: SampleWorkflows;
+	id: string;
+	workflows: SampleWorkflows;
 };
 
 /**
@@ -20,41 +20,38 @@ type WorkflowTagsProps = {
  * @returns The workflow tags for a sample.
  */
 export default function WorkflowTags({ id, workflows }: WorkflowTagsProps) {
-    const workflowTags = Object.entries(workflows).reduce(
-        (tags, [key, value]) => {
-            if (
-                value === WorkflowState.COMPLETE ||
-                value === WorkflowState.PENDING
-            ) {
-                tags.push(
-                    <WorkflowTag
-                        key={key}
-                        displayName={getWorkflowDisplayName(key)}
-                        workflowState={value}
-                    />,
-                );
-            }
-            return tags;
-        },
-        [],
-    );
-    return (
-        <div className="flex items-center">
-            <div className="flex items-stretch">
-                <BaseWorkflowTag
-                    as={Link}
-                    className="bg-purple-400 border-purple-400 border-l-0"
-                    to={`/samples/${id}/analyses`}
-                >
-                    View
-                </BaseWorkflowTag>
-                {!workflowTags.length && (
-                    <BaseWorkflowTag className="bg-purple-50 border border-purple-400 text-purple-900 gap-3 [&_span:last-child]:ml-0">
-                        No Analyses
-                    </BaseWorkflowTag>
-                )}
-                {workflowTags}
-            </div>
-        </div>
-    );
+	const workflowTags = Object.entries(workflows).reduce(
+		(tags, [key, value]) => {
+			if (value === WorkflowState.COMPLETE || value === WorkflowState.PENDING) {
+				tags.push(
+					<WorkflowTag
+						key={key}
+						displayName={getWorkflowDisplayName(key)}
+						workflowState={value}
+					/>,
+				);
+			}
+			return tags;
+		},
+		[],
+	);
+	return (
+		<div className="flex items-center">
+			<div className="flex items-stretch">
+				<BaseWorkflowTag
+					as={Link}
+					className="bg-purple-400 border-purple-400 border-l-0"
+					to={`/samples/${id}/analyses`}
+				>
+					View
+				</BaseWorkflowTag>
+				{!workflowTags.length && (
+					<BaseWorkflowTag className="bg-purple-50 border border-purple-400 text-purple-900 gap-3 [&_span:last-child]:ml-0">
+						No Analyses
+					</BaseWorkflowTag>
+				)}
+				{workflowTags}
+			</div>
+		</div>
+	);
 }

@@ -18,21 +18,21 @@ const StyledSampleQuality = styled.div`
  * Samples quality view showing charts for bases, composition, and sequences
  */
 export default function SampleQuality() {
-    const { sampleId } = usePathParams<{ sampleId: string }>();
-    const { data, isPending } = useFetchSample(sampleId);
+	const { sampleId } = usePathParams<{ sampleId: string }>();
+	const { data, isPending } = useFetchSample(sampleId);
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    return (
-        <StyledSampleQuality>
-            <SampleQualityLegacyAlert showLegacy={data.is_legacy} />
-            <Quality
-                bases={data.quality.bases}
-                composition={data.quality.composition}
-                sequences={data.quality.sequences}
-            />
-        </StyledSampleQuality>
-    );
+	return (
+		<StyledSampleQuality>
+			<SampleQualityLegacyAlert showLegacy={data.is_legacy} />
+			<Quality
+				bases={data.quality.bases}
+				composition={data.quality.composition}
+				sequences={data.quality.sequences}
+			/>
+		</StyledSampleQuality>
+	);
 }

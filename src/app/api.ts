@@ -1,17 +1,17 @@
-import Superagent, { Request } from "superagent";
+import Superagent, { type Request } from "superagent";
 
 const agent = Superagent.agent();
 
 function prefixRequestUrl(request: Request) {
-    if (request.url[0] !== "/") {
-        request.url = `/${request.url}`;
-    }
+	if (request.url[0] !== "/") {
+		request.url = `/${request.url}`;
+	}
 
-    if (!request.url.startsWith("/api")) {
-        request.url = `/api${request.url}`;
-    }
+	if (!request.url.startsWith("/api")) {
+		request.url = `/api${request.url}`;
+	}
 
-    return request;
+	return request;
 }
 
 agent.accept("application/json");

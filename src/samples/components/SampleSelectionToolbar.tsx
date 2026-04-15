@@ -25,31 +25,31 @@ const SampleSelectionToolbarTop = styled.div`
 `;
 
 type SampleSelectionToolbarProps = {
-    /** A callback function to clear selected samples */
-    onClear: () => void;
-    /** A list of selected samples */
-    selected: string[];
+	/** A callback function to clear selected samples */
+	onClear: () => void;
+	/** A list of selected samples */
+	selected: string[];
 };
 
 /**
  * A toolbar allowing users to create an analysis for selected samples
  */
 export default function SampleSelectionToolbar({
-    onClear,
-    selected,
+	onClear,
+	selected,
 }: SampleSelectionToolbarProps) {
-    const search = useSearch();
-    return (
-        <SampleSelectionToolbarTop>
-            <Button onClick={onClear}>
-                Clear selection of {selected.length} samples
-            </Button>
-            <LinkButton
-                color="green"
-                to={updateSearchParam("openQuickAnalyze", "true", search)}
-            >
-                <Icon icon={AreaChart} /> Quick Analyze
-            </LinkButton>
-        </SampleSelectionToolbarTop>
-    );
+	const search = useSearch();
+	return (
+		<SampleSelectionToolbarTop>
+			<Button onClick={onClear}>
+				Clear selection of {selected.length} samples
+			</Button>
+			<LinkButton
+				color="green"
+				to={updateSearchParam("openQuickAnalyze", "true", search)}
+			>
+				<Icon icon={AreaChart} /> Quick Analyze
+			</LinkButton>
+		</SampleSelectionToolbarTop>
+	);
 }

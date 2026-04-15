@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { Group, GroupMinimal } from "@groups/types";
+import type { Group, GroupMinimal } from "@groups/types";
 import { createFakePermissions } from "./permissions";
 
 /**
@@ -9,15 +9,15 @@ import { createFakePermissions } from "./permissions";
  * @returns GroupMinimal object with fake data
  */
 export function createFakeGroupMinimal(
-    overrides?: Partial<GroupMinimal>,
+	overrides?: Partial<GroupMinimal>,
 ): GroupMinimal {
-    const defaultGroupMinimal = {
-        id: faker.number.int(),
-        name: `${faker.person.jobType()}s`,
-        legacy_id: null,
-    };
+	const defaultGroupMinimal = {
+		id: faker.number.int(),
+		name: `${faker.person.jobType()}s`,
+		legacy_id: null,
+	};
 
-    return { ...defaultGroupMinimal, ...overrides };
+	return { ...defaultGroupMinimal, ...overrides };
 }
 
 /**
@@ -27,10 +27,10 @@ export function createFakeGroupMinimal(
  * @returns Group object with fake data
  */
 export function createFakeGroup(overrides?: Partial<Group>): Group {
-    const { permissions, users, ...props } = overrides || {};
-    return {
-        ...createFakeGroupMinimal(props),
-        permissions: createFakePermissions(permissions),
-        users: users || [],
-    };
+	const { permissions, users, ...props } = overrides || {};
+	return {
+		...createFakeGroupMinimal(props),
+		permissions: createFakePermissions(permissions),
+		users: users || [],
+	};
 }

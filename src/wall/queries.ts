@@ -1,16 +1,16 @@
 import { fetchAccount, login, resetPassword } from "@account/api";
 import { accountKeys } from "@account/queries";
-import { Account } from "@account/types";
+import type { Account } from "@account/types";
 import { apiClient } from "@app/api";
-import { Root } from "@app/types";
+import type { Root } from "@app/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Response } from "superagent";
+import type { Response } from "superagent";
 
-import { ErrorResponse } from "@/types/api";
+import type { ErrorResponse } from "@/types/api";
 
 /** Key factory function for the root document */
 export const rootKeys = {
-    all: () => ["root"],
+	all: () => ["root"],
 };
 
 /**
@@ -19,10 +19,10 @@ export const rootKeys = {
  * @returns A query for fetching the root document
  */
 export function useRootQuery() {
-    return useQuery<Root, ErrorResponse>({
-        queryKey: rootKeys.all(),
-        queryFn: () => apiClient.get("/").then((res) => res.body),
-    });
+	return useQuery<Root, ErrorResponse>({
+		queryKey: rootKeys.all(),
+		queryFn: () => apiClient.get("/").then((res) => res.body),
+	});
 }
 
 /**
@@ -31,27 +31,27 @@ export function useRootQuery() {
  * @returns A query for fetching the account document
  */
 export function useAuthentication() {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    const { data, isPending, isError, error, refetch, ...queryInfo } = useQuery<
-        Account,
-        ErrorResponse
-    >({
-        queryKey: accountKeys.all(),
-        queryFn: fetchAccount,
-        retry: false,
-        refetchOnWindowFocus: false,
-    });
+	const { data, isPending, isError, error, refetch, ...queryInfo } = useQuery<
+		Account,
+		ErrorResponse
+	>({
+		queryKey: accountKeys.all(),
+		queryFn: fetchAccount,
+		retry: false,
+		refetchOnWindowFocus: false,
+	});
 
-    if (isError) {
-        if (error.response?.status === 401) {
-            queryClient.setQueryData(accountKeys.all(), null);
-        }
-    }
+	if (isError) {
+		if (error.response?.status === 401) {
+			queryClient.setQueryData(accountKeys.all(), null);
+		}
+	}
 
-    const authenticated = Boolean(data);
+	const authenticated = Boolean(data);
 
-    return { authenticated, isPending, isError, refetch, ...queryInfo };
+	return { authenticated, isPending, isError, refetch, ...queryInfo };
 }
 
 /**
@@ -60,21 +60,21 @@ export function useAuthentication() {
  * @returns A mutator for sending a login request to the API.
  */
 export function useLoginMutation() {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<
-        Response,
-        ErrorResponse,
-        { handle: string; password: string; remember: boolean }
-    >({
-        mutationFn: ({ handle, password, remember }) =>
-            login({ handle, password, remember }),
-        onSuccess: (data) => {
-            if (!data.body.reset) {
-                queryClient.invalidateQueries({ queryKey: accountKeys.all() });
-            }
-        },
-    });
+	return useMutation<
+		Response,
+		ErrorResponse,
+		{ handle: string; password: string; remember: boolean }
+	>({
+		mutationFn: ({ handle, password, remember }) =>
+			login({ handle, password, remember }),
+		onSuccess: (data) => {
+			if (!data.body.reset) {
+				queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+			}
+		},
+	});
 }
 
 /**
@@ -83,17 +83,17 @@ export function useLoginMutation() {
  * @returns A mutator for sending a password reset request to the API.
  */
 export function useResetPasswordMutation() {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<
-        Response,
-        ErrorResponse,
-        { password: string; resetCode: string }
-    >({
-        mutationFn: ({ password, resetCode }) =>
-            resetPassword({ password, resetCode }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
-        },
-    });
+	return useMutation<
+		Response,
+		ErrorResponse,
+		{ password: string; resetCode: string }
+	>({
+		mutationFn: ({ password, resetCode }) =>
+			resetPassword({ password, resetCode }),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+		},
+	});
 }

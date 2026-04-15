@@ -1,4 +1,4 @@
-import { Label } from "@labels/types";
+import type { Label } from "@labels/types";
 import styled from "styled-components";
 import LabelFilter from "./LabelFilter";
 import WorkflowFilter from "./WorkflowFilter";
@@ -9,43 +9,40 @@ const StyledSampleFilters = styled.div`
 `;
 
 type SampleFilterProps = {
-    /** A list of labels */
-    labels: Label[];
+	/** A list of labels */
+	labels: Label[];
 
-    /** Handles click event when label is clicked */
-    onClickLabels: (value: number) => void;
+	/** Handles click event when label is clicked */
+	onClickLabels: (value: number) => void;
 
-    /** A list of selected labels */
-    selectedLabels: number[];
+	/** A list of selected labels */
+	selectedLabels: number[];
 
-    /** Handles click event when workflow is clicked */
-    onClickWorkflows: (value: string[]) => void;
+	/** Handles click event when workflow is clicked */
+	onClickWorkflows: (value: string[]) => void;
 
-    /** A list of selected workflows */
-    selectedWorkflows: string[];
+	/** A list of selected workflows */
+	selectedWorkflows: string[];
 };
 
 /**
  * Filter samples by labels and workflows
  */
 export default function SampleFilters({
-    labels,
-    onClickLabels,
-    onClickWorkflows,
-    selectedLabels,
-    selectedWorkflows,
+	labels,
+	onClickLabels,
+	onClickWorkflows,
+	selectedLabels,
+	selectedWorkflows,
 }: SampleFilterProps) {
-    return (
-        <StyledSampleFilters>
-            <LabelFilter
-                labels={labels}
-                onClick={onClickLabels}
-                selected={selectedLabels}
-            />
-            <WorkflowFilter
-                selected={selectedWorkflows}
-                onClick={onClickWorkflows}
-            />
-        </StyledSampleFilters>
-    );
+	return (
+		<StyledSampleFilters>
+			<LabelFilter
+				labels={labels}
+				onClick={onClickLabels}
+				selected={selectedLabels}
+			/>
+			<WorkflowFilter selected={selectedWorkflows} onClick={onClickWorkflows} />
+		</StyledSampleFilters>
+	);
 }

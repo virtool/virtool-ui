@@ -10,11 +10,11 @@ const StyledMemberItemIcon = styled.div`
 `;
 
 function MemberItemIcon({ handle }) {
-    return (
-        <StyledMemberItemIcon>
-            <InitialIcon handle={handle} size="lg" />
-        </StyledMemberItemIcon>
-    );
+	return (
+		<StyledMemberItemIcon>
+			<InitialIcon handle={handle} size="lg" />
+		</StyledMemberItemIcon>
+	);
 }
 
 const MemberItemButtons = styled.span`
@@ -30,50 +30,46 @@ const StyledMemberItem = styled(BoxGroupSection)`
 `;
 
 export type MemberItemProps = {
-    /** Whether the current user can modify members in the list */
-    canModify: boolean;
+	/** Whether the current user can modify members in the list */
+	canModify: boolean;
 
-    /** The unique identifier for the member */
-    id: number | string;
+	/** The unique identifier for the member */
+	id: number | string;
 
-    /** The handle (user) or name of the member user or group */
-    handleOrName: string;
+	/** The handle (user) or name of the member user or group */
+	handleOrName: string;
 
-    /** Callback to initiate editing the member */
-    onEdit: (id: number | string) => void;
+	/** Callback to initiate editing the member */
+	onEdit: (id: number | string) => void;
 
-    /** Callback to initiate removing the member */
-    onRemove: (id: number | string) => void;
+	/** Callback to initiate removing the member */
+	onRemove: (id: number | string) => void;
 };
 
 /**
  * A condensed user or group item for display in the reference members list
  */
 export default function MemberItem({
-    canModify,
-    handleOrName,
-    id,
-    onEdit,
-    onRemove,
+	canModify,
+	handleOrName,
+	id,
+	onEdit,
+	onRemove,
 }: MemberItemProps) {
-    return (
-        <StyledMemberItem>
-            <MemberItemIcon handle={handleOrName} />
-            {handleOrName}
-            {canModify && (
-                <MemberItemButtons>
-                    <Button onClick={() => onEdit(id)} size="small">
-                        Edit
-                    </Button>
-                    <Button
-                        onClick={() => onRemove(id)}
-                        size="small"
-                        color="red"
-                    >
-                        Remove
-                    </Button>
-                </MemberItemButtons>
-            )}
-        </StyledMemberItem>
-    );
+	return (
+		<StyledMemberItem>
+			<MemberItemIcon handle={handleOrName} />
+			{handleOrName}
+			{canModify && (
+				<MemberItemButtons>
+					<Button onClick={() => onEdit(id)} size="small">
+						Edit
+					</Button>
+					<Button onClick={() => onRemove(id)} size="small" color="red">
+						Remove
+					</Button>
+				</MemberItemButtons>
+			)}
+		</StyledMemberItem>
+	);
 }

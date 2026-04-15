@@ -6,8 +6,8 @@ import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import { WorkflowLabelIcon } from "./WorkflowLabelIcon";
 
 type SampleItemWorkflowTagProps = {
-    displayName: string;
-    workflowState: WorkflowState;
+	displayName: string;
+	workflowState: WorkflowState;
 };
 
 /**
@@ -18,19 +18,19 @@ type SampleItemWorkflowTagProps = {
  * @returns A tag displaying the state of a workflow
  */
 export default function WorkflowTag({
-    displayName,
-    workflowState,
+	displayName,
+	workflowState,
 }: SampleItemWorkflowTagProps) {
-    return (
-        <BaseWorkflowTag>
-            <WorkflowLabelIcon>
-                {workflowState === WorkflowState.PENDING ? (
-                    <Loader size="10px" color="white" />
-                ) : (
-                    <Icon icon={CheckCircle} size={14} />
-                )}
-            </WorkflowLabelIcon>
-            <span>{displayName}</span>
-        </BaseWorkflowTag>
-    );
+	return (
+		<BaseWorkflowTag>
+			<WorkflowLabelIcon>
+				{workflowState === WorkflowState.PENDING ? (
+					<Loader size="10px" color="white" />
+				) : (
+					<Icon icon={CheckCircle} size={14} />
+				)}
+			</WorkflowLabelIcon>
+			<span>{displayName}</span>
+		</BaseWorkflowTag>
+	);
 }

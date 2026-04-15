@@ -8,23 +8,21 @@ import HistoryList from "./HistoryList";
  * Display and manage the history for the OTU
  */
 export default function OtuHistory() {
-    const { otuId } = usePathParams<{ otuId: string }>();
-    const { data, isPending } = useFetchOtuHistory(otuId);
+	const { otuId } = usePathParams<{ otuId: string }>();
+	const { data, isPending } = useFetchOtuHistory(otuId);
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    const changes = groupBy(data, (change) =>
-        change.index.version === "unbuilt" ? "unbuilt" : "built",
-    );
+	const changes = groupBy(data, (change) =>
+		change.index.version === "unbuilt" ? "unbuilt" : "built",
+	);
 
-    return (
-        <div>
-            {changes.unbuilt && (
-                <HistoryList history={changes.unbuilt} unbuilt />
-            )}
-            {changes.built && <HistoryList history={changes.built} />}
-        </div>
-    );
+	return (
+		<div>
+			{changes.unbuilt && <HistoryList history={changes.unbuilt} unbuilt />}
+			{changes.built && <HistoryList history={changes.built} />}
+		</div>
+	);
 }
