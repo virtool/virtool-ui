@@ -2,21 +2,6 @@ import Alert from "@base/Alert";
 import IconButton from "@base/IconButton";
 import { Undo2, X } from "lucide-react";
 import { useState } from "react";
-import styled from "styled-components";
-
-const StyledRestoredAlert = styled(Alert)`
-    display: flex;
-    align-items: center;
-
-    button {
-        margin-left: 10px;
-
-        &:last-child {
-            margin-left: auto;
-            font-size: 16px;
-        }
-    }
-`;
 
 export type RestoredAlertProps = {
 	/* Whether the form has been restored from cached values */
@@ -44,21 +29,23 @@ export function RestoredAlert({
 
 	return (
 		show && (
-			<StyledRestoredAlert>
+			<Alert className="items-center">
 				<span>Resumed editing draft {name}.</span>
 				<IconButton
+					className="ml-2.5"
 					IconComponent={Undo2}
 					color="gray"
 					tip="undo restore"
 					onClick={onUndoRestore}
 				/>
 				<IconButton
+					className="ml-auto"
 					IconComponent={X}
 					color="gray"
 					tip="close"
 					onClick={() => setDismissed(true)}
 				/>
-			</StyledRestoredAlert>
+			</Alert>
 		)
 	);
 }
