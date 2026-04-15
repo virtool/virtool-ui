@@ -28,7 +28,7 @@ function renderRow(user) {
 	);
 }
 
-function toString(user: User) {
+function userToString(user: User) {
 	return user?.handle;
 }
 
@@ -55,7 +55,7 @@ export default function AdministratorUserSelect({
 			term={term}
 			selectedItem={value || null}
 			renderRow={renderRow}
-			itemToString={toString}
+			itemToString={userToString}
 			onFilter={onTermChange}
 			onChange={onChange}
 			id={id}
