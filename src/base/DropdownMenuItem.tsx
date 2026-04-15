@@ -1,16 +1,21 @@
+import { cn } from "@app/utils";
 import { DropdownMenu } from "radix-ui";
-import styled from "styled-components";
+import { type ComponentPropsWithoutRef, forwardRef } from "react";
 
-const DropdownMenuItem = styled(DropdownMenu.Item)`
-    color: ${(props) => props.theme.color.black};
-    cursor: pointer;
-    min-width: 160px;
-    padding: 10px 15px;
-
-    &:hover {
-        background-color: ${(props) => props.theme.color.greyHover};
-        color: ${(props) => props.theme.color.black};
-    }
-`;
+const DropdownMenuItem = forwardRef<
+	HTMLDivElement,
+	ComponentPropsWithoutRef<typeof DropdownMenu.Item>
+>(function DropdownMenuItem({ className, ...props }, ref) {
+	return (
+		<DropdownMenu.Item
+			ref={ref}
+			className={cn(
+				"text-black cursor-pointer min-w-40 px-4 py-2.5 hover:bg-gray-50 hover:text-black",
+				className,
+			)}
+			{...props}
+		/>
+	);
+});
 
 export default DropdownMenuItem;

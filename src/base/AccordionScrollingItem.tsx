@@ -1,13 +1,5 @@
-import { getBorder } from "@app/theme";
 import { Accordion as AccordionPrimitive } from "radix-ui";
 import { createRef, type ReactNode, useEffect } from "react";
-import styled from "styled-components";
-
-const StyledAccordionItem = styled(AccordionPrimitive.Item)`
-    border: ${getBorder};
-    margin-bottom: 10px;
-    scroll-margin-top: 50px;
-`;
 
 /** Composed radix accordion item for handling scroll logic  */
 function ComposedScrollingAccordionItem(props) {
@@ -23,7 +15,13 @@ function ComposedScrollingAccordionItem(props) {
 		}
 	}, [props["data-state"], ref?.current]);
 
-	return <div {...props} ref={ref} />;
+	return (
+		<div
+			{...props}
+			ref={ref}
+			className="border border-gray-300 mb-2.5 scroll-mt-12"
+		/>
+	);
 }
 
 type AccordionScrollingItemProps = {
@@ -39,10 +37,10 @@ export default function AccordionScrollingItem({
 	children,
 }: AccordionScrollingItemProps) {
 	return (
-		<StyledAccordionItem value={value} asChild>
+		<AccordionPrimitive.Item value={value} asChild>
 			<ComposedScrollingAccordionItem>
 				{children}
 			</ComposedScrollingAccordionItem>
-		</StyledAccordionItem>
+		</AccordionPrimitive.Item>
 	);
 }
