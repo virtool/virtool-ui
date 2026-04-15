@@ -24,6 +24,7 @@
         "noGlobalAssign": "warn"
       },
       "correctness": {
+        "noUnusedVariables": "warn",
         "noUnusedFunctionParameters": "warn",
         "noInvalidPositionAtImportRule": "warn"
       },

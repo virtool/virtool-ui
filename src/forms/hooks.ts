@@ -25,7 +25,7 @@ export function usePersistentForm<TFieldValues extends FieldValues>({
 	const [hasRestored, setHasRestored] = useState(false);
 	const initialized = useRef(false);
 
-	const _values = useWatch({ control: methods.control });
+	const values = useWatch({ control: methods.control });
 
 	useEffect(() => {
 		restoreFormValues(formName, methods, setHasRestored);
@@ -34,9 +34,9 @@ export function usePersistentForm<TFieldValues extends FieldValues>({
 
 	useEffect(() => {
 		if (initialized.current) {
-			setSessionStorage(`${formName}FormValues`, methods.getValues());
+			setSessionStorage(`${formName}FormValues`, values);
 		}
-	}, [formName, methods.getValues]);
+	}, [values, formName]);
 
 	return { ...methods, hasRestored };
 }
