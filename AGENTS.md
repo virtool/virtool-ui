@@ -83,6 +83,14 @@ each module's `api.ts`. API errors have the shape `error.response?.body.message`
   colors or spacing values.
 - Tailwind theme customization is in `src/app/style.css` via `@theme`.
 
+## Projects
+
+Ongoing projects are documented in `docs/projects/`. These correspond to Linear
+projects. If your task relates to a project, check that directory for constraints,
+mappings, or decisions that apply to your work.
+
+- **Remove styled-components**: `docs/projects/remove-styled-components.md`
+
 ## Linear
 
 - **Team**: Virtool
