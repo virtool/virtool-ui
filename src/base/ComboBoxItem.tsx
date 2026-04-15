@@ -1,30 +1,16 @@
-import { getColor } from "@app/theme";
-import styled from "styled-components";
-
-const ComboBoxItem = styled.li`
-    padding: 10px 10px;
-
-    &:hover {
-        background-color: ${({ theme }) =>
-					getColor({ color: "greyHover", theme })};
-        border: 0;
-    }
-`;
-
-ComboBoxItem.displayName = "ComboBoxItem";
-
 export default function WrapRow(renderRow, getItemProps) {
 	function WrappedRow(item, index) {
 		return (
-			<ComboBoxItem
+			<li
 				key={item.id}
+				className="px-2.5 py-2.5 hover:bg-gray-50 hover:border-0"
 				{...getItemProps({
 					item: item.id,
 					index,
 				})}
 			>
 				{renderRow(item)}
-			</ComboBoxItem>
+			</li>
 		);
 	}
 	return WrappedRow;

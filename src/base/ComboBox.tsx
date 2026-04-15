@@ -1,32 +1,9 @@
-import {
-	borderRadius,
-	boxShadow,
-	getBorder,
-	getColor,
-	getFontWeight,
-} from "@app/theme";
+import { cn } from "@app/utils";
 import { useCombobox } from "downshift";
 import { ChevronDown } from "lucide-react";
-import styled, { keyframes } from "styled-components";
 import WrapRow from "./ComboBoxItem";
 import Icon from "./Icon";
 import InputSearch from "./InputSearch";
-
-const StyledTriggerButton = styled.button`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 10px;
-    background-color: ${({ theme }) => getColor({ color: "white", theme })};
-    border: ${getBorder};
-    border-radius: ${borderRadius.sm};
-    font-weight: ${getFontWeight("thick")};
-    text-transform: capitalize;
-    width: 100%;
-    svg {
-        margin-left: 5px;
-    }
-`;
 
 function ComboboxTriggerButton({
 	TriggerButtonProps,
@@ -35,63 +12,23 @@ function ComboboxTriggerButton({
 	id,
 }) {
 	return (
-		<StyledTriggerButton {...TriggerButtonProps} id={id} type="button">
+		<button
+			className="flex justify-between items-center px-2.5 py-1.5 bg-white border border-gray-300 rounded font-medium capitalize w-full [&_svg]:ml-1"
+			{...TriggerButtonProps}
+			id={id}
+			type="button"
+		>
 			{selectedItem ? renderRow(selectedItem) : "Select user"}
 			<Icon icon={ChevronDown} />
-		</StyledTriggerButton>
+		</button>
 	);
 }
 
-const ComboBoxContentOpen = keyframes`  
-  from {
-    opacity: 0;
-  }
-  to {  
-    opacity: 1;
-  }
-`;
-
-interface Content {
-	$isOpen: boolean;
-}
-
-const Content = styled.ul<Content>`
-    transform-origin: top center;
-    animation: ${ComboBoxContentOpen} 150ms cubic-bezier(0.16, 1, 0.3, 1);
-    top: 100%;
-    padding: 0;
-    margin-top: 0;
-    position: absolute;
-    background-color: white;
-    width: 100%;
-    max-height: 20rem;
-    overflow-y: auto;
-    overflow-x: hidden;
-    outline: 0;
-    transition: opacity 0.1s ease;
-    box-shadow: ${boxShadow.md};
-    border: ${getBorder};
-    border-radius: ${borderRadius.md};
-    z-index: 110;
-    display: ${(props) => (props.$isOpen ? "block" : "none")};
-`;
-
-const ComboBoxContainer = styled.div`
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    width: 100%;
-`;
-
-const InputSearchContainer = styled.div`
-    margin: 10px 5px;
-`;
-
 function ComboBoxSearch({ getInputProps }) {
 	return (
-		<InputSearchContainer>
+		<div className="mx-1 my-2.5">
 			<InputSearch {...getInputProps()} />
-		</InputSearchContainer>
+		</div>
 	);
 }
 
@@ -144,17 +81,23 @@ export default function ComboBox({
 	const rows = items.map(WrapRow(renderRow, getItemProps));
 
 	return (
-		<ComboBoxContainer>
+		<div className="flex relative flex-col w-full">
 			<ComboboxTriggerButton
 				TriggerButtonProps={getToggleButtonProps()}
 				selectedItem={selectedItem}
 				renderRow={renderRow}
 				id={id}
 			/>
-			<Content {...getMenuProps()} $isOpen={isOpen}>
+			<ul
+				className={cn(
+					"origin-top animate-comboBoxContentOpen top-full p-0 mt-0 absolute bg-white w-full max-h-80 overflow-y-auto overflow-x-hidden outline-0 transition-opacity duration-100 ease-in shadow-md border border-gray-300 rounded-md z-50",
+					isOpen ? "block" : "hidden",
+				)}
+				{...getMenuProps()}
+			>
 				<ComboBoxSearch getInputProps={getInputProps} />
 				{isOpen && rows}
-			</Content>
-		</ComboBoxContainer>
+			</ul>
+		</div>
 	);
 }

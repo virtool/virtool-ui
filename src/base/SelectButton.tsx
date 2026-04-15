@@ -1,24 +1,7 @@
-import { borderRadius, getBorder, getColor, getFontWeight } from "@app/theme";
+import { cn } from "@app/utils";
 import Icon from "@base/Icon";
 import type { LucideIcon } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
-import styled from "styled-components";
-
-const SelectTrigger = styled(SelectPrimitive.Trigger)`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 10px;
-    background-color: ${({ theme }) => getColor({ color: "white", theme })};
-    border: ${getBorder};
-    border-radius: ${borderRadius.sm};
-    font-weight: ${getFontWeight("thick")};
-    text-transform: capitalize;
-
-    svg {
-        margin-left: 5px;
-    }
-`;
 
 type SelectButtonProps = {
 	placeholder?: string;
@@ -34,9 +17,15 @@ export default function SelectButton({
 	id,
 }: SelectButtonProps) {
 	return (
-		<SelectTrigger className={className} id={id}>
+		<SelectPrimitive.Trigger
+			className={cn(
+				"flex justify-between items-center px-2.5 py-1.5 bg-white border border-gray-300 rounded font-medium capitalize [&_svg]:ml-1",
+				className,
+			)}
+			id={id}
+		>
 			<SelectPrimitive.Value placeholder={placeholder} />
 			<Icon icon={LucideIcon} />
-		</SelectTrigger>
+		</SelectPrimitive.Trigger>
 	);
 }

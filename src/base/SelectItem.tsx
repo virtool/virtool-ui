@@ -1,39 +1,18 @@
-import { getColor, getFontSize, getFontWeight } from "@app/theme";
 import { Select as SelectPrimitive } from "radix-ui";
-import styled from "styled-components";
-
-const StyledSelectItem = styled(SelectPrimitive.Item)`
-    font-size: ${getFontSize("md")};
-    font-weight: ${getFontWeight("thick")};
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 5px 35px 5px 25px;
-    position: relative;
-    user-select: none;
-    margin-bottom: 5px;
-    text-transform: capitalize;
-
-    &:hover {
-        background-color: ${({ theme }) =>
-					getColor({ color: "greyHover", theme })};
-        border: 0;
-    }
-`;
-
-const Description = styled.div`
-    font-size: ${getFontSize("sm")};
-    font-weight: ${getFontWeight("normal")};
-    color: ${({ theme }) => getColor({ color: "greyDarkest", theme })};
-    margin-top: 5px;
-    white-space: pre-wrap;
-`;
 
 export default function SelectItem({ value, children, description }) {
 	return (
-		<StyledSelectItem value={value} key={value}>
+		<SelectPrimitive.Item
+			className="text-sm font-medium flex flex-col items-start py-1.5 pr-9 pl-6 relative select-none mb-1 capitalize hover:bg-gray-50 hover:border-0"
+			value={value}
+			key={value}
+		>
 			<SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-			{description && <Description>{description}</Description>}
-		</StyledSelectItem>
+			{description && (
+				<div className="text-xs font-normal text-gray-600 mt-1 whitespace-pre-wrap">
+					{description}
+				</div>
+			)}
+		</SelectPrimitive.Item>
 	);
 }
