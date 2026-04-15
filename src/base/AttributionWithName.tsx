@@ -1,35 +1,24 @@
 import { capitalize } from "es-toolkit";
-import styled from "styled-components";
 import InitialIcon from "./InitialIcon";
 
-type UnstyledAttributionWithNameProps = {
+type AttributionWithNameProps = {
 	className?: string;
 	user: string;
 	verb?: string;
 };
 
-function UnstyledAttributionWithName({
+export default function AttributionWithName({
 	className = "",
 	user,
 	verb = "created",
-}: UnstyledAttributionWithNameProps) {
+}: AttributionWithNameProps) {
 	return (
-		<span className={className}>
+		<span className={`inline-flex items-center ${className}`}>
 			{capitalize(verb)} by{" "}
-			{user ? <InitialIcon size="md" handle={user} /> : null} {user}
+			{user ? (
+				<InitialIcon size="md" handle={user} className="mr-0.5 ml-1.5" />
+			) : null}{" "}
+			{user}
 		</span>
 	);
 }
-
-const AttributionWithName = styled(UnstyledAttributionWithName)`
-    align-items: center;
-    display: inline-flex;
-    font-size: inherit;
-
-    .InitialIcon {
-        margin-right: 3px;
-        margin-left: 6px;
-    }
-`;
-
-export default AttributionWithName;

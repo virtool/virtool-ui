@@ -1,12 +1,5 @@
 import type { ElementType, ReactNode, Ref } from "react";
-import styled from "styled-components";
 import Input from "./Input";
-
-const StyledTextArea = styled(Input)`
-    height: 220px;
-    resize: vertical;
-    overflow-y: scroll;
-`;
 
 type TextAreaProps = {
 	"aria-label"?: string;
@@ -24,5 +17,12 @@ type TextAreaProps = {
 };
 
 export default function TextArea({ ref, ...props }: TextAreaProps) {
-	return <StyledTextArea as="textarea" {...props} ref={ref} />;
+	return (
+		<Input
+			as="textarea"
+			className="h-56 resize-y overflow-y-scroll"
+			{...props}
+			ref={ref}
+		/>
+	);
 }
