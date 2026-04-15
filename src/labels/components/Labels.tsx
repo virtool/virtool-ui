@@ -5,16 +5,9 @@ import NoneFoundSection from "@base/NoneFoundSection";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderSubtitle from "@base/ViewHeaderSubtitle";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import styled from "styled-components";
 import { useFetchLabels } from "../queries";
 import { CreateLabel } from "./CreateLabel";
 import { LabelItem } from "./LabelItem";
-
-const LabelsHeader = styled(ViewHeader)`
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-`;
 
 /**
  * Display and manage a list of labels
@@ -28,7 +21,7 @@ export function Labels() {
 
 	return (
 		<ContainerNarrow>
-			<LabelsHeader title="Labels">
+			<ViewHeader className="flex items-center justify-between" title="Labels">
 				<div>
 					<ViewHeaderTitle>Labels</ViewHeaderTitle>
 					<ViewHeaderSubtitle>
@@ -37,7 +30,7 @@ export function Labels() {
 				</div>
 
 				<CreateLabel />
-			</LabelsHeader>
+			</ViewHeader>
 
 			<BoxGroup>
 				{data.length ? (

@@ -10,27 +10,11 @@ import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useFetchOTU } from "@otus/queries";
 import { useFetchReference } from "@references/queries";
-import styled from "styled-components";
 import { Redirect, Route, Switch } from "wouter";
 import History from "./History/OtuHistory";
 import { OtuHeaderIcons } from "./OtuHeaderIcons";
 import OtuSection from "./OtuSection";
 import Schema from "./Schema/Schema";
-
-const OTUDetailTitle = styled(ViewHeaderTitle)`
-    align-items: baseline;
-    display: flex;
-
-    small {
-        color: ${(props) => props.theme.color.greyDark};
-        font-weight: 600;
-        margin-left: 7px;
-
-        em {
-            font-weight: normal;
-        }
-    }
-`;
 
 /**
  * Displays the details of an OTU.
@@ -54,8 +38,11 @@ export default function OtuDetail() {
 	return (
 		<>
 			<ViewHeader title={name}>
-				<OTUDetailTitle>
-					{name} <small>{abbreviation || <em>No Abbreviation</em>}</small>
+				<ViewHeaderTitle className="items-baseline">
+					{name}{" "}
+					<small className="text-gray-500 font-semibold ml-1.5">
+						{abbreviation || <em className="font-normal">No Abbreviation</em>}
+					</small>
 					<ViewHeaderIcons>
 						<a href={`/api/otus/${id}.fa`} download>
 							Download FASTA
@@ -67,7 +54,7 @@ export default function OtuDetail() {
 							abbreviation={abbreviation}
 						/>
 					</ViewHeaderIcons>
-				</OTUDetailTitle>
+				</ViewHeaderTitle>
 				<p
 					className={cn(
 						"flex",

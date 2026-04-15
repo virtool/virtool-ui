@@ -1,5 +1,4 @@
 import { useDialogParam, useNaiveUrlSearchParam } from "@app/hooks";
-import { getFontSize, getFontWeight } from "@app/theme";
 import NoneFoundBox from "@base/NoneFoundBox";
 import ScrollArea from "@base/ScrollArea";
 import SubviewHeader from "@base/SubviewHeader";
@@ -7,34 +6,8 @@ import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useCurrentOtuContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import styled from "styled-components";
 import IsolateDetail from "./IsolateDetail";
 import IsolateItem from "./IsolateItem";
-
-const IsolateEditorContainer = styled.div`
-    display: flex;
-`;
-
-const IsolateEditorTitle = styled(SubviewHeaderTitle)`
-    align-items: center;
-    display: flex;
-
-    strong {
-        padding-right: 5px;
-    }
-
-    a {
-        align-self: flex-end;
-        font-size: ${getFontSize("md")};
-        font-weight: ${getFontWeight("thick")};
-        margin-left: auto;
-    }
-`;
-
-const AddIsolateLink = styled.a`
-    margin-left: auto;
-    cursor: pointer;
-`;
 
 /**
  * Displays a component for managing the isolates
@@ -67,13 +40,16 @@ export default function IsolateEditor() {
 	));
 
 	const addIsolateLink = canModify ? (
-		<AddIsolateLink onClick={() => setOpenAddIsolate(true)}>
+		<a
+			className="ml-auto cursor-pointer self-end text-sm font-medium"
+			onClick={() => setOpenAddIsolate(true)}
+		>
 			Add Isolate
-		</AddIsolateLink>
+		</a>
 	) : null;
 
 	const body = isolateComponents.length ? (
-		<IsolateEditorContainer>
+		<div className="flex">
 			<ScrollArea>{isolateComponents}</ScrollArea>
 			<IsolateDetail
 				canModify={canModify}
@@ -82,7 +58,7 @@ export default function IsolateEditor() {
 				allowedSourceTypes={source_types}
 				restrictSourceTypes={restrict_source_types}
 			/>
-		</IsolateEditorContainer>
+		</div>
 	) : (
 		<NoneFoundBox noun="isolates" />
 	);
@@ -90,13 +66,13 @@ export default function IsolateEditor() {
 	return (
 		<>
 			<SubviewHeader>
-				<IsolateEditorTitle>
+				<SubviewHeaderTitle className="flex items-center">
 					Isolates{" "}
 					<ViewHeaderTitleBadge>
 						{isolateComponents.length}
 					</ViewHeaderTitleBadge>
 					{addIsolateLink}
-				</IsolateEditorTitle>
+				</SubviewHeaderTitle>
 			</SubviewHeader>
 			{body}
 		</>
