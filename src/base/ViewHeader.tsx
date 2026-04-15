@@ -1,12 +1,5 @@
+import { cn } from "@app/utils";
 import type { ReactNode } from "react";
-import styled from "styled-components";
-
-const StyledViewHeader = styled.header`
-    display: block;
-    margin: 10px 0 20px;
-`;
-
-StyledViewHeader.displayName = "StyledViewHeader";
 
 type ViewHeaderProps = {
 	children?: ReactNode;
@@ -20,9 +13,9 @@ export default function ViewHeader({
 	children,
 }: ViewHeaderProps) {
 	return (
-		<StyledViewHeader className={className}>
+		<header className={cn("mt-2.5 mb-5", className)}>
 			<title>{title}</title>
 			{children}
-		</StyledViewHeader>
+		</header>
 	);
 }

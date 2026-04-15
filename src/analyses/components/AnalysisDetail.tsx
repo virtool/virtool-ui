@@ -10,7 +10,6 @@ import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
 import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import { useFetchSample } from "@samples/queries";
 import { CircleAlert } from "lucide-react";
-import styled from "styled-components";
 import { useGetAnalysis } from "../queries";
 import type {
 	FormattedIimiAnalysis,
@@ -19,12 +18,6 @@ import type {
 } from "../types";
 import { IimiViewer } from "./Iimi/IimiViewer";
 import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";
-
-const UnsupportedAnalysis = styled(Box)`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
 
 /** Base component viewing all supported analysis */
 export default function AnalysisDetail() {
@@ -68,10 +61,10 @@ export default function AnalysisDetail() {
 		content = <IimiViewer detail={analysis as FormattedIimiAnalysis} />;
 	} else {
 		return (
-			<UnsupportedAnalysis>
+			<Box className="flex justify-center items-center">
 				<CircleAlert className="mr-1" />
 				Workflow not supported.
-			</UnsupportedAnalysis>
+			</Box>
 		);
 	}
 
