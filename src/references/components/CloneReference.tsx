@@ -13,16 +13,6 @@ import { useCloneReference } from "@references/queries";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type { ReferenceMinimal } from "references/types";
-import styled from "styled-components";
-
-const ReferenceBox = styled(Box)`
-    display: flex;
-    align-items: center;
-
-    span:last-child {
-        margin-left: auto;
-    }
-`;
 
 type FormValues = {
 	name: string;
@@ -84,14 +74,15 @@ export default function CloneReference({ references }: CloneReferenceProps) {
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<PseudoLabel>Selected reference</PseudoLabel>
 					{reference && (
-						<ReferenceBox>
+						<Box className="flex items-center">
 							<strong>{reference.name}</strong>
 							<Badge className="ml-1.5">{reference.otu_count} OTUs</Badge>
 							<Attribution
+								className="ml-auto"
 								time={reference.created_at}
 								user={reference.user.handle}
 							/>
-						</ReferenceBox>
+						</Box>
 					)}
 					<InputGroup>
 						<InputLabel htmlFor="name">Name</InputLabel>

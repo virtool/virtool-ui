@@ -8,7 +8,6 @@ import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import { Molecule, type OtuSegment } from "@otus/types";
 import { Controller, useForm } from "react-hook-form";
-import styled from "styled-components";
 
 const moleculeTypes = [
 	"",
@@ -19,12 +18,6 @@ const moleculeTypes = [
 	Molecule.ss_rna,
 	Molecule.ds_rna,
 ];
-
-const SegmentFormBody = styled.div`
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    grid-column-gap: ${(props) => props.theme.gap.column};
-`;
 
 type FormValues = {
 	segmentName: string;
@@ -73,7 +66,7 @@ export default function SegmentForm({
 
 	return (
 		<form onSubmit={handleSubmit((values) => onSubmit({ ...values }))}>
-			<SegmentFormBody>
+			<div className="grid gap-4" style={{ gridTemplateColumns: "3fr 1fr" }}>
 				<InputGroup>
 					<InputLabel htmlFor="name">Name</InputLabel>
 					<InputSimple
@@ -111,7 +104,7 @@ export default function SegmentForm({
 				<DialogFooter>
 					<SaveButton />
 				</DialogFooter>
-			</SegmentFormBody>
+			</div>
 		</form>
 	);
 }

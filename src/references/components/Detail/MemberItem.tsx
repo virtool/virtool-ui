@@ -1,33 +1,14 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import Button from "@base/Button";
 import InitialIcon from "@base/InitialIcon";
-import styled from "styled-components";
-
-const StyledMemberItemIcon = styled.div`
-    align-items: center;
-    display: flex;
-    padding-right: 8px;
-`;
 
 function MemberItemIcon({ handle }) {
 	return (
-		<StyledMemberItemIcon>
+		<div className="flex items-center pr-2">
 			<InitialIcon handle={handle} size="lg" />
-		</StyledMemberItemIcon>
+		</div>
 	);
 }
-
-const MemberItemButtons = styled.span`
-    align-items: center;
-    display: flex;
-    gap: 4px;
-    margin-left: auto;
-`;
-
-const StyledMemberItem = styled(BoxGroupSection)`
-    align-items: center;
-    display: flex;
-`;
 
 export type MemberItemProps = {
 	/** Whether the current user can modify members in the list */
@@ -57,19 +38,19 @@ export default function MemberItem({
 	onRemove,
 }: MemberItemProps) {
 	return (
-		<StyledMemberItem>
+		<BoxGroupSection className="flex items-center">
 			<MemberItemIcon handle={handleOrName} />
 			{handleOrName}
 			{canModify && (
-				<MemberItemButtons>
+				<span className="flex items-center gap-1 ml-auto">
 					<Button onClick={() => onEdit(id)} size="small">
 						Edit
 					</Button>
 					<Button onClick={() => onRemove(id)} size="small" color="red">
 						Remove
 					</Button>
-				</MemberItemButtons>
+				</span>
 			)}
-		</StyledMemberItem>
+		</BoxGroupSection>
 	);
 }

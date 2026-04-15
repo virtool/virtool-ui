@@ -8,13 +8,8 @@ import InputSimple from "@base/InputSimple";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import SaveButton from "@base/SaveButton";
 import { Controller, useForm } from "react-hook-form";
-import styled from "styled-components";
 import { UploadBar } from "@/uploads/components/UploadBar";
 import { useImportReference, useUploadReference } from "../queries";
-
-const ImportReferenceUpload = styled.div`
-    margin-bottom: 15px;
-`;
 
 export default function ImportReference() {
 	const navigate = useNavigate();
@@ -57,7 +52,7 @@ export default function ImportReference() {
 				name="upload"
 				rules={{ required: true }}
 				render={({ field: { onChange } }) => (
-					<ImportReferenceUpload>
+					<div className="mb-4">
 						<ProgressBarAffixed color="green" now={progress} />
 						<UploadBar
 							message={uploadBarMessage}
@@ -72,7 +67,7 @@ export default function ImportReference() {
 							{errors.upload?.type === "required" &&
 								"A reference file must be uploaded"}
 						</InputError>
-					</ImportReferenceUpload>
+					</div>
 				)}
 			/>
 

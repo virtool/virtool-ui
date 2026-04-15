@@ -8,6 +8,7 @@ type BoxGroupSectionProps = {
 	className?: string;
 	disabled?: boolean;
 	onClick?: () => void;
+	style?: React.CSSProperties;
 };
 
 export default function BoxGroupSection({

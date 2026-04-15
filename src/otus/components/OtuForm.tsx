@@ -5,13 +5,6 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
-
-const OtuFormBody = styled.div`
-    display: grid;
-    grid-template-columns: 9fr 4fr;
-    grid-column-gap: ${(props) => props.theme.gap.column};
-`;
 
 type FormValues = {
 	name: string;
@@ -46,7 +39,7 @@ export default function OtuForm({
 
 	return (
 		<form onSubmit={handleSubmit((values) => onSubmit({ ...values }))}>
-			<OtuFormBody>
+			<div className="grid gap-4" style={{ gridTemplateColumns: "9fr 4fr" }}>
 				<InputGroup>
 					<InputLabel htmlFor="name">Name</InputLabel>
 					<InputSimple
@@ -60,7 +53,7 @@ export default function OtuForm({
 					<InputLabel htmlFor="abbreviation">Abbreviation</InputLabel>
 					<InputSimple id="abbreviation" {...register("abbreviation")} />
 				</InputGroup>
-			</OtuFormBody>
+			</div>
 			<DialogFooter>
 				<SaveButton />
 			</DialogFooter>

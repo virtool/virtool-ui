@@ -4,12 +4,6 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import TextArea from "@base/TextArea";
 import { useFormContext } from "react-hook-form";
-import styled from "styled-components";
-
-const SequenceFieldTextArea = styled(TextArea)`
-    font-family: ${(props) => props.theme.fontFamily.monospace};
-    text-transform: uppercase;
-`;
 
 /**
  * Displays the sequence field of a form.
@@ -26,7 +20,8 @@ export default function SequenceField() {
 			<InputLabel htmlFor="sequence">
 				Sequence <Badge>{watch("sequence")?.length}</Badge>
 			</InputLabel>
-			<SequenceFieldTextArea
+			<TextArea
+				className="font-mono uppercase"
 				id="sequence"
 				{...register("sequence", {
 					required: "Required Field",

@@ -4,11 +4,6 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import TextArea from "@base/TextArea";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
-import styled from "styled-components";
-
-const StyledInputGroup = styled(InputGroup)`
-    padding-bottom: 0;
-`;
 
 export enum ReferenceFormMode {
 	edit = "edit",
@@ -47,14 +42,14 @@ export function ReferenceForm({ errors, mode, register }: ReferenceFormProps) {
 
 	return (
 		<>
-			<StyledInputGroup>
+			<InputGroup className="pb-0">
 				<InputLabel htmlFor="name">Name</InputLabel>
 				<InputSimple
 					id="name"
 					{...register("name", { required: "Required Field" })}
 				/>
 				<InputError>{errors.name?.message}</InputError>
-			</StyledInputGroup>
+			</InputGroup>
 
 			{organismComponent}
 

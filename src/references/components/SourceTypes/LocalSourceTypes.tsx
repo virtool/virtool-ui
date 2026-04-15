@@ -1,6 +1,5 @@
 import SettingsCheckbox from "@administration/components/SettingsCheckbox";
 import { usePathParams } from "@app/hooks";
-import { getColor } from "@app/theme";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupDisabled from "@base/BoxGroupDisabled";
 import BoxGroupHeader from "@base/BoxGroupHeader";
@@ -19,44 +18,7 @@ import {
 	useUpdateReference,
 } from "@references/queries";
 import { Undo2 } from "lucide-react";
-import styled from "styled-components";
 import SourceTypeList from "./SourceTypeList";
-
-const SourceTypeBoxGroupSection = styled(BoxGroupSection)`
-    button {
-        width: 60px;
-        height: 34px;
-        margin-left: auto;
-        text-align: center;
-        justify-content: center;
-        margin-right: 5px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 3px;
-    }
-`;
-
-const SourceTypeInput = styled.span`
-    display: flex;
-    flex: 1 0 auto;
-    margin-right: 10px;
-    flex-direction: column;
-`;
-
-const SourceTypesUndo = styled(BoxGroupSection)`
-    display: flex;
-    background: ${(props) =>
-			getColor({ color: "greyHover", theme: props.theme })};
-    align-items: center;
-    svg {
-        margin-left: auto;
-    }
-    span > strong {
-        text-transform: capitalize;
-    }
-`;
 
 export function LocalSourceTypes() {
 	const { refId } = usePathParams<{ refId: string }>();
@@ -118,31 +80,40 @@ export function LocalSourceTypes() {
 				<BoxGroupDisabled disabled={!restrictSourceTypes}>
 					<SourceTypeList sourceTypes={sourceTypes} onRemove={handleRemove} />
 					{lastRemoved && (
-						<SourceTypesUndo>
+						<BoxGroupSection className="flex items-center bg-gray-50">
 							<span>
-								The source type <strong>{lastRemoved}</strong> was just removed.
+								The source type{" "}
+								<strong className="capitalize">{lastRemoved}</strong> was just
+								removed.
 							</span>
 							<IconButton
+								className="ml-auto"
 								IconComponent={Undo2}
 								tip="undo"
 								onClick={handleUndo}
 							/>
-						</SourceTypesUndo>
+						</BoxGroupSection>
 					)}
-					<SourceTypeBoxGroupSection>
+					<BoxGroupSection>
 						<form onSubmit={handleSubmit}>
-							<label htmlFor="sourceType">Add Source Type </label>
+							<label className="block mb-1" htmlFor="sourceType">
+								Add Source Type{" "}
+							</label>
 							<InputContainer className="flex mb-[5px]">
-								<SourceTypeInput>
+								<span className="flex flex-auto mr-2.5 flex-col">
 									<InputSimple id="sourceType" {...register("sourceType")} />
 									<InputError>{error}</InputError>
-								</SourceTypeInput>
-								<Button color="green" type="submit">
+								</span>
+								<Button
+									className="w-15 h-8.5 ml-auto text-center justify-center mr-1"
+									color="green"
+									type="submit"
+								>
 									Add
 								</Button>
 							</InputContainer>
 						</form>
-					</SourceTypeBoxGroupSection>
+					</BoxGroupSection>
 				</BoxGroupDisabled>
 			</BoxGroup>
 		</section>
