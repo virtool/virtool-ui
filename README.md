@@ -35,17 +35,3 @@ Use this guide to create your environment when you are contributing to `virtool/
     ```
      tilt up -- --to-edit ui
     ```
-
-### Storybook
-
-Storybook is used to develop and test UI components in isolation. It is also used to
-document components and their use cases.
-
-1. Start storybook
-
-    ```
-    npm run storybook
-    ```
-
-2. Depending on system configuration the address will either open automatically or the
-   address must be manually entered by the user.
