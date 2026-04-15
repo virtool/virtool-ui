@@ -11,28 +11,8 @@ import SaveButton from "@base/SaveButton";
 import type { User } from "@users/types";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import styled from "styled-components";
 import AdministratorRoleSelect from "./AdministratorRoleSelect";
 import AdministratorUserSelect from "./AdministratorUserSelect";
-
-const RoleSelectContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-
-    button {
-        flex-grow: 1;
-        padding: 10px 10px;
-    }
-`;
-
-const UserSelectContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    button {
-        flex-grow: 1;
-        padding: 10px 10px;
-    }
-`;
 
 type FormInputValues = {
 	role: AdministratorRoleName;
@@ -68,7 +48,7 @@ export default function AdministratorForm({
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<InputGroup>
 				<InputLabel htmlFor="user">User</InputLabel>
-				<UserSelectContainer>
+				<div className="flex flex-col [&>button]:grow [&>button]:p-2.5">
 					<Controller
 						render={({ field: { onChange, value } }) => (
 							<AdministratorUserSelect
@@ -84,12 +64,12 @@ export default function AdministratorForm({
 						control={control}
 						rules={{ required: "A user must be selected" }}
 					/>
-				</UserSelectContainer>
+				</div>
 				<InputError>{errors.user?.message}</InputError>
 			</InputGroup>
 			<InputGroup>
 				<InputLabel htmlFor="role">Role</InputLabel>
-				<RoleSelectContainer>
+				<div className="flex flex-col [&>button]:grow [&>button]:p-2.5">
 					<Controller
 						render={({ field: { onChange, value } }) => (
 							<AdministratorRoleSelect
@@ -104,7 +84,7 @@ export default function AdministratorForm({
 						rules={{ required: "A role must be selected" }}
 					/>
 					<InputError>{errors.role?.message}</InputError>
-				</RoleSelectContainer>
+				</div>
 			</InputGroup>
 			<SaveButton />
 		</form>

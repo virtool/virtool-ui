@@ -202,3 +202,50 @@ body {
 		font-size: var(--text-sm);
 	}
 }
+
+.quality-chart {
+	.axis path,
+	.axis line {
+		fill: none;
+		stroke: var(--color-black);
+		shape-rendering: crispEdges;
+	}
+
+	.axis-label {
+		text-anchor: middle;
+	}
+
+	.graph-line {
+		fill: none;
+		shape-rendering: geometricPrecision;
+		stroke-width: 2px;
+	}
+
+	.graph-line-blue {
+		stroke: var(--color-blue-600);
+	}
+
+	.graph-line-green {
+		stroke: var(--color-green-600);
+	}
+
+	.graph-line-yellow {
+		stroke: var(--color-yellow-400);
+	}
+
+	.graph-line-red {
+		stroke: var(--color-red-600);
+	}
+
+	.quality-area {
+		stroke: none;
+	}
+
+	.quality-area-yellow {
+		fill: var(--color-yellow-50);
+	}
+
+	.quality-area-green {
+		fill: var(--color-green-100);
+	}
+}

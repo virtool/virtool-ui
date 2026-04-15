@@ -1,18 +1,5 @@
-import { getColor, getFontSize, theme } from "@app/theme";
 import Attribution from "@base/Attribution";
 import AttributionWithName from "@base/AttributionWithName";
-import styled from "styled-components";
-
-/**
- * Default attribution used when creation details are unknown
- */
-const StyledNoneFoundAttribution = styled.div`
-    color: ${getColor({ color: "grey", theme })};
-    font-size: ${getFontSize("sm")};
-    font-style: italic;
-    min-height: 20px;
-    top: 50%;
-`;
 
 type SubtractionAttributionProps = {
 	/* The user handle */
@@ -35,9 +22,8 @@ export function SubtractionAttribution({
 		return <AttributionWithName user={handle} />;
 	}
 	return (
-		<StyledNoneFoundAttribution>
-			{" "}
+		<div className="top-1/2 min-h-5 text-xs italic text-gray-400">
 			Creator and timestamp unavailable
-		</StyledNoneFoundAttribution>
+		</div>
 	);
 }

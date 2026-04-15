@@ -1,35 +1,6 @@
-import { getFontSize } from "@app/theme";
 import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
 import type { ReactNode } from "react";
-import styled from "styled-components";
-
-const SettingsCheckboxContainer = styled.div`
-    padding: 10px;
-`;
-
-const SettingsCheckboxChildren = styled.div`
-    padding-right: 20px;
-`;
-
-const StyledSettingsCheckbox = styled(Box)`
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    padding: 15px 20px 12px 15px;
-
-    h2 {
-        font-size: ${(props) => props.theme.fontSize.lg};
-        font-weight: ${(props) => props.theme.fontWeight.thick};
-        margin: 0 0 3px;
-        padding-bottom: 5px;
-    }
-
-    small {
-        color: ${(props) => props.theme.color.greyDarkest};
-        font-size: ${getFontSize("md")};
-    }
-`;
 
 type SettingsCheckboxProps = {
 	/** Content to be rendered within the checkbox */
@@ -55,11 +26,11 @@ export default function SettingsCheckbox({
 	onToggle,
 }: SettingsCheckboxProps) {
 	return (
-		<StyledSettingsCheckbox>
-			<SettingsCheckboxChildren>{children}</SettingsCheckboxChildren>
-			<SettingsCheckboxContainer>
+		<Box className="flex items-center justify-between px-5 pt-4 pb-3 [&_h2]:mb-0.5 [&_h2]:pb-1 [&_h2]:text-base [&_h2]:font-medium [&_small]:text-sm [&_small]:text-gray-600">
+			<div className="pr-5">{children}</div>
+			<div className="p-2.5">
 				<Checkbox checked={enabled} id={id} onClick={onToggle} />
-			</SettingsCheckboxContainer>
-		</StyledSettingsCheckbox>
+			</div>
+		</Box>
 	);
 }

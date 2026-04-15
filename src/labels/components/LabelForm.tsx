@@ -1,4 +1,3 @@
-import { getFontWeight } from "@app/theme";
 import Box from "@base/Box";
 import Button from "@base/Button";
 import Color from "@base/Color";
@@ -10,15 +9,6 @@ import InputSimple from "@base/InputSimple";
 import SampleLabel from "@samples/components/Label/SampleLabel";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
-
-const LabelFormPreview = styled(Box)`
-    padding: 10px;
-`;
-
-const LabelFormPreviewLabel = styled.p`
-    font-weight: ${getFontWeight("thick")};
-`;
 
 type LabelFormProps = {
 	color?: string;
@@ -82,13 +72,13 @@ export function LabelForm({
 					onChange={(color) => setColor(color)}
 				/>
 			</InputGroup>
-			<LabelFormPreviewLabel>Preview</LabelFormPreviewLabel>
-			<LabelFormPreview>
+			<p className="font-medium">Preview</p>
+			<Box className="p-2.5">
 				<SampleLabel
 					color={newColor || "#D1D5DB"}
 					name={watch("name") || "Preview"}
 				/>
-			</LabelFormPreview>
+			</Box>
 			<DialogFooter>
 				<Button color="blue" type="submit">
 					Save

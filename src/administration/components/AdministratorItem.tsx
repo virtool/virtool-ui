@@ -3,37 +3,11 @@ import type {
 	AdministratorRole,
 	AdministratorRoleName,
 } from "@administration/types";
-import { getFontSize, getFontWeight } from "@app/theme";
 import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
 import type { User } from "@users/types";
 import { Trash } from "lucide-react";
-import styled from "styled-components";
 import AdministratorRoleSelect from "./AdministratorRoleSelect";
-
-const StyledAdministrator = styled.div`
-    align-items: center;
-    box-shadow: ${(props) => props.theme.boxShadow.md};
-    display: flex;
-    margin-bottom: 10px;
-
-    svg {
-        margin-right: 10px;
-    }
-
-    button {
-        margin-left: auto;
-    }
-
-    button:last-child {
-        margin-left: 10px;
-    }
-`;
-
-const UserHandle = styled.span`
-    font-weight: ${getFontWeight("thick")};
-    font-size: ${getFontSize("lg")};
-`;
 
 type AdministratorItemProps = {
 	roles: AdministratorRole[];
@@ -51,9 +25,12 @@ export default function AdministratorItem({
 	}
 
 	return (
-		<StyledAdministrator key={user.id}>
+		<div
+			className="mb-2.5 flex items-center shadow-md [&>button]:ml-auto [&>button:last-child]:ml-2.5 [&>svg]:mr-2.5"
+			key={user.id}
+		>
 			<InitialIcon handle={user.handle} size="lg" />
-			<UserHandle>{user.handle}</UserHandle>
+			<span className="text-base font-medium">{user.handle}</span>
 			<AdministratorRoleSelect
 				id={`role-${user.id}`}
 				onChange={onChange}
@@ -66,6 +43,6 @@ export default function AdministratorItem({
 				tip="remove administrator role"
 				onClick={() => onChange(null)}
 			/>
-		</StyledAdministrator>
+		</div>
 	);
 }

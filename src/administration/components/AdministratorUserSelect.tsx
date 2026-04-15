@@ -1,30 +1,13 @@
-import { getFontSize, getFontWeight } from "@app/theme";
 import ComboBox from "@base/ComboBox";
 import InitialIcon from "@base/InitialIcon";
 import type { User } from "@users/types";
-import styled from "styled-components";
-
-const UserItem = styled.div`
-    font-size: ${getFontSize("md")};
-    font-weight: ${getFontWeight("thick")};
-    display: flex;
-    align-items: center;
-    position: relative;
-    user-select: none;
-
-    text-transform: capitalize;
-
-    span {
-        margin-left: 5px;
-    }
-`;
 
 function renderRow(user) {
 	return (
-		<UserItem aria-label={user.handle}>
+		<div className="relative flex items-center text-sm font-medium capitalize select-none">
 			<InitialIcon handle={user.handle} size="md" />
-			<span>{user.handle}</span>
-		</UserItem>
+			<span className="ml-1">{user.handle}</span>
+		</div>
 	);
 }
 

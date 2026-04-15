@@ -1,28 +1,7 @@
 import { useDialogParam } from "@app/hooks";
 import Button from "@base/Button";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import styled from "styled-components";
 import { usePostDevCommand } from "../queries";
-
-export const DeveloperCommand = styled.div`
-    align-items: center;
-    display: flex;
-    padding: 15px;
-`;
-
-export const DeveloperCommandLabel = styled.div`
-    h3 {
-        margin: 0 0 5px;
-    }
-
-    p {
-        margin: 0;
-    }
-`;
-
-export const DeveloperCommandControl = styled.div`
-    margin-left: auto;
-`;
 
 /**
  * Displays a dialog for developer commands
@@ -35,15 +14,15 @@ export default function DeveloperDialog() {
 		<Dialog open={openDev} onOpenChange={() => setOpenDev(false)}>
 			<DialogContent size="lg">
 				<DialogTitle>Developer</DialogTitle>
-				<DeveloperCommand>
-					<DeveloperCommandLabel>
+				<div className="flex items-center p-4">
+					<div className="[&>h3]:mb-1 [&>h3]:mt-0 [&>p]:m-0">
 						<h3>Clear Users</h3>
 						<p>
 							Remove existing users. You will be required to create a first
 							user.
 						</p>
-					</DeveloperCommandLabel>
-					<DeveloperCommandControl>
+					</div>
+					<div className="ml-auto">
 						<Button
 							color="red"
 							onClick={() =>
@@ -60,14 +39,14 @@ export default function DeveloperDialog() {
 						>
 							Clear Users
 						</Button>
-					</DeveloperCommandControl>
-				</DeveloperCommand>
-				<DeveloperCommand>
-					<DeveloperCommandLabel>
+					</div>
+				</div>
+				<div className="flex items-center p-4">
+					<div className="[&>h3]:mb-1 [&>h3]:mt-0 [&>p]:m-0">
 						<h3>Create Sample</h3>
 						<p>Creates a sample that is ready for use.</p>
-					</DeveloperCommandLabel>
-					<DeveloperCommandControl>
+					</div>
+					<div className="ml-auto">
 						<Button
 							color="red"
 							onClick={() =>
@@ -78,14 +57,14 @@ export default function DeveloperDialog() {
 						>
 							Create Sample
 						</Button>
-					</DeveloperCommandControl>
-				</DeveloperCommand>
-				<DeveloperCommand>
-					<DeveloperCommandLabel>
+					</div>
+				</div>
+				<div className="flex items-center p-4">
+					<div className="[&>h3]:mb-1 [&>h3]:mt-0 [&>p]:m-0">
 						<h3>Create Subtraction</h3>
 						<p>Creates a subtraction that is ready for use.</p>
-					</DeveloperCommandLabel>
-					<DeveloperCommandControl>
+					</div>
+					<div className="ml-auto">
 						<Button
 							color="red"
 							onClick={() =>
@@ -96,14 +75,14 @@ export default function DeveloperDialog() {
 						>
 							Create Subtraction
 						</Button>
-					</DeveloperCommandControl>
-				</DeveloperCommand>
-				<DeveloperCommand>
-					<DeveloperCommandLabel>
+					</div>
+				</div>
+				<div className="flex items-center p-4">
+					<div className="[&>h3]:mb-1 [&>h3]:mt-0 [&>p]:m-0">
 						<h3>Create Subtraction</h3>
 						<p>Creates a subtraction that is ready for use.</p>
-					</DeveloperCommandLabel>
-					<DeveloperCommandControl>
+					</div>
+					<div className="ml-auto">
 						<Button
 							color="red"
 							onClick={() =>
@@ -114,17 +93,17 @@ export default function DeveloperDialog() {
 						>
 							Create Subtraction
 						</Button>
-					</DeveloperCommandControl>
-				</DeveloperCommand>
-				<DeveloperCommand>
-					<DeveloperCommandLabel>
+					</div>
+				</div>
+				<div className="flex items-center p-4">
+					<div className="[&>h3]:mb-1 [&>h3]:mt-0 [&>p]:m-0">
 						<h3>Force Delete Jobs</h3>
 						<p>
 							Forces cancellation, then deletion of all jobs regardless of
 							status.
 						</p>
-					</DeveloperCommandLabel>
-					<DeveloperCommandControl>
+					</div>
+					<div className="ml-auto">
 						<Button
 							color="red"
 							onClick={() =>
@@ -135,8 +114,8 @@ export default function DeveloperDialog() {
 						>
 							Force Delete Jobs
 						</Button>
-					</DeveloperCommandControl>
-				</DeveloperCommand>
+					</div>
+				</div>
 			</DialogContent>
 		</Dialog>
 	);

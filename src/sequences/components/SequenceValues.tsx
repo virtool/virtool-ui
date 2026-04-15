@@ -1,49 +1,37 @@
-import styled from "styled-components";
+import { cn } from "@app/utils";
 
-export const SequenceValue = styled.div`
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
+type SequenceValueProps = {
+	className?: string;
+	children: React.ReactNode;
+};
 
-    p,
-    small {
-        margin: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    small {
-        color: ${(props) => props.theme.color.greyDark};
-        font-size: ${(props) => props.theme.fontSize.sm};
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-`;
-
-export const StyledSequenceTitleValue = styled(SequenceValue)`
-    flex: 1;
-`;
-
-export function SequenceTitleValue({ label, value }) {
+function SequenceValue({ className, children }: SequenceValueProps) {
 	return (
-		<StyledSequenceTitleValue>
-			<p>{value}</p>
-			<small>{label}</small>
-		</StyledSequenceTitleValue>
+		<div
+			className={cn(
+				"flex min-w-0 flex-col [&>p]:m-0 [&>p]:overflow-hidden [&>p]:text-ellipsis [&>p]:whitespace-nowrap [&>small]:m-0 [&>small]:overflow-hidden [&>small]:text-ellipsis [&>small]:whitespace-nowrap [&>small]:text-xs [&>small]:font-bold [&>small]:uppercase [&>small]:text-gray-500",
+				className,
+			)}
+		>
+			{children}
+		</div>
 	);
 }
 
-const StyledSequenceAccessionValue = styled(SequenceValue)`
-    width: 100px;
-    margin-right: 20px;
-`;
+export function SequenceTitleValue({ label, value }) {
+	return (
+		<SequenceValue className="flex-1">
+			<p>{value}</p>
+			<small>{label}</small>
+		</SequenceValue>
+	);
+}
 
 export function SequenceAccessionValue({ accession }) {
 	return (
-		<StyledSequenceAccessionValue>
+		<SequenceValue className="mr-5 w-25">
 			<p>{accession}</p>
 			<small>ACCESSION</small>
-		</StyledSequenceAccessionValue>
+		</SequenceValue>
 	);
 }

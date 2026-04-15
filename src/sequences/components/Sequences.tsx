@@ -1,27 +1,14 @@
-import { getFontSize } from "@app/theme";
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import NoneFoundSection from "@base/NoneFoundSection";
 import { useCurrentOtuContext } from "@otus/queries";
 import type { OtuIsolate } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
-import styled from "styled-components";
 import CreateSequence from "./CreateSequence";
 import CreateSequenceLink from "./CreateSequenceLink";
 import RemoveSequence from "./RemoveSequence";
 import Sequence from "./Sequence";
 import SequenceEdit from "./SequenceEdit";
-
-const IsolateSequencesHeader = styled.label`
-    align-items: center;
-    display: flex;
-    font-weight: ${getFontSize("thick")};
-
-    strong {
-        font-size: ${getFontSize("lg")};
-        padding-right: 5px;
-    }
-`;
 
 type IsolateSequencesProps = {
 	/** The Isolate that is currently selected */
@@ -55,11 +42,11 @@ export default function Sequences({
 
 	return (
 		<>
-			<IsolateSequencesHeader>
-				<strong>Sequences</strong>
+			<label className="flex items-center font-medium">
+				<strong className="pr-1 text-base">Sequences</strong>
 				<Badge>{sequences.length}</Badge>
 				<CreateSequenceLink refId={reference.id} />
-			</IsolateSequencesHeader>
+			</label>
 
 			<BoxGroup>{sequenceComponents}</BoxGroup>
 

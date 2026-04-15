@@ -1,42 +1,9 @@
-import { getFontSize, getFontWeight } from "@app/theme";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import ProgressCircle, { sizes } from "@base/ProgressCircle";
 import { JobNested } from "@jobs/types";
-import styled from "styled-components";
 import type { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
-
-const StyledSubtractionItem = styled(BoxGroupSection)`
-    align-items: center;
-    display: grid;
-    grid-template-columns: 30% 30% 30% auto;
-    padding-bottom: 15px;
-    padding-top: 15px;
-    margin-left: auto;
-    line-height: 1;
-`;
-
-const SubtractionLink = styled(Link)`
-    font-size: ${getFontSize("lg")};
-    font-weight: ${getFontWeight("thick")};
-`;
-
-const ProgressTag = styled.span`
-    font-size: ${getFontSize("lg")};
-    font-weight: ${getFontWeight("thick")};
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    svg {
-        margin-right: 5px;
-    }
-`;
-
-const Attribution = styled.div`
-    display: flex;
-    justify-content: flex-start;
-`;
 
 /**
  * A condensed subtraction item for use in a list of subtractions
@@ -53,21 +20,23 @@ export function SubtractionItem({
 	const parsedJob = job && JobNested.parse(job);
 
 	return (
-		<StyledSubtractionItem>
-			<SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
+		<BoxGroupSection className="ml-auto grid items-center leading-none py-4 grid-cols-[30%_30%_30%_auto]">
+			<Link className="text-base font-medium" to={`/subtractions/${id}`}>
+				{name}
+			</Link>
 			<div>{nickname}</div>
-			<Attribution>
+			<div className="flex justify-start">
 				<SubtractionAttribution handle={user.handle} time={created_at} />
-			</Attribution>
+			</div>
 			{!ready && job && (
-				<ProgressTag>
+				<span className="flex items-center justify-end text-base font-medium [&>svg]:mr-1">
 					<ProgressCircle
 						size={sizes.md}
 						progress={parsedJob.progress}
 						state={parsedJob.state ?? "pending"}
 					/>
-				</ProgressTag>
+				</span>
 			)}
-		</StyledSubtractionItem>
+		</BoxGroupSection>
 	);
 }
