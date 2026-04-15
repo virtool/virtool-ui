@@ -24,6 +24,9 @@ React + TypeScript single-page application for Virtool, a bioinformatics platfor
 - Before committing: `npm run check` and `npm run typecheck`.
 - After changing tests: run the specific test file with `npx vitest run <path>`.
 - Full test suite only when asked or when changes are cross-cutting.
+- Always fix all lint errors and warnings. The main branch is guaranteed to pass
+  `npm run check` cleanly, so any issues are caused by your changes — never
+  dismiss them as pre-existing.
 
 ## Architecture
 

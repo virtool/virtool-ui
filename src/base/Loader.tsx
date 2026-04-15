@@ -1,37 +1,17 @@
-import { getColor } from "@app/theme";
-import styled, { keyframes } from "styled-components";
+import { cn } from "@app/utils";
 
-const rotate = keyframes`
-    0% {
-        transform: rotate(0deg);
-    }
-    50% { 
-        transform: rotate(180deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-`;
+const colorToClass: Record<string, string> = {
+	blue: "border-blue-600",
+	green: "border-green-600",
+	grey: "border-gray-400",
+	greyDark: "border-gray-500",
+	red: "border-red-600",
+};
 
-interface StyledLoaderProps {
-	size?: string;
-}
-
-const StyledLoader = styled.div<StyledLoaderProps>`
-    animation: ${rotate} 0.75s 0s infinite linear;
-    border: 2px solid ${getColor};
-    border-bottom-color: transparent !important;
-    border-radius: 100%;
-    background: transparent;
-    animation-fill-mode: both;
-    display: inline-block;
-    height: ${(props) => props.size};
-    width: ${(props) => props.size};
-`;
-
-interface LoaderProps extends StyledLoaderProps {
+interface LoaderProps {
 	className?: string;
 	color?: string;
+	size?: string;
 }
 
 export default function Loader({
@@ -40,13 +20,15 @@ export default function Loader({
 	size = "22px",
 }: LoaderProps) {
 	return (
-		<StyledLoader
+		<div
+			role="status"
 			aria-label="loading"
-			className={className}
-			color={color}
-			size={size}
-		>
-			<div />
-		</StyledLoader>
+			className={cn(
+				"animate-rotate inline-block rounded-full border-2 border-b-transparent",
+				colorToClass[color] || "border-gray-500",
+				className,
+			)}
+			style={{ width: size, height: size }}
+		/>
 	);
 }

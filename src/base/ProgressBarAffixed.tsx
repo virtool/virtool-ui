@@ -1,5 +1,10 @@
-import styled, { type DefaultTheme } from "styled-components";
-import { StyledProgress } from "./styled/StyledProgress";
+import { cn } from "@app/utils";
+
+const colorToClass: Record<string, string> = {
+	blue: "bg-blue-600",
+	green: "bg-green-600",
+	red: "bg-red-600",
+};
 
 interface ProgressBarAffixedProps {
 	bottom?: boolean;
@@ -8,45 +13,24 @@ interface ProgressBarAffixedProps {
 	now: number;
 }
 
-interface StyledProgressBarAffixedProps {
-	bottom?: boolean;
-	className?: string;
-	max: string;
-	theme: DefaultTheme;
-	value: number;
-}
-
-const StyledProgressBarAffixed = styled(
-	StyledProgress,
-)<StyledProgressBarAffixedProps>`
-    height: 5px;
-    left: 0;
-    margin: 0;
-    overflow: hidden;
-    position: absolute;
-    background-color: transparent;
-
-    ${(props) => (props.bottom ? "bottom" : "top")}: 0;
-
-    &::-webkit-progress-bar {
-        background-color: transparent;
-    }
-`;
-
-const ProgressBarAffixed = styled(
-	({ className, now, color, bottom }: ProgressBarAffixedProps) => {
-		return (
-			<StyledProgressBarAffixed
-				className={className}
-				max="100"
-				value={now}
-				color={color}
-				bottom={bottom}
+export default function ProgressBarAffixed({
+	bottom,
+	className,
+	color = "blue",
+	now,
+}: ProgressBarAffixedProps) {
+	return (
+		<div
+			className={cn(
+				"absolute left-0 m-0 h-1.5 w-full overflow-hidden",
+				bottom ? "bottom-0" : "top-0",
+				className,
+			)}
+		>
+			<div
+				className={cn("h-full", colorToClass[color] || "bg-blue-600")}
+				style={{ width: `${now}%` }}
 			/>
-		);
-	},
-)``;
-
-ProgressBarAffixed.displayName = "ProgressBarAffixed";
-
-export default ProgressBarAffixed;
+		</div>
+	);
+}

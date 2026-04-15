@@ -1,5 +1,4 @@
-import { sizes } from "@app/theme";
-import ProgressCircle from "@base/ProgressCircle";
+import ProgressCircle, { sizes } from "@base/ProgressCircle";
 import type { JobNested } from "@jobs/types";
 import { CircleCheck } from "lucide-react";
 

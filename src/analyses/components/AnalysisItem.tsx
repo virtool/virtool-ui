@@ -1,12 +1,12 @@
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoleName } from "@administration/types";
-import { getColor, getFontSize, getFontWeight, sizes } from "@app/theme";
+import { getColor, getFontSize, getFontWeight } from "@app/theme";
 import { getWorkflowDisplayName } from "@app/utils";
 import Attribution from "@base/Attribution";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import Link from "@base/Link";
-import ProgressCircle from "@base/ProgressCircle";
+import ProgressCircle, { sizes } from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
 import { Equal, EqualNot } from "lucide-react";
 import styled from "styled-components";
