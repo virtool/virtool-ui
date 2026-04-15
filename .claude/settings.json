@@ -38,7 +38,13 @@
       "Bash(npm run build*)",
       "Bash(npm run storybook*)",
       "Bash(npx vitest*)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "mcp__linear-virtool__get_*",
+      "mcp__linear-virtool__list_*",
+      "mcp__linear-virtool__search_*",
+      "mcp__linear-virtool__extract_*"
     ],
     "deny": [
       "Bash(rm -rf *)",
