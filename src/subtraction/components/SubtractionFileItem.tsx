@@ -1,18 +1,6 @@
 import Attribution from "@base/Attribution";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import type { UserNested } from "@users/types";
-import styled from "styled-components";
-
-type StyledSubtractionFileItemProps = {
-	error: string;
-};
-
-const StyledSubtractionFileItem = styled(
-	SelectBoxGroupSection,
-)<StyledSubtractionFileItemProps>`
-    display: flex;
-    justify-content: space-between;
-`;
 
 type SubtractionFileItemProps = {
 	/** Whether the file is selected */
@@ -44,13 +32,13 @@ export function SubtractionFileItem({
 	user,
 }: SubtractionFileItemProps) {
 	return (
-		<StyledSubtractionFileItem
+		<SelectBoxGroupSection
 			active={active}
+			className="flex justify-between"
 			onClick={() => onClick([id])}
-			error={error}
 		>
 			<strong>{name}</strong>
 			<Attribution user={user.handle} time={uploaded_at} />
-		</StyledSubtractionFileItem>
+		</SelectBoxGroupSection>
 	);
 }

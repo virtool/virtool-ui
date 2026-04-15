@@ -1,4 +1,3 @@
-import { fontWeight, getColor, getFontSize } from "@app/theme";
 import Link from "@base/Link";
 import SideBarSection from "@base/SideBarSection";
 import SidebarHeader from "@base/SidebarHeader";
@@ -6,26 +5,9 @@ import type { Label } from "@labels/types";
 import { useUpdateLabel } from "@samples/queries";
 import type { SampleMinimal } from "@samples/types";
 import { groupBy } from "es-toolkit";
-import styled from "styled-components";
 import SampleLabel from "../Label/SampleLabel";
 import SampleSidebarMultiselectList from "./SampleSidebarMultiselectList";
 import SampleSidebarSelector from "./SampleSidebarSelector";
-
-const SampleLabelsFooter = styled.div`
-    display: flex;
-    color: ${(props) => getColor({ theme: props.theme, color: "greyDarkest" })};
-
-    a {
-        margin-left: 5px;
-        font-size: ${getFontSize("md")};
-        font-weight: ${fontWeight.thick};
-    }
-`;
-
-const StyledSideBarSection = styled(SideBarSection)`
-    grid-row: 2;
-    align-self: start;
-`;
 
 function getSelectedLabels(document: SampleMinimal[]) {
 	const allLabels = document.flatMap((d) => d.labels);
@@ -57,7 +39,7 @@ export default function ManageLabels({
 	const onUpdateLabel = useUpdateLabel(selectedLabels, selectedSamples);
 
 	return (
-		<StyledSideBarSection>
+		<SideBarSection className="row-start-2 self-start">
 			<SidebarHeader>
 				Manage Labels
 				<SampleSidebarSelector
@@ -76,10 +58,10 @@ export default function ManageLabels({
 			</SidebarHeader>
 			<SampleSidebarMultiselectList items={selectedLabels} />
 			{Boolean(labels.length) || (
-				<SampleLabelsFooter>
+				<div className="flex text-gray-600 [&_a]:ml-1 [&_a]:text-sm [&_a]:font-medium">
 					No labels found. <Link to="/samples/labels">Create one</Link>.
-				</SampleLabelsFooter>
+				</div>
 			)}
-		</StyledSideBarSection>
+		</SideBarSection>
 	);
 }

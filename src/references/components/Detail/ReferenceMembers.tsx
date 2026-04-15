@@ -8,34 +8,10 @@ import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useRemoveReferenceUser } from "@references/queries";
 import type { ReferenceGroup, ReferenceUser } from "@references/types";
 import { AlertCircle } from "lucide-react";
-import styled from "styled-components";
 import AddReferenceGroup from "./AddReferenceGroup";
 import AddReferenceUser from "./AddReferenceUser";
 import EditReferenceMember from "./EditMember";
 import MemberItem from "./MemberItem";
-
-const NewMemberLink = styled.a`
-    cursor: pointer;
-    margin-left: auto;
-`;
-
-const NoMembers = styled(BoxGroupSection)`
-    align-items: center;
-    justify-content: center;
-    display: flex;
-
-    i {
-        padding-right: 3px;
-    }
-`;
-
-const ReferenceMembersHeader = styled(BoxGroupHeader)`
-    padding-bottom: 10px;
-
-    h2 {
-        text-transform: capitalize;
-    }
-`;
 
 type ReferenceMembersProps = {
 	/** The list of users or groups associated with the reference */
@@ -80,17 +56,20 @@ export default function ReferenceMembers({
 	return (
 		<>
 			<BoxGroup>
-				<ReferenceMembersHeader>
+				<BoxGroupHeader className="pb-2.5 [&_h2]:capitalize">
 					<h2>
 						{plural}
 						{canModify && (
-							<NewMemberLink onClick={() => setOpenAdd(true)}>
+							<a
+								className="cursor-pointer ml-auto"
+								onClick={() => setOpenAdd(true)}
+							>
 								Add {noun}
-							</NewMemberLink>
+							</a>
 						)}
 					</h2>
 					<p>Manage membership and rights for reference {plural}.</p>
-				</ReferenceMembersHeader>
+				</BoxGroupHeader>
 				{members.length ? (
 					members.map((member: ReferenceGroup | ReferenceUser) => {
 						const handleOrName = objectHasProperty(member, "handle")
@@ -109,9 +88,9 @@ export default function ReferenceMembers({
 						);
 					})
 				) : (
-					<NoMembers>
+					<BoxGroupSection className="flex items-center justify-center [&_i]:pr-0.5">
 						<Icon icon={AlertCircle} /> None Found
-					</NoMembers>
+					</BoxGroupSection>
 				)}
 			</BoxGroup>
 			{noun === "user" ? (

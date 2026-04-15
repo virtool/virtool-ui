@@ -1,41 +1,7 @@
-import { getFontSize, getFontWeight } from "@app/theme";
 import { byteSize } from "@app/utils";
 import Icon from "@base/Icon";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import { File } from "lucide-react";
-import styled from "styled-components";
-
-const ReadIcon = styled.span`
-    font-size: 24px;
-    margin-right: 15px;
-`;
-
-const ReadTitle = styled.div`
-    align-items: center;
-    display: flex;
-
-    strong {
-        font-weight: ${getFontWeight("thick")};
-    }
-`;
-
-const StyledReadOrientation = styled.div`
-    background-color: ${(props) => props.theme.color.blueDark};
-    border: 2px solid ${(props) => props.theme.color.white};
-    border-radius: ${(props) => props.theme.borderRadius.md};
-    color: ${(props) => props.theme.color.white};
-    font-size: ${getFontSize("sm")};
-    font-weight: ${getFontWeight("bold")};
-    text-align: center;
-    width: 48px;
-`;
-
-const StyledReadSelectorItem = styled(SelectBoxGroupSection)`
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    user-select: none;
-`;
 
 type ReadSelectorItemProps = {
 	/** The unique identifier */
@@ -64,21 +30,25 @@ export default function ReadSelectorItem({
 	onSelect,
 }: ReadSelectorItemProps) {
 	return (
-		<StyledReadSelectorItem onClick={() => onSelect(id)} active={selected}>
-			<ReadTitle>
-				<ReadIcon>
+		<SelectBoxGroupSection
+			onClick={() => onSelect(id)}
+			active={selected}
+			className="flex items-center justify-between select-none"
+		>
+			<div className="flex items-center [&_strong]:font-medium">
+				<span className="text-2xl mr-4">
 					<Icon icon={File} />
-				</ReadIcon>
+				</span>
 				<div>
 					<strong>{name}</strong>
 					<div>{byteSize(size)}</div>
 				</div>
-			</ReadTitle>
+			</div>
 			{selected ? (
-				<StyledReadOrientation>
+				<div className="bg-blue-700 border-2 border-white rounded-md text-white text-xs font-bold text-center w-12">
 					{index === 0 ? "LEFT" : "RIGHT"}
-				</StyledReadOrientation>
+				</div>
 			) : null}
-		</StyledReadSelectorItem>
+		</SelectBoxGroupSection>
 	);
 }
