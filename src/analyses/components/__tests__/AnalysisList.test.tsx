@@ -76,7 +76,7 @@ describe("<AnalysesList />", () => {
 
         it("should show analysis creation when user is in the correct group and write is enabled", async () => {
             const account = createFakeAccount({ administrator_role: null });
-            sample.group = account.groups[0].id;
+            sample.group = account.groups[0];
             sample.group_write = true;
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
