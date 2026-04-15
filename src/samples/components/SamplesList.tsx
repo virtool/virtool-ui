@@ -16,26 +16,10 @@ import { useListSamples } from "@samples/queries";
 import type { SampleMinimal } from "@samples/types";
 import { intersectionWith, union, xor } from "es-toolkit/array";
 import { useState } from "react";
-import styled from "styled-components";
 import SampleFilters from "./Filter/SampleFilters";
 import SampleItem from "./Item/SampleItem";
 import SampleToolbar from "./SamplesToolbar";
 import SampleLabels from "./Sidebar/ManageLabels";
-
-const SamplesListHeader = styled.div`
-    grid-column: 1;
-`;
-
-const SamplesListContent = styled.div`
-    grid-row: 2;
-    min-width: 550px;
-`;
-
-const StyledSamplesList = styled.div`
-    display: grid;
-    grid-column-gap: ${(props) => props.theme.gap.column};
-    grid-template-columns: minmax(auto, 1150px) max(320px, 10%);
-`;
 
 /**
  * A list of samples with filtering
@@ -101,8 +85,13 @@ export default function SamplesList() {
 					(document, id) => document.id === id,
 				)}
 			/>
-			<StyledSamplesList>
-				<SamplesListHeader>
+			<div
+				className="grid gap-4"
+				style={{
+					gridTemplateColumns: "minmax(auto, 1150px) max(320px, 10%)",
+				}}
+			>
+				<div className="col-start-1">
 					<ViewHeader title="Samples">
 						<ViewHeaderTitle>
 							Samples <ViewHeaderTitleBadge>{total_count}</ViewHeaderTitleBadge>
@@ -114,8 +103,8 @@ export default function SamplesList() {
 						term={term}
 						onChange={(e) => setTerm(e.target.value)}
 					/>
-				</SamplesListHeader>
-				<SamplesListContent>
+				</div>
+				<div className="row-start-2 min-w-xl">
 					{!documents.length ? (
 						<NoneFoundBox key="noSample" noun="samples" />
 					) : (
@@ -127,7 +116,7 @@ export default function SamplesList() {
 							pageCount={page_count}
 						/>
 					)}
-				</SamplesListContent>
+				</div>
 				{selected.length ? (
 					<SampleLabels
 						labels={labels}
@@ -146,7 +135,7 @@ export default function SamplesList() {
 						onClickWorkflows={setFilterWorkflows}
 					/>
 				)}
-			</StyledSamplesList>
+			</div>
 		</>
 	);
 }

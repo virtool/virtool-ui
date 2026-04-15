@@ -1,17 +1,7 @@
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import type { Read } from "@samples/types";
-import styled from "styled-components";
 import ReadItem from "./ReadItem";
-
-const SampleReadsTitle = styled.h2`
-    display: flex;
-    justify-content: space-between;
-
-    & > a {
-        cursor: pointer;
-    }
-`;
 
 type SampleReadsProps = {
 	/** A list of reads used to create the sample */
@@ -45,7 +35,7 @@ export default function SampleReads({ reads, sampleName }: SampleReadsProps) {
 	return (
 		<BoxGroup>
 			<BoxGroupHeader>
-				<SampleReadsTitle>Reads</SampleReadsTitle>
+				<h2 className="flex justify-between">Reads</h2>
 				<p>The input sequencing data used to create this sample.</p>
 			</BoxGroupHeader>
 			{fileComponents}

@@ -1,6 +1,7 @@
 import Alert from "@base/Alert";
 
 type SampleFilesMessageProps = {
+	className?: string;
 	/** Indicates whether to show the alert for legacy sample uploads */
 	showLegacy: boolean;
 };
@@ -9,10 +10,11 @@ type SampleFilesMessageProps = {
  * Displays an alert message regarding legacy sample uploads
  */
 export default function SampleFilesMessage({
+	className,
 	showLegacy,
 }: SampleFilesMessageProps) {
 	return showLegacy ? (
-		<Alert color="orange" block>
+		<Alert className={className} color="orange" block>
 			<p>
 				<strong>
 					Virtool now retains raw data for newly created samples instead of

@@ -1,12 +1,6 @@
 import type { Label } from "@labels/types";
-import styled from "styled-components";
 import LabelFilter from "./LabelFilter";
 import WorkflowFilter from "./WorkflowFilter";
-
-const StyledSampleFilters = styled.div`
-    grid-column: 2;
-    grid-row: 2;
-`;
 
 type SampleFilterProps = {
 	/** A list of labels */
@@ -36,13 +30,13 @@ export default function SampleFilters({
 	selectedWorkflows,
 }: SampleFilterProps) {
 	return (
-		<StyledSampleFilters>
+		<div className="col-start-2 row-start-2">
 			<LabelFilter
 				labels={labels}
 				onClick={onClickLabels}
 				selected={selectedLabels}
 			/>
 			<WorkflowFilter selected={selectedWorkflows} onClick={onClickWorkflows} />
-		</StyledSampleFilters>
+		</div>
 	);
 }

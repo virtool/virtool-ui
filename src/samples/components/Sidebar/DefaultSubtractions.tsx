@@ -1,27 +1,15 @@
-import { fontWeight, getColor, getFontSize } from "@app/theme";
 import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SideBarSection from "@base/SideBarSection";
 import SidebarHeader from "@base/SidebarHeader";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import { xor } from "es-toolkit/array";
-import styled from "styled-components";
 import SampleSidebarList from "./SampleSidebarList";
 import SampleSidebarSelector from "./SampleSidebarSelector";
 
 function SubtractionInner({ name }) {
 	return name;
 }
-
-const SampleSubtractionFooter = styled.div`
-    display: flex;
-    color: ${(props) => getColor({ theme: props.theme, color: "greyDarkest" })};
-    a {
-        margin-left: 5px;
-        font-size: ${getFontSize("md")};
-        font-weight: ${fontWeight.thick};
-    }
-`;
 
 type DefaultSubtractionsProps = {
 	/** List of subtraction ids associated with the sample. */
@@ -66,9 +54,9 @@ export default function DefaultSubtractions({
 				)}
 			/>
 			{Boolean(subtractionOptions.length) || (
-				<SampleSubtractionFooter>
+				<div className="flex text-gray-600 [&_a]:ml-1 [&_a]:text-sm [&_a]:font-medium">
 					No subtractions found. <Link to="/subtractions">Create one</Link>.
-				</SampleSubtractionFooter>
+				</div>
 			)}
 		</SideBarSection>
 	);

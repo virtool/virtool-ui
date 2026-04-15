@@ -1,79 +1,14 @@
 import { useDialogParam } from "@app/hooks";
-import { getFontSize, getFontWeight } from "@app/theme";
 import Attribution from "@base/Attribution";
 import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
 import Link from "@base/Link";
 import type { SampleMinimal } from "@samples/types";
-import styled from "styled-components";
 import { JobNested } from "@/jobs/types";
 import SampleLabel from "../Label/SampleLabel";
 import SampleLibraryTypeLabel from "../Label/SampleLibraryTypeLabel";
 import WorkflowTags from "../Tag/WorkflowTags";
 import EndIcon from "./EndIcon";
-
-const SampleItemCheckboxContainer = styled.div`
-    grid-column-start: 1;
-    cursor: pointer;
-    display: flex;
-    padding-right: 15px;
-    max-width: 30px;
-`;
-
-const SampleItemLabels = styled.div`
-    margin-top: 10px;
-    & > *:not(:last-child) {
-        margin-right: 5px;
-    }
-    display: flex;
-`;
-
-const SampleItemData = styled.div`
-    grid-column-start: 2;
-    display: flex;
-    flex: 3;
-    flex-direction: column;
-    min-width: 250px;
-`;
-
-const SampleItemMain = styled.div`
-    align-items: center;
-    display: flex;
-    position: relative;
-`;
-
-const SampleItemWorkflows = styled.div`
-    grid-column-start: 3;
-    display: flex;
-    flex: 2;
-    white-space: nowrap;
-`;
-
-const SampleItemIcon = styled.div`
-    display: flex;
-    min-width: 80px;
-`;
-
-const SampleItemTitle = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex: 3;
-    overflow: hidden;
-
-    a {
-        font-size: ${getFontSize("lg")};
-        font-weight: ${getFontWeight("thick")};
-        margin: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-`;
-
-const StyledSampleItem = styled(Box)`
-    align-items: stretch;
-    display: flex;
-    flex-basis: 0;
-`;
 
 type SampleItemProps = {
 	/** Minimal sample data */
@@ -108,33 +43,36 @@ export default function SampleItem({
 	const job = sample.job && JobNested.parse(sample.job);
 
 	return (
-		<StyledSampleItem>
-			<SampleItemCheckboxContainer onClick={handleSelect}>
+		<Box className="flex items-stretch basis-0">
+			<div
+				className="col-start-1 cursor-pointer flex pr-4 max-w-8"
+				onClick={handleSelect}
+			>
 				<Checkbox checked={checked} id={`SampleCheckbox${sample.id}`} />
-			</SampleItemCheckboxContainer>
+			</div>
 
-			<SampleItemData>
-				<SampleItemMain>
-					<SampleItemTitle>
+			<div className="col-start-2 flex flex-3 flex-col min-w-64">
+				<div className="flex items-center relative">
+					<div className="flex flex-col flex-3 overflow-hidden [&_a]:text-base [&_a]:font-medium [&_a]:m-0 [&_a]:overflow-hidden [&_a]:text-ellipsis">
 						<Link to={`/samples/${sample.id}`}>{sample.name}</Link>
 						<Attribution time={sample.created_at} user={sample.user.handle} />
-					</SampleItemTitle>
-				</SampleItemMain>
-				<SampleItemLabels>
+					</div>
+				</div>
+				<div className="flex mt-2.5 [&>*:not(:last-child)]:mr-1">
 					<SampleLibraryTypeLabel libraryType={sample.library_type} />
 					{sample.labels.map((label) => (
 						<SampleLabel {...label} key={label.id} size="sm" />
 					))}
-				</SampleItemLabels>
-			</SampleItemData>
-			<SampleItemWorkflows>
+				</div>
+			</div>
+			<div className="col-start-3 flex flex-2 whitespace-nowrap">
 				{sample.ready && (
 					<WorkflowTags id={sample.id} workflows={sample.workflows} />
 				)}
-			</SampleItemWorkflows>
-			<SampleItemIcon>
+			</div>
+			<div className="flex min-w-20">
 				<EndIcon job={job} onClick={onQuickAnalyze} ready={sample.ready} />
-			</SampleItemIcon>
-		</StyledSampleItem>
+			</div>
+		</Box>
 	);
 }

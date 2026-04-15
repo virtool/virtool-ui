@@ -1,5 +1,4 @@
 import { useFuse } from "@app/fuse";
-import { fontWeight, getFontSize } from "@app/theme";
 import BoxGroupSearch from "@base/BoxGroupSearch";
 import Icon from "@base/Icon";
 import Link from "@base/Link";
@@ -9,28 +8,7 @@ import type { Label } from "@labels/types";
 import type { SubtractionOption } from "@subtraction/types";
 import { Pen } from "lucide-react";
 import type { ReactNode } from "react";
-import styled from "styled-components";
 import SampleSidebarSelectorItem from "./SampleSidebarSelectorItem";
-
-const SampleSidebarSelectorButton = styled.div`
-    display: flex;
-    border-top: 1px solid;
-    border-color: ${(props) => props.theme.color.greyLight};
-    width: 100%;
-    align-items: flex-end;
-
-    a {
-        margin-left: auto;
-        font-size: ${getFontSize("md")};
-        font-weight: ${fontWeight.thick};
-        padding: 10px 10px 10px 0;
-    }
-`;
-
-const SampleItemComponentsContainer = styled.div`
-    max-height: 300px;
-    overflow-y: scroll;
-`;
 
 type SampleSidebarSelectorProps = {
 	/** The link to manage labels or subtractions */
@@ -106,12 +84,10 @@ export default function SampleSidebarSelector({
 				value={term}
 				onChange={setTerm}
 			/>
-			<SampleItemComponentsContainer>
-				{itemComponents}
-			</SampleItemComponentsContainer>
-			<SampleSidebarSelectorButton>
+			<div className="max-h-80 overflow-y-scroll">{itemComponents}</div>
+			<div className="flex border-t border-gray-300 w-full items-end [&_a]:ml-auto [&_a]:text-sm [&_a]:font-medium [&_a]:py-2.5 [&_a]:pr-2.5 [&_a]:pl-0">
 				<Link to={manageLink}> Manage</Link>
-			</SampleSidebarSelectorButton>
+			</div>
 		</Popover>
 	);
 }
