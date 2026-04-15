@@ -2,11 +2,6 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSelect from "@base/InputSelect";
 import type { GroupMinimal } from "@groups/types";
-import styled from "styled-components";
-
-const SampleUserGroupItem = styled.option`
-    text-transform: capitalize;
-`;
 
 type SampleUserGroupProps = {
 	selected: string;
@@ -24,9 +19,9 @@ export default function SampleUserGroup({
 	onChange,
 }: SampleUserGroupProps) {
 	const groupComponents = groups.map((group) => (
-		<SampleUserGroupItem key={group.id} value={group.id}>
+		<option className="capitalize" key={group.id} value={group.id}>
 			{group.name}
-		</SampleUserGroupItem>
+		</option>
 	));
 
 	return (

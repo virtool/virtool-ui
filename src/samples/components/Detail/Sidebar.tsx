@@ -1,17 +1,8 @@
 import type { LabelNested } from "@labels/types";
 import { useUpdateSample } from "@samples/queries";
 import type { SubtractionNested } from "@subtraction/types";
-import styled from "styled-components";
 import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
 import SampleLabels from "../Sidebar/SampleLabels";
-
-const StyledSidebar = styled.div`
-    align-items: stretch;
-    flex-direction: column;
-    display: flex;
-    width: 320px;
-    z-index: 0;
-`;
 
 type SidebarProps = {
 	sampleId: string;
@@ -30,7 +21,7 @@ export default function Sidebar({
 	const mutation = useUpdateSample(sampleId);
 
 	return (
-		<StyledSidebar>
+		<div className="flex flex-col items-stretch w-80 z-0">
 			<SampleLabels
 				onUpdate={(labels) => {
 					mutation.mutate({ update: { labels } });
@@ -45,6 +36,6 @@ export default function Sidebar({
 					(subtraction) => subtraction.id,
 				)}
 			/>
-		</StyledSidebar>
+		</div>
 	);
 }

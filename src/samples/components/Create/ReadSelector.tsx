@@ -1,4 +1,4 @@
-import { getBorder, getFontWeight, theme } from "@app/theme";
+import { cn } from "@app/utils";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import Button from "@base/Button";
@@ -17,43 +17,9 @@ import type {
 } from "@tanstack/react-query/";
 import { Repeat, Undo } from "lucide-react";
 import { type ReactNode, useEffect, useState } from "react";
-import styled from "styled-components";
 import { useValidateFiles } from "@/uploads/hooks";
 import { type FileResponse, UploadType } from "@/uploads/types";
 import ReadSelectorItem from "./ReadSelectorItem";
-
-type ReadSelectorBoxProps = {
-	error: string;
-};
-
-const ReadSelectorBox = styled(Box)<ReadSelectorBoxProps>`
-    ${(props) => (props.error ? `border-color: ${theme.color.red};` : "")};
-`;
-
-const ReadSelectorError = styled(InputError)`
-    margin-bottom: 10px;
-`;
-
-const ReadSelectorHeader = styled.label`
-    align-items: center;
-    display: flex;
-    font-weight: ${getFontWeight("thick")};
-
-    label {
-        margin: 0;
-    }
-
-    span {
-        color: grey;
-        margin-left: auto;
-    }
-`;
-
-const StyledScrollListElement = styled(CompactScrollList)`
-    border: ${(props) => getBorder(props)};
-    border-radius: ${(props) => props.theme.borderRadius.sm};
-    height: 400px;
-`;
 
 type ReadSelectorProps = {
 	/** Samples uploads on current page */
@@ -163,15 +129,15 @@ export default function ReadSelector({
 
 	return (
 		<div>
-			<ReadSelectorHeader>
+			<label className="flex items-center font-medium [&_label]:m-0 [&_span]:text-gray-500 [&_span]:ml-auto">
 				<PseudoLabel>Read files</PseudoLabel>
 				<span>
 					{pairedness}
 					{selected.length} of {total_count} selected
 				</span>
-			</ReadSelectorHeader>
+			</label>
 
-			<ReadSelectorBox error={error}>
+			<Box className={cn(error && "border-red-600")}>
 				<Toolbar>
 					<div className="flex-grow">
 						<InputSearch
@@ -189,7 +155,8 @@ export default function ReadSelector({
 				</Toolbar>
 				{noneFound || (
 					<>
-						<StyledScrollListElement
+						<CompactScrollList
+							className="border border-gray-300 rounded h-96"
 							fetchNextPage={fetchNextPage}
 							isFetchingNextPage={isFetchingNextPage}
 							isPending={isPending}
@@ -197,10 +164,10 @@ export default function ReadSelector({
 							renderRow={renderRow}
 						/>
 
-						<ReadSelectorError>{error}</ReadSelectorError>
+						<InputError className="mb-2.5">{error}</InputError>
 					</>
 				)}
-			</ReadSelectorBox>
+			</Box>
 		</div>
 	);
 }
