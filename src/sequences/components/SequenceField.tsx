@@ -31,7 +31,7 @@ export default function SequenceField() {
 					},
 				})}
 			/>
-			<InputError>{errors.sequence?.message as string}</InputError>
+			<InputError>{errors.sequence?.message}</InputError>
 		</InputGroup>
 	);
 }

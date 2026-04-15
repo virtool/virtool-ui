@@ -49,7 +49,7 @@ export default function RebuildHistory({ unbuilt }) {
 		));
 
 		content = (
-			<div className="max-h-screen overflow-y-auto">
+			<div className="max-h-192 overflow-y-auto">
 				{historyComponents}
 				<RebuildHistoryEllipsis unbuilt={unbuilt} />
 			</div>
