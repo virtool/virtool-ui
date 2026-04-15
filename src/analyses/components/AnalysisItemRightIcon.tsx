@@ -2,25 +2,25 @@ import IconButton from "@base/IconButton";
 import { Trash } from "lucide-react";
 
 type AnalysisItemRightIconProps = {
-    /** Whether the user has permission to remove an analysis */
-    canModify: boolean;
-    /** A callback function to handle the removal of an analysis */
-    onRemove: () => void;
+	/** Whether the user has permission to remove an analysis */
+	canModify: boolean;
+	/** A callback function to handle the removal of an analysis */
+	onRemove: () => void;
 };
 
 /**
  * Displays icon for removing an analysis
  */
 export function AnalysisItemRightIcon({
-    canModify,
-    onRemove,
+	canModify,
+	onRemove,
 }: AnalysisItemRightIconProps) {
-    return canModify ? (
-        <IconButton
-            IconComponent={Trash}
-            color="red"
-            tip="remove"
-            onClick={onRemove}
-        />
-    ) : null;
+	return canModify ? (
+		<IconButton
+			IconComponent={Trash}
+			color="red"
+			tip="remove"
+			onClick={onRemove}
+		/>
+	) : null;
 }

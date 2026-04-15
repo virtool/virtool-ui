@@ -1,21 +1,21 @@
 import { cn } from "@app/utils";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type ContainerWideProps = {
-    children: ReactNode;
-    className?: string;
+	children: ReactNode;
+	className?: string;
 };
 
 /**
  * Full-width page content container
  */
 export default function ContainerWide({
-    children,
-    className,
+	children,
+	className,
 }: ContainerWideProps) {
-    return (
-        <div className={cn("absolute", "left-7", "right-7", className)}>
-            {children}
-        </div>
-    );
+	return (
+		<div className={cn("absolute", "left-7", "right-7", className)}>
+			{children}
+		</div>
+	);
 }

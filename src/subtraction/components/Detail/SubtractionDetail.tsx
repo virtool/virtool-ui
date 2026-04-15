@@ -9,7 +9,7 @@ import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { Permission } from "@groups/types";
 import { useFetchSubtraction } from "@subtraction/queries";
-import { NucleotideComposition } from "@subtraction/types";
+import type { NucleotideComposition } from "@subtraction/types";
 import { Pencil, Trash } from "lucide-react";
 import numbro from "numbro";
 import { SubtractionAttribution } from "../Attribution";
@@ -18,105 +18,103 @@ import RemoveSubtraction from "./RemoveSubtraction";
 import SubtractionFiles from "./SubtractionFiles";
 
 function calculateGc(nucleotides: NucleotideComposition) {
-    return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format(
-        "0.000",
-    );
+	return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format(
+		"0.000",
+	);
 }
 
 /**
  * The subtraction detailed view
  */
 export default function SubtractionDetail() {
-    const { subtractionId } = usePathParams<{ subtractionId: string }>();
+	const { subtractionId } = usePathParams<{ subtractionId: string }>();
 
-    const { data, isPending, isError } = useFetchSubtraction(subtractionId);
-    const { hasPermission: canModify } = useCheckAdminRoleOrPermission(
-        Permission.modify_subtraction,
-    );
+	const { data, isPending, isError } = useFetchSubtraction(subtractionId);
+	const { hasPermission: canModify } = useCheckAdminRoleOrPermission(
+		Permission.modify_subtraction,
+	);
 
-    const { open: openRemoveSubtraction, setOpen: setOpenRemoveSubtraction } =
-        useDialogParam("openRemoveSubtraction");
-    const { open: openEditSubtraction, setOpen: setOpenEditSubtraction } =
-        useDialogParam("openEditSubtraction");
+	const { open: openRemoveSubtraction, setOpen: setOpenRemoveSubtraction } =
+		useDialogParam("openRemoveSubtraction");
+	const { open: openEditSubtraction, setOpen: setOpenEditSubtraction } =
+		useDialogParam("openEditSubtraction");
 
-    if (isError) {
-        return <NotFound />;
-    }
+	if (isError) {
+		return <NotFound />;
+	}
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    if (!data.ready) {
-        return (
-            <LoadingPlaceholder message="Subtraction is still being imported" />
-        );
-    }
+	if (!data.ready) {
+		return <LoadingPlaceholder message="Subtraction is still being imported" />;
+	}
 
-    return (
-        <>
-            <ViewHeader title={data.name}>
-                <ViewHeaderTitle>
-                    {data.name}
-                    {canModify && (
-                        <ViewHeaderIcons>
-                            <IconButton
-                                IconComponent={Pencil}
-                                color="grayDark"
-                                tip="modify"
-                                onClick={() => setOpenEditSubtraction(true)}
-                            />
-                            <IconButton
-                                IconComponent={Trash}
-                                color="red"
-                                tip="remove"
-                                onClick={() => setOpenRemoveSubtraction(true)}
-                            />
-                        </ViewHeaderIcons>
-                    )}
-                </ViewHeaderTitle>
-                {data.user ? (
-                    <SubtractionAttribution
-                        handle={data.user.handle}
-                        time={data.created_at}
-                    />
-                ) : null}
-            </ViewHeader>
-            <Table>
-                <tbody>
-                    <tr>
-                        <th>Nickname</th>
-                        <td>{data.nickname}</td>
-                    </tr>
-                    <tr>
-                        <th>File</th>
-                        <td>{data.file.name || data.file.id}</td>
-                    </tr>
-                    <tr>
-                        <th>Sequence Count</th>
-                        <td>{data.count}</td>
-                    </tr>
-                    <tr>
-                        <th>GC Estimate</th>
-                        <td>{calculateGc(data.gc)}</td>
-                    </tr>
-                    <tr>
-                        <th>Linked Samples</th>
-                        <td>{data.linked_samples.length}</td>
-                    </tr>
-                </tbody>
-            </Table>
-            <SubtractionFiles files={data.files} />
-            <EditSubtraction
-                show={openEditSubtraction}
-                onHide={() => setOpenEditSubtraction(false)}
-                subtraction={data}
-            />
-            <RemoveSubtraction
-                subtraction={data}
-                show={openRemoveSubtraction}
-                onHide={() => setOpenRemoveSubtraction(false)}
-            />
-        </>
-    );
+	return (
+		<>
+			<ViewHeader title={data.name}>
+				<ViewHeaderTitle>
+					{data.name}
+					{canModify && (
+						<ViewHeaderIcons>
+							<IconButton
+								IconComponent={Pencil}
+								color="grayDark"
+								tip="modify"
+								onClick={() => setOpenEditSubtraction(true)}
+							/>
+							<IconButton
+								IconComponent={Trash}
+								color="red"
+								tip="remove"
+								onClick={() => setOpenRemoveSubtraction(true)}
+							/>
+						</ViewHeaderIcons>
+					)}
+				</ViewHeaderTitle>
+				{data.user ? (
+					<SubtractionAttribution
+						handle={data.user.handle}
+						time={data.created_at}
+					/>
+				) : null}
+			</ViewHeader>
+			<Table>
+				<tbody>
+					<tr>
+						<th>Nickname</th>
+						<td>{data.nickname}</td>
+					</tr>
+					<tr>
+						<th>File</th>
+						<td>{data.file.name || data.file.id}</td>
+					</tr>
+					<tr>
+						<th>Sequence Count</th>
+						<td>{data.count}</td>
+					</tr>
+					<tr>
+						<th>GC Estimate</th>
+						<td>{calculateGc(data.gc)}</td>
+					</tr>
+					<tr>
+						<th>Linked Samples</th>
+						<td>{data.linked_samples.length}</td>
+					</tr>
+				</tbody>
+			</Table>
+			<SubtractionFiles files={data.files} />
+			<EditSubtraction
+				show={openEditSubtraction}
+				onHide={() => setOpenEditSubtraction(false)}
+				subtraction={data}
+			/>
+			<RemoveSubtraction
+				subtraction={data}
+				show={openRemoveSubtraction}
+				onHide={() => setOpenRemoveSubtraction(false)}
+			/>
+		</>
+	);
 }

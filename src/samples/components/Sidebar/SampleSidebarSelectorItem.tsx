@@ -2,7 +2,7 @@ import { getFontSize } from "@app/theme";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";
 import { Check, Minus } from "lucide-react";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import styled from "styled-components";
 
 const StyledSampleSidebarSelectorItem = styled(BoxGroupSection)`
@@ -31,39 +31,39 @@ const SampleSidebarSelectorItemContents = styled.div`
 `;
 
 type SampleSidebarSelectorItemProps = {
-    children: ReactNode;
-    id: string | number;
-    name: string;
-    /** A callback function to handle item selection */
-    onClick: (id: string | number) => void;
-    partiallySelected: boolean;
-    selected: boolean;
+	children: ReactNode;
+	id: string | number;
+	name: string;
+	/** A callback function to handle item selection */
+	onClick: (id: string | number) => void;
+	partiallySelected: boolean;
+	selected: boolean;
 };
 
 /**
  * A condensed sidebar item for use in a list of sidebar items
  */
 export default function SampleSidebarSelectorItem({
-    children,
-    id,
-    name,
-    onClick,
-    partiallySelected,
-    selected,
+	children,
+	id,
+	name,
+	onClick,
+	partiallySelected,
+	selected,
 }: SampleSidebarSelectorItemProps) {
-    return (
-        <StyledSampleSidebarSelectorItem
-            as="button"
-            type={"button"}
-            onClick={() => onClick(id)}
-            aria-label={name}
-        >
-            <SampleSidebarSelectorItemCheck>
-                {selected && <Icon icon={partiallySelected ? Minus : Check} />}
-            </SampleSidebarSelectorItemCheck>
-            <SampleSidebarSelectorItemContents>
-                {children}
-            </SampleSidebarSelectorItemContents>
-        </StyledSampleSidebarSelectorItem>
-    );
+	return (
+		<StyledSampleSidebarSelectorItem
+			as="button"
+			type={"button"}
+			onClick={() => onClick(id)}
+			aria-label={name}
+		>
+			<SampleSidebarSelectorItemCheck>
+				{selected && <Icon icon={partiallySelected ? Minus : Check} />}
+			</SampleSidebarSelectorItemCheck>
+			<SampleSidebarSelectorItemContents>
+				{children}
+			</SampleSidebarSelectorItemContents>
+		</StyledSampleSidebarSelectorItem>
+	);
 }

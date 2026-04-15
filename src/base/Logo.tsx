@@ -55,9 +55,9 @@ const StyledLogo = styled.div`
 `;
 
 type LogoProps = {
-    className?: string;
-    height?: number;
-    color?: string;
+	className?: string;
+	height?: number;
+	color?: string;
 };
 
 /**
@@ -69,16 +69,16 @@ type LogoProps = {
  * @returns Virtool's logo
  */
 export default function Logo({ className, height = 30, color }: LogoProps) {
-    return (
-        <StyledLogo className={className} color={color}>
-            <svg id="svg2" viewBox="0 0 512 512" height={height}>
-                <defs id="defs125">
-                    <clipPath id="clipPath4140">
-                        <path d={clipPath} />
-                    </clipPath>
-                </defs>
-                <path id="path4138-2" d={gear} clipPath="url(#clipPath4140)" />
-            </svg>
-        </StyledLogo>
-    );
+	return (
+		<StyledLogo className={className} color={color}>
+			<svg id="svg2" viewBox="0 0 512 512" height={height}>
+				<defs id="defs125">
+					<clipPath id="clipPath4140">
+						<path d={clipPath} />
+					</clipPath>
+				</defs>
+				<path id="path4138-2" d={gear} clipPath="url(#clipPath4140)" />
+			</svg>
+		</StyledLogo>
+	);
 }

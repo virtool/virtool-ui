@@ -20,38 +20,38 @@ const StyledReadItem = styled(BoxGroupSection)`
  * with underscores.
  */
 function sanitizeFileName(name: string): string {
-    return name.replace(/[/\\:*?"<>|\s]/g, "_");
+	return name.replace(/[/\\:*?"<>|\s]/g, "_");
 }
 
 type ReadItemProps = {
-    download_url: string;
-    sampleName: string;
-    side: number;
-    /** The size of the read file in bytes */
-    size: number;
+	download_url: string;
+	sampleName: string;
+	side: number;
+	/** The size of the read file in bytes */
+	size: number;
 };
 
 /**
  * A condensed read item for use in a list of reads
  */
 export default function ReadItem({
-    download_url,
-    sampleName,
-    side,
-    size,
+	download_url,
+	sampleName,
+	side,
+	size,
 }: ReadItemProps) {
-    const downloadName = `${sanitizeFileName(sampleName)}_${side}.fq.gz`;
+	const downloadName = `${sanitizeFileName(sampleName)}_${side}.fq.gz`;
 
-    return (
-        <StyledReadItem>
-            <ReadItemMain>
-                <div>
-                    <a href={`/api/${download_url}`} download={downloadName}>
-                        {downloadName}
-                    </a>
-                </div>
-            </ReadItemMain>
-            {byteSize(size, true)}
-        </StyledReadItem>
-    );
+	return (
+		<StyledReadItem>
+			<ReadItemMain>
+				<div>
+					<a href={`/api/${download_url}`} download={downloadName}>
+						{downloadName}
+					</a>
+				</div>
+			</ReadItemMain>
+			{byteSize(size, true)}
+		</StyledReadItem>
+	);
 }

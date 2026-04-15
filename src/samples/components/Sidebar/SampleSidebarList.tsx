@@ -1,5 +1,5 @@
-import { Label } from "@labels/types";
-import { SubtractionOption } from "@subtraction/types";
+import type { Label } from "@labels/types";
+import type { SubtractionOption } from "@subtraction/types";
 import styled from "styled-components";
 import SampleLabel from "../Label/SampleLabel";
 
@@ -10,21 +10,17 @@ const SampleSidebarListItem = styled(SampleLabel)`
 `;
 
 type SampleSidebarListProps = {
-    /** List of labels or subtractions associated with the sample */
-    items: Label[] | SubtractionOption[];
+	/** List of labels or subtractions associated with the sample */
+	items: Label[] | SubtractionOption[];
 };
 
 /**
  * A sidebar to list labels or subtractions associated with a sample
  */
 export default function SampleSidebarList({ items }: SampleSidebarListProps) {
-    const sampleItemComponents = items.map((item) => (
-        <SampleSidebarListItem
-            key={item.id}
-            color={item.color}
-            name={item.name}
-        />
-    ));
+	const sampleItemComponents = items.map((item) => (
+		<SampleSidebarListItem key={item.id} color={item.color} name={item.name} />
+	));
 
-    return <div className="flex flex-wrap">{sampleItemComponents}</div>;
+	return <div className="flex flex-wrap">{sampleItemComponents}</div>;
 }

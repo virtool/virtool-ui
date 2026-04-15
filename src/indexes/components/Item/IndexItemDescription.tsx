@@ -1,6 +1,6 @@
 type IndexItemDescriptionProps = {
-    changeCount: number;
-    modifiedCount: number;
+	changeCount: number;
+	modifiedCount: number;
 };
 
 /**
@@ -11,22 +11,22 @@ type IndexItemDescriptionProps = {
  * @returns The index item's description
  */
 export function IndexItemDescription({
-    changeCount,
-    modifiedCount,
+	changeCount,
+	modifiedCount,
 }: IndexItemDescriptionProps) {
-    if (changeCount === null) {
-        return null;
-    }
+	if (changeCount === null) {
+		return null;
+	}
 
-    if (changeCount === 0) {
-        return <>No changes</>;
-    }
+	if (changeCount === 0) {
+		return <>No changes</>;
+	}
 
-    return (
-        <span>
-            {changeCount} change{changeCount === 1 ? "" : "s"} made in{" "}
-            {modifiedCount} OTU
-            {modifiedCount === 1 ? "" : "s"}
-        </span>
-    );
+	return (
+		<span>
+			{changeCount} change{changeCount === 1 ? "" : "s"} made in {modifiedCount}{" "}
+			OTU
+			{modifiedCount === 1 ? "" : "s"}
+		</span>
+	);
 }

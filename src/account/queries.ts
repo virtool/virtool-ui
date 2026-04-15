@@ -1,27 +1,27 @@
-import { ErrorResponse } from "@/types/api";
-import { Account, APIKeyMinimal } from "@account/types";
+import type { Account, APIKeyMinimal } from "@account/types";
 import { resetClient } from "@app/utils";
-import { Permissions } from "@groups/types";
+import type { Permissions } from "@groups/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { User } from "@users/types";
+import type { User } from "@users/types";
+import type { ErrorResponse } from "@/types/api";
 import {
-    AccountUpdate,
-    changePassword,
-    createAPIKey,
-    fetchAccount,
-    getApiKeys,
-    logout,
-    removeAPIKey,
-    updateAccount,
-    updateAPIKey,
+	type AccountUpdate,
+	changePassword,
+	createAPIKey,
+	fetchAccount,
+	getApiKeys,
+	logout,
+	removeAPIKey,
+	updateAccount,
+	updateAPIKey,
 } from "./api";
 
 /**
  * Factory object for generating account query keys
  */
 export const accountKeys = {
-    all: () => ["account"],
-    details: () => ["account", "details"] as const,
+	all: () => ["account"],
+	details: () => ["account", "details"] as const,
 };
 
 /**
@@ -30,10 +30,10 @@ export const accountKeys = {
  * @returns UseQueryResult object containing the account data
  */
 export function useFetchAccount() {
-    return useQuery<Account>({
-        queryKey: accountKeys.all(),
-        queryFn: () => fetchAccount(),
-    });
+	return useQuery<Account>({
+		queryKey: accountKeys.all(),
+		queryFn: () => fetchAccount(),
+	});
 }
 
 /**
@@ -42,14 +42,14 @@ export function useFetchAccount() {
  * @returns A mutator for updating a user
  */
 export function useUpdateAccount() {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<User, ErrorResponse, { update: AccountUpdate }>({
-        mutationFn: ({ update }) => updateAccount(update),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
-        },
-    });
+	return useMutation<User, ErrorResponse, { update: AccountUpdate }>({
+		mutationFn: ({ update }) => updateAccount(update),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+		},
+	});
 }
 
 /**
@@ -58,19 +58,19 @@ export function useUpdateAccount() {
  * @returns A mutator for updating a user
  */
 export function useChangePassword() {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<
-        User,
-        ErrorResponse,
-        { old_password: string; password: string }
-    >({
-        mutationFn: ({ old_password, password }) =>
-            changePassword(old_password, password),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
-        },
-    });
+	return useMutation<
+		User,
+		ErrorResponse,
+		{ old_password: string; password: string }
+	>({
+		mutationFn: ({ old_password, password }) =>
+			changePassword(old_password, password),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+		},
+	});
 }
 
 /**
@@ -79,10 +79,10 @@ export function useChangePassword() {
  * @returns A list of API keys for the current user
  */
 export function useFetchAPIKeys() {
-    return useQuery<APIKeyMinimal[]>({
-        queryKey: accountKeys.details(),
-        queryFn: () => getApiKeys(),
-    });
+	return useQuery<APIKeyMinimal[]>({
+		queryKey: accountKeys.details(),
+		queryFn: () => getApiKeys(),
+	});
 }
 
 /**
@@ -91,18 +91,18 @@ export function useFetchAPIKeys() {
  * @returns A mutator for creating a new API key
  */
 export function useCreateAPIKey() {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<
-        APIKeyMinimal,
-        ErrorResponse,
-        { name: string; permissions: Permissions }
-    >({
-        mutationFn: ({ name, permissions }) => createAPIKey(name, permissions),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
-        },
-    });
+	return useMutation<
+		APIKeyMinimal,
+		ErrorResponse,
+		{ name: string; permissions: Permissions }
+	>({
+		mutationFn: ({ name, permissions }) => createAPIKey(name, permissions),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+		},
+	});
 }
 
 /**
@@ -111,19 +111,18 @@ export function useCreateAPIKey() {
  * @returns A mutator for updating an API key
  */
 export function useUpdateApiKey() {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<
-        APIKeyMinimal,
-        ErrorResponse,
-        { keyId: string; permissions: Permissions }
-    >({
-        mutationFn: ({ keyId, permissions }) =>
-            updateAPIKey(keyId, permissions),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
-        },
-    });
+	return useMutation<
+		APIKeyMinimal,
+		ErrorResponse,
+		{ keyId: string; permissions: Permissions }
+	>({
+		mutationFn: ({ keyId, permissions }) => updateAPIKey(keyId, permissions),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+		},
+	});
 }
 
 /**
@@ -132,14 +131,14 @@ export function useUpdateApiKey() {
  * @returns A mutator for removing an API key
  */
 export function useRemoveAPIKey() {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<null, ErrorResponse, { keyId: string }>({
-        mutationFn: ({ keyId }) => removeAPIKey(keyId),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
-        },
-    });
+	return useMutation<null, ErrorResponse, { keyId: string }>({
+		mutationFn: ({ keyId }) => removeAPIKey(keyId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+		},
+	});
 }
 
 /**
@@ -148,10 +147,10 @@ export function useRemoveAPIKey() {
  * @returns A mutator for logging out a user
  */
 export function useLogout() {
-    return useMutation<null, ErrorResponse>({
-        mutationFn: logout,
-        onSuccess: () => {
-            resetClient();
-        },
-    });
+	return useMutation<null, ErrorResponse>({
+		mutationFn: logout,
+		onSuccess: () => {
+			resetClient();
+		},
+	});
 }

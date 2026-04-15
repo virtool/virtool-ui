@@ -2,10 +2,10 @@ import { cn } from "@app/utils";
 import Loader from "./Loader";
 
 type LoadingPlaceholderProps = {
-    /* Tailwind CSS classes */
-    className?: string;
-    /* message to show above the spinner */
-    message?: string;
+	/* Tailwind CSS classes */
+	className?: string;
+	/* message to show above the spinner */
+	message?: string;
 };
 
 /**
@@ -14,13 +14,13 @@ type LoadingPlaceholderProps = {
  * the sample data is retrieved from the server.
  */
 export default function LoadingPlaceholder({
-    className,
-    message = "",
+	className,
+	message = "",
 }: LoadingPlaceholderProps) {
-    return (
-        <div className={cn("text-center", "mt-56", className)}>
-            {message ? <p>{message}</p> : null}
-            <Loader />
-        </div>
-    );
+	return (
+		<div className={cn("text-center", "mt-56", className)}>
+			{message ? <p>{message}</p> : null}
+			<Loader />
+		</div>
+	);
 }

@@ -1,5 +1,5 @@
 import { useGetActiveHit } from "@analyses/hooks";
-import { FormattedNuvsHit, NuvsOrf as NuvsOrfType } from "@analyses/types";
+import type { FormattedNuvsHit, NuvsOrf as NuvsOrfType } from "@analyses/types";
 import { calculateAnnotatedOrfCount } from "@analyses/utils";
 import { useUrlSearchParam } from "@app/hooks";
 import { getBorder } from "@app/theme";
@@ -29,12 +29,12 @@ const StyledNuVsFamilies = styled.div`
 `;
 
 function NuvsFamilies({ families }) {
-    return (
-        <StyledNuVsFamilies>
-            <div>Families</div>
-            <div>{families.length ? families.join(", ") : "None"}</div>
-        </StyledNuVsFamilies>
-    );
+	return (
+		<StyledNuVsFamilies>
+			<div>Families</div>
+			<div>{families.length ? families.join(", ") : "None"}</div>
+		</StyledNuVsFamilies>
+	);
 }
 
 const NuVsLayout = styled.div`
@@ -65,74 +65,72 @@ const NuVsDetailTitle = styled.div`
 `;
 
 function NuvsDetailContainer({ children }) {
-    return (
-        <div className="flex flex-col flex-grow items-stretch">{children}</div>
-    );
+	return (
+		<div className="flex flex-col flex-grow items-stretch">{children}</div>
+	);
 }
 
 type NuVsDetailProps = {
-    analysisId: string;
-    /** A list of sorted and filtered Nuvs hits */
+	analysisId: string;
+	/** A list of sorted and filtered Nuvs hits */
 
-    matches: FormattedNuvsHit[];
-    maxSequenceLength: number;
+	matches: FormattedNuvsHit[];
+	maxSequenceLength: number;
 };
 
 /**
  * The detailed view of a Nuvs sequence
  */
 export default function NuvsDetail({
-    analysisId,
-    matches,
-    maxSequenceLength,
+	analysisId,
+	matches,
+	maxSequenceLength,
 }: NuVsDetailProps) {
-    const { value: filterORFs } = useUrlSearchParam<boolean>("filterOrfs");
-    const hit = useGetActiveHit(matches);
+	const { value: filterORFs } = useUrlSearchParam<boolean>("filterOrfs");
+	const hit = useGetActiveHit(matches);
 
-    if (!hit) {
-        return <NuvsDetailContainer>No Hits</NuvsDetailContainer>;
-    }
+	if (!hit) {
+		return <NuvsDetailContainer>No Hits</NuvsDetailContainer>;
+	}
 
-    const { e, families, orfs, sequence, index } = hit;
+	const { e, families, orfs, sequence, index } = hit;
 
-    let filtered: NuvsOrfType[] = orfs;
+	let filtered: NuvsOrfType[] = orfs;
 
-    if (filterORFs) {
-        filtered = orfs.filter((orf) => orf.hits.length);
-    }
+	if (filterORFs) {
+		filtered = orfs.filter((orf) => orf.hits.length);
+	}
 
-    filtered = sortBy(filtered, [(orf) => orf.hits.length]).reverse();
+	filtered = sortBy(filtered, [(orf) => orf.hits.length]).reverse();
 
-    const orfComponents = filtered.map((orf, index) => (
-        <NuvsOrf
-            key={index}
-            index={index}
-            {...orf}
-            maxSequenceLength={maxSequenceLength}
-        />
-    ));
+	const orfComponents = filtered.map((orf, index) => (
+		<NuvsOrf
+			key={index}
+			index={index}
+			{...orf}
+			maxSequenceLength={maxSequenceLength}
+		/>
+	));
 
-    return (
-        <NuvsDetailContainer>
-            <NuVsDetailTitle>
-                <h3>
-                    Sequence {index}
-                    <Badge className="text-base py-2 px-3">
-                        {sequence.length} bp
-                    </Badge>
-                </h3>
-                <NuvsValues e={e} orfCount={calculateAnnotatedOrfCount(orfs)} />
-                <NuvsFamilies families={families} />
-            </NuVsDetailTitle>
-            <NuVsLayout>
-                <NuvsSequence
-                    key="sequence"
-                    maxSequenceLength={maxSequenceLength}
-                    sequence={sequence}
-                />
-                {orfComponents}
-            </NuVsLayout>
-            <NuvsBlast hit={hit} analysisId={analysisId} />
-        </NuvsDetailContainer>
-    );
+	return (
+		<NuvsDetailContainer>
+			<NuVsDetailTitle>
+				<h3>
+					Sequence {index}
+					<Badge className="text-base py-2 px-3">{sequence.length} bp</Badge>
+				</h3>
+				<NuvsValues e={e} orfCount={calculateAnnotatedOrfCount(orfs)} />
+				<NuvsFamilies families={families} />
+			</NuVsDetailTitle>
+			<NuVsLayout>
+				<NuvsSequence
+					key="sequence"
+					maxSequenceLength={maxSequenceLength}
+					sequence={sequence}
+				/>
+				{orfComponents}
+			</NuVsLayout>
+			<NuvsBlast hit={hit} analysisId={analysisId} />
+		</NuvsDetailContainer>
+	);
 }

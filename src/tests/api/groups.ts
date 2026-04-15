@@ -1,4 +1,4 @@
-import { Group } from "@groups/types";
+import type { Group } from "@groups/types";
 import nock from "nock";
 
 /**
@@ -8,9 +8,9 @@ import nock from "nock";
  * @returns nock scope for the mocked API call
  */
 export function mockApiGetGroup(group: Group) {
-    return nock("http://localhost")
-        .get(`/api/groups/${group.id}`)
-        .reply(200, group);
+	return nock("http://localhost")
+		.get(`/api/groups/${group.id}`)
+		.reply(200, group);
 }
 
 /**
@@ -20,5 +20,5 @@ export function mockApiGetGroup(group: Group) {
  * @returns nock scope for the mocked API call
  */
 export function mockApiListGroups(groups: Group[]) {
-    return nock("http://localhost").get("/api/groups").reply(200, groups);
+	return nock("http://localhost").get("/api/groups").reply(200, groups);
 }

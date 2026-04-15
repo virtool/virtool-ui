@@ -8,12 +8,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { lazy, Suspense, useEffect } from "react";
 import { Redirect, Route, Switch } from "wouter";
 import WsConnection, {
-    ABANDONED,
-    INITIALIZING,
+	ABANDONED,
+	INITIALIZING,
 } from "./websocket/WsConnection";
 
 const Administration = lazy(
-    () => import("@administration/components/Settings"),
+	() => import("@administration/components/Settings"),
 );
 const Account = lazy(() => import("@account/components/Account"));
 const HMM = lazy(() => import("@/hmm/components/Hmm"));
@@ -26,20 +26,20 @@ const DevDialog = lazy(() => import("@dev/components/DeveloperDialog"));
 const UploadOverlay = lazy(() => import("@/uploads/components/UploadOverlay"));
 
 function setupWebSocket(queryClient) {
-    if (!window.ws) {
-        window.ws = new WsConnection(queryClient);
-    }
-    if ([ABANDONED, INITIALIZING].includes(window.ws.connectionStatus)) {
-        window.ws.establishConnection();
-    }
+	if (!window.ws) {
+		window.ws = new WsConnection(queryClient);
+	}
+	if ([ABANDONED, INITIALIZING].includes(window.ws.connectionStatus)) {
+		window.ws.establishConnection();
+	}
 }
 
 function Fallback() {
-    return (
-        <Container>
-            <LoadingPlaceholder />
-        </Container>
-    );
+	return (
+		<Container>
+			<LoadingPlaceholder />
+		</Container>
+	);
 }
 
 /**
@@ -47,63 +47,54 @@ function Fallback() {
  * Sets up the WebSocket connection, handles routing, and renders the main layout.
  */
 export default function Main() {
-    const queryClient = useQueryClient();
-    const { data, isPending } = useFetchAccount();
+	const queryClient = useQueryClient();
+	const { data, isPending } = useFetchAccount();
 
-    useEffect(() => {
-        if (data) {
-            setupWebSocket(queryClient);
-        }
-    }, [data]);
+	useEffect(() => {
+		if (data) {
+			setupWebSocket(queryClient);
+		}
+	}, [data, queryClient]);
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    return (
-        <>
-            <title>Virtool</title>
-            <meta charSet="utf-8" />
+	return (
+		<>
+			<title>Virtool</title>
+			<meta charSet="utf-8" />
 
-            <div className="bg-transparent fixed top-0 w-full z-50">
-                <MessageBanner />
-                <Nav
-                    administrator_role={data.administrator_role}
-                    handle={data.handle}
-                />
-            </div>
+			<div className="bg-transparent fixed top-0 w-full z-50">
+				<MessageBanner />
+				<Nav
+					administrator_role={data.administrator_role}
+					handle={data.handle}
+				/>
+			</div>
 
-            <div className="pt-24">
-                <Suspense fallback={<Fallback />}>
-                    <Switch>
-                        <Route
-                            path="/"
-                            component={() => <Redirect to="/samples" />}
-                        />
-                        <Route
-                            path="/administration/*?"
-                            component={Administration}
-                        />
-                        <Route path="/account/*?" component={Account} />
-                        <Route path="/hmm/*?" component={HMM} />
-                        <Route path="/jobs/*?" component={Jobs} />
-                        <Route path="/ml/*?" component={ML} />
-                        <Route path="/refs/*?" component={References} />
-                        <Route path="/samples/*?" component={Samples} />
-                        <Route
-                            path="/subtractions/*?"
-                            component={Subtraction}
-                        />
-                    </Switch>
-                </Suspense>
-            </div>
+			<div className="pt-24">
+				<Suspense fallback={<Fallback />}>
+					<Switch>
+						<Route path="/" component={() => <Redirect to="/samples" />} />
+						<Route path="/administration/*?" component={Administration} />
+						<Route path="/account/*?" component={Account} />
+						<Route path="/hmm/*?" component={HMM} />
+						<Route path="/jobs/*?" component={Jobs} />
+						<Route path="/ml/*?" component={ML} />
+						<Route path="/refs/*?" component={References} />
+						<Route path="/samples/*?" component={Samples} />
+						<Route path="/subtractions/*?" component={Subtraction} />
+					</Switch>
+				</Suspense>
+			</div>
 
-            <Sidebar administratorRole={data.administrator_role} />
+			<Sidebar administratorRole={data.administrator_role} />
 
-            <Suspense fallback={null}>
-                <DevDialog />
-                <UploadOverlay />
-            </Suspense>
-        </>
-    );
+			<Suspense fallback={null}>
+				<DevDialog />
+				<UploadOverlay />
+			</Suspense>
+		</>
+	);
 }

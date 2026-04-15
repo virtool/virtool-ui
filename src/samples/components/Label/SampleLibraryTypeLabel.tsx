@@ -1,24 +1,24 @@
 import Icon from "@base/Icon";
-import { LibraryType } from "@samples/types";
+import type { LibraryType } from "@samples/types";
 import { getLibraryTypeDisplayName } from "@samples/utils";
 import { Dna } from "lucide-react";
 import { BaseSampleLabel } from "./BaseSampleLabel";
 
 type SampleLibraryTypeLabelProps = {
-    /** The samples library type */
-    libraryType: LibraryType;
+	/** The samples library type */
+	libraryType: LibraryType;
 };
 
 /**
  * Displays the library type associated with the sample
  */
 export default function SampleLibraryTypeLabel({
-    libraryType,
+	libraryType,
 }: SampleLibraryTypeLabelProps) {
-    return (
-        <BaseSampleLabel variant="library">
-            <Icon icon={Dna} />
-            <span>{getLibraryTypeDisplayName(libraryType)}</span>
-        </BaseSampleLabel>
-    );
+	return (
+		<BaseSampleLabel variant="library">
+			<Icon icon={Dna} />
+			<span>{getLibraryTypeDisplayName(libraryType)}</span>
+		</BaseSampleLabel>
+	);
 }

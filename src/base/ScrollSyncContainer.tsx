@@ -1,8 +1,8 @@
-import { ReactNode, useState } from "react";
+import { type ReactNode, useState } from "react";
 import ScrollSyncContext from "./ScrollSyncContext";
 
 type ScrollSyncProps = {
-    children: ReactNode;
+	children: ReactNode;
 };
 
 /**
@@ -11,11 +11,11 @@ type ScrollSyncProps = {
  * @param children - the component to synchronise scroll within
  */
 export default function ScrollSyncContainer({ children }: ScrollSyncProps) {
-    const [scrollPixels, setScrollPixels] = useState(0);
+	const [scrollPixels, setScrollPixels] = useState(0);
 
-    return (
-        <ScrollSyncContext.Provider value={[scrollPixels, setScrollPixels]}>
-            {children}
-        </ScrollSyncContext.Provider>
-    );
+	return (
+		<ScrollSyncContext.Provider value={[scrollPixels, setScrollPixels]}>
+			{children}
+		</ScrollSyncContext.Provider>
+	);
 }

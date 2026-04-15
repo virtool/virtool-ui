@@ -1,32 +1,31 @@
-import { ErrorResponse } from "@/types/api";
 import { samplesQueryKeys } from "@samples/queries";
 import {
-    keepPreviousData,
-    useMutation,
-    useQuery,
-    useQueryClient,
+	keepPreviousData,
+	useMutation,
+	useQuery,
+	useQueryClient,
 } from "@tanstack/react-query";
+import type { ErrorResponse } from "@/types/api";
 import {
-    blastNuvs,
-    createAnalysis,
-    getAnalysis,
-    listAnalyses,
-    removeAnalysis,
+	blastNuvs,
+	createAnalysis,
+	getAnalysis,
+	listAnalyses,
+	removeAnalysis,
 } from "./api";
-import { Analysis, AnalysisSearchResult, GenericAnalysis } from "./types";
+import type { Analysis, AnalysisSearchResult, GenericAnalysis } from "./types";
 import { formatData } from "./utils";
 
 /**
  * Factory object for generating analyses query keys
  */
 export const analysesQueryKeys = {
-    all: () => ["analyses"] as const,
-    lists: () => ["analyses", "list"] as const,
-    list: (filters: Array<string | number | boolean | string[]>) =>
-        ["analyses", "list", ...filters] as const,
-    details: () => ["analyses", "details"] as const,
-    detail: (analysesId: string) =>
-        ["analyses", "details", analysesId] as const,
+	all: () => ["analyses"] as const,
+	lists: () => ["analyses", "list"] as const,
+	list: (filters: Array<string | number | boolean | string[]>) =>
+		["analyses", "list", ...filters] as const,
+	details: () => ["analyses", "details"] as const,
+	detail: (analysesId: string) => ["analyses", "details", analysesId] as const,
 };
 
 /**
@@ -39,16 +38,16 @@ export const analysesQueryKeys = {
  * @returns A page of analyses search results
  */
 export function useListAnalyses(
-    sampleId: string,
-    page: number,
-    per_page: number,
-    term?: string,
+	sampleId: string,
+	page: number,
+	per_page: number,
+	term?: string,
 ) {
-    return useQuery<AnalysisSearchResult>({
-        queryKey: analysesQueryKeys.list([sampleId, page, per_page, term]),
-        queryFn: () => listAnalyses(sampleId, page, per_page, term),
-        placeholderData: keepPreviousData,
-    });
+	return useQuery<AnalysisSearchResult>({
+		queryKey: analysesQueryKeys.list([sampleId, page, per_page, term]),
+		queryFn: () => listAnalyses(sampleId, page, per_page, term),
+		placeholderData: keepPreviousData,
+	});
 }
 
 /**
@@ -58,19 +57,19 @@ export function useListAnalyses(
  * @returns A mutator for removing an analysis
  */
 export function useRemoveAnalysis(analysisId: string) {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    const mutation = useMutation<null, unknown, { analysisId: string }>({
-        mutationFn: ({ analysisId }) => removeAnalysis(analysisId),
+	const mutation = useMutation<null, unknown, { analysisId: string }>({
+		mutationFn: ({ analysisId }) => removeAnalysis(analysisId),
 
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: analysesQueryKeys.lists(),
-            });
-        },
-    });
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: analysesQueryKeys.lists(),
+			});
+		},
+	});
 
-    return () => mutation.mutate({ analysisId });
+	return () => mutation.mutate({ analysisId });
 }
 
 /**
@@ -80,41 +79,41 @@ export function useRemoveAnalysis(analysisId: string) {
  * @returns A complete analysis
  */
 export function useGetAnalysis(analysisId: string) {
-    const queryResult = useQuery<Analysis, ErrorResponse>({
-        queryKey: analysesQueryKeys.detail(analysisId),
-        queryFn: () => getAnalysis({ analysisId }),
-    });
+	const queryResult = useQuery<Analysis, ErrorResponse>({
+		queryKey: analysesQueryKeys.detail(analysisId),
+		queryFn: () => getAnalysis({ analysisId }),
+	});
 
-    return {
-        ...queryResult,
-        data: formatData(queryResult.data) as Analysis,
-    };
+	return {
+		...queryResult,
+		data: formatData(queryResult.data) as Analysis,
+	};
 }
 
 export type CreateAnalysisParams = {
-    mlModel?: string;
-    refId?: string;
-    sampleId: string;
-    subtractionIds?: string[];
-    workflow: string;
+	mlModel?: string;
+	refId?: string;
+	sampleId: string;
+	subtractionIds?: string[];
+	workflow: string;
 };
 
 export function useCreateAnalysis() {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<GenericAnalysis, unknown, CreateAnalysisParams>({
-        mutationFn: ({ mlModel, refId, sampleId, subtractionIds, workflow }) =>
-            createAnalysis(mlModel, refId, sampleId, subtractionIds, workflow),
+	return useMutation<GenericAnalysis, unknown, CreateAnalysisParams>({
+		mutationFn: ({ mlModel, refId, sampleId, subtractionIds, workflow }) =>
+			createAnalysis(mlModel, refId, sampleId, subtractionIds, workflow),
 
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: analysesQueryKeys.lists(),
-            });
-            queryClient.invalidateQueries({
-                queryKey: samplesQueryKeys.lists(),
-            });
-        },
-    });
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: analysesQueryKeys.lists(),
+			});
+			queryClient.invalidateQueries({
+				queryKey: samplesQueryKeys.lists(),
+			});
+		},
+	});
 }
 
 /**
@@ -124,15 +123,15 @@ export function useCreateAnalysis() {
  * @returns A mutator for installing the blast information
  */
 export function useBlastNuvs(analysisId: string) {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<null, unknown, { sequenceIndex: number }>({
-        mutationFn: ({ sequenceIndex }) => blastNuvs(analysisId, sequenceIndex),
+	return useMutation<null, unknown, { sequenceIndex: number }>({
+		mutationFn: ({ sequenceIndex }) => blastNuvs(analysisId, sequenceIndex),
 
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: analysesQueryKeys.detail(analysisId),
-            });
-        },
-    });
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: analysesQueryKeys.detail(analysisId),
+			});
+		},
+	});
 }

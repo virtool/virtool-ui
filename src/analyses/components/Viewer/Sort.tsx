@@ -5,50 +5,49 @@ import DropdownMenuItem from "@base/DropdownMenuItem";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 
 const sortKeys = {
-    pathoscope: ["coverage", "depth", "weight"],
-    nuvs: ["length", "e", "orfs"],
-    iimi: ["name", "probability", "coverage"],
+	pathoscope: ["coverage", "depth", "weight"],
+	nuvs: ["length", "e", "orfs"],
+	iimi: ["name", "probability", "coverage"],
 };
 
 const sortTitles = {
-    coverage: "Coverage",
-    depth: "Depth",
-    e: "E-Value",
-    length: "Length",
-    orfs: "ORFs",
-    weight: "Weight",
-    identity: "Identity",
-    name: "Name",
-    probability: "PScore",
+	coverage: "Coverage",
+	depth: "Depth",
+	e: "E-Value",
+	length: "Length",
+	orfs: "ORFs",
+	weight: "Weight",
+	identity: "Identity",
+	name: "Name",
+	probability: "PScore",
 };
 
 interface AnalysisViewerSortProps {
-    workflow: string;
-    sortKey: string;
-    onSelect: (key: string) => void;
+	workflow: string;
+	sortKey: string;
+	onSelect: (key: string) => void;
 }
 
 export function AnalysisViewerSort({
-    workflow,
-    sortKey,
-    onSelect,
+	workflow,
+	sortKey,
+	onSelect,
 }: AnalysisViewerSortProps) {
-    return (
-        <Dropdown>
-            <DropdownButton className="flex items-center">
-                <span>
-                    <ArrowUpDown className="size-1" /> Sort:{" "}
-                    {sortTitles[sortKey]}
-                </span>
-                <ChevronDown size={18} />
-            </DropdownButton>
-            <DropdownMenuContent>
-                {sortKeys[workflow].map((key) => (
-                    <DropdownMenuItem key={key} onSelect={() => onSelect(key)}>
-                        {sortTitles[key]}
-                    </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-        </Dropdown>
-    );
+	return (
+		<Dropdown>
+			<DropdownButton className="flex items-center">
+				<span>
+					<ArrowUpDown className="size-1" /> Sort: {sortTitles[sortKey]}
+				</span>
+				<ChevronDown size={18} />
+			</DropdownButton>
+			<DropdownMenuContent>
+				{sortKeys[workflow].map((key) => (
+					<DropdownMenuItem key={key} onSelect={() => onSelect(key)}>
+						{sortTitles[key]}
+					</DropdownMenuItem>
+				))}
+			</DropdownMenuContent>
+		</Dropdown>
+	);
 }

@@ -1,6 +1,6 @@
 import { toThousand } from "@app/utils";
 import Icon from "@base/Icon";
-import { IconColor } from "@base/types";
+import type { IconColor } from "@base/types";
 import { Circle } from "lucide-react";
 import styled from "styled-components";
 
@@ -20,17 +20,17 @@ const StyledBarsLegendItem = styled.div`
 `;
 
 interface BarsLegendItemProps {
-    color: IconColor;
-    count: number;
-    title: string;
+	color: IconColor;
+	count: number;
+	title: string;
 }
 
 export function BarsLegendItem({ color, count, title }: BarsLegendItemProps) {
-    return (
-        <StyledBarsLegendItem>
-            <Icon icon={Circle} color={color} />
-            <span>{title}</span>
-            <span>{toThousand(count)}</span>
-        </StyledBarsLegendItem>
-    );
+	return (
+		<StyledBarsLegendItem>
+			<Icon icon={Circle} color={color} />
+			<span>{title}</span>
+			<span>{toThousand(count)}</span>
+		</StyledBarsLegendItem>
+	);
 }

@@ -1,5 +1,5 @@
 import { apiClient } from "@app/api";
-import { JobState, ServerJob, ServerJobSearchResult } from "./types";
+import type { JobState, ServerJob, ServerJobSearchResult } from "./types";
 
 /**
  * Fetch a page of job search results
@@ -10,15 +10,15 @@ import { JobState, ServerJob, ServerJobSearchResult } from "./types";
  * @returns A promise resolving to a page of job search results
  */
 export async function findJobs(
-    page: number,
-    per_page: number,
-    states: JobState[],
+	page: number,
+	per_page: number,
+	states: JobState[],
 ): Promise<ServerJobSearchResult> {
-    const response = await apiClient
-        .get("/jobs/v2")
-        .query({ page, per_page, state: states });
+	const response = await apiClient
+		.get("/jobs/v2")
+		.query({ page, per_page, state: states });
 
-    return response.body;
+	return response.body;
 }
 
 /**
@@ -28,6 +28,6 @@ export async function findJobs(
  * @returns A promise resolving to a single job
  */
 export async function fetchJob(jobId: string): Promise<ServerJob> {
-    const response = await apiClient.get(`/jobs/v2/${jobId}`);
-    return response.body;
+	const response = await apiClient.get(`/jobs/v2/${jobId}`);
+	return response.body;
 }

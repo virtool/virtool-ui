@@ -1,9 +1,9 @@
 import { fontWeight, getFontSize } from "@app/theme";
-import styled, { DefaultTheme } from "styled-components";
+import styled, { type DefaultTheme } from "styled-components";
 import SidebarHeaderButton from "./SidebarHeaderButton";
 
 type SidebarHeaderProps = {
-    theme: DefaultTheme;
+	theme: DefaultTheme;
 };
 
 const SidebarHeader = styled.h3<SidebarHeaderProps>`

@@ -1,5 +1,5 @@
-import { ErrorResponse } from "@/types/api";
 import { useMutation } from "@tanstack/react-query";
+import type { ErrorResponse } from "@/types/api";
 import { postDevCommand } from "./api";
 
 /**
@@ -8,7 +8,7 @@ import { postDevCommand } from "./api";
  * @returns A mutator for executing developer commands
  */
 export function usePostDevCommand() {
-    return useMutation<unknown, ErrorResponse, { command: string }>({
-        mutationFn: ({ command }) => postDevCommand(command),
-    });
+	return useMutation<unknown, ErrorResponse, { command: string }>({
+		mutationFn: ({ command }) => postDevCommand(command),
+	});
 }

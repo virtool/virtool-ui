@@ -11,54 +11,53 @@ import AdministratorCreate from "./AdministratorCreate";
 import AdministratorItem from "./AdministratorItem";
 
 function renderRow(roles) {
-    function AdministratorRow(item) {
-        return <AdministratorItem key={item.id} user={item} roles={roles} />;
-    }
-    return AdministratorRow;
+	function AdministratorRow(item) {
+		return <AdministratorItem key={item.id} user={item} roles={roles} />;
+	}
+	return AdministratorRow;
 }
 
 export default function ManageAdministrators() {
-    const [term, setTerm] = useState("");
-    const { page } = usePageParam();
+	const [term, setTerm] = useState("");
+	const { page } = usePageParam();
 
-    const { data: users, isPending: isPendingUsers } = useFindUsers(
-        page,
-        25,
-        term,
-        true,
-    );
+	const { data: users, isPending: isPendingUsers } = useFindUsers(
+		page,
+		25,
+		term,
+		true,
+	);
 
-    const { data: account, isPending: isPendingAccount } = useFetchAccount();
-    const { data: roles, isPending: isPendingRoles } =
-        useGetAdministratorRoles();
+	const { data: account, isPending: isPendingAccount } = useFetchAccount();
+	const { data: roles, isPending: isPendingRoles } = useGetAdministratorRoles();
 
-    if (isPendingUsers || isPendingRoles || isPendingAccount) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPendingUsers || isPendingRoles || isPendingAccount) {
+		return <LoadingPlaceholder />;
+	}
 
-    const filteredUsers = users.items.filter((user) => user.id !== account.id);
+	const filteredUsers = users.items.filter((user) => user.id !== account.id);
 
-    return (
-        <>
-            <Toolbar>
-                <div className="flex-grow">
-                    <InputSearch
-                        name="search"
-                        aria-label="search"
-                        value={term}
-                        onChange={(e) => setTerm(e.target.value)}
-                    />
-                </div>
-                <AdministratorCreate />
-            </Toolbar>
-            <Pagination
-                items={filteredUsers}
-                renderRow={renderRow(roles)}
-                storedPage={users.page}
-                currentPage={page}
-                pageCount={users.page_count}
-            />
-            {!filteredUsers.length && <NoneFoundBox noun="administrators" />}
-        </>
-    );
+	return (
+		<>
+			<Toolbar>
+				<div className="flex-grow">
+					<InputSearch
+						name="search"
+						aria-label="search"
+						value={term}
+						onChange={(e) => setTerm(e.target.value)}
+					/>
+				</div>
+				<AdministratorCreate />
+			</Toolbar>
+			<Pagination
+				items={filteredUsers}
+				renderRow={renderRow(roles)}
+				storedPage={users.page}
+				currentPage={page}
+				pageCount={users.page_count}
+			/>
+			{!filteredUsers.length && <NoneFoundBox noun="administrators" />}
+		</>
+	);
 }

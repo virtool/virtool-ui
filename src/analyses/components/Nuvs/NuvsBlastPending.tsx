@@ -1,5 +1,3 @@
-import { addSeconds, formatDistanceStrict } from "@/app/date";
-import { useNow } from "@/app/hooks";
 import Box from "@base/Box";
 import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
@@ -7,45 +5,47 @@ import Loader from "@base/Loader";
 import RelativeTime from "@base/RelativeTime";
 import { ExternalLink as ExternalLinkIcon } from "lucide-react";
 import styled from "styled-components";
+import { addSeconds, formatDistanceStrict } from "@/app/date";
+import { useNow } from "@/app/hooks";
 
 const ridRoot =
-    "https://blast.ncbi.nlm.nih.gov/Blast.cgi?\
+	"https://blast.ncbi.nlm.nih.gov/Blast.cgi?\
     CMD=Web&PAGE_TYPE=BlastFormatting&OLD_BLAST=false&GET_RID_INFO=on&RID=";
 
 function RidLink({ rid }) {
-    if (rid) {
-        return (
-            <span>
-                <span> with RID </span>
-                <ExternalLink href={ridRoot + rid}>
-                    {rid}{" "}
-                    <sup>
-                        <Icon icon={ExternalLinkIcon} />
-                    </sup>
-                </ExternalLink>
-            </span>
-        );
-    }
+	if (rid) {
+		return (
+			<span>
+				<span> with RID </span>
+				<ExternalLink href={ridRoot + rid}>
+					{rid}{" "}
+					<sup>
+						<Icon icon={ExternalLinkIcon} />
+					</sup>
+				</ExternalLink>
+			</span>
+		);
+	}
 
-    return null;
+	return null;
 }
 
 function RidTiming({ interval, lastCheckedAt }) {
-    const now = useNow();
+	const now = useNow();
 
-    if (lastCheckedAt) {
-        const nextCheckAt = addSeconds(new Date(lastCheckedAt), interval);
-        const relativeNext = formatDistanceStrict(new Date(nextCheckAt), now);
+	if (lastCheckedAt) {
+		const nextCheckAt = addSeconds(new Date(lastCheckedAt), interval);
+		const relativeNext = formatDistanceStrict(new Date(nextCheckAt), now);
 
-        return (
-            <div className="ml-auto text-gray-700">
-                Last checked <RelativeTime time={lastCheckedAt} />. Checking
-                again in {relativeNext}
-            </div>
-        );
-    }
+		return (
+			<div className="ml-auto text-gray-700">
+				Last checked <RelativeTime time={lastCheckedAt} />. Checking again in{" "}
+				{relativeNext}
+			</div>
+		);
+	}
 
-    return null;
+	return null;
 }
 
 const StyledBLASTInProgress = styled(Box)`
@@ -58,16 +58,16 @@ const StyledBLASTInProgress = styled(Box)`
 `;
 
 export default function NuvsBlastPending({ interval, lastCheckedAt, rid }) {
-    return (
-        <StyledBLASTInProgress>
-            <Loader size="16px" color="primary" />
-            <div>
-                <div>
-                    <span className="font-medium">BLAST in progress</span>
-                    <RidLink rid={rid} />
-                </div>
-                <RidTiming interval={interval} lastCheckedAt={lastCheckedAt} />
-            </div>
-        </StyledBLASTInProgress>
-    );
+	return (
+		<StyledBLASTInProgress>
+			<Loader size="16px" color="primary" />
+			<div>
+				<div>
+					<span className="font-medium">BLAST in progress</span>
+					<RidLink rid={rid} />
+				</div>
+				<RidTiming interval={interval} lastCheckedAt={lastCheckedAt} />
+			</div>
+		</StyledBLASTInProgress>
+	);
 }

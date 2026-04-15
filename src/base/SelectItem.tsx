@@ -16,7 +16,7 @@ const StyledSelectItem = styled(SelectPrimitive.Item)`
 
     &:hover {
         background-color: ${({ theme }) =>
-            getColor({ color: "greyHover", theme })};
+					getColor({ color: "greyHover", theme })};
         border: 0;
     }
 `;
@@ -30,10 +30,10 @@ const Description = styled.div`
 `;
 
 export default function SelectItem({ value, children, description }) {
-    return (
-        <StyledSelectItem value={value} key={value}>
-            <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-            {description && <Description>{description}</Description>}
-        </StyledSelectItem>
-    );
+	return (
+		<StyledSelectItem value={value} key={value}>
+			<SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+			{description && <Description>{description}</Description>}
+		</StyledSelectItem>
+	);
 }

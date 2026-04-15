@@ -1,6 +1,6 @@
-import { LabelNested } from "@labels/types";
+import type { LabelNested } from "@labels/types";
 import { useUpdateSample } from "@samples/queries";
-import { SubtractionNested } from "@subtraction/types";
+import type { SubtractionNested } from "@subtraction/types";
 import styled from "styled-components";
 import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
 import SampleLabels from "../Sidebar/SampleLabels";
@@ -14,37 +14,37 @@ const StyledSidebar = styled.div`
 `;
 
 type SidebarProps = {
-    sampleId: string;
-    sampleLabels: Array<LabelNested>;
-    defaultSubtractions: Array<SubtractionNested>;
+	sampleId: string;
+	sampleLabels: Array<LabelNested>;
+	defaultSubtractions: Array<SubtractionNested>;
 };
 
 /**
  * Displays the sidebar for managing labels and subtractions associated with sample
  */
 export default function Sidebar({
-    sampleId,
-    sampleLabels,
-    defaultSubtractions,
+	sampleId,
+	sampleLabels,
+	defaultSubtractions,
 }: SidebarProps) {
-    const mutation = useUpdateSample(sampleId);
+	const mutation = useUpdateSample(sampleId);
 
-    return (
-        <StyledSidebar>
-            <SampleLabels
-                onUpdate={(labels) => {
-                    mutation.mutate({ update: { labels } });
-                }}
-                sampleLabels={sampleLabels.map((label) => label.id)}
-            />
-            <DefaultSubtractions
-                onUpdate={(subtractions) => {
-                    mutation.mutate({ update: { subtractions } });
-                }}
-                defaultSubtractions={defaultSubtractions.map(
-                    (subtraction) => subtraction.id,
-                )}
-            />
-        </StyledSidebar>
-    );
+	return (
+		<StyledSidebar>
+			<SampleLabels
+				onUpdate={(labels) => {
+					mutation.mutate({ update: { labels } });
+				}}
+				sampleLabels={sampleLabels.map((label) => label.id)}
+			/>
+			<DefaultSubtractions
+				onUpdate={(subtractions) => {
+					mutation.mutate({ update: { subtractions } });
+				}}
+				defaultSubtractions={defaultSubtractions.map(
+					(subtraction) => subtraction.id,
+				)}
+			/>
+		</StyledSidebar>
+	);
 }

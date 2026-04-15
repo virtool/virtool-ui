@@ -1,52 +1,50 @@
 import Button from "@base/Button";
 import {
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    DialogTrigger,
+	Dialog,
+	DialogContent,
+	DialogTitle,
+	DialogTrigger,
 } from "@base/Dialog";
 import { useState } from "react";
 import { useCreateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
 
 type NewLabel = {
-    color: string;
-    description: string;
-    name: string;
+	color: string;
+	description: string;
+	name: string;
 };
 
 /**
  * Displays a dialog for creating a label
  */
 export function CreateLabel() {
-    const [open, setOpen] = useState(false);
-    const mutation = useCreateLabel();
+	const [open, setOpen] = useState(false);
+	const mutation = useCreateLabel();
 
-    function handleSubmit({ color, name, description }: NewLabel) {
-        mutation.mutate(
-            { color, description, name },
-            {
-                onSuccess: () => {
-                    setOpen(false);
-                },
-            },
-        );
-    }
+	function handleSubmit({ color, name, description }: NewLabel) {
+		mutation.mutate(
+			{ color, description, name },
+			{
+				onSuccess: () => {
+					setOpen(false);
+				},
+			},
+		);
+	}
 
-    return (
-        <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-            <Button as={DialogTrigger} color="blue">
-                Create
-            </Button>
-            <DialogContent>
-                <DialogTitle>Create a Label</DialogTitle>
-                <LabelForm
-                    error={
-                        mutation.isError && mutation.error.response.body.message
-                    }
-                    onSubmit={handleSubmit}
-                />
-            </DialogContent>
-        </Dialog>
-    );
+	return (
+		<Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+			<Button as={DialogTrigger} color="blue">
+				Create
+			</Button>
+			<DialogContent>
+				<DialogTitle>Create a Label</DialogTitle>
+				<LabelForm
+					error={mutation.isError && mutation.error.response.body.message}
+					onSubmit={handleSubmit}
+				/>
+			</DialogContent>
+		</Dialog>
+	);
 }

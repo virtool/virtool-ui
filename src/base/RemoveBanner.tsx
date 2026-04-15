@@ -1,9 +1,9 @@
-import styled, { DefaultTheme } from "styled-components";
+import styled, { type DefaultTheme } from "styled-components";
 import Alert from "./Alert";
 import Button from "./Button";
 
 interface StyledRemoveBannerProps {
-    theme: DefaultTheme;
+	theme: DefaultTheme;
 }
 
 const StyledRemoveBanner = styled(Alert)<StyledRemoveBannerProps>`
@@ -20,24 +20,24 @@ const StyledRemoveBanner = styled(Alert)<StyledRemoveBannerProps>`
 `;
 
 type RemoveBannerProps = {
-    buttonText: string;
-    message: string;
-    onClick: () => void;
-    outerClassName?: string;
+	buttonText: string;
+	message: string;
+	onClick: () => void;
+	outerClassName?: string;
 };
 
 export default function RemoveBanner({
-    buttonText,
-    message,
-    onClick,
-    outerClassName,
+	buttonText,
+	message,
+	onClick,
+	outerClassName,
 }: RemoveBannerProps) {
-    return (
-        <StyledRemoveBanner outerClassName={outerClassName} color="red">
-            <strong>{message}</strong>
-            <Button color="red" onClick={onClick}>
-                {buttonText}
-            </Button>
-        </StyledRemoveBanner>
-    );
+	return (
+		<StyledRemoveBanner outerClassName={outerClassName} color="red">
+			<strong>{message}</strong>
+			<Button color="red" onClick={onClick}>
+				{buttonText}
+			</Button>
+		</StyledRemoveBanner>
+	);
 }

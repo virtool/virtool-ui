@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import styled from "styled-components";
 
 const StyledViewHeader = styled.header`
@@ -9,20 +9,20 @@ const StyledViewHeader = styled.header`
 StyledViewHeader.displayName = "StyledViewHeader";
 
 type ViewHeaderProps = {
-    children?: ReactNode;
-    className?: string;
-    title: string;
+	children?: ReactNode;
+	className?: string;
+	title: string;
 };
 
 export default function ViewHeader({
-    className,
-    title,
-    children,
+	className,
+	title,
+	children,
 }: ViewHeaderProps) {
-    return (
-        <StyledViewHeader className={className}>
-            <title>{title}</title>
-            {children}
-        </StyledViewHeader>
-    );
+	return (
+		<StyledViewHeader className={className}>
+			<title>{title}</title>
+			{children}
+		</StyledViewHeader>
+	);
 }

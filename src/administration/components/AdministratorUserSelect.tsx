@@ -1,7 +1,7 @@
 import { getFontSize, getFontWeight } from "@app/theme";
 import ComboBox from "@base/ComboBox";
 import InitialIcon from "@base/InitialIcon";
-import { User } from "@users/types";
+import type { User } from "@users/types";
 import styled from "styled-components";
 
 const UserItem = styled.div`
@@ -20,45 +20,45 @@ const UserItem = styled.div`
 `;
 
 function renderRow(user) {
-    return (
-        <UserItem aria-label={user.handle}>
-            <InitialIcon handle={user.handle} size="md" />
-            <span>{user.handle}</span>
-        </UserItem>
-    );
+	return (
+		<UserItem aria-label={user.handle}>
+			<InitialIcon handle={user.handle} size="md" />
+			<span>{user.handle}</span>
+		</UserItem>
+	);
 }
 
 function toString(user: User) {
-    return user?.handle;
+	return user?.handle;
 }
 
 type UserSelectProps = {
-    term: string;
-    users: Array<User>;
-    value: User;
-    onChange: (value: string) => void;
-    onTermChange: (value: string) => void;
-    id: string;
+	term: string;
+	users: Array<User>;
+	value: User;
+	onChange: (value: string) => void;
+	onTermChange: (value: string) => void;
+	id: string;
 };
 
 export default function AdministratorUserSelect({
-    term,
-    users,
-    value,
-    onChange,
-    onTermChange,
-    id,
+	term,
+	users,
+	value,
+	onChange,
+	onTermChange,
+	id,
 }: UserSelectProps) {
-    return (
-        <ComboBox
-            items={users}
-            term={term}
-            selectedItem={value || null}
-            renderRow={renderRow}
-            itemToString={toString}
-            onFilter={onTermChange}
-            onChange={onChange}
-            id={id}
-        />
-    );
+	return (
+		<ComboBox
+			items={users}
+			term={term}
+			selectedItem={value || null}
+			renderRow={renderRow}
+			itemToString={toString}
+			onFilter={onTermChange}
+			onChange={onChange}
+			id={id}
+		/>
+	);
 }

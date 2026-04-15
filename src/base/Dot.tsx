@@ -3,25 +3,25 @@ import { cn } from "@app/utils";
 export type DotColor = "blue" | "green" | "gray" | "orange" | "purple" | "red";
 
 type DotProps = {
-    color: DotColor;
+	color: DotColor;
 };
 
 export default function Dot({ color }: DotProps) {
-    return (
-        <div
-            className={cn(
-                {
-                    "bg-blue-500": color === "blue",
-                    "bg-green-600": color === "green",
-                    "bg-gray-400": color === "gray",
-                    "bg-amber-600": color === "orange",
-                    "bg-purple-600": color === "purple",
-                    "bg-red-600": color === "red",
-                },
-                "margin-full",
-                "rounded-full",
-                "size-2.5",
-            )}
-        />
-    );
+	return (
+		<div
+			className={cn(
+				{
+					"bg-blue-500": color === "blue",
+					"bg-green-600": color === "green",
+					"bg-gray-400": color === "gray",
+					"bg-amber-600": color === "orange",
+					"bg-purple-600": color === "purple",
+					"bg-red-600": color === "red",
+				},
+				"margin-full",
+				"rounded-full",
+				"size-2.5",
+			)}
+		/>
+	);
 }

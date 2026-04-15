@@ -19,46 +19,46 @@ const StyledRestoredAlert = styled(Alert)`
 `;
 
 export type RestoredAlertProps = {
-    /* Whether the form has been restored from cached values */
-    hasRestored: boolean;
-    /* the display name of the resource */
-    name: string;
-    /* undo the restoration and restore the form to its initial state */
-    resetForm: () => void;
+	/* Whether the form has been restored from cached values */
+	hasRestored: boolean;
+	/* the display name of the resource */
+	name: string;
+	/* undo the restoration and restore the form to its initial state */
+	resetForm: () => void;
 };
 
 /** Alert informing users of form data restoration */
 export function RestoredAlert({
-    hasRestored,
-    name,
-    resetForm,
+	hasRestored,
+	name,
+	resetForm,
 }: RestoredAlertProps) {
-    const [dismissed, setDismissed] = useState(false);
+	const [dismissed, setDismissed] = useState(false);
 
-    function onUndoRestore() {
-        resetForm();
-        setDismissed(true);
-    }
+	function onUndoRestore() {
+		resetForm();
+		setDismissed(true);
+	}
 
-    const show = hasRestored && !dismissed;
+	const show = hasRestored && !dismissed;
 
-    return (
-        show && (
-            <StyledRestoredAlert>
-                <span>Resumed editing draft {name}.</span>
-                <IconButton
-                    IconComponent={Undo2}
-                    color="gray"
-                    tip="undo restore"
-                    onClick={onUndoRestore}
-                />
-                <IconButton
-                    IconComponent={X}
-                    color="gray"
-                    tip="close"
-                    onClick={() => setDismissed(true)}
-                />
-            </StyledRestoredAlert>
-        )
-    );
+	return (
+		show && (
+			<StyledRestoredAlert>
+				<span>Resumed editing draft {name}.</span>
+				<IconButton
+					IconComponent={Undo2}
+					color="gray"
+					tip="undo restore"
+					onClick={onUndoRestore}
+				/>
+				<IconButton
+					IconComponent={X}
+					color="gray"
+					tip="close"
+					onClick={() => setDismissed(true)}
+				/>
+			</StyledRestoredAlert>
+		)
+	);
 }

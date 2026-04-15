@@ -1,9 +1,9 @@
 import { faker } from "@faker-js/faker";
-import {
-    Reference,
-    ReferenceMinimal,
-    ReferenceNested,
-    ReferenceTarget,
+import type {
+	Reference,
+	ReferenceMinimal,
+	ReferenceNested,
+	ReferenceTarget,
 } from "@references/types";
 import nock from "nock";
 import { createFakeUserNested } from "./user";
@@ -12,93 +12,93 @@ import { createFakeUserNested } from "./user";
  * Create a fake reference target
  */
 export function createFakeReferenceTarget(): ReferenceTarget {
-    return {
-        description: faker.lorem.lines(1),
-        length: faker.number.int(),
-        name: faker.word.noun({ strategy: "any-length" }),
-        required: true,
-    };
+	return {
+		description: faker.lorem.lines(1),
+		length: faker.number.int(),
+		name: faker.word.noun({ strategy: "any-length" }),
+		required: true,
+	};
 }
 
 /**
  * Create a fake reference nested
  */
 export function createFakeReferenceNested(
-    overrides?: Partial<ReferenceNested>,
+	overrides?: Partial<ReferenceNested>,
 ): ReferenceNested {
-    return {
-        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        data_type: "genome",
-        name: faker.word.noun({ strategy: "any-length" }),
-        ...overrides,
-    };
+	return {
+		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		data_type: "genome",
+		name: faker.word.noun({ strategy: "any-length" }),
+		...overrides,
+	};
 }
 
 /**
  * Create a fake reference minimal
  */
 export function createFakeReferenceMinimal(
-    overrides?: Partial<ReferenceMinimal>,
+	overrides?: Partial<ReferenceMinimal>,
 ): ReferenceMinimal {
-    const defaultReferenceMinimal = {
-        ...createFakeReferenceNested(overrides),
-        cloned_from: {
-            id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-            name: faker.word.noun({ strategy: "any-length" }),
-        },
-        created_at: faker.date.past().toISOString(),
-        imported_from: null,
-        installed: null,
-        internal_control: faker.word.noun({ strategy: "any-length" }),
-        latest_build: null,
-        organism: faker.word.noun({ strategy: "any-length" }),
-        otu_count: faker.number.int(),
-        release: null,
-        remotes_from: null,
-        task: {
-            complete: true,
-            created_at: faker.date.past(),
-            error: null,
-            id: faker.number.int(),
-            progress: 100,
-            step: "done",
-            type: "clone_reference",
-        },
-        unbuilt_change_count: faker.number.int(),
-        updating: false,
-        user: createFakeUserNested(),
-    };
+	const defaultReferenceMinimal = {
+		...createFakeReferenceNested(overrides),
+		cloned_from: {
+			id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+			name: faker.word.noun({ strategy: "any-length" }),
+		},
+		created_at: faker.date.past().toISOString(),
+		imported_from: null,
+		installed: null,
+		internal_control: faker.word.noun({ strategy: "any-length" }),
+		latest_build: null,
+		organism: faker.word.noun({ strategy: "any-length" }),
+		otu_count: faker.number.int(),
+		release: null,
+		remotes_from: null,
+		task: {
+			complete: true,
+			created_at: faker.date.past(),
+			error: null,
+			id: faker.number.int(),
+			progress: 100,
+			step: "done",
+			type: "clone_reference",
+		},
+		unbuilt_change_count: faker.number.int(),
+		updating: false,
+		user: createFakeUserNested(),
+	};
 
-    return { ...defaultReferenceMinimal, ...overrides };
+	return { ...defaultReferenceMinimal, ...overrides };
 }
 
 /**
  * Create a fake reference
  */
 export function createFakeReference(overrides?: Partial<Reference>): Reference {
-    const { description, ...props } = overrides || {};
+	const { description, ...props } = overrides || {};
 
-    const defaultReference = {
-        ...createFakeReferenceMinimal(props),
-        contributors: [],
-        description: description || "",
-        groups: [],
-        restrict_source_types: false,
-        source_types: ["isolate", "strain"],
-        targets: [createFakeReferenceTarget()],
-        users: [
-            {
-                ...createFakeUserNested(),
-                build: true,
-                created_at: faker.date.past().toISOString(),
-                modify: true,
-                modify_otu: true,
-                remove: true,
-            },
-        ],
-    };
+	const defaultReference = {
+		...createFakeReferenceMinimal(props),
+		contributors: [],
+		description: description || "",
+		groups: [],
+		restrict_source_types: false,
+		source_types: ["isolate", "strain"],
+		targets: [createFakeReferenceTarget()],
+		users: [
+			{
+				...createFakeUserNested(),
+				build: true,
+				created_at: faker.date.past().toISOString(),
+				modify: true,
+				modify_otu: true,
+				remove: true,
+			},
+		],
+	};
 
-    return { ...defaultReference, ...props };
+	return { ...defaultReference, ...props };
 }
 
 /**
@@ -108,15 +108,15 @@ export function createFakeReference(overrides?: Partial<Reference>): Reference {
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetReferences(references: ReferenceMinimal[]) {
-    return nock("http://localhost").get("/api/refs").query(true).reply(200, {
-        documents: references,
-        found_count: references.length,
-        page: 1,
-        page_count: 1,
-        per_page: 25,
-        ready_count: references.length,
-        total_count: references.length,
-    });
+	return nock("http://localhost").get("/api/refs").query(true).reply(200, {
+		documents: references,
+		found_count: references.length,
+		page: 1,
+		page_count: 1,
+		per_page: 25,
+		ready_count: references.length,
+		total_count: references.length,
+	});
 }
 
 /**
@@ -127,13 +127,13 @@ export function mockApiGetReferences(references: ReferenceMinimal[]) {
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetReferenceDetail(
-    referenceDetail: Reference,
-    statusCode?: number,
+	referenceDetail: Reference,
+	statusCode?: number,
 ) {
-    return nock("http://localhost")
-        .get(`/api/refs/${referenceDetail.id}`)
-        .query(true)
-        .reply(statusCode || 200, referenceDetail);
+	return nock("http://localhost")
+		.get(`/api/refs/${referenceDetail.id}`)
+		.query(true)
+		.reply(statusCode || 200, referenceDetail);
 }
 
 /**
@@ -145,26 +145,26 @@ export function mockApiGetReferenceDetail(
  * @returns The nock scope for the mocked API call
  */
 export function mockApiCloneReference(
-    name: string,
-    description: string,
-    reference: ReferenceMinimal,
+	name: string,
+	description: string,
+	reference: ReferenceMinimal,
 ) {
-    const clonedReference = createFakeReference({
-        cloned_from: {
-            id: reference.id,
-            name: reference.name,
-        },
-        name: name,
-        description: description,
-    });
+	const clonedReference = createFakeReference({
+		cloned_from: {
+			id: reference.id,
+			name: reference.name,
+		},
+		name: name,
+		description: description,
+	});
 
-    return nock("http://localhost")
-        .post("/api/refs", {
-            name: name,
-            description: description,
-            clone_from: reference.id,
-        })
-        .reply(201, clonedReference);
+	return nock("http://localhost")
+		.post("/api/refs", {
+			name: name,
+			description: description,
+			clone_from: reference.id,
+		})
+		.reply(201, clonedReference);
 }
 
 /**
@@ -176,17 +176,17 @@ export function mockApiCloneReference(
  * @returns The nock scope for the mocked API call
  */
 export function mockApiCreateReference(
-    name: string,
-    description: string,
-    organism: string,
+	name: string,
+	description: string,
+	organism: string,
 ) {
-    const reference = createFakeReference({
-        name,
-        description,
-        organism,
-    });
+	const reference = createFakeReference({
+		name,
+		description,
+		organism,
+	});
 
-    return nock("http://localhost")
-        .post("/api/refs", { data_type: "genome", description, name, organism })
-        .reply(201, reference);
+	return nock("http://localhost")
+		.post("/api/refs", { data_type: "genome", description, name, organism })
+		.reply(201, reference);
 }

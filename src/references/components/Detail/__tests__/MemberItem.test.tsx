@@ -2,56 +2,52 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import MemberItem, { MemberItemProps } from "../MemberItem";
+import MemberItem, { type MemberItemProps } from "../MemberItem";
 
 describe("<MemberItem />", () => {
-    let props: MemberItemProps;
+	let props: MemberItemProps;
 
-    beforeEach(() => {
-        props = {
-            canModify: false,
-            handleOrName: "bob",
-            id: "bob",
-            onEdit: vi.fn(),
-            onRemove: vi.fn(),
-        };
-    });
+	beforeEach(() => {
+		props = {
+			canModify: false,
+			handleOrName: "bob",
+			id: "bob",
+			onEdit: vi.fn(),
+			onRemove: vi.fn(),
+		};
+	});
 
-    it("should render", () => {
-        renderWithProviders(<MemberItem {...props} />);
-        expect(screen.getByText("bob")).toBeInTheDocument();
-        expect(
-            screen.queryByRole("button", { name: "Edit" }),
-        ).not.toBeInTheDocument();
-        expect(
-            screen.queryByRole("button", { name: "Remove" }),
-        ).not.toBeInTheDocument();
-    });
+	it("should render", () => {
+		renderWithProviders(<MemberItem {...props} />);
+		expect(screen.getByText("bob")).toBeInTheDocument();
+		expect(
+			screen.queryByRole("button", { name: "Edit" }),
+		).not.toBeInTheDocument();
+		expect(
+			screen.queryByRole("button", { name: "Remove" }),
+		).not.toBeInTheDocument();
+	});
 
-    it("should show modification button when [canModify=true]", () => {
-        props.canModify = true;
-        renderWithProviders(<MemberItem {...props} />);
-        expect(
-            screen.getByRole("button", { name: "Edit" }),
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole("button", { name: "Remove" }),
-        ).toBeInTheDocument();
-    });
+	it("should show modification button when [canModify=true]", () => {
+		props.canModify = true;
+		renderWithProviders(<MemberItem {...props} />);
+		expect(screen.getByRole("button", { name: "Edit" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Remove" })).toBeInTheDocument();
+	});
 
-    it("should call onEdit when edit icon is clicked", async () => {
-        props.canModify = true;
-        renderWithProviders(<MemberItem {...props} />);
+	it("should call onEdit when edit icon is clicked", async () => {
+		props.canModify = true;
+		renderWithProviders(<MemberItem {...props} />);
 
-        await userEvent.click(screen.getByRole("button", { name: "Edit" }));
-        expect(props.onEdit).toHaveBeenCalledWith(props.id);
-    });
+		await userEvent.click(screen.getByRole("button", { name: "Edit" }));
+		expect(props.onEdit).toHaveBeenCalledWith(props.id);
+	});
 
-    it("should call onRemove when trash icon is clicked", async () => {
-        props.canModify = true;
-        renderWithProviders(<MemberItem {...props} />);
+	it("should call onRemove when trash icon is clicked", async () => {
+		props.canModify = true;
+		renderWithProviders(<MemberItem {...props} />);
 
-        await userEvent.click(screen.getByRole("button", { name: "Remove" }));
-        expect(props.onRemove).toHaveBeenCalledWith(props.id);
-    });
+		await userEvent.click(screen.getByRole("button", { name: "Remove" }));
+		expect(props.onRemove).toHaveBeenCalledWith(props.id);
+	});
 });

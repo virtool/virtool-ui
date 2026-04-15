@@ -1,16 +1,16 @@
-import { Account } from "@account/types";
-import { Permission } from "@groups/types";
+import type { Account } from "@account/types";
+import type { Permission } from "@groups/types";
 import { AdministratorRoleName } from "./types";
 
 /**
  * The permissions level of each administrator role
  */
 enum AdministratorPermissionsLevel {
-    full,
-    settings,
-    spaces,
-    users,
-    base,
+	full,
+	settings,
+	spaces,
+	users,
+	base,
 }
 
 /**
@@ -21,27 +21,27 @@ enum AdministratorPermissionsLevel {
  */
 
 export function hasSufficientAdminRole(
-    requiredRole: AdministratorRoleName,
-    userRole: AdministratorRoleName,
+	requiredRole: AdministratorRoleName,
+	userRole: AdministratorRoleName,
 ): boolean {
-    return (
-        AdministratorPermissionsLevel[userRole] <=
-        AdministratorPermissionsLevel[requiredRole]
-    );
+	return (
+		AdministratorPermissionsLevel[userRole] <=
+		AdministratorPermissionsLevel[requiredRole]
+	);
 }
 
 /**
  * Permissions granted to each administrator role
  */
 export enum AdministratorPermissions {
-    cancel_job = AdministratorRoleName.BASE,
-    create_ref = AdministratorRoleName.BASE,
-    modify_hmm = AdministratorRoleName.BASE,
-    remove_job = AdministratorRoleName.BASE,
-    upload_file = AdministratorRoleName.FULL,
-    create_sample = AdministratorRoleName.FULL,
-    modify_subtraction = AdministratorRoleName.FULL,
-    remove_file = AdministratorRoleName.FULL,
+	cancel_job = AdministratorRoleName.BASE,
+	create_ref = AdministratorRoleName.BASE,
+	modify_hmm = AdministratorRoleName.BASE,
+	remove_job = AdministratorRoleName.BASE,
+	upload_file = AdministratorRoleName.FULL,
+	create_sample = AdministratorRoleName.FULL,
+	modify_subtraction = AdministratorRoleName.FULL,
+	remove_file = AdministratorRoleName.FULL,
 }
 
 /**
@@ -52,13 +52,13 @@ export enum AdministratorPermissions {
  * @returns  Whether the user is allowed to perform the action
  */
 export function checkAdminRoleOrPermissionsFromAccount(
-    account: Account,
-    permission: Permission,
+	account: Account,
+	permission: Permission,
 ): boolean {
-    return (
-        hasSufficientAdminRole(
-            AdministratorPermissions[permission as string],
-            account.administrator_role,
-        ) || account.permissions[permission]
-    );
+	return (
+		hasSufficientAdminRole(
+			AdministratorPermissions[permission as string],
+			account.administrator_role,
+		) || account.permissions[permission]
+	);
 }

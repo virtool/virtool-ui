@@ -2,27 +2,27 @@ import { byteSize } from "@app/utils";
 import { renderWithProviders } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 import {
-    SubtractionFileItem,
-    SubtractionFileItemProps,
+	SubtractionFileItem,
+	type SubtractionFileItemProps,
 } from "../SubtractionFileItem";
 
 describe("<SubtractionFile />", () => {
-    let props: SubtractionFileItemProps;
+	let props: SubtractionFileItemProps;
 
-    beforeEach(() => {
-        props = {
-            downloadUrl: "/api/subtractions/xl8faqqz/uploads/subtraction.fa.gz",
-            name: "foo",
-            size: 36461731,
-        };
-    });
+	beforeEach(() => {
+		props = {
+			downloadUrl: "/api/subtractions/xl8faqqz/uploads/subtraction.fa.gz",
+			name: "foo",
+			size: 36461731,
+		};
+	});
 
-    it("should render", () => {
-        const { getByText } = renderWithProviders(
-            <SubtractionFileItem {...props} />,
-        );
+	it("should render", () => {
+		const { getByText } = renderWithProviders(
+			<SubtractionFileItem {...props} />,
+		);
 
-        expect(getByText(props.name)).toBeInTheDocument();
-        expect(getByText(byteSize(props.size))).toBeInTheDocument();
-    });
+		expect(getByText(props.name)).toBeInTheDocument();
+		expect(getByText(byteSize(props.size))).toBeInTheDocument();
+	});
 });

@@ -3,34 +3,34 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import Label from "@base/Label";
 
 type SubtractionSelectorItemProps = {
-    id: string;
-    isDefault: boolean;
-    name: string;
-    onClick: (id: string) => void;
+	id: string;
+	isDefault: boolean;
+	name: string;
+	onClick: (id: string) => void;
 };
 
 export default function SubtractionSelectorItem({
-    id,
-    isDefault,
-    name,
-    onClick,
+	id,
+	isDefault,
+	name,
+	onClick,
 }: SubtractionSelectorItemProps) {
-    return (
-        <BoxGroupSection
-            as="button"
-            className={cn(
-                "bg-white",
-                "flex",
-                "justify-between",
-                "items-center",
-                "select-none",
-                "text-ellipsis",
-                "text-nowrap",
-            )}
-            onClick={() => onClick(id)}
-        >
-            <span className="overflow-hidden">{name}</span>
-            {isDefault ? <Label>Default</Label> : null}
-        </BoxGroupSection>
-    );
+	return (
+		<BoxGroupSection
+			as="button"
+			className={cn(
+				"bg-white",
+				"flex",
+				"justify-between",
+				"items-center",
+				"select-none",
+				"text-ellipsis",
+				"text-nowrap",
+			)}
+			onClick={() => onClick(id)}
+		>
+			<span className="overflow-hidden">{name}</span>
+			{isDefault ? <Label>Default</Label> : null}
+		</BoxGroupSection>
+	);
 }

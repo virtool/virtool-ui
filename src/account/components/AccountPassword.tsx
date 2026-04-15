@@ -15,116 +15,104 @@ import { useForm } from "react-hook-form";
 import { useChangePassword } from "../queries";
 
 type FormValues = {
-    oldPassword: string;
-    newPassword: string;
+	oldPassword: string;
+	newPassword: string;
 };
 
 type ChangePasswordProps = {
-    /** The iso formatted date of the most recent password change */
-    lastPasswordChange: string;
+	/** The iso formatted date of the most recent password change */
+	lastPasswordChange: string;
 };
 
 /**
  * A component to update the accounts password
  */
 export default function AccountPassword({
-    lastPasswordChange,
+	lastPasswordChange,
 }: ChangePasswordProps) {
-    const {
-        formState: { errors },
-        handleSubmit,
-        register,
-        reset,
-    } = useForm<FormValues>({
-        defaultValues: { oldPassword: "", newPassword: "" },
-    });
-    const mutation = useChangePassword();
+	const {
+		formState: { errors },
+		handleSubmit,
+		register,
+		reset,
+	} = useForm<FormValues>({
+		defaultValues: { oldPassword: "", newPassword: "" },
+	});
+	const mutation = useChangePassword();
 
-    useEffect(() => {
-        if (mutation.isSuccess) {
-            reset();
-            const timer = setTimeout(() => {
-                mutation.reset();
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [mutation.isSuccess]);
+	useEffect(() => {
+		if (mutation.isSuccess) {
+			reset();
+			const timer = setTimeout(() => {
+				mutation.reset();
+			}, 3000);
+			return () => clearTimeout(timer);
+		}
+	}, [mutation.isSuccess, reset, mutation.reset]);
 
-    function onSubmit({ oldPassword, newPassword }: FormValues) {
-        mutation.mutate({ old_password: oldPassword, password: newPassword });
-    }
+	function onSubmit({ oldPassword, newPassword }: FormValues) {
+		mutation.mutate({ old_password: oldPassword, password: newPassword });
+	}
 
-    return (
-        <BoxGroup>
-            <BoxGroupHeader>
-                <h2>Password</h2>
-            </BoxGroupHeader>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <BoxGroupSection>
-                    <InputGroup>
-                        <InputLabel htmlFor="oldPassword">
-                            Old Password
-                        </InputLabel>
-                        <InputContainer align="right">
-                            <InputPassword
-                                id="oldPassword"
-                                autoComplete="current-password"
-                                {...register("oldPassword", {
-                                    required:
-                                        "Please provide your old password",
-                                    minLength: {
-                                        value: 8,
-                                        message:
-                                            "Password does not meet minimum length requirement (8)",
-                                    },
-                                })}
-                            />
-                            <InputError>
-                                {errors.oldPassword?.message ||
-                                    (mutation.isError &&
-                                        mutation.error.response.body?.message)}
-                            </InputError>
-                        </InputContainer>
-                    </InputGroup>
-                    <InputGroup>
-                        <InputLabel htmlFor="newPassword">
-                            New Password
-                        </InputLabel>
-                        <InputContainer>
-                            <InputPassword
-                                id="newPassword"
-                                autoComplete="new-password"
-                                {...register("newPassword", {
-                                    required: "Please provide a new password",
-                                    minLength: {
-                                        value: 8,
-                                        message:
-                                            "Password does not meet minimum length requirement (8)",
-                                    },
-                                })}
-                            />
-                            <InputError>
-                                {errors.newPassword?.message}
-                            </InputError>
-                        </InputContainer>
-                    </InputGroup>
-                    {mutation.isSuccess && (
-                        <Alert color="green" icon={Check}>
-                            Password changed successfully
-                        </Alert>
-                    )}
-                    <div className="flex items-center justify-between mb-4">
-                        <span>
-                            Last changed{" "}
-                            <RelativeTime time={lastPasswordChange} />
-                        </span>
-                        <SaveButton
-                            altText="Change"
-                            disabled={mutation.isPending}
-                        />
-                    </div>
-                </BoxGroupSection>
-            </form>
-        </BoxGroup>
-    );
+	return (
+		<BoxGroup>
+			<BoxGroupHeader>
+				<h2>Password</h2>
+			</BoxGroupHeader>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<BoxGroupSection>
+					<InputGroup>
+						<InputLabel htmlFor="oldPassword">Old Password</InputLabel>
+						<InputContainer align="right">
+							<InputPassword
+								id="oldPassword"
+								autoComplete="current-password"
+								{...register("oldPassword", {
+									required: "Please provide your old password",
+									minLength: {
+										value: 8,
+										message:
+											"Password does not meet minimum length requirement (8)",
+									},
+								})}
+							/>
+							<InputError>
+								{errors.oldPassword?.message ||
+									(mutation.isError && mutation.error.response.body?.message)}
+							</InputError>
+						</InputContainer>
+					</InputGroup>
+					<InputGroup>
+						<InputLabel htmlFor="newPassword">New Password</InputLabel>
+						<InputContainer>
+							<InputPassword
+								id="newPassword"
+								autoComplete="new-password"
+								{...register("newPassword", {
+									required: "Please provide a new password",
+									minLength: {
+										value: 8,
+										message:
+											"Password does not meet minimum length requirement (8)",
+									},
+								})}
+							/>
+							<InputError>{errors.newPassword?.message}</InputError>
+						</InputContainer>
+					</InputGroup>
+					{mutation.isSuccess && (
+						<Alert color="green" icon={Check}>
+							Password changed successfully
+						</Alert>
+					)}
+					<div className="flex items-center justify-between mb-4">
+						<span>
+							Last changed <RelativeTime time={lastPasswordChange} />
+						</span>
+						<SaveButton altText="Change" disabled={mutation.isPending} />
+					</div>
+				</BoxGroupSection>
+			</form>
+		</BoxGroup>
+	);
 }

@@ -1,6 +1,6 @@
 import { getBorder } from "@app/theme";
 import { Accordion as AccordionPrimitive } from "radix-ui";
-import { createRef, ReactNode, useEffect } from "react";
+import { createRef, type ReactNode, useEffect } from "react";
 import styled from "styled-components";
 
 const StyledAccordionItem = styled(AccordionPrimitive.Item)`
@@ -11,38 +11,38 @@ const StyledAccordionItem = styled(AccordionPrimitive.Item)`
 
 /** Composed radix accordion item for handling scroll logic  */
 function ComposedScrollingAccordionItem(props) {
-    const ref = createRef<HTMLDivElement>();
-    useEffect(() => {
-        if (props["data-state"] === "open" && ref?.current) {
-            const position = ref.current.getBoundingClientRect().top;
-            const offset = window.scrollY;
-            window.scrollTo({
-                top: position + offset - 50,
-                behavior: "smooth",
-            });
-        }
-    }, [props["data-state"]]);
+	const ref = createRef<HTMLDivElement>();
+	useEffect(() => {
+		if (props["data-state"] === "open" && ref?.current) {
+			const position = ref.current.getBoundingClientRect().top;
+			const offset = window.scrollY;
+			window.scrollTo({
+				top: position + offset - 50,
+				behavior: "smooth",
+			});
+		}
+	}, [props["data-state"], ref?.current]);
 
-    return <div {...props} ref={ref} />;
+	return <div {...props} ref={ref} />;
 }
 
 type AccordionScrollingItemProps = {
-    children: ReactNode;
+	children: ReactNode;
 
-    /** The identifying value associated with the item */
-    value: string;
+	/** The identifying value associated with the item */
+	value: string;
 };
 
 /** A radix accordion item that triggers a scroll when opened */
 export default function AccordionScrollingItem({
-    value,
-    children,
+	value,
+	children,
 }: AccordionScrollingItemProps) {
-    return (
-        <StyledAccordionItem value={value} asChild>
-            <ComposedScrollingAccordionItem>
-                {children}
-            </ComposedScrollingAccordionItem>
-        </StyledAccordionItem>
-    );
+	return (
+		<StyledAccordionItem value={value} asChild>
+			<ComposedScrollingAccordionItem>
+				{children}
+			</ComposedScrollingAccordionItem>
+		</StyledAccordionItem>
+	);
 }

@@ -30,31 +30,31 @@ const LabelItemButtons = styled.div`
 `;
 
 type ItemProps = {
-    name: string;
-    color: string;
-    description: string;
-    id: number;
+	name: string;
+	color: string;
+	description: string;
+	id: number;
 };
 
 /**
  * A condensed label item for use in a list of labels
  */
 export function LabelItem({ name, color, description, id }: ItemProps) {
-    return (
-        <LabelItemBox>
-            <LabelItemExampleContainer>
-                <SampleLabel name={name} color={color} />
-            </LabelItemExampleContainer>
-            {description}
-            <LabelItemButtons>
-                <EditLabel
-                    id={id}
-                    color={color}
-                    description={description}
-                    name={name}
-                />
-                <RemoveLabel id={id} name={name} />
-            </LabelItemButtons>
-        </LabelItemBox>
-    );
+	return (
+		<LabelItemBox>
+			<LabelItemExampleContainer>
+				<SampleLabel name={name} color={color} />
+			</LabelItemExampleContainer>
+			{description}
+			<LabelItemButtons>
+				<EditLabel
+					id={id}
+					color={color}
+					description={description}
+					name={name}
+				/>
+				<RemoveLabel id={id} name={name} />
+			</LabelItemButtons>
+		</LabelItemBox>
+	);
 }

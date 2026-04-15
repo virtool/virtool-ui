@@ -15,20 +15,20 @@ const StyledNotFound = styled.div`
 `;
 
 type NotFoundProps = {
-    status?: number;
-    message?: string;
+	status?: number;
+	message?: string;
 };
 
 export default function NotFound({
-    status = 404,
-    message = "Not found",
+	status = 404,
+	message = "Not found",
 }: NotFoundProps) {
-    return (
-        <StyledNotFound>
-            <Label className="text-5xl" color="red">
-                {status}
-            </Label>
-            <strong>{message}</strong>
-        </StyledNotFound>
-    );
+	return (
+		<StyledNotFound>
+			<Label className="text-5xl" color="red">
+				{status}
+			</Label>
+			<strong>{message}</strong>
+		</StyledNotFound>
+	);
 }

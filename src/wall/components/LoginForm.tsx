@@ -8,82 +8,79 @@ import { useLoginMutation } from "../queries";
 import { WallTitle } from "./WallTitle";
 
 type LoginFormProps = {
-    /** Callback to set the reset code in the parent component state. */
-    setResetCode: (resetCode: string) => void;
+	/** Callback to set the reset code in the parent component state. */
+	setResetCode: (resetCode: string) => void;
 };
 
 /** Handles the user login process. */
 export default function LoginForm({ setResetCode }: LoginFormProps) {
-    const { control, handleSubmit, register } = useForm();
-    const loginMutation = useLoginMutation();
+	const { control, handleSubmit, register } = useForm();
+	const loginMutation = useLoginMutation();
 
-    function onSubmit({ handle, password, remember }) {
-        loginMutation.mutate(
-            { handle, password, remember },
-            {
-                onSuccess: (data) => {
-                    if (data.body.reset_code) {
-                        setResetCode(data.body.reset_code);
-                    }
-                },
-            },
-        );
-    }
+	function onSubmit({ handle, password, remember }) {
+		loginMutation.mutate(
+			{ handle, password, remember },
+			{
+				onSuccess: (data) => {
+					if (data.body.reset_code) {
+						setResetCode(data.body.reset_code);
+					}
+				},
+			},
+		);
+	}
 
-    const { error, isError } = loginMutation;
+	const { error, isError } = loginMutation;
 
-    return (
-        <>
-            <WallTitle
-                title="Login"
-                subtitle="Login with your Virtool account."
-            />
+	return (
+		<>
+			<WallTitle title="Login" subtitle="Login with your Virtool account." />
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <InputGroup>
-                    <InputLabel htmlFor="handle">Username</InputLabel>
-                    <InputSimple
-                        id="handle"
-                        autoComplete="username"
-                        {...register("handle", { required: true })}
-                        autoFocus
-                    />
-                </InputGroup>
-                <InputGroup>
-                    <InputLabel htmlFor="password">Password</InputLabel>
-                    <InputSimple
-                        id="password"
-                        type="password"
-                        autoComplete="current-password"
-                        {...register("password", { required: true })}
-                    />
-                </InputGroup>
-                <div className="flex justify-between my-4">
-                    <Controller
-                        name="remember"
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                            <Checkbox
-                                checked={value}
-                                id="RememberMe"
-                                label="Remember Me"
-                                onClick={() => onChange(!value)}
-                            />
-                        )}
-                    />
-                    {isError && (
-                        <div className="flex text-red-500">
-                            {error?.response?.body?.message ||
-                                "An error occurred during login"}
-                        </div>
-                    )}
-                </div>
-                <div className="flex justify-end">
-                    <Button type="submit" color="blue">
-                        Login
-                    </Button>
-                </div>
-            </form>
-        </>
-    );
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<InputGroup>
+					<InputLabel htmlFor="handle">Username</InputLabel>
+					<InputSimple
+						id="handle"
+						autoComplete="username"
+						{...register("handle", { required: true })}
+						autoFocus
+					/>
+				</InputGroup>
+				<InputGroup>
+					<InputLabel htmlFor="password">Password</InputLabel>
+					<InputSimple
+						id="password"
+						type="password"
+						autoComplete="current-password"
+						{...register("password", { required: true })}
+					/>
+				</InputGroup>
+				<div className="flex justify-between my-4">
+					<Controller
+						name="remember"
+						control={control}
+						render={({ field: { onChange, value } }) => (
+							<Checkbox
+								checked={value}
+								id="RememberMe"
+								label="Remember Me"
+								onClick={() => onChange(!value)}
+							/>
+						)}
+					/>
+					{isError && (
+						<div className="flex text-red-500">
+							{error?.response?.body?.message ||
+								"An error occurred during login"}
+						</div>
+					)}
+				</div>
+				<div className="flex justify-end">
+					<Button type="submit" color="blue">
+						Login
+					</Button>
+				</div>
+			</form>
+		</>
+	);
 }

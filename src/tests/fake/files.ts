@@ -1,31 +1,31 @@
-import { Upload, UploadType } from "@/uploads/types";
 import { faker } from "@faker-js/faker";
 import nock from "nock";
+import { type Upload, UploadType } from "@/uploads/types";
 import { createFakeUserNested } from "./user";
 
 /**
  * Create a File object with fake data.
  */
 export function createFakeFile(overrides?: Partial<Upload>): Upload {
-    const name = overrides?.name ?? `sample_${faker.number.int()}.fastq.gz`;
-    const name_on_disk =
-        overrides?.name_on_disk ?? `${faker.number.int()}-${name}`;
+	const name = overrides?.name ?? `sample_${faker.number.int()}.fastq.gz`;
+	const name_on_disk =
+		overrides?.name_on_disk ?? `${faker.number.int()}-${name}`;
 
-    return {
-        id: faker.number.int(),
-        created_at: faker.date.past().toISOString(),
-        name,
-        name_on_disk,
-        ready: true,
-        removed: false,
-        removed_at: undefined,
-        reserved: false,
-        size: faker.number.int(),
-        type: UploadType.reads,
-        uploaded_at: faker.date.past().toISOString(),
-        user: createFakeUserNested(),
-        ...overrides,
-    };
+	return {
+		id: faker.number.int(),
+		created_at: faker.date.past().toISOString(),
+		name,
+		name_on_disk,
+		ready: true,
+		removed: false,
+		removed_at: undefined,
+		reserved: false,
+		size: faker.number.int(),
+		type: UploadType.reads,
+		uploaded_at: faker.date.past().toISOString(),
+		user: createFakeUserNested(),
+		...overrides,
+	};
 }
 
 /**
@@ -36,17 +36,17 @@ export function createFakeFile(overrides?: Partial<Upload>): Upload {
  * @returns {Upload} a File object with fake data
  */
 export function mockApiListFiles(files: Upload[], query?: boolean) {
-    return nock("http://localhost")
-        .get("/api/uploads")
-        .query(query || true)
-        .reply(200, {
-            found_count: files.length,
-            page: 1,
-            page_count: 1,
-            per_page: 25,
-            total_count: files.length,
-            items: files,
-        });
+	return nock("http://localhost")
+		.get("/api/uploads")
+		.query(query || true)
+		.reply(200, {
+			found_count: files.length,
+			page: 1,
+			page_count: 1,
+			per_page: 25,
+			total_count: files.length,
+			items: files,
+		});
 }
 
 /**
@@ -56,12 +56,12 @@ export function mockApiListFiles(files: Upload[], query?: boolean) {
  * @returns {nock.Scope} nock scope for the mocked API call
  */
 export function mockApiUnpaginatedListFiles(files: Upload[], query?: boolean) {
-    return nock("http://localhost")
-        .get("/api/uploads")
-        .query(query || true)
-        .reply(200, {
-            documents: files,
-        });
+	return nock("http://localhost")
+		.get("/api/uploads")
+		.query(query || true)
+		.reply(200, {
+			documents: files,
+		});
 }
 
 /**
@@ -71,5 +71,5 @@ export function mockApiUnpaginatedListFiles(files: Upload[], query?: boolean) {
  * @returns {nock.Scope} nock scope for the mocked API call
  */
 export function mockApiDeleteFile(fileId: number) {
-    return nock("http://localhost").delete(`/api/uploads/${fileId}`).reply(200);
+	return nock("http://localhost").delete(`/api/uploads/${fileId}`).reply(200);
 }

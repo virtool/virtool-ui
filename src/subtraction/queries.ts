@@ -1,36 +1,36 @@
-import { ErrorResponse } from "@/types/api";
 import {
-    keepPreviousData,
-    useMutation,
-    useQuery,
-    useQueryClient,
+	keepPreviousData,
+	useMutation,
+	useQuery,
+	useQueryClient,
 } from "@tanstack/react-query";
+import type { ErrorResponse } from "@/types/api";
 import {
-    createSubtraction,
-    fetchSubtractionShortlist,
-    findSubtractions,
-    getSubtraction,
-    removeSubtraction,
-    updateSubtraction,
+	createSubtraction,
+	fetchSubtractionShortlist,
+	findSubtractions,
+	getSubtraction,
+	removeSubtraction,
+	updateSubtraction,
 } from "./api";
-import {
-    Subtraction,
-    SubtractionOption,
-    SubtractionSearchResult,
+import type {
+	Subtraction,
+	SubtractionOption,
+	SubtractionSearchResult,
 } from "./types";
 
 /**
  * Factory object for generating subtraction query keys
  */
 export const subtractionQueryKeys = {
-    all: () => ["subtraction"] as const,
-    lists: () => ["subtraction", "list"] as const,
-    list: (filters: Array<string | number | boolean>) =>
-        ["subtraction", "list", ...filters] as const,
-    details: () => ["subtraction", "details"] as const,
-    detail: (subtractionId: string) =>
-        ["subtraction", "details", subtractionId] as const,
-    shortlist: () => ["subtraction", "list", "short"] as const,
+	all: () => ["subtraction"] as const,
+	lists: () => ["subtraction", "list"] as const,
+	list: (filters: Array<string | number | boolean>) =>
+		["subtraction", "list", ...filters] as const,
+	details: () => ["subtraction", "details"] as const,
+	detail: (subtractionId: string) =>
+		["subtraction", "details", subtractionId] as const,
+	shortlist: () => ["subtraction", "list", "short"] as const,
 };
 
 /**
@@ -39,21 +39,21 @@ export const subtractionQueryKeys = {
  * @returns A mutator for creating a subtraction
  */
 export function useCreateSubtraction() {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<
-        Subtraction,
-        unknown,
-        { name: string; nickname: string; uploadId: number }
-    >({
-        mutationFn: ({ name, nickname, uploadId }) =>
-            createSubtraction(name, nickname, uploadId),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: subtractionQueryKeys.lists(),
-            });
-        },
-    });
+	return useMutation<
+		Subtraction,
+		unknown,
+		{ name: string; nickname: string; uploadId: number }
+	>({
+		mutationFn: ({ name, nickname, uploadId }) =>
+			createSubtraction(name, nickname, uploadId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: subtractionQueryKeys.lists(),
+			});
+		},
+	});
 }
 
 /**
@@ -65,15 +65,15 @@ export function useCreateSubtraction() {
  * @returns A page of subtraction search results
  */
 export function useFindSubtractions(
-    page: number,
-    per_page: number,
-    term: string,
+	page: number,
+	per_page: number,
+	term: string,
 ) {
-    return useQuery<SubtractionSearchResult>({
-        queryKey: subtractionQueryKeys.list([page, per_page, term]),
-        queryFn: () => findSubtractions(page, per_page, term),
-        placeholderData: keepPreviousData,
-    });
+	return useQuery<SubtractionSearchResult>({
+		queryKey: subtractionQueryKeys.list([page, per_page, term]),
+		queryFn: () => findSubtractions(page, per_page, term),
+		placeholderData: keepPreviousData,
+	});
 }
 
 /**
@@ -83,10 +83,10 @@ export function useFindSubtractions(
  * @returns A single subtraction
  */
 export function useFetchSubtraction(subtractionId: string) {
-    return useQuery<Subtraction, ErrorResponse>({
-        queryKey: subtractionQueryKeys.detail(subtractionId),
-        queryFn: () => getSubtraction(subtractionId),
-    });
+	return useQuery<Subtraction, ErrorResponse>({
+		queryKey: subtractionQueryKeys.detail(subtractionId),
+		queryFn: () => getSubtraction(subtractionId),
+	});
 }
 
 /**
@@ -96,20 +96,16 @@ export function useFetchSubtraction(subtractionId: string) {
  * @returns A mutator for updating a subtraction
  */
 export function useUpdateSubtraction(subtractionId: string) {
-    const queryClient = useQueryClient();
-    return useMutation<
-        Subtraction,
-        unknown,
-        { name: string; nickname: string }
-    >({
-        mutationFn: ({ name, nickname }) =>
-            updateSubtraction(subtractionId, name, nickname),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: subtractionQueryKeys.detail(subtractionId),
-            });
-        },
-    });
+	const queryClient = useQueryClient();
+	return useMutation<Subtraction, unknown, { name: string; nickname: string }>({
+		mutationFn: ({ name, nickname }) =>
+			updateSubtraction(subtractionId, name, nickname),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: subtractionQueryKeys.detail(subtractionId),
+			});
+		},
+	});
 }
 
 /**
@@ -118,9 +114,9 @@ export function useUpdateSubtraction(subtractionId: string) {
  * @returns A mutator for removing a subtraction
  */
 export function useRemoveSubtraction() {
-    return useMutation<Response, unknown, { subtractionId: string }>({
-        mutationFn: ({ subtractionId }) => removeSubtraction(subtractionId),
-    });
+	return useMutation<Response, unknown, { subtractionId: string }>({
+		mutationFn: ({ subtractionId }) => removeSubtraction(subtractionId),
+	});
 }
 
 /**
@@ -130,8 +126,8 @@ export function useRemoveSubtraction() {
  * @returns A list of subtractions
  */
 export function useFetchSubtractionsShortlist(ready?: boolean) {
-    return useQuery<SubtractionOption[]>({
-        queryKey: subtractionQueryKeys.shortlist(),
-        queryFn: () => fetchSubtractionShortlist(ready),
-    });
+	return useQuery<SubtractionOption[]>({
+		queryKey: subtractionQueryKeys.shortlist(),
+		queryFn: () => fetchSubtractionShortlist(ready),
+	});
 }

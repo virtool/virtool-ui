@@ -1,26 +1,30 @@
-import { Account, APIKeyMinimal, QuickAnalyzeWorkflow } from "@account/types";
+import {
+	type Account,
+	type APIKeyMinimal,
+	QuickAnalyzeWorkflow,
+} from "@account/types";
 import { faker } from "@faker-js/faker";
-import { Permissions } from "@groups/types";
+import type { Permissions } from "@groups/types";
 import nock from "nock";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 import { createFakeUser } from "./user";
 
 const defaultSettings = {
-    quick_analyze_workflow: QuickAnalyzeWorkflow.pathoscope_bowtie,
-    show_ids: true,
-    show_versions: true,
-    skip_quick_analyze_dialog: true,
+	quick_analyze_workflow: QuickAnalyzeWorkflow.pathoscope_bowtie,
+	show_ids: true,
+	show_versions: true,
+	skip_quick_analyze_dialog: true,
 };
 
 export function createFakeAccount(overrides?: Partial<Account>): Account {
-    const { settings, email, ...userProps } = overrides || {};
+	const { settings, email, ...userProps } = overrides || {};
 
-    return {
-        email: email ?? faker.internet.email(),
-        settings: { ...defaultSettings, ...settings },
-        ...createFakeUser(userProps),
-    };
+	return {
+		email: email ?? faker.internet.email(),
+		settings: { ...defaultSettings, ...settings },
+		...createFakeUser(userProps),
+	};
 }
 
 /**
@@ -29,19 +33,19 @@ export function createFakeAccount(overrides?: Partial<Account>): Account {
  * @param overrides - optional properties for creating a fake API key with specific values
  */
 export function createFakeApiKey(
-    overrides?: Partial<APIKeyMinimal>,
+	overrides?: Partial<APIKeyMinimal>,
 ): APIKeyMinimal {
-    return {
-        created_at: faker.date.past().toISOString(),
-        groups: [createFakeGroupMinimal()],
-        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        name: faker.word.noun({ strategy: "any-length" }),
-        permissions: createFakePermissions({
-            cancel_job: true,
-            create_ref: true,
-        }),
-        ...overrides,
-    };
+	return {
+		created_at: faker.date.past().toISOString(),
+		groups: [createFakeGroupMinimal()],
+		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		name: faker.word.noun({ strategy: "any-length" }),
+		permissions: createFakePermissions({
+			cancel_job: true,
+			create_ref: true,
+		}),
+		...overrides,
+	};
 }
 
 /**
@@ -51,7 +55,7 @@ export function createFakeApiKey(
  * @returns A nock scope for the mocked API call
  */
 export function mockApiGetAccount(account: Account) {
-    return nock("http://localhost").get("/api/account").reply(200, account);
+	return nock("http://localhost").get("/api/account").reply(200, account);
 }
 
 /**
@@ -61,9 +65,7 @@ export function mockApiGetAccount(account: Account) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiGetApiKeys(apiKeys: APIKeyMinimal[]) {
-    return nock("http://localhost")
-        .get("/api/account/keys")
-        .reply(200, apiKeys);
+	return nock("http://localhost").get("/api/account/keys").reply(200, apiKeys);
 }
 
 /**
@@ -74,18 +76,18 @@ export function mockApiGetApiKeys(apiKeys: APIKeyMinimal[]) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiCreateApiKey(name: string, permissions: Permissions) {
-    const createApiKeyResponse = {
-        groups: [],
-        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        key: "testKey",
-        name,
-        permissions,
-    };
+	const createApiKeyResponse = {
+		groups: [],
+		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		key: "testKey",
+		name,
+		permissions,
+	};
 
-    return nock("http://localhost")
-        .post("/api/account/keys")
-        .query(true)
-        .reply(201, createApiKeyResponse);
+	return nock("http://localhost")
+		.post("/api/account/keys")
+		.query(true)
+		.reply(201, createApiKeyResponse);
 }
 
 /**
@@ -95,5 +97,5 @@ export function mockApiCreateApiKey(name: string, permissions: Permissions) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiChangePassword(account: Account) {
-    return nock("http://localhost").patch("/api/account").reply(200, account);
+	return nock("http://localhost").patch("/api/account").reply(200, account);
 }

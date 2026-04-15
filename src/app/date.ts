@@ -3,18 +3,18 @@
  */
 
 const TIME_UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
-    ["year", 31536000],
-    ["month", 2592000],
-    ["week", 604800],
-    ["day", 86400],
-    ["hour", 3600],
-    ["minute", 60],
-    ["second", 1],
+	["year", 31536000],
+	["month", 2592000],
+	["week", 604800],
+	["day", 86400],
+	["hour", 3600],
+	["minute", 60],
+	["second", 1],
 ];
 
 const relativeTimeFormatter = new Intl.RelativeTimeFormat("en", {
-    numeric: "always",
-    style: "long",
+	numeric: "always",
+	style: "long",
 });
 
 /**
@@ -26,32 +26,32 @@ const relativeTimeFormatter = new Intl.RelativeTimeFormat("en", {
  * @returns a string like "3 days ago" or "in 5 minutes"
  */
 export function formatDistanceStrict(
-    date: Date,
-    baseDate: Date | number = Date.now(),
-    options: { addSuffix?: boolean } = {},
+	date: Date,
+	baseDate: Date | number = Date.now(),
+	options: { addSuffix?: boolean } = {},
 ): string {
-    const { addSuffix = false } = options;
-    const baseDateObj =
-        typeof baseDate === "number" ? new Date(baseDate) : baseDate;
-    const diffInSeconds = Math.round(
-        (date.getTime() - baseDateObj.getTime()) / 1000,
-    );
-    const absoluteDiff = Math.abs(diffInSeconds);
+	const { addSuffix = false } = options;
+	const baseDateObj =
+		typeof baseDate === "number" ? new Date(baseDate) : baseDate;
+	const diffInSeconds = Math.round(
+		(date.getTime() - baseDateObj.getTime()) / 1000,
+	);
+	const absoluteDiff = Math.abs(diffInSeconds);
 
-    for (const [unit, secondsInUnit] of TIME_UNITS) {
-        if (absoluteDiff >= secondsInUnit || unit === "second") {
-            const value = Math.round(absoluteDiff / secondsInUnit);
-            const signedValue = diffInSeconds < 0 ? -value : value;
+	for (const [unit, secondsInUnit] of TIME_UNITS) {
+		if (absoluteDiff >= secondsInUnit || unit === "second") {
+			const value = Math.round(absoluteDiff / secondsInUnit);
+			const signedValue = diffInSeconds < 0 ? -value : value;
 
-            if (addSuffix) {
-                return relativeTimeFormatter.format(signedValue, unit);
-            }
+			if (addSuffix) {
+				return relativeTimeFormatter.format(signedValue, unit);
+			}
 
-            return `${value} ${unit}${value !== 1 ? "s" : ""}`;
-        }
-    }
+			return `${value} ${unit}${value !== 1 ? "s" : ""}`;
+		}
+	}
 
-    return addSuffix ? "just now" : "0 seconds";
+	return addSuffix ? "just now" : "0 seconds";
 }
 
 /**
@@ -63,18 +63,18 @@ export function formatDistanceStrict(
  * @returns a human-readable duration string
  */
 export function formatRoundedDuration(seconds: number): string {
-    if (seconds < 1) {
-        return "less than a second";
-    }
+	if (seconds < 1) {
+		return "less than a second";
+	}
 
-    for (const [unit, secondsInUnit] of TIME_UNITS) {
-        const value = Math.floor(seconds / secondsInUnit);
-        if (value >= 1) {
-            return `${value} ${unit}${value !== 1 ? "s" : ""}`;
-        }
-    }
+	for (const [unit, secondsInUnit] of TIME_UNITS) {
+		const value = Math.floor(seconds / secondsInUnit);
+		if (value >= 1) {
+			return `${value} ${unit}${value !== 1 ? "s" : ""}`;
+		}
+	}
 
-    return "less than a second";
+	return "less than a second";
 }
 
 /**
@@ -85,7 +85,7 @@ export function formatRoundedDuration(seconds: number): string {
  * @returns a new Date with the seconds added
  */
 export function addSeconds(date: Date, seconds: number): Date {
-    return new Date(date.getTime() + seconds * 1000);
+	return new Date(date.getTime() + seconds * 1000);
 }
 
 /**
@@ -95,12 +95,12 @@ export function addSeconds(date: Date, seconds: number): Date {
  * @returns a time string in 24-hour format
  */
 export function formatTime(date: Date): string {
-    return date.toLocaleTimeString("en-GB", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-    });
+	return date.toLocaleTimeString("en-GB", {
+		hour: "2-digit",
+		minute: "2-digit",
+		second: "2-digit",
+		hour12: false,
+	});
 }
 
 /**
@@ -110,8 +110,8 @@ export function formatTime(date: Date): string {
  * @returns a date string in ISO format
  */
 export function formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+	return `${year}-${month}-${day}`;
 }

@@ -6,48 +6,48 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { EditLabel } from "../EditLabel";
 
 describe("<EditLabel>", () => {
-    let props;
+	let props;
 
-    beforeEach(() => {
-        props = {
-            id: 1,
-            name: "Foo",
-            description: "This is a description",
-            color: "#1DAD57",
-        };
-    });
+	beforeEach(() => {
+		props = {
+			id: 1,
+			name: "Foo",
+			description: "This is a description",
+			color: "#1DAD57",
+		};
+	});
 
-    it("edits label", async () => {
-        const scope = nock("http://localhost")
-            .patch("/api/labels/1")
-            .reply(200, (uri, body) => body);
+	it("edits label", async () => {
+		const scope = nock("http://localhost")
+			.patch("/api/labels/1")
+			.reply(200, (_uri, body) => body);
 
-        renderWithProviders(<EditLabel {...props} />);
+		renderWithProviders(<EditLabel {...props} />);
 
-        await userEvent.click(screen.getByText("Edit"));
+		await userEvent.click(screen.getByText("Edit"));
 
-        const descriptionInput = screen.getByLabelText("Description");
-        const nameInput = screen.getByLabelText("Name");
+		const descriptionInput = screen.getByLabelText("Description");
+		const nameInput = screen.getByLabelText("Name");
 
-        // Field initialize from props.
-        expect(nameInput).toHaveValue("Foo");
-        expect(descriptionInput).toHaveValue("This is a description");
+		// Field initialize from props.
+		expect(nameInput).toHaveValue("Foo");
+		expect(descriptionInput).toHaveValue("This is a description");
 
-        // Check fields clear.
-        await userEvent.clear(descriptionInput);
-        await userEvent.clear(nameInput);
-        expect(descriptionInput).toHaveValue("");
-        expect(nameInput).toHaveValue("");
+		// Check fields clear.
+		await userEvent.clear(descriptionInput);
+		await userEvent.clear(nameInput);
+		expect(descriptionInput).toHaveValue("");
+		expect(nameInput).toHaveValue("");
 
-        // Check typing changes input value
-        await userEvent.type(descriptionInput, "This is a label");
-        await userEvent.type(nameInput, "Bar");
+		// Check typing changes input value
+		await userEvent.type(descriptionInput, "This is a label");
+		await userEvent.type(nameInput, "Bar");
 
-        expect(descriptionInput).toHaveValue("This is a label");
-        expect(nameInput).toHaveValue("Bar");
+		expect(descriptionInput).toHaveValue("This is a label");
+		expect(nameInput).toHaveValue("Bar");
 
-        await userEvent.click(screen.getByText("Save"));
+		await userEvent.click(screen.getByText("Save"));
 
-        scope.isDone();
-    });
+		scope.isDone();
+	});
 });

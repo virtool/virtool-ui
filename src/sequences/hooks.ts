@@ -1,15 +1,15 @@
 import { useUrlSearchParam } from "@app/hooks";
 import { useActiveIsolate } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
-import { OtuSegment, OtuSequence } from "@otus/types";
+import type { OtuSegment, OtuSequence } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
 import { compact } from "es-toolkit";
 import { useState } from "react";
 
 type UseExpandedResult = {
-    expanded: boolean;
-    expand: () => void;
-    collapse: () => void;
+	expanded: boolean;
+	expand: () => void;
+	collapse: () => void;
 };
 
 /**
@@ -19,17 +19,17 @@ type UseExpandedResult = {
  * `collapse()`.
  */
 export function useExpanded(): UseExpandedResult {
-    const [expanded, setExpanded] = useState(false);
+	const [expanded, setExpanded] = useState(false);
 
-    function expand() {
-        setExpanded(true);
-    }
+	function expand() {
+		setExpanded(true);
+	}
 
-    function collapse() {
-        setExpanded(false);
-    }
+	function collapse() {
+		setExpanded(false);
+	}
 
-    return { expanded, expand, collapse };
+	return { expanded, expand, collapse };
 }
 
 /**
@@ -38,20 +38,16 @@ export function useExpanded(): UseExpandedResult {
  * @returns The active sequence.
  */
 export function useActiveSequence(): OtuSequence | undefined {
-    const { value: editSequenceId } =
-        useUrlSearchParam<string>("editSequenceId");
+	const { value: editSequenceId } = useUrlSearchParam<string>("editSequenceId");
 
-    const { otu } = useCurrentOtuContext();
+	const { otu } = useCurrentOtuContext();
 
-    const activeIsolate = useActiveIsolate(otu);
-    const sequences = sortSequencesBySegment(
-        activeIsolate.sequences,
-        otu.schema,
-    );
+	const activeIsolate = useActiveIsolate(otu);
+	const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
 
-    if (editSequenceId) {
-        return sequences.find((seq) => seq.id === editSequenceId);
-    }
+	if (editSequenceId) {
+		return sequences.find((seq) => seq.id === editSequenceId);
+	}
 }
 
 /**
@@ -60,25 +56,21 @@ export function useActiveSequence(): OtuSequence | undefined {
  * @returns A list of unreferenced segments
  */
 export function useGetUnreferencedSegments() {
-    const { otu } = useCurrentOtuContext();
+	const { otu } = useCurrentOtuContext();
 
-    const { value: editSequenceId } =
-        useUrlSearchParam<string>("editSequenceId");
+	const { value: editSequenceId } = useUrlSearchParam<string>("editSequenceId");
 
-    const activeIsolate = useActiveIsolate(otu);
-    const activeSequenceId = editSequenceId || undefined;
-    const sequences = sortSequencesBySegment(
-        activeIsolate.sequences,
-        otu.schema,
-    );
+	const activeIsolate = useActiveIsolate(otu);
+	const activeSequenceId = editSequenceId || undefined;
+	const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
 
-    const referencedSegmentNames = compact(
-        sequences
-            .filter((seq) => seq.id !== activeSequenceId)
-            .map((seq) => seq.segment),
-    );
+	const referencedSegmentNames = compact(
+		sequences
+			.filter((seq) => seq.id !== activeSequenceId)
+			.map((seq) => seq.segment),
+	);
 
-    return otu.schema.filter(
-        (segment: OtuSegment) => !referencedSegmentNames.includes(segment.name),
-    );
+	return otu.schema.filter(
+		(segment: OtuSegment) => !referencedSegmentNames.includes(segment.name),
+	);
 }

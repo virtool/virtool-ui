@@ -1,5 +1,5 @@
 import { apiClient } from "@app/api";
-import { Sample, SampleSearchResult } from "./types";
+import type { Sample, SampleSearchResult } from "./types";
 
 /**
  * Fetch a page of samples
@@ -11,16 +11,16 @@ import { Sample, SampleSearchResult } from "./types";
  * @param workflows - Filter the samples by workflows
  */
 export function listSamples(
-    page: number,
-    per_page: number,
-    term: string,
-    labels: number[],
-    workflows: string[],
+	page: number,
+	per_page: number,
+	term: string,
+	labels: number[],
+	workflows: string[],
 ): Promise<SampleSearchResult> {
-    return apiClient
-        .get("/samples")
-        .query({ page, per_page, find: term, label: labels, workflows })
-        .then((res) => res.body);
+	return apiClient
+		.get("/samples")
+		.query({ page, per_page, find: term, label: labels, workflows })
+		.then((res) => res.body);
 }
 
 /**
@@ -30,7 +30,7 @@ export function listSamples(
  * @returns A promise resolving to a single sample
  */
 export function getSample(sampleId: string): Promise<Sample> {
-    return apiClient.get(`/samples/${sampleId}`).then((res) => res.body);
+	return apiClient.get(`/samples/${sampleId}`).then((res) => res.body);
 }
 
 /**
@@ -48,39 +48,39 @@ export function getSample(sampleId: string): Promise<Sample> {
  * @returns A promise resolving to creating a sample
  */
 export function createSample(
-    name: string,
-    isolate: string,
-    host: string,
-    locale: string,
-    libraryType: string,
-    subtractions: string[],
-    files: number[],
-    labels: number[],
-    group: string,
+	name: string,
+	isolate: string,
+	host: string,
+	locale: string,
+	libraryType: string,
+	subtractions: string[],
+	files: number[],
+	labels: number[],
+	group: string,
 ): Promise<Sample> {
-    return apiClient
-        .post("/samples")
-        .send({
-            name,
-            isolate,
-            host,
-            locale,
-            subtractions,
-            files,
-            library_type: libraryType,
-            labels,
-            group,
-        })
-        .then((res) => res.body);
+	return apiClient
+		.post("/samples")
+		.send({
+			name,
+			isolate,
+			host,
+			locale,
+			subtractions,
+			files,
+			library_type: libraryType,
+			labels,
+			group,
+		})
+		.then((res) => res.body);
 }
 
 export type SampleUpdate = {
-    isolate?: string;
-    labels?: number[];
-    locale?: string;
-    name?: string;
-    notes?: string;
-    subtractions?: string[];
+	isolate?: string;
+	labels?: number[];
+	locale?: string;
+	name?: string;
+	notes?: string;
+	subtractions?: string[];
 };
 
 /**
@@ -91,13 +91,13 @@ export type SampleUpdate = {
  * @returns A promise resolving to a response containing the updated sample's data
  */
 export function updateSample(
-    sampleId: string,
-    update: SampleUpdate,
+	sampleId: string,
+	update: SampleUpdate,
 ): Promise<Sample> {
-    return apiClient
-        .patch(`/samples/${sampleId}`)
-        .send(update)
-        .then((response) => response.body);
+	return apiClient
+		.patch(`/samples/${sampleId}`)
+		.send(update)
+		.then((response) => response.body);
 }
 
 /**
@@ -107,27 +107,27 @@ export function updateSample(
  * @returns A promise that resolves to null upon the removal of a sample
  */
 export function removeSample(sampleId: string): Promise<null> {
-    return apiClient
-        .delete(`/samples/${sampleId}`)
-        .then((response) => response.body);
+	return apiClient
+		.delete(`/samples/${sampleId}`)
+		.then((response) => response.body);
 }
 
 /** Data returned from API on sample rights update */
 export type SampleRightsUpdateReturn = {
-    all_read: boolean;
-    all_write: boolean;
-    group: number | string | null;
-    group_read: boolean;
-    group_write: boolean;
-    user: { [key: string]: string };
+	all_read: boolean;
+	all_write: boolean;
+	group: number | string | null;
+	group_read: boolean;
+	group_write: boolean;
+	user: { [key: string]: string };
 };
 
 export type SampleRightsUpdate = {
-    group?: number | string | null;
-    group_read?: boolean;
-    group_write?: boolean;
-    all_read?: boolean;
-    all_write?: boolean;
+	group?: number | string | null;
+	group_read?: boolean;
+	group_write?: boolean;
+	all_read?: boolean;
+	all_write?: boolean;
 };
 
 /**
@@ -138,11 +138,11 @@ export type SampleRightsUpdate = {
  * @returns A promise resolving to a response containing the updated sample's data
  */
 export function updateSampleRights(
-    sampleId: string,
-    update: SampleRightsUpdate,
+	sampleId: string,
+	update: SampleRightsUpdate,
 ): Promise<SampleRightsUpdateReturn> {
-    return apiClient
-        .patch(`/samples/${sampleId}/rights`)
-        .send(update)
-        .then((response) => response.body);
+	return apiClient
+		.patch(`/samples/${sampleId}/rights`)
+		.send(update)
+		.then((response) => response.body);
 }

@@ -6,18 +6,18 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { GlobalSourceTypes } from "./SourceTypes/GlobalSourceTypes";
 
 export default function ReferenceSettings() {
-    const { data, isPending } = useFetchSettings();
+	const { data, isPending } = useFetchSettings();
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    return (
-        <ContainerNarrow>
-            <ViewHeader title="Reference Settings">
-                <ViewHeaderTitle>Settings</ViewHeaderTitle>
-            </ViewHeader>
-            <GlobalSourceTypes sourceTypes={data.default_source_types} />
-        </ContainerNarrow>
-    );
+	return (
+		<ContainerNarrow>
+			<ViewHeader title="Reference Settings">
+				<ViewHeaderTitle>Settings</ViewHeaderTitle>
+			</ViewHeader>
+			<GlobalSourceTypes sourceTypes={data.default_source_types} />
+		</ContainerNarrow>
+	);
 }

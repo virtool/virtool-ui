@@ -14,20 +14,20 @@ const StyledSubtractionFile = styled(BoxGroupSection)`
 `;
 
 export type SubtractionFileItemProps = {
-    downloadUrl: string;
-    name: string;
-    size: number;
+	downloadUrl: string;
+	name: string;
+	size: number;
 };
 
 export function SubtractionFileItem({
-    downloadUrl,
-    name,
-    size,
+	downloadUrl,
+	name,
+	size,
 }: SubtractionFileItemProps) {
-    return (
-        <StyledSubtractionFile>
-            <a href={`/api${downloadUrl}`}>{name}</a>
-            <strong>{byteSize(size)}</strong>
-        </StyledSubtractionFile>
-    );
+	return (
+		<StyledSubtractionFile>
+			<a href={`/api${downloadUrl}`}>{name}</a>
+			<strong>{byteSize(size)}</strong>
+		</StyledSubtractionFile>
+	);
 }

@@ -1,47 +1,47 @@
-import { SearchResult } from "@/types/api";
-import { UserNested } from "@users/types";
+import type { UserNested } from "@users/types";
+import type { SearchResult } from "@/types/api";
 
 export enum UploadType {
-    hmm = "hmm",
-    reference = "reference",
-    reads = "reads",
-    subtraction = "subtraction",
+	hmm = "hmm",
+	reference = "reference",
+	reads = "reads",
+	subtraction = "subtraction",
 }
 
 export type FileResponse = SearchResult & {
-    items: Upload[];
+	items: Upload[];
 };
 
 export type Upload = {
-    id: number;
-    created_at: string;
-    name: string;
-    name_on_disk: string;
-    ready: boolean;
-    removed: boolean;
-    removed_at?: string;
-    reserved: boolean;
-    size: number;
-    type: string;
-    uploaded_at: string;
-    user: UserNested;
+	id: number;
+	created_at: string;
+	name: string;
+	name_on_disk: string;
+	ready: boolean;
+	removed: boolean;
+	removed_at?: string;
+	reserved: boolean;
+	size: number;
+	type: string;
+	uploaded_at: string;
+	user: UserNested;
 };
 
 export type UploadInProgress = {
-    /* Whether the upload failed */
-    failed: boolean;
+	/* Whether the upload failed */
+	failed: boolean;
 
-    fileType: UploadType;
+	fileType: UploadType;
 
-    loaded: number;
+	loaded: number;
 
-    localId: string;
+	localId: string;
 
-    name: string;
+	name: string;
 
-    /* Progress of the upload in percentage */
-    progress: number;
+	/* Progress of the upload in percentage */
+	progress: number;
 
-    /* Size of the file in bytes */
-    size: number;
+	/* Size of the file in bytes */
+	size: number;
 };

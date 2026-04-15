@@ -6,28 +6,28 @@ import { describe, expect, it } from "vitest";
 import Checkbox from "../Checkbox";
 
 function CheckboxEnvironment() {
-    const [checked, setChecked] = useState(false);
+	const [checked, setChecked] = useState(false);
 
-    return (
-        <Checkbox
-            checked={checked}
-            id="example-cb"
-            label="Example"
-            onClick={() => setChecked(!checked)}
-        />
-    );
+	return (
+		<Checkbox
+			checked={checked}
+			id="example-cb"
+			label="Example"
+			onClick={() => setChecked(!checked)}
+		/>
+	);
 }
 
 describe("Checkbox", () => {
-    it("should be checked and unchecked by clicks", async () => {
-        renderWithProviders(<CheckboxEnvironment />);
+	it("should be checked and unchecked by clicks", async () => {
+		renderWithProviders(<CheckboxEnvironment />);
 
-        const checkbox = screen.getByRole("checkbox", { name: "Example" });
-        expect(checkbox).toBeInTheDocument();
-        expect(checkbox).not.toBeChecked();
+		const checkbox = screen.getByRole("checkbox", { name: "Example" });
+		expect(checkbox).toBeInTheDocument();
+		expect(checkbox).not.toBeChecked();
 
-        await userEvent.click(checkbox);
+		await userEvent.click(checkbox);
 
-        expect(checkbox).toBeChecked();
-    });
+		expect(checkbox).toBeChecked();
+	});
 });

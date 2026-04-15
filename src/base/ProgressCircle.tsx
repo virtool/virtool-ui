@@ -1,5 +1,5 @@
 import { getColor, sizes } from "@app/theme";
-import { JobState } from "@jobs/types";
+import type { JobState } from "@jobs/types";
 import { Progress } from "radix-ui";
 import styled, { keyframes } from "styled-components";
 
@@ -11,7 +11,7 @@ import styled, { keyframes } from "styled-components";
  */
 
 function calculateStrokeWidth({ size }: ProgressCircleBaseProps): number {
-    return size / 5;
+	return size / 5;
 }
 
 /**
@@ -21,9 +21,9 @@ function calculateStrokeWidth({ size }: ProgressCircleBaseProps): number {
  * @returns The stroke width in pixels
  */
 function calculateProgressCircleRadius({
-    size,
+	size,
 }: ProgressCircleBaseProps): number {
-    return size / 2 - calculateStrokeWidth({ size });
+	return size / 2 - calculateStrokeWidth({ size });
 }
 
 /**
@@ -33,7 +33,7 @@ function calculateProgressCircleRadius({
  * @returns The circumference of the circle in pixels
  */
 function calculateCircumference({ size }: ProgressCircleBaseProps): number {
-    return calculateProgressCircleRadius({ size }) * Math.PI * 2;
+	return calculateProgressCircleRadius({ size }) * Math.PI * 2;
 }
 
 /**
@@ -44,10 +44,10 @@ function calculateCircumference({ size }: ProgressCircleBaseProps): number {
  * @returns the stroke offset in pixels
  */
 function calculateStrokeDashOffset({
-    progress,
-    ...props
+	progress,
+	...props
 }: ProgressCircleIndicatorProps): number {
-    return (1 - progress) * calculateCircumference(props);
+	return (1 - progress) * calculateCircumference(props);
 }
 
 const rotate = keyframes`
@@ -63,7 +63,7 @@ const rotate = keyframes`
     `;
 
 type ProgressCircleBaseProps = {
-    size: number;
+	size: number;
 };
 
 /**
@@ -98,7 +98,7 @@ const ProgressCircleBase = styled.circle<ProgressCircleBaseProps>`
 `;
 
 type ProgressCircleIndicatorProps = ProgressCircleBaseProps & {
-    progress: number;
+	progress: number;
 };
 
 /**
@@ -109,13 +109,13 @@ type ProgressCircleIndicatorProps = ProgressCircleBaseProps & {
  * @returns The ProgressCircle indicator
  */
 const ProgressCircleIndicator = styled(
-    ProgressCircleBase,
+	ProgressCircleBase,
 )<ProgressCircleIndicatorProps>`
     stroke-dashoffset: ${calculateStrokeDashOffset}px;
 `;
 
 type ProgressCircleTrackProps = ProgressCircleBaseProps & {
-    state: JobState;
+	state: JobState;
 };
 
 /**
@@ -126,17 +126,17 @@ type ProgressCircleTrackProps = ProgressCircleBaseProps & {
  * @returns The progress circle track
  */
 const ProgressCircleTrack = styled(
-    ProgressCircleBase,
+	ProgressCircleBase,
 )<ProgressCircleTrackProps>`
     stroke-dashoffset: ${(props) =>
-        props.state === "pending"
-            ? `${calculateStrokeDashOffset({ progress: 0.75, size: props.size })}px`
-            : "0px"};
+			props.state === "pending"
+				? `${calculateStrokeDashOffset({ progress: 0.75, size: props.size })}px`
+				: "0px"};
     transform-box: fill-box;
     transform-origin: center;
     animation: ${rotate} 0.75s linear infinite;
     animation-play-state: ${(props) =>
-        props.state === "pending" ? "running" : "paused"};
+			props.state === "pending" ? "running" : "paused"};
 `;
 
 const fade = keyframes`
@@ -170,12 +170,12 @@ const ProgressCircleCenter = styled.circle<ProgressCircleTrackProps>`
 `;
 
 const progressCircleSizes = {
-    xs: 12,
-    sm: 16,
-    md: 20,
-    lg: 28,
-    xl: 44,
-    xxl: 60,
+	xs: 12,
+	sm: 16,
+	md: 20,
+	lg: 28,
+	xl: 44,
+	xxl: 60,
 };
 
 /**
@@ -185,21 +185,21 @@ const progressCircleSizes = {
  * @returns The color of the progress circle
  */
 function getProgressColor(state: JobState): string {
-    switch (state) {
-        case "succeeded":
-            return "green";
-        case "running":
-            return "blue";
-        case "pending":
-            return "grey";
-        default:
-            return "red";
-    }
+	switch (state) {
+		case "succeeded":
+			return "green";
+		case "running":
+			return "blue";
+		case "pending":
+			return "grey";
+		default:
+			return "red";
+	}
 }
 type ProgressCircleProps = {
-    progress: number;
-    state?: JobState;
-    size?: sizes;
+	progress: number;
+	state?: JobState;
+	size?: sizes;
 };
 
 /**
@@ -212,38 +212,32 @@ type ProgressCircleProps = {
  */
 
 export default function ProgressCircle({
-    progress,
-    size = sizes.md,
-    state = "pending",
+	progress,
+	size = sizes.md,
+	state = "pending",
 }: ProgressCircleProps) {
-    const circleSize = progressCircleSizes[size];
-    const color = getProgressColor(state);
+	const circleSize = progressCircleSizes[size];
+	const color = getProgressColor(state);
 
-    return (
-        <Progress.Root value={progress} asChild>
-            <StyledProgressCircle size={circleSize}>
-                <ProgressCircleTrack
-                    color={
-                        color === "grey" ? `${color}Light` : `${color}Lightest`
-                    }
-                    size={circleSize}
-                    state={state}
-                />
-                {state === "running" && (
-                    <ProgressCircleCenter
-                        color={color}
-                        size={circleSize}
-                        state={state}
-                    />
-                )}
-                <Progress.Indicator asChild>
-                    <ProgressCircleIndicator
-                        color={color}
-                        size={circleSize}
-                        progress={progress / 100}
-                    />
-                </Progress.Indicator>
-            </StyledProgressCircle>
-        </Progress.Root>
-    );
+	return (
+		<Progress.Root value={progress} asChild>
+			<StyledProgressCircle size={circleSize}>
+				<ProgressCircleTrack
+					color={color === "grey" ? `${color}Light` : `${color}Lightest`}
+					size={circleSize}
+					state={state}
+				/>
+				{state === "running" && (
+					<ProgressCircleCenter color={color} size={circleSize} state={state} />
+				)}
+				<Progress.Indicator asChild>
+					<ProgressCircleIndicator
+						color={color}
+						size={circleSize}
+						progress={progress / 100}
+					/>
+				</Progress.Indicator>
+			</StyledProgressCircle>
+		</Progress.Root>
+	);
 }

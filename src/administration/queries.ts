@@ -1,31 +1,35 @@
-import { ErrorResponse } from "@/types/api";
 import { useDialogParam } from "@app/hooks";
 import {
-    keepPreviousData,
-    useMutation,
-    useQuery,
-    useQueryClient,
+	keepPreviousData,
+	useMutation,
+	useQuery,
+	useQueryClient,
 } from "@tanstack/react-query";
-import { AdminUserResponse, User } from "@users/types";
+import type { AdminUserResponse, User } from "@users/types";
+import type { ErrorResponse } from "@/types/api";
 import {
-    createUser,
-    fetchAdministratorRoles,
-    fetchSettings,
-    findUsers,
-    getUser,
-    setAdministratorRole,
-    SettingsUpdate,
-    updateSettings,
-    updateUser,
-    UserUpdate,
+	createUser,
+	fetchAdministratorRoles,
+	fetchSettings,
+	findUsers,
+	getUser,
+	type SettingsUpdate,
+	setAdministratorRole,
+	type UserUpdate,
+	updateSettings,
+	updateUser,
 } from "./api";
-import { AdministratorRole, AdministratorRoleName, Settings } from "./types";
+import type {
+	AdministratorRole,
+	AdministratorRoleName,
+	Settings,
+} from "./types";
 
 /**
  * Factory object for generating settings query keys
  */
 export const settingsQueryKeys = {
-    all: () => ["settings"] as const,
+	all: () => ["settings"] as const,
 };
 
 /**
@@ -34,10 +38,10 @@ export const settingsQueryKeys = {
  * @returns The API settings.
  */
 export function useFetchSettings() {
-    return useQuery<Settings>({
-        queryKey: settingsQueryKeys.all(),
-        queryFn: fetchSettings,
-    });
+	return useQuery<Settings>({
+		queryKey: settingsQueryKeys.all(),
+		queryFn: fetchSettings,
+	});
 }
 
 /**
@@ -46,20 +50,20 @@ export function useFetchSettings() {
  * @returns A mutator for updating the current settings on the server
  */
 export function useUpdateSettings() {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<Settings, ErrorResponse, SettingsUpdate>({
-        mutationFn: updateSettings,
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: settingsQueryKeys.all(),
-            });
-        },
-    });
+	return useMutation<Settings, ErrorResponse, SettingsUpdate>({
+		mutationFn: updateSettings,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: settingsQueryKeys.all(),
+			});
+		},
+	});
 }
 
 export const roleQueryKeys = {
-    all: () => ["roles"] as const,
+	all: () => ["roles"] as const,
 };
 
 /**
@@ -68,25 +72,25 @@ export const roleQueryKeys = {
  * @returns A list of valid administrator roles
  */
 export function useGetAdministratorRoles() {
-    return useQuery<AdministratorRole[]>({
-        queryKey: roleQueryKeys.all(),
-        queryFn: fetchAdministratorRoles,
-    });
+	return useQuery<AdministratorRole[]>({
+		queryKey: roleQueryKeys.all(),
+		queryFn: fetchAdministratorRoles,
+	});
 }
 
 /**
  * Factory object for generating user query keys
  */
 export const userQueryKeys = {
-    all: () => ["users"] as const,
-    lists: () => ["users", "list"] as const,
-    list: (filters: Array<string | number | boolean>) =>
-        ["users", "list", ...filters] as const,
-    infiniteLists: () => ["users", "infiniteList"] as const,
-    infiniteList: (filters: Array<string | number | boolean>) =>
-        ["users", "infiniteList", ...filters] as const,
-    details: () => ["users", "details"] as const,
-    detail: (user_id: number) => ["users", "details", user_id] as const,
+	all: () => ["users"] as const,
+	lists: () => ["users", "list"] as const,
+	list: (filters: Array<string | number | boolean>) =>
+		["users", "list", ...filters] as const,
+	infiniteLists: () => ["users", "infiniteList"] as const,
+	infiniteList: (filters: Array<string | number | boolean>) =>
+		["users", "infiniteList", ...filters] as const,
+	details: () => ["users", "details"] as const,
+	detail: (user_id: number) => ["users", "details", user_id] as const,
 };
 
 /**
@@ -100,23 +104,17 @@ export const userQueryKeys = {
  * @returns A page of user search results
  */
 export function useFindUsers(
-    page: number,
-    per_page: number,
-    term: string,
-    administrator?: boolean,
-    active?: boolean,
+	page: number,
+	per_page: number,
+	term: string,
+	administrator?: boolean,
+	active?: boolean,
 ) {
-    return useQuery<AdminUserResponse>({
-        queryKey: userQueryKeys.list([
-            page,
-            per_page,
-            term,
-            administrator,
-            active,
-        ]),
-        queryFn: () => findUsers(page, per_page, term, administrator, active),
-        placeholderData: keepPreviousData,
-    });
+	return useQuery<AdminUserResponse>({
+		queryKey: userQueryKeys.list([page, per_page, term, administrator, active]),
+		queryFn: () => findUsers(page, per_page, term, administrator, active),
+		placeholderData: keepPreviousData,
+	});
 }
 
 /**
@@ -125,23 +123,23 @@ export function useFindUsers(
  * @returns A mutator for creating a user
  */
 export function useCreateUser() {
-    const queryClient = useQueryClient();
-    const { setOpen: setOpenCreateUser } = useDialogParam("openCreateUser");
-    return useMutation<
-        User,
-        ErrorResponse,
-        {
-            handle: string;
-            password: string;
-            forceReset: boolean;
-        }
-    >({
-        mutationFn: createUser,
-        onSuccess: () => {
-            setOpenCreateUser(false);
-            queryClient.invalidateQueries({ queryKey: userQueryKeys.lists() });
-        },
-    });
+	const queryClient = useQueryClient();
+	const { setOpen: setOpenCreateUser } = useDialogParam("openCreateUser");
+	return useMutation<
+		User,
+		ErrorResponse,
+		{
+			handle: string;
+			password: string;
+			forceReset: boolean;
+		}
+	>({
+		mutationFn: createUser,
+		onSuccess: () => {
+			setOpenCreateUser(false);
+			queryClient.invalidateQueries({ queryKey: userQueryKeys.lists() });
+		},
+	});
 }
 
 /**
@@ -151,10 +149,10 @@ export function useCreateUser() {
  * @returns A single user
  */
 export function useFetchUser(userId: number) {
-    return useQuery<User>({
-        queryKey: userQueryKeys.detail(userId),
-        queryFn: () => getUser(userId),
-    });
+	return useQuery<User>({
+		queryKey: userQueryKeys.detail(userId),
+		queryFn: () => getUser(userId),
+	});
 }
 
 /**
@@ -163,12 +161,12 @@ export function useFetchUser(userId: number) {
  * @returns A mutator for updating a user
  */
 export function useUpdateUser() {
-    const queryClient = useQueryClient();
-    return useMutation<User, unknown, { userId: number; update: UserUpdate }>({
-        mutationFn: ({ userId, update }) => updateUser(userId, update),
-        onSuccess: (result) =>
-            queryClient.setQueryData(userQueryKeys.detail(result.id), result),
-    });
+	const queryClient = useQueryClient();
+	return useMutation<User, unknown, { userId: number; update: UserUpdate }>({
+		mutationFn: ({ userId, update }) => updateUser(userId, update),
+		onSuccess: (result) =>
+			queryClient.setQueryData(userQueryKeys.detail(result.id), result),
+	});
 }
 
 /**
@@ -177,15 +175,15 @@ export function useUpdateUser() {
  * @returns A mutator for updating a users administrator role
  */
 export function useSetAdministratorRole() {
-    const queryClient = useQueryClient();
-    return useMutation<
-        User,
-        ErrorResponse,
-        { role: AdministratorRoleName; user_id: number }
-    >({
-        mutationFn: ({ role, user_id }) => setAdministratorRole(role, user_id),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: userQueryKeys.all() });
-        },
-    });
+	const queryClient = useQueryClient();
+	return useMutation<
+		User,
+		ErrorResponse,
+		{ role: AdministratorRoleName; user_id: number }
+	>({
+		mutationFn: ({ role, user_id }) => setAdministratorRole(role, user_id),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: userQueryKeys.all() });
+		},
+	});
 }

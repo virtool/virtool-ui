@@ -1,63 +1,63 @@
-import { JobState } from "@jobs/types";
+import type { JobState } from "@jobs/types";
 import { screen } from "@testing-library/react";
 import { createFakeUserNested } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
-import JobItem, { JobItemProps } from "../JobItem";
+import JobItem, { type JobItemProps } from "../JobItem";
 
 describe("<JobItem />", () => {
-    let props: JobItemProps;
+	let props: JobItemProps;
 
-    beforeEach(() => {
-        props = {
-            id: "foo",
-            workflow: "build_index",
-            createdAt: new Date("2022-12-22T21:37:49.429000Z"),
-            progress: 0,
-            state: "pending",
-            user: createFakeUserNested(),
-        };
-    });
+	beforeEach(() => {
+		props = {
+			id: "foo",
+			workflow: "build_index",
+			createdAt: new Date("2022-12-22T21:37:49.429000Z"),
+			progress: 0,
+			state: "pending",
+			user: createFakeUserNested(),
+		};
+	});
 
-    describe("<JobItem />", () => {
-        it("should render properly", () => {
-            renderWithRouter(<JobItem {...props} />);
+	describe("<JobItem />", () => {
+		it("should render properly", () => {
+			renderWithRouter(<JobItem {...props} />);
 
-            expect(screen.getByText("Build Index")).toBeInTheDocument();
-            expect(
-                screen.getByText(`${props.user.handle} created`),
-            ).toBeInTheDocument();
-        });
-    });
+			expect(screen.getByText("Build Index")).toBeInTheDocument();
+			expect(
+				screen.getByText(`${props.user.handle} created`),
+			).toBeInTheDocument();
+		});
+	});
 
-    describe("<JobStatus />", () => {
-        it.each<[JobState, number]>([
-            ["pending", 0],
-            ["running", 0],
-            ["running", 40],
-            ["cancelled", 45],
-            ["failed", 25],
-        ])("should render state=%s with progress=%s", (state, progress) => {
-            props.state = state;
-            props.progress = progress;
+	describe("<JobStatus />", () => {
+		it.each<[JobState, number]>([
+			["pending", 0],
+			["running", 0],
+			["running", 40],
+			["cancelled", 45],
+			["failed", 25],
+		])("should render state=%s with progress=%s", (state, progress) => {
+			props.state = state;
+			props.progress = progress;
 
-            renderWithRouter(<JobItem {...props} />);
+			renderWithRouter(<JobItem {...props} />);
 
-            expect(screen.getByText(state)).toBeInTheDocument();
-            expect(screen.getByRole("progressbar")).toHaveAttribute(
-                "data-value",
-                `${progress}`,
-            );
-        });
+			expect(screen.getByText(state)).toBeInTheDocument();
+			expect(screen.getByRole("progressbar")).toHaveAttribute(
+				"data-value",
+				`${progress}`,
+			);
+		});
 
-        it("should render properly when job is complete", () => {
-            props.state = "succeeded";
-            props.progress = 100;
+		it("should render properly when job is complete", () => {
+			props.state = "succeeded";
+			props.progress = 100;
 
-            renderWithRouter(<JobItem {...props} />);
+			renderWithRouter(<JobItem {...props} />);
 
-            expect(screen.getByText("succeeded")).toBeInTheDocument();
-            expect(screen.queryByRole("progressbar")).toBeNull();
-        });
-    });
+			expect(screen.getByText("succeeded")).toBeInTheDocument();
+			expect(screen.queryByRole("progressbar")).toBeNull();
+		});
+	});
 });

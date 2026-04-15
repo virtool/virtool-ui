@@ -3,77 +3,77 @@ import References from "@references/components/References";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
-    createFakeSettings,
-    mockApiGetSettings,
+	createFakeSettings,
+	mockApiGetSettings,
 } from "@tests/fake/administrator";
 import {
-    createFakeOTUMinimal,
-    mockApiCreateOTU,
-    mockApiFindOtus,
+	createFakeOTUMinimal,
+	mockApiCreateOTU,
+	mockApiFindOtus,
 } from "@tests/fake/otus";
 import {
-    createFakeReference,
-    mockApiGetReferenceDetail,
+	createFakeReference,
+	mockApiGetReferenceDetail,
 } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<OTUForm />", () => {
-    let path;
-    let reference;
+	let path;
+	let reference;
 
-    beforeEach(() => {
-        reference = createFakeReference();
-        mockApiGetReferenceDetail(reference);
-        mockApiFindOtus([createFakeOTUMinimal()], reference.id);
-        mockApiGetSettings(createFakeSettings());
+	beforeEach(() => {
+		reference = createFakeReference();
+		mockApiGetReferenceDetail(reference);
+		mockApiFindOtus([createFakeOTUMinimal()], reference.id);
+		mockApiGetSettings(createFakeSettings());
 
-        path = formatPath(`/refs/${reference.id}/otus`, {
-            openCreateOTU: true,
-        });
-    });
+		path = formatPath(`/refs/${reference.id}/otus`, {
+			openCreateOTU: true,
+		});
+	});
 
-    it("should render", async () => {
-        renderWithRouter(<References />, path);
+	it("should render", async () => {
+		renderWithRouter(<References />, path);
 
-        expect(await screen.findByText("Create OTU")).toBeInTheDocument();
-        expect(screen.getByLabelText("Name")).toBeInTheDocument();
-        expect(screen.getByLabelText("Abbreviation")).toBeInTheDocument();
-        expect(screen.getByRole("button")).toBeInTheDocument();
-    });
+		expect(await screen.findByText("Create OTU")).toBeInTheDocument();
+		expect(screen.getByLabelText("Name")).toBeInTheDocument();
+		expect(screen.getByLabelText("Abbreviation")).toBeInTheDocument();
+		expect(screen.getByRole("button")).toBeInTheDocument();
+	});
 
-    it("should render error once submitted with no name", async () => {
-        renderWithRouter(<References />, path);
+	it("should render error once submitted with no name", async () => {
+		renderWithRouter(<References />, path);
 
-        await userEvent.click(await screen.findByRole("button"));
-        expect(screen.getByText("Name required")).toBeInTheDocument();
-    });
+		await userEvent.click(await screen.findByRole("button"));
+		expect(screen.getByText("Name required")).toBeInTheDocument();
+	});
 
-    it("should create OTU without abbreviation", async () => {
-        const scope = mockApiCreateOTU(reference.id, "TestName", "");
-        renderWithRouter(<References />, path);
+	it("should create OTU without abbreviation", async () => {
+		const scope = mockApiCreateOTU(reference.id, "TestName", "");
+		renderWithRouter(<References />, path);
 
-        await userEvent.type(await screen.findByLabelText("Name"), "TestName");
-        await userEvent.click(screen.getByRole("button"));
+		await userEvent.type(await screen.findByLabelText("Name"), "TestName");
+		await userEvent.click(screen.getByRole("button"));
 
-        scope.done();
-    });
+		scope.done();
+	});
 
-    it("should create OTU with abbreviation", async () => {
-        const scope = mockApiCreateOTU(
-            reference.id,
-            "TestName",
-            "TestAbbreviation",
-        );
-        renderWithRouter(<References />, path);
+	it("should create OTU with abbreviation", async () => {
+		const scope = mockApiCreateOTU(
+			reference.id,
+			"TestName",
+			"TestAbbreviation",
+		);
+		renderWithRouter(<References />, path);
 
-        await userEvent.type(await screen.findByLabelText("Name"), "TestName");
-        await userEvent.type(
-            screen.getByLabelText("Abbreviation"),
-            "TestAbbreviation",
-        );
-        await userEvent.click(screen.getByRole("button"));
+		await userEvent.type(await screen.findByLabelText("Name"), "TestName");
+		await userEvent.type(
+			screen.getByLabelText("Abbreviation"),
+			"TestAbbreviation",
+		);
+		await userEvent.click(screen.getByRole("button"));
 
-        scope.done();
-    });
+		scope.done();
+	});
 });

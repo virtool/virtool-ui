@@ -1,7 +1,7 @@
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSelect from "@base/InputSelect";
-import { GroupMinimal } from "@groups/types";
+import type { GroupMinimal } from "@groups/types";
 import styled from "styled-components";
 
 const SampleUserGroupItem = styled.option`
@@ -9,35 +9,35 @@ const SampleUserGroupItem = styled.option`
 `;
 
 type SampleUserGroupProps = {
-    selected: string;
-    groups: GroupMinimal[];
-    /** A callback function to handle the user group change */
-    onChange: () => void;
+	selected: string;
+	groups: GroupMinimal[];
+	/** A callback function to handle the user group change */
+	onChange: () => void;
 };
 
 /**
  * A dropdown showing the user groups and its options
  */
 export default function SampleUserGroup({
-    selected,
-    groups,
-    onChange,
+	selected,
+	groups,
+	onChange,
 }: SampleUserGroupProps) {
-    const groupComponents = groups.map((group) => (
-        <SampleUserGroupItem key={group.id} value={group.id}>
-            {group.name}
-        </SampleUserGroupItem>
-    ));
+	const groupComponents = groups.map((group) => (
+		<SampleUserGroupItem key={group.id} value={group.id}>
+			{group.name}
+		</SampleUserGroupItem>
+	));
 
-    return (
-        <InputGroup>
-            <InputLabel htmlFor="userGroups">User Group</InputLabel>
-            <InputSelect id="userGroups" value={selected} onChange={onChange}>
-                <option key="none" value="none">
-                    None
-                </option>
-                {groupComponents}
-            </InputSelect>
-        </InputGroup>
-    );
+	return (
+		<InputGroup>
+			<InputLabel htmlFor="userGroups">User Group</InputLabel>
+			<InputSelect id="userGroups" value={selected} onChange={onChange}>
+				<option key="none" value="none">
+					None
+				</option>
+				{groupComponents}
+			</InputSelect>
+		</InputGroup>
+	);
 }

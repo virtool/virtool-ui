@@ -5,7 +5,7 @@ import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
 import { useSetIsolateAsDefault } from "@otus/queries";
-import { OtuIsolate } from "@otus/types";
+import type { OtuIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import Sequences from "@sequences/components/Sequences";
 import { Pencil, Star, Trash } from "lucide-react";
@@ -40,102 +40,102 @@ const StyledIsolateDetail = styled.div`
 `;
 
 type IsolateDetailProps = {
-    /** The Isolate that is currently selected */
-    activeIsolate: OtuIsolate;
-    allowedSourceTypes: string[];
-    /** Whether the user has permission to modify the Isolate */
-    canModify: boolean;
-    otuId: string;
-    /** Indicates whether the source types are restricted */
-    restrictSourceTypes: boolean;
+	/** The Isolate that is currently selected */
+	activeIsolate: OtuIsolate;
+	allowedSourceTypes: string[];
+	/** Whether the user has permission to modify the Isolate */
+	canModify: boolean;
+	otuId: string;
+	/** Indicates whether the source types are restricted */
+	restrictSourceTypes: boolean;
 };
 
 /**
  * Display and edit information for Isolates
  */
 export default function IsolateDetail({
-    activeIsolate,
-    allowedSourceTypes,
-    canModify,
-    otuId,
-    restrictSourceTypes,
+	activeIsolate,
+	allowedSourceTypes,
+	canModify,
+	otuId,
+	restrictSourceTypes,
 }: IsolateDetailProps) {
-    const { open: openEditIsolate, setOpen: setOpenEditIsolate } =
-        useDialogParam("openEditIsolate");
+	const { open: openEditIsolate, setOpen: setOpenEditIsolate } =
+		useDialogParam("openEditIsolate");
 
-    const { open: openRemoveIsolate, setOpen: setOpenRemoveIsolate } =
-        useDialogParam("openRemoveIsolate");
+	const { open: openRemoveIsolate, setOpen: setOpenRemoveIsolate } =
+		useDialogParam("openRemoveIsolate");
 
-    const mutation = useSetIsolateAsDefault();
+	const mutation = useSetIsolateAsDefault();
 
-    return (
-        <StyledIsolateDetail>
-            <EditIsolate
-                key={activeIsolate.id}
-                otuId={otuId}
-                isolateId={activeIsolate.id}
-                sourceType={activeIsolate.source_type}
-                sourceName={activeIsolate.source_name}
-                allowedSourceTypes={allowedSourceTypes}
-                restrictSourceTypes={restrictSourceTypes}
-                show={openEditIsolate}
-                onHide={() => setOpenEditIsolate(false)}
-            />
+	return (
+		<StyledIsolateDetail>
+			<EditIsolate
+				key={activeIsolate.id}
+				otuId={otuId}
+				isolateId={activeIsolate.id}
+				sourceType={activeIsolate.source_type}
+				sourceName={activeIsolate.source_name}
+				allowedSourceTypes={allowedSourceTypes}
+				restrictSourceTypes={restrictSourceTypes}
+				show={openEditIsolate}
+				onHide={() => setOpenEditIsolate(false)}
+			/>
 
-            <RemoveIsolate
-                id={activeIsolate.id}
-                name={formatIsolateName(activeIsolate)}
-                onHide={() => setOpenRemoveIsolate(false)}
-                otuId={otuId}
-                show={openRemoveIsolate}
-            />
+			<RemoveIsolate
+				id={activeIsolate.id}
+				name={formatIsolateName(activeIsolate)}
+				onHide={() => setOpenRemoveIsolate(false)}
+				otuId={otuId}
+				show={openRemoveIsolate}
+			/>
 
-            <IsolateDetailHeader>
-                <div>{formatIsolateName(activeIsolate)}</div>
-                <div>
-                    {activeIsolate.default && (
-                        <Label color="green">
-                            <Icon icon={Star} /> Default Isolate
-                        </Label>
-                    )}
-                    {canModify && (
-                        <>
-                            <IconButton
-                                IconComponent={Pencil}
-                                color="grayDark"
-                                tip="edit isolate"
-                                onClick={() => setOpenEditIsolate(true)}
-                            />
-                            {!activeIsolate.default && (
-                                <IconButton
-                                    IconComponent={Star}
-                                    color="green"
-                                    tip="set as default"
-                                    onClick={() =>
-                                        mutation.mutate({
-                                            otuId,
-                                            isolateId: activeIsolate.id,
-                                        })
-                                    }
-                                />
-                            )}
-                            <IconButton
-                                IconComponent={Trash}
-                                color="red"
-                                tip="remove isolate"
-                                onClick={() => setOpenRemoveIsolate(true)}
-                            />
-                        </>
-                    )}
-                    <DownloadLink
-                        href={`/api/otus/${otuId}/isolates/${activeIsolate.id}.fa`}
-                    >
-                        FASTA
-                    </DownloadLink>
-                </div>
-            </IsolateDetailHeader>
+			<IsolateDetailHeader>
+				<div>{formatIsolateName(activeIsolate)}</div>
+				<div>
+					{activeIsolate.default && (
+						<Label color="green">
+							<Icon icon={Star} /> Default Isolate
+						</Label>
+					)}
+					{canModify && (
+						<>
+							<IconButton
+								IconComponent={Pencil}
+								color="grayDark"
+								tip="edit isolate"
+								onClick={() => setOpenEditIsolate(true)}
+							/>
+							{!activeIsolate.default && (
+								<IconButton
+									IconComponent={Star}
+									color="green"
+									tip="set as default"
+									onClick={() =>
+										mutation.mutate({
+											otuId,
+											isolateId: activeIsolate.id,
+										})
+									}
+								/>
+							)}
+							<IconButton
+								IconComponent={Trash}
+								color="red"
+								tip="remove isolate"
+								onClick={() => setOpenRemoveIsolate(true)}
+							/>
+						</>
+					)}
+					<DownloadLink
+						href={`/api/otus/${otuId}/isolates/${activeIsolate.id}.fa`}
+					>
+						FASTA
+					</DownloadLink>
+				</div>
+			</IsolateDetailHeader>
 
-            <Sequences otuId={otuId} activeIsolate={activeIsolate} />
-        </StyledIsolateDetail>
-    );
+			<Sequences otuId={otuId} activeIsolate={activeIsolate} />
+		</StyledIsolateDetail>
+	);
 }

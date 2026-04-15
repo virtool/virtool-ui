@@ -1,4 +1,3 @@
-import { JobNested } from "@/jobs/types";
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoleName } from "@administration/types";
 import { getColor, getFontSize, getFontWeight, sizes } from "@app/theme";
@@ -11,8 +10,9 @@ import ProgressCircle from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
 import { Equal, EqualNot } from "lucide-react";
 import styled from "styled-components";
+import { JobNested } from "@/jobs/types";
 import { useRemoveAnalysis } from "../queries";
-import { AnalysisMinimal } from "../types";
+import type { AnalysisMinimal } from "../types";
 import { checkSupportedWorkflow } from "../utils";
 import { AnalysisItemRightIcon } from "./AnalysisItemRightIcon";
 
@@ -66,7 +66,7 @@ const UnsupportedAnalysisTitle = styled.div`
     }
     span {
         color: ${(props) =>
-            getColor({ color: "greyDark", theme: props.theme })};
+					getColor({ color: "greyDark", theme: props.theme })};
         font-size: ${getFontSize("md")};
         margin-left: 5px;
         font-weight: ${getFontWeight("normal")};
@@ -74,88 +74,81 @@ const UnsupportedAnalysisTitle = styled.div`
 `;
 
 type AnalysisItemProps = {
-    analysis: AnalysisMinimal;
+	analysis: AnalysisMinimal;
 };
 
 /**
  * Condensed analysis item for use in a list of analyses
  */
 export default function AnalysisItem({ analysis }: AnalysisItemProps) {
-    const {
-        id,
-        workflow,
-        ready,
-        user,
-        reference,
-        index,
-        subtractions,
-        created_at,
-    } = analysis;
-    const { hasPermission: canModify } = useCheckAdminRole(
-        AdministratorRoleName.USERS,
-    );
-    const onRemove = useRemoveAnalysis(id);
+	const {
+		id,
+		workflow,
+		ready,
+		user,
+		reference,
+		index,
+		subtractions,
+		created_at,
+	} = analysis;
+	const { hasPermission: canModify } = useCheckAdminRole(
+		AdministratorRoleName.USERS,
+	);
+	const onRemove = useRemoveAnalysis(id);
 
-    const title = checkSupportedWorkflow(workflow) ? (
-        <Link to={`/samples/${analysis.sample.id}/analyses/${id}`}>
-            {getWorkflowDisplayName(workflow)}
-        </Link>
-    ) : (
-        <UnsupportedAnalysisTitle>
-            {getWorkflowDisplayName(workflow)}
-            <span>Workflow unavailable</span>
-        </UnsupportedAnalysisTitle>
-    );
+	const title = checkSupportedWorkflow(workflow) ? (
+		<Link to={`/samples/${analysis.sample.id}/analyses/${id}`}>
+			{getWorkflowDisplayName(workflow)}
+		</Link>
+	) : (
+		<UnsupportedAnalysisTitle>
+			{getWorkflowDisplayName(workflow)}
+			<span>Workflow unavailable</span>
+		</UnsupportedAnalysisTitle>
+	);
 
-    const job = analysis.job && JobNested.parse(analysis.job);
+	const job = analysis.job && JobNested.parse(analysis.job);
 
-    return (
-        <StyledAnalysisItem>
-            <AnalysisItemTop>
-                {title}
-                <AnalysisAttribution user={user.handle} time={created_at} />
-                <AnalysisItemEndIcon>
-                    {ready ? (
-                        <AnalysisItemRightIcon
-                            canModify={canModify}
-                            onRemove={onRemove}
-                        />
-                    ) : (
-                        <ProgressCircle
-                            progress={job.progress || 0}
-                            state={job.state || "pending"}
-                            size={sizes.md}
-                        />
-                    )}
-                </AnalysisItemEndIcon>
-            </AnalysisItemTop>
-            <AnalysisItemTags>
-                <AnalysisItemTag key="reference">
-                    <Equal size={18} />
-                    <SlashList className="m-0">
-                        <li>
-                            <Link to={`/refs/${reference.id}`}>
-                                {reference.name}
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                to={`/refs/${reference.id}/indexes/${index.id}`}
-                            >
-                                Index {index.version}
-                            </Link>
-                        </li>
-                    </SlashList>
-                </AnalysisItemTag>
-                {subtractions.map((subtraction) => (
-                    <AnalysisItemTag key={subtraction.id}>
-                        <Icon icon={EqualNot} />
-                        <Link to={`/subtractions/${subtraction.id}`}>
-                            {subtraction.name}
-                        </Link>
-                    </AnalysisItemTag>
-                ))}
-            </AnalysisItemTags>
-        </StyledAnalysisItem>
-    );
+	return (
+		<StyledAnalysisItem>
+			<AnalysisItemTop>
+				{title}
+				<AnalysisAttribution user={user.handle} time={created_at} />
+				<AnalysisItemEndIcon>
+					{ready ? (
+						<AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} />
+					) : (
+						<ProgressCircle
+							progress={job.progress || 0}
+							state={job.state || "pending"}
+							size={sizes.md}
+						/>
+					)}
+				</AnalysisItemEndIcon>
+			</AnalysisItemTop>
+			<AnalysisItemTags>
+				<AnalysisItemTag key="reference">
+					<Equal size={18} />
+					<SlashList className="m-0">
+						<li>
+							<Link to={`/refs/${reference.id}`}>{reference.name}</Link>
+						</li>
+						<li>
+							<Link to={`/refs/${reference.id}/indexes/${index.id}`}>
+								Index {index.version}
+							</Link>
+						</li>
+					</SlashList>
+				</AnalysisItemTag>
+				{subtractions.map((subtraction) => (
+					<AnalysisItemTag key={subtraction.id}>
+						<Icon icon={EqualNot} />
+						<Link to={`/subtractions/${subtraction.id}`}>
+							{subtraction.name}
+						</Link>
+					</AnalysisItemTag>
+				))}
+			</AnalysisItemTags>
+		</StyledAnalysisItem>
+	);
 }

@@ -1,12 +1,12 @@
 import { faker } from "@faker-js/faker";
-import { SampleRightsUpdate } from "@samples/api";
+import type { SampleRightsUpdate } from "@samples/api";
 import {
-    LibraryType,
-    Quality,
-    Read,
-    Sample,
-    SampleMinimal,
-    WorkflowState,
+	LibraryType,
+	type Quality,
+	type Read,
+	type Sample,
+	type SampleMinimal,
+	WorkflowState,
 } from "@samples/types";
 import nock from "nock";
 import { createFakeServerJobNested } from "./jobs";
@@ -20,84 +20,84 @@ import { createFakeUserNested } from "./user";
  * @param overrides - optional properties for creating a sample minimal with specific values
  */
 export function createFakeSampleMinimal(
-    overrides?: Partial<SampleMinimal>,
+	overrides?: Partial<SampleMinimal>,
 ): SampleMinimal {
-    const defaultSampleMinimal = {
-        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        name: `${faker.word.noun({ strategy: "any-length" })} ${faker.number.int()}`,
-        created_at: faker.date.past().toISOString(),
-        host: faker.word.noun({ strategy: "any-length" }),
-        isolate: faker.word.noun({ strategy: "any-length" }),
-        job: createFakeServerJobNested({ workflow: "create_sample" }),
-        labels: [createFakeLabelNested()],
-        library_type: LibraryType.normal,
-        notes: faker.lorem.lines(5),
-        nuvs: faker.datatype.boolean(),
-        pathoscope: faker.datatype.boolean(),
-        ready: true,
-        user: createFakeUserNested(),
-        workflows: {
-            nuvs: WorkflowState.NONE,
-            pathoscope: WorkflowState.NONE,
-        },
-    };
+	const defaultSampleMinimal = {
+		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		name: `${faker.word.noun({ strategy: "any-length" })} ${faker.number.int()}`,
+		created_at: faker.date.past().toISOString(),
+		host: faker.word.noun({ strategy: "any-length" }),
+		isolate: faker.word.noun({ strategy: "any-length" }),
+		job: createFakeServerJobNested({ workflow: "create_sample" }),
+		labels: [createFakeLabelNested()],
+		library_type: LibraryType.normal,
+		notes: faker.lorem.lines(5),
+		nuvs: faker.datatype.boolean(),
+		pathoscope: faker.datatype.boolean(),
+		ready: true,
+		user: createFakeUserNested(),
+		workflows: {
+			nuvs: WorkflowState.NONE,
+			pathoscope: WorkflowState.NONE,
+		},
+	};
 
-    return { ...defaultSampleMinimal, ...overrides };
+	return { ...defaultSampleMinimal, ...overrides };
 }
 
 /**
  * Create a fake sample read object
  */
 export function createFakeSampleRead(overrides?: Partial<Read>): Read {
-    const defaultRead = {
-        download_url: faker.word.noun({ strategy: "any-length" }),
-        id: faker.number.int(),
-        name: faker.word.noun({ strategy: "any-length" }),
-        name_on_disk: faker.word.noun({ strategy: "any-length" }),
-        sample: faker.word.noun({ strategy: "any-length" }),
-        size: faker.number.int(),
-        upload: null,
-        uploaded_at: faker.date.past().toISOString(),
-    };
+	const defaultRead = {
+		download_url: faker.word.noun({ strategy: "any-length" }),
+		id: faker.number.int(),
+		name: faker.word.noun({ strategy: "any-length" }),
+		name_on_disk: faker.word.noun({ strategy: "any-length" }),
+		sample: faker.word.noun({ strategy: "any-length" }),
+		size: faker.number.int(),
+		upload: null,
+		uploaded_at: faker.date.past().toISOString(),
+	};
 
-    return { ...defaultRead, ...overrides };
+	return { ...defaultRead, ...overrides };
 }
 
 export function createFakeSampleQuality(): Quality {
-    return {
-        bases: [Array.from({ length: 6 }, () => faker.number.int())],
-        composition: [Array.from({ length: 4 }, () => faker.number.int())],
-        count: faker.number.int(),
-        encoding: "Sanger / Illumina 1.9",
-        gc: faker.number.int(),
-        length: [faker.number.int(), faker.number.int()],
-        sequences: Array.from({ length: 10 }, () => faker.number.int()),
-    };
+	return {
+		bases: [Array.from({ length: 6 }, () => faker.number.int())],
+		composition: [Array.from({ length: 4 }, () => faker.number.int())],
+		count: faker.number.int(),
+		encoding: "Sanger / Illumina 1.9",
+		gc: faker.number.int(),
+		length: [faker.number.int(), faker.number.int()],
+		sequences: Array.from({ length: 10 }, () => faker.number.int()),
+	};
 }
 
 /**
  * Create a fake sample object
  */
 export function createFakeSample(overrides?: Partial<Sample>): Sample {
-    const defaultSample = {
-        ...createFakeSampleMinimal(),
-        all_read: faker.datatype.boolean(),
-        all_write: faker.datatype.boolean(),
-        artifacts: [],
-        format: "fastq",
-        group: null,
-        group_read: faker.datatype.boolean(),
-        group_write: faker.datatype.boolean(),
-        hold: faker.datatype.boolean(),
-        is_legacy: faker.datatype.boolean(),
-        locale: faker.location.country(),
-        paired: faker.datatype.boolean(),
-        quality: createFakeSampleQuality(),
-        reads: [createFakeSampleRead()],
-        subtractions: [createFakeSubtractionNested()],
-    };
+	const defaultSample = {
+		...createFakeSampleMinimal(),
+		all_read: faker.datatype.boolean(),
+		all_write: faker.datatype.boolean(),
+		artifacts: [],
+		format: "fastq",
+		group: null,
+		group_read: faker.datatype.boolean(),
+		group_write: faker.datatype.boolean(),
+		hold: faker.datatype.boolean(),
+		is_legacy: faker.datatype.boolean(),
+		locale: faker.location.country(),
+		paired: faker.datatype.boolean(),
+		quality: createFakeSampleQuality(),
+		reads: [createFakeSampleRead()],
+		subtractions: [createFakeSubtractionNested()],
+	};
 
-    return { ...defaultSample, ...overrides };
+	return { ...defaultSample, ...overrides };
 }
 
 /**
@@ -107,14 +107,14 @@ export function createFakeSample(overrides?: Partial<Sample>): Sample {
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetSamples(samples: SampleMinimal[]) {
-    return nock("http://localhost").get("/api/samples").query(true).reply(200, {
-        page: 1,
-        page_count: 1,
-        per_page: 5,
-        total_count: samples.length,
-        found_count: samples.length,
-        documents: samples,
-    });
+	return nock("http://localhost").get("/api/samples").query(true).reply(200, {
+		page: 1,
+		page_count: 1,
+		per_page: 5,
+		total_count: samples.length,
+		found_count: samples.length,
+		documents: samples,
+	});
 }
 
 /**
@@ -125,13 +125,13 @@ export function mockApiGetSamples(samples: SampleMinimal[]) {
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetSampleDetail(
-    sampleDetail: Sample,
-    statusCode?: number,
+	sampleDetail: Sample,
+	statusCode?: number,
 ) {
-    return nock("http://localhost")
-        .get(`/api/samples/${sampleDetail.id}`)
-        .query(true)
-        .reply(statusCode || 200, sampleDetail);
+	return nock("http://localhost")
+		.get(`/api/samples/${sampleDetail.id}`)
+		.query(true)
+		.reply(statusCode || 200, sampleDetail);
 }
 
 /**
@@ -146,18 +146,18 @@ export function mockApiGetSampleDetail(
  * @returns A nock scope for the mocked API call
  */
 export function mockApiEditSample(
-    sample: Sample,
-    name: string,
-    isolate: string,
-    host: string,
-    locale: string,
-    notes: string,
+	sample: Sample,
+	name: string,
+	isolate: string,
+	host: string,
+	locale: string,
+	notes: string,
 ) {
-    const sampleDetail = { ...sample, name, isolate, host, locale, notes };
+	const sampleDetail = { ...sample, name, isolate, host, locale, notes };
 
-    return nock("http://localhost")
-        .patch(`/api/samples/${sample.id}`)
-        .reply(200, sampleDetail);
+	return nock("http://localhost")
+		.patch(`/api/samples/${sample.id}`)
+		.reply(200, sampleDetail);
 }
 
 /**
@@ -168,22 +168,22 @@ export function mockApiEditSample(
  * @returns A nock scope for the mocked API call
  */
 export function mockApiUpdateSampleRights(
-    sample: Sample,
-    update: SampleRightsUpdate,
+	sample: Sample,
+	update: SampleRightsUpdate,
 ) {
-    const sampleRightsUpdate = {
-        all_read: faker.datatype.boolean(),
-        all_write: faker.datatype.boolean(),
-        group: null,
-        group_read: faker.datatype.boolean(),
-        group_write: faker.datatype.boolean(),
-        user: { id: sample.user.id },
-        ...update,
-    };
+	const sampleRightsUpdate = {
+		all_read: faker.datatype.boolean(),
+		all_write: faker.datatype.boolean(),
+		group: null,
+		group_read: faker.datatype.boolean(),
+		group_write: faker.datatype.boolean(),
+		user: { id: sample.user.id },
+		...update,
+	};
 
-    return nock("http://localhost")
-        .patch(`/api/samples/${sample.id}/rights`)
-        .reply(200, sampleRightsUpdate);
+	return nock("http://localhost")
+		.patch(`/api/samples/${sample.id}/rights`)
+		.reply(200, sampleRightsUpdate);
 }
 
 /**
@@ -201,38 +201,38 @@ export function mockApiUpdateSampleRights(
  * @returns The nock scope for the mocked API call
  */
 export function mockApiCreateSample(
-    name: string,
-    isolate: string,
-    host: string,
-    locale: string,
-    library_type: LibraryType,
-    files: number[],
-    labels: number[],
-    subtractions: string[],
-    group: string | null,
+	name: string,
+	isolate: string,
+	host: string,
+	locale: string,
+	library_type: LibraryType,
+	files: number[],
+	labels: number[],
+	subtractions: string[],
+	group: string | null,
 ) {
-    const sample = createFakeSample({
-        name,
-        isolate,
-        host,
-        locale,
-        library_type,
-        subtractions: [createFakeSubtractionNested({ id: subtractions[0] })],
-    });
+	const sample = createFakeSample({
+		name,
+		isolate,
+		host,
+		locale,
+		library_type,
+		subtractions: [createFakeSubtractionNested({ id: subtractions[0] })],
+	});
 
-    return nock("http://localhost")
-        .post("/api/samples", {
-            name,
-            isolate,
-            host,
-            locale,
-            library_type,
-            files,
-            labels,
-            subtractions,
-            group,
-        })
-        .reply(201, sample);
+	return nock("http://localhost")
+		.post("/api/samples", {
+			name,
+			isolate,
+			host,
+			locale,
+			library_type,
+			files,
+			labels,
+			subtractions,
+			group,
+		})
+		.reply(201, sample);
 }
 
 /**
@@ -242,7 +242,5 @@ export function mockApiCreateSample(
  * @returns The nock scope for the mocked API call
  */
 export function mockApiRemoveSample(sampleId: string) {
-    return nock("http://localhost")
-        .delete(`/api/samples/${sampleId}`)
-        .reply(200);
+	return nock("http://localhost").delete(`/api/samples/${sampleId}`).reply(200);
 }

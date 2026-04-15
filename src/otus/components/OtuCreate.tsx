@@ -4,46 +4,43 @@ import { useCreateOTU } from "../queries";
 import OtuForm from "./OtuForm";
 
 type CreateOTUProps = {
-    refId: string;
+	refId: string;
 };
 
 /**
  * Displays a dialog to create an OTU
  */
 export default function OtuCreate({ refId }: CreateOTUProps) {
-    const { open: openCreateOtu, setOpen: setOpenCreateOtu } =
-        useDialogParam("openCreateOTU");
+	const { open: openCreateOtu, setOpen: setOpenCreateOtu } =
+		useDialogParam("openCreateOTU");
 
-    const mutation = useCreateOTU(refId);
+	const mutation = useCreateOTU(refId);
 
-    function handleSubmit({ name, abbreviation }) {
-        mutation.mutate(
-            { name, abbreviation },
-            {
-                onSuccess: () => {
-                    setOpenCreateOtu(false);
-                },
-            },
-        );
-    }
+	function handleSubmit({ name, abbreviation }) {
+		mutation.mutate(
+			{ name, abbreviation },
+			{
+				onSuccess: () => {
+					setOpenCreateOtu(false);
+				},
+			},
+		);
+	}
 
-    function onHide() {
-        setOpenCreateOtu(false);
-        mutation.reset();
-    }
+	function onHide() {
+		setOpenCreateOtu(false);
+		mutation.reset();
+	}
 
-    return (
-        <Dialog open={openCreateOtu} onOpenChange={onHide}>
-            <DialogContent>
-                <DialogTitle>Create OTU</DialogTitle>
-                <OtuForm
-                    onSubmit={handleSubmit}
-                    error={
-                        mutation.isError &&
-                        mutation.error.response?.body?.message
-                    }
-                />
-            </DialogContent>
-        </Dialog>
-    );
+	return (
+		<Dialog open={openCreateOtu} onOpenChange={onHide}>
+			<DialogContent>
+				<DialogTitle>Create OTU</DialogTitle>
+				<OtuForm
+					onSubmit={handleSubmit}
+					error={mutation.isError && mutation.error.response?.body?.message}
+				/>
+			</DialogContent>
+		</Dialog>
+	);
 }

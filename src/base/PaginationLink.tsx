@@ -1,47 +1,47 @@
 import { cn } from "@app/utils";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import Link from "./Link";
 import PaginationItem from "./PaginationItem";
 
 type PaginationLinkProps = {
-    active?: boolean;
-    children?: ReactNode;
-    className?: string;
-    disabled?: boolean;
-    onClick?: () => void;
-    to: string;
+	active?: boolean;
+	children?: ReactNode;
+	className?: string;
+	disabled?: boolean;
+	onClick?: () => void;
+	to: string;
 };
 
 /**
  * A styled pagination link navigation users to specified page number
  */
 export default function PaginationLink({
-    active,
-    children,
-    className,
-    disabled,
-    onClick,
-    to,
+	active,
+	children,
+	className,
+	disabled,
+	onClick,
+	to,
 }: PaginationLinkProps) {
-    return (
-        <PaginationItem>
-            <Link
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                    "text-lg",
-                    "text-blue-500",
-                    {
-                        "text-blue-900": !active,
-                        "pointer-events-none": disabled,
-                    },
+	return (
+		<PaginationItem>
+			<Link
+				aria-current={active ? "page" : undefined}
+				className={cn(
+					"text-lg",
+					"text-blue-500",
+					{
+						"text-blue-900": !active,
+						"pointer-events-none": disabled,
+					},
 
-                    className,
-                )}
-                to={to}
-                onClick={onClick}
-            >
-                {children}
-            </Link>
-        </PaginationItem>
-    );
+					className,
+				)}
+				to={to}
+				onClick={onClick}
+			>
+				{children}
+			</Link>
+		</PaginationItem>
+	);
 }

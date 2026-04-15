@@ -1,14 +1,14 @@
-import { ReactNode } from "react";
-import styled, { DefaultTheme } from "styled-components";
+import type { ReactNode } from "react";
+import styled, { type DefaultTheme } from "styled-components";
 import BoxGroupSection from "./BoxGroupSection";
 
 type SelectBoxGroupSectionProps = {
-    active?: boolean;
-    theme: DefaultTheme;
+	active?: boolean;
+	theme: DefaultTheme;
 };
 
 const StyledSelectBoxGroupSection = styled(
-    BoxGroupSection,
+	BoxGroupSection,
 )<SelectBoxGroupSectionProps>`
     cursor: pointer;
     width: 100%;
@@ -20,26 +20,26 @@ const StyledSelectBoxGroupSection = styled(
 `;
 
 type BoxGroupSectionSelectProps = {
-    active?: boolean;
-    children: ReactNode;
-    className?: string;
-    onClick?: () => void;
+	active?: boolean;
+	children: ReactNode;
+	className?: string;
+	onClick?: () => void;
 };
 
 export default function SelectBoxGroupSection({
-    active,
-    children,
-    className,
-    onClick,
+	active,
+	children,
+	className,
+	onClick,
 }: BoxGroupSectionSelectProps) {
-    return (
-        <StyledSelectBoxGroupSection
-            active={active}
-            aria-role="option"
-            className={className}
-            onClick={onClick}
-        >
-            {children}
-        </StyledSelectBoxGroupSection>
-    );
+	return (
+		<StyledSelectBoxGroupSection
+			active={active}
+			aria-role="option"
+			className={className}
+			onClick={onClick}
+		>
+			{children}
+		</StyledSelectBoxGroupSection>
+	);
 }
