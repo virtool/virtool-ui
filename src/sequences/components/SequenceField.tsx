@@ -15,29 +15,28 @@ const SequenceFieldTextArea = styled(TextArea)`
  * Displays the sequence field of a form.
  */
 export default function SequenceField() {
-    const {
-        formState: { errors },
-        register,
-        watch,
-    } = useFormContext<{ sequence: string }>();
+	const {
+		formState: { errors },
+		register,
+		watch,
+	} = useFormContext<{ sequence: string }>();
 
-    return (
-        <InputGroup className="flex flex-col">
-            <InputLabel htmlFor="sequence">
-                Sequence <Badge>{watch("sequence")?.length}</Badge>
-            </InputLabel>
-            <SequenceFieldTextArea
-                id="sequence"
-                {...register("sequence", {
-                    required: "Required Field",
-                    pattern: {
-                        value: /^[ATCGNRYKM]*$/,
-                        message:
-                            "Sequence should only contain the characters: ATCGNRYKM",
-                    },
-                })}
-            />
-            <InputError>{errors.sequence?.message}</InputError>
-        </InputGroup>
-    );
+	return (
+		<InputGroup className="flex flex-col">
+			<InputLabel htmlFor="sequence">
+				Sequence <Badge>{watch("sequence")?.length}</Badge>
+			</InputLabel>
+			<SequenceFieldTextArea
+				id="sequence"
+				{...register("sequence", {
+					required: "Required Field",
+					pattern: {
+						value: /^[ATCGNRYKM]*$/,
+						message: "Sequence should only contain the characters: ATCGNRYKM",
+					},
+				})}
+			/>
+			<InputError>{errors.sequence?.message}</InputError>
+		</InputGroup>
+	);
 }

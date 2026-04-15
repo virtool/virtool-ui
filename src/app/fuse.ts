@@ -5,34 +5,31 @@ import { useMemo, useState } from "react";
  * Create a Fuse object.
  */
 export function createFuse<T>(collection: T[], keys: string[]) {
-    return new Fuse(collection, {
-        keys,
-        minMatchCharLength: 1,
-        threshold: 0.3,
-        useExtendedSearch: true,
-    });
+	return new Fuse(collection, {
+		keys,
+		minMatchCharLength: 1,
+		threshold: 0.3,
+		useExtendedSearch: true,
+	});
 }
 
 export function useFuse<T extends object>(
-    collection: T[],
-    keys: string[],
+	collection: T[],
+	keys: string[],
 ): [T[], string, (value: ((prevState: string) => string) | string) => void] {
-    const [term, setTerm] = useState("");
-    const [prevCollection, setPrevCollection] = useState(collection);
+	const [term, setTerm] = useState("");
+	const [prevCollection, setPrevCollection] = useState(collection);
 
-    if (collection !== prevCollection) {
-        setPrevCollection(collection);
-        setTerm("");
-    }
+	if (collection !== prevCollection) {
+		setPrevCollection(collection);
+		setTerm("");
+	}
 
-    const fuse = useMemo(
-        () => createFuse(collection, keys),
-        [collection, keys],
-    );
+	const fuse = useMemo(() => createFuse(collection, keys), [collection, keys]);
 
-    const items = term
-        ? fuse.search(term).map((result) => result.item)
-        : collection;
+	const items = term
+		? fuse.search(term).map((result) => result.item)
+		: collection;
 
-    return [items, term, setTerm];
+	return [items, term, setTerm];
 }

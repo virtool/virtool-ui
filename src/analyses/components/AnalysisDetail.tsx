@@ -12,10 +12,10 @@ import { useFetchSample } from "@samples/queries";
 import { CircleAlert } from "lucide-react";
 import styled from "styled-components";
 import { useGetAnalysis } from "../queries";
-import {
-    FormattedIimiAnalysis,
-    FormattedNuvsAnalysis,
-    FormattedPathoscopeAnalysis,
+import type {
+	FormattedIimiAnalysis,
+	FormattedNuvsAnalysis,
+	FormattedPathoscopeAnalysis,
 } from "../types";
 import { IimiViewer } from "./Iimi/IimiViewer";
 import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";
@@ -28,74 +28,66 @@ const UnsupportedAnalysis = styled(Box)`
 
 /** Base component viewing all supported analysis */
 export default function AnalysisDetail() {
-    const { analysisId, sampleId } = usePathParams<{
-        analysisId: string;
-        sampleId: string;
-    }>();
-    const { data: analysis, isPending, error } = useGetAnalysis(analysisId);
-    const { data: sample, isPending: isPendingSample } =
-        useFetchSample(sampleId);
+	const { analysisId, sampleId } = usePathParams<{
+		analysisId: string;
+		sampleId: string;
+	}>();
+	const { data: analysis, isPending, error } = useGetAnalysis(analysisId);
+	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 
-    if (error?.response.status === 404) {
-        return <NotFound />;
-    }
+	if (error?.response.status === 404) {
+		return <NotFound />;
+	}
 
-    if (isPending || isPendingSample) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending || isPendingSample) {
+		return <LoadingPlaceholder />;
+	}
 
-    if (!analysis.ready) {
-        return (
-            <Box>
-                <LoadingPlaceholder
-                    className="mt-5"
-                    message="Analysis in progress"
-                />
-            </Box>
-        );
-    }
+	if (!analysis.ready) {
+		return (
+			<Box>
+				<LoadingPlaceholder className="mt-5" message="Analysis in progress" />
+			</Box>
+		);
+	}
 
-    let content;
+	let content;
 
-    if (analysis.workflow === "pathoscope_bowtie") {
-        content = (
-            <PathoscopeViewer
-                analysis={analysis as FormattedPathoscopeAnalysis}
-                sample={sample}
-            />
-        );
-    } else if (analysis.workflow === "nuvs") {
-        content = (
-            <NuvsViewer
-                detail={analysis as FormattedNuvsAnalysis}
-                sample={sample}
-            />
-        );
-    } else if (analysis.workflow === "iimi") {
-        content = <IimiViewer detail={analysis as FormattedIimiAnalysis} />;
-    } else {
-        return (
-            <UnsupportedAnalysis>
-                <CircleAlert className="mr-1" />
-                Workflow not supported.
-            </UnsupportedAnalysis>
-        );
-    }
+	if (analysis.workflow === "pathoscope_bowtie") {
+		content = (
+			<PathoscopeViewer
+				analysis={analysis as FormattedPathoscopeAnalysis}
+				sample={sample}
+			/>
+		);
+	} else if (analysis.workflow === "nuvs") {
+		content = (
+			<NuvsViewer detail={analysis as FormattedNuvsAnalysis} sample={sample} />
+		);
+	} else if (analysis.workflow === "iimi") {
+		content = <IimiViewer detail={analysis as FormattedIimiAnalysis} />;
+	} else {
+		return (
+			<UnsupportedAnalysis>
+				<CircleAlert className="mr-1" />
+				Workflow not supported.
+			</UnsupportedAnalysis>
+		);
+	}
 
-    return (
-        <div>
-            <SubviewHeader>
-                <SubviewHeaderTitle>
-                    {getWorkflowDisplayName(analysis.workflow)} for{" "}
-                    {sample.name}
-                </SubviewHeaderTitle>
-                <SubviewHeaderAttribution>
-                    {analysis.user.handle} started{" "}
-                    <RelativeTime time={analysis.created_at} />
-                </SubviewHeaderAttribution>
-            </SubviewHeader>
+	return (
+		<div>
+			<SubviewHeader>
+				<SubviewHeaderTitle>
+					{getWorkflowDisplayName(analysis.workflow)} for {sample.name}
+				</SubviewHeaderTitle>
+				<SubviewHeaderAttribution>
+					{analysis.user.handle} started{" "}
+					<RelativeTime time={analysis.created_at} />
+				</SubviewHeaderAttribution>
+			</SubviewHeader>
 
-            {content}
-        </div>
-    );
+			{content}
+		</div>
+	);
 }

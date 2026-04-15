@@ -1,14 +1,14 @@
 import { apiClient } from "@app/api";
-import {
-    Reference,
-    ReferenceGroup,
-    ReferenceMinimal,
-    ReferenceSearchResult,
-    ReferenceUser,
+import type {
+	Reference,
+	ReferenceGroup,
+	ReferenceMinimal,
+	ReferenceSearchResult,
+	ReferenceUser,
 } from "./types";
 
 export function get({ refId }) {
-    return apiClient.get(`/refs/${refId}`);
+	return apiClient.get(`/refs/${refId}`);
 }
 
 /**
@@ -20,18 +20,18 @@ export function get({ refId }) {
  * @returns A promise resolving to a clone of a reference
  */
 export function cloneReference({
-    name,
-    description,
-    refId,
+	name,
+	description,
+	refId,
 }): Promise<ReferenceMinimal> {
-    return apiClient
-        .post("/refs")
-        .send({
-            name,
-            description,
-            clone_from: refId,
-        })
-        .then((res) => res.body);
+	return apiClient
+		.post("/refs")
+		.send({
+			name,
+			description,
+			clone_from: refId,
+		})
+		.then((res) => res.body);
 }
 
 /**
@@ -41,10 +41,10 @@ export function cloneReference({
  * @returns A promise resolving to the installing remote reference
  */
 export function remoteReference(remote_from: string): Promise<Reference> {
-    return apiClient
-        .post("/refs")
-        .send({ remote_from })
-        .then((res) => res.body);
+	return apiClient
+		.post("/refs")
+		.send({ remote_from })
+		.then((res) => res.body);
 }
 
 /**
@@ -56,14 +56,14 @@ export function remoteReference(remote_from: string): Promise<Reference> {
  * @returns A promise resolving to a page of references search results
  */
 export function findReferences({
-    term,
-    page,
-    per_page,
+	term,
+	page,
+	per_page,
 }): Promise<ReferenceSearchResult> {
-    return apiClient
-        .get("/refs")
-        .query({ find: term, page, per_page })
-        .then((response) => response.body);
+	return apiClient
+		.get("/refs")
+		.query({ find: term, page, per_page })
+		.then((response) => response.body);
 }
 
 /**
@@ -73,7 +73,7 @@ export function findReferences({
  * @returns A promise resolving to a single reference
  */
 export function getReference(refId: string): Promise<Reference> {
-    return apiClient.get(`/refs/${refId}`).then((response) => response.body);
+	return apiClient.get(`/refs/${refId}`).then((response) => response.body);
 }
 
 /**
@@ -85,19 +85,19 @@ export function getReference(refId: string): Promise<Reference> {
  * @returns A promise resolving to creating an empty reference
  */
 export function createReference(
-    name: string,
-    description: string,
-    organism: string,
+	name: string,
+	description: string,
+	organism: string,
 ): Promise<Reference> {
-    return apiClient
-        .post("/refs")
-        .send({
-            name,
-            description,
-            data_type: "genome",
-            organism,
-        })
-        .then((response) => response.body);
+	return apiClient
+		.post("/refs")
+		.send({
+			name,
+			description,
+			data_type: "genome",
+			organism,
+		})
+		.then((response) => response.body);
 }
 
 /**
@@ -109,18 +109,18 @@ export function createReference(
  * @returns A promise resolving to importing a reference
  */
 export function importReference(
-    name: string,
-    description: string,
-    importFrom: string,
+	name: string,
+	description: string,
+	importFrom: string,
 ) {
-    return apiClient
-        .post("/refs")
-        .send({
-            name,
-            description,
-            import_from: importFrom,
-        })
-        .then((res) => res.body);
+	return apiClient
+		.post("/refs")
+		.send({
+			name,
+			description,
+			import_from: importFrom,
+		})
+		.then((res) => res.body);
 }
 
 /**
@@ -131,13 +131,13 @@ export function importReference(
  * @returns A promise resolving to adding a user to a reference
  */
 export function addReferenceUser(
-    refId: string,
-    userId: string | number,
+	refId: string,
+	userId: string | number,
 ): Promise<ReferenceUser> {
-    return apiClient
-        .post(`/refs/${refId}/users`)
-        .send({ user_id: userId })
-        .then((response) => response.body);
+	return apiClient
+		.post(`/refs/${refId}/users`)
+		.send({ user_id: userId })
+		.then((response) => response.body);
 }
 
 /**
@@ -148,13 +148,13 @@ export function addReferenceUser(
  * @returns A promise resolving to adding a group to a reference
  */
 export function addReferenceGroup(
-    refId: string,
-    groupId: string | number,
+	refId: string,
+	groupId: string | number,
 ): Promise<ReferenceGroup> {
-    return apiClient
-        .post(`/refs/${refId}/groups`)
-        .send({ group_id: groupId })
-        .then((response) => response.body);
+	return apiClient
+		.post(`/refs/${refId}/groups`)
+		.send({ group_id: groupId })
+		.then((response) => response.body);
 }
 
 /**
@@ -166,14 +166,14 @@ export function addReferenceGroup(
  * @returns A promise resolving to updating the reference user
  */
 export function editReferenceUser(
-    refId: string,
-    userId: string | number,
-    update: { [key: string]: boolean },
+	refId: string,
+	userId: string | number,
+	update: { [key: string]: boolean },
 ) {
-    return apiClient
-        .patch(`/refs/${refId}/users/${userId}`)
-        .send(update)
-        .then((res) => res.body);
+	return apiClient
+		.patch(`/refs/${refId}/users/${userId}`)
+		.send(update)
+		.then((res) => res.body);
 }
 
 /**
@@ -185,14 +185,14 @@ export function editReferenceUser(
  * @returns A promise resolving to updating the reference group
  */
 export function editReferenceGroup(
-    refId: string,
-    groupId: string | number,
-    update: { [key: string]: boolean },
+	refId: string,
+	groupId: string | number,
+	update: { [key: string]: boolean },
 ) {
-    return apiClient
-        .patch(`/refs/${refId}/groups/${groupId}`)
-        .send(update)
-        .then((res) => res.body);
+	return apiClient
+		.patch(`/refs/${refId}/groups/${groupId}`)
+		.send(update)
+		.then((res) => res.body);
 }
 
 /**
@@ -203,12 +203,12 @@ export function editReferenceGroup(
  * @returns A promise resolving to the API response indicating if the removal was successful
  */
 export function removeReferenceUser(
-    refId: string,
-    userId: string | number,
+	refId: string,
+	userId: string | number,
 ): Promise<Response> {
-    return apiClient
-        .delete(`/refs/${refId}/users/${userId}`)
-        .then((response) => response.body);
+	return apiClient
+		.delete(`/refs/${refId}/users/${userId}`)
+		.then((response) => response.body);
 }
 
 /**
@@ -219,12 +219,12 @@ export function removeReferenceUser(
  * @returns  A promise resolving to the API response indicating if the removal was successful
  */
 export function removeReferenceGroup(
-    refId: string,
-    groupId: string | number,
+	refId: string,
+	groupId: string | number,
 ): Promise<Response> {
-    return apiClient
-        .delete(`/refs/${refId}/groups/${groupId}`)
-        .then((response) => response.body);
+	return apiClient
+		.delete(`/refs/${refId}/groups/${groupId}`)
+		.then((response) => response.body);
 }
 
 /**
@@ -233,9 +233,9 @@ export function removeReferenceGroup(
  * @param refId - The unique identifier of the reference
  */
 export function checkRemoteReferenceUpdates(refId: string) {
-    return apiClient
-        .get(`/refs/${refId}/release`)
-        .then((response) => response.body);
+	return apiClient
+		.get(`/refs/${refId}/release`)
+		.then((response) => response.body);
 }
 
 /**
@@ -244,8 +244,8 @@ export function checkRemoteReferenceUpdates(refId: string) {
  * @param refId - The unique identifier of the reference
  */
 export function updateRemoteReference(refId: string) {
-    return apiClient
-        .post(`/refs/${refId}/updates`)
-        .send({})
-        .then((response) => response.body);
+	return apiClient
+		.post(`/refs/${refId}/updates`)
+		.send({})
+		.then((response) => response.body);
 }

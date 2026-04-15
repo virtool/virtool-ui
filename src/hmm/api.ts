@@ -4,7 +4,7 @@
  * @module hmm/api
  */
 import { apiClient } from "@app/api";
-import { Hmm, HMMInstalled, HmmSearchResults } from "./types";
+import type { HMMInstalled, Hmm, HmmSearchResults } from "./types";
 
 /**
  * Fetch a page of HMM search results from the API.
@@ -14,13 +14,13 @@ import { Hmm, HMMInstalled, HmmSearchResults } from "./types";
  * @returns The promise which resolves to a page of HMM search results
  */
 export function find({
-    term,
-    page,
+	term,
+	page,
 }: {
-    term: string;
-    page: number;
+	term: string;
+	page: number;
 }): Promise<any> {
-    return apiClient.get("/hmms").query({ find: term, page });
+	return apiClient.get("/hmms").query({ find: term, page });
 }
 
 /**
@@ -29,7 +29,7 @@ export function find({
  * @returns The promise which resolves to the servers response
  */
 export function installHmm(): Promise<HMMInstalled> {
-    return apiClient.post("/hmms/status/updates").then((res) => res.body);
+	return apiClient.post("/hmms/status/updates").then((res) => res.body);
 }
 
 /**
@@ -39,7 +39,7 @@ export function installHmm(): Promise<HMMInstalled> {
  * @returns resolves to an object containing a single HMM
  */
 export function fetchHmm(hmmId: string): Promise<Hmm> {
-    return apiClient.get(`/hmms/${hmmId}`).then((res) => res.body);
+	return apiClient.get(`/hmms/${hmmId}`).then((res) => res.body);
 }
 
 /**
@@ -51,12 +51,12 @@ export function fetchHmm(hmmId: string): Promise<Hmm> {
  * @returns A promise resolving to a page of hmm search results
  */
 export function listHmms(
-    page: number,
-    per_page: number,
-    term: string,
+	page: number,
+	per_page: number,
+	term: string,
 ): Promise<HmmSearchResults> {
-    return apiClient
-        .get("/hmms")
-        .query({ page, per_page, find: term })
-        .then((res) => res.body);
+	return apiClient
+		.get("/hmms")
+		.query({ page, per_page, find: term })
+		.then((res) => res.body);
 }

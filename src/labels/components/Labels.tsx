@@ -20,40 +20,40 @@ const LabelsHeader = styled(ViewHeader)`
  * Display and manage a list of labels
  */
 export function Labels() {
-    const { data, isPending } = useFetchLabels();
+	const { data, isPending } = useFetchLabels();
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    return (
-        <ContainerNarrow>
-            <LabelsHeader title="Labels">
-                <div>
-                    <ViewHeaderTitle>Labels</ViewHeaderTitle>
-                    <ViewHeaderSubtitle>
-                        Use labels to organize samples.
-                    </ViewHeaderSubtitle>
-                </div>
+	return (
+		<ContainerNarrow>
+			<LabelsHeader title="Labels">
+				<div>
+					<ViewHeaderTitle>Labels</ViewHeaderTitle>
+					<ViewHeaderSubtitle>
+						Use labels to organize samples.
+					</ViewHeaderSubtitle>
+				</div>
 
-                <CreateLabel />
-            </LabelsHeader>
+				<CreateLabel />
+			</LabelsHeader>
 
-            <BoxGroup>
-                {data.length ? (
-                    data.map((label) => (
-                        <LabelItem
-                            key={label.id}
-                            name={label.name}
-                            color={label.color}
-                            description={label.description}
-                            id={label.id}
-                        />
-                    ))
-                ) : (
-                    <NoneFoundSection noun="labels" />
-                )}
-            </BoxGroup>
-        </ContainerNarrow>
-    );
+			<BoxGroup>
+				{data.length ? (
+					data.map((label) => (
+						<LabelItem
+							key={label.id}
+							name={label.name}
+							color={label.color}
+							description={label.description}
+							id={label.id}
+						/>
+					))
+				) : (
+					<NoneFoundSection noun="labels" />
+				)}
+			</BoxGroup>
+		</ContainerNarrow>
+	);
 }

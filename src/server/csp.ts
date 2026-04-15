@@ -1,5 +1,5 @@
-import { Middleware } from "@/server/types";
 import * as crypto from "node:crypto";
+import type { Middleware } from "@/server/types";
 
 const defaultSrc = "default-src 'self'";
 const baseUri = "base-uri 'self'";
@@ -10,15 +10,15 @@ const fontSrc = `font-src 'self'`;
 const imgSrc = "img-src 'self' data:";
 
 function generateCspScriptSrc(nonce) {
-    return `script-src 'self' 'nonce-${nonce}'`;
+	return `script-src 'self' 'nonce-${nonce}'`;
 }
 
 function generateCspStyleSrc(nonce) {
-    return `style-src 'self' 'nonce-${nonce}'`;
+	return `style-src 'self' 'nonce-${nonce}'`;
 }
 
 function generateCspConnectSrc() {
-    return `connect-src 'self' *.sentry.io`;
+	return `connect-src 'self' *.sentry.io`;
 }
 
 /**
@@ -27,25 +27,25 @@ function generateCspConnectSrc() {
  * @func
  */
 export function createCspMiddleware(): Middleware {
-    return (req, res, next) => {
-        const nonce = crypto.randomBytes(32).toString("base64");
-        res.locals.nonce = nonce;
+	return (_req, res, next) => {
+		const nonce = crypto.randomBytes(32).toString("base64");
+		res.locals.nonce = nonce;
 
-        const csp = [
-            defaultSrc,
-            baseUri,
-            objectSrc,
-            formAction,
-            frameAncestors,
-            fontSrc,
-            imgSrc,
-            generateCspConnectSrc(),
-            generateCspScriptSrc(nonce),
-            generateCspStyleSrc(nonce),
-        ];
+		const csp = [
+			defaultSrc,
+			baseUri,
+			objectSrc,
+			formAction,
+			frameAncestors,
+			fontSrc,
+			imgSrc,
+			generateCspConnectSrc(),
+			generateCspScriptSrc(nonce),
+			generateCspStyleSrc(nonce),
+		];
 
-        res.append("Content-Security-Policy", csp.join("; "));
+		res.append("Content-Security-Policy", csp.join("; "));
 
-        next();
-    };
+		next();
+	};
 }

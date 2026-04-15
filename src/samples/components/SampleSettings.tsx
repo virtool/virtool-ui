@@ -6,18 +6,18 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import SampleRights from "./SampleRights";
 
 export default function SamplesSettings() {
-    const { data, isPending } = useFetchSettings();
+	const { data, isPending } = useFetchSettings();
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    return (
-        <ContainerNarrow>
-            <ViewHeader title="Sample Settings">
-                <ViewHeaderTitle>Sample Settings</ViewHeaderTitle>
-            </ViewHeader>
-            <SampleRights settings={data} />
-        </ContainerNarrow>
-    );
+	return (
+		<ContainerNarrow>
+			<ViewHeader title="Sample Settings">
+				<ViewHeaderTitle>Sample Settings</ViewHeaderTitle>
+			</ViewHeader>
+			<SampleRights settings={data} />
+		</ContainerNarrow>
+	);
 }

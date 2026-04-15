@@ -3,24 +3,24 @@ import type { JobState, JobStep } from "../types";
 import JobStepItem from "./JobStep";
 
 type JobStepsProps = {
-    state: JobState;
-    steps: JobStep[];
+	state: JobState;
+	steps: JobStep[];
 };
 
 export default function JobSteps({ state, steps }: JobStepsProps) {
-    if (steps === null || steps.length === 0) {
-        return null;
-    }
+	if (steps === null || steps.length === 0) {
+		return null;
+	}
 
-    return (
-        <BoxGroup>
-            {steps.map((step, index) => (
-                <JobStepItem
-                    key={step.id}
-                    step={step}
-                    state={index === steps.length - 1 ? state : "succeeded"}
-                />
-            ))}
-        </BoxGroup>
-    );
+	return (
+		<BoxGroup>
+			{steps.map((step, index) => (
+				<JobStepItem
+					key={step.id}
+					step={step}
+					state={index === steps.length - 1 ? state : "succeeded"}
+				/>
+			))}
+		</BoxGroup>
+	);
 }

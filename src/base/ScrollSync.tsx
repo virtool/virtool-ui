@@ -1,10 +1,10 @@
 import { cn } from "@app/utils";
-import { ReactNode, useContext, useEffect, useRef } from "react";
+import { type ReactNode, useContext, useEffect, useRef } from "react";
 import ScrollSyncContext from "./ScrollSyncContext";
 
 type ScrollSyncProps = {
-    children: ReactNode;
-    className?: string;
+	children: ReactNode;
+	className?: string;
 };
 
 /**
@@ -14,40 +14,40 @@ type ScrollSyncProps = {
  * @param className - additional classes to apply to the container
  */
 export default function ScrollSync({ children, className }: ScrollSyncProps) {
-    const [scrollPixels, setScrollPixels] = useContext(ScrollSyncContext);
-    const ref = useRef(null);
+	const [scrollPixels, setScrollPixels] = useContext(ScrollSyncContext);
+	const ref = useRef(null);
 
-    useEffect(() => {
-        const element = ref.current as HTMLElement;
+	useEffect(() => {
+		const element = ref.current as HTMLElement;
 
-        function handleScroll() {
-            setScrollPixels(element.scrollLeft);
-        }
+		function handleScroll() {
+			setScrollPixels(element.scrollLeft);
+		}
 
-        element.addEventListener("scroll", handleScroll);
+		element.addEventListener("scroll", handleScroll);
 
-        return () => {
-            element.removeEventListener("scroll", handleScroll);
-        };
-    }, [setScrollPixels]);
+		return () => {
+			element.removeEventListener("scroll", handleScroll);
+		};
+	}, [setScrollPixels]);
 
-    useEffect(() => {
-        if (ref.current && scrollPixels !== undefined) {
-            ref.current.scrollLeft = scrollPixels;
-        }
-    }, [scrollPixels]);
+	useEffect(() => {
+		if (ref.current && scrollPixels !== undefined) {
+			ref.current.scrollLeft = scrollPixels;
+		}
+	}, [scrollPixels]);
 
-    return (
-        <div
-            className={cn(
-                "overflow-x-auto",
-                "relative",
-                "whitespace-nowrap",
-                className,
-            )}
-            ref={ref}
-        >
-            {children}
-        </div>
-    );
+	return (
+		<div
+			className={cn(
+				"overflow-x-auto",
+				"relative",
+				"whitespace-nowrap",
+				className,
+			)}
+			ref={ref}
+		>
+			{children}
+		</div>
+	);
 }

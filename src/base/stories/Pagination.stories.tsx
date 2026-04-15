@@ -9,23 +9,21 @@ import Pagination from "../Pagination";
 const queryClient = new QueryClient();
 
 const meta: Meta<typeof Pagination> = {
-    title: "base/Pagination",
-    component: Pagination,
-    decorators: [
-        (Story) => (
-            <QueryClientProvider client={queryClient}>
-                {Story()}
-            </QueryClientProvider>
-        ),
-    ],
-    parameters: {
-        docs: {
-            description: {
-                component:
-                    "A pagination component useful for dividing large amounts of content into smaller sections across multiple pages.",
-            },
-        },
-    },
+	title: "base/Pagination",
+	component: Pagination,
+	decorators: [
+		(Story) => (
+			<QueryClientProvider client={queryClient}>{Story()}</QueryClientProvider>
+		),
+	],
+	parameters: {
+		docs: {
+			description: {
+				component:
+					"A pagination component useful for dividing large amounts of content into smaller sections across multiple pages.",
+			},
+		},
+	},
 };
 
 export default meta;
@@ -33,36 +31,36 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function Template(args) {
-    const items = useMemo(
-        () => fakeUserListFactory(args.storedPage, 7),
-        [args.storedPage],
-    );
+	const items = useMemo(
+		() => fakeUserListFactory(args.storedPage, 7),
+		[args.storedPage],
+	);
 
-    return (
-        <Box>
-            <Pagination renderRow={UserItem} items={items} {...args} />
-        </Box>
-    );
+	return (
+		<Box>
+			<Pagination renderRow={UserItem} items={items} {...args} />
+		</Box>
+	);
 }
 
 export const SamplePagination: Story = {
-    args: {
-        pageCount: 10,
-        currentPage: 1,
-        storedPage: 1,
-    },
-    render: Template,
+	args: {
+		pageCount: 10,
+		currentPage: 1,
+		storedPage: 1,
+	},
+	render: Template,
 };
 
 function fakeUserListFactory(seed: number, numItems: number) {
-    faker.seed(seed);
-    const userList = Array(numItems);
-    return userList.map(() => fakeUserFactory());
+	faker.seed(seed);
+	const userList = Array(numItems);
+	return userList.map(() => fakeUserFactory());
 }
 
 function fakeUserFactory() {
-    return {
-        id: faker.string.alphanumeric(6),
-        handle: `${faker.person.firstName()}${faker.person.lastName()}`,
-    };
+	return {
+		id: faker.string.alphanumeric(6),
+		handle: `${faker.person.firstName()}${faker.person.lastName()}`,
+	};
 }

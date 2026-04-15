@@ -1,5 +1,5 @@
-import express from "express";
 import path from "node:path";
+import express from "express";
 import { createCspMiddleware } from "./csp";
 import { logger, loggingMiddleware } from "./logging.js";
 import { parseOptions } from "./options";
@@ -8,38 +8,38 @@ import { ApplySecurityHeadersMiddleware } from "./securityHeaders";
 import { verifyApiVersion } from "./version";
 
 async function main() {
-    const options = parseOptions(process.argv);
+	const options = parseOptions(process.argv);
 
-    await verifyApiVersion(options.apiUrl);
+	await verifyApiVersion(options.apiUrl);
 
-    const app = express();
+	const app = express();
 
-    app.disable("x-powered-by");
-    app.use([
-        createCspMiddleware(),
-        loggingMiddleware,
-        ApplySecurityHeadersMiddleware,
-    ]);
-    app.set("views", path.join("dist"));
-    app.locals.delimiter = "#";
+	app.disable("x-powered-by");
+	app.use([
+		createCspMiddleware(),
+		loggingMiddleware,
+		ApplySecurityHeadersMiddleware,
+	]);
+	app.set("views", path.join("dist"));
+	app.locals.delimiter = "#";
 
-    app.get(
-        /\.(?:js|map|ico|svg|css|ttf)$/,
-        express.static(path.join("dist"), {
-            maxAge: 31536000000,
-        }),
-    );
+	app.get(
+		/\.(?:js|map|ico|svg|css|ttf)$/,
+		express.static(path.join("dist"), {
+			maxAge: 31536000000,
+		}),
+	);
 
-    const defaultHandler = createDefaultRouteHandler(options);
-    app.get("/", defaultHandler);
-    app.get("/*splat", defaultHandler);
+	const defaultHandler = createDefaultRouteHandler(options);
+	app.get("/", defaultHandler);
+	app.get("/*splat", defaultHandler);
 
-    app.listen(options.port, options.host, () => {
-        logger.log("info", "listening for requests", {
-            host: options.host,
-            port: options.port,
-        });
-    });
+	app.listen(options.port, options.host, () => {
+		logger.log("info", "listening for requests", {
+			host: options.host,
+			port: options.port,
+		});
+	});
 }
 
 main();

@@ -14,9 +14,9 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SectionHeader from "@base/SectionHeader";
 import { useUpdateSourceTypes } from "@references/hooks";
 import {
-    referenceQueryKeys,
-    useFetchReference,
-    useUpdateReference,
+	referenceQueryKeys,
+	useFetchReference,
+	useUpdateReference,
 } from "@references/queries";
 import { Undo2 } from "lucide-react";
 import styled from "styled-components";
@@ -48,7 +48,7 @@ const SourceTypeInput = styled.span`
 const SourceTypesUndo = styled(BoxGroupSection)`
     display: flex;
     background: ${(props) =>
-        getColor({ color: "greyHover", theme: props.theme })};
+			getColor({ color: "greyHover", theme: props.theme })};
     align-items: center;
     svg {
         margin-left: auto;
@@ -59,100 +59,92 @@ const SourceTypesUndo = styled(BoxGroupSection)`
 `;
 
 export function LocalSourceTypes() {
-    const { refId } = usePathParams<{ refId: string }>();
+	const { refId } = usePathParams<{ refId: string }>();
 
-    const { data, isPending } = useFetchReference(refId);
+	const { data, isPending } = useFetchReference(refId);
 
-    const { mutation: updateReferenceMutation } = useUpdateReference(refId);
+	const { mutation: updateReferenceMutation } = useUpdateReference(refId);
 
-    const sourceTypes = data?.source_types ?? [];
-    const restrictSourceTypes = data?.restrict_source_types ?? false;
+	const sourceTypes = data?.source_types ?? [];
+	const restrictSourceTypes = data?.restrict_source_types ?? false;
 
-    const {
-        error,
-        lastRemoved,
-        handleRemove,
-        handleSubmit,
-        handleUndo,
-        register,
-    } = useUpdateSourceTypes(
-        "source_types",
-        `/refs/${refId}`,
-        referenceQueryKeys.detail(refId),
-        sourceTypes,
-    );
+	const {
+		error,
+		lastRemoved,
+		handleRemove,
+		handleSubmit,
+		handleUndo,
+		register,
+	} = useUpdateSourceTypes(
+		"source_types",
+		`/refs/${refId}`,
+		referenceQueryKeys.detail(refId),
+		sourceTypes,
+	);
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    function handleToggle() {
-        updateReferenceMutation.mutate({
-            restrict_source_types: !restrictSourceTypes,
-        });
-    }
+	function handleToggle() {
+		updateReferenceMutation.mutate({
+			restrict_source_types: !restrictSourceTypes,
+		});
+	}
 
-    return (
-        <section>
-            <SectionHeader>
-                <h2>Source Types</h2>
-                <p>Configure a list of allowable source types.</p>
-            </SectionHeader>
-            <SettingsCheckbox
-                enabled={restrictSourceTypes}
-                id="RestrictSourceTypes"
-                onToggle={handleToggle}
-            >
-                <h2>Restrict Source Types</h2>
-                <small>
-                    Only allow users to to select from allowed source types for
-                    isolates. If disabled, users will be able to enter any
-                    string as a source type.
-                </small>
-            </SettingsCheckbox>
-            <BoxGroup>
-                <BoxGroupHeader>
-                    <h2>Manage Source Types</h2>
-                    <p>Add or remove source types for this reference.</p>
-                </BoxGroupHeader>
+	return (
+		<section>
+			<SectionHeader>
+				<h2>Source Types</h2>
+				<p>Configure a list of allowable source types.</p>
+			</SectionHeader>
+			<SettingsCheckbox
+				enabled={restrictSourceTypes}
+				id="RestrictSourceTypes"
+				onToggle={handleToggle}
+			>
+				<h2>Restrict Source Types</h2>
+				<small>
+					Only allow users to to select from allowed source types for isolates.
+					If disabled, users will be able to enter any string as a source type.
+				</small>
+			</SettingsCheckbox>
+			<BoxGroup>
+				<BoxGroupHeader>
+					<h2>Manage Source Types</h2>
+					<p>Add or remove source types for this reference.</p>
+				</BoxGroupHeader>
 
-                <BoxGroupDisabled disabled={!restrictSourceTypes}>
-                    <SourceTypeList
-                        sourceTypes={sourceTypes}
-                        onRemove={handleRemove}
-                    />
-                    {lastRemoved && (
-                        <SourceTypesUndo>
-                            <span>
-                                The source type <strong>{lastRemoved}</strong>{" "}
-                                was just removed.
-                            </span>
-                            <IconButton
-                                IconComponent={Undo2}
-                                tip="undo"
-                                onClick={handleUndo}
-                            />
-                        </SourceTypesUndo>
-                    )}
-                    <SourceTypeBoxGroupSection>
-                        <form onSubmit={handleSubmit}>
-                            <label htmlFor="sourceType">Add Source Type </label>
-                            <InputContainer className="flex mb-[5px]">
-                                <SourceTypeInput>
-                                    <InputSimple
-                                        id="sourceType"
-                                        {...register("sourceType")}
-                                    />
-                                    <InputError>{error}</InputError>
-                                </SourceTypeInput>
-                                <Button color="green" type="submit">
-                                    Add
-                                </Button>
-                            </InputContainer>
-                        </form>
-                    </SourceTypeBoxGroupSection>
-                </BoxGroupDisabled>
-            </BoxGroup>
-        </section>
-    );
+				<BoxGroupDisabled disabled={!restrictSourceTypes}>
+					<SourceTypeList sourceTypes={sourceTypes} onRemove={handleRemove} />
+					{lastRemoved && (
+						<SourceTypesUndo>
+							<span>
+								The source type <strong>{lastRemoved}</strong> was just removed.
+							</span>
+							<IconButton
+								IconComponent={Undo2}
+								tip="undo"
+								onClick={handleUndo}
+							/>
+						</SourceTypesUndo>
+					)}
+					<SourceTypeBoxGroupSection>
+						<form onSubmit={handleSubmit}>
+							<label htmlFor="sourceType">Add Source Type </label>
+							<InputContainer className="flex mb-[5px]">
+								<SourceTypeInput>
+									<InputSimple id="sourceType" {...register("sourceType")} />
+									<InputError>{error}</InputError>
+								</SourceTypeInput>
+								<Button color="green" type="submit">
+									Add
+								</Button>
+							</InputContainer>
+						</form>
+					</SourceTypeBoxGroupSection>
+				</BoxGroupDisabled>
+			</BoxGroup>
+		</section>
+	);
 }

@@ -1,28 +1,28 @@
-import { JobNested } from "@jobs/types";
-import { LibraryType } from "./types";
+import type { JobNested } from "@jobs/types";
+import type { LibraryType } from "./types";
 
 export const WorkflowStates = {
-    NONE: "none",
-    PENDING: "pending",
-    READY: "ready",
+	NONE: "none",
+	PENDING: "pending",
+	READY: "ready",
 };
 
 const libraryTypes = {
-    normal: "Normal",
-    srna: "sRNA",
-    amplicon: "Amplicon",
+	normal: "Normal",
+	srna: "sRNA",
+	amplicon: "Amplicon",
 };
 
 export function getLibraryTypeDisplayName(libraryType: LibraryType) {
-    return libraryTypes[libraryType];
+	return libraryTypes[libraryType];
 }
 
 /**
  * Check if a sample can be deleted based on its state
  */
 export function checkCanDeleteSample(ready: boolean, job?: JobNested): boolean {
-    if (ready) {
-        return true;
-    }
-    return job.state === "failed" || job.state == "cancelled";
+	if (ready) {
+		return true;
+	}
+	return job.state === "failed" || job.state === "cancelled";
 }

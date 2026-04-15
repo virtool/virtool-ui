@@ -2,38 +2,38 @@ import { getColor, getFontWeight, theme } from "@app/theme";
 import styled from "styled-components";
 
 const iconSize = {
-    xs: "12px",
-    sm: "16px",
-    md: "20px",
-    lg: "28px",
-    xl: "44px",
-    xxl: "60px",
+	xs: "12px",
+	sm: "16px",
+	md: "20px",
+	lg: "28px",
+	xl: "44px",
+	xxl: "60px",
 };
 
 const fontSize = {
-    xs: "6px",
-    sm: "8px",
-    md: "10px",
-    lg: "14px",
-    xl: "22px",
-    xxl: "30px",
+	xs: "6px",
+	sm: "8px",
+	md: "10px",
+	lg: "14px",
+	xl: "22px",
+	xxl: "30px",
 };
 
 function getIconSize(size: string): string {
-    return iconSize[size];
+	return iconSize[size];
 }
 
 function getFontSize(size: string): string {
-    return fontSize[size];
+	return fontSize[size];
 }
 
 function hashColor(hash, newChar) {
-    return (hash << 5) - newChar.charCodeAt(0);
+	return (hash << 5) - newChar.charCodeAt(0);
 }
 
 type StyledInitialIconProps = {
-    size: string;
-    hash: number;
+	size: string;
+	hash: number;
 };
 
 const StyledInitialIcon = styled.svg<StyledInitialIconProps>`
@@ -56,19 +56,19 @@ const StyledInitialIcon = styled.svg<StyledInitialIconProps>`
 `;
 
 type InitialIconProps = {
-    handle: string;
-    size: string;
+	handle: string;
+	size: string;
 };
 
 export default function InitialIcon({ handle, size }: InitialIconProps) {
-    const hash = handle.split("").reduce(hashColor, 0) % 360;
+	const hash = handle.split("").reduce(hashColor, 0) % 360;
 
-    return (
-        <StyledInitialIcon size={size} hash={hash} className="InitialIcon">
-            <circle>{handle.slice(0, 2).toUpperCase()}</circle>
-            <text x="1em" y="1em" dy=".35em">
-                {handle.slice(0, 2).toUpperCase()}
-            </text>
-        </StyledInitialIcon>
-    );
+	return (
+		<StyledInitialIcon size={size} hash={hash} className="InitialIcon">
+			<circle>{handle.slice(0, 2).toUpperCase()}</circle>
+			<text x="1em" y="1em" dy=".35em">
+				{handle.slice(0, 2).toUpperCase()}
+			</text>
+		</StyledInitialIcon>
+	);
 }

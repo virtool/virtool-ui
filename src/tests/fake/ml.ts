@@ -1,23 +1,23 @@
 import { faker } from "@faker-js/faker";
-import { MlModel, MLModelMinimal, MLModelRelease } from "@ml/types";
+import type { MLModelMinimal, MLModelRelease, MlModel } from "@ml/types";
 import nock from "nock";
 
 /**
  * Create a fake ML model release object
  **/
 export function createFakeMlModelRelease(): MLModelRelease {
-    const id = faker.number.int(100);
+	const id = faker.number.int(100);
 
-    return {
-        id,
-        created_at: faker.date.past().toISOString(),
-        download_url: `api/ml/${id}/download`,
-        github_url: `https://github.com/virtool/ml/releases/${id})}`,
-        name: `${faker.number.int(5)}.${faker.number.int(15)}.${faker.number.int(15)}`,
-        published_at: faker.date.past().toISOString(),
-        ready: true,
-        size: faker.number.int(100000),
-    };
+	return {
+		id,
+		created_at: faker.date.past().toISOString(),
+		download_url: `api/ml/${id}/download`,
+		github_url: `https://github.com/virtool/ml/releases/${id})}`,
+		name: `${faker.number.int(5)}.${faker.number.int(15)}.${faker.number.int(15)}`,
+		published_at: faker.date.past().toISOString(),
+		ready: true,
+		size: faker.number.int(100000),
+	};
 }
 
 /**
@@ -26,16 +26,16 @@ export function createFakeMlModelRelease(): MLModelRelease {
  * @param overrides - optional properties for creating a fake ML models with specific values
  */
 export function createFakeMLModelMinimal(
-    overrides?: Partial<MLModelMinimal>,
+	overrides?: Partial<MLModelMinimal>,
 ): MLModelMinimal {
-    return {
-        id: faker.number.int(100),
-        created_at: overrides?.created_at ?? faker.date.past().toISOString(),
-        description: faker.lorem.sentence(),
-        latest_release: createFakeMlModelRelease(),
-        name: `model-${faker.lorem.word()}`,
-        release_count: faker.number.int(10),
-    };
+	return {
+		id: faker.number.int(100),
+		created_at: overrides?.created_at ?? faker.date.past().toISOString(),
+		description: faker.lorem.sentence(),
+		latest_release: createFakeMlModelRelease(),
+		name: `model-${faker.lorem.word()}`,
+		release_count: faker.number.int(10),
+	};
 }
 
 /**
@@ -44,14 +44,14 @@ export function createFakeMLModelMinimal(
  * @param overrides - optional properties for creating a fake ML models with specific values
  */
 export function createFakeMLModel(overrides?: Partial<MlModel>): MlModel {
-    const releases = [createFakeMlModelRelease()];
+	const releases = [createFakeMlModelRelease()];
 
-    return {
-        ...createFakeMLModelMinimal(overrides),
-        latest_release: releases[0],
-        releases,
-        ...overrides,
-    };
+	return {
+		...createFakeMLModelMinimal(overrides),
+		latest_release: releases[0],
+		releases,
+		...overrides,
+	};
 }
 
 /**
@@ -61,8 +61,8 @@ export function createFakeMLModel(overrides?: Partial<MlModel>): MlModel {
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetModels(mlModels: MLModelMinimal[]) {
-    return nock("http://localhost").get("/api/ml").reply(200, {
-        items: mlModels,
-        last_synced_at: faker.date.recent().toISOString(),
-    });
+	return nock("http://localhost").get("/api/ml").reply(200, {
+		items: mlModels,
+		last_synced_at: faker.date.recent().toISOString(),
+	});
 }

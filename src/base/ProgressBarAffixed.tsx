@@ -1,23 +1,23 @@
-import styled, { DefaultTheme } from "styled-components";
+import styled, { type DefaultTheme } from "styled-components";
 import { StyledProgress } from "./styled/StyledProgress";
 
 interface ProgressBarAffixedProps {
-    bottom?: boolean;
-    className?: string;
-    color?: string;
-    now: number;
+	bottom?: boolean;
+	className?: string;
+	color?: string;
+	now: number;
 }
 
 interface StyledProgressBarAffixedProps {
-    bottom?: boolean;
-    className?: string;
-    max: string;
-    theme: DefaultTheme;
-    value: number;
+	bottom?: boolean;
+	className?: string;
+	max: string;
+	theme: DefaultTheme;
+	value: number;
 }
 
 const StyledProgressBarAffixed = styled(
-    StyledProgress,
+	StyledProgress,
 )<StyledProgressBarAffixedProps>`
     height: 5px;
     left: 0;
@@ -34,17 +34,17 @@ const StyledProgressBarAffixed = styled(
 `;
 
 const ProgressBarAffixed = styled(
-    ({ className, now, color, bottom }: ProgressBarAffixedProps) => {
-        return (
-            <StyledProgressBarAffixed
-                className={className}
-                max="100"
-                value={now}
-                color={color}
-                bottom={bottom}
-            />
-        );
-    },
+	({ className, now, color, bottom }: ProgressBarAffixedProps) => {
+		return (
+			<StyledProgressBarAffixed
+				className={className}
+				max="100"
+				value={now}
+				color={color}
+				bottom={bottom}
+			/>
+		);
+	},
 )``;
 
 ProgressBarAffixed.displayName = "ProgressBarAffixed";

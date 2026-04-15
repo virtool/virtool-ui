@@ -1,4 +1,4 @@
-import { Meta, type StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import styled from "styled-components";
 import Badge from "../Badge";
 
@@ -11,25 +11,24 @@ const StyledBadgeHeader = styled.div`
 `;
 
 const meta: Meta<typeof Badge> = {
-    title: "base/Badge",
-    component: Badge,
-    parameters: {
-        docs: {
-            description: {
-                component:
-                    "Useful for highlighting the status or quantity of an item.",
-            },
-        },
-    },
-    argTypes: {
-        color: {
-            options: ["gray", "blue", "orange", "purple", "red"],
-            control: { type: "radio" },
-        },
-        children: {
-            type: "number",
-        },
-    },
+	title: "base/Badge",
+	component: Badge,
+	parameters: {
+		docs: {
+			description: {
+				component: "Useful for highlighting the status or quantity of an item.",
+			},
+		},
+	},
+	argTypes: {
+		color: {
+			options: ["gray", "blue", "orange", "purple", "red"],
+			control: { type: "radio" },
+		},
+		children: {
+			type: "number",
+		},
+	},
 };
 
 export default meta;
@@ -37,14 +36,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const SampleBadge: Story = {
-    render: ({ children, color }) => (
-        <StyledBadgeHeader>
-            <strong>Files Uploaded</strong>
-            <Badge color={color}>{children}</Badge>
-        </StyledBadgeHeader>
-    ),
-    args: {
-        children: 10,
-        color: "gray",
-    },
+	render: ({ children, color }) => (
+		<StyledBadgeHeader>
+			<strong>Files Uploaded</strong>
+			<Badge color={color}>{children}</Badge>
+		</StyledBadgeHeader>
+	),
+	args: {
+		children: 10,
+		color: "gray",
+	},
 };

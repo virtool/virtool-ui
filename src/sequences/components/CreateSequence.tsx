@@ -1,74 +1,72 @@
 import { useDialogParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useCreateSequence } from "@otus/queries";
-import { OtuSegment, OtuSequence } from "@otus/types";
+import type { OtuSegment, OtuSequence } from "@otus/types";
 import { compact } from "es-toolkit";
 import SequenceForm from "./SequenceForm";
 
 type CreateSequenceProps = {
-    isolateId: string;
-    otuId: string;
-    refId: string;
-    schema: OtuSegment[];
-    sequences: OtuSequence[];
+	isolateId: string;
+	otuId: string;
+	refId: string;
+	schema: OtuSegment[];
+	sequences: OtuSequence[];
 };
 
 /**
  * Displays dialog to add a genome sequence
  */
 export default function CreateSequence({
-    isolateId,
-    otuId,
-    refId,
-    schema,
-    sequences,
+	isolateId,
+	otuId,
+	refId,
+	schema,
+	sequences,
 }: CreateSequenceProps) {
-    const { open: openCreateSequence, setOpen: setOpenCreateSequence } =
-        useDialogParam("openCreateSequence");
+	const { open: openCreateSequence, setOpen: setOpenCreateSequence } =
+		useDialogParam("openCreateSequence");
 
-    const mutation = useCreateSequence(otuId);
+	const mutation = useCreateSequence(otuId);
 
-    const segments = schema.filter(
-        (segment) =>
-            !compact(sequences.map((seq) => seq.segment)).includes(
-                segment.name,
-            ),
-    );
+	const segments = schema.filter(
+		(segment) =>
+			!compact(sequences.map((seq) => seq.segment)).includes(segment.name),
+	);
 
-    function onSubmit({ accession, definition, host, sequence, segment }) {
-        mutation.mutate(
-            {
-                accession,
-                definition,
-                host,
-                isolateId,
-                segment,
-                sequence: sequence.toUpperCase(),
-            },
-            {
-                onSuccess: () => {
-                    setOpenCreateSequence(false);
-                },
-            },
-        );
-    }
+	function onSubmit({ accession, definition, host, sequence, segment }) {
+		mutation.mutate(
+			{
+				accession,
+				definition,
+				host,
+				isolateId,
+				segment,
+				sequence: sequence.toUpperCase(),
+			},
+			{
+				onSuccess: () => {
+					setOpenCreateSequence(false);
+				},
+			},
+		);
+	}
 
-    return (
-        <Dialog
-            open={openCreateSequence}
-            onOpenChange={() => setOpenCreateSequence(false)}
-        >
-            <DialogContent className="top-1/2">
-                <DialogTitle>Create Sequence</DialogTitle>
-                <SequenceForm
-                    hasSchema={schema.length > 0}
-                    noun="create"
-                    onSubmit={onSubmit}
-                    otuId={otuId}
-                    refId={refId}
-                    segments={segments}
-                />
-            </DialogContent>
-        </Dialog>
-    );
+	return (
+		<Dialog
+			open={openCreateSequence}
+			onOpenChange={() => setOpenCreateSequence(false)}
+		>
+			<DialogContent className="top-1/2">
+				<DialogTitle>Create Sequence</DialogTitle>
+				<SequenceForm
+					hasSchema={schema.length > 0}
+					noun="create"
+					onSubmit={onSubmit}
+					otuId={otuId}
+					refId={refId}
+					segments={segments}
+				/>
+			</DialogContent>
+		</Dialog>
+	);
 }

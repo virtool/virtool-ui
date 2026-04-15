@@ -15,56 +15,51 @@ import OtuToolbar from "./OtuToolbar";
  * A list of OTUs with filtering
  */
 export default function OtuList() {
-    const { refId } = usePathParams<{ refId: string }>();
-    const { value: term, setValue: setTerm } =
-        useUrlSearchParam<string>("find");
-    const { page } = usePageParam();
-    const { data: reference, isPending: isPendingReference } =
-        useFetchReference(refId);
-    const { data: otus, isPending: isPendingOTUs } = useListOTUs(
-        refId,
-        page,
-        25,
-        term,
-    );
+	const { refId } = usePathParams<{ refId: string }>();
+	const { value: term, setValue: setTerm } = useUrlSearchParam<string>("find");
+	const { page } = usePageParam();
+	const { data: reference, isPending: isPendingReference } =
+		useFetchReference(refId);
+	const { data: otus, isPending: isPendingOTUs } = useListOTUs(
+		refId,
+		page,
+		25,
+		term,
+	);
 
-    if (isPendingOTUs || isPendingReference) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPendingOTUs || isPendingReference) {
+		return <LoadingPlaceholder />;
+	}
 
-    const { documents, page: storedPage, page_count } = otus;
+	const { documents, page: storedPage, page_count } = otus;
 
-    return (
-        <ContainerNarrow>
-            <RebuildAlert refId={refId} />
-            <OtuToolbar
-                term={term}
-                onChange={(e) => setTerm(e.target.value)}
-                refId={refId}
-                remotesFrom={reference.remotes_from}
-            />
-            <OtuCreate refId={refId} />
+	return (
+		<ContainerNarrow>
+			<RebuildAlert refId={refId} />
+			<OtuToolbar
+				term={term}
+				onChange={(e) => setTerm(e.target.value)}
+				refId={refId}
+				remotesFrom={reference.remotes_from}
+			/>
+			<OtuCreate refId={refId} />
 
-            {documents.length ? (
-                <Pagination
-                    items={documents}
-                    storedPage={storedPage}
-                    currentPage={page}
-                    pageCount={page_count}
-                >
-                    <BoxGroup>
-                        {documents.map((document) => (
-                            <OtuItem
-                                key={document.id}
-                                {...document}
-                                refId={refId}
-                            />
-                        ))}
-                    </BoxGroup>
-                </Pagination>
-            ) : (
-                <NoneFoundBox noun="OTUs" />
-            )}
-        </ContainerNarrow>
-    );
+			{documents.length ? (
+				<Pagination
+					items={documents}
+					storedPage={storedPage}
+					currentPage={page}
+					pageCount={page_count}
+				>
+					<BoxGroup>
+						{documents.map((document) => (
+							<OtuItem key={document.id} {...document} refId={refId} />
+						))}
+					</BoxGroup>
+				</Pagination>
+			) : (
+				<NoneFoundBox noun="OTUs" />
+			)}
+		</ContainerNarrow>
+	);
 }

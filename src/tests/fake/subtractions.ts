@@ -1,10 +1,10 @@
 import { faker } from "@faker-js/faker";
-import {
-    Subtraction,
-    SubtractionFile,
-    SubtractionMinimal,
-    SubtractionNested,
-    SubtractionOption,
+import type {
+	Subtraction,
+	SubtractionFile,
+	SubtractionMinimal,
+	SubtractionNested,
+	SubtractionOption,
 } from "@subtraction/types";
 import { pick } from "es-toolkit";
 import nock from "nock";
@@ -14,73 +14,73 @@ import { createFakeUserNested } from "./user";
  * Create a fake subtraction file
  */
 export function createFakeSubtractionFile(): SubtractionFile {
-    return {
-        download_url: faker.internet.url(),
-        id: faker.number.int(),
-        name: `${faker.word.noun({ strategy: "any-length" })}s.fa`,
-        size: faker.number.int({ min: 20000 }),
-        subtraction: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        type: "fasta",
-    };
+	return {
+		download_url: faker.internet.url(),
+		id: faker.number.int(),
+		name: `${faker.word.noun({ strategy: "any-length" })}s.fa`,
+		size: faker.number.int({ min: 20000 }),
+		subtraction: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		type: "fasta",
+	};
 }
 
 /**
  * Create a fake subtraction nested
  */
 export function createFakeSubtractionNested(
-    overrides?: Partial<SubtractionNested>,
+	overrides?: Partial<SubtractionNested>,
 ): SubtractionNested {
-    const defaultSubtractionNested = {
-        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-        name: faker.word.noun({ strategy: "any-length" }),
-    };
+	const defaultSubtractionNested = {
+		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		name: faker.word.noun({ strategy: "any-length" }),
+	};
 
-    return { ...defaultSubtractionNested, ...overrides };
+	return { ...defaultSubtractionNested, ...overrides };
 }
 
 /**
  * Create a fake minimal subtraction
  */
 export function createFakeSubtractionMinimal(
-    overrides?: Partial<SubtractionMinimal>,
+	overrides?: Partial<SubtractionMinimal>,
 ): SubtractionMinimal {
-    const defaultSubtractionMinimal = {
-        ...createFakeSubtractionNested(),
-        count: faker.number.int({ max: 15 }),
-        created_at: faker.date.past().toISOString(),
-        file: {
-            id: faker.number.int(),
-            name: `${faker.word.noun({ strategy: "any-length" })}s.fa`,
-        },
-        job: null,
-        nickname: faker.word.noun({ strategy: "any-length" }),
-        ready: true,
-        user: createFakeUserNested(),
-    };
+	const defaultSubtractionMinimal = {
+		...createFakeSubtractionNested(),
+		count: faker.number.int({ max: 15 }),
+		created_at: faker.date.past().toISOString(),
+		file: {
+			id: faker.number.int(),
+			name: `${faker.word.noun({ strategy: "any-length" })}s.fa`,
+		},
+		job: null,
+		nickname: faker.word.noun({ strategy: "any-length" }),
+		ready: true,
+		user: createFakeUserNested(),
+	};
 
-    return { ...defaultSubtractionMinimal, ...overrides };
+	return { ...defaultSubtractionMinimal, ...overrides };
 }
 
 /**
  * Create a fake subtraction
  */
 export function createFakeSubtraction(
-    overrides?: Partial<Subtraction>,
+	overrides?: Partial<Subtraction>,
 ): Subtraction {
-    const { files, gc, linked_samples, ...props } = overrides || {};
-    return {
-        ...createFakeSubtractionMinimal(props),
-        files: files || [createFakeSubtractionFile()],
-        gc: gc || { a: 1, c: 1, g: 1, n: 1, t: 1 },
-        linked_samples: linked_samples || [],
-    };
+	const { files, gc, linked_samples, ...props } = overrides || {};
+	return {
+		...createFakeSubtractionMinimal(props),
+		files: files || [createFakeSubtractionFile()],
+		gc: gc || { a: 1, c: 1, g: 1, n: 1, t: 1 },
+		linked_samples: linked_samples || [],
+	};
 }
 
 /**
  * Create a fake subtraction shortlist
  */
 export function createFakeShortlistSubtraction(): SubtractionOption {
-    return pick(createFakeSubtractionMinimal(), ["id", "name", "ready"]);
+	return pick(createFakeSubtractionMinimal(), ["id", "name", "ready"]);
 }
 
 /**
@@ -90,18 +90,18 @@ export function createFakeShortlistSubtraction(): SubtractionOption {
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetSubtractions(Subtractions: SubtractionMinimal[]) {
-    return nock("http://localhost")
-        .get("/api/subtractions")
-        .query(true)
-        .reply(200, {
-            documents: Subtractions,
-            found_count: Subtractions.length,
-            page: 1,
-            page_count: 1,
-            per_page: 25,
-            ready_count: Subtractions.length,
-            total_count: Subtractions.length,
-        });
+	return nock("http://localhost")
+		.get("/api/subtractions")
+		.query(true)
+		.reply(200, {
+			documents: Subtractions,
+			found_count: Subtractions.length,
+			page: 1,
+			page_count: 1,
+			per_page: 25,
+			ready_count: Subtractions.length,
+			total_count: Subtractions.length,
+		});
 }
 
 /**
@@ -112,13 +112,13 @@ export function mockApiGetSubtractions(Subtractions: SubtractionMinimal[]) {
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetSubtractionDetail(
-    subtractionDetail: Subtraction,
-    statusCode?: number,
+	subtractionDetail: Subtraction,
+	statusCode?: number,
 ) {
-    return nock("http://localhost")
-        .get(`/api/subtractions/${subtractionDetail.id}`)
-        .query(true)
-        .reply(statusCode || 200, subtractionDetail);
+	return nock("http://localhost")
+		.get(`/api/subtractions/${subtractionDetail.id}`)
+		.query(true)
+		.reply(statusCode || 200, subtractionDetail);
 }
 
 /**
@@ -130,15 +130,15 @@ export function mockApiGetSubtractionDetail(
  * @returns A nock scope for the mocked API call
  */
 export function mockApiEditSubtraction(
-    subtraction: Subtraction,
-    name: string,
-    nickname: string,
+	subtraction: Subtraction,
+	name: string,
+	nickname: string,
 ) {
-    const subtractionDetail = { ...subtraction, name, nickname };
+	const subtractionDetail = { ...subtraction, name, nickname };
 
-    return nock("http://localhost")
-        .patch(`/api/subtractions/${subtraction.id}`)
-        .reply(200, subtractionDetail);
+	return nock("http://localhost")
+		.patch(`/api/subtractions/${subtraction.id}`)
+		.reply(200, subtractionDetail);
 }
 
 /**
@@ -150,13 +150,13 @@ export function mockApiEditSubtraction(
  * @returns A nock scope for the mocked API call
  */
 export function mockApiCreateSubtraction(
-    name: string,
-    nickname: string,
-    uploadId: number,
+	name: string,
+	nickname: string,
+	uploadId: number,
 ) {
-    return nock("http://localhost")
-        .post("/api/subtractions", { name, nickname, upload_id: uploadId })
-        .reply(200, { name, nickname, id: "subtraction_id" });
+	return nock("http://localhost")
+		.post("/api/subtractions", { name, nickname, upload_id: uploadId })
+		.reply(200, { name, nickname, id: "subtraction_id" });
 }
 
 /**
@@ -166,9 +166,9 @@ export function mockApiCreateSubtraction(
  * @returns A nock scope for the mocked API call
  */
 export function mockApiRemoveSubtraction(subtractionId: string) {
-    return nock("http://localhost")
-        .delete(`/api/subtractions/${subtractionId}`)
-        .reply(200);
+	return nock("http://localhost")
+		.delete(`/api/subtractions/${subtractionId}`)
+		.reply(200);
 }
 
 /**
@@ -179,11 +179,11 @@ export function mockApiRemoveSubtraction(subtractionId: string) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiGetShortlistSubtractions(
-    subtractionsShortlist: SubtractionOption[],
-    ready?: boolean,
+	subtractionsShortlist: SubtractionOption[],
+	ready?: boolean,
 ) {
-    return nock("http://localhost")
-        .get("/api/subtractions")
-        .query(ready ? { short: true, ready } : true)
-        .reply(200, subtractionsShortlist);
+	return nock("http://localhost")
+		.get("/api/subtractions")
+		.query(ready ? { short: true, ready } : true)
+		.reply(200, subtractionsShortlist);
 }

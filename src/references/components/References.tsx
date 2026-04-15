@@ -10,23 +10,23 @@ import ReferenceSettings from "./ReferenceSettings";
  * The references view with routes to reference-related components
  */
 export default function References() {
-    const { isPending } = useFetchSettings();
+	const { isPending } = useFetchSettings();
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    return (
-        <Container>
-            <Switch>
-                <Route
-                    path="/refs/settings/*"
-                    component={() => <Redirect to="/settings" replace />}
-                />
-                <Route path="/refs/settings" component={ReferenceSettings} />
-                <Route path="/refs/:refId/*?" component={ReferenceDetail} />
-                <Route path="/refs/" component={ReferenceList} />
-            </Switch>
-        </Container>
-    );
+	return (
+		<Container>
+			<Switch>
+				<Route
+					path="/refs/settings/*"
+					component={() => <Redirect to="/settings" replace />}
+				/>
+				<Route path="/refs/settings" component={ReferenceSettings} />
+				<Route path="/refs/:refId/*?" component={ReferenceDetail} />
+				<Route path="/refs/" component={ReferenceList} />
+			</Switch>
+		</Container>
+	);
 }

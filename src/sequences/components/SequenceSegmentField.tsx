@@ -8,7 +8,7 @@ import Select from "@base/Select";
 import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
 import SelectItem from "@base/SelectItem";
-import { OtuSegment } from "@otus/types";
+import type { OtuSegment } from "@otus/types";
 import { ChevronDown, CircleAlert } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
 import { Controller, useFormContext } from "react-hook-form";
@@ -44,12 +44,12 @@ const NoSchema = styled(Box)`
 `;
 
 type SequenceSegmentFieldProps = {
-    /** Whether a schema exists for the selected OTU */
-    hasSchema: boolean;
-    otuId: string;
-    refId: string;
-    /** A list of unreferenced segments */
-    segments: OtuSegment[];
+	/** Whether a schema exists for the selected OTU */
+	hasSchema: boolean;
+	otuId: string;
+	refId: string;
+	/** A list of unreferenced segments */
+	segments: OtuSegment[];
 };
 
 const SequenceSegmentRequired = styled.span`
@@ -73,7 +73,7 @@ const StyledSelectItem = styled(SelectPrimitive.Item)`
 
     &:hover {
         background-color: ${({ theme }) =>
-            getColor({ color: "greyHover", theme })};
+					getColor({ color: "greyHover", theme })};
         border: 0;
     }
 `;
@@ -86,120 +86,108 @@ const StyledSequenceSegment = styled.div`
 `;
 
 type SequenceSegmentProps = {
-    /** The name of the segment */
-    name: string;
-    /** Whether the segment is required */
-    required: boolean;
+	/** The name of the segment */
+	name: string;
+	/** Whether the segment is required */
+	required: boolean;
 };
 
 /**
  * A condensed sequence segment for use in a list of segments
  */
 function SequenceSegment({ name, required }: SequenceSegmentProps) {
-    return (
-        <StyledSelectItem value={name} key={name}>
-            <SelectPrimitive.ItemText>
-                <StyledSequenceSegment>
-                    <span>{name}</span>
+	return (
+		<StyledSelectItem value={name} key={name}>
+			<SelectPrimitive.ItemText>
+				<StyledSequenceSegment>
+					<span>{name}</span>
 
-                    {required && (
-                        <SequenceSegmentRequired>
-                            <Icon icon={CircleAlert} />
-                            <span>Required</span>
-                        </SequenceSegmentRequired>
-                    )}
-                </StyledSequenceSegment>
-            </SelectPrimitive.ItemText>
-        </StyledSelectItem>
-    );
+					{required && (
+						<SequenceSegmentRequired>
+							<Icon icon={CircleAlert} />
+							<span>Required</span>
+						</SequenceSegmentRequired>
+					)}
+				</StyledSequenceSegment>
+			</SelectPrimitive.ItemText>
+		</StyledSelectItem>
+	);
 }
 
 /**
  * Displays a dropdown list of available segments in adding/editing dialogs or provides option to create schema
  */
 export default function SequenceSegmentField({
-    hasSchema,
-    otuId,
-    refId,
-    segments,
+	hasSchema,
+	otuId,
+	refId,
+	segments,
 }: SequenceSegmentFieldProps) {
-    const { control, setValue } = useFormContext<{ segment: string }>();
+	const { control, setValue } = useFormContext<{ segment: string }>();
 
-    if (hasSchema) {
-        const segmentOptions = segments.map((segment) => (
-            <SequenceSegment
-                key={segment.name}
-                name={segment.name}
-                required={segment.required}
-            />
-        ));
+	if (hasSchema) {
+		const segmentOptions = segments.map((segment) => (
+			<SequenceSegment
+				key={segment.name}
+				name={segment.name}
+				required={segment.required}
+			/>
+		));
 
-        return (
-            <InputGroup>
-                <InputLabel htmlFor="segment">Segment</InputLabel>
-                <SegmentSelectContainer>
-                    <Controller
-                        control={control}
-                        render={({ field: { onChange, value } }) => {
-                            const segmentExists = segments.some(
-                                (segment) => segment.name === value,
-                            );
+		return (
+			<InputGroup>
+				<InputLabel htmlFor="segment">Segment</InputLabel>
+				<SegmentSelectContainer>
+					<Controller
+						control={control}
+						render={({ field: { onChange, value } }) => {
+							const segmentExists = segments.some(
+								(segment) => segment.name === value,
+							);
 
-                            if (value && !segmentExists) {
-                                setValue("segment", null);
-                            }
+							if (value && !segmentExists) {
+								setValue("segment", null);
+							}
 
-                            return (
-                                <Select
-                                    value={value || "None"}
-                                    onValueChange={(value) =>
-                                        value !== "" &&
-                                        onChange(
-                                            value === "None" ? null : value,
-                                        )
-                                    }
-                                >
-                                    <SelectButton icon={ChevronDown} />
-                                    <SelectContent
-                                        position="popper"
-                                        align="start"
-                                    >
-                                        <SelectItem
-                                            key="None"
-                                            value="None"
-                                            description=""
-                                        >
-                                            None
-                                        </SelectItem>
-                                        {segmentOptions}
-                                    </SelectContent>
-                                </Select>
-                            );
-                        }}
-                        name="segment"
-                    />
-                </SegmentSelectContainer>
-            </InputGroup>
-        );
-    }
+							return (
+								<Select
+									value={value || "None"}
+									onValueChange={(value) =>
+										value !== "" && onChange(value === "None" ? null : value)
+									}
+								>
+									<SelectButton icon={ChevronDown} />
+									<SelectContent position="popper" align="start">
+										<SelectItem key="None" value="None" description="">
+											None
+										</SelectItem>
+										{segmentOptions}
+									</SelectContent>
+								</Select>
+							);
+						}}
+						name="segment"
+					/>
+				</SegmentSelectContainer>
+			</InputGroup>
+		);
+	}
 
-    return (
-        <InputGroup>
-            <InputLabel>Segment</InputLabel>
-            <NoSchema>
-                <div>
-                    <h5>No schema is defined for this OTU.</h5>
-                    <p>
-                        A schema defines the sequence segments that should be
-                        present in isolates of the OTU.{" "}
-                    </p>
-                </div>
-                <div>
-                    <Link to={`/refs/${refId}/otus/${otuId}/schema`}>
-                        Add a Schema
-                    </Link>
-                </div>
-            </NoSchema>
-        </InputGroup>
-    );
+	return (
+		<InputGroup>
+			<InputLabel>Segment</InputLabel>
+			<NoSchema>
+				<div>
+					<h5>No schema is defined for this OTU.</h5>
+					<p>
+						A schema defines the sequence segments that should be present in
+						isolates of the OTU.{" "}
+					</p>
+				</div>
+				<div>
+					<Link to={`/refs/${refId}/otus/${otuId}/schema`}>Add a Schema</Link>
+				</div>
+			</NoSchema>
+		</InputGroup>
+	);
 }

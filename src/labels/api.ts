@@ -1,5 +1,5 @@
 import { apiClient } from "@app/api";
-import { Label } from "./types";
+import type { Label } from "./types";
 
 /**
  * Fetch a list of labels
@@ -7,7 +7,7 @@ import { Label } from "./types";
  * @returns A promise resolving to a list of labels
  */
 export function fetchLabels(): Promise<Label[]> {
-    return apiClient.get("/labels").then((res) => res.body);
+	return apiClient.get("/labels").then((res) => res.body);
 }
 
 /**
@@ -19,18 +19,18 @@ export function fetchLabels(): Promise<Label[]> {
  * @returns A promise resolving to creating a label
  */
 export function createLabel(
-    name: string,
-    description: string,
-    color: string,
+	name: string,
+	description: string,
+	color: string,
 ): Promise<Label> {
-    return apiClient
-        .post("/labels")
-        .send({
-            name,
-            description,
-            color,
-        })
-        .then((res) => res.body);
+	return apiClient
+		.post("/labels")
+		.send({
+			name,
+			description,
+			color,
+		})
+		.then((res) => res.body);
 }
 
 /**
@@ -43,19 +43,19 @@ export function createLabel(
  * @returns A promise resolving to updating a label
  */
 export function updateLabel(
-    labelId: number,
-    name: string,
-    description: string,
-    color: string,
+	labelId: number,
+	name: string,
+	description: string,
+	color: string,
 ): Promise<Label> {
-    return apiClient
-        .patch(`/labels/${labelId}`)
-        .send({
-            name,
-            description,
-            color,
-        })
-        .then((res) => res.body);
+	return apiClient
+		.patch(`/labels/${labelId}`)
+		.send({
+			name,
+			description,
+			color,
+		})
+		.then((res) => res.body);
 }
 
 /**
@@ -65,5 +65,5 @@ export function updateLabel(
  * @returns A promise resolving to removing a label
  */
 export function removeLabel(labelId: number): Promise<null> {
-    return apiClient.delete(`/labels/${labelId}`).then((res) => res.body);
+	return apiClient.delete(`/labels/${labelId}`).then((res) => res.body);
 }

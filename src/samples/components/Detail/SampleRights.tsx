@@ -13,9 +13,9 @@ import InputSelect from "@base/InputSelect";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { useListGroups } from "@groups/queries";
 import {
-    samplesQueryKeys,
-    useFetchSample,
-    useUpdateSampleRights,
+	samplesQueryKeys,
+	useFetchSample,
+	useUpdateSampleRights,
 } from "@samples/queries";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -23,131 +23,122 @@ import { useQueryClient } from "@tanstack/react-query";
  * A component managing a samples rights
  */
 export default function SampleRights() {
-    const { sampleId } = usePathParams<{ sampleId: string }>();
+	const { sampleId } = usePathParams<{ sampleId: string }>();
 
-    const { hasPermission } = useCheckAdminRole(AdministratorRoleName.FULL);
-    const { data: sample, isPending: isPendingSample } =
-        useFetchSample(sampleId);
-    const { data: account, isPending: isPendingAccount } = useFetchAccount();
-    const { data: groups, isPending: isPendingGroups } = useListGroups();
+	const { hasPermission } = useCheckAdminRole(AdministratorRoleName.FULL);
+	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
+	const { data: account, isPending: isPendingAccount } = useFetchAccount();
+	const { data: groups, isPending: isPendingGroups } = useListGroups();
 
-    const queryClient = useQueryClient();
-    const mutation = useUpdateSampleRights(sampleId);
+	const queryClient = useQueryClient();
+	const mutation = useUpdateSampleRights(sampleId);
 
-    if (isPendingSample || isPendingGroups || isPendingAccount) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPendingSample || isPendingGroups || isPendingAccount) {
+		return <LoadingPlaceholder />;
+	}
 
-    const canModifyRights =
-        sample !== null && (hasPermission || sample.user.id === account.id);
+	const canModifyRights =
+		sample !== null && (hasPermission || sample.user.id === account.id);
 
-    const { group, group_read, group_write, all_read, all_write } = sample;
+	const { group, group_read, group_write, all_read, all_write } = sample;
 
-    function handleChangeGroup(e) {
-        const value =
-            e.target.value === "" ? null : parseInt(e.target.value, 10);
-        mutation.mutate(
-            { update: { group: value } },
-            {
-                onSuccess: () => {
-                    queryClient.invalidateQueries({
-                        queryKey: samplesQueryKeys.detail(sampleId),
-                    });
-                },
-            },
-        );
-    }
+	function handleChangeGroup(e) {
+		const value = e.target.value === "" ? null : parseInt(e.target.value, 10);
+		mutation.mutate(
+			{ update: { group: value } },
+			{
+				onSuccess: () => {
+					queryClient.invalidateQueries({
+						queryKey: samplesQueryKeys.detail(sampleId),
+					});
+				},
+			},
+		);
+	}
 
-    function handleChangeRights(e, scope) {
-        mutation.mutate(
-            {
-                update: {
-                    [`${scope}_read`]: e.target.value.includes("r"),
-                    [`${scope}_write`]: e.target.value.includes("w"),
-                },
-            },
-            {
-                onSuccess: () => {
-                    queryClient.invalidateQueries({
-                        queryKey: samplesQueryKeys.detail(sampleId),
-                    });
-                },
-            },
-        );
-    }
+	function handleChangeRights(e, scope) {
+		mutation.mutate(
+			{
+				update: {
+					[`${scope}_read`]: e.target.value.includes("r"),
+					[`${scope}_write`]: e.target.value.includes("w"),
+				},
+			},
+			{
+				onSuccess: () => {
+					queryClient.invalidateQueries({
+						queryKey: samplesQueryKeys.detail(sampleId),
+					});
+				},
+			},
+		);
+	}
 
-    if (!canModifyRights) {
-        return <Box>Not allowed</Box>;
-    }
+	if (!canModifyRights) {
+		return <Box>Not allowed</Box>;
+	}
 
-    const groupRights = (group_read ? "r" : "") + (group_write ? "w" : "");
-    const allRights = (all_read ? "r" : "") + (all_write ? "w" : "");
+	const groupRights = (group_read ? "r" : "") + (group_write ? "w" : "");
+	const allRights = (all_read ? "r" : "") + (all_write ? "w" : "");
 
-    const selectedGroupId: string = group ? group.id.toString() : "";
+	const selectedGroupId: string = group ? group.id.toString() : "";
 
-    return (
-        <ContainerNarrow>
-            <BoxGroup>
-                <BoxGroupHeader>
-                    <h2>Sample Rights</h2>
-                    <p>
-                        Control who can read and write this sample and which
-                        user group owns the sample.
-                    </p>
-                </BoxGroupHeader>
-                <BoxGroupSection>
-                    <InputGroup>
-                        <InputLabel htmlFor="group">Group</InputLabel>
-                        <InputSelect
-                            id="group"
-                            value={selectedGroupId}
-                            onChange={handleChangeGroup}
-                        >
-                            <option key="none" value="">
-                                None
-                            </option>
-                            {groups.map((group) => (
-                                <option
-                                    key={group.id}
-                                    value={group.id.toString()}
-                                >
-                                    {group.name}
-                                </option>
-                            ))}
-                        </InputSelect>
-                    </InputGroup>
+	return (
+		<ContainerNarrow>
+			<BoxGroup>
+				<BoxGroupHeader>
+					<h2>Sample Rights</h2>
+					<p>
+						Control who can read and write this sample and which user group owns
+						the sample.
+					</p>
+				</BoxGroupHeader>
+				<BoxGroupSection>
+					<InputGroup>
+						<InputLabel htmlFor="group">Group</InputLabel>
+						<InputSelect
+							id="group"
+							value={selectedGroupId}
+							onChange={handleChangeGroup}
+						>
+							<option key="none" value="">
+								None
+							</option>
+							{groups.map((group) => (
+								<option key={group.id} value={group.id.toString()}>
+									{group.name}
+								</option>
+							))}
+						</InputSelect>
+					</InputGroup>
 
-                    <InputGroup>
-                        <InputLabel htmlFor="groupRights">
-                            Group Rights
-                        </InputLabel>
-                        <InputSelect
-                            id="groupRights"
-                            value={groupRights}
-                            onChange={(e) => handleChangeRights(e, "group")}
-                        >
-                            <option value="">None</option>
-                            <option value="r">Read</option>
-                            <option value="rw">Read & write</option>
-                        </InputSelect>
-                    </InputGroup>
+					<InputGroup>
+						<InputLabel htmlFor="groupRights">Group Rights</InputLabel>
+						<InputSelect
+							id="groupRights"
+							value={groupRights}
+							onChange={(e) => handleChangeRights(e, "group")}
+						>
+							<option value="">None</option>
+							<option value="r">Read</option>
+							<option value="rw">Read & write</option>
+						</InputSelect>
+					</InputGroup>
 
-                    <InputGroup>
-                        <InputLabel htmlFor="allUsers">
-                            All {"Users'"} Rights
-                        </InputLabel>
-                        <InputSelect
-                            id="allUsers"
-                            value={allRights}
-                            onChange={(e) => handleChangeRights(e, "all")}
-                        >
-                            <option value="">None</option>
-                            <option value="r">Read</option>
-                            <option value="rw">Read & write</option>
-                        </InputSelect>
-                    </InputGroup>
-                </BoxGroupSection>
-            </BoxGroup>
-        </ContainerNarrow>
-    );
+					<InputGroup>
+						<InputLabel htmlFor="allUsers">All {"Users'"} Rights</InputLabel>
+						<InputSelect
+							id="allUsers"
+							value={allRights}
+							onChange={(e) => handleChangeRights(e, "all")}
+						>
+							<option value="">None</option>
+							<option value="r">Read</option>
+							<option value="rw">Read & write</option>
+						</InputSelect>
+					</InputGroup>
+				</BoxGroupSection>
+			</BoxGroup>
+		</ContainerNarrow>
+	);
 }

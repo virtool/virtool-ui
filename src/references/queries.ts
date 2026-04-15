@@ -1,48 +1,48 @@
-import { ErrorResponse } from "@/types/api";
 import { apiClient } from "@app/api";
 import {
-    keepPreviousData,
-    useMutation,
-    useQuery,
-    useQueryClient,
+	keepPreviousData,
+	useMutation,
+	useQuery,
+	useQueryClient,
 } from "@tanstack/react-query";
 import { useState } from "react";
+import type { ErrorResponse } from "@/types/api";
 import {
-    addReferenceGroup,
-    addReferenceUser,
-    checkRemoteReferenceUpdates,
-    cloneReference,
-    createReference,
-    editReferenceGroup,
-    editReferenceUser,
-    findReferences,
-    getReference,
-    importReference,
-    remoteReference,
-    removeReferenceGroup,
-    removeReferenceUser,
-    updateRemoteReference,
+	addReferenceGroup,
+	addReferenceUser,
+	checkRemoteReferenceUpdates,
+	cloneReference,
+	createReference,
+	editReferenceGroup,
+	editReferenceUser,
+	findReferences,
+	getReference,
+	importReference,
+	remoteReference,
+	removeReferenceGroup,
+	removeReferenceUser,
+	updateRemoteReference,
 } from "./api";
-import {
-    Reference,
-    ReferenceGroup,
-    ReferenceInstalled,
-    ReferenceMinimal,
-    ReferenceSearchResult,
-    ReferenceTarget,
-    ReferenceUser,
+import type {
+	Reference,
+	ReferenceGroup,
+	ReferenceInstalled,
+	ReferenceMinimal,
+	ReferenceSearchResult,
+	ReferenceTarget,
+	ReferenceUser,
 } from "./types";
 
 /**
  * Factory for generating react-query keys for reference related queries.
  */
 export const referenceQueryKeys = {
-    all: () => ["reference"] as const,
-    lists: () => ["reference", "list"] as const,
-    list: (filters: Array<string | number | boolean>) =>
-        ["reference", "list", "single", ...filters] as const,
-    details: () => ["reference", "detail"] as const,
-    detail: (refId: string) => ["reference", "detail", refId] as const,
+	all: () => ["reference"] as const,
+	lists: () => ["reference", "list"] as const,
+	list: (filters: Array<string | number | boolean>) =>
+		["reference", "list", "single", ...filters] as const,
+	details: () => ["reference", "detail"] as const,
+	detail: (refId: string) => ["reference", "detail", refId] as const,
 };
 
 /**
@@ -54,15 +54,15 @@ export const referenceQueryKeys = {
  * @returns The paginated list of references
  */
 export function useFindReferences(
-    page: number,
-    per_page: number,
-    term: string,
+	page: number,
+	per_page: number,
+	term: string,
 ) {
-    return useQuery<ReferenceSearchResult>({
-        queryKey: referenceQueryKeys.list([page, per_page, term]),
-        queryFn: () => findReferences({ page, per_page, term }),
-        placeholderData: keepPreviousData,
-    });
+	return useQuery<ReferenceSearchResult>({
+		queryKey: referenceQueryKeys.list([page, per_page, term]),
+		queryFn: () => findReferences({ page, per_page, term }),
+		placeholderData: keepPreviousData,
+	});
 }
 
 /**
@@ -71,13 +71,13 @@ export function useFindReferences(
  * @returns A mutator for cloning a reference
  */
 export function useCloneReference() {
-    return useMutation<
-        ReferenceMinimal,
-        unknown,
-        { name: string; description: string; refId: string }
-    >({
-        mutationFn: cloneReference,
-    });
+	return useMutation<
+		ReferenceMinimal,
+		unknown,
+		{ name: string; description: string; refId: string }
+	>({
+		mutationFn: cloneReference,
+	});
 }
 
 /**
@@ -86,16 +86,16 @@ export function useCloneReference() {
  * @returns A mutator for remotely installing a reference
  */
 export function useRemoteReference() {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<Reference, unknown, { remotes_from: string }>({
-        mutationFn: ({ remotes_from }) => remoteReference(remotes_from),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: referenceQueryKeys.lists(),
-            });
-        },
-    });
+	return useMutation<Reference, unknown, { remotes_from: string }>({
+		mutationFn: ({ remotes_from }) => remoteReference(remotes_from),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: referenceQueryKeys.lists(),
+			});
+		},
+	});
 }
 
 /**
@@ -104,18 +104,18 @@ export function useRemoteReference() {
  * @returns A mutator for importing a reference
  */
 export function useImportReference() {
-    return useMutation<
-        unknown,
-        unknown,
-        {
-            name: string;
-            description: string;
-            importFrom: string;
-        }
-    >({
-        mutationFn: ({ name, description, importFrom }) =>
-            importReference(name, description, importFrom),
-    });
+	return useMutation<
+		unknown,
+		unknown,
+		{
+			name: string;
+			description: string;
+			importFrom: string;
+		}
+	>({
+		mutationFn: ({ name, description, importFrom }) =>
+			importReference(name, description, importFrom),
+	});
 }
 
 /**
@@ -124,30 +124,30 @@ export function useImportReference() {
  * @returns The mutator, file information, and progress of the reference upload
  */
 export function useUploadReference() {
-    const [fileName, setFileName] = useState("");
-    const [fileNameOnDisk, setFileNameOnDisk] = useState("");
-    const [progress, setProgress] = useState(0);
+	const [fileName, setFileName] = useState("");
+	const [fileNameOnDisk, setFileNameOnDisk] = useState("");
+	const [progress, setProgress] = useState(0);
 
-    const uploadMutation = useMutation({
-        mutationFn: (file: File) => {
-            const formData = new FormData();
-            formData.append("file", file);
+	const uploadMutation = useMutation({
+		mutationFn: (file: File) => {
+			const formData = new FormData();
+			formData.append("file", file);
 
-            return apiClient
-                .post("/uploads")
-                .query({ name: file.name, type: "reference" })
-                .send(formData)
-                .on("progress", (event) => {
-                    setProgress(event.percent);
-                })
-                .then((response) => {
-                    setFileName(response.body.name);
-                    setFileNameOnDisk(response.body.name_on_disk);
-                });
-        },
-    });
+			return apiClient
+				.post("/uploads")
+				.query({ name: file.name, type: "reference" })
+				.send(formData)
+				.on("progress", (event) => {
+					setProgress(event.percent);
+				})
+				.then((response) => {
+					setFileName(response.body.name);
+					setFileNameOnDisk(response.body.name_on_disk);
+				});
+		},
+	});
 
-    return { uploadMutation, fileName, fileNameOnDisk, progress };
+	return { uploadMutation, fileName, fileNameOnDisk, progress };
 }
 
 /**
@@ -156,18 +156,18 @@ export function useUploadReference() {
  * @returns A mutator for creating an empty reference
  */
 export function useCreateReference() {
-    return useMutation<
-        Reference,
-        unknown,
-        {
-            name: string;
-            description: string;
-            organism: string;
-        }
-    >({
-        mutationFn: ({ name, description, organism }) =>
-            createReference(name, description, organism),
-    });
+	return useMutation<
+		Reference,
+		unknown,
+		{
+			name: string;
+			description: string;
+			organism: string;
+		}
+	>({
+		mutationFn: ({ name, description, organism }) =>
+			createReference(name, description, organism),
+	});
 }
 
 /**
@@ -176,28 +176,28 @@ export function useCreateReference() {
  * @returns A mutator for updating a reference
  */
 export function useUpdateReference(refId: string, onSuccess?: () => void) {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    const mutation = useMutation<Reference, ErrorResponse, unknown>({
-        mutationFn: (data: {
-            restrict_source_types?: boolean;
-            targets?: ReferenceTarget[];
-        }) => {
-            return apiClient
-                .patch(`/refs/${refId}`)
-                .send(data)
-                .then((res) => res.body);
-        },
-        onSuccess: () => {
-            queryClient
-                .invalidateQueries({
-                    queryKey: referenceQueryKeys.detail(refId),
-                })
-                .then(() => onSuccess?.());
-        },
-    });
+	const mutation = useMutation<Reference, ErrorResponse, unknown>({
+		mutationFn: (data: {
+			restrict_source_types?: boolean;
+			targets?: ReferenceTarget[];
+		}) => {
+			return apiClient
+				.patch(`/refs/${refId}`)
+				.send(data)
+				.then((res) => res.body);
+		},
+		onSuccess: () => {
+			queryClient
+				.invalidateQueries({
+					queryKey: referenceQueryKeys.detail(refId),
+				})
+				.then(() => onSuccess?.());
+		},
+	});
 
-    return { mutation };
+	return { mutation };
 }
 
 /**
@@ -208,23 +208,23 @@ export function useUpdateReference(refId: string, onSuccess?: () => void) {
  * @returns A mutator for adding members to a reference
  */
 export function useAddReferenceMember(refId: string, noun: string) {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<
-        ReferenceUser | ReferenceGroup,
-        unknown,
-        { id: string | number }
-    >({
-        mutationFn: ({ id }) =>
-            noun === "user"
-                ? addReferenceUser(refId, id)
-                : addReferenceGroup(refId, id),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: referenceQueryKeys.detail(refId),
-            });
-        },
-    });
+	return useMutation<
+		ReferenceUser | ReferenceGroup,
+		unknown,
+		{ id: string | number }
+	>({
+		mutationFn: ({ id }) =>
+			noun === "user"
+				? addReferenceUser(refId, id)
+				: addReferenceGroup(refId, id),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: referenceQueryKeys.detail(refId),
+			});
+		},
+	});
 }
 
 /**
@@ -234,20 +234,20 @@ export function useAddReferenceMember(refId: string, noun: string) {
  * @returns A mutator for updating a reference members modifying rights
  */
 export function useUpdateReferenceMember(noun: string) {
-    return useMutation<
-        ReferenceUser | ReferenceGroup,
-        unknown,
-        {
-            refId: string;
-            id: string | number;
-            update: { [key: string]: boolean };
-        }
-    >({
-        mutationFn: ({ refId, id, update }) =>
-            noun === "user"
-                ? editReferenceUser(refId, id, update)
-                : editReferenceGroup(refId, id, update),
-    });
+	return useMutation<
+		ReferenceUser | ReferenceGroup,
+		unknown,
+		{
+			refId: string;
+			id: string | number;
+			update: { [key: string]: boolean };
+		}
+	>({
+		mutationFn: ({ refId, id, update }) =>
+			noun === "user"
+				? editReferenceUser(refId, id, update)
+				: editReferenceGroup(refId, id, update),
+	});
 }
 
 /**
@@ -258,19 +258,19 @@ export function useUpdateReferenceMember(noun: string) {
  * @returns A mutator for removing members from a reference
  */
 export function useRemoveReferenceUser(refId: string, noun: string) {
-    const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
-    return useMutation<Response, unknown, { id: string | number }>({
-        mutationFn: ({ id }) =>
-            noun === "user"
-                ? removeReferenceUser(refId, id)
-                : removeReferenceGroup(refId, id),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: referenceQueryKeys.detail(refId),
-            });
-        },
-    });
+	return useMutation<Response, unknown, { id: string | number }>({
+		mutationFn: ({ id }) =>
+			noun === "user"
+				? removeReferenceUser(refId, id)
+				: removeReferenceGroup(refId, id),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: referenceQueryKeys.detail(refId),
+			});
+		},
+	});
 }
 
 /**
@@ -280,10 +280,10 @@ export function useRemoveReferenceUser(refId: string, noun: string) {
  * @returns Query results containing the reference
  */
 export function useFetchReference(refId: string) {
-    return useQuery<Reference>({
-        queryKey: referenceQueryKeys.detail(refId),
-        queryFn: () => getReference(refId),
-    });
+	return useQuery<Reference>({
+		queryKey: referenceQueryKeys.detail(refId),
+		queryFn: () => getReference(refId),
+	});
 }
 
 /**
@@ -292,15 +292,15 @@ export function useFetchReference(refId: string) {
  * @param refId - The unique identifier of the reference
  */
 export function useCheckReferenceUpdates(refId: string) {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: () => checkRemoteReferenceUpdates(refId),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: referenceQueryKeys.detail(refId),
-            });
-        },
-    });
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: () => checkRemoteReferenceUpdates(refId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: referenceQueryKeys.detail(refId),
+			});
+		},
+	});
 }
 
 /**
@@ -309,13 +309,13 @@ export function useCheckReferenceUpdates(refId: string) {
  * @param refId - The unique identifier of the reference
  */
 export function useUpdateRemoteReference(refId: string) {
-    const queryClient = useQueryClient();
-    return useMutation<ReferenceInstalled, ErrorResponse>({
-        mutationFn: () => updateRemoteReference(refId),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: referenceQueryKeys.detail(refId),
-            });
-        },
-    });
+	const queryClient = useQueryClient();
+	return useMutation<ReferenceInstalled, ErrorResponse>({
+		mutationFn: () => updateRemoteReference(refId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: referenceQueryKeys.detail(refId),
+			});
+		},
+	});
 }

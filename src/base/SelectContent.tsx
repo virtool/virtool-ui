@@ -35,27 +35,27 @@ const ScrollSection = styled(SelectPrimitive.ScrollUpButton)`
     justify-content: center;
     &:hover {
         background-color: ${(props) =>
-            getColor({ color: "greyHover", theme: props.theme })};
+					getColor({ color: "greyHover", theme: props.theme })};
     }
 `;
 
 export default function SelectContent({ children, position, align }) {
-    return (
-        <SelectPrimitive.Portal>
-            <StyledContent
-                position={position}
-                align={align}
-                side="bottom"
-                avoidCollisions={false}
-            >
-                <ScrollSection>
-                    <Icon icon={ChevronUp} />
-                </ScrollSection>
-                <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
-                <ScrollSection as={SelectPrimitive.ScrollDownButton}>
-                    <Icon icon={ChevronDown} />
-                </ScrollSection>
-            </StyledContent>
-        </SelectPrimitive.Portal>
-    );
+	return (
+		<SelectPrimitive.Portal>
+			<StyledContent
+				position={position}
+				align={align}
+				side="bottom"
+				avoidCollisions={false}
+			>
+				<ScrollSection>
+					<Icon icon={ChevronUp} />
+				</ScrollSection>
+				<SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
+				<ScrollSection as={SelectPrimitive.ScrollDownButton}>
+					<Icon icon={ChevronDown} />
+				</ScrollSection>
+			</StyledContent>
+		</SelectPrimitive.Portal>
+	);
 }

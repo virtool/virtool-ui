@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 
 /**
  * Arguments for the createCspMiddleware function.
@@ -9,7 +9,7 @@ import { NextFunction, Request, Response } from "express";
  * @property {NextFunction} next - A function that passes control to the next middleware.
  */
 export type Middleware = (
-    req: Request,
-    res: Response,
-    next: NextFunction,
+	req: Request,
+	res: Response,
+	next: NextFunction,
 ) => void;

@@ -11,40 +11,40 @@ import AccountPassword from "./AccountPassword";
  * Displays information related to the users account with options to reset password and email
  */
 export default function AccountProfile() {
-    const { data, isPending } = useFetchAccount();
+	const { data, isPending } = useFetchAccount();
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    const { administrator_role, email, groups, handle, last_password_change } =
-        data;
+	const { administrator_role, email, groups, handle, last_password_change } =
+		data;
 
-    return (
-        <>
-            <div className="flex items-center justify-between mb-6">
-                <header className="flex font-medium items-center gap-4 text-2xl">
-                    <InitialIcon handle={handle} size="xxl" />
-                    <h3>{handle}</h3>
-                </header>
+	return (
+		<>
+			<div className="flex items-center justify-between mb-6">
+				<header className="flex font-medium items-center gap-4 text-2xl">
+					<InitialIcon handle={handle} size="xxl" />
+					<h3>{handle}</h3>
+				</header>
 
-                <div>
-                    {administrator_role && (
-                        <Label
-                            key="administrator"
-                            className="capitalize text-base ml-auto"
-                            color="purple"
-                        >
-                            <ShieldUser />
-                            {administrator_role} Administrator
-                        </Label>
-                    )}
-                </div>
-            </div>
+				<div>
+					{administrator_role && (
+						<Label
+							key="administrator"
+							className="capitalize text-base ml-auto"
+							color="purple"
+						>
+							<ShieldUser />
+							{administrator_role} Administrator
+						</Label>
+					)}
+				</div>
+			</div>
 
-            <AccountPassword lastPasswordChange={last_password_change} />
-            <AccountEmail email={email} />
-            <AccountGroups groups={groups} />
-        </>
-    );
+			<AccountPassword lastPasswordChange={last_password_change} />
+			<AccountEmail email={email} />
+			<AccountGroups groups={groups} />
+		</>
+	);
 }

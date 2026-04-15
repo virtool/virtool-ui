@@ -6,24 +6,24 @@ const StyledCreateAnalysisSummary = styled.div`
 `;
 
 interface CreateAnalysisSummaryProps {
-    indexCount: number;
-    sampleCount: number;
+	indexCount: number;
+	sampleCount: number;
 }
 
 export function CreateAnalysisSummary({
-    indexCount,
-    sampleCount,
+	indexCount,
+	sampleCount,
 }: CreateAnalysisSummaryProps) {
-    const product = indexCount * sampleCount;
+	const product = indexCount * sampleCount;
 
-    if (product === 0) {
-        return <StyledCreateAnalysisSummary />;
-    }
+	if (product === 0) {
+		return <StyledCreateAnalysisSummary />;
+	}
 
-    return (
-        <StyledCreateAnalysisSummary>
-            {product} job
-            {product === 1 ? "" : "s"} will be started
-        </StyledCreateAnalysisSummary>
-    );
+	return (
+		<StyledCreateAnalysisSummary>
+			{product} job
+			{product === 1 ? "" : "s"} will be started
+		</StyledCreateAnalysisSummary>
+	);
 }

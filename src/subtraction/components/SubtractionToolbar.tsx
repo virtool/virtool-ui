@@ -8,47 +8,39 @@ import { useSearch } from "wouter";
 import SubtractionCreate from "./SubtractionCreate";
 
 type SubtractionToolbarProps = {
-    /** Current search term used for filtering */
-    term: string;
+	/** Current search term used for filtering */
+	term: string;
 
-    /** A callback function to handle changes in search input */
-    handleChange: (any) => void;
+	/** A callback function to handle changes in search input */
+	handleChange: (any) => void;
 };
 
 /**
  * A search filtering toolbar
  */
 export default function SubtractionToolbar({
-    term,
-    handleChange,
+	term,
+	handleChange,
 }: SubtractionToolbarProps) {
-    const { hasPermission } = useCheckAdminRoleOrPermission(
-        Permission.modify_subtraction,
-    );
-    const search = useSearch();
+	const { hasPermission } = useCheckAdminRoleOrPermission(
+		Permission.modify_subtraction,
+	);
+	const search = useSearch();
 
-    return (
-        <Toolbar>
-            <div className="flex-grow">
-                <InputSearch
-                    value={term}
-                    onChange={handleChange}
-                    placeholder="Name"
-                />
-            </div>
-            {hasPermission && (
-                <LinkButton
-                    color="blue"
-                    to={updateSearchParam(
-                        "openCreateSubtraction",
-                        "true",
-                        search,
-                    )}
-                >
-                    Create
-                </LinkButton>
-            )}
-            <SubtractionCreate />
-        </Toolbar>
-    );
+	return (
+		<Toolbar>
+			<div className="flex-grow">
+				<InputSearch value={term} onChange={handleChange} placeholder="Name" />
+			</div>
+			{hasPermission && (
+				<LinkButton
+					color="blue"
+					to={updateSearchParam("openCreateSubtraction", "true", search)}
+				>
+					Create
+				</LinkButton>
+			)}
+			<SubtractionCreate />
+		</Toolbar>
+	);
 }

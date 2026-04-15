@@ -1,6 +1,6 @@
 import { boxShadow } from "@app/theme";
 import { Tooltip as TooltipPrimitive } from "radix-ui";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import styled, { keyframes } from "styled-components";
 
 const slideUpAndFade = keyframes`
@@ -79,29 +79,27 @@ const TooltipContent = styled(TooltipPrimitive.Content)`
 `;
 
 type TooltipProps = {
-    children: ReactNode;
-    position?: "top" | "right" | "bottom" | "left";
-    tip: ReactNode;
+	children: ReactNode;
+	position?: "top" | "right" | "bottom" | "left";
+	tip: ReactNode;
 };
 
 export default function Tooltip({
-    children,
-    position = "top",
-    tip,
+	children,
+	position = "top",
+	tip,
 }: TooltipProps) {
-    return (
-        <TooltipPrimitive.Provider>
-            <TooltipPrimitive.Root>
-                <TooltipPrimitive.Trigger asChild>
-                    {children}
-                </TooltipPrimitive.Trigger>
-                <TooltipPrimitive.Portal>
-                    <TooltipContent side={position} sideOffset={5}>
-                        {tip}
-                        <TooltipPrimitive.Arrow />
-                    </TooltipContent>
-                </TooltipPrimitive.Portal>
-            </TooltipPrimitive.Root>
-        </TooltipPrimitive.Provider>
-    );
+	return (
+		<TooltipPrimitive.Provider>
+			<TooltipPrimitive.Root>
+				<TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
+				<TooltipPrimitive.Portal>
+					<TooltipContent side={position} sideOffset={5}>
+						{tip}
+						<TooltipPrimitive.Arrow />
+					</TooltipContent>
+				</TooltipPrimitive.Portal>
+			</TooltipPrimitive.Root>
+		</TooltipPrimitive.Provider>
+	);
 }

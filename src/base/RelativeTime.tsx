@@ -1,8 +1,8 @@
-import { formatDistanceStrict } from "@/app/date";
 import { useEffect, useState } from "react";
+import { formatDistanceStrict } from "@/app/date";
 
 type RelativeTimeOptions = {
-    addSuffix?: boolean;
+	addSuffix?: boolean;
 };
 
 /**
@@ -17,43 +17,43 @@ type RelativeTimeOptions = {
  * @returns a human-readable relative time string
  */
 function createTimeString(
-    time: string | Date,
-    { addSuffix = true }: RelativeTimeOptions = {},
+	time: string | Date,
+	{ addSuffix = true }: RelativeTimeOptions = {},
 ) {
-    const now = Date.now();
-    const serverDate = new Date(time);
-    const clientDate = new Date();
+	const now = Date.now();
+	const serverDate = new Date(time);
+	const clientDate = new Date();
 
-    const currentTime = serverDate > clientDate ? clientDate : serverDate;
+	const currentTime = serverDate > clientDate ? clientDate : serverDate;
 
-    const timeString = formatDistanceStrict(currentTime, now, {
-        addSuffix,
-    });
+	const timeString = formatDistanceStrict(currentTime, now, {
+		addSuffix,
+	});
 
-    return timeString.startsWith("in ") ? "just now" : timeString;
+	return timeString.startsWith("in ") ? "just now" : timeString;
 }
 
 export function useRelativeTime(
-    time: string | Date,
-    options: RelativeTimeOptions = {},
+	time: string | Date,
+	options: RelativeTimeOptions = {},
 ) {
-    const [, setTick] = useState(0);
+	const [, setTick] = useState(0);
 
-    useEffect(() => {
-        const interval = window.setInterval(() => {
-            setTick((t) => t + 1);
-        }, 8000);
+	useEffect(() => {
+		const interval = window.setInterval(() => {
+			setTick((t) => t + 1);
+		}, 8000);
 
-        return () => {
-            window.clearInterval(interval);
-        };
-    }, [time]);
+		return () => {
+			window.clearInterval(interval);
+		};
+	}, []);
 
-    return createTimeString(time, options);
+	return createTimeString(time, options);
 }
 
 type RelativeTimeProps = {
-    time: string | Date;
+	time: string | Date;
 };
 
 /**
@@ -61,6 +61,6 @@ type RelativeTimeProps = {
  * automatically as time passes.
  */
 export default function RelativeTime({ time }: RelativeTimeProps) {
-    const timeString = useRelativeTime(time);
-    return <span>{timeString}</span>;
+	const timeString = useRelativeTime(time);
+	return <span>{timeString}</span>;
 }

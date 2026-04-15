@@ -5,40 +5,40 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { UserGroup } from "../UserGroup";
 
 describe("<UserGroup />", () => {
-    let props;
+	let props;
 
-    beforeEach(() => {
-        props = {
-            id: "3691nwak3",
-            name: "bob",
-            toggled: true,
-            onClick: vi.fn(),
-        };
-    });
+	beforeEach(() => {
+		props = {
+			id: "3691nwak3",
+			name: "bob",
+			toggled: true,
+			onClick: vi.fn(),
+		};
+	});
 
-    it("should render correctly when toggled=true", () => {
-        renderWithProviders(<UserGroup {...props} />);
+	it("should render correctly when toggled=true", () => {
+		renderWithProviders(<UserGroup {...props} />);
 
-        expect(screen.getByText("bob")).toBeInTheDocument();
-        expect(screen.queryByText("3691nwak3")).not.toBeInTheDocument();
-    });
+		expect(screen.getByText("bob")).toBeInTheDocument();
+		expect(screen.queryByText("3691nwak3")).not.toBeInTheDocument();
+	});
 
-    it("should render with [toggled=false]", () => {
-        props.toggled = false;
+	it("should render with [toggled=false]", () => {
+		props.toggled = false;
 
-        renderWithProviders(<UserGroup {...props} />);
+		renderWithProviders(<UserGroup {...props} />);
 
-        expect(screen.getByText("bob")).toBeInTheDocument();
-        expect(screen.queryByText("3691nwak3")).not.toBeInTheDocument();
-    });
+		expect(screen.getByText("bob")).toBeInTheDocument();
+		expect(screen.queryByText("3691nwak3")).not.toBeInTheDocument();
+	});
 
-    it("should call [onClick] when clicked", async () => {
-        renderWithProviders(<UserGroup {...props} />);
+	it("should call [onClick] when clicked", async () => {
+		renderWithProviders(<UserGroup {...props} />);
 
-        expect(props.onClick).not.toHaveBeenCalled();
+		expect(props.onClick).not.toHaveBeenCalled();
 
-        await userEvent.click(screen.getByText("bob"));
+		await userEvent.click(screen.getByText("bob"));
 
-        expect(props.onClick).toHaveBeenCalled();
-    });
+		expect(props.onClick).toHaveBeenCalled();
+	});
 });

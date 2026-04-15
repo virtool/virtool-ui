@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import Markdown from "../Markdown";
 
 const meta: Meta<typeof Markdown> = {
-    title: "base/Markdown",
-    component: Markdown,
+	title: "base/Markdown",
+	component: Markdown,
 };
 
 export default meta;
@@ -39,10 +39,10 @@ function greet() {
 `;
 
 function Template(args) {
-    return <Markdown markdown={args.markdown} />;
+	return <Markdown markdown={args.markdown} />;
 }
 
 export const SampleMarkdown: Story = {
-    args: { markdown: sampleMarkdown },
-    render: Template,
+	args: { markdown: sampleMarkdown },
+	render: Template,
 };

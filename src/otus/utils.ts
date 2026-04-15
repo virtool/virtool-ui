@@ -1,5 +1,5 @@
 import { sortBy } from "es-toolkit";
-import { OtuSegment, OtuSequence } from "./types";
+import type { OtuSegment, OtuSequence } from "./types";
 
 /**
  * A hook for sorting the sequences for the active isolate
@@ -8,18 +8,18 @@ import { OtuSegment, OtuSequence } from "./types";
  * @param segments - The segments associated with the OTU
  */
 export default function sortSequencesBySegment(
-    sequences: OtuSequence[],
-    segments: OtuSegment[],
+	sequences: OtuSequence[],
+	segments: OtuSegment[],
 ): OtuSequence[] {
-    if (sequences) {
-        const segmentNames = segments.map((s) => s.name);
-        return sortBy(sequences, [
-            (entry) => {
-                const index = segmentNames.indexOf(entry.segment);
-                return index !== -1 ? index : segmentNames.length;
-            },
-        ]);
-    }
+	if (sequences) {
+		const segmentNames = segments.map((s) => s.name);
+		return sortBy(sequences, [
+			(entry) => {
+				const index = segmentNames.indexOf(entry.segment);
+				return index !== -1 ? index : segmentNames.length;
+			},
+		]);
+	}
 
-    return [];
+	return [];
 }

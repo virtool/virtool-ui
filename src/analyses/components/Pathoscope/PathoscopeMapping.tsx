@@ -16,23 +16,21 @@ const StyledAnalysisMappingReferenceTitle = styled.div`
 `;
 
 export function AnalysisMappingReferenceTitle({ index, reference }) {
-    return (
-        <StyledAnalysisMappingReferenceTitle>
-            <Link to={`/refs/${reference.id}`}>{reference.name}</Link>
-            <Label>{index.version}</Label>
-        </StyledAnalysisMappingReferenceTitle>
-    );
+	return (
+		<StyledAnalysisMappingReferenceTitle>
+			<Link to={`/refs/${reference.id}`}>{reference.name}</Link>
+			<Label>{index.version}</Label>
+		</StyledAnalysisMappingReferenceTitle>
+	);
 }
 
 export function AnalysisMappingSubtractionTitle({ subtractions }) {
-    return subtractions.map((subtraction, index) => (
-        <span key={subtraction.id}>
-            <Link to={`/subtractions/${subtraction.id}`}>
-                {subtraction.name}
-            </Link>
-            {index !== subtractions.length - 1 ? ", " : ""}
-        </span>
-    ));
+	return subtractions.map((subtraction, index) => (
+		<span key={subtraction.id}>
+			<Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
+			{index !== subtractions.length - 1 ? ", " : ""}
+		</span>
+	));
 }
 
 const StyledAnalysisMapping = styled(Box)`
@@ -55,46 +53,40 @@ const StyledAnalysisMapping = styled(Box)`
 `;
 
 export function AnalysisMapping({ totalReads, detail }) {
-    const { index, reference, subtractions, results } = detail;
-    const { readCount, subtractedCount } = results;
+	const { index, reference, subtractions, results } = detail;
+	const { readCount, subtractedCount } = results;
 
-    const totalMapped = readCount + subtractedCount;
-    const sumPercent = readCount / totalReads;
+	const totalMapped = readCount + subtractedCount;
+	const sumPercent = readCount / totalReads;
 
-    const legend = [
-        {
-            color: "blue",
-            count: readCount,
-            title: (
-                <AnalysisMappingReferenceTitle
-                    index={index}
-                    reference={reference}
-                />
-            ),
-        },
-    ];
+	const legend = [
+		{
+			color: "blue",
+			count: readCount,
+			title: (
+				<AnalysisMappingReferenceTitle index={index} reference={reference} />
+			),
+		},
+	];
 
-    if (subtractions.length > 0) {
-        legend.push({
-            color: "orange",
-            count: subtractedCount,
-            title: (
-                <AnalysisMappingSubtractionTitle subtractions={subtractions} />
-            ),
-        });
-    }
+	if (subtractions.length > 0) {
+		legend.push({
+			color: "orange",
+			count: subtractedCount,
+			title: <AnalysisMappingSubtractionTitle subtractions={subtractions} />,
+		});
+	}
 
-    return (
-        <StyledAnalysisMapping>
-            <h3>
-                {numbro(sumPercent).format({ output: "percent", mantissa: 2 })}{" "}
-                mapped
-                <small>
-                    {toThousand(readCount)} of {toThousand(totalReads)} reads
-                </small>
-            </h3>
+	return (
+		<StyledAnalysisMapping>
+			<h3>
+				{numbro(sumPercent).format({ output: "percent", mantissa: 2 })} mapped
+				<small>
+					{toThousand(readCount)} of {toThousand(totalReads)} reads
+				</small>
+			</h3>
 
-            <Bars empty={totalReads - totalMapped} items={legend} />
-        </StyledAnalysisMapping>
-    );
+			<Bars empty={totalReads - totalMapped} items={legend} />
+		</StyledAnalysisMapping>
+	);
 }

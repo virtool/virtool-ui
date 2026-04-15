@@ -2,7 +2,7 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import NoneFoundSection from "@base/NoneFoundSection";
 import RelativeTime from "@base/RelativeTime";
-import { ReferenceBuild } from "@references/types";
+import type { ReferenceBuild } from "@references/types";
 import styled from "styled-components";
 
 const StyledLatestBuild = styled(BoxGroupSection)`
@@ -15,33 +15,32 @@ const StyledLatestBuild = styled(BoxGroupSection)`
 `;
 
 type LatestBuildProps = {
-    id: string;
-    /** Information related to the latest index build */
-    latestBuild: ReferenceBuild;
+	id: string;
+	/** Information related to the latest index build */
+	latestBuild: ReferenceBuild;
 };
 
 /**
  * Displays the latest index build information associated with the reference
  */
 export function LatestBuild({ id, latestBuild }: LatestBuildProps) {
-    if (latestBuild) {
-        return (
-            <StyledLatestBuild>
-                <div>
-                    <strong>
-                        <Link to={`/refs/${id}/indexes/${latestBuild.id}`}>
-                            Index {latestBuild.version}
-                        </Link>
-                    </strong>
-                    <span>
-                        &nbsp;/ Created{" "}
-                        <RelativeTime time={latestBuild.created_at} /> by{" "}
-                        {latestBuild.user.handle}
-                    </span>
-                </div>
-            </StyledLatestBuild>
-        );
-    }
+	if (latestBuild) {
+		return (
+			<StyledLatestBuild>
+				<div>
+					<strong>
+						<Link to={`/refs/${id}/indexes/${latestBuild.id}`}>
+							Index {latestBuild.version}
+						</Link>
+					</strong>
+					<span>
+						&nbsp;/ Created <RelativeTime time={latestBuild.created_at} /> by{" "}
+						{latestBuild.user.handle}
+					</span>
+				</div>
+			</StyledLatestBuild>
+		);
+	}
 
-    return <NoneFoundSection noun="index builds" />;
+	return <NoneFoundSection noun="index builds" />;
 }

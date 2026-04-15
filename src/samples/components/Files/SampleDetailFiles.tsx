@@ -10,18 +10,18 @@ import SampleReads from "./SampleReads";
  * The uploads view in sample details
  */
 export default function SampleDetailFiles() {
-    const { sampleId } = usePathParams<{ sampleId: string }>();
-    const { data, isPending } = useFetchSample(sampleId);
+	const { sampleId } = usePathParams<{ sampleId: string }>();
+	const { data, isPending } = useFetchSample(sampleId);
 
-    if (isPending) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPending) {
+		return <LoadingPlaceholder />;
+	}
 
-    return (
-        <ContainerNarrow>
-            <SampleFileSizeWarning reads={data.reads} sampleId={data.id} />
-            <SampleFilesMessage showLegacy={data.is_legacy} />
-            <SampleReads reads={data.reads} sampleName={data.name} />
-        </ContainerNarrow>
-    );
+	return (
+		<ContainerNarrow>
+			<SampleFileSizeWarning reads={data.reads} sampleId={data.id} />
+			<SampleFilesMessage showLegacy={data.is_legacy} />
+			<SampleReads reads={data.reads} sampleName={data.name} />
+		</ContainerNarrow>
+	);
 }

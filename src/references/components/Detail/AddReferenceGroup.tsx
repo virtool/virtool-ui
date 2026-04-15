@@ -9,7 +9,7 @@ import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import Toolbar from "@base/Toolbar";
 import { useInfiniteFindGroups } from "@groups/queries";
 import { useAddReferenceMember } from "@references/queries";
-import { ReferenceGroup } from "@references/types";
+import type { ReferenceGroup } from "@references/types";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -34,78 +34,78 @@ const StyledScrollList = styled(CompactScrollList)`
 `;
 
 type AddReferenceGroupProps = {
-    groups: ReferenceGroup[];
-    /** A callback to hide the dialog */
-    onHide: () => void;
-    refId: string;
-    /** Indicates whether the dialog for adding a reference group is visible */
-    show: boolean;
+	groups: ReferenceGroup[];
+	/** A callback to hide the dialog */
+	onHide: () => void;
+	refId: string;
+	/** Indicates whether the dialog for adding a reference group is visible */
+	show: boolean;
 };
 
 /**
  * Displays a dialog for adding a reference member
  */
 export default function AddReferenceGroup({
-    groups,
-    onHide,
-    refId,
-    show,
+	groups,
+	onHide,
+	refId,
+	show,
 }: AddReferenceGroupProps) {
-    const mutation = useAddReferenceMember(refId, "group");
-    const [term, setTerm] = useState("");
-    const { data, isPending, isFetchingNextPage, fetchNextPage } =
-        useInfiniteFindGroups(25, term);
+	const mutation = useAddReferenceMember(refId, "group");
+	const [term, setTerm] = useState("");
+	const { data, isPending, isFetchingNextPage, fetchNextPage } =
+		useInfiniteFindGroups(25, term);
 
-    if (isPending) {
-        return null;
-    }
+	if (isPending) {
+		return null;
+	}
 
-    const groupIds = groups.map((g) => g.id);
-    const items = data.pages.flatMap((page) => page.items);
-    const filteredItems = items.filter((item) => !groupIds.includes(item.id));
+	const groupIds = groups.map((g) => g.id);
+	const items = data.pages.flatMap((page) => page.items);
+	const filteredItems = items.filter((item) => !groupIds.includes(item.id));
 
-    function renderRow(item) {
-        return (
-            <StyledAddGroupItem
-                key={item.id}
-                onClick={() => mutation.mutate({ id: item.id })}
-            >
-                <InitialIcon size="md" handle={item.name} />
-                {item.name}
-            </StyledAddGroupItem>
-        );
-    }
+	function renderRow(item) {
+		return (
+			<StyledAddGroupItem
+				key={item.id}
+				onClick={() => mutation.mutate({ id: item.id })}
+			>
+				<InitialIcon size="md" handle={item.name} />
+				{item.name}
+			</StyledAddGroupItem>
+		);
+	}
 
-    function onOpenChange() {
-        onHide();
-        setTerm("");
-    }
+	function onOpenChange() {
+		onHide();
+		setTerm("");
+	}
 
-    return (
-        <Dialog open={show} onOpenChange={onOpenChange}>
-            <DialogContent>
-                <AddReferenceGroupHeader>Add Group</AddReferenceGroupHeader>
-                <Toolbar>
-                    <InputSearch
-                        name="search"
-                        value={term}
-                        onChange={(e) => setTerm(e.target.value)}
-                    />
-                </Toolbar>
-                {filteredItems.length ? (
-                    <StyledScrollList
-                        fetchNextPage={fetchNextPage}
-                        isFetchingNextPage={isFetchingNextPage}
-                        isPending={isPending}
-                        items={filteredItems}
-                        renderRow={renderRow}
-                    />
-                ) : (
-                    <BoxGroup>
-                        <NoneFoundSection noun="other groups" />
-                    </BoxGroup>
-                )}
-            </DialogContent>
-        </Dialog>
-    );
+	return (
+		<Dialog open={show} onOpenChange={onOpenChange}>
+			<DialogContent>
+				<AddReferenceGroupHeader>Add Group</AddReferenceGroupHeader>
+				<Toolbar>
+					<InputSearch
+						name="search"
+						value={term}
+						onChange={(e) => setTerm(e.target.value)}
+					/>
+				</Toolbar>
+				{filteredItems.length ? (
+					<StyledScrollList
+						fetchNextPage={fetchNextPage}
+						isFetchingNextPage={isFetchingNextPage}
+						isPending={isPending}
+						items={filteredItems}
+						renderRow={renderRow}
+					/>
+				) : (
+					<BoxGroup>
+						<NoneFoundSection noun="other groups" />
+					</BoxGroup>
+				)}
+			</DialogContent>
+		</Dialog>
+	);
 }

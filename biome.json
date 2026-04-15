@@ -1,10 +1,44 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
+  "css": {
+    "parser": {
+      "cssModules": true,
+      "tailwindDirectives": true
+    }
+  },
   "formatter": {
     "enabled": true
   },
   "linter": {
-    "enabled": true
+    "enabled": true,
+    "rules": {
+      "style": {
+        "useLiteralEnumMembers": "warn"
+      },
+      "suspicious": {
+        "noImplicitAnyLet": "warn",
+        "noExplicitAny": "warn",
+        "noArrayIndexKey": "warn",
+        "useIterableCallbackReturn": "warn",
+        "noShadowRestrictedNames": "warn",
+        "noGlobalAssign": "warn"
+      },
+      "correctness": {
+        "noUnusedFunctionParameters": "warn",
+        "noInvalidPositionAtImportRule": "warn"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "warn"
+      },
+      "a11y": {
+        "noLabelWithoutControl": "warn",
+        "noSvgWithoutTitle": "warn",
+        "noStaticElementInteractions": "warn",
+        "useValidAnchor": "warn",
+        "useKeyWithClickEvents": "warn",
+        "useHtmlLang": "warn"
+      }
+    }
   },
   "assist": {
     "actions": {

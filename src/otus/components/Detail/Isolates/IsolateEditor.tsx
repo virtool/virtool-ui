@@ -40,65 +40,65 @@ const AddIsolateLink = styled.a`
  * Displays a component for managing the isolates
  */
 export default function IsolateEditor() {
-    const { otu, reference } = useCurrentOtuContext();
-    const { isolates } = otu;
-    const { value: activeIsolateId } = useNaiveUrlSearchParam(
-        "activeIsolate",
-        isolates[0]?.id,
-    );
-    const { setOpen: setOpenAddIsolate } = useDialogParam("openAddIsolate");
-    const { restrict_source_types, source_types } = reference;
+	const { otu, reference } = useCurrentOtuContext();
+	const { isolates } = otu;
+	const { value: activeIsolateId } = useNaiveUrlSearchParam(
+		"activeIsolate",
+		isolates[0]?.id,
+	);
+	const { setOpen: setOpenAddIsolate } = useDialogParam("openAddIsolate");
+	const { restrict_source_types, source_types } = reference;
 
-    const { hasPermission: canModify } = useCheckReferenceRight(
-        reference.id,
-        ReferenceRight.modify,
-    );
+	const { hasPermission: canModify } = useCheckReferenceRight(
+		reference.id,
+		ReferenceRight.modify,
+	);
 
-    const activeIsolate = isolates.length
-        ? isolates.find((i) => i.id === (activeIsolateId || isolates[0]?.id))
-        : null;
+	const activeIsolate = isolates.length
+		? isolates.find((i) => i.id === (activeIsolateId || isolates[0]?.id))
+		: null;
 
-    const isolateComponents = isolates.map((isolate, index) => (
-        <IsolateItem
-            key={index}
-            isolate={isolate}
-            active={isolate.id === activeIsolate.id}
-        />
-    ));
+	const isolateComponents = isolates.map((isolate, index) => (
+		<IsolateItem
+			key={index}
+			isolate={isolate}
+			active={isolate.id === activeIsolate.id}
+		/>
+	));
 
-    const addIsolateLink = canModify ? (
-        <AddIsolateLink onClick={() => setOpenAddIsolate(true)}>
-            Add Isolate
-        </AddIsolateLink>
-    ) : null;
+	const addIsolateLink = canModify ? (
+		<AddIsolateLink onClick={() => setOpenAddIsolate(true)}>
+			Add Isolate
+		</AddIsolateLink>
+	) : null;
 
-    const body = isolateComponents.length ? (
-        <IsolateEditorContainer>
-            <ScrollArea>{isolateComponents}</ScrollArea>
-            <IsolateDetail
-                canModify={canModify}
-                otuId={otu.id}
-                activeIsolate={activeIsolate}
-                allowedSourceTypes={source_types}
-                restrictSourceTypes={restrict_source_types}
-            />
-        </IsolateEditorContainer>
-    ) : (
-        <NoneFoundBox noun="isolates" />
-    );
+	const body = isolateComponents.length ? (
+		<IsolateEditorContainer>
+			<ScrollArea>{isolateComponents}</ScrollArea>
+			<IsolateDetail
+				canModify={canModify}
+				otuId={otu.id}
+				activeIsolate={activeIsolate}
+				allowedSourceTypes={source_types}
+				restrictSourceTypes={restrict_source_types}
+			/>
+		</IsolateEditorContainer>
+	) : (
+		<NoneFoundBox noun="isolates" />
+	);
 
-    return (
-        <>
-            <SubviewHeader>
-                <IsolateEditorTitle>
-                    Isolates{" "}
-                    <ViewHeaderTitleBadge>
-                        {isolateComponents.length}
-                    </ViewHeaderTitleBadge>
-                    {addIsolateLink}
-                </IsolateEditorTitle>
-            </SubviewHeader>
-            {body}
-        </>
-    );
+	return (
+		<>
+			<SubviewHeader>
+				<IsolateEditorTitle>
+					Isolates{" "}
+					<ViewHeaderTitleBadge>
+						{isolateComponents.length}
+					</ViewHeaderTitleBadge>
+					{addIsolateLink}
+				</IsolateEditorTitle>
+			</SubviewHeader>
+			{body}
+		</>
+	);
 }

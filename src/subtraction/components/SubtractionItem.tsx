@@ -4,7 +4,7 @@ import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import { JobNested } from "@jobs/types";
 import styled from "styled-components";
-import { SubtractionMinimal } from "../types";
+import type { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
 
 const StyledSubtractionItem = styled(BoxGroupSection)`
@@ -42,35 +42,32 @@ const Attribution = styled.div`
  * A condensed subtraction item for use in a list of subtractions
  */
 export function SubtractionItem({
-    created_at,
-    id,
-    job,
-    name,
-    nickname,
-    ready,
-    user,
+	created_at,
+	id,
+	job,
+	name,
+	nickname,
+	ready,
+	user,
 }: SubtractionMinimal) {
-    const parsedJob = job && JobNested.parse(job);
+	const parsedJob = job && JobNested.parse(job);
 
-    return (
-        <StyledSubtractionItem>
-            <SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
-            <div>{nickname}</div>
-            <Attribution>
-                <SubtractionAttribution
-                    handle={user.handle}
-                    time={created_at}
-                />
-            </Attribution>
-            {!ready && job && (
-                <ProgressTag>
-                    <ProgressCircle
-                        size={sizes.md}
-                        progress={parsedJob.progress}
-                        state={parsedJob.state ?? "pending"}
-                    />
-                </ProgressTag>
-            )}
-        </StyledSubtractionItem>
-    );
+	return (
+		<StyledSubtractionItem>
+			<SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
+			<div>{nickname}</div>
+			<Attribution>
+				<SubtractionAttribution handle={user.handle} time={created_at} />
+			</Attribution>
+			{!ready && job && (
+				<ProgressTag>
+					<ProgressCircle
+						size={sizes.md}
+						progress={parsedJob.progress}
+						state={parsedJob.state ?? "pending"}
+					/>
+				</ProgressTag>
+			)}
+		</StyledSubtractionItem>
+	);
 }

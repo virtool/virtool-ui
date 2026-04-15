@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useInfiniteFindFiles } from "./queries";
-import { UploadType } from "./types";
+import type { UploadType } from "./types";
 
 /**
  * Hook for validating selected uploads from paginated data
@@ -10,27 +10,37 @@ import { UploadType } from "./types";
  * @param setSelected - A callback function to handle file selection
  */
 export function useValidateFiles(
-    type: UploadType,
-    selected: number[],
-    setSelected: (selected: number[]) => void,
+	type: UploadType,
+	selected: number[],
+	setSelected: (selected: number[]) => void,
 ) {
-    const { data, isPending, fetchNextPage, hasNextPage } =
-        useInfiniteFindFiles(type, 25);
+	const { data, isPending, fetchNextPage, hasNextPage } = useInfiniteFindFiles(
+		type,
+		25,
+	);
 
-    useEffect(() => {
-        if (!isPending && selected.length) {
-            const documents = data.pages.flatMap((page) => page.items);
-            const selectedFilesExist = selected.every((itemId) =>
-                documents.some((item) => item.id === itemId),
-            );
+	useEffect(() => {
+		if (!isPending && selected.length) {
+			const documents = data.pages.flatMap((page) => page.items);
+			const selectedFilesExist = selected.every((itemId) =>
+				documents.some((item) => item.id === itemId),
+			);
 
-            if (!selectedFilesExist) {
-                void fetchNextPage();
-            }
+			if (!selectedFilesExist) {
+				void fetchNextPage();
+			}
 
-            if (!hasNextPage && !selectedFilesExist) {
-                setSelected([]);
-            }
-        }
-    }, [data]);
+			if (!hasNextPage && !selectedFilesExist) {
+				setSelected([]);
+			}
+		}
+	}, [
+		data,
+		selected.length,
+		hasNextPage,
+		setSelected,
+		selected.every,
+		isPending,
+		fetchNextPage,
+	]);
 }

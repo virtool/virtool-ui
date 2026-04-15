@@ -1,5 +1,5 @@
 import { useUpdateSettings } from "@administration/queries";
-import { Settings } from "@administration/types";
+import type { Settings } from "@administration/types";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
@@ -9,114 +9,108 @@ import InputSelect from "@base/InputSelect";
 import { SelectBox, SelectBoxItem } from "@base/SelectBox";
 
 const rights = [
-    { label: "None", value: "" },
-    { label: "Read", value: "r" },
-    { label: "Read & write", value: "rw" },
+	{ label: "None", value: "" },
+	{ label: "Read", value: "r" },
+	{ label: "Read & write", value: "rw" },
 ];
 
 type SampleRightsProps = {
-    /** The settings data used for configuring sample rights */
-    settings: Settings;
+	/** The settings data used for configuring sample rights */
+	settings: Settings;
 };
 
 /**
  * A component managing sample settings, allowing users to configure sample rights
  */
 export default function SampleRights({ settings }: SampleRightsProps) {
-    const mutation = useUpdateSettings();
+	const mutation = useUpdateSettings();
 
-    const {
-        sample_group,
-        sample_group_read,
-        sample_group_write,
-        sample_all_read,
-        sample_all_write,
-    } = settings;
+	const {
+		sample_group,
+		sample_group_read,
+		sample_group_write,
+		sample_all_read,
+		sample_all_write,
+	} = settings;
 
-    const group =
-        (sample_group_read ? "r" : "") + (sample_group_write ? "w" : "");
-    const all = (sample_all_read ? "r" : "") + (sample_all_write ? "w" : "");
+	const group =
+		(sample_group_read ? "r" : "") + (sample_group_write ? "w" : "");
+	const all = (sample_all_read ? "r" : "") + (sample_all_write ? "w" : "");
 
-    const options = rights.map((entry, index) => (
-        <option key={index} value={entry.value}>
-            {entry.label}
-        </option>
-    ));
+	const options = rights.map((entry, index) => (
+		<option key={index} value={entry.value}>
+			{entry.label}
+		</option>
+	));
 
-    return (
-        <BoxGroup>
-            <BoxGroupHeader>
-                <h2>Default Sample Rights</h2>
-                <p>
-                    Set the method used to assign groups to new samples and the
-                    default rights.
-                </p>
-            </BoxGroupHeader>
-            <BoxGroupSection>
-                <SelectBox
-                    className="grid-cols-3"
-                    label="Sample Group"
-                    onValueChange={(value) =>
-                        mutation.mutate({ sample_group: value })
-                    }
-                    value={sample_group}
-                >
-                    <SelectBoxItem value="none">
-                        <strong>None</strong>
-                        <p>
-                            Samples are assigned no group and only
-                            <em> all {"users'"}</em> rights apply
-                        </p>
-                    </SelectBoxItem>
-                    <SelectBoxItem value="force_choice">
-                        <strong>Force choice</strong>
-                        <p>
-                            Samples are automatically assigned the creating
-                            {"user's"} primary group
-                        </p>
-                    </SelectBoxItem>
-                    <SelectBoxItem value="users_primary_group">
-                        <strong>{"User's"} primary group</strong>
-                        <p>
-                            Samples are assigned by the user in the creation
-                            form
-                        </p>
-                    </SelectBoxItem>
-                </SelectBox>
+	return (
+		<BoxGroup>
+			<BoxGroupHeader>
+				<h2>Default Sample Rights</h2>
+				<p>
+					Set the method used to assign groups to new samples and the default
+					rights.
+				</p>
+			</BoxGroupHeader>
+			<BoxGroupSection>
+				<SelectBox
+					className="grid-cols-3"
+					label="Sample Group"
+					onValueChange={(value) => mutation.mutate({ sample_group: value })}
+					value={sample_group}
+				>
+					<SelectBoxItem value="none">
+						<strong>None</strong>
+						<p>
+							Samples are assigned no group and only
+							<em> all {"users'"}</em> rights apply
+						</p>
+					</SelectBoxItem>
+					<SelectBoxItem value="force_choice">
+						<strong>Force choice</strong>
+						<p>
+							Samples are automatically assigned the creating
+							{"user's"} primary group
+						</p>
+					</SelectBoxItem>
+					<SelectBoxItem value="users_primary_group">
+						<strong>{"User's"} primary group</strong>
+						<p>Samples are assigned by the user in the creation form</p>
+					</SelectBoxItem>
+				</SelectBox>
 
-                <InputGroup>
-                    <InputLabel htmlFor="group">Group Rights</InputLabel>
-                    <InputSelect
-                        id="group"
-                        value={group}
-                        onChange={(e) =>
-                            mutation.mutate({
-                                sample_group_read: e.target.value.includes("r"),
-                                sample_group_write:
-                                    e.target.value.includes("w"),
-                            })
-                        }
-                    >
-                        {options}
-                    </InputSelect>
-                </InputGroup>
+				<InputGroup>
+					<InputLabel htmlFor="group">Group Rights</InputLabel>
+					<InputSelect
+						id="group"
+						value={group}
+						onChange={(e) =>
+							mutation.mutate({
+								sample_group_read: e.target.value.includes("r"),
+								sample_group_write: e.target.value.includes("w"),
+							})
+						}
+					>
+						{options}
+					</InputSelect>
+				</InputGroup>
 
-                <InputGroup>
-                    <InputLabel htmlFor="all">All {"Users'"} Rights</InputLabel>
-                    <InputSelect
-                        id="all"
-                        value={all}
-                        onChange={(e) =>
-                            mutation.mutate({
-                                sample_all_read: e.target.value.includes("r"),
-                                sample_all_write: e.target.value.includes("w"),
-                            })
-                        }
-                    >
-                        {options}
-                    </InputSelect>
-                </InputGroup>
-            </BoxGroupSection>
-        </BoxGroup>
-    );
+				<InputGroup>
+					<InputLabel htmlFor="all">All {"Users'"} Rights</InputLabel>
+					<InputSelect
+						id="all"
+						value={all}
+						onChange={(e) =>
+							mutation.mutate({
+								sample_all_read: e.target.value.includes("r"),
+								sample_all_write: e.target.value.includes("w"),
+							})
+						}
+					>
+						{options}
+					</InputSelect>
+				</InputGroup>
+			</BoxGroupSection>
+		</BoxGroup>
+	);
 }

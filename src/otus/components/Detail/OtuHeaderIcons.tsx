@@ -6,47 +6,47 @@ import OtuEdit from "../OtuEdit";
 import OtuRemove from "../OtuRemove";
 
 type OTUHeaderEndIconsProps = {
-    id: string;
-    name: string;
-    refId: string;
-    abbreviation: string;
+	id: string;
+	name: string;
+	refId: string;
+	abbreviation: string;
 };
 
 /**
  * Displays end icons to edit or remove an OTU
  */
 export function OtuHeaderIcons({
-    id,
-    name,
-    refId,
-    abbreviation,
+	id,
+	name,
+	refId,
+	abbreviation,
 }: OTUHeaderEndIconsProps) {
-    const { setOpen: setOpenEditOTU } = useDialogParam("openEditOTU");
-    const { setOpen: setOpenRemoveOTU } = useDialogParam("openRemoveOTU");
-    const { hasPermission: canModify } = useCheckReferenceRight(
-        refId,
-        ReferenceRight.modify_otu,
-    );
+	const { setOpen: setOpenEditOTU } = useDialogParam("openEditOTU");
+	const { setOpen: setOpenRemoveOTU } = useDialogParam("openRemoveOTU");
+	const { hasPermission: canModify } = useCheckReferenceRight(
+		refId,
+		ReferenceRight.modify_otu,
+	);
 
-    return canModify ? (
-        <>
-            <IconButton
-                key="edit-icon"
-                color="grayDark"
-                IconComponent={Pencil}
-                tip="edit OTU"
-                onClick={() => setOpenEditOTU(true)}
-            />
-            <IconButton
-                key="remove-icon"
-                color="red"
-                IconComponent={Trash}
-                tip="remove OTU"
-                onClick={() => setOpenRemoveOTU(true)}
-            />
+	return canModify ? (
+		<>
+			<IconButton
+				key="edit-icon"
+				color="grayDark"
+				IconComponent={Pencil}
+				tip="edit OTU"
+				onClick={() => setOpenEditOTU(true)}
+			/>
+			<IconButton
+				key="remove-icon"
+				color="red"
+				IconComponent={Trash}
+				tip="remove OTU"
+				onClick={() => setOpenRemoveOTU(true)}
+			/>
 
-            <OtuEdit otuId={id} name={name} abbreviation={abbreviation} />
-            <OtuRemove id={id} name={name} refId={refId} />
-        </>
-    ) : null;
+			<OtuEdit otuId={id} name={name} abbreviation={abbreviation} />
+			<OtuRemove id={id} name={name} refId={refId} />
+		</>
+	) : null;
 }

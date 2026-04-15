@@ -1,6 +1,6 @@
 import { objectHasProperty } from "@app/common";
 import { borderRadius, getFontSize, getFontWeight } from "@app/theme";
-import { MutableRefObject, useEffect, useRef } from "react";
+import { type MutableRefObject, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -22,7 +22,7 @@ const InputHeaderContainer = styled.form`
 `;
 
 type InputHeaderControlProps = {
-    ref: MutableRefObject<HTMLInputElement>;
+	ref: MutableRefObject<HTMLInputElement>;
 };
 
 const InputHeaderControl = styled.input<InputHeaderControlProps>`
@@ -37,63 +37,63 @@ const InputHeaderControl = styled.input<InputHeaderControlProps>`
 `;
 
 type InputHeaderProps = {
-    id: string;
-    value?: string;
-    onSubmit: (value: string) => void;
+	id: string;
+	value?: string;
+	onSubmit: (value: string) => void;
 };
 
 /**
  * A styled input header field that handles form submission
  */
 export default function InputHeader({
-    id,
-    value = "",
-    onSubmit,
+	id,
+	value = "",
+	onSubmit,
 }: InputHeaderProps) {
-    const inputElement = useRef<HTMLInputElement>();
+	const inputElement = useRef<HTMLInputElement>();
 
-    const {
-        formState: { isSubmitting },
-        handleSubmit,
-        setValue,
-        watch,
-    } = useForm({
-        defaultValues: { [id]: value },
-    });
+	const {
+		formState: { isSubmitting },
+		handleSubmit,
+		setValue,
+		watch,
+	} = useForm({
+		defaultValues: { [id]: value },
+	});
 
-    function onFormSubmit(data) {
-        onSubmit(data[id]);
+	function onFormSubmit(data) {
+		onSubmit(data[id]);
 
-        if (
-            inputElement.current &&
-            objectHasProperty(inputElement.current, "blur")
-        ) {
-            inputElement.current.blur();
-        }
-    }
+		if (
+			inputElement.current &&
+			objectHasProperty(inputElement.current, "blur")
+		) {
+			inputElement.current.blur();
+		}
+	}
 
-    useEffect(() => {
-        setValue(id, value);
-    }, [value, id, setValue]);
+	useEffect(() => {
+		setValue(id, value);
+	}, [value, id, setValue]);
 
-    return (
-        <InputHeaderContainer onSubmit={handleSubmit(onFormSubmit)}>
-            <InputHeaderControl
-                aria-label={id}
-                autoComplete="off"
-                id={id}
-                name={id}
-                ref={inputElement}
-                value={watch(id)}
-                onBlur={() => {
-                    if (!isSubmitting) {
-                        handleSubmit(onFormSubmit)();
-                    }
-                }}
-                onChange={(e) => {
-                    setValue(id, e.target.value);
-                }}
-            />
-        </InputHeaderContainer>
-    );
+	return (
+		<InputHeaderContainer onSubmit={handleSubmit(onFormSubmit)}>
+			<InputHeaderControl
+				aria-label={id}
+				autoComplete="off"
+				id={id}
+				name={id}
+				ref={inputElement}
+				value={watch(id)}
+				onBlur={() => {
+					if (!isSubmitting) {
+						handleSubmit(onFormSubmit)();
+					}
+				}}
+				onChange={(e) => {
+					setValue(id, e.target.value);
+				}}
+			/>
+		</InputHeaderContainer>
+	);
 }

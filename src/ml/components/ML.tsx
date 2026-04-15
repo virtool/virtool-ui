@@ -8,11 +8,11 @@ import { MLModels } from "./MLModels";
  * @returns The ML view
  * */
 export default function ML() {
-    return (
-        <Container>
-            <Switch>
-                <Route path="/ml" component={MLModels} />
-            </Switch>
-        </Container>
-    );
+	return (
+		<Container>
+			<Switch>
+				<Route path="/ml" component={MLModels} />
+			</Switch>
+		</Container>
+	);
 }

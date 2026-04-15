@@ -3,9 +3,9 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
 import {
-    createFakeReferenceMinimal,
-    mockApiCloneReference,
-    mockApiGetReferences,
+	createFakeReferenceMinimal,
+	mockApiCloneReference,
+	mockApiGetReferences,
 } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
@@ -13,154 +13,148 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import ReferenceList from "../ReferenceList";
 
 describe("<ReferenceList />", () => {
-    let references;
+	let references;
 
-    beforeEach(() => {
-        references = createFakeReferenceMinimal();
-    });
+	beforeEach(() => {
+		references = createFakeReferenceMinimal();
+	});
 
-    afterEach(() => nock.cleanAll());
+	afterEach(() => nock.cleanAll());
 
-    it("should render correctly", async () => {
-        const permissions = createFakePermissions({ create_ref: true });
-        const account = createFakeAccount({ permissions: permissions });
-        mockApiGetAccount(account);
-        const scope = mockApiGetReferences([references]);
-        renderWithRouter(<ReferenceList />);
+	it("should render correctly", async () => {
+		const permissions = createFakePermissions({ create_ref: true });
+		const account = createFakeAccount({ permissions: permissions });
+		mockApiGetAccount(account);
+		const scope = mockApiGetReferences([references]);
+		renderWithRouter(<ReferenceList />);
 
-        expect(await screen.findByText("References")).toBeInTheDocument();
-        expect(screen.getByText(references.name)).toBeInTheDocument();
-        expect(
-            screen.getByText(`${references.user.handle} created`),
-        ).toBeInTheDocument();
+		expect(await screen.findByText("References")).toBeInTheDocument();
+		expect(screen.getByText(references.name)).toBeInTheDocument();
+		expect(
+			screen.getByText(`${references.user.handle} created`),
+		).toBeInTheDocument();
 
-        expect(
-            await screen.findByRole("button", { name: "clone" }),
-        ).toBeInTheDocument();
-        expect(screen.getByLabelText("clone")).toBeInTheDocument();
+		expect(
+			await screen.findByRole("button", { name: "clone" }),
+		).toBeInTheDocument();
+		expect(screen.getByLabelText("clone")).toBeInTheDocument();
 
-        scope.done();
-    });
+		scope.done();
+	});
 
-    describe("<ReferenceToolbar />", () => {
-        it("should render when toolbar term is changed to foo", async () => {
-            const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />);
+	describe("<ReferenceToolbar />", () => {
+		it("should render when toolbar term is changed to foo", async () => {
+			const scope = mockApiGetReferences([references]);
+			renderWithRouter(<ReferenceList />);
 
-            expect(await screen.findByText("References")).toBeInTheDocument();
+			expect(await screen.findByText("References")).toBeInTheDocument();
 
-            const inputElement = screen.getByPlaceholderText("Reference name");
-            expect(inputElement).toHaveValue("");
+			const inputElement = screen.getByPlaceholderText("Reference name");
+			expect(inputElement).toHaveValue("");
 
-            await userEvent.type(inputElement, "Foo");
-            expect(inputElement).toHaveValue("Foo");
+			await userEvent.type(inputElement, "Foo");
+			expect(inputElement).toHaveValue("Foo");
 
-            await userEvent.clear(inputElement);
-            scope.done();
-        });
+			await userEvent.clear(inputElement);
+			scope.done();
+		});
 
-        it("should not render creation button when [canCreate=false]", async () => {
-            const permissions = createFakePermissions({ create_ref: false });
-            const account = createFakeAccount({ permissions: permissions });
-            mockApiGetAccount(account);
-            const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />);
+		it("should not render creation button when [canCreate=false]", async () => {
+			const permissions = createFakePermissions({ create_ref: false });
+			const account = createFakeAccount({ permissions: permissions });
+			mockApiGetAccount(account);
+			const scope = mockApiGetReferences([references]);
+			renderWithRouter(<ReferenceList />);
 
-            expect(await screen.findByText("References")).toBeInTheDocument();
-            expect(
-                screen.queryByRole("link", { name: "Create" }),
-            ).not.toBeInTheDocument();
+			expect(await screen.findByText("References")).toBeInTheDocument();
+			expect(
+				screen.queryByRole("link", { name: "Create" }),
+			).not.toBeInTheDocument();
 
-            scope.done();
-        });
+			scope.done();
+		});
 
-        it("should handle toolbar updates correctly", async () => {
-            const scope = mockApiGetReferences([references]);
-            const { history } = renderWithRouter(<ReferenceList />);
+		it("should handle toolbar updates correctly", async () => {
+			const scope = mockApiGetReferences([references]);
+			const { history } = renderWithRouter(<ReferenceList />);
 
-            expect(await screen.findByText("References")).toBeInTheDocument();
+			expect(await screen.findByText("References")).toBeInTheDocument();
 
-            const inputElement = screen.getByPlaceholderText("Reference name");
-            expect(inputElement).toHaveValue("");
+			const inputElement = screen.getByPlaceholderText("Reference name");
+			expect(inputElement).toHaveValue("");
 
-            await userEvent.type(inputElement, "Foobar");
-            expect(inputElement).toHaveValue("Foobar");
+			await userEvent.type(inputElement, "Foobar");
+			expect(inputElement).toHaveValue("Foobar");
 
-            expect(history[0]).toEqual("?find=Foobar");
+			expect(history[0]).toEqual("?find=Foobar");
 
-            scope.done();
-        });
-    });
+			scope.done();
+		});
+	});
 
-    describe("<CloneReference />", () => {
-        it("handleSubmit() should mutate with correct input", async () => {
-            const permissions = createFakePermissions({ create_ref: true });
-            const account = createFakeAccount({ permissions: permissions });
-            mockApiGetAccount(account);
-            const getReferencesScope = mockApiGetReferences([references]);
-            const cloneReferenceScope = mockApiCloneReference(
-                `Clone of ${references.name}`,
-                `Cloned from ${references.name}`,
-                references,
-            );
-            renderWithRouter(<ReferenceList />);
+	describe("<CloneReference />", () => {
+		it("handleSubmit() should mutate with correct input", async () => {
+			const permissions = createFakePermissions({ create_ref: true });
+			const account = createFakeAccount({ permissions: permissions });
+			mockApiGetAccount(account);
+			const getReferencesScope = mockApiGetReferences([references]);
+			const cloneReferenceScope = mockApiCloneReference(
+				`Clone of ${references.name}`,
+				`Cloned from ${references.name}`,
+				references,
+			);
+			renderWithRouter(<ReferenceList />);
 
-            expect(await screen.findByText("References")).toBeInTheDocument();
-            await userEvent.click(
-                await screen.findByRole("button", { name: "clone" }),
-            );
-            await userEvent.click(
-                screen.getByRole("button", { name: "Clone" }),
-            );
+			expect(await screen.findByText("References")).toBeInTheDocument();
+			await userEvent.click(
+				await screen.findByRole("button", { name: "clone" }),
+			);
+			await userEvent.click(screen.getByRole("button", { name: "Clone" }));
 
-            getReferencesScope.done();
-            cloneReferenceScope.done();
-        });
+			getReferencesScope.done();
+			cloneReferenceScope.done();
+		});
 
-        it("handleSubmit() should mutate with changed input", async () => {
-            const permissions = createFakePermissions({ create_ref: true });
-            const account = createFakeAccount({ permissions: permissions });
-            mockApiGetAccount(account);
-            const getReferencesScope = mockApiGetReferences([references]);
-            const cloneReferenceScope = mockApiCloneReference(
-                "newName",
-                `Cloned from ${references.name}`,
-                references,
-            );
-            renderWithRouter(<ReferenceList />);
+		it("handleSubmit() should mutate with changed input", async () => {
+			const permissions = createFakePermissions({ create_ref: true });
+			const account = createFakeAccount({ permissions: permissions });
+			mockApiGetAccount(account);
+			const getReferencesScope = mockApiGetReferences([references]);
+			const cloneReferenceScope = mockApiCloneReference(
+				"newName",
+				`Cloned from ${references.name}`,
+				references,
+			);
+			renderWithRouter(<ReferenceList />);
 
-            expect(await screen.findByText("References")).toBeInTheDocument();
-            await userEvent.click(
-                await screen.findByRole("button", { name: "clone" }),
-            );
-            await userEvent.clear(screen.getByRole("textbox"));
-            await userEvent.type(screen.getByRole("textbox"), "newName");
-            await userEvent.click(
-                screen.getByRole("button", { name: "Clone" }),
-            );
+			expect(await screen.findByText("References")).toBeInTheDocument();
+			await userEvent.click(
+				await screen.findByRole("button", { name: "clone" }),
+			);
+			await userEvent.clear(screen.getByRole("textbox"));
+			await userEvent.type(screen.getByRole("textbox"), "newName");
+			await userEvent.click(screen.getByRole("button", { name: "Clone" }));
 
-            getReferencesScope.done();
-            cloneReferenceScope.done();
-        });
+			getReferencesScope.done();
+			cloneReferenceScope.done();
+		});
 
-        it("should display an error when name input is cleared", async () => {
-            const permissions = createFakePermissions({ create_ref: true });
-            const account = createFakeAccount({ permissions: permissions });
-            mockApiGetAccount(account);
-            const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />);
+		it("should display an error when name input is cleared", async () => {
+			const permissions = createFakePermissions({ create_ref: true });
+			const account = createFakeAccount({ permissions: permissions });
+			mockApiGetAccount(account);
+			const scope = mockApiGetReferences([references]);
+			renderWithRouter(<ReferenceList />);
 
-            expect(await screen.findByText("References")).toBeInTheDocument();
-            await userEvent.click(
-                await screen.findByRole("button", { name: "clone" }),
-            );
-            await userEvent.clear(screen.getByRole("textbox"));
-            await userEvent.click(
-                screen.getByRole("button", { name: "Clone" }),
-            );
-            expect(screen.getByText("Required Field")).toBeInTheDocument();
+			expect(await screen.findByText("References")).toBeInTheDocument();
+			await userEvent.click(
+				await screen.findByRole("button", { name: "clone" }),
+			);
+			await userEvent.clear(screen.getByRole("textbox"));
+			await userEvent.click(screen.getByRole("button", { name: "Clone" }));
+			expect(screen.getByText("Required Field")).toBeInTheDocument();
 
-            scope.done();
-        });
-    });
+			scope.done();
+		});
+	});
 });

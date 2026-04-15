@@ -6,51 +6,47 @@ import { beforeEach, describe, expect, it } from "vitest";
 import DeleteSample from "../DeleteSample";
 
 describe("<DeleteSample />", () => {
-    let props;
+	let props;
 
-    beforeEach(() => {
-        props = {
-            id: "foo",
-            name: "test",
-            ready: true,
-        };
-    });
+	beforeEach(() => {
+		props = {
+			id: "foo",
+			name: "test",
+			ready: true,
+		};
+	});
 
-    it("should render delete button when sample is ready", () => {
-        renderWithRouter(<DeleteSample {...props} />);
+	it("should render delete button when sample is ready", () => {
+		renderWithRouter(<DeleteSample {...props} />);
 
-        expect(screen.getByRole("button")).toBeInTheDocument();
-    });
+		expect(screen.getByRole("button")).toBeInTheDocument();
+	});
 
-    it("should render delete button when sample has failed job", () => {
-        renderWithRouter(
-            <DeleteSample {...props} job={{ state: "failed" }} ready={false} />,
-        );
+	it("should render delete button when sample has failed job", () => {
+		renderWithRouter(
+			<DeleteSample {...props} job={{ state: "failed" }} ready={false} />,
+		);
 
-        expect(screen.getByRole("button")).toBeInTheDocument();
-    });
+		expect(screen.getByRole("button")).toBeInTheDocument();
+	});
 
-    it("does not render when sample has running job", () => {
-        renderWithRouter(
-            <DeleteSample
-                {...props}
-                ready={false}
-                job={{ state: "running" }}
-            />,
-        );
+	it("does not render when sample has running job", () => {
+		renderWithRouter(
+			<DeleteSample {...props} ready={false} job={{ state: "running" }} />,
+		);
 
-        expect(screen.queryByRole("button")).toBeNull();
-    });
+		expect(screen.queryByRole("button")).toBeNull();
+	});
 
-    it("should handle submit when confirm button is clicked", async () => {
-        const scope = mockApiRemoveSample(props.id);
-        renderWithRouter(<DeleteSample {...props} />);
+	it("should handle submit when confirm button is clicked", async () => {
+		const scope = mockApiRemoveSample(props.id);
+		renderWithRouter(<DeleteSample {...props} />);
 
-        await userEvent.click(screen.getByRole("button"));
-        expect(screen.getByText("Delete Sample")).toBeInTheDocument();
+		await userEvent.click(screen.getByRole("button"));
+		expect(screen.getByText("Delete Sample")).toBeInTheDocument();
 
-        await userEvent.click(screen.getByText("Confirm"));
+		await userEvent.click(screen.getByText("Confirm"));
 
-        scope.done();
-    });
+		scope.done();
+	});
 });

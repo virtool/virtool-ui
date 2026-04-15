@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { User, UserNested } from "@users/types";
+import type { User, UserNested } from "@users/types";
 import nock from "nock";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
@@ -10,10 +10,10 @@ import { createFakePermissions } from "./permissions";
  * @returns a UserNested object with fake data
  */
 export function createFakeUserNested(): UserNested {
-    return {
-        id: faker.number.int(),
-        handle: faker.internet.username(),
-    };
+	return {
+		id: faker.number.int(),
+		handle: faker.internet.username(),
+	};
 }
 
 /**
@@ -23,25 +23,25 @@ export function createFakeUserNested(): UserNested {
  * @returns a User object with fake data
  */
 export function createFakeUser(overrides?: Partial<User>): User {
-    const {
-        groups: overrideGroups,
-        permissions,
-        primary_group,
-        ...rest
-    } = overrides || {};
-    const groups = overrideGroups ?? [createFakeGroupMinimal()];
+	const {
+		groups: overrideGroups,
+		permissions,
+		primary_group,
+		...rest
+	} = overrides || {};
+	const groups = overrideGroups ?? [createFakeGroupMinimal()];
 
-    return {
-        ...createFakeUserNested(),
-        active: true,
-        administrator_role: null,
-        force_reset: false,
-        groups,
-        last_password_change: faker.date.past().toISOString(),
-        permissions: createFakePermissions(permissions),
-        primary_group: primary_group === undefined ? groups[0] : primary_group,
-        ...rest,
-    };
+	return {
+		...createFakeUserNested(),
+		active: true,
+		administrator_role: null,
+		force_reset: false,
+		groups,
+		last_password_change: faker.date.past().toISOString(),
+		permissions: createFakePermissions(permissions),
+		primary_group: primary_group === undefined ? groups[0] : primary_group,
+		...rest,
+	};
 }
 
 /**
@@ -51,14 +51,14 @@ export function createFakeUser(overrides?: Partial<User>): User {
  * @returns An array of User objects populated with fake data
  */
 export function createFakeUsers(count: number): Array<User> {
-    return Array.from({ length: count || 1 }, createFakeUser);
+	return Array.from({ length: count || 1 }, createFakeUser);
 }
 
 type FindUsersQuery = {
-    administrator: boolean;
-    page: number;
-    per_page: number;
-    term: string;
+	administrator: boolean;
+	page: number;
+	per_page: number;
+	term: string;
 };
 
 /**
@@ -69,17 +69,17 @@ type FindUsersQuery = {
  * @returns - a nock Scope for the mocked API call
  */
 export function mockApiFindUsers(users: Array<User>, query?: FindUsersQuery) {
-    return nock("http://localhost")
-        .get("/api/admin/users")
-        .query(query || true)
-        .reply(200, {
-            found_count: users.length,
-            items: users,
-            page: 1,
-            page_count: 1,
-            per_page: 25,
-            total_count: users.length,
-        });
+	return nock("http://localhost")
+		.get("/api/admin/users")
+		.query(query || true)
+		.reply(200, {
+			found_count: users.length,
+			items: users,
+			page: 1,
+			page_count: 1,
+			per_page: 25,
+			total_count: users.length,
+		});
 }
 
 /**
@@ -90,9 +90,9 @@ export function mockApiFindUsers(users: Array<User>, query?: FindUsersQuery) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiGetUser(userId: number, user: User) {
-    return nock("http://localhost")
-        .get(`/api/admin/users/${userId}`)
-        .reply(200, user);
+	return nock("http://localhost")
+		.get(`/api/admin/users/${userId}`)
+		.reply(200, user);
 }
 
 /**
@@ -105,12 +105,12 @@ export function mockApiGetUser(userId: number, user: User) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiEditUser(
-    userId: number,
-    statusCode: number,
-    update: object,
-    user?: User,
+	userId: number,
+	statusCode: number,
+	update: object,
+	user?: User,
 ) {
-    return nock("http://localhost")
-        .patch(`/api/admin/users/${userId}`)
-        .reply(statusCode, { ...user, ...update });
+	return nock("http://localhost")
+		.patch(`/api/admin/users/${userId}`)
+		.reply(statusCode, { ...user, ...update });
 }

@@ -38,47 +38,47 @@ const StyledReadSelectorItem = styled(SelectBoxGroupSection)`
 `;
 
 type ReadSelectorItemProps = {
-    /** The unique identifier */
-    id: number;
-    /** The name of the file */
-    name: string;
-    /** The index number of the file */
-    index: number;
-    /** The size of the file in bytes */
-    size: number;
-    /** The selected uploads */
-    selected?: boolean;
-    /** A callback function to handle file selection */
-    onSelect: (id: number) => void;
+	/** The unique identifier */
+	id: number;
+	/** The name of the file */
+	name: string;
+	/** The index number of the file */
+	index: number;
+	/** The size of the file in bytes */
+	size: number;
+	/** The selected uploads */
+	selected?: boolean;
+	/** A callback function to handle file selection */
+	onSelect: (id: number) => void;
 };
 
 /**
  * A condensed file for use in a list of read uploads
  */
 export default function ReadSelectorItem({
-    id,
-    index,
-    name,
-    selected = false,
-    size,
-    onSelect,
+	id,
+	index,
+	name,
+	selected = false,
+	size,
+	onSelect,
 }: ReadSelectorItemProps) {
-    return (
-        <StyledReadSelectorItem onClick={() => onSelect(id)} active={selected}>
-            <ReadTitle>
-                <ReadIcon>
-                    <Icon icon={File} />
-                </ReadIcon>
-                <div>
-                    <strong>{name}</strong>
-                    <div>{byteSize(size)}</div>
-                </div>
-            </ReadTitle>
-            {selected ? (
-                <StyledReadOrientation>
-                    {index === 0 ? "LEFT" : "RIGHT"}
-                </StyledReadOrientation>
-            ) : null}
-        </StyledReadSelectorItem>
-    );
+	return (
+		<StyledReadSelectorItem onClick={() => onSelect(id)} active={selected}>
+			<ReadTitle>
+				<ReadIcon>
+					<Icon icon={File} />
+				</ReadIcon>
+				<div>
+					<strong>{name}</strong>
+					<div>{byteSize(size)}</div>
+				</div>
+			</ReadTitle>
+			{selected ? (
+				<StyledReadOrientation>
+					{index === 0 ? "LEFT" : "RIGHT"}
+				</StyledReadOrientation>
+			) : null}
+		</StyledReadSelectorItem>
+	);
 }

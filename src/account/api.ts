@@ -1,8 +1,8 @@
 import { apiClient } from "@app/api";
-import { Permissions } from "@groups/types";
-import { User } from "@users/types";
-import { Response } from "superagent";
-import { Account, APIKeyMinimal } from "./types";
+import type { Permissions } from "@groups/types";
+import type { User } from "@users/types";
+import type { Response } from "superagent";
+import type { Account, APIKeyMinimal } from "./types";
 
 /**
  * Gets complete account data for the current user.
@@ -11,11 +11,11 @@ import { Account, APIKeyMinimal } from "./types";
  * current user's account data.
  */
 export function get(): Promise<Response> {
-    return apiClient.get("/account");
+	return apiClient.get("/account");
 }
 
 export type AccountUpdate = {
-    email?: string;
+	email?: string;
 };
 
 /**
@@ -26,10 +26,10 @@ export type AccountUpdate = {
  * user's account data
  */
 export function updateAccount(update: AccountUpdate): Promise<User> {
-    return apiClient
-        .patch("/account")
-        .send({ update })
-        .then((res) => res.body);
+	return apiClient
+		.patch("/account")
+		.send({ update })
+		.then((res) => res.body);
 }
 
 /**
@@ -39,7 +39,7 @@ export function updateAccount(update: AccountUpdate): Promise<User> {
  * current user's personal settings.
  */
 export function getSettings(): Promise<Response> {
-    return apiClient.get("/account/settings");
+	return apiClient.get("/account/settings");
 }
 
 /**
@@ -50,7 +50,7 @@ export function getSettings(): Promise<Response> {
  * user's updated personal settings.
  */
 export function updateSettings({ update }): Promise<Response> {
-    return apiClient.patch("/account/settings").send(update);
+	return apiClient.patch("/account/settings").send(update);
 }
 
 /**
@@ -62,16 +62,16 @@ export function updateSettings({ update }): Promise<Response> {
  * password was successfully changed.
  */
 export function changePassword(
-    old_password: string,
-    password: string,
+	old_password: string,
+	password: string,
 ): Promise<User> {
-    return apiClient
-        .patch("/account")
-        .send({
-            old_password,
-            password,
-        })
-        .then((res) => res.body);
+	return apiClient
+		.patch("/account")
+		.send({
+			old_password,
+			password,
+		})
+		.then((res) => res.body);
 }
 
 /**
@@ -81,7 +81,7 @@ export function changePassword(
  * current user's API keys.
  */
 export function getApiKeys(): Promise<APIKeyMinimal[]> {
-    return apiClient.get("/account/keys").then((res) => res.body);
+	return apiClient.get("/account/keys").then((res) => res.body);
 }
 
 /**
@@ -92,16 +92,16 @@ export function getApiKeys(): Promise<APIKeyMinimal[]> {
  * @returns A promise resolving to a response containing the newly created API key
  */
 export function createAPIKey(
-    name: string,
-    permissions: Permissions,
+	name: string,
+	permissions: Permissions,
 ): Promise<APIKeyMinimal> {
-    return apiClient
-        .post("/account/keys")
-        .send({
-            name,
-            permissions,
-        })
-        .then((res) => res.body);
+	return apiClient
+		.post("/account/keys")
+		.send({
+			name,
+			permissions,
+		})
+		.then((res) => res.body);
 }
 
 /**
@@ -112,15 +112,15 @@ export function createAPIKey(
  * @returns A promise resolving to a response containing the updated API key
  */
 export function updateAPIKey(
-    keyId: string,
-    permissions: Permissions,
+	keyId: string,
+	permissions: Permissions,
 ): Promise<APIKeyMinimal> {
-    return apiClient
-        .patch(`/account/keys/${keyId}`)
-        .send({
-            permissions,
-        })
-        .then((res) => res.body);
+	return apiClient
+		.patch(`/account/keys/${keyId}`)
+		.send({
+			permissions,
+		})
+		.then((res) => res.body);
 }
 
 /**
@@ -130,7 +130,7 @@ export function updateAPIKey(
  * @returns A promise which resolves to a response indicating if the API key was successfully removed
  */
 export function removeAPIKey(keyId: string): Promise<null> {
-    return apiClient.delete(`/account/keys/${keyId}`).then((res) => res.body);
+	return apiClient.delete(`/account/keys/${keyId}`).then((res) => res.body);
 }
 
 /**
@@ -144,19 +144,19 @@ export function removeAPIKey(keyId: string): Promise<null> {
  * password must be reset and required information if it needs to be.
  */
 export function login({
-    handle,
-    password,
-    remember,
+	handle,
+	password,
+	remember,
 }: {
-    handle: string;
-    password: string;
-    remember: boolean;
+	handle: string;
+	password: string;
+	remember: boolean;
 }): Promise<Response> {
-    return apiClient.post("/account/login").send({
-        handle,
-        password,
-        remember,
-    });
+	return apiClient.post("/account/login").send({
+		handle,
+		password,
+		remember,
+	});
 }
 
 /**
@@ -166,7 +166,7 @@ export function login({
  * logout was successful.
  */
 export function logout(): Promise<null> {
-    return apiClient.get("/account/logout").then((res) => res.body);
+	return apiClient.get("/account/logout").then((res) => res.body);
 }
 
 /**
@@ -178,16 +178,16 @@ export function logout(): Promise<null> {
  * password was successfully reset.
  */
 export function resetPassword({
-    password,
-    resetCode,
+	password,
+	resetCode,
 }: {
-    password: string;
-    resetCode: string;
+	password: string;
+	resetCode: string;
 }): Promise<Response> {
-    return apiClient.post("/account/reset").send({
-        password,
-        reset_code: resetCode,
-    });
+	return apiClient.post("/account/reset").send({
+		password,
+		reset_code: resetCode,
+	});
 }
 
 /**
@@ -196,5 +196,5 @@ export function resetPassword({
  * @returns A Promise resolving to the current user's account data
  */
 export function fetchAccount(): Promise<Account> {
-    return apiClient.get("/account").then((response) => response.body);
+	return apiClient.get("/account").then((response) => response.body);
 }

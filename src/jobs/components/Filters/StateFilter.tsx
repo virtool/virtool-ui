@@ -1,61 +1,61 @@
 import { useListSearchParam } from "@app/hooks";
 import BoxGroup from "@base/BoxGroup";
-import SidebarHeader from "@base/SidebarHeader";
 import SideBarSection from "@base/SideBarSection";
-import { JobCounts, JobState } from "@jobs/types";
+import SidebarHeader from "@base/SidebarHeader";
+import type { JobCounts, JobState } from "@jobs/types";
 import { xor } from "es-toolkit";
 import { StateButton } from "./StateButton";
 
 type StateFilterProps = {
-    counts: JobCounts;
+	counts: JobCounts;
 };
 
 /**
  * Displays the state filtering for jobs
  */
 export default function StateFilter({ counts }: StateFilterProps) {
-    const { values: states, setValues: setStates } =
-        useListSearchParam<JobState>("state");
+	const { values: states, setValues: setStates } =
+		useListSearchParam<JobState>("state");
 
-    function handleClick(state: JobState) {
-        setStates(xor(states, [state]));
-    }
+	function handleClick(state: JobState) {
+		setStates(xor(states, [state]));
+	}
 
-    return (
-        <SideBarSection className="items-center m-0 relative z-0">
-            <SidebarHeader>State</SidebarHeader>
-            <BoxGroup>
-                <StateButton
-                    active={states.includes("pending")}
-                    count={counts.pending}
-                    label="pending"
-                    onClick={() => handleClick("pending")}
-                />
-                <StateButton
-                    active={states.includes("running")}
-                    count={counts.running}
-                    label="running"
-                    onClick={() => handleClick("running")}
-                />
-                <StateButton
-                    active={states.includes("succeeded")}
-                    count={counts.succeeded}
-                    label="succeeded"
-                    onClick={() => handleClick("succeeded")}
-                />
-                <StateButton
-                    active={states.includes("cancelled")}
-                    count={counts.cancelled}
-                    label="cancelled"
-                    onClick={() => handleClick("cancelled")}
-                />
-                <StateButton
-                    active={states.includes("failed")}
-                    count={counts.failed}
-                    label="failed"
-                    onClick={() => handleClick("failed")}
-                />
-            </BoxGroup>
-        </SideBarSection>
-    );
+	return (
+		<SideBarSection className="items-center m-0 relative z-0">
+			<SidebarHeader>State</SidebarHeader>
+			<BoxGroup>
+				<StateButton
+					active={states.includes("pending")}
+					count={counts.pending}
+					label="pending"
+					onClick={() => handleClick("pending")}
+				/>
+				<StateButton
+					active={states.includes("running")}
+					count={counts.running}
+					label="running"
+					onClick={() => handleClick("running")}
+				/>
+				<StateButton
+					active={states.includes("succeeded")}
+					count={counts.succeeded}
+					label="succeeded"
+					onClick={() => handleClick("succeeded")}
+				/>
+				<StateButton
+					active={states.includes("cancelled")}
+					count={counts.cancelled}
+					label="cancelled"
+					onClick={() => handleClick("cancelled")}
+				/>
+				<StateButton
+					active={states.includes("failed")}
+					count={counts.failed}
+					label="failed"
+					onClick={() => handleClick("failed")}
+				/>
+			</BoxGroup>
+		</SideBarSection>
+	);
 }

@@ -3,22 +3,22 @@ import styled from "styled-components";
 import InitialIcon from "./InitialIcon";
 
 type UnstyledAttributionWithNameProps = {
-    className?: string;
-    user: string;
-    verb?: string;
+	className?: string;
+	user: string;
+	verb?: string;
 };
 
 function UnstyledAttributionWithName({
-    className = "",
-    user,
-    verb = "created",
+	className = "",
+	user,
+	verb = "created",
 }: UnstyledAttributionWithNameProps) {
-    return (
-        <span className={className}>
-            {capitalize(verb)} by{" "}
-            {user ? <InitialIcon size="md" handle={user} /> : null} {user}
-        </span>
-    );
+	return (
+		<span className={className}>
+			{capitalize(verb)} by{" "}
+			{user ? <InitialIcon size="md" handle={user} /> : null} {user}
+		</span>
+	);
 }
 
 const AttributionWithName = styled(UnstyledAttributionWithName)`

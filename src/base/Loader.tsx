@@ -14,7 +14,7 @@ const rotate = keyframes`
 `;
 
 interface StyledLoaderProps {
-    size?: string;
+	size?: string;
 }
 
 const StyledLoader = styled.div<StyledLoaderProps>`
@@ -30,23 +30,23 @@ const StyledLoader = styled.div<StyledLoaderProps>`
 `;
 
 interface LoaderProps extends StyledLoaderProps {
-    className?: string;
-    color?: string;
+	className?: string;
+	color?: string;
 }
 
 export default function Loader({
-    className,
-    color = "greyDark",
-    size = "22px",
+	className,
+	color = "greyDark",
+	size = "22px",
 }: LoaderProps) {
-    return (
-        <StyledLoader
-            aria-label="loading"
-            className={className}
-            color={color}
-            size={size}
-        >
-            <div />
-        </StyledLoader>
-    );
+	return (
+		<StyledLoader
+			aria-label="loading"
+			className={className}
+			color={color}
+			size={size}
+		>
+			<div />
+		</StyledLoader>
+	);
 }

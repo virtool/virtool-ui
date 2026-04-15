@@ -1,36 +1,37 @@
 /**
  * General utility constants and functions.
  */
-import clsx, { ClassValue } from "clsx";
+import clsx, { type ClassValue } from "clsx";
 import { get, sampleSize, startCase } from "es-toolkit/compat";
 import numbro from "numbro";
 import { twMerge } from "tailwind-merge";
 import { capitalize } from "./common";
+
 export { formatRoundedDuration } from "./date";
 
 /**
  * A string containing all alphanumeric digits in both cases.
  */
 const alphanumeric =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 /**
  * Convert an integer in bytes to a nicely formatted string (eg. 10.2 GB).
  */
 export function byteSize(
-    bytes: number,
-    spaceSeparated: boolean = false,
+	bytes: number,
+	spaceSeparated: boolean = false,
 ): string {
-    if (bytes) {
-        return numbro(bytes).format({
-            output: "byte",
-            base: "decimal",
-            mantissa: 1,
-            spaceSeparated: spaceSeparated ? spaceSeparated : false,
-        });
-    }
+	if (bytes) {
+		return numbro(bytes).format({
+			output: "byte",
+			base: "decimal",
+			mantissa: 1,
+			spaceSeparated: spaceSeparated ? spaceSeparated : false,
+		});
+	}
 
-    return "0.0B";
+	return "0.0B";
 }
 
 /**
@@ -39,7 +40,7 @@ export function byteSize(
  * @param length the length of string to return
  */
 export function createRandomString(length = 8) {
-    return sampleSize(alphanumeric, length).join("");
+	return sampleSize(alphanumeric, length).join("");
 }
 
 /**
@@ -47,44 +48,42 @@ export function createRandomString(length = 8) {
  * dynamically generated uploads.
  */
 export function followDynamicDownload(filename: string, text: string) {
-    const a = document.createElement("a");
-    a.href = `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`;
-    a.download = filename;
+	const a = document.createElement("a");
+	a.href = `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`;
+	a.download = filename;
 
-    a.style.display = "none";
-    document.body.appendChild(a);
+	a.style.display = "none";
+	document.body.appendChild(a);
 
-    a.click();
+	a.click();
 
-    document.body.removeChild(a);
+	document.body.removeChild(a);
 }
 
 /**
  * Return a formatted isolate name given an ``isolate`` object.
  */
 export function formatIsolateName(isolate: object): string {
-    const sourceType =
-        get(isolate, "source_type") || get(isolate, "sourceType");
-    const sourceName =
-        get(isolate, "source_name") || get(isolate, "sourceName");
+	const sourceType = get(isolate, "source_type") || get(isolate, "sourceType");
+	const sourceName = get(isolate, "source_name") || get(isolate, "sourceName");
 
-    return sourceType === "unknown"
-        ? "Unnamed"
-        : `${capitalize(sourceType)} ${sourceName}`;
+	return sourceType === "unknown"
+		? "Unnamed"
+		: `${capitalize(sourceType)} ${sourceName}`;
 }
 
 /**
  * Object that maps workflow IDs to human-readable names.
  */
 export const workflowDisplayNames = {
-    create_sample: "Create Sample",
-    create_subtraction: "Create Subtraction",
-    iimi: "Iimi",
-    nuvs: "Nuvs",
-    pathoscope: "Pathoscope",
-    pathoscope_bowtie: "Pathoscope",
-    pathoscope_snap: "Pathoscope",
-    build_index: "Build Index",
+	create_sample: "Create Sample",
+	create_subtraction: "Create Subtraction",
+	iimi: "Iimi",
+	nuvs: "Nuvs",
+	pathoscope: "Pathoscope",
+	pathoscope_bowtie: "Pathoscope",
+	pathoscope_snap: "Pathoscope",
+	build_index: "Build Index",
 };
 
 /**
@@ -95,23 +94,23 @@ export const workflowDisplayNames = {
  * @returns human-readable workflow name
  */
 export function getWorkflowDisplayName(workflow: string): string {
-    return get(workflowDisplayNames, workflow, startCase(workflow));
+	return get(workflowDisplayNames, workflow, startCase(workflow));
 }
 
 export function toThousand(num: number): string {
-    return numbro(num).format({ thousandSeparated: true });
+	return numbro(num).format({ thousandSeparated: true });
 }
 
 /**
  * Converts a ``number`` to a scientific notation string.
  */
 export function toScientificNotation(num: number): string {
-    if (num < 0.01 || num > 1000) {
-        const [coefficient, exponent] = num.toExponential().split("e");
-        return `${numbro(coefficient).format("0.00")}E${exponent.replace("+", "")}`;
-    }
+	if (num < 0.01 || num > 1000) {
+		const [coefficient, exponent] = num.toExponential().split("e");
+		return `${numbro(coefficient).format("0.00")}E${exponent.replace("+", "")}`;
+	}
 
-    return numbro(num).format("0.000");
+	return numbro(num).format("0.000");
 }
 
 /**
@@ -120,35 +119,35 @@ export function toScientificNotation(num: number): string {
  *  This is used to clear the session storage when the user logs out or the token expires.
  */
 export function resetClient() {
-    window.sessionStorage.clear();
-    window.location.reload();
+	window.sessionStorage.clear();
+	window.location.reload();
 }
 
 /**
  * Stores the passed object in local storage at key given
  */
 export function setSessionStorage(key: string, data: object) {
-    try {
-        window.sessionStorage.setItem(key, JSON.stringify(data));
-    } catch (error) {
-        console.warn(
-            `Failed to save data to sessionStorage for key "${key}":`,
-            error,
-        );
-    }
+	try {
+		window.sessionStorage.setItem(key, JSON.stringify(data));
+	} catch (error) {
+		console.warn(
+			`Failed to save data to sessionStorage for key "${key}":`,
+			error,
+		);
+	}
 }
 
 /**
  * Return the object stored in session storage at the given key
  */
 export function getSessionStorage(key: string): object {
-    const item = window.sessionStorage.getItem(key);
+	const item = window.sessionStorage.getItem(key);
 
-    if (item === null) {
-        return null;
-    }
+	if (item === null) {
+		return null;
+	}
 
-    return JSON.parse(item);
+	return JSON.parse(item);
 }
 
 /**
@@ -158,5 +157,5 @@ export function getSessionStorage(key: string): object {
  * @returns a combined class string
  */
 export function cn(...args: ClassValue[]): string {
-    return twMerge(clsx(args));
+	return twMerge(clsx(args));
 }

@@ -15,29 +15,29 @@ const StyledNoneFoundAttribution = styled.div`
 `;
 
 type SubtractionAttributionProps = {
-    /* The user handle */
-    handle: string;
-    /* The time of the subtraction */
-    time?: string;
+	/* The user handle */
+	handle: string;
+	/* The time of the subtraction */
+	time?: string;
 };
 
 /**
  * Formatted attribution showing creating user's handle and time of creation
  */
 export function SubtractionAttribution({
-    handle,
-    time,
+	handle,
+	time,
 }: SubtractionAttributionProps): JSX.Element {
-    if (handle) {
-        if (time) {
-            return <Attribution user={handle} time={time} />;
-        }
-        return <AttributionWithName user={handle} />;
-    }
-    return (
-        <StyledNoneFoundAttribution>
-            {" "}
-            Creator and timestamp unavailable
-        </StyledNoneFoundAttribution>
-    );
+	if (handle) {
+		if (time) {
+			return <Attribution user={handle} time={time} />;
+		}
+		return <AttributionWithName user={handle} />;
+	}
+	return (
+		<StyledNoneFoundAttribution>
+			{" "}
+			Creator and timestamp unavailable
+		</StyledNoneFoundAttribution>
+	);
 }

@@ -6,17 +6,17 @@ import Api from "./Api";
 import InstanceMessage from "./InstanceMessage";
 
 export default function ServerSettings() {
-    const { data: message, isPending: isPendingMessage } = useFetchMessage();
-    const { data: settings, isPending: isPendingSettings } = useFetchSettings();
+	const { data: message, isPending: isPendingMessage } = useFetchMessage();
+	const { data: settings, isPending: isPendingSettings } = useFetchSettings();
 
-    if (isPendingSettings || isPendingMessage) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPendingSettings || isPendingMessage) {
+		return <LoadingPlaceholder />;
+	}
 
-    return (
-        <ContainerNarrow>
-            <Api settings={settings} />
-            <InstanceMessage message={message} />
-        </ContainerNarrow>
-    );
+	return (
+		<ContainerNarrow>
+			<Api settings={settings} />
+			<InstanceMessage message={message} />
+		</ContainerNarrow>
+	);
 }

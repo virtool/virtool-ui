@@ -1,14 +1,14 @@
 import { useFetchAccount } from "@account/queries";
-import { Permission } from "@groups/types";
-import { AdministratorRoleName } from "./types";
+import type { Permission } from "@groups/types";
+import type { AdministratorRoleName } from "./types";
 import {
-    checkAdminRoleOrPermissionsFromAccount,
-    hasSufficientAdminRole,
+	checkAdminRoleOrPermissionsFromAccount,
+	hasSufficientAdminRole,
 } from "./utils";
 
 export type PermissionQueryResult = {
-    hasPermission: boolean | null;
-    isPending: boolean;
+	hasPermission: boolean | null;
+	isPending: boolean;
 };
 
 /**
@@ -18,23 +18,23 @@ export type PermissionQueryResult = {
  * @returns Whether the user has the required role.
  */
 export function useCheckAdminRole(
-    requiredRole: AdministratorRoleName,
+	requiredRole: AdministratorRoleName,
 ): PermissionQueryResult {
-    const { data: account, isPending } = useFetchAccount();
-    return {
-        hasPermission: account
-            ? hasSufficientAdminRole(requiredRole, account.administrator_role)
-            : null,
-        isPending,
-    };
+	const { data: account, isPending } = useFetchAccount();
+	return {
+		hasPermission: account
+			? hasSufficientAdminRole(requiredRole, account.administrator_role)
+			: null,
+		isPending,
+	};
 }
 
 export function useCheckAdminRoleOrPermission(permission: Permission) {
-    const { data: account, isPending } = useFetchAccount();
-    return {
-        hasPermission: account
-            ? checkAdminRoleOrPermissionsFromAccount(account, permission)
-            : null,
-        isPending,
-    };
+	const { data: account, isPending } = useFetchAccount();
+	return {
+		hasPermission: account
+			? checkAdminRoleOrPermissionsFromAccount(account, permission)
+			: null,
+		isPending,
+	};
 }

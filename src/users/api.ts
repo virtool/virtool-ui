@@ -1,5 +1,5 @@
 import { apiClient } from "@app/api";
-import { UserResponse } from "./types";
+import type { UserResponse } from "./types";
 
 /**
  * Creates the first user
@@ -10,15 +10,15 @@ import { UserResponse } from "./types";
  * @returns A promise resolving to creating the first user
  */
 export async function createFirst(
-    handle: string,
-    password: string,
-    forceReset: boolean,
+	handle: string,
+	password: string,
+	forceReset: boolean,
 ) {
-    return await apiClient.put("/users/first").send({
-        handle,
-        password,
-        force_reset: forceReset,
-    });
+	return await apiClient.put("/users/first").send({
+		handle,
+		password,
+		force_reset: forceReset,
+	});
 }
 
 /**
@@ -30,12 +30,12 @@ export async function createFirst(
  * @returns A promise resolving to a page of user search results
  */
 export async function findUsers(
-    page: number,
-    per_page: number,
-    term: string,
+	page: number,
+	per_page: number,
+	term: string,
 ): Promise<UserResponse> {
-    return apiClient
-        .get("/users")
-        .query({ page, per_page, term })
-        .then((res) => res.body);
+	return apiClient
+		.get("/users")
+		.query({ page, per_page, term })
+		.then((res) => res.body);
 }

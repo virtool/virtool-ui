@@ -1,56 +1,56 @@
 import { useUrlSearchParam } from "@app/hooks";
 import RemoveDialog from "@base/RemoveDialog";
 import { useUpdateOTU } from "@otus/queries";
-import { OtuSegment } from "@otus/types";
+import type { OtuSegment } from "@otus/types";
 
 type RemoveSegmentProps = {
-    abbreviation: string;
-    name: string;
-    otuId: string;
-    /** List of segments associated with the OTU */
-    schema: OtuSegment[];
+	abbreviation: string;
+	name: string;
+	otuId: string;
+	/** List of segments associated with the OTU */
+	schema: OtuSegment[];
 };
 
 /**
  * Displays a dialog for removing a segment
  */
 export default function RemoveSegment({
-    abbreviation,
-    name,
-    otuId,
-    schema,
+	abbreviation,
+	name,
+	otuId,
+	schema,
 }: RemoveSegmentProps) {
-    const { value: removeSegmentName, unsetValue: unsetRemoveSegmentName } =
-        useUrlSearchParam<string>("removeSegmentName");
-    const mutation = useUpdateOTU(otuId);
+	const { value: removeSegmentName, unsetValue: unsetRemoveSegmentName } =
+		useUrlSearchParam<string>("removeSegmentName");
+	const mutation = useUpdateOTU(otuId);
 
-    function handleSubmit() {
-        mutation.mutate(
-            {
-                otuId,
-                name,
-                abbreviation,
-                schema: schema.filter((s) => s.name !== removeSegmentName),
-            },
-            {
-                onSuccess: () => {
-                    unsetRemoveSegmentName();
-                },
-            },
-        );
-    }
+	function handleSubmit() {
+		mutation.mutate(
+			{
+				otuId,
+				name,
+				abbreviation,
+				schema: schema.filter((s) => s.name !== removeSegmentName),
+			},
+			{
+				onSuccess: () => {
+					unsetRemoveSegmentName();
+				},
+			},
+		);
+	}
 
-    function onHide() {
-        unsetRemoveSegmentName();
-    }
+	function onHide() {
+		unsetRemoveSegmentName();
+	}
 
-    return (
-        <RemoveDialog
-            name={removeSegmentName}
-            noun="Segment"
-            onConfirm={handleSubmit}
-            onHide={onHide}
-            show={Boolean(removeSegmentName)}
-        />
-    );
+	return (
+		<RemoveDialog
+			name={removeSegmentName}
+			noun="Segment"
+			onConfirm={handleSubmit}
+			onHide={onHide}
+			show={Boolean(removeSegmentName)}
+		/>
+	);
 }

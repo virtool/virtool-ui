@@ -36,90 +36,73 @@ const OTUDetailTitle = styled(ViewHeaderTitle)`
  * Displays the details of an OTU.
  */
 export default function OtuDetail() {
-    const { otuId, refId } = usePathParams<{ otuId: string; refId: string }>();
-    const { data: otu, isPending: isPendingOtu, isError } = useFetchOTU(otuId);
-    const { data: reference, isPending: isPendingReference } =
-        useFetchReference(refId);
+	const { otuId, refId } = usePathParams<{ otuId: string; refId: string }>();
+	const { data: otu, isPending: isPendingOtu, isError } = useFetchOTU(otuId);
+	const { data: reference, isPending: isPendingReference } =
+		useFetchReference(refId);
 
-    if (isError) {
-        return <NotFound />;
-    }
+	if (isError) {
+		return <NotFound />;
+	}
 
-    if (isPendingOtu || isPendingReference) {
-        return <LoadingPlaceholder />;
-    }
+	if (isPendingOtu || isPendingReference) {
+		return <LoadingPlaceholder />;
+	}
 
-    const { id, name, abbreviation } = otu;
+	const { id, name, abbreviation } = otu;
 
-    return (
-        <>
-            <ViewHeader title={name}>
-                <OTUDetailTitle>
-                    {name}{" "}
-                    <small>{abbreviation || <em>No Abbreviation</em>}</small>
-                    <ViewHeaderIcons>
-                        <a href={`/api/otus/${id}.fa`} download>
-                            Download FASTA
-                        </a>
-                        <OtuHeaderIcons
-                            id={id}
-                            refId={refId}
-                            name={name}
-                            abbreviation={abbreviation}
-                        />
-                    </ViewHeaderIcons>
-                </OTUDetailTitle>
-                <p
-                    className={cn(
-                        "flex",
-                        "font-medium",
-                        "items-center",
-                        "gap-2",
-                        "py-2",
-                        "text-lg",
-                    )}
-                >
-                    <Link to={`/refs/${refId}`}>{reference.name}</Link>
-                    <span className="text-slate-600">/</span>
-                    <Link to={`/refs/${refId}/otus`}>OTUs</Link>
-                    <span className="text-slate-600">/</span>
-                    <Link to={`/refs/${refId}/otus/${otuId}`}>{name}</Link>
-                </p>
-            </ViewHeader>
+	return (
+		<>
+			<ViewHeader title={name}>
+				<OTUDetailTitle>
+					{name} <small>{abbreviation || <em>No Abbreviation</em>}</small>
+					<ViewHeaderIcons>
+						<a href={`/api/otus/${id}.fa`} download>
+							Download FASTA
+						</a>
+						<OtuHeaderIcons
+							id={id}
+							refId={refId}
+							name={name}
+							abbreviation={abbreviation}
+						/>
+					</ViewHeaderIcons>
+				</OTUDetailTitle>
+				<p
+					className={cn(
+						"flex",
+						"font-medium",
+						"items-center",
+						"gap-2",
+						"py-2",
+						"text-lg",
+					)}
+				>
+					<Link to={`/refs/${refId}`}>{reference.name}</Link>
+					<span className="text-slate-600">/</span>
+					<Link to={`/refs/${refId}/otus`}>OTUs</Link>
+					<span className="text-slate-600">/</span>
+					<Link to={`/refs/${refId}/otus/${otuId}`}>{name}</Link>
+				</p>
+			</ViewHeader>
 
-            <Tabs>
-                <TabsLink to={`/refs/${refId}/otus/${otuId}/otu`}>OTU</TabsLink>
-                <TabsLink to={`/refs/${refId}/otus/${otuId}/schema`}>
-                    Schema
-                </TabsLink>
-                <TabsLink to={`/refs/${refId}/otus/${otuId}/history`}>
-                    History
-                </TabsLink>
-            </Tabs>
+			<Tabs>
+				<TabsLink to={`/refs/${refId}/otus/${otuId}/otu`}>OTU</TabsLink>
+				<TabsLink to={`/refs/${refId}/otus/${otuId}/schema`}>Schema</TabsLink>
+				<TabsLink to={`/refs/${refId}/otus/${otuId}/history`}>History</TabsLink>
+			</Tabs>
 
-            <Switch>
-                <Route
-                    path="/refs/:refId/otus/:otuId/"
-                    component={() => (
-                        <Redirect
-                            to={`/refs/${refId}/otus/${otuId}/otu`}
-                            replace
-                        />
-                    )}
-                />
-                <Route
-                    path="/refs/:refId/otus/:otuId/otu"
-                    component={OtuSection}
-                />
-                <Route
-                    path="/refs/:refId/otus/:otuId/history"
-                    component={History}
-                />
-                <Route
-                    path="/refs/:refId/otus/:otuId/schema"
-                    component={Schema}
-                />
-            </Switch>
-        </>
-    );
+			<Switch>
+				<Route
+					path="/refs/:refId/otus/:otuId/"
+					component={() => (
+						<Redirect to={`/refs/${refId}/otus/${otuId}/otu`} replace />
+					)}
+				/>
+				<Route path="/refs/:refId/otus/:otuId/otu" component={OtuSection} />
+				<Route path="/refs/:refId/otus/:otuId/history" component={History} />
+				<Route path="/refs/:refId/otus/:otuId/schema" component={Schema} />
+			</Switch>
+		</>
+	);
 }

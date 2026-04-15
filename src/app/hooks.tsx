@@ -2,8 +2,8 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useLocation, useParams, useSearch } from "wouter";
 
 function subscribeToTime(callback: () => void) {
-    const interval = setInterval(callback, 1000);
-    return () => clearInterval(interval);
+	const interval = setInterval(callback, 1000);
+	return () => clearInterval(interval);
 }
 
 /**
@@ -12,39 +12,39 @@ function subscribeToTime(callback: () => void) {
  * Uses useSyncExternalStore for React Compiler compatibility.
  */
 export function useNow() {
-    return useSyncExternalStore(subscribeToTime, Date.now, Date.now);
+	return useSyncExternalStore(subscribeToTime, Date.now, Date.now);
 }
 
 function getSize(ref) {
-    return {
-        height: ref.current ? ref.current.offsetHeight : 0,
-        width: ref.current ? ref.current.offsetWidth : 0,
-    };
+	return {
+		height: ref.current ? ref.current.offsetHeight : 0,
+		width: ref.current ? ref.current.offsetWidth : 0,
+	};
 }
 
 type Size = {
-    height: number;
-    width: number;
+	height: number;
+	width: number;
 };
 
 export function useElementSize<T extends HTMLElement>(): [
-    React.MutableRefObject<T>,
-    Size,
+	React.MutableRefObject<T>,
+	Size,
 ] {
-    const ref = useRef(null);
-    const [size, setSize] = useState<Size>({ height: 0, width: 0 });
+	const ref = useRef(null);
+	const [size, setSize] = useState<Size>({ height: 0, width: 0 });
 
-    useEffect(() => {
-        function handleResize() {
-            setSize(getSize(ref));
-        }
+	useEffect(() => {
+		function handleResize() {
+			setSize(getSize(ref));
+		}
 
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+		handleResize();
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
 
-    return [ref, size];
+	return [ref, size];
 }
 
 /**
@@ -56,15 +56,15 @@ export const usePathParams = useParams;
  * get a function for programmatic internal navigation
  */
 export function useNavigate() {
-    const [, navigate] = useLocation();
+	const [, navigate] = useLocation();
 
-    return navigate;
+	return navigate;
 }
 export function formatPath(
-    basePath: string,
-    searchParams: Record<string, string | number | boolean | null>,
+	basePath: string,
+	searchParams: Record<string, string | number | boolean | null>,
 ) {
-    return basePath + formatSearchParams(searchParams);
+	return basePath + formatSearchParams(searchParams);
 }
 
 /**
@@ -73,21 +73,21 @@ export function formatPath(
  * @param params - the collection of values to be written to the URL
  */
 export function formatSearchParams(
-    params: Record<string, string | number | boolean | null>,
+	params: Record<string, string | number | boolean | null>,
 ) {
-    const searchParams = new URLSearchParams();
+	const searchParams = new URLSearchParams();
 
-    Object.entries(params).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-            value.forEach((arrayValue) =>
-                searchParams.append(key, String(arrayValue)),
-            );
-        } else {
-            searchParams.set(key, String(value));
-        }
-    });
+	Object.entries(params).forEach(([key, value]) => {
+		if (Array.isArray(value)) {
+			value.forEach((arrayValue) =>
+				searchParams.append(key, String(arrayValue)),
+			);
+		} else {
+			searchParams.set(key, String(value));
+		}
+	});
 
-    return `?${searchParams.toString()}`;
+	return `?${searchParams.toString()}`;
 }
 
 /**
@@ -98,15 +98,15 @@ export function formatSearchParams(
  * @param search - The current search string
  */
 export function updateSearchParam(key: string, value: string, search: string) {
-    const params = new URLSearchParams(search);
+	const params = new URLSearchParams(search);
 
-    if (value) {
-        params.set(key, String(value));
-    } else {
-        params.delete(key);
-    }
+	if (value) {
+		params.set(key, String(value));
+	} else {
+		params.delete(key);
+	}
 
-    return `?${params.toString()}`;
+	return `?${params.toString()}`;
 }
 
 /**
@@ -119,26 +119,26 @@ export function updateSearchParam(key: string, value: string, search: string) {
  * @param location - the base URL
  */
 function updateUrlSearchParams(
-    value: string,
-    key: string,
-    navigate: navigate,
-    search: string,
-    location: string,
+	value: string,
+	key: string,
+	navigate: navigate,
+	search: string,
+	location: string,
 ) {
-    const params = new URLSearchParams(search);
+	const params = new URLSearchParams(search);
 
-    params.set(key, String(value));
+	params.set(key, String(value));
 
-    search = params.toString();
-    if (search && location !== "/") {
-        navigate(`${location}?${search}`, { replace: true });
-    } else if (search) {
-        navigate(`?${search}`, { replace: true });
-    } else {
-        navigate(location, { replace: true });
-    }
+	search = params.toString();
+	if (search && location !== "/") {
+		navigate(`${location}?${search}`, { replace: true });
+	} else if (search) {
+		navigate(`?${search}`, { replace: true });
+	} else {
+		navigate(location, { replace: true });
+	}
 
-    return search;
+	return search;
 }
 
 /**
@@ -150,19 +150,19 @@ function updateUrlSearchParams(
  * @param values - The values to be used in the search parameter
  */
 function updateUrlSearchParamsList(
-    key: string,
-    navigate: navigate,
-    search: string,
-    values: SearchParam[],
+	key: string,
+	navigate: navigate,
+	search: string,
+	values: SearchParam[],
 ) {
-    const params = new URLSearchParams(search);
+	const params = new URLSearchParams(search);
 
-    params.delete(key);
-    values.forEach((value) => params.append(key, String(value)));
+	params.delete(key);
+	values.forEach((value) => params.append(key, String(value)));
 
-    search = `?${params.toString()}`;
-    navigate(search);
-    return search;
+	search = `?${params.toString()}`;
+	navigate(search);
+	return search;
 }
 /**
  * Updates the URL search parameters by either setting a new value for a given key or removing the key-value pair
@@ -173,26 +173,26 @@ function updateUrlSearchParamsList(
  * @param location - the base URL
  */
 function unsetUrlSearchParam(key, navigate, search, location) {
-    const params = new URLSearchParams(search);
-    params.delete(key);
+	const params = new URLSearchParams(search);
+	params.delete(key);
 
-    search = params.toString();
-    if (search && location !== "/") {
-        navigate(`${location}?${search}`, { replace: true });
-    } else if (search) {
-        navigate(`?${search}`, { replace: true });
-    } else {
-        navigate(location, { replace: true });
-    }
+	search = params.toString();
+	if (search && location !== "/") {
+		navigate(`${location}?${search}`, { replace: true });
+	} else if (search) {
+		navigate(`?${search}`, { replace: true });
+	} else {
+		navigate(location, { replace: true });
+	}
 
-    return search;
+	return search;
 }
 
 type SearchParam = string | boolean | number | null;
 
 type navigate = <S>(
-    to: string | URL,
-    options?: { replace?: boolean; state?: S },
+	to: string | URL,
+	options?: { replace?: boolean; state?: S },
 ) => void;
 
 /**
@@ -201,28 +201,28 @@ type navigate = <S>(
  * @param value - search param value to be converted
  */
 function castSearchParamValue(value: string) {
-    if (value === null) {
-        return undefined;
-    }
+	if (value === null) {
+		return undefined;
+	}
 
-    const trimValue = value.trim();
-    const numValue = Number(trimValue);
-    if (value.trim().length > 0 && !isNaN(numValue)) {
-        return numValue;
-    }
+	const trimValue = value.trim();
+	const numValue = Number(trimValue);
+	if (value.trim().length > 0 && !Number.isNaN(numValue)) {
+		return numValue;
+	}
 
-    switch (value) {
-        case "true":
-            return true;
-        case "false":
-            return false;
-        case "null":
-            return null;
-        default:
-            break;
-    }
+	switch (value) {
+		case "true":
+			return true;
+		case "false":
+			return false;
+		case "null":
+			return null;
+		default:
+			break;
+	}
 
-    return value;
+	return value;
 }
 
 /**
@@ -233,48 +233,44 @@ function castSearchParamValue(value: string) {
  * @returns The current value and a functions for setting the URL search parameter
  */
 export function useNaiveUrlSearchParam(
-    key: string,
-    defaultValue?: SearchParam,
+	key: string,
+	defaultValue?: SearchParam,
 ): {
-    value: string;
-    setValue: (value: SearchParam) => void;
-    unsetValue: () => void;
+	value: string;
+	setValue: (value: SearchParam) => void;
+	unsetValue: () => void;
 } {
-    const search = useSearch();
-    const [location] = useLocation();
-    const navigate = useNavigate();
+	const search = useSearch();
+	const [location] = useLocation();
+	const navigate = useNavigate();
 
-    const value = new URLSearchParams(search).get(key);
+	const value = new URLSearchParams(search).get(key);
 
-    useEffect(() => {
-        if (
-            defaultValue !== undefined &&
-            !new URLSearchParams(search).has(key)
-        ) {
-            updateUrlSearchParams(
-                String(defaultValue),
-                key,
-                navigate,
-                search,
-                location,
-            );
-        }
-    }, []);
+	useEffect(() => {
+		if (defaultValue !== undefined && !new URLSearchParams(search).has(key)) {
+			updateUrlSearchParams(
+				String(defaultValue),
+				key,
+				navigate,
+				search,
+				location,
+			);
+		}
+	}, [navigate, defaultValue, location, key, search]);
 
-    function setURLSearchParam(newValue: string) {
-        updateUrlSearchParams(newValue, key, navigate, search, location);
-    }
+	function setURLSearchParam(newValue: string) {
+		updateUrlSearchParams(newValue, key, navigate, search, location);
+	}
 
-    function unsetValue() {
-        unsetUrlSearchParam(key, navigate, search, location);
-    }
+	function unsetValue() {
+		unsetUrlSearchParam(key, navigate, search, location);
+	}
 
-    return {
-        value:
-            value ?? (defaultValue !== undefined ? String(defaultValue) : null),
-        setValue: (value: SearchParam) => setURLSearchParam(String(value)),
-        unsetValue,
-    };
+	return {
+		value: value ?? (defaultValue !== undefined ? String(defaultValue) : null),
+		setValue: (value: SearchParam) => setURLSearchParam(String(value)),
+		unsetValue,
+	};
 }
 
 /**
@@ -285,35 +281,35 @@ export function useNaiveUrlSearchParam(
  * @returns The current values and a function to set the URL search parameter
  */
 export function useListSearchParam<T extends SearchParam>(
-    key: string,
-    defaultValues?: T[],
+	key: string,
+	defaultValues?: T[],
 ): { values: T[]; setValues: (newValue: T[]) => void } {
-    const search = useSearch();
-    const navigate = useNavigate();
+	const search = useSearch();
+	const navigate = useNavigate();
 
-    const values = new URLSearchParams(search).getAll(key);
+	const values = new URLSearchParams(search).getAll(key);
 
-    useEffect(() => {
-        if (
-            defaultValues?.length &&
-            !new URLSearchParams(search).getAll(key).length
-        ) {
-            updateUrlSearchParamsList(key, navigate, search, defaultValues);
-        }
-    }, []);
+	useEffect(() => {
+		if (
+			defaultValues?.length &&
+			!new URLSearchParams(search).getAll(key).length
+		) {
+			updateUrlSearchParamsList(key, navigate, search, defaultValues);
+		}
+	}, [defaultValues?.length, navigate, defaultValues, search, key]);
 
-    function setValues(newValues: T[]) {
-        updateUrlSearchParamsList(key, navigate, search, newValues);
-    }
+	function setValues(newValues: T[]) {
+		updateUrlSearchParamsList(key, navigate, search, newValues);
+	}
 
-    const effectiveValues = values.length
-        ? values
-        : ((defaultValues as string[]) ?? []);
+	const effectiveValues = values.length
+		? values
+		: ((defaultValues as string[]) ?? []);
 
-    return {
-        values: effectiveValues.map(castSearchParamValue) as T[],
-        setValues,
-    };
+	return {
+		values: effectiveValues.map(castSearchParamValue) as T[],
+		setValues,
+	};
 }
 
 /**
@@ -324,12 +320,12 @@ export function useListSearchParam<T extends SearchParam>(
  * @returns The current value and a functions for setting the URL search parameter
  */
 export function useUrlSearchParam<T extends SearchParam>(
-    key: string,
-    defaultValue?: T,
+	key: string,
+	defaultValue?: T,
 ) {
-    const { value, ...rest } = useNaiveUrlSearchParam(key, defaultValue);
+	const { value, ...rest } = useNaiveUrlSearchParam(key, defaultValue);
 
-    return { value: castSearchParamValue(value) as T, ...rest };
+	return { value: castSearchParamValue(value) as T, ...rest };
 }
 
 /**
@@ -339,21 +335,21 @@ export function useUrlSearchParam<T extends SearchParam>(
  * @returns Whether the dialog is open and a callback to set the dialog state
  */
 export function useDialogParam(key: string) {
-    const {
-        value: open,
-        setValue,
-        unsetValue,
-    } = useUrlSearchParam<boolean | undefined>(key);
+	const {
+		value: open,
+		setValue,
+		unsetValue,
+	} = useUrlSearchParam<boolean | undefined>(key);
 
-    function setDialogValue(value: boolean) {
-        if (value) {
-            setValue(value);
-        } else {
-            unsetValue();
-        }
-    }
+	function setDialogValue(value: boolean) {
+		if (value) {
+			setValue(value);
+		} else {
+			unsetValue();
+		}
+	}
 
-    return { open: open || false, setOpen: setDialogValue };
+	return { open: open || false, setOpen: setDialogValue };
 }
 
 /**
@@ -361,12 +357,12 @@ export function useDialogParam(key: string) {
  * @returns The current page and a function to change the page
  */
 export function usePageParam() {
-    const {
-        value: page,
-        setValue: setPage,
-        unsetValue: unsetPage,
-    } = useUrlSearchParam<number>("page");
-    return { page: page || 1, setPage, unsetPage };
+	const {
+		value: page,
+		setValue: setPage,
+		unsetValue: unsetPage,
+	} = useUrlSearchParam<number>("page");
+	return { page: page || 1, setPage, unsetPage };
 }
 
 /**
@@ -379,11 +375,11 @@ export function usePageParam() {
  * @returns flag indicating if the passed path matches the current URL
  */
 export function useMatchPartialPath(path: string, exclude?: string[]) {
-    const [location] = useLocation();
+	const [location] = useLocation();
 
-    if (exclude?.includes(location)) {
-        return false;
-    }
+	if (exclude?.includes(location)) {
+		return false;
+	}
 
-    return location.startsWith(path.split("?")[0].replace(/\/+$/, ""));
+	return location.startsWith(path.split("?")[0].replace(/\/+$/, ""));
 }
