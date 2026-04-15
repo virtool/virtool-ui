@@ -1,5 +1,4 @@
-import { getColor, getFontWeight, theme } from "@app/theme";
-import styled from "styled-components";
+import { cn } from "@app/utils";
 
 const iconSize = {
 	xs: "12px",
@@ -19,56 +18,47 @@ const fontSize = {
 	xxl: "30px",
 };
 
-function getIconSize(size: string): string {
-	return iconSize[size];
-}
-
-function getFontSize(size: string): string {
-	return fontSize[size];
-}
-
 function hashColor(hash, newChar) {
 	return (hash << 5) - newChar.charCodeAt(0);
 }
 
-type StyledInitialIconProps = {
-	size: string;
-	hash: number;
-};
-
-const StyledInitialIcon = styled.svg<StyledInitialIconProps>`
-    height: ${(props) => getIconSize(props.size)};
-    width: ${(props) => getIconSize(props.size)};
-    overflow: visible;
-
-    circle {
-        cx: ${(props) => getFontSize(props.size)};
-        cy: ${(props) => getFontSize(props.size)};
-        r: ${(props) => getFontSize(props.size)};
-        fill: ${(props) => `hsl(${props.hash}, 83%, 21%);`};
-    }
-    text {
-        text-anchor: middle;
-        fill: ${getColor({ color: "white", theme })};
-        font-size: ${(props) => getFontSize(props.size)};
-        font-weight: ${getFontWeight("bold")};
-    }
-`;
-
 type InitialIconProps = {
+	className?: string;
 	handle: string;
 	size: string;
 };
 
-export default function InitialIcon({ handle, size }: InitialIconProps) {
+export default function InitialIcon({
+	className,
+	handle,
+	size,
+}: InitialIconProps) {
 	const hash = handle.split("").reduce(hashColor, 0) % 360;
+	const sizeValue = iconSize[size];
+	const fontSizeValue = fontSize[size];
 
 	return (
-		<StyledInitialIcon size={size} hash={hash} className="InitialIcon">
-			<circle>{handle.slice(0, 2).toUpperCase()}</circle>
-			<text x="1em" y="1em" dy=".35em">
+		<svg
+			className={cn("overflow-visible", className)}
+			style={{ height: sizeValue, width: sizeValue }}
+		>
+			<circle
+				cx={fontSizeValue}
+				cy={fontSizeValue}
+				r={fontSizeValue}
+				fill={`hsl(${hash}, 83%, 21%)`}
+			/>
+			<text
+				x="1em"
+				y="1em"
+				dy=".35em"
+				textAnchor="middle"
+				fill="white"
+				fontSize={fontSizeValue}
+				fontWeight="bold"
+			>
 				{handle.slice(0, 2).toUpperCase()}
 			</text>
-		</StyledInitialIcon>
+		</svg>
 	);
 }

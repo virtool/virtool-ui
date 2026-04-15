@@ -1,40 +1,6 @@
 import { objectHasProperty } from "@app/common";
-import { borderRadius, getFontSize, getFontWeight } from "@app/theme";
 import { type MutableRefObject, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
-
-const InputHeaderContainer = styled.form`
-    border: 2px solid transparent;
-    border-radius: ${borderRadius.md};
-
-    box-sizing: border-box;
-    margin-bottom: 15px;
-
-    &:focus-within {
-        background-color: ${(props) => props.theme.color.greyHover};
-        border-color: ${(props) => props.theme.color.blue};
-
-        > input {
-            transform: translateX(15px);
-        }
-    }
-`;
-
-type InputHeaderControlProps = {
-	ref: MutableRefObject<HTMLInputElement>;
-};
-
-const InputHeaderControl = styled.input<InputHeaderControlProps>`
-    background-color: transparent;
-    border: none;
-    border-radius: 5px;
-    font-size: ${getFontSize("xl")};
-    font-weight: ${getFontWeight("bold")};
-    outline: none;
-    padding: 10px 0;
-    width: 100%;
-`;
 
 type InputHeaderProps = {
 	id: string;
@@ -77,13 +43,17 @@ export default function InputHeader({
 	}, [value, id, setValue]);
 
 	return (
-		<InputHeaderContainer onSubmit={handleSubmit(onFormSubmit)}>
-			<InputHeaderControl
+		<form
+			className="border-2 border-transparent rounded-md mb-4 box-border focus-within:bg-gray-50 focus-within:border-blue-600 [&:focus-within>input]:translate-x-4"
+			onSubmit={handleSubmit(onFormSubmit)}
+		>
+			<input
 				aria-label={id}
 				autoComplete="off"
+				className="bg-transparent border-none text-2xl font-bold outline-none py-2.5 px-0 w-full transition-transform"
 				id={id}
 				name={id}
-				ref={inputElement}
+				ref={inputElement as MutableRefObject<HTMLInputElement>}
 				value={watch(id)}
 				onBlur={() => {
 					if (!isSubmitting) {
@@ -94,6 +64,6 @@ export default function InputHeader({
 					setValue(id, e.target.value);
 				}}
 			/>
-		</InputHeaderContainer>
+		</form>
 	);
 }
