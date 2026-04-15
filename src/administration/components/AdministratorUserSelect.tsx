@@ -4,7 +4,11 @@ import type { User } from "@users/types";
 
 function renderRow(user) {
 	return (
-		<div className="relative flex items-center text-sm font-medium capitalize select-none">
+		<div
+			className="relative flex items-center text-sm font-medium capitalize select-none"
+			role="presentation"
+			aria-label={user.handle}
+		>
 			<InitialIcon handle={user.handle} size="md" />
 			<span className="ml-1">{user.handle}</span>
 		</div>
