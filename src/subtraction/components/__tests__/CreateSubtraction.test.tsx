@@ -116,7 +116,7 @@ describe("<SubtractionCreate />", () => {
 
 		await userEvent.type(await screen.findByLabelText("Name"), name);
 		await userEvent.type(screen.getByLabelText("Nickname"), nickname);
-		await userEvent.click(screen.getByText(/ath/i));
+		await userEvent.click(screen.getByText("ath.fa.gz"));
 
 		expect(getSessionStorage("createSubtractionFormValues")).toEqual({
 			name,
