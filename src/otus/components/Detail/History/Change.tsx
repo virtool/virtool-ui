@@ -20,7 +20,6 @@ import {
 	Star,
 	Trash,
 } from "lucide-react";
-import styled from "styled-components";
 
 const methodIconProps = {
 	add_isolate: {
@@ -90,25 +89,6 @@ function getMethodIcon(methodName: string) {
 	return <Icon {...props} />;
 }
 
-const StyledChange = styled(BoxGroupSection)`
-    align-items: center;
-    display: grid;
-    grid-template-columns: 42px 2fr 1fr 15px;
-
-    div:first-child {
-        min-width: 42px;
-    }
-`;
-
-const Description = styled.div`
-    align-items: center;
-    display: flex;
-
-    i {
-        margin-right: 5px;
-    }
-`;
-
 type ChangeProps = {
 	id: string;
 	createdAt: string;
@@ -134,15 +114,18 @@ export default function Change({
 	const mutation = useRevertOTU(otu.id);
 
 	return (
-		<StyledChange>
+		<BoxGroupSection
+			className="grid items-center"
+			style={{ gridTemplateColumns: "42px 2fr 1fr 15px" }}
+		>
 			<div>
 				<Label>{otu.version}</Label>
 			</div>
 
-			<Description>
+			<div className="flex items-center">
 				{getMethodIcon(methodName)}
 				<span>{description || "No Description"}</span>
-			</Description>
+			</div>
 
 			<Attribution time={createdAt} user={user.handle} verb="" />
 
@@ -153,6 +136,6 @@ export default function Change({
 					onClick={() => (unbuilt ? mutation.mutate({ changeId: id }) : null)}
 				/>
 			)}
-		</StyledChange>
+		</BoxGroupSection>
 	);
 }

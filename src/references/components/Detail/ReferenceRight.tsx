@@ -1,34 +1,10 @@
 import Checkbox from "@base/Checkbox";
-import styled from "styled-components";
 
 const descriptions = {
 	build: "Can build new indexes for the reference.",
 	modify: "Can modify reference properties and settings.",
 	modify_otu: "Can modify OTU records in the reference.",
 };
-
-export const MemberRightCheckbox = styled(Checkbox)`
-    margin-top: 1px;
-`;
-
-const MemberRightDescription = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding-left: 10px;
-
-    small {
-        padding-top: 3px;
-    }
-`;
-
-const StyledMemberRight = styled.div`
-    align-items: flex-start;
-    display: flex;
-
-    &:not(:last-child) {
-        margin-bottom: 15px;
-    }
-`;
 
 type MemberRightProps = {
 	/** The name of the right */
@@ -44,17 +20,19 @@ type MemberRightProps = {
  */
 export function ReferenceRight({ right, enabled, onToggle }: MemberRightProps) {
 	return (
-		<StyledMemberRight>
-			<MemberRightCheckbox
-				checked={enabled}
-				id={`ReferenceRightCheckbox-${right}`}
-				key={right}
-				onClick={() => onToggle(right, !enabled)}
-			/>
-			<MemberRightDescription>
+		<div className="flex items-start not-last:mb-4">
+			<div className="mt-px">
+				<Checkbox
+					checked={enabled}
+					id={`ReferenceRightCheckbox-${right}`}
+					key={right}
+					onClick={() => onToggle(right, !enabled)}
+				/>
+			</div>
+			<div className="flex flex-col pl-2.5">
 				<strong>{right}</strong>
-				<small>{descriptions[right]}</small>
-			</MemberRightDescription>
-		</StyledMemberRight>
+				<small className="pt-0.5">{descriptions[right]}</small>
+			</div>
+		</div>
 	);
 }

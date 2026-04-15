@@ -5,16 +5,6 @@ import IconButton from "@base/IconButton";
 import Label from "@base/Label";
 import type { OtuSegment } from "@otus/types";
 import { ChevronDown, ChevronUp, Pencil, Trash } from "lucide-react";
-import styled from "styled-components";
-
-const StyledSegment = styled(BoxGroupSection)`
-    display: grid;
-    align-items: center;
-    grid-template-columns: 45fr 1fr 10fr 10fr;
-    padding: 0 16px;
-    line-height: 1;
-    height: 51px;
-`;
 
 type SegmentProps = {
 	/** Whether the user has permission to modify the otu */
@@ -47,7 +37,10 @@ export default function Segment({
 		useUrlSearchParam<string>("editSegmentName");
 
 	return (
-		<StyledSegment>
+		<BoxGroupSection
+			className="grid items-center px-4 leading-none h-12"
+			style={{ gridTemplateColumns: "45fr 1fr 10fr 10fr" }}
+		>
 			<strong>{segment.name}</strong>
 
 			{segment.required ? (
@@ -100,6 +93,6 @@ export default function Segment({
 					onClick={onMoveDown}
 				/>
 			</div>
-		</StyledSegment>
+		</BoxGroupSection>
 	);
 }

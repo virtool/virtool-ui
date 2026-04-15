@@ -1,3 +1,4 @@
+import { cn } from "@app/utils";
 import type { ElementType, ReactNode, Ref } from "react";
 import Input from "./Input";
 
@@ -16,11 +17,11 @@ type TextAreaProps = {
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function TextArea({ ref, ...props }: TextAreaProps) {
+export default function TextArea({ className, ref, ...props }: TextAreaProps) {
 	return (
 		<Input
 			as="textarea"
-			className="h-56 resize-y overflow-y-scroll"
+			className={cn("h-56 resize-y overflow-y-scroll", className)}
 			{...props}
 			ref={ref}
 		/>

@@ -1,4 +1,3 @@
-import { fontWeight, getColor, getFontSize, getFontWeight } from "@app/theme";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import InputGroup from "@base/InputGroup";
@@ -12,36 +11,6 @@ import type { OtuSegment } from "@otus/types";
 import { ChevronDown, CircleAlert } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
 import { Controller, useFormContext } from "react-hook-form";
-import styled from "styled-components";
-
-const SegmentSelectContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-
-    button {
-        flex-grow: 1;
-        padding: 10px 10px;
-    }
-`;
-
-const NoSchema = styled(Box)`
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-
-    a,
-    h5 {
-        font-weight: ${fontWeight.thick};
-    }
-
-    h5 {
-        margin: 0 0 5px;
-    }
-
-    p {
-        margin: 0;
-    }
-`;
 
 type SequenceSegmentFieldProps = {
 	/** Whether a schema exists for the selected OTU */
@@ -51,39 +20,6 @@ type SequenceSegmentFieldProps = {
 	/** A list of unreferenced segments */
 	segments: OtuSegment[];
 };
-
-const SequenceSegmentRequired = styled.span`
-    align-items: center;
-    display: flex;
-    margin-left: auto;
-
-    span {
-        margin-left: 4px;
-    }
-`;
-
-const StyledSelectItem = styled(SelectPrimitive.Item)`
-    font-size: ${getFontSize("md")};
-    font-weight: ${getFontWeight("thick")};
-    padding: 5px 35px 5px 25px;
-    position: relative;
-    user-select: none;
-    margin-bottom: 5px;
-    text-transform: capitalize;
-
-    &:hover {
-        background-color: ${({ theme }) =>
-					getColor({ color: "greyHover", theme })};
-        border: 0;
-    }
-`;
-
-const StyledSequenceSegment = styled.div`
-    align-items: center;
-    display: flex;
-    font-weight: ${fontWeight.thick};
-    width: 100%;
-`;
 
 type SequenceSegmentProps = {
 	/** The name of the segment */
@@ -97,20 +33,24 @@ type SequenceSegmentProps = {
  */
 function SequenceSegment({ name, required }: SequenceSegmentProps) {
 	return (
-		<StyledSelectItem value={name} key={name}>
+		<SelectPrimitive.Item
+			className="text-sm font-medium py-1 pl-6 pr-9 relative select-none mb-1 capitalize hover:bg-gray-50 hover:border-0"
+			value={name}
+			key={name}
+		>
 			<SelectPrimitive.ItemText>
-				<StyledSequenceSegment>
+				<div className="flex items-center font-medium w-full">
 					<span>{name}</span>
 
 					{required && (
-						<SequenceSegmentRequired>
+						<span className="flex items-center ml-auto">
 							<Icon icon={CircleAlert} />
-							<span>Required</span>
-						</SequenceSegmentRequired>
+							<span className="ml-1">Required</span>
+						</span>
 					)}
-				</StyledSequenceSegment>
+				</div>
 			</SelectPrimitive.ItemText>
-		</StyledSelectItem>
+		</SelectPrimitive.Item>
 	);
 }
 
@@ -137,7 +77,7 @@ export default function SequenceSegmentField({
 		return (
 			<InputGroup>
 				<InputLabel htmlFor="segment">Segment</InputLabel>
-				<SegmentSelectContainer>
+				<div className="flex flex-col [&_button]:grow [&_button]:p-2.5">
 					<Controller
 						control={control}
 						render={({ field: { onChange, value } }) => {
@@ -168,7 +108,7 @@ export default function SequenceSegmentField({
 						}}
 						name="segment"
 					/>
-				</SegmentSelectContainer>
+				</div>
 			</InputGroup>
 		);
 	}
@@ -176,18 +116,25 @@ export default function SequenceSegmentField({
 	return (
 		<InputGroup>
 			<InputLabel>Segment</InputLabel>
-			<NoSchema>
+			<Box className="flex items-center justify-between">
 				<div>
-					<h5>No schema is defined for this OTU.</h5>
-					<p>
+					<h5 className="font-medium mt-0 mb-1">
+						No schema is defined for this OTU.
+					</h5>
+					<p className="m-0">
 						A schema defines the sequence segments that should be present in
 						isolates of the OTU.{" "}
 					</p>
 				</div>
 				<div>
-					<Link to={`/refs/${refId}/otus/${otuId}/schema`}>Add a Schema</Link>
+					<Link
+						className="font-medium"
+						to={`/refs/${refId}/otus/${otuId}/schema`}
+					>
+						Add a Schema
+					</Link>
 				</div>
-			</NoSchema>
+			</Box>
 		</InputGroup>
 	);
 }

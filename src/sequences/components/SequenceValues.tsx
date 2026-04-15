@@ -1,49 +1,25 @@
-import styled from "styled-components";
-
-export const SequenceValue = styled.div`
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-
-    p,
-    small {
-        margin: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    small {
-        color: ${(props) => props.theme.color.greyDark};
-        font-size: ${(props) => props.theme.fontSize.sm};
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-`;
-
-export const StyledSequenceTitleValue = styled(SequenceValue)`
-    flex: 1;
-`;
-
 export function SequenceTitleValue({ label, value }) {
 	return (
-		<StyledSequenceTitleValue>
-			<p>{value}</p>
-			<small>{label}</small>
-		</StyledSequenceTitleValue>
+		<div className="flex flex-col min-w-0 flex-1">
+			<p className="m-0 overflow-hidden text-ellipsis whitespace-nowrap">
+				{value}
+			</p>
+			<small className="m-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-500 text-xs font-bold uppercase">
+				{label}
+			</small>
+		</div>
 	);
 }
 
-const StyledSequenceAccessionValue = styled(SequenceValue)`
-    width: 100px;
-    margin-right: 20px;
-`;
-
 export function SequenceAccessionValue({ accession }) {
 	return (
-		<StyledSequenceAccessionValue>
-			<p>{accession}</p>
-			<small>ACCESSION</small>
-		</StyledSequenceAccessionValue>
+		<div className="flex flex-col min-w-0 w-24 mr-5">
+			<p className="m-0 overflow-hidden text-ellipsis whitespace-nowrap">
+				{accession}
+			</p>
+			<small className="m-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-500 text-xs font-bold uppercase">
+				ACCESSION
+			</small>
+		</div>
 	);
 }

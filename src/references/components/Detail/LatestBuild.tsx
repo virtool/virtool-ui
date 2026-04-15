@@ -3,16 +3,6 @@ import Link from "@base/Link";
 import NoneFoundSection from "@base/NoneFoundSection";
 import RelativeTime from "@base/RelativeTime";
 import type { ReferenceBuild } from "@references/types";
-import styled from "styled-components";
-
-const StyledLatestBuild = styled(BoxGroupSection)`
-    align-items: center;
-    display: flex;
-
-    a {
-        margin-left: auto;
-    }
-`;
 
 type LatestBuildProps = {
 	id: string;
@@ -26,7 +16,7 @@ type LatestBuildProps = {
 export function LatestBuild({ id, latestBuild }: LatestBuildProps) {
 	if (latestBuild) {
 		return (
-			<StyledLatestBuild>
+			<BoxGroupSection className="flex items-center">
 				<div>
 					<strong>
 						<Link to={`/refs/${id}/indexes/${latestBuild.id}`}>
@@ -38,7 +28,7 @@ export function LatestBuild({ id, latestBuild }: LatestBuildProps) {
 						{latestBuild.user.handle}
 					</span>
 				</div>
-			</StyledLatestBuild>
+			</BoxGroupSection>
 		);
 	}
 
