@@ -1,9 +1,8 @@
-import { sizes } from "@app/theme";
 import { getWorkflowDisplayName } from "@app/utils";
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
-import ProgressCircle from "@base/ProgressCircle";
+import ProgressCircle, { sizes } from "@base/ProgressCircle";
 import JobStateIcon from "@jobs/components/JobStateIcon";
 import type { JobState, Workflow } from "@jobs/types";
 import type { UserNested } from "@users/types";

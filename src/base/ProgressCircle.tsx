@@ -1,175 +1,28 @@
-import { getColor, sizes } from "@app/theme";
+import { cn } from "@app/utils";
 import type { JobState } from "@jobs/types";
 import { Progress } from "radix-ui";
-import styled, { keyframes } from "styled-components";
 
-/**
- * Calculate the stroke width based on the total size of the progress circle
- *
- * @param size - The total size of the progress circle in pixels
- * @returns  The stroke width in pixels
- */
-
-function calculateStrokeWidth({ size }: ProgressCircleBaseProps): number {
-	return size / 5;
+export enum sizes {
+	xs = "xs",
+	sm = "sm",
+	md = "md",
+	lg = "lg",
+	xl = "xl",
+	xxl = "xxl",
 }
 
-/**
- * Calculate the radius of the circle based on the total size and stroke width
- *
- * @param size - The total size of the progress circle in pixels
- * @returns The stroke width in pixels
- */
-function calculateProgressCircleRadius({
-	size,
-}: ProgressCircleBaseProps): number {
-	return size / 2 - calculateStrokeWidth({ size });
-}
-
-/**
- * Calculate the circumference of the circle taking into account the stroke width
- *
- * @param size - The total size of the progress circle in pixels
- * @returns The circumference of the circle in pixels
- */
-function calculateCircumference({ size }: ProgressCircleBaseProps): number {
-	return calculateProgressCircleRadius({ size }) * Math.PI * 2;
-}
-
-/**
- * Calculate stroke offset needed to display the correct amount of progress
- *
- * @param size - The total size of the progress circle in pixels
- * @param progress - the amount of progress from 0 to 1
- * @returns the stroke offset in pixels
- */
-function calculateStrokeDashOffset({
-	progress,
-	...props
-}: ProgressCircleIndicatorProps): number {
-	return (1 - progress) * calculateCircumference(props);
-}
-
-const rotate = keyframes`
-        0% {
-            transform: rotate(0deg);
-        }
-        50% { 
-            transform: rotate(180deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    `;
-
-type ProgressCircleBaseProps = {
-	size: number;
+const colorToHex: Record<string, string> = {
+	blue: "#0B7FE5",
+	blueLightest: "#CDF1FD",
+	green: "#1DAD57",
+	greenLightest: "#D1FAD1",
+	grey: "#A0AEC0",
+	greyLight: "#CBD5E0",
+	red: "#E0282E",
+	redLightest: "#FDE1D3",
 };
 
-/**
- * The root progress circle component.
- *
- * @param size - The total size of the progress circle in pixels
- */
-const StyledProgressCircle = styled.svg<ProgressCircleBaseProps>`
-    width: ${(props) => props.size}px;
-    height: ${(props) => props.size}px;
-    transform: rotate(-90deg);
-`;
-
-/**
- * Circle component containing shared ProgressCircle styles
- *
- * @param size - The total size of the progress circle in pixels
- * @returns The ProgressCircle indicator
- */
-
-const ProgressCircleBase = styled.circle<ProgressCircleBaseProps>`
-    cx: ${(props) => props.size / 2}px;
-    cy: ${(props) => props.size / 2}px;
-    r: ${calculateProgressCircleRadius}px;
-    fill: transparent;
-    stroke-width: ${calculateStrokeWidth}px;
-    stroke: ${getColor};
-    stroke-dasharray: ${calculateCircumference}px;
-    transition:
-        stroke-dashoffset 1s,
-        stroke 1s;
-`;
-
-type ProgressCircleIndicatorProps = ProgressCircleBaseProps & {
-	progress: number;
-};
-
-/**
- * Indicator for the amount of progress that has been made.
- *
- * @param size - The total size of the progress circle in pixels
- * @param progress - The amount of progress that has been made from 0 to 1
- * @returns The ProgressCircle indicator
- */
-const ProgressCircleIndicator = styled(
-	ProgressCircleBase,
-)<ProgressCircleIndicatorProps>`
-    stroke-dashoffset: ${calculateStrokeDashOffset}px;
-`;
-
-type ProgressCircleTrackProps = ProgressCircleBaseProps & {
-	state: JobState;
-};
-
-/**
- * The indeterminate loader and track for the determinate progress circle.
- *
- * @param size - The total size of the progress circle in pixels
- * @param state - The current state of the job or task
- * @returns The progress circle track
- */
-const ProgressCircleTrack = styled(
-	ProgressCircleBase,
-)<ProgressCircleTrackProps>`
-    stroke-dashoffset: ${(props) =>
-			props.state === "pending"
-				? `${calculateStrokeDashOffset({ progress: 0.75, size: props.size })}px`
-				: "0px"};
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: ${rotate} 0.75s linear infinite;
-    animation-play-state: ${(props) =>
-			props.state === "pending" ? "running" : "paused"};
-`;
-
-const fade = keyframes`
-    from {
-        opacity: .6;
-        transform: scale(1);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1.1);
-    }
-`;
-
-/**
- * Pulsing inner circle for visually indicating that a job is running.
- *
- * @param size - The total size of the progress circle in pixels
- * @param state - The current state of the job or task
- * @returns An Indeterminately pulsing progress indicator
- */
-const ProgressCircleCenter = styled.circle<ProgressCircleTrackProps>`
-    cx: ${(props) => props.size / 2}px;
-    cy: ${(props) => props.size / 2}px;
-    r: ${(props) => calculateProgressCircleRadius(props) / 2.5}px;
-    fill: ${(props) => getColor({ theme: props.theme, color: "blue" })};
-    opacity: ${(props) => (props.state === "pending" ? 0 : 1)};
-    animation: ${fade} 1.25s ease-in-out infinite alternate;
-    vector-effect: non-scaling-stroke;
-    transform-box: fill-box;
-    transform-origin: center;
-`;
-
-const progressCircleSizes = {
+const progressCircleSizes: Record<string, number> = {
 	xs: 12,
 	sm: 16,
 	md: 20,
@@ -178,12 +31,22 @@ const progressCircleSizes = {
 	xxl: 60,
 };
 
-/**
- * Determine the appropriate color for the ProgressCircle based on the state of the job or task.
- *
- * @param state - The current state of the job or task
- * @returns The color of the progress circle
- */
+function calculateStrokeWidth(size: number): number {
+	return size / 5;
+}
+
+function calculateRadius(size: number): number {
+	return size / 2 - calculateStrokeWidth(size);
+}
+
+function calculateCircumference(size: number): number {
+	return calculateRadius(size) * Math.PI * 2;
+}
+
+function calculateStrokeDashOffset(size: number, progress: number): number {
+	return (1 - progress) * calculateCircumference(size);
+}
+
 function getProgressColor(state: JobState): string {
 	switch (state) {
 		case "succeeded":
@@ -196,20 +59,19 @@ function getProgressColor(state: JobState): string {
 			return "red";
 	}
 }
+
+function getTrackColor(color: string): string {
+	if (color === "grey") {
+		return colorToHex.greyLight;
+	}
+	return colorToHex[`${color}Lightest`] || colorToHex.greyLight;
+}
+
 type ProgressCircleProps = {
 	progress: number;
 	state?: JobState;
 	size?: sizes;
 };
-
-/**
- * Circular progress bar for displaying the progress of a job or task.
- *
- * @param progress - The progress of the circle in percent
- * @param state - The state of the running job or task
- * @param size - The size of the progress circle
- * @returns A determinate or indeterminate progress circle
- */
 
 export default function ProgressCircle({
 	progress,
@@ -218,26 +80,71 @@ export default function ProgressCircle({
 }: ProgressCircleProps) {
 	const circleSize = progressCircleSizes[size];
 	const color = getProgressColor(state);
+	const radius = calculateRadius(circleSize);
+	const strokeWidth = calculateStrokeWidth(circleSize);
+	const circumference = calculateCircumference(circleSize);
+	const center = circleSize / 2;
+
+	const baseCircleStyle = {
+		cx: center,
+		cy: center,
+		r: radius,
+		fill: "transparent",
+		strokeWidth,
+		strokeDasharray: circumference,
+	};
 
 	return (
 		<Progress.Root value={progress} asChild>
-			<StyledProgressCircle size={circleSize}>
-				<ProgressCircleTrack
-					color={color === "grey" ? `${color}Light` : `${color}Lightest`}
-					size={circleSize}
-					state={state}
+			<svg
+				className="-rotate-90"
+				style={{ width: circleSize, height: circleSize }}
+			>
+				<title>Progress: {progress}%</title>
+				<circle
+					{...baseCircleStyle}
+					className={cn(
+						"transition-[stroke-dashoffset,stroke] duration-1000",
+						state === "pending" && "animate-rotate",
+					)}
+					stroke={getTrackColor(color)}
+					strokeDashoffset={
+						state === "pending"
+							? calculateStrokeDashOffset(circleSize, 0.75)
+							: 0
+					}
+					style={{
+						transformBox: "fill-box",
+						transformOrigin: "center",
+						animationPlayState: state === "pending" ? "running" : "paused",
+					}}
 				/>
 				{state === "running" && (
-					<ProgressCircleCenter color={color} size={circleSize} state={state} />
+					<circle
+						cx={center}
+						cy={center}
+						r={radius / 2.5}
+						fill={colorToHex.blue}
+						className="animate-fade"
+						style={{
+							vectorEffect: "non-scaling-stroke",
+							transformBox: "fill-box",
+							transformOrigin: "center",
+						}}
+					/>
 				)}
 				<Progress.Indicator asChild>
-					<ProgressCircleIndicator
-						color={color}
-						size={circleSize}
-						progress={progress / 100}
+					<circle
+						{...baseCircleStyle}
+						className="transition-[stroke-dashoffset,stroke] duration-1000"
+						stroke={colorToHex[color]}
+						strokeDashoffset={calculateStrokeDashOffset(
+							circleSize,
+							progress / 100,
+						)}
 					/>
 				</Progress.Indicator>
-			</StyledProgressCircle>
+			</svg>
 		</Progress.Root>
 	);
 }

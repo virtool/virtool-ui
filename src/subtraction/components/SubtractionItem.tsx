@@ -1,7 +1,7 @@
-import { getFontSize, getFontWeight, sizes } from "@app/theme";
+import { getFontSize, getFontWeight } from "@app/theme";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
-import ProgressCircle from "@base/ProgressCircle";
+import ProgressCircle, { sizes } from "@base/ProgressCircle";
 import { JobNested } from "@jobs/types";
 import styled from "styled-components";
 import type { SubtractionMinimal } from "../types";
