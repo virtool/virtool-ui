@@ -1,21 +1,4 @@
 import type { ReactNode } from "react";
-import styled from "styled-components";
-
-const BoxGroupDisabledOverlay = styled.div`
-    background-color: ${(props) => props.theme.color.greyLightest};
-    opacity: 0.5;
-    position: absolute;
-    z-index: 10;
-
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-`;
-
-const StyledBoxGroupDisabled = styled.div`
-    position: relative;
-`;
 
 type BoxGroupDisabledProps = {
 	children: ReactNode;
@@ -27,9 +10,11 @@ export default function BoxGroupDisabled({
 	disabled = false,
 }: BoxGroupDisabledProps) {
 	return (
-		<StyledBoxGroupDisabled>
-			{disabled && <BoxGroupDisabledOverlay />}
+		<div className="relative">
+			{disabled && (
+				<div className="absolute inset-0 z-10 bg-gray-100 opacity-50" />
+			)}
 			{children}
-		</StyledBoxGroupDisabled>
+		</div>
 	);
 }

@@ -1,4 +1,3 @@
-import { getBorder } from "@app/theme";
 import BoxGroup from "@base/BoxGroup";
 import CompactScrollList from "@base/CompactScrollList";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
@@ -11,27 +10,6 @@ import { useInfiniteFindGroups } from "@groups/queries";
 import { useAddReferenceMember } from "@references/queries";
 import type { ReferenceGroup } from "@references/types";
 import { useState } from "react";
-import styled from "styled-components";
-
-const StyledAddGroupItem = styled(SelectBoxGroupSection)`
-    display: flex;
-    align-items: center;
-
-    .InitialIcon {
-        margin-right: 5px;
-    }
-`;
-
-const AddReferenceGroupHeader = styled(DialogTitle)`
-    text-transform: capitalize;
-`;
-
-const StyledScrollList = styled(CompactScrollList)`
-    border: ${(props) => getBorder(props)};
-    border-radius: ${(props) => props.theme.borderRadius.sm};
-    overflow-y: auto;
-    height: 320px;
-`;
 
 type AddReferenceGroupProps = {
 	groups: ReferenceGroup[];
@@ -66,13 +44,14 @@ export default function AddReferenceGroup({
 
 	function renderRow(item) {
 		return (
-			<StyledAddGroupItem
+			<SelectBoxGroupSection
 				key={item.id}
+				className="flex items-center [&_.InitialIcon]:mr-1"
 				onClick={() => mutation.mutate({ id: item.id })}
 			>
 				<InitialIcon size="md" handle={item.name} />
 				{item.name}
-			</StyledAddGroupItem>
+			</SelectBoxGroupSection>
 		);
 	}
 
@@ -84,7 +63,7 @@ export default function AddReferenceGroup({
 	return (
 		<Dialog open={show} onOpenChange={onOpenChange}>
 			<DialogContent>
-				<AddReferenceGroupHeader>Add Group</AddReferenceGroupHeader>
+				<DialogTitle>Add Group</DialogTitle>
 				<Toolbar>
 					<InputSearch
 						name="search"
@@ -93,7 +72,8 @@ export default function AddReferenceGroup({
 					/>
 				</Toolbar>
 				{filteredItems.length ? (
-					<StyledScrollList
+					<CompactScrollList
+						className="border border-gray-300 rounded overflow-y-auto h-80"
 						fetchNextPage={fetchNextPage}
 						isFetchingNextPage={isFetchingNextPage}
 						isPending={isPending}
