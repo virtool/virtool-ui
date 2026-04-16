@@ -129,9 +129,9 @@ export default function ReadSelector({
 
 	return (
 		<div>
-			<label className="flex items-center font-medium [&_label]:m-0 [&_span]:text-gray-500 [&_span]:ml-auto">
+			<label className="flex items-center font-medium [&_label]:m-0">
 				<PseudoLabel>Read files</PseudoLabel>
-				<span>
+				<span className="text-gray-500 ml-auto">
 					{pairedness}
 					{selected.length} of {total_count} selected
 				</span>
