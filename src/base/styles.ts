@@ -10,14 +10,17 @@ export const inputFocusClasses =
 export const inputErrorClasses =
 	"border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50";
 
+import type { IconColor } from "./types";
+
 /** Icon text color mapping shared by Icon and IconButton */
-export const iconTextColor: Record<string, string> = {
-	blue: "text-blue-500",
+export const iconTextColor: Record<IconColor, string> = {
 	black: "text-black",
-	green: "text-green-500",
+	blue: "text-blue-500",
 	gray: "text-gray-400",
 	grayDark: "text-gray-500",
-	red: "text-red-500",
+	green: "text-green-500",
+	grey: "text-gray-400",
 	orange: "text-orange-500",
 	purple: "text-purple-500",
+	red: "text-red-500",
 };

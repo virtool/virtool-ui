@@ -20,14 +20,7 @@ export default function LinkButton({
 }: LinkButtonProps) {
 	return (
 		<Link
-			className={cn(
-				buttonVariants({ color }),
-				{
-					"hover:text-black": color === "gray",
-					"hover:text-white": ["blue", "green", "red"].includes(color),
-				},
-				className,
-			)}
+			className={cn(buttonVariants({ color }), className)}
 			replace={replace}
 			to={to}
 		>
