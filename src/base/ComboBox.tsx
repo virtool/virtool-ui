@@ -1,6 +1,7 @@
 import { cn } from "@app/utils";
 import { useCombobox } from "downshift";
 import { ChevronDown } from "lucide-react";
+import type { ReactElement } from "react";
 import WrapRow from "./ComboBoxItem";
 import Icon from "./Icon";
 import InputSearch from "./InputSearch";
@@ -36,7 +37,7 @@ type ComboBoxProps = {
 	items: unknown[];
 	selectedItem?: unknown;
 	term: string;
-	renderRow: (item: unknown) => JSX.Element;
+	renderRow: (item: unknown) => ReactElement;
 	onFilter: (term: string) => void;
 	onChange: (item: unknown) => void;
 	itemToString?: (item: unknown) => string;

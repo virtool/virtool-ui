@@ -1,11 +1,12 @@
 import { cn } from "@app/utils";
+import type { ReactElement } from "react";
 import { useUploaderStore } from "../uploader";
 import UploaderDialog from "./UploaderDialog";
 
 /**
  * Overlay uploads with their progress and speeds.
  */
-export default function UploadOverlay(): JSX.Element | null {
+export default function UploadOverlay(): ReactElement | null {
 	const uploads = useUploaderStore((state) => state.uploads);
 	const remaining = useUploaderStore((state) => state.remaining);
 	const speed = useUploaderStore((state) => state.speed);

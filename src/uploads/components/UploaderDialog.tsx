@@ -1,6 +1,7 @@
 import { formatRoundedDuration } from "@app/utils";
 import Badge from "@base/Badge";
 import numbro from "numbro";
+import type { ReactElement } from "react";
 import type { UploadInProgress } from "../types";
 import { UploaderItem } from "./UploaderItem";
 
@@ -25,7 +26,7 @@ export default function UploaderDialog({
 	remaining,
 	speed,
 	uploads,
-}: UploaderDialogProps): JSX.Element {
+}: UploaderDialogProps): ReactElement {
 	if (uploads.length === 0) {
 		return null;
 	}

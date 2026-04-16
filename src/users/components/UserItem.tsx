@@ -5,6 +5,7 @@ import InitialIcon from "@base/InitialIcon";
 import Label from "@base/Label";
 import Link from "@base/Link";
 import type { GroupMinimal } from "@groups/types";
+import type { ReactElement } from "react";
 
 type UserItemProps = {
 	administrator_role: AdministratorRoleName;
@@ -22,7 +23,7 @@ export function UserItem({
 	handle,
 	id,
 	primary_group,
-}: UserItemProps): JSX.Element {
+}: UserItemProps): ReactElement {
 	const { hasPermission: canEdit } = useCheckAdminRole(
 		administrator_role === null
 			? AdministratorRoleName.USERS
