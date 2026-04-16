@@ -1,14 +1,18 @@
 import { cn } from "@app/utils";
-import type { ElementType, ReactNode } from "react";
+import type { ElementType, KeyboardEvent, ReactNode } from "react";
 
 type BoxGroupSectionProps = {
 	active?: boolean;
+	"aria-selected"?: boolean;
 	as?: ElementType;
 	children?: ReactNode;
 	className?: string;
 	disabled?: boolean;
 	onClick?: () => void;
+	onKeyDown?: (e: KeyboardEvent) => void;
+	role?: string;
 	style?: React.CSSProperties;
+	tabIndex?: number;
 };
 
 export default function BoxGroupSection({

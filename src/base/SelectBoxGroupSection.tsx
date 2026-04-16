@@ -1,5 +1,5 @@
 import { cn } from "@app/utils";
-import type { ReactNode } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
 import BoxGroupSection from "./BoxGroupSection";
 
 type SelectBoxGroupSectionProps = {
@@ -15,10 +15,17 @@ export default function SelectBoxGroupSection({
 	className,
 	onClick,
 }: SelectBoxGroupSectionProps) {
+	function onKeyDown(e: KeyboardEvent) {
+		if (e.key === "Enter" || e.key === " ") {
+			e.preventDefault();
+			onClick?.();
+		}
+	}
+
 	return (
 		<BoxGroupSection
 			active={active}
-			aria-role="option"
+			aria-selected={active}
 			className={cn(
 				"cursor-pointer",
 				"w-full",
@@ -29,6 +36,9 @@ export default function SelectBoxGroupSection({
 				className,
 			)}
 			onClick={onClick}
+			onKeyDown={onKeyDown}
+			role="option"
+			tabIndex={0}
 		>
 			{children}
 		</BoxGroupSection>
