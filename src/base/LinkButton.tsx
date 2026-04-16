@@ -1,5 +1,6 @@
 import { cn } from "@app/utils";
 import type { ReactNode } from "react";
+import { buttonVariants } from "./buttonVariants";
 import Link from "./Link";
 
 interface LinkButtonProps {
@@ -19,31 +20,7 @@ export default function LinkButton({
 }: LinkButtonProps) {
 	return (
 		<Link
-			className={cn(
-				className,
-				"items-center",
-				{
-					"bg-blue-600": color === "blue",
-					"bg-gray-200": color === "gray",
-					"bg-green-600": color === "green",
-					"bg-red-600": color === "red",
-				},
-				"inline-flex",
-				"font-medium",
-				"min-h-10",
-				"px-4",
-				"rounded-md",
-				{
-					"text-black": ["gray"].includes(color),
-					"text-white": ["blue", "green", "red"].includes(color),
-				},
-				"text-lg",
-				"hover:shadow-lg",
-				{
-					"hover:text-black": ["gray"].includes(color),
-					"hover:text-white": ["blue", "green", "red"].includes(color),
-				},
-			)}
+			className={cn(buttonVariants({ color }), className)}
 			replace={replace}
 			to={to}
 		>
