@@ -1,6 +1,7 @@
 import { cn } from "@app/utils";
 import { Toggle } from "radix-ui";
 import type { ReactNode, Ref } from "react";
+import { buttonVariants } from "./buttonVariants";
 
 type ButtonToggleProps = {
 	children: ReactNode;
@@ -17,21 +18,7 @@ export default function ButtonToggle({
 }: ButtonToggleProps) {
 	return (
 		<Toggle.Root
-			className={cn(
-				"bg-gray-200",
-				"cursor-pointer",
-				"items-center",
-				"inline-flex",
-				"font-medium",
-				"min-h-10",
-				"px-4",
-				"rounded-md",
-				"select-none",
-				"text-black",
-				"text-lg",
-				"hover:shadow-lg",
-				"active:inset-2",
-			)}
+			className={cn(buttonVariants(), "active:inset-2")}
 			onPressedChange={onPressedChange}
 			pressed={pressed}
 			ref={ref}

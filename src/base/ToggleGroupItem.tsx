@@ -1,6 +1,7 @@
 import { cn } from "@app/utils";
 import { ToggleGroup as ToggleGroupPrimitive } from "radix-ui";
 import type { ReactNode } from "react";
+import { buttonVariants } from "./buttonVariants";
 
 type ToggleGroupItemProps = {
 	children: ReactNode;
@@ -14,19 +15,10 @@ export default function ToggleGroupItem({
 	return (
 		<ToggleGroupPrimitive.Item
 			className={cn(
-				"bg-gray-200",
-				"cursor-pointer",
-				"items-center",
-				"inline-flex",
-				"font-medium",
-				"min-h-10",
-				"px-4",
-				"select-none",
-				"text-black",
-				"text-lg",
+				buttonVariants(),
+				"rounded-none",
 				"aria-checked:bg-gray-300",
 				"first:rounded-l-md",
-				"hover:shadow-lg",
 				"last:rounded-r-md",
 			)}
 			value={value}

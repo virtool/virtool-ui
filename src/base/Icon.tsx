@@ -1,5 +1,6 @@
 import { cn } from "@app/utils";
 import type { LucideIcon } from "lucide-react";
+import { iconTextColor } from "./styles";
 import type { IconColor } from "./types";
 
 export type IconProps = {
@@ -24,16 +25,7 @@ export default function Icon({
 				"text-inherit",
 				"inline-block",
 				"align-middle",
-				{
-					"text-blue-500": color === "blue",
-					"text-black": color === "black",
-					"text-green-500": color === "green",
-					"text-gray-400": color === "gray",
-					"text-gray-500": color === "grayDark",
-					"text-red-500": color === "red",
-					"text-orange-500": color === "orange",
-					"text-purple-500": color === "purple",
-				},
+				color && iconTextColor[color],
 				className,
 			)}
 			size={size}

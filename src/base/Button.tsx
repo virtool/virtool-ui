@@ -1,5 +1,6 @@
 import { cn } from "@app/utils";
 import type { ComponentType, ReactNode } from "react";
+import { buttonVariants } from "./buttonVariants";
 
 export type ButtonProps = {
 	active?: boolean;
@@ -30,36 +31,10 @@ function Button({
 	return (
 		<As
 			className={cn(
-				className,
-				{
-					"bg-blue-600": color === "blue",
-					"bg-red-600": color === "red",
-					"bg-green-600": color === "green",
-					"bg-gray-200": color === "gray",
-					"bg-purple-600": color === "purple",
-				},
-				"cursor-pointer",
+				buttonVariants({ color, size }),
 				"gap-1.5",
-				"items-center",
-				"inline-flex",
-				"font-medium",
-				{ "min-h-10": size === "large", "min-h-8": size === "small" },
-				{
-					"opacity-50": disabled,
-					"opacity-100": !disabled,
-				},
-				"px-4",
-				"rounded-md",
-				"select-none",
-				{
-					"text-black": ["gray"].includes(color),
-					"text-white": ["blue", "green", "purple", "red"].includes(color),
-				},
-				{
-					"text-lg": size === "large",
-					"text-sm": size === "small",
-				},
-				"hover:shadow-lg",
+				disabled ? "opacity-50" : "opacity-100",
+				className,
 			)}
 			disabled={disabled}
 			onBlur={onBlur}

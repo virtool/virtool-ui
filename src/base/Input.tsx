@@ -2,6 +2,11 @@ import { cn } from "@app/utils";
 import { type ElementType, type ReactNode, type Ref, useContext } from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
 import InputContext from "./InputContext";
+import {
+	inputBaseClasses,
+	inputErrorClasses,
+	inputFocusClasses,
+} from "./styles";
 
 export interface InputProps {
 	"aria-label"?: string;
@@ -58,10 +63,8 @@ export default function Input({
 			ref={ref}
 			autoFocus={autoFocus}
 			className={cn(
-				"bg-white border rounded-[3px] shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] block text-sm h-auto outline-none py-2 px-2.5 relative transition-all duration-150 ease-in-out w-full",
-				error
-					? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50"
-					: "border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50",
+				inputBaseClasses,
+				error ? inputErrorClasses : inputFocusClasses,
 				{
 					"read-only:bg-gray-100": Component !== "select",
 				},
