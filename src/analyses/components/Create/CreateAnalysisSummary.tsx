@@ -1,10 +1,3 @@
-import styled from "styled-components";
-
-const StyledCreateAnalysisSummary = styled.div`
-    margin: 0;
-    text-align: left;
-`;
-
 interface CreateAnalysisSummaryProps {
 	indexCount: number;
 	sampleCount: number;
@@ -17,13 +10,13 @@ export function CreateAnalysisSummary({
 	const product = indexCount * sampleCount;
 
 	if (product === 0) {
-		return <StyledCreateAnalysisSummary />;
+		return <div className="m-0 text-left" />;
 	}
 
 	return (
-		<StyledCreateAnalysisSummary>
+		<div className="m-0 text-left">
 			{product} job
 			{product === 1 ? "" : "s"} will be started
-		</StyledCreateAnalysisSummary>
+		</div>
 	);
 }

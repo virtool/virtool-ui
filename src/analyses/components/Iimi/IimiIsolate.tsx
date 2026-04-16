@@ -1,16 +1,8 @@
 import type { FormattedIimiSequence } from "@analyses/types";
 import Box from "@base/Box";
 import { sortBy } from "es-toolkit";
-import styled from "styled-components";
 import { CoverageChart } from "../Charts/CoverageChart";
 import { IimiDetection } from "./IimiDetection";
-
-const CoveragePanel = styled.div`
-    align-items: center;
-    display: flex;
-    gap: 15px;
-    overflow-x: scroll;
-`;
 
 type IimiIsolateProps = {
 	name: string;
@@ -26,7 +18,7 @@ export function IimiIsolate({ name, sequences }: IimiIsolateProps) {
 	return (
 		<div>
 			<h5>{name}</h5>
-			<CoveragePanel>
+			<div className="flex items-center gap-4 overflow-x-scroll">
 				{sorted.map((sequence) => (
 					<Box key={sequence.id}>
 						<p>
@@ -43,7 +35,7 @@ export function IimiIsolate({ name, sequences }: IimiIsolateProps) {
 						/>
 					</Box>
 				))}
-			</CoveragePanel>
+			</div>
 		</div>
 	);
 }

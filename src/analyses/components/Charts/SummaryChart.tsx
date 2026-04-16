@@ -4,10 +4,8 @@ import {
 	deriveTrustworthyRegions,
 	maxSequences,
 } from "@analyses/utils";
-import { theme } from "@app/theme";
 import { area, scaleLinear, select } from "d3";
 import { useEffect, useRef } from "react";
-import styled, { type DefaultTheme } from "styled-components";
 
 function draw(
 	element: HTMLElement,
@@ -47,7 +45,7 @@ function draw(
 				.attr("y", 0)
 				.attr("width", x(range[1]) - x(range[0]))
 				.attr("height", height)
-				.attr("fill", theme.color.blue)
+				.attr("fill", "#0B7FE5")
 				.attr("opacity", 0.15);
 		});
 	}
@@ -60,7 +58,7 @@ function draw(
 				.attr("y", 0)
 				.attr("width", x(range[1]) - x(range[0]))
 				.attr("height", height)
-				.attr("fill", theme.color.red)
+				.attr("fill", "#E0282E")
 				.attr("opacity", 0.4);
 		});
 	}
@@ -78,31 +76,6 @@ function draw(
 			.attr("d", areaDrawer);
 	}
 }
-
-type StyledIimiCoverageChartProps = {
-	theme: DefaultTheme;
-};
-
-const StyledIimiCoverageChart = styled.div<StyledIimiCoverageChartProps>`
-    display: flex;
-    margin-top: 5px;
-    min-width: 200px;
-    width: auto;
-    flex-grow: 1;
-
-    &:not(:first-child) {
-        margin-left: 10px;
-    }
-
-    path.untrustworthy-range {
-        stroke: ${(props) => props.theme.color.red};
-        stroke-width: 1;
-    }
-
-    path.depth-area {
-        fill: ${(props) => props.theme.color.blue};
-    }
-`;
 
 interface IimiCoverageChartProps {
 	/** The data to be graphed */
@@ -129,5 +102,10 @@ export function SummaryChart({ seqs }: IimiCoverageChartProps) {
 		);
 	}, [seqs]);
 
-	return <StyledIimiCoverageChart ref={chartEl} />;
+	return (
+		<div
+			className="coverage-chart flex mt-1 min-w-48 w-auto grow not-first:ml-2.5"
+			ref={chartEl}
+		/>
+	);
 }

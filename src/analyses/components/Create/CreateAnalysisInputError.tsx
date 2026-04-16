@@ -1,6 +1,12 @@
 import InputError from "@base/InputError";
-import styled from "styled-components";
+import type { ReactNode } from "react";
 
-export const CreateAnalysisInputError = styled(InputError)`
-    margin: -23px 0 5px;
-`;
+type CreateAnalysisInputErrorProps = {
+	children: ReactNode;
+};
+
+export function CreateAnalysisInputError({
+	children,
+}: CreateAnalysisInputErrorProps) {
+	return <InputError className="-mt-6 mb-1">{children}</InputError>;
+}
