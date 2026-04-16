@@ -1,9 +1,7 @@
 import type { UntrustworthyRange } from "@analyses/types";
 import { deriveTrustworthyRegions } from "@analyses/utils";
-import { theme } from "@app/theme";
 import { area, axisBottom, axisLeft, format, scaleLinear, select } from "d3";
 import { useEffect, useRef } from "react";
-import styled, { type DefaultTheme } from "styled-components";
 
 function draw(element, data, length, yMax, untrustworthyRanges) {
 	select(element).append("svg");
@@ -48,7 +46,7 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
 				.attr("y", 0)
 				.attr("width", x(range[1] - range[0]))
 				.attr("height", height)
-				.attr("fill", theme.color.blue)
+				.attr("fill", "#0B7FE5")
 				.attr("opacity", 0.15);
 		});
 	}
@@ -61,7 +59,7 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
 				.attr("y", 0)
 				.attr("width", x(range[1] - range[0]))
 				.attr("height", height)
-				.attr("fill", theme.color.red)
+				.attr("fill", "#E0282E")
 				.attr("opacity", 0.4);
 		});
 	}
@@ -91,24 +89,6 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
 	}
 }
 
-type StyledIimiCoverageChartProps = {
-	theme: DefaultTheme;
-};
-
-const StyledIimiCoverageChart = styled.div<StyledIimiCoverageChartProps>`
-    display: inline-block;
-    margin-top: 5px;
-
-    path.untrustworthy-range {
-        stroke: ${(props) => props.theme.color.red};
-        stroke-width: 1;
-    }
-
-    path.depth-area {
-        fill: ${(props) => props.theme.color.blue};
-    }
-`;
-
 interface IimiCoverageChartProps {
 	data: number[];
 	id: string;
@@ -129,5 +109,5 @@ export function CoverageChart({
 		draw(chartEl.current, data, length, yMax, untrustworthyRanges);
 	}, [data, yMax, untrustworthyRanges]);
 
-	return <StyledIimiCoverageChart ref={chartEl} />;
+	return <div className="coverage-chart inline-block mt-1" ref={chartEl} />;
 }

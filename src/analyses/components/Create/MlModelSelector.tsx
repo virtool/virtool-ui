@@ -4,21 +4,7 @@ import SelectContent from "@base/SelectContent";
 import SelectItem from "@base/SelectItem";
 import type { MLModelMinimal } from "@ml/types";
 import { ChevronDown } from "lucide-react";
-import styled from "styled-components";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
-
-const MLModelSelectButton = styled(SelectButton)`
-    display: flex;
-    width: 100%;
-
-    button {
-        flex-grow: 1;
-    }
-`;
-
-const StyledMLModelSelector = styled.div`
-    margin-bottom: 30px;
-`;
 
 export type MLModelSelectorProps = {
 	models: MLModelMinimal[];
@@ -42,14 +28,18 @@ export default function MlModelSelector({
 	));
 
 	return (
-		<StyledMLModelSelector>
+		<div className="mb-8">
 			<CreateAnalysisFieldTitle>MLModel</CreateAnalysisFieldTitle>
 			<Select value={selected} onValueChange={onChange}>
-				<MLModelSelectButton placeholder="Select a model" icon={ChevronDown} />
+				<SelectButton
+					className="flex w-full [&_button]:grow"
+					placeholder="Select a model"
+					icon={ChevronDown}
+				/>
 				<SelectContent position="popper" align="start">
 					{mlModelItems}
 				</SelectContent>
 			</Select>
-		</StyledMLModelSelector>
+		</div>
 	);
 }

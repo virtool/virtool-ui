@@ -1,17 +1,4 @@
-import { getBorder } from "@app/theme";
 import Table from "@base/Table";
-import styled from "styled-components";
-
-const ExportPreviewCode = styled.div`
-    background-color: ${(props) => props.theme.color.greyLightest};
-    border: ${getBorder};
-    border-radius: ${(props) => props.theme.borderRadius.sm};
-    box-shadow: ${(props) => props.theme.boxShadow.inset};
-    color: ${(props) => props.theme.color.greyDarkest};
-    margin-bottom: 15px;
-    min-height: 20px;
-    padding: 20px;
-`;
 
 type NuVsExportPreviewProps = {
 	mode: string;
@@ -53,7 +40,7 @@ export default function NuvsExportPreview({ mode }: NuVsExportPreviewProps) {
 	return (
 		<div>
 			<label>Preview</label>
-			<ExportPreviewCode>
+			<div className="bg-gray-100 border border-gray-300 rounded shadow-inner text-gray-600 mb-4 min-h-5 p-5">
 				<p style={{ wordWrap: "break-word", marginBottom: 0 }}>
 					<code>{previewHeader}</code>
 				</p>
@@ -63,7 +50,7 @@ export default function NuvsExportPreview({ mode }: NuVsExportPreviewProps) {
 						&hellip;
 					</code>
 				</p>
-			</ExportPreviewCode>
+			</div>
 
 			<label>Header Fields</label>
 			<Table>

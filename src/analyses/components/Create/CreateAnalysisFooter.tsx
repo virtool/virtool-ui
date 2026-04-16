@@ -1,13 +1,14 @@
 import { DialogFooter } from "@base/Dialog";
-import styled from "styled-components";
+import type { ReactNode } from "react";
 
-export const CreateAnalysisFooter = styled(DialogFooter)`
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
+type CreateAnalysisFooterProps = {
+	children: ReactNode;
+};
 
-    button {
-        margin-left: auto;
-    }
-`;
+export function CreateAnalysisFooter({ children }: CreateAnalysisFooterProps) {
+	return (
+		<DialogFooter className="items-center justify-between mt-2.5 [&_button]:ml-auto">
+			{children}
+		</DialogFooter>
+	);
+}

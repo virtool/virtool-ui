@@ -4,7 +4,6 @@ import Icon from "@base/Icon";
 import Loader from "@base/Loader";
 import RelativeTime from "@base/RelativeTime";
 import { ExternalLink as ExternalLinkIcon } from "lucide-react";
-import styled from "styled-components";
 import { addSeconds, formatDistanceStrict } from "@/app/date";
 import { useNow } from "@/app/hooks";
 
@@ -48,18 +47,9 @@ function RidTiming({ interval, lastCheckedAt }) {
 	return null;
 }
 
-const StyledBLASTInProgress = styled(Box)`
-    align-items: flex-start;
-    display: flex;
-
-    div:first-of-type {
-        margin-right: 5px;
-    }
-`;
-
 export default function NuvsBlastPending({ interval, lastCheckedAt, rid }) {
 	return (
-		<StyledBLASTInProgress>
+		<Box className="flex items-start [&>div:first-of-type]:mr-1">
 			<Loader size="16px" color="primary" />
 			<div>
 				<div>
@@ -68,6 +58,6 @@ export default function NuvsBlastPending({ interval, lastCheckedAt, rid }) {
 				</div>
 				<RidTiming interval={interval} lastCheckedAt={lastCheckedAt} />
 			</div>
-		</StyledBLASTInProgress>
+		</Box>
 	);
 }

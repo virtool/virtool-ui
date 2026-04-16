@@ -3,24 +3,14 @@ import Box from "@base/Box";
 import Label from "@base/Label";
 import Link from "@base/Link";
 import numbro from "numbro";
-import styled from "styled-components";
 import { Bars } from "../Viewer/Bars";
-
-const StyledAnalysisMappingReferenceTitle = styled.div`
-    align-items: center;
-    display: flex;
-
-    a {
-        margin-right: 5px;
-    }
-`;
 
 export function AnalysisMappingReferenceTitle({ index, reference }) {
 	return (
-		<StyledAnalysisMappingReferenceTitle>
+		<div className="flex items-center [&_a]:mr-1">
 			<Link to={`/refs/${reference.id}`}>{reference.name}</Link>
 			<Label>{index.version}</Label>
-		</StyledAnalysisMappingReferenceTitle>
+		</div>
 	);
 }
 
@@ -32,25 +22,6 @@ export function AnalysisMappingSubtractionTitle({ subtractions }) {
 		</span>
 	));
 }
-
-const StyledAnalysisMapping = styled(Box)`
-    margin-bottom: 30px;
-
-    h3 {
-        align-items: flex-end;
-        display: flex;
-        font-size: ${(props) => props.theme.fontSize.xl};
-        font-weight: normal;
-        margin: 15px 0 10px;
-        justify-content: space-between;
-
-        small {
-            color: ${(props) => props.theme.color.greyDark};
-            font-size: ${(props) => props.theme.fontSize.lg};
-            font-weight: 600;
-        }
-    }
-`;
 
 export function AnalysisMapping({ totalReads, detail }) {
 	const { index, reference, subtractions, results } = detail;
@@ -78,15 +49,15 @@ export function AnalysisMapping({ totalReads, detail }) {
 	}
 
 	return (
-		<StyledAnalysisMapping>
-			<h3>
+		<Box className="mb-8">
+			<h3 className="flex items-end justify-between text-2xl font-normal my-4 mb-2.5">
 				{numbro(sumPercent).format({ output: "percent", mantissa: 2 })} mapped
-				<small>
+				<small className="text-gray-500 text-base font-semibold">
 					{toThousand(readCount)} of {toThousand(totalReads)} reads
 				</small>
 			</h3>
 
 			<Bars empty={totalReads - totalMapped} items={legend} />
-		</StyledAnalysisMapping>
+		</Box>
 	);
 }

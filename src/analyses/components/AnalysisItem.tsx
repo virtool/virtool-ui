@@ -1,6 +1,5 @@
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoleName } from "@administration/types";
-import { getColor, getFontSize, getFontWeight } from "@app/theme";
 import { getWorkflowDisplayName } from "@app/utils";
 import Attribution from "@base/Attribution";
 import Box from "@base/Box";
@@ -9,69 +8,11 @@ import Link from "@base/Link";
 import ProgressCircle, { sizes } from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
 import { Equal, EqualNot } from "lucide-react";
-import styled from "styled-components";
 import { JobNested } from "@/jobs/types";
 import { useRemoveAnalysis } from "../queries";
 import type { AnalysisMinimal } from "../types";
 import { checkSupportedWorkflow } from "../utils";
 import { AnalysisItemRightIcon } from "./AnalysisItemRightIcon";
-
-const StyledAnalysisItem = styled(Box)`
-    color: ${(props) => props.theme.color.greyDarkest};
-    margin-bottom: 10px;
-`;
-
-const AnalysisItemTag = styled.span`
-    align-items: center;
-    display: inline-flex;
-    margin-right: 15px;
-
-    i {
-        margin-right: 5px;
-    }
-`;
-
-const AnalysisItemTags = styled.div`
-    align-items: center;
-    display: flex;
-    margin-top: 10px;
-`;
-
-const AnalysisItemEndIcon = styled.div`
-    display: flex;
-    justify-content: flex-end;
-`;
-
-const AnalysisItemTop = styled.div`
-    align-items: center;
-    display: grid;
-    grid-template-columns: 40% 40% auto;
-    font-size: ${getFontSize("lg")};
-    font-weight: ${getFontWeight("thick")};
-
-    a {
-        font-weight: ${getFontWeight("thick")};
-    }
-`;
-
-const AnalysisAttribution = styled(Attribution)`
-    font-size: ${getFontSize("md")};
-    font-weight: ${getFontWeight("normal")};
-`;
-
-const UnsupportedAnalysisTitle = styled.div`
-    color: ${(props) => props.theme.color.black};
-    svg {
-        margin-left: 5px;
-    }
-    span {
-        color: ${(props) =>
-					getColor({ color: "greyDark", theme: props.theme })};
-        font-size: ${getFontSize("md")};
-        margin-left: 5px;
-        font-weight: ${getFontWeight("normal")};
-    }
-`;
 
 type AnalysisItemProps = {
 	analysis: AnalysisMinimal;
@@ -101,20 +42,26 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 			{getWorkflowDisplayName(workflow)}
 		</Link>
 	) : (
-		<UnsupportedAnalysisTitle>
+		<div className="text-black [&_svg]:ml-1">
 			{getWorkflowDisplayName(workflow)}
-			<span>Workflow unavailable</span>
-		</UnsupportedAnalysisTitle>
+			<span className="text-gray-500 text-sm ml-1 font-normal">
+				Workflow unavailable
+			</span>
+		</div>
 	);
 
 	const job = analysis.job && JobNested.parse(analysis.job);
 
 	return (
-		<StyledAnalysisItem>
-			<AnalysisItemTop>
+		<Box className="text-gray-600 mb-2.5">
+			<div className="grid grid-cols-[40%_40%_auto] items-center text-base font-medium [&_a]:font-medium">
 				{title}
-				<AnalysisAttribution user={user.handle} time={created_at} />
-				<AnalysisItemEndIcon>
+				<Attribution
+					className="text-sm font-normal"
+					user={user.handle}
+					time={created_at}
+				/>
+				<div className="flex justify-end">
 					{ready ? (
 						<AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} />
 					) : (
@@ -124,10 +71,13 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 							size={sizes.md}
 						/>
 					)}
-				</AnalysisItemEndIcon>
-			</AnalysisItemTop>
-			<AnalysisItemTags>
-				<AnalysisItemTag key="reference">
+				</div>
+			</div>
+			<div className="flex items-center mt-2.5">
+				<span
+					className="inline-flex items-center mr-4 [&_i]:mr-1"
+					key="reference"
+				>
 					<Equal size={18} />
 					<SlashList className="m-0">
 						<li>
@@ -139,16 +89,19 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 							</Link>
 						</li>
 					</SlashList>
-				</AnalysisItemTag>
+				</span>
 				{subtractions.map((subtraction) => (
-					<AnalysisItemTag key={subtraction.id}>
+					<span
+						className="inline-flex items-center mr-4 [&_i]:mr-1"
+						key={subtraction.id}
+					>
 						<Icon icon={EqualNot} />
 						<Link to={`/subtractions/${subtraction.id}`}>
 							{subtraction.name}
 						</Link>
-					</AnalysisItemTag>
+					</span>
 				))}
-			</AnalysisItemTags>
-		</StyledAnalysisItem>
+			</div>
+		</Box>
 	);
 }

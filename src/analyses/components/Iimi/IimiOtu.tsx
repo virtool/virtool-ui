@@ -4,23 +4,9 @@ import { formatIsolateName } from "@app/utils";
 import AccordionContent from "@base/AccordionContent";
 import AccordionScrollingItem from "@base/AccordionScrollingItem";
 import AccordionTrigger from "@base/AccordionTrigger";
-import styled from "styled-components";
 import { IimiCondensedCoverage } from "./IimiCondensedCoverage";
 import { IimiDetection } from "./IimiDetection";
 import { IimiIsolate } from "./IimiIsolate";
-
-const IimiAccordionTrigger = styled(AccordionTrigger)`
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-
-    & > div {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-    }
-`;
 
 type IimiOtuProps = {
 	hit: FormattedIimiHit;
@@ -34,7 +20,7 @@ export function IimiOtu({
 }: IimiOtuProps) {
 	return (
 		<AccordionScrollingItem value={id}>
-			<IimiAccordionTrigger>
+			<AccordionTrigger className="flex-col overflow-hidden">
 				<div className="flex justify-between mb-3">
 					<h3 className="font-medium text-lg">{name}</h3>
 					<div className="flex gap-4">
@@ -47,7 +33,7 @@ export function IimiOtu({
 					</div>
 				</div>
 				<IimiCondensedCoverage isolates={isolates} />
-			</IimiAccordionTrigger>
+			</AccordionTrigger>
 			<AccordionContent>
 				{isolates.map((isolate: FormattedIimiIsolate) => (
 					<IimiIsolate

@@ -5,23 +5,8 @@ import { toScientificNotation } from "@app/utils";
 import AccordionContent from "@base/AccordionContent";
 import AccordionScrollingItem from "@base/AccordionScrollingItem";
 import AccordionTrigger from "@base/AccordionTrigger";
-import styled from "styled-components";
 import PathoscopeDetail from "./PathoscopeDetail";
 import PathoscopeOtuCoverage from "./PathoscopeOtuCoverage";
-
-const PathoscopeAccordionTrigger = styled(AccordionTrigger)`
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    width: 100%;
-
-    & > div {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-    }
-`;
 
 type PathoscopeItemProps = {
 	/** Complete information for a pathoscope hit */
@@ -42,7 +27,7 @@ export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
 
 	return (
 		<AccordionScrollingItem value={id}>
-			<PathoscopeAccordionTrigger>
+			<AccordionTrigger className="flex-col overflow-hidden">
 				<div className="flex justify-between mb-4">
 					<header className="flex flex-col font-medium items-start text-lg">
 						<span className="mb-0.5">{name}</span>
@@ -66,7 +51,7 @@ export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
 				</div>
 
 				<PathoscopeOtuCoverage filled={filled} />
-			</PathoscopeAccordionTrigger>
+			</AccordionTrigger>
 			<AccordionContent>
 				<PathoscopeDetail hit={hit} mappedCount={mappedCount} />
 			</AccordionContent>
