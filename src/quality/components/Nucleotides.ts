@@ -1,4 +1,3 @@
-import { theme } from "@app/theme";
 import {
 	appendLegend,
 	createSvg,
@@ -9,10 +8,10 @@ import { axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { unzip } from "es-toolkit";
 
 const series = [
-	{ label: "Guanine", color: theme.color.blue },
-	{ label: "Adenine", color: theme.color.red },
-	{ label: "Thymine", color: theme.color.green },
-	{ label: "Cytosine", color: theme.color.greyDark },
+	{ label: "Guanine", color: "#0B7FE5" },
+	{ label: "Adenine", color: "#E0282E" },
+	{ label: "Thymine", color: "#1DAD57" },
+	{ label: "Cytosine", color: "#718096" },
 ];
 
 export function drawNucleotidesChart(

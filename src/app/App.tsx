@@ -2,11 +2,9 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthentication, useRootQuery } from "@wall/queries";
 import React, { type ReactElement, Suspense } from "react";
-import { ThemeProvider } from "styled-components";
 import { Router } from "wouter";
 import { useBrowserLocation } from "wouter/use-browser-location";
 import Main from "./Main";
-import { theme } from "./theme";
 import { resetClient } from "./utils";
 
 // Lazy load components
@@ -62,12 +60,10 @@ const queryClient = new QueryClient({
 /** The root App component that provides theme, query client, and routing setup */
 export default function App(): ReactElement {
 	return (
-		<ThemeProvider theme={theme}>
-			<QueryClientProvider client={queryClient}>
-				<Router hook={useBrowserLocation}>
-					<ConnectedApp />
-				</Router>
-			</QueryClientProvider>
-		</ThemeProvider>
+		<QueryClientProvider client={queryClient}>
+			<Router hook={useBrowserLocation}>
+				<ConnectedApp />
+			</Router>
+		</QueryClientProvider>
 	);
 }

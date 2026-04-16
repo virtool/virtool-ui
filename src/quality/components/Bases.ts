@@ -1,4 +1,3 @@
-import { theme } from "@app/theme";
 import {
 	appendLegend,
 	createSvg,
@@ -9,10 +8,10 @@ import { area, axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { min } from "es-toolkit/compat";
 
 const series = [
-	{ label: "Mean", color: theme.color.red },
-	{ label: "Median", color: theme.color.blue },
-	{ label: "Quartile", color: theme.color.green },
-	{ label: "Decile", color: theme.color.yellow },
+	{ label: "Mean", color: "#E0282E" },
+	{ label: "Median", color: "#0B7FE5" },
+	{ label: "Quartile", color: "#1DAD57" },
+	{ label: "Decile", color: "#FFE030" },
 ];
 
 function getArea(name: string, areaX, y, a, b) {
