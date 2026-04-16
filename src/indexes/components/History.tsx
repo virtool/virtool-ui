@@ -4,7 +4,6 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { sortBy } from "es-toolkit";
 import type { ReactNode } from "react";
-import styled from "styled-components";
 
 type HistoryDocument = {
 	id: string;
@@ -12,37 +11,23 @@ type HistoryDocument = {
 	otu: { name: string };
 };
 
-const StyledRebuildHistoryItem = styled(BoxGroupSection)`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-`;
-
-const RebuildHistoryContent = styled.div`
-    max-height: 700px;
-    overflow-y: auto;
-`;
-
-const StyledRebuildHistoryEllipsis = styled(BoxGroupSection)`
-    text-align: right;
-`;
-
 function RebuildHistoryEllipsis({ unbuilt }) {
 	if (unbuilt.page_count > 1) {
 		return (
-			<StyledRebuildHistoryEllipsis key="last-item">
+			<BoxGroupSection className="text-right" key="last-item">
 				+ {unbuilt.total_count - unbuilt.per_page} more changes
-			</StyledRebuildHistoryEllipsis>
+			</BoxGroupSection>
 		);
 	}
 }
 
 function RebuildHistoryItem({ description, otuName }) {
 	return (
-		<StyledRebuildHistoryItem>
+		<BoxGroupSection className="grid grid-cols-2">
 			<strong>{otuName}</strong>
 
 			{description || "No Description"}
-		</StyledRebuildHistoryItem>
+		</BoxGroupSection>
 	);
 }
 
@@ -64,10 +49,10 @@ export default function RebuildHistory({ unbuilt }) {
 		));
 
 		content = (
-			<RebuildHistoryContent>
+			<div className="max-h-192 overflow-y-auto">
 				{historyComponents}
 				<RebuildHistoryEllipsis unbuilt={unbuilt} />
-			</RebuildHistoryContent>
+			</div>
 		);
 	}
 

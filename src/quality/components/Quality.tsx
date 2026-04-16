@@ -1,17 +1,9 @@
 import { useElementSize } from "@app/hooks";
-import { getFontSize } from "@app/theme";
 import type { RefObject } from "react";
-import styled from "styled-components";
 import { drawBasesChart } from "./Bases";
 import { drawNucleotidesChart } from "./Nucleotides";
 import { SampleChart } from "./SampleChart";
 import { drawSequencesChart } from "./Sequences";
-
-const QualityTitle = styled.h5`
-    display: flex;
-    font-size: ${getFontSize("lg")};
-    justify-content: space-between;
-`;
 
 export function Quality({ bases, composition, sequences }) {
 	const [ref, { width }] = useElementSize();
@@ -20,27 +12,27 @@ export function Quality({ bases, composition, sequences }) {
 		<div ref={ref as RefObject<HTMLDivElement>}>
 			{width && (
 				<>
-					<QualityTitle>
+					<h5 className="flex justify-between text-base">
 						<strong>Quality Distribution at Read Positions</strong>
-					</QualityTitle>
+					</h5>
 					<SampleChart
 						createChart={drawBasesChart}
 						data={bases}
 						width={width}
 					/>
 
-					<QualityTitle>
+					<h5 className="flex justify-between text-base">
 						<strong>Nucleotide Composition at Read Positions</strong>
-					</QualityTitle>
+					</h5>
 					<SampleChart
 						createChart={drawNucleotidesChart}
 						data={composition}
 						width={width}
 					/>
 
-					<QualityTitle>
+					<h5 className="flex justify-between text-base">
 						<strong>Read-wise Quality Occurrence</strong>
-					</QualityTitle>
+					</h5>
 					<SampleChart
 						createChart={drawSequencesChart}
 						data={sequences}

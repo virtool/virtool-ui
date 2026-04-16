@@ -1,19 +1,6 @@
-import { getFontSize, getFontWeight } from "@app/theme";
 import Attribution from "@base/Attribution";
 import Box from "@base/Box";
-import styled from "styled-components";
 import type { MLModelRelease } from "../types";
-
-const MlModelHeader = styled.div`
-    font-size: ${getFontSize("lg")};
-    font-weight: ${getFontWeight("thick")};
-    display: flex;
-    justify-content: space-between;
-
-    &:last-child {
-        margin-left: auto;
-    }
-`;
 
 type MlModelProps = {
 	created_at: string;
@@ -38,10 +25,10 @@ export function MlModel({ created_at, latest_release, name }: MlModelProps) {
 
 	return (
 		<Box className="flex flex-col">
-			<MlModelHeader>
+			<div className="flex justify-between text-base font-medium last:ml-auto">
 				<span>{name}</span>
 				{version}
-			</MlModelHeader>
+			</div>
 			<Attribution time={created_at} />
 		</Box>
 	);

@@ -7,14 +7,9 @@ import type {
 	FetchNextPageOptions,
 	InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
-import styled from "styled-components";
 import { useValidateFiles } from "@/uploads/hooks";
 import { type FileResponse, type Upload, UploadType } from "@/uploads/types";
 import { SubtractionFileItem } from "./SubtractionFileItem";
-
-const SubtractionFileSelectorError = styled(InputError)`
-    margin-bottom: 5px;
-`;
 
 type SubtractionFileSelectorProps = {
 	/** The subtraction uploads */
@@ -87,7 +82,7 @@ export function SubtractionFileSelector({
 				items={items}
 				renderRow={renderRow}
 			/>
-			<SubtractionFileSelectorError>{error}</SubtractionFileSelectorError>
+			<InputError className="mb-1">{error}</InputError>
 		</>
 	);
 }

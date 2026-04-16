@@ -1,17 +1,5 @@
-import { fontWeight } from "@app/theme";
 import { byteSize } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
-import styled from "styled-components";
-
-const StyledSubtractionFile = styled(BoxGroupSection)`
-    align-items: center;
-    display: flex;
-
-    a {
-        margin-right: auto;
-        font-weight: ${fontWeight.thick};
-    }
-`;
 
 export type SubtractionFileItemProps = {
 	downloadUrl: string;
@@ -25,9 +13,11 @@ export function SubtractionFileItem({
 	size,
 }: SubtractionFileItemProps) {
 	return (
-		<StyledSubtractionFile>
-			<a href={`/api${downloadUrl}`}>{name}</a>
+		<BoxGroupSection className="flex items-center">
+			<a className="mr-auto font-medium" href={`/api${downloadUrl}`}>
+				{name}
+			</a>
 			<strong>{byteSize(size)}</strong>
-		</StyledSubtractionFile>
+		</BoxGroupSection>
 	);
 }

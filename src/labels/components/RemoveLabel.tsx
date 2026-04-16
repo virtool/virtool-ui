@@ -1,4 +1,3 @@
-import { getFontSize } from "@app/theme";
 import Button from "@base/Button";
 import {
 	Dialog,
@@ -7,17 +6,7 @@ import {
 	DialogTrigger,
 } from "@base/Dialog";
 import { useState } from "react";
-import styled from "styled-components";
 import { useRemoveLabel } from "../queries";
-
-const RemoveLabelQuestion = styled.p`
-    font-size: ${getFontSize("lg")};
-`;
-
-const RemoveLabelFooter = styled.footer`
-    display: flex;
-    margin-top: 30px;
-`;
 
 type RemoveLabelProps = {
 	id: number;
@@ -49,14 +38,14 @@ export function RemoveLabel({ id, name }: RemoveLabelProps) {
 			</Button>
 			<DialogContent>
 				<DialogTitle>Delete Label</DialogTitle>
-				<RemoveLabelQuestion>
+				<p className="text-base">
 					Are you sure you want to delete the label <strong>{name}</strong>?
-				</RemoveLabelQuestion>
-				<RemoveLabelFooter>
+				</p>
+				<footer className="mt-8 flex">
 					<Button type="button" color="red" onClick={handleSubmit}>
 						Delete
 					</Button>
-				</RemoveLabelFooter>
+				</footer>
 			</DialogContent>
 		</Dialog>
 	);
