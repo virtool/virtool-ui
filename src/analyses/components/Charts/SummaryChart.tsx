@@ -104,7 +104,7 @@ export function SummaryChart({ seqs }: IimiCoverageChartProps) {
 
 	return (
 		<div
-			className="coverage-chart flex mt-1 min-w-50 w-auto grow not-first:ml-2.5"
+			className="coverage-chart flex mt-1 min-w-48 w-auto grow not-first:ml-2.5"
 			ref={chartEl}
 		/>
 	);
