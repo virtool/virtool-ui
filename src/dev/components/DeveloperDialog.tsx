@@ -79,24 +79,6 @@ export default function DeveloperDialog() {
 				</div>
 				<div className="flex items-center p-4">
 					<div>
-						<h3 className="mb-1 mt-0">Create Subtraction</h3>
-						<p className="m-0">Creates a subtraction that is ready for use.</p>
-					</div>
-					<div className="ml-auto">
-						<Button
-							color="red"
-							onClick={() =>
-								mutation.mutate({
-									command: "create_subtraction",
-								})
-							}
-						>
-							Create Subtraction
-						</Button>
-					</div>
-				</div>
-				<div className="flex items-center p-4">
-					<div>
 						<h3 className="mb-1 mt-0">Force Delete Jobs</h3>
 						<p className="m-0">
 							Forces cancellation, then deletion of all jobs regardless of

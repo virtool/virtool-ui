@@ -11,7 +11,7 @@ import NuvsValues from "./NuvsValues";
 
 function NuvsFamilies({ families }) {
 	return (
-		<div className="flex border border-gray-300 rounded my-2.5 mb-1 overflow-hidden">
+		<div className="flex border border-gray-300 rounded mt-2.5 mb-1 overflow-hidden">
 			<div className="py-1 px-2.5 bg-gray-100 border-r border-gray-300">
 				Families
 			</div>
