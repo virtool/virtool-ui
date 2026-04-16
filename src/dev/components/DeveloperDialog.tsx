@@ -15,9 +15,9 @@ export default function DeveloperDialog() {
 			<DialogContent size="lg">
 				<DialogTitle>Developer</DialogTitle>
 				<div className="flex items-center p-4">
-					<div className="[&>h3]:mb-1 [&>h3]:mt-0 [&>p]:m-0">
-						<h3>Clear Users</h3>
-						<p>
+					<div>
+						<h3 className="mb-1 mt-0">Clear Users</h3>
+						<p className="m-0">
 							Remove existing users. You will be required to create a first
 							user.
 						</p>
@@ -42,9 +42,9 @@ export default function DeveloperDialog() {
 					</div>
 				</div>
 				<div className="flex items-center p-4">
-					<div className="[&>h3]:mb-1 [&>h3]:mt-0 [&>p]:m-0">
-						<h3>Create Sample</h3>
-						<p>Creates a sample that is ready for use.</p>
+					<div>
+						<h3 className="mb-1 mt-0">Create Sample</h3>
+						<p className="m-0">Creates a sample that is ready for use.</p>
 					</div>
 					<div className="ml-auto">
 						<Button
@@ -60,9 +60,9 @@ export default function DeveloperDialog() {
 					</div>
 				</div>
 				<div className="flex items-center p-4">
-					<div className="[&>h3]:mb-1 [&>h3]:mt-0 [&>p]:m-0">
-						<h3>Create Subtraction</h3>
-						<p>Creates a subtraction that is ready for use.</p>
+					<div>
+						<h3 className="mb-1 mt-0">Create Subtraction</h3>
+						<p className="m-0">Creates a subtraction that is ready for use.</p>
 					</div>
 					<div className="ml-auto">
 						<Button
@@ -78,27 +78,9 @@ export default function DeveloperDialog() {
 					</div>
 				</div>
 				<div className="flex items-center p-4">
-					<div className="[&>h3]:mb-1 [&>h3]:mt-0 [&>p]:m-0">
-						<h3>Create Subtraction</h3>
-						<p>Creates a subtraction that is ready for use.</p>
-					</div>
-					<div className="ml-auto">
-						<Button
-							color="red"
-							onClick={() =>
-								mutation.mutate({
-									command: "create_subtraction",
-								})
-							}
-						>
-							Create Subtraction
-						</Button>
-					</div>
-				</div>
-				<div className="flex items-center p-4">
-					<div className="[&>h3]:mb-1 [&>h3]:mt-0 [&>p]:m-0">
-						<h3>Force Delete Jobs</h3>
-						<p>
+					<div>
+						<h3 className="mb-1 mt-0">Force Delete Jobs</h3>
+						<p className="m-0">
 							Forces cancellation, then deletion of all jobs regardless of
 							status.
 						</p>

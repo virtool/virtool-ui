@@ -11,9 +11,13 @@ import NuvsValues from "./NuvsValues";
 
 function NuvsFamilies({ families }) {
 	return (
-		<div className="flex border border-gray-300 rounded my-2.5 mb-1 overflow-hidden [&_div]:py-1 [&_div]:px-2.5 [&_div:first-child]:bg-gray-100 [&_div:first-child]:border-r [&_div:first-child]:border-gray-300">
-			<div>Families</div>
-			<div>{families.length ? families.join(", ") : "None"}</div>
+		<div className="flex border border-gray-300 rounded mt-2.5 mb-1 overflow-hidden">
+			<div className="py-1 px-2.5 bg-gray-100 border-r border-gray-300">
+				Families
+			</div>
+			<div className="py-1 px-2.5">
+				{families.length ? families.join(", ") : "None"}
+			</div>
 		</div>
 	);
 }
@@ -68,8 +72,8 @@ export default function NuvsDetail({
 
 	return (
 		<NuvsDetailContainer>
-			<div className="mb-2.5 [&_h3]:flex [&_h3]:items-center [&_h3]:justify-between [&_h3]:text-base [&_h3]:font-bold [&_h3]:m-0 [&_span]:text-sm [&_span]:font-bold">
-				<h3>
+			<div className="mb-2.5 [&_span]:text-sm [&_span]:font-bold">
+				<h3 className="flex items-center justify-between text-base font-bold m-0">
 					Sequence {index}
 					<Badge className="text-base py-2 px-3">{sequence.length} bp</Badge>
 				</h3>

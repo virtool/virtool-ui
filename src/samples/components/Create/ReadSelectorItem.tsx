@@ -35,12 +35,12 @@ export default function ReadSelectorItem({
 			active={selected}
 			className="flex items-center justify-between select-none"
 		>
-			<div className="flex items-center [&_strong]:font-medium">
+			<div className="flex items-center">
 				<span className="text-2xl mr-4">
 					<Icon icon={File} />
 				</span>
 				<div>
-					<strong>{name}</strong>
+					<strong className="font-medium">{name}</strong>
 					<div>{byteSize(size)}</div>
 				</div>
 			</div>

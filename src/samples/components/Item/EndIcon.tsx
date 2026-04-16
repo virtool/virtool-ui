@@ -28,7 +28,7 @@ export default function SampleItemEndIcon({
 	className,
 }: SampleItemEndIconProps) {
 	const containerClasses = cn(
-		"flex items-center justify-center ml-auto [&_strong]:ml-1",
+		"flex items-center justify-center ml-auto",
 		className,
 	);
 
@@ -52,7 +52,7 @@ export default function SampleItemEndIcon({
 				progress={job?.progress || 0}
 				state={job?.state || "pending"}
 			/>
-			<strong>Creating</strong>
+			<strong className="ml-1">Creating</strong>
 		</div>
 	);
 }
