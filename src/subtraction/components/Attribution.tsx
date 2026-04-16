@@ -1,5 +1,6 @@
 import Attribution from "@base/Attribution";
 import AttributionWithName from "@base/AttributionWithName";
+import type { ReactElement } from "react";
 
 type SubtractionAttributionProps = {
 	/* The user handle */
@@ -14,7 +15,7 @@ type SubtractionAttributionProps = {
 export function SubtractionAttribution({
 	handle,
 	time,
-}: SubtractionAttributionProps): JSX.Element {
+}: SubtractionAttributionProps): ReactElement {
 	if (handle) {
 		if (time) {
 			return <Attribution user={handle} time={time} />;

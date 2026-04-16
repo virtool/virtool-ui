@@ -1,11 +1,9 @@
-import { theme } from "@app/theme";
 import { faker } from "@faker-js/faker";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@testing-library/jest-dom/vitest";
 import { fireEvent, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
-import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
 import { Router } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
@@ -17,21 +15,13 @@ faker.seed(1);
 export function wrapWithProviders(ui: ReactNode) {
 	const queryClient = new QueryClient();
 
-	return (
-		<QueryClientProvider client={queryClient}>
-			<ThemeProvider theme={theme}>{ui}</ThemeProvider>
-		</QueryClientProvider>
-	);
+	return <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>;
 }
 
 export function renderWithProviders(ui: ReactNode) {
 	const { rerender, ...rest } = rtlRender(wrapWithProviders(ui));
 
-	function rerenderWithProviders(updatedUi: ReactNode) {
-		return rerender(<ThemeProvider theme={theme}>{updatedUi}</ThemeProvider>);
-	}
-
-	return { ...rest, rerender: rerenderWithProviders };
+	return { ...rest, rerender };
 }
 
 export function renderWithRouter(ui: ReactNode, path?: string) {

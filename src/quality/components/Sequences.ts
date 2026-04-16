@@ -1,4 +1,3 @@
-import { theme } from "@app/theme";
 import { toScientificNotation } from "@app/utils.js";
 import {
 	createSvg,
@@ -33,7 +32,7 @@ export function drawSequencesChart(element, data, baseWidth) {
 		.append("path")
 		.attr("d", lineDrawer(data))
 		.attr("class", "graph-line")
-		.attr("stroke", theme.color.greyDark);
+		.attr("stroke", "#718096");
 
 	// Append a labelled x-axis to the SVG.
 	svg

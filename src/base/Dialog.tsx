@@ -1,6 +1,6 @@
 import { cn } from "@app/utils";
 import { Dialog as DialogPrimitive } from "radix-ui";
-import type { ReactNode } from "react";
+import type { ReactElement, ReactNode } from "react";
 
 export const Dialog = DialogPrimitive.Root;
 export const DialogClose = DialogPrimitive.Close;
@@ -84,7 +84,7 @@ type DialogDescriptionProps = {
 
 export function DialogDescription({
 	children,
-}: DialogDescriptionProps): JSX.Element {
+}: DialogDescriptionProps): ReactElement {
 	return (
 		<DialogPrimitive.Description
 			className={cn("font-medium", "pb-4", "text-lg", "text-slate-600")}

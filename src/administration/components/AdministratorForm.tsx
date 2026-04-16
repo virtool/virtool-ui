@@ -9,7 +9,7 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import SaveButton from "@base/SaveButton";
 import type { User } from "@users/types";
-import { useState } from "react";
+import { type ReactElement, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import AdministratorRoleSelect from "./AdministratorRoleSelect";
 import AdministratorUserSelect from "./AdministratorUserSelect";
@@ -25,7 +25,7 @@ type AdministratorFormProps = {
 
 export default function AdministratorForm({
 	onClose,
-}: AdministratorFormProps): JSX.Element {
+}: AdministratorFormProps): ReactElement {
 	const {
 		formState: { errors },
 		handleSubmit,

@@ -16,7 +16,7 @@ export default function InputHeader({
 	value = "",
 	onSubmit,
 }: InputHeaderProps) {
-	const inputElement = useRef<HTMLInputElement>();
+	const inputElement = useRef<HTMLInputElement>(null);
 
 	const {
 		formState: { isSubmitting },
