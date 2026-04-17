@@ -5,7 +5,7 @@ import Attribution from "@base/Attribution";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import Link from "@base/Link";
-import ProgressCircle, { sizes } from "@base/ProgressCircle";
+import ProgressCircle from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
 import { Equal, EqualNot } from "lucide-react";
 import { JobNested } from "@/jobs/types";
@@ -68,7 +68,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 						<ProgressCircle
 							progress={job.progress || 0}
 							state={job.state || "pending"}
-							size={sizes.md}
+							size="md"
 						/>
 					)}
 				</div>

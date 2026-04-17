@@ -1,6 +1,6 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
-import ProgressCircle, { sizes } from "@base/ProgressCircle";
+import ProgressCircle from "@base/ProgressCircle";
 import { JobNested } from "@jobs/types";
 import type { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
@@ -31,7 +31,7 @@ export function SubtractionItem({
 			{!ready && job && (
 				<span className="flex items-center justify-end text-base font-medium [&>svg]:mr-1">
 					<ProgressCircle
-						size={sizes.md}
+						size="md"
 						progress={parsedJob.progress}
 						state={parsedJob.state ?? "pending"}
 					/>
