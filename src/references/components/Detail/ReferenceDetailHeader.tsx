@@ -5,7 +5,7 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useCheckReferenceRight } from "@references/hooks";
 import { Lock, Pencil } from "lucide-react";
 import { useLocation } from "wouter";
 
@@ -30,10 +30,7 @@ export default function ReferenceDetailHeader({
 }: ReferenceDetailHeaderProps) {
 	const [location] = useLocation();
 	const { setOpen: setOpenEditReference } = useDialogParam("openEditReference");
-	const { hasPermission: canModify } = useCheckReferenceRight(
-		refId,
-		ReferenceRight.modify,
-	);
+	const { hasPermission: canModify } = useCheckReferenceRight(refId, "modify");
 
 	const showIcons = location.endsWith("/manage");
 

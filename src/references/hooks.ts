@@ -116,11 +116,7 @@ export function useUpdateSourceTypes(
 /**
  * All reference rights
  */
-export enum ReferenceRight {
-	build = "build",
-	modify = "modify",
-	modify_otu = "modify_otu",
-}
+export type ReferenceRight = "build" | "modify" | "modify_otu";
 
 /**
  * Check if the logged in account has the passed `right` on the reference detail is loaded for.

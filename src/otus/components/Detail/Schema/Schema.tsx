@@ -4,7 +4,7 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import type { OtuSegment } from "@otus/types";
-import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useCheckReferenceRight } from "@references/hooks";
 import Button from "@/base/Button";
 import AddSegment from "./AddSegment";
 import EditSegment from "./EditSegment";
@@ -17,7 +17,7 @@ import Segment from "./Segment";
 export default function Schema() {
 	const { refId, otuId } = usePathParams<{ otuId: string; refId: string }>();
 	const { hasPermission: canModify, isPending: isPendingPermission } =
-		useCheckReferenceRight(refId, ReferenceRight.modify_otu);
+		useCheckReferenceRight(refId, "modify_otu");
 
 	const { setOpen: setOpenAddSegment } = useDialogParam("openAddSegment");
 

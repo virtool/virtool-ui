@@ -2,7 +2,7 @@ import { formatSearchParams } from "@app/hooks";
 import InputSearch from "@base/InputSearch";
 import LinkButton from "@base/LinkButton";
 import Toolbar from "@base/Toolbar";
-import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useCheckReferenceRight } from "@references/hooks";
 import type { ReferenceRemotesFrom } from "@references/types";
 import type { ChangeEvent } from "react";
 
@@ -31,7 +31,7 @@ export default function OtuToolbar({
 }: OtuToolbarProps) {
 	const { hasPermission: canCreate } = useCheckReferenceRight(
 		refId,
-		ReferenceRight.modify_otu,
+		"modify_otu",
 	);
 
 	return (

@@ -4,7 +4,7 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";
-import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useCheckReferenceRight } from "@references/hooks";
 import { useRemoveReferenceUser } from "@references/queries";
 import type { ReferenceGroup, ReferenceUser } from "@references/types";
 import { AlertCircle } from "lucide-react";
@@ -41,10 +41,7 @@ export default function ReferenceMembers({
 	} = useUrlSearchParam<string>(`edit${noun}Id`);
 
 	const mutation = useRemoveReferenceUser(refId, noun);
-	const { hasPermission: canModify } = useCheckReferenceRight(
-		refId,
-		ReferenceRight.modify,
-	);
+	const { hasPermission: canModify } = useCheckReferenceRight(refId, "modify");
 
 	function handleHide() {
 		setOpenAdd(false);

@@ -1,6 +1,6 @@
 import { useDialogParam } from "@app/hooks";
 import IconButton from "@base/IconButton";
-import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useCheckReferenceRight } from "@references/hooks";
 import { Pencil, Trash } from "lucide-react";
 import OtuEdit from "../OtuEdit";
 import OtuRemove from "../OtuRemove";
@@ -25,7 +25,7 @@ export function OtuHeaderIcons({
 	const { setOpen: setOpenRemoveOTU } = useDialogParam("openRemoveOTU");
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		refId,
-		ReferenceRight.modify_otu,
+		"modify_otu",
 	);
 
 	return canModify ? (

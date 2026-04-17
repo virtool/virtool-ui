@@ -5,7 +5,7 @@ import SubviewHeader from "@base/SubviewHeader";
 import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useCurrentOtuContext } from "@otus/queries";
-import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useCheckReferenceRight } from "@references/hooks";
 import IsolateDetail from "./IsolateDetail";
 import IsolateItem from "./IsolateItem";
 
@@ -24,7 +24,7 @@ export default function IsolateEditor() {
 
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		reference.id,
-		ReferenceRight.modify,
+		"modify",
 	);
 
 	const activeIsolate = isolates.length

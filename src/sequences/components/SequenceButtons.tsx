@@ -4,7 +4,7 @@ import IconButton from "@base/IconButton";
 import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
-import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useCheckReferenceRight } from "@references/hooks";
 import { Pencil, Trash } from "lucide-react";
 
 type SequenceButtonsProps = {
@@ -29,7 +29,7 @@ export default function SequenceButtons({
 
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		reference.id,
-		ReferenceRight.modify_otu,
+		"modify_otu",
 	);
 	const isolateId = useGetActiveIsolateId(otu);
 
