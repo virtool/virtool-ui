@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import References from "@references/components/References";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -73,7 +72,7 @@ describe("<OTUsList />", () => {
 		it("should not render creation button when [canCreate=true]", async () => {
 			const scope = mockApiFindOtus(OTUs, reference.id);
 			const account = createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			});
 			mockApiGetAccount(account);
 			renderWithRouter(<References />, path);

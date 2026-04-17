@@ -3,7 +3,6 @@ import Box from "@base/Box";
 import Button from "@base/Button";
 import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
-import { Permission } from "@groups/types";
 import { CloudDownload } from "lucide-react";
 import { useRemoteReference } from "../queries";
 
@@ -17,9 +16,7 @@ type ReferenceOfficialProps = {
 export default function ReferenceOfficial({
 	officialInstalled,
 }: ReferenceOfficialProps) {
-	const { hasPermission } = useCheckAdminRoleOrPermission(
-		Permission.create_ref,
-	);
+	const { hasPermission } = useCheckAdminRoleOrPermission("create_ref");
 	const mutation = useRemoteReference();
 	const show = !officialInstalled && hasPermission;
 

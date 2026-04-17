@@ -1,11 +1,10 @@
 import { useCheckAdminRole } from "@administration/hooks";
-import { AdministratorRoleName } from "@administration/types";
 import { getWorkflowDisplayName } from "@app/utils";
 import Attribution from "@base/Attribution";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import Link from "@base/Link";
-import ProgressCircle, { sizes } from "@base/ProgressCircle";
+import ProgressCircle from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
 import { Equal, EqualNot } from "lucide-react";
 import { JobNested } from "@/jobs/types";
@@ -32,9 +31,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 		subtractions,
 		created_at,
 	} = analysis;
-	const { hasPermission: canModify } = useCheckAdminRole(
-		AdministratorRoleName.USERS,
-	);
+	const { hasPermission: canModify } = useCheckAdminRole("users");
 	const onRemove = useRemoveAnalysis(id);
 
 	const title = checkSupportedWorkflow(workflow) ? (
@@ -68,7 +65,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 						<ProgressCircle
 							progress={job.progress || 0}
 							state={job.state || "pending"}
-							size={sizes.md}
+							size="md"
 						/>
 					)}
 				</div>

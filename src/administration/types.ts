@@ -14,13 +14,12 @@ export type AdministratorRole = {
 /**
  * All administrator roles
  */
-export enum AdministratorRoleName {
-	FULL = "full",
-	SETTINGS = "settings",
-	SPACES = "spaces",
-	USERS = "users",
-	BASE = "base",
-}
+export type AdministratorRoleName =
+	| "full"
+	| "settings"
+	| "spaces"
+	| "users"
+	| "base";
 
 export type Settings = {
 	default_source_types: string[];

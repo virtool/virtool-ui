@@ -1,4 +1,4 @@
-import ProgressCircle, { sizes } from "@base/ProgressCircle";
+import ProgressCircle from "@base/ProgressCircle";
 import type { JobNested } from "@jobs/types";
 import { CircleCheck } from "lucide-react";
 
@@ -36,7 +36,7 @@ export function IndexItemIcon({
 				<ProgressCircle
 					progress={job?.progress || 0}
 					state={job?.state || "pending"}
-					size={sizes.md}
+					size="md"
 				/>
 			)}
 			<span className="font-medium">{ready ? "Active" : "Building"}</span>

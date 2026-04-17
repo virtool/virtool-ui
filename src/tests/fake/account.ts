@@ -1,8 +1,4 @@
-import {
-	type Account,
-	type APIKeyMinimal,
-	QuickAnalyzeWorkflow,
-} from "@account/types";
+import type { Account, APIKeyMinimal } from "@account/types";
 import { faker } from "@faker-js/faker";
 import type { Permissions } from "@groups/types";
 import nock from "nock";
@@ -11,7 +7,7 @@ import { createFakePermissions } from "./permissions";
 import { createFakeUser } from "./user";
 
 const defaultSettings = {
-	quick_analyze_workflow: QuickAnalyzeWorkflow.pathoscope_bowtie,
+	quick_analyze_workflow: "pathoscope_bowtie",
 	show_ids: true,
 	show_versions: true,
 	skip_quick_analyze_dialog: true,

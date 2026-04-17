@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
@@ -33,7 +32,7 @@ describe("<ApiKeys />", () => {
 
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		mockApiGetApiKeys([]);
@@ -98,7 +97,7 @@ describe("<ApiKeys />", () => {
 	it("should show administrator notice when appropriate", async () => {
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		mockApiGetApiKeys([]);

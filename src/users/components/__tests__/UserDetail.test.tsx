@@ -1,5 +1,4 @@
 import Settings from "@administration/components/Settings";
-import { AdministratorRoleName } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiListGroups } from "@tests/api/groups";
@@ -39,7 +38,7 @@ describe("<UserDetail />", () => {
 			active: true,
 		});
 		account = createFakeAccount({
-			administrator_role: AdministratorRoleName.FULL,
+			administrator_role: "full",
 		});
 	});
 
@@ -51,7 +50,7 @@ describe("<UserDetail />", () => {
 			mockApiGetAccount(account);
 
 			const userDetail = createFakeUser({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 				groups,
 			});
 

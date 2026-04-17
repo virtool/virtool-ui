@@ -3,31 +3,32 @@ import type { ReferenceNested } from "@references/types";
 import type { UserNested } from "@users/types";
 import type { SearchResult } from "@/types/api";
 
-export enum Molecule {
-	ds_dna = "dsDNA",
-	ds_rna = "dsRNA",
-	ss_dna = "ssDNA",
-	ss_rna = "ssRNA",
-	ss_rna_neg = "ssRNA-",
-	ss_rna_pos = "ssRNA+",
-}
+export const Molecule = {
+	ds_dna: "dsDNA",
+	ds_rna: "dsRNA",
+	ss_dna: "ssDNA",
+	ss_rna: "ssRNA",
+	ss_rna_neg: "ssRNA-",
+	ss_rna_pos: "ssRNA+",
+} as const;
 
-export enum HistoryMethod {
-	add_isolate = "add_isolate",
-	create = "create",
-	create_sequence = "create_sequence",
-	clone = "clone",
-	edit = "edit",
-	edit_sequence = "edit_sequence",
-	edit_isolate = "edit_isolate",
-	remove = "remove",
-	remote = "remote",
-	remove_isolate = "remove_isolate",
-	remove_sequence = "remove_sequence",
-	import_otu = "import",
-	set_as_default = "set_as_default",
-	update = "update",
-}
+export type Molecule = (typeof Molecule)[keyof typeof Molecule];
+
+export type HistoryMethod =
+	| "add_isolate"
+	| "create"
+	| "create_sequence"
+	| "clone"
+	| "edit"
+	| "edit_sequence"
+	| "edit_isolate"
+	| "remove"
+	| "remote"
+	| "remove_isolate"
+	| "remove_sequence"
+	| "import"
+	| "set_as_default"
+	| "update";
 
 /** Contains information on history change */
 export type HistoryNested = {

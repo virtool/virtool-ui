@@ -1,12 +1,7 @@
 import type { UserNested } from "@users/types";
 import type { SearchResult } from "@/types/api";
 
-export enum UploadType {
-	hmm = "hmm",
-	reference = "reference",
-	reads = "reads",
-	subtraction = "subtraction",
-}
+export type UploadType = "hmm" | "reference" | "reads" | "subtraction";
 
 export type FileResponse = SearchResult & {
 	items: Upload[];

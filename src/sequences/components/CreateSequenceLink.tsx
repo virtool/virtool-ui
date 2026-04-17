@@ -1,6 +1,6 @@
 import { useUrlSearchParam } from "@app/hooks";
 import { cn } from "@app/utils";
-import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useCheckReferenceRight } from "@references/hooks";
 
 type CreateSequenceLinkProps = {
 	refId: string;
@@ -12,7 +12,7 @@ type CreateSequenceLinkProps = {
 export default function CreateSequenceLink({ refId }: CreateSequenceLinkProps) {
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		refId,
-		ReferenceRight.modify_otu,
+		"modify_otu",
 	);
 	const { setValue: setOpenCreateSequence } =
 		useUrlSearchParam("openCreateSequence");

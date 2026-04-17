@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -19,13 +18,13 @@ import ManageAdministrators from "../AdministratorList";
 describe("<Administrators>", () => {
 	it("should render", async () => {
 		const account = createFakeAccount({
-			administrator_role: AdministratorRoleName.FULL,
+			administrator_role: "full",
 		});
 		mockApiGetAccount(account);
 
 		const users = createFakeUsers(2);
-		users[0].administrator_role = AdministratorRoleName.FULL;
-		users[1].administrator_role = AdministratorRoleName.BASE;
+		users[0].administrator_role = "full";
+		users[1].administrator_role = "base";
 		mockApiFindUsers(users);
 
 		mockGetAdministratorRoles();
@@ -44,7 +43,7 @@ describe("<Administrators>", () => {
 			}),
 		).toBeInTheDocument();
 		expect(
-			within(user_1).getByText(`${AdministratorRoleName.FULL} Administrator`),
+			within(user_1).getByText(`${"full"} Administrator`),
 		).toBeInTheDocument();
 
 		const user_2 = screen.getByText(users[1].handle).closest("div");
@@ -54,7 +53,7 @@ describe("<Administrators>", () => {
 			}),
 		).toBeInTheDocument();
 		expect(
-			within(user_2).getByText(`${AdministratorRoleName.BASE} Administrator`),
+			within(user_2).getByText(`${"base"} Administrator`),
 		).toBeInTheDocument();
 
 		nock.cleanAll();
@@ -62,12 +61,12 @@ describe("<Administrators>", () => {
 
 	it("should change user role when dropdown is changed", async () => {
 		const account = createFakeAccount({
-			administrator_role: AdministratorRoleName.FULL,
+			administrator_role: "full",
 		});
 		mockApiGetAccount(account);
 
 		const user = createFakeUser({
-			administrator_role: AdministratorRoleName.FULL,
+			administrator_role: "full",
 		});
 		mockApiFindUsers([user]);
 
@@ -75,7 +74,7 @@ describe("<Administrators>", () => {
 
 		const set_role_scope = mockSetAdministratorRoleAPI({
 			user,
-			new_role: AdministratorRoleName.BASE,
+			new_role: "base",
 		});
 
 		renderWithRouter(<ManageAdministrators />);
@@ -83,7 +82,7 @@ describe("<Administrators>", () => {
 		await userEvent.click(await screen.findByRole("combobox"));
 		await userEvent.click(
 			await screen.findByRole("option", {
-				name: `${AdministratorRoleName.BASE} Administrator`,
+				name: `${"base"} Administrator`,
 			}),
 		);
 
@@ -93,12 +92,12 @@ describe("<Administrators>", () => {
 
 	it("should remove admin role when trash icon clicked", async () => {
 		const account = createFakeAccount({
-			administrator_role: AdministratorRoleName.FULL,
+			administrator_role: "full",
 		});
 		mockApiGetAccount(account);
 
 		const user = createFakeUser({
-			administrator_role: AdministratorRoleName.FULL,
+			administrator_role: "full",
 		});
 		mockApiFindUsers([user]);
 

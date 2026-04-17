@@ -5,7 +5,6 @@ import Button from "@base/Button";
 import Icon from "@base/Icon";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
-import { Permission } from "@groups/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { Info } from "lucide-react";
 import { useEffect } from "react";
@@ -17,9 +16,8 @@ import { hmmQueryKeys, useInstallHmm, useListHmms } from "../queries";
 export function HmmInstall() {
 	const { data, isPending } = useListHmms(1, 25);
 	const queryClient = useQueryClient();
-	const { hasPermission: canInstall } = useCheckAdminRoleOrPermission(
-		Permission.modify_hmm,
-	);
+	const { hasPermission: canInstall } =
+		useCheckAdminRoleOrPermission("modify_hmm");
 	const installMutation = useInstallHmm();
 
 	const taskComplete = data?.status?.task?.complete;

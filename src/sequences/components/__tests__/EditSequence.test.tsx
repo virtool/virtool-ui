@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { formatPath } from "@app/hooks";
 import References from "@references/components/References";
 import { screen } from "@testing-library/react";
@@ -37,7 +36,7 @@ describe("<SequenceEdit>", () => {
 		mockApiGetSettings(createFakeSettings());
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		path = formatPath(`/refs/${reference.id}/otus/${otu.id}/otu`, {

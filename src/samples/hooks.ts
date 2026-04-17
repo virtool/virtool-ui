@@ -1,5 +1,4 @@
 import { useFetchAccount } from "@account/queries";
-import { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import { useFetchSample } from "./queries";
 
@@ -18,10 +17,7 @@ export function useCheckCanEditSample(sampleId: string) {
 	}
 
 	const hasPermission =
-		hasSufficientAdminRole(
-			AdministratorRoleName.FULL,
-			account.administrator_role,
-		) ||
+		hasSufficientAdminRole("full", account.administrator_role) ||
 		sample.all_write ||
 		sample.user.id === account.id ||
 		(sample.group_write &&

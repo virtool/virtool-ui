@@ -1,12 +1,11 @@
 import { faker } from "@faker-js/faker";
 import type { SampleRightsUpdate } from "@samples/api";
-import {
+import type {
 	LibraryType,
-	type Quality,
-	type Read,
-	type Sample,
-	type SampleMinimal,
-	WorkflowState,
+	Quality,
+	Read,
+	Sample,
+	SampleMinimal,
 } from "@samples/types";
 import nock from "nock";
 import { createFakeServerJobNested } from "./jobs";
@@ -22,7 +21,7 @@ import { createFakeUserNested } from "./user";
 export function createFakeSampleMinimal(
 	overrides?: Partial<SampleMinimal>,
 ): SampleMinimal {
-	const defaultSampleMinimal = {
+	const defaultSampleMinimal: SampleMinimal = {
 		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
 		name: `${faker.word.noun({ strategy: "any-length" })} ${faker.number.int()}`,
 		created_at: faker.date.past().toISOString(),
@@ -30,15 +29,15 @@ export function createFakeSampleMinimal(
 		isolate: faker.word.noun({ strategy: "any-length" }),
 		job: createFakeServerJobNested({ workflow: "create_sample" }),
 		labels: [createFakeLabelNested()],
-		library_type: LibraryType.normal,
+		library_type: "normal",
 		notes: faker.lorem.lines(5),
 		nuvs: faker.datatype.boolean(),
 		pathoscope: faker.datatype.boolean(),
 		ready: true,
 		user: createFakeUserNested(),
 		workflows: {
-			nuvs: WorkflowState.NONE,
-			pathoscope: WorkflowState.NONE,
+			nuvs: "none",
+			pathoscope: "none",
 		},
 	};
 

@@ -1,6 +1,6 @@
 import Tabs from "@base/Tabs";
 import TabsLink from "@base/TabsLink";
-import { AdministratorRoleName } from "../types";
+import type { AdministratorRoleName } from "../types";
 import { hasSufficientAdminRole } from "../utils";
 
 type AdministratorTabsProps = {
@@ -12,25 +12,23 @@ export default function AdministrationTabs({
 }: AdministratorTabsProps) {
 	const tabs = [];
 
-	if (
-		hasSufficientAdminRole(AdministratorRoleName.SETTINGS, administratorRole)
-	) {
+	if (hasSufficientAdminRole("settings", administratorRole)) {
 		tabs.push(<TabsLink to="/administration/settings">Settings</TabsLink>);
 	}
 
-	if (hasSufficientAdminRole(AdministratorRoleName.USERS, administratorRole)) {
+	if (hasSufficientAdminRole("users", administratorRole)) {
 		tabs.push(
 			<TabsLink to="/administration/users?status=active">Users</TabsLink>,
 		);
 	}
 
-	if (hasSufficientAdminRole(AdministratorRoleName.FULL, administratorRole)) {
+	if (hasSufficientAdminRole("full", administratorRole)) {
 		tabs.push(
 			<TabsLink to="/administration/administrators">Administrators</TabsLink>,
 		);
 	}
 
-	if (hasSufficientAdminRole(AdministratorRoleName.USERS, administratorRole)) {
+	if (hasSufficientAdminRole("users", administratorRole)) {
 		tabs.push(<TabsLink to="/administration/groups">Groups</TabsLink>);
 	}
 

@@ -2,14 +2,7 @@ import { cn } from "@app/utils";
 import type { JobState } from "@jobs/types";
 import { Progress } from "radix-ui";
 
-export enum sizes {
-	xs = "xs",
-	sm = "sm",
-	md = "md",
-	lg = "lg",
-	xl = "xl",
-	xxl = "xxl",
-}
+export type sizes = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
 
 const colorToHex: Record<string, string> = {
 	blue: "#0B7FE5",
@@ -75,7 +68,7 @@ type ProgressCircleProps = {
 
 export default function ProgressCircle({
 	progress,
-	size = sizes.md,
+	size = "md",
 	state = "pending",
 }: ProgressCircleProps) {
 	const circleSize = progressCircleSizes[size];

@@ -1,11 +1,9 @@
-import { AdministratorRoleName } from "@administration/types";
 import { formatPath } from "@app/hooks";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { renderWithRouter } from "@tests/setup";
-import { UploadType } from "@uploads/types";
 import { upload } from "@uploads/uploader";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FileManager, type FileManagerProps } from "../FileManager";
@@ -23,7 +21,7 @@ describe("<FileManager>", () => {
 			accept: {
 				"application/gzip": [".fasta.gz", ".fa.gz", ".fastq.gz", ".fq.gz"],
 			},
-			fileType: UploadType.reads,
+			fileType: "reads",
 			message: "",
 		};
 		path = formatPath("/samples/uploads", { page: 1 });
@@ -97,7 +95,7 @@ describe("<FileManager>", () => {
 	it("should take custom message", async () => {
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);

@@ -1,4 +1,4 @@
-import { AdministratorRoleName } from "@administration/types";
+import type { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import { cn } from "@app/utils";
 import { FolderOpen, List, Settings, Tag } from "lucide-react";
@@ -13,10 +13,7 @@ type SidebarProps = {
  * Displays the sidebar with routes to manage the component
  */
 export default function Sidebar({ administratorRole }: SidebarProps) {
-	const fullAdministrator = hasSufficientAdminRole(
-		AdministratorRoleName.FULL,
-		administratorRole,
-	);
+	const fullAdministrator = hasSufficientAdminRole("full", administratorRole);
 
 	return (
 		<div

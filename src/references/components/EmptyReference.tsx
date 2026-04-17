@@ -3,7 +3,7 @@ import Button from "@base/Button";
 import { DialogFooter } from "@base/Dialog";
 import { useForm } from "react-hook-form";
 import { useCreateReference } from "../queries";
-import { ReferenceForm, ReferenceFormMode } from "./ReferenceForm";
+import { ReferenceForm } from "./ReferenceForm";
 
 type FormValues = {
 	name: string;
@@ -41,11 +41,7 @@ export default function EmptyReference() {
 				}),
 			)}
 		>
-			<ReferenceForm
-				errors={errors}
-				mode={ReferenceFormMode.empty}
-				register={register}
-			/>
+			<ReferenceForm errors={errors} mode="empty" register={register} />
 			<DialogFooter>
 				<Button type="submit" color="blue">
 					Save

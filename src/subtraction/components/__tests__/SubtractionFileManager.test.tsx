@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { formatPath } from "@app/hooks";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -20,7 +19,7 @@ describe("<SubtractionFileManager />", () => {
 	it("should reject uploads that don't pass validation", async () => {
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })]);

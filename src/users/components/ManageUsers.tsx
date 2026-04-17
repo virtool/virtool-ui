@@ -1,5 +1,4 @@
 import { useCheckAdminRole } from "@administration/hooks";
-import { AdministratorRoleName } from "@administration/types";
 import { useUrlSearchParam } from "@app/hooks";
 import Alert from "@base/Alert";
 import InputSearch from "@base/InputSearch";
@@ -21,9 +20,7 @@ export function ManageUsers() {
 		"status",
 		"active",
 	);
-	const { hasPermission, isPending } = useCheckAdminRole(
-		AdministratorRoleName.USERS,
-	);
+	const { hasPermission, isPending } = useCheckAdminRole("users");
 
 	if (isPending) {
 		return <LoadingPlaceholder />;

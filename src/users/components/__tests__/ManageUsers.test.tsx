@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { screen } from "@testing-library/react";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeUsers, mockApiFindUsers } from "@tests/fake/user";
@@ -9,10 +8,10 @@ import { ManageUsers } from "../ManageUsers";
 describe("<ManageUsers />", () => {
 	it("should render correctly with 3 users", async () => {
 		const users = createFakeUsers(3);
-		users[0].administrator_role = AdministratorRoleName.FULL;
+		users[0].administrator_role = "full";
 		await mockApiFindUsers(users);
 		const account = createFakeAccount({
-			administrator_role: AdministratorRoleName.FULL,
+			administrator_role: "full",
 		});
 		mockApiGetAccount(account);
 
@@ -28,7 +27,7 @@ describe("<ManageUsers />", () => {
 
 	it("should render correctly when documents = null", async () => {
 		const account = createFakeAccount({
-			administrator_role: AdministratorRoleName.FULL,
+			administrator_role: "full",
 		});
 		mockApiGetAccount(account);
 

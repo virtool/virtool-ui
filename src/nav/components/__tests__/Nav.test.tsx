@@ -1,4 +1,4 @@
-import { AdministratorRoleName } from "@administration/types";
+import type { AdministratorRoleName } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
@@ -6,8 +6,12 @@ import { describe, expect, it } from "vitest";
 import Nav from "../Nav";
 
 describe("<Nav />", () => {
-	const props = {
-		administrator_role: AdministratorRoleName.FULL,
+	const props: {
+		administrator_role: AdministratorRoleName;
+		dev: boolean;
+		handle: string;
+	} = {
+		administrator_role: "full",
 		dev: false,
 		handle: "Bob",
 	};

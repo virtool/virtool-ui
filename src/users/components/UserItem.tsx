@@ -1,5 +1,5 @@
 import { useCheckAdminRole } from "@administration/hooks";
-import { AdministratorRoleName } from "@administration/types";
+import type { AdministratorRoleName } from "@administration/types";
 import BoxGroupSection from "@base/BoxGroupSection";
 import InitialIcon from "@base/InitialIcon";
 import Label from "@base/Label";
@@ -25,9 +25,7 @@ export function UserItem({
 	primary_group,
 }: UserItemProps): ReactElement {
 	const { hasPermission: canEdit } = useCheckAdminRole(
-		administrator_role === null
-			? AdministratorRoleName.USERS
-			: AdministratorRoleName.FULL,
+		administrator_role === null ? "users" : "full",
 	);
 
 	return (

@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { screen } from "@testing-library/react";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
@@ -54,7 +53,7 @@ describe("<HmmList />", () => {
 			});
 			const scope = mockApiGetHmms(fakeHMMData);
 			const account = createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			});
 			mockApiGetAccount(account);
 			renderWithRouter(<HMM />, path);
@@ -113,7 +112,7 @@ describe("<HmmList />", () => {
 			});
 			const scope = mockApiGetHmms(fakeHMMData);
 			const account = createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			});
 			mockApiGetAccount(account);
 			renderWithRouter(<HMM />, path);

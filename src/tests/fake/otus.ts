@@ -1,13 +1,12 @@
 import { faker } from "@faker-js/faker";
 import type { UpdateOTUProps } from "@otus/queries";
-import {
-	HistoryMethod,
-	type HistoryNested,
-	type Otu,
-	type OtuIsolate,
-	type OtuMinimal,
-	type OtuSegment,
-	type OtuSequence,
+import type {
+	HistoryNested,
+	Otu,
+	OtuIsolate,
+	OtuMinimal,
+	OtuSegment,
+	OtuSequence,
 } from "@otus/types";
 import nock from "nock";
 import { createFakeReferenceNested } from "./references";
@@ -21,7 +20,7 @@ export function createFakeHistoryNested(): HistoryNested {
 		created_at: faker.date.past().toISOString(),
 		description: faker.lorem.lines(1),
 		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-		method_name: HistoryMethod.create,
+		method_name: "create",
 		user: createFakeUserNested(),
 	};
 }

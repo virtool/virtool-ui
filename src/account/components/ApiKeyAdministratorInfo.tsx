@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import Alert from "@base/Alert";
 import { useFetchAccount } from "../queries";
@@ -9,10 +8,7 @@ import { useFetchAccount } from "../queries";
 export default function ApiKeyAdministratorInfo() {
 	const { data, isPending } = useFetchAccount();
 
-	if (
-		!isPending &&
-		hasSufficientAdminRole(AdministratorRoleName.BASE, data.administrator_role)
-	) {
+	if (!isPending && hasSufficientAdminRole("base", data.administrator_role)) {
 		return (
 			<Alert color="purple">
 				<div>

@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import Samples from "@samples/components/Samples";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -34,7 +33,7 @@ describe("<SampleRights />", () => {
 	it("should render", async () => {
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		renderWithRouter(<Samples />, path);
@@ -54,7 +53,7 @@ describe("<SampleRights />", () => {
 	it("should handle group change when input is changed", async () => {
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		renderWithRouter(<Samples />, path);
@@ -65,7 +64,7 @@ describe("<SampleRights />", () => {
 	it("should handle group rights change when input is changed", async () => {
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		renderWithRouter(<Samples />, `/samples/${sample.id}/rights`);
@@ -76,7 +75,7 @@ describe("<SampleRights />", () => {
 	it("should handle all users' rights change when input is changed", async () => {
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		renderWithRouter(<Samples />, path);

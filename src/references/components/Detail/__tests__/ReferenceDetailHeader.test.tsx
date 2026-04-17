@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { screen } from "@testing-library/react";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import {
@@ -19,7 +18,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 		mockApiGetReferenceDetail(reference);
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		props = {
@@ -64,7 +63,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 		props.isRemote = true;
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		renderWithRouter(<ReferenceDetailHeader {...props} />, path);
@@ -75,7 +74,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 	it("should render when [isRemote=false]", () => {
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		renderWithRouter(<ReferenceDetailHeader {...props} />, path);

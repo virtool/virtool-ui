@@ -1,5 +1,4 @@
 import AdministratorCreate from "@administration/components/AdministratorCreate";
-import { AdministratorRoleName } from "@administration/types";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -15,7 +14,7 @@ import { describe, expect, it } from "vitest";
 describe("<AdministratorCreate>", () => {
 	it("should render form", async () => {
 		const account = createFakeAccount({
-			administrator_role: AdministratorRoleName.FULL,
+			administrator_role: "full",
 		});
 		mockApiGetAccount(account);
 
@@ -47,7 +46,7 @@ describe("<AdministratorCreate>", () => {
 
 	it("should promote admin when correct", async () => {
 		const account = createFakeAccount({
-			administrator_role: AdministratorRoleName.FULL,
+			administrator_role: "full",
 		});
 		mockApiGetAccount(account);
 
@@ -58,7 +57,7 @@ describe("<AdministratorCreate>", () => {
 
 		const set_role_scope = mockSetAdministratorRoleAPI({
 			user: users[0],
-			new_role: AdministratorRoleName.FULL,
+			new_role: "full",
 		});
 
 		renderWithProviders(<AdministratorCreate />);
@@ -79,14 +78,12 @@ describe("<AdministratorCreate>", () => {
 		await userEvent.click(screen.getByRole("combobox", { name: "Role" }));
 		await userEvent.click(
 			screen.getByRole("option", {
-				name: `${AdministratorRoleName.FULL} Administrator`,
+				name: `${"full"} Administrator`,
 			}),
 		);
 		const roleTrigger = screen.getByRole("combobox", { name: "Role" });
 		expect(
-			within(roleTrigger).getByText(
-				`${AdministratorRoleName.FULL} Administrator`,
-			),
+			within(roleTrigger).getByText(`${"full"} Administrator`),
 		).toBeInTheDocument();
 
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -97,7 +94,7 @@ describe("<AdministratorCreate>", () => {
 
 	it("should filter users", async () => {
 		const account = createFakeAccount({
-			administrator_role: AdministratorRoleName.FULL,
+			administrator_role: "full",
 		});
 		mockApiGetAccount(account);
 

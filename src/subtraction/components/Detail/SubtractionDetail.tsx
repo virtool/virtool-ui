@@ -7,7 +7,6 @@ import Table from "@base/Table";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import { Permission } from "@groups/types";
 import { useFetchSubtraction } from "@subtraction/queries";
 import type { NucleotideComposition } from "@subtraction/types";
 import { Pencil, Trash } from "lucide-react";
@@ -30,9 +29,8 @@ export default function SubtractionDetail() {
 	const { subtractionId } = usePathParams<{ subtractionId: string }>();
 
 	const { data, isPending, isError } = useFetchSubtraction(subtractionId);
-	const { hasPermission: canModify } = useCheckAdminRoleOrPermission(
-		Permission.modify_subtraction,
-	);
+	const { hasPermission: canModify } =
+		useCheckAdminRoleOrPermission("modify_subtraction");
 
 	const { open: openRemoveSubtraction, setOpen: setOpenRemoveSubtraction } =
 		useDialogParam("openRemoveSubtraction");

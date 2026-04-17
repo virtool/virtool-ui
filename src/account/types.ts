@@ -1,10 +1,7 @@
 import type { GroupMinimal, Permissions } from "@groups/types";
 import type { User } from "@users/types";
 
-export enum QuickAnalyzeWorkflow {
-	nuvs = "nuvs",
-	pathoscope_bowtie = "pathoscope_bowtie",
-}
+export type QuickAnalyzeWorkflow = "nuvs" | "pathoscope_bowtie";
 
 export type APIKeyMinimal = {
 	created_at?: string;
