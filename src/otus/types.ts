@@ -12,22 +12,21 @@ export enum Molecule {
 	ss_rna_pos = "ssRNA+",
 }
 
-export enum HistoryMethod {
-	add_isolate = "add_isolate",
-	create = "create",
-	create_sequence = "create_sequence",
-	clone = "clone",
-	edit = "edit",
-	edit_sequence = "edit_sequence",
-	edit_isolate = "edit_isolate",
-	remove = "remove",
-	remote = "remote",
-	remove_isolate = "remove_isolate",
-	remove_sequence = "remove_sequence",
-	import_otu = "import",
-	set_as_default = "set_as_default",
-	update = "update",
-}
+export type HistoryMethod =
+	| "add_isolate"
+	| "create"
+	| "create_sequence"
+	| "clone"
+	| "edit"
+	| "edit_sequence"
+	| "edit_isolate"
+	| "remove"
+	| "remote"
+	| "remove_isolate"
+	| "remove_sequence"
+	| "import"
+	| "set_as_default"
+	| "update";
 
 /** Contains information on history change */
 export type HistoryNested = {
