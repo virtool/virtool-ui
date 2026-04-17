@@ -5,13 +5,13 @@ import { AdministratorRoleName } from "./types";
 /**
  * The permissions level of each administrator role
  */
-enum AdministratorPermissionsLevel {
-	full,
-	settings,
-	spaces,
-	users,
-	base,
-}
+const AdministratorPermissionsLevel: Record<AdministratorRoleName, number> = {
+	[AdministratorRoleName.FULL]: 0,
+	[AdministratorRoleName.SETTINGS]: 1,
+	[AdministratorRoleName.SPACES]: 2,
+	[AdministratorRoleName.USERS]: 3,
+	[AdministratorRoleName.BASE]: 4,
+};
 
 /**
  * Check if a user has a sufficient admin role
@@ -33,16 +33,16 @@ export function hasSufficientAdminRole(
 /**
  * Permissions granted to each administrator role
  */
-export enum AdministratorPermissions {
-	cancel_job = AdministratorRoleName.BASE,
-	create_ref = AdministratorRoleName.BASE,
-	modify_hmm = AdministratorRoleName.BASE,
-	remove_job = AdministratorRoleName.BASE,
-	upload_file = AdministratorRoleName.FULL,
-	create_sample = AdministratorRoleName.FULL,
-	modify_subtraction = AdministratorRoleName.FULL,
-	remove_file = AdministratorRoleName.FULL,
-}
+export const AdministratorPermissions: Record<string, AdministratorRoleName> = {
+	cancel_job: AdministratorRoleName.BASE,
+	create_ref: AdministratorRoleName.BASE,
+	modify_hmm: AdministratorRoleName.BASE,
+	remove_job: AdministratorRoleName.BASE,
+	upload_file: AdministratorRoleName.FULL,
+	create_sample: AdministratorRoleName.FULL,
+	modify_subtraction: AdministratorRoleName.FULL,
+	remove_file: AdministratorRoleName.FULL,
+};
 
 /**
  * Check if a user has a sufficient admin role or legacy permissions to perform an action
