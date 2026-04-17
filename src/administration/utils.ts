@@ -33,7 +33,10 @@ export function hasSufficientAdminRole(
 /**
  * Permissions granted to each administrator role
  */
-export const AdministratorPermissions: Record<string, AdministratorRoleName> = {
+export const AdministratorPermissions: Record<
+	Permission,
+	AdministratorRoleName
+> = {
 	cancel_job: "base",
 	create_ref: "base",
 	modify_hmm: "base",
@@ -57,7 +60,7 @@ export function checkAdminRoleOrPermissionsFromAccount(
 ): boolean {
 	return (
 		hasSufficientAdminRole(
-			AdministratorPermissions[permission as string],
+			AdministratorPermissions[permission],
 			account.administrator_role,
 		) || account.permissions[permission]
 	);
