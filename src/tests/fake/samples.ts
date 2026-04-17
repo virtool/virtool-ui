@@ -1,11 +1,11 @@
 import { faker } from "@faker-js/faker";
 import type { SampleRightsUpdate } from "@samples/api";
-import {
+import type {
 	LibraryType,
-	type Quality,
-	type Read,
-	type Sample,
-	type SampleMinimal,
+	Quality,
+	Read,
+	Sample,
+	SampleMinimal,
 } from "@samples/types";
 import nock from "nock";
 import { createFakeServerJobNested } from "./jobs";
@@ -29,7 +29,7 @@ export function createFakeSampleMinimal(
 		isolate: faker.word.noun({ strategy: "any-length" }),
 		job: createFakeServerJobNested({ workflow: "create_sample" }),
 		labels: [createFakeLabelNested()],
-		library_type: LibraryType.normal,
+		library_type: "normal",
 		notes: faker.lorem.lines(5),
 		nuvs: faker.datatype.boolean(),
 		pathoscope: faker.datatype.boolean(),

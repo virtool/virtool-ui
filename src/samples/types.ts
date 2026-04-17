@@ -17,12 +17,7 @@ import type { SearchResult } from "../types/api";
 export type WorkflowState = "complete" | "pending" | "none" | "incompatible";
 
 /* All Library types */
-export enum LibraryType {
-	amplicon = "amplicon",
-	srna = "srna",
-	other = "other",
-	normal = "normal",
-}
+export type LibraryType = "amplicon" | "srna" | "other" | "normal";
 
 /* All workflow states for a sample */
 export type SampleWorkflows = {

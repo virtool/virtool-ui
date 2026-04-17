@@ -1,4 +1,3 @@
-import { LibraryType } from "@samples/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiListGroups } from "@tests/api/groups";
@@ -83,7 +82,7 @@ describe("<CreateSample>", () => {
 			"",
 			"",
 			"",
-			LibraryType.normal,
+			"normal",
 			[file.id],
 			[],
 			[],
@@ -115,7 +114,7 @@ describe("<CreateSample>", () => {
 			"Clone AB",
 			"Apple",
 			"Earth",
-			LibraryType.normal,
+			"normal",
 			[files[0].id, files[1].id],
 			[labels[0].id],
 			[subtractionShortlist.id],
