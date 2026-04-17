@@ -6,7 +6,6 @@ import {
 	type Read,
 	type Sample,
 	type SampleMinimal,
-	WorkflowState,
 } from "@samples/types";
 import nock from "nock";
 import { createFakeServerJobNested } from "./jobs";
@@ -22,7 +21,7 @@ import { createFakeUserNested } from "./user";
 export function createFakeSampleMinimal(
 	overrides?: Partial<SampleMinimal>,
 ): SampleMinimal {
-	const defaultSampleMinimal = {
+	const defaultSampleMinimal: SampleMinimal = {
 		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
 		name: `${faker.word.noun({ strategy: "any-length" })} ${faker.number.int()}`,
 		created_at: faker.date.past().toISOString(),
@@ -37,8 +36,8 @@ export function createFakeSampleMinimal(
 		ready: true,
 		user: createFakeUserNested(),
 		workflows: {
-			nuvs: WorkflowState.NONE,
-			pathoscope: WorkflowState.NONE,
+			nuvs: "none",
+			pathoscope: "none",
 		},
 	};
 

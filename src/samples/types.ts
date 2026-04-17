@@ -14,12 +14,7 @@ import type { SubtractionNested } from "../subtraction/types";
 import type { SearchResult } from "../types/api";
 
 /* All workflow states */
-export enum WorkflowState {
-	COMPLETE = "complete",
-	PENDING = "pending",
-	NONE = "none",
-	INCOMPATIBLE = "incompatible",
-}
+export type WorkflowState = "complete" | "pending" | "none" | "incompatible";
 
 /* All Library types */
 export enum LibraryType {

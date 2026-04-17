@@ -1,5 +1,5 @@
 import { getWorkflowDisplayName } from "@app/utils";
-import { type SampleWorkflows, WorkflowState } from "@samples/types";
+import type { SampleWorkflows } from "@samples/types";
 import { Link } from "wouter";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import WorkflowTag from "./WorkflowTag";
@@ -22,7 +22,7 @@ type WorkflowTagsProps = {
 export default function WorkflowTags({ id, workflows }: WorkflowTagsProps) {
 	const workflowTags = Object.entries(workflows).reduce(
 		(tags, [key, value]) => {
-			if (value === WorkflowState.COMPLETE || value === WorkflowState.PENDING) {
+			if (value === "complete" || value === "pending") {
 				tags.push(
 					<WorkflowTag
 						key={key}
