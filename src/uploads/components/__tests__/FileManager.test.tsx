@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { formatPath } from "@app/hooks";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -96,7 +95,7 @@ describe("<FileManager>", () => {
 	it("should take custom message", async () => {
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);

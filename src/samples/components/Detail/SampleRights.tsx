@@ -1,6 +1,5 @@
 import { useFetchAccount } from "@account/queries";
 import { useCheckAdminRole } from "@administration/hooks";
-import { AdministratorRoleName } from "@administration/types";
 import { usePathParams } from "@app/hooks";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
@@ -25,7 +24,7 @@ import { useQueryClient } from "@tanstack/react-query";
 export default function SampleRights() {
 	const { sampleId } = usePathParams<{ sampleId: string }>();
 
-	const { hasPermission } = useCheckAdminRole(AdministratorRoleName.FULL);
+	const { hasPermission } = useCheckAdminRole("full");
 	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 	const { data: account, isPending: isPendingAccount } = useFetchAccount();
 	const { data: groups, isPending: isPendingGroups } = useListGroups();

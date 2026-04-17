@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import References from "@references/components/References";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -29,7 +28,7 @@ describe("<Indexes />", () => {
 		mockApiGetReferenceDetail(reference);
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		mockApiGetSettings(createFakeSettings());

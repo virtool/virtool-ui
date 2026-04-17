@@ -1,6 +1,5 @@
 import { useCheckAdminRole } from "@administration/hooks";
 import { useFetchUser, useUpdateUser } from "@administration/queries";
-import { AdministratorRoleName } from "@administration/types";
 import { usePathParams } from "@app/hooks";
 import Alert from "@base/Alert";
 import InitialIcon from "@base/InitialIcon";
@@ -20,9 +19,7 @@ export default function UserDetail() {
 	const { userId } = usePathParams<{ userId: string }>();
 	const { data, isPending } = useFetchUser(Number(userId));
 	const { hasPermission: canEdit } = useCheckAdminRole(
-		data?.administrator_role === null
-			? AdministratorRoleName.USERS
-			: AdministratorRoleName.FULL,
+		data?.administrator_role === null ? "users" : "full",
 	);
 
 	const mutation = useUpdateUser();

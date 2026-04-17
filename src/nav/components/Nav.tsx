@@ -1,5 +1,5 @@
 import { useLogout } from "@account/queries";
-import { AdministratorRoleName } from "@administration/types";
+import type { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import { useDialogParam } from "@app/hooks";
 import Dropdown from "@base/Dropdown";
@@ -67,10 +67,7 @@ export default function Nav({ administrator_role, handle }: NavBarProps) {
 						<div />
 
 						<DropdownMenuLink to="/account">Account</DropdownMenuLink>
-						{hasSufficientAdminRole(
-							AdministratorRoleName.USERS,
-							administrator_role,
-						) && (
+						{hasSufficientAdminRole("users", administrator_role) && (
 							<DropdownMenuLink to="/administration">
 								Administration{" "}
 							</DropdownMenuLink>

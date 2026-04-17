@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
 import {
@@ -24,7 +23,7 @@ describe("<Settings />", () => {
 	});
 
 	it("should render", async () => {
-		account.administrator_role = AdministratorRoleName.FULL;
+		account.administrator_role = "full";
 		scope = nock("http://localhost").get("/api/account").reply(200, account);
 		renderWithRouter(<Settings />, path);
 
@@ -43,7 +42,7 @@ describe("<Settings />", () => {
 	});
 
 	it("should render all options for full administrators", async () => {
-		account.administrator_role = AdministratorRoleName.FULL;
+		account.administrator_role = "full";
 		scope = nock("http://localhost").get("/api/account").reply(200, account);
 		renderWithRouter(<Settings />, path);
 
@@ -56,7 +55,7 @@ describe("<Settings />", () => {
 	});
 
 	it("should render only groups and users for users administrators", async () => {
-		account.administrator_role = AdministratorRoleName.USERS;
+		account.administrator_role = "users";
 		scope = nock("http://localhost").get("/api/account").reply(200, account);
 		renderWithRouter(<Settings />, path);
 

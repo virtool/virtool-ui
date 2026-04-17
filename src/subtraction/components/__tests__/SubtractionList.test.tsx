@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -52,7 +51,7 @@ describe("<SubtractionList />", () => {
 	it("should render create button when [canModify=true]", async () => {
 		const scope = mockApiGetSubtractions([subtractions]);
 		const account = createFakeAccount({
-			administrator_role: AdministratorRoleName.FULL,
+			administrator_role: "full",
 		});
 		mockApiGetAccount(account);
 		renderWithRouter(<SubtractionList />);

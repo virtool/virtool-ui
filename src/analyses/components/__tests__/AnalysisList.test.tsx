@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { formatPath } from "@app/hooks";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -55,7 +54,7 @@ describe("<AnalysesList />", () => {
 	describe("<AnalysesToolbar />", () => {
 		it("should show analysis creation when user is full admin", async () => {
 			const account = createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			});
 			mockApiGetAccount(account);
 			mockApiGetSampleDetail(sample);
@@ -109,7 +108,7 @@ describe("<AnalysesList />", () => {
 		it("should change state once create analysis is clicked", async () => {
 			mockApiGetAccount(
 				createFakeAccount({
-					administrator_role: AdministratorRoleName.FULL,
+					administrator_role: "full",
 				}),
 			);
 			mockApiGetSampleDetail(sample);

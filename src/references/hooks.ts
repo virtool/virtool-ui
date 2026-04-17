@@ -1,5 +1,4 @@
 import { useFetchAccount } from "@account/queries";
-import { AdministratorRoleName } from "@administration/types";
 import { apiClient } from "@app/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -137,7 +136,7 @@ export function useCheckReferenceRight(
 		return { hasPermission: false, isPending: true };
 	}
 
-	if (account.administrator_role === AdministratorRoleName.FULL) {
+	if (account.administrator_role === "full") {
 		return { hasPermission: true, isPending: false };
 	}
 

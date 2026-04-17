@@ -1,16 +1,16 @@
 import type { Account } from "@account/types";
 import type { Permission } from "@groups/types";
-import { AdministratorRoleName } from "./types";
+import type { AdministratorRoleName } from "./types";
 
 /**
  * The permissions level of each administrator role
  */
 const AdministratorPermissionsLevel: Record<AdministratorRoleName, number> = {
-	[AdministratorRoleName.FULL]: 0,
-	[AdministratorRoleName.SETTINGS]: 1,
-	[AdministratorRoleName.SPACES]: 2,
-	[AdministratorRoleName.USERS]: 3,
-	[AdministratorRoleName.BASE]: 4,
+	full: 0,
+	settings: 1,
+	spaces: 2,
+	users: 3,
+	base: 4,
 };
 
 /**
@@ -34,14 +34,14 @@ export function hasSufficientAdminRole(
  * Permissions granted to each administrator role
  */
 export const AdministratorPermissions: Record<string, AdministratorRoleName> = {
-	cancel_job: AdministratorRoleName.BASE,
-	create_ref: AdministratorRoleName.BASE,
-	modify_hmm: AdministratorRoleName.BASE,
-	remove_job: AdministratorRoleName.BASE,
-	upload_file: AdministratorRoleName.FULL,
-	create_sample: AdministratorRoleName.FULL,
-	modify_subtraction: AdministratorRoleName.FULL,
-	remove_file: AdministratorRoleName.FULL,
+	cancel_job: "base",
+	create_ref: "base",
+	modify_hmm: "base",
+	remove_job: "base",
+	upload_file: "full",
+	create_sample: "full",
+	modify_subtraction: "full",
+	remove_file: "full",
 };
 
 /**

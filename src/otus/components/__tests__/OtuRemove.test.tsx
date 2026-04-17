@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { formatPath } from "@app/hooks";
 import References from "@references/components/References";
 import { screen, waitFor } from "@testing-library/react";
@@ -35,7 +34,7 @@ describe("<RemoveOTU />", () => {
 		mockApiGetSettings(createFakeSettings());
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 

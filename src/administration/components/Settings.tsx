@@ -8,7 +8,6 @@ import Groups from "@groups/components/Groups";
 import { ManageUsers } from "@users/components/ManageUsers";
 import UserDetail from "@users/components/UserDetail";
 import { Redirect, Route, Switch } from "wouter";
-import { AdministratorRoleName } from "../types";
 import { hasSufficientAdminRole } from "../utils";
 import AdministrationTabs from "./AdministrationTabs";
 import ManageAdministrators from "./AdministratorList";
@@ -18,7 +17,7 @@ export default function Settings() {
 	const { data: account, isPending } = useFetchAccount();
 
 	const redirect = hasSufficientAdminRole(
-		AdministratorRoleName.SETTINGS,
+		"settings",
 		account?.administrator_role,
 	)
 		? "settings"

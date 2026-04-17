@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -57,7 +56,7 @@ describe("<SamplesList />", () => {
 	it("should render create button when [canModify=true]", async () => {
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 		renderWithRouter(<SamplesList />, path);

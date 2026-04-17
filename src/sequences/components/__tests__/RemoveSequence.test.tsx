@@ -1,4 +1,3 @@
-import { AdministratorRoleName } from "@administration/types";
 import { formatPath } from "@app/hooks";
 import { faker } from "@faker-js/faker";
 import References from "@references/components/References";
@@ -39,7 +38,7 @@ describe("<RemoveSequence />", () => {
 		mockApiGetSettings(createFakeSettings());
 		mockApiGetAccount(
 			createFakeAccount({
-				administrator_role: AdministratorRoleName.FULL,
+				administrator_role: "full",
 			}),
 		);
 
