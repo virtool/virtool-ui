@@ -6,7 +6,6 @@ import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { mockApiCreateSubtraction } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { UploadType } from "@/uploads/types";
 import SubtractionCreate from "../SubtractionCreate";
 
 describe("<SubtractionCreate />", () => {
@@ -29,7 +28,7 @@ describe("<SubtractionCreate />", () => {
 	it("should render error when submitted with no name or file entered", async () => {
 		const file = createFakeFile({
 			name: "subtraction.fq.gz",
-			type: UploadType.subtraction,
+			type: "subtraction",
 		});
 		mockApiListFiles([file]);
 		renderWithRouter(<SubtractionCreate />, path);
@@ -44,7 +43,7 @@ describe("<SubtractionCreate />", () => {
 	it("should submit correct values when all fields selected", async () => {
 		const file = createFakeFile({
 			name: "testsubtraction1",
-			type: UploadType.subtraction,
+			type: "subtraction",
 		});
 		const name = "testSubtractionname";
 		const nickname = "testSubtractionNickname";
@@ -69,7 +68,7 @@ describe("<SubtractionCreate />", () => {
 	it("should restore form values from session storage", async () => {
 		const file = createFakeFile({
 			name: "testSubtraction1",
-			type: UploadType.subtraction,
+			type: "subtraction",
 		});
 		const name = "testSubtractionName";
 		const nickname = "testSubtractionNickname";
@@ -100,7 +99,7 @@ describe("<SubtractionCreate />", () => {
 	it("should persist values into session storage", async () => {
 		const file = createFakeFile({
 			name: "ath.fa.gz",
-			type: UploadType.subtraction,
+			type: "subtraction",
 		});
 		const name = "Arabidopsis thaliana";
 		const nickname = "Thale cress";

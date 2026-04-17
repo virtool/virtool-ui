@@ -8,7 +8,7 @@ import type {
 	InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
 import { useValidateFiles } from "@/uploads/hooks";
-import { type FileResponse, type Upload, UploadType } from "@/uploads/types";
+import type { FileResponse, Upload } from "@/uploads/types";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 type SubtractionFileSelectorProps = {
@@ -52,7 +52,7 @@ export function SubtractionFileSelector({
 	isPending,
 	isFetchingNextPage,
 }: SubtractionFileSelectorProps) {
-	useValidateFiles(UploadType.subtraction, selected, onClick);
+	useValidateFiles("subtraction", selected, onClick);
 
 	const items = files.pages.flatMap((page) => page.items);
 

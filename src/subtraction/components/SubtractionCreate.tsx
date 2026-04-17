@@ -17,7 +17,6 @@ import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { Controller } from "react-hook-form";
 import { useInfiniteFindFiles } from "@/uploads/queries";
-import { UploadType } from "@/uploads/types";
 import { useCreateSubtraction } from "../queries";
 import { SubtractionFileSelector } from "./SubtractionFileSelector";
 
@@ -50,7 +49,7 @@ export default function SubtractionCreate() {
 		isPending,
 		isFetchingNextPage,
 		fetchNextPage,
-	} = useInfiniteFindFiles(UploadType.subtraction, 25);
+	} = useInfiniteFindFiles("subtraction", 25);
 
 	const mutation = useCreateSubtraction();
 

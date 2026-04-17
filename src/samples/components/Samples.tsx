@@ -3,7 +3,6 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import { Labels } from "@labels/components/Labels";
 import { Route, Switch } from "wouter";
 import { FileManager } from "@/uploads/components/FileManager";
-import { UploadType } from "@/uploads/types";
 import CreateSample from "./Create/CreateSample";
 import SampleDetail from "./Detail/SampleDetail";
 import SamplesSettings from "./SampleSettings";
@@ -20,7 +19,7 @@ function SampleFileManager() {
 					"application/gzip": [".fasta.gz", ".fa.gz", ".fastq.gz", ".fq.gz"],
 					"text/plain": [".fasta", ".fa", ".fastq", ".fq"],
 				}}
-				fileType={UploadType.reads}
+				fileType="reads"
 				message={
 					<div className="flex flex-col gap-1 items-center">
 						<span className="font-medium text-lg">

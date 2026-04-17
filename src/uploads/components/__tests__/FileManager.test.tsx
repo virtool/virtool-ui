@@ -5,7 +5,6 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { renderWithRouter } from "@tests/setup";
-import { UploadType } from "@uploads/types";
 import { upload } from "@uploads/uploader";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FileManager, type FileManagerProps } from "../FileManager";
@@ -23,7 +22,7 @@ describe("<FileManager>", () => {
 			accept: {
 				"application/gzip": [".fasta.gz", ".fa.gz", ".fastq.gz", ".fq.gz"],
 			},
-			fileType: UploadType.reads,
+			fileType: "reads",
 			message: "",
 		};
 		path = formatPath("/samples/uploads", { page: 1 });

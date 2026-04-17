@@ -20,7 +20,7 @@ import { Clock, WandSparkles } from "lucide-react";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import { useInfiniteFindFiles } from "@/uploads/queries";
-import { type Upload, UploadType } from "@/uploads/types";
+import type { Upload } from "@/uploads/types";
 import LibraryTypeSelector from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
 import SampleUserGroup from "./SampleUserGroup";
@@ -65,7 +65,7 @@ export default function CreateSample() {
 		isPending: isPendingReads,
 		isFetchingNextPage,
 		fetchNextPage,
-	} = useInfiniteFindFiles(UploadType.reads, 25);
+	} = useInfiniteFindFiles("reads", 25);
 	const {
 		control,
 		formState: { errors },

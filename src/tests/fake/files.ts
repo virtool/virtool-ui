@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import nock from "nock";
-import { type Upload, UploadType } from "@/uploads/types";
+import type { Upload } from "@/uploads/types";
 import { createFakeUserNested } from "./user";
 
 /**
@@ -21,7 +21,7 @@ export function createFakeFile(overrides?: Partial<Upload>): Upload {
 		removed_at: undefined,
 		reserved: false,
 		size: faker.number.int(),
-		type: UploadType.reads,
+		type: "reads",
 		uploaded_at: faker.date.past().toISOString(),
 		user: createFakeUserNested(),
 		...overrides,

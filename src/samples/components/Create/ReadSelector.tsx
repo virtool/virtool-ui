@@ -18,7 +18,7 @@ import type {
 import { Repeat, Undo } from "lucide-react";
 import { type ReactNode, useEffect, useState } from "react";
 import { useValidateFiles } from "@/uploads/hooks";
-import { type FileResponse, UploadType } from "@/uploads/types";
+import type { FileResponse } from "@/uploads/types";
 import ReadSelectorItem from "./ReadSelectorItem";
 
 type ReadSelectorProps = {
@@ -52,7 +52,7 @@ export default function ReadSelector({
 	error,
 	selected,
 }: ReadSelectorProps) {
-	useValidateFiles(UploadType.reads, selected, onSelect);
+	useValidateFiles("reads", selected, onSelect);
 
 	const [term, setTerm] = useState("");
 	const [selectedFiles, setSelectedFiles] = useState(selected);
