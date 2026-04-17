@@ -9,7 +9,6 @@ import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
-import { Permission } from "@groups/types";
 import { capitalize } from "es-toolkit";
 import { AlertCircle } from "lucide-react";
 import type { ReactNode } from "react";
@@ -55,11 +54,11 @@ export function FileManager({
 
 	const canUpload = checkAdminRoleOrPermissionsFromAccount(
 		account,
-		Permission.upload_file,
+		"upload_file",
 	);
 	const canDelete = checkAdminRoleOrPermissionsFromAccount(
 		account,
-		Permission.remove_file,
+		"remove_file",
 	);
 
 	const title = `${fileType === "reads" ? "Read" : capitalize(fileType)} Files`;

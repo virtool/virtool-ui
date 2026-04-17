@@ -3,7 +3,6 @@ import { updateSearchParam } from "@app/hooks";
 import InputSearch from "@base/InputSearch";
 import LinkButton from "@base/LinkButton";
 import Toolbar from "@base/Toolbar";
-import { Permission } from "@groups/types";
 import { useSearch } from "wouter";
 import SubtractionCreate from "./SubtractionCreate";
 
@@ -22,9 +21,7 @@ export default function SubtractionToolbar({
 	term,
 	handleChange,
 }: SubtractionToolbarProps) {
-	const { hasPermission } = useCheckAdminRoleOrPermission(
-		Permission.modify_subtraction,
-	);
+	const { hasPermission } = useCheckAdminRoleOrPermission("modify_subtraction");
 	const search = useSearch();
 
 	return (

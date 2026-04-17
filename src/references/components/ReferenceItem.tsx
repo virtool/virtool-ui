@@ -5,7 +5,6 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
-import { Permission } from "@groups/types";
 import type { ReferenceMinimal } from "@references/types";
 import { Copy } from "lucide-react";
 import type { ReactNode } from "react";
@@ -23,9 +22,8 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
 
 	const { created_at, id, name, task, user } = reference;
 
-	const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(
-		Permission.create_ref,
-	);
+	const { hasPermission: canCreate } =
+		useCheckAdminRoleOrPermission("create_ref");
 
 	let end: ReactNode = null;
 
