@@ -4,7 +4,7 @@ import SaveButton from "@base/SaveButton";
 import { useUpdateReference } from "@references/queries";
 import type { Reference } from "@references/types";
 import { useForm } from "react-hook-form";
-import { ReferenceForm, ReferenceFormMode } from "../ReferenceForm";
+import { ReferenceForm } from "../ReferenceForm";
 
 export type FormValues = {
 	name: string;
@@ -49,11 +49,7 @@ export default function EditReference({ detail }: EditReferenceProps) {
 			<DialogContent>
 				<DialogTitle>Edit Reference</DialogTitle>
 				<form onSubmit={handleSubmit((values) => handleEdit({ ...values }))}>
-					<ReferenceForm
-						errors={errors}
-						mode={ReferenceFormMode.edit}
-						register={register}
-					/>
+					<ReferenceForm errors={errors} mode="edit" register={register} />
 					<DialogFooter>
 						<SaveButton />
 					</DialogFooter>

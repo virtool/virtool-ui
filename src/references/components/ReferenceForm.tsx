@@ -5,10 +5,7 @@ import InputSimple from "@base/InputSimple";
 import TextArea from "@base/TextArea";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 
-export enum ReferenceFormMode {
-	edit = "edit",
-	empty = "empty",
-}
+export type ReferenceFormMode = "edit" | "empty";
 
 type FormValues = {
 	name: string;
@@ -31,7 +28,7 @@ type ReferenceFormProps = {
 export function ReferenceForm({ errors, mode, register }: ReferenceFormProps) {
 	let organismComponent;
 
-	if (mode === ReferenceFormMode.empty || mode === ReferenceFormMode.edit) {
+	if (mode === "empty" || mode === "edit") {
 		organismComponent = (
 			<InputGroup>
 				<InputLabel htmlFor="organism">Organism</InputLabel>
