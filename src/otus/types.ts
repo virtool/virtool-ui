@@ -3,14 +3,16 @@ import type { ReferenceNested } from "@references/types";
 import type { UserNested } from "@users/types";
 import type { SearchResult } from "@/types/api";
 
-export enum Molecule {
-	ds_dna = "dsDNA",
-	ds_rna = "dsRNA",
-	ss_dna = "ssDNA",
-	ss_rna = "ssRNA",
-	ss_rna_neg = "ssRNA-",
-	ss_rna_pos = "ssRNA+",
-}
+export const Molecule = {
+	ds_dna: "dsDNA",
+	ds_rna: "dsRNA",
+	ss_dna: "ssDNA",
+	ss_rna: "ssRNA",
+	ss_rna_neg: "ssRNA-",
+	ss_rna_pos: "ssRNA+",
+} as const;
+
+export type Molecule = (typeof Molecule)[keyof typeof Molecule];
 
 export type HistoryMethod =
 	| "add_isolate"
