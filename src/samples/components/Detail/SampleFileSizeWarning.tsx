@@ -2,7 +2,7 @@ import Alert from "@base/Alert";
 import Link from "@base/Link";
 import type { Read } from "@samples/types";
 import { AlertTriangle } from "lucide-react";
-import { Route, useLocation } from "wouter";
+import { useLocation } from "wouter";
 
 type SampleFileSizeWarningProps = {
 	reads: Read[];
@@ -30,7 +30,6 @@ export default function SampleFileSizeWarning({
 
 		return (
 			<Alert color="orange" level icon={AlertTriangle}>
-				<Route path="~/samples/:sampleId/files"> test route</Route>
 				<span>
 					<strong>
 						The read files in this sample are smaller than expected.{" "}
