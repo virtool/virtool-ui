@@ -188,7 +188,7 @@ function unsetUrlSearchParam(key, navigate, search, location) {
 	return search;
 }
 
-type SearchParam = string | boolean | number | null;
+export type SearchParam = string | boolean | number | null;
 
 type navigate = <S>(
 	to: string | URL,
@@ -200,7 +200,7 @@ type navigate = <S>(
  *
  * @param value - search param value to be converted
  */
-function castSearchParamValue(value: string) {
+export function castSearchParamValue(value: string) {
 	if (value === null) {
 		return undefined;
 	}

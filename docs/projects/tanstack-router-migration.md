@@ -97,6 +97,21 @@ about adding SSR and server functions — not re-learning routing.
 - **React Query provider in tests.** Every test wraps in a fresh `QueryClient` via
   `renderWithProviders`. That wrapping must remain.
 
+## User-Visible URL Changes
+
+These changes take effect when the search-param compatibility shim (I4) is swapped in
+at cutover (I13).
+
+- **D14 — Array params use JSON encoding.** List/array search params change from
+  repeated keys (`?labels=1&labels=2`) to a single JSON-encoded array
+  (`?labels=%5B1%2C2%5D`). This is a consequence of TanStack Router's default
+  `parseSearch`/`stringifySearch` (no custom serializer, per D3). Bookmarked URLs with
+  the old repeated-key format will not be read correctly after cutover.
+- **D15 — Dialog params are stripped when false.** Dialog presence/absence is preserved:
+  `setOpen(true)` writes the key, `setOpen(false)` removes it. The URL will never
+  contain `?openX=false` — the shim collapses falsy values to `undefined`, which the
+  JSON serializer strips.
+
 ## Wouter to TanStack Router API Mapping
 
 | wouter | TanStack Router | Notes |
