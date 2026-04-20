@@ -16,6 +16,17 @@
     "enabled": true,
     "rules": {
       "style": {
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "@tanstack/react-router": {
+                "importNames": ["useMatchRoute"],
+                "message": "useMatchRoute breaks React Compiler reactivity (TanStack Router #4499). Use useMatchPartialPath from @app/useMatchPartialPath.tanstack instead."
+              }
+            }
+          }
+        },
         "useLiteralEnumMembers": "warn"
       },
       "suspicious": {
