@@ -187,10 +187,11 @@ while preserving the existing call-site API.
 
 ```ts
 function useUrlSearchParam<T>(key: string, defaultValue?: T): [T, (value: T) => void] {
-  const search = Route.useSearch();
+  const search = useSearch({ strict: false });
   const navigate = useNavigate();
   const value = search[key] ?? defaultValue;
-  const setValue = (next: T) => navigate({ search: { ...search, [key]: next } });
+  const setValue = (next: T) =>
+    navigate({ search: (prev) => ({ ...prev, [key]: next }) });
   return [value, setValue];
 }
 ```
@@ -199,14 +200,18 @@ function useUrlSearchParam<T>(key: string, defaultValue?: T): [T, (value: T) => 
 
 ```ts
 function useDialogParam(key: string): [boolean, () => void, () => void] {
-  const search = Route.useSearch();
+  const search = useSearch({ strict: false });
   const navigate = useNavigate();
   const open = search[key] === true;
-  const setOpen = () => navigate({ search: { ...search, [key]: true } });
-  const setClosed = () => {
-    const { [key]: _, ...rest } = search;
-    navigate({ search: rest });
-  };
+  const setOpen = () =>
+    navigate({ search: (prev) => ({ ...prev, [key]: true }) });
+  const setClosed = () =>
+    navigate({
+      search: (prev) => {
+        const { [key]: _, ...rest } = prev;
+        return rest;
+      },
+    });
   return [open, setOpen, setClosed];
 }
 ```
@@ -223,10 +228,11 @@ function usePageParam(): [number, (page: number) => void] {
 
 ```ts
 function useListSearchParam<T>(key: string, defaults?: T[]): [T[], (values: T[]) => void] {
-  const search = Route.useSearch();
+  const search = useSearch({ strict: false });
   const navigate = useNavigate();
   const values = search[key] ?? defaults ?? [];
-  const setValues = (next: T[]) => navigate({ search: { ...search, [key]: next } });
+  const setValues = (next: T[]) =>
+    navigate({ search: (prev) => ({ ...prev, [key]: next }) });
   return [values, setValues];
 }
 ```
@@ -267,7 +273,7 @@ export default defineConfig({
 ```ts
 import { createMemoryHistory, createRouter, createRootRoute, createRoute } from "@tanstack/react-router";
 
-function renderWithRouter(ui: ReactElement, path = "/") {
+function renderWithRouter(ui: ReactNode, path = "/") {
   const history: string[] = [];
 
   const rootRoute = createRootRoute();
@@ -289,7 +295,7 @@ function renderWithRouter(ui: ReactElement, path = "/") {
     history.push(router.state.location.href);
   });
 
-  const result = render(<RouterProvider router={router} />);
+  const result = renderWithProviders(<RouterProvider router={router} />);
   return { ...result, history };
 }
 ```
