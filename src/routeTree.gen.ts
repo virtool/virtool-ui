@@ -12,6 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthenticatedAdministrationRouteRouteImport } from './routes/_authenticated/administration/route'
+import { Route as AuthenticatedAdministrationIndexRouteImport } from './routes/_authenticated/administration/index'
+import { Route as AuthenticatedAdministrationSettingsRouteImport } from './routes/_authenticated/administration/settings'
+import { Route as AuthenticatedAdministrationGroupsRouteImport } from './routes/_authenticated/administration/groups'
+import { Route as AuthenticatedAdministrationAdministratorsRouteImport } from './routes/_authenticated/administration/administrators'
+import { Route as AuthenticatedAdministrationUsersIndexRouteImport } from './routes/_authenticated/administration/users/index'
+import { Route as AuthenticatedAdministrationUsersUserIdRouteImport } from './routes/_authenticated/administration/users/$userId'
 
 const SetupRoute = SetupRouteImport.update({
   id: '/setup',
@@ -27,33 +34,125 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdministrationRouteRoute =
+  AuthenticatedAdministrationRouteRouteImport.update({
+    id: '/administration',
+    path: '/administration',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdministrationIndexRoute =
+  AuthenticatedAdministrationIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
+  } as any)
+const AuthenticatedAdministrationSettingsRoute =
+  AuthenticatedAdministrationSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
+  } as any)
+const AuthenticatedAdministrationGroupsRoute =
+  AuthenticatedAdministrationGroupsRouteImport.update({
+    id: '/groups',
+    path: '/groups',
+    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
+  } as any)
+const AuthenticatedAdministrationAdministratorsRoute =
+  AuthenticatedAdministrationAdministratorsRouteImport.update({
+    id: '/administrators',
+    path: '/administrators',
+    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
+  } as any)
+const AuthenticatedAdministrationUsersIndexRoute =
+  AuthenticatedAdministrationUsersIndexRouteImport.update({
+    id: '/users/',
+    path: '/users/',
+    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
+  } as any)
+const AuthenticatedAdministrationUsersUserIdRoute =
+  AuthenticatedAdministrationUsersUserIdRouteImport.update({
+    id: '/users/$userId',
+    path: '/users/$userId',
+    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedRoute
+  '/': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
+  '/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
+  '/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
+  '/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
+  '/administration/': typeof AuthenticatedAdministrationIndexRoute
+  '/administration/users/$userId': typeof AuthenticatedAdministrationUsersUserIdRoute
+  '/administration/users/': typeof AuthenticatedAdministrationUsersIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AuthenticatedRoute
+  '/': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
+  '/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
+  '/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
+  '/administration': typeof AuthenticatedAdministrationIndexRoute
+  '/administration/users/$userId': typeof AuthenticatedAdministrationUsersUserIdRoute
+  '/administration/users': typeof AuthenticatedAdministrationUsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_authenticated': typeof AuthenticatedRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/_authenticated/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
+  '/_authenticated/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
+  '/_authenticated/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
+  '/_authenticated/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
+  '/_authenticated/administration/': typeof AuthenticatedAdministrationIndexRoute
+  '/_authenticated/administration/users/$userId': typeof AuthenticatedAdministrationUsersUserIdRoute
+  '/_authenticated/administration/users/': typeof AuthenticatedAdministrationUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/setup'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/setup'
+    | '/administration'
+    | '/administration/administrators'
+    | '/administration/groups'
+    | '/administration/settings'
+    | '/administration/'
+    | '/administration/users/$userId'
+    | '/administration/users/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/setup'
-  id: '__root__' | '/_authenticated' | '/login' | '/setup'
+  to:
+    | '/'
+    | '/login'
+    | '/setup'
+    | '/administration/administrators'
+    | '/administration/groups'
+    | '/administration/settings'
+    | '/administration'
+    | '/administration/users/$userId'
+    | '/administration/users'
+  id:
+    | '__root__'
+    | '/_authenticated'
+    | '/login'
+    | '/setup'
+    | '/_authenticated/administration'
+    | '/_authenticated/administration/administrators'
+    | '/_authenticated/administration/groups'
+    | '/_authenticated/administration/settings'
+    | '/_authenticated/administration/'
+    | '/_authenticated/administration/users/$userId'
+    | '/_authenticated/administration/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthenticatedRoute: typeof AuthenticatedRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   SetupRoute: typeof SetupRoute
 }
@@ -81,11 +180,103 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/administration': {
+      id: '/_authenticated/administration'
+      path: '/administration'
+      fullPath: '/administration'
+      preLoaderRoute: typeof AuthenticatedAdministrationRouteRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/administration/': {
+      id: '/_authenticated/administration/'
+      path: '/'
+      fullPath: '/administration/'
+      preLoaderRoute: typeof AuthenticatedAdministrationIndexRouteImport
+      parentRoute: typeof AuthenticatedAdministrationRouteRoute
+    }
+    '/_authenticated/administration/settings': {
+      id: '/_authenticated/administration/settings'
+      path: '/settings'
+      fullPath: '/administration/settings'
+      preLoaderRoute: typeof AuthenticatedAdministrationSettingsRouteImport
+      parentRoute: typeof AuthenticatedAdministrationRouteRoute
+    }
+    '/_authenticated/administration/groups': {
+      id: '/_authenticated/administration/groups'
+      path: '/groups'
+      fullPath: '/administration/groups'
+      preLoaderRoute: typeof AuthenticatedAdministrationGroupsRouteImport
+      parentRoute: typeof AuthenticatedAdministrationRouteRoute
+    }
+    '/_authenticated/administration/administrators': {
+      id: '/_authenticated/administration/administrators'
+      path: '/administrators'
+      fullPath: '/administration/administrators'
+      preLoaderRoute: typeof AuthenticatedAdministrationAdministratorsRouteImport
+      parentRoute: typeof AuthenticatedAdministrationRouteRoute
+    }
+    '/_authenticated/administration/users/': {
+      id: '/_authenticated/administration/users/'
+      path: '/users'
+      fullPath: '/administration/users/'
+      preLoaderRoute: typeof AuthenticatedAdministrationUsersIndexRouteImport
+      parentRoute: typeof AuthenticatedAdministrationRouteRoute
+    }
+    '/_authenticated/administration/users/$userId': {
+      id: '/_authenticated/administration/users/$userId'
+      path: '/users/$userId'
+      fullPath: '/administration/users/$userId'
+      preLoaderRoute: typeof AuthenticatedAdministrationUsersUserIdRouteImport
+      parentRoute: typeof AuthenticatedAdministrationRouteRoute
+    }
   }
 }
 
+interface AuthenticatedAdministrationRouteRouteChildren {
+  AuthenticatedAdministrationAdministratorsRoute: typeof AuthenticatedAdministrationAdministratorsRoute
+  AuthenticatedAdministrationGroupsRoute: typeof AuthenticatedAdministrationGroupsRoute
+  AuthenticatedAdministrationSettingsRoute: typeof AuthenticatedAdministrationSettingsRoute
+  AuthenticatedAdministrationIndexRoute: typeof AuthenticatedAdministrationIndexRoute
+  AuthenticatedAdministrationUsersUserIdRoute: typeof AuthenticatedAdministrationUsersUserIdRoute
+  AuthenticatedAdministrationUsersIndexRoute: typeof AuthenticatedAdministrationUsersIndexRoute
+}
+
+const AuthenticatedAdministrationRouteRouteChildren: AuthenticatedAdministrationRouteRouteChildren =
+  {
+    AuthenticatedAdministrationAdministratorsRoute:
+      AuthenticatedAdministrationAdministratorsRoute,
+    AuthenticatedAdministrationGroupsRoute:
+      AuthenticatedAdministrationGroupsRoute,
+    AuthenticatedAdministrationSettingsRoute:
+      AuthenticatedAdministrationSettingsRoute,
+    AuthenticatedAdministrationIndexRoute:
+      AuthenticatedAdministrationIndexRoute,
+    AuthenticatedAdministrationUsersUserIdRoute:
+      AuthenticatedAdministrationUsersUserIdRoute,
+    AuthenticatedAdministrationUsersIndexRoute:
+      AuthenticatedAdministrationUsersIndexRoute,
+  }
+
+const AuthenticatedAdministrationRouteRouteWithChildren =
+  AuthenticatedAdministrationRouteRoute._addFileChildren(
+    AuthenticatedAdministrationRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedAdministrationRouteRoute: typeof AuthenticatedAdministrationRouteRouteWithChildren
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdministrationRouteRoute:
+    AuthenticatedAdministrationRouteRouteWithChildren,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  AuthenticatedRoute: AuthenticatedRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   SetupRoute: SetupRoute,
 }
