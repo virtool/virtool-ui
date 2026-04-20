@@ -103,4 +103,22 @@ describe("useMatchPartialPath (tanstack)", () => {
 
 		expect(await getResult()).toBe(true);
 	});
+
+	it("does not match partial segments", async () => {
+		await renderWithTanStackRouter(<TestHarness path="/sample" />, "/samples");
+
+		expect(await getResult()).toBe(false);
+	});
+
+	it("does not match all paths when given root path", async () => {
+		await renderWithTanStackRouter(<TestHarness path="/" />, "/samples");
+
+		expect(await getResult()).toBe(false);
+	});
+
+	it("matches root path exactly", async () => {
+		await renderWithTanStackRouter(<TestHarness path="/" />, "/");
+
+		expect(await getResult()).toBe(true);
+	});
 });

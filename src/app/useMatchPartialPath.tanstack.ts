@@ -7,5 +7,8 @@ export function useMatchPartialPath(path: string, exclude?: string[]): boolean {
 		return false;
 	}
 
-	return pathname.startsWith(path.split("?")[0].replace(/\/+$/, ""));
+	const normalizedPath = path.split("?")[0].replace(/\/+$/, "") || "/";
+	return (
+		pathname === normalizedPath || pathname.startsWith(`${normalizedPath}/`)
+	);
 }
