@@ -1,5 +1,5 @@
 import { fetchAccount } from "@account/api";
-import { accountKeys, useFetchAccount } from "@account/queries";
+import { accountKeys } from "@account/queries";
 import AdministrationTabs from "@administration/components/AdministrationTabs";
 import { hasSufficientAdminRole } from "@administration/utils";
 import ContainerNarrow from "@base/ContainerNarrow";
@@ -20,12 +20,14 @@ export const Route = createFileRoute("/_authenticated/administration")({
 		if (!hasSufficientAdminRole("users", account.administrator_role)) {
 			throw redirect({ to: "/" });
 		}
+
+		return { account };
 	},
 	component: AdministrationLayout,
 });
 
 function AdministrationLayout() {
-	const { data: account } = useFetchAccount();
+	const { account } = Route.useRouteContext();
 
 	return (
 		<ContainerWide>
