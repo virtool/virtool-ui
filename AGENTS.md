@@ -21,6 +21,8 @@ React + TypeScript single-page application for Virtool, a bioinformatics platfor
 
 ### When to run checks
 
+- After changing route files in `src/routes/`: run `npx @tanstack/router-cli generate`
+  to regenerate `src/routeTree.gen.ts` before running type checks.
 - Before committing: `npm run check` and `npm run typecheck`.
 - After changing tests: run the specific test file with `npx vitest run <path>`.
 - Full test suite only when asked or when changes are cross-cutting.
