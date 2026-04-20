@@ -63,9 +63,15 @@ about adding SSR and server functions — not re-learning routing.
 
 - Keep `babel-plugin-react-compiler` unchanged.
 - Avoid `useMatchRoute` due to open reactivity bug under React Compiler (TanStack
-  Router #4499). Use `useLocation`/`useMatches` instead.
+  Router #4499). Use `useLocation`/`useMatches` instead. A Biome
+  `noRestrictedImports` rule enforces this ban at lint time.
 - If the bug is encountered elsewhere, selectively exclude affected files from the
   compiler.
+- **`"use no memo"` escape hatch:** Adding the string directive `"use no memo"` at
+  the top of a component or hook opts it out of React Compiler memoization. Use this
+  only as a last resort when a TanStack Router API triggers a Compiler reactivity bug
+  and no alternative API exists. Prefer swapping to a Compiler-safe API first (e.g.
+  `useLocation` over `useMatchRoute`).
 
 ### Bundle size
 
