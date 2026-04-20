@@ -1,4 +1,5 @@
 import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
@@ -47,6 +48,12 @@ export default defineConfig({
         },
     },
     plugins: [
+        tanstackRouter({
+            target: "react",
+            autoCodeSplitting: true,
+            routesDirectory: path.resolve("src/routes"),
+            generatedRouteTree: path.resolve("src/routeTree.gen.ts"),
+        }),
         react({
             include: "**/*.{tsx}",
             babel: {
