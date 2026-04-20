@@ -122,6 +122,7 @@ Types: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`.
 - Title: lowercase, no period, under 72 characters.
 - Scope is optional but preferred.
 - Don't push or create PRs unless asked.
+- Don't include a Test plan section in PR descriptions.
 - Don't use `git -C <path>` unless necessary. It triggers permission prompts that
   aren't worth the trouble. Run git commands from the working directory instead.
 
