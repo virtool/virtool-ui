@@ -1,17 +1,16 @@
 import { fetchAccount } from "@account/api";
 import { accountKeys } from "@account/queries";
-import { apiClient } from "@app/api";
-import type { Root } from "@app/types";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { fetchRoot } from "@wall/api";
 import { rootKeys } from "@wall/queries";
 
 export const Route = createFileRoute("/_authenticated")({
 	beforeLoad: async ({ context }) => {
 		const { queryClient } = context;
 
-		const rootData = await queryClient.ensureQueryData<Root>({
+		const rootData = await queryClient.ensureQueryData({
 			queryKey: rootKeys.all(),
-			queryFn: () => apiClient.get("/").then((res) => res.body),
+			queryFn: fetchRoot,
 		});
 
 		if (rootData.first_user) {
