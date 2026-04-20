@@ -9,6 +9,9 @@ import { castSearchParamValue, type SearchParam } from "./hooks";
 type AnySearchReducer = any;
 
 function castIfString(value: unknown): unknown {
+	if (value == null) {
+		return undefined;
+	}
 	return typeof value === "string" ? castSearchParamValue(value) : value;
 }
 
@@ -104,9 +107,7 @@ export function useListSearchParam<T extends SearchParam>(
 		});
 	}
 
-	const effectiveValues = values.length
-		? values
-		: ((defaultValues as string[]) ?? []);
+	const effectiveValues = values.length ? values : (defaultValues ?? []);
 
 	return {
 		values: effectiveValues.map(castIfString) as T[],
@@ -118,7 +119,7 @@ export function useDialogParam(key: string) {
 	const search = useSearch({ strict: false }) as Record<string, unknown>;
 	const navigate = useNavigate();
 
-	const open = Boolean(search[key]);
+	const open = Boolean(castIfString(search[key]));
 
 	function setOpen(value: boolean) {
 		navigate({

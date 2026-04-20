@@ -162,6 +162,15 @@ describe("useDialogParam", () => {
 		expect(screen.getByTestId("open")).toHaveTextContent("true");
 	});
 
+	it("reads open as false when param is the string 'false'", async () => {
+		await renderWithTanStackRouter(
+			<TestHarness paramKey="openCreate" />,
+			'/samples?openCreate="false"',
+		);
+
+		expect(screen.getByTestId("open")).toHaveTextContent("false");
+	});
+
 	it("reads open state as false when param is absent", async () => {
 		await renderWithTanStackRouter(
 			<TestHarness paramKey="openCreate" />,
