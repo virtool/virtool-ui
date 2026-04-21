@@ -1,5 +1,5 @@
 import type { FormattedPathoscopeAnalysis } from "@analyses/types";
-import { useUrlSearchParam } from "@app/hooks";
+import { useUrlSearchParam } from "@app/hooks.tanstack";
 import Alert from "@base/Alert";
 import type { Sample } from "@samples/types";
 import { PathoscopeList } from "./PathoscopeList";

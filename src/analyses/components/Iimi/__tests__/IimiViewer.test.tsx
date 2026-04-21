@@ -1,10 +1,54 @@
-import { screen } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	createMemoryHistory,
+	createRootRoute,
+	createRoute,
+	createRouter,
+	RouterProvider,
+} from "@tanstack/react-router";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeIimiAnalysis } from "@tests/fake/analyses";
-import { renderWithRouter } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
+import { z } from "zod/v4";
 import { formatData } from "../../../utils";
 import { IimiViewer } from "../IimiViewer";
+
+const iimiSearchSchema = z.object({
+	find: z.string().optional().catch(undefined),
+	sort: z.string().optional().catch(undefined),
+	minProbability: z.string().optional().catch(undefined),
+});
+
+async function renderWithAnalysisRoute(ui: React.ReactElement, search = "") {
+	const rootRoute = createRootRoute();
+	const testRoute = createRoute({
+		getParentRoute: () => rootRoute,
+		path: "/",
+		validateSearch: iimiSearchSchema,
+		component: () => ui,
+	});
+	rootRoute.addChildren([testRoute]);
+
+	const queryClient = new QueryClient();
+
+	// @ts-expect-error createRouter requires strictNullChecks which is not enabled project-wide
+	const router = createRouter({
+		routeTree: rootRoute,
+		history: createMemoryHistory({
+			initialEntries: [`/${search}`],
+		}),
+		defaultPendingMinMs: 0,
+	});
+
+	await router.load();
+
+	return render(
+		<QueryClientProvider client={queryClient}>
+			<RouterProvider router={router} />
+		</QueryClientProvider>,
+	);
+}
 
 describe("<IimiViewer />", () => {
 	let formattedIimiAnalysis;
@@ -17,7 +61,6 @@ describe("<IimiViewer />", () => {
 			workflow: "iimi",
 		});
 
-		// Define three hits with known values for testing
 		predefinedHits = [
 			{
 				...formattedIimiAnalysis.results.hits[0],
@@ -47,7 +90,9 @@ describe("<IimiViewer />", () => {
 	});
 
 	it("should render", async () => {
-		renderWithRouter(<IimiViewer detail={formattedIimiAnalysis} />);
+		await renderWithAnalysisRoute(
+			<IimiViewer detail={formattedIimiAnalysis} />,
+		);
 
 		expect(
 			screen.getByText("Iimi is an experimental workflow."),
@@ -59,11 +104,9 @@ describe("<IimiViewer />", () => {
 			screen.getByText(/This analysis could become inaccessible at any time/),
 		).toBeInTheDocument();
 
-		// Check probability  filter and search inputs.
 		expect(screen.getByDisplayValue("0.500")).toBeInTheDocument();
 		expect(screen.getByText("Sort: PScore")).toBeInTheDocument();
 
-		// Make sure first hit is open.
 		expect(
 			screen.getByText(formattedIimiAnalysis.results.hits[0].name),
 		).toBeInTheDocument();
@@ -81,7 +124,7 @@ describe("<IimiViewer />", () => {
 			["Medium Probability Virus", "High Probability Virus"],
 		],
 		["name", "Name", ["High Probability Virus", "Medium Probability Virus"]],
-	])("should sort hits correctly by %s", (sortKey, expectedText, expectedOrder) => {
+	])("should sort hits correctly by %s", async (sortKey, expectedText, expectedOrder) => {
 		const testAnalysis = {
 			...formattedIimiAnalysis,
 			results: {
@@ -89,7 +132,10 @@ describe("<IimiViewer />", () => {
 			},
 		};
 
-		renderWithRouter(<IimiViewer detail={testAnalysis} />, `/?sort=${sortKey}`);
+		await renderWithAnalysisRoute(
+			<IimiViewer detail={testAnalysis} />,
+			`?sort=${sortKey}`,
+		);
 
 		expect(screen.getByText(`Sort: ${expectedText}`)).toBeInTheDocument();
 
@@ -102,7 +148,7 @@ describe("<IimiViewer />", () => {
 		});
 	});
 
-	it("should filter hits by minimum probability", () => {
+	it("should filter hits by minimum probability", async () => {
 		const testAnalysis = {
 			...formattedIimiAnalysis,
 			results: {
@@ -110,18 +156,18 @@ describe("<IimiViewer />", () => {
 			},
 		};
 
-		renderWithRouter(<IimiViewer detail={testAnalysis} />);
+		await renderWithAnalysisRoute(<IimiViewer detail={testAnalysis} />);
 
-		// Should show high (0.9) and medium (0.7) probability hits (both >= 0.5 default threshold)
 		expect(screen.getByText("High Probability Virus")).toBeInTheDocument();
 		expect(screen.getByText("Medium Probability Virus")).toBeInTheDocument();
 
-		// Should not show low probability hit (0.3 < 0.5 threshold)
 		expect(screen.queryByText("Low Probability Virus")).not.toBeInTheDocument();
 	});
 
 	it("should allow expanding OTU details", async () => {
-		renderWithRouter(<IimiViewer detail={formattedIimiAnalysis} />);
+		await renderWithAnalysisRoute(
+			<IimiViewer detail={formattedIimiAnalysis} />,
+		);
 
 		expect(
 			screen.getByText(formattedIimiAnalysis.results.hits[0].name),
@@ -132,7 +178,6 @@ describe("<IimiViewer />", () => {
 		});
 		await userEvent.click(otu);
 
-		// Check that isolate details are visible after expansion
 		const isolate = formattedIimiAnalysis.results.hits[0].isolates[0];
 		const expectedIsolateName = `${isolate.source_type} ${isolate.source_name}`;
 		expect(
@@ -148,30 +193,25 @@ describe("<IimiViewer />", () => {
 			},
 		};
 
-		renderWithRouter(<IimiViewer detail={testAnalysis} />);
+		await renderWithAnalysisRoute(<IimiViewer detail={testAnalysis} />);
 
-		// Initially should show high (0.9) and medium (0.7) probability hits (both >= 0.5 default threshold)
 		expect(screen.getByText("High Probability Virus")).toBeInTheDocument();
 		expect(screen.getByText("Medium Probability Virus")).toBeInTheDocument();
 		expect(screen.queryByText("Low Probability Virus")).not.toBeInTheDocument();
 
-		// Change threshold to 0.8 to filter out medium probability hit
 		const probabilityInput = screen.getByDisplayValue("0.500");
 		await userEvent.clear(probabilityInput);
 		await userEvent.type(probabilityInput, "0.8");
 
-		// Now should only show high probability hit
 		expect(screen.getByText("High Probability Virus")).toBeInTheDocument();
 		expect(
 			screen.queryByText("Medium Probability Virus"),
 		).not.toBeInTheDocument();
 		expect(screen.queryByText("Low Probability Virus")).not.toBeInTheDocument();
 
-		// Change threshold to 0.2 to show all hits
 		await userEvent.clear(probabilityInput);
 		await userEvent.type(probabilityInput, "0.2");
 
-		// Now should show all three hits
 		expect(screen.getByText("High Probability Virus")).toBeInTheDocument();
 		expect(screen.getByText("Medium Probability Virus")).toBeInTheDocument();
 		expect(screen.getByText("Low Probability Virus")).toBeInTheDocument();

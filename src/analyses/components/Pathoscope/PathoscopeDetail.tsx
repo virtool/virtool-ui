@@ -1,5 +1,5 @@
 import type { FormattedPathoscopeHit } from "@analyses/types";
-import { useUrlSearchParam } from "@app/hooks";
+import { useUrlSearchParam } from "@app/hooks.tanstack";
 import ScrollSyncContainer from "@base/ScrollSyncContainer";
 import { maxBy } from "es-toolkit";
 import PathoscopeIsolate from "./PathoscopeIsolate";

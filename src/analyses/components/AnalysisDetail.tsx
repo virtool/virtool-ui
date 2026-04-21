@@ -3,7 +3,6 @@ import { usePathParams } from "@app/hooks";
 import { getWorkflowDisplayName } from "@app/utils";
 import Box from "@base/Box";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NotFound from "@base/NotFound";
 import RelativeTime from "@base/RelativeTime";
 import SubviewHeader from "@base/SubviewHeader";
 import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
@@ -25,12 +24,8 @@ export default function AnalysisDetail() {
 		analysisId: string;
 		sampleId: string;
 	}>();
-	const { data: analysis, isPending, error } = useGetAnalysis(analysisId);
+	const { data: analysis, isPending } = useGetAnalysis(analysisId);
 	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
-
-	if (error?.response.status === 404) {
-		return <NotFound />;
-	}
 
 	if (isPending || isPendingSample) {
 		return <LoadingPlaceholder />;

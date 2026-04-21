@@ -1,7 +1,7 @@
 import { useGetActiveHit } from "@analyses/hooks";
 import type { FormattedNuvsHit, NuvsOrf as NuvsOrfType } from "@analyses/types";
 import { calculateAnnotatedOrfCount } from "@analyses/utils";
-import { useUrlSearchParam } from "@app/hooks";
+import { useUrlSearchParam } from "@app/hooks.tanstack";
 import Badge from "@base/Badge";
 import { sortBy } from "es-toolkit";
 import NuvsBlast from "./NuvsBlast";

@@ -3,7 +3,7 @@ import NuvsItem from "@analyses/components/Nuvs/NuvsItem";
 import { useKeyNavigation } from "@analyses/components/Viewer/hooks";
 import { useSortAndFilterNuVsHits } from "@analyses/hooks";
 import type { FormattedNuvsAnalysis } from "@analyses/types";
-import { useUrlSearchParam } from "@app/hooks";
+import { useUrlSearchParam } from "@app/hooks.tanstack";
 import Key from "@base/Key";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useRef } from "react";

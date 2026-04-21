@@ -1,16 +1,19 @@
 import { createFuse } from "@app/fuse";
-import { useUrlSearchParam } from "@app/hooks";
 import { useListIndexes } from "@indexes/queries";
 import type { IndexMinimal } from "@indexes/types";
 import { useFetchSample } from "@samples/queries";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import type { SubtractionOption } from "@subtraction/types";
+import { useSearch } from "@tanstack/react-router";
 import { groupBy, maxBy, sortBy } from "es-toolkit";
-import { useSearch } from "wouter";
 import type {
 	FormattedNuvsAnalysis,
 	FormattedPathoscopeAnalysis,
 } from "./types";
+
+const searchOptions = {
+	from: "/_authenticated/samples/$sampleId/analyses/$analysisId",
+} as const;
 
 /** Sort and filter a list of pathoscope hits  */
 export function useSortAndFilterPathoscopeHits(
@@ -18,26 +21,25 @@ export function useSortAndFilterPathoscopeHits(
 	maxReadLength: number,
 ) {
 	let hits = detail.results.hits;
-	const search = useSearch();
-	const searchParams = new URLSearchParams(search);
+
+	const { find, filterOtus, sort, sortDesc } = useSearch(searchOptions);
 
 	const fuse = createFuse(hits, ["name", "abbreviation"]);
 
-	if (searchParams.get("find")) {
-		hits = fuse.search(searchParams.get("find")).map((result) => result.item);
+	if (find) {
+		hits = fuse.search(String(find)).map((result) => result.item);
 	}
 
-	if (searchParams.get("filterOtus") === "true") {
+	if (filterOtus) {
 		hits = hits.filter(
 			(hit) =>
 				hit.pi * detail.results.readCount >= (hit.length * 0.8) / maxReadLength,
 		);
 	}
 
-	const sortKey = searchParams.get("sort");
-	const sortedHits = sortBy(hits, [(hit) => hit[sortKey]]);
+	const sortedHits = sortBy(hits, [(hit) => hit[sort as string]]);
 
-	if (searchParams.get("sortDesc") === "true") {
+	if (sortDesc) {
 		sortedHits.reverse();
 	}
 
@@ -46,33 +48,32 @@ export function useSortAndFilterPathoscopeHits(
 
 /** Sort and filter a list of Nuvs hits  */
 export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
-	const search = useSearch();
-	const searchParams = new URLSearchParams(search);
-
 	let hits = detail.results.hits;
+
+	const { find, filterSequences, sort } = useSearch(searchOptions);
 
 	const fuse = createFuse(hits, ["name", "families"]);
 
-	if (searchParams.get("find")) {
-		hits = fuse.search(searchParams.get("find")).map((result) => result.item);
+	if (find) {
+		hits = fuse.search(String(find)).map((result) => result.item);
 	}
 
-	if (searchParams.get("filterSequences") === "true") {
+	if (filterSequences) {
 		hits = hits.filter((hit) => hit.e !== undefined);
 	}
 
 	const sortedHits =
-		searchParams.get("sort") === "orfs"
+		sort === "orfs"
 			? sortBy(hits, [(hit) => hit.annotatedOrfCount]).reverse()
-			: sortBy(hits, [(hit) => hit[searchParams.get("sort")]]);
+			: sortBy(hits, [(hit) => hit[sort as string]]);
 
 	return sortedHits;
 }
 
 export function useGetActiveHit(matches) {
-	const { value: activeHit } = useUrlSearchParam<string>("activeHit");
+	const { activeHit } = useSearch(searchOptions);
 
-	if (activeHit !== null) {
+	if (activeHit) {
 		return matches.find((match) => match.id === Number(activeHit)) || null;
 	}
 
