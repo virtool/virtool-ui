@@ -1,6 +1,7 @@
 import { apiClient } from "@app/api";
 import {
 	keepPreviousData,
+	queryOptions,
 	useMutation,
 	useQuery,
 	useQueryClient,
@@ -273,6 +274,13 @@ export function useRemoveReferenceUser(refId: string, noun: string) {
 	});
 }
 
+export function referenceQueryOptions(refId: string) {
+	return queryOptions({
+		queryKey: referenceQueryKeys.detail(refId),
+		queryFn: () => getReference(refId),
+	});
+}
+
 /**
  * Get a reference by its id
  *
@@ -280,10 +288,7 @@ export function useRemoveReferenceUser(refId: string, noun: string) {
  * @returns Query results containing the reference
  */
 export function useFetchReference(refId: string) {
-	return useQuery<Reference>({
-		queryKey: referenceQueryKeys.detail(refId),
-		queryFn: () => getReference(refId),
-	});
+	return useQuery(referenceQueryOptions(refId));
 }
 
 /**

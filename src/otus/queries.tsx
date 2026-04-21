@@ -1,6 +1,7 @@
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import {
 	keepPreviousData,
+	queryOptions,
 	useMutation,
 	useQuery,
 	useQueryClient,
@@ -74,6 +75,13 @@ export function useListOTUs(
 	});
 }
 
+export function otuQueryOptions(otuId: string) {
+	return queryOptions<Otu, ErrorResponse>({
+		queryKey: OTUQueryKeys.detail(otuId),
+		queryFn: () => getOTU(otuId),
+	});
+}
+
 /**
  * Fetches a single OTU
  *
@@ -82,8 +90,7 @@ export function useListOTUs(
  */
 export function useFetchOTU(otuId: string) {
 	return useQuery<Otu, ErrorResponse>({
-		queryKey: OTUQueryKeys.detail(otuId),
-		queryFn: () => getOTU(otuId),
+		...otuQueryOptions(otuId),
 		retry: (failureCount, error) => {
 			if (error.response?.status === 404) {
 				return false;
