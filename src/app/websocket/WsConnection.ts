@@ -1,54 +1,81 @@
+import type { QueryClient } from "@tanstack/react-query";
 import { resetClient } from "../utils";
 import { reactQueryHandler } from "./reactQueryHandler";
+import type { WsMessage } from "./schema";
+import { WsMessageSchema } from "./schema";
 
-export const INITIALIZING = "initializing";
-export const CONNECTING = "connecting";
-export const CONNECTED = "connected";
-export const ABANDONED = "abandoned";
-export const RECONNECTING = "reconnecting";
+type ConnectionStatus =
+	| "initializing"
+	| "connecting"
+	| "connected"
+	| "abandoned"
+	| "reconnecting";
 
-export default function WsConnection(queryClient) {
-	this.reactQueryHandler = reactQueryHandler(queryClient);
+let connection: WebSocket | null = null;
+let connectionStatus: ConnectionStatus = "initializing";
+let interval = 500;
+let handleMessage: ((message: WsMessage) => void) | null = null;
 
-	// When a websocket message is received, this method is called with the message as the sole argument. Every message
-	// has a property "operation" that tells the dispatcher what to do. Illegal operation names will throw an error.
-	this.handle = (message) => {
-		this.reactQueryHandler(message);
+export function init(queryClient: QueryClient): void {
+	if (handleMessage) {
+		return;
+	}
+
+	const handler = reactQueryHandler(queryClient);
+	handleMessage = (message) => handler(message);
+}
+
+export function establishConnection(): void {
+	if (!handleMessage) {
+		throw new Error("WebSocket not initialized. Call init(queryClient) first.");
+	}
+
+	if (connectionStatus === "connecting" || connectionStatus === "connected") {
+		return;
+	}
+
+	connection?.close();
+
+	const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+
+	connection = new window.WebSocket(`${protocol}://${window.location.host}/ws`);
+	connectionStatus = "connecting";
+
+	connection.onopen = () => {
+		interval = 500;
+		connectionStatus = "connected";
 	};
 
-	this.interval = 500;
-	this.connectionStatus = INITIALIZING;
+	connection.onmessage = (e) => {
+		try {
+			const parsed = WsMessageSchema.safeParse(JSON.parse(e.data));
 
-	this.establishConnection = () => {
-		const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-
-		this.connection = new window.WebSocket(
-			`${protocol}://${window.location.host}/ws`,
-		);
-		this.connectionStatus = CONNECTING;
-
-		this.connection.onopen = () => {
-			this.interval = 500;
-			this.connectionStatus = CONNECTED;
-		};
-
-		this.connection.onmessage = (e) => {
-			this.handle(JSON.parse(e.data));
-		};
-
-		this.connection.onclose = (e) => {
-			if (this.interval < 15000) {
-				this.interval += 500;
+			if (parsed.success) {
+				handleMessage?.(parsed.data);
+			} else {
+				window.console.warn("Invalid WebSocket message", parsed.error);
 			}
-
-			if (e.code === 4000) {
-				resetClient();
-			}
-
-			setTimeout(() => {
-				this.establishConnection();
-				this.connectionStatus = RECONNECTING;
-			}, this.interval);
-		};
+		} catch (error) {
+			window.console.error("Failed to parse WebSocket message", error);
+		}
 	};
+
+	connection.onclose = (e) => {
+		if (interval < 15000) {
+			interval += 500;
+		}
+
+		if (e.code === 4000) {
+			resetClient();
+		}
+
+		setTimeout(() => {
+			establishConnection();
+			connectionStatus = "reconnecting";
+		}, interval);
+	};
+}
+
+export function getConnectionStatus(): ConnectionStatus {
+	return connectionStatus;
 }
