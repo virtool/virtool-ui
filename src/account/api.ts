@@ -1,7 +1,7 @@
 import { apiClient, type ApiResponse } from "@app/api";
 import type { Permissions } from "@groups/types";
 import type { User } from "@users/types";
-import type { Account, APIKeyMinimal } from "./types";
+import type { Account, AccountSettings, APIKeyMinimal } from "./types";
 
 /**
  * Gets complete account data for the current user.
@@ -48,7 +48,7 @@ export function getSettings(): Promise<ApiResponse> {
  * @returns A promise resolving to a response containing the
  * user's updated personal settings.
  */
-export function updateSettings({ update }): Promise<ApiResponse> {
+export function updateSettings({ update }: { update: Partial<AccountSettings> }): Promise<ApiResponse> {
 	return apiClient.patch("/account/settings").send(update);
 }
 
