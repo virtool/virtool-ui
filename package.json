@@ -50,7 +50,7 @@
     "@types/superagent": "^8.1.9",
     "@vitejs/plugin-react": "^5.1.4",
     "babel-plugin-react-compiler": "^1.0.0",
-    "baseline-browser-mapping": "^2.10.0",
+    "baseline-browser-mapping": "^2.10.20",
     "jsdom": "^27.4.0",
     "nock": "^13.5.5",
     "tailwindcss": "^4.2.2",
