@@ -1,12 +1,19 @@
 import { faker } from "@faker-js/faker";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	createMemoryHistory,
+	createRootRoute,
+	createRoute,
+	createRouter,
+	Outlet,
+	RouterProvider,
+} from "@tanstack/react-router";
 import "@testing-library/jest-dom/vitest";
 import { fireEvent, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import type { ReactNode } from "react";
+import { createContext, type ReactNode, useContext, useState } from "react";
 import { vi } from "vitest";
-import { Router } from "wouter";
-import { memoryLocation } from "wouter/memory-location";
+import { routeTree } from "@/routeTree.gen";
 
 process.env.TZ = "UTC";
 
@@ -25,11 +32,43 @@ export function renderWithProviders(ui: ReactNode) {
 }
 
 export function renderWithRouter(ui: ReactNode, path?: string) {
-	const { hook, history } = memoryLocation({ path, record: true });
+	const history: string[] = [];
 
-	const result = renderWithProviders(<Router hook={hook}>{ui}</Router>);
+	const rootRoute = createRootRoute();
+	const catchAllRoute = createRoute({
+		getParentRoute: () => rootRoute,
+		path: "$",
+		component: () => ui,
+	});
+	rootRoute.addChildren([catchAllRoute]);
 
+	const memoryHistory = createMemoryHistory({
+		initialEntries: [path || "/"],
+	});
+
+	// @ts-expect-error createRouter requires strictNullChecks
+	const router = createRouter({
+		routeTree: rootRoute,
+		history: memoryHistory,
+		defaultPendingMinMs: 0,
+	});
+
+	router.history.subscribe(({ action }) => {
+		if (action.type === "REPLACE" && history.length > 0) {
+			history[history.length - 1] = router.state.location.href;
+		} else {
+			history.push(router.state.location.href);
+		}
+	});
+
+	const result = renderWithProviders(<RouterProvider router={router} />);
 	return { ...result, history };
+}
+
+const MemoryRouterChildrenContext = createContext<ReactNode>(null);
+
+function MemoryRouterCatchAll() {
+	return <>{useContext(MemoryRouterChildrenContext)}</>;
 }
 
 export function MemoryRouter({
@@ -39,11 +78,69 @@ export function MemoryRouter({
 	children: ReactNode;
 	path?: string;
 }) {
+	const [router] = useState(() => {
+		const rootRoute = createRootRoute({ component: () => <Outlet /> });
+		const catchAllRoute = createRoute({
+			getParentRoute: () => rootRoute,
+			path: "$",
+			component: MemoryRouterCatchAll,
+		});
+		rootRoute.addChildren([catchAllRoute]);
+
+		// @ts-expect-error createRouter requires strictNullChecks
+		return createRouter({
+			routeTree: rootRoute,
+			history: createMemoryHistory({ initialEntries: [path || "/"] }),
+			defaultPendingMinMs: 0,
+		});
+	});
+
 	return (
-		<Router hook={memoryLocation({ path }).hook} key={path?.length}>
-			{children}
-		</Router>
+		<MemoryRouterChildrenContext value={children}>
+			<RouterProvider router={router} />
+		</MemoryRouterChildrenContext>
 	);
+}
+
+interface RenderRouteOptions {
+	seed?: (queryClient: QueryClient) => void;
+}
+
+export async function renderRoute(path: string, opts?: RenderRouteOptions) {
+	const history: string[] = [];
+	const queryClient = new QueryClient();
+
+	if (opts?.seed) {
+		opts.seed(queryClient);
+	}
+
+	const memoryHistory = createMemoryHistory({ initialEntries: [path] });
+
+	// @ts-expect-error createRouter requires strictNullChecks
+	const router = createRouter({
+		routeTree,
+		history: memoryHistory,
+		defaultPendingMinMs: 0,
+		context: { queryClient },
+	});
+
+	router.history.subscribe(({ action }) => {
+		if (action.type === "REPLACE" && history.length > 0) {
+			history[history.length - 1] = router.state.location.href;
+		} else {
+			history.push(router.state.location.href);
+		}
+	});
+
+	await router.load();
+
+	const result = rtlRender(
+		<QueryClientProvider client={queryClient}>
+			<RouterProvider router={router} />
+		</QueryClientProvider>,
+	);
+
+	return { ...result, history, router, queryClient };
 }
 
 //mocks HTML element prototypes that are not implemented in jsdom

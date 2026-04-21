@@ -119,13 +119,12 @@ describe("<AnalysesList />", () => {
 			);
 
 			expect(await screen.findByText("Create")).toBeInTheDocument();
-			expect(history[0]).toEqual(`/samples/${sample.id}/analyses`);
 
 			await userEvent.click(screen.getByText("Create"));
 
 			await waitFor(() =>
-				expect(history[1]).toEqual(
-					formatPath("", {
+				expect(history[0]).toEqual(
+					formatPath(`/samples/${sample.id}/analyses`, {
 						openCreateAnalysis: true,
 					}),
 				),

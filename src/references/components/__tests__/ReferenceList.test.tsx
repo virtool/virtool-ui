@@ -86,7 +86,7 @@ describe("<ReferenceList />", () => {
 			await userEvent.type(inputElement, "Foobar");
 			expect(inputElement).toHaveValue("Foobar");
 
-			expect(history[0]).toEqual("?find=Foobar");
+			expect(history[0]).toEqual("/?find=Foobar");
 
 			scope.done();
 		});
