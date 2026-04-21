@@ -1,4 +1,4 @@
-import { apiClient, type ApiResponse } from "@app/api";
+import { type ApiResponse, apiClient } from "@app/api";
 import type { Permissions } from "@groups/types";
 import type { User } from "@users/types";
 import type { Account, AccountSettings, APIKeyMinimal } from "./types";
@@ -48,7 +48,11 @@ export function getSettings(): Promise<ApiResponse> {
  * @returns A promise resolving to a response containing the
  * user's updated personal settings.
  */
-export function updateSettings({ update }: { update: Partial<AccountSettings> }): Promise<ApiResponse> {
+export function updateSettings({
+	update,
+}: {
+	update: Partial<AccountSettings>;
+}): Promise<ApiResponse> {
 	return apiClient.patch("/account/settings").send(update);
 }
 
