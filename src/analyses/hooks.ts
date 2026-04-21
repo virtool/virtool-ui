@@ -6,7 +6,6 @@ import { useFetchSample } from "@samples/queries";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import type { SubtractionOption } from "@subtraction/types";
 import { groupBy, maxBy, sortBy } from "es-toolkit";
-import { useSearch } from "wouter";
 import type {
 	FormattedNuvsAnalysis,
 	FormattedPathoscopeAnalysis,
@@ -18,26 +17,28 @@ export function useSortAndFilterPathoscopeHits(
 	maxReadLength: number,
 ) {
 	let hits = detail.results.hits;
-	const search = useSearch();
-	const searchParams = new URLSearchParams(search);
+
+	const { value: find } = useUrlSearchParam<string>("find");
+	const { value: filterOtus } = useUrlSearchParam<boolean>("filterOtus");
+	const { value: sortKey } = useUrlSearchParam<string>("sort");
+	const { value: sortDesc } = useUrlSearchParam<boolean>("sortDesc");
 
 	const fuse = createFuse(hits, ["name", "abbreviation"]);
 
-	if (searchParams.get("find")) {
-		hits = fuse.search(searchParams.get("find")).map((result) => result.item);
+	if (find) {
+		hits = fuse.search(String(find)).map((result) => result.item);
 	}
 
-	if (searchParams.get("filterOtus") === "true") {
+	if (filterOtus) {
 		hits = hits.filter(
 			(hit) =>
 				hit.pi * detail.results.readCount >= (hit.length * 0.8) / maxReadLength,
 		);
 	}
 
-	const sortKey = searchParams.get("sort");
-	const sortedHits = sortBy(hits, [(hit) => hit[sortKey]]);
+	const sortedHits = sortBy(hits, [(hit) => hit[sortKey as string]]);
 
-	if (searchParams.get("sortDesc") === "true") {
+	if (sortDesc) {
 		sortedHits.reverse();
 	}
 
@@ -46,25 +47,27 @@ export function useSortAndFilterPathoscopeHits(
 
 /** Sort and filter a list of Nuvs hits  */
 export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
-	const search = useSearch();
-	const searchParams = new URLSearchParams(search);
-
 	let hits = detail.results.hits;
+
+	const { value: find } = useUrlSearchParam<string>("find");
+	const { value: filterSequences } =
+		useUrlSearchParam<boolean>("filterSequences");
+	const { value: sortKey } = useUrlSearchParam<string>("sort");
 
 	const fuse = createFuse(hits, ["name", "families"]);
 
-	if (searchParams.get("find")) {
-		hits = fuse.search(searchParams.get("find")).map((result) => result.item);
+	if (find) {
+		hits = fuse.search(String(find)).map((result) => result.item);
 	}
 
-	if (searchParams.get("filterSequences") === "true") {
+	if (filterSequences) {
 		hits = hits.filter((hit) => hit.e !== undefined);
 	}
 
 	const sortedHits =
-		searchParams.get("sort") === "orfs"
+		sortKey === "orfs"
 			? sortBy(hits, [(hit) => hit.annotatedOrfCount]).reverse()
-			: sortBy(hits, [(hit) => hit[searchParams.get("sort")]]);
+			: sortBy(hits, [(hit) => hit[sortKey as string]]);
 
 	return sortedHits;
 }

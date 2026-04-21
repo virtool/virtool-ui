@@ -1,6 +1,7 @@
 import { samplesQueryKeys } from "@samples/queries";
 import {
 	keepPreviousData,
+	queryOptions,
 	useMutation,
 	useQuery,
 	useQueryClient,
@@ -72,17 +73,15 @@ export function useRemoveAnalysis(analysisId: string) {
 	return () => mutation.mutate({ analysisId });
 }
 
-/**
- * Fetch complete information for a single analysis
- *
- * @param analysisId - The id of the analysis to fetch
- * @returns A complete analysis
- */
-export function useGetAnalysis(analysisId: string) {
-	const queryResult = useQuery<Analysis, ErrorResponse>({
+export function analysisQueryOptions(analysisId: string) {
+	return queryOptions<Analysis, ErrorResponse>({
 		queryKey: analysesQueryKeys.detail(analysisId),
 		queryFn: () => getAnalysis({ analysisId }),
 	});
+}
+
+export function useGetAnalysis(analysisId: string) {
+	const queryResult = useQuery(analysisQueryOptions(analysisId));
 
 	return {
 		...queryResult,
