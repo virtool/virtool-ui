@@ -10,7 +10,7 @@
     "clsx": "^2.1.1",
     "commander": "^14.0.3",
     "d3": "^7.9.0",
-    "downshift": "^9.0.13",
+    "downshift": "^9.3.2",
     "es-toolkit": "^1.45.1",
     "express": "^5.2.1",
     "fuse.js": "^7.1.0",
