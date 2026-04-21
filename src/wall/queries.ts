@@ -1,10 +1,9 @@
 import { fetchAccount, login, resetPassword } from "@account/api";
 import { accountKeys } from "@account/queries";
 import type { Account } from "@account/types";
-import { apiClient } from "@app/api";
+import { apiClient, type ApiResponse } from "@app/api";
 import type { Root } from "@app/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Response } from "superagent";
 
 import type { ErrorResponse } from "@/types/api";
 
@@ -63,7 +62,7 @@ export function useLoginMutation() {
 	const queryClient = useQueryClient();
 
 	return useMutation<
-		Response,
+		ApiResponse,
 		ErrorResponse,
 		{ handle: string; password: string; remember: boolean }
 	>({
@@ -86,7 +85,7 @@ export function useResetPasswordMutation() {
 	const queryClient = useQueryClient();
 
 	return useMutation<
-		Response,
+		ApiResponse,
 		ErrorResponse,
 		{ password: string; resetCode: string }
 	>({

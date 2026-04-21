@@ -1,11 +1,10 @@
 import { useFetchAccount } from "@account/queries";
-import { apiClient } from "@app/api";
+import { apiClient, type ApiResponse } from "@app/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { difference, union } from "es-toolkit/array";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import type { Response } from "superagent";
 import z from "zod";
 import { useFetchReference } from "./queries";
 
@@ -50,10 +49,10 @@ export function useUpdateSourceTypes(
 	const [lastRemoved, setLastRemoved] = useState("");
 
 	const mutation = useMutation({
-		mutationFn: async (sourceTypes: string[]): Promise<Response> => {
+		mutationFn: async (sourceTypes: string[]): Promise<ApiResponse> => {
 			return apiClient.patch(path).send({ [key]: sourceTypes });
 		},
-		onSuccess: (data: Response) => {
+		onSuccess: (data: ApiResponse) => {
 			const updatedSourceTypes = data.body[key];
 
 			if (sourceTypes.length > updatedSourceTypes) {
