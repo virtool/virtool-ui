@@ -30,6 +30,12 @@ export function establishConnection(): void {
 		throw new Error("WebSocket not initialized. Call init(queryClient) first.");
 	}
 
+	if (connectionStatus === "connecting" || connectionStatus === "connected") {
+		return;
+	}
+
+	connection?.close();
+
 	const protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
 	connection = new window.WebSocket(`${protocol}://${window.location.host}/ws`);
@@ -41,12 +47,16 @@ export function establishConnection(): void {
 	};
 
 	connection.onmessage = (e) => {
-		const parsed = WsMessageSchema.safeParse(JSON.parse(e.data));
+		try {
+			const parsed = WsMessageSchema.safeParse(JSON.parse(e.data));
 
-		if (parsed.success) {
-			handleMessage?.(parsed.data);
-		} else {
-			window.console.warn("Invalid WebSocket message", parsed.error);
+			if (parsed.success) {
+				handleMessage?.(parsed.data);
+			} else {
+				window.console.warn("Invalid WebSocket message", parsed.error);
+			}
+		} catch (error) {
+			window.console.error("Failed to parse WebSocket message", error);
 		}
 	};
 
