@@ -64,13 +64,18 @@ Every feature directory has a `@name` alias (e.g., `@app/utils`, `@base/Button`,
 - **wouter** for routing
 - **React Query** (`@tanstack/react-query`) for server state
 - **zustand** for client state
-- **react-hook-form** + **zod** for forms and validation
+- **react-hook-form** + **zod v4** for forms and validation
 - **superagent** for API calls (via `@app/api.ts` client)
 - **styled-components** for CSS-in-JS (legacy, still in use)
 - **Tailwind CSS v4** for utility styles (preferred for new code)
 - **Radix UI** primitives for accessible components
 - **CVA** (`class-variance-authority`) for component variants
 - **Lucide React** for icons
+
+### TanStack Router search params
+
+Zod v4 schemas can be passed directly to `validateSearch` — `@tanstack/zod-adapter`
+is not needed. Use `.default()` and `.catch()` for defaults and fallbacks.
 
 ### API calls
 

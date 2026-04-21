@@ -13,18 +13,25 @@ import { Route as SetupRouteImport } from './routes/setup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedSamplesRouteImport } from './routes/_authenticated/samples'
+import { Route as AuthenticatedAdministrationRouteRouteImport } from './routes/_authenticated/administration/route'
 import { Route as AuthenticatedSamplesIndexRouteImport } from './routes/_authenticated/samples/index'
+import { Route as AuthenticatedAdministrationIndexRouteImport } from './routes/_authenticated/administration/index'
 import { Route as AuthenticatedSamplesSettingsRouteImport } from './routes/_authenticated/samples/settings'
 import { Route as AuthenticatedSamplesLabelsRouteImport } from './routes/_authenticated/samples/labels'
 import { Route as AuthenticatedSamplesFilesRouteImport } from './routes/_authenticated/samples/files'
 import { Route as AuthenticatedSamplesCreateRouteImport } from './routes/_authenticated/samples/create'
 import { Route as AuthenticatedSamplesSampleIdRouteImport } from './routes/_authenticated/samples/$sampleId'
+import { Route as AuthenticatedAdministrationSettingsRouteImport } from './routes/_authenticated/administration/settings'
+import { Route as AuthenticatedAdministrationGroupsRouteImport } from './routes/_authenticated/administration/groups'
+import { Route as AuthenticatedAdministrationAdministratorsRouteImport } from './routes/_authenticated/administration/administrators'
 import { Route as AuthenticatedSamplesSampleIdIndexRouteImport } from './routes/_authenticated/samples/$sampleId/index'
+import { Route as AuthenticatedAdministrationUsersIndexRouteImport } from './routes/_authenticated/administration/users/index'
 import { Route as AuthenticatedSamplesSampleIdRightsRouteImport } from './routes/_authenticated/samples/$sampleId/rights'
 import { Route as AuthenticatedSamplesSampleIdQualityRouteImport } from './routes/_authenticated/samples/$sampleId/quality'
 import { Route as AuthenticatedSamplesSampleIdGeneralRouteImport } from './routes/_authenticated/samples/$sampleId/general'
 import { Route as AuthenticatedSamplesSampleIdFilesRouteImport } from './routes/_authenticated/samples/$sampleId/files'
 import { Route as AuthenticatedSamplesSampleIdAnalysesRouteImport } from './routes/_authenticated/samples/$sampleId/analyses'
+import { Route as AuthenticatedAdministrationUsersUserIdRouteImport } from './routes/_authenticated/administration/users/$userId'
 import { Route as AuthenticatedSamplesSampleIdAnalysesIndexRouteImport } from './routes/_authenticated/samples/$sampleId/analyses/index'
 import { Route as AuthenticatedSamplesSampleIdAnalysesAnalysisIdRouteImport } from './routes/_authenticated/samples/$sampleId/analyses/$analysisId'
 
@@ -47,11 +54,23 @@ const AuthenticatedSamplesRoute = AuthenticatedSamplesRouteImport.update({
   path: '/samples',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdministrationRouteRoute =
+  AuthenticatedAdministrationRouteRouteImport.update({
+    id: '/administration',
+    path: '/administration',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedSamplesIndexRoute =
   AuthenticatedSamplesIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedSamplesRoute,
+  } as any)
+const AuthenticatedAdministrationIndexRoute =
+  AuthenticatedAdministrationIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
   } as any)
 const AuthenticatedSamplesSettingsRoute =
   AuthenticatedSamplesSettingsRouteImport.update({
@@ -83,11 +102,35 @@ const AuthenticatedSamplesSampleIdRoute =
     path: '/$sampleId',
     getParentRoute: () => AuthenticatedSamplesRoute,
   } as any)
+const AuthenticatedAdministrationSettingsRoute =
+  AuthenticatedAdministrationSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
+  } as any)
+const AuthenticatedAdministrationGroupsRoute =
+  AuthenticatedAdministrationGroupsRouteImport.update({
+    id: '/groups',
+    path: '/groups',
+    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
+  } as any)
+const AuthenticatedAdministrationAdministratorsRoute =
+  AuthenticatedAdministrationAdministratorsRouteImport.update({
+    id: '/administrators',
+    path: '/administrators',
+    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
+  } as any)
 const AuthenticatedSamplesSampleIdIndexRoute =
   AuthenticatedSamplesSampleIdIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedSamplesSampleIdRoute,
+  } as any)
+const AuthenticatedAdministrationUsersIndexRoute =
+  AuthenticatedAdministrationUsersIndexRouteImport.update({
+    id: '/users/',
+    path: '/users/',
+    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
   } as any)
 const AuthenticatedSamplesSampleIdRightsRoute =
   AuthenticatedSamplesSampleIdRightsRouteImport.update({
@@ -119,6 +162,12 @@ const AuthenticatedSamplesSampleIdAnalysesRoute =
     path: '/analyses',
     getParentRoute: () => AuthenticatedSamplesSampleIdRoute,
   } as any)
+const AuthenticatedAdministrationUsersUserIdRoute =
+  AuthenticatedAdministrationUsersUserIdRouteImport.update({
+    id: '/users/$userId',
+    path: '/users/$userId',
+    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
+  } as any)
 const AuthenticatedSamplesSampleIdAnalysesIndexRoute =
   AuthenticatedSamplesSampleIdAnalysesIndexRouteImport.update({
     id: '/',
@@ -136,18 +185,25 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
   '/samples': typeof AuthenticatedSamplesRouteWithChildren
+  '/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
+  '/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
+  '/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
   '/samples/$sampleId': typeof AuthenticatedSamplesSampleIdRouteWithChildren
   '/samples/create': typeof AuthenticatedSamplesCreateRoute
   '/samples/files': typeof AuthenticatedSamplesFilesRoute
   '/samples/labels': typeof AuthenticatedSamplesLabelsRoute
   '/samples/settings': typeof AuthenticatedSamplesSettingsRoute
+  '/administration/': typeof AuthenticatedAdministrationIndexRoute
   '/samples/': typeof AuthenticatedSamplesIndexRoute
+  '/administration/users/$userId': typeof AuthenticatedAdministrationUsersUserIdRoute
   '/samples/$sampleId/analyses': typeof AuthenticatedSamplesSampleIdAnalysesRouteWithChildren
   '/samples/$sampleId/files': typeof AuthenticatedSamplesSampleIdFilesRoute
   '/samples/$sampleId/general': typeof AuthenticatedSamplesSampleIdGeneralRoute
   '/samples/$sampleId/quality': typeof AuthenticatedSamplesSampleIdQualityRoute
   '/samples/$sampleId/rights': typeof AuthenticatedSamplesSampleIdRightsRoute
+  '/administration/users/': typeof AuthenticatedAdministrationUsersIndexRoute
   '/samples/$sampleId/': typeof AuthenticatedSamplesSampleIdIndexRoute
   '/samples/$sampleId/analyses/$analysisId': typeof AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute
   '/samples/$sampleId/analyses/': typeof AuthenticatedSamplesSampleIdAnalysesIndexRoute
@@ -156,15 +212,21 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
+  '/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
+  '/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
   '/samples/create': typeof AuthenticatedSamplesCreateRoute
   '/samples/files': typeof AuthenticatedSamplesFilesRoute
   '/samples/labels': typeof AuthenticatedSamplesLabelsRoute
   '/samples/settings': typeof AuthenticatedSamplesSettingsRoute
+  '/administration': typeof AuthenticatedAdministrationIndexRoute
   '/samples': typeof AuthenticatedSamplesIndexRoute
+  '/administration/users/$userId': typeof AuthenticatedAdministrationUsersUserIdRoute
   '/samples/$sampleId/files': typeof AuthenticatedSamplesSampleIdFilesRoute
   '/samples/$sampleId/general': typeof AuthenticatedSamplesSampleIdGeneralRoute
   '/samples/$sampleId/quality': typeof AuthenticatedSamplesSampleIdQualityRoute
   '/samples/$sampleId/rights': typeof AuthenticatedSamplesSampleIdRightsRoute
+  '/administration/users': typeof AuthenticatedAdministrationUsersIndexRoute
   '/samples/$sampleId': typeof AuthenticatedSamplesSampleIdIndexRoute
   '/samples/$sampleId/analyses/$analysisId': typeof AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute
   '/samples/$sampleId/analyses': typeof AuthenticatedSamplesSampleIdAnalysesIndexRoute
@@ -174,18 +236,25 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/_authenticated/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
   '/_authenticated/samples': typeof AuthenticatedSamplesRouteWithChildren
+  '/_authenticated/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
+  '/_authenticated/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
+  '/_authenticated/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
   '/_authenticated/samples/$sampleId': typeof AuthenticatedSamplesSampleIdRouteWithChildren
   '/_authenticated/samples/create': typeof AuthenticatedSamplesCreateRoute
   '/_authenticated/samples/files': typeof AuthenticatedSamplesFilesRoute
   '/_authenticated/samples/labels': typeof AuthenticatedSamplesLabelsRoute
   '/_authenticated/samples/settings': typeof AuthenticatedSamplesSettingsRoute
+  '/_authenticated/administration/': typeof AuthenticatedAdministrationIndexRoute
   '/_authenticated/samples/': typeof AuthenticatedSamplesIndexRoute
+  '/_authenticated/administration/users/$userId': typeof AuthenticatedAdministrationUsersUserIdRoute
   '/_authenticated/samples/$sampleId/analyses': typeof AuthenticatedSamplesSampleIdAnalysesRouteWithChildren
   '/_authenticated/samples/$sampleId/files': typeof AuthenticatedSamplesSampleIdFilesRoute
   '/_authenticated/samples/$sampleId/general': typeof AuthenticatedSamplesSampleIdGeneralRoute
   '/_authenticated/samples/$sampleId/quality': typeof AuthenticatedSamplesSampleIdQualityRoute
   '/_authenticated/samples/$sampleId/rights': typeof AuthenticatedSamplesSampleIdRightsRoute
+  '/_authenticated/administration/users/': typeof AuthenticatedAdministrationUsersIndexRoute
   '/_authenticated/samples/$sampleId/': typeof AuthenticatedSamplesSampleIdIndexRoute
   '/_authenticated/samples/$sampleId/analyses/$analysisId': typeof AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute
   '/_authenticated/samples/$sampleId/analyses/': typeof AuthenticatedSamplesSampleIdAnalysesIndexRoute
@@ -196,18 +265,25 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/setup'
+    | '/administration'
     | '/samples'
+    | '/administration/administrators'
+    | '/administration/groups'
+    | '/administration/settings'
     | '/samples/$sampleId'
     | '/samples/create'
     | '/samples/files'
     | '/samples/labels'
     | '/samples/settings'
+    | '/administration/'
     | '/samples/'
+    | '/administration/users/$userId'
     | '/samples/$sampleId/analyses'
     | '/samples/$sampleId/files'
     | '/samples/$sampleId/general'
     | '/samples/$sampleId/quality'
     | '/samples/$sampleId/rights'
+    | '/administration/users/'
     | '/samples/$sampleId/'
     | '/samples/$sampleId/analyses/$analysisId'
     | '/samples/$sampleId/analyses/'
@@ -216,15 +292,21 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/setup'
+    | '/administration/administrators'
+    | '/administration/groups'
+    | '/administration/settings'
     | '/samples/create'
     | '/samples/files'
     | '/samples/labels'
     | '/samples/settings'
+    | '/administration'
     | '/samples'
+    | '/administration/users/$userId'
     | '/samples/$sampleId/files'
     | '/samples/$sampleId/general'
     | '/samples/$sampleId/quality'
     | '/samples/$sampleId/rights'
+    | '/administration/users'
     | '/samples/$sampleId'
     | '/samples/$sampleId/analyses/$analysisId'
     | '/samples/$sampleId/analyses'
@@ -233,18 +315,25 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/login'
     | '/setup'
+    | '/_authenticated/administration'
     | '/_authenticated/samples'
+    | '/_authenticated/administration/administrators'
+    | '/_authenticated/administration/groups'
+    | '/_authenticated/administration/settings'
     | '/_authenticated/samples/$sampleId'
     | '/_authenticated/samples/create'
     | '/_authenticated/samples/files'
     | '/_authenticated/samples/labels'
     | '/_authenticated/samples/settings'
+    | '/_authenticated/administration/'
     | '/_authenticated/samples/'
+    | '/_authenticated/administration/users/$userId'
     | '/_authenticated/samples/$sampleId/analyses'
     | '/_authenticated/samples/$sampleId/files'
     | '/_authenticated/samples/$sampleId/general'
     | '/_authenticated/samples/$sampleId/quality'
     | '/_authenticated/samples/$sampleId/rights'
+    | '/_authenticated/administration/users/'
     | '/_authenticated/samples/$sampleId/'
     | '/_authenticated/samples/$sampleId/analyses/$analysisId'
     | '/_authenticated/samples/$sampleId/analyses/'
@@ -286,12 +375,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSamplesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/administration': {
+      id: '/_authenticated/administration'
+      path: '/administration'
+      fullPath: '/administration'
+      preLoaderRoute: typeof AuthenticatedAdministrationRouteRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/samples/': {
       id: '/_authenticated/samples/'
       path: '/'
       fullPath: '/samples/'
       preLoaderRoute: typeof AuthenticatedSamplesIndexRouteImport
       parentRoute: typeof AuthenticatedSamplesRoute
+    }
+    '/_authenticated/administration/': {
+      id: '/_authenticated/administration/'
+      path: '/'
+      fullPath: '/administration/'
+      preLoaderRoute: typeof AuthenticatedAdministrationIndexRouteImport
+      parentRoute: typeof AuthenticatedAdministrationRouteRoute
     }
     '/_authenticated/samples/settings': {
       id: '/_authenticated/samples/settings'
@@ -328,12 +431,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSamplesSampleIdRouteImport
       parentRoute: typeof AuthenticatedSamplesRoute
     }
+    '/_authenticated/administration/settings': {
+      id: '/_authenticated/administration/settings'
+      path: '/settings'
+      fullPath: '/administration/settings'
+      preLoaderRoute: typeof AuthenticatedAdministrationSettingsRouteImport
+      parentRoute: typeof AuthenticatedAdministrationRouteRoute
+    }
+    '/_authenticated/administration/groups': {
+      id: '/_authenticated/administration/groups'
+      path: '/groups'
+      fullPath: '/administration/groups'
+      preLoaderRoute: typeof AuthenticatedAdministrationGroupsRouteImport
+      parentRoute: typeof AuthenticatedAdministrationRouteRoute
+    }
+    '/_authenticated/administration/administrators': {
+      id: '/_authenticated/administration/administrators'
+      path: '/administrators'
+      fullPath: '/administration/administrators'
+      preLoaderRoute: typeof AuthenticatedAdministrationAdministratorsRouteImport
+      parentRoute: typeof AuthenticatedAdministrationRouteRoute
+    }
     '/_authenticated/samples/$sampleId/': {
       id: '/_authenticated/samples/$sampleId/'
       path: '/'
       fullPath: '/samples/$sampleId/'
       preLoaderRoute: typeof AuthenticatedSamplesSampleIdIndexRouteImport
       parentRoute: typeof AuthenticatedSamplesSampleIdRoute
+    }
+    '/_authenticated/administration/users/': {
+      id: '/_authenticated/administration/users/'
+      path: '/users'
+      fullPath: '/administration/users/'
+      preLoaderRoute: typeof AuthenticatedAdministrationUsersIndexRouteImport
+      parentRoute: typeof AuthenticatedAdministrationRouteRoute
     }
     '/_authenticated/samples/$sampleId/rights': {
       id: '/_authenticated/samples/$sampleId/rights'
@@ -370,6 +501,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSamplesSampleIdAnalysesRouteImport
       parentRoute: typeof AuthenticatedSamplesSampleIdRoute
     }
+    '/_authenticated/administration/users/$userId': {
+      id: '/_authenticated/administration/users/$userId'
+      path: '/users/$userId'
+      fullPath: '/administration/users/$userId'
+      preLoaderRoute: typeof AuthenticatedAdministrationUsersUserIdRouteImport
+      parentRoute: typeof AuthenticatedAdministrationRouteRoute
+    }
     '/_authenticated/samples/$sampleId/analyses/': {
       id: '/_authenticated/samples/$sampleId/analyses/'
       path: '/'
@@ -386,6 +524,36 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedAdministrationRouteRouteChildren {
+  AuthenticatedAdministrationAdministratorsRoute: typeof AuthenticatedAdministrationAdministratorsRoute
+  AuthenticatedAdministrationGroupsRoute: typeof AuthenticatedAdministrationGroupsRoute
+  AuthenticatedAdministrationSettingsRoute: typeof AuthenticatedAdministrationSettingsRoute
+  AuthenticatedAdministrationIndexRoute: typeof AuthenticatedAdministrationIndexRoute
+  AuthenticatedAdministrationUsersUserIdRoute: typeof AuthenticatedAdministrationUsersUserIdRoute
+  AuthenticatedAdministrationUsersIndexRoute: typeof AuthenticatedAdministrationUsersIndexRoute
+}
+
+const AuthenticatedAdministrationRouteRouteChildren: AuthenticatedAdministrationRouteRouteChildren =
+  {
+    AuthenticatedAdministrationAdministratorsRoute:
+      AuthenticatedAdministrationAdministratorsRoute,
+    AuthenticatedAdministrationGroupsRoute:
+      AuthenticatedAdministrationGroupsRoute,
+    AuthenticatedAdministrationSettingsRoute:
+      AuthenticatedAdministrationSettingsRoute,
+    AuthenticatedAdministrationIndexRoute:
+      AuthenticatedAdministrationIndexRoute,
+    AuthenticatedAdministrationUsersUserIdRoute:
+      AuthenticatedAdministrationUsersUserIdRoute,
+    AuthenticatedAdministrationUsersIndexRoute:
+      AuthenticatedAdministrationUsersIndexRoute,
+  }
+
+const AuthenticatedAdministrationRouteRouteWithChildren =
+  AuthenticatedAdministrationRouteRoute._addFileChildren(
+    AuthenticatedAdministrationRouteRouteChildren,
+  )
 
 interface AuthenticatedSamplesSampleIdAnalysesRouteChildren {
   AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute: typeof AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute
@@ -458,10 +626,13 @@ const AuthenticatedSamplesRouteWithChildren =
   AuthenticatedSamplesRoute._addFileChildren(AuthenticatedSamplesRouteChildren)
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAdministrationRouteRoute: typeof AuthenticatedAdministrationRouteRouteWithChildren
   AuthenticatedSamplesRoute: typeof AuthenticatedSamplesRouteWithChildren
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdministrationRouteRoute:
+    AuthenticatedAdministrationRouteRouteWithChildren,
   AuthenticatedSamplesRoute: AuthenticatedSamplesRouteWithChildren,
 }
 
