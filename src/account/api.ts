@@ -1,8 +1,7 @@
-import { apiClient } from "@app/api";
+import { type ApiResponse, apiClient } from "@app/api";
 import type { Permissions } from "@groups/types";
 import type { User } from "@users/types";
-import type { Response } from "superagent";
-import type { Account, APIKeyMinimal } from "./types";
+import type { Account, AccountSettings, APIKeyMinimal } from "./types";
 
 /**
  * Gets complete account data for the current user.
@@ -10,7 +9,7 @@ import type { Account, APIKeyMinimal } from "./types";
  * @returns A promise resolving to a response containing the
  * current user's account data.
  */
-export function get(): Promise<Response> {
+export function get(): Promise<ApiResponse> {
 	return apiClient.get("/account");
 }
 
@@ -38,7 +37,7 @@ export function updateAccount(update: AccountUpdate): Promise<User> {
  * @returns A promise resolving to a response containing the
  * current user's personal settings.
  */
-export function getSettings(): Promise<Response> {
+export function getSettings(): Promise<ApiResponse> {
 	return apiClient.get("/account/settings");
 }
 
@@ -49,7 +48,11 @@ export function getSettings(): Promise<Response> {
  * @returns A promise resolving to a response containing the
  * user's updated personal settings.
  */
-export function updateSettings({ update }): Promise<Response> {
+export function updateSettings({
+	update,
+}: {
+	update: Partial<AccountSettings>;
+}): Promise<ApiResponse> {
 	return apiClient.patch("/account/settings").send(update);
 }
 
@@ -151,7 +154,7 @@ export function login({
 	handle: string;
 	password: string;
 	remember: boolean;
-}): Promise<Response> {
+}): Promise<ApiResponse> {
 	return apiClient.post("/account/login").send({
 		handle,
 		password,
@@ -183,7 +186,7 @@ export function resetPassword({
 }: {
 	password: string;
 	resetCode: string;
-}): Promise<Response> {
+}): Promise<ApiResponse> {
 	return apiClient.post("/account/reset").send({
 		password,
 		reset_code: resetCode,
