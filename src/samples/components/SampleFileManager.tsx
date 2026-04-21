@@ -1,5 +1,5 @@
 import ContainerNarrow from "@base/ContainerNarrow";
-import { FileManager } from "@/uploads/components/FileManager";
+import { FileManager } from "@uploads/components/FileManager";
 
 export default function SampleFileManager() {
 	return (

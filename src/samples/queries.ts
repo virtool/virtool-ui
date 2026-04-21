@@ -62,7 +62,7 @@ export function useListSamples(
 }
 
 export function sampleQueryOptions(sampleId: string) {
-	return queryOptions({
+	return queryOptions<Sample, ErrorResponse>({
 		queryKey: samplesQueryKeys.detail(sampleId),
 		queryFn: () => getSample(sampleId),
 	});
