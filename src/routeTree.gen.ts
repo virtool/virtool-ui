@@ -12,21 +12,37 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthenticatedSubtractionsRouteImport } from './routes/_authenticated/subtractions'
 import { Route as AuthenticatedSamplesRouteImport } from './routes/_authenticated/samples'
+import { Route as AuthenticatedMlRouteImport } from './routes/_authenticated/ml'
+import { Route as AuthenticatedJobsRouteImport } from './routes/_authenticated/jobs'
+import { Route as AuthenticatedHmmRouteImport } from './routes/_authenticated/hmm'
+import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedRefsRouteRouteImport } from './routes/_authenticated/refs/route'
 import { Route as AuthenticatedAdministrationRouteRouteImport } from './routes/_authenticated/administration/route'
+import { Route as AuthenticatedSubtractionsIndexRouteImport } from './routes/_authenticated/subtractions/index'
 import { Route as AuthenticatedSamplesIndexRouteImport } from './routes/_authenticated/samples/index'
 import { Route as AuthenticatedRefsIndexRouteImport } from './routes/_authenticated/refs/index'
+import { Route as AuthenticatedMlIndexRouteImport } from './routes/_authenticated/ml/index'
+import { Route as AuthenticatedJobsIndexRouteImport } from './routes/_authenticated/jobs/index'
+import { Route as AuthenticatedHmmIndexRouteImport } from './routes/_authenticated/hmm/index'
 import { Route as AuthenticatedAdministrationIndexRouteImport } from './routes/_authenticated/administration/index'
+import { Route as AuthenticatedAccountIndexRouteImport } from './routes/_authenticated/account/index'
+import { Route as AuthenticatedSubtractionsFilesRouteImport } from './routes/_authenticated/subtractions/files'
+import { Route as AuthenticatedSubtractionsSubtractionIdRouteImport } from './routes/_authenticated/subtractions/$subtractionId'
 import { Route as AuthenticatedSamplesSettingsRouteImport } from './routes/_authenticated/samples/settings'
 import { Route as AuthenticatedSamplesLabelsRouteImport } from './routes/_authenticated/samples/labels'
 import { Route as AuthenticatedSamplesFilesRouteImport } from './routes/_authenticated/samples/files'
 import { Route as AuthenticatedSamplesCreateRouteImport } from './routes/_authenticated/samples/create'
 import { Route as AuthenticatedSamplesSampleIdRouteImport } from './routes/_authenticated/samples/$sampleId'
 import { Route as AuthenticatedRefsSettingsRouteImport } from './routes/_authenticated/refs/settings'
+import { Route as AuthenticatedJobsJobIdRouteImport } from './routes/_authenticated/jobs/$jobId'
+import { Route as AuthenticatedHmmHmmIdRouteImport } from './routes/_authenticated/hmm/$hmmId'
 import { Route as AuthenticatedAdministrationSettingsRouteImport } from './routes/_authenticated/administration/settings'
 import { Route as AuthenticatedAdministrationGroupsRouteImport } from './routes/_authenticated/administration/groups'
 import { Route as AuthenticatedAdministrationAdministratorsRouteImport } from './routes/_authenticated/administration/administrators'
+import { Route as AuthenticatedAccountProfileRouteImport } from './routes/_authenticated/account/profile'
+import { Route as AuthenticatedAccountApiRouteImport } from './routes/_authenticated/account/api'
 import { Route as AuthenticatedRefsRefIdRouteRouteImport } from './routes/_authenticated/refs/$refId/route'
 import { Route as AuthenticatedSamplesSampleIdIndexRouteImport } from './routes/_authenticated/samples/$sampleId/index'
 import { Route as AuthenticatedRefsRefIdIndexRouteImport } from './routes/_authenticated/refs/$refId/index'
@@ -64,9 +80,35 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSubtractionsRoute =
+  AuthenticatedSubtractionsRouteImport.update({
+    id: '/subtractions',
+    path: '/subtractions',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedSamplesRoute = AuthenticatedSamplesRouteImport.update({
   id: '/samples',
   path: '/samples',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedMlRoute = AuthenticatedMlRouteImport.update({
+  id: '/ml',
+  path: '/ml',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedJobsRoute = AuthenticatedJobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedHmmRoute = AuthenticatedHmmRouteImport.update({
+  id: '/hmm',
+  path: '/hmm',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedRefsRouteRoute = AuthenticatedRefsRouteRouteImport.update({
@@ -80,6 +122,12 @@ const AuthenticatedAdministrationRouteRoute =
     path: '/administration',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedSubtractionsIndexRoute =
+  AuthenticatedSubtractionsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedSubtractionsRoute,
+  } as any)
 const AuthenticatedSamplesIndexRoute =
   AuthenticatedSamplesIndexRouteImport.update({
     id: '/',
@@ -91,11 +139,44 @@ const AuthenticatedRefsIndexRoute = AuthenticatedRefsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRefsRouteRoute,
 } as any)
+const AuthenticatedMlIndexRoute = AuthenticatedMlIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedMlRoute,
+} as any)
+const AuthenticatedJobsIndexRoute = AuthenticatedJobsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedJobsRoute,
+} as any)
+const AuthenticatedHmmIndexRoute = AuthenticatedHmmIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedHmmRoute,
+} as any)
 const AuthenticatedAdministrationIndexRoute =
   AuthenticatedAdministrationIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedAdministrationRouteRoute,
+  } as any)
+const AuthenticatedAccountIndexRoute =
+  AuthenticatedAccountIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAccountRoute,
+  } as any)
+const AuthenticatedSubtractionsFilesRoute =
+  AuthenticatedSubtractionsFilesRouteImport.update({
+    id: '/files',
+    path: '/files',
+    getParentRoute: () => AuthenticatedSubtractionsRoute,
+  } as any)
+const AuthenticatedSubtractionsSubtractionIdRoute =
+  AuthenticatedSubtractionsSubtractionIdRouteImport.update({
+    id: '/$subtractionId',
+    path: '/$subtractionId',
+    getParentRoute: () => AuthenticatedSubtractionsRoute,
   } as any)
 const AuthenticatedSamplesSettingsRoute =
   AuthenticatedSamplesSettingsRouteImport.update({
@@ -133,6 +214,16 @@ const AuthenticatedRefsSettingsRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedRefsRouteRoute,
   } as any)
+const AuthenticatedJobsJobIdRoute = AuthenticatedJobsJobIdRouteImport.update({
+  id: '/$jobId',
+  path: '/$jobId',
+  getParentRoute: () => AuthenticatedJobsRoute,
+} as any)
+const AuthenticatedHmmHmmIdRoute = AuthenticatedHmmHmmIdRouteImport.update({
+  id: '/$hmmId',
+  path: '/$hmmId',
+  getParentRoute: () => AuthenticatedHmmRoute,
+} as any)
 const AuthenticatedAdministrationSettingsRoute =
   AuthenticatedAdministrationSettingsRouteImport.update({
     id: '/settings',
@@ -151,6 +242,17 @@ const AuthenticatedAdministrationAdministratorsRoute =
     path: '/administrators',
     getParentRoute: () => AuthenticatedAdministrationRouteRoute,
   } as any)
+const AuthenticatedAccountProfileRoute =
+  AuthenticatedAccountProfileRouteImport.update({
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => AuthenticatedAccountRoute,
+  } as any)
+const AuthenticatedAccountApiRoute = AuthenticatedAccountApiRouteImport.update({
+  id: '/api',
+  path: '/api',
+  getParentRoute: () => AuthenticatedAccountRoute,
+} as any)
 const AuthenticatedRefsRefIdRouteRoute =
   AuthenticatedRefsRefIdRouteRouteImport.update({
     id: '/$refId',
@@ -290,20 +392,36 @@ export interface FileRoutesByFullPath {
   '/setup': typeof SetupRoute
   '/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
   '/refs': typeof AuthenticatedRefsRouteRouteWithChildren
+  '/account': typeof AuthenticatedAccountRouteWithChildren
+  '/hmm': typeof AuthenticatedHmmRouteWithChildren
+  '/jobs': typeof AuthenticatedJobsRouteWithChildren
+  '/ml': typeof AuthenticatedMlRouteWithChildren
   '/samples': typeof AuthenticatedSamplesRouteWithChildren
+  '/subtractions': typeof AuthenticatedSubtractionsRouteWithChildren
   '/refs/$refId': typeof AuthenticatedRefsRefIdRouteRouteWithChildren
+  '/account/api': typeof AuthenticatedAccountApiRoute
+  '/account/profile': typeof AuthenticatedAccountProfileRoute
   '/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
   '/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
   '/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
+  '/hmm/$hmmId': typeof AuthenticatedHmmHmmIdRoute
+  '/jobs/$jobId': typeof AuthenticatedJobsJobIdRoute
   '/refs/settings': typeof AuthenticatedRefsSettingsRoute
   '/samples/$sampleId': typeof AuthenticatedSamplesSampleIdRouteWithChildren
   '/samples/create': typeof AuthenticatedSamplesCreateRoute
   '/samples/files': typeof AuthenticatedSamplesFilesRoute
   '/samples/labels': typeof AuthenticatedSamplesLabelsRoute
   '/samples/settings': typeof AuthenticatedSamplesSettingsRoute
+  '/subtractions/$subtractionId': typeof AuthenticatedSubtractionsSubtractionIdRoute
+  '/subtractions/files': typeof AuthenticatedSubtractionsFilesRoute
+  '/account/': typeof AuthenticatedAccountIndexRoute
   '/administration/': typeof AuthenticatedAdministrationIndexRoute
+  '/hmm/': typeof AuthenticatedHmmIndexRoute
+  '/jobs/': typeof AuthenticatedJobsIndexRoute
+  '/ml/': typeof AuthenticatedMlIndexRoute
   '/refs/': typeof AuthenticatedRefsIndexRoute
   '/samples/': typeof AuthenticatedSamplesIndexRoute
+  '/subtractions/': typeof AuthenticatedSubtractionsIndexRoute
   '/administration/users/$userId': typeof AuthenticatedAdministrationUsersUserIdRoute
   '/refs/$refId/manage': typeof AuthenticatedRefsRefIdManageRoute
   '/refs/$refId/settings': typeof AuthenticatedRefsRefIdSettingsRoute
@@ -330,17 +448,28 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/account/api': typeof AuthenticatedAccountApiRoute
+  '/account/profile': typeof AuthenticatedAccountProfileRoute
   '/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
   '/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
   '/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
+  '/hmm/$hmmId': typeof AuthenticatedHmmHmmIdRoute
+  '/jobs/$jobId': typeof AuthenticatedJobsJobIdRoute
   '/refs/settings': typeof AuthenticatedRefsSettingsRoute
   '/samples/create': typeof AuthenticatedSamplesCreateRoute
   '/samples/files': typeof AuthenticatedSamplesFilesRoute
   '/samples/labels': typeof AuthenticatedSamplesLabelsRoute
   '/samples/settings': typeof AuthenticatedSamplesSettingsRoute
+  '/subtractions/$subtractionId': typeof AuthenticatedSubtractionsSubtractionIdRoute
+  '/subtractions/files': typeof AuthenticatedSubtractionsFilesRoute
+  '/account': typeof AuthenticatedAccountIndexRoute
   '/administration': typeof AuthenticatedAdministrationIndexRoute
+  '/hmm': typeof AuthenticatedHmmIndexRoute
+  '/jobs': typeof AuthenticatedJobsIndexRoute
+  '/ml': typeof AuthenticatedMlIndexRoute
   '/refs': typeof AuthenticatedRefsIndexRoute
   '/samples': typeof AuthenticatedSamplesIndexRoute
+  '/subtractions': typeof AuthenticatedSubtractionsIndexRoute
   '/administration/users/$userId': typeof AuthenticatedAdministrationUsersUserIdRoute
   '/refs/$refId/manage': typeof AuthenticatedRefsRefIdManageRoute
   '/refs/$refId/settings': typeof AuthenticatedRefsRefIdSettingsRoute
@@ -368,20 +497,36 @@ export interface FileRoutesById {
   '/setup': typeof SetupRoute
   '/_authenticated/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
   '/_authenticated/refs': typeof AuthenticatedRefsRouteRouteWithChildren
+  '/_authenticated/account': typeof AuthenticatedAccountRouteWithChildren
+  '/_authenticated/hmm': typeof AuthenticatedHmmRouteWithChildren
+  '/_authenticated/jobs': typeof AuthenticatedJobsRouteWithChildren
+  '/_authenticated/ml': typeof AuthenticatedMlRouteWithChildren
   '/_authenticated/samples': typeof AuthenticatedSamplesRouteWithChildren
+  '/_authenticated/subtractions': typeof AuthenticatedSubtractionsRouteWithChildren
   '/_authenticated/refs/$refId': typeof AuthenticatedRefsRefIdRouteRouteWithChildren
+  '/_authenticated/account/api': typeof AuthenticatedAccountApiRoute
+  '/_authenticated/account/profile': typeof AuthenticatedAccountProfileRoute
   '/_authenticated/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
   '/_authenticated/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
   '/_authenticated/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
+  '/_authenticated/hmm/$hmmId': typeof AuthenticatedHmmHmmIdRoute
+  '/_authenticated/jobs/$jobId': typeof AuthenticatedJobsJobIdRoute
   '/_authenticated/refs/settings': typeof AuthenticatedRefsSettingsRoute
   '/_authenticated/samples/$sampleId': typeof AuthenticatedSamplesSampleIdRouteWithChildren
   '/_authenticated/samples/create': typeof AuthenticatedSamplesCreateRoute
   '/_authenticated/samples/files': typeof AuthenticatedSamplesFilesRoute
   '/_authenticated/samples/labels': typeof AuthenticatedSamplesLabelsRoute
   '/_authenticated/samples/settings': typeof AuthenticatedSamplesSettingsRoute
+  '/_authenticated/subtractions/$subtractionId': typeof AuthenticatedSubtractionsSubtractionIdRoute
+  '/_authenticated/subtractions/files': typeof AuthenticatedSubtractionsFilesRoute
+  '/_authenticated/account/': typeof AuthenticatedAccountIndexRoute
   '/_authenticated/administration/': typeof AuthenticatedAdministrationIndexRoute
+  '/_authenticated/hmm/': typeof AuthenticatedHmmIndexRoute
+  '/_authenticated/jobs/': typeof AuthenticatedJobsIndexRoute
+  '/_authenticated/ml/': typeof AuthenticatedMlIndexRoute
   '/_authenticated/refs/': typeof AuthenticatedRefsIndexRoute
   '/_authenticated/samples/': typeof AuthenticatedSamplesIndexRoute
+  '/_authenticated/subtractions/': typeof AuthenticatedSubtractionsIndexRoute
   '/_authenticated/administration/users/$userId': typeof AuthenticatedAdministrationUsersUserIdRoute
   '/_authenticated/refs/$refId/manage': typeof AuthenticatedRefsRefIdManageRoute
   '/_authenticated/refs/$refId/settings': typeof AuthenticatedRefsRefIdSettingsRoute
@@ -412,20 +557,36 @@ export interface FileRouteTypes {
     | '/setup'
     | '/administration'
     | '/refs'
+    | '/account'
+    | '/hmm'
+    | '/jobs'
+    | '/ml'
     | '/samples'
+    | '/subtractions'
     | '/refs/$refId'
+    | '/account/api'
+    | '/account/profile'
     | '/administration/administrators'
     | '/administration/groups'
     | '/administration/settings'
+    | '/hmm/$hmmId'
+    | '/jobs/$jobId'
     | '/refs/settings'
     | '/samples/$sampleId'
     | '/samples/create'
     | '/samples/files'
     | '/samples/labels'
     | '/samples/settings'
+    | '/subtractions/$subtractionId'
+    | '/subtractions/files'
+    | '/account/'
     | '/administration/'
+    | '/hmm/'
+    | '/jobs/'
+    | '/ml/'
     | '/refs/'
     | '/samples/'
+    | '/subtractions/'
     | '/administration/users/$userId'
     | '/refs/$refId/manage'
     | '/refs/$refId/settings'
@@ -452,17 +613,28 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/setup'
+    | '/account/api'
+    | '/account/profile'
     | '/administration/administrators'
     | '/administration/groups'
     | '/administration/settings'
+    | '/hmm/$hmmId'
+    | '/jobs/$jobId'
     | '/refs/settings'
     | '/samples/create'
     | '/samples/files'
     | '/samples/labels'
     | '/samples/settings'
+    | '/subtractions/$subtractionId'
+    | '/subtractions/files'
+    | '/account'
     | '/administration'
+    | '/hmm'
+    | '/jobs'
+    | '/ml'
     | '/refs'
     | '/samples'
+    | '/subtractions'
     | '/administration/users/$userId'
     | '/refs/$refId/manage'
     | '/refs/$refId/settings'
@@ -489,20 +661,36 @@ export interface FileRouteTypes {
     | '/setup'
     | '/_authenticated/administration'
     | '/_authenticated/refs'
+    | '/_authenticated/account'
+    | '/_authenticated/hmm'
+    | '/_authenticated/jobs'
+    | '/_authenticated/ml'
     | '/_authenticated/samples'
+    | '/_authenticated/subtractions'
     | '/_authenticated/refs/$refId'
+    | '/_authenticated/account/api'
+    | '/_authenticated/account/profile'
     | '/_authenticated/administration/administrators'
     | '/_authenticated/administration/groups'
     | '/_authenticated/administration/settings'
+    | '/_authenticated/hmm/$hmmId'
+    | '/_authenticated/jobs/$jobId'
     | '/_authenticated/refs/settings'
     | '/_authenticated/samples/$sampleId'
     | '/_authenticated/samples/create'
     | '/_authenticated/samples/files'
     | '/_authenticated/samples/labels'
     | '/_authenticated/samples/settings'
+    | '/_authenticated/subtractions/$subtractionId'
+    | '/_authenticated/subtractions/files'
+    | '/_authenticated/account/'
     | '/_authenticated/administration/'
+    | '/_authenticated/hmm/'
+    | '/_authenticated/jobs/'
+    | '/_authenticated/ml/'
     | '/_authenticated/refs/'
     | '/_authenticated/samples/'
+    | '/_authenticated/subtractions/'
     | '/_authenticated/administration/users/$userId'
     | '/_authenticated/refs/$refId/manage'
     | '/_authenticated/refs/$refId/settings'
@@ -555,11 +743,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/subtractions': {
+      id: '/_authenticated/subtractions'
+      path: '/subtractions'
+      fullPath: '/subtractions'
+      preLoaderRoute: typeof AuthenticatedSubtractionsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/samples': {
       id: '/_authenticated/samples'
       path: '/samples'
       fullPath: '/samples'
       preLoaderRoute: typeof AuthenticatedSamplesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/ml': {
+      id: '/_authenticated/ml'
+      path: '/ml'
+      fullPath: '/ml'
+      preLoaderRoute: typeof AuthenticatedMlRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/jobs': {
+      id: '/_authenticated/jobs'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof AuthenticatedJobsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/hmm': {
+      id: '/_authenticated/hmm'
+      path: '/hmm'
+      fullPath: '/hmm'
+      preLoaderRoute: typeof AuthenticatedHmmRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/refs': {
@@ -576,6 +799,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdministrationRouteRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/subtractions/': {
+      id: '/_authenticated/subtractions/'
+      path: '/'
+      fullPath: '/subtractions/'
+      preLoaderRoute: typeof AuthenticatedSubtractionsIndexRouteImport
+      parentRoute: typeof AuthenticatedSubtractionsRoute
+    }
     '/_authenticated/samples/': {
       id: '/_authenticated/samples/'
       path: '/'
@@ -590,12 +820,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRefsIndexRouteImport
       parentRoute: typeof AuthenticatedRefsRouteRoute
     }
+    '/_authenticated/ml/': {
+      id: '/_authenticated/ml/'
+      path: '/'
+      fullPath: '/ml/'
+      preLoaderRoute: typeof AuthenticatedMlIndexRouteImport
+      parentRoute: typeof AuthenticatedMlRoute
+    }
+    '/_authenticated/jobs/': {
+      id: '/_authenticated/jobs/'
+      path: '/'
+      fullPath: '/jobs/'
+      preLoaderRoute: typeof AuthenticatedJobsIndexRouteImport
+      parentRoute: typeof AuthenticatedJobsRoute
+    }
+    '/_authenticated/hmm/': {
+      id: '/_authenticated/hmm/'
+      path: '/'
+      fullPath: '/hmm/'
+      preLoaderRoute: typeof AuthenticatedHmmIndexRouteImport
+      parentRoute: typeof AuthenticatedHmmRoute
+    }
     '/_authenticated/administration/': {
       id: '/_authenticated/administration/'
       path: '/'
       fullPath: '/administration/'
       preLoaderRoute: typeof AuthenticatedAdministrationIndexRouteImport
       parentRoute: typeof AuthenticatedAdministrationRouteRoute
+    }
+    '/_authenticated/account/': {
+      id: '/_authenticated/account/'
+      path: '/'
+      fullPath: '/account/'
+      preLoaderRoute: typeof AuthenticatedAccountIndexRouteImport
+      parentRoute: typeof AuthenticatedAccountRoute
+    }
+    '/_authenticated/subtractions/files': {
+      id: '/_authenticated/subtractions/files'
+      path: '/files'
+      fullPath: '/subtractions/files'
+      preLoaderRoute: typeof AuthenticatedSubtractionsFilesRouteImport
+      parentRoute: typeof AuthenticatedSubtractionsRoute
+    }
+    '/_authenticated/subtractions/$subtractionId': {
+      id: '/_authenticated/subtractions/$subtractionId'
+      path: '/$subtractionId'
+      fullPath: '/subtractions/$subtractionId'
+      preLoaderRoute: typeof AuthenticatedSubtractionsSubtractionIdRouteImport
+      parentRoute: typeof AuthenticatedSubtractionsRoute
     }
     '/_authenticated/samples/settings': {
       id: '/_authenticated/samples/settings'
@@ -639,6 +911,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRefsSettingsRouteImport
       parentRoute: typeof AuthenticatedRefsRouteRoute
     }
+    '/_authenticated/jobs/$jobId': {
+      id: '/_authenticated/jobs/$jobId'
+      path: '/$jobId'
+      fullPath: '/jobs/$jobId'
+      preLoaderRoute: typeof AuthenticatedJobsJobIdRouteImport
+      parentRoute: typeof AuthenticatedJobsRoute
+    }
+    '/_authenticated/hmm/$hmmId': {
+      id: '/_authenticated/hmm/$hmmId'
+      path: '/$hmmId'
+      fullPath: '/hmm/$hmmId'
+      preLoaderRoute: typeof AuthenticatedHmmHmmIdRouteImport
+      parentRoute: typeof AuthenticatedHmmRoute
+    }
     '/_authenticated/administration/settings': {
       id: '/_authenticated/administration/settings'
       path: '/settings'
@@ -659,6 +945,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/administration/administrators'
       preLoaderRoute: typeof AuthenticatedAdministrationAdministratorsRouteImport
       parentRoute: typeof AuthenticatedAdministrationRouteRoute
+    }
+    '/_authenticated/account/profile': {
+      id: '/_authenticated/account/profile'
+      path: '/profile'
+      fullPath: '/account/profile'
+      preLoaderRoute: typeof AuthenticatedAccountProfileRouteImport
+      parentRoute: typeof AuthenticatedAccountRoute
+    }
+    '/_authenticated/account/api': {
+      id: '/_authenticated/account/api'
+      path: '/api'
+      fullPath: '/account/api'
+      preLoaderRoute: typeof AuthenticatedAccountApiRouteImport
+      parentRoute: typeof AuthenticatedAccountRoute
     }
     '/_authenticated/refs/$refId': {
       id: '/_authenticated/refs/$refId'
@@ -919,6 +1219,59 @@ const AuthenticatedRefsRouteRouteWithChildren =
     AuthenticatedRefsRouteRouteChildren,
   )
 
+interface AuthenticatedAccountRouteChildren {
+  AuthenticatedAccountApiRoute: typeof AuthenticatedAccountApiRoute
+  AuthenticatedAccountProfileRoute: typeof AuthenticatedAccountProfileRoute
+  AuthenticatedAccountIndexRoute: typeof AuthenticatedAccountIndexRoute
+}
+
+const AuthenticatedAccountRouteChildren: AuthenticatedAccountRouteChildren = {
+  AuthenticatedAccountApiRoute: AuthenticatedAccountApiRoute,
+  AuthenticatedAccountProfileRoute: AuthenticatedAccountProfileRoute,
+  AuthenticatedAccountIndexRoute: AuthenticatedAccountIndexRoute,
+}
+
+const AuthenticatedAccountRouteWithChildren =
+  AuthenticatedAccountRoute._addFileChildren(AuthenticatedAccountRouteChildren)
+
+interface AuthenticatedHmmRouteChildren {
+  AuthenticatedHmmHmmIdRoute: typeof AuthenticatedHmmHmmIdRoute
+  AuthenticatedHmmIndexRoute: typeof AuthenticatedHmmIndexRoute
+}
+
+const AuthenticatedHmmRouteChildren: AuthenticatedHmmRouteChildren = {
+  AuthenticatedHmmHmmIdRoute: AuthenticatedHmmHmmIdRoute,
+  AuthenticatedHmmIndexRoute: AuthenticatedHmmIndexRoute,
+}
+
+const AuthenticatedHmmRouteWithChildren =
+  AuthenticatedHmmRoute._addFileChildren(AuthenticatedHmmRouteChildren)
+
+interface AuthenticatedJobsRouteChildren {
+  AuthenticatedJobsJobIdRoute: typeof AuthenticatedJobsJobIdRoute
+  AuthenticatedJobsIndexRoute: typeof AuthenticatedJobsIndexRoute
+}
+
+const AuthenticatedJobsRouteChildren: AuthenticatedJobsRouteChildren = {
+  AuthenticatedJobsJobIdRoute: AuthenticatedJobsJobIdRoute,
+  AuthenticatedJobsIndexRoute: AuthenticatedJobsIndexRoute,
+}
+
+const AuthenticatedJobsRouteWithChildren =
+  AuthenticatedJobsRoute._addFileChildren(AuthenticatedJobsRouteChildren)
+
+interface AuthenticatedMlRouteChildren {
+  AuthenticatedMlIndexRoute: typeof AuthenticatedMlIndexRoute
+}
+
+const AuthenticatedMlRouteChildren: AuthenticatedMlRouteChildren = {
+  AuthenticatedMlIndexRoute: AuthenticatedMlIndexRoute,
+}
+
+const AuthenticatedMlRouteWithChildren = AuthenticatedMlRoute._addFileChildren(
+  AuthenticatedMlRouteChildren,
+)
+
 interface AuthenticatedSamplesSampleIdAnalysesRouteChildren {
   AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute: typeof AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute
   AuthenticatedSamplesSampleIdAnalysesIndexRoute: typeof AuthenticatedSamplesSampleIdAnalysesIndexRoute
@@ -989,17 +1342,46 @@ const AuthenticatedSamplesRouteChildren: AuthenticatedSamplesRouteChildren = {
 const AuthenticatedSamplesRouteWithChildren =
   AuthenticatedSamplesRoute._addFileChildren(AuthenticatedSamplesRouteChildren)
 
+interface AuthenticatedSubtractionsRouteChildren {
+  AuthenticatedSubtractionsSubtractionIdRoute: typeof AuthenticatedSubtractionsSubtractionIdRoute
+  AuthenticatedSubtractionsFilesRoute: typeof AuthenticatedSubtractionsFilesRoute
+  AuthenticatedSubtractionsIndexRoute: typeof AuthenticatedSubtractionsIndexRoute
+}
+
+const AuthenticatedSubtractionsRouteChildren: AuthenticatedSubtractionsRouteChildren =
+  {
+    AuthenticatedSubtractionsSubtractionIdRoute:
+      AuthenticatedSubtractionsSubtractionIdRoute,
+    AuthenticatedSubtractionsFilesRoute: AuthenticatedSubtractionsFilesRoute,
+    AuthenticatedSubtractionsIndexRoute: AuthenticatedSubtractionsIndexRoute,
+  }
+
+const AuthenticatedSubtractionsRouteWithChildren =
+  AuthenticatedSubtractionsRoute._addFileChildren(
+    AuthenticatedSubtractionsRouteChildren,
+  )
+
 interface AuthenticatedRouteChildren {
   AuthenticatedAdministrationRouteRoute: typeof AuthenticatedAdministrationRouteRouteWithChildren
   AuthenticatedRefsRouteRoute: typeof AuthenticatedRefsRouteRouteWithChildren
+  AuthenticatedAccountRoute: typeof AuthenticatedAccountRouteWithChildren
+  AuthenticatedHmmRoute: typeof AuthenticatedHmmRouteWithChildren
+  AuthenticatedJobsRoute: typeof AuthenticatedJobsRouteWithChildren
+  AuthenticatedMlRoute: typeof AuthenticatedMlRouteWithChildren
   AuthenticatedSamplesRoute: typeof AuthenticatedSamplesRouteWithChildren
+  AuthenticatedSubtractionsRoute: typeof AuthenticatedSubtractionsRouteWithChildren
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdministrationRouteRoute:
     AuthenticatedAdministrationRouteRouteWithChildren,
   AuthenticatedRefsRouteRoute: AuthenticatedRefsRouteRouteWithChildren,
+  AuthenticatedAccountRoute: AuthenticatedAccountRouteWithChildren,
+  AuthenticatedHmmRoute: AuthenticatedHmmRouteWithChildren,
+  AuthenticatedJobsRoute: AuthenticatedJobsRouteWithChildren,
+  AuthenticatedMlRoute: AuthenticatedMlRouteWithChildren,
   AuthenticatedSamplesRoute: AuthenticatedSamplesRouteWithChildren,
+  AuthenticatedSubtractionsRoute: AuthenticatedSubtractionsRouteWithChildren,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
