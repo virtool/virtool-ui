@@ -7,7 +7,7 @@ import {
 	createFileRoute,
 	notFound,
 	Outlet,
-	useLocation,
+	useMatches,
 } from "@tanstack/react-router";
 import { z } from "zod/v4";
 
@@ -33,9 +33,9 @@ export const Route = createFileRoute("/_authenticated/refs/$refId")({
 function ReferenceDetailLayout() {
 	const { refId } = Route.useParams();
 	const { data } = useFetchReference(refId);
-	const pathname = useLocation({ select: (l) => l.pathname });
-
-	const isOtuDetail = /\/refs\/[^/]+\/otus\/[^/]+/.test(pathname);
+	const isOtuDetail = useMatches().some(
+		(match) => match.routeId === "/_authenticated/refs/$refId/otus/$otuId",
+	);
 
 	if (!data) {
 		return null;

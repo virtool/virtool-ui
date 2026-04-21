@@ -1,4 +1,3 @@
-import { cn } from "@app/utils";
 import Link from "@base/Link";
 import Tabs from "@base/Tabs";
 import TabsLink from "@base/TabsLink";
@@ -74,16 +73,7 @@ function OtuDetailLayout() {
 						/>
 					</ViewHeaderIcons>
 				</ViewHeaderTitle>
-				<p
-					className={cn(
-						"flex",
-						"font-medium",
-						"items-center",
-						"gap-2",
-						"py-2",
-						"text-lg",
-					)}
-				>
+				<p className="flex font-medium items-center gap-2 py-2 text-lg">
 					<Link to={`/refs/${refId}`}>{reference.name}</Link>
 					<span className="text-slate-600">/</span>
 					<Link to={`/refs/${refId}/otus`}>OTUs</Link>
