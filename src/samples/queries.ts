@@ -1,6 +1,7 @@
 import type { Label } from "@labels/types";
 import {
 	keepPreviousData,
+	queryOptions,
 	useMutation,
 	useQuery,
 	useQueryClient,
@@ -60,17 +61,15 @@ export function useListSamples(
 	});
 }
 
-/**
- * Fetches a single sample
- *
- * @param sampleId - The id of the sample to fetch
- * @returns A single sample
- */
-export function useFetchSample(sampleId: string) {
-	return useQuery<Sample, ErrorResponse>({
+export function sampleQueryOptions(sampleId: string) {
+	return queryOptions({
 		queryKey: samplesQueryKeys.detail(sampleId),
 		queryFn: () => getSample(sampleId),
 	});
+}
+
+export function useFetchSample(sampleId: string) {
+	return useQuery(sampleQueryOptions(sampleId));
 }
 
 /**

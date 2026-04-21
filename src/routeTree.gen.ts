@@ -12,6 +12,21 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthenticatedSamplesRouteImport } from './routes/_authenticated/samples'
+import { Route as AuthenticatedSamplesIndexRouteImport } from './routes/_authenticated/samples/index'
+import { Route as AuthenticatedSamplesSettingsRouteImport } from './routes/_authenticated/samples/settings'
+import { Route as AuthenticatedSamplesLabelsRouteImport } from './routes/_authenticated/samples/labels'
+import { Route as AuthenticatedSamplesFilesRouteImport } from './routes/_authenticated/samples/files'
+import { Route as AuthenticatedSamplesCreateRouteImport } from './routes/_authenticated/samples/create'
+import { Route as AuthenticatedSamplesSampleIdRouteImport } from './routes/_authenticated/samples/$sampleId'
+import { Route as AuthenticatedSamplesSampleIdIndexRouteImport } from './routes/_authenticated/samples/$sampleId/index'
+import { Route as AuthenticatedSamplesSampleIdRightsRouteImport } from './routes/_authenticated/samples/$sampleId/rights'
+import { Route as AuthenticatedSamplesSampleIdQualityRouteImport } from './routes/_authenticated/samples/$sampleId/quality'
+import { Route as AuthenticatedSamplesSampleIdGeneralRouteImport } from './routes/_authenticated/samples/$sampleId/general'
+import { Route as AuthenticatedSamplesSampleIdFilesRouteImport } from './routes/_authenticated/samples/$sampleId/files'
+import { Route as AuthenticatedSamplesSampleIdAnalysesRouteImport } from './routes/_authenticated/samples/$sampleId/analyses'
+import { Route as AuthenticatedSamplesSampleIdAnalysesIndexRouteImport } from './routes/_authenticated/samples/$sampleId/analyses/index'
+import { Route as AuthenticatedSamplesSampleIdAnalysesAnalysisIdRouteImport } from './routes/_authenticated/samples/$sampleId/analyses/$analysisId'
 
 const SetupRoute = SetupRouteImport.update({
   id: '/setup',
@@ -27,33 +42,216 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSamplesRoute = AuthenticatedSamplesRouteImport.update({
+  id: '/samples',
+  path: '/samples',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedSamplesIndexRoute =
+  AuthenticatedSamplesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedSamplesRoute,
+  } as any)
+const AuthenticatedSamplesSettingsRoute =
+  AuthenticatedSamplesSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedSamplesRoute,
+  } as any)
+const AuthenticatedSamplesLabelsRoute =
+  AuthenticatedSamplesLabelsRouteImport.update({
+    id: '/labels',
+    path: '/labels',
+    getParentRoute: () => AuthenticatedSamplesRoute,
+  } as any)
+const AuthenticatedSamplesFilesRoute =
+  AuthenticatedSamplesFilesRouteImport.update({
+    id: '/files',
+    path: '/files',
+    getParentRoute: () => AuthenticatedSamplesRoute,
+  } as any)
+const AuthenticatedSamplesCreateRoute =
+  AuthenticatedSamplesCreateRouteImport.update({
+    id: '/create',
+    path: '/create',
+    getParentRoute: () => AuthenticatedSamplesRoute,
+  } as any)
+const AuthenticatedSamplesSampleIdRoute =
+  AuthenticatedSamplesSampleIdRouteImport.update({
+    id: '/$sampleId',
+    path: '/$sampleId',
+    getParentRoute: () => AuthenticatedSamplesRoute,
+  } as any)
+const AuthenticatedSamplesSampleIdIndexRoute =
+  AuthenticatedSamplesSampleIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedSamplesSampleIdRoute,
+  } as any)
+const AuthenticatedSamplesSampleIdRightsRoute =
+  AuthenticatedSamplesSampleIdRightsRouteImport.update({
+    id: '/rights',
+    path: '/rights',
+    getParentRoute: () => AuthenticatedSamplesSampleIdRoute,
+  } as any)
+const AuthenticatedSamplesSampleIdQualityRoute =
+  AuthenticatedSamplesSampleIdQualityRouteImport.update({
+    id: '/quality',
+    path: '/quality',
+    getParentRoute: () => AuthenticatedSamplesSampleIdRoute,
+  } as any)
+const AuthenticatedSamplesSampleIdGeneralRoute =
+  AuthenticatedSamplesSampleIdGeneralRouteImport.update({
+    id: '/general',
+    path: '/general',
+    getParentRoute: () => AuthenticatedSamplesSampleIdRoute,
+  } as any)
+const AuthenticatedSamplesSampleIdFilesRoute =
+  AuthenticatedSamplesSampleIdFilesRouteImport.update({
+    id: '/files',
+    path: '/files',
+    getParentRoute: () => AuthenticatedSamplesSampleIdRoute,
+  } as any)
+const AuthenticatedSamplesSampleIdAnalysesRoute =
+  AuthenticatedSamplesSampleIdAnalysesRouteImport.update({
+    id: '/analyses',
+    path: '/analyses',
+    getParentRoute: () => AuthenticatedSamplesSampleIdRoute,
+  } as any)
+const AuthenticatedSamplesSampleIdAnalysesIndexRoute =
+  AuthenticatedSamplesSampleIdAnalysesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedSamplesSampleIdAnalysesRoute,
+  } as any)
+const AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute =
+  AuthenticatedSamplesSampleIdAnalysesAnalysisIdRouteImport.update({
+    id: '/$analysisId',
+    path: '/$analysisId',
+    getParentRoute: () => AuthenticatedSamplesSampleIdAnalysesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedRoute
+  '/': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/samples': typeof AuthenticatedSamplesRouteWithChildren
+  '/samples/$sampleId': typeof AuthenticatedSamplesSampleIdRouteWithChildren
+  '/samples/create': typeof AuthenticatedSamplesCreateRoute
+  '/samples/files': typeof AuthenticatedSamplesFilesRoute
+  '/samples/labels': typeof AuthenticatedSamplesLabelsRoute
+  '/samples/settings': typeof AuthenticatedSamplesSettingsRoute
+  '/samples/': typeof AuthenticatedSamplesIndexRoute
+  '/samples/$sampleId/analyses': typeof AuthenticatedSamplesSampleIdAnalysesRouteWithChildren
+  '/samples/$sampleId/files': typeof AuthenticatedSamplesSampleIdFilesRoute
+  '/samples/$sampleId/general': typeof AuthenticatedSamplesSampleIdGeneralRoute
+  '/samples/$sampleId/quality': typeof AuthenticatedSamplesSampleIdQualityRoute
+  '/samples/$sampleId/rights': typeof AuthenticatedSamplesSampleIdRightsRoute
+  '/samples/$sampleId/': typeof AuthenticatedSamplesSampleIdIndexRoute
+  '/samples/$sampleId/analyses/$analysisId': typeof AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute
+  '/samples/$sampleId/analyses/': typeof AuthenticatedSamplesSampleIdAnalysesIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AuthenticatedRoute
+  '/': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/samples/create': typeof AuthenticatedSamplesCreateRoute
+  '/samples/files': typeof AuthenticatedSamplesFilesRoute
+  '/samples/labels': typeof AuthenticatedSamplesLabelsRoute
+  '/samples/settings': typeof AuthenticatedSamplesSettingsRoute
+  '/samples': typeof AuthenticatedSamplesIndexRoute
+  '/samples/$sampleId/files': typeof AuthenticatedSamplesSampleIdFilesRoute
+  '/samples/$sampleId/general': typeof AuthenticatedSamplesSampleIdGeneralRoute
+  '/samples/$sampleId/quality': typeof AuthenticatedSamplesSampleIdQualityRoute
+  '/samples/$sampleId/rights': typeof AuthenticatedSamplesSampleIdRightsRoute
+  '/samples/$sampleId': typeof AuthenticatedSamplesSampleIdIndexRoute
+  '/samples/$sampleId/analyses/$analysisId': typeof AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute
+  '/samples/$sampleId/analyses': typeof AuthenticatedSamplesSampleIdAnalysesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_authenticated': typeof AuthenticatedRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/_authenticated/samples': typeof AuthenticatedSamplesRouteWithChildren
+  '/_authenticated/samples/$sampleId': typeof AuthenticatedSamplesSampleIdRouteWithChildren
+  '/_authenticated/samples/create': typeof AuthenticatedSamplesCreateRoute
+  '/_authenticated/samples/files': typeof AuthenticatedSamplesFilesRoute
+  '/_authenticated/samples/labels': typeof AuthenticatedSamplesLabelsRoute
+  '/_authenticated/samples/settings': typeof AuthenticatedSamplesSettingsRoute
+  '/_authenticated/samples/': typeof AuthenticatedSamplesIndexRoute
+  '/_authenticated/samples/$sampleId/analyses': typeof AuthenticatedSamplesSampleIdAnalysesRouteWithChildren
+  '/_authenticated/samples/$sampleId/files': typeof AuthenticatedSamplesSampleIdFilesRoute
+  '/_authenticated/samples/$sampleId/general': typeof AuthenticatedSamplesSampleIdGeneralRoute
+  '/_authenticated/samples/$sampleId/quality': typeof AuthenticatedSamplesSampleIdQualityRoute
+  '/_authenticated/samples/$sampleId/rights': typeof AuthenticatedSamplesSampleIdRightsRoute
+  '/_authenticated/samples/$sampleId/': typeof AuthenticatedSamplesSampleIdIndexRoute
+  '/_authenticated/samples/$sampleId/analyses/$analysisId': typeof AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute
+  '/_authenticated/samples/$sampleId/analyses/': typeof AuthenticatedSamplesSampleIdAnalysesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/setup'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/setup'
+    | '/samples'
+    | '/samples/$sampleId'
+    | '/samples/create'
+    | '/samples/files'
+    | '/samples/labels'
+    | '/samples/settings'
+    | '/samples/'
+    | '/samples/$sampleId/analyses'
+    | '/samples/$sampleId/files'
+    | '/samples/$sampleId/general'
+    | '/samples/$sampleId/quality'
+    | '/samples/$sampleId/rights'
+    | '/samples/$sampleId/'
+    | '/samples/$sampleId/analyses/$analysisId'
+    | '/samples/$sampleId/analyses/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/setup'
-  id: '__root__' | '/_authenticated' | '/login' | '/setup'
+  to:
+    | '/'
+    | '/login'
+    | '/setup'
+    | '/samples/create'
+    | '/samples/files'
+    | '/samples/labels'
+    | '/samples/settings'
+    | '/samples'
+    | '/samples/$sampleId/files'
+    | '/samples/$sampleId/general'
+    | '/samples/$sampleId/quality'
+    | '/samples/$sampleId/rights'
+    | '/samples/$sampleId'
+    | '/samples/$sampleId/analyses/$analysisId'
+    | '/samples/$sampleId/analyses'
+  id:
+    | '__root__'
+    | '/_authenticated'
+    | '/login'
+    | '/setup'
+    | '/_authenticated/samples'
+    | '/_authenticated/samples/$sampleId'
+    | '/_authenticated/samples/create'
+    | '/_authenticated/samples/files'
+    | '/_authenticated/samples/labels'
+    | '/_authenticated/samples/settings'
+    | '/_authenticated/samples/'
+    | '/_authenticated/samples/$sampleId/analyses'
+    | '/_authenticated/samples/$sampleId/files'
+    | '/_authenticated/samples/$sampleId/general'
+    | '/_authenticated/samples/$sampleId/quality'
+    | '/_authenticated/samples/$sampleId/rights'
+    | '/_authenticated/samples/$sampleId/'
+    | '/_authenticated/samples/$sampleId/analyses/$analysisId'
+    | '/_authenticated/samples/$sampleId/analyses/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthenticatedRoute: typeof AuthenticatedRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   SetupRoute: typeof SetupRoute
 }
@@ -81,11 +279,198 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/samples': {
+      id: '/_authenticated/samples'
+      path: '/samples'
+      fullPath: '/samples'
+      preLoaderRoute: typeof AuthenticatedSamplesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/samples/': {
+      id: '/_authenticated/samples/'
+      path: '/'
+      fullPath: '/samples/'
+      preLoaderRoute: typeof AuthenticatedSamplesIndexRouteImport
+      parentRoute: typeof AuthenticatedSamplesRoute
+    }
+    '/_authenticated/samples/settings': {
+      id: '/_authenticated/samples/settings'
+      path: '/settings'
+      fullPath: '/samples/settings'
+      preLoaderRoute: typeof AuthenticatedSamplesSettingsRouteImport
+      parentRoute: typeof AuthenticatedSamplesRoute
+    }
+    '/_authenticated/samples/labels': {
+      id: '/_authenticated/samples/labels'
+      path: '/labels'
+      fullPath: '/samples/labels'
+      preLoaderRoute: typeof AuthenticatedSamplesLabelsRouteImport
+      parentRoute: typeof AuthenticatedSamplesRoute
+    }
+    '/_authenticated/samples/files': {
+      id: '/_authenticated/samples/files'
+      path: '/files'
+      fullPath: '/samples/files'
+      preLoaderRoute: typeof AuthenticatedSamplesFilesRouteImport
+      parentRoute: typeof AuthenticatedSamplesRoute
+    }
+    '/_authenticated/samples/create': {
+      id: '/_authenticated/samples/create'
+      path: '/create'
+      fullPath: '/samples/create'
+      preLoaderRoute: typeof AuthenticatedSamplesCreateRouteImport
+      parentRoute: typeof AuthenticatedSamplesRoute
+    }
+    '/_authenticated/samples/$sampleId': {
+      id: '/_authenticated/samples/$sampleId'
+      path: '/$sampleId'
+      fullPath: '/samples/$sampleId'
+      preLoaderRoute: typeof AuthenticatedSamplesSampleIdRouteImport
+      parentRoute: typeof AuthenticatedSamplesRoute
+    }
+    '/_authenticated/samples/$sampleId/': {
+      id: '/_authenticated/samples/$sampleId/'
+      path: '/'
+      fullPath: '/samples/$sampleId/'
+      preLoaderRoute: typeof AuthenticatedSamplesSampleIdIndexRouteImport
+      parentRoute: typeof AuthenticatedSamplesSampleIdRoute
+    }
+    '/_authenticated/samples/$sampleId/rights': {
+      id: '/_authenticated/samples/$sampleId/rights'
+      path: '/rights'
+      fullPath: '/samples/$sampleId/rights'
+      preLoaderRoute: typeof AuthenticatedSamplesSampleIdRightsRouteImport
+      parentRoute: typeof AuthenticatedSamplesSampleIdRoute
+    }
+    '/_authenticated/samples/$sampleId/quality': {
+      id: '/_authenticated/samples/$sampleId/quality'
+      path: '/quality'
+      fullPath: '/samples/$sampleId/quality'
+      preLoaderRoute: typeof AuthenticatedSamplesSampleIdQualityRouteImport
+      parentRoute: typeof AuthenticatedSamplesSampleIdRoute
+    }
+    '/_authenticated/samples/$sampleId/general': {
+      id: '/_authenticated/samples/$sampleId/general'
+      path: '/general'
+      fullPath: '/samples/$sampleId/general'
+      preLoaderRoute: typeof AuthenticatedSamplesSampleIdGeneralRouteImport
+      parentRoute: typeof AuthenticatedSamplesSampleIdRoute
+    }
+    '/_authenticated/samples/$sampleId/files': {
+      id: '/_authenticated/samples/$sampleId/files'
+      path: '/files'
+      fullPath: '/samples/$sampleId/files'
+      preLoaderRoute: typeof AuthenticatedSamplesSampleIdFilesRouteImport
+      parentRoute: typeof AuthenticatedSamplesSampleIdRoute
+    }
+    '/_authenticated/samples/$sampleId/analyses': {
+      id: '/_authenticated/samples/$sampleId/analyses'
+      path: '/analyses'
+      fullPath: '/samples/$sampleId/analyses'
+      preLoaderRoute: typeof AuthenticatedSamplesSampleIdAnalysesRouteImport
+      parentRoute: typeof AuthenticatedSamplesSampleIdRoute
+    }
+    '/_authenticated/samples/$sampleId/analyses/': {
+      id: '/_authenticated/samples/$sampleId/analyses/'
+      path: '/'
+      fullPath: '/samples/$sampleId/analyses/'
+      preLoaderRoute: typeof AuthenticatedSamplesSampleIdAnalysesIndexRouteImport
+      parentRoute: typeof AuthenticatedSamplesSampleIdAnalysesRoute
+    }
+    '/_authenticated/samples/$sampleId/analyses/$analysisId': {
+      id: '/_authenticated/samples/$sampleId/analyses/$analysisId'
+      path: '/$analysisId'
+      fullPath: '/samples/$sampleId/analyses/$analysisId'
+      preLoaderRoute: typeof AuthenticatedSamplesSampleIdAnalysesAnalysisIdRouteImport
+      parentRoute: typeof AuthenticatedSamplesSampleIdAnalysesRoute
+    }
   }
 }
 
+interface AuthenticatedSamplesSampleIdAnalysesRouteChildren {
+  AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute: typeof AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute
+  AuthenticatedSamplesSampleIdAnalysesIndexRoute: typeof AuthenticatedSamplesSampleIdAnalysesIndexRoute
+}
+
+const AuthenticatedSamplesSampleIdAnalysesRouteChildren: AuthenticatedSamplesSampleIdAnalysesRouteChildren =
+  {
+    AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute:
+      AuthenticatedSamplesSampleIdAnalysesAnalysisIdRoute,
+    AuthenticatedSamplesSampleIdAnalysesIndexRoute:
+      AuthenticatedSamplesSampleIdAnalysesIndexRoute,
+  }
+
+const AuthenticatedSamplesSampleIdAnalysesRouteWithChildren =
+  AuthenticatedSamplesSampleIdAnalysesRoute._addFileChildren(
+    AuthenticatedSamplesSampleIdAnalysesRouteChildren,
+  )
+
+interface AuthenticatedSamplesSampleIdRouteChildren {
+  AuthenticatedSamplesSampleIdAnalysesRoute: typeof AuthenticatedSamplesSampleIdAnalysesRouteWithChildren
+  AuthenticatedSamplesSampleIdFilesRoute: typeof AuthenticatedSamplesSampleIdFilesRoute
+  AuthenticatedSamplesSampleIdGeneralRoute: typeof AuthenticatedSamplesSampleIdGeneralRoute
+  AuthenticatedSamplesSampleIdQualityRoute: typeof AuthenticatedSamplesSampleIdQualityRoute
+  AuthenticatedSamplesSampleIdRightsRoute: typeof AuthenticatedSamplesSampleIdRightsRoute
+  AuthenticatedSamplesSampleIdIndexRoute: typeof AuthenticatedSamplesSampleIdIndexRoute
+}
+
+const AuthenticatedSamplesSampleIdRouteChildren: AuthenticatedSamplesSampleIdRouteChildren =
+  {
+    AuthenticatedSamplesSampleIdAnalysesRoute:
+      AuthenticatedSamplesSampleIdAnalysesRouteWithChildren,
+    AuthenticatedSamplesSampleIdFilesRoute:
+      AuthenticatedSamplesSampleIdFilesRoute,
+    AuthenticatedSamplesSampleIdGeneralRoute:
+      AuthenticatedSamplesSampleIdGeneralRoute,
+    AuthenticatedSamplesSampleIdQualityRoute:
+      AuthenticatedSamplesSampleIdQualityRoute,
+    AuthenticatedSamplesSampleIdRightsRoute:
+      AuthenticatedSamplesSampleIdRightsRoute,
+    AuthenticatedSamplesSampleIdIndexRoute:
+      AuthenticatedSamplesSampleIdIndexRoute,
+  }
+
+const AuthenticatedSamplesSampleIdRouteWithChildren =
+  AuthenticatedSamplesSampleIdRoute._addFileChildren(
+    AuthenticatedSamplesSampleIdRouteChildren,
+  )
+
+interface AuthenticatedSamplesRouteChildren {
+  AuthenticatedSamplesSampleIdRoute: typeof AuthenticatedSamplesSampleIdRouteWithChildren
+  AuthenticatedSamplesCreateRoute: typeof AuthenticatedSamplesCreateRoute
+  AuthenticatedSamplesFilesRoute: typeof AuthenticatedSamplesFilesRoute
+  AuthenticatedSamplesLabelsRoute: typeof AuthenticatedSamplesLabelsRoute
+  AuthenticatedSamplesSettingsRoute: typeof AuthenticatedSamplesSettingsRoute
+  AuthenticatedSamplesIndexRoute: typeof AuthenticatedSamplesIndexRoute
+}
+
+const AuthenticatedSamplesRouteChildren: AuthenticatedSamplesRouteChildren = {
+  AuthenticatedSamplesSampleIdRoute:
+    AuthenticatedSamplesSampleIdRouteWithChildren,
+  AuthenticatedSamplesCreateRoute: AuthenticatedSamplesCreateRoute,
+  AuthenticatedSamplesFilesRoute: AuthenticatedSamplesFilesRoute,
+  AuthenticatedSamplesLabelsRoute: AuthenticatedSamplesLabelsRoute,
+  AuthenticatedSamplesSettingsRoute: AuthenticatedSamplesSettingsRoute,
+  AuthenticatedSamplesIndexRoute: AuthenticatedSamplesIndexRoute,
+}
+
+const AuthenticatedSamplesRouteWithChildren =
+  AuthenticatedSamplesRoute._addFileChildren(AuthenticatedSamplesRouteChildren)
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedSamplesRoute: typeof AuthenticatedSamplesRouteWithChildren
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedSamplesRoute: AuthenticatedSamplesRouteWithChildren,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  AuthenticatedRoute: AuthenticatedRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   SetupRoute: SetupRoute,
 }
