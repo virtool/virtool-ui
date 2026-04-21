@@ -1,4 +1,4 @@
-import { useUrlSearchParam } from "@app/hooks";
+import { useUrlSearchParam } from "@app/hooks.tanstack";
 import ButtonToggle from "@base/ButtonToggle";
 import InputSearch from "@base/InputSearch";
 import Toolbar from "@base/Toolbar";

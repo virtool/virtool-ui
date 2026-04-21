@@ -1,6 +1,6 @@
 import AnalysisValue from "@analyses/components/AnalysisValue";
 import type { FormattedPathoscopeHit } from "@analyses/types";
-import { useUrlSearchParam } from "@app/hooks";
+import { useUrlSearchParam } from "@app/hooks.tanstack";
 import { toScientificNotation } from "@app/utils";
 import AccordionContent from "@base/AccordionContent";
 import AccordionScrollingItem from "@base/AccordionScrollingItem";

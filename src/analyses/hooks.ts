@@ -1,15 +1,19 @@
 import { createFuse } from "@app/fuse";
-import { useUrlSearchParam } from "@app/hooks";
 import { useListIndexes } from "@indexes/queries";
 import type { IndexMinimal } from "@indexes/types";
 import { useFetchSample } from "@samples/queries";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import type { SubtractionOption } from "@subtraction/types";
+import { useSearch } from "@tanstack/react-router";
 import { groupBy, maxBy, sortBy } from "es-toolkit";
 import type {
 	FormattedNuvsAnalysis,
 	FormattedPathoscopeAnalysis,
 } from "./types";
+
+const searchOptions = {
+	from: "/_authenticated/samples/$sampleId/analyses/$analysisId",
+} as const;
 
 /** Sort and filter a list of pathoscope hits  */
 export function useSortAndFilterPathoscopeHits(
@@ -18,10 +22,7 @@ export function useSortAndFilterPathoscopeHits(
 ) {
 	let hits = detail.results.hits;
 
-	const { value: find } = useUrlSearchParam<string>("find");
-	const { value: filterOtus } = useUrlSearchParam<boolean>("filterOtus");
-	const { value: sortKey } = useUrlSearchParam<string>("sort");
-	const { value: sortDesc } = useUrlSearchParam<boolean>("sortDesc");
+	const { find, filterOtus, sort, sortDesc } = useSearch(searchOptions);
 
 	const fuse = createFuse(hits, ["name", "abbreviation"]);
 
@@ -36,7 +37,7 @@ export function useSortAndFilterPathoscopeHits(
 		);
 	}
 
-	const sortedHits = sortBy(hits, [(hit) => hit[sortKey as string]]);
+	const sortedHits = sortBy(hits, [(hit) => hit[sort as string]]);
 
 	if (sortDesc) {
 		sortedHits.reverse();
@@ -49,10 +50,7 @@ export function useSortAndFilterPathoscopeHits(
 export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 	let hits = detail.results.hits;
 
-	const { value: find } = useUrlSearchParam<string>("find");
-	const { value: filterSequences } =
-		useUrlSearchParam<boolean>("filterSequences");
-	const { value: sortKey } = useUrlSearchParam<string>("sort");
+	const { find, filterSequences, sort } = useSearch(searchOptions);
 
 	const fuse = createFuse(hits, ["name", "families"]);
 
@@ -65,17 +63,17 @@ export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 	}
 
 	const sortedHits =
-		sortKey === "orfs"
+		sort === "orfs"
 			? sortBy(hits, [(hit) => hit.annotatedOrfCount]).reverse()
-			: sortBy(hits, [(hit) => hit[sortKey as string]]);
+			: sortBy(hits, [(hit) => hit[sort as string]]);
 
 	return sortedHits;
 }
 
 export function useGetActiveHit(matches) {
-	const { value: activeHit } = useUrlSearchParam<string>("activeHit");
+	const { activeHit } = useSearch(searchOptions);
 
-	if (activeHit !== null) {
+	if (activeHit) {
 		return matches.find((match) => match.id === Number(activeHit)) || null;
 	}
 

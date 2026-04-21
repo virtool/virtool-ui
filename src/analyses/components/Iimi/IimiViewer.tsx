@@ -1,6 +1,6 @@
 import type { FormattedIimiAnalysis, FormattedIimiHit } from "@analyses/types";
 import { useFuse } from "@app/fuse";
-import { useUrlSearchParam } from "@app/hooks";
+import { useUrlSearchParam } from "@app/hooks.tanstack";
 import Accordion from "@base/Accordion";
 import Box from "@base/Box";
 import { orderBy } from "es-toolkit";

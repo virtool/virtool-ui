@@ -1,6 +1,6 @@
 import NuvsValues from "@analyses/components/Nuvs/NuvsValues";
 import type { FormattedNuvsHit } from "@analyses/types";
-import { useUrlSearchParam } from "@app/hooks";
+import { useUrlSearchParam } from "@app/hooks.tanstack";
 import { cn } from "@app/utils";
 import Badge from "@base/Badge";
 import Box from "@base/Box";

@@ -11,6 +11,7 @@ const analysisDetailSearchSchema = z.object({
 	filterIsolates: z.boolean().optional().catch(undefined),
 	reads: z.boolean().optional().catch(undefined),
 	filterSequences: z.boolean().optional().catch(undefined),
+	filterOrfs: z.boolean().optional().catch(undefined),
 	activeHit: z.string().optional().catch(undefined),
 });
 

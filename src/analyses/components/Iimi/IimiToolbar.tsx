@@ -1,5 +1,5 @@
 import { AnalysisViewerSort } from "@analyses/components/Viewer/Sort";
-import { useUrlSearchParam } from "@app/hooks";
+import { useUrlSearchParam } from "@app/hooks.tanstack";
 import InputSearch from "@base/InputSearch";
 import InputSimple from "@base/InputSimple";
 import Toolbar from "@base/Toolbar";
