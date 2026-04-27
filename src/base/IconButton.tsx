@@ -21,7 +21,7 @@ export default function IconButton({
 	color = "black",
 	IconComponent,
 	onClick,
-	size = 20,
+	size,
 	tip,
 	tipPlacement,
 }: IconButtonProps) {
@@ -59,7 +59,7 @@ export default function IconButton({
 			type="button"
 			onClick={onClick}
 		>
-			<IconComponent size={size} />
+			<IconComponent size={size ?? "1.2em"} />
 		</button>
 	);
 
