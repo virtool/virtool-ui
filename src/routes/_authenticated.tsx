@@ -17,7 +17,7 @@ import { rootKeys } from "@wall/queries";
 import { lazy, Suspense, useEffect } from "react";
 
 const DevDialog = lazy(() => import("@dev/components/DeveloperDialog"));
-const UploadOverlay = lazy(() => import("@/uploads/components/UploadOverlay"));
+const UploadOverlay = lazy(() => import("@uploads/components/UploadOverlay"));
 
 function setupWebSocket(queryClient) {
 	if (!window.ws) {

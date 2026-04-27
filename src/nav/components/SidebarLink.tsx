@@ -33,12 +33,7 @@ function parseLinkSearch(link: string): Record<string, string> | undefined {
 	if (qIndex === -1) {
 		return undefined;
 	}
-	const params = new URLSearchParams(link.slice(qIndex));
-	const result: Record<string, string> = {};
-	for (const [key, value] of params) {
-		result[key] = value;
-	}
-	return result;
+	return Object.fromEntries(new URLSearchParams(link.slice(qIndex)));
 }
 
 export default function SidebarLink({

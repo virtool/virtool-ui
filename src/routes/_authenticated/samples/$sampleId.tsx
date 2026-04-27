@@ -8,6 +8,7 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import { JobNested } from "@jobs/types";
 import DeleteSample from "@samples/components/Detail/DeleteSample";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { sampleQueryOptions, useFetchSample } from "@samples/queries";
@@ -18,7 +19,6 @@ import {
 	useLocation,
 } from "@tanstack/react-router";
 import { Key, Pencil } from "lucide-react";
-import { JobNested } from "@/jobs/types";
 
 export const Route = createFileRoute("/_authenticated/samples/$sampleId")({
 	loader: async ({ context: { queryClient }, params: { sampleId } }) => {

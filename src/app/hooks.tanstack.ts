@@ -30,7 +30,15 @@ export function useNavigate() {
 
 	return useCallback(
 		(to: string, options?: { replace?: boolean }) => {
-			navigate({ to, replace: options?.replace });
+			const [path, searchStr] = to.split("?");
+			const search = searchStr
+				? Object.fromEntries(new URLSearchParams(searchStr))
+				: undefined;
+			navigate({
+				to: path,
+				search,
+				replace: options?.replace,
+			} as AnySearchReducer);
 		},
 		[navigate],
 	);
