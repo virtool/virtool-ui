@@ -9,10 +9,11 @@ import { referenceQueryKeys } from "@references/queries";
 import { samplesQueryKeys } from "@samples/queries";
 import type { QueryClient } from "@tanstack/react-query";
 import { get } from "es-toolkit/compat";
+import type { Task } from "@/types/api";
 import { fileQueryKeys } from "@/uploads/queries";
+import type { WsMessage } from "./schema";
 import { taskUpdaters } from "./updaters";
 
-/** Get affected resource query keys by workflow name  */
 const workflowQueries = {
 	build_index: [indexQueryKeys.lists()],
 	create_sample: [samplesQueryKeys.lists()],
@@ -21,21 +22,14 @@ const workflowQueries = {
 	pathoscope_bowtie: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
 };
 
-/**
- * Invalidate queries that are affected by a job update
- *
- * @param queryClient - The react-query client
- * @param message - The websocket message
- */
-function jobUpdater(queryClient, data) {
-	const queryKeys = workflowQueries[data.workflow];
+function jobUpdater(queryClient: QueryClient, data: WsMessage["data"]) {
+	const queryKeys = workflowQueries[data.workflow as string];
 
 	queryKeys?.forEach((queryKey) => {
 		queryClient.invalidateQueries({ queryKey });
 	});
 }
 
-/**  Get resource keys from interface name */
 const keyFactories = {
 	account: accountKeys,
 	groups: groupQueryKeys,
@@ -49,20 +43,8 @@ const keyFactories = {
 	samples: samplesQueryKeys,
 };
 
-/**
- Create a handler for websocket messages that are related to react-query managed resources
-
- @param queryClient - The react-query client
- @returns A websocket message handler for react-query
- */
-
 export function reactQueryHandler(queryClient: QueryClient) {
-	/**
-    Handle websocket messages related to react-query managed resources
-
-    @param message - The websocket message
-    */
-	return (message) => {
+	return (message: WsMessage) => {
 		const { interface: iface, operation, data } = message;
 		window.console.log(`${iface}.${operation}`);
 
@@ -76,9 +58,9 @@ export function reactQueryHandler(queryClient: QueryClient) {
 		}
 
 		if (iface === "tasks" && operation === "update") {
-			const updater = get(taskUpdaters, data.type);
+			const updater = get(taskUpdaters, data.type as string);
 			if (updater) {
-				updater(queryClient, data);
+				updater(queryClient, data as unknown as Task);
 			}
 		}
 	};

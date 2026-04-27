@@ -2,15 +2,17 @@ import { fetchAccount } from "@account/api";
 import { accountKeys, useFetchAccount } from "@account/queries";
 import { apiClient } from "@app/api";
 import type { Root } from "@app/types";
-import WsConnection, {
-	ABANDONED,
-	INITIALIZING,
+import {
+	establishConnection,
+	getConnectionStatus,
+	init,
 } from "@app/websocket/WsConnection";
 import Container from "@base/Container";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import MessageBanner from "@message/components/MessageBanner";
 import Nav from "@nav/components/Nav";
 import Sidebar from "@nav/components/Sidebar";
+import type { QueryClient } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { rootKeys } from "@wall/queries";
@@ -19,12 +21,11 @@ import { lazy, Suspense, useEffect } from "react";
 const DevDialog = lazy(() => import("@dev/components/DeveloperDialog"));
 const UploadOverlay = lazy(() => import("@uploads/components/UploadOverlay"));
 
-function setupWebSocket(queryClient) {
-	if (!window.ws) {
-		window.ws = new WsConnection(queryClient);
-	}
-	if ([ABANDONED, INITIALIZING].includes(window.ws.connectionStatus)) {
-		window.ws.establishConnection();
+function setupWebSocket(queryClient: QueryClient) {
+	init(queryClient);
+	const status = getConnectionStatus();
+	if (status === "initializing" || status === "abandoned") {
+		establishConnection();
 	}
 }
 
