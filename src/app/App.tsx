@@ -1,45 +1,8 @@
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useAuthentication, useRootQuery } from "@wall/queries";
-import React, { type ReactElement, Suspense } from "react";
-import { Router } from "wouter";
-import { useBrowserLocation } from "wouter/use-browser-location";
-import Main from "./Main";
+import type { ReactElement } from "react";
+import AppRouter from "./AppRouter";
 import { resetClient } from "./utils";
 
-// Lazy load components
-const LazyFirstUser = React.lazy(() => import("@wall/components/FirstUser"));
-const LazyLoginWall = React.lazy(() => import("@wall/components/LoginWall"));
-
-/** The main application component that handles authentication and routing */
-function ConnectedApp(): ReactElement {
-	const { data: rootData, isPending: isRootPending } = useRootQuery();
-	const { authenticated, isPending: isAuthPending } = useAuthentication();
-
-	if (isRootPending || isAuthPending) {
-		return <LoadingPlaceholder />;
-	}
-
-	if (rootData.first_user) {
-		return (
-			<Suspense fallback={<div />}>
-				<LazyFirstUser />
-			</Suspense>
-		);
-	}
-
-	if (!authenticated) {
-		return (
-			<Suspense fallback={<div />}>
-				<LazyLoginWall />
-			</Suspense>
-		);
-	}
-
-	return <Main />;
-}
-
-// Query client setup with default options and error handling
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
@@ -57,13 +20,10 @@ const queryClient = new QueryClient({
 	},
 });
 
-/** The root App component that provides theme, query client, and routing setup */
 export default function App(): ReactElement {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<Router hook={useBrowserLocation}>
-				<ConnectedApp />
-			</Router>
+			<AppRouter />
 		</QueryClientProvider>
 	);
 }
