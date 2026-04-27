@@ -1,8 +1,8 @@
 import Alert from "@base/Alert";
 import Link from "@base/Link";
 import type { Read } from "@samples/types";
+import { useLocation } from "@tanstack/react-router";
 import { AlertTriangle } from "lucide-react";
-import { useLocation } from "wouter";
 
 type SampleFileSizeWarningProps = {
 	reads: Read[];
@@ -16,7 +16,7 @@ export default function SampleFileSizeWarning({
 	reads,
 	sampleId,
 }: SampleFileSizeWarningProps) {
-	const [location] = useLocation();
+	const { pathname: location } = useLocation();
 	const show = reads.some((file) => file.size < 10000000);
 
 	if (show) {

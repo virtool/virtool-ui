@@ -1,6 +1,6 @@
 import { useMatchPartialPath } from "@app/hooks";
 import { cn } from "@app/utils";
-import { Link } from "wouter";
+import Link from "@base/Link";
 
 const baseClassName = cn(
 	"flex",
@@ -20,7 +20,7 @@ export function NavLink({ children, to }) {
 	const active = useMatchPartialPath(to);
 
 	return (
-		<Link to={to} className={() => (active ? activeClassName : baseClassName)}>
+		<Link to={to} className={active ? activeClassName : baseClassName}>
 			{children}
 		</Link>
 	);

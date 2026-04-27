@@ -1,11 +1,10 @@
-import Samples from "@samples/components/Samples";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiListGroups } from "@tests/api/groups";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeAccount } from "@tests/fake/account";
 import { createFakeGroup } from "@tests/fake/groups";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
-import { renderWithRouter } from "@tests/setup";
+import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -31,12 +30,8 @@ describe("<SampleRights />", () => {
 	afterEach(() => nock.cleanAll());
 
 	it("should render", async () => {
-		mockApiGetAccount(
-			createFakeAccount({
-				administrator_role: "full",
-			}),
-		);
-		renderWithRouter(<Samples />, path);
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(path, { account });
 
 		expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
 		expect(screen.getByText("Group")).toBeInTheDocument();
@@ -45,40 +40,28 @@ describe("<SampleRights />", () => {
 	});
 
 	it("should return Not allowed panel when[this.props.canModifyRights=false]", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
-		renderWithRouter(<Samples />, path);
+		const account = createFakeAccount({ administrator_role: null });
+		await renderRoute(path, { account });
 		expect(await screen.findByText("Not allowed")).toBeInTheDocument();
 	});
 
 	it("should handle group change when input is changed", async () => {
-		mockApiGetAccount(
-			createFakeAccount({
-				administrator_role: "full",
-			}),
-		);
-		renderWithRouter(<Samples />, path);
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(path, { account });
 		expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
 		await userEvent.selectOptions(screen.getByLabelText("Group"), group.name);
 	});
 
 	it("should handle group rights change when input is changed", async () => {
-		mockApiGetAccount(
-			createFakeAccount({
-				administrator_role: "full",
-			}),
-		);
-		renderWithRouter(<Samples />, `/samples/${sample.id}/rights`);
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(path, { account });
 		expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
 		await userEvent.selectOptions(screen.getByLabelText("Group Rights"), "rw");
 	});
 
 	it("should handle all users' rights change when input is changed", async () => {
-		mockApiGetAccount(
-			createFakeAccount({
-				administrator_role: "full",
-			}),
-		);
-		renderWithRouter(<Samples />, path);
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(path, { account });
 		expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
 		await userEvent.selectOptions(
 			screen.getByLabelText("All Users' Rights"),

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedSubtractionsRouteImport } from './routes/_authenticated/subtractions'
 import { Route as AuthenticatedSamplesRouteImport } from './routes/_authenticated/samples'
 import { Route as AuthenticatedMlRouteImport } from './routes/_authenticated/ml'
@@ -79,6 +80,11 @@ const LoginRoute = LoginRouteImport.update({
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedSubtractionsRoute =
   AuthenticatedSubtractionsRouteImport.update({
@@ -387,7 +393,7 @@ const AuthenticatedRefsRefIdOtusOtuIdHistoryRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedRouteWithChildren
+  '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
@@ -445,9 +451,9 @@ export interface FileRoutesByFullPath {
   '/refs/$refId/otus/$otuId/': typeof AuthenticatedRefsRefIdOtusOtuIdIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/': typeof AuthenticatedIndexRoute
   '/account/api': typeof AuthenticatedAccountApiRoute
   '/account/profile': typeof AuthenticatedAccountProfileRoute
   '/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
@@ -503,6 +509,7 @@ export interface FileRoutesById {
   '/_authenticated/ml': typeof AuthenticatedMlRouteWithChildren
   '/_authenticated/samples': typeof AuthenticatedSamplesRouteWithChildren
   '/_authenticated/subtractions': typeof AuthenticatedSubtractionsRouteWithChildren
+  '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/refs/$refId': typeof AuthenticatedRefsRefIdRouteRouteWithChildren
   '/_authenticated/account/api': typeof AuthenticatedAccountApiRoute
   '/_authenticated/account/profile': typeof AuthenticatedAccountProfileRoute
@@ -610,9 +617,9 @@ export interface FileRouteTypes {
     | '/refs/$refId/otus/$otuId/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/login'
     | '/setup'
+    | '/'
     | '/account/api'
     | '/account/profile'
     | '/administration/administrators'
@@ -667,6 +674,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ml'
     | '/_authenticated/samples'
     | '/_authenticated/subtractions'
+    | '/_authenticated/'
     | '/_authenticated/refs/$refId'
     | '/_authenticated/account/api'
     | '/_authenticated/account/profile'
@@ -742,6 +750,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/subtractions': {
       id: '/_authenticated/subtractions'
@@ -1370,6 +1385,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedMlRoute: typeof AuthenticatedMlRouteWithChildren
   AuthenticatedSamplesRoute: typeof AuthenticatedSamplesRouteWithChildren
   AuthenticatedSubtractionsRoute: typeof AuthenticatedSubtractionsRouteWithChildren
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -1382,6 +1398,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedMlRoute: AuthenticatedMlRouteWithChildren,
   AuthenticatedSamplesRoute: AuthenticatedSamplesRouteWithChildren,
   AuthenticatedSubtractionsRoute: AuthenticatedSubtractionsRouteWithChildren,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

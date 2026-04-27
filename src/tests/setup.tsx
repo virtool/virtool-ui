@@ -1,3 +1,4 @@
+import type { Account } from "@account/types";
 import { faker } from "@faker-js/faker";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -14,6 +15,7 @@ import userEvent from "@testing-library/user-event";
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { vi } from "vitest";
 import { routeTree } from "@/routeTree.gen";
+import { createFakeAccount } from "./fake/account";
 
 process.env.TZ = "UTC";
 
@@ -103,12 +105,19 @@ export function MemoryRouter({
 }
 
 interface RenderRouteOptions {
+	account?: Account;
 	seed?: (queryClient: QueryClient) => void;
 }
 
 export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 	const history: string[] = [];
-	const queryClient = new QueryClient();
+	const queryClient = new QueryClient({
+		defaultOptions: { queries: { retry: false } },
+	});
+
+	queryClient.setQueryData(["root"], { first_user: false });
+	queryClient.setQueryData(["account"], opts?.account ?? createFakeAccount());
+	queryClient.setQueryData(["message"], { message: "" });
 
 	if (opts?.seed) {
 		opts.seed(queryClient);

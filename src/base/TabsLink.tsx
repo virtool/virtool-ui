@@ -1,7 +1,7 @@
 import { useMatchPartialPath } from "@app/hooks";
 import { cn } from "@app/utils";
+import Link from "@base/Link";
 import type { ReactNode } from "react";
-import { Link } from "wouter";
 
 type TabsLinkProps = {
 	children: ReactNode;

@@ -1,15 +1,11 @@
-import References from "@references/components/References";
 import { screen } from "@testing-library/react";
-import {
-	createFakeSettings,
-	mockApiGetSettings,
-} from "@tests/fake/administrator";
 import {
 	createFakeReference,
 	mockApiGetReferenceDetail,
 } from "@tests/fake/references";
-import { renderWithRouter } from "@tests/setup";
-import { beforeEach, describe, expect, it } from "vitest";
+import { renderRoute } from "@tests/setup";
+import nock from "nock";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("<ReferenceManager />", () => {
 	let reference;
@@ -19,11 +15,12 @@ describe("<ReferenceManager />", () => {
 		reference = createFakeReference();
 		path = `/refs/${reference.id}/manage`;
 		mockApiGetReferenceDetail(reference);
-		mockApiGetSettings(createFakeSettings());
 	});
 
+	afterEach(() => nock.cleanAll());
+
 	it("should render properly", async () => {
-		renderWithRouter(<References />, path);
+		await renderRoute(path);
 
 		expect(await screen.findByText("General")).toBeInTheDocument();
 		expect(screen.getByText("Description")).toBeInTheDocument();
@@ -35,14 +32,14 @@ describe("<ReferenceManager />", () => {
 	});
 
 	it("should render when [remotes_from=null]", async () => {
-		renderWithRouter(<References />, path);
+		await renderRoute(path);
 
 		expect(await screen.findByText("General")).toBeInTheDocument();
 		expect(screen.queryByText("Remote Reference")).toBeNull();
 	});
 
 	it("should render when [cloned_from={ Bar: 'Bee' }]", async () => {
-		renderWithRouter(<References />, path);
+		await renderRoute(path);
 
 		expect(await screen.findByText("Clone Reference")).toBeInTheDocument();
 		expect(screen.getByText("Source Reference"));

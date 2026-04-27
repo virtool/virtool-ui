@@ -1,17 +1,12 @@
-import References from "@references/components/References";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import {
-	createFakeSettings,
-	mockApiGetSettings,
-} from "@tests/fake/administrator";
+import { createFakeAccount } from "@tests/fake/account";
 import { createFakeOTUMinimal, mockApiFindOtus } from "@tests/fake/otus";
 import {
 	createFakeReference,
 	mockApiGetReferenceDetail,
 } from "@tests/fake/references";
-import { renderWithRouter } from "@tests/setup";
+import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -24,7 +19,6 @@ describe("<OTUsList />", () => {
 		reference = createFakeReference();
 		OTUs = [createFakeOTUMinimal(), createFakeOTUMinimal()];
 		mockApiGetReferenceDetail(reference);
-		mockApiGetSettings(createFakeSettings());
 		path = `/refs/${reference.id}/otus`;
 	});
 
@@ -33,7 +27,7 @@ describe("<OTUsList />", () => {
 	describe("<OTUList />", () => {
 		it("should render correctly", async () => {
 			const scope = mockApiFindOtus(OTUs, reference.id);
-			renderWithRouter(<References />, path);
+			await renderRoute(path);
 
 			expect(await screen.findByText(OTUs[0].name)).toBeInTheDocument();
 			expect(screen.getByText(OTUs[0].abbreviation)).toBeInTheDocument();
@@ -49,7 +43,7 @@ describe("<OTUsList />", () => {
 
 		it("should render when no documents are found", async () => {
 			const scope = mockApiFindOtus([], reference.id);
-			renderWithRouter(<References />, path);
+			await renderRoute(path);
 
 			expect(await screen.findByText("No OTUs found.")).toBeInTheDocument();
 			expect(screen.queryByText(OTUs[0].name)).toBeNull();
@@ -62,7 +56,7 @@ describe("<OTUsList />", () => {
 	describe("<OTUToolbar />", () => {
 		it("should render properly", async () => {
 			const scope = mockApiFindOtus(OTUs, reference.id);
-			renderWithRouter(<References />, path);
+			await renderRoute(path);
 
 			expect(await screen.findByRole("textbox")).toBeInTheDocument();
 
@@ -74,8 +68,7 @@ describe("<OTUsList />", () => {
 			const account = createFakeAccount({
 				administrator_role: "full",
 			});
-			mockApiGetAccount(account);
-			renderWithRouter(<References />, path);
+			await renderRoute(path, { account });
 
 			expect(await screen.findByText("Create")).toBeInTheDocument();
 
@@ -87,8 +80,7 @@ describe("<OTUsList />", () => {
 			const account = createFakeAccount({
 				administrator_role: null,
 			});
-			mockApiGetAccount(account);
-			renderWithRouter(<References />, path);
+			await renderRoute(path, { account });
 
 			expect(await screen.findByRole("textbox")).toBeInTheDocument();
 			expect(screen.queryByText("Create")).toBeNull();
@@ -98,7 +90,7 @@ describe("<OTUsList />", () => {
 
 		it("should handle toolbar updates correctly", async () => {
 			const scope = mockApiFindOtus(OTUs, reference.id);
-			const { history } = renderWithRouter(<References />, path);
+			const { history } = await renderRoute(path);
 
 			expect(await screen.findByRole("textbox")).toBeInTheDocument();
 			const inputElement = screen.getByPlaceholderText("Name or abbreviation");
@@ -117,7 +109,7 @@ describe("<OTUsList />", () => {
 	describe("<OTUItem />", () => {
 		it("should render when [verified=true]", async () => {
 			const scope = mockApiFindOtus(OTUs, reference.id);
-			renderWithRouter(<References />, path);
+			await renderRoute(path);
 
 			expect(await screen.findByText(OTUs[0].name)).toBeInTheDocument();
 			expect(screen.queryByText("Unverified")).toBeNull();
@@ -130,7 +122,7 @@ describe("<OTUsList />", () => {
 				[createFakeOTUMinimal({ verified: false })],
 				reference.id,
 			);
-			renderWithRouter(<References />, path);
+			await renderRoute(path);
 
 			expect(await screen.findByText("Unverified")).toBeInTheDocument();
 			scope.done();

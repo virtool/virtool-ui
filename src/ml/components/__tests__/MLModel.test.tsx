@@ -1,11 +1,13 @@
 import { screen } from "@testing-library/react";
 import { createFakeMLModelMinimal, mockApiGetModels } from "@tests/fake/ml";
-import { renderWithRouter } from "@tests/setup";
-import { describe, expect, it } from "vitest";
-import ML from "../ML";
+import { renderRoute } from "@tests/setup";
+import nock from "nock";
+import { afterEach, describe, expect, it } from "vitest";
 
 describe("<MLModels/>", () => {
 	const path = "/ml";
+
+	afterEach(() => nock.cleanAll());
 
 	it("should render", async () => {
 		const created_at = new Date();
@@ -16,7 +18,7 @@ describe("<MLModels/>", () => {
 		});
 		const model_scope = mockApiGetModels([mlModel]);
 
-		renderWithRouter(<ML />, path);
+		await renderRoute(path);
 
 		expect(await screen.findByText(mlModel.name)).toBeInTheDocument();
 		expect(
@@ -31,7 +33,7 @@ describe("<MLModels/>", () => {
 
 	it("should render NoneFound when no models exist", async () => {
 		const model_scope = mockApiGetModels([]);
-		renderWithRouter(<ML />, path);
+		await renderRoute(path);
 
 		expect(
 			await screen.findByText("No machine learning models found."),

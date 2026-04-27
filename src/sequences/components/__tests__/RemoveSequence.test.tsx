@@ -1,13 +1,8 @@
 import { formatPath } from "@app/hooks";
 import { faker } from "@faker-js/faker";
-import References from "@references/components/References";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import {
-	createFakeSettings,
-	mockApiGetSettings,
-} from "@tests/fake/administrator";
+import { createFakeAccount } from "@tests/fake/account";
 import {
 	createFakeOtu,
 	mockApiGetOtu,
@@ -17,8 +12,9 @@ import {
 	createFakeReference,
 	mockApiGetReferenceDetail,
 } from "@tests/fake/references";
-import { renderWithRouter } from "@tests/setup";
-import { beforeEach, describe, expect, it } from "vitest";
+import { renderRoute } from "@tests/setup";
+import nock from "nock";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 faker.seed(684329);
 
@@ -35,12 +31,6 @@ describe("<RemoveSequence />", () => {
 		mockApiGetReferenceDetail(reference);
 		otu = createFakeOtu();
 		otuScope = mockApiGetOtu(otu);
-		mockApiGetSettings(createFakeSettings());
-		mockApiGetAccount(
-			createFakeAccount({
-				administrator_role: "full",
-			}),
-		);
 
 		path = `/refs/${reference.id}/otus/${otu.id}/otu`;
 		searchParams = { removeSequenceId: otu.isolates[0].sequences[0].id };
@@ -50,8 +40,11 @@ describe("<RemoveSequence />", () => {
 			otu.isolates[0].source_type.slice(1);
 	});
 
+	afterEach(() => nock.cleanAll());
+
 	it("should render when [show=true]", async () => {
-		renderWithRouter(<References />, formatPath(path, searchParams));
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(formatPath(path, searchParams), { account });
 
 		expect(await screen.findByText("Remove Sequence")).toBeInTheDocument();
 		expect(
@@ -67,7 +60,8 @@ describe("<RemoveSequence />", () => {
 	});
 
 	it("should render when [show=false]", async () => {
-		renderWithRouter(<References />, path);
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(path, { account });
 
 		await waitFor(() => otuScope.done());
 
@@ -90,7 +84,8 @@ describe("<RemoveSequence />", () => {
 			otu.isolates[0].id,
 			otu.isolates[0].sequences[0].id,
 		);
-		renderWithRouter(<References />, formatPath(path, searchParams));
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(formatPath(path, searchParams), { account });
 
 		await userEvent.click(
 			await screen.findByRole("button", { name: "Confirm" }),

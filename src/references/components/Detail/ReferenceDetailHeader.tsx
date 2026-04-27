@@ -6,8 +6,8 @@ import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useCheckReferenceRight } from "@references/hooks";
+import { useLocation } from "@tanstack/react-router";
 import { Lock, Pencil } from "lucide-react";
-import { useLocation } from "wouter";
 
 type ReferenceDetailHeaderProps = {
 	createdAt: string;
@@ -28,7 +28,7 @@ export default function ReferenceDetailHeader({
 	refId,
 	userHandle,
 }: ReferenceDetailHeaderProps) {
-	const [location] = useLocation();
+	const { pathname: location } = useLocation();
 	const { setOpen: setOpenEditReference } = useDialogParam("openEditReference");
 	const { hasPermission: canModify } = useCheckReferenceRight(refId, "modify");
 

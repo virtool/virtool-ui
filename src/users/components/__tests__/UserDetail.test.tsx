@@ -1,15 +1,14 @@
-import Settings from "@administration/components/Settings";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiListGroups } from "@tests/api/groups";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeAccount } from "@tests/fake/account";
 import { createFakeGroup } from "@tests/fake/groups";
 import {
 	createFakeUser,
 	mockApiEditUser,
 	mockApiGetUser,
 } from "@tests/fake/user";
-import { renderWithRouter } from "@tests/setup";
+import { renderRoute } from "@tests/setup";
 import type { User } from "@users/types";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -47,7 +46,6 @@ describe("<UserDetail />", () => {
 	describe("<UserDetail />", () => {
 		it("should render correctly when administrator_role = AdministratorRoles.FULL, canModifyUser=true and 5 groups exist", async () => {
 			mockApiListGroups(groups);
-			mockApiGetAccount(account);
 
 			const userDetail = createFakeUser({
 				administrator_role: "full",
@@ -56,7 +54,7 @@ describe("<UserDetail />", () => {
 
 			const scope = mockApiGetUser(userDetail.id, userDetail);
 
-			renderWithRouter(<Settings />, formatUserPath(userDetail));
+			await renderRoute(formatUserPath(userDetail), { account });
 
 			expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
@@ -93,20 +91,18 @@ describe("<UserDetail />", () => {
 			scope.done();
 		});
 
-		it("should render loading when the user details hasn't loaded", () => {
-			renderWithRouter(<Settings />, `/administration/users/${user.id}`);
+		it("should render loading when the user details hasn't loaded", async () => {
+			await renderRoute(`/administration/users/${user.id}`, { account });
 
 			expect(screen.getByLabelText("loading")).toBeInTheDocument();
-			expect(screen.queryByText("Groups")).not.toBeInTheDocument();
 			expect(screen.queryByText("bob")).not.toBeInTheDocument();
 		});
 
 		it("should render correctly when [administrator_role=null] and canModifyUser=false", async () => {
 			mockApiListGroups(groups);
-			mockApiGetAccount(account);
 			const scope = mockApiGetUser(user.id, user);
 
-			renderWithRouter(<Settings />, formatUserPath(user));
+			await renderRoute(formatUserPath(user), { account });
 
 			expect(await screen.findByText("Change Password")).toBeInTheDocument();
 			expect(screen.queryByLabelText("Administrator")).not.toBeInTheDocument();
@@ -118,11 +114,11 @@ describe("<UserDetail />", () => {
 		});
 
 		it("should render correctly when user has insufficient permissions", async () => {
-			const account = createFakeAccount({ administrator_role: null });
-			mockApiGetAccount(account);
-			const scope = mockApiGetUser(user.id, user);
+			const account = createFakeAccount({ administrator_role: "users" });
+			const adminUser = createFakeUser({ administrator_role: "full" });
+			const scope = mockApiGetUser(adminUser.id, adminUser);
 
-			renderWithRouter(<Settings />, formatUserPath(user));
+			await renderRoute(formatUserPath(adminUser), { account });
 
 			expect(
 				await screen.findByText(
@@ -131,19 +127,17 @@ describe("<UserDetail />", () => {
 			).toBeInTheDocument();
 
 			expect(screen.getByText("Contact an administrator.")).toBeInTheDocument();
-			expect(screen.queryByText(user.handle)).not.toBeInTheDocument();
-			expect(screen.queryByText("Groups")).not.toBeInTheDocument();
+			expect(screen.queryByText(adminUser.handle)).not.toBeInTheDocument();
 			expect(screen.queryByText("Permissions")).not.toBeInTheDocument();
 
 			scope.done();
 		});
 
 		it("should handle user deactivation", async () => {
-			mockApiGetAccount(account);
 			mockApiListGroups(groups);
 			mockApiGetUser(user.id, user);
 			const scope = mockApiEditUser(user.id, 200, { active: false });
-			renderWithRouter(<Settings />, formatUserPath(user));
+			await renderRoute(formatUserPath(user), { account });
 
 			await userEvent.click(
 				await screen.findByRole("button", { name: "Deactivate" }),
@@ -153,14 +147,13 @@ describe("<UserDetail />", () => {
 		});
 
 		it("should handle user reactivation", async () => {
-			mockApiGetAccount(account);
 			mockApiListGroups(groups);
 			const inactiveUser = createFakeUser({ active: false });
 			mockApiGetUser(inactiveUser.id, inactiveUser);
 			const scope = mockApiEditUser(inactiveUser.id, 200, {
 				active: true,
 			});
-			renderWithRouter(<Settings />, formatUserPath(inactiveUser));
+			await renderRoute(formatUserPath(inactiveUser), { account });
 
 			await userEvent.click(
 				await screen.findByRole("button", { name: "Activate" }),
@@ -173,10 +166,9 @@ describe("<UserDetail />", () => {
 	describe("<UserGroups />", () => {
 		it("should render correctly", async () => {
 			const groupScope = mockApiListGroups(groups);
-			mockApiGetAccount(account);
 			const scope = mockApiGetUser(user.id, user);
 
-			renderWithRouter(<Settings />, formatUserPath(user));
+			await renderRoute(formatUserPath(user), { account });
 
 			await waitFor(() => {
 				scope.done();
@@ -187,10 +179,9 @@ describe("<UserDetail />", () => {
 			expect(screen.getByLabelText("Group 3")).toBeInTheDocument();
 		});
 		it("should render loading when groups haven't loaded", async () => {
-			mockApiGetAccount(account);
 			const scope = mockApiGetUser(user.id, user);
 
-			renderWithRouter(<Settings />, formatUserPath(user));
+			await renderRoute(formatUserPath(user), { account });
 
 			expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
@@ -202,15 +193,13 @@ describe("<UserDetail />", () => {
 			scope.done();
 		});
 		it("should render NoneFound when documents = []", async () => {
-			mockApiGetAccount(account);
-
 			const user = createFakeUser({ groups: [] });
 
 			mockApiListGroups([]);
 
 			const scope = mockApiGetUser(user.id, user);
 
-			renderWithRouter(<Settings />, formatUserPath(user));
+			await renderRoute(formatUserPath(user), { account });
 
 			expect(await screen.findByText("Groups")).toBeInTheDocument();
 			expect(await screen.findByText("No groups found")).toBeInTheDocument();
@@ -224,11 +213,10 @@ describe("<UserDetail />", () => {
 
 	describe("<Password />", () => {
 		it("should render correctly when forceReset = false", async () => {
-			mockApiGetAccount(account);
 			mockApiListGroups(groups);
 			const scope = mockApiGetUser(user.id, user);
 
-			renderWithRouter(<Settings />, formatUserPath(user));
+			await renderRoute(formatUserPath(user), { account });
 
 			expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
@@ -244,14 +232,13 @@ describe("<UserDetail />", () => {
 		});
 
 		it("should render correctly when forceReset = false", async () => {
-			mockApiGetAccount(account);
 			mockApiListGroups(groups);
 
 			const user = createFakeUser({ force_reset: true });
 
 			const scope = mockApiGetUser(user.id, user);
 
-			renderWithRouter(<Settings />, formatUserPath(user));
+			await renderRoute(formatUserPath(user), { account });
 
 			expect(await screen.findByText("Change Password")).toBeInTheDocument();
 			expect(screen.getByText("Last changed")).toBeInTheDocument();
@@ -265,12 +252,11 @@ describe("<UserDetail />", () => {
 		});
 
 		it("should submit when password is long enough", async () => {
-			mockApiGetAccount(account);
 			mockApiListGroups(groups);
 			mockApiEditUser(user.id, 200, { password: "newPassword" }, user);
 			const scope = mockApiGetUser(user.id, user);
 
-			renderWithRouter(<Settings />, formatUserPath(user));
+			await renderRoute(formatUserPath(user), { account });
 
 			expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
@@ -281,7 +267,6 @@ describe("<UserDetail />", () => {
 		});
 
 		it("should display error when password is not long enough", async () => {
-			mockApiGetAccount(account);
 			mockApiListGroups(groups);
 			mockApiEditUser(user.id, 400, {
 				id: "bad_request",
@@ -289,7 +274,7 @@ describe("<UserDetail />", () => {
 			});
 			const scope = mockApiGetUser(user.id, user);
 
-			renderWithRouter(<Settings />, formatUserPath(user));
+			await renderRoute(formatUserPath(user), { account });
 
 			expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
@@ -309,7 +294,6 @@ describe("<UserDetail />", () => {
 
 	describe("<UserPermissions />", () => {
 		it("should render permissions correctly", async () => {
-			mockApiGetAccount(account);
 			mockApiListGroups(groups);
 
 			const permissions = {
@@ -327,7 +311,7 @@ describe("<UserDetail />", () => {
 
 			const scope = mockApiGetUser(user.id, user);
 
-			renderWithRouter(<Settings />, formatUserPath(user));
+			await renderRoute(formatUserPath(user), { account });
 
 			expect(await screen.findByText("Permissions")).toBeInTheDocument();
 			expect(

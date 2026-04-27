@@ -1,7 +1,6 @@
-import { updateSearchParam, usePageParam } from "@app/hooks";
+import { usePageParam } from "@app/hooks";
 import { range } from "es-toolkit/math";
 import { type ReactElement, type ReactNode, useEffect } from "react";
-import { useSearch } from "wouter";
 import PaginationContent from "./PaginationContent";
 import PaginationLink from "./PaginationLink";
 import PaginationNext from "./PaginationNext";
@@ -31,9 +30,6 @@ type PaginationProps = {
 	pageCount: number;
 };
 
-/**
- * A styled pagination component managing paginated data
- */
 export default function Pagination({
 	children,
 	currentPage,
@@ -42,7 +38,6 @@ export default function Pagination({
 	renderRow,
 	storedPage,
 }: PaginationProps) {
-	const search = useSearch();
 	const { setPage } = usePageParam();
 
 	useEffect(() => {
@@ -56,7 +51,7 @@ export default function Pagination({
 	const pageButtons = getPageRange(pageCount, storedPage).map((pageNumber) => (
 		<PaginationLink
 			key={pageNumber}
-			to={updateSearchParam("page", String(pageNumber), search)}
+			page={pageNumber}
 			active={storedPage !== pageNumber}
 			disabled={storedPage === pageNumber}
 		>
@@ -74,13 +69,13 @@ export default function Pagination({
 				<PaginationRoot>
 					<PaginationContent>
 						<PaginationPrevious
-							to={updateSearchParam("page", String(currentPage - 1), search)}
+							page={currentPage - 1}
 							disabled={currentPage === 1}
 							active={currentPage !== 1}
 						/>
 						{pageButtons}
 						<PaginationNext
-							to={updateSearchParam("page", String(currentPage + 1), search)}
+							page={currentPage + 1}
 							disabled={currentPage === pageCount}
 						/>
 					</PaginationContent>
