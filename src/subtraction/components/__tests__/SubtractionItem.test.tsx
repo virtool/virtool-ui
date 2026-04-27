@@ -39,7 +39,6 @@ describe("<SubtractionItem />", () => {
 		await renderWithRouter(<SubtractionItem {...props} />);
 
 		expect(screen.getByText("Arabidopsis thaliana")).toBeInTheDocument();
-		expect(screen.getByText("Thale cress")).toBeInTheDocument();
 		expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", "50");
 	});
 

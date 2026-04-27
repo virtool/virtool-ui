@@ -56,7 +56,7 @@ export default function CreateSequence({
 			open={openCreateSequence}
 			onOpenChange={() => setOpenCreateSequence(false)}
 		>
-			<DialogContent className="top-1/2">
+			<DialogContent>
 				<DialogTitle>Create Sequence</DialogTitle>
 				<SequenceForm
 					hasSchema={schema.length > 0}

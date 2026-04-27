@@ -40,7 +40,6 @@ export default function Nav({ administrator_role, handle }: NavBarProps) {
 				<NavLink to="/refs">References</NavLink>
 				<NavLink to="/hmm">HMM</NavLink>
 				<NavLink to="/subtractions">Subtractions</NavLink>
-				<NavLink to="/ml">ML</NavLink>
 			</div>
 
 			<div className="flex gap-2 pr-4">

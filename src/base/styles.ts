@@ -1,14 +1,14 @@
 /** Base classes shared by Input and InputSimple */
 export const inputBaseClasses =
-	"bg-white border rounded-[3px] shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] block text-sm h-auto outline-none py-2 px-2.5 relative transition-all duration-150 ease-in-out w-full";
+	"bg-white border rounded min-w-0 block h-auto outline-none py-2 px-2.5 relative transition-[color,box-shadow] w-full placeholder:text-gray-400 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50";
 
 /** Focus ring for inputs in normal (non-error) state */
 export const inputFocusClasses =
-	"border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50";
+	"border-gray-300 focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/50";
 
 /** Focus ring + border for inputs in error state */
 export const inputErrorClasses =
-	"border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/50";
+	"border-red-500 focus-visible:border-red-500 focus-visible:ring-2 focus-visible:ring-red-500/50";
 
 import type { IconColor } from "./types";
 

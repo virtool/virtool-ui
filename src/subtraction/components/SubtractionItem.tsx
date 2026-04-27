@@ -13,23 +13,24 @@ export function SubtractionItem({
 	id,
 	job,
 	name,
-	nickname,
 	ready,
 	user,
 }: SubtractionMinimal) {
 	const parsedJob = job && JobNested.parse(job);
 
 	return (
-		<BoxGroupSection className="ml-auto grid items-center leading-none py-4 grid-cols-[30%_30%_30%_auto]">
-			<Link className="text-base font-medium" to={`/subtractions/${id}`}>
+		<BoxGroupSection className="grid grid-cols-5 items-center">
+			<Link
+				className="col-span-2 text-lg font-medium"
+				to={`/subtractions/${id}`}
+			>
 				{name}
 			</Link>
-			<div>{nickname}</div>
-			<div className="flex justify-start">
+			<div className="col-span-2 flex justify-start">
 				<SubtractionAttribution handle={user.handle} time={created_at} />
 			</div>
 			{!ready && job && (
-				<span className="flex items-center justify-end text-base font-medium [&>svg]:mr-1">
+				<span className="flex items-center justify-end gap-1 font-medium">
 					<ProgressCircle
 						size="md"
 						progress={parsedJob.progress}
