@@ -41,13 +41,13 @@ function Alert({
 		>
 			<div
 				className={cn(
-					"p-4 [&>svg:first-child]:pr-1",
+					"p-4 gap-2",
 					block ? "block" : "flex",
 					level && "items-center",
 					className,
 				)}
 			>
-				{icon ? <Icon icon={icon} size={30} /> : null}
+				{icon ? <Icon icon={icon} size={20} /> : null}
 				{children}
 			</div>
 		</div>
