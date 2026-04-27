@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
@@ -26,7 +26,7 @@ describe("<ReferenceList />", () => {
 		const account = createFakeAccount({ permissions: permissions });
 		mockApiGetAccount(account);
 		const scope = mockApiGetReferences([references]);
-		renderWithRouter(<ReferenceList />);
+		await renderWithRouter(<ReferenceList />);
 
 		expect(await screen.findByText("References")).toBeInTheDocument();
 		expect(screen.getByText(references.name)).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe("<ReferenceList />", () => {
 	describe("<ReferenceToolbar />", () => {
 		it("should render when toolbar term is changed to foo", async () => {
 			const scope = mockApiGetReferences([references]);
-			renderWithRouter(<ReferenceList />);
+			await renderWithRouter(<ReferenceList />);
 
 			expect(await screen.findByText("References")).toBeInTheDocument();
 
@@ -64,7 +64,7 @@ describe("<ReferenceList />", () => {
 			const account = createFakeAccount({ permissions: permissions });
 			mockApiGetAccount(account);
 			const scope = mockApiGetReferences([references]);
-			renderWithRouter(<ReferenceList />);
+			await renderWithRouter(<ReferenceList />);
 
 			expect(await screen.findByText("References")).toBeInTheDocument();
 			expect(
@@ -76,7 +76,7 @@ describe("<ReferenceList />", () => {
 
 		it("should handle toolbar updates correctly", async () => {
 			const scope = mockApiGetReferences([references]);
-			const { history } = renderWithRouter(<ReferenceList />);
+			const { router } = await renderWithRouter(<ReferenceList />);
 
 			expect(await screen.findByText("References")).toBeInTheDocument();
 
@@ -86,7 +86,9 @@ describe("<ReferenceList />", () => {
 			await userEvent.type(inputElement, "Foobar");
 			expect(inputElement).toHaveValue("Foobar");
 
-			expect(history[0]).toEqual("?find=Foobar");
+			await waitFor(() =>
+				expect(router.state.location.href).toEqual("/?find=Foobar"),
+			);
 
 			scope.done();
 		});
@@ -103,7 +105,7 @@ describe("<ReferenceList />", () => {
 				`Cloned from ${references.name}`,
 				references,
 			);
-			renderWithRouter(<ReferenceList />);
+			await renderWithRouter(<ReferenceList />);
 
 			expect(await screen.findByText("References")).toBeInTheDocument();
 			await userEvent.click(
@@ -125,7 +127,7 @@ describe("<ReferenceList />", () => {
 				`Cloned from ${references.name}`,
 				references,
 			);
-			renderWithRouter(<ReferenceList />);
+			await renderWithRouter(<ReferenceList />);
 
 			expect(await screen.findByText("References")).toBeInTheDocument();
 			await userEvent.click(
@@ -144,7 +146,7 @@ describe("<ReferenceList />", () => {
 			const account = createFakeAccount({ permissions: permissions });
 			mockApiGetAccount(account);
 			const scope = mockApiGetReferences([references]);
-			renderWithRouter(<ReferenceList />);
+			await renderWithRouter(<ReferenceList />);
 
 			expect(await screen.findByText("References")).toBeInTheDocument();
 			await userEvent.click(

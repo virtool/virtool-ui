@@ -24,7 +24,7 @@ describe("<SubtractionFileManager />", () => {
 		);
 		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })]);
 
-		renderWithRouter(<SubtractionFileManager />, path);
+		await renderWithRouter(<SubtractionFileManager />, path);
 
 		expect(
 			await screen.findByText("Drag files here to upload"),

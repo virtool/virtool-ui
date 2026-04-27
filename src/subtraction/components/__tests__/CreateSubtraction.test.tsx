@@ -20,7 +20,7 @@ describe("<SubtractionCreate />", () => {
 
 	it("should render when no uploads available", async () => {
 		mockApiListFiles([]);
-		renderWithRouter(<SubtractionCreate />, path);
+		await renderWithRouter(<SubtractionCreate />, path);
 
 		expect(await screen.findByText(/no files found/i)).toBeInTheDocument();
 	});
@@ -31,7 +31,7 @@ describe("<SubtractionCreate />", () => {
 			type: "subtraction",
 		});
 		mockApiListFiles([file]);
-		renderWithRouter(<SubtractionCreate />, path);
+		await renderWithRouter(<SubtractionCreate />, path);
 
 		expect(await screen.findByText(file.name)).toBeInTheDocument();
 		await userEvent.click(await screen.findByText(/save/i));
@@ -55,7 +55,7 @@ describe("<SubtractionCreate />", () => {
 			file.id,
 		);
 
-		renderWithRouter(<SubtractionCreate />, path);
+		await renderWithRouter(<SubtractionCreate />, path);
 
 		await userEvent.type(await screen.findByLabelText("Name"), name);
 		await userEvent.type(screen.getByLabelText("Nickname"), nickname);
@@ -86,7 +86,7 @@ describe("<SubtractionCreate />", () => {
 		);
 		mockApiListFiles([file]);
 
-		renderWithRouter(<SubtractionCreate />, path);
+		await renderWithRouter(<SubtractionCreate />, path);
 
 		expect(await screen.findByDisplayValue(name)).toBeInTheDocument();
 		expect(await screen.findByDisplayValue(nickname)).toBeInTheDocument();
@@ -111,7 +111,7 @@ describe("<SubtractionCreate />", () => {
 			file.id,
 		);
 
-		renderWithRouter(<SubtractionCreate />, path);
+		await renderWithRouter(<SubtractionCreate />, path);
 
 		await userEvent.type(await screen.findByLabelText("Name"), name);
 		await userEvent.type(screen.getByLabelText("Nickname"), nickname);

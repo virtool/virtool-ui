@@ -1,4 +1,4 @@
-import { formatSearchParams, useUrlSearchParam } from "@app/hooks";
+import { useUrlSearchParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import Tabs from "@base/Tabs";
 import TabsLink from "@base/TabsLink";
@@ -23,17 +23,15 @@ export function CreateReference() {
 				<DialogTitle>Create Reference</DialogTitle>
 				<Tabs>
 					<TabsLink
-						to={formatSearchParams({
-							createReferenceType: "empty",
-						})}
+						to="."
+						search={{ createReferenceType: "empty" }}
 						isActive={createReferenceType === "empty"}
 					>
 						Empty
 					</TabsLink>
 					<TabsLink
-						to={formatSearchParams({
-							createReferenceType: "import",
-						})}
+						to="."
+						search={{ createReferenceType: "import" }}
 						isActive={createReferenceType === "import"}
 					>
 						Import

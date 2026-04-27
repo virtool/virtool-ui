@@ -35,8 +35,8 @@ describe("<SubtractionItem />", () => {
 		};
 	});
 
-	it("should render", () => {
-		renderWithRouter(<SubtractionItem {...props} />);
+	it("should render", async () => {
+		await renderWithRouter(<SubtractionItem {...props} />);
 
 		expect(screen.getByText("Arabidopsis thaliana")).toBeInTheDocument();
 		expect(screen.getByText("Thale cress")).toBeInTheDocument();
@@ -47,17 +47,17 @@ describe("<SubtractionItem />", () => {
 		"waiting",
 		"running",
 		"error",
-	] as const)("should render progress bar for ", (state) => {
+	] as const)("should render progress bar for ", async (state) => {
 		props.job.state = state;
 
-		renderWithRouter(<SubtractionItem {...props} />);
+		await renderWithRouter(<SubtractionItem {...props} />);
 		expect(screen.getByRole("progressbar")).toBeInTheDocument();
 	});
 
-	it("should not render progress bar if job is ready", () => {
+	it("should not render progress bar if job is ready", async () => {
 		props.ready = true;
 
-		renderWithRouter(<SubtractionItem {...props} />);
+		await renderWithRouter(<SubtractionItem {...props} />);
 
 		expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
 		expect(screen.queryByText("Complete")).not.toBeInTheDocument();
@@ -67,10 +67,10 @@ describe("<SubtractionItem />", () => {
 		expect(screen.getByText("1 year ago")).toBeInTheDocument();
 	});
 
-	it("should correctly render subtractions where jobs=null", () => {
+	it("should correctly render subtractions where jobs=null", async () => {
 		props.job = null;
 		props.ready = false;
 
-		renderWithRouter(<SubtractionItem {...props} />);
+		await renderWithRouter(<SubtractionItem {...props} />);
 	});
 });

@@ -1,11 +1,6 @@
-import References from "@references/components/References";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import {
-	createFakeSettings,
-	mockApiGetSettings,
-} from "@tests/fake/administrator";
+import { createFakeAccount } from "@tests/fake/account";
 import {
 	createFakeIndexMinimal,
 	mockApiFindIndexes,
@@ -15,7 +10,7 @@ import {
 	createFakeReference,
 	mockApiGetReferenceDetail,
 } from "@tests/fake/references";
-import { renderWithRouter } from "@tests/setup";
+import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -26,12 +21,6 @@ describe("<Indexes />", () => {
 	beforeEach(() => {
 		reference = createFakeReference();
 		mockApiGetReferenceDetail(reference);
-		mockApiGetAccount(
-			createFakeAccount({
-				administrator_role: "full",
-			}),
-		);
-		mockApiGetSettings(createFakeSettings());
 		path = `/refs/${reference.id}/indexes`;
 	});
 
@@ -45,7 +34,8 @@ describe("<Indexes />", () => {
 			total_otu_count: 1,
 			change_count: 1,
 		});
-		renderWithRouter(<References />, path);
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(path, { account });
 
 		await waitFor(() => findIndexesScope.done());
 		expect(
@@ -76,7 +66,8 @@ describe("<Indexes />", () => {
 			total_otu_count: 1,
 			change_count: 1,
 		});
-		renderWithRouter(<References />, path);
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(path, { account });
 
 		await waitFor(() => scope.done());
 

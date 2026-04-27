@@ -20,8 +20,8 @@ describe("<JobItem />", () => {
 	});
 
 	describe("<JobItem />", () => {
-		it("should render properly", () => {
-			renderWithRouter(<JobItem {...props} />);
+		it("should render properly", async () => {
+			await renderWithRouter(<JobItem {...props} />);
 
 			expect(screen.getByText("Build Index")).toBeInTheDocument();
 			expect(
@@ -37,11 +37,11 @@ describe("<JobItem />", () => {
 			["running", 40],
 			["cancelled", 45],
 			["failed", 25],
-		])("should render state=%s with progress=%s", (state, progress) => {
+		])("should render state=%s with progress=%s", async (state, progress) => {
 			props.state = state;
 			props.progress = progress;
 
-			renderWithRouter(<JobItem {...props} />);
+			await renderWithRouter(<JobItem {...props} />);
 
 			expect(screen.getByText(state)).toBeInTheDocument();
 			expect(screen.getByRole("progressbar")).toHaveAttribute(
@@ -50,11 +50,11 @@ describe("<JobItem />", () => {
 			);
 		});
 
-		it("should render properly when job is complete", () => {
+		it("should render properly when job is complete", async () => {
 			props.state = "succeeded";
 			props.progress = 100;
 
-			renderWithRouter(<JobItem {...props} />);
+			await renderWithRouter(<JobItem {...props} />);
 
 			expect(screen.getByText("succeeded")).toBeInTheDocument();
 			expect(screen.queryByRole("progressbar")).toBeNull();

@@ -1,26 +1,25 @@
 import { cn } from "@app/utils";
-import LinkButton from "./LinkButton";
+import { buttonVariants } from "./buttonVariants";
+import Link from "./Link";
 import PaginationItem from "./PaginationItem";
 
 type PaginationNextProps = {
 	className?: string;
 	disabled?: boolean;
-	to: string;
+	page: number;
 };
 
-/**
- * A styled next button link for use in a pagination component
- */
 export default function PaginationNext({
 	className,
 	disabled,
-	to,
+	page,
 }: PaginationNextProps) {
 	return (
 		<PaginationItem>
-			<LinkButton
+			<Link
 				aria-label="Go to next page"
 				className={cn(
+					buttonVariants({ color: "blue" }),
 					"flex",
 					"justify-center",
 					"w-18",
@@ -28,11 +27,11 @@ export default function PaginationNext({
 					{ "pointer-events-none": disabled },
 					className,
 				)}
-				to={to}
-				color="blue"
+				to="."
+				search={((prev: Record<string, unknown>) => ({ ...prev, page })) as any}
 			>
 				Next
-			</LinkButton>
+			</Link>
 		</PaginationItem>
 	);
 }

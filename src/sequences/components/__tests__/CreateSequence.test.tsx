@@ -1,12 +1,7 @@
 import { formatPath } from "@app/hooks";
-import References from "@references/components/References";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import {
-	createFakeSettings,
-	mockApiGetSettings,
-} from "@tests/fake/administrator";
+import { createFakeAccount } from "@tests/fake/account";
 import {
 	createFakeOtu,
 	mockApiAddSequence,
@@ -16,7 +11,8 @@ import {
 	createFakeReference,
 	mockApiGetReferenceDetail,
 } from "@tests/fake/references";
-import { renderWithRouter } from "@tests/setup";
+import { renderRoute } from "@tests/setup";
+import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("<CreateSequence>", () => {
@@ -29,19 +25,16 @@ describe("<CreateSequence>", () => {
 		mockApiGetReferenceDetail(reference);
 		otu = createFakeOtu();
 		mockApiGetOtu(otu);
-		mockApiGetSettings(createFakeSettings());
-		mockApiGetAccount(
-			createFakeAccount({
-				administrator_role: "full",
-			}),
-		);
 
 		path = formatPath(`/refs/${reference.id}/otus/${otu.id}/otu`, {
 			openCreateSequence: true,
 		});
 	});
 
-	afterEach(() => window.sessionStorage.clear());
+	afterEach(() => {
+		window.sessionStorage.clear();
+		nock.cleanAll();
+	});
 
 	it("should update fields on typing", async () => {
 		const scope = mockApiAddSequence(
@@ -53,7 +46,8 @@ describe("<CreateSequence>", () => {
 			"ATGRYKM",
 			otu.schema[0].name,
 		);
-		renderWithRouter(<References />, path);
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(path, { account });
 
 		expect(await screen.findByText("Segment")).toBeInTheDocument();
 		expect(screen.getByRole("combobox")).toBeInTheDocument();
@@ -95,7 +89,8 @@ describe("<CreateSequence>", () => {
 		scope.done();
 	});
 	it("should display errors when accession, definition, or sequence not defined", async () => {
-		renderWithRouter(<References />, path);
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(path, { account });
 
 		await userEvent.click(await screen.findByRole("button", { name: "Save" }));
 
@@ -103,7 +98,8 @@ describe("<CreateSequence>", () => {
 	});
 
 	it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-		renderWithRouter(<References />, path);
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(path, { account });
 
 		await userEvent.type(
 			await screen.findByRole("textbox", { name: /Sequence [0-9]/ }),
@@ -128,7 +124,8 @@ describe("<CreateSequence>", () => {
 			"ATGRYKM",
 			otu.schema[0].name,
 		);
-		renderWithRouter(<References />, path);
+		const account = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(path, { account });
 
 		expect(await screen.findByText("Segment")).toBeInTheDocument();
 		expect(screen.getByRole("combobox")).toBeInTheDocument();
@@ -169,7 +166,13 @@ describe("<CreateSequence>", () => {
 
 		scope.done();
 
-		renderWithRouter(<References />, path);
+		window.sessionStorage.clear();
+		nock.cleanAll();
+		mockApiGetReferenceDetail(reference);
+		mockApiGetOtu(otu);
+
+		const account2 = createFakeAccount({ administrator_role: "full" });
+		await renderRoute(path, { account: account2 });
 		expect(screen.queryByText("Resumed editing draft sequence.")).toBeNull();
 	});
 });

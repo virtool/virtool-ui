@@ -1,5 +1,9 @@
-import { useNavigate, useSearch } from "@tanstack/react-router";
-import { useEffect } from "react";
+import {
+	useParams,
+	useSearch,
+	useNavigate as useTanStackNavigate,
+} from "@tanstack/react-router";
+import { useCallback, useEffect } from "react";
 import { castSearchParamValue, type SearchParam } from "./hooks";
 
 // TanStack Router's navigate expects a strictly typed search reducer.
@@ -15,6 +19,31 @@ function castIfString(value: unknown): unknown {
 	return typeof value === "string" ? castSearchParamValue(value) : value;
 }
 
+export function usePathParams<
+	T extends Record<string, string> = Record<string, string>,
+>(): T {
+	return useParams({ strict: false } as any) as T;
+}
+
+export function useNavigate() {
+	const navigate = useTanStackNavigate();
+
+	return useCallback(
+		(to: string, options?: { replace?: boolean }) => {
+			const [path, searchStr] = to.split("?");
+			const search = searchStr
+				? Object.fromEntries(new URLSearchParams(searchStr))
+				: undefined;
+			navigate({
+				to: path,
+				search,
+				replace: options?.replace,
+			} as AnySearchReducer);
+		},
+		[navigate],
+	);
+}
+
 export function useNaiveUrlSearchParam(
 	key: string,
 	defaultValue?: SearchParam,
@@ -24,7 +53,7 @@ export function useNaiveUrlSearchParam(
 	unsetValue: () => void;
 } {
 	const search = useSearch({ strict: false }) as Record<string, unknown>;
-	const navigate = useNavigate();
+	const navigate = useTanStackNavigate();
 
 	useEffect(() => {
 		if (defaultValue !== undefined && search[key] === undefined) {
@@ -81,7 +110,7 @@ export function useListSearchParam<T extends SearchParam>(
 	defaultValues?: T[],
 ): { values: T[]; setValues: (newValue: T[]) => void } {
 	const search = useSearch({ strict: false }) as Record<string, unknown>;
-	const navigate = useNavigate();
+	const navigate = useTanStackNavigate();
 
 	const raw = search[key];
 	const values = Array.isArray(raw) ? raw : [];
@@ -117,7 +146,7 @@ export function useListSearchParam<T extends SearchParam>(
 
 export function useDialogParam(key: string) {
 	const search = useSearch({ strict: false }) as Record<string, unknown>;
-	const navigate = useNavigate();
+	const navigate = useTanStackNavigate();
 
 	const open = Boolean(castIfString(search[key]));
 

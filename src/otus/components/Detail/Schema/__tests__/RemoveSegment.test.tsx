@@ -1,53 +1,39 @@
 import { formatPath } from "@app/hooks";
-import References from "@references/components/References";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import {
-	createFakeSettings,
-	mockApiGetSettings,
-} from "@tests/fake/administrator";
+import { createFakeAccount } from "@tests/fake/account";
 import { createFakeOtu, mockApiEditOTU, mockApiGetOtu } from "@tests/fake/otus";
 import {
 	createFakeReference,
 	mockApiGetReferenceDetail,
 } from "@tests/fake/references";
-import { renderWithRouter } from "@tests/setup";
-import { beforeEach, describe, expect, it } from "vitest";
+import { renderRoute } from "@tests/setup";
+import nock from "nock";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("<RemoveSegment />", () => {
-	let props;
 	let path;
 	let reference;
 	let searchParams;
 	let otu;
 	let otuScope;
+	let account;
 
 	beforeEach(() => {
 		reference = createFakeReference({ name: "Foo" });
 		mockApiGetReferenceDetail(reference);
 		otu = createFakeOtu();
 		otuScope = mockApiGetOtu(otu);
-		mockApiGetSettings(createFakeSettings());
-		mockApiGetAccount(
-			createFakeAccount({
-				administrator_role: "full",
-			}),
-		);
+		account = createFakeAccount({ administrator_role: "full" });
 
 		path = `/refs/${reference.id}/otus/${otu.id}/schema`;
 		searchParams = { removeSegmentName: otu.schema[0].name };
-
-		props = {
-			abbreviation: otu.abbreviation,
-			name: otu.name,
-			otuId: otu.id,
-			schema: otu.schema,
-		};
 	});
 
+	afterEach(() => nock.cleanAll());
+
 	it("should render when [show=true]", async () => {
-		renderWithRouter(<References />, formatPath(path, searchParams));
+		await renderRoute(formatPath(path, searchParams), { account });
 
 		expect(await screen.findByText("Remove Segment")).toBeInTheDocument();
 		expect(
@@ -58,7 +44,7 @@ describe("<RemoveSegment />", () => {
 	});
 
 	it("should render when [show=false]", async () => {
-		renderWithRouter(<References />, path);
+		await renderRoute(path, { account });
 
 		await waitFor(() => otuScope.done());
 
@@ -76,9 +62,9 @@ describe("<RemoveSegment />", () => {
 			abbreviation: otu.abbreviation,
 			name: otu.name,
 			otuId: otu.id,
-			schema: [props.schema[1]],
+			schema: [otu.schema[1]],
 		});
-		renderWithRouter(<References />, formatPath(path, searchParams));
+		await renderRoute(formatPath(path, searchParams), { account });
 
 		await userEvent.click(
 			await screen.findByRole("button", { name: "Confirm" }),
@@ -88,7 +74,7 @@ describe("<RemoveSegment />", () => {
 	});
 
 	it("should call onHide() when onHide() called on <RemoveDialog />", async () => {
-		renderWithRouter(<References />, formatPath(path, searchParams));
+		await renderRoute(formatPath(path, searchParams), { account });
 
 		expect(await screen.findByText("Remove Segment")).toBeInTheDocument();
 

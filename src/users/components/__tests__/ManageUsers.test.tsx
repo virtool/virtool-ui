@@ -15,7 +15,7 @@ describe("<ManageUsers />", () => {
 		});
 		mockApiGetAccount(account);
 
-		renderWithRouter(<ManageUsers />);
+		await renderWithRouter(<ManageUsers />);
 
 		expect(await screen.findByLabelText("search")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Create" })).toBeInTheDocument();
@@ -31,7 +31,7 @@ describe("<ManageUsers />", () => {
 		});
 		mockApiGetAccount(account);
 
-		renderWithRouter(<ManageUsers />);
+		await renderWithRouter(<ManageUsers />);
 
 		expect(await screen.findByLabelText("search")).toBeInTheDocument();
 		expect(screen.getByRole("button")).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe("<ManageUsers />", () => {
 		mockApiFindUsers(users);
 		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
 
-		renderWithRouter(<ManageUsers />);
+		await renderWithRouter(<ManageUsers />);
 
 		expect(
 			await screen.findByText("You do not have permission to manage users."),

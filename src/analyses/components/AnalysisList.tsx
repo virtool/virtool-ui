@@ -1,6 +1,6 @@
-import { usePageParam, usePathParams } from "@app/hooks";
+import { useDialogParam, usePageParam, usePathParams } from "@app/hooks";
+import { buttonVariants } from "@base/buttonVariants";
 import ContainerNarrow from "@base/ContainerNarrow";
-import LinkButton from "@base/LinkButton";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
@@ -34,6 +34,7 @@ export default function AnalysesList() {
 	const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
 	const { isPending: isPendingSample } = useFetchSample(sampleId);
 	const { hasPermission: canCreate } = useCheckCanEditSample(sampleId);
+	const { setOpen } = useDialogParam("openCreateAnalysis");
 
 	if (isPendingAnalyses || isPendingHmms || isPendingSample) {
 		return <LoadingPlaceholder />;
@@ -44,9 +45,13 @@ export default function AnalysesList() {
 			<AnalysisHMMAlert installed={hmms.status.task?.complete} />
 			<div className="flex justify-end pb-4">
 				{canCreate && (
-					<LinkButton color="blue" to="?openCreateAnalysis=true">
+					<button
+						type="button"
+						className={buttonVariants({ color: "blue" })}
+						onClick={() => setOpen(true)}
+					>
 						Create
-					</LinkButton>
+					</button>
 				)}
 			</div>
 			{analyses.found_count ? (

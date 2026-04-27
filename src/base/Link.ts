@@ -1,3 +1,3 @@
-import { Link } from "wouter";
+import { Link } from "@tanstack/react-router";
 
 export default Link;

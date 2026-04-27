@@ -6,18 +6,15 @@ type PaginationPreviousProps = {
 	className?: string;
 	disabled?: boolean;
 	onClick?: () => void;
-	to: string;
+	page: number;
 };
 
-/**
- * A styled previous button link for use in a pagination component
- */
 export default function PaginationPrevious({
 	active,
 	className,
 	disabled,
 	onClick,
-	to,
+	page,
 }: PaginationPreviousProps) {
 	return (
 		<PaginationLink
@@ -26,7 +23,7 @@ export default function PaginationPrevious({
 			active={active}
 			disabled={disabled}
 			onClick={onClick}
-			to={to}
+			page={page}
 		>
 			Previous
 		</PaginationLink>

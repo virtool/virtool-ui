@@ -1,28 +1,21 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
-import { updateSearchParam } from "@app/hooks";
+import { useDialogParam } from "@app/hooks";
+import Button from "@base/Button";
 import InputSearch from "@base/InputSearch";
-import LinkButton from "@base/LinkButton";
 import Toolbar from "@base/Toolbar";
-import { useSearch } from "wouter";
 import SubtractionCreate from "./SubtractionCreate";
 
 type SubtractionToolbarProps = {
-	/** Current search term used for filtering */
 	term: string;
-
-	/** A callback function to handle changes in search input */
 	handleChange: (any) => void;
 };
 
-/**
- * A search filtering toolbar
- */
 export default function SubtractionToolbar({
 	term,
 	handleChange,
 }: SubtractionToolbarProps) {
 	const { hasPermission } = useCheckAdminRoleOrPermission("modify_subtraction");
-	const search = useSearch();
+	const { setOpen } = useDialogParam("openCreateSubtraction");
 
 	return (
 		<Toolbar>
@@ -30,12 +23,9 @@ export default function SubtractionToolbar({
 				<InputSearch value={term} onChange={handleChange} placeholder="Name" />
 			</div>
 			{hasPermission && (
-				<LinkButton
-					color="blue"
-					to={updateSearchParam("openCreateSubtraction", "true", search)}
-				>
+				<Button color="blue" onClick={() => setOpen(true)}>
 					Create
-				</LinkButton>
+				</Button>
 			)}
 			<SubtractionCreate />
 		</Toolbar>

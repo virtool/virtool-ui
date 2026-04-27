@@ -47,7 +47,7 @@ describe("<FileManager>", () => {
 
 		vi.mock("@uploads/uploader");
 
-		renderWithRouter(
+		await renderWithRouter(
 			<FileManager {...props} regex={/.(?:fa|fasta)(?:.gz|.gzip)?$/} />,
 			path,
 		);
@@ -82,7 +82,7 @@ describe("<FileManager>", () => {
 		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
 		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
-		renderWithRouter(<FileManager {...props} />, path);
+		await renderWithRouter(<FileManager {...props} />, path);
 
 		expect(
 			await screen.findByText("You do not have permission to upload files."),
@@ -100,7 +100,10 @@ describe("<FileManager>", () => {
 		);
 		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
-		renderWithRouter(<FileManager {...props} message="Test Message" />, path);
+		await renderWithRouter(
+			<FileManager {...props} message="Test Message" />,
+			path,
+		);
 
 		expect(await screen.findByText("Test Message")).toBeInTheDocument();
 	});

@@ -5,7 +5,6 @@ import Link from "@base/Link";
 import type { LucideIcon } from "lucide-react";
 
 type SidebarItemProps = {
-	/** A list of routes to exclude from the sidebar */
 	exclude?: string[];
 	icon: LucideIcon;
 	link: string;
@@ -29,9 +28,14 @@ const activeClassName = cn(
 	"focus:text-primary",
 );
 
-/**
- * Displays a styled sidebar item for use in the sidebar component
- */
+function parseLinkSearch(link: string): Record<string, string> | undefined {
+	const qIndex = link.indexOf("?");
+	if (qIndex === -1) {
+		return undefined;
+	}
+	return Object.fromEntries(new URLSearchParams(link.slice(qIndex)));
+}
+
 export default function SidebarLink({
 	icon,
 	link,
@@ -39,13 +43,14 @@ export default function SidebarLink({
 	exclude,
 }: SidebarItemProps) {
 	const isActive = useMatchPartialPath(link, exclude);
+	const to = link.split("?")[0];
+	const search = parseLinkSearch(link) as any;
 
 	return (
 		<Link
-			to={link}
-			className={(active) =>
-				active || isActive ? activeClassName : baseClassName
-			}
+			to={to}
+			search={search}
+			className={isActive ? activeClassName : baseClassName}
 		>
 			<Icon icon={icon} className="text-lg" />
 			<p className="block text-md my-2">{title}</p>

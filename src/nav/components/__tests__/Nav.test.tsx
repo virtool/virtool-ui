@@ -17,7 +17,7 @@ describe("<Nav />", () => {
 	};
 
 	it("should render", async () => {
-		renderWithRouter(<Nav {...props} />);
+		await renderWithRouter(<Nav {...props} />);
 		expect(screen.getByRole("link", { name: "Jobs" })).toBeInTheDocument();
 		expect(screen.getByRole("link", { name: "Samples" })).toBeInTheDocument();
 		expect(

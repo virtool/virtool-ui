@@ -1,4 +1,3 @@
-import { formatSearchParams } from "@app/hooks";
 import InputSearch from "@base/InputSearch";
 import LinkButton from "@base/LinkButton";
 import Toolbar from "@base/Toolbar";
@@ -45,10 +44,7 @@ export default function OtuToolbar({
 			</div>
 
 			{canCreate && !remotesFrom && (
-				<LinkButton
-					to={formatSearchParams({ openCreateOTU: true })}
-					color="blue"
-				>
+				<LinkButton to="." search={{ openCreateOTU: true }} color="blue">
 					Create
 				</LinkButton>
 			)}

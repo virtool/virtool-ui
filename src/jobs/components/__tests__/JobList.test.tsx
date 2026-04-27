@@ -17,7 +17,7 @@ describe("<JobsList />", () => {
 			}),
 		]);
 
-		renderWithRouter(<JobsList />);
+		await renderWithRouter(<JobsList />);
 
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
@@ -27,14 +27,14 @@ describe("<JobsList />", () => {
 		scope.done();
 	});
 
-	it("should show spinner while loading", () => {
-		renderWithRouter(<JobsList />);
+	it("should show spinner while loading", async () => {
+		await renderWithRouter(<JobsList />);
 		expect(screen.getByLabelText("loading")).toBeInTheDocument();
 	});
 
 	it("should show message when there are no unarchived jobs", async () => {
 		const scope = mockApiGetJobs([]);
-		renderWithRouter(<JobsList />);
+		await renderWithRouter(<JobsList />);
 
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
@@ -50,7 +50,7 @@ describe("<JobsList />", () => {
 			0,
 		);
 
-		renderWithRouter(<JobsList />);
+		await renderWithRouter(<JobsList />);
 
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),

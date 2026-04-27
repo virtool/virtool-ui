@@ -1,14 +1,13 @@
 import { screen } from "@testing-library/react";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeAccount } from "@tests/fake/account";
 import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
-import { renderWithRouter } from "@tests/setup";
+import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import HMM from "../Hmm";
 
 describe("<HmmList />", () => {
 	let fakeHMMData;
-	let path;
+	let path: string;
 
 	beforeEach(() => {
 		fakeHMMData = createFakeHmmSearchResults();
@@ -19,7 +18,7 @@ describe("<HmmList />", () => {
 
 	it("should render correctly", async () => {
 		const scope = mockApiGetHmms(fakeHMMData);
-		renderWithRouter(<HMM />, path);
+		await renderRoute(path);
 
 		expect(await screen.findByText("HMMs")).toBeInTheDocument();
 		expect(screen.getByPlaceholderText("Name")).toBeInTheDocument();
@@ -37,7 +36,7 @@ describe("<HmmList />", () => {
 	it("should render correctly when no documents exist", async () => {
 		const fakeHMMData = createFakeHmmSearchResults({ documents: [] });
 		const scope = mockApiGetHmms(fakeHMMData);
-		renderWithRouter(<HMM />, path);
+		await renderRoute(path);
 
 		expect(await screen.findByText("HMMs")).toBeInTheDocument();
 		expect(screen.getByText("No HMMs found.")).toBeInTheDocument();
@@ -51,27 +50,23 @@ describe("<HmmList />", () => {
 				documents: [],
 				total_count: 0,
 			});
-			const scope = mockApiGetHmms(fakeHMMData);
+			mockApiGetHmms(fakeHMMData);
+			mockApiGetHmms(fakeHMMData);
 			const account = createFakeAccount({
 				administrator_role: "full",
 			});
-			mockApiGetAccount(account);
-			renderWithRouter(<HMM />, path);
-
-			expect(await screen.findByText("HMMs")).toBeInTheDocument();
+			await renderRoute(path, { account });
 
 			expect(
-				screen.getByText("HMM profiles not installed."),
+				await screen.findByText("HMM profiles not installed."),
 			).toBeInTheDocument();
 			expect(
 				screen.getByText(/HMM profiles are required for NuVs analysis/),
 			).toBeInTheDocument();
 
 			expect(
-				await screen.findByRole("button", { name: "Install" }),
+				screen.getByRole("button", { name: "Install" }),
 			).toBeInTheDocument();
-
-			scope.done();
 		});
 
 		it("should render correctly when installed = false and user does not have permission to install", async () => {
@@ -79,22 +74,18 @@ describe("<HmmList />", () => {
 				documents: [],
 				total_count: 0,
 			});
-			const scope = mockApiGetHmms(fakeHMMData);
+			mockApiGetHmms(fakeHMMData);
+			mockApiGetHmms(fakeHMMData);
 			const account = createFakeAccount({ administrator_role: null });
-			mockApiGetAccount(account);
-			renderWithRouter(<HMM />, path);
-
-			expect(await screen.findByText("HMMs")).toBeInTheDocument();
+			await renderRoute(path, { account });
 
 			expect(
-				screen.getByText("Contact an administrator to install HMMs."),
+				await screen.findByText("Contact an administrator to install HMMs."),
 			).toBeInTheDocument();
 
 			expect(
 				screen.queryByRole("button", { name: "Install" }),
 			).not.toBeInTheDocument();
-
-			scope.done();
 		});
 
 		it("should render correctly when installed = false, user has permission to install and task !== undefined", async () => {
@@ -110,16 +101,14 @@ describe("<HmmList />", () => {
 					},
 				},
 			});
-			const scope = mockApiGetHmms(fakeHMMData);
+			mockApiGetHmms(fakeHMMData);
+			mockApiGetHmms(fakeHMMData);
 			const account = createFakeAccount({
 				administrator_role: "full",
 			});
-			mockApiGetAccount(account);
-			renderWithRouter(<HMM />, path);
+			await renderRoute(path, { account });
 
-			expect(await screen.findByText("HMMs")).toBeInTheDocument();
-
-			expect(screen.getByText("Installing")).toBeInTheDocument();
+			expect(await screen.findByText("Installing")).toBeInTheDocument();
 			expect(screen.getByText("decompress")).toBeInTheDocument();
 
 			expect(
@@ -128,8 +117,6 @@ describe("<HmmList />", () => {
 			expect(
 				screen.queryByRole("button", { name: "Install" }),
 			).not.toBeInTheDocument();
-
-			scope.done();
 		});
 	});
 });

@@ -18,7 +18,7 @@ describe("<SubtractionList />", () => {
 
 	it("renders correctly", async () => {
 		const scope = mockApiGetSubtractions([subtractions]);
-		renderWithRouter(<SubtractionList />);
+		await renderWithRouter(<SubtractionList />);
 
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
@@ -33,7 +33,7 @@ describe("<SubtractionList />", () => {
 
 	it("should call handleChange when search input changes in toolbar", async () => {
 		const scope = mockApiGetSubtractions([subtractions]);
-		renderWithRouter(<SubtractionList />);
+		await renderWithRouter(<SubtractionList />);
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
 		);
@@ -54,13 +54,13 @@ describe("<SubtractionList />", () => {
 			administrator_role: "full",
 		});
 		mockApiGetAccount(account);
-		renderWithRouter(<SubtractionList />);
+		await renderWithRouter(<SubtractionList />);
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
 		);
 
 		expect(
-			await screen.findByRole("link", { name: "Create" }),
+			await screen.findByRole("button", { name: "Create" }),
 		).toBeInTheDocument();
 
 		scope.done();
@@ -70,7 +70,7 @@ describe("<SubtractionList />", () => {
 		const scope = mockApiGetSubtractions([subtractions]);
 		const account = createFakeAccount({ administrator_role: null });
 		mockApiGetAccount(account);
-		renderWithRouter(<SubtractionList />);
+		await renderWithRouter(<SubtractionList />);
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
 		);
@@ -83,7 +83,7 @@ describe("<SubtractionList />", () => {
 
 	it("should handle toolbar updates correctly", async () => {
 		const scope = mockApiGetSubtractions([subtractions]);
-		const { history } = renderWithRouter(<SubtractionList />);
+		const { router } = await renderWithRouter(<SubtractionList />);
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
 		);
@@ -95,7 +95,9 @@ describe("<SubtractionList />", () => {
 		expect(inputElement).toHaveValue("Foobar");
 		expect(screen.getByPlaceholderText("Name")).toHaveValue("Foobar");
 
-		expect(history[0]).toEqual("?find=Foobar");
+		await waitFor(() =>
+			expect(router.state.location.href).toEqual("/?find=Foobar"),
+		);
 
 		scope.done();
 	});

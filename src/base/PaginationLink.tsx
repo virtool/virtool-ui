@@ -9,19 +9,16 @@ type PaginationLinkProps = {
 	className?: string;
 	disabled?: boolean;
 	onClick?: () => void;
-	to: string;
+	page: number;
 };
 
-/**
- * A styled pagination link navigation users to specified page number
- */
 export default function PaginationLink({
 	active,
 	children,
 	className,
 	disabled,
 	onClick,
-	to,
+	page,
 }: PaginationLinkProps) {
 	return (
 		<PaginationItem>
@@ -34,10 +31,10 @@ export default function PaginationLink({
 						"text-blue-900": !active,
 						"pointer-events-none": disabled,
 					},
-
 					className,
 				)}
-				to={to}
+				to="."
+				search={((prev: Record<string, unknown>) => ({ ...prev, page })) as any}
 				onClick={onClick}
 			>
 				{children}

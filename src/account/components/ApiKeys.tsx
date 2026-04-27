@@ -40,7 +40,7 @@ export default function ApiKeys() {
 					</ExternalLink>
 					.
 				</h3>
-				<Link to="?openCreateKey=true" replace>
+				<Link to="." search={{ openCreateKey: true } as never} replace>
 					Create
 				</Link>
 			</header>
