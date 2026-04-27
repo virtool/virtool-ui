@@ -1,6 +1,7 @@
 import { formatPath } from "@app/hooks";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mockApiFindIndexes } from "@tests/fake/indexes";
 import {
 	createFakeOTUMinimal,
 	mockApiCreateOTU,
@@ -22,6 +23,11 @@ describe("<OTUForm />", () => {
 		reference = createFakeReference();
 		mockApiGetReferenceDetail(reference);
 		mockApiFindOtus([createFakeOTUMinimal()], reference.id);
+		mockApiFindIndexes(reference.id, 1, {
+			documents: [],
+			total_otu_count: 0,
+			change_count: 0,
+		});
 
 		path = formatPath(`/refs/${reference.id}/otus`, {
 			openCreateOTU: true,
@@ -42,8 +48,9 @@ describe("<OTUForm />", () => {
 	it("should render error once submitted with no name", async () => {
 		await renderRoute(path);
 
-		await userEvent.click(await screen.findByRole("button"));
-		expect(screen.getByText("Name required")).toBeInTheDocument();
+		await screen.findByText("Create OTU");
+		await userEvent.click(screen.getByRole("button"));
+		expect(await screen.findByText("Name required")).toBeInTheDocument();
 	});
 
 	it("should create OTU without abbreviation", async () => {

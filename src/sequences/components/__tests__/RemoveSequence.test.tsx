@@ -75,7 +75,7 @@ describe("<RemoveSequence />", () => {
 		expect(
 			screen.getAllByText(`${sourceType} ${otu.isolates[0].source_name}`),
 		).toHaveLength(2);
-		expect(screen.queryByRole("button")).toBeNull();
+		expect(screen.queryByRole("button", { name: "Confirm" })).toBeNull();
 	});
 
 	it("should handle submit when onConfirm() on RemoveDialog is called", async () => {

@@ -29,7 +29,7 @@ describe("<Administrators>", () => {
 
 		mockGetAdministratorRoles();
 
-		renderWithRouter(<ManageAdministrators />);
+		await renderWithRouter(<ManageAdministrators />);
 
 		expect(
 			await screen.findByRole("textbox", { name: "search" }),
@@ -77,7 +77,7 @@ describe("<Administrators>", () => {
 			new_role: "base",
 		});
 
-		renderWithRouter(<ManageAdministrators />);
+		await renderWithRouter(<ManageAdministrators />);
 
 		await userEvent.click(await screen.findByRole("combobox"));
 		await userEvent.click(
@@ -108,7 +108,7 @@ describe("<Administrators>", () => {
 			new_role: null,
 		});
 
-		renderWithRouter(<ManageAdministrators />);
+		await renderWithRouter(<ManageAdministrators />);
 
 		await userEvent.click(
 			await screen.findByRole("button", {

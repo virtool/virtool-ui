@@ -41,8 +41,8 @@ const workflows = [
 ];
 
 describe("<JobArgs />", () => {
-	it("should render basics correctly", () => {
-		renderWithRouter(
+	it("should render basics correctly", async () => {
+		await renderWithRouter(
 			<JobArgs
 				workflow="create_sample"
 				args={{ sample_id: "test_sample_id" }}
@@ -55,12 +55,12 @@ describe("<JobArgs />", () => {
 		).toBeInTheDocument();
 	});
 
-	it.each(workflows)("should render $workflow jobs correctly", ({
+	it.each(workflows)("should render $workflow jobs correctly", async ({
 		workflow,
 		args,
 		links,
 	}) => {
-		renderWithRouter(
+		await renderWithRouter(
 			<JobArgs
 				workflow={workflow}
 				args={{ ...args, extra_param: "extra_param" }}
@@ -73,8 +73,8 @@ describe("<JobArgs />", () => {
 		expect(screen.queryByText("extra_param")).not.toBeInTheDocument();
 	});
 
-	it("should render unknown workflows", () => {
-		renderWithRouter(
+	it("should render unknown workflows", async () => {
+		await renderWithRouter(
 			<JobArgs
 				workflow="unknown_workflow"
 				args={{

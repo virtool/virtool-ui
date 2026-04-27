@@ -16,22 +16,22 @@ describe("<DeleteSample />", () => {
 		};
 	});
 
-	it("should render delete button when sample is ready", () => {
-		renderWithRouter(<DeleteSample {...props} />);
+	it("should render delete button when sample is ready", async () => {
+		await renderWithRouter(<DeleteSample {...props} />);
 
 		expect(screen.getByRole("button")).toBeInTheDocument();
 	});
 
-	it("should render delete button when sample has failed job", () => {
-		renderWithRouter(
+	it("should render delete button when sample has failed job", async () => {
+		await renderWithRouter(
 			<DeleteSample {...props} job={{ state: "failed" }} ready={false} />,
 		);
 
 		expect(screen.getByRole("button")).toBeInTheDocument();
 	});
 
-	it("does not render when sample has running job", () => {
-		renderWithRouter(
+	it("does not render when sample has running job", async () => {
+		await renderWithRouter(
 			<DeleteSample {...props} ready={false} job={{ state: "running" }} />,
 		);
 
@@ -40,7 +40,7 @@ describe("<DeleteSample />", () => {
 
 	it("should handle submit when confirm button is clicked", async () => {
 		const scope = mockApiRemoveSample(props.id);
-		renderWithRouter(<DeleteSample {...props} />);
+		await renderWithRouter(<DeleteSample {...props} />);
 
 		await userEvent.click(screen.getByRole("button"));
 		expect(screen.getByText("Delete Sample")).toBeInTheDocument();

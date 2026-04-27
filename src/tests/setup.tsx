@@ -10,7 +10,11 @@ import {
 	RouterProvider,
 } from "@tanstack/react-router";
 import "@testing-library/jest-dom/vitest";
-import { fireEvent, render as rtlRender } from "@testing-library/react";
+import {
+	fireEvent,
+	renderHook,
+	render as rtlRender,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { vi } from "vitest";
@@ -33,7 +37,7 @@ export function renderWithProviders(ui: ReactNode) {
 	return { ...rest, rerender };
 }
 
-export function renderWithRouter(ui: ReactNode, path?: string) {
+export async function renderWithRouter(ui: ReactNode, path?: string) {
 	const history: string[] = [];
 
 	const rootRoute = createRootRoute();
@@ -63,8 +67,10 @@ export function renderWithRouter(ui: ReactNode, path?: string) {
 		}
 	});
 
+	await router.load();
+
 	const result = renderWithProviders(<RouterProvider router={router} />);
-	return { ...result, history };
+	return { ...result, history, router };
 }
 
 const MemoryRouterChildrenContext = createContext<ReactNode>(null);
@@ -102,6 +108,33 @@ export function MemoryRouter({
 			<RouterProvider router={router} />
 		</MemoryRouterChildrenContext>
 	);
+}
+
+export async function renderHookWithRouter<T>(hook: () => T, path?: string) {
+	const rootRoute = createRootRoute({ component: () => <Outlet /> });
+	const catchAllRoute = createRoute({
+		getParentRoute: () => rootRoute,
+		path: "$",
+		component: MemoryRouterCatchAll,
+	});
+	rootRoute.addChildren([catchAllRoute]);
+
+	// @ts-expect-error createRouter requires strictNullChecks
+	const router = createRouter({
+		routeTree: rootRoute,
+		history: createMemoryHistory({ initialEntries: [path || "/"] }),
+		defaultPendingMinMs: 0,
+	});
+
+	await router.load();
+
+	return renderHook(hook, {
+		wrapper: ({ children }: { children: ReactNode }) => (
+			<MemoryRouterChildrenContext value={children}>
+				<RouterProvider router={router} />
+			</MemoryRouterChildrenContext>
+		),
+	});
 }
 
 interface RenderRouteOptions {

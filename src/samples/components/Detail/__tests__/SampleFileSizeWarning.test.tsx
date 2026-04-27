@@ -14,9 +14,9 @@ describe("<SampleFileSizeWarning />", () => {
 		};
 	});
 
-	it("should render", () => {
+	it("should render", async () => {
 		props.reads = [createFakeSampleRead({ size: 5 })];
-		renderWithRouter(<SampleFileSizeWarning {...props} />);
+		await renderWithRouter(<SampleFileSizeWarning {...props} />);
 
 		expect(
 			screen.getByText(
@@ -32,9 +32,9 @@ describe("<SampleFileSizeWarning />", () => {
 		).toBeNull();
 	});
 
-	it("should render when [show=false]", () => {
+	it("should render when [show=false]", async () => {
 		props.reads = [createFakeSampleRead({ size: 10000000 })];
-		renderWithRouter(<SampleFileSizeWarning {...props} />);
+		await renderWithRouter(<SampleFileSizeWarning {...props} />);
 
 		expect(
 			screen.queryByText(
@@ -43,9 +43,9 @@ describe("<SampleFileSizeWarning />", () => {
 		).toBeNull();
 	});
 
-	it("should render link when [showLink=true]", () => {
+	it("should render link when [showLink=true]", async () => {
 		props.reads = [createFakeSampleRead({ size: 5 })];
-		renderWithRouter(<SampleFileSizeWarning {...props} />);
+		await renderWithRouter(<SampleFileSizeWarning {...props} />);
 
 		expect(
 			screen.getByText(
@@ -58,9 +58,9 @@ describe("<SampleFileSizeWarning />", () => {
 		).toBeNull();
 	});
 
-	it("should render link when [showLink=false]", () => {
+	it("should render link when [showLink=false]", async () => {
 		props.reads = [createFakeSampleRead({ size: 5 })];
-		renderWithRouter(
+		await renderWithRouter(
 			<SampleFileSizeWarning {...props} />,
 			"/samples/test/uploads",
 		);

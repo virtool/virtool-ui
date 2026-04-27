@@ -20,7 +20,7 @@ describe("<ManageLabels>", () => {
 
 	it("should be disabled if no labels exist", async () => {
 		props.labels = [];
-		renderWithRouter(<ManageLabels {...props} />);
+		await renderWithRouter(<ManageLabels {...props} />);
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
 		);
@@ -36,7 +36,7 @@ describe("<ManageLabels>", () => {
 				labels: [{ color: "#C4B5FD", description: "", id: 1, name: "test" }],
 			},
 		];
-		renderWithRouter(<ManageLabels {...props} />);
+		await renderWithRouter(<ManageLabels {...props} />);
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
 		);
@@ -57,7 +57,7 @@ describe("<ManageLabels>", () => {
 				labels: [{ color: "#FCA5A5", description: "", id: 2, name: "label" }],
 			},
 		];
-		renderWithRouter(<ManageLabels {...props} />);
+		await renderWithRouter(<ManageLabels {...props} />);
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
 		);

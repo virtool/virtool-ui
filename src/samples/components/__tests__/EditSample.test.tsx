@@ -23,10 +23,10 @@ describe("<Editsample />", () => {
 		searchParams = { openEditSample: true };
 	});
 
-	it("should render when [show=false]", () => {
+	it("should render when [show=false]", async () => {
 		props.show = false;
 
-		renderWithRouter(<EditSample {...props} />, path);
+		await renderWithRouter(<EditSample {...props} />, path);
 
 		expect(screen.queryByRole("textbox", { name: "Name" })).toBeNull();
 		expect(screen.queryByRole("textbox", { name: "Isolate" })).toBeNull();
@@ -43,7 +43,10 @@ describe("<Editsample />", () => {
 		"Locale",
 		"Notes",
 	])("should render changed data for", async (inputLabel) => {
-		renderWithRouter(<EditSample {...props} />, formatPath(path, searchParams));
+		await renderWithRouter(
+			<EditSample {...props} />,
+			formatPath(path, searchParams),
+		);
 
 		const inputBox = screen.getByLabelText(inputLabel);
 		expect(inputBox).toBeInTheDocument();
@@ -65,7 +68,10 @@ describe("<Editsample />", () => {
 			"newLocale",
 			"newNotes",
 		);
-		renderWithRouter(<EditSample {...props} />, formatPath(path, searchParams));
+		await renderWithRouter(
+			<EditSample {...props} />,
+			formatPath(path, searchParams),
+		);
 
 		const nameInput = screen.getByLabelText("Name");
 		await userEvent.clear(nameInput);

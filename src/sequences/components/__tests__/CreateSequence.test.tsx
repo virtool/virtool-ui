@@ -166,6 +166,7 @@ describe("<CreateSequence>", () => {
 
 		scope.done();
 
+		window.sessionStorage.clear();
 		nock.cleanAll();
 		mockApiGetReferenceDetail(reference);
 		mockApiGetOtu(otu);

@@ -14,7 +14,7 @@ describe("<ReferenceItem />", () => {
 		};
 	});
 
-	it("should render when [organism='virus'] and [progress=32]", () => {
+	it("should render when [organism='virus'] and [progress=32]", async () => {
 		props.reference = createFakeReferenceMinimal({
 			task: {
 				complete: false,
@@ -27,12 +27,12 @@ describe("<ReferenceItem />", () => {
 			},
 			organism: "virus",
 		});
-		renderWithRouter(<ReferenceItem {...props} />);
+		await renderWithRouter(<ReferenceItem {...props} />);
 
 		expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", "32");
 	});
 
-	it("should render when [progress=100]", () => {
+	it("should render when [progress=100]", async () => {
 		props.reference = createFakeReferenceMinimal({
 			task: {
 				complete: true,
@@ -45,7 +45,7 @@ describe("<ReferenceItem />", () => {
 			},
 			organism: null,
 		});
-		renderWithRouter(<ReferenceItem {...props} />);
+		await renderWithRouter(<ReferenceItem {...props} />);
 
 		expect(screen.queryByRole("progressbar")).toBeNull();
 	});

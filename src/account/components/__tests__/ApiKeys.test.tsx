@@ -18,8 +18,8 @@ describe("<ApiKeys />", () => {
 
 	afterEach(() => nock.cleanAll());
 
-	it("should render correctly when keys === null", () => {
-		renderWithRouter(<ApiKeys />, basePath);
+	it("should render correctly when keys === null", async () => {
+		await renderWithRouter(<ApiKeys />, basePath);
 
 		expect(screen.getByLabelText("loading")).toBeInTheDocument();
 		expect(
@@ -42,7 +42,7 @@ describe("<ApiKeys />", () => {
 			createFakePermissions({ remove_job: true }),
 		);
 
-		renderWithRouter(<ApiKeys />, "/account/api");
+		await renderWithRouter(<ApiKeys />, "/account/api");
 
 		await screen.findByRole("heading", {
 			name: /Manage API keys for accessing the/,
@@ -102,7 +102,7 @@ describe("<ApiKeys />", () => {
 		);
 		mockApiGetApiKeys([]);
 
-		renderWithRouter(<ApiKeys />, basePath);
+		await renderWithRouter(<ApiKeys />, basePath);
 
 		await userEvent.click(await screen.findByRole("link", { name: "Create" }));
 
@@ -135,7 +135,7 @@ describe("<ApiKeys />", () => {
 		);
 		mockApiGetApiKeys([key]);
 
-		renderWithRouter(<ApiKeys />, "/account/api");
+		await renderWithRouter(<ApiKeys />, "/account/api");
 
 		await userEvent.click(await screen.findByRole("button", { name: "Edit" }));
 

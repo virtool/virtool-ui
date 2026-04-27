@@ -20,30 +20,30 @@ describe("<RemoveSubtraction />", () => {
 		};
 	});
 
-	it("should render when [show=false]", () => {
+	it("should render when [show=false]", async () => {
 		props.show = false;
-		renderWithRouter(<RemoveSubtraction {...props} />);
+		await renderWithRouter(<RemoveSubtraction {...props} />);
 
 		expect(screen.queryByText("Remove Subtraction")).toBeNull();
 	});
 
-	it("should render when [show=true]", () => {
-		renderWithRouter(<RemoveSubtraction {...props} />);
+	it("should render when [show=true]", async () => {
+		await renderWithRouter(<RemoveSubtraction {...props} />);
 
 		expect(screen.getByText("Remove Subtraction")).toBeInTheDocument();
 	});
 
 	it("should call onConfirm() when onConfirm() on <RemoveModal /> is called", async () => {
 		const scope = mockApiRemoveSubtraction(subtraction.id);
-		renderWithRouter(<RemoveSubtraction {...props} />);
+		await renderWithRouter(<RemoveSubtraction {...props} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
 		scope.done();
 	});
 
-	it("should call onHide() when onHide() on <RemoveModal /> is called", () => {
-		renderWithRouter(<RemoveSubtraction {...props} />);
+	it("should call onHide() when onHide() on <RemoveModal /> is called", async () => {
+		await renderWithRouter(<RemoveSubtraction {...props} />);
 
 		fireEvent.keyDown(document, { key: "Escape" });
 		expect(props.onHide).toHaveBeenCalled();

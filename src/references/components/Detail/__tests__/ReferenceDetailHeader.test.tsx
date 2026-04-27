@@ -31,8 +31,8 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 		path = `/refs/${reference.id}/manage`;
 	});
 
-	it("should render", () => {
-		renderWithRouter(<ReferenceDetailHeader {...props} />, path);
+	it("should render", async () => {
+		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
 		expect(screen.getByText(reference.name)).toBeInTheDocument();
 		expect(
@@ -40,21 +40,21 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 		).toBeInTheDocument();
 	});
 
-	it("should render when [showIcons=false]", () => {
-		renderWithRouter(<ReferenceDetailHeader {...props} />, path);
+	it("should render when [showIcons=false]", async () => {
+		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
 		expect(screen.queryByLabelText("lock")).toBeNull();
 		expect(screen.queryByRole("button")).toBeNull();
 	});
 
 	it("should render when [canModify=true]", async () => {
-		renderWithRouter(<ReferenceDetailHeader {...props} />, path);
+		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
 		expect(await screen.findByRole("button")).toBeInTheDocument();
 	});
 
-	it("should render when [canModify=false]", () => {
-		renderWithRouter(<ReferenceDetailHeader {...props} />, path);
+	it("should render when [canModify=false]", async () => {
+		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
 		expect(screen.queryByRole("button")).toBeNull();
 	});
@@ -66,25 +66,25 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 				administrator_role: "full",
 			}),
 		);
-		renderWithRouter(<ReferenceDetailHeader {...props} />, path);
+		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
 		expect(await screen.findByLabelText("lock")).toBeInTheDocument();
 	});
 
-	it("should render when [isRemote=false]", () => {
+	it("should render when [isRemote=false]", async () => {
 		mockApiGetAccount(
 			createFakeAccount({
 				administrator_role: "full",
 			}),
 		);
-		renderWithRouter(<ReferenceDetailHeader {...props} />, path);
+		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
 		expect(screen.queryByLabelText("lock")).toBeNull();
 	});
 
-	it("should render when [both canModify=false, isRemote=false]", () => {
+	it("should render when [both canModify=false, isRemote=false]", async () => {
 		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
-		renderWithRouter(<ReferenceDetailHeader {...props} />, path);
+		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
 		expect(screen.queryByLabelText("lock")).toBeNull();
 		expect(screen.queryByRole("button")).toBeNull();

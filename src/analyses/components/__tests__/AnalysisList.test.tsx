@@ -1,4 +1,3 @@
-import { formatPath } from "@app/hooks";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount } from "@tests/fake/account";
@@ -106,7 +105,7 @@ describe("<AnalysesList />", () => {
 			});
 			mockApiGetSampleDetail(sample);
 
-			const { history } = await renderRoute(`/samples/${sample.id}/analyses`, {
+			const { router } = await renderRoute(`/samples/${sample.id}/analyses/`, {
 				account,
 			});
 
@@ -115,10 +114,8 @@ describe("<AnalysesList />", () => {
 			await userEvent.click(screen.getByText("Create"));
 
 			await waitFor(() =>
-				expect(history[0]).toEqual(
-					formatPath(`/samples/${sample.id}/analyses`, {
-						openCreateAnalysis: true,
-					}),
+				expect(router.state.location.search).toEqual(
+					expect.objectContaining({ openCreateAnalysis: true }),
 				),
 			);
 		});

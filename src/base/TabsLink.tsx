@@ -7,6 +7,7 @@ type TabsLinkProps = {
 	children: ReactNode;
 	className?: string;
 	isActive?: boolean;
+	search?: Record<string, unknown>;
 	to: string;
 };
 
@@ -17,6 +18,7 @@ export default function TabsLink({
 	children,
 	className,
 	isActive,
+	search,
 	to,
 }: TabsLinkProps) {
 	isActive = useMatchPartialPath(to) || isActive;
@@ -45,6 +47,7 @@ export default function TabsLink({
 						)
 					: classname
 			}
+			search={search as never}
 			to={to}
 		>
 			{children}

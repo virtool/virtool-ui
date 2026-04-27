@@ -1,6 +1,7 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount } from "@tests/fake/account";
+import { mockApiFindIndexes } from "@tests/fake/indexes";
 import { createFakeOTUMinimal, mockApiFindOtus } from "@tests/fake/otus";
 import {
 	createFakeReference,
@@ -19,6 +20,11 @@ describe("<OTUsList />", () => {
 		reference = createFakeReference();
 		OTUs = [createFakeOTUMinimal(), createFakeOTUMinimal()];
 		mockApiGetReferenceDetail(reference);
+		mockApiFindIndexes(reference.id, 1, {
+			documents: [],
+			total_otu_count: 0,
+			change_count: 0,
+		});
 		path = `/refs/${reference.id}/otus`;
 	});
 
@@ -89,8 +95,8 @@ describe("<OTUsList />", () => {
 		});
 
 		it("should handle toolbar updates correctly", async () => {
-			const scope = mockApiFindOtus(OTUs, reference.id);
-			const { history } = await renderRoute(path);
+			const _scope = mockApiFindOtus(OTUs, reference.id).persist();
+			const { router } = await renderRoute(path);
 
 			expect(await screen.findByRole("textbox")).toBeInTheDocument();
 			const inputElement = screen.getByPlaceholderText("Name or abbreviation");
@@ -100,9 +106,13 @@ describe("<OTUsList />", () => {
 
 			expect(inputElement).toHaveValue("Foobar");
 
-			expect(history[0]).toEqual(`/refs/${reference.id}/otus?find=Foobar`);
+			await waitFor(() =>
+				expect(router.state.location.search).toEqual(
+					expect.objectContaining({ find: "Foobar" }),
+				),
+			);
 
-			scope.done();
+			nock.cleanAll();
 		});
 	});
 

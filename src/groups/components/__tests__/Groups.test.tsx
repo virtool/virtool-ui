@@ -8,8 +8,8 @@ import { describe, expect, it } from "vitest";
 import Groups from "../Groups";
 
 describe("Groups", () => {
-	it("should render correctly when loading = true", () => {
-		renderWithRouter(<Groups />);
+	it("should render correctly when loading = true", async () => {
+		await renderWithRouter(<Groups />);
 
 		expect(screen.queryByText("No Groups Exist")).not.toBeInTheDocument();
 		expect(screen.queryByText("cancel_job")).not.toBeInTheDocument();
@@ -21,7 +21,7 @@ describe("Groups", () => {
 
 	it("should render correctly when no groups exist", async () => {
 		mockApiListGroups([]);
-		renderWithRouter(<Groups />);
+		await renderWithRouter(<Groups />);
 
 		expect(await screen.findByText("No Groups Exist")).toBeInTheDocument();
 		expect(
@@ -34,7 +34,7 @@ describe("Groups", () => {
 		const group = createFakeGroup();
 		mockApiListGroups([group]);
 		mockApiGetGroup(group);
-		renderWithRouter(<Groups />);
+		await renderWithRouter(<Groups />);
 
 		expect(
 			await screen.findByRole("button", { name: "Delete" }),
@@ -50,7 +50,7 @@ describe("Groups", () => {
 
 	it("should render create new group view correctly", async () => {
 		mockApiListGroups([]);
-		renderWithRouter(<Groups />);
+		await renderWithRouter(<Groups />);
 
 		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 		await userEvent.click(await screen.findByText("Create"));
@@ -67,7 +67,7 @@ describe("Groups", () => {
 		});
 		mockApiListGroups([group]);
 		mockApiGetGroup(group);
-		renderWithRouter(<Groups />);
+		await renderWithRouter(<Groups />);
 
 		expect(await screen.findByText("Members")).toBeInTheDocument();
 		expect(screen.getByText("testUser1")).toBeInTheDocument();
@@ -96,7 +96,7 @@ describe("Groups", () => {
 		mockApiListGroups([group1, group2]);
 		mockApiGetGroup(group1);
 
-		renderWithRouter(<Groups />);
+		await renderWithRouter(<Groups />);
 
 		expect(await screen.findByText("Group 1")).toBeInTheDocument();
 		expect(screen.getByText("Group 2")).toBeInTheDocument();
