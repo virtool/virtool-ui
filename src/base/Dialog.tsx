@@ -15,6 +15,7 @@ export function DialogOverlay() {
 		<DialogPrimitive.Overlay
 			className={cn(
 				"data-[state=open]:animate-overlayShow",
+				"data-[state=closed]:animate-overlayHide",
 				"bg-gray-500/60",
 				"fixed",
 				"inset-0",
@@ -44,9 +45,10 @@ export function DialogContent({
 			<DialogPrimitive.Content
 				className={cn(
 					"data-[state=open]:animate-contentShow",
+					"data-[state=closed]:animate-contentHide",
 					"fixed",
-					"top-[40%]",
-					"left-[50%]",
+					"top-1/2",
+					"left-1/2",
 					"-translate-x-1/2",
 					"-translate-y-1/2",
 					"rounded-lg",

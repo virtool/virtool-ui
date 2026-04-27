@@ -45,7 +45,7 @@ export default function SequenceEdit() {
 			open={Boolean(editSequenceId)}
 			onOpenChange={() => unsetEditSequenceId()}
 		>
-			<DialogContent className="top-1/2">
+			<DialogContent>
 				<DialogTitle>Edit Sequence</DialogTitle>
 				<SequenceForm
 					activeSequence={activeSequence}
