@@ -1,7 +1,7 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
-import { JobNested } from "@jobs/types";
+import { JobNestedSchema } from "@jobs/types";
 import type { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
 
@@ -16,7 +16,7 @@ export function SubtractionItem({
 	ready,
 	user,
 }: SubtractionMinimal) {
-	const parsedJob = job && JobNested.parse(job);
+	const parsedJob = job && JobNestedSchema.parse(job);
 
 	return (
 		<BoxGroupSection className="grid grid-cols-5 items-center">

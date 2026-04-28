@@ -21,7 +21,7 @@ describe("<SubtractionItem />", () => {
 				name: "subtraction.fa.gz",
 			},
 			job: {
-				id: "foobar",
+				id: 42,
 				created_at: createdAt.toISOString(),
 				progress: 50,
 				state: "running",
@@ -43,9 +43,9 @@ describe("<SubtractionItem />", () => {
 	});
 
 	it.each([
-		"waiting",
+		"pending",
 		"running",
-		"error",
+		"failed",
 	] as const)("should render progress bar for ", async (state) => {
 		props.job.state = state;
 

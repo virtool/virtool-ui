@@ -9,7 +9,7 @@ import type { UserNested } from "@users/types";
 
 export type JobItemProps = {
 	/** The job id */
-	id: string;
+	id: number;
 
 	/** When the job was created */
 	createdAt: Date;

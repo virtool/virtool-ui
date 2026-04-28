@@ -10,17 +10,6 @@ import type {
 import nock from "nock";
 import { createFakeUserNested } from "./user";
 
-/** V1 job states used by the server for nested jobs */
-type ServerJobState =
-	| "cancelled"
-	| "complete"
-	| "error"
-	| "preparing"
-	| "running"
-	| "terminated"
-	| "timeout"
-	| "waiting";
-
 /**
  * Creates a fake job minimal object in server response shape.
  * Use this for HTTP mocks.
@@ -29,7 +18,7 @@ export function createFakeServerJobMinimal(
 	overrides?: Partial<ServerJobMinimal>,
 ): ServerJobMinimal {
 	return {
-		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		id: faker.number.int(),
 		created_at: faker.date.past().toISOString(),
 		progress: faker.number.int({ min: 0, max: 100 }),
 		state: faker.helpers.arrayElement<JobState>([
@@ -54,7 +43,7 @@ export function createFakeJobMinimal(
 ): JobMinimal {
 	return {
 		createdAt: faker.date.past(),
-		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		id: faker.number.int(),
 		progress: faker.number.int({ min: 0, max: 100 }),
 		state: faker.helpers.arrayElement<JobState>([
 			"cancelled",
@@ -79,7 +68,7 @@ export function createFakeJobMinimal(
 }
 
 /**
- * Creates a fake nested job object in server response shape (V1 states).
+ * Creates a fake nested job object in server response shape.
  * Use this for HTTP mocks of resources with nested jobs (samples, analyses, etc).
  */
 export function createFakeServerJobNested(
@@ -87,17 +76,14 @@ export function createFakeServerJobNested(
 ): ServerJobNested {
 	return {
 		created_at: faker.date.past().toISOString(),
-		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		id: faker.number.int(),
 		progress: faker.number.int({ min: 0, max: 100 }),
-		state: faker.helpers.arrayElement<ServerJobState>([
+		state: faker.helpers.arrayElement<JobState>([
 			"cancelled",
-			"complete",
-			"error",
-			"preparing",
+			"failed",
+			"pending",
 			"running",
-			"terminated",
-			"timeout",
-			"waiting",
+			"succeeded",
 		]),
 		user: createFakeUserNested(),
 		workflow: "pathoscope_bowtie",
@@ -106,13 +92,13 @@ export function createFakeServerJobNested(
 }
 
 /**
- * Creates a fake nested job object in client shape (transformed with V2 states).
+ * Creates a fake nested job object in client shape (transformed).
  * Use this for components that expect the transformed JobNested type.
  */
 export function createFakeJobNested(overrides?: Partial<JobNested>): JobNested {
 	return {
 		createdAt: faker.date.past(),
-		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		id: faker.number.int(),
 		progress: faker.number.int({ min: 0, max: 100 }),
 		state: faker.helpers.arrayElement<JobState>([
 			"cancelled",

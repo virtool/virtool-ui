@@ -7,7 +7,7 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import { JobNested } from "@jobs/types";
+import { JobNestedSchema } from "@jobs/types";
 import DeleteSample from "@samples/components/Detail/DeleteSample";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { sampleQueryOptions, useFetchSample } from "@samples/queries";
@@ -57,7 +57,7 @@ function SampleDetailLayout() {
 	}
 
 	const { created_at, name, user } = data;
-	const job = data.job && JobNested.parse(data.job);
+	const job = data.job && JobNestedSchema.parse(data.job);
 
 	return (
 		<>
