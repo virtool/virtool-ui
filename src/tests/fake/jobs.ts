@@ -134,7 +134,7 @@ export function mockApiGetJobs(
 	found_count?: number,
 ) {
 	return nock("http://localhost")
-		.get("/api/jobs/v2")
+		.get("/api/jobs")
 		.query(true)
 		.reply(200, {
 			items: jobs,
