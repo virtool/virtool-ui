@@ -9,10 +9,15 @@ export default defineConfig({
     build: {
         outDir: "../dist",
         sourcemap: true,
-        rollupOptions: {
+        rolldownOptions: {
             output: {
-                manualChunks: {
-                    sentry: ["@sentry/react"],
+                advancedChunks: {
+                    groups: [
+                        {
+                            name: "sentry",
+                            test: /node_modules[\\/]@sentry[\\/]react/,
+                        },
+                    ],
                 },
             },
         },
