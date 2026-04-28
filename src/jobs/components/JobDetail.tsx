@@ -48,7 +48,7 @@ function PendingJobAlert({ createdAt }: { createdAt: Date }) {
  */
 export default function JobDetail() {
 	const { jobId } = routeApi.useParams();
-	const { data, isPending, error } = useFetchJob(jobId);
+	const { data, isPending, error } = useFetchJob(Number(jobId));
 
 	if (error) {
 		if ("status" in error && error.status === 404) {

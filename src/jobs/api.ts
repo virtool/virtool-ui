@@ -27,7 +27,7 @@ export async function findJobs(
  * @param jobId - The id of the job to fetch
  * @returns A promise resolving to a single job
  */
-export async function fetchJob(jobId: string): Promise<ServerJob> {
+export async function fetchJob(jobId: number): Promise<ServerJob> {
 	const response = await apiClient.get(`/jobs/v2/${jobId}`);
 	return response.body;
 }

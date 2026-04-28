@@ -11,7 +11,7 @@ export const jobQueryKeys = {
 	list: (filters: Array<string | number | boolean>) =>
 		["job", "list", ...filters] as const,
 	details: () => ["job", "details"] as const,
-	detail: (jobId: string) => ["job", "details", jobId] as const,
+	detail: (jobId: number) => ["job", "details", jobId] as const,
 };
 
 /**
@@ -41,7 +41,7 @@ export function useFindJobs(
  * @param jobId - The id of the job to get
  * @returns Query results containing the job
  */
-export function useFetchJob(jobId: string) {
+export function useFetchJob(jobId: number) {
 	return useQuery({
 		queryKey: jobQueryKeys.detail(jobId),
 		queryFn: () => fetchJob(jobId),
