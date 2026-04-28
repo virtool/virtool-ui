@@ -1,6 +1,5 @@
 import { useFetchAccount } from "@account/queries";
 import { useCheckAdminRole } from "@administration/hooks";
-import { usePathParams } from "@app/hooks";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
@@ -17,12 +16,15 @@ import {
 	useUpdateSampleRights,
 } from "@samples/queries";
 import { useQueryClient } from "@tanstack/react-query";
+import { getRouteApi } from "@tanstack/react-router";
+
+const routeApi = getRouteApi("/_authenticated/samples/$sampleId");
 
 /**
  * A component managing a samples rights
  */
 export default function SampleRights() {
-	const { sampleId } = usePathParams<{ sampleId: string }>();
+	const { sampleId } = routeApi.useParams();
 
 	const { hasPermission } = useCheckAdminRole("full");
 	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);

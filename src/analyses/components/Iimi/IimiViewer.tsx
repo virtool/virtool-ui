@@ -1,6 +1,6 @@
+import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import type { FormattedIimiAnalysis, FormattedIimiHit } from "@analyses/types";
 import { useFuse } from "@app/fuse";
-import { useUrlSearchParam } from "@app/hooks.tanstack";
 import Accordion from "@base/Accordion";
 import Box from "@base/Box";
 import { orderBy } from "es-toolkit";
@@ -29,7 +29,8 @@ export function IimiViewer({ detail }: { detail: FormattedIimiAnalysis }) {
 		["name"],
 	);
 
-	const { value: sort } = useUrlSearchParam("sort", "probability");
+	const { search } = useAnalysisSearch();
+	const sort = search.sort ?? "probability";
 
 	const [minimumProbability, setMinimumProbability] = useState(0.5);
 
@@ -65,6 +66,7 @@ export function IimiViewer({ detail }: { detail: FormattedIimiAnalysis }) {
 				term={term}
 				setMinimumProbability={setMinimumProbability}
 				setTerm={setTerm}
+				sortKey={sort}
 			/>
 			<Accordion type="single" collapsible>
 				{sortedHits.map((hit) => (

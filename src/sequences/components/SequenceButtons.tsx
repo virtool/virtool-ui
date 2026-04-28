@@ -1,6 +1,6 @@
-import { useUrlSearchParam } from "@app/hooks";
 import CloseButton from "@base/CloseButton";
 import IconButton from "@base/IconButton";
+import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
 import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
@@ -19,12 +19,7 @@ export default function SequenceButtons({
 	id,
 	onCollapse,
 }: SequenceButtonsProps) {
-	const { setValue: setOpenEditSequence } =
-		useUrlSearchParam<string>("editSequenceId");
-
-	const { setValue: setOpenRemoveSequence } =
-		useUrlSearchParam<string>("removeSequenceId");
-
+	const { setSearch } = useOtuDetailSearch();
 	const { otu, reference } = useCurrentOtuContext();
 
 	const { hasPermission: canModify } = useCheckReferenceRight(
@@ -43,14 +38,14 @@ export default function SequenceButtons({
 						IconComponent={Pencil}
 						color="grayDark"
 						tip="Edit"
-						onClick={() => setOpenEditSequence(id)}
+						onClick={() => setSearch({ editSequenceId: id })}
 						className="ml-0.5"
 					/>
 					<IconButton
 						IconComponent={Trash}
 						color="red"
 						tip="Remove"
-						onClick={() => setOpenRemoveSequence(id)}
+						onClick={() => setSearch({ removeSequenceId: id })}
 						className="ml-0.5"
 					/>
 				</>

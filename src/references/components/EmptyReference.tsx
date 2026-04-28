@@ -1,6 +1,6 @@
-import { useNavigate } from "@app/hooks";
 import Button from "@base/Button";
 import { DialogFooter } from "@base/Dialog";
+import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useCreateReference } from "../queries";
 import { ReferenceForm } from "./ReferenceForm";
@@ -36,7 +36,7 @@ export default function EmptyReference() {
 			onSubmit={handleSubmit((values) =>
 				mutation.mutate(values, {
 					onSuccess: () => {
-						navigate("/refs");
+						navigate({ to: "/refs" });
 					},
 				}),
 			)}

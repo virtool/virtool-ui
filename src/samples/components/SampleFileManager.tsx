@@ -1,7 +1,15 @@
 import ContainerNarrow from "@base/ContainerNarrow";
 import { FileManager } from "@uploads/components/FileManager";
 
-export default function SampleFileManager() {
+type SampleFileManagerProps = {
+	page: number;
+	setPage: (page: number) => void;
+};
+
+export default function SampleFileManager({
+	page,
+	setPage,
+}: SampleFileManagerProps) {
 	return (
 		<ContainerNarrow>
 			<FileManager
@@ -10,6 +18,7 @@ export default function SampleFileManager() {
 					"text/plain": [".fasta", ".fa", ".fastq", ".fq"],
 				}}
 				fileType="reads"
+				page={page}
 				message={
 					<div className="flex flex-col gap-1 items-center">
 						<span className="font-medium text-lg">
@@ -21,6 +30,7 @@ export default function SampleFileManager() {
 					</div>
 				}
 				regex={/\.f(ast)?q(\.gz)?$/}
+				setPage={setPage}
 			/>
 		</ContainerNarrow>
 	);

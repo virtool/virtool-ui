@@ -11,5 +11,18 @@ export const Route = createFileRoute(
 	"/_authenticated/subtractions/$subtractionId",
 )({
 	validateSearch: subtractionDetailSearchSchema,
-	component: SubtractionDetail,
+	component: SubtractionRoute,
 });
+
+function SubtractionRoute() {
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	return (
+		<SubtractionDetail
+			openEditSubtraction={Boolean(search.openEditSubtraction)}
+			openRemoveSubtraction={Boolean(search.openRemoveSubtraction)}
+			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+		/>
+	);
+}

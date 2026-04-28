@@ -32,6 +32,8 @@ export const Route = createFileRoute("/_authenticated/refs/$refId")({
 
 function ReferenceDetailLayout() {
 	const { refId } = Route.useParams();
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
 	const { data } = useFetchReference(refId);
 	const isOtuDetail = useMatches().some(
 		(match) => match.routeId === "/_authenticated/refs/$refId/otus/$otuId",
@@ -49,6 +51,9 @@ function ReferenceDetailLayout() {
 						createdAt={data.created_at}
 						isRemote={Boolean(data.remotes_from)}
 						name={data.name}
+						setOpenEditReference={(openEditReference) =>
+							navigate({ search: { ...search, openEditReference } })
+						}
 						userHandle={data.user.handle}
 						refId={refId}
 					/>
@@ -60,7 +65,13 @@ function ReferenceDetailLayout() {
 				<Outlet />
 			</ContainerNarrow>
 
-			<EditReference detail={data} />
+			<EditReference
+				detail={data}
+				open={Boolean(search.openEditReference)}
+				setOpen={(openEditReference) =>
+					navigate({ search: { ...search, openEditReference } })
+				}
+			/>
 		</>
 	);
 }

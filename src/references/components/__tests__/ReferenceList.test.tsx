@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
@@ -9,11 +9,32 @@ import {
 } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
+import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import ReferenceList from "../ReferenceList";
 
+type ReferenceListSearch = {
+	cloneReferenceId?: string;
+	createReferenceType?: string;
+	find?: string;
+	page?: number;
+};
+
+function ReferenceListHarness() {
+	const [search, setSearch] = useState<ReferenceListSearch>({
+		cloneReferenceId: undefined,
+		find: "",
+	});
+
+	function handleSetSearch(next: ReferenceListSearch) {
+		setSearch((prev) => ({ ...prev, ...next }));
+	}
+
+	return <ReferenceList {...search} setSearch={handleSetSearch} />;
+}
+
 describe("<ReferenceList />", () => {
-	let references;
+	let references: ReturnType<typeof createFakeReferenceMinimal>;
 
 	beforeEach(() => {
 		references = createFakeReferenceMinimal();
@@ -45,7 +66,10 @@ describe("<ReferenceList />", () => {
 	describe("<ReferenceToolbar />", () => {
 		it("should render when toolbar term is changed to foo", async () => {
 			const scope = mockApiGetReferences([references]);
-			await renderWithRouter(<ReferenceList />);
+			mockApiGetReferences([references]);
+			mockApiGetReferences([references]);
+			mockApiGetReferences([references]);
+			await renderWithRouter(<ReferenceListHarness />);
 
 			expect(await screen.findByText("References")).toBeInTheDocument();
 
@@ -53,9 +77,9 @@ describe("<ReferenceList />", () => {
 			expect(inputElement).toHaveValue("");
 
 			await userEvent.type(inputElement, "Foo");
-			expect(inputElement).toHaveValue("Foo");
+			expect(await screen.findByDisplayValue("Foo")).toBeInTheDocument();
 
-			await userEvent.clear(inputElement);
+			await userEvent.clear(screen.getByRole("textbox"));
 			scope.done();
 		});
 
@@ -76,7 +100,13 @@ describe("<ReferenceList />", () => {
 
 		it("should handle toolbar updates correctly", async () => {
 			const scope = mockApiGetReferences([references]);
-			const { router } = await renderWithRouter(<ReferenceList />);
+			mockApiGetReferences([references]);
+			mockApiGetReferences([references]);
+			mockApiGetReferences([references]);
+			mockApiGetReferences([references]);
+			mockApiGetReferences([references]);
+			mockApiGetReferences([references]);
+			await renderWithRouter(<ReferenceListHarness />);
 
 			expect(await screen.findByText("References")).toBeInTheDocument();
 
@@ -84,11 +114,7 @@ describe("<ReferenceList />", () => {
 			expect(inputElement).toHaveValue("");
 
 			await userEvent.type(inputElement, "Foobar");
-			expect(inputElement).toHaveValue("Foobar");
-
-			await waitFor(() =>
-				expect(router.state.location.href).toEqual("/?find=Foobar"),
-			);
+			expect(await screen.findByDisplayValue("Foobar")).toBeInTheDocument();
 
 			scope.done();
 		});
@@ -105,7 +131,7 @@ describe("<ReferenceList />", () => {
 				`Cloned from ${references.name}`,
 				references,
 			);
-			await renderWithRouter(<ReferenceList />);
+			await renderWithRouter(<ReferenceListHarness />);
 
 			expect(await screen.findByText("References")).toBeInTheDocument();
 			await userEvent.click(
@@ -127,7 +153,7 @@ describe("<ReferenceList />", () => {
 				`Cloned from ${references.name}`,
 				references,
 			);
-			await renderWithRouter(<ReferenceList />);
+			await renderWithRouter(<ReferenceListHarness />);
 
 			expect(await screen.findByText("References")).toBeInTheDocument();
 			await userEvent.click(
@@ -146,7 +172,7 @@ describe("<ReferenceList />", () => {
 			const account = createFakeAccount({ permissions: permissions });
 			mockApiGetAccount(account);
 			const scope = mockApiGetReferences([references]);
-			await renderWithRouter(<ReferenceList />);
+			await renderWithRouter(<ReferenceListHarness />);
 
 			expect(await screen.findByText("References")).toBeInTheDocument();
 			await userEvent.click(

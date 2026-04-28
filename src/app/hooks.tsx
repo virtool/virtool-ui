@@ -1,17 +1,5 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
-export {
-	useDialogParam,
-	useListSearchParam,
-	useNaiveUrlSearchParam,
-	useNavigate,
-	usePageParam,
-	usePathParams,
-	useUrlSearchParam,
-} from "./hooks.tanstack";
-
-export { useMatchPartialPath } from "./useMatchPartialPath.tanstack";
-
 function subscribeToTime(callback: () => void) {
 	const interval = setInterval(callback, 1000);
 	return () => clearInterval(interval);
@@ -53,23 +41,19 @@ export function useElementSize<T extends HTMLElement>(): [
 	return [ref, size];
 }
 
-export function formatPath(
-	basePath: string,
-	searchParams: Record<string, string | number | boolean | null>,
-) {
-	return basePath + formatSearchParams(searchParams);
-}
-
-export function formatSearchParams(
-	params: Record<string, string | number | boolean | null>,
+function formatSearchParams(
+	params: Record<
+		string,
+		string | number | boolean | null | Array<string | number | boolean>
+	>,
 ) {
 	const searchParams = new URLSearchParams();
 
 	Object.entries(params).forEach(([key, value]) => {
 		if (Array.isArray(value)) {
-			value.forEach((arrayValue) =>
-				searchParams.append(key, String(arrayValue)),
-			);
+			value.forEach((arrayValue) => {
+				searchParams.append(key, String(arrayValue));
+			});
 		} else {
 			searchParams.set(key, String(value));
 		}
@@ -78,41 +62,12 @@ export function formatSearchParams(
 	return `?${searchParams.toString()}`;
 }
 
-export function updateSearchParam(key: string, value: string, search: string) {
-	const params = new URLSearchParams(search);
-
-	if (value) {
-		params.set(key, String(value));
-	} else {
-		params.delete(key);
-	}
-
-	return `?${params.toString()}`;
-}
-
-export type SearchParam = string | boolean | number | null;
-
-export function castSearchParamValue(value: string) {
-	if (value === null) {
-		return undefined;
-	}
-
-	const trimValue = value.trim();
-	const numValue = Number(trimValue);
-	if (value.trim().length > 0 && !Number.isNaN(numValue)) {
-		return numValue;
-	}
-
-	switch (value) {
-		case "true":
-			return true;
-		case "false":
-			return false;
-		case "null":
-			return null;
-		default:
-			break;
-	}
-
-	return value;
+export function formatPath(
+	basePath: string,
+	searchParams: Record<
+		string,
+		string | number | boolean | null | Array<string | number | boolean>
+	>,
+) {
+	return basePath + formatSearchParams(searchParams);
 }

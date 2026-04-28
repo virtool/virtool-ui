@@ -1,4 +1,3 @@
-import { usePageParam, useUrlSearchParam } from "@app/hooks";
 import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
@@ -10,21 +9,34 @@ import { useFindSubtractions } from "../queries";
 import { SubtractionItem } from "./SubtractionItem";
 import SubtractionToolbar from "./SubtractionToolbar";
 
+type SubtractionListProps = {
+	find?: string;
+	openCreateSubtraction?: boolean;
+	page?: number;
+	setSearch?: (next: {
+		find?: string;
+		openCreateSubtraction?: boolean;
+		page?: number;
+	}) => void;
+};
+
 /**
  * A list of subtractions.
  */
-export default function SubtractionList() {
-	const { value: term, setValue: setTerm } = useUrlSearchParam<string>("find");
-	const { page } = usePageParam();
-
-	const { data, isPending } = useFindSubtractions(page, 25, term);
+export default function SubtractionList({
+	find = "",
+	openCreateSubtraction = false,
+	page = 1,
+	setSearch = () => {},
+}: SubtractionListProps) {
+	const { data, isPending } = useFindSubtractions(page, 25, find);
 
 	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 
 	function handleChange(e) {
-		setTerm(e.target.value);
+		setSearch({ find: e.target.value });
 	}
 
 	const { documents, total_count, page: storedPage, page_count } = data;
@@ -38,7 +50,14 @@ export default function SubtractionList() {
 				</ViewHeaderTitle>
 			</ViewHeader>
 
-			<SubtractionToolbar term={term} handleChange={handleChange} />
+			<SubtractionToolbar
+				openCreate={openCreateSubtraction}
+				setOpenCreate={(openCreateSubtraction) =>
+					setSearch({ openCreateSubtraction })
+				}
+				term={find}
+				handleChange={handleChange}
+			/>
 
 			{!documents.length ? (
 				<NoneFoundBox key="subtractions" noun="subtractions" />
@@ -48,6 +67,7 @@ export default function SubtractionList() {
 					storedPage={storedPage}
 					currentPage={page}
 					pageCount={page_count}
+					onPageChange={(page) => setSearch({ page })}
 				>
 					<BoxGroup>
 						{documents.map((document) => (

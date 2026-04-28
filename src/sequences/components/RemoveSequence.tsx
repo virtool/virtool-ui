@@ -1,5 +1,5 @@
-import { useUrlSearchParam } from "@app/hooks";
 import RemoveDialog from "@base/RemoveDialog";
+import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
 import { useRemoveSequence } from "@otus/queries";
 import type { OtuSequence } from "@otus/types";
 
@@ -19,8 +19,8 @@ export default function RemoveSequence({
 	otuId,
 	sequences,
 }: RemoveSequenceProps) {
-	const { value: removeSequenceId, unsetValue: unsetRemoveSequence } =
-		useUrlSearchParam<string>("removeSequenceId");
+	const { search, setSearch } = useOtuDetailSearch();
+	const removeSequenceId = search.removeSequenceId;
 
 	const mutation = useRemoveSequence(otuId);
 
@@ -31,7 +31,7 @@ export default function RemoveSequence({
 			{ otuId, isolateId, sequenceId: removeSequenceId },
 			{
 				onSuccess: () => {
-					unsetRemoveSequence();
+					setSearch({ removeSequenceId: undefined });
 				},
 			},
 		);
@@ -50,7 +50,7 @@ export default function RemoveSequence({
 			name={`${removeSequenceId}`}
 			noun="Sequence"
 			onConfirm={handleConfirm}
-			onHide={() => unsetRemoveSequence()}
+			onHide={() => setSearch({ removeSequenceId: undefined })}
 			show={Boolean(removeSequenceId)}
 			message={removeMessage}
 		/>

@@ -17,11 +17,30 @@ import {
 	mockApiGetShortlistSubtractions,
 } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
+import { useState } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import SamplesList from "../SamplesList";
 
+type SamplesListSearch = {
+	labels?: number[];
+	openQuickAnalyze?: boolean;
+	page?: number;
+	term?: string;
+	workflows?: string[];
+};
+
+function SamplesListHarness() {
+	const [search, setSearch] = useState<SamplesListSearch>({ term: "" });
+
+	function handleSetSearch(next: SamplesListSearch) {
+		setSearch((prev) => ({ ...prev, ...next }));
+	}
+
+	return <SamplesList {...search} setSearch={handleSetSearch} />;
+}
+
 describe("<SamplesList />", () => {
-	let samples;
+	let samples: ReturnType<typeof createFakeSampleMinimal>[];
 	const path = "/samples";
 
 	beforeEach(() => {
@@ -43,7 +62,10 @@ describe("<SamplesList />", () => {
 	});
 
 	it("should call onChange when search input changes in toolbar", async () => {
-		await renderWithRouter(<SamplesList />, path);
+		mockApiGetSamples(samples);
+		mockApiGetSamples(samples);
+		mockApiGetSamples(samples);
+		await renderWithRouter(<SamplesListHarness />, path);
 		expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 		const inputElement = screen.getByPlaceholderText("Sample name");

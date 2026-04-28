@@ -1,6 +1,5 @@
 import { useFetchAccount } from "@account/queries";
 import { checkAdminRoleOrPermissionsFromAccount } from "@administration/utils";
-import { usePageParam } from "@app/hooks";
 import Alert from "@base/Alert";
 import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
@@ -29,18 +28,22 @@ export type FileManagerProps = {
 	/* A message to display in the upload toolbar. */
 	message?: ReactNode;
 
+	page?: number;
+
 	/* A regular expression to validate file names. */
 	regex?: RegExp;
+
+	setPage?: (page: number) => void;
 };
 
 export function FileManager({
 	accept,
 	fileType,
 	message,
+	page = 1,
 	regex,
+	setPage = () => {},
 }: FileManagerProps) {
-	const { page } = usePageParam();
-
 	const { data: account, isPending: isPendingAccount } = useFetchAccount();
 	const { data: files, isPending: isPendingFiles } = useListFiles(
 		fileType,
@@ -100,6 +103,7 @@ export function FileManager({
 					storedPage={files.page}
 					currentPage={page}
 					pageCount={files.page_count}
+					onPageChange={setPage}
 				>
 					<BoxGroup>
 						{files.items.map((item) => (

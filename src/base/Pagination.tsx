@@ -1,4 +1,3 @@
-import { usePageParam } from "@app/hooks";
 import { range } from "es-toolkit/math";
 import { type ReactElement, type ReactNode, useEffect } from "react";
 import PaginationContent from "./PaginationContent";
@@ -28,23 +27,23 @@ type PaginationProps = {
 	storedPage: number;
 	currentPage: number;
 	pageCount: number;
+	onPageChange?: (page: number) => void;
 };
 
 export default function Pagination({
 	children,
 	currentPage,
 	items,
+	onPageChange = () => {},
 	pageCount,
 	renderRow,
 	storedPage,
 }: PaginationProps) {
-	const { setPage } = usePageParam();
-
 	useEffect(() => {
 		if (currentPage > pageCount) {
-			setPage(pageCount);
+			onPageChange(pageCount);
 		}
-	}, [currentPage, pageCount, setPage]);
+	}, [currentPage, onPageChange, pageCount]);
 
 	const entries = renderRow && items.map((item) => renderRow(item));
 
@@ -54,6 +53,7 @@ export default function Pagination({
 			page={pageNumber}
 			active={storedPage !== pageNumber}
 			disabled={storedPage === pageNumber}
+			onPageChange={onPageChange}
 		>
 			{pageNumber}
 		</PaginationLink>
@@ -72,11 +72,13 @@ export default function Pagination({
 							page={currentPage - 1}
 							disabled={currentPage === 1}
 							active={currentPage !== 1}
+							onPageChange={onPageChange}
 						/>
 						{pageButtons}
 						<PaginationNext
 							page={currentPage + 1}
 							disabled={currentPage === pageCount}
+							onPageChange={onPageChange}
 						/>
 					</PaginationContent>
 				</PaginationRoot>

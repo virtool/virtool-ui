@@ -1,4 +1,3 @@
-import { usePageParam, useUrlSearchParam } from "@app/hooks";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
@@ -13,13 +12,30 @@ import { ReferenceItem } from "./ReferenceItem";
 import ReferenceOfficial from "./ReferenceOfficial";
 import ReferenceToolbar from "./ReferenceToolbar";
 
+type ReferenceListProps = {
+	cloneReferenceId?: string;
+	createReferenceType?: string;
+	find?: string;
+	page?: number;
+	setSearch?: (next: {
+		cloneReferenceId?: string;
+		createReferenceType?: string;
+		find?: string;
+		page?: number;
+	}) => void;
+};
+
 /**
  * A list of references with filtering options
  */
-export default function ReferenceList() {
-	const { page } = usePageParam();
-	const { value: term } = useUrlSearchParam<string>("find");
-	const { data, isPending } = useFindReferences(page, 25, term);
+export default function ReferenceList({
+	cloneReferenceId,
+	createReferenceType,
+	find = "",
+	page = 1,
+	setSearch = () => {},
+}: ReferenceListProps) {
+	const { data, isPending } = useFindReferences(page, 25, find);
 
 	if (isPending) {
 		return <LoadingPlaceholder />;
@@ -42,8 +58,19 @@ export default function ReferenceList() {
 						<ViewHeaderTitleBadge>{total_count}</ViewHeaderTitleBadge>
 					</ViewHeaderTitle>
 				</ViewHeader>
-				<ReferenceToolbar />
-				<CreateReference />
+				<ReferenceToolbar
+					find={find}
+					setCreateReferenceType={(createReferenceType) =>
+						setSearch({ createReferenceType })
+					}
+					setFind={(find) => setSearch({ find })}
+				/>
+				<CreateReference
+					createReferenceType={createReferenceType}
+					setCreateReferenceType={(createReferenceType) =>
+						setSearch({ createReferenceType })
+					}
+				/>
 				<ReferenceOfficial officialInstalled={official_installed} />
 				{total_count !== 0 && (
 					<Pagination
@@ -51,16 +78,27 @@ export default function ReferenceList() {
 						storedPage={storedPage}
 						currentPage={page}
 						pageCount={page_count}
+						onPageChange={(page) => setSearch({ page })}
 					>
 						<BoxGroup>
 							{documents.map((document) => (
-								<ReferenceItem key={document.id} reference={document} />
+								<ReferenceItem
+									key={document.id}
+									onClone={(cloneReferenceId) =>
+										setSearch({ cloneReferenceId })
+									}
+									reference={document}
+								/>
 							))}
 						</BoxGroup>
 					</Pagination>
 				)}
 			</ContainerNarrow>
-			<Clone references={documents} />
+			<Clone
+				cloneReferenceId={cloneReferenceId}
+				references={documents}
+				unsetCloneReferenceId={() => setSearch({ cloneReferenceId: undefined })}
+			/>
 		</>
 	);
 }

@@ -1,5 +1,4 @@
 import NuvsViewer from "@analyses/components/Nuvs/NuvsViewer";
-import { usePathParams } from "@app/hooks";
 import { getWorkflowDisplayName } from "@app/utils";
 import Box from "@base/Box";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
@@ -8,7 +7,9 @@ import SubviewHeader from "@base/SubviewHeader";
 import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
 import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import { useFetchSample } from "@samples/queries";
+import { getRouteApi } from "@tanstack/react-router";
 import { CircleAlert } from "lucide-react";
+import type { ReactNode } from "react";
 import { useGetAnalysis } from "../queries";
 import type {
 	FormattedIimiAnalysis,
@@ -18,12 +19,13 @@ import type {
 import { IimiViewer } from "./Iimi/IimiViewer";
 import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";
 
+const routeApi = getRouteApi(
+	"/_authenticated/samples/$sampleId/analyses/$analysisId",
+);
+
 /** Base component viewing all supported analysis */
 export default function AnalysisDetail() {
-	const { analysisId, sampleId } = usePathParams<{
-		analysisId: string;
-		sampleId: string;
-	}>();
+	const { analysisId, sampleId } = routeApi.useParams();
 	const { data: analysis, isPending } = useGetAnalysis(analysisId);
 	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 
@@ -39,7 +41,7 @@ export default function AnalysisDetail() {
 		);
 	}
 
-	let content;
+	let content: ReactNode;
 
 	if (analysis.workflow === "pathoscope_bowtie") {
 		content = (

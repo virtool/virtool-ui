@@ -1,29 +1,31 @@
 import { cn } from "@app/utils";
 import type { ReactNode } from "react";
-import Link from "./Link";
 import PaginationItem from "./PaginationItem";
 
 type PaginationLinkProps = {
 	active?: boolean;
+	ariaLabel?: string;
 	children?: ReactNode;
 	className?: string;
 	disabled?: boolean;
-	onClick?: () => void;
+	onPageChange: (page: number) => void;
 	page: number;
 };
 
 export default function PaginationLink({
 	active,
+	ariaLabel,
 	children,
 	className,
 	disabled,
-	onClick,
+	onPageChange,
 	page,
 }: PaginationLinkProps) {
 	return (
 		<PaginationItem>
-			<Link
-				aria-current={active ? "page" : undefined}
+			<button
+				aria-current={disabled ? "page" : undefined}
+				aria-label={ariaLabel}
 				className={cn(
 					"text-lg",
 					"text-blue-500",
@@ -33,12 +35,12 @@ export default function PaginationLink({
 					},
 					className,
 				)}
-				to="."
-				search={((prev: Record<string, unknown>) => ({ ...prev, page })) as any}
-				onClick={onClick}
+				disabled={disabled}
+				onClick={() => onPageChange(page)}
+				type="button"
 			>
 				{children}
-			</Link>
+			</button>
 		</PaginationItem>
 	);
 }

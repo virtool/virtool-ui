@@ -1,9 +1,9 @@
+import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import NuvsDetail from "@analyses/components/Nuvs/NuvsDetail";
 import NuvsItem from "@analyses/components/Nuvs/NuvsItem";
 import { useKeyNavigation } from "@analyses/components/Viewer/hooks";
 import { useSortAndFilterNuVsHits } from "@analyses/hooks";
 import type { FormattedNuvsAnalysis } from "@analyses/types";
-import { useUrlSearchParam } from "@app/hooks.tanstack";
 import Key from "@base/Key";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useRef } from "react";
@@ -18,10 +18,10 @@ type NuVsListProps = {
  */
 export default function NuvsList({ detail }: NuVsListProps) {
 	const sortedHits = useSortAndFilterNuVsHits(detail);
+	const { search, setSearch } = useAnalysisSearch();
 
 	const firstHitId = sortedHits[0]?.id ? String(sortedHits[0].id) : undefined;
-	const { value: activeHit, setValue: setActiveHit } =
-		useUrlSearchParam<string>("activeHit", firstHitId);
+	const activeHit = search.activeHit ?? firstHitId;
 
 	let nextId: string | undefined;
 	let nextIndex: number | undefined;
@@ -63,11 +63,16 @@ export default function NuvsList({ detail }: NuVsListProps) {
 		nextIndex,
 		previousId,
 		previousIndex,
-		(id) => setActiveHit(id),
+		(activeHit) => setSearch({ activeHit }),
 	);
 
 	const hitComponents = sortedHits.map((hit) => (
-		<NuvsItem key={hit.id} hit={hit} />
+		<NuvsItem
+			key={hit.id}
+			activeHit={activeHit}
+			hit={hit}
+			setActiveHit={(activeHit) => setSearch({ activeHit })}
+		/>
 	));
 
 	return (
@@ -110,6 +115,7 @@ export default function NuvsList({ detail }: NuVsListProps) {
 			</div>
 			<NuvsDetail
 				analysisId={detail.id}
+				filterORFs={search.filterOrfs ?? true}
 				matches={sortedHits}
 				maxSequenceLength={detail.maxSequenceLength}
 			/>

@@ -10,5 +10,17 @@ export const Route = createFileRoute(
 	"/_authenticated/administration/administrators",
 )({
 	validateSearch: searchSchema,
-	component: ManageAdministrators,
+	component: AdministratorsRoute,
 });
+
+function AdministratorsRoute() {
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	return (
+		<ManageAdministrators
+			page={search.page}
+			setPage={(page) => navigate({ search: { ...search, page } })}
+		/>
+	);
+}

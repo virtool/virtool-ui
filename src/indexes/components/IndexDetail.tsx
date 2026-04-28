@@ -1,4 +1,3 @@
-import { usePathParams } from "@app/hooks";
 import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
@@ -8,19 +7,19 @@ import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
 import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { useFetchReference } from "@references/queries";
+import { getRouteApi } from "@tanstack/react-router";
 import { useFetchIndex } from "../queries";
 import Contributors from "./Contributors";
 import Files from "./IndexFiles";
 import IndexOTUs from "./IndexOTUs";
 
+const routeApi = getRouteApi("/_authenticated/refs/$refId/indexes/$indexId");
+
 /**
  * The index detailed view
  */
 export default function IndexDetail() {
-	const { indexId, refId } = usePathParams<{
-		indexId: string;
-		refId: string;
-	}>();
+	const { indexId, refId } = routeApi.useParams();
 	const {
 		data: index,
 		isPending: isPendingIndex,

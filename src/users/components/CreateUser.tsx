@@ -1,5 +1,4 @@
 import { useCreateUser } from "@administration/queries";
-import { useDialogParam } from "@app/hooks";
 import Button from "@base/Button";
 import {
 	Dialog,
@@ -18,20 +17,26 @@ type NewUser = {
 	forceReset: boolean;
 };
 
+type CreateUserProps = {
+	open?: boolean;
+	setOpen?: (open: boolean) => void;
+};
+
 /**
  * A dialog for creating a new user
  */
-export default function CreateUser() {
+export default function CreateUser({
+	open = false,
+	setOpen = () => {},
+}: CreateUserProps) {
 	const mutation = useCreateUser();
-	const { open: openCreateUser, setOpen: setOpenCreateUser } =
-		useDialogParam("openCreateUser");
 
 	function handleSubmit({ handle, password, forceReset }: NewUser) {
 		mutation.mutate(
 			{ handle, password, forceReset },
 			{
 				onSuccess: () => {
-					setOpenCreateUser(false);
+					setOpen(false);
 				},
 			},
 		);
@@ -39,11 +44,11 @@ export default function CreateUser() {
 
 	function onOpenChange(open) {
 		mutation.reset();
-		setOpenCreateUser(open);
+		setOpen(open);
 	}
 
 	return (
-		<Dialog open={openCreateUser} onOpenChange={onOpenChange}>
+		<Dialog open={open} onOpenChange={onOpenChange}>
 			<Button as={DialogTrigger} color="blue">
 				Create
 			</Button>

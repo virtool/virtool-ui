@@ -9,5 +9,18 @@ const hmmSearchSchema = z.object({
 
 export const Route = createFileRoute("/_authenticated/hmm/")({
 	validateSearch: hmmSearchSchema,
-	component: HmmList,
+	component: HmmRoute,
 });
+
+function HmmRoute() {
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	return (
+		<HmmList
+			find={search.find}
+			page={search.page}
+			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+		/>
+	);
+}

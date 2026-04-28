@@ -1,22 +1,23 @@
 import { cn } from "@app/utils";
 import { buttonVariants } from "./buttonVariants";
-import Link from "./Link";
 import PaginationItem from "./PaginationItem";
 
 type PaginationNextProps = {
 	className?: string;
 	disabled?: boolean;
+	onPageChange: (page: number) => void;
 	page: number;
 };
 
 export default function PaginationNext({
 	className,
 	disabled,
+	onPageChange,
 	page,
 }: PaginationNextProps) {
 	return (
 		<PaginationItem>
-			<Link
+			<button
 				aria-label="Go to next page"
 				className={cn(
 					buttonVariants({ color: "blue" }),
@@ -27,11 +28,12 @@ export default function PaginationNext({
 					{ "pointer-events-none": disabled },
 					className,
 				)}
-				to="."
-				search={((prev: Record<string, unknown>) => ({ ...prev, page })) as any}
+				disabled={disabled}
+				onClick={() => onPageChange(page)}
+				type="button"
 			>
 				Next
-			</Link>
+			</button>
 		</PaginationItem>
 	);
 }

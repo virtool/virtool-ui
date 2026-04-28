@@ -1,9 +1,4 @@
 import QuickAnalyze from "@analyses/components/Create/QuickAnalyze";
-import {
-	useListSearchParam,
-	usePageParam,
-	useUrlSearchParam,
-} from "@app/hooks";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
@@ -21,20 +16,32 @@ import SampleItem from "./Item/SampleItem";
 import SampleToolbar from "./SamplesToolbar";
 import SampleLabels from "./Sidebar/ManageLabels";
 
+type SamplesListProps = {
+	labels?: number[];
+	openQuickAnalyze?: boolean;
+	page?: number;
+	setSearch?: (next: {
+		labels?: number[];
+		openQuickAnalyze?: boolean;
+		page?: number;
+		term?: string;
+		workflows?: string[];
+	}) => void;
+	term?: string;
+	workflows?: string[];
+};
+
 /**
  * A list of samples with filtering
  */
-export default function SamplesList() {
-	const { page: urlPage } = usePageParam();
-
-	const { value: term, setValue: setTerm } = useUrlSearchParam<string>("term");
-
-	const { values: filterLabels, setValues: setFilterLabels } =
-		useListSearchParam<number>("labels");
-
-	const { values: filterWorkflows, setValues: setFilterWorkflows } =
-		useListSearchParam<string>("workflows");
-
+export default function SamplesList({
+	labels: filterLabels = [],
+	openQuickAnalyze = false,
+	page: urlPage = 1,
+	setSearch = () => {},
+	term = "",
+	workflows: filterWorkflows = [],
+}: SamplesListProps) {
 	const { data: samples, isPending: isPendingSamples } = useListSamples(
 		urlPage,
 		25,
@@ -71,6 +78,9 @@ export default function SamplesList() {
 				checked={selected.includes(document.id)}
 				handleSelect={handleSelect}
 				selectOnQuickAnalyze={selectOnQuickAnalyze}
+				setOpenQuickAnalyze={(openQuickAnalyze) =>
+					setSearch({ openQuickAnalyze })
+				}
 			/>
 		);
 	}
@@ -78,7 +88,9 @@ export default function SamplesList() {
 	return (
 		<>
 			<QuickAnalyze
+				open={openQuickAnalyze}
 				onClear={() => setSelected([])}
+				setOpen={(openQuickAnalyze) => setSearch({ openQuickAnalyze })}
 				samples={intersectionWith(
 					documents,
 					selected,
@@ -100,8 +112,11 @@ export default function SamplesList() {
 					<SampleToolbar
 						selected={selected}
 						onClear={() => setSelected([])}
+						setOpenQuickAnalyze={(openQuickAnalyze) =>
+							setSearch({ openQuickAnalyze })
+						}
 						term={term}
-						onChange={(e) => setTerm(e.target.value)}
+						onChange={(e) => setSearch({ term: e.target.value })}
 					/>
 				</div>
 				<div className="row-start-2 min-w-xl">
@@ -114,6 +129,7 @@ export default function SamplesList() {
 							currentPage={urlPage}
 							renderRow={renderRow}
 							pageCount={page_count}
+							onPageChange={(page) => setSearch({ page })}
 						/>
 					)}
 				</div>
@@ -129,10 +145,10 @@ export default function SamplesList() {
 				) : (
 					<SampleFilters
 						labels={labels}
-						onClickLabels={(e) => setFilterLabels(xor(filterLabels, [e]))}
+						onClickLabels={(e) => setSearch({ labels: xor(filterLabels, [e]) })}
 						selectedLabels={filterLabels}
 						selectedWorkflows={filterWorkflows}
-						onClickWorkflows={setFilterWorkflows}
+						onClickWorkflows={(workflows) => setSearch({ workflows })}
 					/>
 				)}
 			</div>

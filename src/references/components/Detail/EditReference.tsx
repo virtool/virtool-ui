@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@base/Dialog";
 import SaveButton from "@base/SaveButton";
 import { useUpdateReference } from "@references/queries";
@@ -15,14 +14,18 @@ export type FormValues = {
 type EditReferenceProps = {
 	/** The reference details */
 	detail: Reference;
+	open?: boolean;
+	setOpen?: (open: boolean) => void;
 };
 
 /**
  * A dialog for editing a reference
  */
-export default function EditReference({ detail }: EditReferenceProps) {
-	const { open: openEditReference, setOpen: setOpenEditReference } =
-		useDialogParam("openEditReference");
+export default function EditReference({
+	detail,
+	open = false,
+	setOpen = () => {},
+}: EditReferenceProps) {
 	const {
 		formState: { errors },
 		handleSubmit,
@@ -38,14 +41,11 @@ export default function EditReference({ detail }: EditReferenceProps) {
 
 	function handleEdit({ name, description, organism }) {
 		mutation.mutate({ name, description, organism });
-		setOpenEditReference(false);
+		setOpen(false);
 	}
 
 	return (
-		<Dialog
-			open={openEditReference}
-			onOpenChange={() => setOpenEditReference(false)}
-		>
+		<Dialog open={open} onOpenChange={() => setOpen(false)}>
 			<DialogContent>
 				<DialogTitle>Edit Reference</DialogTitle>
 				<form onSubmit={handleSubmit((values) => handleEdit({ ...values }))}>

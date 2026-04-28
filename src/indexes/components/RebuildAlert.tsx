@@ -1,4 +1,3 @@
-import { usePageParam } from "@app/hooks";
 import Alert from "@base/Alert";
 import Link from "@base/Link";
 import { useCheckReferenceRight } from "@references/hooks";
@@ -6,14 +5,14 @@ import { AlertCircle, Info } from "lucide-react";
 import { useFindIndexes } from "../queries";
 
 type RebuildAlertProps = {
+	page: number;
 	refId: string;
 };
 
 /**
  * An alert that appears when the reference has unbuilt changes.
  */
-export default function RebuildAlert({ refId }: RebuildAlertProps) {
-	const { page } = usePageParam();
+export default function RebuildAlert({ page, refId }: RebuildAlertProps) {
 	const { data, isPending } = useFindIndexes(page, 25, refId);
 	const { hasPermission: hasRights } = useCheckReferenceRight(refId, "build");
 

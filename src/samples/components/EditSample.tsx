@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
@@ -12,16 +11,20 @@ import { useUpdateSample } from "../queries";
 import type { Sample } from "../types";
 
 type EditSampleProps = {
+	open?: boolean;
 	/** The sample data */
 	sample: Sample;
+	setOpen?: (open: boolean) => void;
 };
 
 /**
  * Displays a dialog for editing the sample
  */
-export default function EditSample({ sample }: EditSampleProps) {
-	const { open: openEditSample, setOpen: setOpenEditSample } =
-		useDialogParam("openEditSample");
+export default function EditSample({
+	open = false,
+	sample,
+	setOpen = () => {},
+}: EditSampleProps) {
 	const mutation = useUpdateSample(sample.id);
 
 	const { register, handleSubmit } = useForm({
@@ -35,7 +38,7 @@ export default function EditSample({ sample }: EditSampleProps) {
 	});
 
 	return (
-		<Dialog open={openEditSample} onOpenChange={() => setOpenEditSample(false)}>
+		<Dialog open={open} onOpenChange={() => setOpen(false)}>
 			<DialogContent>
 				<DialogTitle>Edit Sample</DialogTitle>
 				<form
@@ -52,7 +55,7 @@ export default function EditSample({ sample }: EditSampleProps) {
 							},
 							{
 								onSuccess: () => {
-									setOpenEditSample(false);
+									setOpen(false);
 								},
 							},
 						),

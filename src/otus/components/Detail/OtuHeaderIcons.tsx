@@ -1,9 +1,9 @@
-import { useDialogParam } from "@app/hooks";
 import IconButton from "@base/IconButton";
 import { useCheckReferenceRight } from "@references/hooks";
 import { Pencil, Trash } from "lucide-react";
 import OtuEdit from "../OtuEdit";
 import OtuRemove from "../OtuRemove";
+import { useOtuDetailSearch } from "./OtuDetailSearchContext";
 
 type OTUHeaderEndIconsProps = {
 	id: string;
@@ -21,8 +21,7 @@ export function OtuHeaderIcons({
 	refId,
 	abbreviation,
 }: OTUHeaderEndIconsProps) {
-	const { setOpen: setOpenEditOTU } = useDialogParam("openEditOTU");
-	const { setOpen: setOpenRemoveOTU } = useDialogParam("openRemoveOTU");
+	const { search, setSearch } = useOtuDetailSearch();
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		refId,
 		"modify_otu",
@@ -35,18 +34,30 @@ export function OtuHeaderIcons({
 				color="grayDark"
 				IconComponent={Pencil}
 				tip="edit OTU"
-				onClick={() => setOpenEditOTU(true)}
+				onClick={() => setSearch({ openEditOTU: true })}
 			/>
 			<IconButton
 				key="remove-icon"
 				color="red"
 				IconComponent={Trash}
 				tip="remove OTU"
-				onClick={() => setOpenRemoveOTU(true)}
+				onClick={() => setSearch({ openRemoveOTU: true })}
 			/>
 
-			<OtuEdit otuId={id} name={name} abbreviation={abbreviation} />
-			<OtuRemove id={id} name={name} refId={refId} />
+			<OtuEdit
+				otuId={id}
+				name={name}
+				abbreviation={abbreviation}
+				open={Boolean(search.openEditOTU)}
+				setOpen={(openEditOTU) => setSearch({ openEditOTU })}
+			/>
+			<OtuRemove
+				id={id}
+				name={name}
+				open={Boolean(search.openRemoveOTU)}
+				refId={refId}
+				setOpen={(openRemoveOTU) => setSearch({ openRemoveOTU })}
+			/>
 		</>
 	) : null;
 }

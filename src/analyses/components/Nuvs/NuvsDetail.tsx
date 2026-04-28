@@ -1,7 +1,6 @@
 import { useGetActiveHit } from "@analyses/hooks";
 import type { FormattedNuvsHit, NuvsOrf as NuvsOrfType } from "@analyses/types";
 import { calculateAnnotatedOrfCount } from "@analyses/utils";
-import { useUrlSearchParam } from "@app/hooks.tanstack";
 import Badge from "@base/Badge";
 import { sortBy } from "es-toolkit";
 import NuvsBlast from "./NuvsBlast";
@@ -30,6 +29,7 @@ function NuvsDetailContainer({ children }) {
 
 type NuVsDetailProps = {
 	analysisId: string;
+	filterORFs: boolean;
 	/** A list of sorted and filtered Nuvs hits */
 
 	matches: FormattedNuvsHit[];
@@ -41,10 +41,10 @@ type NuVsDetailProps = {
  */
 export default function NuvsDetail({
 	analysisId,
+	filterORFs,
 	matches,
 	maxSequenceLength,
 }: NuVsDetailProps) {
-	const { value: filterORFs } = useUrlSearchParam<boolean>("filterOrfs");
 	const hit = useGetActiveHit(matches);
 
 	if (!hit) {
@@ -63,7 +63,7 @@ export default function NuvsDetail({
 
 	const orfComponents = filtered.map((orf, index) => (
 		<NuvsOrf
-			key={index}
+			key={`${orf.index}-${orf.frame}-${orf.pos.join("-")}`}
 			index={index}
 			{...orf}
 			maxSequenceLength={maxSequenceLength}

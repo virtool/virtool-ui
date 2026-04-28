@@ -1,14 +1,16 @@
-import { usePathParams } from "@app/hooks";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { useFetchOtuHistory } from "@otus/queries";
+import { getRouteApi } from "@tanstack/react-router";
 import { groupBy } from "es-toolkit";
 import HistoryList from "./HistoryList";
+
+const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
 
 /**
  * Display and manage the history for the OTU
  */
 export default function OtuHistory() {
-	const { otuId } = usePathParams<{ otuId: string }>();
+	const { otuId } = routeApi.useParams();
 	const { data, isPending } = useFetchOtuHistory(otuId);
 
 	if (isPending) {

@@ -1,5 +1,4 @@
 import { useFetchAccount } from "@account/queries";
-import { useNavigate } from "@app/hooks";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import InputContainer from "@base/InputContainer";
@@ -16,6 +15,7 @@ import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import { useCreateSample } from "@samples/queries";
+import { useNavigate } from "@tanstack/react-router";
 import { Clock, WandSparkles } from "lucide-react";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
@@ -137,7 +137,7 @@ export default function CreateSample() {
 			{
 				onSuccess: () => {
 					reset();
-					navigate("/samples");
+					navigate({ to: "/samples" });
 				},
 			},
 		);

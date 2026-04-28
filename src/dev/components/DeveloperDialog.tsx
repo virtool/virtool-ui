@@ -1,17 +1,23 @@
-import { useDialogParam } from "@app/hooks";
 import Button from "@base/Button";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { usePostDevCommand } from "../queries";
 
+type DeveloperDialogProps = {
+	open: boolean;
+	setOpen: (open: boolean) => void;
+};
+
 /**
  * Displays a dialog for developer commands
  */
-export default function DeveloperDialog() {
-	const { open: openDev, setOpen: setOpenDev } = useDialogParam("openDev");
+export default function DeveloperDialog({
+	open,
+	setOpen,
+}: DeveloperDialogProps) {
 	const mutation = usePostDevCommand();
 
 	return (
-		<Dialog open={openDev} onOpenChange={() => setOpenDev(false)}>
+		<Dialog open={open} onOpenChange={() => setOpen(false)}>
 			<DialogContent size="lg">
 				<DialogTitle>Developer</DialogTitle>
 				<div className="flex items-center p-4">
@@ -30,7 +36,7 @@ export default function DeveloperDialog() {
 									{ command: "clear_users" },
 									{
 										onSuccess: () => {
-											setOpenDev(false);
+											setOpen(false);
 											location.reload();
 										},
 									},

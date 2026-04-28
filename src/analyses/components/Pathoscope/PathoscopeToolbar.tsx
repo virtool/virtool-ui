@@ -1,4 +1,4 @@
-import { useUrlSearchParam } from "@app/hooks.tanstack";
+import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import ButtonToggle from "@base/ButtonToggle";
 import Dropdown from "@base/Dropdown";
 import DropdownButton from "@base/DropdownButton";
@@ -24,44 +24,34 @@ type PathoscopeToolbarProps = {
 
 /** A selection of filters and toggles for pathoscope data presentation */
 export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
-	const { value: filterOTUs, setValue: setFilterOtus } =
-		useUrlSearchParam<boolean>("filterOtus", true);
-
-	const { value: filterIsolates, setValue: setFilterIsolates } =
-		useUrlSearchParam<boolean>("filterIsolates", true);
-
-	const { value: find, setValue: setFind } = useUrlSearchParam<string>("find");
-
-	const { value: showReads, setValue: setShowReads } =
-		useUrlSearchParam<boolean>("reads", false);
-
-	const { value: sortKey, setValue: setSortKey } = useUrlSearchParam<string>(
-		"sort",
-		"coverage",
-	);
-
-	const { value: sortDesc, setValue: setSortDesc } = useUrlSearchParam<boolean>(
-		"sortDesc",
-		true,
-	);
+	const { search, setSearch } = useAnalysisSearch();
+	const filterOTUs = search.filterOtus ?? true;
+	const filterIsolates = search.filterIsolates ?? true;
+	const find = search.find ?? "";
+	const showReads = search.reads ?? false;
+	const sortKey = search.sort ?? "coverage";
+	const sortDesc = search.sortDesc ?? true;
 
 	return (
 		<Toolbar>
-			<InputSearch value={find} onChange={(e) => setFind(e.target.value)} />
+			<InputSearch
+				value={find}
+				onChange={(e) => setSearch({ find: e.target.value })}
+			/>
 			<AnalysisViewerSort
 				workflow="pathoscope"
 				sortKey={sortKey}
-				onSelect={setSortKey}
+				onSelect={(sort) => setSearch({ sort })}
 			/>
 			<ButtonToggle
-				onPressedChange={(active) => setSortDesc(active)}
+				onPressedChange={(sortDesc) => setSearch({ sortDesc })}
 				pressed={Boolean(sortDesc)}
 			>
 				<Icon icon={sortDesc ? ArrowDownWideNarrow : ArrowUpWideNarrow} />
 			</ButtonToggle>
 			<Tooltip tip="Show read pseudo-counts instead of weight">
 				<ButtonToggle
-					onPressedChange={(active) => setShowReads(active)}
+					onPressedChange={(reads) => setSearch({ reads })}
 					pressed={Boolean(showReads)}
 				>
 					Show Reads
@@ -69,7 +59,7 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 			</Tooltip>
 			<Tooltip tip="Hide OTUs with low coverage support">
 				<ButtonToggle
-					onPressedChange={(active) => setFilterOtus(active)}
+					onPressedChange={(filterOtus) => setSearch({ filterOtus })}
 					pressed={Boolean(filterOTUs)}
 				>
 					Filter OTUs
@@ -77,7 +67,7 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 			</Tooltip>
 			<Tooltip tip="Hide isolates with low coverage support">
 				<ButtonToggle
-					onPressedChange={(active) => setFilterIsolates(active)}
+					onPressedChange={(filterIsolates) => setSearch({ filterIsolates })}
 					pressed={Boolean(filterIsolates)}
 				>
 					Filter Isolates

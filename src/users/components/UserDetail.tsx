@@ -1,9 +1,9 @@
 import { useCheckAdminRole } from "@administration/hooks";
 import { useFetchUser, useUpdateUser } from "@administration/queries";
-import { usePathParams } from "@app/hooks";
 import Alert from "@base/Alert";
 import InitialIcon from "@base/InitialIcon";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import { getRouteApi } from "@tanstack/react-router";
 import { CircleAlert, ShieldUserIcon } from "lucide-react";
 import Label from "@/base/Label";
 import Password from "./Password";
@@ -12,11 +12,13 @@ import { UserActivationBanner } from "./UserActivationBanner";
 import UserGroups from "./UserGroups";
 import UserPermissions from "./UserPermissions";
 
+const routeApi = getRouteApi("/_authenticated/administration/users/$userId");
+
 /**
  * The detailed view of a user
  */
 export default function UserDetail() {
-	const { userId } = usePathParams<{ userId: string }>();
+	const { userId } = routeApi.useParams();
 	const { data, isPending } = useFetchUser(Number(userId));
 	const { hasPermission: canEdit } = useCheckAdminRole(
 		data?.administrator_role === null ? "users" : "full",

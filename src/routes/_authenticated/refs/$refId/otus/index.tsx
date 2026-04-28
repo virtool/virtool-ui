@@ -10,5 +10,19 @@ const otuListSearchSchema = z.object({
 
 export const Route = createFileRoute("/_authenticated/refs/$refId/otus/")({
 	validateSearch: otuListSearchSchema,
-	component: OtuList,
+	component: OtusRoute,
 });
+
+function OtusRoute() {
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	return (
+		<OtuList
+			find={search.find}
+			openCreateOTU={Boolean(search.openCreateOTU)}
+			page={search.page}
+			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+		/>
+	);
+}

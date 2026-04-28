@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import Attribution from "@base/Attribution";
 import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
@@ -22,6 +21,7 @@ type SampleItemProps = {
 
 	/** Callback to handle sample selection on end icon quick analysis */
 	selectOnQuickAnalyze: () => void;
+	setOpenQuickAnalyze: (open: boolean) => void;
 };
 
 /**
@@ -32,23 +32,24 @@ export default function SampleItem({
 	checked,
 	handleSelect,
 	selectOnQuickAnalyze,
+	setOpenQuickAnalyze,
 }: SampleItemProps) {
-	const { setOpen } = useDialogParam("openQuickAnalyze");
-
 	function onQuickAnalyze() {
 		selectOnQuickAnalyze();
-		setOpen(true);
+		setOpenQuickAnalyze(true);
 	}
 
 	const job = sample.job && JobNested.parse(sample.job);
 
 	return (
 		<Box className="flex items-stretch basis-0">
-			<div
-				className="col-start-1 cursor-pointer flex pr-4 max-w-8"
-				onClick={handleSelect}
-			>
-				<Checkbox checked={checked} id={`SampleCheckbox${sample.id}`} />
+			<div className="col-start-1 flex max-w-8 pr-4">
+				<Checkbox
+					ariaLabel={`select ${sample.name}`}
+					checked={checked}
+					id={`SampleCheckbox${sample.id}`}
+					onClick={handleSelect}
+				/>
 			</div>
 
 			<div className="col-start-2 flex flex-3 flex-col min-w-64">

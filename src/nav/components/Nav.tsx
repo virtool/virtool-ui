@@ -1,7 +1,6 @@
 import { useLogout } from "@account/queries";
 import type { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
-import { useDialogParam } from "@app/hooks";
 import Dropdown from "@base/Dropdown";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
@@ -17,13 +16,17 @@ import { NavLink } from "./NavLink";
 type NavBarProps = {
 	administrator_role: AdministratorRoleName;
 	handle: string;
+	setOpenDev?: (open: boolean) => void;
 };
 
 /**
  * Display the main navigation bar with links too root level views.
  */
-export default function Nav({ administrator_role, handle }: NavBarProps) {
-	const { setOpen: setOpenDev } = useDialogParam("openDev");
+export default function Nav({
+	administrator_role,
+	handle,
+	setOpenDev = () => {},
+}: NavBarProps) {
 	const mutation = useLogout();
 	const { data } = useRootQuery();
 

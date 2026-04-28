@@ -1,4 +1,3 @@
-import { useListSearchParam, usePageParam } from "@app/hooks";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
@@ -13,12 +12,17 @@ import JobItem from "./JobItem";
 
 const initialState: JobState[] = ["pending", "running"];
 
-export default function JobsList() {
-	const { values: states } = useListSearchParam<JobState>(
-		"state",
-		initialState,
-	);
-	const { page } = usePageParam();
+type JobsListProps = {
+	page?: number;
+	setSearch?: (next: { page?: number; state?: JobState[] }) => void;
+	states?: JobState[];
+};
+
+export default function JobsList({
+	page = 1,
+	setSearch = () => {},
+	states = initialState,
+}: JobsListProps) {
 	const { data, isPending } = useFindJobs(page, 25, states);
 
 	if (isPending || !data) {
@@ -58,6 +62,7 @@ export default function JobsList() {
 							storedPage={storedPage}
 							currentPage={page}
 							pageCount={pageCount}
+							onPageChange={(page) => setSearch({ page })}
 						>
 							<BoxGroup>
 								{items.map((item) => (
@@ -67,7 +72,11 @@ export default function JobsList() {
 						</Pagination>
 					)}
 				</ContainerNarrow>
-				<JobFilters counts={counts} />
+				<JobFilters
+					counts={counts}
+					setStates={(state) => setSearch({ state })}
+					states={states}
+				/>
 			</div>
 		</>
 	);

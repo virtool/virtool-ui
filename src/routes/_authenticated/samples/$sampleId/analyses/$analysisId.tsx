@@ -1,4 +1,5 @@
 import AnalysisDetail from "@analyses/components/AnalysisDetail";
+import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
 import { analysisQueryOptions } from "@analyses/queries";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { z } from "zod/v4";
@@ -34,5 +35,19 @@ export const Route = createFileRoute(
 			throw error;
 		}
 	},
-	component: AnalysisDetail,
+	component: AnalysisRoute,
 });
+
+function AnalysisRoute() {
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	return (
+		<AnalysisSearchProvider
+			search={search}
+			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+		>
+			<AnalysisDetail />
+		</AnalysisSearchProvider>
+	);
+}

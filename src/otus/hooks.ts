@@ -1,4 +1,4 @@
-import { useNaiveUrlSearchParam, useUrlSearchParam } from "@app/hooks";
+import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
 import type { Otu, OtuIsolate } from "./types";
 
 /**
@@ -8,7 +8,8 @@ import type { Otu, OtuIsolate } from "./types";
  * @returns The active isolate
  */
 export function useActiveIsolate(otu: Otu): OtuIsolate | undefined {
-	const { value: activeIsolate } = useNaiveUrlSearchParam("activeIsolate");
+	const { search } = useOtuDetailSearch();
+	const activeIsolate = search.activeIsolate;
 	return otu.isolates.find(
 		(isolate) => isolate.id === (activeIsolate || otu.isolates[0]?.id),
 	);
@@ -21,7 +22,8 @@ export function useActiveIsolate(otu: Otu): OtuIsolate | undefined {
  * @returns The unique identifier of the active isolate
  */
 export function useGetActiveIsolateId(otu: Otu) {
-	const { value: activeIsolate } = useUrlSearchParam("activeIsolate");
+	const { search } = useOtuDetailSearch();
+	const activeIsolate = search.activeIsolate;
 
 	return activeIsolate || otu.isolates[0]?.id;
 }

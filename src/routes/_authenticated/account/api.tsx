@@ -8,5 +8,19 @@ const apiSearchSchema = z.object({
 
 export const Route = createFileRoute("/_authenticated/account/api")({
 	validateSearch: apiSearchSchema,
-	component: ApiKeys,
+	component: ApiKeysRoute,
 });
+
+function ApiKeysRoute() {
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	return (
+		<ApiKeys
+			openCreateKey={Boolean(search.openCreateKey)}
+			setOpenCreateKey={(openCreateKey) =>
+				navigate({ search: { ...search, openCreateKey } })
+			}
+		/>
+	);
+}

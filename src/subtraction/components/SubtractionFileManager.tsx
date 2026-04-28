@@ -1,9 +1,17 @@
 import { FileManager } from "@/uploads/components/FileManager";
 
+type SubtractionFileManagerProps = {
+	page?: number;
+	setPage?: (page: number) => void;
+};
+
 /**
  * Displays a list of subtraction uploads with functionality to upload/delete uploads
  */
-export function SubtractionFileManager() {
+export function SubtractionFileManager({
+	page = 1,
+	setPage = () => {},
+}: SubtractionFileManagerProps) {
 	return (
 		<FileManager
 			accept={{
@@ -11,6 +19,7 @@ export function SubtractionFileManager() {
 				"application/text": [".fasta", ".fa"],
 			}}
 			fileType="subtraction"
+			page={page}
 			message={
 				<div className="flex flex-col gap-1 items-center">
 					<span className="font-medium text-base">
@@ -22,6 +31,7 @@ export function SubtractionFileManager() {
 				</div>
 			}
 			regex={/\.(?:fa|fasta)(?:\.gz|\.gzip)?$/}
+			setPage={setPage}
 		/>
 	);
 }

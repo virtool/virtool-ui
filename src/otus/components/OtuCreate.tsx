@@ -1,19 +1,17 @@
-import { useDialogParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useCreateOTU } from "../queries";
 import OtuForm from "./OtuForm";
 
 type CreateOTUProps = {
+	open: boolean;
 	refId: string;
+	setOpen: (open: boolean) => void;
 };
 
 /**
  * Displays a dialog to create an OTU
  */
-export default function OtuCreate({ refId }: CreateOTUProps) {
-	const { open: openCreateOtu, setOpen: setOpenCreateOtu } =
-		useDialogParam("openCreateOTU");
-
+export default function OtuCreate({ open, refId, setOpen }: CreateOTUProps) {
 	const mutation = useCreateOTU(refId);
 
 	function handleSubmit({ name, abbreviation }) {
@@ -21,19 +19,19 @@ export default function OtuCreate({ refId }: CreateOTUProps) {
 			{ name, abbreviation },
 			{
 				onSuccess: () => {
-					setOpenCreateOtu(false);
+					setOpen(false);
 				},
 			},
 		);
 	}
 
 	function onHide() {
-		setOpenCreateOtu(false);
+		setOpen(false);
 		mutation.reset();
 	}
 
 	return (
-		<Dialog open={openCreateOtu} onOpenChange={onHide}>
+		<Dialog open={open} onOpenChange={onHide}>
 			<DialogContent>
 				<DialogTitle>Create OTU</DialogTitle>
 				<OtuForm

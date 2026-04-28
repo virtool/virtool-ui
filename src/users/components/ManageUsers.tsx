@@ -1,5 +1,4 @@
 import { useCheckAdminRole } from "@administration/hooks";
-import { useUrlSearchParam } from "@app/hooks";
 import Alert from "@base/Alert";
 import InputSearch from "@base/InputSearch";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
@@ -11,15 +10,27 @@ import { useState } from "react";
 import CreateUser from "./CreateUser";
 import UsersList from "./UsersList";
 
+type ManageUsersProps = {
+	openCreateUser?: boolean;
+	page?: number;
+	setSearch?: (next: {
+		openCreateUser?: boolean;
+		page?: number;
+		status?: string;
+	}) => void;
+	status?: string;
+};
+
 /**
  * Displays a list of editable users and tools for sorting through and creating users
  */
-export function ManageUsers() {
+export function ManageUsers({
+	openCreateUser = false,
+	page = 1,
+	setSearch = () => {},
+	status = "active",
+}: ManageUsersProps) {
 	const [term, setTerm] = useState("");
-	const { value: status, setValue: setStatus } = useUrlSearchParam<string>(
-		"status",
-		"active",
-	);
 	const { hasPermission, isPending } = useCheckAdminRole("users");
 
 	if (isPending) {
@@ -38,14 +49,25 @@ export function ManageUsers() {
 							onChange={(e) => setTerm(e.target.value)}
 						/>
 					</div>
-					<ToggleGroup value={status} onValueChange={setStatus}>
+					<ToggleGroup
+						value={status}
+						onValueChange={(status) => setSearch({ status })}
+					>
 						<ToggleGroupItem value="active">Active</ToggleGroupItem>
 						<ToggleGroupItem value="deactivated">Deactivated</ToggleGroupItem>
 					</ToggleGroup>
-					<CreateUser />
+					<CreateUser
+						open={openCreateUser}
+						setOpen={(openCreateUser) => setSearch({ openCreateUser })}
+					/>
 				</Toolbar>
 
-				<UsersList term={term} />
+				<UsersList
+					page={page}
+					setPage={(page) => setSearch({ page })}
+					status={status}
+					term={term}
+				/>
 			</>
 		);
 	}

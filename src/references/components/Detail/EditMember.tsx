@@ -1,4 +1,3 @@
-import { useUrlSearchParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import {
 	referenceQueryKeys,
@@ -11,22 +10,23 @@ import { ReferenceRight } from "./ReferenceRight";
 const rights = ["modify_otu", "build", "modify", "remove"];
 
 type EditReferenceMemberProps = {
+	editId?: string;
 	member: ReferenceGroup | ReferenceUser;
 	noun: string;
 	refId: string;
+	unsetEditId?: () => void;
 };
 
 /**
  * Displays a dialog to modify rights for a member
  */
 export default function EditReferenceMember({
+	editId,
 	noun,
 	refId,
 	member,
+	unsetEditId = () => {},
 }: EditReferenceMemberProps) {
-	const { value: editId, unsetValue: unsetEditId } = useUrlSearchParam<string>(
-		`edit${noun}Id`,
-	);
 	const mutation = useUpdateReferenceMember(noun);
 	const queryClient = useQueryClient();
 

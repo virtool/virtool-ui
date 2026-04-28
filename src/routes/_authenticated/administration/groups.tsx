@@ -8,5 +8,19 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/_authenticated/administration/groups")({
 	validateSearch: searchSchema,
-	component: Groups,
+	component: GroupsRoute,
 });
+
+function GroupsRoute() {
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	return (
+		<Groups
+			openCreateGroup={Boolean(search.openCreateGroup)}
+			setOpenCreateGroup={(openCreateGroup) =>
+				navigate({ search: { ...search, openCreateGroup } })
+			}
+		/>
+	);
+}

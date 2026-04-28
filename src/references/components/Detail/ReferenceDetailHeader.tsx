@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import ViewHeader from "@base/ViewHeader";
@@ -15,6 +14,7 @@ type ReferenceDetailHeaderProps = {
 	isRemote: boolean;
 	name: string;
 	refId: string;
+	setOpenEditReference?: (open: boolean) => void;
 	userHandle: string;
 };
 
@@ -26,10 +26,10 @@ export default function ReferenceDetailHeader({
 	isRemote,
 	name,
 	refId,
+	setOpenEditReference = () => {},
 	userHandle,
 }: ReferenceDetailHeaderProps) {
 	const { pathname: location } = useLocation();
-	const { setOpen: setOpenEditReference } = useDialogParam("openEditReference");
 	const { hasPermission: canModify } = useCheckReferenceRight(refId, "modify");
 
 	const showIcons = location.endsWith("/manage");

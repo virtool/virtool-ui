@@ -1,6 +1,5 @@
 import NuvsValues from "@analyses/components/Nuvs/NuvsValues";
 import type { FormattedNuvsHit } from "@analyses/types";
-import { useUrlSearchParam } from "@app/hooks.tanstack";
 import { cn } from "@app/utils";
 import Badge from "@base/Badge";
 import Box from "@base/Box";
@@ -8,19 +7,22 @@ import numbro from "numbro";
 import "./NuvsItem.css";
 
 type NuVsItemProps = {
+	activeHit?: string;
 	hit: FormattedNuvsHit;
+	setActiveHit: (id: string) => void;
 };
 
 /**
  * A condensed Nuvs item for use in a list of Nuvs
  */
-export default function NuvsItem({ hit }: NuVsItemProps) {
-	const { value: activeHit, setValue: setActiveHit } =
-		useUrlSearchParam<string>("activeHit");
-
+export default function NuvsItem({
+	activeHit,
+	hit,
+	setActiveHit,
+}: NuVsItemProps) {
 	const { annotatedOrfCount, e, id, index, sequence } = hit;
 
-	const isActive = activeHit !== null && Number(activeHit) === id;
+	const isActive = activeHit !== undefined && Number(activeHit) === id;
 
 	return (
 		<Box

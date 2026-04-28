@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
@@ -17,10 +16,17 @@ import {
 	notFound,
 	Outlet,
 	useLocation,
+	useNavigate,
 } from "@tanstack/react-router";
 import { Key, Pencil } from "lucide-react";
+import { z } from "zod/v4";
+
+const sampleDetailSearchSchema = z.object({
+	openEditSample: z.boolean().optional().catch(undefined),
+});
 
 export const Route = createFileRoute("/_authenticated/samples/$sampleId")({
+	validateSearch: sampleDetailSearchSchema,
 	loader: async ({ context: { queryClient }, params: { sampleId } }) => {
 		try {
 			await queryClient.ensureQueryData(sampleQueryOptions(sampleId));
@@ -44,7 +50,7 @@ function SampleDetailLayout() {
 	const location = useLocation();
 	const { data, isPending } = useFetchSample(sampleId);
 	const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
-	const { setOpen: setOpenEditSample } = useDialogParam("openEditSample");
+	const navigate = useNavigate({ from: Route.fullPath });
 
 	if (isPending) {
 		return <LoadingPlaceholder />;
@@ -65,7 +71,15 @@ function SampleDetailLayout() {
 									color="grayDark"
 									IconComponent={Pencil}
 									tip="modify"
-									onClick={() => setOpenEditSample(true)}
+									onClick={() =>
+										navigate({
+											search: ((prev: Record<string, unknown>) => ({
+												...prev,
+												openEditSample: true,
+											})) as never,
+											replace: true,
+										})
+									}
 								/>
 								<DeleteSample
 									id={sampleId}

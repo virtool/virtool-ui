@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import { cn } from "@app/utils";
 import Button from "@base/Button";
 import {
@@ -26,15 +25,21 @@ type FormValues = {
 	permissions: Permissions;
 };
 
+type ApiKeyCreateProps = {
+	open?: boolean;
+	setOpen?: (open: boolean) => void;
+};
+
 /**
  * Displays a dialog to create an API key
  */
-export default function ApiKeyCreate() {
+export default function ApiKeyCreate({
+	open = false,
+	setOpen = () => {},
+}: ApiKeyCreateProps) {
 	const [copied, setCopied] = useState(false);
 	const [newKey, setNewKey] = useState("");
 	const mutation = useCreateAPIKey();
-	const { open: openCreateKey, setOpen: setOpenCreateKey } =
-		useDialogParam("openCreateKey");
 
 	const {
 		formState: { errors },
@@ -61,7 +66,7 @@ export default function ApiKeyCreate() {
 
 	function handleHide() {
 		setCopied(false);
-		setOpenCreateKey(false);
+		setOpen(false);
 		setNewKey("");
 	}
 
@@ -81,7 +86,7 @@ export default function ApiKeyCreate() {
 	}
 
 	return (
-		<Dialog open={openCreateKey} onOpenChange={handleHide}>
+		<Dialog open={open} onOpenChange={handleHide}>
 			<DialogContent>
 				<DialogTitle>Create API Key</DialogTitle>
 				<DialogDescription>

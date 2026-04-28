@@ -1,4 +1,3 @@
-import { useNavigate } from "@app/hooks";
 import Alert from "@base/Alert";
 import { DialogFooter } from "@base/Dialog";
 import InputError from "@base/InputError";
@@ -7,6 +6,7 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import SaveButton from "@base/SaveButton";
+import { useNavigate } from "@tanstack/react-router";
 import { Controller, useForm } from "react-hook-form";
 import { UploadBar } from "@/uploads/components/UploadBar";
 import { useImportReference, useUploadReference } from "../queries";
@@ -75,7 +75,7 @@ export default function ImportReference() {
 				onSubmit={handleSubmit((values) => {
 					importMutation.mutate(
 						{ ...values, importFrom: fileNameOnDisk },
-						{ onSuccess: () => navigate("/refs", { replace: true }) },
+						{ onSuccess: () => navigate({ to: "/refs", replace: true }) },
 					);
 				})}
 			>

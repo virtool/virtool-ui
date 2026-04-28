@@ -1,4 +1,4 @@
-import { useMatchPartialPath } from "@app/hooks";
+import { useMatchPartialPath } from "@app/useMatchPartialPath";
 import { cn } from "@app/utils";
 import Icon from "@base/Icon";
 import Link from "@base/Link";
@@ -44,7 +44,7 @@ export default function SidebarLink({
 }: SidebarItemProps) {
 	const isActive = useMatchPartialPath(link, exclude);
 	const to = link.split("?")[0];
-	const search = parseLinkSearch(link) as any;
+	const search = parseLinkSearch(link) as never;
 
 	return (
 		<Link
