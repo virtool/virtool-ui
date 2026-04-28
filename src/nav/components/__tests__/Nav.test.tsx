@@ -27,7 +27,6 @@ describe("<Nav />", () => {
 		expect(
 			screen.getByRole("link", { name: "Subtractions" }),
 		).toBeInTheDocument();
-		expect(screen.getByRole("link", { name: "ML" })).toBeInTheDocument();
 
 		await userEvent.click(screen.getByRole("button"));
 

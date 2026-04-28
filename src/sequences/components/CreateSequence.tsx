@@ -55,7 +55,7 @@ export default function CreateSequence({
 			open={Boolean(search.openCreateSequence)}
 			onOpenChange={() => setSearch({ openCreateSequence: false })}
 		>
-			<DialogContent className="top-1/2">
+			<DialogContent>
 				<DialogTitle>Create Sequence</DialogTitle>
 				<SequenceForm
 					hasSchema={schema.length > 0}

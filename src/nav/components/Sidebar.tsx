@@ -86,8 +86,6 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
 				icon={List}
 			/>
 		);
-	} else if (pathname.startsWith("/ml")) {
-		links = <SidebarLink title="Browse" link="/ml" icon={List} />;
 	}
 
 	return (
