@@ -63,8 +63,8 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 						<AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} />
 					) : (
 						<ProgressCircle
-							progress={job.progress || 0}
-							state={job.state || "pending"}
+							progress={job?.progress ?? 0}
+							state={job?.state ?? "pending"}
 							size="md"
 						/>
 					)}

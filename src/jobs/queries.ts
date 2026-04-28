@@ -46,5 +46,6 @@ export function useFetchJob(jobId: number) {
 		queryKey: jobQueryKeys.detail(jobId),
 		queryFn: () => fetchJob(jobId),
 		select: JobSchema.parse,
+		enabled: Number.isInteger(jobId),
 	});
 }
