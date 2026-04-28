@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import Button from "@base/Button";
 import InputHeader from "@base/InputHeader";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
@@ -16,11 +15,18 @@ import { GroupMembers } from "./GroupMembers";
 import { GroupPermissions } from "./GroupPermissions";
 import { GroupSelector } from "./GroupSelector";
 
-export default function Groups() {
+type GroupsProps = {
+	openCreateGroup?: boolean;
+	setOpenCreateGroup?: (open: boolean) => void;
+};
+
+export default function Groups({
+	openCreateGroup = false,
+	setOpenCreateGroup = () => {},
+}: GroupsProps) {
 	const updateGroupMutation = useUpdateGroup();
 	const removeMutation = useRemoveGroup();
 
-	const { setOpen: setOpenCreateGroup } = useDialogParam("openCreateGroup");
 	const [selectedGroupId, setSelectedGroupId] = useState(null);
 	const [prevGroups, setPrevGroups] = useState(null);
 
@@ -82,7 +88,7 @@ export default function Groups() {
 				</div>
 			)}
 
-			<Create />
+			<Create open={openCreateGroup} setOpen={setOpenCreateGroup} />
 		</>
 	);
 }

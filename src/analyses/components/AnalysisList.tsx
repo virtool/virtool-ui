@@ -1,4 +1,3 @@
-import { useDialogParam, usePageParam, usePathParams } from "@app/hooks";
 import { buttonVariants } from "@base/buttonVariants";
 import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
@@ -7,11 +6,20 @@ import Pagination from "@base/Pagination";
 import { useListHmms } from "@hmm/queries";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
+import { getRouteApi } from "@tanstack/react-router";
 import { useListAnalyses } from "../queries";
 import type { AnalysisMinimal } from "../types";
 import AnalysisItem from "./AnalysisItem";
 import CreateAnalysis from "./Create/CreateAnalysis";
 import AnalysisHMMAlert from "./HMMAlert";
+
+const routeApi = getRouteApi("/_authenticated/samples/$sampleId/analyses/");
+
+type AnalysesListProps = {
+	openCreateAnalysis: boolean;
+	page: number;
+	setSearch: (next: { openCreateAnalysis?: boolean; page?: number }) => void;
+};
 
 function renderRow() {
 	function AnalysisRow(document: AnalysisMinimal) {
@@ -23,9 +31,12 @@ function renderRow() {
 /**
  * A list of analyses with filtering options
  */
-export default function AnalysesList() {
-	const { sampleId } = usePathParams<{ sampleId: string }>();
-	const { page } = usePageParam();
+export default function AnalysesList({
+	openCreateAnalysis,
+	page,
+	setSearch,
+}: AnalysesListProps) {
+	const { sampleId } = routeApi.useParams();
 	const { data: analyses, isPending: isPendingAnalyses } = useListAnalyses(
 		sampleId,
 		page,
@@ -34,7 +45,6 @@ export default function AnalysesList() {
 	const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
 	const { isPending: isPendingSample } = useFetchSample(sampleId);
 	const { hasPermission: canCreate } = useCheckCanEditSample(sampleId);
-	const { setOpen } = useDialogParam("openCreateAnalysis");
 
 	if (isPendingAnalyses || isPendingHmms || isPendingSample) {
 		return <LoadingPlaceholder />;
@@ -48,7 +58,7 @@ export default function AnalysesList() {
 					<button
 						type="button"
 						className={buttonVariants({ color: "blue" })}
-						onClick={() => setOpen(true)}
+						onClick={() => setSearch({ openCreateAnalysis: true })}
 					>
 						Create
 					</button>
@@ -61,12 +71,18 @@ export default function AnalysesList() {
 					storedPage={analyses.page}
 					currentPage={page}
 					pageCount={analyses.page_count}
+					onPageChange={(page) => setSearch({ page })}
 				/>
 			) : (
 				<NoneFoundBox noun="analyses" />
 			)}
 
-			<CreateAnalysis hmms={hmms} sampleId={sampleId} />
+			<CreateAnalysis
+				hmms={hmms}
+				open={openCreateAnalysis}
+				setOpen={(openCreateAnalysis) => setSearch({ openCreateAnalysis })}
+				sampleId={sampleId}
+			/>
 		</ContainerNarrow>
 	);
 }

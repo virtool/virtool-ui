@@ -1,5 +1,4 @@
 import SettingsCheckbox from "@administration/components/SettingsCheckbox";
-import { usePathParams } from "@app/hooks";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupDisabled from "@base/BoxGroupDisabled";
 import BoxGroupHeader from "@base/BoxGroupHeader";
@@ -17,11 +16,14 @@ import {
 	useFetchReference,
 	useUpdateReference,
 } from "@references/queries";
+import { getRouteApi } from "@tanstack/react-router";
 import { Undo2 } from "lucide-react";
 import SourceTypeList from "./SourceTypeList";
 
+const routeApi = getRouteApi("/_authenticated/refs/$refId");
+
 export function LocalSourceTypes() {
-	const { refId } = usePathParams<{ refId: string }>();
+	const { refId } = routeApi.useParams();
 
 	const { data, isPending } = useFetchReference(refId);
 

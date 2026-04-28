@@ -1,4 +1,4 @@
-import { useUrlSearchParam } from "@app/hooks.tanstack";
+import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import ButtonToggle from "@base/ButtonToggle";
 import InputSearch from "@base/InputSearch";
 import Toolbar from "@base/Toolbar";
@@ -14,39 +14,29 @@ export default function NuvsToolbar({
 	results,
 	sampleName,
 }: NuvsExportProps) {
-	const { value: filterORFs, setValue: setFilterORFs } =
-		useUrlSearchParam<boolean>("filterOrfs", true);
-
-	const { value: filterSequences, setValue: setFilterSequences } =
-		useUrlSearchParam<boolean>("filterSequences", true);
-
-	const { value: find, setValue: setFind } = useUrlSearchParam<string>(
-		"find",
-		"",
-	);
-
-	const { value: sortKey, setValue: setSortKey } = useUrlSearchParam<string>(
-		"sort",
-		"length",
-	);
+	const { search, setSearch } = useAnalysisSearch();
+	const filterORFs = search.filterOrfs ?? true;
+	const filterSequences = search.filterSequences ?? true;
+	const find = search.find ?? "";
+	const sortKey = search.sort ?? "length";
 
 	return (
 		<Toolbar>
 			<div className="flex-grow">
 				<InputSearch
 					value={find}
-					onChange={(e) => setFind(e.target.value)}
+					onChange={(e) => setSearch({ find: e.target.value })}
 					placeholder="Name or family"
 				/>
 			</div>
 			<AnalysisViewerSort
 				workflow="nuvs"
 				sortKey={sortKey}
-				onSelect={setSortKey}
+				onSelect={(sort) => setSearch({ sort })}
 			/>
 			<Tooltip tip="Hide sequences that have no HMM hits">
 				<ButtonToggle
-					onPressedChange={(active) => setFilterSequences(active)}
+					onPressedChange={(filterSequences) => setSearch({ filterSequences })}
 					pressed={filterSequences}
 				>
 					Filter Sequences
@@ -55,7 +45,7 @@ export default function NuvsToolbar({
 			<Tooltip tip="Hide ORFs that have no HMM hits">
 				<ButtonToggle
 					pressed={filterORFs}
-					onPressedChange={(active) => setFilterORFs(active)}
+					onPressedChange={(filterOrfs) => setSearch({ filterOrfs })}
 				>
 					Filter ORFs
 				</ButtonToggle>

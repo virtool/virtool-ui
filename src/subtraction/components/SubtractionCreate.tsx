@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import {
 	Dialog,
 	DialogContent,
@@ -26,12 +25,18 @@ type FormValues = {
 	uploadId: number[];
 };
 
+type SubtractionCreateProps = {
+	open?: boolean;
+	setOpen?: (open: boolean) => void;
+};
+
 /**
  * Displays a dialog for creating a subtraction
  */
-export default function SubtractionCreate() {
-	const { open, setOpen } = useDialogParam("openCreateSubtraction");
-
+export default function SubtractionCreate({
+	open = false,
+	setOpen = () => {},
+}: SubtractionCreateProps) {
 	const {
 		hasRestored,
 		formState: { errors },

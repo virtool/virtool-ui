@@ -1,5 +1,5 @@
-import { useDialogParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
+import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
 import { useCreateSequence } from "@otus/queries";
 import type { OtuSegment, OtuSequence } from "@otus/types";
 import { compact } from "es-toolkit";
@@ -23,8 +23,7 @@ export default function CreateSequence({
 	schema,
 	sequences,
 }: CreateSequenceProps) {
-	const { open: openCreateSequence, setOpen: setOpenCreateSequence } =
-		useDialogParam("openCreateSequence");
+	const { search, setSearch } = useOtuDetailSearch();
 
 	const mutation = useCreateSequence(otuId);
 
@@ -45,7 +44,7 @@ export default function CreateSequence({
 			},
 			{
 				onSuccess: () => {
-					setOpenCreateSequence(false);
+					setSearch({ openCreateSequence: false });
 				},
 			},
 		);
@@ -53,8 +52,8 @@ export default function CreateSequence({
 
 	return (
 		<Dialog
-			open={openCreateSequence}
-			onOpenChange={() => setOpenCreateSequence(false)}
+			open={Boolean(search.openCreateSequence)}
+			onOpenChange={() => setSearch({ openCreateSequence: false })}
 		>
 			<DialogContent>
 				<DialogTitle>Create Sequence</DialogTitle>

@@ -6,11 +6,28 @@ import {
 	mockApiGetSubtractions,
 } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
+import { useState } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import SubtractionList from "../SubtractionList";
 
+type SubtractionListSearch = {
+	find?: string;
+	openCreateSubtraction?: boolean;
+	page?: number;
+};
+
+function SubtractionListHarness() {
+	const [search, setSearch] = useState<SubtractionListSearch>({ find: "" });
+
+	function handleSetSearch(next: SubtractionListSearch) {
+		setSearch((prev) => ({ ...prev, ...next }));
+	}
+
+	return <SubtractionList {...search} setSearch={handleSetSearch} />;
+}
+
 describe("<SubtractionList />", () => {
-	let subtractions;
+	let subtractions: ReturnType<typeof createFakeSubtractionMinimal>;
 
 	beforeEach(() => {
 		subtractions = createFakeSubtractionMinimal();
@@ -33,7 +50,11 @@ describe("<SubtractionList />", () => {
 
 	it("should call handleChange when search input changes in toolbar", async () => {
 		const scope = mockApiGetSubtractions([subtractions]);
-		await renderWithRouter(<SubtractionList />);
+		mockApiGetSubtractions([subtractions]);
+		mockApiGetSubtractions([subtractions]);
+		mockApiGetSubtractions([subtractions]);
+		mockApiGetSubtractions([subtractions]);
+		await renderWithRouter(<SubtractionListHarness />);
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
 		);
@@ -83,7 +104,13 @@ describe("<SubtractionList />", () => {
 
 	it("should handle toolbar updates correctly", async () => {
 		const scope = mockApiGetSubtractions([subtractions]);
-		const { router } = await renderWithRouter(<SubtractionList />);
+		mockApiGetSubtractions([subtractions]);
+		mockApiGetSubtractions([subtractions]);
+		mockApiGetSubtractions([subtractions]);
+		mockApiGetSubtractions([subtractions]);
+		mockApiGetSubtractions([subtractions]);
+		mockApiGetSubtractions([subtractions]);
+		await renderWithRouter(<SubtractionListHarness />);
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
 		);
@@ -94,10 +121,6 @@ describe("<SubtractionList />", () => {
 		await userEvent.type(inputElement, "Foobar");
 		expect(inputElement).toHaveValue("Foobar");
 		expect(screen.getByPlaceholderText("Name")).toHaveValue("Foobar");
-
-		await waitFor(() =>
-			expect(router.state.location.href).toEqual("/?find=Foobar"),
-		);
 
 		scope.done();
 	});

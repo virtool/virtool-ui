@@ -1,4 +1,5 @@
 import JobsList from "@jobs/components/JobList";
+import type { JobState } from "@jobs/types";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod/v4";
 
@@ -23,5 +24,18 @@ const jobsSearchSchema = z.object({
 
 export const Route = createFileRoute("/_authenticated/jobs/")({
 	validateSearch: jobsSearchSchema,
-	component: JobsList,
+	component: JobsRoute,
 });
+
+function JobsRoute() {
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	return (
+		<JobsList
+			page={search.page}
+			states={search.state as JobState[]}
+			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+		/>
+	);
+}

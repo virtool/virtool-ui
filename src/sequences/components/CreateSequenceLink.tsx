@@ -1,5 +1,5 @@
-import { useUrlSearchParam } from "@app/hooks";
 import { cn } from "@app/utils";
+import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
 import { useCheckReferenceRight } from "@references/hooks";
 
 type CreateSequenceLinkProps = {
@@ -14,17 +14,23 @@ export default function CreateSequenceLink({ refId }: CreateSequenceLinkProps) {
 		refId,
 		"modify_otu",
 	);
-	const { setValue: setOpenCreateSequence } =
-		useUrlSearchParam("openCreateSequence");
+	const { setSearch } = useOtuDetailSearch();
 
 	if (canModify) {
 		return (
-			<a
-				className={cn("ml-auto", "cursor-pointer")}
-				onClick={() => setOpenCreateSequence(true)}
+			<button
+				className={cn(
+					"ml-auto",
+					"cursor-pointer",
+					"bg-transparent",
+					"border-0",
+					"p-0",
+				)}
+				onClick={() => setSearch({ openCreateSequence: true })}
+				type="button"
 			>
 				Create Sequence
-			</a>
+			</button>
 		);
 	}
 

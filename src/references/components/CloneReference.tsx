@@ -1,4 +1,3 @@
-import { useUrlSearchParam } from "@app/hooks";
 import Attribution from "@base/Attribution";
 import Badge from "@base/Badge";
 import Box from "@base/Box";
@@ -19,14 +18,20 @@ type FormValues = {
 };
 
 type CloneReferenceProps = {
+	cloneReferenceId?: string;
 	/** A list of minimal references */
 	references: ReferenceMinimal[];
+	unsetCloneReferenceId: () => void;
 };
 
 /**
  * Displays a form used for creating a clone of a reference
  */
-export default function CloneReference({ references }: CloneReferenceProps) {
+export default function CloneReference({
+	cloneReferenceId,
+	references,
+	unsetCloneReferenceId,
+}: CloneReferenceProps) {
 	const {
 		formState: { errors },
 		register,
@@ -35,9 +40,6 @@ export default function CloneReference({ references }: CloneReferenceProps) {
 	} = useForm<FormValues>();
 
 	const mutation = useCloneReference();
-
-	const { value: cloneReferenceId, unsetValue: unsetCloneReferenceId } =
-		useUrlSearchParam("cloneReferenceId");
 
 	const reference = references.find(
 		(reference) => reference.id === cloneReferenceId,

@@ -1,7 +1,7 @@
-import { useNavigate } from "@app/hooks";
 import RemoveDialog from "@base/RemoveDialog";
 import { useRemoveSubtraction } from "@subtraction/queries";
 import type { Subtraction } from "@subtraction/types";
+import { useNavigate } from "@tanstack/react-router";
 
 type RemoveSubtractionProps = {
 	/** The subtraction data */
@@ -34,7 +34,7 @@ export default function RemoveSubtraction({
 					{ subtractionId: subtraction.id },
 					{
 						onSuccess: () => {
-							navigate("/subtractions");
+							navigate({ to: "/subtractions" });
 						},
 					},
 				)

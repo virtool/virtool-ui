@@ -1,4 +1,3 @@
-import { useDialogParam, useNaiveUrlSearchParam } from "@app/hooks";
 import NoneFoundBox from "@base/NoneFoundBox";
 import ScrollArea from "@base/ScrollArea";
 import SubviewHeader from "@base/SubviewHeader";
@@ -6,6 +5,7 @@ import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useCurrentOtuContext } from "@otus/queries";
 import { useCheckReferenceRight } from "@references/hooks";
+import { useOtuDetailSearch } from "../OtuDetailSearchContext";
 import IsolateDetail from "./IsolateDetail";
 import IsolateItem from "./IsolateItem";
 
@@ -15,11 +15,8 @@ import IsolateItem from "./IsolateItem";
 export default function IsolateEditor() {
 	const { otu, reference } = useCurrentOtuContext();
 	const { isolates } = otu;
-	const { value: activeIsolateId } = useNaiveUrlSearchParam(
-		"activeIsolate",
-		isolates[0]?.id,
-	);
-	const { setOpen: setOpenAddIsolate } = useDialogParam("openAddIsolate");
+	const { search, setSearch } = useOtuDetailSearch();
+	const activeIsolateId = search.activeIsolate || isolates[0]?.id;
 	const { restrict_source_types, source_types } = reference;
 
 	const { hasPermission: canModify } = useCheckReferenceRight(
@@ -31,21 +28,22 @@ export default function IsolateEditor() {
 		? isolates.find((i) => i.id === (activeIsolateId || isolates[0]?.id))
 		: null;
 
-	const isolateComponents = isolates.map((isolate, index) => (
+	const isolateComponents = isolates.map((isolate) => (
 		<IsolateItem
-			key={index}
+			key={isolate.id}
 			isolate={isolate}
 			active={isolate.id === activeIsolate.id}
 		/>
 	));
 
 	const addIsolateLink = canModify ? (
-		<a
-			className="ml-auto cursor-pointer self-end text-sm font-medium"
-			onClick={() => setOpenAddIsolate(true)}
+		<button
+			className="ml-auto cursor-pointer self-end text-sm font-medium bg-transparent border-0 p-0"
+			onClick={() => setSearch({ openAddIsolate: true })}
+			type="button"
 		>
 			Add Isolate
-		</a>
+		</button>
 	) : null;
 
 	const body = isolateComponents.length ? (

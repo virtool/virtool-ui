@@ -1,5 +1,5 @@
+import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import type { FormattedPathoscopeHit } from "@analyses/types";
-import { useUrlSearchParam } from "@app/hooks.tanstack";
 import ScrollSyncContainer from "@base/ScrollSyncContainer";
 import { maxBy } from "es-toolkit";
 import PathoscopeIsolate from "./PathoscopeIsolate";
@@ -17,8 +17,8 @@ export default function PathoscopeDetail({
 	hit,
 	mappedCount,
 }: PathoscopeDetailProps) {
-	const { value: filterIsolates } =
-		useUrlSearchParam<boolean>("filterIsolates");
+	const { search } = useAnalysisSearch();
+	const filterIsolates = search.filterIsolates ?? true;
 
 	const { isolates, pi } = hit;
 

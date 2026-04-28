@@ -5,7 +5,7 @@ type PaginationPreviousProps = {
 	active?: boolean;
 	className?: string;
 	disabled?: boolean;
-	onClick?: () => void;
+	onPageChange: (page: number) => void;
 	page: number;
 };
 
@@ -13,16 +13,16 @@ export default function PaginationPrevious({
 	active,
 	className,
 	disabled,
-	onClick,
+	onPageChange,
 	page,
 }: PaginationPreviousProps) {
 	return (
 		<PaginationLink
-			aria-label="Go to previous page"
+			ariaLabel="Go to previous page"
 			className={cn("gap-1 pl-2.5", className)}
 			active={active}
 			disabled={disabled}
-			onClick={onClick}
+			onPageChange={onPageChange}
 			page={page}
 		>
 			Previous

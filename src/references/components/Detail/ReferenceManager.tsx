@@ -1,4 +1,3 @@
-import { usePathParams } from "@app/hooks";
 import { cn } from "@app/utils";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
@@ -7,15 +6,18 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Contributors from "@indexes/components/Contributors";
 import { useFetchReference } from "@references/queries";
+/**
+ * Display and edit information for a reference
+ */
+import { getRouteApi } from "@tanstack/react-router";
 import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";
 import RemoteReference from "./Remote";
 
-/**
- * Display and edit information for a reference
- */
+const routeApi = getRouteApi("/_authenticated/refs/$refId");
+
 export default function ReferenceManager() {
-	const { refId } = usePathParams<{ refId: string }>();
+	const { refId } = routeApi.useParams();
 	const { data: reference, isPending } = useFetchReference(refId);
 
 	if (isPending) {

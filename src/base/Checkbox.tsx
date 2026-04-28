@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import Icon from "./Icon";
 
 type CheckboxProps = {
+	ariaLabel?: string;
 	checked?: boolean;
 	label?: string;
 	labelComponent?: ReactNode;
@@ -14,6 +15,7 @@ type CheckboxProps = {
 };
 
 function Checkbox({
+	ariaLabel,
 	checked = false,
 	id,
 	label,
@@ -23,7 +25,7 @@ function Checkbox({
 	return (
 		<div className="inline-flex items-center gap-3">
 			<CheckboxPrimitive.Root
-				aria-label={label || "checkbox"}
+				aria-label={ariaLabel || label || "checkbox"}
 				checked={checked}
 				className={cn(
 					{

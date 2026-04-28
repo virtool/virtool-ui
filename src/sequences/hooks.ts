@@ -1,4 +1,4 @@
-import { useUrlSearchParam } from "@app/hooks";
+import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
 import { useActiveIsolate } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
 import type { OtuSegment, OtuSequence } from "@otus/types";
@@ -38,7 +38,8 @@ export function useExpanded(): UseExpandedResult {
  * @returns The active sequence.
  */
 export function useActiveSequence(): OtuSequence | undefined {
-	const { value: editSequenceId } = useUrlSearchParam<string>("editSequenceId");
+	const { search } = useOtuDetailSearch();
+	const editSequenceId = search.editSequenceId;
 
 	const { otu } = useCurrentOtuContext();
 
@@ -58,7 +59,8 @@ export function useActiveSequence(): OtuSequence | undefined {
 export function useGetUnreferencedSegments() {
 	const { otu } = useCurrentOtuContext();
 
-	const { value: editSequenceId } = useUrlSearchParam<string>("editSequenceId");
+	const { search } = useOtuDetailSearch();
+	const editSequenceId = search.editSequenceId;
 
 	const activeIsolate = useActiveIsolate(otu);
 	const activeSequenceId = editSequenceId || undefined;

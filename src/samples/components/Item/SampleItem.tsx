@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import Attribution from "@base/Attribution";
 import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
@@ -22,6 +21,7 @@ type SampleItemProps = {
 
 	/** Callback to handle sample selection on end icon quick analysis */
 	selectOnQuickAnalyze: () => void;
+	setOpenQuickAnalyze: (open: boolean) => void;
 };
 
 /**
@@ -32,12 +32,11 @@ export default function SampleItem({
 	checked,
 	handleSelect,
 	selectOnQuickAnalyze,
+	setOpenQuickAnalyze,
 }: SampleItemProps) {
-	const { setOpen } = useDialogParam("openQuickAnalyze");
-
 	function onQuickAnalyze() {
 		selectOnQuickAnalyze();
-		setOpen(true);
+		setOpenQuickAnalyze(true);
 	}
 
 	const job = sample.job && JobNested.parse(sample.job);

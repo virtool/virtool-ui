@@ -11,5 +11,18 @@ export const Route = createFileRoute(
 	"/_authenticated/samples/$sampleId/analyses/",
 )({
 	validateSearch: analysesListSearchSchema,
-	component: AnalysesList,
+	component: AnalysesRoute,
 });
+
+function AnalysesRoute() {
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	return (
+		<AnalysesList
+			openCreateAnalysis={Boolean(search.openCreateAnalysis)}
+			page={search.page}
+			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+		/>
+	);
+}

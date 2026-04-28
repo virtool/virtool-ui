@@ -1,17 +1,19 @@
-import type { JobCounts } from "@jobs/types";
+import type { JobCounts, JobState } from "@jobs/types";
 import StateFilter from "./StateFilter";
 
 type StateFilterProps = {
 	counts: JobCounts;
+	setStates: (states: JobState[]) => void;
+	states: JobState[];
 };
 
 /**
  * Displays the state filter options for jobs
  */
-export function JobFilters({ counts }: StateFilterProps) {
+export function JobFilters({ counts, setStates, states }: StateFilterProps) {
 	return (
 		<div>
-			<StateFilter counts={counts} />
+			<StateFilter counts={counts} setStates={setStates} states={states} />
 		</div>
 	);
 }

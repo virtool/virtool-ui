@@ -1,14 +1,16 @@
-import { usePathParams } from "@app/hooks";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { Quality } from "@quality/components/Quality";
+import { getRouteApi } from "@tanstack/react-router";
 import { useFetchSample } from "../queries";
 import LegacyAlert from "./SampleFilesMessage";
+
+const routeApi = getRouteApi("/_authenticated/samples/$sampleId");
 
 /**
  * Samples quality view showing charts for bases, composition, and sequences
  */
 export default function SampleQuality() {
-	const { sampleId } = usePathParams<{ sampleId: string }>();
+	const { sampleId } = routeApi.useParams();
 	const { data, isPending } = useFetchSample(sampleId);
 
 	if (isPending) {

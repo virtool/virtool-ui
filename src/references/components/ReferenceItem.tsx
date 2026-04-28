@@ -1,5 +1,4 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
-import { useUrlSearchParam } from "@app/hooks";
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
@@ -10,16 +9,14 @@ import { Copy } from "lucide-react";
 import type { ReactNode } from "react";
 
 type ReferenceItemProps = {
+	onClone: (id: string) => void;
 	reference: ReferenceMinimal;
 };
 
 /**
  * A condensed reference item for use in a list of references
  */
-export function ReferenceItem({ reference }: ReferenceItemProps) {
-	const { setValue: setCloneReferenceId } =
-		useUrlSearchParam<string>("cloneReferenceId");
-
+export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 	const { created_at, id, name, task, user } = reference;
 
 	const { hasPermission: canCreate } =
@@ -40,7 +37,7 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
 				IconComponent={Copy}
 				tip="clone"
 				color="blue"
-				onClick={() => setCloneReferenceId(id)}
+				onClick={() => onClone(id)}
 			/>
 		);
 	}

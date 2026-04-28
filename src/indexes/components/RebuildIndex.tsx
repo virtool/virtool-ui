@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import Button from "@base/Button";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@base/Dialog";
 import { useCreateIndex, useFetchUnbuiltChanges } from "../queries";
@@ -6,15 +5,19 @@ import RebuildHistory from "./History";
 import RebuildIndexError from "./RebuildIndexError";
 
 type RebuildIndexProps = {
+	open: boolean;
 	refId: string;
+	setOpen: (open: boolean) => void;
 };
 
 /**
  * Displays a dialog to rebuild an index
  */
-export default function RebuildIndex({ refId }: RebuildIndexProps) {
-	const { open: openRebuild, setOpen: setOpenRebuild } =
-		useDialogParam("openRebuild");
+export default function RebuildIndex({
+	open,
+	refId,
+	setOpen,
+}: RebuildIndexProps) {
 	const { data, isPending } = useFetchUnbuiltChanges(refId);
 	const mutation = useCreateIndex();
 
@@ -28,14 +31,14 @@ export default function RebuildIndex({ refId }: RebuildIndexProps) {
 			{ refId },
 			{
 				onSuccess: () => {
-					setOpenRebuild(false);
+					setOpen(false);
 				},
 			},
 		);
 	}
 
 	return (
-		<Dialog open={openRebuild} onOpenChange={() => setOpenRebuild(false)}>
+		<Dialog open={open} onOpenChange={() => setOpen(false)}>
 			<DialogContent>
 				<DialogTitle>Rebuild Index</DialogTitle>
 				<form onSubmit={handleSubmit}>

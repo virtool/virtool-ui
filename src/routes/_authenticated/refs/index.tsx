@@ -11,5 +11,20 @@ const refsSearchSchema = z.object({
 
 export const Route = createFileRoute("/_authenticated/refs/")({
 	validateSearch: refsSearchSchema,
-	component: ReferenceList,
+	component: ReferencesRoute,
 });
+
+function ReferencesRoute() {
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	return (
+		<ReferenceList
+			cloneReferenceId={search.cloneReferenceId}
+			createReferenceType={search.createReferenceType}
+			find={search.find}
+			page={search.page}
+			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+		/>
+	);
+}

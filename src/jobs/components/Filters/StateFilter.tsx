@@ -1,4 +1,3 @@
-import { useListSearchParam } from "@app/hooks";
 import BoxGroup from "@base/BoxGroup";
 import SideBarSection from "@base/SideBarSection";
 import SidebarHeader from "@base/SidebarHeader";
@@ -8,15 +7,18 @@ import { StateButton } from "./StateButton";
 
 type StateFilterProps = {
 	counts: JobCounts;
+	setStates: (states: JobState[]) => void;
+	states: JobState[];
 };
 
 /**
  * Displays the state filtering for jobs
  */
-export default function StateFilter({ counts }: StateFilterProps) {
-	const { values: states, setValues: setStates } =
-		useListSearchParam<JobState>("state");
-
+export default function StateFilter({
+	counts,
+	setStates,
+	states,
+}: StateFilterProps) {
 	function handleClick(state: JobState) {
 		setStates(xor(states, [state]));
 	}

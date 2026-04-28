@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import { formatIsolateName } from "@app/utils";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
@@ -9,6 +8,7 @@ import type { OtuIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import Sequences from "@sequences/components/Sequences";
 import { Pencil, Star, Trash } from "lucide-react";
+import { useOtuDetailSearch } from "../OtuDetailSearchContext";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./RemoveIsolate";
 
@@ -33,12 +33,7 @@ export default function IsolateDetail({
 	otuId,
 	restrictSourceTypes,
 }: IsolateDetailProps) {
-	const { open: openEditIsolate, setOpen: setOpenEditIsolate } =
-		useDialogParam("openEditIsolate");
-
-	const { open: openRemoveIsolate, setOpen: setOpenRemoveIsolate } =
-		useDialogParam("openRemoveIsolate");
-
+	const { search, setSearch } = useOtuDetailSearch();
 	const mutation = useSetIsolateAsDefault();
 
 	return (
@@ -51,16 +46,16 @@ export default function IsolateDetail({
 				sourceName={activeIsolate.source_name}
 				allowedSourceTypes={allowedSourceTypes}
 				restrictSourceTypes={restrictSourceTypes}
-				show={openEditIsolate}
-				onHide={() => setOpenEditIsolate(false)}
+				show={Boolean(search.openEditIsolate)}
+				onHide={() => setSearch({ openEditIsolate: false })}
 			/>
 
 			<RemoveIsolate
 				id={activeIsolate.id}
 				name={formatIsolateName(activeIsolate)}
-				onHide={() => setOpenRemoveIsolate(false)}
+				onHide={() => setSearch({ openRemoveIsolate: false })}
 				otuId={otuId}
-				show={openRemoveIsolate}
+				show={Boolean(search.openRemoveIsolate)}
 			/>
 
 			<Box className="flex items-center text-base justify-between">
@@ -78,7 +73,7 @@ export default function IsolateDetail({
 								IconComponent={Pencil}
 								color="grayDark"
 								tip="edit isolate"
-								onClick={() => setOpenEditIsolate(true)}
+								onClick={() => setSearch({ openEditIsolate: true })}
 							/>
 							{!activeIsolate.default && (
 								<IconButton
@@ -99,7 +94,7 @@ export default function IsolateDetail({
 								IconComponent={Trash}
 								color="red"
 								tip="remove isolate"
-								onClick={() => setOpenRemoveIsolate(true)}
+								onClick={() => setSearch({ openRemoveIsolate: true })}
 							/>
 						</>
 					)}

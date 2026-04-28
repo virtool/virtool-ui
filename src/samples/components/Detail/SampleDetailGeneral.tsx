@@ -1,4 +1,3 @@
-import { usePathParams } from "@app/hooks";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";
@@ -9,17 +8,22 @@ import Markdown from "@base/Markdown";
 import JobItem from "@jobs/components/JobItem";
 import { useFetchSample } from "@samples/queries";
 import { getLibraryTypeDisplayName } from "@samples/utils";
+/**
+ * The general view in sample details
+ */
+import { getRouteApi } from "@tanstack/react-router";
 import numbro from "numbro";
 import { JobNested } from "@/jobs/types";
 import EditSample from "../EditSample";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";
 import Sidebar from "./Sidebar";
 
-/**
- * The general view in sample details
- */
+const routeApi = getRouteApi("/_authenticated/samples/$sampleId");
+
 export default function SampleDetailGeneral() {
-	const { sampleId } = usePathParams<{ sampleId: string }>();
+	const { sampleId } = routeApi.useParams();
+	const search = routeApi.useSearch();
+	const navigate = routeApi.useNavigate();
 	const { data, isPending } = useFetchSample(sampleId);
 
 	if (isPending) {
@@ -125,7 +129,13 @@ export default function SampleDetailGeneral() {
 				/>
 			</ContainerSide>
 
-			<EditSample sample={data} />
+			<EditSample
+				open={Boolean(search.openEditSample)}
+				sample={data}
+				setOpen={(openEditSample) =>
+					navigate({ search: { ...search, openEditSample } })
+				}
+			/>
 		</div>
 	);
 }

@@ -10,5 +10,19 @@ const subtractionsSearchSchema = z.object({
 
 export const Route = createFileRoute("/_authenticated/subtractions/")({
 	validateSearch: subtractionsSearchSchema,
-	component: SubtractionList,
+	component: SubtractionsRoute,
 });
+
+function SubtractionsRoute() {
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	return (
+		<SubtractionList
+			find={search.find}
+			openCreateSubtraction={Boolean(search.openCreateSubtraction)}
+			page={search.page}
+			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+		/>
+	);
+}

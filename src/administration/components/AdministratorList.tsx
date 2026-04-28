@@ -1,5 +1,4 @@
 import { useFetchAccount } from "@account/queries";
-import { usePageParam } from "@app/hooks";
 import InputSearch from "@base/InputSearch";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
@@ -10,6 +9,11 @@ import { useFindUsers, useGetAdministratorRoles } from "../queries";
 import AdministratorCreate from "./AdministratorCreate";
 import AdministratorItem from "./AdministratorItem";
 
+type ManageAdministratorsProps = {
+	page?: number;
+	setPage?: (page: number) => void;
+};
+
 function renderRow(roles) {
 	function AdministratorRow(item) {
 		return <AdministratorItem key={item.id} user={item} roles={roles} />;
@@ -17,9 +21,11 @@ function renderRow(roles) {
 	return AdministratorRow;
 }
 
-export default function ManageAdministrators() {
+export default function ManageAdministrators({
+	page = 1,
+	setPage = () => {},
+}: ManageAdministratorsProps) {
 	const [term, setTerm] = useState("");
-	const { page } = usePageParam();
 
 	const { data: users, isPending: isPendingUsers } = useFindUsers(
 		page,
@@ -56,6 +62,7 @@ export default function ManageAdministrators() {
 				storedPage={users.page}
 				currentPage={page}
 				pageCount={users.page_count}
+				onPageChange={setPage}
 			/>
 			{!filteredUsers.length && <NoneFoundBox noun="administrators" />}
 		</>

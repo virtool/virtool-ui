@@ -1,5 +1,5 @@
+import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import type { FormattedPathoscopeAnalysis } from "@analyses/types";
-import { useUrlSearchParam } from "@app/hooks.tanstack";
 import Alert from "@base/Alert";
 import type { Sample } from "@samples/types";
 import { PathoscopeList } from "./PathoscopeList";
@@ -17,7 +17,8 @@ type PathoscopeViewerProps = {
 
 /** Detailed breakdown of the results of a pathoscope analysis */
 export function PathoscopeViewer({ analysis, sample }: PathoscopeViewerProps) {
-	const { value: showReads } = useUrlSearchParam<boolean>("reads");
+	const { search } = useAnalysisSearch();
+	const showReads = search.reads ?? false;
 
 	return (
 		<>

@@ -1,4 +1,3 @@
-import { useUrlSearchParam } from "@app/hooks";
 import RemoveDialog from "@base/RemoveDialog";
 import { useUpdateOTU } from "@otus/queries";
 import type { OtuSegment } from "@otus/types";
@@ -7,8 +6,10 @@ type RemoveSegmentProps = {
 	abbreviation: string;
 	name: string;
 	otuId: string;
+	removeSegmentName?: string;
 	/** List of segments associated with the OTU */
 	schema: OtuSegment[];
+	unsetRemoveSegmentName?: () => void;
 };
 
 /**
@@ -18,10 +19,10 @@ export default function RemoveSegment({
 	abbreviation,
 	name,
 	otuId,
+	removeSegmentName,
 	schema,
+	unsetRemoveSegmentName = () => {},
 }: RemoveSegmentProps) {
-	const { value: removeSegmentName, unsetValue: unsetRemoveSegmentName } =
-		useUrlSearchParam<string>("removeSegmentName");
 	const mutation = useUpdateOTU(otuId);
 
 	function handleSubmit() {

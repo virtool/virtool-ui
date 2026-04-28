@@ -1,6 +1,6 @@
+import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import AnalysisValue from "@analyses/components/AnalysisValue";
 import type { FormattedPathoscopeHit } from "@analyses/types";
-import { useUrlSearchParam } from "@app/hooks.tanstack";
 import { toScientificNotation } from "@app/utils";
 import AccordionContent from "@base/AccordionContent";
 import AccordionScrollingItem from "@base/AccordionScrollingItem";
@@ -19,7 +19,8 @@ type PathoscopeItemProps = {
 /** Results for a single pathoscope analysis hit  */
 export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
 	const { abbreviation, coverage, depth, filled, name, pi, id } = hit;
-	const { value: showReads } = useUrlSearchParam<boolean>("reads");
+	const { search } = useAnalysisSearch();
+	const showReads = search.reads ?? false;
 
 	const piValue = showReads
 		? Math.round(pi * mappedCount)

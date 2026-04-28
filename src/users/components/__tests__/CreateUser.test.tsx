@@ -2,8 +2,15 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
+import { useState } from "react";
 import { describe, expect, it } from "vitest";
 import CreateUser from "../CreateUser";
+
+function CreateUserHarness() {
+	const [open, setOpen] = useState(false);
+
+	return <CreateUser open={open} setOpen={setOpen} />;
+}
 
 describe("<CreateUser />", () => {
 	it("creates user once form is submitted", async () => {
@@ -20,7 +27,7 @@ describe("<CreateUser />", () => {
 				password: passwordInput,
 				forceReset: false,
 			});
-		await renderWithRouter(<CreateUser />);
+		await renderWithRouter(<CreateUserHarness />);
 
 		await userEvent.click(screen.getByRole("button"));
 
@@ -37,7 +44,7 @@ describe("<CreateUser />", () => {
 	});
 
 	it("should render correct username error message", async () => {
-		await renderWithRouter(<CreateUser />);
+		await renderWithRouter(<CreateUserHarness />);
 		await userEvent.click(screen.getByRole("button"));
 
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));

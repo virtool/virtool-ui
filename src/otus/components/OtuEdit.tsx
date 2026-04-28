@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useUpdateOTU } from "@otus/queries";
 import OtuForm from "./OtuForm";
@@ -6,16 +5,21 @@ import OtuForm from "./OtuForm";
 type OtuEditProps = {
 	abbreviation: string;
 	name: string;
+	open?: boolean;
 	otuId: string;
+	setOpen?: (open: boolean) => void;
 };
 
 /**
  * Displays a dialog for editing an OTU
  */
-export default function OtuEdit({ abbreviation, name, otuId }: OtuEditProps) {
-	const { open: openEditOTU, setOpen: setOpenEditOTU } =
-		useDialogParam("openEditOTU");
-
+export default function OtuEdit({
+	abbreviation,
+	name,
+	open = false,
+	otuId,
+	setOpen = () => {},
+}: OtuEditProps) {
 	const mutation = useUpdateOTU(otuId);
 
 	function handleSubmit({ name, abbreviation }) {
@@ -23,19 +27,19 @@ export default function OtuEdit({ abbreviation, name, otuId }: OtuEditProps) {
 			{ otuId, name, abbreviation },
 			{
 				onSuccess: () => {
-					setOpenEditOTU(false);
+					setOpen(false);
 				},
 			},
 		);
 	}
 
 	function onHide() {
-		setOpenEditOTU(false);
+		setOpen(false);
 		mutation.reset();
 	}
 
 	return (
-		<Dialog open={openEditOTU} onOpenChange={onHide}>
+		<Dialog open={open} onOpenChange={onHide}>
 			<DialogContent>
 				<DialogTitle>Edit OTU</DialogTitle>
 				<OtuForm

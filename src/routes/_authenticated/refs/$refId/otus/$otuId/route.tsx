@@ -4,6 +4,7 @@ import TabsLink from "@base/TabsLink";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import { OtuDetailSearchProvider } from "@otus/components/Detail/OtuDetailSearchContext";
 import { OtuHeaderIcons } from "@otus/components/Detail/OtuHeaderIcons";
 import { otuQueryOptions, useFetchOTU } from "@otus/queries";
 import { referenceQueryOptions, useFetchReference } from "@references/queries";
@@ -47,6 +48,8 @@ export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 
 function OtuDetailLayout() {
 	const { refId, otuId } = Route.useParams();
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
 	const { data: otu } = useFetchOTU(otuId);
 	const { data: reference } = useFetchReference(refId);
 
@@ -57,7 +60,10 @@ function OtuDetailLayout() {
 	const { id, name, abbreviation } = otu;
 
 	return (
-		<>
+		<OtuDetailSearchProvider
+			search={search}
+			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+		>
 			<ViewHeader title={name}>
 				<ViewHeaderTitle className="items-baseline">
 					{name}{" "}
@@ -92,6 +98,6 @@ function OtuDetailLayout() {
 			</Tabs>
 
 			<Outlet />
-		</>
+		</OtuDetailSearchProvider>
 	);
 }

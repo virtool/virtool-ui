@@ -1,4 +1,3 @@
-import { useUrlSearchParam } from "@app/hooks";
 import { cn } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
@@ -18,6 +17,8 @@ type SegmentProps = {
 	/** A callback function to move the segment down */
 	onMoveDown: () => void;
 	segment: OtuSegment;
+	setEditSegmentName: (name: string) => void;
+	setRemoveSegmentName: (name: string) => void;
 };
 
 /**
@@ -30,12 +31,9 @@ export default function Segment({
 	onMoveUp,
 	onMoveDown,
 	segment,
+	setEditSegmentName,
+	setRemoveSegmentName,
 }: SegmentProps) {
-	const { setValue: setRemoveSegmentName } =
-		useUrlSearchParam<string>("removeSegmentName");
-	const { setValue: setEditSegmentName } =
-		useUrlSearchParam<string>("editSegmentName");
-
 	return (
 		<BoxGroupSection
 			className="grid items-center px-4 leading-none h-12"

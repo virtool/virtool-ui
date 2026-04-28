@@ -10,5 +10,19 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/_authenticated/administration/users/")({
 	validateSearch: searchSchema,
-	component: ManageUsers,
+	component: UsersRoute,
 });
+
+function UsersRoute() {
+	const search = Route.useSearch();
+	const navigate = Route.useNavigate();
+
+	return (
+		<ManageUsers
+			openCreateUser={Boolean(search.openCreateUser)}
+			page={search.page}
+			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+			status={search.status}
+		/>
+	);
+}

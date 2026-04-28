@@ -1,5 +1,4 @@
 import { objectHasProperty } from "@app/common";
-import { useDialogParam, useUrlSearchParam } from "@app/hooks";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
@@ -14,38 +13,37 @@ import EditReferenceMember from "./EditMember";
 import MemberItem from "./MemberItem";
 
 type ReferenceMembersProps = {
+	editId?: string;
 	/** The list of users or groups associated with the reference */
 	members: ReferenceGroup[] | ReferenceUser[];
 
 	/** Whether the member is a user or a group */
 	noun: string;
 
+	openAdd?: boolean;
 	refId: string;
+	setEditId?: (id?: string) => void;
+	setOpenAdd?: (open: boolean) => void;
 };
 
 /**
  * Displays a component for managing who can access a reference by users or groups
  */
 export default function ReferenceMembers({
+	editId,
 	members,
 	noun,
+	openAdd = false,
 	refId,
+	setEditId = () => {},
+	setOpenAdd = () => {},
 }: ReferenceMembersProps) {
-	const { open: openAdd, setOpen: setOpenAdd } = useDialogParam(
-		`openAdd${noun}`,
-	);
-	const {
-		value: editId,
-		setValue: setEditId,
-		unsetValue: unsetEditId,
-	} = useUrlSearchParam<string>(`edit${noun}Id`);
-
 	const mutation = useRemoveReferenceUser(refId, noun);
 	const { hasPermission: canModify } = useCheckReferenceRight(refId, "modify");
 
 	function handleHide() {
 		setOpenAdd(false);
-		unsetEditId();
+		setEditId(undefined);
 	}
 
 	const plural = `${noun}s`;
@@ -57,12 +55,13 @@ export default function ReferenceMembers({
 					<h2>
 						{plural}
 						{canModify && (
-							<a
-								className="cursor-pointer ml-auto"
+							<button
+								className="bg-transparent border-0 cursor-pointer ml-auto p-0"
 								onClick={() => setOpenAdd(true)}
+								type="button"
 							>
 								Add {noun}
-							</a>
+							</button>
 						)}
 					</h2>
 					<p>Manage membership and rights for reference {plural}.</p>
@@ -109,6 +108,8 @@ export default function ReferenceMembers({
 				member={members.find(
 					(member: ReferenceGroup | ReferenceUser) => member.id === editId,
 				)}
+				editId={editId}
+				unsetEditId={() => setEditId(undefined)}
 				noun={noun}
 				refId={refId}
 			/>

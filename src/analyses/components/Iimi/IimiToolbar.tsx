@@ -1,5 +1,5 @@
+import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import { AnalysisViewerSort } from "@analyses/components/Viewer/Sort";
-import { useUrlSearchParam } from "@app/hooks.tanstack";
 import InputSearch from "@base/InputSearch";
 import InputSimple from "@base/InputSimple";
 import Toolbar from "@base/Toolbar";
@@ -7,6 +7,7 @@ import numbro from "numbro";
 
 type IimiToolbarProps = {
 	minimumProbability: number;
+	sortKey: string;
 	term: string;
 	setMinimumProbability: (value: number) => void;
 	setTerm: (value: string) => void;
@@ -17,16 +18,13 @@ type IimiToolbarProps = {
  */
 export default function IimiToolbar({
 	minimumProbability,
+	sortKey,
 	term,
 	setMinimumProbability,
 	setTerm,
 }: IimiToolbarProps) {
 	const value = numbro(minimumProbability).format("0.000");
-
-	const { value: sortKey, setValue: setSortKey } = useUrlSearchParam<string>(
-		"sort",
-		"probability",
-	);
+	const { setSearch } = useAnalysisSearch();
 
 	return (
 		<Toolbar>
@@ -34,7 +32,7 @@ export default function IimiToolbar({
 			<AnalysisViewerSort
 				workflow="iimi"
 				sortKey={sortKey}
-				onSelect={setSortKey}
+				onSelect={(sort) => setSearch({ sort })}
 			/>
 			<form>
 				<InputSimple

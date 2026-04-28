@@ -1,21 +1,23 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
-import { useDialogParam } from "@app/hooks";
 import Button from "@base/Button";
 import InputSearch from "@base/InputSearch";
 import Toolbar from "@base/Toolbar";
 import SubtractionCreate from "./SubtractionCreate";
 
 type SubtractionToolbarProps = {
-	term: string;
 	handleChange: (any) => void;
+	openCreate: boolean;
+	setOpenCreate: (open: boolean) => void;
+	term: string;
 };
 
 export default function SubtractionToolbar({
-	term,
 	handleChange,
+	openCreate,
+	setOpenCreate,
+	term,
 }: SubtractionToolbarProps) {
 	const { hasPermission } = useCheckAdminRoleOrPermission("modify_subtraction");
-	const { setOpen } = useDialogParam("openCreateSubtraction");
 
 	return (
 		<Toolbar>
@@ -23,11 +25,11 @@ export default function SubtractionToolbar({
 				<InputSearch value={term} onChange={handleChange} placeholder="Name" />
 			</div>
 			{hasPermission && (
-				<Button color="blue" onClick={() => setOpen(true)}>
+				<Button color="blue" onClick={() => setOpenCreate(true)}>
 					Create
 				</Button>
 			)}
-			<SubtractionCreate />
+			<SubtractionCreate open={openCreate} setOpen={setOpenCreate} />
 		</Toolbar>
 	);
 }

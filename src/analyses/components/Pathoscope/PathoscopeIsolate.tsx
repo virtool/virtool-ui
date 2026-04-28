@@ -1,4 +1,4 @@
-import { useUrlSearchParam } from "@app/hooks.tanstack";
+import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import { toScientificNotation } from "@app/utils";
 import ScrollSync from "@base/ScrollSync";
 import PathoscopeSequence from "./PathoscopeSequence";
@@ -13,7 +13,8 @@ export default function PathoscopeIsolate({
 	reads,
 	sequences,
 }) {
-	const { value: showReads } = useUrlSearchParam<boolean>("showReads");
+	const { search } = useAnalysisSearch();
+	const showReads = search.reads ?? false;
 
 	const totalLength = sequences.reduce(
 		(acc, hit) => acc + hit.filled.length,

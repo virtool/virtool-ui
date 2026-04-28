@@ -1,4 +1,3 @@
-import { useUrlSearchParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useUpdateOTU } from "@otus/queries";
 import type { Molecule, OtuSegment } from "@otus/types";
@@ -12,10 +11,12 @@ type FormValues = {
 
 type EditSegmentProps = {
 	abbreviation: string;
+	editSegmentName?: string;
 	name: string;
 	otuId: string;
 	/** The segments associated with the otu */
 	schema: OtuSegment[];
+	unsetEditSegmentName?: () => void;
 };
 
 /**
@@ -23,12 +24,12 @@ type EditSegmentProps = {
  */
 export default function EditSegment({
 	abbreviation,
+	editSegmentName,
 	otuId,
 	name,
 	schema,
+	unsetEditSegmentName = () => {},
 }: EditSegmentProps) {
-	const { value: editSegmentName, unsetValue: unsetEditSegmentName } =
-		useUrlSearchParam<string>("editSegmentName");
 	const mutation = useUpdateOTU(otuId);
 
 	const segment = schema.find((s) => s.name === editSegmentName);

@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { useMatchPartialPath } from "../useMatchPartialPath.tanstack";
+import { useMatchPartialPath } from "../useMatchPartialPath";
 
 function TestHarness({ path, exclude }: { path: string; exclude?: string[] }) {
 	const result = useMatchPartialPath(path, exclude);

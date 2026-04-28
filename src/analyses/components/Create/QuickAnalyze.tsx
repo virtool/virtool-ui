@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import { cn } from "@app/utils";
 import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
@@ -27,8 +26,10 @@ function Content({ children, value }) {
 }
 
 type QuickAnalyzeProps = {
+	open: boolean;
 	/** A callback function to clear selected samples */
 	onClear: () => void;
+	setOpen: (open: boolean) => void;
 
 	/** The selected samples */
 	samples: SampleMinimal[];
@@ -37,16 +38,19 @@ type QuickAnalyzeProps = {
 /**
  * A form for triggering quick analyses on selected samples
  */
-export default function QuickAnalyze({ samples }: QuickAnalyzeProps) {
-	const { open, setOpen } = useDialogParam("openQuickAnalyze");
+export default function QuickAnalyze({
+	open,
+	samples,
+	setOpen,
+}: QuickAnalyzeProps) {
 	const { data: hmms, isPending } = useListHmms(1, 1, "");
 
 	// The dialog should close when all selected samples have been analyzed and deselected.
 	useEffect(() => {
-		if (samples.length === 0) {
+		if (open && samples.length === 0) {
 			setOpen(false);
 		}
-	}, [samples, setOpen]);
+	}, [open, samples, setOpen]);
 
 	if (isPending) {
 		return null;

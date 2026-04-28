@@ -29,9 +29,19 @@ function SampleSearchToolbar({ onChange, term }) {
 /**
  * A toolbar allowing samples to be filtered by name and to create an analysis for selected samples
  */
-export default function SampleToolbar({ selected, onClear, onChange, term }) {
+export default function SampleToolbar({
+	selected,
+	onClear,
+	onChange,
+	setOpenQuickAnalyze,
+	term,
+}) {
 	return selected.length ? (
-		<SampleSelectionToolbar selected={selected} onClear={onClear} />
+		<SampleSelectionToolbar
+			selected={selected}
+			onClear={onClear}
+			setOpenQuickAnalyze={setOpenQuickAnalyze}
+		/>
 	) : (
 		<SampleSearchToolbar onChange={onChange} term={term} />
 	);

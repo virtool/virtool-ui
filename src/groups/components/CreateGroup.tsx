@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@base/Dialog";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
@@ -12,12 +11,18 @@ type FormValues = {
 	name: string;
 };
 
+type CreateGroupProps = {
+	open?: boolean;
+	setOpen?: (open: boolean) => void;
+};
+
 /**
  * A dialog for creating a new group
  */
-export default function CreateGroup() {
-	const { open: openCreateGroup, setOpen: setOpenCreateGroup } =
-		useDialogParam("openCreateGroup");
+export default function CreateGroup({
+	open = false,
+	setOpen = () => {},
+}: CreateGroupProps) {
 	const createGroupMutation = useCreateGroup();
 	const {
 		formState: { errors },
@@ -30,17 +35,14 @@ export default function CreateGroup() {
 			{ name },
 			{
 				onSuccess: () => {
-					setOpenCreateGroup(false);
+					setOpen(false);
 				},
 			},
 		);
 	}
 
 	return (
-		<Dialog
-			open={openCreateGroup}
-			onOpenChange={() => setOpenCreateGroup(false)}
-		>
+		<Dialog open={open} onOpenChange={() => setOpen(false)}>
 			<DialogContent>
 				<DialogTitle>Create Group</DialogTitle>
 				<form onSubmit={handleSubmit(onSubmit)}>

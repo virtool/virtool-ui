@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import {
 	keepPreviousData,
 	useMutation,
@@ -124,7 +123,6 @@ export function useFindUsers(
  */
 export function useCreateUser() {
 	const queryClient = useQueryClient();
-	const { setOpen: setOpenCreateUser } = useDialogParam("openCreateUser");
 	return useMutation<
 		User,
 		ErrorResponse,
@@ -136,7 +134,6 @@ export function useCreateUser() {
 	>({
 		mutationFn: createUser,
 		onSuccess: () => {
-			setOpenCreateUser(false);
 			queryClient.invalidateQueries({ queryKey: userQueryKeys.lists() });
 		},
 	});

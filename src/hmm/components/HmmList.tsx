@@ -1,4 +1,3 @@
-import { usePageParam, useUrlSearchParam } from "@app/hooks";
 import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
@@ -11,13 +10,17 @@ import { HmmInstall } from "./HmmInstall";
 import HmmItem from "./HmmItem";
 import HmmToolbar from "./HmmToolbar";
 
+type HmmListProps = {
+	find: string;
+	page: number;
+	setSearch: (next: { find?: string; page?: number }) => void;
+};
+
 /**
  * A list of HMMs with filtering options
  */
-export default function HmmList() {
-	const { page } = usePageParam();
-	const { value: term, setValue: setTerm } = useUrlSearchParam<string>("find");
-	const { data, isPending } = useListHmms(page, 25, term);
+export default function HmmList({ find, page, setSearch }: HmmListProps) {
+	const { data, isPending } = useListHmms(page, 25, find);
 
 	if (isPending) {
 		return <LoadingPlaceholder />;
@@ -45,13 +48,17 @@ export default function HmmList() {
 
 			{total_count ? (
 				<>
-					<HmmToolbar term={term} onChange={(e) => setTerm(e.target.value)} />
+					<HmmToolbar
+						term={find}
+						onChange={(e) => setSearch({ find: e.target.value })}
+					/>
 					{documents.length ? (
 						<Pagination
 							items={documents}
 							storedPage={storedPage}
 							currentPage={page}
 							pageCount={page_count}
+							onPageChange={(page) => setSearch({ page })}
 						>
 							<BoxGroup>
 								{documents.map((document) => (

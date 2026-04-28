@@ -1,22 +1,26 @@
-import { useUrlSearchParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import Tabs from "@base/Tabs";
 import TabsLink from "@base/TabsLink";
 import EmptyReference from "./EmptyReference";
 import ImportReference from "./ImportReference";
 
+type CreateReferenceProps = {
+	createReferenceType?: string;
+	setCreateReferenceType: (type?: string) => void;
+};
+
 /**
  * The create reference view with options to create an empty reference or import a reference
  */
-export function CreateReference() {
-	const { value: createReferenceType, unsetValue: unsetCreateReferenceType } =
-		useUrlSearchParam("createReferenceType");
-
+export function CreateReference({
+	createReferenceType,
+	setCreateReferenceType,
+}: CreateReferenceProps) {
 	return (
 		<Dialog
 			open={Boolean(createReferenceType)}
 			onOpenChange={() => {
-				unsetCreateReferenceType();
+				setCreateReferenceType(undefined);
 			}}
 		>
 			<DialogContent size="lg">

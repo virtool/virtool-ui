@@ -1,4 +1,3 @@
-import { usePathParams } from "@app/hooks";
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
@@ -9,15 +8,18 @@ import NotFound from "@base/NotFound";
 import ScrollArea from "@base/ScrollArea";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import { getRouteApi } from "@tanstack/react-router";
 import { useFetchHmm } from "../queries";
 import { HmmEntropyIndicator } from "./HmmEntropyIndicator";
 import { HmmTaxonomy } from "./HmmTaxonomy";
+
+const routeApi = getRouteApi("/_authenticated/hmm/$hmmId");
 
 /**
  * The HMM detailed view
  */
 export default function HmmDetail() {
-	const { hmmId } = usePathParams<{ hmmId: string }>();
+	const { hmmId } = routeApi.useParams();
 	const { data, isPending, isError } = useFetchHmm(hmmId);
 
 	if (isError) {
@@ -28,20 +30,18 @@ export default function HmmDetail() {
 		return <LoadingPlaceholder className="mt-32" />;
 	}
 
-	const clusterMembers = data.entries.map(
-		({ name, accession, organism }, index) => (
-			<BoxGroupSection key={index} className="grid grid-cols-3">
-				<ExternalLink href={`http://www.ncbi.nlm.nih.gov/protein/${accession}`}>
-					{accession}
-				</ExternalLink>
-				<span>{name}</span>
-				<span>{organism}</span>
-			</BoxGroupSection>
-		),
-	);
+	const clusterMembers = data.entries.map(({ name, accession, organism }) => (
+		<BoxGroupSection key={accession} className="grid grid-cols-3">
+			<ExternalLink href={`http://www.ncbi.nlm.nih.gov/protein/${accession}`}>
+				{accession}
+			</ExternalLink>
+			<span>{name}</span>
+			<span>{organism}</span>
+		</BoxGroupSection>
+	));
 
-	const names = data.names.map((name, index) => (
-		<Label className="mr-1" key={index}>
+	const names = data.names.map((name) => (
+		<Label className="mr-1" key={name}>
 			{name}
 		</Label>
 	));

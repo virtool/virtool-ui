@@ -1,4 +1,3 @@
-import { useDialogParam } from "@app/hooks";
 import { cn } from "@app/utils";
 import { Dialog, DialogTitle } from "@base/Dialog";
 import type { HmmSearchResults } from "@hmm/types";
@@ -13,6 +12,10 @@ import { getCompatibleWorkflows } from "./workflows";
 type CreateAnalysisProps = {
 	/** The HMM search results */
 	hmms: HmmSearchResults;
+
+	open: boolean;
+
+	setOpen: (open: boolean) => void;
 
 	/** The id of the sample being used */
 	sampleId: string;
@@ -34,10 +37,10 @@ function Content({ children, value }) {
  */
 export default function CreateAnalysis({
 	hmms,
+	open,
+	setOpen,
 	sampleId,
 }: CreateAnalysisProps) {
-	const { open, setOpen } = useDialogParam("openCreateAnalysis");
-
 	const compatibleWorkflows = getCompatibleWorkflows(Boolean(hmms.total_count));
 
 	const sampleIds = [sampleId];
