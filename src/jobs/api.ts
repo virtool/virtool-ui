@@ -15,7 +15,7 @@ export async function findJobs(
 	states: JobState[],
 ): Promise<ServerJobSearchResult> {
 	const response = await apiClient
-		.get("/jobs/v2")
+		.get("/jobs")
 		.query({ page, per_page, state: states });
 
 	return response.body;
@@ -28,6 +28,6 @@ export async function findJobs(
  * @returns A promise resolving to a single job
  */
 export async function fetchJob(jobId: number): Promise<ServerJob> {
-	const response = await apiClient.get(`/jobs/v2/${jobId}`);
+	const response = await apiClient.get(`/jobs/${jobId}`);
 	return response.body;
 }
