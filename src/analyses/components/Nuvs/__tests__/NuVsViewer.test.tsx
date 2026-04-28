@@ -1,12 +1,6 @@
+import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
 import NuvsViewer from "@analyses/components/Nuvs/NuvsViewer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-	createMemoryHistory,
-	createRootRoute,
-	createRoute,
-	createRouter,
-	RouterProvider,
-} from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
@@ -15,52 +9,19 @@ import {
 } from "@tests/fake/analyses";
 import { createFakeSample } from "@tests/fake/samples";
 import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { z } from "zod/v4";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const analysisSearchSchema = z.object({
-	find: z.string().optional().catch(undefined),
-	sort: z.string().optional().catch(undefined),
-	sortDesc: z.boolean().optional().catch(undefined),
-	filterOtus: z.boolean().optional().catch(undefined),
-	filterIsolates: z.boolean().optional().catch(undefined),
-	reads: z.boolean().optional().catch(undefined),
-	filterSequences: z.boolean().optional().catch(undefined),
-	filterOrfs: z.boolean().optional().catch(undefined),
-	activeHit: z.string().optional().catch(undefined),
-});
-
-async function renderWithAnalysisRoute(ui: React.ReactElement) {
-	const rootRoute = createRootRoute();
-	const authenticatedRoute = createRoute({
-		getParentRoute: () => rootRoute,
-		id: "_authenticated",
-	});
-	const analysisRoute = createRoute({
-		getParentRoute: () => authenticatedRoute,
-		path: "samples/$sampleId/analyses/$analysisId",
-		validateSearch: analysisSearchSchema,
-		component: () => ui,
-	});
-	authenticatedRoute.addChildren([analysisRoute]);
-	rootRoute.addChildren([authenticatedRoute]);
-
+function renderWithAnalysisSearch(
+	ui: React.ReactElement,
+	search: { activeHit?: string } = {},
+) {
 	const queryClient = new QueryClient();
-
-	// @ts-expect-error createRouter requires strictNullChecks which is not enabled project-wide
-	const router = createRouter({
-		routeTree: rootRoute,
-		history: createMemoryHistory({
-			initialEntries: ["/samples/test-sample/analyses/test-analysis"],
-		}),
-		defaultPendingMinMs: 0,
-	});
-
-	await router.load();
 
 	return render(
 		<QueryClientProvider client={queryClient}>
-			<RouterProvider router={router} />
+			<AnalysisSearchProvider search={search} setSearch={vi.fn()}>
+				{ui}
+			</AnalysisSearchProvider>
 		</QueryClientProvider>,
 	);
 }
@@ -83,7 +44,9 @@ describe("<NuvsViewer />", () => {
 
 	describe("<NuVsDetail />", () => {
 		it("should render correctly", async () => {
-			await renderWithAnalysisRoute(<NuvsViewer {...props} />);
+			renderWithAnalysisSearch(<NuvsViewer {...props} />, {
+				activeHit: String(nuvs.results.hits[0].id),
+			});
 
 			expect(
 				await screen.findByText(
@@ -98,7 +61,9 @@ describe("<NuvsViewer />", () => {
 
 		it("should render blast when clicked", async () => {
 			const scope = mockApiBlastNuVs(nuvs.id, nuvs.results.hits[0].index);
-			await renderWithAnalysisRoute(<NuvsViewer {...props} />);
+			renderWithAnalysisSearch(<NuvsViewer {...props} />, {
+				activeHit: String(nuvs.results.hits[0].id),
+			});
 
 			await userEvent.click(
 				await screen.findByRole("button", { name: "BLAST at NCBI" }),
@@ -109,7 +74,9 @@ describe("<NuvsViewer />", () => {
 
 	describe("<NuVsExport />", () => {
 		it("should render export dialog when exporting", async () => {
-			await renderWithAnalysisRoute(<NuvsViewer {...props} />);
+			renderWithAnalysisSearch(<NuvsViewer {...props} />, {
+				activeHit: String(nuvs.results.hits[0].id),
+			});
 
 			await userEvent.click(screen.getByRole("button", { name: "Export" }));
 			expect(screen.getByText("Export Analysis")).toBeInTheDocument();

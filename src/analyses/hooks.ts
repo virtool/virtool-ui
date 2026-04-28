@@ -1,19 +1,15 @@
+import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import { createFuse } from "@app/fuse";
 import { useListIndexes } from "@indexes/queries";
 import type { IndexMinimal } from "@indexes/types";
 import { useFetchSample } from "@samples/queries";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import type { SubtractionOption } from "@subtraction/types";
-import { useSearch } from "@tanstack/react-router";
 import { groupBy, maxBy, sortBy } from "es-toolkit";
 import type {
 	FormattedNuvsAnalysis,
 	FormattedPathoscopeAnalysis,
 } from "./types";
-
-const searchOptions = {
-	from: "/_authenticated/samples/$sampleId/analyses/$analysisId",
-} as const;
 
 /** Sort and filter a list of pathoscope hits  */
 export function useSortAndFilterPathoscopeHits(
@@ -22,7 +18,9 @@ export function useSortAndFilterPathoscopeHits(
 ) {
 	let hits = detail.results.hits;
 
-	const { find, filterOtus, sort, sortDesc } = useSearch(searchOptions);
+	const {
+		search: { find, filterOtus, sort, sortDesc },
+	} = useAnalysisSearch();
 
 	const fuse = createFuse(hits, ["name", "abbreviation"]);
 
@@ -50,7 +48,9 @@ export function useSortAndFilterPathoscopeHits(
 export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 	let hits = detail.results.hits;
 
-	const { find, filterSequences, sort } = useSearch(searchOptions);
+	const {
+		search: { find, filterSequences, sort },
+	} = useAnalysisSearch();
 
 	const fuse = createFuse(hits, ["name", "families"]);
 
@@ -71,7 +71,9 @@ export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 }
 
 export function useGetActiveHit(matches) {
-	const { activeHit } = useSearch(searchOptions);
+	const {
+		search: { activeHit },
+	} = useAnalysisSearch();
 
 	if (activeHit) {
 		return matches.find((match) => match.id === Number(activeHit)) || null;

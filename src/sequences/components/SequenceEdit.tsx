@@ -1,5 +1,6 @@
-import { useUrlSearchParam } from "@app/hooks";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
+import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
+import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOtuContext, useEditSequence } from "@otus/queries";
 import { useActiveSequence, useGetUnreferencedSegments } from "../hooks";
 import SequenceForm from "./SequenceForm";
@@ -8,13 +9,13 @@ import SequenceForm from "./SequenceForm";
  * Displays dialog to edit a genome sequence
  */
 export default function SequenceEdit() {
-	const { value: isolateId } = useUrlSearchParam<string>("activeIsolate");
+	const { search, setSearch } = useOtuDetailSearch();
 	const { otu, reference } = useCurrentOtuContext();
+	const isolateId = useGetActiveIsolateId(otu);
 
 	const hasSchema = Boolean(otu.schema.length);
 
-	const { value: editSequenceId, unsetValue: unsetEditSequenceId } =
-		useUrlSearchParam("editSequenceId");
+	const editSequenceId = search.editSequenceId;
 
 	const mutation = useEditSequence(otu.id);
 
@@ -34,7 +35,7 @@ export default function SequenceEdit() {
 			},
 			{
 				onSuccess: () => {
-					unsetEditSequenceId();
+					setSearch({ editSequenceId: undefined });
 				},
 			},
 		);
@@ -43,7 +44,7 @@ export default function SequenceEdit() {
 	return (
 		<Dialog
 			open={Boolean(editSequenceId)}
-			onOpenChange={() => unsetEditSequenceId()}
+			onOpenChange={() => setSearch({ editSequenceId: undefined })}
 		>
 			<DialogContent className="top-1/2">
 				<DialogTitle>Edit Sequence</DialogTitle>

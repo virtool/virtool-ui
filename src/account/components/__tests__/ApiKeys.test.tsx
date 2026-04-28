@@ -10,8 +10,14 @@ import {
 import { createFakePermissions } from "@tests/fake/permissions";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
+import { useState } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 import ApiKeys from "../ApiKeys";
+
+function ApiKeysHarness() {
+	const [open, setOpen] = useState(false);
+	return <ApiKeys openCreateKey={open} setOpenCreateKey={setOpen} />;
+}
 
 describe("<ApiKeys />", () => {
 	const basePath = "/account/api";
@@ -42,7 +48,7 @@ describe("<ApiKeys />", () => {
 			createFakePermissions({ remove_job: true }),
 		);
 
-		await renderWithRouter(<ApiKeys />, "/account/api");
+		await renderWithRouter(<ApiKeysHarness />, "/account/api");
 
 		await screen.findByRole("heading", {
 			name: /Manage API keys for accessing the/,
@@ -50,7 +56,7 @@ describe("<ApiKeys />", () => {
 
 		expect(screen.getByText("No API keys found.")).toBeInTheDocument();
 
-		await userEvent.click(screen.getByRole("link", { name: "Create" }));
+		await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
 		const dialog = screen.getByRole("dialog", { name: "Create API Key" });
 		const input = within(dialog).getByLabelText("Name");
@@ -102,9 +108,11 @@ describe("<ApiKeys />", () => {
 		);
 		mockApiGetApiKeys([]);
 
-		await renderWithRouter(<ApiKeys />, basePath);
+		await renderWithRouter(<ApiKeysHarness />, basePath);
 
-		await userEvent.click(await screen.findByRole("link", { name: "Create" }));
+		await userEvent.click(
+			await screen.findByRole("button", { name: "Create" }),
+		);
 
 		expect(
 			await screen.findByText(/You are an administrator/),

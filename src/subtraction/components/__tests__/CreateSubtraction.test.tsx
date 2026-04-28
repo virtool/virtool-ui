@@ -1,26 +1,20 @@
-import { formatPath } from "@app/hooks";
 import { getSessionStorage, setSessionStorage } from "@app/utils";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { mockApiCreateSubtraction } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import SubtractionCreate from "../SubtractionCreate";
 
 describe("<SubtractionCreate />", () => {
-	let path;
 	afterEach(() => {
 		sessionStorage.clear();
 	});
 
-	beforeEach(() => {
-		path = formatPath("/subtractions", { openCreateSubtraction: true });
-	});
-
 	it("should render when no uploads available", async () => {
 		mockApiListFiles([]);
-		await renderWithRouter(<SubtractionCreate />, path);
+		await renderWithRouter(<SubtractionCreate open setOpen={vi.fn()} />);
 
 		expect(await screen.findByText(/no files found/i)).toBeInTheDocument();
 	});
@@ -31,7 +25,7 @@ describe("<SubtractionCreate />", () => {
 			type: "subtraction",
 		});
 		mockApiListFiles([file]);
-		await renderWithRouter(<SubtractionCreate />, path);
+		await renderWithRouter(<SubtractionCreate open setOpen={vi.fn()} />);
 
 		expect(await screen.findByText(file.name)).toBeInTheDocument();
 		await userEvent.click(await screen.findByText(/save/i));
@@ -55,7 +49,7 @@ describe("<SubtractionCreate />", () => {
 			file.id,
 		);
 
-		await renderWithRouter(<SubtractionCreate />, path);
+		await renderWithRouter(<SubtractionCreate open setOpen={vi.fn()} />);
 
 		await userEvent.type(await screen.findByLabelText("Name"), name);
 		await userEvent.type(screen.getByLabelText("Nickname"), nickname);
@@ -86,7 +80,7 @@ describe("<SubtractionCreate />", () => {
 		);
 		mockApiListFiles([file]);
 
-		await renderWithRouter(<SubtractionCreate />, path);
+		await renderWithRouter(<SubtractionCreate open setOpen={vi.fn()} />);
 
 		expect(await screen.findByDisplayValue(name)).toBeInTheDocument();
 		expect(await screen.findByDisplayValue(nickname)).toBeInTheDocument();
@@ -111,7 +105,7 @@ describe("<SubtractionCreate />", () => {
 			file.id,
 		);
 
-		await renderWithRouter(<SubtractionCreate />, path);
+		await renderWithRouter(<SubtractionCreate open setOpen={vi.fn()} />);
 
 		await userEvent.type(await screen.findByLabelText("Name"), name);
 		await userEvent.type(screen.getByLabelText("Nickname"), nickname);

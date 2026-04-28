@@ -1,4 +1,3 @@
-import { formatPath } from "@app/hooks";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeSample, mockApiEditSample } from "@tests/fake/samples";
@@ -9,24 +8,20 @@ import EditSample from "../EditSample";
 describe("<Editsample />", () => {
 	let sample;
 	let props;
-	let path;
-	let searchParams;
 
 	beforeEach(() => {
 		sample = createFakeSample();
 		props = {
 			sample,
-			show: true,
-			onHide: vi.fn(),
+			open: true,
+			setOpen: vi.fn(),
 		};
-		path = `/samples/${props.sample.id}/general`;
-		searchParams = { openEditSample: true };
 	});
 
-	it("should render when [show=false]", async () => {
-		props.show = false;
+	it("should render when [open=false]", async () => {
+		props.open = false;
 
-		await renderWithRouter(<EditSample {...props} />, path);
+		await renderWithRouter(<EditSample {...props} />);
 
 		expect(screen.queryByRole("textbox", { name: "Name" })).toBeNull();
 		expect(screen.queryByRole("textbox", { name: "Isolate" })).toBeNull();
@@ -43,10 +38,7 @@ describe("<Editsample />", () => {
 		"Locale",
 		"Notes",
 	])("should render changed data for", async (inputLabel) => {
-		await renderWithRouter(
-			<EditSample {...props} />,
-			formatPath(path, searchParams),
-		);
+		await renderWithRouter(<EditSample {...props} />);
 
 		const inputBox = screen.getByLabelText(inputLabel);
 		expect(inputBox).toBeInTheDocument();
@@ -68,10 +60,7 @@ describe("<Editsample />", () => {
 			"newLocale",
 			"newNotes",
 		);
-		await renderWithRouter(
-			<EditSample {...props} />,
-			formatPath(path, searchParams),
-		);
+		await renderWithRouter(<EditSample {...props} />);
 
 		const nameInput = screen.getByLabelText("Name");
 		await userEvent.clear(nameInput);

@@ -1,51 +1,23 @@
+import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-	createMemoryHistory,
-	createRootRoute,
-	createRoute,
-	createRouter,
-	RouterProvider,
-} from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeIimiAnalysis } from "@tests/fake/analyses";
-import { beforeEach, describe, expect, it } from "vitest";
-import { z } from "zod/v4";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { formatData } from "../../../utils";
 import { IimiViewer } from "../IimiViewer";
 
-const iimiSearchSchema = z.object({
-	find: z.string().optional().catch(undefined),
-	sort: z.string().optional().catch(undefined),
-	minProbability: z.string().optional().catch(undefined),
-});
-
-async function renderWithAnalysisRoute(ui: React.ReactElement, search = "") {
-	const rootRoute = createRootRoute();
-	const testRoute = createRoute({
-		getParentRoute: () => rootRoute,
-		path: "/",
-		validateSearch: iimiSearchSchema,
-		component: () => ui,
-	});
-	rootRoute.addChildren([testRoute]);
-
+function renderWithAnalysisSearch(
+	ui: React.ReactElement,
+	search: { sort?: string; find?: string } = {},
+) {
 	const queryClient = new QueryClient();
-
-	// @ts-expect-error createRouter requires strictNullChecks which is not enabled project-wide
-	const router = createRouter({
-		routeTree: rootRoute,
-		history: createMemoryHistory({
-			initialEntries: [`/${search}`],
-		}),
-		defaultPendingMinMs: 0,
-	});
-
-	await router.load();
 
 	return render(
 		<QueryClientProvider client={queryClient}>
-			<RouterProvider router={router} />
+			<AnalysisSearchProvider search={search} setSearch={vi.fn()}>
+				{ui}
+			</AnalysisSearchProvider>
 		</QueryClientProvider>,
 	);
 }
@@ -90,7 +62,7 @@ describe("<IimiViewer />", () => {
 	});
 
 	it("should render", async () => {
-		await renderWithAnalysisRoute(
+		await renderWithAnalysisSearch(
 			<IimiViewer detail={formattedIimiAnalysis} />,
 		);
 
@@ -132,10 +104,9 @@ describe("<IimiViewer />", () => {
 			},
 		};
 
-		await renderWithAnalysisRoute(
-			<IimiViewer detail={testAnalysis} />,
-			`?sort=${sortKey}`,
-		);
+		renderWithAnalysisSearch(<IimiViewer detail={testAnalysis} />, {
+			sort: sortKey,
+		});
 
 		expect(screen.getByText(`Sort: ${expectedText}`)).toBeInTheDocument();
 
@@ -156,7 +127,7 @@ describe("<IimiViewer />", () => {
 			},
 		};
 
-		await renderWithAnalysisRoute(<IimiViewer detail={testAnalysis} />);
+		await renderWithAnalysisSearch(<IimiViewer detail={testAnalysis} />);
 
 		expect(screen.getByText("High Probability Virus")).toBeInTheDocument();
 		expect(screen.getByText("Medium Probability Virus")).toBeInTheDocument();
@@ -165,7 +136,7 @@ describe("<IimiViewer />", () => {
 	});
 
 	it("should allow expanding OTU details", async () => {
-		await renderWithAnalysisRoute(
+		await renderWithAnalysisSearch(
 			<IimiViewer detail={formattedIimiAnalysis} />,
 		);
 
@@ -193,7 +164,7 @@ describe("<IimiViewer />", () => {
 			},
 		};
 
-		await renderWithAnalysisRoute(<IimiViewer detail={testAnalysis} />);
+		await renderWithAnalysisSearch(<IimiViewer detail={testAnalysis} />);
 
 		expect(screen.getByText("High Probability Virus")).toBeInTheDocument();
 		expect(screen.getByText("Medium Probability Virus")).toBeInTheDocument();
