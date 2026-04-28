@@ -9,9 +9,9 @@ import InputSimple from "@base/InputSimple";
 import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
 import { useCloneReference } from "@references/queries";
+import type { ReferenceMinimal } from "@references/types";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import type { ReferenceMinimal } from "references/types";
 
 type FormValues = {
 	name: string;
