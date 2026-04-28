@@ -50,7 +50,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "baseline-browser-mapping": "^2.10.20",
-    "jsdom": "^27.4.0",
+    "jsdom": "^29.1.0",
     "nock": "^13.5.5",
     "tailwindcss": "^4.2.4",
     "typescript": "^5.9.3",
