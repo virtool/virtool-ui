@@ -13,7 +13,7 @@ import { getLibraryTypeDisplayName } from "@samples/utils";
  */
 import { getRouteApi } from "@tanstack/react-router";
 import numbro from "numbro";
-import { JobNested } from "@/jobs/types";
+import { JobNestedSchema } from "@/jobs/types";
 import EditSample from "../EditSample";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";
 import Sidebar from "./Sidebar";
@@ -32,7 +32,7 @@ export default function SampleDetailGeneral() {
 
 	const { quality } = data;
 
-	const job = data?.job ? JobNested.parse(data.job) : undefined;
+	const job = data?.job ? JobNestedSchema.parse(data.job) : undefined;
 
 	return (
 		<div className="flex items-stretch">

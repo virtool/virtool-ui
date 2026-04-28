@@ -7,7 +7,7 @@ import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
 import { Equal, EqualNot } from "lucide-react";
-import { JobNested } from "@/jobs/types";
+import { JobNestedSchema } from "@/jobs/types";
 import { useRemoveAnalysis } from "../queries";
 import type { AnalysisMinimal } from "../types";
 import { checkSupportedWorkflow } from "../utils";
@@ -47,7 +47,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 		</div>
 	);
 
-	const job = analysis.job && JobNested.parse(analysis.job);
+	const job = analysis.job && JobNestedSchema.parse(analysis.job);
 
 	return (
 		<Box className="text-gray-600 mb-2.5">

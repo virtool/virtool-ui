@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { fetchJob, findJobs } from "./api";
-import { Job, JobSearchResult, type JobState } from "./types";
+import { JobSchema, JobSearchResultSchema, type JobState } from "./types";
 
 /**
  * Factory object for generating job query keys
@@ -31,7 +31,7 @@ export function useFindJobs(
 		queryKey: jobQueryKeys.list([page, per_page, ...states]),
 		queryFn: () => findJobs(page, per_page, states),
 		placeholderData: keepPreviousData,
-		select: JobSearchResult.parse,
+		select: JobSearchResultSchema.parse,
 	});
 }
 
@@ -45,6 +45,6 @@ export function useFetchJob(jobId: string) {
 	return useQuery({
 		queryKey: jobQueryKeys.detail(jobId),
 		queryFn: () => fetchJob(jobId),
-		select: Job.parse,
+		select: JobSchema.parse,
 	});
 }

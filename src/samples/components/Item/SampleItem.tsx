@@ -3,7 +3,7 @@ import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
 import Link from "@base/Link";
 import type { SampleMinimal } from "@samples/types";
-import { JobNested } from "@/jobs/types";
+import { JobNestedSchema } from "@/jobs/types";
 import SampleLabel from "../Label/SampleLabel";
 import SampleLibraryTypeLabel from "../Label/SampleLibraryTypeLabel";
 import WorkflowTags from "../Tag/WorkflowTags";
@@ -39,7 +39,7 @@ export default function SampleItem({
 		setOpenQuickAnalyze(true);
 	}
 
-	const job = sample.job && JobNested.parse(sample.job);
+	const job = sample.job && JobNestedSchema.parse(sample.job);
 
 	return (
 		<Box className="flex items-stretch basis-0 gap-4">

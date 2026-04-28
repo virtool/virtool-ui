@@ -10,7 +10,7 @@ describe("<JobItem />", () => {
 
 	beforeEach(() => {
 		props = {
-			id: "foo",
+			id: 42,
 			workflow: "build_index",
 			createdAt: new Date("2022-12-22T21:37:49.429000Z"),
 			progress: 0,
