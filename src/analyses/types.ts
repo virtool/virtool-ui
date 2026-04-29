@@ -284,7 +284,7 @@ export type NuvsOrf = {
 
 /** Analysis search results from the API */
 export type AnalysisSearchResult = SearchResult & {
-	documents: AnalysisMinimal[];
+	items: AnalysisMinimal[];
 };
 
 export type AnalysisWorkflow = "iimi" | "pathoscope_bowtie" | "nuvs";

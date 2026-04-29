@@ -42,7 +42,7 @@ export default function ReferenceList({
 	}
 
 	const {
-		documents,
+		items,
 		page: storedPage,
 		page_count,
 		total_count,
@@ -74,20 +74,20 @@ export default function ReferenceList({
 				<ReferenceOfficial officialInstalled={official_installed} />
 				{total_count !== 0 && (
 					<Pagination
-						items={documents}
+						items={items}
 						storedPage={storedPage}
 						currentPage={page}
 						pageCount={page_count}
 						onPageChange={(page) => setSearch({ page })}
 					>
 						<BoxGroup>
-							{documents.map((document) => (
+							{items.map((item) => (
 								<ReferenceItem
-									key={document.id}
+									key={item.id}
 									onClone={(cloneReferenceId) =>
 										setSearch({ cloneReferenceId })
 									}
-									reference={document}
+									reference={item}
 								/>
 							))}
 						</BoxGroup>
@@ -96,7 +96,7 @@ export default function ReferenceList({
 			</ContainerNarrow>
 			<Clone
 				cloneReferenceId={cloneReferenceId}
-				references={documents}
+				references={items}
 				unsetCloneReferenceId={() => setSearch({ cloneReferenceId: undefined })}
 			/>
 		</>

@@ -47,7 +47,7 @@ describe("<OTUsList />", () => {
 			scope.done();
 		});
 
-		it("should render when no documents are found", async () => {
+		it("should render when no items are found", async () => {
 			const scope = mockApiFindOtus([], reference.id);
 			await renderRoute(path);
 

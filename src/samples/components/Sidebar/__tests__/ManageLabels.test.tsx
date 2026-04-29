@@ -8,7 +8,6 @@ describe("<ManageLabels>", () => {
 
 	beforeEach(() => {
 		props = {
-			documents: [],
 			selectedSamples: [],
 			labels: [
 				{ color: "#C4B5FD", description: "", id: 1, name: "test" },
@@ -28,8 +27,8 @@ describe("<ManageLabels>", () => {
 		expect(screen.getByText("Create one")).toBeInTheDocument();
 	});
 
-	it("should display labels of one selected document", async () => {
-		props.selectedSamples = props.documents = [
+	it("should display labels of one selected sample", async () => {
+		props.selectedSamples = [
 			{
 				name: "Foo Sample",
 				id: "foo_sample",
@@ -44,8 +43,8 @@ describe("<ManageLabels>", () => {
 		expect(screen.getByText("test")).toBeInTheDocument();
 	});
 
-	it("should display labels of two selected documents", async () => {
-		props.selectedSamples = props.documents = [
+	it("should display labels of two selected samples", async () => {
+		props.selectedSamples = [
 			{
 				name: "Foo Sample",
 				id: "foo_sample",

@@ -192,7 +192,7 @@ describe("<UserDetail />", () => {
 
 			scope.done();
 		});
-		it("should render NoneFound when documents = []", async () => {
+		it("should render NoneFound when items = []", async () => {
 			const user = createFakeUser({ groups: [] });
 
 			mockApiListGroups([]);

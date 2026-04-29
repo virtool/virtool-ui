@@ -113,5 +113,5 @@ export type Sample = SampleMinimal & {
 
 /* Sample search results from the API */
 export type SampleSearchResult = SearchResult & {
-	documents: Array<SampleMinimal>;
+	items: Array<SampleMinimal>;
 };

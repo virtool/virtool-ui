@@ -30,7 +30,10 @@ export function listAnalyses(
 	return apiClient
 		.get(`/samples/${sampleId}/analyses`)
 		.query({ page, per_page, find: term })
-		.then((res) => res.body);
+		.then((res) => {
+			const { documents, ...rest } = res.body;
+			return { ...rest, items: documents };
+		});
 }
 
 /**

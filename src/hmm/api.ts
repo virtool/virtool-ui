@@ -58,5 +58,8 @@ export function listHmms(
 	return apiClient
 		.get("/hmms")
 		.query({ page, per_page, find: term })
-		.then((res) => res.body);
+		.then((res) => {
+			const { documents, ...rest } = res.body;
+			return { ...rest, items: documents };
+		});
 }

@@ -31,7 +31,7 @@ export default function Indexes({
 		return <LoadingPlaceholder />;
 	}
 
-	const { documents, page: storedPage, page_count } = data;
+	const { items, page: storedPage, page_count } = data;
 
 	return (
 		<>
@@ -41,22 +41,22 @@ export default function Indexes({
 				setOpen={(openRebuild) => setSearch({ openRebuild })}
 				refId={refId}
 			/>
-			{documents.length ? (
+			{items.length ? (
 				<Pagination
-					items={documents}
+					items={items}
 					storedPage={storedPage}
 					currentPage={page}
 					pageCount={page_count}
 					onPageChange={(page) => setSearch({ page })}
 				>
 					<BoxGroup>
-						{documents.map((document) => (
+						{items.map((item) => (
 							<IndexItem
-								key={document.id}
-								index={document}
+								key={item.id}
+								index={item}
 								refId={refId}
 								activeId={
-									documents.find((doc) => doc.ready && doc.has_files)?.id
+									items.find((index) => index.ready && index.has_files)?.id
 								}
 							/>
 						))}

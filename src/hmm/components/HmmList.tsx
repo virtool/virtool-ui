@@ -27,7 +27,7 @@ export default function HmmList({ find, page, setSearch }: HmmListProps) {
 	}
 
 	const {
-		documents,
+		items,
 		page: storedPage,
 		page_count,
 		found_count,
@@ -52,17 +52,17 @@ export default function HmmList({ find, page, setSearch }: HmmListProps) {
 						term={find}
 						onChange={(e) => setSearch({ find: e.target.value })}
 					/>
-					{documents.length ? (
+					{items.length ? (
 						<Pagination
-							items={documents}
+							items={items}
 							storedPage={storedPage}
 							currentPage={page}
 							pageCount={page_count}
 							onPageChange={(page) => setSearch({ page })}
 						>
 							<BoxGroup>
-								{documents.map((document) => (
-									<HmmItem key={document.id} hmm={document} />
+								{items.map((item) => (
+									<HmmItem key={item.id} hmm={item} />
 								))}
 							</BoxGroup>
 						</Pagination>

@@ -34,7 +34,10 @@ export function findIndexes(
 	return apiClient
 		.get(`/refs/${refId}/indexes`)
 		.query({ find: term, page, per_page })
-		.then((res) => res.body);
+		.then((res) => {
+			const { documents, ...rest } = res.body;
+			return { ...rest, items: documents };
+		});
 }
 
 /**
@@ -60,9 +63,10 @@ export function listIndexes({ ready, term }: { ready: boolean; term: string }) {
 export function getUnbuiltChanges(
 	refId: string,
 ): Promise<UnbuiltChangesSearchResults> {
-	return apiClient
-		.get(`/refs/${refId}/history?unbuilt=true`)
-		.then((res) => res.body);
+	return apiClient.get(`/refs/${refId}/history?unbuilt=true`).then((res) => {
+		const { documents, ...rest } = res.body;
+		return { ...rest, items: documents };
+	});
 }
 
 /**

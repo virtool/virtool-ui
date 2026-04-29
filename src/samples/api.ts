@@ -20,7 +20,10 @@ export function listSamples(
 	return apiClient
 		.get("/samples")
 		.query({ page, per_page, find: term, label: labels, workflows })
-		.then((res) => res.body);
+		.then((res) => {
+			const { documents, ...rest } = res.body;
+			return { ...rest, items: documents };
+		});
 }
 
 /**

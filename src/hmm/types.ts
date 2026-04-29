@@ -45,7 +45,12 @@ export type HMMInstalled = {
 /** HMM search results from the API */
 export type HmmSearchResults = SearchResult & {
 	/** Gives information about each HMM */
-	documents: HMMMinimal[];
+	items: HMMMinimal[];
 	/** The status of the HMMs */
 	status: { [key: string]: any };
+};
+
+/** Wire-shape HMM search results returned by the backend before the UI transform */
+export type ServerHmmSearchResults = Omit<HmmSearchResults, "items"> & {
+	documents: HMMMinimal[];
 };

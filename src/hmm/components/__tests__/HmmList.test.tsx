@@ -33,7 +33,7 @@ describe("<HmmList />", () => {
 		scope.done();
 	});
 
-	it("should render correctly when no documents exist", async () => {
+	it("should render correctly when no items exist", async () => {
 		const fakeHMMData = createFakeHmmSearchResults({ documents: [] });
 		const scope = mockApiGetHmms(fakeHMMData);
 		await renderRoute(path);

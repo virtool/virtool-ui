@@ -63,7 +63,10 @@ export function findReferences({
 	return apiClient
 		.get("/refs")
 		.query({ find: term, page, per_page })
-		.then((response) => response.body);
+		.then((response) => {
+			const { documents, ...rest } = response.body;
+			return { ...rest, items: documents };
+		});
 }
 
 /**
