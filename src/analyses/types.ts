@@ -93,7 +93,7 @@ export type Analysis =
 export type FormattedPathoscopeAnalysis = AnalysisMinimal & {
 	files: AnalysisFile[];
 	results: FormattedPathoscopeResults;
-	workflow: "pathoscope_bowtie";
+	workflow: "pathoscope";
 };
 
 /** All results for a pathoscope analysis*/
@@ -287,7 +287,7 @@ export type AnalysisSearchResult = SearchResult & {
 	items: AnalysisMinimal[];
 };
 
-export type AnalysisWorkflow = "iimi" | "pathoscope_bowtie" | "nuvs";
+export type AnalysisWorkflow = "iimi" | "pathoscope" | "nuvs";
 
 /** Read depths of a sequence mapped by position to an array */
 export type PositionMappedReadDepths = number[];

@@ -81,13 +81,11 @@ export const workflowDisplayNames = {
 	iimi: "Iimi",
 	nuvs: "Nuvs",
 	pathoscope: "Pathoscope",
-	pathoscope_bowtie: "Pathoscope",
-	pathoscope_snap: "Pathoscope",
 	build_index: "Build Index",
 };
 
 /**
- * Transforms a plain workflow ID (eg. pathoscope_bowtie) to a human-readable name (eg. PathoscopeBowtie).
+ * Transforms a plain workflow ID (eg. pathoscope) to a human-readable name (eg. Pathoscope).
  *
  * @func
  * @param workflow plain workflow ID

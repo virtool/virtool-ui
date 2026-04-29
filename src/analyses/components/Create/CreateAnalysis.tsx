@@ -50,7 +50,7 @@ export default function CreateAnalysis({
 			<CreateAnalysisDialogContent>
 				<DialogTitle>Analyze</DialogTitle>
 				<HMMAlert installed={hmms.status.task?.complete} />
-				<Tabs.Root defaultValue="pathoscope_bowtie">
+				<Tabs.Root defaultValue="pathoscope">
 					<Tabs.List
 						className={cn(
 							"bg-gray-100",
@@ -101,7 +101,7 @@ export default function CreateAnalysis({
 					<Content value="nuvs">
 						<CreateNuvs sampleCount={1} sampleIds={sampleIds} />
 					</Content>
-					<Content value="pathoscope_bowtie">
+					<Content value="pathoscope">
 						<CreatePathoscope sampleCount={1} sampleIds={sampleIds} />
 					</Content>
 				</Tabs.Root>

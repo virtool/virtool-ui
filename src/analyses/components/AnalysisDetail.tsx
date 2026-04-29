@@ -43,7 +43,7 @@ export default function AnalysisDetail() {
 
 	let content: ReactNode;
 
-	if (analysis.workflow === "pathoscope_bowtie") {
+	if (analysis.workflow === "pathoscope") {
 		content = (
 			<PathoscopeViewer
 				analysis={analysis as FormattedPathoscopeAnalysis}

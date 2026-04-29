@@ -39,7 +39,7 @@ export function createFakeAnalysisMinimal(
 		subtractions: [createFakeSubtractionNested()],
 		updated_at: faker.date.past().toISOString(),
 		user: createFakeUserNested(),
-		workflow: "pathoscope_bowtie",
+		workflow: "pathoscope",
 		...overrides,
 	};
 }

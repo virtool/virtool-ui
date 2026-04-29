@@ -4,7 +4,7 @@ export type workflow = {
 };
 
 export const pathoscopeWorkflow = {
-	id: "pathoscope_bowtie",
+	id: "pathoscope",
 	name: "Pathoscope",
 };
 
