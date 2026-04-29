@@ -130,6 +130,6 @@ export type Reference = ReferenceMinimal & {
 };
 
 export type ReferenceSearchResult = SearchResult & {
-	documents: Array<ReferenceMinimal>;
+	items: Array<ReferenceMinimal>;
 	official_installed: boolean;
 };

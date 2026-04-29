@@ -25,7 +25,7 @@ describe("<ManageUsers />", () => {
 		});
 	});
 
-	it("should render correctly when documents = null", async () => {
+	it("should render correctly when items = null", async () => {
 		const account = createFakeAccount({
 			administrator_role: "full",
 		});

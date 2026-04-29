@@ -22,8 +22,8 @@ type AnalysesListProps = {
 };
 
 function renderRow() {
-	function AnalysisRow(document: AnalysisMinimal) {
-		return <AnalysisItem key={document.id} analysis={document} />;
+	function AnalysisRow(item: AnalysisMinimal) {
+		return <AnalysisItem key={item.id} analysis={item} />;
 	}
 	return AnalysisRow;
 }
@@ -66,7 +66,7 @@ export default function AnalysesList({
 			</div>
 			{analyses.found_count ? (
 				<Pagination
-					items={analyses.documents}
+					items={analyses.items}
 					renderRow={renderRow()}
 					storedPage={analyses.page}
 					currentPage={page}

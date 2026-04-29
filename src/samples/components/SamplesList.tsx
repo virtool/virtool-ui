@@ -58,24 +58,24 @@ export default function SamplesList({
 		return <LoadingPlaceholder />;
 	}
 
-	const { documents, page, page_count, total_count } = samples;
+	const { items, page, page_count, total_count } = samples;
 
-	function renderRow(document: SampleMinimal) {
+	function renderRow(item: SampleMinimal) {
 		function handleSelect() {
-			setSelected(xor(selected, [document.id]));
+			setSelected(xor(selected, [item.id]));
 		}
 
 		function selectOnQuickAnalyze() {
-			if (!selected.includes(document.id)) {
-				setSelected(union(selected, [document.id]));
+			if (!selected.includes(item.id)) {
+				setSelected(union(selected, [item.id]));
 			}
 		}
 
 		return (
 			<SampleItem
-				key={document.id}
-				sample={document}
-				checked={selected.includes(document.id)}
+				key={item.id}
+				sample={item}
+				checked={selected.includes(item.id)}
 				handleSelect={handleSelect}
 				selectOnQuickAnalyze={selectOnQuickAnalyze}
 				setOpenQuickAnalyze={(openQuickAnalyze) =>
@@ -92,9 +92,9 @@ export default function SamplesList({
 				onClear={() => setSelected([])}
 				setOpen={(openQuickAnalyze) => setSearch({ openQuickAnalyze })}
 				samples={intersectionWith(
-					documents,
+					items,
 					selected,
-					(document, id) => document.id === id,
+					(item, id) => item.id === id,
 				)}
 			/>
 			<div
@@ -120,11 +120,11 @@ export default function SamplesList({
 					/>
 				</div>
 				<div className="row-start-2 min-w-xl">
-					{!documents.length ? (
+					{!items.length ? (
 						<NoneFoundBox key="noSample" noun="samples" />
 					) : (
 						<Pagination
-							items={documents}
+							items={items}
 							storedPage={page}
 							currentPage={urlPage}
 							renderRow={renderRow}
@@ -137,9 +137,9 @@ export default function SamplesList({
 					<SampleLabels
 						labels={labels}
 						selectedSamples={intersectionWith(
-							documents,
+							items,
 							selected,
-							(document, id) => document.id === id,
+							(item, id) => item.id === id,
 						)}
 					/>
 				) : (

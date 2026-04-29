@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import type { Hmm, HmmSearchResults } from "@hmm/types";
+import type { Hmm, ServerHmmSearchResults } from "@hmm/types";
 import nock from "nock";
 
 /**
@@ -53,8 +53,8 @@ export function createFakeHmm() {
  * @param overrides - optional properties for creating a fake Hmm search result with specific values
  */
 export function createFakeHmmSearchResults(
-	overrides?: Partial<HmmSearchResults>,
-): HmmSearchResults {
+	overrides?: Partial<ServerHmmSearchResults>,
+): ServerHmmSearchResults {
 	return {
 		documents: Array.from({ length: 5 }, createFakeHmmMinimal),
 		status: {
@@ -81,7 +81,7 @@ export function createFakeHmmSearchResults(
  * @param hmmSearchResults - The hmm search results to be returned from the mocked API call
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetHmms(hmmSearchResults: HmmSearchResults) {
+export function mockApiGetHmms(hmmSearchResults: ServerHmmSearchResults) {
 	return nock("http://localhost")
 		.get("/api/hmms")
 		.query(true)

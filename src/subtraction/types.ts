@@ -93,5 +93,5 @@ export type SubtractionOption = SubtractionNested & {
 /** Subtraction search results from the API */
 export type SubtractionSearchResult = SearchResult & {
 	ready_count: number;
-	documents: Array<SubtractionMinimal>;
+	items: Array<SubtractionMinimal>;
 };

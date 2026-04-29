@@ -5,7 +5,7 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { sortBy } from "es-toolkit";
 import type { ReactNode } from "react";
 
-type HistoryDocument = {
+type HistoryItem = {
 	id: string;
 	description: string;
 	otu: { name: string };
@@ -37,10 +37,9 @@ export default function RebuildHistory({ unbuilt }) {
 	if (unbuilt === null) {
 		content = <LoadingPlaceholder className="mt-5" />;
 	} else {
-		const historyComponents = sortBy(
-			(unbuilt.documents ?? []) as HistoryDocument[],
-			[(doc) => doc.otu.name],
-		).map((change) => (
+		const historyComponents = sortBy((unbuilt.items ?? []) as HistoryItem[], [
+			(change) => change.otu.name,
+		]).map((change) => (
 			<RebuildHistoryItem
 				key={change.id}
 				description={change.description}

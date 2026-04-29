@@ -21,7 +21,7 @@ function taskSelector<T extends TaskObject>(cache: T): Task {
 	return cache?.task;
 }
 
-type Document = { items: TaskObject[] } | { documents: TaskObject[] };
+type ListCache = { items: TaskObject[] };
 
 /**
  * Update `Task`s in the list of items
@@ -30,15 +30,14 @@ type Document = { items: TaskObject[] } | { documents: TaskObject[] };
  * @param selector - A function that returns the task from an instance of the cached item
  * @returns A function that updates the task in the cache
  */
-function listItemUpdater<T extends Document>(
+function listItemUpdater<T extends ListCache>(
 	task: Task,
 	selector: (cache: TaskObject) => Task,
 ) {
 	return (cache: T): T => {
 		const newCache = cloneDeep(cache);
 
-		const items = "items" in newCache ? newCache.items : newCache.documents;
-		items.forEach((item: { task: Task }) => {
+		newCache.items.forEach((item: { task: Task }) => {
 			const previousTask = selector(item);
 			if (previousTask && item.task.id === task.id) {
 				Object.assign(previousTask, task);

@@ -108,6 +108,6 @@ export type Otu = OtuMinimal & {
 
 /** OTU search results from API*/
 export type OtuSearchResult = SearchResult & {
-	documents: OtuMinimal[];
+	items: OtuMinimal[];
 	modified_count: number;
 };

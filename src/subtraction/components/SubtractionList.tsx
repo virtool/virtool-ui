@@ -39,7 +39,7 @@ export default function SubtractionList({
 		setSearch({ find: e.target.value });
 	}
 
-	const { documents, total_count, page: storedPage, page_count } = data;
+	const { items, total_count, page: storedPage, page_count } = data;
 
 	return (
 		<>
@@ -59,19 +59,19 @@ export default function SubtractionList({
 				handleChange={handleChange}
 			/>
 
-			{!documents.length ? (
+			{!items.length ? (
 				<NoneFoundBox key="subtractions" noun="subtractions" />
 			) : (
 				<Pagination
-					items={documents}
+					items={items}
 					storedPage={storedPage}
 					currentPage={page}
 					pageCount={page_count}
 					onPageChange={(page) => setSearch({ page })}
 				>
 					<BoxGroup>
-						{documents.map((document) => (
-							<SubtractionItem key={document.id} {...document} />
+						{items.map((item) => (
+							<SubtractionItem key={item.id} {...item} />
 						))}
 					</BoxGroup>
 				</Pagination>

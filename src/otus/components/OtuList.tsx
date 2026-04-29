@@ -47,7 +47,7 @@ export default function OtuList({
 		return <LoadingPlaceholder />;
 	}
 
-	const { documents, page: storedPage, page_count } = otus;
+	const { items, page: storedPage, page_count } = otus;
 
 	return (
 		<ContainerNarrow>
@@ -64,17 +64,17 @@ export default function OtuList({
 				refId={refId}
 			/>
 
-			{documents.length ? (
+			{items.length ? (
 				<Pagination
-					items={documents}
+					items={items}
 					storedPage={storedPage}
 					currentPage={page}
 					pageCount={page_count}
 					onPageChange={(page) => setSearch({ page })}
 				>
 					<BoxGroup>
-						{documents.map((document) => (
-							<OtuItem key={document.id} {...document} refId={refId} />
+						{items.map((item) => (
+							<OtuItem key={item.id} {...item} refId={refId} />
 						))}
 					</BoxGroup>
 				</Pagination>

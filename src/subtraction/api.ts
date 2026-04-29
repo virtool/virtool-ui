@@ -44,7 +44,10 @@ export function findSubtractions(
 	return apiClient
 		.get("/subtractions")
 		.query({ page, per_page, find: term })
-		.then((response) => response.body);
+		.then((response) => {
+			const { documents, ...rest } = response.body;
+			return { ...rest, items: documents };
+		});
 }
 
 /**

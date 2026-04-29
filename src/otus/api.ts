@@ -301,7 +301,10 @@ export function listOTUs(
 	return apiClient
 		.get(`/refs/${refId}/otus`)
 		.query({ find: term, page, per_page, verified: verified || undefined })
-		.then((res) => res.body);
+		.then((res) => {
+			const { documents, ...rest } = res.body;
+			return { ...rest, items: documents };
+		});
 }
 
 /**

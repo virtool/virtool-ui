@@ -91,13 +91,13 @@ export type UnbuiltChanges = HistoryNested & {
 
 /** Unbuilt changes search results */
 export type UnbuiltChangesSearchResults = SearchResult & {
-	documents: UnbuiltChanges[];
+	items: UnbuiltChanges[];
 };
 
 /** Index search results */
 export type IndexSearchResult = SearchResult & {
 	/** Indexes relevant to the query*/
-	documents: Index[];
+	items: Index[];
 	/** The number of individual OTUs changes since the last index build */
 	modified_otu_count: number;
 	/** The number of total OTUs in the reference */

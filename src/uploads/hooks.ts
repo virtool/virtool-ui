@@ -21,9 +21,9 @@ export function useValidateFiles(
 
 	useEffect(() => {
 		if (!isPending && selected.length) {
-			const documents = data.pages.flatMap((page) => page.items);
+			const items = data.pages.flatMap((page) => page.items);
 			const selectedFilesExist = selected.every((itemId) =>
-				documents.some((item) => item.id === itemId),
+				items.some((item) => item.id === itemId),
 			);
 
 			if (!selectedFilesExist) {
