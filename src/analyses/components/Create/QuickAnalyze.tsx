@@ -66,7 +66,7 @@ export default function QuickAnalyze({
 				<DialogTitle>Quick Analyze</DialogTitle>
 				<HMMAlert installed={hmms.status.task?.complete} />
 
-				<Tabs.Root defaultValue="pathoscope_bowtie">
+				<Tabs.Root defaultValue="pathoscope">
 					<Tabs.List
 						className={cn(
 							"bg-gray-100",
@@ -137,7 +137,7 @@ export default function QuickAnalyze({
 					<Content value="nuvs">
 						<CreateNuvs sampleCount={sampleIds.length} sampleIds={sampleIds} />
 					</Content>
-					<Content value="pathoscope_bowtie">
+					<Content value="pathoscope">
 						<CreatePathoscope
 							sampleCount={sampleIds.length}
 							sampleIds={sampleIds}

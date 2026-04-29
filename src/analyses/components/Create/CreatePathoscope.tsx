@@ -63,7 +63,7 @@ export default function CreatePathoscope({
 				refId,
 				sampleId,
 				subtractionIds,
-				workflow: "pathoscope_bowtie",
+				workflow: "pathoscope",
 			}),
 		);
 	}

@@ -7,7 +7,7 @@ import { createFakePermissions } from "./permissions";
 import { createFakeUser } from "./user";
 
 const defaultSettings = {
-	quick_analyze_workflow: "pathoscope_bowtie",
+	quick_analyze_workflow: "pathoscope",
 	show_ids: true,
 	show_versions: true,
 	skip_quick_analyze_dialog: true,

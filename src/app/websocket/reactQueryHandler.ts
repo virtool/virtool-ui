@@ -19,7 +19,7 @@ const workflowQueries = {
 	create_sample: [samplesQueryKeys.lists()],
 	iimi: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
 	nuvs: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
-	pathoscope_bowtie: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
+	pathoscope: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
 };
 
 function jobUpdater(queryClient: QueryClient, data: WsMessage["data"]) {

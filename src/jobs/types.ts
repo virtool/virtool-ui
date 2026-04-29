@@ -9,19 +9,15 @@ const JobStateSchema = z.enum([
 ]);
 export type JobState = z.infer<typeof JobStateSchema>;
 
-export const Workflow = z.preprocess(
-	(val) => (val === "pathoscope_bowtie" ? "pathoscope" : val),
-	z.enum([
-		"build_index",
-		"create_sample",
-		"create_subtraction",
-		"nuvs",
-		"pathoscope",
-		"iimi",
-	]),
-);
+export const Workflow = z.literal([
+	"build_index",
+	"create_sample",
+	"create_subtraction",
+	"nuvs",
+	"pathoscope",
+	"iimi",
+]);
 export type Workflow = z.infer<typeof Workflow>;
-export type ServerWorkflow = z.input<typeof Workflow>;
 
 export const JobNestedSchema = z
 	.object({

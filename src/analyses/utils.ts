@@ -268,7 +268,7 @@ export function formatPathoscopeData(detail): FormattedPathoscopeAnalysis {
 }
 
 export function formatData(detail) {
-	if (detail?.workflow?.startsWith("pathoscope")) {
+	if (detail?.workflow === "pathoscope") {
 		return formatPathoscopeData(detail);
 	}
 
@@ -283,7 +283,7 @@ export function formatData(detail) {
 	return detail;
 }
 
-const supportedWorkflows = ["pathoscope_bowtie", "nuvs", "iimi"];
+const supportedWorkflows = ["pathoscope", "nuvs", "iimi"];
 
 export function checkSupportedWorkflow(workflow) {
 	return supportedWorkflows.includes(workflow);

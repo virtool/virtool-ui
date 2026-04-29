@@ -29,7 +29,7 @@ export function createFakeServerJobMinimal(
 			"succeeded",
 		]),
 		user: createFakeUserNested(),
-		workflow: "pathoscope_bowtie",
+		workflow: "pathoscope",
 		...overrides,
 	};
 }
@@ -86,7 +86,7 @@ export function createFakeServerJobNested(
 			"succeeded",
 		]),
 		user: createFakeUserNested(),
-		workflow: "pathoscope_bowtie",
+		workflow: "pathoscope",
 		...overrides,
 	};
 }
