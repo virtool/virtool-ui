@@ -1,9 +1,9 @@
 import { cn } from "@app/utils";
 import { BarsLegendItem } from "./BarsLegendItem";
-import { bgColorClasses } from "./colors";
+import { type BarColor, bgColorClasses } from "./colors";
 
 type BarItemProps = {
-	color: string;
+	color: BarColor | "white";
 	empty?: boolean;
 	size: number;
 };
