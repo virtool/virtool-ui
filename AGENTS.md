@@ -118,13 +118,46 @@ mappings, or decisions that apply to your work.
 
 ## Git
 
-Commit messages use **Conventional Commits**:
+Commit messages use **Conventional Commits**. Releases are automated with
+semantic-release: only `feat` (minor) and `fix` (patch) trigger a release.
+Anything user-visible must be one of those — never `refactor` or `chore`.
 
 ```
 type(scope): description
 ```
 
-Types: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`.
+### Types
+
+- `feat`: new user-facing feature or capability
+- `fix`: bug fix or correcting wrong behavior (includes UI adjustments and
+  performance improvements)
+- `chore`: internal code not yet exposed to users (e.g., new hook, data model),
+  configs, dependencies, file moves/renames, build scripts
+- `refactor`: restructuring code without changing behavior (e.g., extracting
+  functions, renaming variables, reorganizing modules)
+- `style`: formatting only — no logic changes
+- `docs`: documentation changes only
+- `test`: adding or updating tests
+- `ci`: CI/CD pipeline changes
+
+### Titles
+
+`feat` and `fix` titles are user-facing. Describe the outcome for the user, not
+the code change. Implementation details go in the body, not the title.
+
+- Bad: `fix: use shared Button component with corrected label`
+- Good: `fix: correct submit button label`
+- Bad: `feat: wrap save handler in a transaction`
+- Good: `fix: prevent rare data loss when saving`
+
+All other types are developer-facing — implementation details are helpful and
+make commits easier to find later.
+
+- Good: `refactor: extract form helpers into src/forms/`
+- Good: `chore: add csv parser`
+- Good: `test: add tests for table components and hooks`
+
+### Other rules
 
 - Title: lowercase, no period, under 72 characters.
 - Scope is optional but preferred.
