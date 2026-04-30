@@ -28,8 +28,8 @@ export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
 
 	return (
 		<AccordionScrollingItem value={id}>
-			<AccordionTrigger className="flex-col overflow-hidden">
-				<div className="flex justify-between mb-4">
+			<AccordionTrigger className="flex-col items-stretch gap-4">
+				<div className="flex justify-between">
 					<header className="flex flex-col font-medium items-start text-lg">
 						<span className="mb-0.5">{name}</span>
 						<span className="text-gray-500">
