@@ -59,8 +59,5 @@ export function useCreateFirstUser() {
 		mutationFn: ({ handle, password, forceReset }) => {
 			return createFirst(handle, password, forceReset);
 		},
-		onSuccess: () => {
-			window.location.reload();
-		},
 	});
 }

@@ -1,25 +1,26 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderWithProviders } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import { describe, expect, it } from "vitest";
 import FirstUser from "../FirstUser";
 
 describe("<FirstUser />", () => {
-	it("creates first user once form is submitted", async () => {
+	it("creates first user and redirects to / on success", async () => {
 		const usernameInput = "Username";
 		const passwordInput = "Password";
 		const scope = nock("http://localhost")
-			.post("/api/users/first", {
+			.put("/api/users/first", {
 				handle: usernameInput,
 				password: passwordInput,
+				force_reset: false,
 			})
 			.reply(201, {
 				handle: usernameInput,
 				password: passwordInput,
 			});
 
-		renderWithProviders(<FirstUser />);
+		const { router } = await renderWithRouter(<FirstUser />, "/setup");
 
 		const usernameField = screen.getByLabelText("username");
 		const passwordField = screen.getByLabelText("password");
@@ -35,6 +36,9 @@ describe("<FirstUser />", () => {
 
 		await userEvent.click(screen.getByRole("button", { name: /Create User/i }));
 
-		scope.isDone();
+		await waitFor(() => {
+			expect(router.state.location.pathname).toBe("/");
+		});
+		expect(scope.isDone()).toBe(true);
 	});
 });
