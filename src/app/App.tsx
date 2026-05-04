@@ -1,17 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactElement } from "react";
 import AppRouter from "./AppRouter";
-import { resetClient } from "./utils";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
 			retry: (failureCount: number, error: any) => {
-				if ([403, 404].includes(error.response?.status)) {
+				const status = error.response?.status;
+				if ([401, 403, 404].includes(status)) {
 					return false;
-				}
-				if (error.response?.status === 401) {
-					resetClient();
 				}
 				return failureCount <= 3;
 			},

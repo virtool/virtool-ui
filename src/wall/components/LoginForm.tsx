@@ -3,19 +3,23 @@ import Checkbox from "@base/Checkbox";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
+import { useNavigate } from "@tanstack/react-router";
 import { Controller, useForm } from "react-hook-form";
 import { useLoginMutation } from "../queries";
 import { WallTitle } from "./WallTitle";
 
 type LoginFormProps = {
+	/** URL to navigate to after a successful login. Defaults to "/". */
+	redirect?: string;
 	/** Callback to set the reset code in the parent component state. */
 	setResetCode: (resetCode: string) => void;
 };
 
 /** Handles the user login process. */
-export default function LoginForm({ setResetCode }: LoginFormProps) {
+export default function LoginForm({ redirect, setResetCode }: LoginFormProps) {
 	const { control, handleSubmit, register } = useForm();
 	const loginMutation = useLoginMutation();
+	const navigate = useNavigate();
 
 	function onSubmit({ handle, password, remember }) {
 		loginMutation.mutate(
@@ -24,7 +28,9 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
 				onSuccess: (data) => {
 					if (data.body.reset_code) {
 						setResetCode(data.body.reset_code);
+						return;
 					}
+					navigate({ to: redirect ?? "/" });
 				},
 			},
 		);

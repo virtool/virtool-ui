@@ -36,7 +36,7 @@ function setupWebSocket(queryClient: QueryClient) {
 
 export const Route = createFileRoute("/_authenticated")({
 	validateSearch: authenticatedSearchSchema,
-	beforeLoad: async ({ context }) => {
+	beforeLoad: async ({ context, location }) => {
 		const { queryClient } = context;
 
 		const rootData = await queryClient.ensureQueryData<Root>({
@@ -54,7 +54,10 @@ export const Route = createFileRoute("/_authenticated")({
 				queryFn: fetchAccount,
 			});
 		} catch {
-			throw redirect({ to: "/login" });
+			throw redirect({
+				to: "/login",
+				search: { redirect: location.href } as never,
+			});
 		}
 	},
 	component: AuthenticatedLayout,
