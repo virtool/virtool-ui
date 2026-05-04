@@ -56,7 +56,8 @@ export const Route = createFileRoute("/_authenticated")({
 		} catch {
 			throw redirect({
 				to: "/login",
-				search: { redirect: location.href } as never,
+				// biome-ignore lint/suspicious/noExplicitAny: route search type is `AnyRoute` because tsconfig has `strict: false` (see AppRouter.tsx)
+				search: { redirect: location.href } as any,
 			});
 		}
 	},
