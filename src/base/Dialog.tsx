@@ -70,11 +70,14 @@ export function DialogContent({
 
 type DialogTitleProps = {
 	children: ReactNode;
+	className?: string;
 };
 
-export function DialogTitle({ children }: DialogTitleProps) {
+export function DialogTitle({ children, className }: DialogTitleProps) {
 	return (
-		<DialogPrimitive.Title className="font-medium pb-4 text-2xl">
+		<DialogPrimitive.Title
+			className={cn("font-medium pb-4 text-2xl", className)}
+		>
 			{children}
 		</DialogPrimitive.Title>
 	);

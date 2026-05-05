@@ -42,9 +42,9 @@ export default function ReferenceDetailHeader({
 	return (
 		<ViewHeader title={name}>
 			<ViewHeaderTitle>
-				{name}
+				{archived ? <span className="text-gray-500">{name}</span> : name}
 				{archived && (
-					<Badge className="ml-3" color="gray">
+					<Badge className="ml-3" color="gray" variant="outline">
 						Archived
 					</Badge>
 				)}

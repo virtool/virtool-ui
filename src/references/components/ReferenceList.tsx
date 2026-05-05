@@ -6,6 +6,7 @@ import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
+import { Archive } from "lucide-react";
 import { useFindReferences } from "../queries";
 import Clone from "./CloneReference";
 import { CreateReference } from "./CreateReference";
@@ -78,8 +79,11 @@ export default function ReferenceList({
 					}
 				/>
 				<ReferenceOfficial officialInstalled={official_installed} />
-				{total_count === 0 ? (
-					<NoneFound noun={archived ? "archived references" : "references"} />
+				{!items.length ? (
+					<NoneFound
+						noun={archived ? "archived references" : "references"}
+						icon={archived ? Archive : undefined}
+					/>
 				) : (
 					<Pagination
 						items={items}

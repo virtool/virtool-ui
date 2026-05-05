@@ -20,6 +20,12 @@ function ArchiveReferenceHarness({
 	return <ArchiveReference detail={detail} open={open} setOpen={setOpen} />;
 }
 
+function getDialogTitle(verb: "Archive" | "Unarchive", name: string) {
+	return screen.queryByRole("heading", {
+		name: `${verb} ${name}?`,
+	});
+}
+
 describe("<ArchiveReference />", () => {
 	afterEach(() => nock.cleanAll());
 
@@ -30,12 +36,12 @@ describe("<ArchiveReference />", () => {
 
 		await renderWithRouter(<ArchiveReferenceHarness detail={detail} />);
 
-		expect(screen.getByText("Archive reference")).toBeInTheDocument();
+		expect(getDialogTitle("Archive", detail.name)).toBeInTheDocument();
 
 		await userEvent.click(screen.getByRole("button", { name: "Archive" }));
 
 		await waitFor(() => {
-			expect(screen.queryByText("Archive reference")).toBeNull();
+			expect(getDialogTitle("Archive", detail.name)).toBeNull();
 		});
 
 		scope.done();
@@ -48,23 +54,22 @@ describe("<ArchiveReference />", () => {
 
 		await renderWithRouter(<ArchiveReferenceHarness detail={detail} />);
 
-		expect(screen.getByText("Unarchive reference")).toBeInTheDocument();
+		expect(getDialogTitle("Unarchive", detail.name)).toBeInTheDocument();
 
 		await userEvent.click(screen.getByRole("button", { name: "Unarchive" }));
 
 		await waitFor(() => {
-			expect(screen.queryByText("Unarchive reference")).toBeNull();
+			expect(getDialogTitle("Unarchive", detail.name)).toBeNull();
 		});
 
 		scope.done();
 	});
 
-	it("should surface the official-reference message on a 409 response", async () => {
-		const detail = createFakeReference({
-			archived: false,
-			name: "Plant Viruses",
-		});
-		const scope = mockApiArchiveReference(detail.id, detail, 409);
+	it("should surface a server-provided error message when one is returned", async () => {
+		const detail = createFakeReference({ archived: false });
+		const scope = nock("http://localhost")
+			.post(`/api/refs/${detail.id}/archive`)
+			.reply(409, { message: "The official reference cannot be archived." });
 
 		await renderWithRouter(<ArchiveReferenceHarness detail={detail} />);
 
@@ -73,12 +78,29 @@ describe("<ArchiveReference />", () => {
 		expect(
 			await screen.findByText("The official reference cannot be archived."),
 		).toBeInTheDocument();
-		expect(screen.getByText("Archive reference")).toBeInTheDocument();
+		expect(getDialogTitle("Archive", detail.name)).toBeInTheDocument();
 
 		scope.done();
 	});
 
-	it("should surface a generic message on other errors", async () => {
+	it("should fall back to the official-reference message on 409 with no body", async () => {
+		const detail = createFakeReference({ archived: false });
+		const scope = nock("http://localhost")
+			.post(`/api/refs/${detail.id}/archive`)
+			.reply(409);
+
+		await renderWithRouter(<ArchiveReferenceHarness detail={detail} />);
+
+		await userEvent.click(screen.getByRole("button", { name: "Archive" }));
+
+		expect(
+			await screen.findByText("The official reference cannot be archived."),
+		).toBeInTheDocument();
+
+		scope.done();
+	});
+
+	it("should surface a generic message when the server returns no message", async () => {
 		const detail = createFakeReference({ archived: false });
 		const scope = mockApiArchiveReference(detail.id, detail, 500);
 
@@ -91,5 +113,19 @@ describe("<ArchiveReference />", () => {
 		).toBeInTheDocument();
 
 		scope.done();
+	});
+
+	it("should close without mutating when the Cancel button is clicked", async () => {
+		const detail = createFakeReference({ archived: false });
+		const scope = mockApiArchiveReference(detail.id, detail);
+
+		await renderWithRouter(<ArchiveReferenceHarness detail={detail} />);
+
+		await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
+
+		await waitFor(() => {
+			expect(getDialogTitle("Archive", detail.name)).toBeNull();
+		});
+		expect(scope.isDone()).toBe(false);
 	});
 });

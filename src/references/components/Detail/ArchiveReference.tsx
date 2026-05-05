@@ -5,6 +5,7 @@ import {
 	useUnarchiveReference,
 } from "@references/queries";
 import type { Reference } from "@references/types";
+import { AlertCircle, Archive, ArchiveRestore } from "lucide-react";
 
 type ArchiveReferenceProps = {
 	detail: Reference;
@@ -39,33 +40,56 @@ export default function ArchiveReference({
 		}
 	}
 
-	const isOfficialConflict = mutation.error?.response?.status === 409;
-	const errorMessage = mutation.error
-		? isOfficialConflict
-			? "The official reference cannot be archived."
-			: `Failed to ${verb.toLowerCase()} reference. Please try again.`
-		: null;
+	let errorMessage: string | null = null;
+	if (mutation.error) {
+		const serverMessage = mutation.error.response?.body?.message;
+		if (serverMessage) {
+			errorMessage = serverMessage;
+		} else if (mutation.error.response?.status === 409) {
+			errorMessage = "The official reference cannot be archived.";
+		} else {
+			errorMessage = `Failed to ${verb.toLowerCase()} reference. Please try again.`;
+		}
+	}
+
+	const Icon = detail.archived ? ArchiveRestore : Archive;
 
 	return (
 		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogContent>
-				<DialogTitle>{verb} reference</DialogTitle>
-				<p>
-					{detail.archived ? (
-						<span>
-							Restore <strong>{detail.name}</strong> to the active references
-							list?
-						</span>
-					) : (
-						<span>
-							Archive <strong>{detail.name}</strong>? Archived references are
-							hidden from the default list but are not deleted.
-						</span>
-					)}
-				</p>
-				{errorMessage && <p className="pt-3 text-red-600">{errorMessage}</p>}
-				<DialogFooter>
-					<Button onClick={handleConfirm}>{verb}</Button>
+				<div className="flex gap-4">
+					<div className="shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full bg-gray-100 text-gray-600">
+						<Icon size={20} strokeWidth={2.25} />
+					</div>
+					<div className="min-w-0 flex-1">
+						<DialogTitle className="pb-1">
+							{verb} <span className="text-gray-700">{detail.name}</span>?
+						</DialogTitle>
+						<p className="text-base text-gray-600 leading-relaxed">
+							{detail.archived
+								? "It will return to active use and appear in the default references list."
+								: "Archived references are hidden from default views and blocked from edits and new analyses. Existing analyses will continue to resolve."}
+						</p>
+					</div>
+				</div>
+
+				{errorMessage && (
+					<div className="mt-4 flex items-start gap-2 px-3 py-2.5 rounded border border-red-200 bg-red-50 text-red-700">
+						<AlertCircle size={16} className="mt-0.5 shrink-0" />
+						<div className="text-sm leading-snug">
+							<span className="font-semibold">
+								Cannot {verb.toLowerCase()}.
+							</span>{" "}
+							{errorMessage}
+						</div>
+					</div>
+				)}
+
+				<DialogFooter className="mt-2 gap-2">
+					<Button onClick={() => handleOpenChange(false)}>Cancel</Button>
+					<Button color="blue" onClick={handleConfirm}>
+						{verb}
+					</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

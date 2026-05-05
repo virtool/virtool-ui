@@ -5,6 +5,7 @@ type BadgeProps = {
 	children: ReactNode;
 	className?: string;
 	color?: "blue" | "green" | "gray" | "orange" | "purple" | "red";
+	variant?: "solid" | "outline";
 };
 
 /**
@@ -14,7 +15,23 @@ export default function Badge({
 	children,
 	className,
 	color = "gray",
+	variant = "solid",
 }: BadgeProps) {
+	if (variant === "outline") {
+		return (
+			<span
+				className={cn(
+					"align-middle font-semibold inline-flex items-center gap-1",
+					"px-2 py-0.5 rounded-xl text-sm whitespace-nowrap",
+					"text-gray-600 bg-gray-100 border border-gray-200",
+					className,
+				)}
+			>
+				{children}
+			</span>
+		);
+	}
+
 	return (
 		<span
 			className={cn(

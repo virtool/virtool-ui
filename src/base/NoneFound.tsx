@@ -1,20 +1,32 @@
-import { CircleAlert } from "lucide-react";
+import { CircleAlert, type LucideIcon } from "lucide-react";
 import { cn } from "@/app/utils";
 import { noneFoundStyle } from "./noneFoundStyle";
 
-/**
- * A ListGroupItem component with a 'none found'-type message. Used in ListGroups when no data is available to populate
- * the list. For example, when no sample have been created.
- *
- * @param noun {string} the name of the items of which none were found (eg. samples)
- * @param noListGroup {boolean} don't include a ListGroup in the returned element
- */
 interface NoneFoundProps {
 	noun: string;
 	className?: string;
+	icon?: LucideIcon;
 }
 
-export default function NoneFound({ noun, className }: NoneFoundProps) {
+export default function NoneFound({
+	noun,
+	className,
+	icon: Icon,
+}: NoneFoundProps) {
+	if (Icon) {
+		return (
+			<div
+				className={cn(
+					"flex flex-col items-center justify-center gap-2 py-8 text-gray-500",
+					className,
+				)}
+			>
+				<Icon size={28} className="text-gray-400" aria-hidden />
+				<p className="m-0">No {noun} found</p>
+			</div>
+		);
+	}
+
 	return (
 		<div className={cn(noneFoundStyle, className)}>
 			<CircleAlert size={18} /> No {noun} found

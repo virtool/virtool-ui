@@ -9,6 +9,7 @@ import {
 	notFound,
 	Outlet,
 	useMatches,
+	useNavigate,
 } from "@tanstack/react-router";
 import { z } from "zod/v4";
 
@@ -35,7 +36,7 @@ export const Route = createFileRoute("/_authenticated/refs/$refId")({
 function ReferenceDetailLayout() {
 	const { refId } = Route.useParams();
 	const search = Route.useSearch();
-	const navigate = Route.useNavigate();
+	const navigate = useNavigate();
 	const { data } = useFetchReference(refId);
 	const isOtuDetail = useMatches().some(
 		(match) => match.routeId === "/_authenticated/refs/$refId/otus/$otuId",
@@ -43,6 +44,24 @@ function ReferenceDetailLayout() {
 
 	if (!data) {
 		return null;
+	}
+
+	function setOpenArchiveReference(openArchiveReference: boolean) {
+		navigate({
+			search: ((prev: Record<string, unknown>) => ({
+				...prev,
+				openArchiveReference,
+			})) as never,
+		});
+	}
+
+	function setOpenEditReference(openEditReference: boolean) {
+		navigate({
+			search: ((prev: Record<string, unknown>) => ({
+				...prev,
+				openEditReference,
+			})) as never,
+		});
 	}
 
 	return (
@@ -54,12 +73,8 @@ function ReferenceDetailLayout() {
 						createdAt={data.created_at}
 						isRemote={Boolean(data.remotes_from)}
 						name={data.name}
-						setOpenArchiveReference={(openArchiveReference) =>
-							navigate({ search: { ...search, openArchiveReference } })
-						}
-						setOpenEditReference={(openEditReference) =>
-							navigate({ search: { ...search, openEditReference } })
-						}
+						setOpenArchiveReference={setOpenArchiveReference}
+						setOpenEditReference={setOpenEditReference}
 						userHandle={data.user.handle}
 						refId={refId}
 					/>
@@ -74,17 +89,13 @@ function ReferenceDetailLayout() {
 			<EditReference
 				detail={data}
 				open={Boolean(search.openEditReference)}
-				setOpen={(openEditReference) =>
-					navigate({ search: { ...search, openEditReference } })
-				}
+				setOpen={setOpenEditReference}
 			/>
 
 			<ArchiveReference
 				detail={data}
 				open={Boolean(search.openArchiveReference)}
-				setOpen={(openArchiveReference) =>
-					navigate({ search: { ...search, openArchiveReference } })
-				}
+				setOpen={setOpenArchiveReference}
 			/>
 		</>
 	);

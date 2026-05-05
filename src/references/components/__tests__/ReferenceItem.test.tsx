@@ -1,8 +1,18 @@
 import { screen } from "@testing-library/react";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakePermissions } from "@tests/fake/permissions";
 import { createFakeReferenceMinimal } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 import { ReferenceItem } from "../ReferenceItem";
+
+function mockAccountWithCreateRef() {
+	mockApiGetAccount(
+		createFakeAccount({
+			permissions: createFakePermissions({ create_ref: true }),
+		}),
+	);
+}
 
 describe("<ReferenceItem />", () => {
 	let props;
@@ -62,5 +72,24 @@ describe("<ReferenceItem />", () => {
 		await renderWithRouter(<ReferenceItem {...props} />);
 
 		expect(screen.queryByText("Archived")).toBeNull();
+	});
+
+	it("should render the clone button when the user has create_ref and the reference is not archived", async () => {
+		mockAccountWithCreateRef();
+		props.reference = createFakeReferenceMinimal({ archived: false });
+		await renderWithRouter(<ReferenceItem {...props} />);
+
+		expect(
+			await screen.findByRole("button", { name: "clone" }),
+		).toBeInTheDocument();
+	});
+
+	it("should not render the clone button when [archived=true]", async () => {
+		mockAccountWithCreateRef();
+		props.reference = createFakeReferenceMinimal({ archived: true });
+		await renderWithRouter(<ReferenceItem {...props} />);
+
+		expect(await screen.findByText("Archived")).toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: "clone" })).toBeNull();
 	});
 });
