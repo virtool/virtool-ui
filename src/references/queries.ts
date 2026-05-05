@@ -11,6 +11,7 @@ import type { ErrorResponse } from "@/types/api";
 import {
 	addReferenceGroup,
 	addReferenceUser,
+	archiveReference,
 	checkRemoteReferenceUpdates,
 	cloneReference,
 	createReference,
@@ -22,6 +23,7 @@ import {
 	remoteReference,
 	removeReferenceGroup,
 	removeReferenceUser,
+	unarchiveReference,
 	updateRemoteReference,
 } from "./api";
 import type {
@@ -40,7 +42,7 @@ import type {
 export const referenceQueryKeys = {
 	all: () => ["reference"] as const,
 	lists: () => ["reference", "list"] as const,
-	list: (filters: Array<string | number | boolean>) =>
+	list: (filters: Array<string | number | boolean | undefined>) =>
 		["reference", "list", "single", ...filters] as const,
 	details: () => ["reference", "detail"] as const,
 	detail: (refId: string) => ["reference", "detail", refId] as const,
@@ -52,16 +54,18 @@ export const referenceQueryKeys = {
  * @param page - The page to fetch
  * @param per_page - The number of references to fetch per page
  * @param term - The search term to filter references by
+ * @param archived - Lifecycle filter; `true` for archived only, `false` for active only
  * @returns The paginated list of references
  */
 export function useFindReferences(
 	page: number,
 	per_page: number,
 	term: string,
+	archived?: boolean,
 ) {
 	return useQuery<ReferenceSearchResult>({
-		queryKey: referenceQueryKeys.list([page, per_page, term]),
-		queryFn: () => findReferences({ page, per_page, term }),
+		queryKey: referenceQueryKeys.list([page, per_page, term, archived]),
+		queryFn: () => findReferences({ page, per_page, term, archived }),
 		placeholderData: keepPreviousData,
 	});
 }
@@ -320,6 +324,50 @@ export function useUpdateRemoteReference(refId: string) {
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: referenceQueryKeys.detail(refId),
+			});
+		},
+	});
+}
+
+/**
+ * Initializes a mutator for archiving a reference
+ *
+ * @param refId - The id of the reference to archive
+ * @returns A mutator for archiving the reference
+ */
+export function useArchiveReference(refId: string) {
+	const queryClient = useQueryClient();
+
+	return useMutation<Reference, ErrorResponse, void>({
+		mutationFn: () => archiveReference(refId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: referenceQueryKeys.detail(refId),
+			});
+			queryClient.invalidateQueries({
+				queryKey: referenceQueryKeys.lists(),
+			});
+		},
+	});
+}
+
+/**
+ * Initializes a mutator for unarchiving a reference
+ *
+ * @param refId - The id of the reference to unarchive
+ * @returns A mutator for unarchiving the reference
+ */
+export function useUnarchiveReference(refId: string) {
+	const queryClient = useQueryClient();
+
+	return useMutation<Reference, ErrorResponse, void>({
+		mutationFn: () => unarchiveReference(refId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: referenceQueryKeys.detail(refId),
+			});
+			queryClient.invalidateQueries({
+				queryKey: referenceQueryKeys.lists(),
 			});
 		},
 	});

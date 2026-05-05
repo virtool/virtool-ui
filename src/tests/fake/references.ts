@@ -42,6 +42,7 @@ export function createFakeReferenceMinimal(
 ): ReferenceMinimal {
 	const defaultReferenceMinimal = {
 		...createFakeReferenceNested(overrides),
+		archived: false,
 		cloned_from: {
 			id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
 			name: faker.word.noun({ strategy: "any-length" }),
@@ -189,4 +190,40 @@ export function mockApiCreateReference(
 	return nock("http://localhost")
 		.post("/api/refs", { data_type: "genome", description, name, organism })
 		.reply(201, reference);
+}
+
+/**
+ * Sets up a mocked API route for archiving a reference
+ *
+ * @param refId - The id of the reference being archived
+ * @param response - The reference returned in the response body
+ * @param statusCode - Optional HTTP status code; defaults to 200
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiArchiveReference(
+	refId: string,
+	response: Reference,
+	statusCode = 200,
+) {
+	return nock("http://localhost")
+		.post(`/api/refs/${refId}/archive`)
+		.reply(statusCode, response);
+}
+
+/**
+ * Sets up a mocked API route for unarchiving a reference
+ *
+ * @param refId - The id of the reference being unarchived
+ * @param response - The reference returned in the response body
+ * @param statusCode - Optional HTTP status code; defaults to 200
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiUnarchiveReference(
+	refId: string,
+	response: Reference,
+	statusCode = 200,
+) {
+	return nock("http://localhost")
+		.post(`/api/refs/${refId}/unarchive`)
+		.reply(statusCode, response);
 }

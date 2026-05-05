@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod/v4";
 
 const refsSearchSchema = z.object({
+	archived: z.boolean().default(false).catch(false),
 	find: z.string().default("").catch(""),
 	page: z.number().default(1).catch(1),
 	createReferenceType: z.string().optional().catch(undefined),
@@ -20,6 +21,7 @@ function ReferencesRoute() {
 
 	return (
 		<ReferenceList
+			archived={search.archived}
 			cloneReferenceId={search.cloneReferenceId}
 			createReferenceType={search.createReferenceType}
 			find={search.find}

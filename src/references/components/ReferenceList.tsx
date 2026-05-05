@@ -1,6 +1,7 @@
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NoneFound from "@base/NoneFound";
 import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
@@ -13,11 +14,13 @@ import ReferenceOfficial from "./ReferenceOfficial";
 import ReferenceToolbar from "./ReferenceToolbar";
 
 type ReferenceListProps = {
+	archived?: boolean;
 	cloneReferenceId?: string;
 	createReferenceType?: string;
 	find?: string;
 	page?: number;
 	setSearch?: (next: {
+		archived?: boolean;
 		cloneReferenceId?: string;
 		createReferenceType?: string;
 		find?: string;
@@ -29,13 +32,14 @@ type ReferenceListProps = {
  * A list of references with filtering options
  */
 export default function ReferenceList({
+	archived = false,
 	cloneReferenceId,
 	createReferenceType,
 	find = "",
 	page = 1,
 	setSearch = () => {},
 }: ReferenceListProps) {
-	const { data, isPending } = useFindReferences(page, 25, find);
+	const { data, isPending } = useFindReferences(page, 25, find, archived);
 
 	if (isPending) {
 		return <LoadingPlaceholder />;
@@ -59,7 +63,9 @@ export default function ReferenceList({
 					</ViewHeaderTitle>
 				</ViewHeader>
 				<ReferenceToolbar
+					archived={archived}
 					find={find}
+					setArchived={(archived) => setSearch({ archived, page: 1 })}
 					setCreateReferenceType={(createReferenceType) =>
 						setSearch({ createReferenceType })
 					}
@@ -72,7 +78,9 @@ export default function ReferenceList({
 					}
 				/>
 				<ReferenceOfficial officialInstalled={official_installed} />
-				{total_count !== 0 && (
+				{total_count === 0 ? (
+					<NoneFound noun={archived ? "archived references" : "references"} />
+				) : (
 					<Pagination
 						items={items}
 						storedPage={storedPage}

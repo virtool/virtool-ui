@@ -1,4 +1,5 @@
 import ContainerNarrow from "@base/ContainerNarrow";
+import ArchiveReference from "@references/components/Detail/ArchiveReference";
 import EditReference from "@references/components/Detail/EditReference";
 import ReferenceDetailHeader from "@references/components/Detail/ReferenceDetailHeader";
 import ReferenceDetailTabs from "@references/components/Detail/ReferenceDetailTabs";
@@ -12,6 +13,7 @@ import {
 import { z } from "zod/v4";
 
 const refDetailSearchSchema = z.object({
+	openArchiveReference: z.boolean().optional().catch(undefined),
 	openEditReference: z.boolean().optional().catch(undefined),
 });
 
@@ -48,9 +50,13 @@ function ReferenceDetailLayout() {
 			{!isOtuDetail && (
 				<>
 					<ReferenceDetailHeader
+						archived={data.archived}
 						createdAt={data.created_at}
 						isRemote={Boolean(data.remotes_from)}
 						name={data.name}
+						setOpenArchiveReference={(openArchiveReference) =>
+							navigate({ search: { ...search, openArchiveReference } })
+						}
 						setOpenEditReference={(openEditReference) =>
 							navigate({ search: { ...search, openEditReference } })
 						}
@@ -70,6 +76,14 @@ function ReferenceDetailLayout() {
 				open={Boolean(search.openEditReference)}
 				setOpen={(openEditReference) =>
 					navigate({ search: { ...search, openEditReference } })
+				}
+			/>
+
+			<ArchiveReference
+				detail={data}
+				open={Boolean(search.openArchiveReference)}
+				setOpen={(openArchiveReference) =>
+					navigate({ search: { ...search, openArchiveReference } })
 				}
 			/>
 		</>

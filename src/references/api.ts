@@ -53,20 +53,51 @@ export function remoteReference(remote_from: string): Promise<Reference> {
  * @param term - The search term to filter references by
  * @param page - The page to fetch
  * @param per_page - The number of references to fetch per page
+ * @param archived - Lifecycle filter; `true` for archived only, `false` for active only
  * @returns A promise resolving to a page of references search results
  */
 export function findReferences({
 	term,
 	page,
 	per_page,
+	archived,
+}: {
+	term: string;
+	page: number;
+	per_page: number;
+	archived?: boolean;
 }): Promise<ReferenceSearchResult> {
 	return apiClient
 		.get("/refs")
-		.query({ find: term, page, per_page })
+		.query({ find: term, page, per_page, archived })
 		.then((response) => {
 			const { documents, ...rest } = response.body;
 			return { ...rest, items: documents };
 		});
+}
+
+/**
+ * Archive a reference
+ *
+ * @param refId - The id of the reference to archive
+ * @returns A promise resolving to the updated reference
+ */
+export function archiveReference(refId: string): Promise<Reference> {
+	return apiClient
+		.post(`/refs/${refId}/archive`)
+		.then((response) => response.body);
+}
+
+/**
+ * Unarchive a reference
+ *
+ * @param refId - The id of the reference to unarchive
+ * @returns A promise resolving to the updated reference
+ */
+export function unarchiveReference(refId: string): Promise<Reference> {
+	return apiClient
+		.post(`/refs/${refId}/unarchive`)
+		.then((response) => response.body);
 }
 
 /**

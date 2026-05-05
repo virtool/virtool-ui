@@ -49,4 +49,18 @@ describe("<ReferenceItem />", () => {
 
 		expect(screen.queryByRole("progressbar")).toBeNull();
 	});
+
+	it("should render the Archived badge when [archived=true]", async () => {
+		props.reference = createFakeReferenceMinimal({ archived: true });
+		await renderWithRouter(<ReferenceItem {...props} />);
+
+		expect(screen.getByText("Archived")).toBeInTheDocument();
+	});
+
+	it("should not render the Archived badge when [archived=false]", async () => {
+		props.reference = createFakeReferenceMinimal({ archived: false });
+		await renderWithRouter(<ReferenceItem {...props} />);
+
+		expect(screen.queryByText("Archived")).toBeNull();
+	});
 });
