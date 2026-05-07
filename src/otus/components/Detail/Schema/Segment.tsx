@@ -1,4 +1,3 @@
-import { cn } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
@@ -35,19 +34,17 @@ export default function Segment({
 	setRemoveSegmentName,
 }: SegmentProps) {
 	return (
-		<BoxGroupSection
-			className="grid items-center px-4 leading-none h-12"
-			style={{ gridTemplateColumns: "45fr 1fr 10fr 10fr" }}
-		>
-			<strong>{segment.name}</strong>
+		<BoxGroupSection className="flex items-center gap-3 h-12">
+			<strong className="flex-1 truncate">{segment.name}</strong>
 
 			{segment.required ? (
 				<Label color="purple">Required</Label>
 			) : (
 				<Label>Optional</Label>
 			)}
+
 			{canModify && (
-				<div className={cn("text-lg", "m-2")}>
+				<div className="flex">
 					<IconButton
 						IconComponent={Trash}
 						color="red"
@@ -63,34 +60,24 @@ export default function Segment({
 				</div>
 			)}
 
-			<div
-				className={cn(
-					"flex",
-					"justify-center",
-					"ml-auto",
-					"font-bold",
-					"text-2xl",
-				)}
-			>
-				<IconButton
-					className={cn("leading-none", {
-						hidden: first,
-						flex: !first,
-					})}
-					IconComponent={ChevronUp}
-					tip="move up"
-					onClick={onMoveUp}
-				/>
-				<IconButton
-					className={cn("leading-none", {
-						hidden: last,
-						flex: !last,
-					})}
-					IconComponent={ChevronDown}
-					tip="move down"
-					onClick={onMoveDown}
-				/>
-			</div>
+			{(!first || !last) && (
+				<div className="flex">
+					{!first && (
+						<IconButton
+							IconComponent={ChevronUp}
+							tip="move up"
+							onClick={onMoveUp}
+						/>
+					)}
+					{!last && (
+						<IconButton
+							IconComponent={ChevronDown}
+							tip="move down"
+							onClick={onMoveDown}
+						/>
+					)}
+				</div>
+			)}
 		</BoxGroupSection>
 	);
 }
