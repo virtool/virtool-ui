@@ -8,7 +8,12 @@ import { OtuDetailSearchProvider } from "@otus/components/Detail/OtuDetailSearch
 import { OtuHeaderIcons } from "@otus/components/Detail/OtuHeaderIcons";
 import { otuQueryOptions, useFetchOTU } from "@otus/queries";
 import { referenceQueryOptions, useFetchReference } from "@references/queries";
-import { createFileRoute, notFound, Outlet } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	notFound,
+	Outlet,
+	useNavigate,
+} from "@tanstack/react-router";
 import { z } from "zod/v4";
 
 const otuDetailSearchSchema = z.object({
@@ -49,7 +54,7 @@ export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 function OtuDetailLayout() {
 	const { refId, otuId } = Route.useParams();
 	const search = Route.useSearch();
-	const navigate = Route.useNavigate();
+	const navigate = useNavigate();
 	const { data: otu } = useFetchOTU(otuId);
 	const { data: reference } = useFetchReference(refId);
 
