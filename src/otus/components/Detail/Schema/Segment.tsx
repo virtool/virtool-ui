@@ -60,7 +60,7 @@ export default function Segment({
 				</div>
 			)}
 
-			{(!first || !last) && (
+			{canModify && (!first || !last) && (
 				<div className="flex">
 					{!first && (
 						<IconButton

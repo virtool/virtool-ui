@@ -1,7 +1,8 @@
 import RemoveDialog from "@base/RemoveDialog";
 import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
-import { useRemoveSequence } from "@otus/queries";
+import { useCurrentOtuContext, useRemoveSequence } from "@otus/queries";
 import type { OtuSequence } from "@otus/types";
+import { useReferenceIsArchived } from "@references/hooks";
 
 type RemoveSequenceProps = {
 	isolateName: string;
@@ -21,6 +22,8 @@ export default function RemoveSequence({
 }: RemoveSequenceProps) {
 	const { search, setSearch } = useOtuDetailSearch();
 	const removeSequenceId = search.removeSequenceId;
+	const { reference } = useCurrentOtuContext();
+	const archived = useReferenceIsArchived(reference.id);
 
 	const mutation = useRemoveSequence(otuId);
 
@@ -51,7 +54,7 @@ export default function RemoveSequence({
 			noun="Sequence"
 			onConfirm={handleConfirm}
 			onHide={() => setSearch({ removeSequenceId: undefined })}
-			show={Boolean(removeSequenceId)}
+			show={Boolean(removeSequenceId) && !archived}
 			message={removeMessage}
 		/>
 	);

@@ -1,5 +1,6 @@
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { CurrentOtuContextProvider, useFetchOTU } from "@otus/queries";
+import { useReferenceIsArchived } from "@references/hooks";
 import { useFetchReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
 import OtuIssues from "../OtuIssues";
@@ -19,6 +20,7 @@ export default function OtuSection() {
 	const { data: reference, isPending: isPendingReference } =
 		useFetchReference(refId);
 	const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
+	const archived = useReferenceIsArchived(refId);
 
 	if (isPendingReference || isPendingOTU) {
 		return <LoadingPlaceholder />;
@@ -32,7 +34,7 @@ export default function OtuSection() {
 				allowedSourceTypes={reference.source_types}
 				otuId={otuId}
 				restrictSourceTypes={reference.restrict_source_types}
-				show={Boolean(search.openAddIsolate)}
+				show={Boolean(search.openAddIsolate) && !archived}
 				onHide={() => setSearch({ openAddIsolate: false })}
 			/>
 		</CurrentOtuContextProvider>

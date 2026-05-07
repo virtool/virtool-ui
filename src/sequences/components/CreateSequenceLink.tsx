@@ -1,6 +1,9 @@
 import { cn } from "@app/utils";
 import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
-import { useCheckReferenceRight } from "@references/hooks";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
 
 type CreateSequenceLinkProps = {
 	refId: string;
@@ -14,9 +17,10 @@ export default function CreateSequenceLink({ refId }: CreateSequenceLinkProps) {
 		refId,
 		"modify_otu",
 	);
+	const archived = useReferenceIsArchived(refId);
 	const { setSearch } = useOtuDetailSearch();
 
-	if (canModify) {
+	if (canModify && !archived) {
 		return (
 			<button
 				className={cn(

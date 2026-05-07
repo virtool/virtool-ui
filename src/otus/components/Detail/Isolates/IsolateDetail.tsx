@@ -3,9 +3,10 @@ import Box from "@base/Box";
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
-import { useSetIsolateAsDefault } from "@otus/queries";
+import { useCurrentOtuContext, useSetIsolateAsDefault } from "@otus/queries";
 import type { OtuIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
+import { useReferenceIsArchived } from "@references/hooks";
 import Sequences from "@sequences/components/Sequences";
 import { Pencil, Star, Trash } from "lucide-react";
 import { useOtuDetailSearch } from "../OtuDetailSearchContext";
@@ -35,6 +36,8 @@ export default function IsolateDetail({
 }: IsolateDetailProps) {
 	const { search, setSearch } = useOtuDetailSearch();
 	const mutation = useSetIsolateAsDefault();
+	const { reference } = useCurrentOtuContext();
+	const archived = useReferenceIsArchived(reference.id);
 
 	return (
 		<div className="flex-1 min-h-0 min-w-0">
@@ -46,7 +49,7 @@ export default function IsolateDetail({
 				sourceName={activeIsolate.source_name}
 				allowedSourceTypes={allowedSourceTypes}
 				restrictSourceTypes={restrictSourceTypes}
-				show={Boolean(search.openEditIsolate)}
+				show={Boolean(search.openEditIsolate) && !archived}
 				onHide={() => setSearch({ openEditIsolate: false })}
 			/>
 
@@ -55,7 +58,7 @@ export default function IsolateDetail({
 				name={formatIsolateName(activeIsolate)}
 				onHide={() => setSearch({ openRemoveIsolate: false })}
 				otuId={otuId}
-				show={Boolean(search.openRemoveIsolate)}
+				show={Boolean(search.openRemoveIsolate) && !archived}
 			/>
 
 			<Box className="flex items-center text-base justify-between">
@@ -66,7 +69,7 @@ export default function IsolateDetail({
 							<Icon className="pl-1" icon={Star} /> Default Isolate
 						</Label>
 					)}
-					{canModify && (
+					{canModify && !archived && (
 						<>
 							<IconButton
 								className="pl-1"

@@ -1,4 +1,3 @@
-import { cn } from "@app/utils";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";
@@ -25,7 +24,6 @@ export default function ReferenceManager() {
 	}
 
 	const {
-		archived,
 		cloned_from,
 		contributors,
 		description,
@@ -40,13 +38,7 @@ export default function ReferenceManager() {
 				<BoxGroupHeader>
 					<h2>General</h2>
 				</BoxGroupHeader>
-				<BoxGroupTable
-					className={cn(
-						"[&_th]:w-45",
-						"[&_tr:not(:first-of-type)_td]:capitalize",
-						archived && "[&_td]:text-gray-500",
-					)}
-				>
+				<BoxGroupTable className="[&_th]:w-45 [&_tr:not(:first-of-type)_td]:capitalize">
 					<tbody>
 						<tr>
 							<th>Description</th>

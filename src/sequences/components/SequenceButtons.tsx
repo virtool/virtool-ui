@@ -4,7 +4,10 @@ import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchConte
 import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
-import { useCheckReferenceRight } from "@references/hooks";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
 import { Pencil, Trash } from "lucide-react";
 
 type SequenceButtonsProps = {
@@ -26,13 +29,14 @@ export default function SequenceButtons({
 		reference.id,
 		"modify_otu",
 	);
+	const archived = useReferenceIsArchived(reference.id);
 	const isolateId = useGetActiveIsolateId(otu);
 
 	const href = `/api/otus/${otu.id}/isolates/${isolateId}/sequences/${id}.fa`;
 
 	return (
 		<span className="flex items-center ml-auto pl-5">
-			{canModify && (
+			{canModify && !archived && (
 				<>
 					<IconButton
 						IconComponent={Pencil}

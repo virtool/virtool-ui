@@ -3,7 +3,12 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import type { OtuSegment } from "@otus/types";
-import { useCheckReferenceRight } from "@references/hooks";
+import ArchivedNotice from "@references/components/Detail/ArchivedNotice";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
+import { useFetchReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
 import Button from "@/base/Button";
 import { useOtuDetailSearch } from "../OtuDetailSearchContext";
@@ -22,6 +27,8 @@ export default function Schema() {
 	const { search, setSearch } = useOtuDetailSearch();
 	const { hasPermission: canModify, isPending: isPendingPermission } =
 		useCheckReferenceRight(refId, "modify_otu");
+	const archived = useReferenceIsArchived(refId);
+	const { data: reference } = useFetchReference(refId);
 
 	const { data, isPending } = useFetchOTU(otuId);
 	const mutation = useUpdateOTU(otuId);
@@ -56,14 +63,26 @@ export default function Schema() {
 
 	return (
 		<div>
-			<div className="flex justify-end mb-3">
-				{canModify && (
-					<Button
-						color="blue"
-						onClick={() => setSearch({ openAddSegment: true })}
-					>
-						Add Segment
-					</Button>
+			<div className="flex items-center justify-between gap-3 mb-3 min-h-9">
+				{archived ? (
+					<p className="m-0 text-sm text-gray-500">
+						Schema is read-only while{" "}
+						{reference?.name ?? "the parent reference"} is archived.
+					</p>
+				) : (
+					<span />
+				)}
+				{archived ? (
+					<ArchivedNotice>editing disabled</ArchivedNotice>
+				) : (
+					canModify && (
+						<Button
+							color="blue"
+							onClick={() => setSearch({ openAddSegment: true })}
+						>
+							Add Segment
+						</Button>
+					)
 				)}
 			</div>
 			{schema.length ? (
@@ -71,7 +90,7 @@ export default function Schema() {
 					{schema.map((segment, index) => (
 						<Segment
 							key={segment.name}
-							canModify={canModify}
+							canModify={canModify && !archived}
 							segment={segment}
 							first={index === 0}
 							last={index === schema.length - 1}
@@ -94,13 +113,13 @@ export default function Schema() {
 				abbreviation={abbreviation}
 				name={name}
 				otuId={otuId}
-				open={Boolean(search.openAddSegment)}
+				open={Boolean(search.openAddSegment) && !archived}
 				schema={schema}
 				setOpen={(openAddSegment) => setSearch({ openAddSegment })}
 			/>
 			<EditSegment
 				abbreviation={abbreviation}
-				editSegmentName={search.editSegmentName}
+				editSegmentName={archived ? undefined : search.editSegmentName}
 				name={name}
 				otuId={otuId}
 				schema={schema}
@@ -111,7 +130,7 @@ export default function Schema() {
 					abbreviation={abbreviation}
 					name={name}
 					otuId={otuId}
-					removeSegmentName={search.removeSegmentName}
+					removeSegmentName={archived ? undefined : search.removeSegmentName}
 					schema={schema}
 					unsetRemoveSegmentName={() =>
 						setSearch({ removeSegmentName: undefined })

@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
 import { useCreateSequence } from "@otus/queries";
 import type { OtuSegment, OtuSequence } from "@otus/types";
+import { useReferenceIsArchived } from "@references/hooks";
 import { compact } from "es-toolkit";
 import SequenceForm from "./SequenceForm";
 
@@ -24,6 +25,7 @@ export default function CreateSequence({
 	sequences,
 }: CreateSequenceProps) {
 	const { search, setSearch } = useOtuDetailSearch();
+	const archived = useReferenceIsArchived(refId);
 
 	const mutation = useCreateSequence(otuId);
 
@@ -52,7 +54,7 @@ export default function CreateSequence({
 
 	return (
 		<Dialog
-			open={Boolean(search.openCreateSequence)}
+			open={Boolean(search.openCreateSequence) && !archived}
 			onOpenChange={() => setSearch({ openCreateSequence: false })}
 		>
 			<DialogContent>

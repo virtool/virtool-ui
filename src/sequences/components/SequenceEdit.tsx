@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
 import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOtuContext, useEditSequence } from "@otus/queries";
+import { useReferenceIsArchived } from "@references/hooks";
 import { useActiveSequence, useGetUnreferencedSegments } from "../hooks";
 import SequenceForm from "./SequenceForm";
 
@@ -11,6 +12,7 @@ import SequenceForm from "./SequenceForm";
 export default function SequenceEdit() {
 	const { search, setSearch } = useOtuDetailSearch();
 	const { otu, reference } = useCurrentOtuContext();
+	const archived = useReferenceIsArchived(reference.id);
 	const isolateId = useGetActiveIsolateId(otu);
 
 	const hasSchema = Boolean(otu.schema.length);
@@ -43,7 +45,7 @@ export default function SequenceEdit() {
 
 	return (
 		<Dialog
-			open={Boolean(editSequenceId)}
+			open={Boolean(editSequenceId) && !archived}
 			onOpenChange={() => setSearch({ editSequenceId: undefined })}
 		>
 			<DialogContent>
