@@ -42,7 +42,14 @@ export default function ReferenceSettings({
 		<>
 			{Boolean(data.remotes_from) || <LocalSourceTypes />}
 			<SectionHeader>
-				<h2>Access</h2>
+				<h2 className="flex items-center gap-2">
+					Access
+					{data.archived && (
+						<span className="text-xs font-normal text-gray-500">
+							rights still editable
+						</span>
+					)}
+				</h2>
 				<p>Manage who can access this reference.</p>
 			</SectionHeader>
 			<ReferenceMembers

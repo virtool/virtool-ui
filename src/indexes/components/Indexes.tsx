@@ -2,7 +2,9 @@ import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
+import { useReferenceIsArchived } from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
+import { Info } from "lucide-react";
 import { useFindIndexes } from "../queries";
 import { IndexItem } from "./Item/IndexItem";
 import RebuildAlert from "./RebuildAlert";
@@ -26,6 +28,7 @@ export default function Indexes({
 }: IndexesProps) {
 	const { refId } = routeApi.useParams();
 	const { data, isPending } = useFindIndexes(page, 25, refId);
+	const archived = useReferenceIsArchived(refId);
 
 	if (isPending) {
 		return <LoadingPlaceholder />;
@@ -35,7 +38,16 @@ export default function Indexes({
 
 	return (
 		<>
-			<RebuildAlert page={page} refId={refId} />
+			{archived ? (
+				<div className="flex items-center gap-2 px-4 py-3 mb-4 rounded-md border border-gray-200 bg-gray-50 text-sm text-gray-600">
+					<Info size={16} className="text-gray-500 shrink-0" />
+					<span>
+						New index builds are disabled while this reference is archived.
+					</span>
+				</div>
+			) : (
+				<RebuildAlert page={page} refId={refId} />
+			)}
 			<RebuildIndex
 				open={openRebuild}
 				setOpen={(openRebuild) => setSearch({ openRebuild })}

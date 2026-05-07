@@ -25,6 +25,7 @@ export default function ReferenceManager() {
 	}
 
 	const {
+		archived,
 		cloned_from,
 		contributors,
 		description,
@@ -43,6 +44,7 @@ export default function ReferenceManager() {
 					className={cn(
 						"[&_th]:w-45",
 						"[&_tr:not(:first-of-type)_td]:capitalize",
+						archived && "[&_td]:text-gray-500",
 					)}
 				>
 					<tbody>

@@ -1,7 +1,10 @@
 import InputSearch from "@base/InputSearch";
 import LinkButton from "@base/LinkButton";
 import Toolbar from "@base/Toolbar";
-import { useCheckReferenceRight } from "@references/hooks";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
 import type { ReferenceRemotesFrom } from "@references/types";
 import type { ChangeEvent } from "react";
 
@@ -32,6 +35,7 @@ export default function OtuToolbar({
 		refId,
 		"modify_otu",
 	);
+	const archived = useReferenceIsArchived(refId);
 
 	return (
 		<Toolbar>
@@ -43,7 +47,7 @@ export default function OtuToolbar({
 				/>
 			</div>
 
-			{canCreate && !remotesFrom && (
+			{canCreate && !remotesFrom && !archived && (
 				<LinkButton to="." search={{ openCreateOTU: true }} color="blue">
 					Create
 				</LinkButton>

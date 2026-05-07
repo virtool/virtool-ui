@@ -1,4 +1,5 @@
 import Badge from "@base/Badge";
+import Button from "@base/Button";
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import ViewHeader from "@base/ViewHeader";
@@ -39,15 +40,48 @@ export default function ReferenceDetailHeader({
 
 	const showIcons = location.endsWith("/manage");
 
+	if (archived) {
+		return (
+			<ViewHeader title={name}>
+				<div className="flex items-start gap-4">
+					<div className="flex flex-1 items-center gap-3 min-w-0">
+						<div className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-md bg-gray-100 text-gray-500">
+							<Archive size={18} />
+						</div>
+						<div className="min-w-0 flex-1">
+							<ViewHeaderTitle className="text-2xl font-semibold text-gray-700 leading-tight">
+								{name}
+								<Badge className="ml-3" color="gray" variant="outline">
+									Archived
+								</Badge>
+								{showIcons && isRemote && (
+									<ViewHeaderIcons>
+										<Icon color="grey" icon={Lock} aria-label="lock" />
+									</ViewHeaderIcons>
+								)}
+							</ViewHeaderTitle>
+							<ViewHeaderAttribution time={createdAt} user={userHandle} />
+						</div>
+					</div>
+					{showIcons && !isRemote && canModify && (
+						<Button
+							color="gray"
+							size="large"
+							onClick={() => setOpenArchiveReference(true)}
+						>
+							<ArchiveRestore size={16} />
+							Unarchive
+						</Button>
+					)}
+				</div>
+			</ViewHeader>
+		);
+	}
+
 	return (
 		<ViewHeader title={name}>
 			<ViewHeaderTitle>
-				{archived ? <span className="text-gray-500">{name}</span> : name}
-				{archived && (
-					<Badge className="ml-3" color="gray" variant="outline">
-						Archived
-					</Badge>
-				)}
+				{name}
 				{showIcons && (
 					<ViewHeaderIcons>
 						{isRemote && <Icon color="grey" icon={Lock} aria-label="lock" />}
@@ -61,8 +95,8 @@ export default function ReferenceDetailHeader({
 								/>
 								<IconButton
 									color="grayDark"
-									IconComponent={archived ? ArchiveRestore : Archive}
-									tip={archived ? "unarchive" : "archive"}
+									IconComponent={Archive}
+									tip="archive"
 									onClick={() => setOpenArchiveReference(true)}
 								/>
 							</>

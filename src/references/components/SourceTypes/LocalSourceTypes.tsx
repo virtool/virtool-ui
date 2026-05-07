@@ -10,14 +10,17 @@ import InputError from "@base/InputError";
 import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SectionHeader from "@base/SectionHeader";
-import { useUpdateSourceTypes } from "@references/hooks";
+import {
+	useReferenceIsArchived,
+	useUpdateSourceTypes,
+} from "@references/hooks";
 import {
 	referenceQueryKeys,
 	useFetchReference,
 	useUpdateReference,
 } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
-import { Undo2 } from "lucide-react";
+import { Lock, Undo2 } from "lucide-react";
 import SourceTypeList from "./SourceTypeList";
 
 const routeApi = getRouteApi("/_authenticated/refs/$refId");
@@ -28,6 +31,8 @@ export function LocalSourceTypes() {
 	const { data, isPending } = useFetchReference(refId);
 
 	const { mutation: updateReferenceMutation } = useUpdateReference(refId);
+
+	const archived = useReferenceIsArchived(refId);
 
 	const sourceTypes = data?.source_types ?? [];
 	const restrictSourceTypes = data?.restrict_source_types ?? false;
@@ -48,6 +53,45 @@ export function LocalSourceTypes() {
 
 	if (isPending) {
 		return <LoadingPlaceholder />;
+	}
+
+	if (archived) {
+		return (
+			<section>
+				<SectionHeader>
+					<div className="flex items-baseline justify-between">
+						<h2>Source Types</h2>
+						<span className="text-xs font-medium text-gray-500 inline-flex items-center gap-1">
+							<Lock size={12} /> read-only — archived
+						</span>
+					</div>
+				</SectionHeader>
+				{sourceTypes.length ? (
+					<BoxGroup className="opacity-70">
+						{sourceTypes.map((sourceType) => (
+							<BoxGroupSection
+								key={sourceType}
+								className="flex items-center justify-between"
+							>
+								<span className="capitalize text-gray-600">{sourceType}</span>
+								<span
+									aria-hidden
+									className="text-gray-300 select-none text-base"
+								>
+									×
+								</span>
+							</BoxGroupSection>
+						))}
+					</BoxGroup>
+				) : (
+					<BoxGroup className="opacity-70">
+						<BoxGroupSection className="text-gray-500 text-sm">
+							No source types configured.
+						</BoxGroupSection>
+					</BoxGroup>
+				)}
+			</section>
+		);
 	}
 
 	function handleToggle() {

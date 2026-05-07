@@ -108,9 +108,10 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
 		expect(
-			await screen.findByRole("button", { name: "unarchive" }),
+			await screen.findByRole("button", { name: "Unarchive" }),
 		).toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: "archive" })).toBeNull();
+		expect(screen.queryByRole("button", { name: "modify" })).toBeNull();
 		expect(screen.getByText("Archived")).toBeInTheDocument();
 	});
 
