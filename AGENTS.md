@@ -93,6 +93,16 @@ each module's `api.ts`. API errors have the shape `error.response?.body.message`
   colors or spacing values.
 - Tailwind theme customization is in `src/app/style.css` via `@theme`.
 
+### Base component color props
+
+Base components in `src/base/` that expose a `color` prop should accept the
+shared palette: `"blue" | "green" | "gray" | "orange" | "purple" | "red"`. Don't
+add one-off colors or trim the set per component — keep the surface uniform.
+
+If a component has multiple variants (e.g. `solid` / `soft`), `color` should
+work in every variant. A variant that silently ignores `color` is a footgun;
+either honor it across the board or drop the prop for that variant.
+
 ## Projects
 
 Ongoing projects are documented in `docs/projects/`. These correspond to Linear

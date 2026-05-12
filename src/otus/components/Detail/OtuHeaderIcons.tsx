@@ -1,5 +1,8 @@
 import IconButton from "@base/IconButton";
-import { useCheckReferenceRight } from "@references/hooks";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
 import { Pencil, Trash } from "lucide-react";
 import OtuEdit from "../OtuEdit";
 import OtuRemove from "../OtuRemove";
@@ -26,6 +29,7 @@ export function OtuHeaderIcons({
 		refId,
 		"modify_otu",
 	);
+	const archived = useReferenceIsArchived(refId);
 
 	return canModify ? (
 		<>
@@ -48,13 +52,13 @@ export function OtuHeaderIcons({
 				otuId={id}
 				name={name}
 				abbreviation={abbreviation}
-				open={Boolean(search.openEditOTU)}
+				open={Boolean(search.openEditOTU) && !archived}
 				setOpen={(openEditOTU) => setSearch({ openEditOTU })}
 			/>
 			<OtuRemove
 				id={id}
 				name={name}
-				open={Boolean(search.openRemoveOTU)}
+				open={Boolean(search.openRemoveOTU) && !archived}
 				refId={refId}
 				setOpen={(openRemoveOTU) => setSearch({ openRemoveOTU })}
 			/>

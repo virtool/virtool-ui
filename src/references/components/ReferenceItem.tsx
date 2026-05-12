@@ -57,7 +57,7 @@ export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 					{name}
 				</Link>
 				{archived && (
-					<Badge color="gray" variant="outline">
+					<Badge color="gray" variant="soft">
 						Archived
 					</Badge>
 				)}

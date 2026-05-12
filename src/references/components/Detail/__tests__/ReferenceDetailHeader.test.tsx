@@ -22,7 +22,6 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 			}),
 		);
 		props = {
-			archived: false,
 			createdAt: reference.created_at,
 			isRemote: false,
 			name: reference.name,
@@ -93,26 +92,13 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 		expect(screen.queryByRole("button")).toBeNull();
 	});
 
-	it("should render the archive button when [archived=false] and [canModify=true]", async () => {
+	it("should render the archive button when [canModify=true]", async () => {
 		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
 		expect(
 			await screen.findByRole("button", { name: "archive" }),
 		).toBeInTheDocument();
-		expect(screen.queryByRole("button", { name: "unarchive" })).toBeNull();
 		expect(screen.queryByText("Archived")).toBeNull();
-	});
-
-	it("should render the unarchive button and Archived badge when [archived=true]", async () => {
-		props.archived = true;
-		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
-
-		expect(
-			await screen.findByRole("button", { name: "Unarchive" }),
-		).toBeInTheDocument();
-		expect(screen.queryByRole("button", { name: "archive" })).toBeNull();
-		expect(screen.queryByRole("button", { name: "modify" })).toBeNull();
-		expect(screen.getByText("Archived")).toBeInTheDocument();
 	});
 
 	it("should not render the archive button when [canModify=false]", async () => {
@@ -120,6 +106,5 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
 		expect(screen.queryByRole("button", { name: "archive" })).toBeNull();
-		expect(screen.queryByRole("button", { name: "unarchive" })).toBeNull();
 	});
 });

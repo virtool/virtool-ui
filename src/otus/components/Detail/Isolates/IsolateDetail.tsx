@@ -1,6 +1,5 @@
 import { formatIsolateName } from "@app/utils";
 import Box from "@base/Box";
-import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
 import { useCurrentOtuContext, useSetIsolateAsDefault } from "@otus/queries";
@@ -66,7 +65,8 @@ export default function IsolateDetail({
 				<div>
 					{activeIsolate.default && (
 						<Label color="green">
-							<Icon className="pl-1" icon={Star} /> Default Isolate
+							<Star size={14} />
+							Default Isolate
 						</Label>
 					)}
 					{canModify && !archived && (

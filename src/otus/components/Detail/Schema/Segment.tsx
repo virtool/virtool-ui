@@ -1,3 +1,4 @@
+import { cn } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
@@ -33,15 +34,19 @@ export default function Segment({
 	setEditSegmentName,
 	setRemoveSegmentName,
 }: SegmentProps) {
+	const singleSegment = first && last;
+
 	return (
 		<BoxGroupSection className="flex items-center gap-3 h-12">
 			<strong className="flex-1 truncate">{segment.name}</strong>
 
-			{segment.required ? (
-				<Label color="purple">Required</Label>
-			) : (
-				<Label>Optional</Label>
-			)}
+			<div className="w-20 flex justify-start">
+				{segment.required ? (
+					<Label color="purple">Required</Label>
+				) : (
+					<Label>Optional</Label>
+				)}
+			</div>
 
 			{canModify && (
 				<div className="flex">
@@ -60,22 +65,20 @@ export default function Segment({
 				</div>
 			)}
 
-			{canModify && (!first || !last) && (
+			{canModify && !singleSegment && (
 				<div className="flex">
-					{!first && (
-						<IconButton
-							IconComponent={ChevronUp}
-							tip="move up"
-							onClick={onMoveUp}
-						/>
-					)}
-					{!last && (
-						<IconButton
-							IconComponent={ChevronDown}
-							tip="move down"
-							onClick={onMoveDown}
-						/>
-					)}
+					<IconButton
+						className={cn({ invisible: first })}
+						IconComponent={ChevronUp}
+						tip="move up"
+						onClick={onMoveUp}
+					/>
+					<IconButton
+						className={cn({ invisible: last })}
+						IconComponent={ChevronDown}
+						tip="move down"
+						onClick={onMoveDown}
+					/>
 				</div>
 			)}
 		</BoxGroupSection>

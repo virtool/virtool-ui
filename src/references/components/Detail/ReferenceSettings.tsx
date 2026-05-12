@@ -6,6 +6,7 @@ import { useFetchReference } from "@references/queries";
  */
 import { getRouteApi } from "@tanstack/react-router";
 import { sortBy } from "es-toolkit";
+import { ArchivedSourceTypes } from "../SourceTypes/ArchivedSourceTypes";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
 import ReferenceMembers from "./ReferenceMembers";
 
@@ -40,7 +41,8 @@ export default function ReferenceSettings({
 
 	return (
 		<>
-			{Boolean(data.remotes_from) || <LocalSourceTypes />}
+			{Boolean(data.remotes_from) ||
+				(data.archived ? <ArchivedSourceTypes /> : <LocalSourceTypes />)}
 			<SectionHeader>
 				<h2 className="flex items-center gap-2">
 					Access

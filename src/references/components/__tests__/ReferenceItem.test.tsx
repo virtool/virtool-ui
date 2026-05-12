@@ -6,14 +6,6 @@ import { renderWithRouter } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 import { ReferenceItem } from "../ReferenceItem";
 
-function mockAccountWithCreateRef() {
-	mockApiGetAccount(
-		createFakeAccount({
-			permissions: createFakePermissions({ create_ref: true }),
-		}),
-	);
-}
-
 describe("<ReferenceItem />", () => {
 	let props;
 
@@ -75,7 +67,11 @@ describe("<ReferenceItem />", () => {
 	});
 
 	it("should render the clone button when the user has create_ref and the reference is not archived", async () => {
-		mockAccountWithCreateRef();
+		mockApiGetAccount(
+			createFakeAccount({
+				permissions: createFakePermissions({ create_ref: true }),
+			}),
+		);
 		props.reference = createFakeReferenceMinimal({ archived: false });
 		await renderWithRouter(<ReferenceItem {...props} />);
 
@@ -85,7 +81,11 @@ describe("<ReferenceItem />", () => {
 	});
 
 	it("should not render the clone button when [archived=true]", async () => {
-		mockAccountWithCreateRef();
+		mockApiGetAccount(
+			createFakeAccount({
+				permissions: createFakePermissions({ create_ref: true }),
+			}),
+		);
 		props.reference = createFakeReferenceMinimal({ archived: true });
 		await renderWithRouter(<ReferenceItem {...props} />);
 

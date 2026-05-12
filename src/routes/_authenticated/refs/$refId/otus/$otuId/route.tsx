@@ -85,7 +85,7 @@ function OtuDetailLayout() {
 						{abbreviation || <em className="font-normal">No Abbreviation</em>}
 					</small>
 					{archived && (
-						<Badge className="ml-3 self-center" color="gray" variant="outline">
+						<Badge className="ml-3 self-center" color="gray" variant="soft">
 							Archived
 						</Badge>
 					)}

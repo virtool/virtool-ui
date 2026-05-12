@@ -1,12 +1,11 @@
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFound from "@base/NoneFound";
+import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
-import { Archive } from "lucide-react";
 import { useFindReferences } from "../queries";
 import Clone from "./CloneReference";
 import { CreateReference } from "./CreateReference";
@@ -80,9 +79,8 @@ export default function ReferenceList({
 				/>
 				<ReferenceOfficial officialInstalled={official_installed} />
 				{!items.length ? (
-					<NoneFound
+					<NoneFoundBox
 						noun={archived ? "archived references" : "references"}
-						icon={archived ? Archive : undefined}
 					/>
 				) : (
 					<Pagination

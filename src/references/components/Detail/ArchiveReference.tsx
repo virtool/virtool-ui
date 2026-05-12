@@ -1,5 +1,11 @@
 import Button from "@base/Button";
-import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@base/Dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogTitle,
+} from "@base/Dialog";
 import {
 	useArchiveReference,
 	useUnarchiveReference,
@@ -62,14 +68,14 @@ export default function ArchiveReference({
 						<Icon size={20} strokeWidth={2.25} />
 					</div>
 					<div className="min-w-0 flex-1">
-						<DialogTitle className="pb-1">
+						<DialogTitle>
 							{verb} <span className="text-gray-700">{detail.name}</span>?
 						</DialogTitle>
-						<p className="text-base text-gray-600 leading-relaxed">
+						<DialogDescription>
 							{detail.archived
 								? "It will return to active use and appear in the default references list."
 								: "Archived references are hidden from default views and blocked from edits and new analyses. Existing analyses will continue to resolve."}
-						</p>
+						</DialogDescription>
 					</div>
 				</div>
 

@@ -1,4 +1,5 @@
 import ContainerNarrow from "@base/ContainerNarrow";
+import ArchivedReferenceDetailHeader from "@references/components/Detail/ArchivedReferenceDetailHeader";
 import ArchiveReference from "@references/components/Detail/ArchiveReference";
 import EditReference from "@references/components/Detail/EditReference";
 import ReferenceDetailHeader from "@references/components/Detail/ReferenceDetailHeader";
@@ -68,16 +69,26 @@ function ReferenceDetailLayout() {
 		<>
 			{!isOtuDetail && (
 				<>
-					<ReferenceDetailHeader
-						archived={data.archived}
-						createdAt={data.created_at}
-						isRemote={Boolean(data.remotes_from)}
-						name={data.name}
-						setOpenArchiveReference={setOpenArchiveReference}
-						setOpenEditReference={setOpenEditReference}
-						userHandle={data.user.handle}
-						refId={refId}
-					/>
+					{data.archived ? (
+						<ArchivedReferenceDetailHeader
+							createdAt={data.created_at}
+							isRemote={Boolean(data.remotes_from)}
+							name={data.name}
+							setOpenArchiveReference={setOpenArchiveReference}
+							userHandle={data.user.handle}
+							refId={refId}
+						/>
+					) : (
+						<ReferenceDetailHeader
+							createdAt={data.created_at}
+							isRemote={Boolean(data.remotes_from)}
+							name={data.name}
+							setOpenArchiveReference={setOpenArchiveReference}
+							setOpenEditReference={setOpenEditReference}
+							userHandle={data.user.handle}
+							refId={refId}
+						/>
+					)}
 					<ReferenceDetailTabs id={refId} otuCount={data.otu_count} />
 				</>
 			)}
