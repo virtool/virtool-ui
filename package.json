@@ -38,7 +38,7 @@
     "@sentry/vite-plugin": "^5.2.1",
     "@tailwindcss/vite": "^4.2.4",
     "@tanstack/router-devtools": "^1.166.13",
-    "@tanstack/router-plugin": "^1.167.33",
+    "@tanstack/router-plugin": "^1.167.35",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.5.2",
