@@ -18,11 +18,7 @@ export const iimiWorkflow = {
 	name: "Iimi",
 };
 
-export const workflows = [
-	pathoscopeWorkflow,
-	nuvsWorkflow,
-	iimiWorkflow,
-] as workflow[];
+export const workflows = [pathoscopeWorkflow, nuvsWorkflow] as workflow[];
 
 export function getCompatibleWorkflows(hasHmm: boolean): workflow[] {
 	return workflows.filter((workflow) => {
