@@ -1,4 +1,4 @@
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 RUN corepack enable
 WORKDIR /repo
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
@@ -18,7 +18,7 @@ FROM base AS dev
 FROM base AS build
 RUN pnpm --filter @virtool/web build
 
-FROM node:22-alpine AS dist
+FROM node:24-alpine AS dist
 WORKDIR /ui
 COPY --from=build /repo/apps/web/dist ./dist
 COPY --from=build /repo/apps/web/package.json ./
