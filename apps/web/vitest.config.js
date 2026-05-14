@@ -12,10 +12,6 @@ export default defineConfig({
         environment: "jsdom",
         setupFiles: ["./src/tests/setup.tsx"],
         silent: false,
-        poolOptions: {
-            threads: {
-                maxThreads: Math.max(1, Math.floor(os.cpus().length / 2)),
-            },
-        },
+        maxWorkers: Math.max(1, Math.floor(os.cpus().length / 2)),
     },
 });
