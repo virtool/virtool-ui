@@ -62,6 +62,9 @@ export default defineConfig({
             spa: {
                 enabled: true,
             },
+            router: {
+                autoCodeSplitting: true,
+            },
         }),
         react({
             include: "**/*.{tsx}",
