@@ -1,13 +1,14 @@
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import tailwindcss from "@tailwindcss/vite";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vite";
+import pkg from "./package.json" with { type: "json" };
 
 export default defineConfig({
     build: {
-        outDir: "../dist",
+        outDir: "dist",
         sourcemap: true,
         rolldownOptions: {
             output: {
@@ -22,6 +23,10 @@ export default defineConfig({
             },
         },
     },
+    define: {
+        __APP_VERSION__: JSON.stringify(pkg.version),
+    },
+    envPrefix: ["VITE_", "VT_"],
     resolve: {
         alias: {
             "@": path.resolve("src"),
@@ -53,11 +58,10 @@ export default defineConfig({
         },
     },
     plugins: [
-        tanstackRouter({
-            target: "react",
-            autoCodeSplitting: true,
-            routesDirectory: path.resolve("src/routes"),
-            generatedRouteTree: path.resolve("src/routeTree.gen.ts"),
+        tanstackStart({
+            spa: {
+                enabled: true,
+            },
         }),
         react({
             include: "**/*.{tsx}",
@@ -71,7 +75,6 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
-    root: "src",
     server: {
         allowedHosts: ["virtool.local"],
     },
