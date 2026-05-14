@@ -7,7 +7,7 @@
     "build": "vite build",
     "check-api": "node scripts/check-api.mjs",
     "develop": "vite",
-    "start": "node .output/server/index.mjs",
+    "start": "node scripts/check-api.mjs && node scripts/serve.mjs",
     "test": "TZ=UTC vitest",
     "typecheck": "tsc --noEmit"
   },
@@ -36,6 +36,7 @@
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.74.0",
     "semver": "^7.7.4",
+    "sirv": "^3.0.0",
     "superagent": "^8.0.9",
     "tailwind-merge": "^3.5.0",
     "zod": "^4.3.5",

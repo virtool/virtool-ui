@@ -21,9 +21,10 @@ RUN pnpm --filter @virtool/web build
 FROM node:24-alpine AS dist
 WORKDIR /ui
 COPY --from=build /repo/apps/web/dist ./dist
+COPY --from=build /repo/apps/web/scripts ./scripts
 COPY --from=build /repo/apps/web/package.json ./
-RUN npm install commander express superagent semver
-COPY apps/web/src/server/ ./src/server
+RUN npm install --omit=dev semver sirv
 EXPOSE 9900
 ENV VT_UI_HOST="0.0.0.0"
-ENTRYPOINT ["node", "run"]
+ENV VT_UI_PORT="9900"
+CMD ["npm", "start"]
