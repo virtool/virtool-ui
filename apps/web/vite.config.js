@@ -80,5 +80,15 @@ export default defineConfig({
     ],
     server: {
         allowedHosts: ["virtool.local"],
+        warmup: {
+            clientFiles: [
+                "./src/routes/__root.tsx",
+                "./src/routes/_authenticated.tsx",
+                "./src/routes/login.tsx",
+                "./src/app/**/*.{ts,tsx}",
+                "./src/base/**/*.{ts,tsx}",
+                "./src/nav/**/*.{ts,tsx}",
+            ],
+        },
     },
 });
