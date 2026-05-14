@@ -15,25 +15,11 @@ type RouterContext = {
 	queryClient: QueryClient;
 };
 
-const csp = [
-	"default-src 'self'",
-	"base-uri 'self'",
-	"object-src 'none'",
-	"form-action 'self'",
-	"frame-ancestors 'none'",
-	"font-src 'self'",
-	"img-src 'self' data:",
-	"connect-src 'self' *.sentry.io",
-	"script-src 'self'",
-	"style-src 'self' 'unsafe-inline'",
-].join("; ");
-
 export const Route = createRootRouteWithContext<RouterContext>()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
 			{ name: "viewport", content: "width=device-width, initial-scale=1" },
-			{ httpEquiv: "Content-Security-Policy", content: csp },
 			{ httpEquiv: "X-UA-Compatible", content: "IE=edge" },
 			{ title: "Virtool" },
 		],
