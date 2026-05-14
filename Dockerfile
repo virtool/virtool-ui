@@ -1,22 +1,29 @@
 FROM node:22-alpine AS base
-WORKDIR /build
-COPY package.json package-lock.json tailwind.config.js tsconfig.json vite.config.js ./
-RUN npm i
-COPY src /build/src/
+RUN corepack enable
+WORKDIR /repo
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
+COPY apps/web/package.json ./apps/web/
+COPY packages/bio/package.json ./packages/bio/
+COPY packages/config/package.json ./packages/config/
+COPY packages/contracts/package.json ./packages/contracts/
+COPY packages/logger/package.json ./packages/logger/
+COPY packages/sentry/package.json ./packages/sentry/
+RUN pnpm install
+COPY biome.json ./
+COPY packages ./packages
+COPY apps/web ./apps/web
 
 FROM base AS dev
-WORKDIR /build
 
 FROM base AS build
-WORKDIR /build
-RUN npx vite build
+RUN pnpm --filter @virtool/web build
 
 FROM node:22-alpine AS dist
 WORKDIR /ui
-COPY --from=build /build/dist ./dist
-COPY --from=build /build/package.json ./
+COPY --from=build /repo/apps/web/dist ./dist
+COPY --from=build /repo/apps/web/package.json ./
 RUN npm install commander express superagent semver
-COPY src/server/ ./src/server
+COPY apps/web/src/server/ ./src/server
 EXPOSE 9900
 ENV VT_UI_HOST="0.0.0.0"
 ENTRYPOINT ["node", "run"]

@@ -1,0 +1,65 @@
+import { hostname } from "node:os";
+import pino, {
+	type DestinationStream,
+	type Logger,
+	type LoggerOptions,
+	type TransportMultiOptions,
+	type TransportPipelineOptions,
+	type TransportSingleOptions,
+} from "pino";
+import { DEFAULT_REDACT_PATHS, type LogLevel, resolveLevel } from "./config";
+
+export type { Logger } from "pino";
+export type { LogLevel } from "./config";
+export { DEFAULT_REDACT_PATHS, LOG_LEVEL_ENV, resolveLevel } from "./config";
+
+/** Any pino transport shape — single target, multi-target, or pipeline. */
+export type LoggerTransport =
+	| TransportSingleOptions
+	| TransportMultiOptions
+	| TransportPipelineOptions;
+
+/** Options for `createLogger`. */
+export interface CreateLoggerOptions {
+	/** Service identifier baked into every log record as `name`. */
+	name: string;
+	/** Override the level resolved from env. */
+	level?: LogLevel;
+	/** Extra redact paths merged with `DEFAULT_REDACT_PATHS`. */
+	redact?: readonly string[];
+	/** Extra base bindings merged into every record alongside `pid`/`hostname`. */
+	base?: Record<string, unknown>;
+	/** Pino transport config. Mutually exclusive with `destination`. */
+	transport?: LoggerTransport;
+	/** Env source for level resolution. Defaults to `process.env`. */
+	env?: Record<string, string | undefined>;
+	/** Destination stream. Ignored when `transport` is set. */
+	destination?: DestinationStream;
+}
+
+export function createLogger(options: CreateLoggerOptions): Logger {
+	const env = options.env ?? process.env;
+	const level = options.level ?? resolveLevel(env);
+
+	const pinoOptions: LoggerOptions = {
+		name: options.name,
+		level,
+		redact: {
+			paths: [...DEFAULT_REDACT_PATHS, ...(options.redact ?? [])],
+			censor: "[redacted]",
+		},
+	};
+
+	if (options.base) {
+		pinoOptions.base = {
+			pid: process.pid,
+			hostname: hostname(),
+			...options.base,
+		};
+	}
+
+	if (options.transport) {
+		return pino({ ...pinoOptions, transport: options.transport });
+	}
+	return pino(pinoOptions, options.destination);
+}

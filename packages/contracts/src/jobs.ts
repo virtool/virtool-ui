@@ -1,0 +1,51 @@
+import { z } from "zod";
+import { WorkflowName } from "./workflowName";
+
+/** Job row returned by the lifecycle endpoints. Provisional shape. */
+export const Job = z.object({
+	id: z.string(),
+	workflow: WorkflowName,
+	analysisId: z.string(),
+	sampleId: z.string(),
+	indexId: z.string(),
+	subtractionIds: z.array(z.string()),
+});
+
+export type Job = z.infer<typeof Job>;
+
+/** Body for `POST /jobs/claim` — runner narrows to its workflow image's pool. */
+export const JobClaimRequest = z.object({
+	workflows: z.array(WorkflowName).min(1),
+});
+
+export type JobClaimRequest = z.infer<typeof JobClaimRequest>;
+
+/** Response body for `POST /jobs/claim` — the claimed job plus the one-time BasicAuth key. */
+export const JobClaimResponse = z.object({
+	job: Job,
+	key: z.string(),
+});
+
+export type JobClaimResponse = z.infer<typeof JobClaimResponse>;
+
+/** Body for `POST /jobs/{id}/steps/{step_id}/start`. Empty until a field is needed. */
+export const JobStepStartRequest = z.object({});
+
+export type JobStepStartRequest = z.infer<typeof JobStepStartRequest>;
+
+/** Response for `POST /jobs/{id}/steps/{step_id}/start`. Empty until a field is needed. */
+export const JobStepStartResponse = z.object({});
+
+export type JobStepStartResponse = z.infer<typeof JobStepStartResponse>;
+
+/** Response for `PUT /jobs/{id}/ping` — carries the cancellation signal back to the runner. */
+export const JobPingResponse = z.object({
+	cancelled: z.boolean(),
+});
+
+export type JobPingResponse = z.infer<typeof JobPingResponse>;
+
+/** Body for `POST /jobs/{id}/finish` (success terminal transition only — failure is API-side). */
+export const JobFinishRequest = z.object({});
+
+export type JobFinishRequest = z.infer<typeof JobFinishRequest>;
