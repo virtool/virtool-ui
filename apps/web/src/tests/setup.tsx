@@ -11,6 +11,7 @@ import {
 } from "@tanstack/react-router";
 import "@testing-library/jest-dom/vitest";
 import {
+	act,
 	fireEvent,
 	renderHook,
 	render as rtlRender,
@@ -70,6 +71,7 @@ export async function renderWithRouter(ui: ReactNode, path?: string) {
 	await router.load();
 
 	const result = renderWithProviders(<RouterProvider router={router} />);
+	await act(async () => {});
 	return { ...result, history, router };
 }
 
@@ -128,13 +130,15 @@ export async function renderHookWithRouter<T>(hook: () => T, path?: string) {
 
 	await router.load();
 
-	return renderHook(hook, {
+	const result = renderHook(hook, {
 		wrapper: ({ children }: { children: ReactNode }) => (
 			<MemoryRouterChildrenContext value={children}>
 				<RouterProvider router={router} />
 			</MemoryRouterChildrenContext>
 		),
 	});
+	await act(async () => {});
+	return result;
 }
 
 interface RenderRouteOptions {
@@ -181,6 +185,7 @@ export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 			<RouterProvider router={router} />
 		</QueryClientProvider>,
 	);
+	await act(async () => {});
 
 	return { ...result, history, router, queryClient };
 }
