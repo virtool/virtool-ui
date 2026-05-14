@@ -78,17 +78,23 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    optimizeDeps: {
+        holdUntilCrawlEnd: false,
+        include: [
+            "@hookform/resolvers/zod",
+            "@tanstack/react-query",
+            "@tanstack/react-router",
+            "@tanstack/react-virtual",
+            "d3",
+            "d3-transition",
+            "lucide-react",
+            "radix-ui",
+            "react-hook-form",
+            "zod",
+            "zod/v4",
+        ],
+    },
     server: {
         allowedHosts: ["virtool.local"],
-        warmup: {
-            clientFiles: [
-                "./src/routes/__root.tsx",
-                "./src/routes/_authenticated.tsx",
-                "./src/routes/login.tsx",
-                "./src/app/**/*.{ts,tsx}",
-                "./src/base/**/*.{ts,tsx}",
-                "./src/nav/**/*.{ts,tsx}",
-            ],
-        },
     },
 });
