@@ -189,6 +189,7 @@ export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 window.HTMLElement.prototype.scrollIntoView = vi.fn();
 window.HTMLElement.prototype.releasePointerCapture = vi.fn();
 window.HTMLElement.prototype.hasPointerCapture = vi.fn();
+window.scrollTo = vi.fn();
 
 class ResizeObserver {
 	observe() {}
