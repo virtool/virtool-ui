@@ -1,3 +1,4 @@
+import os from "os";
 import { defineConfig } from "vitest/config";
 import viteConfig from "./vite.config";
 
@@ -11,5 +12,10 @@ export default defineConfig({
         environment: "jsdom",
         setupFiles: ["./src/tests/setup.tsx"],
         silent: false,
+        poolOptions: {
+            threads: {
+                maxThreads: Math.max(1, Math.floor(os.cpus().length / 2)),
+            },
+        },
     },
 });
