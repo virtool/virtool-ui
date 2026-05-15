@@ -11,7 +11,7 @@ describe("<HmmList />", () => {
 
 	beforeEach(() => {
 		fakeHMMData = createFakeHmmSearchResults();
-		path = "/hmm";
+		path = "/hmms";
 	});
 
 	afterEach(() => nock.cleanAll());

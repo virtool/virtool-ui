@@ -29,8 +29,9 @@ export default function TabsLink({
 		"font-medium",
 		"py-2.5",
 		"px-4",
-		"-mb-[1px]",
-		"hover:border-b-2",
+		"-mb-px",
+		"border-b-2",
+		"border-b-transparent",
 		"hover:border-b-gray-400",
 		className,
 	);
@@ -39,12 +40,7 @@ export default function TabsLink({
 		<Link
 			className={
 				isActive
-					? cn(
-							classname,
-							"border-b-2",
-							"border-b-teal-700",
-							"hover:border-b-teal-700",
-						)
+					? cn(classname, "border-b-teal-700", "hover:border-b-teal-700")
 					: classname
 			}
 			search={search as never}

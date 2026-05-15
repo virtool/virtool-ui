@@ -7,7 +7,6 @@ import { useCheckReferenceRight } from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
 import Button from "@/base/Button";
-import { useOtuDetailSearch } from "../OtuDetailSearchContext";
 import AddSegment from "./AddSegment";
 import EditSegment from "./EditSegment";
 import RemoveSegment from "./RemoveSegment";
@@ -20,12 +19,13 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
  */
 export default function Schema() {
 	const { refId, otuId } = routeApi.useParams();
-	const { search, setSearch } = useOtuDetailSearch();
 	const { hasPermission: canModify, isPending: isPendingPermission } =
 		useCheckReferenceRight(refId, "modify_otu");
 
 	const { data, isPending } = useFetchOTU(otuId);
 	const mutation = useUpdateOTU(otuId);
+	const [openAddSegment, setOpenAddSegment] = useState(false);
+	const [segmentToEdit, setSegmentToEdit] = useState<string | undefined>();
 	const [segmentToRemove, setSegmentToRemove] = useState<string | undefined>();
 
 	if (isPending || isPendingPermission) {
@@ -60,10 +60,7 @@ export default function Schema() {
 		<div>
 			<div className="flex justify-end mb-3">
 				{canModify && (
-					<Button
-						color="blue"
-						onClick={() => setSearch({ openAddSegment: true })}
-					>
+					<Button color="blue" onClick={() => setOpenAddSegment(true)}>
 						Add Segment
 					</Button>
 				)}
@@ -80,9 +77,7 @@ export default function Schema() {
 							onMoveUp={() => handleMoveUp(index)}
 							onMoveDown={() => handleMoveDown(index)}
 							onRemove={() => setSegmentToRemove(segment.name)}
-							setEditSegmentName={(editSegmentName) =>
-								setSearch({ editSegmentName })
-							}
+							setEditSegmentName={setSegmentToEdit}
 						/>
 					))}
 				</BoxGroup>
@@ -94,17 +89,17 @@ export default function Schema() {
 				abbreviation={abbreviation}
 				name={name}
 				otuId={otuId}
-				open={Boolean(search.openAddSegment)}
+				open={openAddSegment}
 				schema={schema}
-				setOpen={(openAddSegment) => setSearch({ openAddSegment })}
+				setOpen={setOpenAddSegment}
 			/>
 			<EditSegment
 				abbreviation={abbreviation}
-				editSegmentName={search.editSegmentName}
+				editSegmentName={segmentToEdit}
 				name={name}
 				otuId={otuId}
 				schema={schema}
-				unsetEditSegmentName={() => setSearch({ editSegmentName: undefined })}
+				unsetEditSegmentName={() => setSegmentToEdit(undefined)}
 			/>
 			{schema.length ? (
 				<RemoveSegment

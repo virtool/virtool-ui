@@ -74,10 +74,12 @@ export function FileManager({
 
 	return (
 		<>
-			<ViewHeader title={title} />
-			<ViewHeaderTitle>
-				{title} <ViewHeaderTitleBadge>{files.found_count}</ViewHeaderTitleBadge>
-			</ViewHeaderTitle>
+			<ViewHeader title={title}>
+				<ViewHeaderTitle>
+					{title}{" "}
+					<ViewHeaderTitleBadge>{files.found_count}</ViewHeaderTitleBadge>
+				</ViewHeaderTitle>
+			</ViewHeader>
 
 			{canUpload ? (
 				<UploadBar

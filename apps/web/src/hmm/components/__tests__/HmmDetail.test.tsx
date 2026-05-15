@@ -9,7 +9,7 @@ describe("<HmmDetail />", () => {
 	let path: string;
 
 	beforeEach(() => {
-		path = `/hmm/${hmmDetail.id}`;
+		path = `/hmms/${hmmDetail.id}`;
 	});
 
 	afterEach(() => nock.cleanAll());

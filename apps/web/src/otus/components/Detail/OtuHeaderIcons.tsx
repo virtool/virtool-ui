@@ -1,14 +1,16 @@
 import IconButton from "@base/IconButton";
 import { useCheckReferenceRight } from "@references/hooks";
 import { Pencil, Trash } from "lucide-react";
+import { useState } from "react";
 import OtuEdit from "../OtuEdit";
-import { useOtuDetailSearch } from "./OtuDetailSearchContext";
+import OtuRemove from "../OtuRemove";
 
 type OTUHeaderEndIconsProps = {
 	id: string;
 	name: string;
 	refId: string;
 	abbreviation: string;
+	onRemoved: () => void;
 };
 
 /**
@@ -19,37 +21,50 @@ export function OtuHeaderIcons({
 	name,
 	refId,
 	abbreviation,
+	onRemoved,
 }: OTUHeaderEndIconsProps) {
-	const { search, setSearch } = useOtuDetailSearch();
+	const [openEdit, setOpenEdit] = useState(false);
+	const [openRemove, setOpenRemove] = useState(false);
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		refId,
 		"modify_otu",
 	);
 
-	return canModify ? (
+	if (!canModify) {
+		return null;
+	}
+
+	return (
 		<>
 			<IconButton
 				key="edit-icon"
 				color="grayDark"
 				IconComponent={Pencil}
 				tip="edit OTU"
-				onClick={() => setSearch({ openEditOTU: true })}
+				onClick={() => setOpenEdit(true)}
 			/>
 			<IconButton
 				key="remove-icon"
 				color="red"
 				IconComponent={Trash}
 				tip="remove OTU"
-				onClick={() => setSearch({ openRemoveOTU: true })}
+				onClick={() => setOpenRemove(true)}
 			/>
 
 			<OtuEdit
 				otuId={id}
 				name={name}
 				abbreviation={abbreviation}
-				open={Boolean(search.openEditOTU)}
-				setOpen={(openEditOTU) => setSearch({ openEditOTU })}
+				open={openEdit}
+				setOpen={setOpenEdit}
+			/>
+			<OtuRemove
+				id={id}
+				name={name}
+				open={openRemove}
+				setOpen={setOpenRemove}
+				onRemoved={onRemoved}
 			/>
 		</>
-	) : null;
+	);
 }

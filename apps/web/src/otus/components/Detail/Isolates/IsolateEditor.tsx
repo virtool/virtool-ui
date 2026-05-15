@@ -5,9 +5,13 @@ import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useCurrentOtuContext } from "@otus/queries";
 import { useCheckReferenceRight } from "@references/hooks";
-import { useOtuDetailSearch } from "../OtuDetailSearchContext";
+import { getRouteApi } from "@tanstack/react-router";
+import { useState } from "react";
+import AddIsolate from "./AddIsolate";
 import IsolateDetail from "./IsolateDetail";
 import IsolateItem from "./IsolateItem";
+
+const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
 
 /**
  * Displays a component for managing the isolates
@@ -15,8 +19,8 @@ import IsolateItem from "./IsolateItem";
 export default function IsolateEditor() {
 	const { otu, reference } = useCurrentOtuContext();
 	const { isolates } = otu;
-	const { search, setSearch } = useOtuDetailSearch();
-	const activeIsolateId = search.activeIsolate || isolates[0]?.id;
+	const { activeIsolate: activeIsolateId } = routeApi.useSearch();
+	const [openAdd, setOpenAdd] = useState(false);
 	const { restrict_source_types, source_types } = reference;
 
 	const { hasPermission: canModify } = useCheckReferenceRight(
@@ -39,7 +43,7 @@ export default function IsolateEditor() {
 	const addIsolateLink = canModify ? (
 		<button
 			className="ml-auto cursor-pointer self-end text-sm font-medium bg-transparent border-0 p-0"
-			onClick={() => setSearch({ openAddIsolate: true })}
+			onClick={() => setOpenAdd(true)}
 			type="button"
 		>
 			Add Isolate
@@ -73,6 +77,13 @@ export default function IsolateEditor() {
 				</SubviewHeaderTitle>
 			</SubviewHeader>
 			{body}
+			<AddIsolate
+				allowedSourceTypes={source_types}
+				otuId={otu.id}
+				restrictSourceTypes={restrict_source_types}
+				show={openAdd}
+				onHide={() => setOpenAdd(false)}
+			/>
 		</>
 	);
 }
