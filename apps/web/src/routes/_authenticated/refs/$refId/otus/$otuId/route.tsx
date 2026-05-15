@@ -71,7 +71,7 @@ function OtuDetailLayout() {
 		>
 			<ViewHeader title={name}>
 				<ViewHeaderTitle className="items-baseline">
-					<span className={archived ? "text-gray-700" : undefined}>{name}</span>{" "}
+					{name}{" "}
 					<small className="text-gray-500 font-semibold ml-1.5">
 						{abbreviation || <em className="font-normal">No Abbreviation</em>}
 					</small>
