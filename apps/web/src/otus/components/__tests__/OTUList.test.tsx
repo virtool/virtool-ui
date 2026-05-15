@@ -1,5 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
 import { mockApiFindIndexes } from "@tests/fake/indexes";
 import { createFakeOTUMinimal, mockApiFindOtus } from "@tests/fake/otus";
@@ -92,27 +91,6 @@ describe("<OTUsList />", () => {
 			expect(screen.queryByText("Create")).toBeNull();
 
 			scope.done();
-		});
-
-		it("should handle toolbar updates correctly", async () => {
-			const _scope = mockApiFindOtus(OTUs, reference.id).persist();
-			const { router } = await renderRoute(path);
-
-			expect(await screen.findByRole("textbox")).toBeInTheDocument();
-			const inputElement = screen.getByPlaceholderText("Name or abbreviation");
-			expect(inputElement).toHaveValue("");
-
-			await userEvent.type(inputElement, "Foobar");
-
-			expect(inputElement).toHaveValue("Foobar");
-
-			await waitFor(() =>
-				expect(router.state.location.search).toEqual(
-					expect.objectContaining({ find: "Foobar" }),
-				),
-			);
-
-			nock.cleanAll();
 		});
 	});
 

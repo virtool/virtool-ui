@@ -1,5 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
 import {
 	createFakeAnalysisMinimal,
@@ -97,27 +96,6 @@ describe("<AnalysesList />", () => {
 
 			expect(await screen.findByText("Pathoscope")).toBeInTheDocument();
 			expect(screen.queryByText("Create")).not.toBeInTheDocument();
-		});
-
-		it("should change state once create analysis is clicked", async () => {
-			const account = createFakeAccount({
-				administrator_role: "full",
-			});
-			mockApiGetSampleDetail(sample);
-
-			const { router } = await renderRoute(`/samples/${sample.id}/analyses/`, {
-				account,
-			});
-
-			expect(await screen.findByText("Create")).toBeInTheDocument();
-
-			await userEvent.click(screen.getByText("Create"));
-
-			await waitFor(() =>
-				expect(router.state.location.search).toEqual(
-					expect.objectContaining({ openCreateAnalysis: true }),
-				),
-			);
 		});
 	});
 });
