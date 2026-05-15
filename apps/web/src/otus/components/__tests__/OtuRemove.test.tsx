@@ -1,70 +1,70 @@
-import { formatPath } from "@app/hooks";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount } from "@tests/fake/account";
-import {
-	createFakeOtu,
-	mockApiGetOtu,
-	mockApiRemoveOTU,
-} from "@tests/fake/otus";
-import {
-	createFakeReference,
-	mockApiGetReferenceDetail,
-} from "@tests/fake/references";
-import { renderRoute } from "@tests/setup";
+import { createFakeOtu, mockApiRemoveOTU } from "@tests/fake/otus";
+import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import OtuRemove from "../OtuRemove";
 
-describe("<RemoveOTU />", () => {
-	let path;
-	let reference;
-	let searchParams;
+describe("<OtuRemove />", () => {
 	let otu;
-	let otuScope;
 
 	beforeEach(() => {
-		reference = createFakeReference({ name: "Foo" });
-		mockApiGetReferenceDetail(reference);
 		otu = createFakeOtu();
-		otuScope = mockApiGetOtu(otu);
-
-		path = `/refs/${reference.id}/otus/${otu.id}/otu`;
-		searchParams = { openRemoveOTU: true };
 	});
 
 	afterEach(() => nock.cleanAll());
 
-	it("should render when [show=true]", async () => {
-		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(formatPath(path, searchParams), { account });
+	it("should render when [open=true]", () => {
+		renderWithProviders(
+			<OtuRemove
+				id={otu.id}
+				name={otu.name}
+				open
+				onRemoved={vi.fn()}
+				setOpen={vi.fn()}
+			/>,
+		);
 
-		expect(await screen.findByText("Remove OTU")).toBeInTheDocument();
+		expect(screen.getByText("Remove OTU")).toBeInTheDocument();
 		expect(
 			screen.getByText(/Are you sure you want to remove/),
 		).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument();
 	});
 
-	it("should render when [show=false]", async () => {
-		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account });
-
-		await waitFor(() => otuScope.done());
+	it("should not render when [open=false]", () => {
+		renderWithProviders(
+			<OtuRemove
+				id={otu.id}
+				name={otu.name}
+				onRemoved={vi.fn()}
+				setOpen={vi.fn()}
+			/>,
+		);
 
 		expect(screen.queryByText("Remove OTU")).toBeNull();
 		expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
 		expect(screen.queryByRole("button", { name: "Confirm" })).toBeNull();
 	});
 
-	it("should handle submit when onConfirm() on RemoveDialog is called", async () => {
+	it("should call onRemoved after successful removal", async () => {
 		const scope = mockApiRemoveOTU(otu.id);
-		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(formatPath(path, searchParams), { account });
+		const onRemoved = vi.fn();
 
-		await userEvent.click(
-			await screen.findByRole("button", { name: "Confirm" }),
+		renderWithProviders(
+			<OtuRemove
+				id={otu.id}
+				name={otu.name}
+				open
+				onRemoved={onRemoved}
+				setOpen={vi.fn()}
+			/>,
 		);
 
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
+
+		await waitFor(() => expect(onRemoved).toHaveBeenCalledOnce());
 		scope.done();
 	});
 });

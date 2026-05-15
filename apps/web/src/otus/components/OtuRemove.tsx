@@ -1,12 +1,11 @@
 import RemoveDialog from "@base/RemoveDialog";
-import { useNavigate } from "@tanstack/react-router";
 import { useRemoveOTU } from "../queries";
 
 type RemoveOtuProps = {
 	id: string;
 	name: string;
 	open?: boolean;
-	refId: string;
+	onRemoved: () => void;
 	setOpen?: (open: boolean) => void;
 };
 
@@ -17,22 +16,13 @@ export default function OtuRemove({
 	id,
 	name,
 	open = false,
-	refId,
+	onRemoved,
 	setOpen = () => {},
 }: RemoveOtuProps) {
-	const navigate = useNavigate();
-
 	const mutation = useRemoveOTU();
 
 	function handleConfirm() {
-		mutation.mutate(
-			{ otuId: id },
-			{
-				onSuccess: () => {
-					navigate({ to: `/refs/${refId}/otus/` });
-				},
-			},
-		);
+		mutation.mutate({ otuId: id }, { onSuccess: onRemoved });
 	}
 
 	return (

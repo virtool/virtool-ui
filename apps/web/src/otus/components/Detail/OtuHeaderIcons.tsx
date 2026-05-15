@@ -2,7 +2,6 @@ import IconButton from "@base/IconButton";
 import { useCheckReferenceRight } from "@references/hooks";
 import { Pencil, Trash } from "lucide-react";
 import OtuEdit from "../OtuEdit";
-import OtuRemove from "../OtuRemove";
 import { useOtuDetailSearch } from "./OtuDetailSearchContext";
 
 type OTUHeaderEndIconsProps = {
@@ -50,13 +49,6 @@ export function OtuHeaderIcons({
 				abbreviation={abbreviation}
 				open={Boolean(search.openEditOTU)}
 				setOpen={(openEditOTU) => setSearch({ openEditOTU })}
-			/>
-			<OtuRemove
-				id={id}
-				name={name}
-				open={Boolean(search.openRemoveOTU)}
-				refId={refId}
-				setOpen={(openRemoveOTU) => setSearch({ openRemoveOTU })}
 			/>
 		</>
 	) : null;

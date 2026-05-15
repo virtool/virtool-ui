@@ -6,6 +6,7 @@ import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { OtuDetailSearchProvider } from "@otus/components/Detail/OtuDetailSearchContext";
 import { OtuHeaderIcons } from "@otus/components/Detail/OtuHeaderIcons";
+import OtuRemove from "@otus/components/OtuRemove";
 import { otuQueryOptions, useFetchOTU } from "@otus/queries";
 import { referenceQueryOptions, useFetchReference } from "@references/queries";
 import { createFileRoute, notFound, Outlet } from "@tanstack/react-router";
@@ -96,6 +97,16 @@ function OtuDetailLayout() {
 				<TabsLink to={`/refs/${refId}/otus/${otuId}/schema`}>Schema</TabsLink>
 				<TabsLink to={`/refs/${refId}/otus/${otuId}/history`}>History</TabsLink>
 			</Tabs>
+
+			<OtuRemove
+				id={id}
+				name={name}
+				open={Boolean(search.openRemoveOTU)}
+				setOpen={(openRemoveOTU) =>
+					navigate({ search: { ...search, openRemoveOTU } })
+				}
+				onRemoved={() => navigate({ to: `/refs/${refId}/otus` })}
+			/>
 
 			<Outlet />
 		</OtuDetailSearchProvider>
