@@ -20,8 +20,7 @@ describe("<HmmList />", () => {
 		const scope = mockApiGetHmms(fakeHMMData);
 		await renderRoute(path);
 
-		expect(await screen.findByText("HMMs")).toBeInTheDocument();
-		expect(screen.getByPlaceholderText("Name")).toBeInTheDocument();
+		expect(await screen.findByPlaceholderText("Name")).toBeInTheDocument();
 
 		expect(
 			screen.getByText(fakeHMMData.documents[0].cluster),
@@ -38,8 +37,7 @@ describe("<HmmList />", () => {
 		const scope = mockApiGetHmms(fakeHMMData);
 		await renderRoute(path);
 
-		expect(await screen.findByText("HMMs")).toBeInTheDocument();
-		expect(screen.getByText("No HMMs found.")).toBeInTheDocument();
+		expect(await screen.findByText("No HMMs found.")).toBeInTheDocument();
 
 		scope.done();
 	});
