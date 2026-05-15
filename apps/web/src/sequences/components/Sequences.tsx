@@ -1,7 +1,6 @@
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import NoneFoundSection from "@base/NoneFoundSection";
-import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
 import { useCurrentOtuContext } from "@otus/queries";
 import type { OtuIsolate, OtuSequence } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
@@ -26,7 +25,7 @@ export default function Sequences({
 	otuId,
 }: IsolateSequencesProps) {
 	const { otu, reference } = useCurrentOtuContext();
-	const { search, setSearch } = useOtuDetailSearch();
+	const [openCreate, setOpenCreate] = useState(false);
 	const [sequenceToRemove, setSequenceToRemove] = useState<
 		OtuSequence | undefined
 	>();
@@ -55,19 +54,22 @@ export default function Sequences({
 			<label className="flex items-center font-medium">
 				<strong className="text-base pr-1">Sequences</strong>
 				<Badge>{sequences.length}</Badge>
-				<CreateSequenceLink refId={reference.id} />
+				<CreateSequenceLink
+					onCreate={() => setOpenCreate(true)}
+					refId={reference.id}
+				/>
 			</label>
 
 			<BoxGroup>{sequenceComponents}</BoxGroup>
 
 			<CreateSequence
 				isolateId={activeIsolate.id}
-				open={Boolean(search.openCreateSequence)}
+				open={openCreate}
 				otuId={otuId}
 				refId={reference.id}
 				schema={otu.schema}
 				sequences={sequences}
-				setOpen={(openCreateSequence) => setSearch({ openCreateSequence })}
+				setOpen={setOpenCreate}
 			/>
 
 			<SequenceEdit />

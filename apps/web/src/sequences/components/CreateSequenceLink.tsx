@@ -1,20 +1,22 @@
 import { cn } from "@app/utils";
-import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
 import { useCheckReferenceRight } from "@references/hooks";
 
 type CreateSequenceLinkProps = {
+	onCreate: () => void;
 	refId: string;
 };
 
 /**
  * Displays a link to add a sequence
  */
-export default function CreateSequenceLink({ refId }: CreateSequenceLinkProps) {
+export default function CreateSequenceLink({
+	onCreate,
+	refId,
+}: CreateSequenceLinkProps) {
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		refId,
 		"modify_otu",
 	);
-	const { setSearch } = useOtuDetailSearch();
 
 	if (canModify) {
 		return (
@@ -26,7 +28,7 @@ export default function CreateSequenceLink({ refId }: CreateSequenceLinkProps) {
 					"border-0",
 					"p-0",
 				)}
-				onClick={() => setSearch({ openCreateSequence: true })}
+				onClick={onCreate}
 				type="button"
 			>
 				Create Sequence

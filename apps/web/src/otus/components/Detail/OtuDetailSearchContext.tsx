@@ -6,7 +6,6 @@ type OtuDetailSearch = {
 	editSequenceId?: string;
 	openAddIsolate?: boolean;
 	openAddSegment?: boolean;
-	openCreateSequence?: boolean;
 	openEditIsolate?: boolean;
 	openEditOTU?: boolean;
 	openRemoveIsolate?: boolean;

@@ -23,7 +23,6 @@ const otuDetailSearchSchema = z.object({
 	editSegmentName: z.string().optional().catch(undefined),
 	removeSegmentName: z.string().optional().catch(undefined),
 	editSequenceId: z.string().optional().catch(undefined),
-	openCreateSequence: z.boolean().optional().catch(undefined),
 });
 
 export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
