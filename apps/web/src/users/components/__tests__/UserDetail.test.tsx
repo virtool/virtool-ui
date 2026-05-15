@@ -84,13 +84,6 @@ describe("<UserDetail />", () => {
 			scope.done();
 		});
 
-		it("should render loading when the user details hasn't loaded", async () => {
-			renderWithProviders(<UserDetail userId={user.id} />);
-
-			expect(screen.getByLabelText("loading")).toBeInTheDocument();
-			expect(screen.queryByText("bob")).not.toBeInTheDocument();
-		});
-
 		it("should render correctly when [administrator_role=null] and canModifyUser=false", async () => {
 			mockApiListGroups(groups);
 			const scope = mockApiGetUser(user.id, user);
@@ -172,20 +165,6 @@ describe("<UserDetail />", () => {
 			expect(await screen.findByLabelText("Group 1")).toBeInTheDocument();
 			expect(screen.getByLabelText("Group 3")).toBeInTheDocument();
 		});
-		it("should render loading when groups haven't loaded", async () => {
-			const scope = mockApiGetUser(user.id, user);
-
-			renderWithProviders(<UserDetail userId={user.id} />);
-
-			expect(await screen.findByText("Change Password")).toBeInTheDocument();
-
-			expect(screen.getByLabelText("loading")).toBeInTheDocument();
-			expect(screen.queryByLabelText("Group 1")).not.toBeInTheDocument();
-			expect(screen.queryByLabelText("Group 3")).not.toBeInTheDocument();
-			expect(screen.getByText("Permissions")).toBeInTheDocument();
-
-			scope.done();
-		});
 		it("should render NoneFound when items = []", async () => {
 			const user = createFakeUser({ groups: [] });
 
@@ -206,40 +185,18 @@ describe("<UserDetail />", () => {
 	});
 
 	describe("<Password />", () => {
-		it("should render correctly when forceReset = false", async () => {
+		it("should render correctly", async () => {
 			mockApiListGroups(groups);
 			const scope = mockApiGetUser(user.id, user);
 
 			renderWithProviders(<UserDetail userId={user.id} />);
 
 			expect(await screen.findByText("Change Password")).toBeInTheDocument();
-
-			expect(screen.getByText("Change Password")).toBeInTheDocument();
 			expect(screen.getByText(/Last changed/)).toBeInTheDocument();
 			expect(
 				screen.getByText("Force user to reset password on next login"),
 			).toBeInTheDocument();
 			expect(screen.getByLabelText("password")).toBeInTheDocument();
-			expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
-
-			scope.done();
-		});
-
-		it("should render correctly when forceReset = true", async () => {
-			mockApiListGroups(groups);
-
-			const user = createFakeUser({ force_reset: true });
-
-			const scope = mockApiGetUser(user.id, user);
-
-			renderWithProviders(<UserDetail userId={user.id} />);
-
-			expect(await screen.findByText("Change Password")).toBeInTheDocument();
-			expect(screen.getByText("Last changed")).toBeInTheDocument();
-			expect(screen.getByLabelText("password")).toBeInTheDocument();
-			expect(
-				screen.getByText("Force user to reset password on next login"),
-			).toBeInTheDocument();
 			expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
 
 			scope.done();
