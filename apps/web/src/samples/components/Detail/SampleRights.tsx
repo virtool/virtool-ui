@@ -16,16 +16,15 @@ import {
 	useUpdateSampleRights,
 } from "@samples/queries";
 import { useQueryClient } from "@tanstack/react-query";
-import { getRouteApi } from "@tanstack/react-router";
 
-const routeApi = getRouteApi("/_authenticated/samples/$sampleId");
+type SampleRightsProps = {
+	sampleId: string;
+};
 
 /**
  * A component managing a samples rights
  */
-export default function SampleRights() {
-	const { sampleId } = routeApi.useParams();
-
+export default function SampleRights({ sampleId }: SampleRightsProps) {
 	const { hasPermission } = useCheckAdminRole("full");
 	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 	const { data: account, isPending: isPendingAccount } = useFetchAccount();

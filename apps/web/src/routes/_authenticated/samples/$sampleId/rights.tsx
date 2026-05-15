@@ -1,8 +1,13 @@
-import Rights from "@samples/components/Detail/SampleRights";
+import SampleRights from "@samples/components/Detail/SampleRights";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
 	"/_authenticated/samples/$sampleId/rights",
 )({
-	component: Rights,
+	component: RouteComponent,
 });
+
+function RouteComponent() {
+	const { sampleId } = Route.useParams();
+	return <SampleRights sampleId={sampleId} />;
+}
