@@ -1,5 +1,5 @@
+import Button from "@base/Button";
 import InputSearch from "@base/InputSearch";
-import LinkButton from "@base/LinkButton";
 import Toolbar from "@base/Toolbar";
 import { useCheckReferenceRight } from "@references/hooks";
 import type { ReferenceRemotesFrom } from "@references/types";
@@ -11,6 +11,9 @@ type OtuToolbarProps = {
 
 	/** A callback function to handle changes in search input */
 	onChange: (term: ChangeEvent<HTMLInputElement>) => void;
+
+	/** Called when the user clicks the Create button */
+	onCreate: () => void;
 
 	/** ID of the OTU's parent reference */
 	refId: string;
@@ -25,6 +28,7 @@ type OtuToolbarProps = {
 export default function OtuToolbar({
 	term,
 	onChange,
+	onCreate,
 	refId,
 	remotesFrom,
 }: OtuToolbarProps) {
@@ -44,9 +48,9 @@ export default function OtuToolbar({
 			</div>
 
 			{canCreate && !remotesFrom && (
-				<LinkButton to="." search={{ openCreateOTU: true }} color="blue">
+				<Button onClick={onCreate} color="blue">
 					Create
-				</LinkButton>
+				</Button>
 			)}
 		</Toolbar>
 	);

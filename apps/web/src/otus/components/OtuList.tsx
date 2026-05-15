@@ -7,6 +7,7 @@ import RebuildAlert from "@indexes/components/RebuildAlert";
 import { useListOTUs } from "@otus/queries";
 import { useFetchReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
+import { useState } from "react";
 import OtuCreate from "./OtuCreate";
 import OtuItem from "./OtuItem";
 import OtuToolbar from "./OtuToolbar";
@@ -15,25 +16,16 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/");
 
 type OtuListProps = {
 	find: string;
-	openCreateOTU: boolean;
 	page: number;
-	setSearch: (next: {
-		find?: string;
-		openCreateOTU?: boolean;
-		page?: number;
-	}) => void;
+	setSearch: (next: { find?: string; page?: number }) => void;
 };
 
 /**
  * A list of OTUs with filtering
  */
-export default function OtuList({
-	find,
-	openCreateOTU,
-	page,
-	setSearch,
-}: OtuListProps) {
+export default function OtuList({ find, page, setSearch }: OtuListProps) {
 	const { refId } = routeApi.useParams();
+	const [openCreate, setOpenCreate] = useState(false);
 	const { data: reference, isPending: isPendingReference } =
 		useFetchReference(refId);
 	const { data: otus, isPending: isPendingOTUs } = useListOTUs(
@@ -55,14 +47,11 @@ export default function OtuList({
 			<OtuToolbar
 				term={find}
 				onChange={(e) => setSearch({ find: e.target.value })}
+				onCreate={() => setOpenCreate(true)}
 				refId={refId}
 				remotesFrom={reference.remotes_from}
 			/>
-			<OtuCreate
-				open={openCreateOTU}
-				setOpen={(openCreateOTU) => setSearch({ openCreateOTU })}
-				refId={refId}
-			/>
+			<OtuCreate open={openCreate} setOpen={setOpenCreate} refId={refId} />
 
 			{items.length ? (
 				<Pagination
