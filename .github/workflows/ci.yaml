@@ -47,7 +47,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v6
             - name: Setup pnpm
-              uses: pnpm/action-setup@v4
+              uses: pnpm/action-setup@v6
               with:
                   version: ${{ env.PNPM_VERSION }}
             - name: Setup NodeJS
@@ -66,7 +66,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v6
             - name: Setup pnpm
-              uses: pnpm/action-setup@v4
+              uses: pnpm/action-setup@v6
               with:
                   version: ${{ env.PNPM_VERSION }}
             - name: Setup NodeJS
@@ -85,7 +85,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v6
             - name: Setup pnpm
-              uses: pnpm/action-setup@v4
+              uses: pnpm/action-setup@v6
               with:
                   version: ${{ env.PNPM_VERSION }}
             - name: Setup NodeJS
