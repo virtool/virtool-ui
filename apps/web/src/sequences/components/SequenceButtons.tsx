@@ -10,6 +10,7 @@ import { Pencil, Trash } from "lucide-react";
 type SequenceButtonsProps = {
 	id: string;
 	onCollapse: () => void;
+	onRemove: () => void;
 };
 
 /**
@@ -18,6 +19,7 @@ type SequenceButtonsProps = {
 export default function SequenceButtons({
 	id,
 	onCollapse,
+	onRemove,
 }: SequenceButtonsProps) {
 	const { setSearch } = useOtuDetailSearch();
 	const { otu, reference } = useCurrentOtuContext();
@@ -45,7 +47,7 @@ export default function SequenceButtons({
 						IconComponent={Trash}
 						color="red"
 						tip="Remove"
-						onClick={() => setSearch({ removeSequenceId: id })}
+						onClick={onRemove}
 						className="ml-0.5"
 					/>
 				</>

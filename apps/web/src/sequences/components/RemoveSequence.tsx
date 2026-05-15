@@ -1,39 +1,36 @@
 import RemoveDialog from "@base/RemoveDialog";
-import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
 import { useRemoveSequence } from "@otus/queries";
 import type { OtuSequence } from "@otus/types";
 
 type RemoveSequenceProps = {
-	isolateName: string;
 	isolateId: string;
+	isolateName: string;
 	otuId: string;
-	sequences: OtuSequence[];
+	open?: boolean;
+	sequence?: OtuSequence;
+	setOpen?: (open: boolean) => void;
 };
 
 /**
  * Displays a dialog for removing a sequence
  */
 export default function RemoveSequence({
-	isolateName,
 	isolateId,
+	isolateName,
 	otuId,
-	sequences,
+	open = false,
+	sequence,
+	setOpen = () => {},
 }: RemoveSequenceProps) {
-	const { search, setSearch } = useOtuDetailSearch();
-	const removeSequenceId = search.removeSequenceId;
-
 	const mutation = useRemoveSequence(otuId);
 
-	const sequence = sequences.find((seq) => seq.id === removeSequenceId);
-
 	function handleConfirm() {
+		if (!sequence) {
+			return;
+		}
 		mutation.mutate(
-			{ otuId, isolateId, sequenceId: removeSequenceId },
-			{
-				onSuccess: () => {
-					setSearch({ removeSequenceId: undefined });
-				},
-			},
+			{ otuId, isolateId, sequenceId: sequence.id },
+			{ onSuccess: () => setOpen(false) },
 		);
 	}
 
@@ -47,11 +44,11 @@ export default function RemoveSequence({
 
 	return (
 		<RemoveDialog
-			name={`${removeSequenceId}`}
+			name={sequence?.id ?? ""}
 			noun="Sequence"
 			onConfirm={handleConfirm}
-			onHide={() => setSearch({ removeSequenceId: undefined })}
-			show={Boolean(removeSequenceId)}
+			onHide={() => setOpen(false)}
+			show={open}
 			message={removeMessage}
 		/>
 	);

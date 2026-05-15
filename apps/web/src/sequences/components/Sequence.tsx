@@ -9,6 +9,7 @@ type GenomeSequenceProps = {
 	definition: string;
 	host: string;
 	id: string;
+	onRemove: () => void;
 	segment?: string;
 	sequence: string;
 };
@@ -21,6 +22,7 @@ export default function Sequence({
 	definition,
 	host,
 	id,
+	onRemove,
 	segment,
 	sequence,
 }: GenomeSequenceProps) {
@@ -34,7 +36,9 @@ export default function Sequence({
 					label={segment ? "SEGMENT" : "DEFINITION"}
 					value={segment || definition}
 				/>
-				{expanded && <SequenceButtons id={id} onCollapse={collapse} />}
+				{expanded && (
+					<SequenceButtons id={id} onCollapse={collapse} onRemove={onRemove} />
+				)}
 			</div>
 			{expanded && (
 				<SequenceTable

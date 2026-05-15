@@ -2,8 +2,9 @@ import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import NoneFoundSection from "@base/NoneFoundSection";
 import { useCurrentOtuContext } from "@otus/queries";
-import type { OtuIsolate } from "@otus/types";
+import type { OtuIsolate, OtuSequence } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
+import { useState } from "react";
 import CreateSequence from "./CreateSequence";
 import CreateSequenceLink from "./CreateSequenceLink";
 import RemoveSequence from "./RemoveSequence";
@@ -24,11 +25,18 @@ export default function Sequences({
 	otuId,
 }: IsolateSequencesProps) {
 	const { otu, reference } = useCurrentOtuContext();
+	const [sequenceToRemove, setSequenceToRemove] = useState<
+		OtuSequence | undefined
+	>();
 
 	const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
 
 	let sequenceComponents = sequences.map((sequence) => (
-		<Sequence key={sequence.id} {...sequence} />
+		<Sequence
+			key={sequence.id}
+			{...sequence}
+			onRemove={() => setSequenceToRemove(sequence)}
+		/>
 	));
 
 	let isolateName = `${activeIsolate.source_type} ${activeIsolate.source_name}`;
@@ -63,7 +71,13 @@ export default function Sequences({
 				isolateId={activeIsolate.id}
 				isolateName={isolateName}
 				otuId={otuId}
-				sequences={sequences}
+				open={Boolean(sequenceToRemove)}
+				sequence={sequenceToRemove}
+				setOpen={(open) => {
+					if (!open) {
+						setSequenceToRemove(undefined);
+					}
+				}}
 			/>
 		</>
 	);
