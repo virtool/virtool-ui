@@ -1,0 +1,31 @@
+name: virtool-ui
+
+services:
+  mongo:
+    image: mongo:8
+    ports:
+      - "27017:27017"
+    tmpfs:
+      - /data/db:size=1g
+    healthcheck:
+      test: mongosh --quiet --eval "db.adminCommand('ping').ok"
+      interval: 2s
+      retries: 10
+      start_period: 2s
+
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: virtool
+      POSTGRES_PASSWORD: virtool
+      POSTGRES_DB: virtool
+    ports:
+      - "5432:5432"
+    tmpfs:
+      - /var/lib/postgresql:size=1g
+    command: postgres -c fsync=off
+    healthcheck:
+      test: pg_isready -U virtool -d virtool
+      interval: 2s
+      retries: 10
+      start_period: 2s

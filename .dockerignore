@@ -1,6 +1,8 @@
 .idea
 data
-dist
+**/dist
 docker
 docs
-node_modules
+**/node_modules
+.git
+.github
