@@ -3,7 +3,6 @@ import { useFetchUser, useUpdateUser } from "@administration/queries";
 import Alert from "@base/Alert";
 import InitialIcon from "@base/InitialIcon";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import { getRouteApi } from "@tanstack/react-router";
 import { CircleAlert, ShieldUserIcon } from "lucide-react";
 import Label from "@/base/Label";
 import Password from "./Password";
@@ -12,14 +11,16 @@ import { UserActivationBanner } from "./UserActivationBanner";
 import UserGroups from "./UserGroups";
 import UserPermissions from "./UserPermissions";
 
-const routeApi = getRouteApi("/_authenticated/administration/users/$userId");
+type UserDetailProps = {
+	/** The unique id of the user being viewed */
+	userId: number;
+};
 
 /**
  * The detailed view of a user
  */
-export default function UserDetail() {
-	const { userId } = routeApi.useParams();
-	const { data, isPending } = useFetchUser(Number(userId));
+export default function UserDetail({ userId }: UserDetailProps) {
+	const { data, isPending } = useFetchUser(userId);
 	const { hasPermission: canEdit } = useCheckAdminRole(
 		data?.administrator_role === null ? "users" : "full",
 	);
