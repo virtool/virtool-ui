@@ -5,6 +5,7 @@ import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import type { OtuSegment } from "@otus/types";
 import { useCheckReferenceRight } from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
+import { useState } from "react";
 import Button from "@/base/Button";
 import { useOtuDetailSearch } from "../OtuDetailSearchContext";
 import AddSegment from "./AddSegment";
@@ -25,6 +26,7 @@ export default function Schema() {
 
 	const { data, isPending } = useFetchOTU(otuId);
 	const mutation = useUpdateOTU(otuId);
+	const [segmentToRemove, setSegmentToRemove] = useState<string | undefined>();
 
 	if (isPending || isPendingPermission) {
 		return <LoadingPlaceholder />;
@@ -77,11 +79,9 @@ export default function Schema() {
 							last={index === schema.length - 1}
 							onMoveUp={() => handleMoveUp(index)}
 							onMoveDown={() => handleMoveDown(index)}
+							onRemove={() => setSegmentToRemove(segment.name)}
 							setEditSegmentName={(editSegmentName) =>
 								setSearch({ editSegmentName })
-							}
-							setRemoveSegmentName={(removeSegmentName) =>
-								setSearch({ removeSegmentName })
 							}
 						/>
 					))}
@@ -110,12 +110,15 @@ export default function Schema() {
 				<RemoveSegment
 					abbreviation={abbreviation}
 					name={name}
+					open={Boolean(segmentToRemove)}
 					otuId={otuId}
-					removeSegmentName={search.removeSegmentName}
 					schema={schema}
-					unsetRemoveSegmentName={() =>
-						setSearch({ removeSegmentName: undefined })
-					}
+					segmentName={segmentToRemove}
+					setOpen={(open) => {
+						if (!open) {
+							setSegmentToRemove(undefined);
+						}
+					}}
 				/>
 			) : null}
 		</div>

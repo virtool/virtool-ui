@@ -5,11 +5,11 @@ import type { OtuSegment } from "@otus/types";
 type RemoveSegmentProps = {
 	abbreviation: string;
 	name: string;
+	open?: boolean;
 	otuId: string;
-	removeSegmentName?: string;
-	/** List of segments associated with the OTU */
 	schema: OtuSegment[];
-	unsetRemoveSegmentName?: () => void;
+	segmentName?: string;
+	setOpen?: (open: boolean) => void;
 };
 
 /**
@@ -18,40 +18,36 @@ type RemoveSegmentProps = {
 export default function RemoveSegment({
 	abbreviation,
 	name,
+	open = false,
 	otuId,
-	removeSegmentName,
 	schema,
-	unsetRemoveSegmentName = () => {},
+	segmentName,
+	setOpen = () => {},
 }: RemoveSegmentProps) {
 	const mutation = useUpdateOTU(otuId);
 
 	function handleSubmit() {
+		if (!segmentName) {
+			return;
+		}
 		mutation.mutate(
 			{
 				otuId,
 				name,
 				abbreviation,
-				schema: schema.filter((s) => s.name !== removeSegmentName),
+				schema: schema.filter((s) => s.name !== segmentName),
 			},
-			{
-				onSuccess: () => {
-					unsetRemoveSegmentName();
-				},
-			},
+			{ onSuccess: () => setOpen(false) },
 		);
-	}
-
-	function onHide() {
-		unsetRemoveSegmentName();
 	}
 
 	return (
 		<RemoveDialog
-			name={removeSegmentName}
+			name={segmentName ?? ""}
 			noun="Segment"
 			onConfirm={handleSubmit}
-			onHide={onHide}
-			show={Boolean(removeSegmentName)}
+			onHide={() => setOpen(false)}
+			show={open}
 		/>
 	);
 }

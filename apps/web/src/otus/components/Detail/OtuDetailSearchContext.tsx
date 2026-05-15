@@ -9,7 +9,6 @@ type OtuDetailSearch = {
 	openEditOTU?: boolean;
 	openRemoveIsolate?: boolean;
 	openRemoveOTU?: boolean;
-	removeSegmentName?: string;
 };
 
 type OtuDetailSearchContextValue = {

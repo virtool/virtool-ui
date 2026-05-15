@@ -16,9 +16,10 @@ type SegmentProps = {
 	onMoveUp: () => void;
 	/** A callback function to move the segment down */
 	onMoveDown: () => void;
+	/** A callback fired when the user requests segment removal */
+	onRemove: () => void;
 	segment: OtuSegment;
 	setEditSegmentName: (name: string) => void;
-	setRemoveSegmentName: (name: string) => void;
 };
 
 /**
@@ -30,9 +31,9 @@ export default function Segment({
 	last,
 	onMoveUp,
 	onMoveDown,
+	onRemove,
 	segment,
 	setEditSegmentName,
-	setRemoveSegmentName,
 }: SegmentProps) {
 	return (
 		<BoxGroupSection
@@ -52,7 +53,7 @@ export default function Segment({
 						IconComponent={Trash}
 						color="red"
 						tip="remove segment"
-						onClick={() => setRemoveSegmentName(segment.name)}
+						onClick={onRemove}
 					/>
 					<IconButton
 						IconComponent={Pencil}

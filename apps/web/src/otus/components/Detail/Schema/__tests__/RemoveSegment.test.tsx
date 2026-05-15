@@ -1,87 +1,104 @@
-import { formatPath } from "@app/hooks";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount } from "@tests/fake/account";
-import { createFakeOtu, mockApiEditOTU, mockApiGetOtu } from "@tests/fake/otus";
-import {
-	createFakeReference,
-	mockApiGetReferenceDetail,
-} from "@tests/fake/references";
-import { renderRoute } from "@tests/setup";
+import { createFakeOtu, mockApiEditOTU } from "@tests/fake/otus";
+import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import RemoveSegment from "../RemoveSegment";
 
 describe("<RemoveSegment />", () => {
-	let path;
-	let reference;
-	let searchParams;
 	let otu;
-	let otuScope;
-	let account;
+	let segmentName;
 
 	beforeEach(() => {
-		reference = createFakeReference({ name: "Foo" });
-		mockApiGetReferenceDetail(reference);
 		otu = createFakeOtu();
-		otuScope = mockApiGetOtu(otu);
-		account = createFakeAccount({ administrator_role: "full" });
-
-		path = `/refs/${reference.id}/otus/${otu.id}/schema`;
-		searchParams = { removeSegmentName: otu.schema[0].name };
+		segmentName = otu.schema[0].name;
 	});
 
 	afterEach(() => nock.cleanAll());
 
-	it("should render when [show=true]", async () => {
-		await renderRoute(formatPath(path, searchParams), { account });
+	it("should render when [open=true]", () => {
+		renderWithProviders(
+			<RemoveSegment
+				abbreviation={otu.abbreviation}
+				name={otu.name}
+				open
+				otuId={otu.id}
+				schema={otu.schema}
+				segmentName={segmentName}
+				setOpen={vi.fn()}
+			/>,
+		);
 
-		expect(await screen.findByText("Remove Segment")).toBeInTheDocument();
+		expect(screen.getByText("Remove Segment")).toBeInTheDocument();
 		expect(
 			screen.getByText(/Are you sure you want to remove/),
 		).toBeInTheDocument();
-		expect(screen.getAllByText(`${otu.schema[0].name}`)).toHaveLength(2);
+		expect(screen.getByText(segmentName)).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument();
 	});
 
-	it("should render when [show=false]", async () => {
-		await renderRoute(path, { account });
-
-		await waitFor(() => otuScope.done());
-
-		expect(
-			await screen.findByText(`${otu.schema[0].name}`),
-		).toBeInTheDocument();
+	it("should not render when [open=false]", () => {
+		renderWithProviders(
+			<RemoveSegment
+				abbreviation={otu.abbreviation}
+				name={otu.name}
+				otuId={otu.id}
+				schema={otu.schema}
+				segmentName={segmentName}
+				setOpen={vi.fn()}
+			/>,
+		);
 
 		expect(screen.queryByText("Remove Segment")).toBeNull();
 		expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
 		expect(screen.queryByRole("button", { name: "Confirm" })).toBeNull();
 	});
 
-	it("should call onSubmit() when onConfirm() called on <RemoveDialog />", async () => {
+	it("should call API and close dialog when Confirm is clicked", async () => {
 		const scope = mockApiEditOTU(otu, {
 			abbreviation: otu.abbreviation,
 			name: otu.name,
 			otuId: otu.id,
-			schema: [otu.schema[1]],
+			schema: otu.schema.filter((s) => s.name !== segmentName),
 		});
-		await renderRoute(formatPath(path, searchParams), { account });
+		const setOpen = vi.fn();
 
-		await userEvent.click(
-			await screen.findByRole("button", { name: "Confirm" }),
+		renderWithProviders(
+			<RemoveSegment
+				abbreviation={otu.abbreviation}
+				name={otu.name}
+				open
+				otuId={otu.id}
+				schema={otu.schema}
+				segmentName={segmentName}
+				setOpen={setOpen}
+			/>,
 		);
 
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
+
+		await waitFor(() => expect(setOpen).toHaveBeenCalledWith(false));
 		scope.done();
 	});
 
-	it("should call onHide() when onHide() called on <RemoveDialog />", async () => {
-		await renderRoute(formatPath(path, searchParams), { account });
+	it("should call setOpen(false) when dialog is dismissed", async () => {
+		const setOpen = vi.fn();
 
-		expect(await screen.findByText("Remove Segment")).toBeInTheDocument();
+		renderWithProviders(
+			<RemoveSegment
+				abbreviation={otu.abbreviation}
+				name={otu.name}
+				open
+				otuId={otu.id}
+				schema={otu.schema}
+				segmentName={segmentName}
+				setOpen={setOpen}
+			/>,
+		);
 
 		await userEvent.keyboard("{Escape}");
 
-		await waitFor(() =>
-			expect(screen.queryByText("Remove Segment")).toBeNull(),
-		);
+		await waitFor(() => expect(setOpen).toHaveBeenCalledWith(false));
 	});
 });
