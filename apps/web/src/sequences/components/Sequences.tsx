@@ -4,6 +4,7 @@ import NoneFoundSection from "@base/NoneFoundSection";
 import { useCurrentOtuContext } from "@otus/queries";
 import type { OtuIsolate, OtuSequence } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
+import { useReferenceIsArchived } from "@references/hooks";
 import { useState } from "react";
 import CreateSequence from "./CreateSequence";
 import CreateSequenceLink from "./CreateSequenceLink";
