@@ -7,7 +7,7 @@ import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useCheckReferenceRight } from "@references/hooks";
 import { useLocation } from "@tanstack/react-router";
-import { Archive, ArchiveRestore, Lock } from "lucide-react";
+import { ArchiveRestore, Lock } from "lucide-react";
 
 type ArchivedReferenceDetailHeaderProps = {
 	createdAt: string;
@@ -38,35 +38,26 @@ export default function ArchivedReferenceDetailHeader({
 
 	return (
 		<ViewHeader title={name}>
-			<div className="flex items-center gap-3 min-w-0">
-				<div className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-md bg-gray-100 text-gray-500">
-					<Archive size={18} />
-				</div>
-				<div className="min-w-0 flex-1">
-					<ViewHeaderTitle className="text-2xl font-semibold text-gray-700 leading-tight">
-						{name}
-						<Badge className="ml-3" color="gray" variant="soft">
-							Archived
-						</Badge>
-						{showIcons && (
-							<ViewHeaderIcons>
-								{isRemote && (
-									<Icon color="grey" icon={Lock} aria-label="lock" />
-								)}
-								{!isRemote && canModify && (
-									<IconButton
-										color="grayDark"
-										IconComponent={ArchiveRestore}
-										tip="unarchive"
-										onClick={() => setOpenArchiveReference(true)}
-									/>
-								)}
-							</ViewHeaderIcons>
+			<ViewHeaderTitle className="text-2xl font-semibold text-gray-700 leading-tight">
+				{name}
+				<Badge className="ml-3" color="gray" variant="soft">
+					Archived
+				</Badge>
+				{showIcons && (
+					<ViewHeaderIcons>
+						{isRemote && <Icon color="grey" icon={Lock} aria-label="lock" />}
+						{!isRemote && canModify && (
+							<IconButton
+								color="grayDark"
+								IconComponent={ArchiveRestore}
+								tip="unarchive"
+								onClick={() => setOpenArchiveReference(true)}
+							/>
 						)}
-					</ViewHeaderTitle>
-					<ViewHeaderAttribution time={createdAt} user={userHandle} />
-				</div>
-			</div>
+					</ViewHeaderIcons>
+				)}
+			</ViewHeaderTitle>
+			<ViewHeaderAttribution time={createdAt} user={userHandle} />
 		</ViewHeader>
 	);
 }

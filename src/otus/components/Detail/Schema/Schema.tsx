@@ -3,12 +3,10 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import type { OtuSegment } from "@otus/types";
-import ArchivedNotice from "@references/components/Detail/ArchivedNotice";
 import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
 } from "@references/hooks";
-import { useFetchReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
 import Button from "@/base/Button";
 import { useOtuDetailSearch } from "../OtuDetailSearchContext";
@@ -28,7 +26,6 @@ export default function Schema() {
 	const { hasPermission: canModify, isPending: isPendingPermission } =
 		useCheckReferenceRight(refId, "modify_otu");
 	const archived = useReferenceIsArchived(refId);
-	const { data: reference } = useFetchReference(refId);
 
 	const { data, isPending } = useFetchOTU(otuId);
 	const mutation = useUpdateOTU(otuId);
@@ -63,28 +60,20 @@ export default function Schema() {
 
 	return (
 		<div>
-			<div className="flex items-center justify-between gap-3 mb-3 min-h-9">
-				{archived ? (
-					<p className="m-0 text-sm text-gray-500">
-						Schema is read-only while{" "}
-						{reference?.name ?? "the parent reference"} is archived.
-					</p>
-				) : (
-					<span />
-				)}
-				{archived ? (
-					<ArchivedNotice>editing disabled</ArchivedNotice>
-				) : (
-					canModify && (
+			{archived ? (
+				<p className="mb-3 text-sm text-gray-500">Read only - archived</p>
+			) : (
+				canModify && (
+					<div className="flex justify-end mb-3">
 						<Button
 							color="blue"
 							onClick={() => setSearch({ openAddSegment: true })}
 						>
 							Add Segment
 						</Button>
-					)
-				)}
-			</div>
+					</div>
+				)
+			)}
 			{schema.length ? (
 				<BoxGroup>
 					{schema.map((segment, index) => (

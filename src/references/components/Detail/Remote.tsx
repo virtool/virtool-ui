@@ -18,7 +18,6 @@ import {
 	RefreshCw,
 } from "lucide-react";
 import { cn } from "@/app/utils";
-import ArchivedNotice from "./ArchivedNotice";
 
 function Release({ release, checking, updating, onCheckUpdates, onUpdate }) {
 	const hasUpdate = !updating && release.newer;
@@ -107,7 +106,6 @@ export default function Remote({ detail }) {
 				<h2 className="flex items-center justify-between gap-2">
 					<span className="inline-flex items-center gap-2">
 						Remote Reference
-						{archived && <ArchivedNotice>updates paused</ArchivedNotice>}
 					</span>
 					<a
 						className="flex gap-1 items-center text-base"

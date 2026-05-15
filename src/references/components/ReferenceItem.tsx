@@ -32,7 +32,13 @@ export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 				state={task.complete ? "succeeded" : "running"}
 			/>
 		);
-	} else if (canCreate && !archived) {
+	} else if (archived) {
+		end = (
+			<Badge color="gray" variant="soft">
+				Archived
+			</Badge>
+		);
+	} else if (canCreate) {
 		end = (
 			<IconButton
 				IconComponent={Copy}
@@ -45,23 +51,9 @@ export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 
 	return (
 		<BoxGroupSection className="grid grid-cols-3 items-center gap-x-4">
-			<div className="flex items-center gap-2">
-				<Link
-					className={
-						archived
-							? "font-medium text-lg text-gray-500"
-							: "font-medium text-lg"
-					}
-					to={`/refs/${id}`}
-				>
-					{name}
-				</Link>
-				{archived && (
-					<Badge color="gray" variant="soft">
-						Archived
-					</Badge>
-				)}
-			</div>
+			<Link className="font-medium text-lg" to={`/refs/${id}`}>
+				{name}
+			</Link>
 			<Attribution time={created_at} user={user.handle} />
 			<div className="flex justify-end">{end}</div>
 		</BoxGroupSection>

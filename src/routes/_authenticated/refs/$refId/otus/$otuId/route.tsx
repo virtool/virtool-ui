@@ -16,7 +16,6 @@ import {
 	Outlet,
 	useNavigate,
 } from "@tanstack/react-router";
-import { Archive } from "lucide-react";
 import { z } from "zod/v4";
 
 const otuDetailSearchSchema = z.object({
@@ -75,11 +74,6 @@ function OtuDetailLayout() {
 		>
 			<ViewHeader title={name}>
 				<ViewHeaderTitle className="items-baseline">
-					{archived && (
-						<span className="inline-flex items-center justify-center w-9 h-9 rounded-md bg-gray-100 text-gray-500 shrink-0 self-center mr-3">
-							<Archive size={18} />
-						</span>
-					)}
 					<span className={archived ? "text-gray-700" : undefined}>{name}</span>{" "}
 					<small className="text-gray-500 font-semibold ml-1.5">
 						{abbreviation || <em className="font-normal">No Abbreviation</em>}
@@ -104,16 +98,7 @@ function OtuDetailLayout() {
 					</ViewHeaderIcons>
 				</ViewHeaderTitle>
 				<p className="flex font-medium items-center gap-2 py-2 text-lg">
-					<span className="inline-flex items-center gap-1.5">
-						{archived && (
-							<Archive
-								size={12}
-								className="text-gray-400 shrink-0"
-								aria-hidden="true"
-							/>
-						)}
-						<Link to={`/refs/${refId}`}>{reference.name}</Link>
-					</span>
+					<Link to={`/refs/${refId}`}>{reference.name}</Link>
 					<span className="text-slate-600">/</span>
 					<Link to={`/refs/${refId}/otus`}>OTUs</Link>
 					<span className="text-slate-600">/</span>

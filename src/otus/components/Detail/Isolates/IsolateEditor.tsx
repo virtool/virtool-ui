@@ -4,7 +4,6 @@ import SubviewHeader from "@base/SubviewHeader";
 import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useCurrentOtuContext } from "@otus/queries";
-import ArchivedNotice from "@references/components/Detail/ArchivedNotice";
 import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
@@ -42,13 +41,7 @@ export default function IsolateEditor() {
 	));
 
 	let trailing = null;
-	if (archived) {
-		trailing = (
-			<span className="ml-auto self-center">
-				<ArchivedNotice>add disabled</ArchivedNotice>
-			</span>
-		);
-	} else if (canModify) {
+	if (!archived && canModify) {
 		trailing = (
 			<button
 				className="ml-auto cursor-pointer self-end text-sm font-medium bg-transparent border-0 p-0"

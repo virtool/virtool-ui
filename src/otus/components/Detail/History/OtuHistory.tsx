@@ -26,9 +26,7 @@ export default function OtuHistory() {
 	return (
 		<div>
 			{archived && (
-				<p className="mb-3 text-sm text-gray-500">
-					Reverting otu changes is disabled while this reference is archived.
-				</p>
+				<p className="mb-3 text-sm text-gray-500">Read only - archived</p>
 			)}
 			{changes.unbuilt && (
 				<HistoryList archived={archived} history={changes.unbuilt} unbuilt />

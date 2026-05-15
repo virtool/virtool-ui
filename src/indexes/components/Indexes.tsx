@@ -5,7 +5,6 @@ import Pagination from "@base/Pagination";
 import { useReferenceIsArchived } from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
 import { useFindIndexes } from "../queries";
-import ArchivedRebuildAlert from "./ArchivedRebuildAlert";
 import { IndexItem } from "./Item/IndexItem";
 import RebuildAlert from "./RebuildAlert";
 import RebuildIndex from "./RebuildIndex";
@@ -38,11 +37,7 @@ export default function Indexes({
 
 	return (
 		<>
-			{archived ? (
-				<ArchivedRebuildAlert />
-			) : (
-				<RebuildAlert page={page} refId={refId} />
-			)}
+			{!archived && <RebuildAlert page={page} refId={refId} />}
 			<RebuildIndex
 				open={openRebuild}
 				setOpen={(openRebuild) => setSearch({ openRebuild })}
