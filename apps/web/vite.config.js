@@ -50,6 +50,7 @@ export default defineConfig({
             "@references": path.resolve("src/references"),
             "@samples": path.resolve("src/samples"),
             "@sequences": path.resolve("src/sequences"),
+            "@server": path.resolve("src/server"),
             "@subtraction": path.resolve("src/subtraction"),
             "@tests": path.resolve("src/tests"),
             "@uploads": path.resolve("src/uploads"),

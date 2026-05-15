@@ -1,0 +1,19 @@
+name: virtool-ui
+
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: virtool
+      POSTGRES_PASSWORD: virtool
+      POSTGRES_DB: virtool
+    ports:
+      - "5432:5432"
+    tmpfs:
+      - /var/lib/postgresql:size=1g
+    command: postgres -c fsync=off
+    healthcheck:
+      test: pg_isready -U virtool -d virtool
+      interval: 2s
+      retries: 10
+      start_period: 2s
