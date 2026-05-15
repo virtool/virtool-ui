@@ -15,6 +15,7 @@ export const Route = createFileRoute(
 });
 
 function AnalysesRoute() {
+	const { sampleId } = Route.useParams();
 	const search = Route.useSearch();
 	const navigate = Route.useNavigate();
 
@@ -22,6 +23,7 @@ function AnalysesRoute() {
 		<AnalysesList
 			openCreateAnalysis={Boolean(search.openCreateAnalysis)}
 			page={search.page}
+			sampleId={sampleId}
 			setSearch={(next) => navigate({ search: { ...search, ...next } })}
 		/>
 	);

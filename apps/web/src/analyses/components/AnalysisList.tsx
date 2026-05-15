@@ -6,18 +6,16 @@ import Pagination from "@base/Pagination";
 import { useListHmms } from "@hmm/queries";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
-import { getRouteApi } from "@tanstack/react-router";
 import { useListAnalyses } from "../queries";
 import type { AnalysisMinimal } from "../types";
 import AnalysisItem from "./AnalysisItem";
 import CreateAnalysis from "./Create/CreateAnalysis";
 import AnalysisHMMAlert from "./HMMAlert";
 
-const routeApi = getRouteApi("/_authenticated/samples/$sampleId/analyses/");
-
 type AnalysesListProps = {
 	openCreateAnalysis: boolean;
 	page: number;
+	sampleId: string;
 	setSearch: (next: { openCreateAnalysis?: boolean; page?: number }) => void;
 };
 
@@ -34,9 +32,9 @@ function renderRow() {
 export default function AnalysesList({
 	openCreateAnalysis,
 	page,
+	sampleId,
 	setSearch,
 }: AnalysesListProps) {
-	const { sampleId } = routeApi.useParams();
 	const { data: analyses, isPending: isPendingAnalyses } = useListAnalyses(
 		sampleId,
 		page,
