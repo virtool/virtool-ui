@@ -1,47 +1,39 @@
-import { formatPath } from "@app/hooks";
-import { screen } from "@testing-library/react";
+import { cleanup, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount } from "@tests/fake/account";
-import {
-	createFakeOTUSequence,
-	createFakeOtu,
-	mockApiEditSequence,
-	mockApiGetOtu,
-} from "@tests/fake/otus";
-import {
-	createFakeReference,
-	mockApiGetReferenceDetail,
-} from "@tests/fake/references";
-import { renderRoute } from "@tests/setup";
+import { createFakeOTUSequence, mockApiEditSequence } from "@tests/fake/otus";
+import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import SequenceEdit from "../SequenceEdit";
 
 describe("<SequenceEdit>", () => {
-	let props;
-	let reference;
-	let otu;
+	const isolateId = "test_isolate_id";
+	const otuId = "test_otu_id";
+	const refId = "test_ref_id";
 	let activeSequence;
-	let path;
+
+	function renderSequenceEdit(setOpen = vi.fn()) {
+		return renderWithProviders(
+			<SequenceEdit
+				activeSequence={activeSequence}
+				isolateId={isolateId}
+				open
+				otuId={otuId}
+				refId={refId}
+				schema={[{ molecule: null, name: "segment_a", required: false }]}
+				sequences={[activeSequence]}
+				setOpen={setOpen}
+			/>,
+		);
+	}
 
 	beforeEach(() => {
-		reference = createFakeReference();
-		mockApiGetReferenceDetail(reference);
-		otu = createFakeOtu();
-		activeSequence = otu.isolates[0].sequences[0];
-		mockApiGetOtu(otu);
-
-		path = formatPath(`/refs/${reference.id}/otus/${otu.id}/otu`, {
-			editSequenceId: activeSequence.id,
+		activeSequence = createFakeOTUSequence({
+			accession: "initial_accession",
+			definition: "initial_definition",
+			host: "initial_host",
+			sequence: "ACGY",
 		});
-
-		props = {
-			activeSequence: createFakeOTUSequence({ sequence: "ACGY" }),
-			isolateId: "test_isolate_id",
-			otuId: "test_otu_id",
-			hasSchema: true,
-			segments: [],
-			refId: "test_ref_id",
-		};
 	});
 
 	afterEach(() => {
@@ -50,29 +42,28 @@ describe("<SequenceEdit>", () => {
 	});
 
 	it("should render all fields with current sequence data", async () => {
-		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account });
+		renderSequenceEdit();
 
 		expect(await screen.findByText("Segment")).toBeInTheDocument();
 		expect(screen.getByRole("combobox")).toBeInTheDocument();
 		expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveValue(
-			props.initialAccession,
+			activeSequence.accession,
 		);
 		expect(screen.getByRole("textbox", { name: "Host" })).toHaveValue(
-			props.initialHost,
+			activeSequence.host,
 		);
 		expect(screen.getByRole("textbox", { name: "Definition" })).toHaveValue(
-			props.initialDefinition,
+			activeSequence.definition,
 		);
 		expect(screen.getByRole("textbox", { name: /Sequence [0-9]/ })).toHaveValue(
-			props.initialSequence,
+			activeSequence.sequence,
 		);
 	});
 
 	it("should submit correct data when all fields changed", async () => {
 		const scope = mockApiEditSequence(
-			otu.id,
-			otu.isolates[0].id,
+			otuId,
+			isolateId,
 			activeSequence.id,
 			"user_typed_accession",
 			"user_typed_definition",
@@ -80,8 +71,8 @@ describe("<SequenceEdit>", () => {
 			"ACGRYKM",
 			null,
 		);
-		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account });
+
+		renderSequenceEdit();
 
 		await userEvent.click(await screen.findByRole("combobox"));
 		await userEvent.click(screen.getByRole("option", { name: "None" }));
@@ -112,12 +103,11 @@ describe("<SequenceEdit>", () => {
 
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-		scope.done();
+		await waitFor(() => scope.done());
 	});
 
 	it("should display errors when accession, definition, or sequence not defined", async () => {
-		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account });
+		renderSequenceEdit();
 
 		await userEvent.clear(
 			await screen.findByRole("textbox", { name: "Accession (ID)" }),
@@ -132,8 +122,7 @@ describe("<SequenceEdit>", () => {
 	});
 
 	it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account });
+		renderSequenceEdit();
 
 		await userEvent.type(
 			await screen.findByRole("textbox", { name: /Sequence [0-9]/ }),
@@ -150,8 +139,8 @@ describe("<SequenceEdit>", () => {
 
 	it("should clear form cache submitting", async () => {
 		const scope = mockApiEditSequence(
-			otu.id,
-			otu.isolates[0].id,
+			otuId,
+			isolateId,
 			activeSequence.id,
 			"user_typed_accession",
 			"user_typed_definition",
@@ -159,8 +148,8 @@ describe("<SequenceEdit>", () => {
 			"ACGRYKM",
 			null,
 		);
-		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account });
+
+		renderSequenceEdit();
 
 		await userEvent.click(await screen.findByRole("combobox"));
 		await userEvent.click(screen.getByRole("option", { name: "None" }));
@@ -191,14 +180,13 @@ describe("<SequenceEdit>", () => {
 
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-		scope.done();
+		await waitFor(() => scope.done());
 
 		window.sessionStorage.clear();
-		nock.cleanAll();
-		mockApiGetReferenceDetail(reference);
-		mockApiGetOtu(otu);
+		cleanup();
 
-		await renderRoute(path, { account });
+		renderSequenceEdit();
+
 		expect(screen.queryByText("Resumed editing draft sequence.")).toBeNull();
 	});
 });

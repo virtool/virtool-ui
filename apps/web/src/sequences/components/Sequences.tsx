@@ -26,6 +26,9 @@ export default function Sequences({
 }: IsolateSequencesProps) {
 	const { otu, reference } = useCurrentOtuContext();
 	const [openCreate, setOpenCreate] = useState(false);
+	const [sequenceToEdit, setSequenceToEdit] = useState<
+		OtuSequence | undefined
+	>();
 	const [sequenceToRemove, setSequenceToRemove] = useState<
 		OtuSequence | undefined
 	>();
@@ -36,6 +39,7 @@ export default function Sequences({
 		<Sequence
 			key={sequence.id}
 			{...sequence}
+			onEdit={() => setSequenceToEdit(sequence)}
 			onRemove={() => setSequenceToRemove(sequence)}
 		/>
 	));
@@ -72,7 +76,20 @@ export default function Sequences({
 				setOpen={setOpenCreate}
 			/>
 
-			<SequenceEdit />
+			<SequenceEdit
+				activeSequence={sequenceToEdit}
+				isolateId={activeIsolate.id}
+				open={Boolean(sequenceToEdit)}
+				otuId={otuId}
+				refId={reference.id}
+				schema={otu.schema}
+				sequences={sequences}
+				setOpen={(open) => {
+					if (!open) {
+						setSequenceToEdit(undefined);
+					}
+				}}
+			/>
 			<RemoveSequence
 				isolateId={activeIsolate.id}
 				isolateName={isolateName}

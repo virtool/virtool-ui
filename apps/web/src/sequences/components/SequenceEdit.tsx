@@ -1,28 +1,50 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
-import { useGetActiveIsolateId } from "@otus/hooks";
-import { useCurrentOtuContext, useEditSequence } from "@otus/queries";
-import { useActiveSequence, useGetUnreferencedSegments } from "../hooks";
+import { useEditSequence } from "@otus/queries";
+import type { OtuSegment, OtuSequence } from "@otus/types";
+import { compact } from "es-toolkit";
 import SequenceForm from "./SequenceForm";
+
+type SequenceEditProps = {
+	activeSequence?: OtuSequence;
+	isolateId: string;
+	open?: boolean;
+	otuId: string;
+	refId: string;
+	schema: OtuSegment[];
+	sequences: OtuSequence[];
+	setOpen?: (open: boolean) => void;
+};
 
 /**
  * Displays dialog to edit a genome sequence
  */
-export default function SequenceEdit() {
-	const { search, setSearch } = useOtuDetailSearch();
-	const { otu, reference } = useCurrentOtuContext();
-	const isolateId = useGetActiveIsolateId(otu);
+export default function SequenceEdit({
+	activeSequence,
+	isolateId,
+	open = false,
+	otuId,
+	refId,
+	schema,
+	sequences,
+	setOpen = () => {},
+}: SequenceEditProps) {
+	const mutation = useEditSequence(otuId);
 
-	const hasSchema = Boolean(otu.schema.length);
+	const referencedSegmentNames = compact(
+		sequences
+			.filter((seq) => seq.id !== activeSequence?.id)
+			.map((seq) => seq.segment),
+	);
 
-	const editSequenceId = search.editSequenceId;
-
-	const mutation = useEditSequence(otu.id);
-
-	const segments = useGetUnreferencedSegments();
-	const activeSequence = useActiveSequence();
+	const segments = schema.filter(
+		(segment) => !referencedSegmentNames.includes(segment.name),
+	);
 
 	function onSubmit({ accession, definition, host, sequence, segment }) {
+		if (!activeSequence) {
+			return;
+		}
+
 		mutation.mutate(
 			{
 				isolateId,
@@ -35,26 +57,23 @@ export default function SequenceEdit() {
 			},
 			{
 				onSuccess: () => {
-					setSearch({ editSequenceId: undefined });
+					setOpen(false);
 				},
 			},
 		);
 	}
 
 	return (
-		<Dialog
-			open={Boolean(editSequenceId)}
-			onOpenChange={() => setSearch({ editSequenceId: undefined })}
-		>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent>
 				<DialogTitle>Edit Sequence</DialogTitle>
 				<SequenceForm
 					activeSequence={activeSequence}
-					hasSchema={hasSchema}
+					hasSchema={schema.length > 0}
 					noun="edit"
 					onSubmit={onSubmit}
-					otuId={otu.id}
-					refId={reference.id}
+					otuId={otuId}
+					refId={refId}
 					segments={segments}
 				/>
 			</DialogContent>

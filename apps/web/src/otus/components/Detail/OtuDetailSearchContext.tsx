@@ -3,7 +3,6 @@ import { createContext, type ReactNode, useContext } from "react";
 type OtuDetailSearch = {
 	activeIsolate?: string;
 	editSegmentName?: string;
-	editSequenceId?: string;
 	openAddIsolate?: boolean;
 	openAddSegment?: boolean;
 	openEditIsolate?: boolean;

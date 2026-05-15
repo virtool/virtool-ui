@@ -1,6 +1,5 @@
 import CloseButton from "@base/CloseButton";
 import IconButton from "@base/IconButton";
-import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
 import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
@@ -10,6 +9,7 @@ import { Pencil, Trash } from "lucide-react";
 type SequenceButtonsProps = {
 	id: string;
 	onCollapse: () => void;
+	onEdit: () => void;
 	onRemove: () => void;
 };
 
@@ -19,9 +19,9 @@ type SequenceButtonsProps = {
 export default function SequenceButtons({
 	id,
 	onCollapse,
+	onEdit,
 	onRemove,
 }: SequenceButtonsProps) {
-	const { setSearch } = useOtuDetailSearch();
 	const { otu, reference } = useCurrentOtuContext();
 
 	const { hasPermission: canModify } = useCheckReferenceRight(
@@ -40,7 +40,7 @@ export default function SequenceButtons({
 						IconComponent={Pencil}
 						color="grayDark"
 						tip="Edit"
-						onClick={() => setSearch({ editSequenceId: id })}
+						onClick={onEdit}
 						className="ml-0.5"
 					/>
 					<IconButton

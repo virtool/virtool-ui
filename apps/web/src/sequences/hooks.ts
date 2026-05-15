@@ -1,9 +1,3 @@
-import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
-import { useActiveIsolate } from "@otus/hooks";
-import { useCurrentOtuContext } from "@otus/queries";
-import type { OtuSegment, OtuSequence } from "@otus/types";
-import sortSequencesBySegment from "@otus/utils";
-import { compact } from "es-toolkit";
 import { useState } from "react";
 
 type UseExpandedResult = {
@@ -30,49 +24,4 @@ export function useExpanded(): UseExpandedResult {
 	}
 
 	return { expanded, expand, collapse };
-}
-
-/**
- * A hook to get the active sequence.
- *
- * @returns The active sequence.
- */
-export function useActiveSequence(): OtuSequence | undefined {
-	const { search } = useOtuDetailSearch();
-	const editSequenceId = search.editSequenceId;
-
-	const { otu } = useCurrentOtuContext();
-
-	const activeIsolate = useActiveIsolate(otu);
-	const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
-
-	if (editSequenceId) {
-		return sequences.find((seq) => seq.id === editSequenceId);
-	}
-}
-
-/**
- * A hook to get unreferenced segments for a genome sequence
- *
- * @returns A list of unreferenced segments
- */
-export function useGetUnreferencedSegments() {
-	const { otu } = useCurrentOtuContext();
-
-	const { search } = useOtuDetailSearch();
-	const editSequenceId = search.editSequenceId;
-
-	const activeIsolate = useActiveIsolate(otu);
-	const activeSequenceId = editSequenceId || undefined;
-	const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
-
-	const referencedSegmentNames = compact(
-		sequences
-			.filter((seq) => seq.id !== activeSequenceId)
-			.map((seq) => seq.segment),
-	);
-
-	return otu.schema.filter(
-		(segment: OtuSegment) => !referencedSegmentNames.includes(segment.name),
-	);
 }
