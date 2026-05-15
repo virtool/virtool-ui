@@ -1,34 +1,33 @@
-import { formatPath } from "@app/hooks";
-import { screen } from "@testing-library/react";
+import { cleanup, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount } from "@tests/fake/account";
-import {
-	createFakeOtu,
-	mockApiAddSequence,
-	mockApiGetOtu,
-} from "@tests/fake/otus";
-import {
-	createFakeReference,
-	mockApiGetReferenceDetail,
-} from "@tests/fake/references";
-import { renderRoute } from "@tests/setup";
+import { createFakeOtu, mockApiAddSequence } from "@tests/fake/otus";
+import { createFakeReference } from "@tests/fake/references";
+import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import CreateSequence from "../CreateSequence";
 
 describe("<CreateSequence>", () => {
 	let otu;
-	let path;
 	let reference;
+
+	function renderCreateSequence(setOpen = vi.fn()) {
+		return renderWithProviders(
+			<CreateSequence
+				isolateId={otu.isolates[0].id}
+				open
+				otuId={otu.id}
+				refId={reference.id}
+				schema={otu.schema}
+				sequences={otu.isolates[0].sequences}
+				setOpen={setOpen}
+			/>,
+		);
+	}
 
 	beforeEach(() => {
 		reference = createFakeReference();
-		mockApiGetReferenceDetail(reference);
 		otu = createFakeOtu();
-		mockApiGetOtu(otu);
-
-		path = formatPath(`/refs/${reference.id}/otus/${otu.id}/otu`, {
-			openCreateSequence: true,
-		});
 	});
 
 	afterEach(() => {
@@ -46,8 +45,8 @@ describe("<CreateSequence>", () => {
 			"ATGRYKM",
 			otu.schema[0].name,
 		);
-		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account });
+
+		renderCreateSequence();
 
 		expect(await screen.findByText("Segment")).toBeInTheDocument();
 		expect(screen.getByRole("combobox")).toBeInTheDocument();
@@ -64,9 +63,7 @@ describe("<CreateSequence>", () => {
 
 		await userEvent.click(screen.getByRole("combobox"));
 		await userEvent.click(
-			await screen.findByRole("option", {
-				name: `${otu.schema[0].name}`,
-			}),
+			await screen.findByRole("option", { name: otu.schema[0].name }),
 		);
 		await userEvent.type(
 			screen.getByRole("textbox", { name: "Accession (ID)" }),
@@ -86,11 +83,11 @@ describe("<CreateSequence>", () => {
 		);
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-		scope.done();
+		await waitFor(() => scope.done());
 	});
+
 	it("should display errors when accession, definition, or sequence not defined", async () => {
-		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account });
+		renderCreateSequence();
 
 		await userEvent.click(await screen.findByRole("button", { name: "Save" }));
 
@@ -98,8 +95,7 @@ describe("<CreateSequence>", () => {
 	});
 
 	it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account });
+		renderCreateSequence();
 
 		await userEvent.type(
 			await screen.findByRole("textbox", { name: /Sequence [0-9]/ }),
@@ -124,27 +120,12 @@ describe("<CreateSequence>", () => {
 			"ATGRYKM",
 			otu.schema[0].name,
 		);
-		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account });
 
-		expect(await screen.findByText("Segment")).toBeInTheDocument();
-		expect(screen.getByRole("combobox")).toBeInTheDocument();
-		expect(
-			screen.getByRole("textbox", { name: "Accession (ID)" }),
-		).toBeInTheDocument();
-		expect(screen.getByRole("textbox", { name: "Host" })).toBeInTheDocument();
-		expect(
-			screen.getByRole("textbox", { name: "Definition" }),
-		).toBeInTheDocument();
-		expect(
-			screen.getByRole("textbox", { name: /Sequence [0-9]/ }),
-		).toBeInTheDocument();
+		renderCreateSequence();
 
-		await userEvent.click(screen.getByRole("combobox"));
+		await userEvent.click(await screen.findByRole("combobox"));
 		await userEvent.click(
-			await screen.findByRole("option", {
-				name: `${otu.schema[0].name}`,
-			}),
+			await screen.findByRole("option", { name: otu.schema[0].name }),
 		);
 		await userEvent.type(
 			screen.getByRole("textbox", { name: "Accession (ID)" }),
@@ -164,15 +145,13 @@ describe("<CreateSequence>", () => {
 		);
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-		scope.done();
+		await waitFor(() => scope.done());
 
 		window.sessionStorage.clear();
-		nock.cleanAll();
-		mockApiGetReferenceDetail(reference);
-		mockApiGetOtu(otu);
+		cleanup();
 
-		const account2 = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account: account2 });
+		renderCreateSequence();
+
 		expect(screen.queryByText("Resumed editing draft sequence.")).toBeNull();
 	});
 });
