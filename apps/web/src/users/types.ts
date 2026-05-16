@@ -74,5 +74,5 @@ export type AdminUserResponse = SearchResult & {
 /** User search results from the API */
 export type UserResponse = SearchResult & {
 	/** The page of users */
-	items: Array<User>;
+	documents: Array<User>;
 };

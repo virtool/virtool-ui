@@ -23,7 +23,7 @@ describe("<Nav />", () => {
 		expect(
 			screen.getByRole("link", { name: "References" }),
 		).toBeInTheDocument();
-		expect(screen.getByRole("link", { name: "HMM" })).toBeInTheDocument();
+		expect(screen.getByRole("link", { name: "HMMs" })).toBeInTheDocument();
 		expect(
 			screen.getByRole("link", { name: "Subtractions" }),
 		).toBeInTheDocument();

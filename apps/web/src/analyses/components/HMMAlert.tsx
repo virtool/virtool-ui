@@ -18,7 +18,7 @@ export default function AnalysisHMMAlert({ installed }: AnalysisHMMAlertProps) {
 				<CircleAlert size={18} />
 				<span>
 					<strong>HMM data is not installed. </strong>
-					<Link to="/hmm">Install HMMs</Link>
+					<Link to="/hmms">Install HMMs</Link>
 					<span> to run NuV analyses.</span>
 				</span>
 			</div>

@@ -22,10 +22,10 @@ const baseClassName = cn(
 
 const activeClassName = cn(
 	baseClassName,
-	"text-primary",
+	"text-gray-900",
 	"font-medium",
-	"hover:text-primary",
-	"focus:text-primary",
+	"hover:text-gray-900",
+	"focus:text-gray-900",
 );
 
 function parseLinkSearch(link: string): Record<string, string> | undefined {

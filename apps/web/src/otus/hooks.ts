@@ -1,19 +1,7 @@
-import { useOtuDetailSearch } from "@otus/components/Detail/OtuDetailSearchContext";
-import type { Otu, OtuIsolate } from "./types";
+import { getRouteApi } from "@tanstack/react-router";
+import type { Otu } from "./types";
 
-/**
- * A hook to get the active isolate
- *
- * @param otu - The OTU to get the isolate from
- * @returns The active isolate
- */
-export function useActiveIsolate(otu: Otu): OtuIsolate | undefined {
-	const { search } = useOtuDetailSearch();
-	const activeIsolate = search.activeIsolate;
-	return otu.isolates.find(
-		(isolate) => isolate.id === (activeIsolate || otu.isolates[0]?.id),
-	);
-}
+const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
 
 /**
  * A hook to get the active isolate id
@@ -22,8 +10,6 @@ export function useActiveIsolate(otu: Otu): OtuIsolate | undefined {
  * @returns The unique identifier of the active isolate
  */
 export function useGetActiveIsolateId(otu: Otu) {
-	const { search } = useOtuDetailSearch();
-	const activeIsolate = search.activeIsolate;
-
+	const { activeIsolate } = routeApi.useSearch();
 	return activeIsolate || otu.isolates[0]?.id;
 }

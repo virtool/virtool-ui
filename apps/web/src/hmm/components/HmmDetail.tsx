@@ -13,7 +13,7 @@ import { useFetchHmm } from "../queries";
 import { HmmEntropyIndicator } from "./HmmEntropyIndicator";
 import { HmmTaxonomy } from "./HmmTaxonomy";
 
-const routeApi = getRouteApi("/_authenticated/hmm/$hmmId");
+const routeApi = getRouteApi("/_authenticated/hmms/$hmmId");
 
 /**
  * The HMM detailed view

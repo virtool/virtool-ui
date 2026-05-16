@@ -1,6 +1,5 @@
 import type { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
-import { cn } from "@app/utils";
 import { useLocation } from "@tanstack/react-router";
 import { FolderOpen, List, Settings, Tag } from "lucide-react";
 import SidebarLink from "./SidebarLink";
@@ -31,7 +30,12 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
 		links = (
 			<>
 				<SidebarLink
-					exclude={["/samples/uploads", "/samples/labels", "/samples/settings"]}
+					exclude={[
+						"/samples/files",
+						"/samples/uploads",
+						"/samples/labels",
+						"/samples/settings",
+					]}
 					title="Browse"
 					link="/samples"
 					icon={List}
@@ -77,28 +81,16 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
 				/>
 			</>
 		);
-	} else if (pathname.startsWith("/hmm")) {
+	} else if (pathname.startsWith("/hmms")) {
 		links = (
 			<SidebarLink
-				exclude={["/hmm/settings"]}
+				exclude={["/hmms/settings"]}
 				title="Browse"
-				link="/hmm"
+				link="/hmms"
 				icon={List}
 			/>
 		);
 	}
 
-	return (
-		<div
-			className={cn(
-				"items-center",
-				"flex flex-col",
-				"bottom-0 left-0 top-30",
-				"fixed",
-				"pl-6 pb-2",
-			)}
-		>
-			{links}
-		</div>
-	);
+	return <div className="flex w-28 flex-col items-center">{links}</div>;
 }

@@ -41,7 +41,7 @@ export default function Nav({
 				<NavLink to="/jobs?state=running">Jobs</NavLink>
 				<NavLink to="/samples">Samples</NavLink>
 				<NavLink to="/refs">References</NavLink>
-				<NavLink to="/hmm">HMM</NavLink>
+				<NavLink to="/hmms">HMMs</NavLink>
 				<NavLink to="/subtractions">Subtractions</NavLink>
 			</div>
 
