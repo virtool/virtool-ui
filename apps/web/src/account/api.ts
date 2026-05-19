@@ -1,8 +1,14 @@
 import { type ApiResponse, apiClient } from "@app/api";
 import type { Permissions } from "@groups/types";
-import { loginFn, logoutFn } from "@server/auth/functions";
+import { loginFn, logoutFn, resetPasswordFn } from "@server/auth/functions";
 import type { User } from "@users/types";
 import type { Account, AccountSettings, APIKeyMinimal } from "./types";
+
+/** Result of a successful password reset. */
+export type ResetPasswordResult = {
+	login: false;
+	reset: false;
+};
 
 /**
  * Gets complete account data for the current user.
@@ -179,8 +185,8 @@ export function logout(): Promise<null> {
  *
  * @param password - The new password
  * @param resetCode - The reset code sent to the user
- * @returns A promise which resolves to a response indicating if the
- * password was successfully reset.
+ * @returns A promise which resolves to a result indicating the user is now
+ * authenticated.
  */
 export function resetPassword({
 	password,
@@ -188,11 +194,8 @@ export function resetPassword({
 }: {
 	password: string;
 	resetCode: string;
-}): Promise<ApiResponse> {
-	return apiClient.post("/account/reset").send({
-		password,
-		reset_code: resetCode,
-	});
+}): Promise<ResetPasswordResult> {
+	return resetPasswordFn({ data: { password, reset_code: resetCode } });
 }
 
 /**

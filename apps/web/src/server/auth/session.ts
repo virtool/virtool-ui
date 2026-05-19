@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto";
 
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 import type { Db } from "../db/pg";
 import { type SessionRow, sessions } from "../db/schema/sessions";
@@ -106,16 +106,9 @@ export async function invalidateSession(
 	await db.delete(sessions).where(eq(sessions.sessionId, sessionId));
 }
 
-export async function invalidateUserAuthenticatedSessions(
+export async function invalidateUserSessions(
 	db: Db,
 	userId: number,
 ): Promise<void> {
-	await db
-		.delete(sessions)
-		.where(
-			and(
-				eq(sessions.userId, userId),
-				eq(sessions.sessionType, "authenticated"),
-			),
-		);
+	await db.delete(sessions).where(eq(sessions.userId, userId));
 }

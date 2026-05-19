@@ -42,8 +42,7 @@ export default function ResetForm({ resetCode }: ResetFormProps) {
 					/>
 					{isError && (
 						<InputError>
-							{error?.response?.body?.message ||
-								"An error occurred during password reset"}
+							{error?.message || "An error occurred during password reset"}
 						</InputError>
 					)}
 				</InputGroup>

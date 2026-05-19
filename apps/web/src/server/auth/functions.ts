@@ -4,12 +4,24 @@ import { z } from "zod";
 
 import { db } from "../db/pg";
 import { realCookies } from "./cookies";
-import { InvalidCredentialsError, login, logout } from "./core";
+import {
+	InvalidCredentialsError,
+	InvalidResetSessionError,
+	login,
+	logout,
+	PasswordReuseError,
+	resetPassword,
+} from "./core";
 
 const loginSchema = z.object({
 	handle: z.string().min(1),
 	password: z.string().min(1),
 	remember: z.boolean().default(false),
+});
+
+const resetPasswordSchema = z.object({
+	password: z.string().min(1),
+	reset_code: z.string().min(1),
 });
 
 /** Pull the client IP from the request headers, with a non-null fallback. */
@@ -55,3 +67,28 @@ export const logoutFn = createServerFn({ method: "POST" }).handler(async () => {
 	await logout(db, realCookies);
 	return null;
 });
+
+/** Reset-password server function. Mirrors Python's `POST /account/reset` shape. */
+export const resetPasswordFn = createServerFn({ method: "POST" })
+	.inputValidator(resetPasswordSchema)
+	.handler(async ({ data }) => {
+		try {
+			await resetPassword(db, realCookies, {
+				password: data.password,
+				resetCode: data.reset_code,
+				ip: getClientIp(),
+			});
+			setResponseStatus(200);
+			return { login: false as const, reset: false as const };
+		} catch (err) {
+			if (err instanceof InvalidResetSessionError) {
+				setResponseStatus(400);
+				throw new Error("Invalid session");
+			}
+			if (err instanceof PasswordReuseError) {
+				setResponseStatus(400);
+				throw new Error("Cannot reuse current password");
+			}
+			throw err;
+		}
+	});
