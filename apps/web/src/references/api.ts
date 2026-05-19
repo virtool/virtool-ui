@@ -115,7 +115,7 @@ export function importReference(
 	name: string,
 	description: string,
 	importFrom: number,
-) {
+): Promise<Reference> {
 	return apiClient
 		.post("/refs")
 		.send({

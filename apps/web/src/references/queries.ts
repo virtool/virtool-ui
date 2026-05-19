@@ -146,6 +146,11 @@ export function useUploadReference() {
 					setUploadId(response.body.id);
 				});
 		},
+		onMutate: () => {
+			setFileName("");
+			setUploadId(null);
+			setProgress(0);
+		},
 	});
 
 	return { uploadMutation, fileName, uploadId, progress };

@@ -97,7 +97,7 @@ export default function ImportReference() {
 
 				<DialogFooter>
 					<SaveButton
-						disabled={progress !== 100 && progress !== 0}
+						disabled={progress > 0 && uploadId === null}
 						altText="Import"
 					/>
 				</DialogFooter>
