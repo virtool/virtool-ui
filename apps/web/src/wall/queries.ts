@@ -1,4 +1,9 @@
-import { fetchAccount, login, resetPassword } from "@account/api";
+import {
+	fetchAccount,
+	type LoginResult,
+	login,
+	resetPassword,
+} from "@account/api";
 import { accountKeys } from "@account/queries";
 import type { Account } from "@account/types";
 import { type ApiResponse, apiClient } from "@app/api";
@@ -62,14 +67,14 @@ export function useLoginMutation() {
 	const queryClient = useQueryClient();
 
 	return useMutation<
-		ApiResponse,
-		ErrorResponse,
+		LoginResult,
+		Error,
 		{ handle: string; password: string; remember: boolean }
 	>({
 		mutationFn: ({ handle, password, remember }) =>
 			login({ handle, password, remember }),
 		onSuccess: (data) => {
-			if (!data.body.reset) {
+			if (!data.reset) {
 				queryClient.invalidateQueries({ queryKey: accountKeys.all() });
 			}
 		},

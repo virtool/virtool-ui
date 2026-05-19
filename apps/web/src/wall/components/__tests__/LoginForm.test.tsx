@@ -1,65 +1,73 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderWithProviders } from "@tests/setup";
-import nock from "nock";
+import { MemoryRouter, renderWithProviders } from "@tests/setup";
 import { afterEach, describe, expect, it, vi } from "vitest";
+
+const { loginMock } = vi.hoisted(() => ({
+	loginMock: vi.fn(),
+}));
+
+vi.mock("../../queries", async () => {
+	const { useMutation } = await import("@tanstack/react-query");
+	return {
+		useLoginMutation: () =>
+			useMutation({
+				mutationFn: loginMock,
+			}),
+	};
+});
+
 import LoginForm from "../LoginForm";
 
 describe("<LoginForm />", () => {
-	afterEach(() => nock.cleanAll());
-
-	it("should call mutate() with correct values when submitted", async () => {
-		const handle = "test_Username";
-		const password = "Password";
-		const setResetCode = vi.fn();
-
-		const scope = nock("http://localhost")
-			.post("/api/account/login", { handle, password, remember: true })
-			.reply(200);
-
-		renderWithProviders(<LoginForm setResetCode={setResetCode} />);
-
-		const usernameField = screen.getByLabelText("Username");
-		await userEvent.type(usernameField, handle);
-		expect(usernameField).toHaveValue(handle);
-
-		const passwordField = screen.getByLabelText("Password");
-		await userEvent.type(passwordField, password);
-		expect(passwordField).toHaveValue(password);
-
-		expect(screen.getByLabelText("Remember Me")).toHaveAttribute(
-			"data-state",
-			"unchecked",
-		);
-		await userEvent.click(screen.getByLabelText("Remember Me"));
-		expect(screen.getByLabelText("Remember Me")).toHaveAttribute(
-			"data-state",
-			"checked",
-		);
-
-		await userEvent.click(screen.getByRole("button", { name: "Login" }));
-
-		scope.done();
+	afterEach(() => {
+		loginMock.mockReset();
 	});
 
-	it("should display error message on login failure", async () => {
+	it("calls the login mutation with the form values", async () => {
 		const handle = "test_Username";
 		const password = "Password";
-		const errorMessage = "An error occurred during login";
 		const setResetCode = vi.fn();
 
-		const scope = nock("http://localhost")
-			.post("/api/account/login", { handle, password })
-			.reply(400, { message: errorMessage });
+		loginMock.mockResolvedValue({ reset: false });
 
-		renderWithProviders(<LoginForm setResetCode={setResetCode} />);
+		renderWithProviders(
+			<MemoryRouter>
+				<LoginForm setResetCode={setResetCode} />
+			</MemoryRouter>,
+		);
 
-		await userEvent.type(screen.getByLabelText("Username"), handle);
+		await userEvent.type(await screen.findByLabelText("Username"), handle);
+		await userEvent.type(screen.getByLabelText("Password"), password);
+		await userEvent.click(screen.getByLabelText("Remember Me"));
+		await userEvent.click(screen.getByRole("button", { name: "Login" }));
+
+		await waitFor(() => expect(loginMock).toHaveBeenCalledTimes(1));
+		expect(loginMock.mock.calls[0][0]).toEqual({
+			handle,
+			password,
+			remember: true,
+		});
+	});
+
+	it("displays the thrown error message on login failure", async () => {
+		const handle = "test_Username";
+		const password = "Password";
+		const errorMessage = "Invalid handle or password.";
+		const setResetCode = vi.fn();
+
+		loginMock.mockRejectedValue(new Error(errorMessage));
+
+		renderWithProviders(
+			<MemoryRouter>
+				<LoginForm setResetCode={setResetCode} />
+			</MemoryRouter>,
+		);
+
+		await userEvent.type(await screen.findByLabelText("Username"), handle);
 		await userEvent.type(screen.getByLabelText("Password"), password);
 		await userEvent.click(screen.getByRole("button", { name: "Login" }));
 
 		expect(await screen.findByText(errorMessage)).toBeInTheDocument();
-
-		scope.done();
 	});
 });

@@ -1,5 +1,6 @@
 import { type ApiResponse, apiClient } from "@app/api";
 import type { Permissions } from "@groups/types";
+import { loginFn, logoutFn } from "@server/auth/functions";
 import type { User } from "@users/types";
 import type { Account, AccountSettings, APIKeyMinimal } from "./types";
 
@@ -136,6 +137,12 @@ export function removeAPIKey(keyId: string): Promise<null> {
 	return apiClient.delete(`/account/keys/${keyId}`).then((res) => res.body);
 }
 
+/** Result of a login attempt. `reset_code` is only set when `reset` is true. */
+export type LoginResult = {
+	reset: boolean;
+	reset_code?: string;
+};
+
 /**
  * Log in using the provided credentials.
  *
@@ -143,8 +150,8 @@ export function removeAPIKey(keyId: string): Promise<null> {
  * @param password - The password to log in with
  * @param remember - Whether the sessions should be remembered for a
  * longer period of time
- * @returns A promise which resolves to a response indicating if the users
- * password must be reset and required information if it needs to be.
+ * @returns A promise which resolves to a result indicating whether the user's
+ * password must be reset; if so, `reset_code` is included.
  */
 export function login({
 	handle,
@@ -154,22 +161,17 @@ export function login({
 	handle: string;
 	password: string;
 	remember: boolean;
-}): Promise<ApiResponse> {
-	return apiClient.post("/account/login").send({
-		handle,
-		password,
-		remember,
-	});
+}): Promise<LoginResult> {
+	return loginFn({ data: { handle, password, remember } });
 }
 
 /**
  * Logs out the current session.
  *
- * @returns A promise which resolves to a response indicating if the
- * logout was successful.
+ * @returns A promise which resolves once the session has been invalidated.
  */
 export function logout(): Promise<null> {
-	return apiClient.get("/account/logout").then((res) => res.body);
+	return logoutFn();
 }
 
 /**
