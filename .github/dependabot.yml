@@ -13,9 +13,47 @@ updates:
           interval: "weekly"
       open-pull-requests-limit: 10
       commit-message:
-          prefix: "chore"
-          include: "scope"
+          prefix: "chore(deps)"
+      groups:
+          tanstack:
+              patterns:
+                  - "@tanstack/*"
+          sentry:
+              patterns:
+                  - "@sentry/*"
+          testing:
+              patterns:
+                  - "@testing-library/*"
+                  - "@faker-js/*"
+                  - "vitest"
+                  - "@vitest/*"
+                  - "jsdom"
+          react:
+              patterns:
+                  - "react"
+                  - "react-dom"
+                  - "@types/react"
+                  - "@types/react-dom"
+                  - "babel-plugin-react-compiler"
+          tailwind:
+              patterns:
+                  - "tailwindcss"
+                  - "@tailwindcss/*"
+          vite:
+              patterns:
+                  - "vite"
+                  - "@vitejs/*"
+          react-hook-form:
+              patterns:
+                  - "react-hook-form"
+                  - "@hookform/*"
     - package-ecosystem: "github-actions"
       directory: "/"
       schedule:
           interval: "monthly"
+      commit-message:
+          prefix: "chore(deps)"
+      groups:
+          actions:
+              patterns:
+                  - "*"
