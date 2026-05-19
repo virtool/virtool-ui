@@ -1,4 +1,4 @@
-pre-start = "npm ci"
+pre-start = "pnpm install"
 
 [list]
 url = "http://localhost:{{ branch | hash_port }}"
