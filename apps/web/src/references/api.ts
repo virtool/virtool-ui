@@ -108,13 +108,13 @@ export function createReference(
  *
  * @param name - name of the reference
  * @param description - description for the reference
- * @param importFrom - the ID of the file to import from
+ * @param importFrom - the ID of the upload to import from
  * @returns A promise resolving to importing a reference
  */
 export function importReference(
 	name: string,
 	description: string,
-	importFrom: string,
+	importFrom: number,
 ) {
 	return apiClient
 		.post("/refs")

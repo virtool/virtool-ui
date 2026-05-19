@@ -111,7 +111,7 @@ export function useImportReference() {
 		{
 			name: string;
 			description: string;
-			importFrom: string;
+			importFrom: number;
 		}
 	>({
 		mutationFn: ({ name, description, importFrom }) =>
@@ -126,7 +126,7 @@ export function useImportReference() {
  */
 export function useUploadReference() {
 	const [fileName, setFileName] = useState("");
-	const [fileNameOnDisk, setFileNameOnDisk] = useState("");
+	const [uploadId, setUploadId] = useState<number | null>(null);
 	const [progress, setProgress] = useState(0);
 
 	const uploadMutation = useMutation({
@@ -143,12 +143,12 @@ export function useUploadReference() {
 				})
 				.then((response) => {
 					setFileName(response.body.name);
-					setFileNameOnDisk(response.body.name_on_disk);
+					setUploadId(response.body.id);
 				});
 		},
 	});
 
-	return { uploadMutation, fileName, fileNameOnDisk, progress };
+	return { uploadMutation, fileName, uploadId, progress };
 }
 
 /**

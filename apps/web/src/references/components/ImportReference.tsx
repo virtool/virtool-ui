@@ -15,8 +15,7 @@ export default function ImportReference() {
 	const navigate = useNavigate();
 
 	const importMutation = useImportReference();
-	const { uploadMutation, fileName, fileNameOnDisk, progress } =
-		useUploadReference();
+	const { uploadMutation, fileName, uploadId, progress } = useUploadReference();
 
 	const {
 		control,
@@ -73,8 +72,11 @@ export default function ImportReference() {
 
 			<form
 				onSubmit={handleSubmit((values) => {
+					if (uploadId === null) {
+						return;
+					}
 					importMutation.mutate(
-						{ ...values, importFrom: fileNameOnDisk },
+						{ ...values, importFrom: uploadId },
 						{ onSuccess: () => navigate({ to: "/refs", replace: true }) },
 					);
 				})}
