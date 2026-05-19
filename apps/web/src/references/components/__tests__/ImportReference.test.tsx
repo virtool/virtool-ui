@@ -12,14 +12,13 @@ describe("<ImportReference />", () => {
 		scope.post("/api/uploads?name=external.json.gz&type=reference").reply(200, {
 			id: 12,
 			name: "external.json.gz",
-			name_on_disk: "12-external.json.gz",
 		});
 
 		scope
 			.post("/api/refs", {
 				name: "External",
 				description: "External reference",
-				import_from: "12-external.json.gz",
+				import_from: 12,
 			})
 			.reply(201, {
 				id: "foo",
