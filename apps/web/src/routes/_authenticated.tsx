@@ -7,7 +7,6 @@ import {
 	getConnectionStatus,
 	init,
 } from "@app/websocket/WsConnection";
-import Container from "@base/Container";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import MessageBanner from "@message/components/MessageBanner";
 import Nav from "@nav/components/Nav";
@@ -94,19 +93,16 @@ function AuthenticatedLayout() {
 				/>
 			</div>
 
-			<div className="pt-24">
-				<Suspense
-					fallback={
-						<Container>
-							<LoadingPlaceholder />
-						</Container>
-					}
-				>
-					<Outlet />
-				</Suspense>
+			<div className="pt-30 flex">
+				<aside className="sticky top-30 self-start">
+					<Sidebar administratorRole={data.administrator_role} />
+				</aside>
+				<main className="flex-1 min-w-0 px-9">
+					<Suspense fallback={<LoadingPlaceholder />}>
+						<Outlet />
+					</Suspense>
+				</main>
 			</div>
-
-			<Sidebar administratorRole={data.administrator_role} />
 
 			<Suspense fallback={null}>
 				<DevDialog

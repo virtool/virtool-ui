@@ -8,7 +8,7 @@ import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { useReferenceIsArchived } from "@references/hooks";
 import Sequences from "@sequences/components/Sequences";
 import { Pencil, Star, Trash } from "lucide-react";
-import { useOtuDetailSearch } from "../OtuDetailSearchContext";
+import { useState } from "react";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./RemoveIsolate";
 
@@ -33,7 +33,8 @@ export default function IsolateDetail({
 	otuId,
 	restrictSourceTypes,
 }: IsolateDetailProps) {
-	const { search, setSearch } = useOtuDetailSearch();
+	const [openEdit, setOpenEdit] = useState(false);
+	const [openRemove, setOpenRemove] = useState(false);
 	const mutation = useSetIsolateAsDefault();
 	const { reference } = useCurrentOtuContext();
 	const archived = useReferenceIsArchived(reference.id);
@@ -48,16 +49,16 @@ export default function IsolateDetail({
 				sourceName={activeIsolate.source_name}
 				allowedSourceTypes={allowedSourceTypes}
 				restrictSourceTypes={restrictSourceTypes}
-				show={Boolean(search.openEditIsolate) && !archived}
-				onHide={() => setSearch({ openEditIsolate: false })}
+				show={openEdit}
+				onHide={() => setOpenEdit(false)}
 			/>
 
 			<RemoveIsolate
 				id={activeIsolate.id}
 				name={formatIsolateName(activeIsolate)}
-				onHide={() => setSearch({ openRemoveIsolate: false })}
+				onHide={() => setOpenRemove(false)}
 				otuId={otuId}
-				show={Boolean(search.openRemoveIsolate) && !archived}
+				show={openRemove}
 			/>
 
 			<Box className="flex items-center text-base justify-between">
@@ -76,7 +77,7 @@ export default function IsolateDetail({
 								IconComponent={Pencil}
 								color="grayDark"
 								tip="edit isolate"
-								onClick={() => setSearch({ openEditIsolate: true })}
+								onClick={() => setOpenEdit(true)}
 							/>
 							{!activeIsolate.default && (
 								<IconButton
@@ -97,7 +98,7 @@ export default function IsolateDetail({
 								IconComponent={Trash}
 								color="red"
 								tip="remove isolate"
-								onClick={() => setSearch({ openRemoveIsolate: true })}
+								onClick={() => setOpenRemove(true)}
 							/>
 						</>
 					)}

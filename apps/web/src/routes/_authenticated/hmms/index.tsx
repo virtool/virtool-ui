@@ -7,7 +7,7 @@ const hmmSearchSchema = z.object({
 	page: z.number().default(1).catch(1),
 });
 
-export const Route = createFileRoute("/_authenticated/hmm/")({
+export const Route = createFileRoute("/_authenticated/hmms/")({
 	validateSearch: hmmSearchSchema,
 	component: HmmRoute,
 });

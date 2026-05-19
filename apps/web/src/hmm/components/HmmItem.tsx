@@ -25,7 +25,7 @@ export default function HmmItem({ hmm }: HmmItemProps) {
 			<strong className="shrink-0 grow-0 basis-12 font-bold">
 				{hmm.cluster}
 			</strong>
-			<Link className="flex-1 shrink-0" to={`/hmm/${hmm.id}`}>
+			<Link className="flex-1 shrink-0" to={`/hmms/${hmm.id}`}>
 				{hmm.names[0]}
 			</Link>
 			<div className="flex items-center text-base ml-auto gap-1.5">

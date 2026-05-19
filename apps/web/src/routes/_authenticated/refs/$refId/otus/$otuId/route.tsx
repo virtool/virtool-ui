@@ -5,29 +5,15 @@ import TabsLink from "@base/TabsLink";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import { OtuDetailSearchProvider } from "@otus/components/Detail/OtuDetailSearchContext";
 import { OtuHeaderIcons } from "@otus/components/Detail/OtuHeaderIcons";
-import OtuRemove from "@otus/components/OtuRemove";
 import { otuQueryOptions, useFetchOTU } from "@otus/queries";
 import { useReferenceIsArchived } from "@references/hooks";
 import { referenceQueryOptions, useFetchReference } from "@references/queries";
-import {
-	createFileRoute,
-	notFound,
-	Outlet,
-	useNavigate,
-} from "@tanstack/react-router";
+import { createFileRoute, notFound, Outlet } from "@tanstack/react-router";
 import { z } from "zod/v4";
 
 const otuDetailSearchSchema = z.object({
 	activeIsolate: z.string().optional().catch(undefined),
-	openAddIsolate: z.boolean().optional().catch(undefined),
-	openEditOTU: z.boolean().optional().catch(undefined),
-	openRemoveOTU: z.boolean().optional().catch(undefined),
-	openEditIsolate: z.boolean().optional().catch(undefined),
-	openRemoveIsolate: z.boolean().optional().catch(undefined),
-	openAddSegment: z.boolean().optional().catch(undefined),
-	editSegmentName: z.string().optional().catch(undefined),
 });
 
 export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
@@ -52,8 +38,7 @@ export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 
 function OtuDetailLayout() {
 	const { refId, otuId } = Route.useParams();
-	const search = Route.useSearch();
-	const navigate = useNavigate();
+	const navigate = Route.useNavigate();
 	const { data: otu } = useFetchOTU(otuId);
 	const { data: reference } = useFetchReference(refId);
 	const archived = useReferenceIsArchived(refId);
@@ -65,10 +50,7 @@ function OtuDetailLayout() {
 	const { id, name, abbreviation } = otu;
 
 	return (
-		<OtuDetailSearchProvider
-			search={search}
-			setSearch={(next) => navigate({ search: { ...search, ...next } })}
-		>
+		<>
 			<ViewHeader title={name}>
 				<ViewHeaderTitle className="items-baseline">
 					{name}{" "}
@@ -90,11 +72,12 @@ function OtuDetailLayout() {
 								refId={refId}
 								name={name}
 								abbreviation={abbreviation}
+								onRemoved={() => navigate({ to: `/refs/${refId}/otus` })}
 							/>
 						)}
 					</ViewHeaderIcons>
 				</ViewHeaderTitle>
-				<p className="flex font-medium items-center gap-2 py-2 text-lg">
+				<p className="flex font-medium items-center gap-2 py-2">
 					<Link to={`/refs/${refId}`}>{reference.name}</Link>
 					<span className="text-slate-600">/</span>
 					<Link to={`/refs/${refId}/otus`}>OTUs</Link>
@@ -109,17 +92,7 @@ function OtuDetailLayout() {
 				<TabsLink to={`/refs/${refId}/otus/${otuId}/history`}>History</TabsLink>
 			</Tabs>
 
-			<OtuRemove
-				id={id}
-				name={name}
-				open={Boolean(search.openRemoveOTU) && !archived}
-				setOpen={(openRemoveOTU) =>
-					navigate({ search: { ...search, openRemoveOTU } })
-				}
-				onRemoved={() => navigate({ to: `/refs/${refId}/otus` })}
-			/>
-
 			<Outlet />
-		</OtuDetailSearchProvider>
+		</>
 	);
 }

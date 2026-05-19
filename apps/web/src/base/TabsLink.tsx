@@ -29,9 +29,9 @@ export default function TabsLink({
 		"font-medium",
 		"py-2.5",
 		"px-4",
+		"-mb-px",
 		"border-b-2",
 		"border-b-transparent",
-		"-mb-[1px]",
 		"hover:border-b-gray-400",
 		className,
 	);
