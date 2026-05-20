@@ -1,11 +1,10 @@
 import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import semver from "semver";
+import { fileURLToPath } from "node:url";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const here = dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse(
-	readFileSync(resolve(__dirname, "..", "package.json"), "utf8"),
+	readFileSync(resolve(here, "..", "package.json"), "utf8"),
 );
 const minApiVersion = pkg.virtool.minApiVersion;
 const apiUrl = process.env.VT_UI_API_URL ?? "http://localhost:9950";
@@ -17,7 +16,7 @@ if (!response.ok) {
 }
 
 const body = await response.json();
-if (!semver.gte(body.version, minApiVersion)) {
+if (!gte(body.version, minApiVersion)) {
 	console.error(
 		`found incompatible API version ${body.version}. Require ${minApiVersion}.`,
 	);
@@ -25,3 +24,19 @@ if (!semver.gte(body.version, minApiVersion)) {
 }
 
 console.log(`found compatible api version ${body.version}`);
+
+// Minimal semver "greater-than-or-equal" for `major.minor.patch` strings,
+// ignoring prerelease/build suffixes. Inlined to avoid pulling `semver` into
+// the runtime image when the Nitro bundle already contains everything else.
+function gte(a, b) {
+	const parse = (s) =>
+		s
+			.split("-", 1)[0]
+			.split(".", 3)
+			.map((n) => Number.parseInt(n, 10) || 0);
+	const [aMaj, aMin, aPat] = parse(a);
+	const [bMaj, bMin, bPat] = parse(b);
+	if (aMaj !== bMaj) return aMaj > bMaj;
+	if (aMin !== bMin) return aMin > bMin;
+	return aPat >= bPat;
+}

@@ -6,6 +6,8 @@ __pycache__
 /build
 node_modules
 dist
+.output
+.nitro
 doc
 coverage
 /data
