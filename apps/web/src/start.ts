@@ -1,5 +1,9 @@
 import { randomBytes } from "node:crypto";
-import { createMiddleware, createStart } from "@tanstack/react-start";
+import {
+	createCsrfMiddleware,
+	createMiddleware,
+	createStart,
+} from "@tanstack/react-start";
 
 const cspDirectives = [
 	"default-src 'self'",
@@ -42,7 +46,14 @@ const cspNonce = createMiddleware().server(async ({ next }) => {
 	};
 });
 
+// Server functions are same-origin RPC endpoints callable from any site.
+// Scoping CSRF checks to serverFn requests avoids blocking regular page
+// loads and API proxy routes that don't share the same threat model.
+const csrfMiddleware = createCsrfMiddleware({
+	filter: (ctx) => ctx.handlerType === "serverFn",
+});
+
 export const startInstance = createStart(() => ({
 	defaultSsr: false,
-	requestMiddleware: [cspNonce],
+	requestMiddleware: [csrfMiddleware, cspNonce],
 }));
