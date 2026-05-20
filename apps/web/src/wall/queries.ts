@@ -1,7 +1,13 @@
-import { fetchAccount, login, resetPassword } from "@account/api";
+import {
+	fetchAccount,
+	type LoginResult,
+	login,
+	type ResetPasswordResult,
+	resetPassword,
+} from "@account/api";
 import { accountKeys } from "@account/queries";
 import type { Account } from "@account/types";
-import { type ApiResponse, apiClient } from "@app/api";
+import { apiClient } from "@app/api";
 import type { Root } from "@app/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -62,14 +68,14 @@ export function useLoginMutation() {
 	const queryClient = useQueryClient();
 
 	return useMutation<
-		ApiResponse,
-		ErrorResponse,
+		LoginResult,
+		Error,
 		{ handle: string; password: string; remember: boolean }
 	>({
 		mutationFn: ({ handle, password, remember }) =>
 			login({ handle, password, remember }),
 		onSuccess: (data) => {
-			if (!data.body.reset) {
+			if (!data.reset) {
 				queryClient.invalidateQueries({ queryKey: accountKeys.all() });
 			}
 		},
@@ -85,8 +91,8 @@ export function useResetPasswordMutation() {
 	const queryClient = useQueryClient();
 
 	return useMutation<
-		ApiResponse,
-		ErrorResponse,
+		ResetPasswordResult,
+		Error,
 		{ password: string; resetCode: string }
 	>({
 		mutationFn: ({ password, resetCode }) =>

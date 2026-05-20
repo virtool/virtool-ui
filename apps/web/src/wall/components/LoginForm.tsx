@@ -26,8 +26,8 @@ export default function LoginForm({ redirect, setResetCode }: LoginFormProps) {
 			{ handle, password, remember },
 			{
 				onSuccess: (data) => {
-					if (data.body.reset_code) {
-						setResetCode(data.body.reset_code);
+					if (data.reset_code) {
+						setResetCode(data.reset_code);
 						return;
 					}
 					navigate({ to: redirect ?? "/" });
@@ -76,8 +76,7 @@ export default function LoginForm({ redirect, setResetCode }: LoginFormProps) {
 					/>
 					{isError && (
 						<div className="flex text-red-500">
-							{error?.response?.body?.message ||
-								"An error occurred during login"}
+							{error?.message || "An error occurred during login"}
 						</div>
 					)}
 				</div>

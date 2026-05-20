@@ -17,13 +17,13 @@ FROM base AS dev
 
 FROM base AS build
 RUN pnpm --filter @virtool/web build
-RUN pnpm --filter @virtool/web --prod deploy --legacy /out
 
 FROM node:24-alpine AS dist
 WORKDIR /ui
-COPY --from=build /out ./
-COPY --from=build /repo/apps/web/dist ./dist
+COPY --from=build /repo/apps/web/.output ./.output
+COPY --from=build /repo/apps/web/scripts ./scripts
+COPY --from=build /repo/apps/web/package.json ./package.json
 EXPOSE 9900
-ENV VT_UI_HOST="0.0.0.0"
-ENV VT_UI_PORT="9900"
+ENV HOST="0.0.0.0"
+ENV PORT="9900"
 CMD ["npm", "start"]

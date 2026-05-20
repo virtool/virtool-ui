@@ -31,6 +31,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			},
 		],
 	}),
+	shellComponent: RootShell,
 	component: RootComponent,
 	pendingComponent: LoadingPlaceholder,
 	notFoundComponent: NotFoundComponent,
@@ -40,28 +41,26 @@ function NotFoundComponent() {
 	return <NotFound />;
 }
 
-function RootComponent() {
-	return (
-		<RootDocument>
-			<Outlet />
-		</RootDocument>
-	);
-}
-
-function RootDocument({ children }: { children: ReactNode }) {
-	const { queryClient } = useRouteContext({ from: Route.id });
-
+function RootShell({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en">
 			<head>
 				<HeadContent />
 			</head>
 			<body>
-				<QueryClientProvider client={queryClient}>
-					{children}
-				</QueryClientProvider>
+				{children}
 				<Scripts />
 			</body>
 		</html>
+	);
+}
+
+function RootComponent() {
+	const { queryClient } = useRouteContext({ from: Route.id });
+
+	return (
+		<QueryClientProvider client={queryClient}>
+			<Outlet />
+		</QueryClientProvider>
 	);
 }
