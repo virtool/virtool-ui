@@ -35,20 +35,22 @@ export default function Segment({
 	segment,
 	setEditSegmentName,
 }: SegmentProps) {
-	return (
-		<BoxGroupSection
-			className="grid items-center px-4 leading-none h-12"
-			style={{ gridTemplateColumns: "45fr 1fr 10fr 10fr" }}
-		>
-			<strong>{segment.name}</strong>
+	const singleSegment = first && last;
 
-			{segment.required ? (
-				<Label color="purple">Required</Label>
-			) : (
-				<Label>Optional</Label>
-			)}
+	return (
+		<BoxGroupSection className="flex items-center gap-3 h-12">
+			<strong className="flex-1 truncate">{segment.name}</strong>
+
+			<div className="w-20 flex justify-start">
+				{segment.required ? (
+					<Label color="purple">Required</Label>
+				) : (
+					<Label>Optional</Label>
+				)}
+			</div>
+
 			{canModify && (
-				<div className={cn("text-lg", "m-2")}>
+				<div className="flex">
 					<IconButton
 						IconComponent={Trash}
 						color="red"
@@ -64,34 +66,22 @@ export default function Segment({
 				</div>
 			)}
 
-			<div
-				className={cn(
-					"flex",
-					"justify-center",
-					"ml-auto",
-					"font-bold",
-					"text-2xl",
-				)}
-			>
-				<IconButton
-					className={cn("leading-none", {
-						hidden: first,
-						flex: !first,
-					})}
-					IconComponent={ChevronUp}
-					tip="move up"
-					onClick={onMoveUp}
-				/>
-				<IconButton
-					className={cn("leading-none", {
-						hidden: last,
-						flex: !last,
-					})}
-					IconComponent={ChevronDown}
-					tip="move down"
-					onClick={onMoveDown}
-				/>
-			</div>
+			{canModify && !singleSegment && (
+				<div className="flex">
+					<IconButton
+						className={cn({ invisible: first })}
+						IconComponent={ChevronUp}
+						tip="move up"
+						onClick={onMoveUp}
+					/>
+					<IconButton
+						className={cn({ invisible: last })}
+						IconComponent={ChevronDown}
+						tip="move down"
+						onClick={onMoveDown}
+					/>
+				</div>
+			)}
 		</BoxGroupSection>
 	);
 }

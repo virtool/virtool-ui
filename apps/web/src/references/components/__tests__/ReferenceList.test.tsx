@@ -14,6 +14,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import ReferenceList from "../ReferenceList";
 
 type ReferenceListSearch = {
+	archived?: boolean;
 	cloneReferenceId?: string;
 	createReferenceType?: string;
 	find?: string;
@@ -22,6 +23,7 @@ type ReferenceListSearch = {
 
 function ReferenceListHarness() {
 	const [search, setSearch] = useState<ReferenceListSearch>({
+		archived: false,
 		cloneReferenceId: undefined,
 		find: "",
 	});
@@ -96,6 +98,53 @@ describe("<ReferenceList />", () => {
 			).not.toBeInTheDocument();
 
 			scope.done();
+		});
+
+		it("should default the lifecycle toggle to Active", async () => {
+			const scope = mockApiGetReferences([references]);
+			await renderWithRouter(<ReferenceListHarness />);
+
+			expect(await screen.findByText("References")).toBeInTheDocument();
+
+			expect(screen.getByRole("radio", { name: "Active" })).toHaveAttribute(
+				"data-state",
+				"on",
+			);
+			expect(screen.getByRole("radio", { name: "Archived" })).toHaveAttribute(
+				"data-state",
+				"off",
+			);
+
+			scope.done();
+		});
+
+		it("should refetch with archived=true when the Archived toggle is clicked", async () => {
+			const initialScope = mockApiGetReferences([references]);
+			const archivedScope = nock("http://localhost")
+				.get("/api/refs")
+				.query((q) => q.archived === "true")
+				.reply(200, {
+					documents: [],
+					found_count: 0,
+					page: 1,
+					page_count: 0,
+					per_page: 25,
+					ready_count: 0,
+					total_count: 0,
+				});
+
+			await renderWithRouter(<ReferenceListHarness />);
+
+			expect(await screen.findByText("References")).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("radio", { name: "Archived" }));
+
+			expect(
+				await screen.findByText(/No archived references found/i),
+			).toBeInTheDocument();
+
+			initialScope.done();
+			archivedScope.done();
 		});
 
 		it("should handle toolbar updates correctly", async () => {

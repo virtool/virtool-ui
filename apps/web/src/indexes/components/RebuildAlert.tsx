@@ -1,6 +1,9 @@
 import Alert from "@base/Alert";
 import Link from "@base/Link";
-import { useCheckReferenceRight } from "@references/hooks";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
 import { AlertCircle, Info } from "lucide-react";
 import { useFindIndexes } from "../queries";
 
@@ -15,8 +18,9 @@ type RebuildAlertProps = {
 export default function RebuildAlert({ page, refId }: RebuildAlertProps) {
 	const { data, isPending } = useFindIndexes(page, 25, refId);
 	const { hasPermission: hasRights } = useCheckReferenceRight(refId, "build");
+	const archived = useReferenceIsArchived(refId);
 
-	if (isPending) {
+	if (isPending || archived) {
 		return null;
 	}
 

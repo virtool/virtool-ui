@@ -1,11 +1,11 @@
 import { formatIsolateName } from "@app/utils";
 import Box from "@base/Box";
-import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
-import { useSetIsolateAsDefault } from "@otus/queries";
+import { useCurrentOtuContext, useSetIsolateAsDefault } from "@otus/queries";
 import type { OtuIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
+import { useReferenceIsArchived } from "@references/hooks";
 import Sequences from "@sequences/components/Sequences";
 import { Pencil, Star, Trash } from "lucide-react";
 import { useState } from "react";
@@ -36,6 +36,8 @@ export default function IsolateDetail({
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openRemove, setOpenRemove] = useState(false);
 	const mutation = useSetIsolateAsDefault();
+	const { reference } = useCurrentOtuContext();
+	const archived = useReferenceIsArchived(reference.id);
 
 	return (
 		<div className="flex-1 min-h-0 min-w-0">
@@ -64,10 +66,11 @@ export default function IsolateDetail({
 				<div>
 					{activeIsolate.default && (
 						<Label color="green">
-							<Icon className="pl-1" icon={Star} /> Default Isolate
+							<Star size={14} />
+							Default Isolate
 						</Label>
 					)}
-					{canModify && (
+					{canModify && !archived && (
 						<>
 							<IconButton
 								className="pl-1"

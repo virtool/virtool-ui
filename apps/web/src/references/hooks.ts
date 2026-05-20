@@ -112,6 +112,14 @@ export function useUpdateSourceTypes(
 }
 
 /**
+ * Returns whether the reference is archived. `false` while the reference query is loading.
+ */
+export function useReferenceIsArchived(referenceId: string) {
+	const { data: reference } = useFetchReference(referenceId);
+	return reference?.archived ?? false;
+}
+
+/**
  * All reference rights
  */
 export type ReferenceRight = "build" | "modify" | "modify_otu";

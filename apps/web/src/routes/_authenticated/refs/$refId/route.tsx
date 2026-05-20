@@ -1,4 +1,6 @@
 import ContainerNarrow from "@base/ContainerNarrow";
+import ArchivedReferenceDetailHeader from "@references/components/Detail/ArchivedReferenceDetailHeader";
+import ArchiveReference from "@references/components/Detail/ArchiveReference";
 import EditReference from "@references/components/Detail/EditReference";
 import ReferenceDetailHeader from "@references/components/Detail/ReferenceDetailHeader";
 import ReferenceDetailTabs from "@references/components/Detail/ReferenceDetailTabs";
@@ -8,10 +10,12 @@ import {
 	notFound,
 	Outlet,
 	useMatches,
+	useNavigate,
 } from "@tanstack/react-router";
 import { z } from "zod/v4";
 
 const refDetailSearchSchema = z.object({
+	openArchiveReference: z.boolean().optional().catch(undefined),
 	openEditReference: z.boolean().optional().catch(undefined),
 });
 
@@ -33,7 +37,7 @@ export const Route = createFileRoute("/_authenticated/refs/$refId")({
 function ReferenceDetailLayout() {
 	const { refId } = Route.useParams();
 	const search = Route.useSearch();
-	const navigate = Route.useNavigate();
+	const navigate = useNavigate();
 	const { data } = useFetchReference(refId);
 	const isOtuDetail = useMatches().some(
 		(match) => match.routeId === "/_authenticated/refs/$refId/otus/$otuId",
@@ -43,20 +47,48 @@ function ReferenceDetailLayout() {
 		return null;
 	}
 
+	function setOpenArchiveReference(openArchiveReference: boolean) {
+		navigate({
+			search: ((prev: Record<string, unknown>) => ({
+				...prev,
+				openArchiveReference,
+			})) as never,
+		});
+	}
+
+	function setOpenEditReference(openEditReference: boolean) {
+		navigate({
+			search: ((prev: Record<string, unknown>) => ({
+				...prev,
+				openEditReference,
+			})) as never,
+		});
+	}
+
 	return (
 		<>
 			{!isOtuDetail && (
 				<>
-					<ReferenceDetailHeader
-						createdAt={data.created_at}
-						isRemote={Boolean(data.remotes_from)}
-						name={data.name}
-						setOpenEditReference={(openEditReference) =>
-							navigate({ search: { ...search, openEditReference } })
-						}
-						userHandle={data.user.handle}
-						refId={refId}
-					/>
+					{data.archived ? (
+						<ArchivedReferenceDetailHeader
+							createdAt={data.created_at}
+							isRemote={Boolean(data.remotes_from)}
+							name={data.name}
+							setOpenArchiveReference={setOpenArchiveReference}
+							userHandle={data.user.handle}
+							refId={refId}
+						/>
+					) : (
+						<ReferenceDetailHeader
+							createdAt={data.created_at}
+							isRemote={Boolean(data.remotes_from)}
+							name={data.name}
+							setOpenArchiveReference={setOpenArchiveReference}
+							setOpenEditReference={setOpenEditReference}
+							userHandle={data.user.handle}
+							refId={refId}
+						/>
+					)}
 					<ReferenceDetailTabs id={refId} otuCount={data.otu_count} />
 				</>
 			)}
@@ -68,9 +100,13 @@ function ReferenceDetailLayout() {
 			<EditReference
 				detail={data}
 				open={Boolean(search.openEditReference)}
-				setOpen={(openEditReference) =>
-					navigate({ search: { ...search, openEditReference } })
-				}
+				setOpen={setOpenEditReference}
+			/>
+
+			<ArchiveReference
+				detail={data}
+				open={Boolean(search.openArchiveReference)}
+				setOpen={setOpenArchiveReference}
 			/>
 		</>
 	);

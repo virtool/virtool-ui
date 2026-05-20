@@ -22,9 +22,12 @@ export default function IsolateItem({ active, isolate }: IsolateItemProps) {
 
 	return (
 		<BoxGroupSection
-			className={cn("flex items-center border-none", {
-				"shadow-[inset_3px_0_0_var(--color-virtool)]": active,
-			})}
+			className={cn(
+				"flex items-center border-none cursor-pointer hover:bg-gray-50",
+				{
+					"shadow-[inset_3px_0_0_var(--color-virtool)]": active,
+				},
+			)}
 			onClick={() =>
 				navigate({ search: { ...search, activeIsolate: isolate.id } })
 			}

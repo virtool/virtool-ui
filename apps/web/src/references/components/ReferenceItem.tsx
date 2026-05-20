@@ -1,5 +1,6 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import Attribution from "@base/Attribution";
+import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import Link from "@base/Link";
@@ -17,7 +18,7 @@ type ReferenceItemProps = {
  * A condensed reference item for use in a list of references
  */
 export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
-	const { created_at, id, name, task, user } = reference;
+	const { archived, created_at, id, name, task, user } = reference;
 
 	const { hasPermission: canCreate } =
 		useCheckAdminRoleOrPermission("create_ref");
@@ -31,6 +32,12 @@ export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 				state={task.complete ? "succeeded" : "running"}
 			/>
 		);
+	} else if (archived) {
+		end = (
+			<Badge color="gray" variant="soft">
+				Archived
+			</Badge>
+		);
 	} else if (canCreate) {
 		end = (
 			<IconButton
@@ -43,7 +50,7 @@ export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 	}
 
 	return (
-		<BoxGroupSection className="grid grid-cols-3 items-center">
+		<BoxGroupSection className="grid grid-cols-3 items-center gap-x-4">
 			<Link className="font-medium text-lg" to={`/refs/${id}`}>
 				{name}
 			</Link>

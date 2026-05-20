@@ -37,5 +37,8 @@ export async function findUsers(
 	return apiClient
 		.get("/users")
 		.query({ page, per_page, term })
-		.then((res) => res.body);
+		.then((res) => {
+			const { documents, ...rest } = res.body;
+			return { ...rest, items: documents };
+		});
 }

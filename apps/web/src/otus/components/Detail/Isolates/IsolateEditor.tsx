@@ -4,7 +4,10 @@ import SubviewHeader from "@base/SubviewHeader";
 import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useCurrentOtuContext } from "@otus/queries";
-import { useCheckReferenceRight } from "@references/hooks";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
 import AddIsolate from "./AddIsolate";
@@ -27,6 +30,7 @@ export default function IsolateEditor() {
 		reference.id,
 		"modify",
 	);
+	const archived = useReferenceIsArchived(reference.id);
 
 	const activeIsolate = isolates.length
 		? isolates.find((i) => i.id === (activeIsolateId || isolates[0]?.id))
@@ -40,15 +44,16 @@ export default function IsolateEditor() {
 		/>
 	));
 
-	const addIsolateLink = canModify ? (
-		<button
-			className="ml-auto cursor-pointer self-end text-sm font-medium bg-transparent border-0 p-0"
-			onClick={() => setOpenAdd(true)}
-			type="button"
-		>
-			Add Isolate
-		</button>
-	) : null;
+	const addIsolateLink =
+		canModify && !archived ? (
+			<button
+				className="ml-auto cursor-pointer self-end text-sm font-medium bg-transparent border-0 p-0"
+				onClick={() => setOpenAdd(true)}
+				type="button"
+			>
+				Add Isolate
+			</button>
+		) : null;
 
 	const body = isolateComponents.length ? (
 		<div className="flex">

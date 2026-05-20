@@ -1,3 +1,4 @@
+import Badge from "@base/Badge";
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import ViewHeader from "@base/ViewHeader";
@@ -6,32 +7,30 @@ import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useCheckReferenceRight } from "@references/hooks";
 import { useLocation } from "@tanstack/react-router";
-import { Archive, Lock, Pencil } from "lucide-react";
+import { ArchiveRestore, Lock } from "lucide-react";
 
-type ReferenceDetailHeaderProps = {
+type ArchivedReferenceDetailHeaderProps = {
 	createdAt: string;
 	/** Whether the reference is installed remotely */
 	isRemote: boolean;
 	name: string;
 	refId: string;
 	setOpenArchiveReference?: (open: boolean) => void;
-	setOpenEditReference?: (open: boolean) => void;
 	userHandle: string;
 };
 
 /**
- * Displays header for an active reference with options to edit and archive.
- * Archived references use {@link ArchivedReferenceDetailHeader} instead.
+ * Header for an archived reference. Shows the archived badge and an
+ * unarchive action; all other modifications are blocked.
  */
-export default function ReferenceDetailHeader({
+export default function ArchivedReferenceDetailHeader({
 	createdAt,
 	isRemote,
 	name,
 	refId,
 	setOpenArchiveReference = () => {},
-	setOpenEditReference = () => {},
 	userHandle,
-}: ReferenceDetailHeaderProps) {
+}: ArchivedReferenceDetailHeaderProps) {
 	const { pathname: location } = useLocation();
 	const { hasPermission: canModify } = useCheckReferenceRight(refId, "modify");
 
@@ -39,26 +38,21 @@ export default function ReferenceDetailHeader({
 
 	return (
 		<ViewHeader title={name}>
-			<ViewHeaderTitle>
+			<ViewHeaderTitle className="text-2xl font-semibold text-gray-700 leading-tight">
 				{name}
+				<Badge className="ml-3" color="gray" variant="soft">
+					Archived
+				</Badge>
 				{showIcons && (
 					<ViewHeaderIcons>
 						{isRemote && <Icon color="grey" icon={Lock} aria-label="lock" />}
 						{!isRemote && canModify && (
-							<>
-								<IconButton
-									color="grayDark"
-									IconComponent={Pencil}
-									tip="modify"
-									onClick={() => setOpenEditReference(true)}
-								/>
-								<IconButton
-									color="grayDark"
-									IconComponent={Archive}
-									tip="archive"
-									onClick={() => setOpenArchiveReference(true)}
-								/>
-							</>
+							<IconButton
+								color="grayDark"
+								IconComponent={ArchiveRestore}
+								tip="unarchive"
+								onClick={() => setOpenArchiveReference(true)}
+							/>
 						)}
 					</ViewHeaderIcons>
 				)}

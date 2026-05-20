@@ -103,6 +103,7 @@ export type ReferenceBuild = {
 };
 
 export type ReferenceMinimal = ReferenceNested & {
+	archived: boolean;
 	cloned_from: ReferenceClonedFrom | null;
 	created_at: string;
 	imported_from: File | null;

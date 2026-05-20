@@ -91,6 +91,7 @@ function getMethodIcon(methodName: string) {
 
 type ChangeProps = {
 	id: string;
+	archived?: boolean;
 	createdAt: string;
 	description: string;
 	methodName: string;
@@ -104,6 +105,7 @@ type ChangeProps = {
  */
 export default function Change({
 	id,
+	archived = false,
 	createdAt,
 	description,
 	methodName,
@@ -113,27 +115,31 @@ export default function Change({
 }: ChangeProps) {
 	const mutation = useRevertOTU(otu.id);
 
+	const showRevert = unbuilt && !archived;
+
 	return (
 		<BoxGroupSection
 			className="grid items-center"
-			style={{ gridTemplateColumns: "42px 2fr 1fr 15px" }}
+			style={{
+				gridTemplateColumns: showRevert ? "42px 2fr 1fr 15px" : "42px 2fr 1fr",
+			}}
 		>
 			<div>
 				<Label>{otu.version}</Label>
 			</div>
 
-			<div className="flex items-center">
+			<div className="flex items-center gap-2">
 				{getMethodIcon(methodName)}
 				<span>{description || "No Description"}</span>
 			</div>
 
 			<Attribution time={createdAt} user={user.handle} verb="" />
 
-			{unbuilt && (
+			{showRevert && (
 				<IconButton
 					IconComponent={History}
 					tip="revert"
-					onClick={() => (unbuilt ? mutation.mutate({ changeId: id }) : null)}
+					onClick={() => mutation.mutate({ changeId: id })}
 				/>
 			)}
 		</BoxGroupSection>

@@ -3,7 +3,10 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import type { OtuSegment } from "@otus/types";
-import { useCheckReferenceRight } from "@references/hooks";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
 import Button from "@/base/Button";
@@ -21,6 +24,7 @@ export default function Schema() {
 	const { refId, otuId } = routeApi.useParams();
 	const { hasPermission: canModify, isPending: isPendingPermission } =
 		useCheckReferenceRight(refId, "modify_otu");
+	const archived = useReferenceIsArchived(refId);
 
 	const { data, isPending } = useFetchOTU(otuId);
 	const mutation = useUpdateOTU(otuId);
@@ -58,19 +62,23 @@ export default function Schema() {
 
 	return (
 		<div>
-			<div className="flex justify-end mb-3">
-				{canModify && (
-					<Button color="blue" onClick={() => setOpenAddSegment(true)}>
-						Add Segment
-					</Button>
-				)}
-			</div>
+			{archived ? (
+				<p className="mb-3 text-sm text-gray-500">Read only - archived</p>
+			) : (
+				canModify && (
+					<div className="flex justify-end mb-3">
+						<Button color="blue" onClick={() => setOpenAddSegment(true)}>
+							Add Segment
+						</Button>
+					</div>
+				)
+			)}
 			{schema.length ? (
 				<BoxGroup>
 					{schema.map((segment, index) => (
 						<Segment
 							key={segment.name}
-							canModify={canModify}
+							canModify={canModify && !archived}
 							segment={segment}
 							first={index === 0}
 							last={index === schema.length - 1}
@@ -89,13 +97,13 @@ export default function Schema() {
 				abbreviation={abbreviation}
 				name={name}
 				otuId={otuId}
-				open={openAddSegment}
+				open={openAddSegment && !archived}
 				schema={schema}
 				setOpen={setOpenAddSegment}
 			/>
 			<EditSegment
 				abbreviation={abbreviation}
-				editSegmentName={segmentToEdit}
+				editSegmentName={archived ? undefined : segmentToEdit}
 				name={name}
 				otuId={otuId}
 				schema={schema}

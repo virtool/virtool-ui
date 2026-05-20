@@ -91,7 +91,8 @@ function Upgrade({ progress }) {
 }
 
 export default function Remote({ detail }) {
-	const { id, installed, release, remotes_from, updating, task } = detail;
+	const { archived, id, installed, release, remotes_from, updating, task } =
+		detail;
 
 	const slug = remotes_from.slug;
 
@@ -102,8 +103,10 @@ export default function Remote({ detail }) {
 	return (
 		<BoxGroup>
 			<BoxGroupHeader>
-				<h2 className="flex items-center justify-between">
-					Remote Reference
+				<h2 className="flex items-center justify-between gap-2">
+					<span className="inline-flex items-center gap-2">
+						Remote Reference
+					</span>
 					<a
 						className="flex gap-1 items-center text-base"
 						href={`https://github.com/${slug}`}
@@ -128,17 +131,18 @@ export default function Remote({ detail }) {
 				</BoxGroupSection>
 			)}
 
-			{updating ? (
-				<Upgrade progress={task.progress} />
-			) : (
-				<Release
-					release={release}
-					checking={isPendingReferenceUpdate}
-					updating={updating}
-					onCheckUpdates={checkReferenceUpdate}
-					onUpdate={updateRemoteReference}
-				/>
-			)}
+			{!archived &&
+				(updating ? (
+					<Upgrade progress={task.progress} />
+				) : (
+					<Release
+						release={release}
+						checking={isPendingReferenceUpdate}
+						updating={updating}
+						onCheckUpdates={checkReferenceUpdate}
+						onUpdate={updateRemoteReference}
+					/>
+				))}
 		</BoxGroup>
 	);
 }

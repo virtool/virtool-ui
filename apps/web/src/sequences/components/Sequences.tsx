@@ -4,6 +4,7 @@ import NoneFoundSection from "@base/NoneFoundSection";
 import { useCurrentOtuContext } from "@otus/queries";
 import type { OtuIsolate, OtuSequence } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
+import { useReferenceIsArchived } from "@references/hooks";
 import { useState } from "react";
 import CreateSequence from "./CreateSequence";
 import CreateSequenceLink from "./CreateSequenceLink";
@@ -25,6 +26,7 @@ export default function Sequences({
 	otuId,
 }: IsolateSequencesProps) {
 	const { otu, reference } = useCurrentOtuContext();
+	const archived = useReferenceIsArchived(reference.id);
 	const [openCreate, setOpenCreate] = useState(false);
 	const [sequenceToEdit, setSequenceToEdit] = useState<
 		OtuSequence | undefined
@@ -68,7 +70,7 @@ export default function Sequences({
 
 			<CreateSequence
 				isolateId={activeIsolate.id}
-				open={openCreate}
+				open={openCreate && !archived}
 				otuId={otuId}
 				refId={reference.id}
 				schema={otu.schema}
@@ -79,7 +81,7 @@ export default function Sequences({
 			<SequenceEdit
 				activeSequence={sequenceToEdit}
 				isolateId={activeIsolate.id}
-				open={Boolean(sequenceToEdit)}
+				open={Boolean(sequenceToEdit) && !archived}
 				otuId={otuId}
 				refId={reference.id}
 				schema={otu.schema}
@@ -94,7 +96,7 @@ export default function Sequences({
 				isolateId={activeIsolate.id}
 				isolateName={isolateName}
 				otuId={otuId}
-				open={Boolean(sequenceToRemove)}
+				open={Boolean(sequenceToRemove) && !archived}
 				sequence={sequenceToRemove}
 				setOpen={(open) => {
 					if (!open) {

@@ -1,5 +1,8 @@
 import { cn } from "@app/utils";
-import { useCheckReferenceRight } from "@references/hooks";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
 
 type CreateSequenceLinkProps = {
 	onCreate: () => void;
@@ -17,8 +20,9 @@ export default function CreateSequenceLink({
 		refId,
 		"modify_otu",
 	);
+	const archived = useReferenceIsArchived(refId);
 
-	if (canModify) {
+	if (canModify && !archived) {
 		return (
 			<button
 				className={cn(
