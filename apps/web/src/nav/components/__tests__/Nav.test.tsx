@@ -26,9 +26,7 @@ describe("<Nav />", () => {
 			screen.getByRole("link", { name: "Subtractions" }),
 		).toBeInTheDocument();
 
-		const buttons = screen.getAllByRole("button");
-		const dropdownTrigger = buttons[buttons.length - 1];
-		await userEvent.click(dropdownTrigger);
+		await userEvent.click(screen.getByRole("button", { name: "User menu" }));
 
 		expect(
 			screen.getByRole("menuitem", { name: "Signed in as Bob" }),

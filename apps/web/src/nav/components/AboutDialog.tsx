@@ -26,21 +26,25 @@ export default function AboutDialog({ open, setOpen }: AboutDialogProps) {
 
 				<section className="pb-6">
 					<h3 className="font-medium pb-3 text-lg">Versions</h3>
-					<dl className="grid grid-cols-[8rem_1fr] gap-y-3">
-						<dt className="font-medium">Server</dt>
-						<dd>
-							<div className="font-mono">{data?.version ?? "—"}</div>
-							<div className="text-slate-600 text-sm">
-								Stores data and runs analyses.
-							</div>
-						</dd>
-						<dt className="font-medium">Web app</dt>
-						<dd>
-							<div className="font-mono">{__APP_VERSION__}</div>
-							<div className="text-slate-600 text-sm">
-								The pages you see in your browser.
-							</div>
-						</dd>
+					<dl className="space-y-3">
+						<div className="flex">
+							<dt className="font-medium w-32 shrink-0">Server</dt>
+							<dd>
+								<div className="font-mono">{data?.version ?? "—"}</div>
+								<div className="text-slate-600 text-sm">
+									Stores data and runs analyses.
+								</div>
+							</dd>
+						</div>
+						<div className="flex">
+							<dt className="font-medium w-32 shrink-0">Web app</dt>
+							<dd>
+								<div className="font-mono">{__APP_VERSION__}</div>
+								<div className="text-slate-600 text-sm">
+									The pages you see in your browser.
+								</div>
+							</dd>
+						</div>
 					</dl>
 				</section>
 

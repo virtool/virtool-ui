@@ -66,7 +66,7 @@ export default function Nav({
 				/>
 
 				<Dropdown>
-					<DropdownMenuTrigger>
+					<DropdownMenuTrigger aria-label="User menu">
 						<div className="bg-transparent flex items-center">
 							<InitialIcon handle={handle} size="md" />
 						</div>
