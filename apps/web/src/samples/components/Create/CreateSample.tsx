@@ -14,6 +14,7 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
+import type { Label } from "@labels/types";
 import { useCreateSample } from "@samples/queries";
 import { useNavigate } from "@tanstack/react-router";
 import { Clock, WandSparkles } from "lucide-react";
@@ -52,10 +53,14 @@ type FormValues = {
 	sidebar: { labels: number[]; subtractionIds: string[] };
 };
 
+type CreateSampleProps = {
+	labels: Label[];
+};
+
 /**
- * A form for creating a sample
+ * A form for creating a sample. Caller provides labels.
  */
-export default function CreateSample() {
+export default function CreateSample({ labels }: CreateSampleProps) {
 	const navigate = useNavigate();
 
 	const { data: groups, isPending: isPendingGroups } = useListGroups();
@@ -251,6 +256,7 @@ export default function CreateSample() {
 					render={({ field: { value } }) => (
 						<Sidebar
 							defaultSubtractions={value.subtractionIds}
+							labels={labels}
 							onUpdate={setValue}
 							sampleLabels={value.labels}
 						/>
