@@ -2,6 +2,9 @@
 
 React + TypeScript single-page application for Virtool, a bioinformatics platform.
 
+> `CLAUDE.md` is a symlink to this file. Edit `AGENTS.md` — never write to
+> `CLAUDE.md` directly.
+
 ## Repository layout
 
 This is a **pnpm monorepo**:
@@ -393,7 +396,16 @@ and make commits easier to find later.
 - **Assertions:** Use explicit `expect()` assertions, not snapshots.
 - **User interaction:** Use `@testing-library/user-event` over `fireEvent`.
 - **Queries:** Prefer accessible queries (`getByRole`, `getByLabelText`) over
-  `getByTestId`.
+  `getByTestId`. Every interactive element should be reachable by an
+  accessible name (visible label, `aria-label`, or `aria-labelledby`). If a
+  query is ambiguous, give the target a name in the component rather than
+  disambiguating in the test — the test stays stable as the surrounding UI
+  changes.
+- **Don't disambiguate by index.** Reaching into `getAllByRole(...)[n]` to
+  pick between *different* controls (e.g. one of several buttons) is
+  fragile — adding or reordering controls silently picks up the wrong one.
+  Add an accessible name instead. Indexing into a list of intrinsically
+  ordered, equivalent items (rows in a table, cards in a list) is fine.
 
 ### Shared test fixtures live in their own module
 
