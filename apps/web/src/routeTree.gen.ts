@@ -13,6 +13,7 @@ import { Route as SetupRouteImport } from './routes/setup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as ApiEventsRouteImport } from './routes/api/events'
 import { Route as AuthenticatedSubtractionsRouteImport } from './routes/_authenticated/subtractions'
 import { Route as AuthenticatedSamplesRouteImport } from './routes/_authenticated/samples'
 import { Route as AuthenticatedJobsRouteImport } from './routes/_authenticated/jobs'
@@ -83,6 +84,11 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const ApiEventsRoute = ApiEventsRouteImport.update({
+  id: '/api/events',
+  path: '/api/events',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedSubtractionsRoute =
   AuthenticatedSubtractionsRouteImport.update({
@@ -391,6 +397,7 @@ export interface FileRoutesByFullPath {
   '/jobs': typeof AuthenticatedJobsRouteWithChildren
   '/samples': typeof AuthenticatedSamplesRouteWithChildren
   '/subtractions': typeof AuthenticatedSubtractionsRouteWithChildren
+  '/api/events': typeof ApiEventsRoute
   '/refs/$refId': typeof AuthenticatedRefsRefIdRouteRouteWithChildren
   '/account/api': typeof AuthenticatedAccountApiRoute
   '/account/profile': typeof AuthenticatedAccountProfileRoute
@@ -439,6 +446,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/api/events': typeof ApiEventsRoute
   '/': typeof AuthenticatedIndexRoute
   '/account/api': typeof AuthenticatedAccountApiRoute
   '/account/profile': typeof AuthenticatedAccountProfileRoute
@@ -493,6 +501,7 @@ export interface FileRoutesById {
   '/_authenticated/jobs': typeof AuthenticatedJobsRouteWithChildren
   '/_authenticated/samples': typeof AuthenticatedSamplesRouteWithChildren
   '/_authenticated/subtractions': typeof AuthenticatedSubtractionsRouteWithChildren
+  '/api/events': typeof ApiEventsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/refs/$refId': typeof AuthenticatedRefsRefIdRouteRouteWithChildren
   '/_authenticated/account/api': typeof AuthenticatedAccountApiRoute
@@ -552,6 +561,7 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/samples'
     | '/subtractions'
+    | '/api/events'
     | '/refs/$refId'
     | '/account/api'
     | '/account/profile'
@@ -600,6 +610,7 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/setup'
+    | '/api/events'
     | '/'
     | '/account/api'
     | '/account/profile'
@@ -653,6 +664,7 @@ export interface FileRouteTypes {
     | '/_authenticated/jobs'
     | '/_authenticated/samples'
     | '/_authenticated/subtractions'
+    | '/api/events'
     | '/_authenticated/'
     | '/_authenticated/refs/$refId'
     | '/_authenticated/account/api'
@@ -704,6 +716,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   SetupRoute: typeof SetupRoute
+  ApiEventsRoute: typeof ApiEventsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -735,6 +748,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/events': {
+      id: '/api/events'
+      path: '/api/events'
+      fullPath: '/api/events'
+      preLoaderRoute: typeof ApiEventsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/subtractions': {
       id: '/_authenticated/subtractions'
@@ -1359,6 +1379,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   SetupRoute: SetupRoute,
+  ApiEventsRoute: ApiEventsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

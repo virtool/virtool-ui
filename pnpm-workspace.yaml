@@ -6,3 +6,6 @@ allowBuilds:
   '@sentry/cli': true
   bcrypt: true
   esbuild: true
+
+overrides:
+  '@tanstack/router-core': '1.170.0'

@@ -1,6 +1,7 @@
 import { fetchAccount } from "@account/api";
 import { accountKeys, useFetchAccount } from "@account/queries";
 import { apiClient } from "@app/api";
+import * as Sse from "@app/sse/SseConnection";
 import type { Root } from "@app/types";
 import {
 	establishConnection,
@@ -30,6 +31,14 @@ function setupWebSocket(queryClient: QueryClient) {
 	const status = getConnectionStatus();
 	if (status === "initializing" || status === "abandoned") {
 		establishConnection();
+	}
+}
+
+function setupSse(queryClient: QueryClient) {
+	Sse.init(queryClient);
+	const status = Sse.getConnectionStatus();
+	if (status === "initializing" || status === "abandoned") {
+		Sse.establishConnection();
 	}
 }
 
@@ -72,6 +81,7 @@ function AuthenticatedLayout() {
 	useEffect(() => {
 		if (data) {
 			setupWebSocket(queryClient);
+			setupSse(queryClient);
 		}
 	}, [data, queryClient]);
 

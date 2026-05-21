@@ -1,0 +1,100 @@
+import { createServerFn } from "@tanstack/react-start";
+import { setResponseStatus } from "@tanstack/react-start/server";
+import { z } from "zod";
+import {
+	createLabel as createLabelImpl,
+	deleteLabel as deleteLabelImpl,
+	findLabels as findLabelsImpl,
+	getLabel as getLabelImpl,
+	LabelConflictError,
+	LabelNotFoundError,
+	updateLabel as updateLabelImpl,
+} from "./data";
+
+const colorSchema = z
+	.string()
+	.regex(/^#?[0-9a-fA-F]{6}$/, "Color must be a hex color.");
+
+function normalizeColor(color: string): string {
+	return color.startsWith("#") ? color : `#${color}`;
+}
+
+function normalizeValues<T extends { color?: string }>(values: T): T {
+	if (values.color === undefined) {
+		return values;
+	}
+	return { ...values, color: normalizeColor(values.color) };
+}
+
+const labelValuesSchema = z.object({
+	color: colorSchema,
+	description: z.string().default(""),
+	name: z.string().min(1),
+});
+
+const labelIdSchema = z.object({
+	labelId: z.number().int().positive(),
+});
+
+const findLabelsSchema = z.object({ term: z.string().default("") }).optional();
+
+function rethrowAsHttp(err: unknown): never {
+	if (err instanceof LabelNotFoundError) {
+		setResponseStatus(404);
+		throw new Error("Label not found.");
+	}
+	if (err instanceof LabelConflictError) {
+		setResponseStatus(409);
+		throw new Error("Label name already exists.");
+	}
+	throw err;
+}
+
+export const findLabels = createServerFn({ method: "GET" })
+	.inputValidator(findLabelsSchema)
+	.handler(async ({ data }) => findLabelsImpl(data?.term ?? ""));
+
+export const getLabel = createServerFn({ method: "GET" })
+	.inputValidator(labelIdSchema)
+	.handler(async ({ data }) => {
+		try {
+			return await getLabelImpl(data.labelId);
+		} catch (err) {
+			rethrowAsHttp(err);
+		}
+	});
+
+export const createLabel = createServerFn({ method: "POST" })
+	.inputValidator(labelValuesSchema)
+	.handler(async ({ data }) => {
+		try {
+			const label = await createLabelImpl(normalizeValues(data));
+			setResponseStatus(201);
+			return label;
+		} catch (err) {
+			rethrowAsHttp(err);
+		}
+	});
+
+export const updateLabel = createServerFn({ method: "POST" })
+	.inputValidator(labelIdSchema.extend(labelValuesSchema.partial().shape))
+	.handler(async ({ data }) => {
+		const { labelId, ...values } = data;
+		try {
+			return await updateLabelImpl(labelId, normalizeValues(values));
+		} catch (err) {
+			rethrowAsHttp(err);
+		}
+	});
+
+export const deleteLabel = createServerFn({ method: "POST" })
+	.inputValidator(labelIdSchema)
+	.handler(async ({ data }) => {
+		try {
+			await deleteLabelImpl(data.labelId);
+			setResponseStatus(204);
+			return null;
+		} catch (err) {
+			rethrowAsHttp(err);
+		}
+	});

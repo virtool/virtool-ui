@@ -13,5 +13,9 @@ export default defineConfig({
         setupFiles: ["./src/tests/setup.tsx"],
         silent: false,
         maxWorkers: Math.max(1, Math.floor(os.cpus().length / 2)),
+        env: {
+            VT_POSTGRES_URL: "postgres://test:test@localhost:1/test",
+            VT_MONGODB_URL: "mongodb://localhost:1/test",
+        },
     },
 });
