@@ -66,7 +66,7 @@ describe("eventToWsMessage", () => {
 		expect(message?.data).toBe(label);
 	});
 
-	it("emits delete with the id wrapped in an array, without fetching", async () => {
+	it("emits delete with the id in a record, without fetching", async () => {
 		const message = await eventToWsMessage({
 			domain: "labels",
 			resource_id: 9,
@@ -76,7 +76,7 @@ describe("eventToWsMessage", () => {
 		expect(message).toEqual({
 			interface: "labels",
 			operation: "delete",
-			data: [9],
+			data: { id: 9 },
 		});
 		expect(getLabel).not.toHaveBeenCalled();
 	});

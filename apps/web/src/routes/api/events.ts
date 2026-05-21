@@ -1,3 +1,5 @@
+import { verifyRequest } from "@server/auth/verify";
+import { db } from "@server/db/pg";
 import { eventToWsMessage } from "@server/events/broadcast";
 import { listenForClientEvents } from "@server/events/listen";
 import { logger } from "@server/logger";
@@ -5,13 +7,16 @@ import { createFileRoute } from "@tanstack/react-router";
 
 const KEEPALIVE_MS = 25_000;
 
-// TODO: gate with session auth once a requireAuthenticatedRequest middleware
-// equivalent exists for SSE responses.
 async function handleEvents({
 	request,
 }: {
 	request: Request;
 }): Promise<Response> {
+	const session = await verifyRequest(db, request);
+	if (!session) {
+		return new Response("Unauthorized", { status: 401 });
+	}
+
 	const encoder = new TextEncoder();
 	const stream = listenForClientEvents();
 

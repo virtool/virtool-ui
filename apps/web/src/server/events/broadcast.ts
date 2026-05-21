@@ -28,7 +28,7 @@ export async function eventToWsMessage(
 		return {
 			interface: event.domain,
 			operation: "delete",
-			data: [event.resource_id],
+			data: { id: event.resource_id },
 		};
 	}
 
