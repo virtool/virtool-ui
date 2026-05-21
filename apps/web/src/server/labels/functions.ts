@@ -1,6 +1,7 @@
-import { createServerFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
+
+import { createServerFn } from "../fn";
 import {
 	createLabel as createLabelImpl,
 	deleteLabel as deleteLabelImpl,

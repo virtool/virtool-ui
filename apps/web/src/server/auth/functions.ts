@@ -1,8 +1,8 @@
-import { createServerFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 
 import { db } from "../db/pg";
+import { createServerFn, createUnauthenticatedServerFn } from "../fn";
 import { realCookies } from "./cookies";
 import {
 	InvalidCredentialsError,
@@ -34,8 +34,8 @@ function getClientIp(): string {
 	);
 }
 
-/** Login server function. Mirrors Python's response shape. */
-export const loginFn = createServerFn({ method: "POST" })
+/** Login server function. Unauthenticated by necessity — this *creates* the session. */
+export const loginFn = createUnauthenticatedServerFn({ method: "POST" })
 	.inputValidator(loginSchema)
 	.handler(async ({ data }) => {
 		try {
@@ -62,14 +62,18 @@ export const loginFn = createServerFn({ method: "POST" })
 		}
 	});
 
-/** Logout server function. Always succeeds, even with no active session. */
+/** Logout server function. Requires an authenticated session. */
 export const logoutFn = createServerFn({ method: "POST" }).handler(async () => {
 	await logout(db, realCookies);
 	return null;
 });
 
-/** Reset-password server function. Mirrors Python's `POST /account/reset` shape. */
-export const resetPasswordFn = createServerFn({ method: "POST" })
+/**
+ * Reset-password server function. Unauthenticated by necessity — this is the
+ * forced-reset flow that runs before the user has a session. Authorization is
+ * carried by the `reset_code` returned from `loginFn`.
+ */
+export const resetPasswordFn = createUnauthenticatedServerFn({ method: "POST" })
 	.inputValidator(resetPasswordSchema)
 	.handler(async ({ data }) => {
 		try {

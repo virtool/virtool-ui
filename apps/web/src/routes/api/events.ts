@@ -1,5 +1,4 @@
-import { verifyRequest } from "@server/auth/verify";
-import { db } from "@server/db/pg";
+import { requireAuthenticatedRequest } from "@server/auth/middleware";
 import { eventToWsMessage } from "@server/events/broadcast";
 import { listenForClientEvents } from "@server/events/listen";
 import { logger } from "@server/logger";
@@ -12,9 +11,9 @@ async function handleEvents({
 }: {
 	request: Request;
 }): Promise<Response> {
-	const session = await verifyRequest(db, request);
-	if (!session) {
-		return new Response("Unauthorized", { status: 401 });
+	const gate = await requireAuthenticatedRequest(request);
+	if (gate instanceof Response) {
+		return gate;
 	}
 
 	const encoder = new TextEncoder();
