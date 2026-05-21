@@ -8,11 +8,9 @@ import Nav from "../Nav";
 describe("<Nav />", () => {
 	const props: {
 		administrator_role: AdministratorRoleName;
-		dev: boolean;
 		handle: string;
 	} = {
 		administrator_role: "full",
-		dev: false,
 		handle: "Bob",
 	};
 
@@ -28,7 +26,7 @@ describe("<Nav />", () => {
 			screen.getByRole("link", { name: "Subtractions" }),
 		).toBeInTheDocument();
 
-		await userEvent.click(screen.getByRole("button"));
+		await userEvent.click(screen.getByRole("button", { name: "User menu" }));
 
 		expect(
 			screen.getByRole("menuitem", { name: "Signed in as Bob" }),
@@ -40,10 +38,28 @@ describe("<Nav />", () => {
 			screen.getByRole("menuitem", { name: "Administration" }),
 		).toBeInTheDocument();
 		expect(
-			screen.getByRole("menuitem", { name: "Documentation" }),
-		).toBeInTheDocument();
+			screen.queryByRole("menuitem", { name: "Documentation" }),
+		).not.toBeInTheDocument();
 		expect(
 			screen.getByRole("menuitem", { name: "Logout" }),
 		).toBeInTheDocument();
+	});
+
+	it("opens the About dialog when the About button is clicked", async () => {
+		await renderWithRouter(<Nav {...props} />);
+
+		await userEvent.click(screen.getByRole("button", { name: "About" }));
+
+		expect(
+			screen.getByRole("heading", { name: "About Virtool" }),
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole("heading", { name: "Documentation" }),
+		).toBeInTheDocument();
+		const docLink = screen.getByRole("link", { name: "virtool.ca/docs" });
+		expect(docLink).toHaveAttribute(
+			"href",
+			"https://virtool.ca/docs/manual/start/installation/",
+		);
 	});
 });
