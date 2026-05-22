@@ -26,12 +26,13 @@ export default function AdministratorItem({
 
 	return (
 		<div
-			className="mb-2.5 flex items-center shadow-md [&>button]:ml-auto [&>button:last-child]:ml-2.5 [&>svg]:mr-2.5"
+			className="mb-2.5 flex items-center px-6 py-3 shadow-md [&>button]:ml-auto [&>button:last-child]:ml-2.5 [&>svg]:mr-2.5"
 			key={user.id}
 		>
 			<InitialIcon handle={user.handle} size="lg" />
 			<span className="text-base font-medium">{user.handle}</span>
 			<AdministratorRoleSelect
+				className="max-w-56"
 				id={`role-${user.id}`}
 				onChange={onChange}
 				roles={roles}
