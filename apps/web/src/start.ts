@@ -5,11 +5,13 @@ import {
 	createStart,
 } from "@tanstack/react-start";
 
-import { loginFn, resetPasswordFn } from "./server/auth/functions";
+import { loginFn, logoutFn, resetPasswordFn } from "./server/auth/functions";
 import { createAuthenticationMiddleware } from "./server/auth/middleware";
 
+// logoutFn must be exempt so stale or missing cookies can still be cleared.
 const authenticationMiddleware = createAuthenticationMiddleware([
 	loginFn,
+	logoutFn,
 	resetPasswordFn,
 ]);
 
