@@ -42,12 +42,24 @@ export async function requireAuthenticatedRequest(
 }
 
 /**
- * Server-function middleware that gates the handler behind an authenticated
- * session and passes the session through `context.session`.
+ * Build the global server-function middleware that enforces authentication on
+ * every server function except those in `exceptions`. Pass server-function
+ * references (e.g. `loginFn`); the URL path is derived from each. Resolved
+ * sessions are exposed to downstream handlers as `context.session`.
  */
-export const authMiddleware = createMiddleware({ type: "function" }).server(
-	async ({ next }) => {
-		const session = await requireSession();
+// Server fn IDs are unique per fn and each fn binds to exactly one method, so
+// matching on pathname alone is sufficient to identify the call.
+export function createAuthenticationMiddleware(
+	exceptions: ReadonlyArray<{ url: string }>,
+) {
+	const exceptionPaths = new Set(
+		exceptions.map((fn) => new URL(fn.url, "http://x").pathname),
+	);
+	return createMiddleware({ type: "function" }).server(async ({ next }) => {
+		const pathname = new URL(getRequest().url).pathname;
+		const session: AuthenticatedSession | null = exceptionPaths.has(pathname)
+			? null
+			: await requireSession();
 		return next({ context: { session } });
-	},
-);
+	});
+}

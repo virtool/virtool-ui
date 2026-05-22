@@ -5,6 +5,14 @@ import {
 	createStart,
 } from "@tanstack/react-start";
 
+import { loginFn, resetPasswordFn } from "./server/auth/functions";
+import { createAuthenticationMiddleware } from "./server/auth/middleware";
+
+const authenticationMiddleware = createAuthenticationMiddleware([
+	loginFn,
+	resetPasswordFn,
+]);
+
 const cspDirectives = [
 	"default-src 'self'",
 	"base-uri 'self'",
@@ -56,4 +64,5 @@ const csrfMiddleware = createCsrfMiddleware({
 export const startInstance = createStart(() => ({
 	defaultSsr: false,
 	requestMiddleware: [csrfMiddleware, cspNonce],
+	functionMiddleware: [authenticationMiddleware],
 }));

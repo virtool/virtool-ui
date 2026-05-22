@@ -1,8 +1,8 @@
+import { createServerFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 
 import { db } from "../db/pg";
-import { createServerFn, createUnauthenticatedServerFn } from "../fn";
 import { realCookies } from "./cookies";
 import {
 	InvalidCredentialsError,
@@ -35,7 +35,7 @@ function getClientIp(): string {
 }
 
 /** Login server function. Unauthenticated by necessity — this *creates* the session. */
-export const loginFn = createUnauthenticatedServerFn({ method: "POST" })
+export const loginFn = createServerFn({ method: "POST" })
 	.inputValidator(loginSchema)
 	.handler(async ({ data }) => {
 		try {
@@ -73,7 +73,7 @@ export const logoutFn = createServerFn({ method: "POST" }).handler(async () => {
  * forced-reset flow that runs before the user has a session. Authorization is
  * carried by the `reset_code` returned from `loginFn`.
  */
-export const resetPasswordFn = createUnauthenticatedServerFn({ method: "POST" })
+export const resetPasswordFn = createServerFn({ method: "POST" })
 	.inputValidator(resetPasswordSchema)
 	.handler(async ({ data }) => {
 		try {
