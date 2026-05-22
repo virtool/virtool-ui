@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 import {
@@ -38,7 +38,11 @@ const labelIdSchema = z.object({
 
 const findLabelsSchema = z.object({ term: z.string().default("") }).optional();
 
-function rethrowAsHttp(err: unknown): never {
+// Wrapped in createServerOnlyFn so the compiler can strip this body — and the
+// LabelNotFoundError / LabelConflictError imports it references — from the
+// client bundle. A plain top-level helper would pin ./data and its postgres
+// transitive dependency in the client graph.
+const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	if (err instanceof LabelNotFoundError) {
 		setResponseStatus(404);
 		throw new Error("Label not found.");
@@ -48,7 +52,7 @@ function rethrowAsHttp(err: unknown): never {
 		throw new Error("Label name already exists.");
 	}
 	throw err;
-}
+});
 
 export const findLabels = createServerFn({ method: "GET" })
 	.inputValidator(findLabelsSchema)

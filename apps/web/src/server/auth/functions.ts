@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 
@@ -24,15 +24,17 @@ const resetPasswordSchema = z.object({
 	reset_code: z.string().min(1),
 });
 
-/** Pull the client IP from the request headers, with a non-null fallback. */
-function getClientIp(): string {
+// Wrapped in createServerOnlyFn so the compiler strips this body and its
+// getRequest import from the client bundle. A plain top-level helper would
+// keep @tanstack/react-start/server in the client module graph.
+const getClientIp = createServerOnlyFn((): string => {
 	const request = getRequest();
 	return (
 		request.headers.get("cf-connecting-ip") ??
 		request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
 		""
 	);
-}
+});
 
 /** Login server function. Unauthenticated by necessity — this *creates* the session. */
 export const loginFn = createServerFn({ method: "POST" })

@@ -100,7 +100,7 @@ async function handleEvents({
 	});
 }
 
-export const Route = createFileRoute("/api/events")({
+export const Route = createFileRoute("/events")({
 	server: {
 		handlers: {
 			GET: handleEvents,

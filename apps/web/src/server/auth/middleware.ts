@@ -1,4 +1,4 @@
-import { createMiddleware } from "@tanstack/react-start";
+import { createMiddleware, createServerOnlyFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
 
 import { db } from "../db/pg";
@@ -17,29 +17,34 @@ export class UnauthorizedError extends Error {
  * 401. Sets the HTTP response status as a side effect so the serialized error
  * reaches the client as a real 401.
  */
-export async function requireSession(): Promise<AuthenticatedSession> {
-	const session = await verifyRequest(db, getRequest());
-	if (!session) {
-		setResponseStatus(401);
-		throw new UnauthorizedError();
-	}
-	return session;
-}
+// createServerOnlyFn keeps the getRequest / db / verifyRequest references
+// behind a server boundary so import-protection doesn't pin
+// @tanstack/react-start/server in the client graph via start.ts.
+export const requireSession = createServerOnlyFn(
+	async (): Promise<AuthenticatedSession> => {
+		const session = await verifyRequest(db, getRequest());
+		if (!session) {
+			setResponseStatus(401);
+			throw new UnauthorizedError();
+		}
+		return session;
+	},
+);
 
 /**
  * Resolve the session for a raw `Request` (used by `createFileRoute` handlers
  * outside the server-function async-local context). Returns a 401 `Response`
  * on failure so the caller can `return` it directly.
  */
-export async function requireAuthenticatedRequest(
-	request: Request,
-): Promise<AuthenticatedSession | Response> {
-	const session = await verifyRequest(db, request);
-	if (!session) {
-		return new Response("Unauthorized", { status: 401 });
-	}
-	return session;
-}
+export const requireAuthenticatedRequest = createServerOnlyFn(
+	async (request: Request): Promise<AuthenticatedSession | Response> => {
+		const session = await verifyRequest(db, request);
+		if (!session) {
+			return new Response("Unauthorized", { status: 401 });
+		}
+		return session;
+	},
+);
 
 /**
  * Build the global server-function middleware that enforces authentication on

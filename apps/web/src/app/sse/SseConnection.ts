@@ -41,7 +41,7 @@ export function establishConnection(): void {
 
 	connection?.close();
 
-	connection = new window.EventSource("/api/events");
+	connection = new window.EventSource("/events");
 	connectionStatus = "connecting";
 
 	connection.onopen = () => {
