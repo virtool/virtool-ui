@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 
@@ -24,17 +24,19 @@ const resetPasswordSchema = z.object({
 	reset_code: z.string().min(1),
 });
 
-/** Pull the client IP from the request headers, with a non-null fallback. */
-function getClientIp(): string {
+// Wrapped in createServerOnlyFn so the compiler strips this body and its
+// getRequest import from the client bundle. A plain top-level helper would
+// keep @tanstack/react-start/server in the client module graph.
+const getClientIp = createServerOnlyFn((): string => {
 	const request = getRequest();
 	return (
 		request.headers.get("cf-connecting-ip") ??
 		request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
 		""
 	);
-}
+});
 
-/** Login server function. Mirrors Python's response shape. */
+/** Login server function. Unauthenticated by necessity — this *creates* the session. */
 export const loginFn = createServerFn({ method: "POST" })
 	.inputValidator(loginSchema)
 	.handler(async ({ data }) => {
@@ -62,13 +64,17 @@ export const loginFn = createServerFn({ method: "POST" })
 		}
 	});
 
-/** Logout server function. Always succeeds, even with no active session. */
+/** Logout server function. Requires an authenticated session. */
 export const logoutFn = createServerFn({ method: "POST" }).handler(async () => {
 	await logout(db, realCookies);
 	return null;
 });
 
-/** Reset-password server function. Mirrors Python's `POST /account/reset` shape. */
+/**
+ * Reset-password server function. Unauthenticated by necessity — this is the
+ * forced-reset flow that runs before the user has a session. Authorization is
+ * carried by the `reset_code` returned from `loginFn`.
+ */
 export const resetPasswordFn = createServerFn({ method: "POST" })
 	.inputValidator(resetPasswordSchema)
 	.handler(async ({ data }) => {

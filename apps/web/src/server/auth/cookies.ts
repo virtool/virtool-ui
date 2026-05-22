@@ -1,3 +1,4 @@
+import { createServerOnlyFn } from "@tanstack/react-start";
 import {
 	deleteCookie,
 	getCookie,
@@ -39,21 +40,21 @@ export type CookieAdapter = {
 	clear(): void;
 };
 
+// Each method is wrapped in createServerOnlyFn so the references to
+// getCookie/setCookie/deleteCookie sit behind a server boundary the compiler
+// recognizes — otherwise the object literal at module scope would pin
+// @tanstack/react-start/server in any client-reachable import chain.
 export const realCookies: CookieAdapter = {
-	getSessionId() {
-		return getCookie(SESSION_ID_COOKIE);
-	},
-	getSessionToken() {
-		return getCookie(SESSION_TOKEN_COOKIE);
-	},
-	setSessionId(sessionId) {
+	getSessionId: createServerOnlyFn(() => getCookie(SESSION_ID_COOKIE)),
+	getSessionToken: createServerOnlyFn(() => getCookie(SESSION_TOKEN_COOKIE)),
+	setSessionId: createServerOnlyFn((sessionId: string) => {
 		setCookie(SESSION_ID_COOKIE, sessionId, cookieOptions(isSecure()));
-	},
-	setSessionToken(token) {
+	}),
+	setSessionToken: createServerOnlyFn((token: string) => {
 		setCookie(SESSION_TOKEN_COOKIE, token, cookieOptions(isSecure()));
-	},
-	clear() {
+	}),
+	clear: createServerOnlyFn(() => {
 		deleteCookie(SESSION_ID_COOKIE, { path: "/" });
 		deleteCookie(SESSION_TOKEN_COOKIE, { path: "/" });
-	},
+	}),
 };

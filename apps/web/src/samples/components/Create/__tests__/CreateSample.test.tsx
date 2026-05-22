@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { mockApiListGroups } from "@tests/api/groups";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
-import { createFakeLabelNested, mockApiGetLabels } from "@tests/fake/labels";
+import { createFakeLabel } from "@tests/fake/labels";
 import { mockApiCreateSample } from "@tests/fake/samples";
 import {
 	createFakeShortlistSubtraction,
@@ -15,13 +15,12 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import CreateSample from "../CreateSample";
 
 describe("<CreateSample>", () => {
-	const labels = [createFakeLabelNested()];
+	const labels = [createFakeLabel()];
 	const subtractionShortlist = createFakeShortlistSubtraction();
 
 	beforeEach(() => {
 		window.sessionStorage.clear();
 
-		mockApiGetLabels(labels);
 		mockApiGetAccount(createFakeAccount({ primary_group: null }));
 		mockApiListGroups([]);
 	});
@@ -36,14 +35,14 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile();
 		const filesScope = mockApiListFiles([file]);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 		expect(await screen.findByLabelText("loading")).toBeInTheDocument();
 
 		filesScope.done();
 	});
 
 	it("should show loader when there are no sample uploads to read", async () => {
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 		expect(await screen.findByLabelText("loading")).toBeInTheDocument();
 	});
 
@@ -53,7 +52,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 		expect(screen.queryByText("Required Field")).not.toBeInTheDocument();
@@ -89,7 +88,7 @@ describe("<CreateSample>", () => {
 			null,
 		);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		// Wait for the data to load.
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
@@ -121,7 +120,7 @@ describe("<CreateSample>", () => {
 			null,
 		);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		// Wait for the data to load.
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
@@ -161,7 +160,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		const field = await screen.findByRole("textbox", { name: "Name" });
 		expect(field).toHaveValue("");
@@ -178,7 +177,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
@@ -195,7 +194,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
@@ -213,7 +212,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		await userEvent.type(await screen.findByLabelText("Name"), "Sample B");
 
@@ -235,7 +234,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 

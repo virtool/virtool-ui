@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as EventsRouteImport } from './routes/events'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedSubtractionsRouteImport } from './routes/_authenticated/subtractions'
@@ -73,6 +74,11 @@ const SetupRoute = SetupRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -382,6 +388,7 @@ const AuthenticatedRefsRefIdOtusOtuIdHistoryRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
+  '/events': typeof EventsRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
@@ -437,6 +444,7 @@ export interface FileRoutesByFullPath {
   '/refs/$refId/otus/$otuId/': typeof AuthenticatedRefsRefIdOtusOtuIdIndexRoute
 }
 export interface FileRoutesByTo {
+  '/events': typeof EventsRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/': typeof AuthenticatedIndexRoute
@@ -484,6 +492,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/events': typeof EventsRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/_authenticated/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
@@ -543,6 +552,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/events'
     | '/login'
     | '/setup'
     | '/administration'
@@ -598,6 +608,7 @@ export interface FileRouteTypes {
     | '/refs/$refId/otus/$otuId/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/events'
     | '/login'
     | '/setup'
     | '/'
@@ -644,6 +655,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_authenticated'
+    | '/events'
     | '/login'
     | '/setup'
     | '/_authenticated/administration'
@@ -702,6 +714,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  EventsRoute: typeof EventsRoute
   LoginRoute: typeof LoginRoute
   SetupRoute: typeof SetupRoute
 }
@@ -720,6 +733,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -1357,19 +1377,10 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  EventsRoute: EventsRoute,
   LoginRoute: LoginRoute,
   SetupRoute: SetupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

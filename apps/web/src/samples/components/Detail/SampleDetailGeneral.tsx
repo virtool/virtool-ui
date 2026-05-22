@@ -6,6 +6,7 @@ import ContainerSide from "@base/ContainerSide";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Markdown from "@base/Markdown";
 import JobItem from "@jobs/components/JobItem";
+import type { Label } from "@labels/types";
 import { useFetchSample } from "@samples/queries";
 import { getLibraryTypeDisplayName } from "@samples/utils";
 /**
@@ -20,7 +21,13 @@ import Sidebar from "./Sidebar";
 
 const routeApi = getRouteApi("/_authenticated/samples/$sampleId");
 
-export default function SampleDetailGeneral() {
+type SampleDetailGeneralProps = {
+	labels: Label[];
+};
+
+export default function SampleDetailGeneral({
+	labels,
+}: SampleDetailGeneralProps) {
 	const { sampleId } = routeApi.useParams();
 	const search = routeApi.useSearch();
 	const navigate = routeApi.useNavigate();
@@ -123,6 +130,7 @@ export default function SampleDetailGeneral() {
 
 			<ContainerSide className="pl-[15px]">
 				<Sidebar
+					labels={labels}
 					sampleId={data.id}
 					sampleLabels={data.labels}
 					defaultSubtractions={data.subtractions}

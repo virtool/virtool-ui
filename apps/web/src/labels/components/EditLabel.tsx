@@ -8,43 +8,55 @@ import {
 import Icon from "@base/Icon";
 import { Pen } from "lucide-react";
 import { useState } from "react";
-import { useUpdateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
 
-type UpdatedLabel = {
+/** Fields collected by the edit-label form. */
+export type UpdatedLabel = {
 	color: string;
 	description: string;
 	name: string;
 };
 
 type EditLabelProps = {
-	/** The id of the label being updated */
-	id: number;
 	color: string;
 	description: string;
 	name: string;
+	/** Resolves on success so the dialog can close; rejects to surface the error. */
+	onSubmit: (values: UpdatedLabel) => Promise<unknown>;
 };
 
 /**
- * Displays a dialog for updating a label
+ * Dialog for editing a label. Pure presentation — submission is delegated
+ * to `onSubmit`; rejection messages are displayed inline.
  */
-export function EditLabel({ id, color, name, description }: EditLabelProps) {
-	const [show, setShow] = useState(false);
-	const mutation = useUpdateLabel();
+export function EditLabel({
+	color,
+	description,
+	name,
+	onSubmit,
+}: EditLabelProps) {
+	const [open, setOpen] = useState(false);
+	const [error, setError] = useState<string | undefined>();
 
-	function handleSubmit({ color, description, name }: UpdatedLabel) {
-		mutation.mutate(
-			{ labelId: id, name, description, color },
-			{
-				onSuccess: () => {
-					setShow(false);
-				},
-			},
-		);
+	async function handleSubmit(values: UpdatedLabel) {
+		setError(undefined);
+		try {
+			await onSubmit(values);
+			setOpen(false);
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "Could not update label.");
+		}
+	}
+
+	function handleOpenChange(next: boolean) {
+		setOpen(next);
+		if (!next) {
+			setError(undefined);
+		}
 	}
 
 	return (
-		<Dialog open={show} onOpenChange={(show) => setShow(show)}>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<Button as={DialogTrigger} size="small">
 				<Icon icon={Pen} />
 				<span>Edit</span>
@@ -54,6 +66,7 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
 				<LabelForm
 					color={color}
 					description={description}
+					error={error}
 					name={name}
 					onSubmit={handleSubmit}
 				/>

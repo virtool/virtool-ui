@@ -6,7 +6,7 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useListIndexes } from "@indexes/queries";
-import { useFetchLabels } from "@labels/queries";
+import type { Label } from "@labels/types";
 import { useListSamples } from "@samples/queries";
 import type { SampleMinimal } from "@samples/types";
 import { intersectionWith, union, xor } from "es-toolkit/array";
@@ -17,7 +17,8 @@ import SampleToolbar from "./SamplesToolbar";
 import SampleLabels from "./Sidebar/ManageLabels";
 
 type SamplesListProps = {
-	labels?: number[];
+	labels: Label[];
+	filterLabels?: number[];
 	openQuickAnalyze?: boolean;
 	page?: number;
 	setSearch?: (next: {
@@ -32,10 +33,11 @@ type SamplesListProps = {
 };
 
 /**
- * A list of samples with filtering
+ * A list of samples with filtering. Caller passes labels in.
  */
 export default function SamplesList({
-	labels: filterLabels = [],
+	labels,
+	filterLabels = [],
 	openQuickAnalyze = false,
 	page: urlPage = 1,
 	setSearch = () => {},
@@ -49,12 +51,11 @@ export default function SamplesList({
 		filterLabels,
 		filterWorkflows,
 	);
-	const { data: labels, isPending: isPendingLabels } = useFetchLabels();
 	const { isPending: isPendingIndexes } = useListIndexes(true);
 
 	const [selected, setSelected] = useState([]);
 
-	if (isPendingSamples || isPendingLabels || isPendingIndexes) {
+	if (isPendingSamples || isPendingIndexes) {
 		return <LoadingPlaceholder />;
 	}
 

@@ -5,4 +5,10 @@ packages:
 allowBuilds:
   '@sentry/cli': true
   bcrypt: true
+  cpu-features: true
   esbuild: true
+  protobufjs: true
+  ssh2: true
+
+overrides:
+  '@tanstack/router-core': '1.170.0'

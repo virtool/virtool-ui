@@ -4,6 +4,7 @@ import { analysesQueryKeys } from "@analyses/queries";
 import { groupQueryKeys } from "@groups/queries";
 import { indexQueryKeys } from "@indexes/queries";
 import { jobQueryKeys } from "@jobs/queries";
+import { labelQueryKeys } from "@labels/queries";
 import { modelQueryKeys } from "@ml/queries";
 import { referenceQueryKeys } from "@references/queries";
 import { samplesQueryKeys } from "@samples/queries";
@@ -35,6 +36,7 @@ const keyFactories = {
 	groups: groupQueryKeys,
 	indexes: indexQueryKeys,
 	jobs: jobQueryKeys,
+	labels: labelQueryKeys,
 	models: modelQueryKeys,
 	references: referenceQueryKeys,
 	roles: roleQueryKeys,

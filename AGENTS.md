@@ -62,6 +62,11 @@ pnpm check                        # biome check (whole repo)
 - Always fix all lint errors and warnings. The main branch is guaranteed to
   pass `pnpm check` cleanly, so any issues are caused by your changes — never
   dismiss them as pre-existing.
+- Always assume tests pass on `main` — CI enforces it. Any test failures you
+  see locally are caused by your changes, never pre-existing. Do **not** use
+  `git stash` (or any other working-tree-modifying command) to "check what
+  main looks like" — that risks dropping uncommitted work. Just trust that
+  main is green and debug your own changes.
 
 ## Architecture
 

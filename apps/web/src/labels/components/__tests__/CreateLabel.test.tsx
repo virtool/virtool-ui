@@ -1,26 +1,13 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
-import nock from "nock";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { CreateLabel } from "../CreateLabel";
 
 describe("<CreateLabel>", () => {
-	it("creates label with color", async () => {
-		const scope = nock("http://localhost")
-			.post("/api/labels", {
-				name: "Foo",
-				description: "This is a description",
-				color: "#6B7280",
-			})
-			.reply(201, {
-				id: 1,
-				name: "Foo",
-				description: "This is a description",
-				color: "#6B7280",
-			});
-
-		renderWithProviders(<CreateLabel />);
+	it("submits with the selected color", async () => {
+		const onSubmit = vi.fn().mockResolvedValue(undefined);
+		renderWithProviders(<CreateLabel onSubmit={onSubmit} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
@@ -30,49 +17,42 @@ describe("<CreateLabel>", () => {
 		await userEvent.type(descriptionInput, "This is a description");
 		await userEvent.type(nameInput, "Foo");
 		await userEvent.click(screen.getByRole("button", { name: "#6B7280" }));
-
-		expect(descriptionInput).toHaveValue("This is a description");
-		expect(nameInput).toHaveValue("Foo");
-
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-		scope.isDone();
+		await waitFor(() =>
+			expect(onSubmit).toHaveBeenCalledWith({
+				name: "Foo",
+				description: "This is a description",
+				color: "#6B7280",
+			}),
+		);
 	});
 
-	it("creates label without color", async () => {
-		const scope = nock("http://localhost")
-			.post("/api/labels", {
-				name: "Foo",
-				description: "This is a description",
-				color: "#D1D5DB",
-			})
-			.reply(201, {
-				id: 1,
-				name: "Foo",
-				description: "This is a description",
-				color: "#D1D5DB",
-			});
-
-		renderWithProviders(<CreateLabel />);
+	it("submits with the default color when none picked", async () => {
+		const onSubmit = vi.fn().mockResolvedValue(undefined);
+		renderWithProviders(<CreateLabel onSubmit={onSubmit} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
-		const nameInput = screen.getByLabelText("Name");
-		const descriptionInput = screen.getByLabelText("Description");
-
-		await userEvent.type(descriptionInput, "This is a description");
-		await userEvent.type(nameInput, "Foo");
-
-		expect(descriptionInput).toHaveValue("This is a description");
-		expect(nameInput).toHaveValue("Foo");
-
+		await userEvent.type(
+			screen.getByLabelText("Description"),
+			"This is a description",
+		);
+		await userEvent.type(screen.getByLabelText("Name"), "Foo");
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-		scope.isDone();
+		await waitFor(() =>
+			expect(onSubmit).toHaveBeenCalledWith({
+				name: "Foo",
+				description: "This is a description",
+				color: "#D1D5DB",
+			}),
+		);
 	});
 
-	it("errors without name", async () => {
-		renderWithProviders(<CreateLabel />);
+	it("blocks submit when name is empty", async () => {
+		const onSubmit = vi.fn();
+		renderWithProviders(<CreateLabel onSubmit={onSubmit} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
@@ -85,32 +65,26 @@ describe("<CreateLabel>", () => {
 		);
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-		expect(screen.queryByText("Name is required.")).toBeInTheDocument();
+		expect(screen.getByText("Name is required.")).toBeInTheDocument();
+		expect(onSubmit).not.toHaveBeenCalled();
 	});
 
-	it("errors with name conflict", async () => {
-		const scope = nock("http://localhost").post("/api/labels").reply(400, {
-			id: "bad_request",
-			message: "Label name already exists",
-		});
-
-		renderWithProviders(<CreateLabel />);
+	it("shows the rejection message and keeps the dialog open on failure", async () => {
+		const onSubmit = vi
+			.fn()
+			.mockRejectedValue(new Error("Label name already exists."));
+		renderWithProviders(<CreateLabel onSubmit={onSubmit} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "Create" }));
-
-		expect(
-			screen.queryByText("Label name already exists"),
-		).not.toBeInTheDocument();
-
 		await userEvent.type(screen.getByLabelText("Name"), "Foo");
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
 		await waitFor(() =>
 			expect(
-				screen.queryByText("Label name already exists"),
+				screen.getByText("Label name already exists."),
 			).toBeInTheDocument(),
 		);
-
-		expect(scope.isDone()).toBeTruthy();
+		// Form is still in the document — dialog stayed open.
+		expect(screen.getByLabelText("Name")).toBeInTheDocument();
 	});
 });

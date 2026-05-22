@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
-import type { LabelNested } from "@labels/types";
-import nock from "nock";
+import type { Label, LabelNested } from "@labels/types";
 
 export function createFakeLabelNested(): LabelNested {
 	return {
@@ -11,9 +10,9 @@ export function createFakeLabelNested(): LabelNested {
 	};
 }
 
-export function mockApiGetLabels(labels: LabelNested[]) {
-	return nock("http://localhost")
-		.get("/api/labels")
-		.query(true)
-		.reply(200, labels);
+export function createFakeLabel(): Label {
+	return {
+		...createFakeLabelNested(),
+		count: faker.number.int({ min: 0, max: 50 }),
+	};
 }

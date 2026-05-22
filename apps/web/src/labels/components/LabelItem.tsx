@@ -1,19 +1,28 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import SampleLabel from "@samples/components/Label/SampleLabel";
-import { EditLabel } from "./EditLabel";
+import { EditLabel, type UpdatedLabel } from "./EditLabel";
 import { RemoveLabel } from "./RemoveLabel";
 
-type ItemProps = {
-	name: string;
+type LabelItemProps = {
 	color: string;
 	description: string;
 	id: number;
+	name: string;
+	onEdit: (id: number, values: UpdatedLabel) => Promise<unknown>;
+	onRemove: (id: number) => Promise<unknown>;
 };
 
 /**
- * A condensed label item for use in a list of labels
+ * A condensed label item with edit and delete affordances.
  */
-export function LabelItem({ name, color, description, id }: ItemProps) {
+export function LabelItem({
+	color,
+	description,
+	id,
+	name,
+	onEdit,
+	onRemove,
+}: LabelItemProps) {
 	return (
 		<BoxGroupSection className="flex items-center">
 			<div className="min-w-3/10">
@@ -22,12 +31,12 @@ export function LabelItem({ name, color, description, id }: ItemProps) {
 			{description}
 			<div className="absolute top-0 right-0 bottom-0 flex items-center gap-1 pr-4 text-lg">
 				<EditLabel
-					id={id}
 					color={color}
 					description={description}
 					name={name}
+					onSubmit={(values) => onEdit(id, values)}
 				/>
-				<RemoveLabel id={id} name={name} />
+				<RemoveLabel name={name} onConfirm={() => onRemove(id)} />
 			</div>
 		</BoxGroupSection>
 	);
