@@ -1,0 +1,55 @@
+import Alert from "@base/Alert";
+import Link from "@base/Link";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
+import { AlertCircle, Info } from "lucide-react";
+import { useFindIndexes } from "../queries";
+
+type RebuildAlertProps = {
+	page: number;
+	refId: string;
+};
+
+/**
+ * An alert that appears when the reference has unbuilt changes.
+ */
+export default function RebuildAlert({ page, refId }: RebuildAlertProps) {
+	const { data, isPending } = useFindIndexes(page, 25, refId);
+	const { hasPermission: hasRights } = useCheckReferenceRight(refId, "build");
+	const archived = useReferenceIsArchived(refId);
+
+	if (isPending || archived) {
+		return null;
+	}
+
+	const { total_otu_count, change_count } = data;
+
+	if (total_otu_count === 0 && hasRights) {
+		return (
+			<Alert color="orange" level icon={AlertCircle}>
+				<strong>
+					At least one OTU must be added to the database before an index can be
+					built.
+				</strong>
+			</Alert>
+		);
+	}
+
+	if (change_count && hasRights) {
+		return (
+			<Alert color="orange" level icon={Info}>
+				<span>
+					<span>There are unbuilt changes. </span>
+					<Link to={`/refs/${refId}/indexes?openRebuild=true`}>
+						Rebuild the index
+					</Link>
+					<span> to use the changes in future analyses.</span>
+				</span>
+			</Alert>
+		);
+	}
+
+	return null;
+}

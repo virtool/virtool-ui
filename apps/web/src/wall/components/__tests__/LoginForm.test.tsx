@@ -1,0 +1,73 @@
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter, renderWithProviders } from "@tests/setup";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+const { loginMock } = vi.hoisted(() => ({
+	loginMock: vi.fn(),
+}));
+
+vi.mock("../../queries", async () => {
+	const { useMutation } = await import("@tanstack/react-query");
+	return {
+		useLoginMutation: () =>
+			useMutation({
+				mutationFn: loginMock,
+			}),
+	};
+});
+
+import LoginForm from "../LoginForm";
+
+describe("<LoginForm />", () => {
+	afterEach(() => {
+		loginMock.mockReset();
+	});
+
+	it("calls the login mutation with the form values", async () => {
+		const handle = "test_Username";
+		const password = "Password";
+		const setResetCode = vi.fn();
+
+		loginMock.mockResolvedValue({ reset: false });
+
+		renderWithProviders(
+			<MemoryRouter>
+				<LoginForm setResetCode={setResetCode} />
+			</MemoryRouter>,
+		);
+
+		await userEvent.type(await screen.findByLabelText("Username"), handle);
+		await userEvent.type(screen.getByLabelText("Password"), password);
+		await userEvent.click(screen.getByLabelText("Remember Me"));
+		await userEvent.click(screen.getByRole("button", { name: "Login" }));
+
+		await waitFor(() => expect(loginMock).toHaveBeenCalledTimes(1));
+		expect(loginMock.mock.calls[0][0]).toEqual({
+			handle,
+			password,
+			remember: true,
+		});
+	});
+
+	it("displays the thrown error message on login failure", async () => {
+		const handle = "test_Username";
+		const password = "Password";
+		const errorMessage = "Invalid handle or password.";
+		const setResetCode = vi.fn();
+
+		loginMock.mockRejectedValue(new Error(errorMessage));
+
+		renderWithProviders(
+			<MemoryRouter>
+				<LoginForm setResetCode={setResetCode} />
+			</MemoryRouter>,
+		);
+
+		await userEvent.type(await screen.findByLabelText("Username"), handle);
+		await userEvent.type(screen.getByLabelText("Password"), password);
+		await userEvent.click(screen.getByRole("button", { name: "Login" }));
+
+		expect(await screen.findByText(errorMessage)).toBeInTheDocument();
+	});
+});

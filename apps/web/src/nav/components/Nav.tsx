@@ -1,0 +1,95 @@
+import { useLogout } from "@account/queries";
+import type { AdministratorRoleName } from "@administration/types";
+import { hasSufficientAdminRole } from "@administration/utils";
+import Dropdown from "@base/Dropdown";
+import DropdownMenuContent from "@base/DropdownMenuContent";
+import DropdownMenuItem from "@base/DropdownMenuItem";
+import DropdownMenuLink from "@base/DropdownMenuLink";
+import DropdownMenuTrigger from "@base/DropdownMenuTrigger";
+import IconButton from "@base/IconButton";
+import InitialIcon from "@base/InitialIcon";
+import Logo from "@base/Logo";
+import { useRootQuery } from "@wall/queries";
+import { Bug, Info } from "lucide-react";
+import { useState } from "react";
+import AboutDialog from "./AboutDialog";
+import { NavLink } from "./NavLink";
+
+type NavBarProps = {
+	administrator_role: AdministratorRoleName;
+	handle: string;
+	setOpenDev?: (open: boolean) => void;
+};
+
+/**
+ * Display the main navigation bar with links too root level views.
+ */
+export default function Nav({
+	administrator_role,
+	handle,
+	setOpenDev = () => {},
+}: NavBarProps) {
+	const mutation = useLogout();
+	const { data } = useRootQuery();
+	const [aboutOpen, setAboutOpen] = useState(false);
+
+	function onLogout() {
+		mutation.mutate();
+	}
+
+	return (
+		<nav className="bg-virtool flex justify-between text-white">
+			<div className="flex items-center">
+				<Logo className="pb-2.5 pl-10 pr-4" color="white" />
+				<NavLink to="/jobs?state=running">Jobs</NavLink>
+				<NavLink to="/samples">Samples</NavLink>
+				<NavLink to="/refs">References</NavLink>
+				<NavLink to="/hmms">HMMs</NavLink>
+				<NavLink to="/subtractions">Subtractions</NavLink>
+			</div>
+
+			<div className="flex gap-2 pr-4">
+				{data?.dev && (
+					<IconButton
+						onClick={() => setOpenDev(true)}
+						IconComponent={Bug}
+						tip="dev tools"
+						color="red"
+					/>
+				)}
+
+				<IconButton
+					onClick={() => setAboutOpen(true)}
+					IconComponent={Info}
+					tip="About"
+					color="gray"
+				/>
+
+				<Dropdown>
+					<DropdownMenuTrigger aria-label="User menu">
+						<div className="bg-transparent flex items-center">
+							<InitialIcon handle={handle} size="md" />
+						</div>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent>
+						<DropdownMenuLink to="/account">
+							Signed in as <strong>{handle}</strong>
+						</DropdownMenuLink>
+
+						<div />
+
+						<DropdownMenuLink to="/account">Account</DropdownMenuLink>
+						{hasSufficientAdminRole("users", administrator_role) && (
+							<DropdownMenuLink to="/administration">
+								Administration{" "}
+							</DropdownMenuLink>
+						)}
+						<DropdownMenuItem onSelect={onLogout}>Logout</DropdownMenuItem>
+					</DropdownMenuContent>
+				</Dropdown>
+			</div>
+
+			<AboutDialog open={aboutOpen} setOpen={setAboutOpen} />
+		</nav>
+	);
+}

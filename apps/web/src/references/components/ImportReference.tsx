@@ -1,0 +1,107 @@
+import Alert from "@base/Alert";
+import { DialogFooter } from "@base/Dialog";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
+import ProgressBarAffixed from "@base/ProgressBarAffixed";
+import SaveButton from "@base/SaveButton";
+import { useNavigate } from "@tanstack/react-router";
+import { Controller, useForm } from "react-hook-form";
+import { UploadBar } from "@/uploads/components/UploadBar";
+import { useImportReference, useUploadReference } from "../queries";
+
+export default function ImportReference() {
+	const navigate = useNavigate();
+
+	const importMutation = useImportReference();
+	const { uploadMutation, fileName, uploadId, progress } = useUploadReference();
+
+	const {
+		control,
+		formState: { errors },
+		handleSubmit,
+		register,
+	} = useForm({
+		defaultValues: {
+			name: "",
+			description: "",
+			upload: "",
+		},
+	});
+
+	function handleDrop(acceptedFiles: File[]) {
+		uploadMutation.mutate(acceptedFiles[0]);
+	}
+
+	const uploadBarMessage =
+		fileName || (progress === 0 ? "Drag file here to upload" : "Uploading...");
+
+	return (
+		<>
+			<Alert>
+				<strong>
+					Create a reference from a file previously exported from another
+					Virtool reference.
+				</strong>
+			</Alert>
+
+			<Controller
+				control={control}
+				name="upload"
+				rules={{ required: true }}
+				render={({ field: { onChange } }) => (
+					<div className="mb-4">
+						<ProgressBarAffixed color="green" now={progress} />
+						<UploadBar
+							message={uploadBarMessage}
+							onDrop={(acceptedFiles) => {
+								handleDrop(acceptedFiles);
+								onChange(acceptedFiles[0].name);
+							}}
+							multiple={false}
+						/>
+
+						<InputError>
+							{errors.upload?.type === "required" &&
+								"A reference file must be uploaded"}
+						</InputError>
+					</div>
+				)}
+			/>
+
+			<form
+				onSubmit={handleSubmit((values) => {
+					if (uploadId === null) {
+						return;
+					}
+					importMutation.mutate(
+						{ ...values, importFrom: uploadId },
+						{ onSuccess: () => navigate({ to: "/refs", replace: true }) },
+					);
+				})}
+			>
+				<InputGroup>
+					<InputLabel htmlFor="name">Name</InputLabel>
+					<InputSimple id="name" {...register("name", { required: true })} />
+					<InputError>{errors.name?.type && "A name is required."}</InputError>
+				</InputGroup>
+				<InputGroup>
+					<InputLabel htmlFor="description">Description</InputLabel>
+					<InputSimple
+						as="textarea"
+						id="description"
+						{...register("description")}
+					/>
+				</InputGroup>
+
+				<DialogFooter>
+					<SaveButton
+						disabled={progress > 0 && uploadId === null}
+						altText="Import"
+					/>
+				</DialogFooter>
+			</form>
+		</>
+	);
+}
