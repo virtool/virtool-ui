@@ -20,14 +20,16 @@ describe("<Settings />", () => {
 
 	it("should render", async () => {
 		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account });
+		await renderRoute(path, {
+			account,
+			seed: (queryClient) => {
+				queryClient.setQueryData(["message", "list"], []);
+			},
+		});
 
-		expect(await screen.findByText("Instance Message")).toBeInTheDocument();
+		expect(await screen.findByText("Instance Messages")).toBeInTheDocument();
 		expect(screen.getByText("Settings")).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
-		expect(
-			screen.getByRole("textbox", { name: "Message" }),
-		).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Create" })).toBeInTheDocument();
 
 		expect(screen.getByText("JSON API")).toBeInTheDocument();
 	});
