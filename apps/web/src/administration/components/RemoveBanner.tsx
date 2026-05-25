@@ -19,18 +19,27 @@ export default function RemoveBanner({
 	onConfirm,
 }: RemoveBannerProps) {
 	const [open, setOpen] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+
+	function handleOpenChange(next: boolean) {
+		setOpen(next);
+		if (!next) {
+			setError(null);
+		}
+	}
 
 	async function handleConfirm() {
 		try {
+			setError(null);
 			await onConfirm();
 			setOpen(false);
 		} catch {
-			// Leave the dialog open if deletion fails.
+			setError("Failed to delete the banner. Please try again.");
 		}
 	}
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<IconButton
 				color="red"
 				IconComponent={Trash}
@@ -42,6 +51,11 @@ export default function RemoveBanner({
 				<p className="text-base">
 					Are you sure you want to delete the banner <strong>{message}</strong>?
 				</p>
+				{error && (
+					<p role="alert" className="mt-4 text-red-600">
+						{error}
+					</p>
+				)}
 				<footer className="mt-8 flex">
 					<Button type="button" color="red" onClick={handleConfirm}>
 						Delete

@@ -138,13 +138,13 @@ export async function updateMessage(
 ): Promise<Message> {
 	const update: Partial<typeof instanceMessages.$inferInsert> = {
 		user: String(userId),
+		updatedAt: new Date(),
 	};
 	if (values.color !== undefined) {
 		update.color = values.color;
 	}
 	if (values.message !== undefined) {
 		update.message = values.message;
-		update.updatedAt = new Date();
 	}
 
 	const [row] = await db
@@ -189,12 +189,12 @@ export async function setActiveMessage(id: number): Promise<Message> {
 			.where(eq(instanceMessages.id, id))
 			.returning();
 
+		if (!updated) {
+			throw new MessageNotFoundError();
+		}
+
 		return updated;
 	});
-
-	if (!row) {
-		throw new MessageNotFoundError();
-	}
 
 	await emit("messages", row.id, "update");
 

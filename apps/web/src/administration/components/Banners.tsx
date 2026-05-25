@@ -36,10 +36,10 @@ export default function Banners() {
 
 	function handleChange(value: string) {
 		if (value === "off") {
-			void clearActiveMutation.mutateAsync();
+			clearActiveMutation.mutate();
 			return;
 		}
-		void setActiveMutation.mutateAsync({ id: Number(value) });
+		setActiveMutation.mutate({ id: Number(value) });
 	}
 
 	return (

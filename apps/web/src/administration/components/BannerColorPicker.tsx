@@ -1,14 +1,9 @@
 import { cn } from "@app/utils";
-import { type BannerColor, bannerColors } from "@banner/types";
-
-const swatchClasses: Record<BannerColor, string> = {
-	red: "bg-red-500",
-	orange: "bg-orange-500",
-	yellow: "bg-yellow-500",
-	blue: "bg-blue-500",
-	purple: "bg-purple-500",
-	grey: "bg-gray-500",
-};
+import {
+	type BannerColor,
+	bannerColorClasses,
+	bannerColors,
+} from "@banner/types";
 
 const labels: Record<BannerColor, string> = {
 	red: "Red",
@@ -24,6 +19,7 @@ type BannerColorPickerProps = {
 	name?: string;
 	value: BannerColor;
 	onChange: (value: BannerColor) => void;
+	"aria-labelledby"?: string;
 };
 
 /**
@@ -35,14 +31,19 @@ export default function BannerColorPicker({
 	name = "banner-color",
 	value,
 	onChange,
+	"aria-labelledby": ariaLabelledBy,
 }: BannerColorPickerProps) {
 	return (
-		<fieldset id={id} className="flex gap-2 mt-1 border-0 p-0">
+		<fieldset
+			id={id}
+			aria-labelledby={ariaLabelledBy}
+			className="flex gap-2 mt-1 border-0 p-0"
+		>
 			{bannerColors.map((color) => (
 				<label
 					key={color}
 					className={cn(
-						swatchClasses[color],
+						bannerColorClasses[color],
 						"h-8",
 						"w-8",
 						"rounded-full",

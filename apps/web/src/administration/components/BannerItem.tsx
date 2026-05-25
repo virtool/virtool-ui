@@ -1,19 +1,10 @@
 import { cn } from "@app/utils";
-import type { BannerColor } from "@banner/types";
+import { type BannerColor, bannerColorClasses } from "@banner/types";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { RadioGroupItem } from "@base/RadioGroup";
 import type { BannerFormValues } from "./BannerForm";
 import EditBanner from "./EditBanner";
 import RemoveBanner from "./RemoveBanner";
-
-const swatchClasses: Record<BannerColor, string> = {
-	red: "bg-red-500",
-	orange: "bg-orange-500",
-	yellow: "bg-yellow-500",
-	blue: "bg-blue-500",
-	purple: "bg-purple-500",
-	grey: "bg-gray-500",
-};
 
 type BannerItemProps = {
 	color: BannerColor;
@@ -45,7 +36,7 @@ export default function BannerItem({
 			>
 				<span
 					className={cn(
-						swatchClasses[color],
+						bannerColorClasses[color],
 						"h-5",
 						"w-5",
 						"shrink-0",

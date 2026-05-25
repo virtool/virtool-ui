@@ -19,14 +19,14 @@ const colorSchema = z.enum(bannerColors);
 const idSchema = z.object({ id: z.number().int().positive() });
 
 const createMessageSchema = z.object({
-	message: z.string(),
+	message: z.string().min(1, "Message cannot be empty."),
 	color: colorSchema,
 });
 
 const updateMessageSchema = z
 	.object({
 		id: z.number().int().positive(),
-		message: z.string().optional(),
+		message: z.string().min(1, "Message cannot be empty.").optional(),
 		color: colorSchema.optional(),
 	})
 	.refine((data) => data.message !== undefined || data.color !== undefined, {

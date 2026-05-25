@@ -54,13 +54,13 @@ export default function BannerForm({
 				<InputError>{errors.message?.message || error}</InputError>
 			</InputGroup>
 			<InputGroup>
-				<InputLabel htmlFor="color">Color</InputLabel>
+				<InputLabel id="color-label">Color</InputLabel>
 				<Controller
 					control={control}
 					name="color"
 					render={({ field }) => (
 						<BannerColorPicker
-							id="color"
+							aria-labelledby="color-label"
 							value={field.value}
 							onChange={field.onChange}
 						/>
