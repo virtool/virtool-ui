@@ -8,6 +8,7 @@ import {
 
 const setMessageSchema = z.object({
 	message: z.string(),
+	color: z.enum(["red", "yellow", "blue", "purple", "orange", "grey"]),
 });
 
 export const findMessage = createServerFn({ method: "GET" }).handler(async () =>
@@ -19,5 +20,5 @@ export const setMessage = createServerFn({ method: "POST" })
 	.handler(async ({ data }) => {
 		const session = await requireSession();
 		await requireAdminRole(session, "settings");
-		return setMessageImpl(data.message, session.userId);
+		return setMessageImpl(data.message, data.color, session.userId);
 	});

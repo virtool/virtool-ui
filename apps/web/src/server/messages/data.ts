@@ -4,6 +4,7 @@ import { db } from "../db/pg";
 import {
 	type InstanceMessageRow,
 	instanceMessages,
+	type MessageColor,
 } from "../db/schema/messages";
 import { users } from "../db/schema/users";
 import { emit } from "../events/emit";
@@ -12,7 +13,7 @@ import { emit } from "../events/emit";
 export type Message = {
 	id: number;
 	active: boolean;
-	color: string;
+	color: MessageColor;
 	message: string;
 	created_at: string;
 	updated_at: string;
@@ -64,6 +65,7 @@ export async function findMessage(): Promise<Message | null> {
 
 export async function setMessage(
 	message: string,
+	color: MessageColor,
 	userId: number,
 ): Promise<Message> {
 	const now = new Date();
@@ -71,7 +73,7 @@ export async function setMessage(
 		.insert(instanceMessages)
 		.values({
 			active: message.trim().length > 0,
-			color: "red",
+			color,
 			message,
 			createdAt: now,
 			updatedAt: now,

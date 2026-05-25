@@ -27,6 +27,21 @@ describe("MessageBanner", () => {
 		expect(screen.getByText("Maintenance tonight")).toBeInTheDocument();
 	});
 
+	it("applies the configured color class to the banner", () => {
+		useFetchMessageMock.mockReturnValue({
+			data: createFakeMessage({
+				active: true,
+				color: "blue",
+				message: "Heads up",
+			}),
+			isPending: false,
+		} as ReturnType<typeof useFetchMessage>);
+
+		renderWithProviders(<MessageBanner />);
+
+		expect(screen.getByText("Heads up")).toHaveClass("bg-blue-500");
+	});
+
 	it("hides the message when it is inactive", () => {
 		useFetchMessageMock.mockReturnValue({
 			data: createFakeMessage({

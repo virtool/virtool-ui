@@ -33,3 +33,6 @@ export const instanceMessages = pgTable("instance_messages", {
 
 /** A row from the `instance_messages` table. */
 export type InstanceMessageRow = typeof instanceMessages.$inferSelect;
+
+/** One of the allowed instance-message colors stored in `instance_messages.color`. */
+export type MessageColor = (typeof messageColor.enumValues)[number];

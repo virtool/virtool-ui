@@ -1,6 +1,6 @@
 import { findMessage, setMessage } from "@server/messages/functions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Message } from "./types";
+import type { Message, MessageColor } from "./types";
 
 /**
  * Factory for generating react-query keys for message related queries.
@@ -28,8 +28,13 @@ export function useFetchMessage() {
  */
 export function useSetMessage() {
 	const queryClient = useQueryClient();
-	return useMutation<Message, unknown, { message: string }>({
-		mutationFn: ({ message }) => setMessage({ data: { message } }),
+	return useMutation<
+		Message,
+		unknown,
+		{ message: string; color: MessageColor }
+	>({
+		mutationFn: ({ message, color }) =>
+			setMessage({ data: { message, color } }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: messageQueryKeys.all() });
 		},
