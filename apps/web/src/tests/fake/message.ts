@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
 import type { Message } from "@message/types";
-import nock from "nock";
 import { createFakeUserNested } from "./user";
 
 /**
@@ -19,16 +18,4 @@ export function createFakeMessage(overrides?: Partial<Message>): Message {
 		user: createFakeUserNested(),
 		...overrides,
 	};
-}
-
-/**
- * Creates a mocked API call for getting the instance message
- *
- * @param message - The message documents
- * @returns A nock scope for the mocked API call
- */
-export function mockApiGetMessage(message) {
-	return nock("http://localhost")
-		.get("/api/instance_message")
-		.reply(200, message);
 }

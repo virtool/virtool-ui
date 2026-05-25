@@ -1,5 +1,5 @@
+import { findMessage, setMessage } from "@server/messages/functions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getMessage, setMessage } from "./api";
 import type { Message } from "./types";
 
 /**
@@ -15,9 +15,9 @@ export const messageQueryKeys = {
  * @returns The instance message
  */
 export function useFetchMessage() {
-	return useQuery<Message>({
+	return useQuery<Message | null>({
 		queryKey: messageQueryKeys.all(),
-		queryFn: getMessage,
+		queryFn: () => findMessage(),
 	});
 }
 
@@ -29,7 +29,7 @@ export function useFetchMessage() {
 export function useSetMessage() {
 	const queryClient = useQueryClient();
 	return useMutation<Message, unknown, { message: string }>({
-		mutationFn: ({ message }) => setMessage(message),
+		mutationFn: ({ message }) => setMessage({ data: { message } }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: messageQueryKeys.all() });
 		},
