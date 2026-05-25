@@ -1,5 +1,6 @@
 import { cn } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
+import { RadioGroupItem } from "@base/RadioGroup";
 import type { MessageColor } from "@message/types";
 import EditInstanceMessage from "./EditInstanceMessage";
 import type { InstanceMessageFormValues } from "./InstanceMessageForm";
@@ -14,28 +15,10 @@ const swatchClasses: Record<MessageColor, string> = {
 	grey: "bg-gray-500",
 };
 
-const radioClasses = cn(
-	"appearance-none",
-	"h-5",
-	"w-5",
-	"shrink-0",
-	"rounded-full",
-	"border-2",
-	"border-gray-300",
-	"cursor-pointer",
-	"checked:border-gray-900",
-	"checked:bg-gray-900",
-	"focus-visible:ring-2",
-	"focus-visible:ring-blue-500",
-	"focus-visible:outline-none",
-);
-
 type InstanceMessageItemProps = {
-	active: boolean;
 	color: MessageColor;
 	id: number;
 	message: string;
-	onActivate: (id: number) => Promise<unknown>;
 	onEdit: (id: number, values: InstanceMessageFormValues) => Promise<unknown>;
 	onRemove: (id: number) => Promise<unknown>;
 };
@@ -45,11 +28,9 @@ type InstanceMessageItemProps = {
  * and delete affordances.
  */
 export default function InstanceMessageItem({
-	active,
 	color,
 	id,
 	message,
-	onActivate,
 	onEdit,
 	onRemove,
 }: InstanceMessageItemProps) {
@@ -57,14 +38,7 @@ export default function InstanceMessageItem({
 
 	return (
 		<BoxGroupSection className="flex items-center gap-3">
-			<input
-				type="radio"
-				id={radioId}
-				name="instance-message-active"
-				checked={active}
-				onChange={() => void onActivate(id)}
-				className={radioClasses}
-			/>
+			<RadioGroupItem id={radioId} value={id.toString()} />
 			<label
 				htmlFor={radioId}
 				className="flex grow items-center gap-3 min-w-0 cursor-pointer"

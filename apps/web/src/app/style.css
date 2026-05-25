@@ -48,12 +48,6 @@ body {
 		margin: 5px 0 10px;
 	}
 
-	label {
-		display: inline-block;
-		font-weight: var(--font-weight-medium);
-		margin-bottom: calc(var(--spacing) * 2);
-	}
-
 	p {
 		margin: 0 0 10px;
 	}

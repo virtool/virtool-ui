@@ -1,8 +1,8 @@
-import { cn } from "@app/utils";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundSection from "@base/NoneFoundSection";
+import { RadioGroup, RadioGroupItem } from "@base/RadioGroup";
 import SectionHeader from "@base/SectionHeader";
 import {
 	useClearActiveMessage,
@@ -14,22 +14,6 @@ import {
 } from "@message/queries";
 import CreateInstanceMessage from "./CreateInstanceMessage";
 import InstanceMessageItem from "./InstanceMessageItem";
-
-const offRadioClasses = cn(
-	"appearance-none",
-	"h-5",
-	"w-5",
-	"shrink-0",
-	"rounded-full",
-	"border-2",
-	"border-gray-300",
-	"cursor-pointer",
-	"checked:border-gray-900",
-	"checked:bg-gray-900",
-	"focus-visible:ring-2",
-	"focus-visible:ring-blue-500",
-	"focus-visible:outline-none",
-);
 
 /**
  * Display and manage the list of instance messages. Admins can create, edit,
@@ -48,7 +32,16 @@ export default function InstanceMessages() {
 		return <LoadingPlaceholder />;
 	}
 
-	const hasActive = data.some((item) => item.active);
+	const activeMessage = data.find((item) => item.active);
+	const selectedValue = activeMessage?.id.toString() ?? "off";
+
+	function handleChange(value: string) {
+		if (value === "off") {
+			void clearActiveMutation.mutateAsync();
+			return;
+		}
+		void setActiveMutation.mutateAsync({ id: Number(value) });
+	}
 
 	return (
 		<section>
@@ -64,17 +57,14 @@ export default function InstanceMessages() {
 				/>
 			</SectionHeader>
 			{data.length ? (
-				<div role="radiogroup" aria-label="Active instance message">
+				<RadioGroup
+					aria-label="Active instance message"
+					value={selectedValue}
+					onValueChange={handleChange}
+				>
 					<BoxGroup>
 						<BoxGroupSection className="flex items-center gap-3">
-							<input
-								type="radio"
-								id="instance-message-off"
-								name="instance-message-active"
-								checked={!hasActive}
-								onChange={() => void clearActiveMutation.mutateAsync()}
-								className={offRadioClasses}
-							/>
+							<RadioGroupItem id="instance-message-off" value="off" />
 							<label
 								htmlFor="instance-message-off"
 								className="grow cursor-pointer text-gray-600"
@@ -85,11 +75,9 @@ export default function InstanceMessages() {
 						{data.map((item) => (
 							<InstanceMessageItem
 								key={item.id}
-								active={item.active}
 								color={item.color}
 								id={item.id}
 								message={item.message}
-								onActivate={(id) => setActiveMutation.mutateAsync({ id })}
 								onEdit={(id, values) =>
 									updateMutation.mutateAsync({ id, ...values })
 								}
@@ -97,7 +85,7 @@ export default function InstanceMessages() {
 							/>
 						))}
 					</BoxGroup>
-				</div>
+				</RadioGroup>
 			) : (
 				<BoxGroup>
 					<NoneFoundSection noun="instance messages" />
