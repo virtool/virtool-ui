@@ -1,11 +1,5 @@
-import Button from "@base/Button";
-import {
-	Dialog,
-	DialogContent,
-	DialogTitle,
-	DialogTrigger,
-} from "@base/Dialog";
-import Icon from "@base/Icon";
+import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
+import IconButton from "@base/IconButton";
 import type { MessageColor } from "@message/types";
 import { Pen } from "lucide-react";
 import { useState } from "react";
@@ -53,10 +47,11 @@ export default function EditInstanceMessage({
 
 	return (
 		<Dialog open={open} onOpenChange={handleOpenChange}>
-			<Button as={DialogTrigger} size="small">
-				<Icon icon={Pen} />
-				<span>Edit</span>
-			</Button>
+			<IconButton
+				IconComponent={Pen}
+				onClick={() => setOpen(true)}
+				tip="Edit"
+			/>
 			<DialogContent>
 				<DialogTitle>Edit Instance Message</DialogTitle>
 				<InstanceMessageForm

@@ -45,16 +45,16 @@ export default function InstanceMessages() {
 
 	return (
 		<section>
-			<SectionHeader className="flex items-start justify-between">
-				<div>
-					<h2>Instance Messages</h2>
-					<p>
-						Manage the message displayed to all users above the navigation bar.
-					</p>
+			<SectionHeader>
+				<h2>Instance Messages</h2>
+				<p>
+					Manage the message displayed to all users above the navigation bar.
+				</p>
+				<div className="mt-3 flex justify-end">
+					<CreateInstanceMessage
+						onSubmit={(values) => createMutation.mutateAsync(values)}
+					/>
 				</div>
-				<CreateInstanceMessage
-					onSubmit={(values) => createMutation.mutateAsync(values)}
-				/>
 			</SectionHeader>
 			{data.length ? (
 				<RadioGroup

@@ -1,10 +1,7 @@
 import Button from "@base/Button";
-import {
-	Dialog,
-	DialogContent,
-	DialogTitle,
-	DialogTrigger,
-} from "@base/Dialog";
+import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
+import IconButton from "@base/IconButton";
+import { Trash } from "lucide-react";
 import { useState } from "react";
 
 type RemoveInstanceMessageProps = {
@@ -34,9 +31,12 @@ export default function RemoveInstanceMessage({
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<Button as={DialogTrigger} color="red" size="small">
-				Delete
-			</Button>
+			<IconButton
+				color="red"
+				IconComponent={Trash}
+				onClick={() => setOpen(true)}
+				tip="Delete"
+			/>
 			<DialogContent>
 				<DialogTitle>Delete Instance Message</DialogTitle>
 				<p className="text-base">
