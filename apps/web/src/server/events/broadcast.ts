@@ -1,5 +1,6 @@
 import { getLabel, LabelNotFoundError } from "../labels/data";
 import { logger } from "../logger";
+import { findMessage } from "../messages/data";
 import type { ClientEvent } from "./channel";
 
 /** Message shape sent to browser clients (matches the legacy WebSocket wire format). */
@@ -13,6 +14,7 @@ type Resolver = (resourceId: number | string) => Promise<unknown>;
 
 const resolvers: Record<string, Resolver> = {
 	labels: async (id) => getLabel(Number(id)),
+	messages: async () => findMessage(),
 };
 
 /**

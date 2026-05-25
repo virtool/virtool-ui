@@ -8,7 +8,7 @@ type InputLabelProps = {
 
 export default function InputLabel({ children, htmlFor, id }: InputLabelProps) {
 	return (
-		<label htmlFor={htmlFor} id={id} className="font-medium">
+		<label htmlFor={htmlFor} id={id} className="font-medium mb-2 inline-block">
 			{children}
 		</label>
 	);

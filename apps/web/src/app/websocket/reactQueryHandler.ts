@@ -1,6 +1,7 @@
 import { accountKeys } from "@account/queries";
 import { roleQueryKeys, userQueryKeys } from "@administration/queries";
 import { analysesQueryKeys } from "@analyses/queries";
+import { bannerQueryKeys } from "@banner/queries";
 import { groupQueryKeys } from "@groups/queries";
 import { indexQueryKeys } from "@indexes/queries";
 import { jobQueryKeys } from "@jobs/queries";
@@ -37,6 +38,7 @@ const keyFactories = {
 	indexes: indexQueryKeys,
 	jobs: jobQueryKeys,
 	labels: labelQueryKeys,
+	messages: bannerQueryKeys,
 	models: modelQueryKeys,
 	references: referenceQueryKeys,
 	roles: roleQueryKeys,

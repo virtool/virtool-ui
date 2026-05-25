@@ -56,7 +56,7 @@ function Checkbox({
 			</CheckboxPrimitive.Root>
 			{label && (
 				<label
-					className="flex gap-2 items-center font-normal m-0 select-none cursor-pointer"
+					className="flex gap-2 items-center select-none cursor-pointer"
 					htmlFor={id}
 				>
 					{labelComponent || label}

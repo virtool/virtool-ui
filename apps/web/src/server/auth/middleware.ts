@@ -1,7 +1,11 @@
+import type { AdministratorRoleName } from "@administration/types";
+import { hasSufficientAdminRole } from "@administration/utils";
 import { createMiddleware, createServerOnlyFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
+import { eq } from "drizzle-orm";
 
 import { db } from "../db/pg";
+import { users } from "../db/schema/users";
 import { type AuthenticatedSession, verifyRequest } from "./verify";
 
 /** Thrown by the auth middleware when a request has no valid session. */
@@ -11,6 +15,41 @@ export class UnauthorizedError extends Error {
 		this.name = "UnauthorizedError";
 	}
 }
+
+/** Thrown when the session user lacks the required administrator role. */
+export class ForbiddenError extends Error {
+	constructor() {
+		super("Forbidden");
+		this.name = "ForbiddenError";
+	}
+}
+
+/**
+ * Throw `ForbiddenError` (and 403) if the session user lacks the required
+ * administrator role. Reads the user's `administrator_role` from the upstream
+ * users table; users with a null role are always rejected.
+ */
+export const requireAdminRole = createServerOnlyFn(
+	async (
+		session: AuthenticatedSession,
+		requiredRole: AdministratorRoleName,
+	): Promise<void> => {
+		const [row] = await db
+			.select({ administratorRole: users.administratorRole })
+			.from(users)
+			.where(eq(users.id, session.userId))
+			.limit(1);
+
+		if (
+			!row ||
+			row.administratorRole === null ||
+			!hasSufficientAdminRole(requiredRole, row.administratorRole)
+		) {
+			setResponseStatus(403);
+			throw new ForbiddenError();
+		}
+	},
+);
 
 /**
  * Resolve the session for the active server-function request or reject with

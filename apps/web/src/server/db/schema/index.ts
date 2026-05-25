@@ -4,5 +4,6 @@
 // here. Each feature owns a sibling file (e.g. `labels.ts`) and is added to
 // the `export *` list as it lands.
 export * from "./labels";
+export * from "./messages";
 export * from "./sessions";
 export * from "./users";
