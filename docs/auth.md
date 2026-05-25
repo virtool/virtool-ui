@@ -1,0 +1,237 @@
+# Authentication
+
+Authentication owns its own subtree under
+`apps/web/src/server/auth/` and a global function middleware wired
+into `apps/web/src/start.ts`. This doc covers the whole picture: the
+code layout (a documented exception to the three-file
+`data.ts`/`service.ts`/`functions.ts` layering used by other server
+features), how requests are gated, the session model, and the
+login / reset / logout flows.
+
+## Code layout
+
+The pure layer is split by primitive rather than collapsed into one
+`data.ts`:
+
+- `core.ts` — login / logout / password-reset domain logic
+- `session.ts` — session row CRUD
+- `tokens.ts` — session id and token generation, hashing
+- `password.ts` — bcrypt wrappers
+- `cookies.ts` — `CookieAdapter` type (framework-agnostic cookie I/O)
+- `verify.ts` — request verification (pure, given a cookie adapter and
+  db handle)
+
+The wired layer is split too:
+
+- `functions.ts` — TanStack Start server functions for login, logout,
+  password reset
+- `middleware.ts` — TanStack Start middleware that delegates to
+  `verify.ts`
+
+The shape is the same as labels — pure below, framework wiring above —
+just finer-grained because the primitives are distinct (crypto vs.
+persistence vs. cookies vs. verification). A future feature that needs
+this level of separation should follow this pattern; one that doesn't
+should look like labels.
+
+## Authentication middleware
+
+Authentication is enforced globally at the server-function boundary,
+not per-handler. The wiring lives in `apps/web/src/start.ts`:
+
+```ts
+const authenticationMiddleware = createAuthenticationMiddleware([
+  loginFn,
+  logoutFn,
+  resetPasswordFn,
+]);
+
+export const startInstance = createStart(() => ({
+  defaultSsr: false,
+  requestMiddleware: [csrfMiddleware, cspNonce],
+  functionMiddleware: [authenticationMiddleware],
+}));
+```
+
+Every server function is gated by default. Public endpoints opt out by
+being listed in the `exceptions` array — passed as **server-function
+references**, not URL strings. The middleware derives the path from
+each fn's bound `url`, so the exception list can't drift out of sync
+with a rename.
+
+The middleware lives in `server/auth/middleware.ts` and exposes three
+helpers:
+
+- **`createAuthenticationMiddleware(exceptions)`** — builds the global
+  function middleware. Resolves the session for every non-exception
+  call and attaches it to `context.session`. Downstream server
+  functions read it from their handler context — they do not call
+  `requireSession()` themselves.
+- **`requireSession()`** — the server-only resolver that the middleware
+  delegates to. Throws `UnauthorizedError` and sets a 401 response
+  status on failure. Use directly only when authentication has to be
+  enforced *outside* the middleware-wrapped path (rare; the global
+  middleware covers normal server functions).
+- **`requireAuthenticatedRequest(request)`** — for raw `Request`
+  handlers in `createFileRoute` (e.g. SSE / streaming routes like
+  `routes/events.ts`). These run outside the server-function
+  async-local context, so the middleware can't reach them. Returns a
+  401 `Response` on failure for the caller to `return` directly.
+
+Verification itself is pure: `verify.ts` exports `verifyRequest(db,
+request)` and `verifyAuthenticatedSession(db, sessionId, sessionToken)`
+with no framework imports. The middleware is the only place that ties
+verification to the TanStack Start request context — keeping
+verification reusable from any handler shape that can produce a
+`Request` or a cookie pair.
+
+### Why a global middleware and not per-fn guards
+
+Per-fn `requireSession()` calls would be easy to forget on a new
+server function, and forgetting is silent — the fn would just be
+publicly callable. Default-on with an explicit opt-out flips the
+failure mode: forgetting to list a fn in `exceptions` produces a 401
+the moment you test it, not a security hole.
+
+### Permissions are not middleware (yet)
+
+Permission checks currently live inside the relevant `data.ts` /
+`service.ts` functions, not as a separate middleware layer. If a
+`requirePermission(...)` middleware lands later, it will compose with
+authentication the same way — global where it makes sense, explicit
+opt-outs by fn reference.
+
+## Session model
+
+Sessions are rows in the Postgres `sessions` table
+(`apps/web/src/server/db/schema/sessions.ts`). Each row carries a
+`sessionType` discriminator: `"authenticated"` or `"reset"`. The client
+identifies itself with two cookies set by `server/auth/cookies.ts`:
+
+- **`session_id`** — opaque identifier of a session row. Set on
+  successful login and on a successful reset. Present alone (no
+  `session_token`) during a forced-reset flow.
+- **`session_token`** — proves the `session_id` belongs to an
+  authenticated session. Only set on the authenticated branch of
+  login and after a successful reset. The server stores the bcrypt-ish
+  hash via `hashToken` in `server/auth/tokens.ts`; only the client
+  ever holds the unhashed value. Treat it as equivalent to the user's
+  password for the token's validity.
+
+There is **no anonymous `session_id`**. The new server functions only
+set the cookie when a real session row exists (`core.ts:90`,
+`core.ts:99`, `core.ts:198`). This is a deliberate departure from the
+legacy Python behaviour described in older docs — don't reintroduce
+anonymous sessions without an explicit reason.
+
+A reset session is not "authenticated" as far as the middleware is
+concerned — any non-exception server function call from a client
+holding only a reset cookie returns 401.
+
+## Session lifetimes
+
+Defined in `server/auth/session.ts:15-17`:
+
+| Kind                          | Lifetime   |
+| ----------------------------- | ---------- |
+| Authenticated, `remember`     | 30 days    |
+| Authenticated, no `remember`  | 60 minutes |
+| Reset                         | 10 minutes |
+
+These mirror the Python values in `virtool/sessions/data.py` so a row
+written by either backend is indistinguishable. Don't drift them — the
+comment in `session.ts` exists because the migration depends on both
+sides minting interchangeable rows.
+
+## Login
+
+`loginFn` (`server/auth/functions.ts:40`) is the public server
+function. It delegates to `core.login`, which:
+
+1. Looks up the user by handle (case-insensitive). A missing or
+   inactive user still pays the `verifyPassword` cost against
+   `TIMING_DUMMY_HASH` so the missing-handle and wrong-password paths
+   are indistinguishable to a timing observer (`core.ts:20`,
+   `core.ts:75`).
+2. Verifies the password with bcrypt.
+3. Branches on the user's `forceReset` flag:
+   - `forceReset = false` → mints an authenticated session, sets both
+     cookies, returns `{ status: "authenticated" }`.
+   - `forceReset = true` → mints a reset session, sets only
+     `session_id`, returns `{ status: "reset_required", resetCode }`.
+
+The `resetCode` is returned in the response body (not a cookie) so the
+client can hold it in JS for the duration of the reset flow.
+
+## Forced password reset
+
+`resetPasswordFn` (`server/auth/functions.ts:78`) takes the new
+password and the `resetCode` returned from the previous login.
+`core.resetPassword`:
+
+1. Resolves the session_id from the cookie and loads the row, requiring
+   `sessionType = "reset"`.
+2. Compares the supplied `resetCode` against the stored one with
+   `timingSafeEqual` (`core.ts:121`). A mismatch invalidates the
+   session and throws.
+3. Rejects an expired session (`expiresAt` past).
+4. Rejects a password that matches the user's current hash
+   (`PasswordReuseError`).
+5. Invalidates **all** of the user's existing sessions
+   (`invalidateUserSessions`), updates the password / clears
+   `forceReset` / sets `lastPasswordChange` / sets `invalidateSessions`,
+   then mints a new authenticated session and rotates both cookies.
+
+Step (5) must match the Python order in
+`virtool.account.data.AccountData.reset` so a user mid-reset sees the
+same behaviour regardless of which backend serves them
+(`core.ts:175-200`).
+
+A reset session is invalidated by:
+
+- Successful reset (cookies rotate to the new authenticated session).
+- A `reset_code` mismatch on `resetPasswordFn`.
+- 10-minute expiry.
+
+## Logout
+
+### Server side
+
+`logoutFn` (`server/auth/functions.ts:68`) calls `core.logout`, which
+deletes the session row keyed by the `session_id` cookie and clears
+both cookies (`core.ts:104`). It's listed in the middleware's
+`exceptions` array — calling it while already logged out is harmless.
+
+### Client side
+
+Two paths trigger a client-side logout today:
+
+- **User-initiated.** `useLogout` in `account/queries.ts:149` runs
+  `logoutFn()` and then calls `resetClient()`.
+- **WebSocket close code 4000.** `WsConnection.ts:68` calls
+  `resetClient()` directly when the server closes the connection with
+  code 4000 (the signal that the session is no longer valid
+  server-side). There is no 401 interceptor on the SuperAgent client;
+  auth state on initial load is checked by
+  `routes/_authenticated.tsx`'s `beforeLoad`, which redirects to
+  `/login` if `fetchAccount` throws.
+
+### `resetClient`
+
+`resetClient` (`app/utils.ts:119`) does two things:
+
+```ts
+window.sessionStorage.clear();
+window.location.reload();
+```
+
+The full-page reload wipes everything held in memory — React state,
+React Query cache, zustand stores, websocket / SSE connections.
+Clearing `sessionStorage` drops persisted form state.
+
+**`localStorage` is not cleared.** Anything persisted to `localStorage`
+survives logout. If you add a `localStorage` key whose meaning depends
+on the logged-in user (cached user data, per-user preferences keyed by
+implicit identity), either clear it from `resetClient` or scope the
+key by user id so the stale value can't be picked up by the next user
+on the same browser.
