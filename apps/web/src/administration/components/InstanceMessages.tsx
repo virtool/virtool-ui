@@ -1,7 +1,7 @@
 import BoxGroup from "@base/BoxGroup";
-import BoxGroupHeader from "@base/BoxGroupHeader";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundSection from "@base/NoneFoundSection";
+import SectionHeader from "@base/SectionHeader";
 import {
 	useClearActiveMessage,
 	useCreateMessage,
@@ -31,8 +31,8 @@ export default function InstanceMessages() {
 	}
 
 	return (
-		<BoxGroup>
-			<BoxGroupHeader className="flex justify-between">
+		<section>
+			<SectionHeader className="flex items-start justify-between">
 				<div>
 					<h2>Instance Messages</h2>
 					<p>
@@ -42,26 +42,28 @@ export default function InstanceMessages() {
 				<CreateInstanceMessage
 					onSubmit={(values) => createMutation.mutateAsync(values)}
 				/>
-			</BoxGroupHeader>
-			{data.length ? (
-				data.map((item) => (
-					<InstanceMessageItem
-						key={item.id}
-						active={item.active}
-						color={item.color}
-						id={item.id}
-						message={item.message}
-						onActivate={(id) => setActiveMutation.mutateAsync({ id })}
-						onDeactivate={() => clearActiveMutation.mutateAsync()}
-						onEdit={(id, values) =>
-							updateMutation.mutateAsync({ id, ...values })
-						}
-						onRemove={(id) => deleteMutation.mutateAsync({ id })}
-					/>
-				))
-			) : (
-				<NoneFoundSection noun="instance messages" />
-			)}
-		</BoxGroup>
+			</SectionHeader>
+			<BoxGroup>
+				{data.length ? (
+					data.map((item) => (
+						<InstanceMessageItem
+							key={item.id}
+							active={item.active}
+							color={item.color}
+							id={item.id}
+							message={item.message}
+							onActivate={(id) => setActiveMutation.mutateAsync({ id })}
+							onDeactivate={() => clearActiveMutation.mutateAsync()}
+							onEdit={(id, values) =>
+								updateMutation.mutateAsync({ id, ...values })
+							}
+							onRemove={(id) => deleteMutation.mutateAsync({ id })}
+						/>
+					))
+				) : (
+					<NoneFoundSection noun="instance messages" />
+				)}
+			</BoxGroup>
+		</section>
 	);
 }
