@@ -1,12 +1,12 @@
 import { cn } from "@app/utils";
+import type { BannerColor } from "@banner/types";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { RadioGroupItem } from "@base/RadioGroup";
-import type { MessageColor } from "@message/types";
-import EditInstanceMessage from "./EditInstanceMessage";
-import type { InstanceMessageFormValues } from "./InstanceMessageForm";
-import RemoveInstanceMessage from "./RemoveInstanceMessage";
+import type { BannerFormValues } from "./BannerForm";
+import EditBanner from "./EditBanner";
+import RemoveBanner from "./RemoveBanner";
 
-const swatchClasses: Record<MessageColor, string> = {
+const swatchClasses: Record<BannerColor, string> = {
 	red: "bg-red-500",
 	orange: "bg-orange-500",
 	yellow: "bg-yellow-500",
@@ -15,26 +15,26 @@ const swatchClasses: Record<MessageColor, string> = {
 	grey: "bg-gray-500",
 };
 
-type InstanceMessageItemProps = {
-	color: MessageColor;
+type BannerItemProps = {
+	color: BannerColor;
 	id: number;
 	message: string;
-	onEdit: (id: number, values: InstanceMessageFormValues) => Promise<unknown>;
+	onEdit: (id: number, values: BannerFormValues) => Promise<unknown>;
 	onRemove: (id: number) => Promise<unknown>;
 };
 
 /**
- * A single instance-message row rendered as a radio option, paired with edit
- * and delete affordances.
+ * A single banner row rendered as a radio option, paired with edit and delete
+ * affordances.
  */
-export default function InstanceMessageItem({
+export default function BannerItem({
 	color,
 	id,
 	message,
 	onEdit,
 	onRemove,
-}: InstanceMessageItemProps) {
-	const radioId = `instance-message-${id}`;
+}: BannerItemProps) {
+	const radioId = `banner-${id}`;
 
 	return (
 		<BoxGroupSection className="flex items-center gap-3">
@@ -56,15 +56,12 @@ export default function InstanceMessageItem({
 				<span className="grow truncate">{message}</span>
 			</label>
 			<div className="flex items-center gap-1">
-				<EditInstanceMessage
+				<EditBanner
 					color={color}
 					message={message}
 					onSubmit={(values) => onEdit(id, values)}
 				/>
-				<RemoveInstanceMessage
-					message={message}
-					onConfirm={() => onRemove(id)}
-				/>
+				<RemoveBanner message={message} onConfirm={() => onRemove(id)} />
 			</div>
 		</BoxGroupSection>
 	);

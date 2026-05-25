@@ -2,19 +2,17 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import { describe, expect, it, vi } from "vitest";
-import EditInstanceMessage from "../EditInstanceMessage";
+import EditBanner from "../EditBanner";
 
 const baseProps = {
 	color: "blue" as const,
 	message: "Existing message",
 };
 
-describe("<EditInstanceMessage>", () => {
+describe("<EditBanner>", () => {
 	it("initializes the form from props and submits the edited values", async () => {
 		const onSubmit = vi.fn().mockResolvedValue(undefined);
-		renderWithProviders(
-			<EditInstanceMessage {...baseProps} onSubmit={onSubmit} />,
-		);
+		renderWithProviders(<EditBanner {...baseProps} onSubmit={onSubmit} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "Edit" }));
 
@@ -37,9 +35,7 @@ describe("<EditInstanceMessage>", () => {
 
 	it("blocks submit when the message is cleared", async () => {
 		const onSubmit = vi.fn();
-		renderWithProviders(
-			<EditInstanceMessage {...baseProps} onSubmit={onSubmit} />,
-		);
+		renderWithProviders(<EditBanner {...baseProps} onSubmit={onSubmit} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "Edit" }));
 		await userEvent.clear(screen.getByLabelText("Message"));

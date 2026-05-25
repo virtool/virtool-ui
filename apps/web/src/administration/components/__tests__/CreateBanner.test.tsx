@@ -2,12 +2,12 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import { describe, expect, it, vi } from "vitest";
-import CreateInstanceMessage from "../CreateInstanceMessage";
+import CreateBanner from "../CreateBanner";
 
-describe("<CreateInstanceMessage>", () => {
+describe("<CreateBanner>", () => {
 	it("submits with the message text and the selected color", async () => {
 		const onSubmit = vi.fn().mockResolvedValue(undefined);
-		renderWithProviders(<CreateInstanceMessage onSubmit={onSubmit} />);
+		renderWithProviders(<CreateBanner onSubmit={onSubmit} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
@@ -25,7 +25,7 @@ describe("<CreateInstanceMessage>", () => {
 
 	it("defaults the color to red when none is picked", async () => {
 		const onSubmit = vi.fn().mockResolvedValue(undefined);
-		renderWithProviders(<CreateInstanceMessage onSubmit={onSubmit} />);
+		renderWithProviders(<CreateBanner onSubmit={onSubmit} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "Create" }));
 		await userEvent.type(screen.getByLabelText("Message"), "Hello");
@@ -41,7 +41,7 @@ describe("<CreateInstanceMessage>", () => {
 
 	it("blocks submit when message is empty", async () => {
 		const onSubmit = vi.fn();
-		renderWithProviders(<CreateInstanceMessage onSubmit={onSubmit} />);
+		renderWithProviders(<CreateBanner onSubmit={onSubmit} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
@@ -55,7 +55,7 @@ describe("<CreateInstanceMessage>", () => {
 
 	it("shows the rejection message and keeps the dialog open on failure", async () => {
 		const onSubmit = vi.fn().mockRejectedValue(new Error("Server exploded."));
-		renderWithProviders(<CreateInstanceMessage onSubmit={onSubmit} />);
+		renderWithProviders(<CreateBanner onSubmit={onSubmit} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "Create" }));
 		await userEvent.type(screen.getByLabelText("Message"), "Hi");

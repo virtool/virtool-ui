@@ -1,4 +1,4 @@
-import { messageColors } from "@message/types";
+import { bannerColors } from "@banner/types";
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
@@ -14,7 +14,7 @@ import {
 	updateMessage as updateMessageImpl,
 } from "./data";
 
-const colorSchema = z.enum(messageColors);
+const colorSchema = z.enum(bannerColors);
 
 const idSchema = z.object({ id: z.number().int().positive() });
 

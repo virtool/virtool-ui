@@ -8,8 +8,8 @@ import {
 	getConnectionStatus,
 	init,
 } from "@app/websocket/WsConnection";
+import Banner from "@banner/components/Banner";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import MessageBanner from "@message/components/MessageBanner";
 import Nav from "@nav/components/Nav";
 import Sidebar from "@nav/components/Sidebar";
 import type { QueryClient } from "@tanstack/react-query";
@@ -95,7 +95,7 @@ function AuthenticatedLayout() {
 			<meta charSet="utf-8" />
 
 			<div className="bg-transparent fixed top-0 w-full z-50">
-				<MessageBanner />
+				<Banner />
 				<Nav
 					administrator_role={data.administrator_role}
 					handle={data.handle}

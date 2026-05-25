@@ -1,6 +1,6 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeMessage } from "@tests/fake/message";
+import { createFakeBanner } from "@tests/fake/banner";
 import { renderWithProviders } from "@tests/setup";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -21,7 +21,7 @@ vi.mock("@server/messages/functions", () => ({
 	deleteMessage: (...args: unknown[]) => deleteMessage(...args),
 }));
 
-const { default: InstanceMessages } = await import("../InstanceMessages");
+const { default: Banners } = await import("../Banners");
 
 beforeEach(() => {
 	findMessages.mockReset();
@@ -32,58 +32,56 @@ beforeEach(() => {
 	deleteMessage.mockReset();
 });
 
-describe("<InstanceMessages>", () => {
-	it("renders the empty state when there are no messages", async () => {
+describe("<Banners>", () => {
+	it("renders the empty state when there are no banners", async () => {
 		findMessages.mockResolvedValueOnce([]);
-		renderWithProviders(<InstanceMessages />);
+		renderWithProviders(<Banners />);
 
-		expect(
-			await screen.findByText(/no instance messages found/i),
-		).toBeInTheDocument();
+		expect(await screen.findByText(/no banners found/i)).toBeInTheDocument();
 	});
 
-	it("renders all messages with the active one selected", async () => {
-		const messages = [
-			createFakeMessage({
+	it("renders all banners with the active one selected", async () => {
+		const banners = [
+			createFakeBanner({
 				id: 1,
 				active: true,
 				color: "blue",
 				message: "Active one",
 			}),
-			createFakeMessage({
+			createFakeBanner({
 				id: 2,
 				active: false,
 				color: "red",
 				message: "Inactive one",
 			}),
 		];
-		findMessages.mockResolvedValueOnce(messages);
+		findMessages.mockResolvedValueOnce(banners);
 
-		renderWithProviders(<InstanceMessages />);
+		renderWithProviders(<Banners />);
 
 		expect(await screen.findByText("Active one")).toBeInTheDocument();
 		expect(screen.getByText("Inactive one")).toBeInTheDocument();
 
 		const radios = screen.getAllByRole("radio");
-		// Off, message 1, message 2
+		// Off, banner 1, banner 2
 		expect(radios).toHaveLength(3);
 		expect(radios[0]).not.toBeChecked();
 		expect(radios[1]).toBeChecked();
 		expect(radios[2]).not.toBeChecked();
 	});
 
-	it("selects the Off option when no message is active", async () => {
-		const messages = [
-			createFakeMessage({
+	it("selects the Off option when no banner is active", async () => {
+		const banners = [
+			createFakeBanner({
 				id: 1,
 				active: false,
 				color: "blue",
 				message: "First",
 			}),
 		];
-		findMessages.mockResolvedValueOnce(messages);
+		findMessages.mockResolvedValueOnce(banners);
 
-		renderWithProviders(<InstanceMessages />);
+		renderWithProviders(<Banners />);
 
 		await screen.findByText("First");
 
@@ -92,20 +90,20 @@ describe("<InstanceMessages>", () => {
 		expect(radios[1]).not.toBeChecked();
 	});
 
-	it("activates a message by selecting its radio", async () => {
-		const messages = [
-			createFakeMessage({
+	it("activates a banner by selecting its radio", async () => {
+		const banners = [
+			createFakeBanner({
 				id: 1,
 				active: false,
 				color: "blue",
 				message: "First",
 			}),
 		];
-		findMessages.mockResolvedValueOnce(messages);
+		findMessages.mockResolvedValueOnce(banners);
 		setActiveMessage.mockResolvedValueOnce(undefined);
-		findMessages.mockResolvedValue(messages);
+		findMessages.mockResolvedValue(banners);
 
-		renderWithProviders(<InstanceMessages />);
+		renderWithProviders(<Banners />);
 
 		await screen.findByText("First");
 		await userEvent.click(screen.getByLabelText(/First/));
@@ -115,20 +113,20 @@ describe("<InstanceMessages>", () => {
 		);
 	});
 
-	it("deactivates the active message by selecting Off", async () => {
-		const messages = [
-			createFakeMessage({
+	it("deactivates the active banner by selecting Off", async () => {
+		const banners = [
+			createFakeBanner({
 				id: 1,
 				active: true,
 				color: "blue",
 				message: "First",
 			}),
 		];
-		findMessages.mockResolvedValueOnce(messages);
+		findMessages.mockResolvedValueOnce(banners);
 		clearActiveMessage.mockResolvedValueOnce(null);
-		findMessages.mockResolvedValue(messages);
+		findMessages.mockResolvedValue(banners);
 
-		renderWithProviders(<InstanceMessages />);
+		renderWithProviders(<Banners />);
 
 		await screen.findByText("First");
 		await userEvent.click(screen.getByLabelText(/Off/));

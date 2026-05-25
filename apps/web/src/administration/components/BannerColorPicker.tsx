@@ -1,7 +1,7 @@
 import { cn } from "@app/utils";
-import { type MessageColor, messageColors } from "@message/types";
+import { type BannerColor, bannerColors } from "@banner/types";
 
-const swatchClasses: Record<MessageColor, string> = {
+const swatchClasses: Record<BannerColor, string> = {
 	red: "bg-red-500",
 	orange: "bg-orange-500",
 	yellow: "bg-yellow-500",
@@ -10,7 +10,7 @@ const swatchClasses: Record<MessageColor, string> = {
 	grey: "bg-gray-500",
 };
 
-const labels: Record<MessageColor, string> = {
+const labels: Record<BannerColor, string> = {
 	red: "Red",
 	orange: "Orange",
 	yellow: "Yellow",
@@ -19,26 +19,26 @@ const labels: Record<MessageColor, string> = {
 	grey: "Grey",
 };
 
-type InstanceMessageColorPickerProps = {
+type BannerColorPickerProps = {
 	id?: string;
 	name?: string;
-	value: MessageColor;
-	onChange: (value: MessageColor) => void;
+	value: BannerColor;
+	onChange: (value: BannerColor) => void;
 };
 
 /**
- * Radio group for picking an instance-message banner color. Renders the
- * `messageColors` palette as colored circles.
+ * Radio group for picking a banner color. Renders the `bannerColors` palette
+ * as colored circles.
  */
-export default function InstanceMessageColorPicker({
+export default function BannerColorPicker({
 	id,
-	name = "instance-message-color",
+	name = "banner-color",
 	value,
 	onChange,
-}: InstanceMessageColorPickerProps) {
+}: BannerColorPickerProps) {
 	return (
 		<fieldset id={id} className="flex gap-2 mt-1 border-0 p-0">
-			{messageColors.map((color) => (
+			{bannerColors.map((color) => (
 				<label
 					key={color}
 					className={cn(

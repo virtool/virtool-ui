@@ -1,40 +1,36 @@
+import type { BannerColor } from "@banner/types";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import IconButton from "@base/IconButton";
-import type { MessageColor } from "@message/types";
 import { Pen } from "lucide-react";
 import { useState } from "react";
-import InstanceMessageForm, {
-	type InstanceMessageFormValues,
-} from "./InstanceMessageForm";
+import BannerForm, { type BannerFormValues } from "./BannerForm";
 
-type EditInstanceMessageProps = {
-	color: MessageColor;
+type EditBannerProps = {
+	color: BannerColor;
 	message: string;
 	/** Resolves on success so the dialog can close; rejects to surface the error. */
-	onSubmit: (values: InstanceMessageFormValues) => Promise<unknown>;
+	onSubmit: (values: BannerFormValues) => Promise<unknown>;
 };
 
 /**
- * Dialog for editing an existing instance message. Pure presentation —
- * submission is delegated to `onSubmit`.
+ * Dialog for editing an existing banner. Pure presentation — submission is
+ * delegated to `onSubmit`.
  */
-export default function EditInstanceMessage({
+export default function EditBanner({
 	color,
 	message,
 	onSubmit,
-}: EditInstanceMessageProps) {
+}: EditBannerProps) {
 	const [open, setOpen] = useState(false);
 	const [error, setError] = useState<string | undefined>();
 
-	async function handleSubmit(values: InstanceMessageFormValues) {
+	async function handleSubmit(values: BannerFormValues) {
 		setError(undefined);
 		try {
 			await onSubmit(values);
 			setOpen(false);
 		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : "Could not update message.",
-			);
+			setError(err instanceof Error ? err.message : "Could not update banner.");
 		}
 	}
 
@@ -53,8 +49,8 @@ export default function EditInstanceMessage({
 				tip="Edit"
 			/>
 			<DialogContent>
-				<DialogTitle>Edit Instance Message</DialogTitle>
-				<InstanceMessageForm
+				<DialogTitle>Edit Banner</DialogTitle>
+				<BannerForm
 					color={color}
 					error={error}
 					message={message}

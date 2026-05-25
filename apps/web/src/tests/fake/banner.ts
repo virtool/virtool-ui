@@ -1,13 +1,13 @@
+import type { Banner } from "@banner/types";
 import { faker } from "@faker-js/faker";
-import type { Message } from "@message/types";
 import { createFakeUserNested } from "./user";
 
 /**
- * Create a fake message
+ * Create a fake banner.
  *
- * @param overrides - optional properties for creating a fake message with specific values
+ * @param overrides - optional properties for creating a fake banner with specific values
  */
-export function createFakeMessage(overrides?: Partial<Message>): Message {
+export function createFakeBanner(overrides?: Partial<Banner>): Banner {
 	return {
 		active: true,
 		color: "red",

@@ -1,8 +1,8 @@
 import { cn } from "@/app/utils";
-import { useFetchMessage } from "../queries";
-import type { MessageColor } from "../types";
+import { useFetchBanner } from "../queries";
+import type { BannerColor } from "../types";
 
-const bannerColorClasses: Record<MessageColor, string> = {
+const bannerColorClasses: Record<BannerColor, string> = {
 	red: "bg-red-500",
 	orange: "bg-orange-500",
 	yellow: "bg-yellow-500",
@@ -12,10 +12,10 @@ const bannerColorClasses: Record<MessageColor, string> = {
 };
 
 /**
- * Displays the banner containing the instance message
+ * Displays the active banner.
  */
-export default function MessageBanner() {
-	const { data, isPending } = useFetchMessage();
+export default function Banner() {
+	const { data, isPending } = useFetchBanner();
 
 	return !isPending && data?.active ? (
 		<div

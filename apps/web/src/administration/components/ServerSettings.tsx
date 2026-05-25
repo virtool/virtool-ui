@@ -2,7 +2,7 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { useFetchSettings } from "../queries";
 import Api from "./Api";
-import InstanceMessages from "./InstanceMessages";
+import Banners from "./Banners";
 
 export default function ServerSettings() {
 	const { data: settings, isPending: isPendingSettings } = useFetchSettings();
@@ -14,7 +14,7 @@ export default function ServerSettings() {
 	return (
 		<ContainerNarrow>
 			<Api settings={settings} />
-			<InstanceMessages />
+			<Banners />
 		</ContainerNarrow>
 	);
 }

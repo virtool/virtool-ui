@@ -4,20 +4,20 @@ import IconButton from "@base/IconButton";
 import { Trash } from "lucide-react";
 import { useState } from "react";
 
-type RemoveInstanceMessageProps = {
+type RemoveBannerProps = {
 	message: string;
 	/** Resolves on success so the dialog can close. */
 	onConfirm: () => Promise<unknown>;
 };
 
 /**
- * Dialog confirming instance-message removal. Pure presentation — deletion is
- * delegated to `onConfirm`.
+ * Dialog confirming banner removal. Pure presentation — deletion is delegated
+ * to `onConfirm`.
  */
-export default function RemoveInstanceMessage({
+export default function RemoveBanner({
 	message,
 	onConfirm,
-}: RemoveInstanceMessageProps) {
+}: RemoveBannerProps) {
 	const [open, setOpen] = useState(false);
 
 	async function handleConfirm() {
@@ -38,10 +38,9 @@ export default function RemoveInstanceMessage({
 				tip="Delete"
 			/>
 			<DialogContent>
-				<DialogTitle>Delete Instance Message</DialogTitle>
+				<DialogTitle>Delete Banner</DialogTitle>
 				<p className="text-base">
-					Are you sure you want to delete the message <strong>{message}</strong>
-					?
+					Are you sure you want to delete the banner <strong>{message}</strong>?
 				</p>
 				<footer className="mt-8 flex">
 					<Button type="button" color="red" onClick={handleConfirm}>

@@ -1,39 +1,38 @@
+import {
+	useClearActiveBanner,
+	useCreateBanner,
+	useDeleteBanner,
+	useFetchBanners,
+	useSetActiveBanner,
+	useUpdateBanner,
+} from "@banner/queries";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundSection from "@base/NoneFoundSection";
 import { RadioGroup, RadioGroupItem } from "@base/RadioGroup";
 import SectionHeader from "@base/SectionHeader";
-import {
-	useClearActiveMessage,
-	useCreateMessage,
-	useDeleteMessage,
-	useFetchMessages,
-	useSetActiveMessage,
-	useUpdateMessage,
-} from "@message/queries";
-import CreateInstanceMessage from "./CreateInstanceMessage";
-import InstanceMessageItem from "./InstanceMessageItem";
+import BannerItem from "./BannerItem";
+import CreateBanner from "./CreateBanner";
 
 /**
- * Display and manage the list of instance messages. Admins can create, edit,
- * activate, deactivate, and delete entries; the banner exposes the single
- * active row to all users.
+ * Display and manage the list of banners. Admins can create, edit, activate,
+ * deactivate, and delete entries; the active row is shown to all users.
  */
-export default function InstanceMessages() {
-	const { data, isPending } = useFetchMessages();
-	const createMutation = useCreateMessage();
-	const updateMutation = useUpdateMessage();
-	const deleteMutation = useDeleteMessage();
-	const setActiveMutation = useSetActiveMessage();
-	const clearActiveMutation = useClearActiveMessage();
+export default function Banners() {
+	const { data, isPending } = useFetchBanners();
+	const createMutation = useCreateBanner();
+	const updateMutation = useUpdateBanner();
+	const deleteMutation = useDeleteBanner();
+	const setActiveMutation = useSetActiveBanner();
+	const clearActiveMutation = useClearActiveBanner();
 
 	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 
-	const activeMessage = data.find((item) => item.active);
-	const selectedValue = activeMessage?.id.toString() ?? "off";
+	const activeBanner = data.find((item) => item.active);
+	const selectedValue = activeBanner?.id.toString() ?? "off";
 
 	function handleChange(value: string) {
 		if (value === "off") {
@@ -46,34 +45,34 @@ export default function InstanceMessages() {
 	return (
 		<section>
 			<SectionHeader>
-				<h2>Instance Messages</h2>
+				<h2>Banners</h2>
 				<p>
-					Manage the message displayed to all users above the navigation bar.
+					Manage the banner displayed to all users above the navigation bar.
 				</p>
 				<div className="mt-3 flex justify-end">
-					<CreateInstanceMessage
+					<CreateBanner
 						onSubmit={(values) => createMutation.mutateAsync(values)}
 					/>
 				</div>
 			</SectionHeader>
 			{data.length ? (
 				<RadioGroup
-					aria-label="Active instance message"
+					aria-label="Active banner"
 					value={selectedValue}
 					onValueChange={handleChange}
 				>
 					<BoxGroup>
 						<BoxGroupSection className="flex items-center gap-3">
-							<RadioGroupItem id="instance-message-off" value="off" />
+							<RadioGroupItem id="banner-off" value="off" />
 							<label
-								htmlFor="instance-message-off"
+								htmlFor="banner-off"
 								className="grow cursor-pointer text-gray-600"
 							>
-								Off — no message displayed
+								Off — no banner displayed
 							</label>
 						</BoxGroupSection>
 						{data.map((item) => (
-							<InstanceMessageItem
+							<BannerItem
 								key={item.id}
 								color={item.color}
 								id={item.id}
@@ -88,7 +87,7 @@ export default function InstanceMessages() {
 				</RadioGroup>
 			) : (
 				<BoxGroup>
-					<NoneFoundSection noun="instance messages" />
+					<NoneFoundSection noun="banners" />
 				</BoxGroup>
 			)}
 		</section>

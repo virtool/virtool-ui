@@ -23,11 +23,11 @@ describe("<Settings />", () => {
 		await renderRoute(path, {
 			account,
 			seed: (queryClient) => {
-				queryClient.setQueryData(["message", "list"], []);
+				queryClient.setQueryData(["banner", "list"], []);
 			},
 		});
 
-		expect(await screen.findByText("Instance Messages")).toBeInTheDocument();
+		expect(await screen.findByText("Banners")).toBeInTheDocument();
 		expect(screen.getByText("Settings")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Create" })).toBeInTheDocument();
 

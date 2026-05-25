@@ -1,44 +1,44 @@
+import type { BannerColor } from "@banner/types";
 import Button from "@base/Button";
 import { DialogFooter } from "@base/Dialog";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
-import type { MessageColor } from "@message/types";
 import { Controller, useForm } from "react-hook-form";
-import InstanceMessageColorPicker from "./InstanceMessageColorPicker";
+import BannerColorPicker from "./BannerColorPicker";
 
-/** Values produced by the instance-message form. */
-export type InstanceMessageFormValues = {
-	color: MessageColor;
+/** Values produced by the banner form. */
+export type BannerFormValues = {
+	color: BannerColor;
 	message: string;
 };
 
-type InstanceMessageFormProps = {
-	color?: MessageColor;
+type BannerFormProps = {
+	color?: BannerColor;
 	error?: string;
 	message?: string;
-	onSubmit: (values: InstanceMessageFormValues) => void;
+	onSubmit: (values: BannerFormValues) => void;
 	submitLabel?: string;
 };
 
 /**
- * Form for creating or editing an instance message. Shared between the create
- * and edit dialogs.
+ * Form for creating or editing a banner. Shared between the create and edit
+ * dialogs.
  */
-export default function InstanceMessageForm({
+export default function BannerForm({
 	color = "red",
 	error = "",
 	message = "",
 	onSubmit,
 	submitLabel = "Save",
-}: InstanceMessageFormProps) {
+}: BannerFormProps) {
 	const {
 		control,
 		formState: { errors },
 		handleSubmit,
 		register,
-	} = useForm<InstanceMessageFormValues>({
+	} = useForm<BannerFormValues>({
 		defaultValues: { color, message },
 	});
 
@@ -59,7 +59,7 @@ export default function InstanceMessageForm({
 					control={control}
 					name="color"
 					render={({ field }) => (
-						<InstanceMessageColorPicker
+						<BannerColorPicker
 							id="color"
 							value={field.value}
 							onChange={field.onChange}
