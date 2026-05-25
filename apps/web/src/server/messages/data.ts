@@ -70,7 +70,7 @@ export async function setMessage(
 	const [row] = await db
 		.insert(instanceMessages)
 		.values({
-			active: true,
+			active: message.trim().length > 0,
 			color: "red",
 			message,
 			createdAt: now,

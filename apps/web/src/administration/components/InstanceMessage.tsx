@@ -10,7 +10,7 @@ import type { Message } from "@message/types";
 import { useForm } from "react-hook-form";
 
 type InstanceMessageProps = {
-	message: Message;
+	message: Message | null;
 };
 
 /**

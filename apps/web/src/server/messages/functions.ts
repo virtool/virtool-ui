@@ -7,7 +7,7 @@ import {
 } from "./data";
 
 const setMessageSchema = z.object({
-	message: z.string().min(1),
+	message: z.string(),
 });
 
 export const findMessage = createServerFn({ method: "GET" }).handler(async () =>

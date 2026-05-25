@@ -7,7 +7,7 @@ import { useFetchMessage } from "../queries";
 export default function MessageBanner() {
 	const { data, isPending } = useFetchMessage();
 
-	return !isPending && data?.message ? (
+	return !isPending && data?.active ? (
 		<div
 			className={cn(
 				"bg-red-500",
