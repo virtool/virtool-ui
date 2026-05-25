@@ -42,7 +42,7 @@ describe("<InstanceMessages>", () => {
 		).toBeInTheDocument();
 	});
 
-	it("renders all messages and marks the active one", async () => {
+	it("renders all messages with the active one selected", async () => {
 		const messages = [
 			createFakeMessage({
 				id: 1,
@@ -63,14 +63,36 @@ describe("<InstanceMessages>", () => {
 
 		expect(await screen.findByText("Active one")).toBeInTheDocument();
 		expect(screen.getByText("Inactive one")).toBeInTheDocument();
-		expect(screen.getByText("Active")).toBeInTheDocument();
 
-		const switches = screen.getAllByRole("switch");
-		expect(switches[0]).toBeChecked();
-		expect(switches[1]).not.toBeChecked();
+		const radios = screen.getAllByRole("radio");
+		// Off, message 1, message 2
+		expect(radios).toHaveLength(3);
+		expect(radios[0]).not.toBeChecked();
+		expect(radios[1]).toBeChecked();
+		expect(radios[2]).not.toBeChecked();
 	});
 
-	it("activates an inactive message via setActiveMessage", async () => {
+	it("selects the Off option when no message is active", async () => {
+		const messages = [
+			createFakeMessage({
+				id: 1,
+				active: false,
+				color: "blue",
+				message: "First",
+			}),
+		];
+		findMessages.mockResolvedValueOnce(messages);
+
+		renderWithProviders(<InstanceMessages />);
+
+		await screen.findByText("First");
+
+		const radios = screen.getAllByRole("radio");
+		expect(radios[0]).toBeChecked();
+		expect(radios[1]).not.toBeChecked();
+	});
+
+	it("activates a message by selecting its radio", async () => {
 		const messages = [
 			createFakeMessage({
 				id: 1,
@@ -86,16 +108,14 @@ describe("<InstanceMessages>", () => {
 		renderWithProviders(<InstanceMessages />);
 
 		await screen.findByText("First");
-		await userEvent.click(
-			screen.getByRole("switch", { name: "Activate message" }),
-		);
+		await userEvent.click(screen.getByLabelText(/First/));
 
 		await waitFor(() =>
 			expect(setActiveMessage).toHaveBeenCalledWith({ data: { id: 1 } }),
 		);
 	});
 
-	it("deactivates the active message via clearActiveMessage", async () => {
+	it("deactivates the active message by selecting Off", async () => {
 		const messages = [
 			createFakeMessage({
 				id: 1,
@@ -111,9 +131,7 @@ describe("<InstanceMessages>", () => {
 		renderWithProviders(<InstanceMessages />);
 
 		await screen.findByText("First");
-		await userEvent.click(
-			screen.getByRole("switch", { name: "Deactivate message" }),
-		);
+		await userEvent.click(screen.getByLabelText(/Off/));
 
 		await waitFor(() => expect(clearActiveMessage).toHaveBeenCalled());
 	});
