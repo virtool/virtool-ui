@@ -9,6 +9,20 @@ export function useNow() {
 	return useSyncExternalStore(subscribeToTime, Date.now, Date.now);
 }
 
+/**
+ * Returns `value` delayed until it has been stable for `delayMs`.
+ */
+export function useDebouncedValue<T>(value: T, delayMs = 250): T {
+	const [debounced, setDebounced] = useState(value);
+
+	useEffect(() => {
+		const id = setTimeout(() => setDebounced(value), delayMs);
+		return () => clearTimeout(id);
+	}, [value, delayMs]);
+
+	return debounced;
+}
+
 function getSize(ref) {
 	return {
 		height: ref.current ? ref.current.offsetHeight : 0,

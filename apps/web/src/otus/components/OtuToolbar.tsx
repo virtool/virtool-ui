@@ -1,3 +1,4 @@
+import { useDebouncedValue } from "@app/hooks";
 import Button from "@base/Button";
 import InputSearch from "@base/InputSearch";
 import Toolbar from "@base/Toolbar";
@@ -6,14 +7,14 @@ import {
 	useReferenceIsArchived,
 } from "@references/hooks";
 import type { ReferenceRemotesFrom } from "@references/types";
-import type { ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 
 type OtuToolbarProps = {
 	/** Current search term used for filtering */
 	term: string;
 
-	/** A callback function to handle changes in search input */
-	onChange: (term: ChangeEvent<HTMLInputElement>) => void;
+	/** Update the search term in the url */
+	setTerm: (term: string) => void;
 
 	/** Called when the user clicks the Create button */
 	onCreate: () => void;
@@ -30,7 +31,7 @@ type OtuToolbarProps = {
  */
 export default function OtuToolbar({
 	term,
-	onChange,
+	setTerm,
 	onCreate,
 	refId,
 	remotesFrom,
@@ -41,13 +42,22 @@ export default function OtuToolbar({
 	);
 	const archived = useReferenceIsArchived(refId);
 
+	const [draft, setDraft] = useState(term);
+	const debouncedDraft = useDebouncedValue(draft);
+
+	useEffect(() => {
+		if (debouncedDraft !== term) {
+			setTerm(debouncedDraft);
+		}
+	}, [debouncedDraft, setTerm, term]);
+
 	return (
 		<Toolbar>
 			<div className="flex-grow">
 				<InputSearch
 					placeholder="Name or abbreviation"
-					value={term}
-					onChange={onChange}
+					value={draft}
+					onChange={(e) => setDraft(e.target.value)}
 				/>
 			</div>
 

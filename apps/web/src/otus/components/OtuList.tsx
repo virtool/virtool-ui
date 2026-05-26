@@ -17,7 +17,10 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/");
 type OtuListProps = {
 	find: string;
 	page: number;
-	setSearch: (next: { find?: string; page?: number }) => void;
+	setSearch: (
+		next: { find?: string; page?: number },
+		options?: { replace?: boolean },
+	) => void;
 };
 
 /**
@@ -46,7 +49,7 @@ export default function OtuList({ find, page, setSearch }: OtuListProps) {
 			<RebuildAlert page={page} refId={refId} />
 			<OtuToolbar
 				term={find}
-				onChange={(e) => setSearch({ find: e.target.value })}
+				setTerm={(find) => setSearch({ find }, { replace: true })}
 				onCreate={() => setOpenCreate(true)}
 				refId={refId}
 				remotesFrom={reference.remotes_from}

@@ -19,13 +19,16 @@ type ReferenceListProps = {
 	createReferenceType?: string;
 	find?: string;
 	page?: number;
-	setSearch?: (next: {
-		archived?: boolean;
-		cloneReferenceId?: string;
-		createReferenceType?: string;
-		find?: string;
-		page?: number;
-	}) => void;
+	setSearch?: (
+		next: {
+			archived?: boolean;
+			cloneReferenceId?: string;
+			createReferenceType?: string;
+			find?: string;
+			page?: number;
+		},
+		options?: { replace?: boolean },
+	) => void;
 };
 
 /**
@@ -69,7 +72,7 @@ export default function ReferenceList({
 					setCreateReferenceType={(createReferenceType) =>
 						setSearch({ createReferenceType })
 					}
-					setFind={(find) => setSearch({ find })}
+					setFind={(find) => setSearch({ find }, { replace: true })}
 				/>
 				<CreateReference
 					createReferenceType={createReferenceType}
