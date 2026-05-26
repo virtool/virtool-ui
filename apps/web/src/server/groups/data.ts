@@ -53,10 +53,15 @@ export class GroupNotFoundError extends AppError {}
 export class GroupConflictError extends AppError {}
 
 function isUniqueViolation(error: unknown): boolean {
+	if (error === null || typeof error !== "object") {
+		return false;
+	}
 	const cause = (error as { cause?: unknown }).cause;
 	return (
 		(error as Partial<PostgresError>).code === "23505" ||
-		(cause as Partial<PostgresError> | undefined)?.code === "23505"
+		(cause !== null &&
+			typeof cause === "object" &&
+			(cause as Partial<PostgresError>).code === "23505")
 	);
 }
 
@@ -109,19 +114,17 @@ export async function findGroups(
 	const filter = term ? ilike(groupsTable.name, `%${term}%`) : undefined;
 	const skip = page > 1 ? (page - 1) * perPage : 0;
 
-	const [foundRow] = await db
-		.select({ value: count() })
-		.from(groupsTable)
-		.where(filter);
-	const [totalRow] = await db.select({ value: count() }).from(groupsTable);
-
-	const rows = await db
-		.select()
-		.from(groupsTable)
-		.where(filter)
-		.orderBy(asc(groupsTable.name))
-		.limit(perPage)
-		.offset(skip);
+	const [[foundRow], [totalRow], rows] = await Promise.all([
+		db.select({ value: count() }).from(groupsTable).where(filter),
+		db.select({ value: count() }).from(groupsTable),
+		db
+			.select()
+			.from(groupsTable)
+			.where(filter)
+			.orderBy(asc(groupsTable.name))
+			.limit(perPage)
+			.offset(skip),
+	]);
 
 	const foundCount = foundRow?.value ?? 0;
 
@@ -155,9 +158,8 @@ export async function getGroup(groupId: number): Promise<Group> {
 }
 
 export async function createGroup(name: string): Promise<Group> {
-	let row: GroupRow;
 	try {
-		[row] = await db
+		const [row] = await db
 			.insert(groupsTable)
 			.values({
 				name,
@@ -165,20 +167,20 @@ export async function createGroup(name: string): Promise<Group> {
 				permissions: generateBasePermissions(),
 			})
 			.returning();
+
+		await emit("groups", row.id, "create");
+
+		return {
+			...toGroupMinimal(row),
+			permissions: row.permissions,
+			users: [],
+		};
 	} catch (error) {
 		if (isUniqueViolation(error)) {
 			throw new GroupConflictError();
 		}
 		throw error;
 	}
-
-	await emit("groups", row.id, "create");
-
-	return {
-		...toGroupMinimal(row),
-		permissions: row.permissions,
-		users: [],
-	};
 }
 
 export async function updateGroup(

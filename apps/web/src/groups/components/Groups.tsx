@@ -11,6 +11,7 @@ import {
 	useRemoveGroup,
 	useUpdateGroup,
 } from "../queries";
+import type { GroupMinimal } from "../types";
 import Create from "./CreateGroup";
 import { GroupMembers } from "./GroupMembers";
 import { GroupPermissions } from "./GroupPermissions";
@@ -21,7 +22,9 @@ export default function Groups() {
 
 	const [openCreateGroup, setOpenCreateGroup] = useState(false);
 	const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
-	const [prevGroups, setPrevGroups] = useState(null);
+	const [prevGroups, setPrevGroups] = useState<
+		GroupMinimal[] | undefined | null
+	>(null);
 
 	const { data: groups, isPending: isPendingGroups } = useListGroups();
 
