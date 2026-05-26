@@ -1,3 +1,4 @@
+import { GroupNotFoundError, getGroup } from "../groups/data";
 import { getLabel, LabelNotFoundError } from "../labels/data";
 import { logger } from "../logger";
 import { findMessage } from "../messages/data";
@@ -13,6 +14,7 @@ export type WsMessage = {
 type Resolver = (resourceId: number | string) => Promise<unknown>;
 
 const resolvers: Record<string, Resolver> = {
+	groups: async (id) => getGroup(Number(id)),
 	labels: async (id) => getLabel(Number(id)),
 	messages: async () => findMessage(),
 };
@@ -47,7 +49,10 @@ export async function eventToWsMessage(
 			data,
 		};
 	} catch (err) {
-		if (err instanceof LabelNotFoundError) {
+		if (
+			err instanceof LabelNotFoundError ||
+			err instanceof GroupNotFoundError
+		) {
 			return null;
 		}
 		logger.warn(
