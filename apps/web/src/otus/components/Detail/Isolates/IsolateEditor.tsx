@@ -14,7 +14,7 @@ import AddIsolate from "./AddIsolate";
 import IsolateDetail from "./IsolateDetail";
 import IsolateItem from "./IsolateItem";
 
-const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
+const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId/otu");
 
 /**
  * Displays a component for managing the isolates
