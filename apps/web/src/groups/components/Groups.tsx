@@ -15,18 +15,11 @@ import { GroupMembers } from "./GroupMembers";
 import { GroupPermissions } from "./GroupPermissions";
 import { GroupSelector } from "./GroupSelector";
 
-type GroupsProps = {
-	openCreateGroup?: boolean;
-	setOpenCreateGroup?: (open: boolean) => void;
-};
-
-export default function Groups({
-	openCreateGroup = false,
-	setOpenCreateGroup = () => {},
-}: GroupsProps) {
+export default function Groups() {
 	const updateGroupMutation = useUpdateGroup();
 	const removeMutation = useRemoveGroup();
 
+	const [openCreateGroup, setOpenCreateGroup] = useState(false);
 	const [selectedGroupId, setSelectedGroupId] = useState(null);
 	const [prevGroups, setPrevGroups] = useState(null);
 
