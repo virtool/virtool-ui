@@ -1,4 +1,12 @@
 import {
+	createGroup,
+	deleteGroup,
+	findGroups,
+	getGroup,
+	listGroups,
+	updateGroup,
+} from "@server/groups/functions";
+import {
 	keepPreviousData,
 	useInfiniteQuery,
 	useMutation,
@@ -6,13 +14,6 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
-import {
-	createGroup,
-	findGroups,
-	getGroup,
-	removeGroup,
-	updateGroup,
-} from "./api";
 import type {
 	Group,
 	GroupMinimal,
@@ -45,12 +46,9 @@ export function useInfiniteFindGroups(per_page: number, term: string) {
 	return useInfiniteQuery<GroupSearchResults>({
 		queryKey: groupQueryKeys.infiniteList([per_page, term]),
 		queryFn: ({ pageParam }) =>
-			findGroups(
-				pageParam as number,
-				per_page,
-				term,
-				true,
-			) as Promise<GroupSearchResults>,
+			findGroups({
+				data: { term, page: pageParam as number, per_page },
+			}) as Promise<GroupSearchResults>,
 		initialPageParam: 1,
 		getNextPageParam: (lastPage) => {
 			if (lastPage.page >= lastPage.page_count) {
@@ -70,7 +68,7 @@ export function useInfiniteFindGroups(per_page: number, term: string) {
 export function useListGroups() {
 	return useQuery<GroupMinimal[]>({
 		queryKey: groupQueryKeys.lists(),
-		queryFn: () => findGroups() as Promise<GroupMinimal[]>,
+		queryFn: () => listGroups() as Promise<GroupMinimal[]>,
 	});
 }
 
@@ -83,7 +81,8 @@ export function useListGroups() {
 export function useFetchGroup(id: string | number) {
 	return useQuery<Group>({
 		queryKey: groupQueryKeys.detail(id),
-		queryFn: () => getGroup(id),
+		queryFn: () =>
+			getGroup({ data: { groupId: Number(id) } }) as Promise<Group>,
 		enabled: Boolean(id),
 		placeholderData: keepPreviousData,
 	});
@@ -106,7 +105,9 @@ export function useUpdateGroup() {
 		}
 	>({
 		mutationFn: ({ id, name, permissions }) =>
-			updateGroup(id, name, permissions),
+			updateGroup({
+				data: { groupId: Number(id), name, permissions },
+			}) as Promise<Group>,
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: groupQueryKeys.lists() });
 			queryClient.setQueryData(groupQueryKeys.detail(data.id), data);
@@ -122,7 +123,8 @@ export function useUpdateGroup() {
 export function useRemoveGroup() {
 	const queryClient = useQueryClient();
 	return useMutation<null, ErrorResponse, { id: string | number }>({
-		mutationFn: ({ id }) => removeGroup(id),
+		mutationFn: ({ id }) =>
+			deleteGroup({ data: { groupId: Number(id) } }) as Promise<null>,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: groupQueryKeys.all() });
 		},
@@ -137,7 +139,7 @@ export function useRemoveGroup() {
 export function useCreateGroup() {
 	const queryClient = useQueryClient();
 	return useMutation<Group, Error, { name: string }>({
-		mutationFn: ({ name }) => createGroup(name),
+		mutationFn: ({ name }) => createGroup({ data: { name } }) as Promise<Group>,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: groupQueryKeys.lists() });
 		},

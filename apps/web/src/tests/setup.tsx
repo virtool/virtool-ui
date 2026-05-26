@@ -17,9 +17,18 @@ import {
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createContext, type ReactNode, useContext, useState } from "react";
-import { vi } from "vitest";
+import { beforeEach, vi } from "vitest";
 import { routeTree } from "@/routeTree.gen";
+import { groupServerFnMocks } from "./api/groups";
 import { createFakeAccount } from "./fake/account";
+
+vi.mock("@server/groups/functions", () => groupServerFnMocks);
+
+beforeEach(() => {
+	for (const fn of Object.values(groupServerFnMocks)) {
+		fn.mockReset();
+	}
+});
 
 process.env.TZ = "UTC";
 
