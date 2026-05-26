@@ -87,6 +87,10 @@ currently configured in another repository.
   `pnpm --filter @virtool/web exec tsr generate` (or the equivalent
   `@tanstack/router-cli generate`) to regenerate
   `apps/web/src/routeTree.gen.ts` before running type checks.
+- `apps/web/src/routeTree.gen.ts` is checked in. If it shows up in
+  `git status` — even when it looks like unrelated drift from a
+  regen — commit it alongside your other changes. Never leave it
+  out of a commit.
 - Before committing: `pnpm check` and `pnpm typecheck`.
 - After changing tests: run the specific test file with
   `pnpm --filter @virtool/web exec vitest run <path>`.

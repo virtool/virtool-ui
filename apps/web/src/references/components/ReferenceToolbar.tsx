@@ -1,4 +1,5 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
+import { useDebouncedDraft } from "@app/hooks";
 import Button from "@base/Button";
 import InputSearch from "@base/InputSearch";
 import ToggleGroup from "@base/ToggleGroup";
@@ -26,13 +27,15 @@ export default function ReferenceToolbar({
 	const { hasPermission: canCreate } =
 		useCheckAdminRoleOrPermission("create_ref");
 
+	const [draft, setDraft] = useDebouncedDraft(find, setFind);
+
 	return (
 		<Toolbar>
 			<div className="flex-grow">
 				<InputSearch
 					placeholder="Reference name"
-					value={find}
-					onChange={(e) => setFind(e.target.value)}
+					value={draft}
+					onChange={(e) => setDraft(e.target.value)}
 				/>
 			</div>
 			<ToggleGroup

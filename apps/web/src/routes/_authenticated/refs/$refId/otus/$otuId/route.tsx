@@ -10,15 +10,9 @@ import { otuQueryOptions, useFetchOTU } from "@otus/queries";
 import { useReferenceIsArchived } from "@references/hooks";
 import { referenceQueryOptions, useFetchReference } from "@references/queries";
 import { createFileRoute, notFound, Outlet } from "@tanstack/react-router";
-import { z } from "zod/v4";
-
-const otuDetailSearchSchema = z.object({
-	activeIsolate: z.string().optional().catch(undefined),
-});
 
 export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 	{
-		validateSearch: otuDetailSearchSchema,
 		loader: async ({ context: { queryClient }, params: { refId, otuId } }) => {
 			try {
 				await Promise.all([

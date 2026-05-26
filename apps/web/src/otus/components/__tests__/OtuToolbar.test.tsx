@@ -25,7 +25,7 @@ describe("<OtuToolbar />", () => {
 		renderWithProviders(
 			<OtuToolbar
 				term=""
-				onChange={vi.fn()}
+				setTerm={vi.fn()}
 				onCreate={vi.fn()}
 				refId={reference.id}
 				remotesFrom={null}
@@ -43,7 +43,7 @@ describe("<OtuToolbar />", () => {
 		renderWithProviders(
 			<OtuToolbar
 				term=""
-				onChange={vi.fn()}
+				setTerm={vi.fn()}
 				onCreate={vi.fn()}
 				refId={reference.id}
 				remotesFrom={null}

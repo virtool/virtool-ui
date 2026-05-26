@@ -9,6 +9,52 @@ export function useNow() {
 	return useSyncExternalStore(subscribeToTime, Date.now, Date.now);
 }
 
+/**
+ * Returns `value` delayed until it has been stable for `delayMs`.
+ */
+export function useDebouncedValue<T>(value: T, delayMs = 250): T {
+	const [debounced, setDebounced] = useState(value);
+
+	useEffect(() => {
+		const id = setTimeout(() => setDebounced(value), delayMs);
+		return () => clearTimeout(id);
+	}, [value, delayMs]);
+
+	return debounced;
+}
+
+/**
+ * Two-way binding for an input whose committed value lives in the parent (URL,
+ * store, etc.). Returns a local `draft` for the input and a setter; commits
+ * `draft` to `onChange` after it's been stable for `delayMs`, and resyncs
+ * `draft` when `value` changes externally (e.g. back/forward navigation).
+ */
+export function useDebouncedDraft<T>(
+	value: T,
+	onChange: (next: T) => void,
+	delayMs?: number,
+): [T, (next: T) => void] {
+	const [draft, setDraft] = useState(value);
+	const debouncedDraft = useDebouncedValue(draft, delayMs);
+	const lastSentRef = useRef(value);
+
+	useEffect(() => {
+		if (debouncedDraft !== value) {
+			lastSentRef.current = debouncedDraft;
+			onChange(debouncedDraft);
+		}
+	}, [debouncedDraft, onChange, value]);
+
+	useEffect(() => {
+		if (value !== lastSentRef.current) {
+			lastSentRef.current = value;
+			setDraft(value);
+		}
+	}, [value]);
+
+	return [draft, setDraft];
+}
+
 function getSize(ref) {
 	return {
 		height: ref.current ? ref.current.offsetHeight : 0,
