@@ -1,6 +1,8 @@
 import os from "os";
 import { defineConfig } from "vitest/config";
-import viteConfig from "./vite.config";
+import viteConfigFn from "./vite.config";
+
+const viteConfig = viteConfigFn({ command: "serve", mode: "test" });
 
 export default defineConfig({
     ...viteConfig,
