@@ -49,7 +49,7 @@ export default function OtuList({ find, page, setSearch }: OtuListProps) {
 			<RebuildAlert page={page} refId={refId} />
 			<OtuToolbar
 				term={find}
-				setTerm={(find) => setSearch({ find }, { replace: true })}
+				setTerm={(find) => setSearch({ find, page: 1 }, { replace: true })}
 				onCreate={() => setOpenCreate(true)}
 				refId={refId}
 				remotesFrom={reference.remotes_from}

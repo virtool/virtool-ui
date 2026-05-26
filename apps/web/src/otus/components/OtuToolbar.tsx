@@ -1,4 +1,4 @@
-import { useDebouncedValue } from "@app/hooks";
+import { useDebouncedDraft } from "@app/hooks";
 import Button from "@base/Button";
 import InputSearch from "@base/InputSearch";
 import Toolbar from "@base/Toolbar";
@@ -7,7 +7,6 @@ import {
 	useReferenceIsArchived,
 } from "@references/hooks";
 import type { ReferenceRemotesFrom } from "@references/types";
-import { useEffect, useState } from "react";
 
 type OtuToolbarProps = {
 	/** Current search term used for filtering */
@@ -42,14 +41,7 @@ export default function OtuToolbar({
 	);
 	const archived = useReferenceIsArchived(refId);
 
-	const [draft, setDraft] = useState(term);
-	const debouncedDraft = useDebouncedValue(draft);
-
-	useEffect(() => {
-		if (debouncedDraft !== term) {
-			setTerm(debouncedDraft);
-		}
-	}, [debouncedDraft, setTerm, term]);
+	const [draft, setDraft] = useDebouncedDraft(term, setTerm);
 
 	return (
 		<Toolbar>

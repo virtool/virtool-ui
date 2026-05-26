@@ -72,7 +72,7 @@ export default function ReferenceList({
 					setCreateReferenceType={(createReferenceType) =>
 						setSearch({ createReferenceType })
 					}
-					setFind={(find) => setSearch({ find }, { replace: true })}
+					setFind={(find) => setSearch({ find, page: 1 }, { replace: true })}
 				/>
 				<CreateReference
 					createReferenceType={createReferenceType}

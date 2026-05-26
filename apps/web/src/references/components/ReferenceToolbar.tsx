@@ -1,11 +1,10 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
-import { useDebouncedValue } from "@app/hooks";
+import { useDebouncedDraft } from "@app/hooks";
 import Button from "@base/Button";
 import InputSearch from "@base/InputSearch";
 import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
 import Toolbar from "@base/Toolbar";
-import { useEffect, useState } from "react";
 
 type ReferenceToolbarProps = {
 	archived: boolean;
@@ -28,14 +27,7 @@ export default function ReferenceToolbar({
 	const { hasPermission: canCreate } =
 		useCheckAdminRoleOrPermission("create_ref");
 
-	const [draft, setDraft] = useState(find);
-	const debouncedDraft = useDebouncedValue(draft);
-
-	useEffect(() => {
-		if (debouncedDraft !== find) {
-			setFind(debouncedDraft);
-		}
-	}, [debouncedDraft, setFind, find]);
+	const [draft, setDraft] = useDebouncedDraft(find, setFind);
 
 	return (
 		<Toolbar>
