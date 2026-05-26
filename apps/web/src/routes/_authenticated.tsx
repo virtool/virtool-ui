@@ -14,7 +14,13 @@ import Nav from "@nav/components/Nav";
 import Sidebar from "@nav/components/Sidebar";
 import type { QueryClient } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	Navigate,
+	Outlet,
+	redirect,
+	useLocation,
+} from "@tanstack/react-router";
 import { rootKeys } from "@wall/queries";
 import { lazy, Suspense, useEffect } from "react";
 import { z } from "zod/v4";
@@ -74,7 +80,8 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthenticatedLayout() {
 	const queryClient = useQueryClient();
-	const { data, isPending } = useFetchAccount();
+	const { data, isPending, isError } = useFetchAccount();
+	const location = useLocation();
 	const search = Route.useSearch();
 	const navigate = Route.useNavigate();
 
@@ -87,6 +94,17 @@ function AuthenticatedLayout() {
 
 	if (isPending) {
 		return <LoadingPlaceholder />;
+	}
+
+	if (isError || !data) {
+		return (
+			<Navigate
+				to="/login"
+				replace
+				// biome-ignore lint/suspicious/noExplicitAny: route search type is `AnyRoute` because tsconfig has `strict: false` (see AppRouter.tsx)
+				search={{ redirect: location.href } as any}
+			/>
+		);
 	}
 
 	return (
