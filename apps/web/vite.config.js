@@ -7,7 +7,7 @@ import path from "path";
 import { defineConfig } from "vite";
 import pkg from "./package.json" with { type: "json" };
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
 	build: {
 		sourcemap: true,
 		rolldownOptions: {
@@ -71,29 +71,49 @@ export default defineConfig({
 				plugins: ["babel-plugin-react-compiler"],
 			},
 		}),
-		sentryVitePlugin({
-			org: "cfia-virtool",
-			project: "cloud-ui",
-		}),
+		command === "build" &&
+			sentryVitePlugin({
+				org: "cfia-virtool",
+				project: "cloud-ui",
+			}),
 		tailwindcss(),
 	],
 	optimizeDeps: {
 		holdUntilCrawlEnd: false,
 		include: [
 			"@hookform/resolvers/zod",
+			"@sentry/react",
 			"@tanstack/react-query",
 			"@tanstack/react-router",
 			"@tanstack/react-virtual",
+			"class-variance-authority",
+			"clsx",
 			"d3",
 			"d3-transition",
+			"downshift",
+			"es-toolkit",
+			"es-toolkit/array",
+			"es-toolkit/compat",
+			"es-toolkit/math",
+			"es-toolkit/object",
+			"es-toolkit/predicate",
+			"es-toolkit/string",
+			"fuse.js",
 			"lucide-react",
+			"marked",
+			"numbro",
 			"radix-ui",
+			"react-dropzone",
 			"react-hook-form",
+			"superagent",
+			"tailwind-merge",
 			"zod",
 			"zod/v4",
+			"zustand",
+			"zustand/middleware",
 		],
 	},
 	server: {
 		allowedHosts: ["virtool.local"],
 	},
-});
+}));
