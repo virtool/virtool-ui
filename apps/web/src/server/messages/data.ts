@@ -1,11 +1,7 @@
 import type { UserNested } from "@users/types";
-import { desc, eq, inArray } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db } from "../db/pg";
-import {
-	type InstanceMessageRow,
-	instanceMessages,
-	type MessageColor,
-} from "../db/schema/messages";
+import { instanceMessages, type MessageColor } from "../db/schema/messages";
 import { users } from "../db/schema/users";
 import { AppError } from "../errors";
 import { emit } from "../events/emit";
@@ -24,48 +20,30 @@ export type Message = {
 /** Thrown when a requested instance message does not exist. */
 export class MessageNotFoundError extends AppError {}
 
-function parseUserId(userIdText: string | null): number | null {
-	if (userIdText === null) {
-		return null;
-	}
-	const parsed = Number.parseInt(userIdText, 10);
-	return Number.isNaN(parsed) ? null : parsed;
-}
+type MessageJoinRow = {
+	id: number;
+	active: boolean | null;
+	color: MessageColor;
+	message: string | null;
+	createdAt: Date | null;
+	updatedAt: Date | null;
+	user: UserNested;
+};
 
-async function lookupUsers(
-	userIdTexts: ReadonlyArray<string | null>,
-): Promise<Map<number, UserNested>> {
-	const ids = Array.from(
-		new Set(
-			userIdTexts.map(parseUserId).filter((id): id is number => id !== null),
-		),
-	);
+const messageSelect = {
+	id: instanceMessages.id,
+	active: instanceMessages.active,
+	color: instanceMessages.color,
+	message: instanceMessages.message,
+	createdAt: instanceMessages.createdAt,
+	updatedAt: instanceMessages.updatedAt,
+	user: {
+		id: users.id,
+		handle: users.handle,
+	},
+} as const;
 
-	if (ids.length === 0) {
-		return new Map();
-	}
-
-	const rows = await db
-		.select({ id: users.id, handle: users.handle })
-		.from(users)
-		.where(inArray(users.id, ids));
-
-	return new Map(rows.map((row) => [row.id, row]));
-}
-
-async function lookupUser(userIdText: string | null): Promise<UserNested> {
-	const map = await lookupUsers([userIdText]);
-	const id = parseUserId(userIdText);
-	if (id !== null) {
-		const user = map.get(id);
-		if (user) {
-			return user;
-		}
-	}
-	return { id: 0, handle: "" };
-}
-
-function toMessage(row: InstanceMessageRow, user: UserNested): Message {
+function toMessage(row: MessageJoinRow): Message {
 	return {
 		id: row.id,
 		active: row.active ?? false,
@@ -73,38 +51,44 @@ function toMessage(row: InstanceMessageRow, user: UserNested): Message {
 		message: row.message ?? "",
 		created_at: row.createdAt?.toISOString() ?? "",
 		updated_at: row.updatedAt?.toISOString() ?? "",
-		user,
+		user: row.user,
 	};
 }
 
 export async function findMessage(): Promise<Message | null> {
 	const [row] = await db
-		.select()
+		.select(messageSelect)
 		.from(instanceMessages)
+		.innerJoin(users, eq(users.id, instanceMessages.userId))
 		.where(eq(instanceMessages.active, true))
 		.limit(1);
 
-	if (!row) {
-		return null;
-	}
-
-	const user = await lookupUser(row.user);
-	return toMessage(row, user);
+	return row ? toMessage(row) : null;
 }
 
 export async function findMessages(): Promise<Message[]> {
 	const rows = await db
-		.select()
+		.select(messageSelect)
 		.from(instanceMessages)
+		.innerJoin(users, eq(users.id, instanceMessages.userId))
 		.orderBy(desc(instanceMessages.createdAt));
 
-	const userMap = await lookupUsers(rows.map((row) => row.user));
+	return rows.map(toMessage);
+}
 
-	return rows.map((row) => {
-		const id = parseUserId(row.user);
-		const user = (id !== null && userMap.get(id)) || { id: 0, handle: "" };
-		return toMessage(row, user);
-	});
+async function findMessageById(id: number): Promise<Message> {
+	const [row] = await db
+		.select(messageSelect)
+		.from(instanceMessages)
+		.innerJoin(users, eq(users.id, instanceMessages.userId))
+		.where(eq(instanceMessages.id, id))
+		.limit(1);
+
+	if (!row) {
+		throw new MessageNotFoundError();
+	}
+
+	return toMessage(row);
 }
 
 export async function createMessage(
@@ -121,14 +105,13 @@ export async function createMessage(
 			message,
 			createdAt: now,
 			updatedAt: now,
-			user: String(userId),
+			userId,
 		})
-		.returning();
+		.returning({ id: instanceMessages.id });
 
 	await emit("messages", row.id, "create");
 
-	const user = await lookupUser(row.user);
-	return toMessage(row, user);
+	return findMessageById(row.id);
 }
 
 export async function updateMessage(
@@ -137,7 +120,7 @@ export async function updateMessage(
 	userId: number,
 ): Promise<Message> {
 	const update: Partial<typeof instanceMessages.$inferInsert> = {
-		user: String(userId),
+		userId,
 		updatedAt: new Date(),
 	};
 	if (values.color !== undefined) {
@@ -151,7 +134,7 @@ export async function updateMessage(
 		.update(instanceMessages)
 		.set(update)
 		.where(eq(instanceMessages.id, id))
-		.returning();
+		.returning({ id: instanceMessages.id });
 
 	if (!row) {
 		throw new MessageNotFoundError();
@@ -159,8 +142,7 @@ export async function updateMessage(
 
 	await emit("messages", row.id, "update");
 
-	const user = await lookupUser(row.user);
-	return toMessage(row, user);
+	return findMessageById(row.id);
 }
 
 export async function deleteMessage(id: number): Promise<void> {
@@ -187,7 +169,7 @@ export async function setActiveMessage(id: number): Promise<Message> {
 			.update(instanceMessages)
 			.set({ active: true })
 			.where(eq(instanceMessages.id, id))
-			.returning();
+			.returning({ id: instanceMessages.id });
 
 		if (!updated) {
 			throw new MessageNotFoundError();
@@ -198,8 +180,7 @@ export async function setActiveMessage(id: number): Promise<Message> {
 
 	await emit("messages", row.id, "update");
 
-	const user = await lookupUser(row.user);
-	return toMessage(row, user);
+	return findMessageById(row.id);
 }
 
 export async function clearActiveMessage(): Promise<void> {

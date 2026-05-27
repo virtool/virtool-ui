@@ -1,7 +1,8 @@
-// Read-only mirror of the `instance_messages` table managed by the upstream
-// Python service via Alembic. Do not generate or push migrations from this
-// side. Keep the columns in sync with
-// `../../../../../../virtool/virtool/messages/sql.py`.
+// Mirror of the `instance_messages` table. Schema and migrations are owned by
+// the upstream Python service via Alembic — do not generate or push migrations
+// from this side. The legacy `"user"` VARCHAR column still exists in the DB
+// during the upstream cleanup window but is not declared here; Drizzle ignores
+// columns it does not know about.
 
 import {
 	boolean,
@@ -11,6 +12,7 @@ import {
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
+import { users } from "./users";
 
 export const messageColor = pgEnum("messagecolor", [
 	"red",
@@ -28,7 +30,9 @@ export const instanceMessages = pgTable("instance_messages", {
 	message: text("message"),
 	createdAt: timestamp("created_at"),
 	updatedAt: timestamp("updated_at"),
-	user: text("user"),
+	userId: integer("user_id")
+		.notNull()
+		.references(() => users.id),
 });
 
 /** A row from the `instance_messages` table. */
