@@ -1,6 +1,6 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { reactQueryHandler } from "../websocket/reactQueryHandler";
-import { WsMessageSchema } from "../websocket/schema";
+import { reactQueryHandler } from "./reactQueryHandler";
+import { WsMessageSchema } from "./schema";
 
 type ConnectionStatus =
 	| "initializing"

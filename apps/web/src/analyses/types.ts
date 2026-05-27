@@ -10,7 +10,7 @@ export type AnalysisSample = {
 	id: string;
 };
 
-/** Minimal Analysis used for websocket messages and resource listings */
+/** Minimal Analysis used for resource listings */
 export type AnalysisMinimal = {
 	/** When the analysis was created */
 	created_at: string;
