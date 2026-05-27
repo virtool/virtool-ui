@@ -3,11 +3,6 @@ import { accountKeys, useFetchAccount } from "@account/queries";
 import { apiClient } from "@app/api";
 import * as Sse from "@app/sse/SseConnection";
 import type { Root } from "@app/types";
-import {
-	establishConnection,
-	getConnectionStatus,
-	init,
-} from "@app/websocket/WsConnection";
 import Banner from "@banner/components/Banner";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Nav from "@nav/components/Nav";
@@ -25,14 +20,6 @@ const UploadOverlay = lazy(() => import("@uploads/components/UploadOverlay"));
 const authenticatedSearchSchema = z.object({
 	openDev: z.boolean().optional().catch(undefined),
 });
-
-function setupWebSocket(queryClient: QueryClient) {
-	init(queryClient);
-	const status = getConnectionStatus();
-	if (status === "initializing" || status === "abandoned") {
-		establishConnection();
-	}
-}
 
 function setupSse(queryClient: QueryClient) {
 	Sse.init(queryClient);
@@ -80,7 +67,6 @@ function AuthenticatedLayout() {
 
 	useEffect(() => {
 		if (data) {
-			setupWebSocket(queryClient);
 			setupSse(queryClient);
 		}
 	}, [data, queryClient]);
