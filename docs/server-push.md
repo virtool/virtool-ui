@@ -47,11 +47,17 @@ The SSE handler emits one `data:` frame per event:
 { "domain": "labels", "operation": "insert", "id": 4 }
 ```
 
-- `domain` — the domain name (`labels`, `samples`, `jobs`, …).
+- `domain` — one of the literals in `SseDomainSchema` (`account`,
+  `groups`, `indexes`, `jobs`, `labels`, `messages`, `models`,
+  `references`, `roles`, `samples`, `uploads`, `users`). Frames with
+  any other `domain` fail `safeParse` on the client and are dropped
+  with a warning — by design, so contract drift is loud.
 - `operation` — `"insert"`, `"update"`, or `"delete"`. `create` events
   map to `insert`; the other two pass through.
-- `id` — number or string, matching whatever the producer published as
-  `resource_id`.
+- `id` — per-domain primary key type. Mongo-owned domains (`indexes`,
+  `references`, `roles`, `samples`) use string ids; the others use
+  number ids. A frame whose `id` type doesn't match its `domain` is
+  rejected at the parse boundary.
 
 The handler also sends `: connected` on open and `: keepalive` every
 25 s to keep proxies and the browser's `EventSource` happy.
@@ -105,11 +111,11 @@ in load metrics.
   reconnect, and pipes parsed messages into `reactQueryHandler`.
 - `app/sse/schema.ts` defines `SseMessageSchema`, which validates the
   wire frame and strips unknown fields.
-- `app/sse/reactQueryHandler.ts` maps `message.domain` to a
-  `*QueryKeys.all()` factory and calls
-  `queryClient.invalidateQueries`. Coarse but resilient — every list
-  and detail under that domain refetches. Revisit if a hot domain
-  starts thrashing.
+- `app/sse/reactQueryHandler.ts` maps `message.domain` to a query-key
+  factory and invalidates by operation: `update` invalidates
+  `detail(id)`, `insert` and `delete` invalidate `lists()`. Factories
+  that lack a method fall back to `all()`. Unknown domains are
+  ignored.
 
 ## Follow-ups
 

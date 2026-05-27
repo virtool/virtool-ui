@@ -10,9 +10,15 @@ import { referenceQueryKeys } from "@references/queries";
 import { samplesQueryKeys } from "@samples/queries";
 import type { QueryClient } from "@tanstack/react-query";
 import { fileQueryKeys } from "@/uploads/queries";
-import type { SseMessage } from "./schema";
+import type { SseDomain, SseMessage } from "./schema";
 
-const keyFactories = {
+type KeyFactory = {
+	all(): readonly unknown[];
+	lists?(): readonly unknown[];
+	detail?(id: number | string): readonly unknown[];
+};
+
+const keyFactories: Record<SseDomain, KeyFactory> = {
 	account: accountKeys,
 	groups: groupQueryKeys,
 	indexes: indexQueryKeys,
@@ -27,11 +33,28 @@ const keyFactories = {
 	samples: samplesQueryKeys,
 };
 
+function selectQueryKey(
+	factory: KeyFactory,
+	operation: SseMessage["operation"],
+	id: SseMessage["id"],
+): readonly unknown[] {
+	if (operation === "update" && factory.detail) {
+		return factory.detail(id);
+	}
+	if ((operation === "insert" || operation === "delete") && factory.lists) {
+		return factory.lists();
+	}
+	return factory.all();
+}
+
 export function reactQueryHandler(queryClient: QueryClient) {
 	return (message: SseMessage) => {
-		const keyFactory = keyFactories[message.domain];
-		if (keyFactory) {
-			queryClient.invalidateQueries({ queryKey: keyFactory.all() });
+		const factory = keyFactories[message.domain];
+		if (!factory) {
+			return;
 		}
+		queryClient.invalidateQueries({
+			queryKey: selectQueryKey(factory, message.operation, message.id),
+		});
 	};
 }
