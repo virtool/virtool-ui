@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { eventToWsMessage } from "./broadcast";
+import { eventToSseMessage } from "./broadcast";
 
-describe("eventToWsMessage", () => {
+describe("eventToSseMessage", () => {
 	it("maps create to insert with the resource id", () => {
 		expect(
-			eventToWsMessage({
+			eventToSseMessage({
 				domain: "labels",
 				resource_id: 4,
 				operation: "create",
@@ -18,7 +18,7 @@ describe("eventToWsMessage", () => {
 
 	it("maps update to update with the resource id", () => {
 		expect(
-			eventToWsMessage({
+			eventToSseMessage({
 				domain: "labels",
 				resource_id: 5,
 				operation: "update",
@@ -32,7 +32,7 @@ describe("eventToWsMessage", () => {
 
 	it("maps delete to delete with the resource id", () => {
 		expect(
-			eventToWsMessage({
+			eventToSseMessage({
 				domain: "labels",
 				resource_id: 9,
 				operation: "delete",
@@ -46,7 +46,7 @@ describe("eventToWsMessage", () => {
 
 	it("preserves string resource ids", () => {
 		expect(
-			eventToWsMessage({
+			eventToSseMessage({
 				domain: "samples",
 				resource_id: "abc",
 				operation: "create",

@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { WsMessageSchema } from "../schema";
+import { SseMessageSchema } from "../schema";
 
-describe("WsMessageSchema", () => {
+describe("SseMessageSchema", () => {
 	it("accepts a valid message with a numeric id", () => {
-		const result = WsMessageSchema.safeParse({
+		const result = SseMessageSchema.safeParse({
 			interface: "samples",
 			operation: "update",
 			data: { id: 42 },
@@ -17,7 +17,7 @@ describe("WsMessageSchema", () => {
 	});
 
 	it("accepts a valid message with a string id", () => {
-		const result = WsMessageSchema.safeParse({
+		const result = SseMessageSchema.safeParse({
 			interface: "samples",
 			operation: "insert",
 			data: { id: "abc123" },
@@ -26,7 +26,7 @@ describe("WsMessageSchema", () => {
 	});
 
 	it("strips unknown fields from data", () => {
-		const result = WsMessageSchema.safeParse({
+		const result = SseMessageSchema.safeParse({
 			interface: "samples",
 			operation: "update",
 			data: { id: 1, name: "junk" },
@@ -36,7 +36,7 @@ describe("WsMessageSchema", () => {
 	});
 
 	it("rejects messages with an unsupported operation", () => {
-		const result = WsMessageSchema.safeParse({
+		const result = SseMessageSchema.safeParse({
 			interface: "samples",
 			operation: "patch",
 			data: { id: 1 },
@@ -45,7 +45,7 @@ describe("WsMessageSchema", () => {
 	});
 
 	it("rejects messages without a data.id", () => {
-		const result = WsMessageSchema.safeParse({
+		const result = SseMessageSchema.safeParse({
 			interface: "samples",
 			operation: "update",
 			data: {},
@@ -54,7 +54,7 @@ describe("WsMessageSchema", () => {
 	});
 
 	it("rejects messages without an interface", () => {
-		const result = WsMessageSchema.safeParse({
+		const result = SseMessageSchema.safeParse({
 			operation: "update",
 			data: { id: 1 },
 		});

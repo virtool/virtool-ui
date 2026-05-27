@@ -1,18 +1,12 @@
+import type { SseMessage } from "@app/sse/schema";
 import type { ClientEvent } from "./channel";
-
-/** Message shape sent to browser clients. */
-export type WsMessage = {
-	interface: string;
-	operation: "insert" | "update" | "delete";
-	data: { id: number | string };
-};
 
 /**
  * Convert a Postgres-published client event into the id-only message shape
  * browser clients consume. The client refetches via the normal REST API on
  * invalidation, so the server does no resource resolution here.
  */
-export function eventToWsMessage(event: ClientEvent): WsMessage {
+export function eventToSseMessage(event: ClientEvent): SseMessage {
 	const operation =
 		event.operation === "create"
 			? "insert"

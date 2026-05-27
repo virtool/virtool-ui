@@ -1,6 +1,6 @@
 import { z } from "zod/v4";
 
-export const WsMessageSchema = z
+export const SseMessageSchema = z
 	.object({
 		interface: z.string(),
 		operation: z.enum(["insert", "update", "delete"]),
@@ -8,4 +8,4 @@ export const WsMessageSchema = z
 	})
 	.strip();
 
-export type WsMessage = z.infer<typeof WsMessageSchema>;
+export type SseMessage = z.infer<typeof SseMessageSchema>;

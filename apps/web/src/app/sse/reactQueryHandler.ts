@@ -10,7 +10,7 @@ import { referenceQueryKeys } from "@references/queries";
 import { samplesQueryKeys } from "@samples/queries";
 import type { QueryClient } from "@tanstack/react-query";
 import { fileQueryKeys } from "@/uploads/queries";
-import type { WsMessage } from "./schema";
+import type { SseMessage } from "./schema";
 
 const keyFactories = {
 	account: accountKeys,
@@ -28,7 +28,7 @@ const keyFactories = {
 };
 
 export function reactQueryHandler(queryClient: QueryClient) {
-	return (message: WsMessage) => {
+	return (message: SseMessage) => {
 		const keyFactory = keyFactories[message.interface];
 		if (keyFactory) {
 			queryClient.invalidateQueries({ queryKey: keyFactory.all() });
