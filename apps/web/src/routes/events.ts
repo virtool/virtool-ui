@@ -66,10 +66,8 @@ async function handleEvents({
 					}
 
 					try {
-						const message = await eventToWsMessage(event);
-						if (message) {
-							send(`data: ${JSON.stringify(message)}\n\n`);
-						}
+						const message = eventToWsMessage(event);
+						send(`data: ${JSON.stringify(message)}\n\n`);
 					} catch (err) {
 						logger.warn({ err, event }, "failed to deliver sse message");
 					}

@@ -2,69 +2,62 @@ import { describe, expect, it } from "vitest";
 import { WsMessageSchema } from "../schema";
 
 describe("WsMessageSchema", () => {
-	it("should accept a valid message", () => {
+	it("accepts a valid message with a numeric id", () => {
 		const result = WsMessageSchema.safeParse({
 			interface: "samples",
 			operation: "update",
-			data: { id: "abc123", name: "test" },
+			data: { id: 42 },
+		});
+		expect(result.success).toBe(true);
+		expect(result.data).toEqual({
+			interface: "samples",
+			operation: "update",
+			data: { id: 42 },
+		});
+	});
+
+	it("accepts a valid message with a string id", () => {
+		const result = WsMessageSchema.safeParse({
+			interface: "samples",
+			operation: "insert",
+			data: { id: "abc123" },
 		});
 		expect(result.success).toBe(true);
 	});
 
-	it("should reject a message without interface", () => {
+	it("strips unknown fields from data", () => {
 		const result = WsMessageSchema.safeParse({
+			interface: "samples",
+			operation: "update",
+			data: { id: 1, name: "junk" },
+		});
+		expect(result.success).toBe(true);
+		expect(result.data?.data).toEqual({ id: 1 });
+	});
+
+	it("rejects messages with an unsupported operation", () => {
+		const result = WsMessageSchema.safeParse({
+			interface: "samples",
+			operation: "patch",
+			data: { id: 1 },
+		});
+		expect(result.success).toBe(false);
+	});
+
+	it("rejects messages without a data.id", () => {
+		const result = WsMessageSchema.safeParse({
+			interface: "samples",
 			operation: "update",
 			data: {},
 		});
 		expect(result.success).toBe(false);
 	});
 
-	it("should reject a message without operation", () => {
+	it("rejects messages without an interface", () => {
 		const result = WsMessageSchema.safeParse({
-			interface: "samples",
-			data: {},
+			operation: "update",
+			data: { id: 1 },
 		});
 		expect(result.success).toBe(false);
-	});
-
-	it("should reject a message with non-object data", () => {
-		const result = WsMessageSchema.safeParse({
-			interface: "samples",
-			operation: "update",
-			data: "not an object",
-		});
-		expect(result.success).toBe(false);
-	});
-
-	it("should reject a message with array data", () => {
-		const result = WsMessageSchema.safeParse({
-			interface: "samples",
-			operation: "update",
-			data: [1, 2, 3],
-		});
-		expect(result.success).toBe(false);
-	});
-
-	it("should accept a job message with workflow", () => {
-		const result = WsMessageSchema.safeParse({
-			interface: "jobs",
-			operation: "update",
-			data: { workflow: "build_index", id: "job1" },
-		});
-		expect(result.success).toBe(true);
-	});
-
-	it("should accept a task message", () => {
-		const result = WsMessageSchema.safeParse({
-			interface: "tasks",
-			operation: "update",
-			data: {
-				type: "clone_reference",
-				id: 1,
-				complete: false,
-				progress: 50,
-			},
-		});
-		expect(result.success).toBe(true);
 	});
 });
