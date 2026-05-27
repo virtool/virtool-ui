@@ -29,7 +29,7 @@ const keyFactories = {
 
 export function reactQueryHandler(queryClient: QueryClient) {
 	return (message: SseMessage) => {
-		const keyFactory = keyFactories[message.interface];
+		const keyFactory = keyFactories[message.domain];
 		if (keyFactory) {
 			queryClient.invalidateQueries({ queryKey: keyFactory.all() });
 		}

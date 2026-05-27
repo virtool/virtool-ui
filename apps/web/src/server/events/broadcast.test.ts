@@ -10,9 +10,9 @@ describe("eventToSseMessage", () => {
 				operation: "create",
 			}),
 		).toEqual({
-			interface: "labels",
+			domain: "labels",
 			operation: "insert",
-			data: { id: 4 },
+			id: 4,
 		});
 	});
 
@@ -24,9 +24,9 @@ describe("eventToSseMessage", () => {
 				operation: "update",
 			}),
 		).toEqual({
-			interface: "labels",
+			domain: "labels",
 			operation: "update",
-			data: { id: 5 },
+			id: 5,
 		});
 	});
 
@@ -38,9 +38,9 @@ describe("eventToSseMessage", () => {
 				operation: "delete",
 			}),
 		).toEqual({
-			interface: "labels",
+			domain: "labels",
 			operation: "delete",
-			data: { id: 9 },
+			id: 9,
 		});
 	});
 
@@ -52,9 +52,9 @@ describe("eventToSseMessage", () => {
 				operation: "create",
 			}),
 		).toEqual({
-			interface: "samples",
+			domain: "samples",
 			operation: "insert",
-			data: { id: "abc" },
+			id: "abc",
 		});
 	});
 });

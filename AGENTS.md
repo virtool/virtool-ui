@@ -244,9 +244,9 @@ coordination, and notes on aggregation pipelines.
 ### Server → client push runs over SSE with id-only frames
 
 Server-pushed cache invalidations are delivered over a single SSE
-stream at `/events`. Each frame carries `{ interface, operation,
-data: { id } }`; the client invalidates React Query caches by
-`interface` and refetches through the REST API so per-user auth is
+stream at `/events`. Each frame carries `{ domain, operation, id }`;
+the client invalidates React Query caches by `domain` and refetches
+through the REST API so per-user auth is
 enforced on the refetch instead of in a fanout broadcast. Both
 Python and Node publish onto the Postgres `client_events` channel;
 `routes/events.ts` is the sole consumer.

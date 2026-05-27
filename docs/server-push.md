@@ -2,9 +2,9 @@
 
 Server → client push runs over a single transport: a Server-Sent
 Events stream served by this repo at `/events`. Each frame is an
-id-only `{ interface, operation, data: { id } }` message; the client
-invalidates React Query caches keyed by `interface` and refetches the
-fresh resource through the normal REST API.
+id-only `{ domain, operation, id }` message; the client invalidates
+React Query caches keyed by `domain` and refetches the fresh resource
+through the normal REST API.
 
 ## Shape
 
@@ -44,14 +44,14 @@ resource resolution happens on the server side.
 The SSE handler emits one `data:` frame per event:
 
 ```json
-{ "interface": "labels", "operation": "insert", "data": { "id": 4 } }
+{ "domain": "labels", "operation": "insert", "id": 4 }
 ```
 
-- `interface` — the domain name (`labels`, `samples`, `jobs`, …).
+- `domain` — the domain name (`labels`, `samples`, `jobs`, …).
 - `operation` — `"insert"`, `"update"`, or `"delete"`. `create` events
   map to `insert`; the other two pass through.
-- `data.id` — number or string, matching whatever the producer
-  published as `resource_id`.
+- `id` — number or string, matching whatever the producer published as
+  `resource_id`.
 
 The handler also sends `: connected` on open and `: keepalive` every
 25 s to keep proxies and the browser's `EventSource` happy.
@@ -93,7 +93,7 @@ in load metrics.
 - `server/events/channel.ts` — channel name + payload type. Pure.
 - `server/events/emit.ts` — publishes a `ClientEvent` via `NOTIFY`.
 - `server/events/listen.ts` — `LISTEN`-backed async iterable.
-- `server/events/broadcast.ts` — pure `ClientEvent → WsMessage` shape
+- `server/events/broadcast.ts` — pure `ClientEvent → SseMessage` shape
   conversion.
 - `routes/events.ts` — TanStack Start `createFileRoute` that owns the
   `ReadableStream`, keepalive timer, SSE framing, and the
@@ -103,12 +103,12 @@ in load metrics.
 
 - `app/sse/SseConnection.ts` opens the `EventSource`, manages
   reconnect, and pipes parsed messages into `reactQueryHandler`.
-- `app/sse/schema.ts` defines `WsMessageSchema`, which validates the
-  wire frame and strips unknown fields out of `data`.
-- `app/sse/reactQueryHandler.ts` maps `message.interface` to a
+- `app/sse/schema.ts` defines `SseMessageSchema`, which validates the
+  wire frame and strips unknown fields.
+- `app/sse/reactQueryHandler.ts` maps `message.domain` to a
   `*QueryKeys.all()` factory and calls
   `queryClient.invalidateQueries`. Coarse but resilient — every list
-  and detail under that interface refetches. Revisit if a hot domain
+  and detail under that domain refetches. Revisit if a hot domain
   starts thrashing.
 
 ## Follow-ups

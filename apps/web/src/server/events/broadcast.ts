@@ -15,8 +15,8 @@ export function eventToSseMessage(event: ClientEvent): SseMessage {
 				: "delete";
 
 	return {
-		interface: event.domain,
+		domain: event.domain,
 		operation,
-		data: { id: event.resource_id },
+		id: event.resource_id,
 	};
 }
