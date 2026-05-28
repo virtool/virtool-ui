@@ -12,6 +12,7 @@ export const SseDomainSchema = z.enum([
 	"references",
 	"roles",
 	"samples",
+	"tasks",
 	"uploads",
 	"users",
 ]);
@@ -45,6 +46,7 @@ export const SseMessageSchema = z.discriminatedUnion("domain", [
 	frame("references", StringId),
 	frame("roles", StringId),
 	frame("samples", StringId),
+	frame("tasks", NumberId),
 	frame("uploads", NumberId),
 	frame("users", NumberId),
 ]);

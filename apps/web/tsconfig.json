@@ -24,6 +24,7 @@
             "@sequences/*": ["./src/sequences/*"],
             "@server/*": ["./src/server/*"],
             "@subtraction/*": ["./src/subtraction/*"],
+            "@tasks/*": ["./src/tasks/*"],
             "@tests/*": ["./src/tests/*"],
             "@uploads/*": ["./src/uploads/*"],
             "@users/*": ["./src/users/*"],

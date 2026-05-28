@@ -49,7 +49,8 @@ The SSE handler emits one `data:` frame per event:
 
 - `domain` — one of the literals in `SseDomainSchema` (`account`,
   `groups`, `indexes`, `jobs`, `labels`, `messages`, `models`,
-  `references`, `roles`, `samples`, `uploads`, `users`). Frames with
+  `references`, `roles`, `samples`, `tasks`, `uploads`, `users`).
+  Frames with
   any other `domain` fail `safeParse` on the client and are dropped
   with a warning — by design, so contract drift is loud.
 - `operation` — `"insert"`, `"update"`, or `"delete"`. `create` events
@@ -141,12 +142,15 @@ in load metrics.
   function (or `?view=nested` param) that returns just the
   `JobNested` shape, and point `useFetchJob`'s seeded callers at it to
   drop the over-fetch.
-- **Push for `tasks` and `hmm`.** Task-nested sites
+- **`hmm` has no push domain.** Task-nested sites
   (`references/components/ReferenceItem.tsx`,
   `references/components/Detail/Remote.tsx`,
-  `hmm/components/HmmInstall.tsx`) render live task `progress`/`step`
-  but can't use the Approach-A pattern: `tasks` and `hmm` are not
-  `SseDomain` literals and there is no `/tasks/:id` fetch + task query
-  module. Add the domains to `SseDomainSchema`, wire producers to
-  `pg_notify` on task/hmm changes, and add a task query module before
-  applying the same seeded-refetch fix there.
+  `hmm/components/HmmInstall.tsx`) now keep live task `progress`/`step`
+  fresh by mounting `useFetchTask(id)` seeded with the nested task, so
+  a `tasks` update frame invalidates `taskQueryKeys.detail(id)` and
+  refetches through the `getTask` server function. `hmm` itself is not
+  an `SseDomain` and has no `/hmms` refetch trigger; `HmmInstall`
+  bridges that gap by watching the live task's `complete` and
+  invalidating `hmmQueryKeys.lists()` from a `useEffect`. If HMM gains
+  its own push domain, drop that effect in favour of a direct
+  invalidation.

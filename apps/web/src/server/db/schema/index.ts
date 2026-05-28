@@ -7,4 +7,5 @@ export * from "./groups";
 export * from "./labels";
 export * from "./messages";
 export * from "./sessions";
+export * from "./tasks";
 export * from "./users";

@@ -143,7 +143,7 @@ export function useUpdateSample(sampleId: string) {
 
 ## Update strategy: invalidate, don't patch
 
-When data goes stale — from a user action, a websocket message, or a
+When data goes stale — from a user action, a server-push event, or a
 successful mutation — invalidate the relevant keys and let React Query
 refetch. The hierarchical key structure means one
 `invalidateQueries({ queryKey: samplesQueryKeys.lists() })` covers every

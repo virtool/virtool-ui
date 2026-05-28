@@ -52,6 +52,7 @@ export default defineConfig(({ command }) => ({
 			"@sequences": path.resolve("src/sequences"),
 			"@server": path.resolve("src/server"),
 			"@subtraction": path.resolve("src/subtraction"),
+			"@tasks": path.resolve("src/tasks"),
 			"@tests": path.resolve("src/tests"),
 			"@uploads": path.resolve("src/uploads"),
 			"@users": path.resolve("src/users"),

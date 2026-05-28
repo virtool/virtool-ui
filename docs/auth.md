@@ -204,17 +204,15 @@ both cookies (`core.ts:104`). It's listed in the middleware's
 
 ### Client side
 
-Two paths trigger a client-side logout today:
+The only client-side logout path today is user-initiated: `useLogout`
+in `account/queries.ts:149` runs `logoutFn()` and then calls
+`resetClient()`.
 
-- **User-initiated.** `useLogout` in `account/queries.ts:149` runs
-  `logoutFn()` and then calls `resetClient()`.
-- **WebSocket close code 4000.** `WsConnection.ts:68` calls
-  `resetClient()` directly when the server closes the connection with
-  code 4000 (the signal that the session is no longer valid
-  server-side). There is no 401 interceptor on the SuperAgent client;
-  auth state on initial load is checked by
-  `routes/_authenticated.tsx`'s `beforeLoad`, which redirects to
-  `/login` if `fetchAccount` throws.
+There is no 401 interceptor on the SuperAgent client and no in-stream
+session-revocation signal on the SSE connection — a revoked session
+stays connected until the next server-function call fails auth. Auth
+state on initial load is checked by `routes/_authenticated.tsx`'s
+`beforeLoad`, which redirects to `/login` if `fetchAccount` throws.
 
 ### `resetClient`
 
@@ -226,7 +224,7 @@ window.location.reload();
 ```
 
 The full-page reload wipes everything held in memory — React state,
-React Query cache, zustand stores, websocket / SSE connections.
+React Query cache, zustand stores, the SSE connection.
 Clearing `sessionStorage` drops persisted form state.
 
 **`localStorage` is not cleared.** Anything persisted to `localStorage`

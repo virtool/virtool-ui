@@ -9,6 +9,7 @@ import { modelQueryKeys } from "@ml/queries";
 import { referenceQueryKeys } from "@references/queries";
 import { samplesQueryKeys } from "@samples/queries";
 import type { QueryClient } from "@tanstack/react-query";
+import { taskQueryKeys } from "@tasks/queries";
 import { fileQueryKeys } from "@/uploads/queries";
 import type { SseDomain, SseMessage } from "./schema";
 
@@ -28,6 +29,7 @@ const keyFactories: Record<SseDomain, KeyFactory> = {
 	models: modelQueryKeys,
 	references: referenceQueryKeys,
 	roles: roleQueryKeys,
+	tasks: taskQueryKeys,
 	uploads: fileQueryKeys,
 	users: userQueryKeys,
 	samples: samplesQueryKeys,
