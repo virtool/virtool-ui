@@ -80,7 +80,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthenticatedLayout() {
 	const queryClient = useQueryClient();
-	const { data, isPending, isError } = useFetchAccount();
+	const { data, isPending } = useFetchAccount();
 	const location = useLocation();
 	const search = Route.useSearch();
 	const navigate = Route.useNavigate();
@@ -96,7 +96,7 @@ function AuthenticatedLayout() {
 		return <LoadingPlaceholder />;
 	}
 
-	if (isError || !data) {
+	if (!data) {
 		return (
 			<Navigate
 				to="/login"
