@@ -76,7 +76,7 @@ export async function findMessages(): Promise<Message[]> {
 	return rows.map(toMessage);
 }
 
-async function findMessageById(id: number): Promise<Message> {
+async function getMessageById(id: number): Promise<Message> {
 	const [row] = await db
 		.select(messageSelect)
 		.from(instanceMessages)
@@ -111,7 +111,7 @@ export async function createMessage(
 
 	await emit("messages", row.id, "create");
 
-	return findMessageById(row.id);
+	return getMessageById(row.id);
 }
 
 export async function updateMessage(
@@ -142,7 +142,7 @@ export async function updateMessage(
 
 	await emit("messages", row.id, "update");
 
-	return findMessageById(row.id);
+	return getMessageById(row.id);
 }
 
 export async function deleteMessage(id: number): Promise<void> {
@@ -180,7 +180,7 @@ export async function setActiveMessage(id: number): Promise<Message> {
 
 	await emit("messages", row.id, "update");
 
-	return findMessageById(row.id);
+	return getMessageById(row.id);
 }
 
 export async function clearActiveMessage(): Promise<void> {
