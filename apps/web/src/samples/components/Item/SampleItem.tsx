@@ -2,8 +2,8 @@ import Attribution from "@base/Attribution";
 import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";
 import Link from "@base/Link";
+import { useFetchJob } from "@jobs/queries";
 import type { SampleMinimal } from "@samples/types";
-import { JobNestedSchema } from "@/jobs/types";
 import SampleLabel from "../Label/SampleLabel";
 import SampleLibraryTypeLabel from "../Label/SampleLibraryTypeLabel";
 import WorkflowTags from "../Tag/WorkflowTags";
@@ -39,7 +39,7 @@ export default function SampleItem({
 		setOpenQuickAnalyze(true);
 	}
 
-	const job = sample.job && JobNestedSchema.parse(sample.job);
+	const { data: job } = useFetchJob(sample.job?.id ?? Number.NaN, sample.job);
 
 	return (
 		<Box className="flex items-stretch basis-0 gap-4">
@@ -60,7 +60,12 @@ export default function SampleItem({
 						{sample.ready && (
 							<WorkflowTags id={sample.id} workflows={sample.workflows} />
 						)}
-						<EndIcon job={job} onClick={onQuickAnalyze} ready={sample.ready} />
+						<EndIcon
+							progress={job?.progress ?? 0}
+							state={job?.state}
+							onClick={onQuickAnalyze}
+							ready={sample.ready}
+						/>
 					</div>
 				</div>
 				<div className="flex mt-2.5 [&>*:not(:last-child)]:mr-1">

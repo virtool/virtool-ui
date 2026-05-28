@@ -1,12 +1,13 @@
 import ProgressCircle from "@base/ProgressCircle";
-import type { JobNested } from "@jobs/types";
+import type { JobState } from "@jobs/types";
 import { CircleCheck } from "lucide-react";
 
 type IndexItemIconProps = {
 	activeId: string;
 	id: string;
 	ready: boolean;
-	job?: JobNested;
+	progress?: number;
+	state?: JobState;
 };
 
 /**
@@ -15,14 +16,16 @@ type IndexItemIconProps = {
  * @param activeId - The id of the active index
  * @param id - The id of the index
  * @param ready - Whether the index is ready
- * @param job - The related job object
+ * @param progress - The progress of the building job
+ * @param state - The state of the building job
  * @returns The index item's icon
  */
 export function IndexItemIcon({
 	activeId,
 	id,
 	ready,
-	job,
+	progress,
+	state,
 }: IndexItemIconProps) {
 	if (ready && id !== activeId) {
 		return null;
@@ -34,8 +37,8 @@ export function IndexItemIcon({
 				<CircleCheck className="stroke-green-600" size={18} />
 			) : (
 				<ProgressCircle
-					progress={job?.progress || 0}
-					state={job?.state || "pending"}
+					progress={progress ?? 0}
+					state={state ?? "pending"}
 					size="md"
 				/>
 			)}

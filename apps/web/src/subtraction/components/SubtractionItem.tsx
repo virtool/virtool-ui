@@ -1,7 +1,7 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
-import { JobNestedSchema } from "@jobs/types";
+import { useFetchJob } from "@jobs/queries";
 import type { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
 
@@ -16,7 +16,7 @@ export function SubtractionItem({
 	ready,
 	user,
 }: SubtractionMinimal) {
-	const parsedJob = job && JobNestedSchema.parse(job);
+	const { data: fetchedJob } = useFetchJob(job?.id ?? Number.NaN, job);
 
 	return (
 		<BoxGroupSection className="grid grid-cols-5 items-center">
@@ -33,8 +33,8 @@ export function SubtractionItem({
 				<span className="flex items-center justify-end gap-1 font-medium">
 					<ProgressCircle
 						size="md"
-						progress={parsedJob.progress}
-						state={parsedJob.state ?? "pending"}
+						progress={fetchedJob?.progress ?? job.progress}
+						state={fetchedJob?.state ?? job.state}
 					/>
 				</span>
 			)}

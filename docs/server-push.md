@@ -131,3 +131,22 @@ in load metrics.
   `setTimeout` reconnect on top of the browser's built-in
   `EventSource` auto-reconnect. Pick one — drop `onerror` reconnect
   or switch to `fetch` streaming with full manual control.
+- **Dedicated nested-job fetch (Approach B).** Job-nested sites
+  (`sample.job`, `index.job`, `analysis.job`, `subtraction.job`) keep
+  their live `progress`/`state` fresh by mounting `useFetchJob(id)`
+  seeded with the nested object, so a `jobs` update frame invalidates
+  `jobQueryKeys.detail(id)` and refetches. That refetch hits
+  `/jobs/:id`, which returns the full `Job` (args, claim, steps) —
+  far more than the nested view needs. Add a lightweight server
+  function (or `?view=nested` param) that returns just the
+  `JobNested` shape, and point `useFetchJob`'s seeded callers at it to
+  drop the over-fetch.
+- **Push for `tasks` and `hmm`.** Task-nested sites
+  (`references/components/ReferenceItem.tsx`,
+  `references/components/Detail/Remote.tsx`,
+  `hmm/components/HmmInstall.tsx`) render live task `progress`/`step`
+  but can't use the Approach-A pattern: `tasks` and `hmm` are not
+  `SseDomain` literals and there is no `/tasks/:id` fetch + task query
+  module. Add the domains to `SseDomainSchema`, wire producers to
+  `pg_notify` on task/hmm changes, and add a task query module before
+  applying the same seeded-refetch fix there.
