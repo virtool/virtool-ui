@@ -117,6 +117,10 @@ export async function updateLabel(
 	labelId: number,
 	values: Partial<LabelValues>,
 ): Promise<Label> {
+	if (Object.keys(values).length === 0) {
+		return getLabel(db, labelId);
+	}
+
 	let row: LabelRow | undefined;
 	try {
 		[row] = await db
