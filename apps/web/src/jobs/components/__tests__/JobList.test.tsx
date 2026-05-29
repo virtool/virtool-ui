@@ -1,13 +1,11 @@
 import { screen, waitFor } from "@testing-library/react";
-import { createFakeServerJobMinimal, mockApiGetJobs } from "@tests/fake/jobs";
+import { mockApiGetJobs } from "@tests/api/jobs";
+import { createFakeServerJobMinimal } from "@tests/fake/jobs";
 import { renderWithRouter } from "@tests/setup";
-import nock from "nock";
-import { afterEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import JobsList from "../JobList";
 
 describe("<JobsList />", () => {
-	afterEach(() => nock.cleanAll());
-
 	it("should render", async () => {
 		const scope = mockApiGetJobs([
 			createFakeServerJobMinimal({

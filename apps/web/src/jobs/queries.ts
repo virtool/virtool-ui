@@ -1,4 +1,4 @@
-import { apiClient } from "@app/api";
+import { findJobs, getJob } from "@server/jobs/functions";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
 	JobSchema,
@@ -6,7 +6,6 @@ import {
 	type JobState,
 	type ServerJob,
 	type ServerJobNested,
-	type ServerJobSearchResult,
 } from "./types";
 
 /**
@@ -36,13 +35,7 @@ export function useFindJobs(
 ) {
 	return useQuery({
 		queryKey: jobQueryKeys.list([page, per_page, ...states]),
-		queryFn: async (): Promise<ServerJobSearchResult> => {
-			const response = await apiClient
-				.get("/jobs")
-				.query({ page, per_page, state: states });
-
-			return response.body;
-		},
+		queryFn: () => findJobs({ data: { page, perPage: per_page, states } }),
 		placeholderData: keepPreviousData,
 		select: JobSearchResultSchema.parse,
 	});
@@ -81,10 +74,7 @@ function getJobSeed(job: ServerJobNested): ServerJob {
 export function useFetchJob(jobId: number, seed?: ServerJobNested) {
 	return useQuery({
 		queryKey: jobQueryKeys.detail(jobId),
-		queryFn: async (): Promise<ServerJob> => {
-			const response = await apiClient.get(`/jobs/${jobId}`);
-			return response.body;
-		},
+		queryFn: () => getJob({ data: { jobId } }),
 		select: JobSchema.parse,
 		enabled: Number.isInteger(jobId),
 		initialData: seed ? getJobSeed(seed) : undefined,

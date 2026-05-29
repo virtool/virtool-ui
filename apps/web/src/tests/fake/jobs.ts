@@ -7,7 +7,6 @@ import type {
 	ServerJobNested,
 	Workflow,
 } from "@jobs/types";
-import nock from "nock";
 import { createFakeUserNested } from "./user";
 
 /**
@@ -120,29 +119,4 @@ export function createFakeJobNested(overrides?: Partial<JobNested>): JobNested {
 		]),
 		...overrides,
 	};
-}
-
-/**
- * Sets up a mocked API route for fetching a list of jobs
- *
- * @param jobs - The documents for jobs (server shape)
- * @param found_count - The number of jobs found
- * @returns The nock scope for the mocked API call
- */
-export function mockApiGetJobs(
-	jobs: ReturnType<typeof createFakeServerJobMinimal>[],
-	found_count?: number,
-) {
-	return nock("http://localhost")
-		.get("/api/jobs")
-		.query(true)
-		.reply(200, {
-			items: jobs,
-			counts: {},
-			found_count: found_count ?? jobs.length,
-			page: 1,
-			page_count: 1,
-			per_page: 25,
-			total_count: jobs.length,
-		});
 }
