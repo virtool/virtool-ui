@@ -35,6 +35,17 @@ function setupSse(queryClient: QueryClient) {
 	}
 }
 
+/**
+ * True when an error is the auth middleware's `UnauthorizedError` — a 401 from a
+ * server function. Matched by name because the class lives server-side
+ * (`server/auth/middleware.ts`) and crosses the server-function boundary as a
+ * plain `Error` with its `name` preserved. Any other failure (network blip, 5xx)
+ * is treated as transient and must not bounce a logged-in user to login.
+ */
+function isUnauthorizedError(error: unknown): boolean {
+	return error instanceof Error && error.name === "UnauthorizedError";
+}
+
 export const Route = createFileRoute("/_authenticated")({
 	validateSearch: authenticatedSearchSchema,
 	beforeLoad: async ({ context, location }) => {
@@ -54,12 +65,17 @@ export const Route = createFileRoute("/_authenticated")({
 				queryKey: accountKeys.all(),
 				queryFn: fetchAccount,
 			});
-		} catch {
-			throw redirect({
-				to: "/login",
-				// biome-ignore lint/suspicious/noExplicitAny: route search type is `AnyRoute` because tsconfig has `strict: false` (see AppRouter.tsx)
-				search: { redirect: location.href } as any,
-			});
+		} catch (error) {
+			// Only a genuine auth failure bounces the user to login. Transient
+			// failures (network blips, 5xx) are swallowed so the route still loads
+			// and the component can render any cached account data.
+			if (isUnauthorizedError(error)) {
+				throw redirect({
+					to: "/login",
+					// biome-ignore lint/suspicious/noExplicitAny: route search type is `AnyRoute` because tsconfig has `strict: false` (see AppRouter.tsx)
+					search: { redirect: location.href } as any,
+				});
+			}
 		}
 	},
 	component: AuthenticatedLayout,
@@ -67,7 +83,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthenticatedLayout() {
 	const queryClient = useQueryClient();
-	const { data, isPending } = useFetchAccount();
+	const { data, isError, error } = useFetchAccount();
 	const location = useLocation();
 	const search = Route.useSearch();
 	const navigate = Route.useNavigate();
@@ -78,11 +94,9 @@ function AuthenticatedLayout() {
 		}
 	}, [data, queryClient]);
 
-	if (isPending) {
-		return <LoadingPlaceholder />;
-	}
-
-	if (!data) {
+	// A genuine auth failure always sends the user to login, even when stale
+	// account data is still cached.
+	if (isError && isUnauthorizedError(error)) {
 		return (
 			<Navigate
 				to="/login"
@@ -91,6 +105,13 @@ function AuthenticatedLayout() {
 				search={{ redirect: location.href } as any}
 			/>
 		);
+	}
+
+	// No account data yet — initial load in flight, or a transient failure left
+	// nothing cached to show. A transient refetch failure once data exists falls
+	// through to the render below, keeping the logged-in user in place.
+	if (!data) {
+		return <LoadingPlaceholder />;
 	}
 
 	return (

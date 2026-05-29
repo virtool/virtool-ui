@@ -1,5 +1,6 @@
 import { type ApiResponse, apiClient } from "@app/api";
 import type { Permissions } from "@groups/types";
+import { getAccount } from "@server/account/functions";
 import { loginFn, logoutFn, resetPasswordFn } from "@server/auth/functions";
 import type { User } from "@users/types";
 import type { Account, AccountSettings, APIKeyMinimal } from "./types";
@@ -199,10 +200,13 @@ export function resetPassword({
 }
 
 /**
- * Fetches account data for the logged-in user
+ * Fetches account data for the logged-in user.
  *
  * @returns A Promise resolving to the current user's account data
  */
 export function fetchAccount(): Promise<Account> {
-	return apiClient.get("/account").then((response) => response.body);
+	// The server function models `administrator_role` and `primary_group` as
+	// nullable — their real shape — while the client `Account` type does not.
+	// The shapes are otherwise identical, so we narrow at this boundary.
+	return getAccount() as Promise<Account>;
 }
