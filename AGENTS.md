@@ -235,11 +235,15 @@ Virtool's data lives in two stores during the migration. Postgres
 fully-migrated domains; Mongo (via Mongoose / the Node driver) owns
 OTUs, sequences, references, samples, and the rest. Python is the
 sole owner of schema and migrations on both sides — TS code reads
-and writes against the schema Python defines.
+and writes against the schema Python defines. Mirror Python-side
+column defaults with Drizzle `.$defaultFn()`, never `.default()` —
+the real columns have no `server_default`, so `.default()` inserts
+`null`.
 
 See [docs/database.md](docs/database.md) for the per-domain
 ownership table, the `legacy_id` resolution rules, dual-store write
-coordination, and notes on aggregation pipelines.
+coordination, the column-default convention, and notes on
+aggregation pipelines.
 
 ### Server → client push runs over SSE with id-only frames
 
