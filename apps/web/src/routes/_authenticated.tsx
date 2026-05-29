@@ -66,15 +66,20 @@ export const Route = createFileRoute("/_authenticated")({
 				queryFn: fetchAccount,
 			});
 		} catch (error) {
-			// Only a genuine auth failure bounces the user to login. Transient
-			// failures (network blips, 5xx) are swallowed so the route still loads
-			// and the component can render any cached account data.
+			// A genuine auth failure always bounces the user to login.
 			if (isUnauthorizedError(error)) {
 				throw redirect({
 					to: "/login",
 					// biome-ignore lint/suspicious/noExplicitAny: route search type is `AnyRoute` because tsconfig has `strict: false` (see AppRouter.tsx)
 					search: { redirect: location.href } as any,
 				});
+			}
+			// Re-throw transient failures when nothing is cached — stale data lets
+			// the route mount and show cached content, but with no fallback the
+			// user would be stuck on an infinite spinner. Let TanStack Router's
+			// error boundary handle it instead.
+			if (!queryClient.getQueryData(accountKeys.all())) {
+				throw error;
 			}
 		}
 	},

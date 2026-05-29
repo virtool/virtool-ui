@@ -2,7 +2,8 @@ import SampleRights from "@samples/components/Detail/SampleRights";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiListGroups } from "@tests/api/groups";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { mockApiGetAccount } from "@tests/api/account";
+import { createFakeAccount } from "@tests/fake/account";
 import { createFakeGroup } from "@tests/fake/groups";
 import {
 	createFakeSample,

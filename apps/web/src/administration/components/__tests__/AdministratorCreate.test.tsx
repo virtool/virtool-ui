@@ -1,7 +1,8 @@
 import AdministratorCreate from "@administration/components/AdministratorCreate";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { mockApiGetAccount } from "@tests/api/account";
+import { createFakeAccount } from "@tests/fake/account";
 import {
 	mockGetAdministratorRoles,
 	mockSetAdministratorRoleAPI,

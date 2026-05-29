@@ -22,8 +22,11 @@ const AdministratorPermissionsLevel: Record<AdministratorRoleName, number> = {
 
 export function hasSufficientAdminRole(
 	requiredRole: AdministratorRoleName,
-	userRole: AdministratorRoleName,
+	userRole: AdministratorRoleName | null,
 ): boolean {
+	if (userRole === null) {
+		return false;
+	}
 	return (
 		AdministratorPermissionsLevel[userRole] <=
 		AdministratorPermissionsLevel[requiredRole]

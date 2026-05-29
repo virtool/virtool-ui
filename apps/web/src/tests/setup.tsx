@@ -22,9 +22,17 @@ import { routeTree } from "@/routeTree.gen";
 import { groupServerFnMocks } from "./api/groups";
 import { createFakeAccount } from "./fake/account";
 
+// vi.hoisted runs before the module graph is resolved, preventing a TDZ error
+// that would otherwise occur because setup.tsx → routeTree.gen → _authenticated
+// → account/api eagerly imports @server/account/functions before ./api/account
+// has finished loading.
+const accountFns = vi.hoisted(() => ({ getAccount: vi.fn() }));
+
+vi.mock("@server/account/functions", () => accountFns);
 vi.mock("@server/groups/functions", () => groupServerFnMocks);
 
 beforeEach(() => {
+	accountFns.getAccount.mockReset();
 	for (const fn of Object.values(groupServerFnMocks)) {
 		fn.mockReset();
 	}

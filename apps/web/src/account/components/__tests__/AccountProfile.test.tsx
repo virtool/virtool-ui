@@ -1,11 +1,8 @@
 import AccountProfile from "@account/components/AccountProfile";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-	createFakeAccount,
-	mockApiChangePassword,
-	mockApiGetAccount,
-} from "@tests/fake/account";
+import { mockApiGetAccount } from "@tests/api/account";
+import { createFakeAccount, mockApiChangePassword } from "@tests/fake/account";
 import { renderWithProviders } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 

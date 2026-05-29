@@ -5,7 +5,7 @@ import { FolderOpen, List, Settings, Tag } from "lucide-react";
 import SidebarLink from "./SidebarLink";
 
 type SidebarProps = {
-	administratorRole: AdministratorRoleName;
+	administratorRole: AdministratorRoleName | null;
 };
 
 /**

@@ -45,16 +45,6 @@ export function createFakeApiKey(
 }
 
 /**
- * Mocks an API call to get the users account
- *
- * @param account - The account to fetch
- * @returns A nock scope for the mocked API call
- */
-export function mockApiGetAccount(account: Account) {
-	return nock("http://localhost").get("/api/account").reply(200, account);
-}
-
-/**
  * Mocks an API call for getting the API keys
  *
  * @param apiKeys - The array of API keys to return

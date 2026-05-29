@@ -1,5 +1,6 @@
 import { screen } from "@testing-library/react";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { mockApiGetAccount } from "@tests/api/account";
+import { createFakeAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
 import { createFakeReferenceMinimal } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";

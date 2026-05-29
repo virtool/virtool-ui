@@ -205,8 +205,5 @@ export function resetPassword({
  * @returns A Promise resolving to the current user's account data
  */
 export function fetchAccount(): Promise<Account> {
-	// The server function models `administrator_role` and `primary_group` as
-	// nullable — their real shape — while the client `Account` type does not.
-	// The shapes are otherwise identical, so we narrow at this boundary.
-	return getAccount() as Promise<Account>;
+	return getAccount();
 }

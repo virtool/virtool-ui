@@ -1,6 +1,7 @@
 import AnalysesList from "@analyses/components/AnalysisList";
 import { screen } from "@testing-library/react";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { mockApiGetAccount } from "@tests/api/account";
+import { createFakeAccount } from "@tests/fake/account";
 import {
 	createFakeAnalysisMinimal,
 	mockApiGetAnalyses,

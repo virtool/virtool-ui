@@ -24,7 +24,7 @@ export const getAccount = createServerFn({ method: "GET" }).handler(
 		try {
 			return await getAccountImpl(db, context.session.userId);
 		} catch (err) {
-			rethrowAsHttp(err);
+			await rethrowAsHttp(err);
 		}
 	},
 );

@@ -1,10 +1,10 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mockApiGetAccount } from "@tests/api/account";
 import {
 	createFakeAccount,
 	createFakeApiKey,
 	mockApiCreateApiKey,
-	mockApiGetAccount,
 	mockApiGetApiKeys,
 } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";

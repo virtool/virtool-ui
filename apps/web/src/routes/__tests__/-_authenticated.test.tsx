@@ -16,9 +16,15 @@ function createUnauthorizedError() {
 // Drive the route's `beforeLoad` directly with a fake query client so the
 // account fetch can be made to fail in a controlled way. `ensureQueryData` runs
 // first for the root query (gated on `first_user`) and then for the account
-// query — only the latter is made to reject. Returns the thrown redirect, or
-// null when `beforeLoad` resolves without redirecting.
-async function runBeforeLoad(accountError: Error | null) {
+// query — only the latter is made to reject. `hasCachedAccount` controls what
+// `getQueryData` returns when the error path checks for a cache fallback.
+// Returns the thrown value, or null when `beforeLoad` resolves without throwing.
+async function runBeforeLoad(
+	accountError: Error | null,
+	hasCachedAccount = false,
+) {
+	const cachedAccount = hasCachedAccount ? createFakeAccount() : undefined;
+
 	const queryClient = {
 		ensureQueryData: vi.fn(async ({ queryKey }: { queryKey: string[] }) => {
 			if (queryKey[0] === "root") {
@@ -29,6 +35,7 @@ async function runBeforeLoad(accountError: Error | null) {
 			}
 			return createFakeAccount();
 		}),
+		getQueryData: vi.fn(() => cachedAccount),
 	};
 
 	const beforeLoad = Route.options.beforeLoad as (
@@ -54,8 +61,18 @@ describe("/_authenticated beforeLoad", () => {
 		expect(result?.options?.search).toMatchObject({ redirect: "/samples" });
 	});
 
-	it("does not redirect when the account fetch fails transiently", async () => {
-		const result = await runBeforeLoad(new Error("Internal Server Error"));
+	it("re-throws a transient error when no account is cached", async () => {
+		const transientError = new Error("Internal Server Error");
+		const result = await runBeforeLoad(transientError, false);
+
+		expect(result).toBe(transientError);
+	});
+
+	it("swallows a transient error when cached account data exists", async () => {
+		const result = await runBeforeLoad(
+			new Error("Internal Server Error"),
+			true,
+		);
 
 		expect(result).toBeNull();
 	});
