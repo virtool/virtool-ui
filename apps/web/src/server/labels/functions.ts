@@ -1,6 +1,7 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { db } from "../db/pg";
 import {
 	createLabel as createLabelImpl,
 	deleteLabel as deleteLabelImpl,
@@ -56,13 +57,13 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 
 export const findLabels = createServerFn({ method: "GET" })
 	.inputValidator(findLabelsSchema)
-	.handler(async ({ data }) => findLabelsImpl(data?.term ?? ""));
+	.handler(async ({ data }) => findLabelsImpl(db, data?.term ?? ""));
 
 export const getLabel = createServerFn({ method: "GET" })
 	.inputValidator(labelIdSchema)
 	.handler(async ({ data }) => {
 		try {
-			return await getLabelImpl(data.labelId);
+			return await getLabelImpl(db, data.labelId);
 		} catch (err) {
 			rethrowAsHttp(err);
 		}
@@ -72,7 +73,7 @@ export const createLabel = createServerFn({ method: "POST" })
 	.inputValidator(labelValuesSchema)
 	.handler(async ({ data }) => {
 		try {
-			const label = await createLabelImpl(normalizeValues(data));
+			const label = await createLabelImpl(db, normalizeValues(data));
 			setResponseStatus(201);
 			return label;
 		} catch (err) {
@@ -85,7 +86,7 @@ export const updateLabel = createServerFn({ method: "POST" })
 	.handler(async ({ data }) => {
 		const { labelId, ...values } = data;
 		try {
-			return await updateLabelImpl(labelId, normalizeValues(values));
+			return await updateLabelImpl(db, labelId, normalizeValues(values));
 		} catch (err) {
 			rethrowAsHttp(err);
 		}
@@ -95,7 +96,7 @@ export const deleteLabel = createServerFn({ method: "POST" })
 	.inputValidator(labelIdSchema)
 	.handler(async ({ data }) => {
 		try {
-			await deleteLabelImpl(data.labelId);
+			await deleteLabelImpl(db, data.labelId);
 			setResponseStatus(204);
 			return null;
 		} catch (err) {
