@@ -410,14 +410,33 @@ export async function updateUser(
 		}
 
 		if (values.groups !== undefined) {
+			// Re-applied to the new membership rows so toggling group membership
+			// without also sending primary_group doesn't silently clear it.
+			const currentPrimary = await tx
+				.select({ groupId: userGroupsTable.groupId })
+				.from(userGroupsTable)
+				.where(
+					and(
+						eq(userGroupsTable.userId, userId),
+						eq(userGroupsTable.primary, true),
+					),
+				)
+				.limit(1)
+				.then((rows) => rows[0]?.groupId);
+
 			await tx
 				.delete(userGroupsTable)
 				.where(eq(userGroupsTable.userId, userId));
 
-			if (values.groups.length > 0) {
-				await tx
-					.insert(userGroupsTable)
-					.values(values.groups.map((groupId) => ({ userId, groupId })));
+			const uniqueGroupIds = Array.from(new Set(values.groups));
+			if (uniqueGroupIds.length > 0) {
+				await tx.insert(userGroupsTable).values(
+					uniqueGroupIds.map((groupId) => ({
+						userId,
+						groupId,
+						primary: groupId === currentPrimary,
+					})),
+				);
 			}
 		}
 

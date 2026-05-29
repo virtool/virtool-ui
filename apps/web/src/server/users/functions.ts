@@ -114,7 +114,7 @@ export const createUser = createServerFn({ method: "POST" })
 	.handler(async ({ data }) => {
 		await requireAdminRole(await requireSession(), "users");
 
-		if (data.handle === "virtool") {
+		if (data.handle.toLowerCase() === "virtool") {
 			setResponseStatus(400);
 			throw new Error("Reserved user name: virtool");
 		}
