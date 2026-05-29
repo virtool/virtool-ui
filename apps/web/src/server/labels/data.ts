@@ -1,7 +1,7 @@
 import { asc, eq, ilike } from "drizzle-orm";
 import type { PostgresError } from "postgres";
 import { SampleDocument } from "../db/mongo";
-import { db } from "../db/pg";
+import type { Db } from "../db/pg";
 import { type LabelRow, labels as labelsTable } from "../db/schema/labels";
 import { AppError } from "../errors";
 import { emit } from "../events/emit";
@@ -70,7 +70,7 @@ async function countSamplesByLabel(
 	return new Map(rows.map((row) => [row._id, row.count]));
 }
 
-export async function findLabels(term = ""): Promise<Label[]> {
+export async function findLabels(db: Db, term = ""): Promise<Label[]> {
 	const rows = await db
 		.select()
 		.from(labelsTable)
@@ -82,7 +82,7 @@ export async function findLabels(term = ""): Promise<Label[]> {
 	return rows.map((row) => toLabel(row, counts.get(row.id) ?? 0));
 }
 
-export async function getLabel(labelId: number): Promise<Label> {
+export async function getLabel(db: Db, labelId: number): Promise<Label> {
 	const [row] = await db
 		.select()
 		.from(labelsTable)
@@ -96,7 +96,7 @@ export async function getLabel(labelId: number): Promise<Label> {
 	return toLabel(row, counts.get(row.id) ?? 0);
 }
 
-export async function createLabel(values: LabelValues): Promise<Label> {
+export async function createLabel(db: Db, values: LabelValues): Promise<Label> {
 	let row: LabelRow;
 	try {
 		[row] = await db.insert(labelsTable).values(values).returning();
@@ -113,6 +113,7 @@ export async function createLabel(values: LabelValues): Promise<Label> {
 }
 
 export async function updateLabel(
+	db: Db,
 	labelId: number,
 	values: Partial<LabelValues>,
 ): Promise<Label> {
@@ -140,7 +141,7 @@ export async function updateLabel(
 	return toLabel(row, counts.get(row.id) ?? 0);
 }
 
-export async function deleteLabel(labelId: number): Promise<void> {
+export async function deleteLabel(db: Db, labelId: number): Promise<void> {
 	const [row] = await db
 		.delete(labelsTable)
 		.where(eq(labelsTable.id, labelId))
