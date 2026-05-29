@@ -1,4 +1,4 @@
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { sentryTanstackStart } from "@sentry/tanstackstart-react/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import react from "@vitejs/plugin-react";
@@ -16,7 +16,7 @@ export default defineConfig(({ command }) => ({
 					groups: [
 						{
 							name: "sentry",
-							test: /node_modules[\\/]@sentry[\\/]react/,
+							test: /node_modules[\\/]@sentry[\\/]/,
 						},
 					],
 				},
@@ -72,18 +72,21 @@ export default defineConfig(({ command }) => ({
 				plugins: ["babel-plugin-react-compiler"],
 			},
 		}),
+		tailwindcss(),
+		// Build only: uploads source maps and adds route/middleware
+		// instrumentation. Kept out of dev/test so Sentry never loads there. Must
+		// come last.
 		command === "build" &&
-			sentryVitePlugin({
+			sentryTanstackStart({
 				org: "cfia-virtool",
 				project: "cloud-ui",
+				authToken: process.env.SENTRY_AUTH_TOKEN,
 			}),
-		tailwindcss(),
 	],
 	optimizeDeps: {
 		holdUntilCrawlEnd: false,
 		include: [
 			"@hookform/resolvers/zod",
-			"@sentry/react",
 			"@tanstack/react-query",
 			"@tanstack/react-router",
 			"@tanstack/react-virtual",
