@@ -133,8 +133,8 @@ module:
 ### Path aliases
 
 Every feature directory has a `@name` alias (e.g., `@app/utils`, `@base/Button`,
-`@samples/api`). The catch-all `@/*` maps to `apps/web/src/*`. Prefer specific
-aliases over `@/`.
+`@samples/queries`). The catch-all `@/*` maps to `apps/web/src/*`. Prefer
+specific aliases over `@/`.
 
 ### Key libraries
 
@@ -165,14 +165,17 @@ internal route triggers a full page reload. For query strings, use `search` on
 
 ### API calls
 
-Use the superagent-based client in `apps/web/src/app/api.ts`. Feature API
-functions live in each module's `api.ts`. API errors have the shape
-`error.response?.body.message`.
+Use the superagent-based client in `apps/web/src/app/api.ts`. API errors have
+the shape `error.response?.body.message`.
 
-Each feature wraps its API in React Query hooks in a sibling `queries.ts`
-module, keyed by a `*QueryKeys` factory and prefetched from route loaders
-where appropriate. See [docs/queries.md](docs/queries.md) for the
-query-key, `queryOptions`, route-loader prefetch, and mutation patterns.
+Each feature owns a `queries.ts` module that folds its request logic directly
+into React Query hooks and `queryOptions`/`*QueryKeys` factories — there is no
+separate per-feature `api.ts` layer. Inline each `apiClient` call into the
+hook's `queryFn`/`mutationFn`; keep a module-private helper only when a request
+is shared across hooks or branches. Route loaders prefetch via the same
+`queryOptions` factories where appropriate. See
+[docs/queries.md](docs/queries.md) for the query-key, `queryOptions`,
+route-loader prefetch, and mutation patterns.
 
 ### Styling
 
@@ -235,11 +238,15 @@ Virtool's data lives in two stores during the migration. Postgres
 fully-migrated domains; Mongo (via Mongoose / the Node driver) owns
 OTUs, sequences, references, samples, and the rest. Python is the
 sole owner of schema and migrations on both sides — TS code reads
-and writes against the schema Python defines.
+and writes against the schema Python defines. Mirror Python-side
+column defaults with Drizzle `.$defaultFn()`, never `.default()` —
+the real columns have no `server_default`, so `.default()` inserts
+`null`.
 
 See [docs/database.md](docs/database.md) for the per-domain
 ownership table, the `legacy_id` resolution rules, dual-store write
-coordination, and notes on aggregation pipelines.
+coordination, the column-default convention, and notes on
+aggregation pipelines.
 
 ### Server → client push runs over SSE with id-only frames
 
@@ -322,8 +329,14 @@ Pass structured fields as the first arg and the message as the second —
 never interpolate values into the message string, that defeats the
 redaction list and makes records ungreppable.
 
+When `VT_SENTRY_DSN` is set, server logs at `info` and above are
+forwarded to Sentry automatically (via a pino destination stream, not
+`Sentry.pinoIntegration()`); redaction still applies and dev does not
+forward.
+
 See [docs/logging.md](docs/logging.md) for the redaction
-defaults, `VT_LOG_LEVEL` resolution, and where the logger singleton lives.
+defaults, `VT_LOG_LEVEL` resolution, where the logger singleton lives, and
+the Sentry forwarding wiring.
 
 ## Git
 

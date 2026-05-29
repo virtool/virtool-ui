@@ -1,5 +1,6 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
+import type { AuthenticatedSession } from "../auth/verify";
 import { db } from "../db/pg";
 import { AccountNotFoundError, getAccount as getAccountImpl } from "./data";
 
@@ -21,8 +22,14 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 // comes from the session, never from the caller.
 export const getAccount = createServerFn({ method: "GET" }).handler(
 	async ({ context }) => {
+		// Sentry's global function middleware is untyped (`~types: undefined`),
+		// which collapses the inferred handler `context` to `undefined`. The auth
+		// middleware sets `context.session` at runtime, so the known shape is
+		// asserted here; `session` is non-null because this function is not in the
+		// middleware `exceptions` list.
+		const { session } = context as { session: AuthenticatedSession };
 		try {
-			return await getAccountImpl(db, context.session.userId);
+			return await getAccountImpl(db, session.userId);
 		} catch (err) {
 			await rethrowAsHttp(err);
 		}

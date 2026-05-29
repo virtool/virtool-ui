@@ -29,6 +29,34 @@ needs to censor additional fields.
 
 ## Sentry forwarding
 
-Not currently wired. When the server bootstrap registers
-`Sentry.pinoIntegration()`, logs at `info` and above will be forwarded to
-Sentry whenever a DSN is set, with no extra wiring at call sites.
+When `VT_SENTRY_DSN` is set, the server logger fans `info`-and-above
+records out to Sentry's structured logging API (`Sentry.logger`) in
+addition to stdout. There is no per-call-site wiring: every record that
+goes through `@virtool/logger` is forwarded automatically.
+
+This is a plain pino destination stream
+(`apps/web/src/server/sentryLog.ts`), **not**
+`Sentry.pinoIntegration()`. The integration patches the `pino` module at
+load time via `import-in-the-middle`, but the production server is bundled
+(Nitro inlines pino into the server chunks), so there is no module
+boundary left to patch. A destination stream needs no patching — pino
+hands it each serialised record directly.
+
+Wiring:
+
+- `apps/web/src/instrument.server.ts` calls `Sentry.init` (with
+  `enableLogs: true`, from `@virtool/sentry`'s `getCommonOptions`). It is
+  imported for its side effect at the top of `apps/web/src/server.ts`.
+- `apps/web/src/server/logger.ts` adds the Sentry stream to the logger
+  only when a DSN is present, via `@virtool/logger`'s `streams` option.
+  The `@sentry/*` SDK is loaded lazily (dynamic `import`) so it is never
+  pulled in when no DSN is configured.
+
+Redaction still applies. pino runs `DEFAULT_REDACT_PATHS` redaction before
+writing to any destination, so the records the Sentry stream receives
+already have `password` / `token` / `secret` / `authorization` / `cookie`
+(and the `req.headers.*` / `headers.*` variants) replaced with
+`[redacted]`.
+
+Dev does not forward. The Tilt dev container runs Vite with no DSN, so the
+logger stays stdout-only and the Sentry SDK is never loaded.

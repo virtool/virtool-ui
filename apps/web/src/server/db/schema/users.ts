@@ -40,12 +40,20 @@ export const users = pgTable(
 	"users",
 	{
 		id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-		active: boolean("active").default(true).notNull(),
+		active: boolean("active")
+			.$defaultFn(() => true)
+			.notNull(),
 		administratorRole: administratorRole("administrator_role"),
-		email: text("email").default("").notNull(),
-		forceReset: boolean("force_reset").default(false).notNull(),
+		email: text("email")
+			.$defaultFn(() => "")
+			.notNull(),
+		forceReset: boolean("force_reset")
+			.$defaultFn(() => false)
+			.notNull(),
 		handle: text("handle").notNull(),
-		invalidateSessions: boolean("invalidate_sessions").default(false).notNull(),
+		invalidateSessions: boolean("invalidate_sessions")
+			.$defaultFn(() => false)
+			.notNull(),
 		lastPasswordChange: timestamp("last_password_change").notNull(),
 		legacyId: text("legacy_id").unique(),
 		password: bytea("password").notNull(),

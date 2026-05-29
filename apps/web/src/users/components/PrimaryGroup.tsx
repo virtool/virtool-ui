@@ -28,7 +28,8 @@ export default function PrimaryGroup({
 		mutation.mutate({
 			userId: id,
 			update: {
-				primary_group: e.target.value === "none" ? null : e.target.value,
+				primary_group:
+					e.target.value === "none" ? null : Number(e.target.value),
 			},
 		});
 	}

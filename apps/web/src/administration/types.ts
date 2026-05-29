@@ -7,8 +7,8 @@
  */
 export type AdministratorRole = {
 	description: string;
-	id: string;
-	name: AdministratorRoleName;
+	id: AdministratorRoleName;
+	name: string;
 };
 
 /**

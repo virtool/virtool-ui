@@ -1,7 +1,8 @@
 import { screen } from "@testing-library/react";
 import { mockApiGetAccount } from "@tests/api/account";
+import { mockApiFindUsers } from "@tests/api/users";
 import { createFakeAccount } from "@tests/fake/account";
-import { createFakeUsers, mockApiFindUsers } from "@tests/fake/user";
+import { createFakeUsers } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 import { ManageUsers } from "../ManageUsers";

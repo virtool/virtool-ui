@@ -1,12 +1,6 @@
+import { apiClient } from "@app/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
-import {
-	createIndex,
-	findIndexes,
-	getIndex,
-	getUnbuiltChanges,
-	listIndexes,
-} from "./api";
 import type {
 	Index,
 	IndexMinimal,
@@ -46,7 +40,14 @@ export function useFindIndexes(
 ) {
 	return useQuery<IndexSearchResult>({
 		queryKey: indexQueryKeys.infiniteList([page, per_page, refId, term]),
-		queryFn: () => findIndexes(page, per_page, refId, term),
+		queryFn: () =>
+			apiClient
+				.get(`/refs/${refId}/indexes`)
+				.query({ find: term, page, per_page })
+				.then((res) => {
+					const { documents, ...rest } = res.body;
+					return { ...rest, items: documents };
+				}),
 	});
 }
 
@@ -55,10 +56,14 @@ export function useFindIndexes(
  *
  * @returns A list of ready indexes
  */
-export function useListIndexes(ready: boolean, term?: string) {
+export function useListIndexes(ready: boolean) {
 	return useQuery<IndexMinimal[]>({
 		queryKey: indexQueryKeys.list([ready]),
-		queryFn: () => listIndexes({ ready, term }),
+		queryFn: () =>
+			apiClient
+				.get("/indexes")
+				.query({ ready })
+				.then((res) => res.body),
 	});
 }
 
@@ -71,7 +76,7 @@ export function useListIndexes(ready: boolean, term?: string) {
 export function useFetchIndex(indexId: string) {
 	return useQuery<Index, ErrorResponse>({
 		queryKey: indexQueryKeys.detail(indexId),
-		queryFn: () => getIndex(indexId),
+		queryFn: () => apiClient.get(`/indexes/${indexId}`).then((res) => res.body),
 	});
 }
 
@@ -83,7 +88,11 @@ export function useFetchIndex(indexId: string) {
  */
 export function useFetchUnbuiltChanges(refId: string) {
 	return useQuery<UnbuiltChangesSearchResults>({
-		queryFn: () => getUnbuiltChanges(refId),
+		queryFn: () =>
+			apiClient.get(`/refs/${refId}/history?unbuilt=true`).then((res) => {
+				const { documents, ...rest } = res.body;
+				return { ...rest, items: documents };
+			}),
 		queryKey: indexQueryKeys.detail(refId),
 	});
 }
@@ -96,7 +105,8 @@ export function useFetchUnbuiltChanges(refId: string) {
 export function useCreateIndex() {
 	const queryClient = useQueryClient();
 	return useMutation<Index, ErrorResponse, { refId: string }>({
-		mutationFn: ({ refId }) => createIndex(refId),
+		mutationFn: ({ refId }) =>
+			apiClient.post(`/refs/${refId}/indexes`).then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: indexQueryKeys.infiniteLists(),

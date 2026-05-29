@@ -123,4 +123,43 @@ describe("createLogger", () => {
 		expect(record.pid).toBe(process.pid);
 		expect(typeof record.hostname).toBe("string");
 	});
+
+	it("fans out to extra streams, honouring per-stream levels", () => {
+		const primary = makeSink();
+		const extra = makeSink();
+		const log = createLogger({
+			name: "web",
+			level: "debug",
+			destination: primary.stream,
+			streams: [{ level: "info", stream: extra.stream }],
+		});
+
+		log.debug("verbose");
+		log.info("noteworthy");
+
+		expect(primary.records().map((r) => r.msg)).toEqual([
+			"verbose",
+			"noteworthy",
+		]);
+		expect(extra.records().map((r) => r.msg)).toEqual(["noteworthy"]);
+	});
+
+	it("redacts secrets before they reach extra streams", () => {
+		const primary = makeSink();
+		const extra = makeSink();
+		const log = createLogger({
+			name: "web",
+			level: "info",
+			destination: primary.stream,
+			streams: [{ level: "info", stream: extra.stream }],
+		});
+
+		log.info({ password: "hunter2", headers: { cookie: "s=1" } }, "login");
+
+		const [record] = extra.records();
+		expect(record.password).toBe("[redacted]");
+		expect((record.headers as Record<string, string>).cookie).toBe(
+			"[redacted]",
+		);
+	});
 });

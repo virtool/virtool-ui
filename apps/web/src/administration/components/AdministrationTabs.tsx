@@ -20,15 +20,6 @@ export default function AdministrationTabs({
 		tabs.push(
 			<TabsLink to="/administration/users?status=active">Users</TabsLink>,
 		);
-	}
-
-	if (hasSufficientAdminRole("full", administratorRole)) {
-		tabs.push(
-			<TabsLink to="/administration/administrators">Administrators</TabsLink>,
-		);
-	}
-
-	if (hasSufficientAdminRole("users", administratorRole)) {
 		tabs.push(<TabsLink to="/administration/groups">Groups</TabsLink>);
 	}
 

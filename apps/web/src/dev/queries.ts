@@ -1,6 +1,6 @@
+import { apiClient } from "@app/api";
 import { useMutation } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
-import { postDevCommand } from "./api";
 
 /**
  * Initialize a mutator for executing developer commands
@@ -9,6 +9,10 @@ import { postDevCommand } from "./api";
  */
 export function usePostDevCommand() {
 	return useMutation<unknown, ErrorResponse, { command: string }>({
-		mutationFn: ({ command }) => postDevCommand(command),
+		mutationFn: ({ command }) =>
+			apiClient
+				.post("/dev")
+				.send({ command })
+				.then((res) => res.body),
 	});
 }

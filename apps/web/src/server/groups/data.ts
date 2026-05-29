@@ -204,18 +204,17 @@ export async function updateGroup(
 		patch.permissions = { ...existing.permissions, ...values.permissions };
 	}
 
-	if (Object.keys(patch).length > 0) {
-		try {
-			await db
-				.update(groupsTable)
-				.set(patch)
-				.where(eq(groupsTable.id, groupId));
-		} catch (error) {
-			if (isUniqueViolation(error)) {
-				throw new GroupConflictError();
-			}
-			throw error;
+	if (Object.keys(patch).length === 0) {
+		return getGroup(groupId);
+	}
+
+	try {
+		await db.update(groupsTable).set(patch).where(eq(groupsTable.id, groupId));
+	} catch (error) {
+		if (isUniqueViolation(error)) {
+			throw new GroupConflictError();
 		}
+		throw error;
 	}
 
 	await emit("groups", groupId, "update");

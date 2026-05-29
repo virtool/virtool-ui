@@ -1,3 +1,4 @@
+import { apiClient } from "@app/api";
 import type { Label } from "@labels/types";
 import {
 	keepPreviousData,
@@ -8,18 +9,14 @@ import {
 } from "@tanstack/react-query";
 import { union } from "es-toolkit";
 import type { ErrorResponse } from "@/types/api";
-import {
-	createSample,
-	getSample,
-	listSamples,
-	removeSample,
-	type SampleRightsUpdate,
-	type SampleRightsUpdateReturn,
-	type SampleUpdate,
-	updateSample,
-	updateSampleRights,
-} from "./api";
-import type { Sample, SampleMinimal, SampleSearchResult } from "./types";
+import type {
+	Sample,
+	SampleMinimal,
+	SampleRightsUpdate,
+	SampleRightsUpdateReturn,
+	SampleSearchResult,
+	SampleUpdate,
+} from "./types";
 
 export type SampleLabel = Label & {
 	/** Whether all selected samples contain the label */
@@ -39,6 +36,18 @@ export const samplesQueryKeys = {
 };
 
 /**
+ * Updates the data for a sample.
+ *
+ * Shared by the single-sample update hook and the bulk label-update hook.
+ */
+function updateSample(sampleId: string, update: SampleUpdate): Promise<Sample> {
+	return apiClient
+		.patch(`/samples/${sampleId}`)
+		.send(update)
+		.then((response) => response.body);
+}
+
+/**
  * Fetch a page of samples from the API
  *
  * @param page - The page to fetch
@@ -56,7 +65,14 @@ export function useListSamples(
 ) {
 	return useQuery<SampleSearchResult, ErrorResponse>({
 		queryKey: samplesQueryKeys.list([page, per_page, term, labels, workflows]),
-		queryFn: () => listSamples(page, per_page, term, labels, workflows),
+		queryFn: () =>
+			apiClient
+				.get("/samples")
+				.query({ page, per_page, find: term, label: labels, workflows })
+				.then((res) => {
+					const { documents, ...rest } = res.body;
+					return { ...rest, items: documents };
+				}),
 		placeholderData: keepPreviousData,
 	});
 }
@@ -64,7 +80,8 @@ export function useListSamples(
 export function sampleQueryOptions(sampleId: string) {
 	return queryOptions<Sample, ErrorResponse>({
 		queryKey: samplesQueryKeys.detail(sampleId),
-		queryFn: () => getSample(sampleId),
+		queryFn: () =>
+			apiClient.get(`/samples/${sampleId}`).then((res) => res.body),
 	});
 }
 
@@ -104,17 +121,20 @@ export function useCreateSample() {
 			labels,
 			group,
 		}) =>
-			createSample(
-				name,
-				isolate,
-				host,
-				locale,
-				libraryType,
-				subtractions,
-				files,
-				labels,
-				group,
-			),
+			apiClient
+				.post("/samples")
+				.send({
+					name,
+					isolate,
+					host,
+					locale,
+					subtractions,
+					files,
+					library_type: libraryType,
+					labels,
+					group,
+				})
+				.then((res) => res.body),
 	});
 }
 
@@ -143,7 +163,10 @@ export function useUpdateSample(sampleId: string) {
  */
 export function useRemoveSample() {
 	return useMutation<null, unknown, { sampleId: string }>({
-		mutationFn: ({ sampleId }) => removeSample(sampleId),
+		mutationFn: ({ sampleId }) =>
+			apiClient
+				.delete(`/samples/${sampleId}`)
+				.then((response) => response.body),
 	});
 }
 
@@ -158,7 +181,11 @@ export function useUpdateSampleRights(sampleId: string) {
 		unknown,
 		{ update: SampleRightsUpdate }
 	>({
-		mutationFn: ({ update }) => updateSampleRights(sampleId, update),
+		mutationFn: ({ update }) =>
+			apiClient
+				.patch(`/samples/${sampleId}/rights`)
+				.send(update)
+				.then((response) => response.body),
 	});
 }
 
