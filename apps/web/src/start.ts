@@ -11,6 +11,7 @@ import {
 
 import { loginFn, logoutFn, resetPasswordFn } from "./server/auth/functions";
 import { createAuthenticationMiddleware } from "./server/auth/middleware";
+import { errorLoggingMiddleware } from "./server/error-logging";
 
 // logoutFn must be exempt so stale or missing cookies can still be cleared.
 const authenticationMiddleware = createAuthenticationMiddleware([
@@ -74,6 +75,7 @@ export const startInstance = createStart(() => ({
 	requestMiddleware: [sentryGlobalRequestMiddleware, csrfMiddleware, cspNonce],
 	functionMiddleware: [
 		sentryGlobalFunctionMiddleware,
+		errorLoggingMiddleware,
 		authenticationMiddleware,
 	],
 }));

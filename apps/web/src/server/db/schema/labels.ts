@@ -7,7 +7,7 @@ import { integer, pgTable, text, varchar } from "drizzle-orm/pg-core";
 export const labels = pgTable("labels", {
 	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
 	color: varchar("color", { length: 7 }),
-	description: text("description").default(""),
+	description: text("description").$defaultFn(() => ""),
 	name: text("name").unique(),
 	space: integer("space"),
 });

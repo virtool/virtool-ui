@@ -20,13 +20,27 @@ import { createContext, type ReactNode, useContext, useState } from "react";
 import { beforeEach, vi } from "vitest";
 import { routeTree } from "@/routeTree.gen";
 import { groupServerFnMocks } from "./api/groups";
+import { userServerFnMocks } from "./api/users";
 import { createFakeAccount } from "./fake/account";
 
 vi.mock("@server/groups/functions", () => groupServerFnMocks);
+// Resolve the mock lazily via dynamic import. A direct reference to the
+// imported `userServerFnMocks` binding races route modules (pulled in by
+// `routeTree`) that import the mocked module before this binding initializes.
+vi.mock("@server/users/functions", async () => {
+	const { userServerFnMocks } = await import("./api/users");
+	return userServerFnMocks;
+});
 
 beforeEach(() => {
 	for (const fn of Object.values(groupServerFnMocks)) {
 		fn.mockReset();
+	}
+	for (const fn of Object.values(userServerFnMocks)) {
+		fn.mockReset();
+		// Default to a pending promise so an un-stubbed query renders its loading
+		// state instead of resolving to `undefined`.
+		fn.mockReturnValue(new Promise(() => {}));
 	}
 });
 

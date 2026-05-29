@@ -25,7 +25,7 @@ export const messageColor = pgEnum("messagecolor", [
 
 export const instanceMessages = pgTable("instance_messages", {
 	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-	active: boolean("active").default(true),
+	active: boolean("active").$defaultFn(() => true),
 	color: messageColor("color").notNull(),
 	message: text("message"),
 	createdAt: timestamp("created_at"),

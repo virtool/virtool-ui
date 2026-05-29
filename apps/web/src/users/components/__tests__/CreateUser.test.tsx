@@ -1,7 +1,8 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mockApiCreateUser } from "@tests/api/users";
+import { createFakeUser } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
-import nock from "nock";
 import { useState } from "react";
 import { describe, expect, it } from "vitest";
 import CreateUser from "../CreateUser";
@@ -16,17 +17,7 @@ describe("<CreateUser />", () => {
 	it("creates user once form is submitted", async () => {
 		const usernameInput = "Username";
 		const passwordInput = "Password";
-		const scope = nock("http://localhost")
-			.post("/api/users", {
-				handle: usernameInput,
-				password: passwordInput,
-				forceReset: false,
-			})
-			.reply(201, {
-				handle: usernameInput,
-				password: passwordInput,
-				forceReset: false,
-			});
+		const scope = mockApiCreateUser(createFakeUser({ handle: usernameInput }));
 		await renderWithRouter(<CreateUserHarness />);
 
 		await userEvent.click(screen.getByRole("button"));
@@ -40,7 +31,8 @@ describe("<CreateUser />", () => {
 		expect(passwordField).toHaveValue(passwordInput);
 
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
-		scope.isDone();
+
+		await waitFor(() => scope.done());
 	});
 
 	it("should render correct username error message", async () => {

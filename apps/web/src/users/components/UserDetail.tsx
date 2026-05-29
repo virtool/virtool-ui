@@ -8,6 +8,7 @@ import Label from "@/base/Label";
 import Password from "./Password";
 import PrimaryGroup from "./PrimaryGroup";
 import { UserActivationBanner } from "./UserActivationBanner";
+import UserAdministratorRole from "./UserAdministratorRole";
 import UserGroups from "./UserGroups";
 import UserPermissions from "./UserPermissions";
 
@@ -68,6 +69,8 @@ export default function UserDetail({ userId }: UserDetailProps) {
 					</Label>
 				)}
 			</header>
+
+			<UserAdministratorRole id={id} role={administrator_role} />
 
 			<Password
 				key={id}

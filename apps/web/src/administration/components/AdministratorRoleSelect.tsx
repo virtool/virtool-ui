@@ -13,7 +13,7 @@ type RoleSelectProps = {
 	id: string;
 	onChange: (value: AdministratorRoleName) => void;
 	roles: AdministratorRole[];
-	value: AdministratorRoleName;
+	value?: AdministratorRoleName;
 };
 
 export default function AdministratorRoleSelect({
