@@ -40,8 +40,8 @@ describe("<Settings />", () => {
 
 		expect(await screen.findByText("Users")).toBeInTheDocument();
 		expect(screen.getByText("Settings")).toBeInTheDocument();
-		expect(screen.getByText("Administrators")).toBeInTheDocument();
 		expect(screen.getByText("Groups")).toBeInTheDocument();
+		expect(screen.queryByText("Administrators")).not.toBeInTheDocument();
 	});
 
 	it("should render only groups and users for users administrators", async () => {
