@@ -7,6 +7,7 @@ import {
 
 import { loginFn, logoutFn, resetPasswordFn } from "./server/auth/functions";
 import { createAuthenticationMiddleware } from "./server/auth/middleware";
+import { errorLoggingMiddleware } from "./server/error-logging";
 
 // logoutFn must be exempt so stale or missing cookies can still be cleared.
 const authenticationMiddleware = createAuthenticationMiddleware([
@@ -66,5 +67,5 @@ const csrfMiddleware = createCsrfMiddleware({
 export const startInstance = createStart(() => ({
 	defaultSsr: false,
 	requestMiddleware: [csrfMiddleware, cspNonce],
-	functionMiddleware: [authenticationMiddleware],
+	functionMiddleware: [errorLoggingMiddleware, authenticationMiddleware],
 }));
