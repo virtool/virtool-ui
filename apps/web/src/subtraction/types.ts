@@ -48,7 +48,7 @@ export type SubtractionUpload = {
 	name: string;
 };
 
-/** Minimal Subtraction used for websocket messages and resource listings */
+/** Minimal Subtraction used for resource listings */
 export type SubtractionMinimal = SubtractionNested & {
 	/** The number of sequences in the subtraction */
 	count?: number;

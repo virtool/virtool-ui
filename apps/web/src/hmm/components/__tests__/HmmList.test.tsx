@@ -1,6 +1,7 @@
 import { screen } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
+import { createFakeTask } from "@tests/fake/tasks";
 import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -91,12 +92,12 @@ describe("<HmmList />", () => {
 				documents: [],
 				total_count: 0,
 				status: {
-					task: {
+					task: createFakeTask({
 						complete: false,
 						id: 21,
 						progress: 33,
 						step: "decompress",
-					},
+					}),
 				},
 			});
 			mockApiGetHmms(fakeHMMData);

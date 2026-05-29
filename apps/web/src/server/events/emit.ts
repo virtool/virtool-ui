@@ -1,9 +1,11 @@
+import type { SseDomain } from "@app/sse/schema";
 import { client } from "../db/pg";
 import { logger } from "../logger";
 import {
 	CLIENT_EVENTS_CHANNEL,
 	type ClientEvent,
 	type EventOperation,
+	type ResourceId,
 } from "./channel";
 
 /**
@@ -11,9 +13,9 @@ import {
  * Postgres NOTIFY. Mirrors the payload shape emitted by the Python service so
  * a single listener can fan out events from either source.
  */
-export async function emit(
-	domain: string,
-	resourceId: number | string,
+export async function emit<D extends SseDomain>(
+	domain: D,
+	resourceId: ResourceId<D>,
 	operation: EventOperation,
 ): Promise<void> {
 	const payload: ClientEvent = {

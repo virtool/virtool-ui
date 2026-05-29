@@ -1,64 +1,25 @@
-import { GroupNotFoundError, getGroup } from "../groups/data";
-import { getLabel, LabelNotFoundError } from "../labels/data";
-import { logger } from "../logger";
-import { findMessage } from "../messages/data";
+import type { SseMessage } from "@app/sse/schema";
 import type { ClientEvent } from "./channel";
 
-/** Message shape sent to browser clients (matches the legacy WebSocket wire format). */
-export type WsMessage = {
-	interface: string;
-	operation: "insert" | "update" | "delete";
-	data: unknown;
-};
-
-type Resolver = (resourceId: number | string) => Promise<unknown>;
-
-const resolvers: Record<string, Resolver> = {
-	groups: async (id) => getGroup(Number(id)),
-	labels: async (id) => getLabel(Number(id)),
-	messages: async () => findMessage(),
-};
-
 /**
- * Convert a Postgres-published client event into the message shape browser
- * clients consume. Returns `null` when the domain isn't owned by this service
- * yet (e.g. Python still emits for `samples`); the legacy WS path will deliver
- * those.
+ * Convert a Postgres-published client event into the id-only message shape
+ * browser clients consume. The client refetches via the normal REST API on
+ * invalidation, so the server does no resource resolution here.
+ *
+ * The wire schema enforces per-domain id types at the client parse boundary;
+ * we forward the resource id as-is and let SseMessageSchema reject mismatches.
  */
-export async function eventToWsMessage(
-	event: ClientEvent,
-): Promise<WsMessage | null> {
-	if (event.operation === "delete") {
-		return {
-			interface: event.domain,
-			operation: "delete",
-			data: { id: event.resource_id },
-		};
-	}
+export function eventToSseMessage(event: ClientEvent): SseMessage {
+	const operation =
+		event.operation === "create"
+			? "insert"
+			: event.operation === "update"
+				? "update"
+				: "delete";
 
-	const resolve = resolvers[event.domain];
-	if (!resolve) {
-		return null;
-	}
-
-	try {
-		const data = await resolve(event.resource_id);
-		return {
-			interface: event.domain,
-			operation: event.operation === "create" ? "insert" : "update",
-			data,
-		};
-	} catch (err) {
-		if (
-			err instanceof LabelNotFoundError ||
-			err instanceof GroupNotFoundError
-		) {
-			return null;
-		}
-		logger.warn(
-			{ err, domain: event.domain, resource_id: event.resource_id },
-			"failed to resolve resource for client event",
-		);
-		return null;
-	}
+	return {
+		domain: event.domain,
+		operation,
+		id: event.resource_id,
+	} as SseMessage;
 }

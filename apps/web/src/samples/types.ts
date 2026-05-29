@@ -45,7 +45,7 @@ export type SampleNested = SampleID & {
 	name: string;
 };
 
-/* Minimal Sample used for websocket messages and resource listings */
+/* Minimal Sample used for resource listings */
 export type SampleMinimal = SampleNested & {
 	created_at: string;
 	host: string;

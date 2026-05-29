@@ -1,5 +1,5 @@
 import { requireAuthenticatedRequest } from "@server/auth/middleware";
-import { eventToWsMessage } from "@server/events/broadcast";
+import { eventToSseMessage } from "@server/events/broadcast";
 import { listenForClientEvents } from "@server/events/listen";
 import { logger } from "@server/logger";
 import { createFileRoute } from "@tanstack/react-router";
@@ -66,10 +66,8 @@ async function handleEvents({
 					}
 
 					try {
-						const message = await eventToWsMessage(event);
-						if (message) {
-							send(`data: ${JSON.stringify(message)}\n\n`);
-						}
+						const message = eventToSseMessage(event);
+						send(`data: ${JSON.stringify(message)}\n\n`);
 					} catch (err) {
 						logger.warn({ err, event }, "failed to deliver sse message");
 					}

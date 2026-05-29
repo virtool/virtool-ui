@@ -6,6 +6,7 @@ import ContainerSide from "@base/ContainerSide";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Markdown from "@base/Markdown";
 import JobItem from "@jobs/components/JobItem";
+import { useFetchJob } from "@jobs/queries";
 import type { Label } from "@labels/types";
 import { useFetchSample } from "@samples/queries";
 import { getLibraryTypeDisplayName } from "@samples/utils";
@@ -14,7 +15,6 @@ import { getLibraryTypeDisplayName } from "@samples/utils";
  */
 import { getRouteApi } from "@tanstack/react-router";
 import numbro from "numbro";
-import { JobNestedSchema } from "@/jobs/types";
 import EditSample from "../EditSample";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";
 import Sidebar from "./Sidebar";
@@ -32,14 +32,13 @@ export default function SampleDetailGeneral({
 	const search = routeApi.useSearch();
 	const navigate = routeApi.useNavigate();
 	const { data, isPending } = useFetchSample(sampleId);
+	const { data: job } = useFetchJob(data?.job?.id ?? Number.NaN, data?.job);
 
 	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 
 	const { quality } = data;
-
-	const job = data?.job ? JobNestedSchema.parse(data.job) : undefined;
 
 	return (
 		<div className="flex items-stretch">

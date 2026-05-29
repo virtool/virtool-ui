@@ -1,12 +1,15 @@
 import IconButton from "@base/IconButton";
 import ProgressCircle from "@base/ProgressCircle";
-import type { JobNested } from "@jobs/types";
+import type { JobState } from "@jobs/types";
 import { ChartArea } from "lucide-react";
 import { cn } from "@/app/utils";
 
 type SampleItemEndIconProps = {
-	/** The job responsible for creating the sample */
-	job: JobNested;
+	/** Progress of the job responsible for creating the sample */
+	progress: number;
+
+	/** State of the job responsible for creating the sample */
+	state?: JobState;
 
 	/** Callback to handle click event */
 	onClick: () => void;
@@ -24,7 +27,8 @@ type SampleItemEndIconProps = {
 export default function SampleItemEndIcon({
 	onClick,
 	ready,
-	job,
+	progress,
+	state,
 	className,
 }: SampleItemEndIconProps) {
 	const containerClasses = cn(
@@ -32,7 +36,7 @@ export default function SampleItemEndIcon({
 		className,
 	);
 
-	if (ready || job?.state === "succeeded") {
+	if (ready || state === "succeeded") {
 		return (
 			<div className={containerClasses}>
 				<IconButton
@@ -48,10 +52,7 @@ export default function SampleItemEndIcon({
 	}
 	return (
 		<div className={containerClasses}>
-			<ProgressCircle
-				progress={job?.progress || 0}
-				state={job?.state || "pending"}
-			/>
+			<ProgressCircle progress={progress} state={state ?? "pending"} />
 			<strong className="ml-1">Creating</strong>
 		</div>
 	);

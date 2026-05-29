@@ -1,6 +1,6 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { reactQueryHandler } from "../websocket/reactQueryHandler";
-import { WsMessageSchema } from "../websocket/schema";
+import { reactQueryHandler } from "./reactQueryHandler";
+import { SseMessageSchema } from "./schema";
 
 type ConnectionStatus =
 	| "initializing"
@@ -21,7 +21,7 @@ export function init(queryClient: QueryClient): void {
 
 	const handler = reactQueryHandler(queryClient);
 	handleMessage = (data) => {
-		const parsed = WsMessageSchema.safeParse(data);
+		const parsed = SseMessageSchema.safeParse(data);
 		if (parsed.success) {
 			handler(parsed.data);
 		} else {

@@ -2,7 +2,7 @@ import type { UserNested } from "@users/types";
 
 import type { SearchResult } from "../types/api";
 
-/** Minimal HMM used for websocket messages and resource listings */
+/** Minimal HMM used for resource listings */
 export type HMMMinimal = {
 	/** The unique identifier */
 	id: string;

@@ -241,18 +241,18 @@ See [docs/database.md](docs/database.md) for the per-domain
 ownership table, the `legacy_id` resolution rules, dual-store write
 coordination, and notes on aggregation pipelines.
 
-### Server → client push runs over both WS and SSE
+### Server → client push runs over SSE with id-only frames
 
-Server-pushed cache invalidations are delivered over two transports
-in parallel: the legacy Python WebSocket and the Node SSE route at
-`routes/events.ts`. Both publish into `client_events` on Postgres
-and both feed the same client-side `reactQueryHandler`, which
-invalidates React Query caches by `interface`. Domains migrate one
-at a time by adding a resolver to `server/events/broadcast.ts`.
+Server-pushed cache invalidations are delivered over a single SSE
+stream at `/events`. Each frame carries `{ domain, operation, id }`;
+the client invalidates React Query caches by `domain` and refetches
+through the REST API so per-user auth is
+enforced on the refetch instead of in a fanout broadcast. Both
+Python and Node publish onto the Postgres `client_events` channel;
+`routes/events.ts` is the sole consumer.
 
 See [docs/server-push.md](docs/server-push.md) for the wire format,
-auth on the SSE side, the surgical-patch cache writers, and the
-follow-up TODOs.
+auth on the SSE side, and the follow-up TODOs.
 
 ## Projects
 

@@ -10,6 +10,7 @@ import {
 	useCheckReferenceUpdates,
 	useUpdateRemoteReference,
 } from "@references/queries";
+import { useFetchTask } from "@tasks/queries";
 import {
 	CircleCheck,
 	CircleFadingArrowUp,
@@ -94,6 +95,8 @@ export default function Remote({ detail }) {
 	const { archived, id, installed, release, remotes_from, updating, task } =
 		detail;
 
+	const { data: liveTask } = useFetchTask(task?.id ?? Number.NaN, task);
+
 	const slug = remotes_from.slug;
 
 	const { mutate: checkReferenceUpdate, isPending: isPendingReferenceUpdate } =
@@ -133,7 +136,7 @@ export default function Remote({ detail }) {
 
 			{!archived &&
 				(updating ? (
-					<Upgrade progress={task.progress} />
+					<Upgrade progress={liveTask?.progress ?? task.progress} />
 				) : (
 					<Release
 						release={release}
