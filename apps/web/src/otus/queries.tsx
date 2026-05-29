@@ -53,7 +53,6 @@ export const OTUQueryKeys = {
  * @param page - The page to fetch
  * @param per_page - The number of hmms to fetch per page
  * @param term - The search term to filter indexes by
- * @param verified - Filter the results to verified OTUs only
  * @returns A page of OTU search results
  */
 export function useListOTUs(
@@ -61,14 +60,13 @@ export function useListOTUs(
 	page: number,
 	per_page: number,
 	term: string,
-	verified?: boolean,
 ) {
 	return useQuery<OtuSearchResult>({
 		queryKey: OTUQueryKeys.list([page, per_page, term]),
 		queryFn: () =>
 			apiClient
 				.get(`/refs/${refId}/otus`)
-				.query({ find: term, page, per_page, verified: verified || undefined })
+				.query({ find: term, page, per_page })
 				.then((res) => {
 					const { documents, ...rest } = res.body;
 					return { ...rest, items: documents };

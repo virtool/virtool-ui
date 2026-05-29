@@ -56,13 +56,13 @@ export function useFindIndexes(
  *
  * @returns A list of ready indexes
  */
-export function useListIndexes(ready: boolean, term?: string) {
+export function useListIndexes(ready: boolean) {
 	return useQuery<IndexMinimal[]>({
 		queryKey: indexQueryKeys.list([ready]),
 		queryFn: () =>
 			apiClient
 				.get("/indexes")
-				.query({ ready, find: term })
+				.query({ ready })
 				.then((res) => res.body),
 	});
 }

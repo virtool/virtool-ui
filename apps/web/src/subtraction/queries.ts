@@ -139,7 +139,7 @@ export function useRemoveSubtraction() {
  */
 export function useFetchSubtractionsShortlist(ready?: boolean) {
 	return useQuery<SubtractionOption[]>({
-		queryKey: subtractionQueryKeys.shortlist(),
+		queryKey: [...subtractionQueryKeys.shortlist(), ready],
 		queryFn: () =>
 			apiClient
 				.get("/subtractions")
