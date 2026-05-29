@@ -56,7 +56,7 @@ any) mirrors or annotates.
 | HMMs          | **Primary**      | —                 | Mongo-only                                |
 | History       | **Primary**      | diffs             | Mixed; Mongo headers, PG diff blobs       |
 | Jobs          | —                | **Primary**       | Fully migrated                            |
-| Settings      | **Primary**      | —                 | Mongo-only                                |
+| Settings      | —                | **Primary**       | Fully migrated                            |
 | API keys      | **Primary**      | —                 | Mongo-only                                |
 
 Use this to gauge migration cost per feature: a Postgres-only domain
