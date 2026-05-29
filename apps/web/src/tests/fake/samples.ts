@@ -1,11 +1,11 @@
 import { faker } from "@faker-js/faker";
-import type { SampleRightsUpdate } from "@samples/api";
 import type {
 	LibraryType,
 	Quality,
 	Read,
 	Sample,
 	SampleMinimal,
+	SampleRightsUpdate,
 } from "@samples/types";
 import nock from "nock";
 import { createFakeServerJobNested } from "./jobs";

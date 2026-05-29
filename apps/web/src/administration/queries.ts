@@ -1,3 +1,4 @@
+import { apiClient } from "@app/api";
 import {
 	createUser,
 	findUsers,
@@ -14,8 +15,22 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
-import { fetchSettings, type SettingsUpdate, updateSettings } from "./api";
 import type { AdministratorRoleName, Settings } from "./types";
+
+/** Fields that can be changed when updating the server settings */
+export type SettingsUpdate = {
+	default_source_types?: string[];
+	enable_api?: boolean;
+	enable_sentry?: boolean;
+	hmm_slug?: string;
+	minimum_password_length?: number;
+	sample_all_read?: boolean;
+	sample_all_write?: boolean;
+	sample_group?: string;
+	sample_group_read?: boolean;
+	sample_group_write?: boolean;
+	sample_unique_names?: boolean;
+};
 
 /**
  * Factory object for generating settings query keys
@@ -32,7 +47,7 @@ export const settingsQueryKeys = {
 export function useFetchSettings() {
 	return useQuery<Settings>({
 		queryKey: settingsQueryKeys.all(),
-		queryFn: fetchSettings,
+		queryFn: () => apiClient.get("/settings").then((response) => response.body),
 	});
 }
 
@@ -45,7 +60,11 @@ export function useUpdateSettings() {
 	const queryClient = useQueryClient();
 
 	return useMutation<Settings, ErrorResponse, SettingsUpdate>({
-		mutationFn: updateSettings,
+		mutationFn: (update) =>
+			apiClient
+				.patch("/settings")
+				.send(update)
+				.then((response) => response.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: settingsQueryKeys.all(),

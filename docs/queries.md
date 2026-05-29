@@ -4,15 +4,20 @@ Data fetching in the SPA goes through
 [TanStack Query](https://tanstack.com/query) (React Query, v5) regardless of
 the underlying transport. Two transports coexist while the backend migrates:
 
-- **Legacy path** — each feature's `api.ts` uses superagent to call the
-  Python API. Error shape is `error.response?.body.message`.
+- **Legacy path** — superagent calls the Python API through the shared
+  `apiClient` in `apps/web/src/app/api.ts`. Error shape is
+  `error.response?.body.message`.
 - **New path** — TanStack Start server functions under
   `apps/web/src/server/<feature>/`, called from the SPA via React Query
   hooks.
 
 Either way, the cache surface is the same: each feature owns a `queries.ts`
 module that exports a `*QueryKeys` factory, `queryOptions`-based helpers,
-and `use*` hooks.
+and `use*` hooks. There is no separate per-feature `api.ts` — the request
+logic lives directly inside the hook's `queryFn`/`mutationFn` (or a
+`queryOptions` factory). Inline the `apiClient` call; reach for a
+module-private helper only when the same request is shared by more than one
+hook or selected between branches.
 
 ## Query keys come from a per-feature factory
 
@@ -54,7 +59,8 @@ reuse the same options from hooks and route loaders:
 export function sampleQueryOptions(sampleId: string) {
   return queryOptions<Sample, ErrorResponse>({
     queryKey: samplesQueryKeys.detail(sampleId),
-    queryFn: () => getSample(sampleId),
+    queryFn: () =>
+      apiClient.get(`/samples/${sampleId}`).then((res) => res.body),
   });
 }
 
@@ -62,6 +68,10 @@ export function useFetchSample(sampleId: string) {
   return useQuery(sampleQueryOptions(sampleId));
 }
 ```
+
+Annotate the `queryOptions` generic (`<Sample, ErrorResponse>`) when the
+fetcher is inlined — `apiClient` responses are untyped, so without it the
+cached data type degrades to `any`.
 
 The same options object can be passed to `queryClient.ensureQueryData` from
 a route loader without duplicating the key or fetcher.
@@ -101,7 +111,14 @@ paginated list:
 ```ts
 return useQuery<SampleSearchResult, ErrorResponse>({
   queryKey: samplesQueryKeys.list([page, per_page, term, labels, workflows]),
-  queryFn: () => listSamples(page, per_page, term, labels, workflows),
+  queryFn: () =>
+    apiClient
+      .get("/samples")
+      .query({ page, per_page, find: term, label: labels, workflows })
+      .then((res) => {
+        const { documents, ...rest } = res.body;
+        return { ...rest, items: documents };
+      }),
   placeholderData: keepPreviousData,
 });
 ```
