@@ -326,8 +326,14 @@ Pass structured fields as the first arg and the message as the second —
 never interpolate values into the message string, that defeats the
 redaction list and makes records ungreppable.
 
+When `VT_SENTRY_DSN` is set, server logs at `info` and above are
+forwarded to Sentry automatically (via a pino destination stream, not
+`Sentry.pinoIntegration()`); redaction still applies and dev does not
+forward.
+
 See [docs/logging.md](docs/logging.md) for the redaction
-defaults, `VT_LOG_LEVEL` resolution, and where the logger singleton lives.
+defaults, `VT_LOG_LEVEL` resolution, where the logger singleton lives, and
+the Sentry forwarding wiring.
 
 ## Git
 

@@ -1,5 +1,9 @@
 import { randomBytes } from "node:crypto";
 import {
+	sentryGlobalFunctionMiddleware,
+	sentryGlobalRequestMiddleware,
+} from "@sentry/tanstackstart-react";
+import {
 	createCsrfMiddleware,
 	createMiddleware,
 	createStart,
@@ -64,8 +68,14 @@ const csrfMiddleware = createCsrfMiddleware({
 	filter: (ctx) => ctx.handlerType === "serverFn",
 });
 
+// Sentry middleware go first so request and server-function spans wrap the
+// csrf/csp/auth work rather than nesting inside it.
 export const startInstance = createStart(() => ({
 	defaultSsr: false,
-	requestMiddleware: [csrfMiddleware, cspNonce],
-	functionMiddleware: [errorLoggingMiddleware, authenticationMiddleware],
+	requestMiddleware: [sentryGlobalRequestMiddleware, csrfMiddleware, cspNonce],
+	functionMiddleware: [
+		sentryGlobalFunctionMiddleware,
+		errorLoggingMiddleware,
+		authenticationMiddleware,
+	],
 }));
