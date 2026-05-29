@@ -133,8 +133,8 @@ module:
 ### Path aliases
 
 Every feature directory has a `@name` alias (e.g., `@app/utils`, `@base/Button`,
-`@samples/api`). The catch-all `@/*` maps to `apps/web/src/*`. Prefer specific
-aliases over `@/`.
+`@samples/queries`). The catch-all `@/*` maps to `apps/web/src/*`. Prefer
+specific aliases over `@/`.
 
 ### Key libraries
 
@@ -165,14 +165,17 @@ internal route triggers a full page reload. For query strings, use `search` on
 
 ### API calls
 
-Use the superagent-based client in `apps/web/src/app/api.ts`. Feature API
-functions live in each module's `api.ts`. API errors have the shape
-`error.response?.body.message`.
+Use the superagent-based client in `apps/web/src/app/api.ts`. API errors have
+the shape `error.response?.body.message`.
 
-Each feature wraps its API in React Query hooks in a sibling `queries.ts`
-module, keyed by a `*QueryKeys` factory and prefetched from route loaders
-where appropriate. See [docs/queries.md](docs/queries.md) for the
-query-key, `queryOptions`, route-loader prefetch, and mutation patterns.
+Each feature owns a `queries.ts` module that folds its request logic directly
+into React Query hooks and `queryOptions`/`*QueryKeys` factories — there is no
+separate per-feature `api.ts` layer. Inline each `apiClient` call into the
+hook's `queryFn`/`mutationFn`; keep a module-private helper only when a request
+is shared across hooks or branches. Route loaders prefetch via the same
+`queryOptions` factories where appropriate. See
+[docs/queries.md](docs/queries.md) for the query-key, `queryOptions`,
+route-loader prefetch, and mutation patterns.
 
 ### Styling
 

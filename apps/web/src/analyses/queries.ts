@@ -1,3 +1,4 @@
+import { apiClient } from "@app/api";
 import { samplesQueryKeys } from "@samples/queries";
 import {
 	keepPreviousData,
@@ -7,13 +8,6 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
-import {
-	blastNuvs,
-	createAnalysis,
-	getAnalysis,
-	listAnalyses,
-	removeAnalysis,
-} from "./api";
 import type { Analysis, AnalysisSearchResult, GenericAnalysis } from "./types";
 import { formatData } from "./utils";
 
@@ -46,7 +40,14 @@ export function useListAnalyses(
 ) {
 	return useQuery<AnalysisSearchResult>({
 		queryKey: analysesQueryKeys.list([sampleId, page, per_page, term]),
-		queryFn: () => listAnalyses(sampleId, page, per_page, term),
+		queryFn: () =>
+			apiClient
+				.get(`/samples/${sampleId}/analyses`)
+				.query({ page, per_page, find: term })
+				.then((res) => {
+					const { documents, ...rest } = res.body;
+					return { ...rest, items: documents };
+				}),
 		placeholderData: keepPreviousData,
 	});
 }
@@ -61,7 +62,8 @@ export function useRemoveAnalysis(analysisId: string) {
 	const queryClient = useQueryClient();
 
 	const mutation = useMutation<null, unknown, { analysisId: string }>({
-		mutationFn: ({ analysisId }) => removeAnalysis(analysisId),
+		mutationFn: ({ analysisId }) =>
+			apiClient.delete(`/analyses/${analysisId}`).then((res) => res.body),
 
 		onSuccess: () => {
 			queryClient.invalidateQueries({
@@ -76,7 +78,10 @@ export function useRemoveAnalysis(analysisId: string) {
 export function analysisQueryOptions(analysisId: string) {
 	return queryOptions<Analysis, ErrorResponse>({
 		queryKey: analysesQueryKeys.detail(analysisId),
-		queryFn: () => getAnalysis({ analysisId }),
+		queryFn: async () => {
+			const response = await apiClient.get(`/analyses/${analysisId}`);
+			return response.body;
+		},
 	});
 }
 
@@ -102,7 +107,15 @@ export function useCreateAnalysis() {
 
 	return useMutation<GenericAnalysis, unknown, CreateAnalysisParams>({
 		mutationFn: ({ mlModel, refId, sampleId, subtractionIds, workflow }) =>
-			createAnalysis(mlModel, refId, sampleId, subtractionIds, workflow),
+			apiClient
+				.post(`/samples/${sampleId}/analyses`)
+				.send({
+					workflow,
+					ref_id: refId,
+					subtractions: subtractionIds,
+					ml: mlModel,
+				})
+				.then((res) => res.body),
 
 		onSuccess: () => {
 			queryClient.invalidateQueries({
@@ -125,7 +138,10 @@ export function useBlastNuvs(analysisId: string) {
 	const queryClient = useQueryClient();
 
 	return useMutation<null, unknown, { sequenceIndex: number }>({
-		mutationFn: ({ sequenceIndex }) => blastNuvs(analysisId, sequenceIndex),
+		mutationFn: ({ sequenceIndex }) =>
+			apiClient
+				.put(`/analyses/${analysisId}/${sequenceIndex}/blast`)
+				.then((res) => res.body),
 
 		onSuccess: () => {
 			queryClient.invalidateQueries({

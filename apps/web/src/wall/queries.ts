@@ -1,15 +1,22 @@
-import {
-	type LoginResult,
-	login,
-	type ResetPasswordResult,
-	resetPassword,
-} from "@account/api";
 import { accountKeys } from "@account/queries";
 import { apiClient } from "@app/api";
 import type { Root } from "@app/types";
+import { loginFn, resetPasswordFn } from "@server/auth/functions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import type { ErrorResponse } from "@/types/api";
+
+/** Result of a login attempt. `reset_code` is only set when `reset` is true. */
+export type LoginResult = {
+	reset: boolean;
+	reset_code?: string;
+};
+
+/** Result of a successful password reset. */
+export type ResetPasswordResult = {
+	login: false;
+	reset: false;
+};
 
 /** Key factory function for the root document */
 export const rootKeys = {
@@ -42,7 +49,7 @@ export function useLoginMutation() {
 		{ handle: string; password: string; remember: boolean }
 	>({
 		mutationFn: ({ handle, password, remember }) =>
-			login({ handle, password, remember }),
+			loginFn({ data: { handle, password, remember } }),
 		onSuccess: (data) => {
 			if (!data.reset) {
 				queryClient.invalidateQueries({ queryKey: accountKeys.all() });
@@ -65,7 +72,7 @@ export function useResetPasswordMutation() {
 		{ password: string; resetCode: string }
 	>({
 		mutationFn: ({ password, resetCode }) =>
-			resetPassword({ password, resetCode }),
+			resetPasswordFn({ data: { password, reset_code: resetCode } }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
 		},

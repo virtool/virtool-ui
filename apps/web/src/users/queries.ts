@@ -1,10 +1,10 @@
+import { apiClient } from "@app/api";
 import {
 	keepPreviousData,
 	useInfiniteQuery,
 	useMutation,
 } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
-import { createFirst, findUsers } from "./api";
 import type { UserResponse } from "./types";
 
 /**
@@ -32,7 +32,11 @@ export const userQueryKeys = {
 export function useInfiniteFindUsers(per_page: number, term: string) {
 	return useInfiniteQuery<UserResponse>({
 		queryKey: userQueryKeys.infiniteList([per_page, term]),
-		queryFn: ({ pageParam }) => findUsers(pageParam as number, per_page, term),
+		queryFn: ({ pageParam }) =>
+			apiClient
+				.get("/users")
+				.query({ page: pageParam as number, per_page, term })
+				.then((res) => res.body),
 		initialPageParam: 1,
 		getNextPageParam: (lastPage) => {
 			if (lastPage.page >= lastPage.page_count) {
@@ -56,8 +60,9 @@ export function useCreateFirstUser() {
 		ErrorResponse,
 		{ handle: string; password: string; forceReset: boolean }
 	>({
-		mutationFn: ({ handle, password, forceReset }) => {
-			return createFirst(handle, password, forceReset);
-		},
+		mutationFn: ({ handle, password, forceReset }) =>
+			apiClient
+				.put("/users/first")
+				.send({ handle, password, force_reset: forceReset }),
 	});
 }

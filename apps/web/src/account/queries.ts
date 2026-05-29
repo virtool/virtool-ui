@@ -1,20 +1,21 @@
 import type { Account, APIKeyMinimal } from "@account/types";
+import { apiClient } from "@app/api";
 import { resetClient } from "@app/utils";
 import type { Permissions } from "@groups/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { logoutFn } from "@server/auth/functions";
+import {
+	queryOptions,
+	useMutation,
+	useQuery,
+	useQueryClient,
+} from "@tanstack/react-query";
 import type { User } from "@users/types";
 import type { ErrorResponse } from "@/types/api";
-import {
-	type AccountUpdate,
-	changePassword,
-	createAPIKey,
-	fetchAccount,
-	getApiKeys,
-	logout,
-	removeAPIKey,
-	updateAccount,
-	updateAPIKey,
-} from "./api";
+
+/** Fields that can be changed when updating the current account */
+export type AccountUpdate = {
+	email?: string;
+};
 
 /**
  * Factory object for generating account query keys
@@ -25,15 +26,25 @@ export const accountKeys = {
 };
 
 /**
+ * Query options for fetching the logged-in user's account data.
+ *
+ * Shared by the account hook and the route loaders that gate authenticated
+ * pages on a resolved account.
+ */
+export function accountQueryOptions() {
+	return queryOptions<Account, ErrorResponse>({
+		queryKey: accountKeys.all(),
+		queryFn: () => apiClient.get("/account").then((response) => response.body),
+	});
+}
+
+/**
  * Fetches account data for the logged-in user
  *
  * @returns UseQueryResult object containing the account data
  */
 export function useFetchAccount() {
-	return useQuery<Account>({
-		queryKey: accountKeys.all(),
-		queryFn: () => fetchAccount(),
-	});
+	return useQuery(accountQueryOptions());
 }
 
 /**
@@ -45,7 +56,11 @@ export function useUpdateAccount() {
 	const queryClient = useQueryClient();
 
 	return useMutation<User, ErrorResponse, { update: AccountUpdate }>({
-		mutationFn: ({ update }) => updateAccount(update),
+		mutationFn: ({ update }) =>
+			apiClient
+				.patch("/account")
+				.send({ update })
+				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
 		},
@@ -66,7 +81,10 @@ export function useChangePassword() {
 		{ old_password: string; password: string }
 	>({
 		mutationFn: ({ old_password, password }) =>
-			changePassword(old_password, password),
+			apiClient
+				.patch("/account")
+				.send({ old_password, password })
+				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
 		},
@@ -81,7 +99,7 @@ export function useChangePassword() {
 export function useFetchAPIKeys() {
 	return useQuery<APIKeyMinimal[]>({
 		queryKey: accountKeys.details(),
-		queryFn: () => getApiKeys(),
+		queryFn: () => apiClient.get("/account/keys").then((res) => res.body),
 	});
 }
 
@@ -98,7 +116,11 @@ export function useCreateAPIKey() {
 		ErrorResponse,
 		{ name: string; permissions: Permissions }
 	>({
-		mutationFn: ({ name, permissions }) => createAPIKey(name, permissions),
+		mutationFn: ({ name, permissions }) =>
+			apiClient
+				.post("/account/keys")
+				.send({ name, permissions })
+				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
 		},
@@ -118,7 +140,11 @@ export function useUpdateApiKey() {
 		ErrorResponse,
 		{ keyId: string; permissions: Permissions }
 	>({
-		mutationFn: ({ keyId, permissions }) => updateAPIKey(keyId, permissions),
+		mutationFn: ({ keyId, permissions }) =>
+			apiClient
+				.patch(`/account/keys/${keyId}`)
+				.send({ permissions })
+				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
 		},
@@ -134,7 +160,8 @@ export function useRemoveAPIKey() {
 	const queryClient = useQueryClient();
 
 	return useMutation<null, ErrorResponse, { keyId: string }>({
-		mutationFn: ({ keyId }) => removeAPIKey(keyId),
+		mutationFn: ({ keyId }) =>
+			apiClient.delete(`/account/keys/${keyId}`).then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
 		},
@@ -148,7 +175,7 @@ export function useRemoveAPIKey() {
  */
 export function useLogout() {
 	return useMutation<null, ErrorResponse>({
-		mutationFn: logout,
+		mutationFn: () => logoutFn(),
 		onSuccess: () => {
 			resetClient();
 		},

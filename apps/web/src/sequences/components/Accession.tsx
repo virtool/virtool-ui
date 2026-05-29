@@ -5,7 +5,7 @@ import InputIconButton from "@base/InputIconButton";
 import InputLabel from "@base/InputLabel";
 import InputLoading from "@base/InputLoading";
 import InputSimple from "@base/InputSimple";
-import { getGenbank } from "@otus/api";
+import { getGenbank } from "@otus/queries";
 import { WandSparkles } from "lucide-react";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";

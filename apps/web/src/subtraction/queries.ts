@@ -1,3 +1,4 @@
+import { apiClient } from "@app/api";
 import {
 	keepPreviousData,
 	useMutation,
@@ -5,14 +6,6 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
-import {
-	createSubtraction,
-	fetchSubtractionShortlist,
-	findSubtractions,
-	getSubtraction,
-	removeSubtraction,
-	updateSubtraction,
-} from "./api";
 import type {
 	Subtraction,
 	SubtractionOption,
@@ -47,7 +40,10 @@ export function useCreateSubtraction() {
 		{ name: string; nickname: string; uploadId: number }
 	>({
 		mutationFn: ({ name, nickname, uploadId }) =>
-			createSubtraction(name, nickname, uploadId),
+			apiClient
+				.post("/subtractions")
+				.send({ name, nickname, upload_id: uploadId })
+				.then((response) => response.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: subtractionQueryKeys.lists(),
@@ -71,7 +67,14 @@ export function useFindSubtractions(
 ) {
 	return useQuery<SubtractionSearchResult>({
 		queryKey: subtractionQueryKeys.list([page, per_page, term]),
-		queryFn: () => findSubtractions(page, per_page, term),
+		queryFn: () =>
+			apiClient
+				.get("/subtractions")
+				.query({ page, per_page, find: term })
+				.then((response) => {
+					const { documents, ...rest } = response.body;
+					return { ...rest, items: documents };
+				}),
 		placeholderData: keepPreviousData,
 	});
 }
@@ -85,7 +88,10 @@ export function useFindSubtractions(
 export function useFetchSubtraction(subtractionId: string) {
 	return useQuery<Subtraction, ErrorResponse>({
 		queryKey: subtractionQueryKeys.detail(subtractionId),
-		queryFn: () => getSubtraction(subtractionId),
+		queryFn: () =>
+			apiClient
+				.get(`/subtractions/${subtractionId}`)
+				.then((response) => response.body),
 	});
 }
 
@@ -99,7 +105,10 @@ export function useUpdateSubtraction(subtractionId: string) {
 	const queryClient = useQueryClient();
 	return useMutation<Subtraction, unknown, { name: string; nickname: string }>({
 		mutationFn: ({ name, nickname }) =>
-			updateSubtraction(subtractionId, name, nickname),
+			apiClient
+				.patch(`/subtractions/${subtractionId}`)
+				.send({ name, nickname })
+				.then((response) => response.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: subtractionQueryKeys.detail(subtractionId),
@@ -115,7 +124,10 @@ export function useUpdateSubtraction(subtractionId: string) {
  */
 export function useRemoveSubtraction() {
 	return useMutation<Response, unknown, { subtractionId: string }>({
-		mutationFn: ({ subtractionId }) => removeSubtraction(subtractionId),
+		mutationFn: ({ subtractionId }) =>
+			apiClient
+				.delete(`/subtractions/${subtractionId}`)
+				.then((response) => response.body),
 	});
 }
 
@@ -128,6 +140,10 @@ export function useRemoveSubtraction() {
 export function useFetchSubtractionsShortlist(ready?: boolean) {
 	return useQuery<SubtractionOption[]>({
 		queryKey: subtractionQueryKeys.shortlist(),
-		queryFn: () => fetchSubtractionShortlist(ready),
+		queryFn: () =>
+			apiClient
+				.get("/subtractions")
+				.query({ short: true, ready })
+				.then((response) => response.body),
 	});
 }

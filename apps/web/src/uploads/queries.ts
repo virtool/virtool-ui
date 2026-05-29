@@ -1,3 +1,4 @@
+import { apiClient } from "@app/api";
 import {
 	keepPreviousData,
 	useInfiniteQuery,
@@ -5,7 +6,6 @@ import {
 	useQuery,
 } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
-import { findFiles, removeFile } from "./api";
 import type { FileResponse, UploadType } from "./types";
 
 export const fileQueryKeys = {
@@ -16,6 +16,25 @@ export const fileQueryKeys = {
 	infiniteList: (type: string, filters: Array<string | number | boolean>) =>
 		["files", "list", "infinite", type, ...filters] as const,
 };
+
+function findFiles(
+	type: UploadType,
+	page: number,
+	per_page: number,
+	term?: string,
+): Promise<FileResponse> {
+	return apiClient
+		.get("/uploads")
+		.query({
+			upload_type: type,
+			page,
+			per_page,
+			ready: true,
+			paginate: true,
+			find: term,
+		})
+		.then((res) => res.body);
+}
 
 export function useListFiles(type: UploadType, page, per_page: number) {
 	return useQuery<FileResponse, ErrorResponse>({
@@ -51,6 +70,7 @@ export function useInfiniteFindFiles(
  */
 export function useDeleteFile() {
 	return useMutation<null, unknown, { id: number }>({
-		mutationFn: ({ id }) => removeFile(id),
+		mutationFn: ({ id }) =>
+			apiClient.delete(`/uploads/${id}`).then((res) => res.body),
 	});
 }

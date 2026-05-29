@@ -1,5 +1,4 @@
-import { fetchAccount } from "@account/api";
-import { accountKeys, useFetchAccount } from "@account/queries";
+import { accountQueryOptions, useFetchAccount } from "@account/queries";
 import { apiClient } from "@app/api";
 import * as Sse from "@app/sse/SseConnection";
 import type { Root } from "@app/types";
@@ -50,10 +49,7 @@ export const Route = createFileRoute("/_authenticated")({
 		}
 
 		try {
-			await queryClient.ensureQueryData({
-				queryKey: accountKeys.all(),
-				queryFn: fetchAccount,
-			});
+			await queryClient.ensureQueryData(accountQueryOptions());
 		} catch {
 			throw redirect({
 				to: "/login",

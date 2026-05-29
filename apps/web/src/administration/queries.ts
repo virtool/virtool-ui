@@ -1,3 +1,4 @@
+import { apiClient } from "@app/api";
 import {
 	keepPreviousData,
 	useMutation,
@@ -6,23 +7,35 @@ import {
 } from "@tanstack/react-query";
 import type { AdminUserResponse, User } from "@users/types";
 import type { ErrorResponse } from "@/types/api";
-import {
-	createUser,
-	fetchAdministratorRoles,
-	fetchSettings,
-	findUsers,
-	getUser,
-	type SettingsUpdate,
-	setAdministratorRole,
-	type UserUpdate,
-	updateSettings,
-	updateUser,
-} from "./api";
 import type {
 	AdministratorRole,
 	AdministratorRoleName,
 	Settings,
 } from "./types";
+
+/** Fields that can be changed when updating the server settings */
+export type SettingsUpdate = {
+	default_source_types?: string[];
+	enable_api?: boolean;
+	enable_sentry?: boolean;
+	hmm_slug?: string;
+	minimum_password_length?: number;
+	sample_all_read?: boolean;
+	sample_all_write?: boolean;
+	sample_group?: string;
+	sample_group_read?: boolean;
+	sample_group_write?: boolean;
+	sample_unique_names?: boolean;
+};
+
+/** Fields that can be changed when updating a user */
+export type UserUpdate = {
+	active?: boolean;
+	force_reset?: boolean;
+	password?: string;
+	primary_group?: string;
+	groups?: Array<string | number>;
+};
 
 /**
  * Factory object for generating settings query keys
@@ -39,7 +52,7 @@ export const settingsQueryKeys = {
 export function useFetchSettings() {
 	return useQuery<Settings>({
 		queryKey: settingsQueryKeys.all(),
-		queryFn: fetchSettings,
+		queryFn: () => apiClient.get("/settings").then((response) => response.body),
 	});
 }
 
@@ -52,7 +65,11 @@ export function useUpdateSettings() {
 	const queryClient = useQueryClient();
 
 	return useMutation<Settings, ErrorResponse, SettingsUpdate>({
-		mutationFn: updateSettings,
+		mutationFn: (update) =>
+			apiClient
+				.patch("/settings")
+				.send(update)
+				.then((response) => response.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: settingsQueryKeys.all(),
@@ -73,7 +90,7 @@ export const roleQueryKeys = {
 export function useGetAdministratorRoles() {
 	return useQuery<AdministratorRole[]>({
 		queryKey: roleQueryKeys.all(),
-		queryFn: fetchAdministratorRoles,
+		queryFn: () => apiClient.get("/admin/roles").then((res) => res.body),
 	});
 }
 
@@ -111,7 +128,11 @@ export function useFindUsers(
 ) {
 	return useQuery<AdminUserResponse>({
 		queryKey: userQueryKeys.list([page, per_page, term, administrator, active]),
-		queryFn: () => findUsers(page, per_page, term, administrator, active),
+		queryFn: () =>
+			apiClient
+				.get("/admin/users")
+				.query({ page, per_page, term, administrator, active })
+				.then((response) => response.body),
 		placeholderData: keepPreviousData,
 	});
 }
@@ -132,7 +153,11 @@ export function useCreateUser() {
 			forceReset: boolean;
 		}
 	>({
-		mutationFn: createUser,
+		mutationFn: ({ handle, password, forceReset }) =>
+			apiClient
+				.post("/admin/users")
+				.send({ handle, password, force_reset: forceReset })
+				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: userQueryKeys.lists() });
 		},
@@ -148,7 +173,8 @@ export function useCreateUser() {
 export function useFetchUser(userId: number) {
 	return useQuery<User>({
 		queryKey: userQueryKeys.detail(userId),
-		queryFn: () => getUser(userId),
+		queryFn: () =>
+			apiClient.get(`/admin/users/${userId}`).then((res) => res.body),
 	});
 }
 
@@ -160,7 +186,11 @@ export function useFetchUser(userId: number) {
 export function useUpdateUser() {
 	const queryClient = useQueryClient();
 	return useMutation<User, unknown, { userId: number; update: UserUpdate }>({
-		mutationFn: ({ userId, update }) => updateUser(userId, update),
+		mutationFn: ({ userId, update }) =>
+			apiClient
+				.patch(`/admin/users/${userId}`)
+				.send(update)
+				.then((res) => res.body),
 		onSuccess: (result) =>
 			queryClient.setQueryData(userQueryKeys.detail(result.id), result),
 	});
@@ -178,7 +208,11 @@ export function useSetAdministratorRole() {
 		ErrorResponse,
 		{ role: AdministratorRoleName; user_id: number }
 	>({
-		mutationFn: ({ role, user_id }) => setAdministratorRole(role, user_id),
+		mutationFn: ({ role, user_id }) =>
+			apiClient
+				.put(`/admin/users/${user_id}/role`)
+				.send({ role })
+				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: userQueryKeys.all() });
 		},
