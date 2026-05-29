@@ -30,6 +30,22 @@ This ordering is non-negotiable as long as Python is in production —
 TS code lagging the schema is fine, but Python lagging the schema
 breaks the deployed app.
 
+### Column defaults: use `.$defaultFn()`, never `.default()`
+
+SQLAlchemy's `mapped_column(default=...)` is a **Python-side** default
+applied by the ORM at insert time — it does *not* emit a `server_default`,
+so the real Postgres columns have **no** server-side `DEFAULT` (there are
+zero `server_default`s in the Python repo). Drizzle's `.default(value)`
+assumes the opposite: on insert it emits the SQL `DEFAULT` keyword and
+relies on the database to fill the column. Against these tables that
+yields `null` — a not-null violation on required columns, or a silent
+`null` on nullable ones.
+
+Mirror a Python-side default with `.$defaultFn(() => value)`, which
+injects the value client-side at insert time (the true analog of
+SQLAlchemy's `default=`) and stays out of the DDL. Reserve `.default()`
+for a column that genuinely has a `server_default` in Python.
+
 ## Domain ownership today
 
 Snapshot of where each resource's primary record lives, as of the

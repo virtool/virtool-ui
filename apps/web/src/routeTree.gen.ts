@@ -40,7 +40,6 @@ import { Route as AuthenticatedJobsJobIdRouteImport } from './routes/_authentica
 import { Route as AuthenticatedHmmsHmmIdRouteImport } from './routes/_authenticated/hmms/$hmmId'
 import { Route as AuthenticatedAdministrationSettingsRouteImport } from './routes/_authenticated/administration/settings'
 import { Route as AuthenticatedAdministrationGroupsRouteImport } from './routes/_authenticated/administration/groups'
-import { Route as AuthenticatedAdministrationAdministratorsRouteImport } from './routes/_authenticated/administration/administrators'
 import { Route as AuthenticatedAccountProfileRouteImport } from './routes/_authenticated/account/profile'
 import { Route as AuthenticatedAccountApiRouteImport } from './routes/_authenticated/account/api'
 import { Route as AuthenticatedRefsRefIdRouteRouteImport } from './routes/_authenticated/refs/$refId/route'
@@ -236,12 +235,6 @@ const AuthenticatedAdministrationGroupsRoute =
     path: '/groups',
     getParentRoute: () => AuthenticatedAdministrationRouteRoute,
   } as any)
-const AuthenticatedAdministrationAdministratorsRoute =
-  AuthenticatedAdministrationAdministratorsRouteImport.update({
-    id: '/administrators',
-    path: '/administrators',
-    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
-  } as any)
 const AuthenticatedAccountProfileRoute =
   AuthenticatedAccountProfileRouteImport.update({
     id: '/profile',
@@ -401,7 +394,6 @@ export interface FileRoutesByFullPath {
   '/refs/$refId': typeof AuthenticatedRefsRefIdRouteRouteWithChildren
   '/account/api': typeof AuthenticatedAccountApiRoute
   '/account/profile': typeof AuthenticatedAccountProfileRoute
-  '/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
   '/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
   '/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
   '/hmms/$hmmId': typeof AuthenticatedHmmsHmmIdRoute
@@ -450,7 +442,6 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/account/api': typeof AuthenticatedAccountApiRoute
   '/account/profile': typeof AuthenticatedAccountProfileRoute
-  '/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
   '/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
   '/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
   '/hmms/$hmmId': typeof AuthenticatedHmmsHmmIdRoute
@@ -506,7 +497,6 @@ export interface FileRoutesById {
   '/_authenticated/refs/$refId': typeof AuthenticatedRefsRefIdRouteRouteWithChildren
   '/_authenticated/account/api': typeof AuthenticatedAccountApiRoute
   '/_authenticated/account/profile': typeof AuthenticatedAccountProfileRoute
-  '/_authenticated/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
   '/_authenticated/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
   '/_authenticated/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
   '/_authenticated/hmms/$hmmId': typeof AuthenticatedHmmsHmmIdRoute
@@ -565,7 +555,6 @@ export interface FileRouteTypes {
     | '/refs/$refId'
     | '/account/api'
     | '/account/profile'
-    | '/administration/administrators'
     | '/administration/groups'
     | '/administration/settings'
     | '/hmms/$hmmId'
@@ -614,7 +603,6 @@ export interface FileRouteTypes {
     | '/'
     | '/account/api'
     | '/account/profile'
-    | '/administration/administrators'
     | '/administration/groups'
     | '/administration/settings'
     | '/hmms/$hmmId'
@@ -669,7 +657,6 @@ export interface FileRouteTypes {
     | '/_authenticated/refs/$refId'
     | '/_authenticated/account/api'
     | '/_authenticated/account/profile'
-    | '/_authenticated/administration/administrators'
     | '/_authenticated/administration/groups'
     | '/_authenticated/administration/settings'
     | '/_authenticated/hmms/$hmmId'
@@ -938,13 +925,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdministrationGroupsRouteImport
       parentRoute: typeof AuthenticatedAdministrationRouteRoute
     }
-    '/_authenticated/administration/administrators': {
-      id: '/_authenticated/administration/administrators'
-      path: '/administrators'
-      fullPath: '/administration/administrators'
-      preLoaderRoute: typeof AuthenticatedAdministrationAdministratorsRouteImport
-      parentRoute: typeof AuthenticatedAdministrationRouteRoute
-    }
     '/_authenticated/account/profile': {
       id: '/_authenticated/account/profile'
       path: '/profile'
@@ -1117,7 +1097,6 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdministrationRouteRouteChildren {
-  AuthenticatedAdministrationAdministratorsRoute: typeof AuthenticatedAdministrationAdministratorsRoute
   AuthenticatedAdministrationGroupsRoute: typeof AuthenticatedAdministrationGroupsRoute
   AuthenticatedAdministrationSettingsRoute: typeof AuthenticatedAdministrationSettingsRoute
   AuthenticatedAdministrationIndexRoute: typeof AuthenticatedAdministrationIndexRoute
@@ -1127,8 +1106,6 @@ interface AuthenticatedAdministrationRouteRouteChildren {
 
 const AuthenticatedAdministrationRouteRouteChildren: AuthenticatedAdministrationRouteRouteChildren =
   {
-    AuthenticatedAdministrationAdministratorsRoute:
-      AuthenticatedAdministrationAdministratorsRoute,
     AuthenticatedAdministrationGroupsRoute:
       AuthenticatedAdministrationGroupsRoute,
     AuthenticatedAdministrationSettingsRoute:

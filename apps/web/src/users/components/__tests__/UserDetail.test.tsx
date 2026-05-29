@@ -1,13 +1,16 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiListGroups } from "@tests/api/groups";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeGroup } from "@tests/fake/groups";
 import {
-	createFakeUser,
 	mockApiEditUser,
 	mockApiGetUser,
-} from "@tests/fake/user";
+	mockApiListAdministratorRoles,
+	mockApiSetAdministratorRole,
+} from "@tests/api/users";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { administratorRoles } from "@tests/fake/administrator";
+import { createFakeGroup } from "@tests/fake/groups";
+import { createFakeUser } from "@tests/fake/user";
 import { renderWithProviders } from "@tests/setup";
 import UserDetail from "@users/components/UserDetail";
 import type { User } from "@users/types";
@@ -274,6 +277,54 @@ describe("<UserDetail />", () => {
 			expect(screen.getByLabelText("create_sample:true")).toBeInTheDocument();
 			expect(screen.getByLabelText("remove_file:false")).toBeInTheDocument();
 			expect(screen.getByLabelText("upload_file:false")).toBeInTheDocument();
+
+			scope.done();
+		});
+	});
+
+	describe("<UserAdministratorRole />", () => {
+		beforeEach(() => {
+			mockApiListGroups(groups);
+			mockApiGetAccount(
+				createFakeAccount({ id: 1, administrator_role: "full" }),
+			);
+			mockApiListAdministratorRoles(administratorRoles);
+		});
+
+		it("shows the role selector when managing another user", async () => {
+			const target = createFakeUser({ id: 2, administrator_role: null });
+			mockApiGetUser(target.id, target);
+
+			renderWithProviders(<UserDetail userId={target.id} />);
+
+			expect(await screen.findByText("Administrator Role")).toBeInTheDocument();
+			expect(screen.getByText("Select administrator role")).toBeInTheDocument();
+		});
+
+		it("lets a full administrator remove a user's role", async () => {
+			const target = createFakeUser({ id: 2, administrator_role: "users" });
+			mockApiGetUser(target.id, target);
+			const scope = mockApiSetAdministratorRole(target);
+
+			renderWithProviders(<UserDetail userId={target.id} />);
+
+			await userEvent.click(
+				await screen.findByRole("button", {
+					name: "remove administrator role",
+				}),
+			);
+
+			await waitFor(() => scope.done());
+		});
+
+		it("is hidden for a full administrator viewing their own account", async () => {
+			const self = createFakeUser({ id: 1, administrator_role: "full" });
+			const scope = mockApiGetUser(self.id, self);
+
+			renderWithProviders(<UserDetail userId={self.id} />);
+
+			expect(await screen.findByText("Change Password")).toBeInTheDocument();
+			expect(screen.queryByText("Administrator Role")).not.toBeInTheDocument();
 
 			scope.done();
 		});

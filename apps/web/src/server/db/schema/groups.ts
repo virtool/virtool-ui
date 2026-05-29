@@ -45,7 +45,9 @@ export const userGroups = pgTable(
 		userId: integer("user_id")
 			.notNull()
 			.references(() => users.id, { onDelete: "cascade" }),
-		primary: boolean("primary").default(false).notNull(),
+		primary: boolean("primary")
+			.$defaultFn(() => false)
+			.notNull(),
 	},
 	(table) => [primaryKey({ columns: [table.groupId, table.userId] })],
 );
