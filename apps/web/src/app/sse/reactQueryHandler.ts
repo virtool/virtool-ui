@@ -10,7 +10,7 @@ import { referenceQueryKeys } from "@references/queries";
 import { samplesQueryKeys } from "@samples/queries";
 import type { QueryClient } from "@tanstack/react-query";
 import { taskQueryKeys } from "@tasks/queries";
-import { fileQueryKeys } from "@/uploads/queries";
+import { fileQueryKeys } from "@uploads/queries";
 import type { SseDomain, SseMessage } from "./schema";
 
 type KeyFactory = {

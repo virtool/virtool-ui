@@ -1,6 +1,6 @@
 import { getTask } from "@server/tasks/functions";
 import { useQuery } from "@tanstack/react-query";
-import { type Task, TaskSchema } from "./types";
+import { type ServerTask, TaskSchema } from "./types";
 
 /**
  * Factory object for generating task query keys
@@ -22,13 +22,13 @@ export const taskQueryKeys = {
  * @param seed - Nested task data to seed the cache with
  * @returns Query results containing the task
  */
-export function useFetchTask(taskId: number, seed?: Task) {
+export function useFetchTask(taskId: number, seed?: ServerTask) {
 	return useQuery({
 		queryKey: taskQueryKeys.detail(taskId),
 		queryFn: () => getTask({ data: { taskId } }),
 		select: TaskSchema.parse,
 		enabled: Number.isInteger(taskId),
-		initialData: seed,
+		initialData: seed ? TaskSchema.parse(seed) : undefined,
 		staleTime: seed ? Number.POSITIVE_INFINITY : undefined,
 	});
 }
