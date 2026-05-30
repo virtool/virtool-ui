@@ -44,7 +44,7 @@
 		"superagent": "^8.0.9",
 		"tailwind-merge": "^3.5.0",
 		"zod": "^4.3.5",
-		"zustand": "^5.0.13"
+		"zustand": "^5.0.14"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^10.4.0",
