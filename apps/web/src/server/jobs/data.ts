@@ -144,7 +144,7 @@ export async function findJobs(
 				.innerJoin(users, eq(jobs.user_id, users.id))
 				.where(stateFilter)
 				.orderBy(desc(jobs.created_at))
-				.offset(page > 1 ? (page - 1) * perPage : 0)
+				.offset((page - 1) * perPage)
 				.limit(perPage),
 		]);
 
