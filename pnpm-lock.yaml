@@ -136,8 +136,8 @@ importers:
         specifier: ^1.166.13
         version: 1.166.13(@tanstack/react-router@1.170.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@tanstack/router-core@1.170.0)(csstype@3.2.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@testcontainers/mongodb':
-        specifier: ^12.0.0
-        version: 12.0.0
+        specifier: ^12.0.1
+        version: 12.0.1
       '@testcontainers/postgresql':
         specifier: ^12.0.1
         version: 12.0.1
@@ -1988,8 +1988,8 @@ packages:
     resolution: {integrity: sha512-uhOeFyxLcU41HzvrxsGpiWdcMbScY1EDgbZ5K7DVRMYInbLYWAC0EA/kx9wXAoSM8q82bUG2hRl8+EAjE6XAbA==}
     engines: {node: '>=20.19'}
 
-  '@testcontainers/mongodb@12.0.0':
-    resolution: {integrity: sha512-jX1gHNPx4Ccr2mvl1mvgB67CpxQVXHtuB+zxcNw5isA/+SELcEmzNIEB6nMB6Ar58RMCXNQbxnfsYCq+dT+esw==}
+  '@testcontainers/mongodb@12.0.1':
+    resolution: {integrity: sha512-tPIxN9blYp/UIyiTAgv/j9tDDQzysDBORvMbLbtODEaaudnh0lXJMu+u7SJpoD0rg+0VSaT23U1D413yMP9GsQ==}
 
   '@testcontainers/postgresql@12.0.1':
     resolution: {integrity: sha512-6SyyduUM6lTAo4UwKG1aCochP6wTe0k7/W/m5uODZQMUrV3STk6/28Km3474JLGZdw/P793BUEF2IeU7rDyoEg==}
@@ -6243,7 +6243,7 @@ snapshots:
 
   '@tanstack/virtual-file-routes@1.162.0': {}
 
-  '@testcontainers/mongodb@12.0.0':
+  '@testcontainers/mongodb@12.0.1':
     dependencies:
       compare-versions: 6.1.1
       testcontainers: 12.0.1
