@@ -43,6 +43,6 @@ export const getJob = createServerFn({ method: "GET" })
 		try {
 			return await getJobImpl(db, data.jobId);
 		} catch (err) {
-			rethrowAsHttp(err);
+			await rethrowAsHttp(err);
 		}
 	});

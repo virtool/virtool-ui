@@ -114,7 +114,7 @@ export async function findJobs(
 	// caller needs to scope jobs by user.
 	const stateFilter = states.length ? inArray(jobs.state, states) : undefined;
 
-	const [countRows, [{ value: totalCount }], [{ value: foundCount }], rows] =
+	const [countRows, [{ value: totalCount }], foundCountResult, rows] =
 		await Promise.all([
 			db
 				.select({
@@ -125,7 +125,11 @@ export async function findJobs(
 				.from(jobs)
 				.groupBy(jobs.state, jobs.workflow),
 			db.select({ value: count() }).from(jobs),
-			db.select({ value: count() }).from(jobs).where(stateFilter),
+			// Without a state filter the found count equals the total count, so
+			// skip the redundant query and reuse totalCount below.
+			stateFilter
+				? db.select({ value: count() }).from(jobs).where(stateFilter)
+				: undefined,
 			db
 				.select({
 					id: jobs.id,
@@ -143,6 +147,8 @@ export async function findJobs(
 				.offset((page - 1) * perPage)
 				.limit(perPage),
 		]);
+
+	const foundCount = foundCountResult ? foundCountResult[0].value : totalCount;
 
 	const items = rows.map((row) => ({
 		id: row.id,
