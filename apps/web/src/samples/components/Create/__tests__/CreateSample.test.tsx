@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiListGroups } from "@tests/api/groups";
 import { mockApiGetAccount } from "@tests/api/account";
+import { mockApiListGroups } from "@tests/api/groups";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { createFakeLabel } from "@tests/fake/labels";
