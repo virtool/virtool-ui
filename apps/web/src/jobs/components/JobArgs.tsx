@@ -57,7 +57,7 @@ type BuildIndexRowsProps = {
 	ref_id: string;
 };
 
-/** Rows showing important arguments when running an "build_index" workflow. */
+/** Rows showing important arguments when running a "build_index" workflow. */
 function BuildIndexRows({ index_id, ref_id }: BuildIndexRowsProps) {
 	return (
 		<>

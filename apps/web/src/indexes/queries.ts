@@ -71,12 +71,14 @@ export function useListIndexes(ready: boolean) {
  * Fetches a single index
  *
  * @param indexId - The id of the index to fetch
+ * @param enabled - Whether the query should run
  * @returns A single index
  */
-export function useFetchIndex(indexId: string) {
+export function useFetchIndex(indexId: string, enabled = true) {
 	return useQuery<Index, ErrorResponse>({
 		queryKey: indexQueryKeys.detail(indexId),
 		queryFn: () => apiClient.get(`/indexes/${indexId}`).then((res) => res.body),
+		enabled: enabled && Boolean(indexId),
 	});
 }
 

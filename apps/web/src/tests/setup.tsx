@@ -20,6 +20,7 @@ import { createContext, type ReactNode, useContext, useState } from "react";
 import { beforeEach, vi } from "vitest";
 import { routeTree } from "@/routeTree.gen";
 import { groupServerFnMocks } from "./api/groups";
+import { jobServerFnMocks } from "./api/jobs";
 import { userServerFnMocks } from "./api/users";
 import { createFakeAccount } from "./fake/account";
 
@@ -31,12 +32,19 @@ vi.mock("@server/users/functions", async () => {
 	const { userServerFnMocks } = await import("./api/users");
 	return userServerFnMocks;
 });
+vi.mock("@server/jobs/functions", async () => {
+	const { jobServerFnMocks } = await import("./api/jobs");
+	return jobServerFnMocks;
+});
 
 beforeEach(() => {
 	for (const fn of Object.values(groupServerFnMocks)) {
 		fn.mockReset();
 	}
-	for (const fn of Object.values(userServerFnMocks)) {
+	for (const fn of [
+		...Object.values(userServerFnMocks),
+		...Object.values(jobServerFnMocks),
+	]) {
 		fn.mockReset();
 		// Default to a pending promise so an un-stubbed query renders its loading
 		// state instead of resolving to `undefined`.
