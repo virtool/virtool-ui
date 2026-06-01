@@ -5,6 +5,7 @@ import NotFound from "@base/NotFound";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import { useFetchIndex } from "@indexes/queries";
 import { getRouteApi } from "@tanstack/react-router";
 import Alert from "@/base/Alert";
 import RelativeTime, { useRelativeTime } from "@/base/RelativeTime";
@@ -51,6 +52,18 @@ export default function JobDetail() {
 	const numericJobId = Number(jobId);
 	const { data, isPending, error } = useFetchJob(numericJobId);
 
+	// build_index jobs reference an index but not its reference, so the
+	// reference id is resolved from the index alongside the job — keeping both
+	// fetches under the same loading gate.
+	const indexId =
+		data?.workflow === "build_index"
+			? (data.args.index_id as string)
+			: undefined;
+	const { data: index, isPending: isIndexPending } = useFetchIndex(
+		indexId ?? "",
+		Boolean(indexId),
+	);
+
 	if (!Number.isInteger(numericJobId)) {
 		return <NotFound />;
 	}
@@ -62,12 +75,13 @@ export default function JobDetail() {
 		throw error;
 	}
 
-	if (isPending) {
+	if (isPending || (indexId && isIndexPending)) {
 		return <LoadingPlaceholder />;
 	}
 
 	const color = getAlertColor(data.state);
 	const workflow = getWorkflowDisplayName(data.workflow);
+	const args = index ? { ...data.args, ref_id: index.reference.id } : data.args;
 
 	return (
 		<ContainerNarrow>
@@ -75,7 +89,7 @@ export default function JobDetail() {
 				<ViewHeaderTitle>{workflow}</ViewHeaderTitle>
 				<ViewHeaderAttribution time={data.createdAt} user={data.user.handle} />
 			</ViewHeader>
-			<JobArgs workflow={data.workflow} args={data.args} />
+			<JobArgs workflow={data.workflow} args={args} />
 			{data.state === "pending" ? (
 				<PendingJobAlert createdAt={data.createdAt} />
 			) : (
