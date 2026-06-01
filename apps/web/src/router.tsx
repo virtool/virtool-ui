@@ -9,8 +9,21 @@ export function getRouter() {
 		defaultOptions: {
 			queries: {
 				retry: (failureCount: number, error: any) => {
+					// Superagent (legacy Python API) errors carry the HTTP status here.
 					const status = error.response?.status;
 					if ([401, 403, 404].includes(status)) {
+						return false;
+					}
+					// TanStack Start server-function errors cross the boundary as plain
+					// `Error`s with only `name`/`message` preserved — the status set via
+					// `setResponseStatus` is not attached. Match the auth errors by name
+					// so a 401/403 (e.g. after logout) rejects immediately instead of
+					// retrying ~4× while the screen sits blank before the route can
+					// bounce to /login.
+					if (
+						error.name === "UnauthorizedError" ||
+						error.name === "ForbiddenError"
+					) {
 						return false;
 					}
 					return failureCount <= 3;
