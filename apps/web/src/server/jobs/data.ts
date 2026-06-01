@@ -12,21 +12,17 @@ import {
 import { users } from "../db/schema/users";
 import { AppError } from "../errors";
 
-/** One of a job's lifecycle states. */
-export type JobState =
-	| "cancelled"
-	| "failed"
-	| "pending"
-	| "running"
-	| "succeeded";
-
-const JOB_STATES: JobState[] = [
+/** The canonical list of a job's lifecycle states. */
+export const JOB_STATES = [
 	"cancelled",
 	"failed",
 	"pending",
 	"running",
 	"succeeded",
-];
+] as const;
+
+/** One of a job's lifecycle states. */
+export type JobState = (typeof JOB_STATES)[number];
 
 /** A job as it appears in a search result list. */
 export type JobMinimal = {

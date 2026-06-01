@@ -5,16 +5,11 @@ import { db } from "../db/pg";
 import {
 	findJobs as findJobsImpl,
 	getJob as getJobImpl,
+	JOB_STATES,
 	JobNotFoundError,
 } from "./data";
 
-const jobStateSchema = z.enum([
-	"cancelled",
-	"failed",
-	"pending",
-	"running",
-	"succeeded",
-]);
+const jobStateSchema = z.enum(JOB_STATES);
 
 const findJobsSchema = z.object({
 	page: z.number().int().min(1).default(1),
