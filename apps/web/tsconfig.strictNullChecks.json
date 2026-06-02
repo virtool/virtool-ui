@@ -1,7 +1,8 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "noEmit": true
     },
-    "include": ["src/app/types.ts"]
+    "include": ["src/**/*.d.ts", "src/app/types.ts"]
 }
