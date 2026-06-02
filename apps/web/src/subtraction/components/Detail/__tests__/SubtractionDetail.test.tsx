@@ -89,7 +89,7 @@ describe("<SubtractionDetail />", () => {
 		scope.done();
 	});
 
-	it("should render file id when name not defined", async () => {
+	it("should render file id when name is empty", async () => {
 		const subtraction = createFakeSubtraction({
 			file: { id: 999, name: "" },
 		});

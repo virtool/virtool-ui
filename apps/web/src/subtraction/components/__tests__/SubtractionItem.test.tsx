@@ -68,7 +68,7 @@ describe("<SubtractionItem />", () => {
 		expect(screen.getByText("1 year ago")).toBeInTheDocument();
 	});
 
-	it("should correctly render subtractions where jobs=null", async () => {
+	it("should correctly render subtractions where job is absent", async () => {
 		props.job = undefined;
 		props.ready = false;
 

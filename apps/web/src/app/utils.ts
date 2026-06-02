@@ -145,7 +145,12 @@ export function getSessionStorage(key: string): object | null {
 		return null;
 	}
 
-	return JSON.parse(item);
+	try {
+		const parsed = JSON.parse(item);
+		return typeof parsed === "object" ? parsed : null;
+	} catch {
+		return null;
+	}
 }
 
 /**

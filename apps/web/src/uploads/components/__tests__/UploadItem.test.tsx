@@ -37,6 +37,7 @@ describe("<UploadItem />", () => {
 
 		renderWithProviders(<UploadItem {...props} />);
 
+		expect(screen.getByText(/Retrieved/)).toBeInTheDocument();
 		expect(screen.getByText(new RegExp(props.name))).toBeInTheDocument();
 		expect(screen.getByText("10.0 B")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "remove" })).toBeInTheDocument();
