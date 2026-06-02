@@ -9,7 +9,8 @@
 		"develop": "vite",
 		"start": "node scripts/check-api.mjs && node .output/server/index.mjs",
 		"test": "TZ=UTC vitest",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"typecheck:strict": "tsc -p tsconfig.strictNullChecks.json"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^5.4.0",
