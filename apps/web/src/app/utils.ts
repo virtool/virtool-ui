@@ -69,7 +69,7 @@ export function formatIsolateName(isolate: object): string {
 
 	return sourceType === "unknown"
 		? "Unnamed"
-		: `${capitalize(sourceType)} ${sourceName}`;
+		: `${capitalize(sourceType || "")} ${sourceName || ""}`;
 }
 
 /**
@@ -138,7 +138,7 @@ export function setSessionStorage(key: string, data: object) {
 /**
  * Return the object stored in session storage at the given key
  */
-export function getSessionStorage(key: string): object {
+export function getSessionStorage(key: string): object | null {
 	const item = window.sessionStorage.getItem(key);
 
 	if (item === null) {

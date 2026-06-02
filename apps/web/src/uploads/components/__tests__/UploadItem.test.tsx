@@ -23,9 +23,10 @@ describe("<UploadItem />", () => {
 	});
 
 	it("should render", () => {
-		renderWithProviders(<UploadItem {...props} />);
+		const user = { id: 1, handle: "bill" };
+		renderWithProviders(<UploadItem {...props} user={user} />);
 
-		expect(screen.getByText(new RegExp(props.user.handle))).toBeInTheDocument();
+		expect(screen.getByText(new RegExp(user.handle))).toBeInTheDocument();
 		expect(screen.getByText(new RegExp(props.name))).toBeInTheDocument();
 		expect(screen.getByText("10.0 B")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "remove" })).toBeInTheDocument();

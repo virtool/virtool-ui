@@ -35,7 +35,7 @@ function Alert({
 		<div
 			className={cn(
 				"rounded-md shadow-sm font-medium mb-4 overflow-hidden",
-				alertColorStyles[color] ?? defaultColorStyle,
+				(color && alertColorStyles[color]) ?? defaultColorStyle,
 				outerClassName,
 			)}
 		>

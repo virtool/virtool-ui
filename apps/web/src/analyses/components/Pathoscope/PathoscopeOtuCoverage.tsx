@@ -38,7 +38,11 @@ type OtuCoverageProps = {
 export default function PathoscopeOtuCoverage({ filled }: OtuCoverageProps) {
 	const [ref, { width }] = useElementSize<HTMLDivElement>();
 
-	useLayoutEffect(() => draw(ref.current, filled, width));
+	useLayoutEffect(() => {
+		if (ref.current) {
+			draw(ref.current, filled, width);
+		}
+	});
 
 	return <div className="bg-blue-50 pt-2" ref={ref} />;
 }

@@ -14,7 +14,7 @@ import type { HMMInstalled, Hmm, HmmSearchResults } from "./types";
 export const hmmQueryKeys = {
 	all: () => ["hmm"] as const,
 	lists: () => ["hmm", "list"] as const,
-	list: (filters: Array<string | number | boolean | string[]>) =>
+	list: (filters: Array<string | number | boolean | string[] | undefined>) =>
 		["hmm", "list", ...filters] as const,
 	details: () => ["hmm", "details"] as const,
 	detail: (hmmId: string) => ["hmm", "details", hmmId] as const,

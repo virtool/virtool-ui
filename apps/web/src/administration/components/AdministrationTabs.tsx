@@ -4,7 +4,7 @@ import type { AdministratorRoleName } from "../types";
 import { hasSufficientAdminRole } from "../utils";
 
 type AdministratorTabsProps = {
-	administratorRole: AdministratorRoleName;
+	administratorRole: AdministratorRoleName | null;
 };
 
 export default function AdministrationTabs({

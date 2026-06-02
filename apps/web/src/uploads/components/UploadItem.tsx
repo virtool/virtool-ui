@@ -13,7 +13,7 @@ export type UploadItemProps = {
 	name: string;
 	size: number;
 	uploaded_at: string;
-	user: UserNested;
+	user: UserNested | null;
 };
 
 export default function UploadItem({

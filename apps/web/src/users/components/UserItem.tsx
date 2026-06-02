@@ -8,7 +8,7 @@ import type { GroupMinimal } from "@groups/types";
 import type { ReactElement } from "react";
 
 type UserItemProps = {
-	administrator_role: AdministratorRoleName;
+	administrator_role: AdministratorRoleName | null;
 	handle: string;
 	id: number;
 	/** The primary group assigned to the user */

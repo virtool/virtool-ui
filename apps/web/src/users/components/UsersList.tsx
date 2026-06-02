@@ -31,7 +31,7 @@ export default function UsersList({
 		status === "active",
 	);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 

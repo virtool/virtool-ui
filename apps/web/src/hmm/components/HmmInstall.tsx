@@ -32,7 +32,7 @@ export function HmmInstall() {
 		}
 	}, [taskComplete, queryClient]);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 

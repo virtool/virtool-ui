@@ -58,6 +58,20 @@ export default function SubtractionCreate({
 
 	const mutation = useCreateSubtraction();
 
+	if (isPending || !files) {
+		return (
+			<Dialog open={open} onOpenChange={() => setOpen(false)}>
+				<DialogContent size="lg">
+					<DialogTitle>Create Subtraction</DialogTitle>
+					<DialogDescription>
+						Create a new subtraction from a FASTA file.
+					</DialogDescription>
+					<LoadingPlaceholder className="mt-9" />
+				</DialogContent>
+			</Dialog>
+		);
+	}
+
 	function onSubmit({ name, nickname, uploadId }: FormValues) {
 		mutation.mutate(
 			{ name, nickname, uploadId: uploadId[0] },
@@ -77,54 +91,50 @@ export default function SubtractionCreate({
 				<DialogDescription>
 					Create a new subtraction from a FASTA file.
 				</DialogDescription>
-				{isPending ? (
-					<LoadingPlaceholder className="mt-9" />
-				) : (
-					<form onSubmit={handleSubmit(onSubmit)}>
-						<RestoredAlert
-							hasRestored={hasRestored}
-							name="subtraction"
-							resetForm={reset}
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<RestoredAlert
+						hasRestored={hasRestored}
+						name="subtraction"
+						resetForm={reset}
+					/>
+					<InputGroup>
+						<InputLabel htmlFor="name">Name</InputLabel>
+						<InputSimple
+							id="name"
+							{...register("name", {
+								required: "A name is required",
+							})}
 						/>
-						<InputGroup>
-							<InputLabel htmlFor="name">Name</InputLabel>
-							<InputSimple
-								id="name"
-								{...register("name", {
-									required: "A name is required",
-								})}
+						<InputError>{errors.name?.message}</InputError>
+					</InputGroup>
+
+					<InputGroup>
+						<InputLabel htmlFor="nickname">Nickname</InputLabel>
+						<InputSimple id="nickname" {...register("nickname")} />
+					</InputGroup>
+
+					<PseudoLabel>Files</PseudoLabel>
+					<Controller
+						name="uploadId"
+						control={control}
+						render={({ field: { onChange, value } }) => (
+							<SubtractionFileSelector
+								onClick={onChange}
+								error={errors.uploadId?.message ?? ""}
+								files={files}
+								isFetchingNextPage={isFetchingNextPage}
+								fetchNextPage={fetchNextPage}
+								isPending={isPending}
+								foundCount={files.pages[0].found_count}
+								selected={value}
 							/>
-							<InputError>{errors.name?.message}</InputError>
-						</InputGroup>
-
-						<InputGroup>
-							<InputLabel htmlFor="nickname">Nickname</InputLabel>
-							<InputSimple id="nickname" {...register("nickname")} />
-						</InputGroup>
-
-						<PseudoLabel>Files</PseudoLabel>
-						<Controller
-							name="uploadId"
-							control={control}
-							render={({ field: { onChange, value } }) => (
-								<SubtractionFileSelector
-									onClick={onChange}
-									error={errors.uploadId?.message}
-									files={files}
-									isFetchingNextPage={isFetchingNextPage}
-									fetchNextPage={fetchNextPage}
-									isPending={isPending}
-									foundCount={files.pages[0].found_count}
-									selected={value}
-								/>
-							)}
-							rules={{ required: "Please select a file" }}
-						/>
-						<DialogFooter>
-							<SaveButton />
-						</DialogFooter>
-					</form>
-				)}
+						)}
+						rules={{ required: "Please select a file" }}
+					/>
+					<DialogFooter>
+						<SaveButton />
+					</DialogFooter>
+				</form>
 			</DialogContent>
 		</Dialog>
 	);

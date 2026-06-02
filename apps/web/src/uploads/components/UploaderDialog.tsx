@@ -26,7 +26,7 @@ export default function UploaderDialog({
 	remaining,
 	speed,
 	uploads,
-}: UploaderDialogProps): ReactElement {
+}: UploaderDialogProps): ReactElement | null {
 	if (uploads.length === 0) {
 		return null;
 	}

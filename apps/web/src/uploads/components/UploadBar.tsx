@@ -35,13 +35,15 @@ export function UploadBar({
 	onDrop,
 	regex,
 }: UploadBarProps) {
-	function validator(file: File): FileError {
+	function validator(file: File): FileError | null {
 		if (regex && !regex.test(file.name)) {
 			return {
 				code: "file-invalid-type",
 				message: "Invalid file type",
 			};
 		}
+
+		return null;
 	}
 
 	const {

@@ -14,7 +14,7 @@ export default function InputGroup({
 	error,
 }: InputGroupProps) {
 	return (
-		<InputContext.Provider value={error}>
+		<InputContext.Provider value={error ?? ""}>
 			<div className={cn(className, "mb-4", "pb-2")}>{children}</div>
 		</InputContext.Provider>
 	);
