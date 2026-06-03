@@ -52,7 +52,7 @@ export default function QuickAnalyze({
 		}
 	}, [open, samples, setOpen]);
 
-	if (isPending) {
+	if (isPending || !hmms) {
 		return null;
 	}
 

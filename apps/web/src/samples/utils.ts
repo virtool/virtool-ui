@@ -24,5 +24,5 @@ export function checkCanDeleteSample(ready: boolean, job?: JobNested): boolean {
 	if (ready) {
 		return true;
 	}
-	return job.state === "failed" || job.state === "cancelled";
+	return job?.state === "failed" || job?.state === "cancelled";
 }

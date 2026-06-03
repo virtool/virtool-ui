@@ -12,7 +12,7 @@ export function useCheckCanEditSample(sampleId: string) {
 	const { data: account, isPending: isPendingAccount } = useFetchAccount();
 	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 
-	if (isPendingSample || isPendingAccount) {
+	if (isPendingSample || isPendingAccount || !sample || !account) {
 		return { hasPermission: false, isPending: true };
 	}
 

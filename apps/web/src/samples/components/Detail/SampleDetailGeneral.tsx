@@ -34,7 +34,7 @@ export default function SampleDetailGeneral({
 	const { data, isPending } = useFetchSample(sampleId);
 	const { data: job } = useFetchJob(data?.job?.id ?? Number.NaN, data?.job);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 
@@ -43,7 +43,7 @@ export default function SampleDetailGeneral({
 	return (
 		<div className="flex items-stretch">
 			<ContainerNarrow>
-				{!data.ready && (
+				{!data.ready && data.job && (
 					<BoxGroup>
 						<JobItem
 							id={data.job.id}
@@ -79,7 +79,7 @@ export default function SampleDetailGeneral({
 					</BoxGroupTable>
 				</BoxGroup>
 
-				{data.ready && (
+				{data.ready && quality && (
 					<BoxGroup>
 						<BoxGroupHeader>
 							<h2>Library</h2>

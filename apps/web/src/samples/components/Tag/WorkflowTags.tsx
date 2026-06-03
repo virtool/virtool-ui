@@ -1,6 +1,7 @@
 import { getWorkflowDisplayName } from "@app/utils";
 import Link from "@base/Link";
 import type { SampleWorkflows } from "@samples/types";
+import type { ReactElement } from "react";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import WorkflowTag from "./WorkflowTag";
 
@@ -20,7 +21,7 @@ type WorkflowTagsProps = {
  * @returns The workflow tags for a sample.
  */
 export default function WorkflowTags({ id, workflows }: WorkflowTagsProps) {
-	const workflowTags = Object.entries(workflows).reduce(
+	const workflowTags = Object.entries(workflows).reduce<ReactElement[]>(
 		(tags, [key, value]) => {
 			if (value === "complete" || value === "pending") {
 				tags.push(

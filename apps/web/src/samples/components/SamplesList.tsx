@@ -53,9 +53,9 @@ export default function SamplesList({
 	);
 	const { isPending: isPendingIndexes } = useListIndexes(true);
 
-	const [selected, setSelected] = useState([]);
+	const [selected, setSelected] = useState<string[]>([]);
 
-	if (isPendingSamples || isPendingIndexes) {
+	if (isPendingSamples || isPendingIndexes || !samples) {
 		return <LoadingPlaceholder />;
 	}
 

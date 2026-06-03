@@ -6,7 +6,7 @@ type SampleLabelProps = {
 	/** The class name being used for the component */
 	className?: string;
 	/** The color assigned to the label */
-	color: string;
+	color?: string;
 	/** The name of the label */
 	name: string;
 	/** The size variant */

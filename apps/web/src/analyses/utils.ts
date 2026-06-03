@@ -37,7 +37,7 @@ function calculateSequenceMinimumE(orfs: NuvsOrf[]) {
 	if (orfs.length) {
 		return min(
 			orfs.map((orf) =>
-				orf.hits.length ? minBy(orf.hits, "full_e").full_e : 0,
+				orf.hits.length ? (minBy(orf.hits, "full_e")?.full_e ?? 0) : 0,
 			),
 		);
 	}
@@ -149,10 +149,13 @@ export function mergeCoverage(
 	isolates: FormattedPathoscopeIsolate[],
 ): number[] {
 	const longest = maxBy(isolates, (isolate) => isolate.filled.length);
+	if (!longest) {
+		return [];
+	}
 	const coverages = isolates.map((isolate) => isolate.filled);
 
-	return longest.filled.map((_depth, index) =>
-		max(coverages.map((coverage) => coverage[index])),
+	return longest.filled.map(
+		(_depth, index) => max(coverages.map((coverage) => coverage[index])) ?? 0,
 	);
 }
 
@@ -184,10 +187,9 @@ export function formatPathoscopeData(detail): FormattedPathoscopeAnalysis {
 	const readCount = results.read_count;
 
 	const hits = results.hits.map((otu) => {
-		const isolateNames = [];
-
 		// Go through each isolate associated with the OTU, adding properties for weight, read count,
 		// median depth, and coverage. These values will be calculated from the sequences owned by each isolate.
+		const isolateNames: string[] = [];
 		const isolates = otu.isolates.map((isolate) => {
 			// Make a name for the isolate by joining the source type and name, eg. "Isolate" + "Q47".
 			const name = formatIsolateName(isolate);
@@ -317,12 +319,14 @@ function formatIimiData(detail: IimiAnalysis): FormattedIimiAnalysis {
 
 		const probability = hit.isolates.reduce(
 			(result: number, isolate: IimiIsolate) => {
-				return max([
-					result,
-					...isolate.sequences.map(
-						(sequence: IimiSequence) => sequence.probability,
-					),
-				]);
+				return (
+					max([
+						result,
+						...isolate.sequences.map(
+							(sequence: IimiSequence) => sequence.probability,
+						),
+					]) ?? 0
+				);
 			},
 			0,
 		);
@@ -375,7 +379,7 @@ export function convertRleToCoverage(
 	lengths: Array<number>,
 	rle: Array<number>,
 ): PositionMappedReadDepths {
-	const coverage = [];
+	const coverage: number[] = [];
 
 	for (let sharedIndex = 0; sharedIndex < lengths.length; sharedIndex++) {
 		const length = lengths[sharedIndex];
@@ -413,9 +417,9 @@ export function deriveTrustworthyRegions(
 	length: number,
 	untrustworthyRanges: [number, number][],
 ): [number, number][] {
-	const trustworthyRanges = [];
+	const trustworthyRanges: [number, number][] = [];
 	let start = 1;
-	let end;
+	let end: number;
 
 	untrustworthyRanges.forEach((range) => {
 		end = range[0];

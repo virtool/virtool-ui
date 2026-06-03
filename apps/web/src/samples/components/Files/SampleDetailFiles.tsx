@@ -15,7 +15,7 @@ export default function SampleDetailFiles() {
 	const { sampleId } = routeApi.useParams();
 	const { data, isPending } = useFetchSample(sampleId);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 
