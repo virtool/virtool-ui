@@ -7,7 +7,7 @@ import { IndexItemDescription } from "./IndexItemDescription";
 import { IndexItemIcon } from "./IndexItemIcon";
 
 type IndexItemProps = {
-	activeId: string;
+	activeId?: string;
 	index: IndexMinimal;
 	refId: string;
 };

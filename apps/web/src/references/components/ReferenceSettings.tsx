@@ -8,7 +8,7 @@ import { GlobalSourceTypes } from "./SourceTypes/GlobalSourceTypes";
 export default function ReferenceSettings() {
 	const { data, isPending } = useFetchSettings();
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 

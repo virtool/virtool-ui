@@ -40,7 +40,7 @@ export default function IsolateEditor() {
 		<IsolateItem
 			key={isolate.id}
 			isolate={isolate}
-			active={isolate.id === activeIsolate.id}
+			active={isolate.id === activeIsolate?.id}
 		/>
 	));
 
@@ -55,7 +55,7 @@ export default function IsolateEditor() {
 			</button>
 		) : null;
 
-	const body = isolateComponents.length ? (
+	const body = activeIsolate ? (
 		<div className="flex">
 			<ScrollArea>{isolateComponents}</ScrollArea>
 			<IsolateDetail

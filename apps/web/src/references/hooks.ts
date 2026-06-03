@@ -143,6 +143,10 @@ export function useCheckReferenceRight(
 		return { hasPermission: false, isPending: true };
 	}
 
+	if (!account || !reference) {
+		return { hasPermission: false, isPending: false };
+	}
+
 	if (account.administrator_role === "full") {
 		return { hasPermission: true, isPending: false };
 	}

@@ -16,7 +16,7 @@ export default function OtuSection() {
 	const { isPending: isPendingReference } = useFetchReference(refId);
 	const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
 
-	if (isPendingReference || isPendingOTU) {
+	if (isPendingReference || isPendingOTU || !otu) {
 		return <LoadingPlaceholder />;
 	}
 

@@ -34,7 +34,7 @@ export default function AddReferenceGroup({
 	const { data, isPending, isFetchingNextPage, fetchNextPage } =
 		useInfiniteFindGroups(25, term);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return null;
 	}
 

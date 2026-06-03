@@ -107,12 +107,12 @@ export type ReferenceMinimal = ReferenceNested & {
 	cloned_from: ReferenceClonedFrom | null;
 	created_at: string;
 	imported_from: File | null;
-	installed: ReferenceInstalled;
+	installed: ReferenceInstalled | null;
 	internal_control: string | null;
-	latest_build: ReferenceBuild;
+	latest_build: ReferenceBuild | null;
 	organism: string;
 	otu_count: number;
-	release: ReferenceRelease;
+	release: ReferenceRelease | null;
 	remotes_from: ReferenceRemotesFrom | null;
 	task: Task;
 	unbuilt_change_count: number;

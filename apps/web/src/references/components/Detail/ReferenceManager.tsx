@@ -19,7 +19,7 @@ export default function ReferenceManager() {
 	const { refId } = routeApi.useParams();
 	const { data: reference, isPending } = useFetchReference(refId);
 
-	if (isPending) {
+	if (isPending || !reference) {
 		return <LoadingPlaceholder />;
 	}
 

@@ -63,7 +63,7 @@ export default function SequenceSegmentField({
 	refId,
 	segments,
 }: SequenceSegmentFieldProps) {
-	const { control, setValue } = useFormContext<{ segment: string }>();
+	const { control, setValue } = useFormContext<{ segment: string | null }>();
 
 	if (hasSchema) {
 		const segmentOptions = segments.map((segment) => (

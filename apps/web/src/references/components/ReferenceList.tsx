@@ -44,7 +44,7 @@ export default function ReferenceList({
 }: ReferenceListProps) {
 	const { data, isPending } = useFindReferences(page, 25, find, archived);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 
