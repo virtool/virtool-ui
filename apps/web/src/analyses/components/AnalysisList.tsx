@@ -44,7 +44,13 @@ export default function AnalysesList({
 	const { isPending: isPendingSample } = useFetchSample(sampleId);
 	const { hasPermission: canCreate } = useCheckCanEditSample(sampleId);
 
-	if (isPendingAnalyses || isPendingHmms || isPendingSample) {
+	if (
+		isPendingAnalyses ||
+		isPendingHmms ||
+		isPendingSample ||
+		!analyses ||
+		!hmms
+	) {
 		return <LoadingPlaceholder />;
 	}
 

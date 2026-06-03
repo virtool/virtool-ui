@@ -32,7 +32,7 @@ function getBestHit(items) {
 
 function exportContigData(hits: FormattedNuvsHit[], sampleName: string) {
 	return hits.map((result) => {
-		const orfNames = result.orfs.reduce((names, orf) => {
+		const orfNames = result.orfs.reduce<string[]>((names, orf) => {
 			// Get the best hit for the current ORF.
 			if (orf.hits.length) {
 				const bestHit = getBestHit(orf.hits);
@@ -49,7 +49,7 @@ function exportContigData(hits: FormattedNuvsHit[], sampleName: string) {
 }
 
 function exportOrfData(hits: FormattedNuvsHit[], sampleName: string) {
-	return hits.reduce((lines, result) => {
+	return hits.reduce<string[]>((lines, result) => {
 		result.orfs.forEach((orf) => {
 			// Get the best hit for the current ORF.
 			if (orf.hits.length) {

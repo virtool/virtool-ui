@@ -9,7 +9,7 @@ function draw(element: HTMLElement, data: number[], width: number) {
 	const x = scaleLinear().range([0, width]).domain([0, data.length]);
 	const y = scaleLinear()
 		.range([height, 0])
-		.domain([0, max(data)]);
+		.domain([0, max(data) ?? 0]);
 
 	select(element).selectAll("*").remove();
 
