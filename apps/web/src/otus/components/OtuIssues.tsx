@@ -39,7 +39,11 @@ export default function OtuIssues({ isolates, issues }: OtuIssuesProps) {
 			// Get the entire isolate identified by isolate_id from the detail data.
 			const isolate = isolates.find((i) => i.id === isolateId);
 
-			return <li key={index}>{isolate && formatIsolateName(isolate)}</li>;
+			return (
+				<li key={index}>
+					{isolate ? formatIsolateName(isolate) : "Unknown isolate"}
+				</li>
+			);
 		});
 
 		errors.push(
@@ -60,7 +64,7 @@ export default function OtuIssues({ isolates, issues }: OtuIssuesProps) {
 				<li key={index}>
 					<span>
 						<em>{errorObject._id}</em> in isolate{" "}
-						<em>{isolate && formatIsolateName(isolate)}</em>
+						<em>{isolate ? formatIsolateName(isolate) : "Unknown isolate"}</em>
 					</span>
 				</li>
 			);
