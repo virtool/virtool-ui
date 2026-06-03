@@ -75,7 +75,7 @@ export default function ApiKeyCreate({
 			{ name, permissions },
 			{
 				onSuccess: (data) => {
-					setNewKey(data.key);
+					setNewKey(data.key ?? "");
 				},
 			},
 		);

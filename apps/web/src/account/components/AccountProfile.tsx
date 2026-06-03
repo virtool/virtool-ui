@@ -13,7 +13,7 @@ import AccountPassword from "./AccountPassword";
 export default function AccountProfile() {
 	const { data, isPending } = useFetchAccount();
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 

@@ -7,7 +7,7 @@ import Banners from "./Banners";
 export default function ServerSettings() {
 	const { data: settings, isPending: isPendingSettings } = useFetchSettings();
 
-	if (isPendingSettings) {
+	if (isPendingSettings || !settings) {
 		return <LoadingPlaceholder />;
 	}
 

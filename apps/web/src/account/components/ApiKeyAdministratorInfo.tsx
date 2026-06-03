@@ -8,7 +8,11 @@ import { useFetchAccount } from "../queries";
 export default function ApiKeyAdministratorInfo() {
 	const { data, isPending } = useFetchAccount();
 
-	if (!isPending && hasSufficientAdminRole("base", data.administrator_role)) {
+	if (
+		!isPending &&
+		data &&
+		hasSufficientAdminRole("base", data.administrator_role)
+	) {
 		return (
 			<Alert color="purple">
 				<div>
