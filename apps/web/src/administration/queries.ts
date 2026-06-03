@@ -229,7 +229,9 @@ export function useUpdateUser() {
 		mutationFn: ({ userId, update }) =>
 			updateUser({ data: { userId, ...update } }),
 		onSuccess: (result) => {
-			queryClient.setQueryData(userQueryKeys.detail(result.id), result);
+			if (result) {
+				queryClient.setQueryData(userQueryKeys.detail(result.id), result);
+			}
 			queryClient.invalidateQueries({ queryKey: userQueryKeys.lists() });
 		},
 	});

@@ -28,6 +28,8 @@ function getAlertColor(
 			return "green";
 		case "succeeded":
 			return "blue";
+		case "cancelled":
+			return "orange";
 	}
 }
 

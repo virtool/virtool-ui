@@ -51,7 +51,7 @@ export function FileManager({
 		25,
 	);
 
-	if (isPendingFiles || isPendingAccount) {
+	if (isPendingFiles || isPendingAccount || !account || !files) {
 		return <LoadingPlaceholder />;
 	}
 

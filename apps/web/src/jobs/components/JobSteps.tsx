@@ -4,7 +4,7 @@ import JobStepItem from "./JobStep";
 
 type JobStepsProps = {
 	state: JobState;
-	steps: JobStep[];
+	steps: JobStep[] | null;
 };
 
 export default function JobSteps({ state, steps }: JobStepsProps) {

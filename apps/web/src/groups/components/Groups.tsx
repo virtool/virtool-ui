@@ -35,9 +35,9 @@ export default function Groups() {
 		}
 	}
 
-	const { data: selectedGroup } = useFetchGroup(selectedGroupId);
+	const { data: selectedGroup } = useFetchGroup(selectedGroupId ?? 0);
 
-	if (isPendingGroups || (groups.length && !selectedGroup)) {
+	if (isPendingGroups || !groups || (groups.length && !selectedGroup)) {
 		return <LoadingPlaceholder className="mt-32" />;
 	}
 
@@ -53,7 +53,7 @@ export default function Groups() {
 				</Button>
 			</header>
 
-			{groups.length ? (
+			{groups.length && selectedGroup ? (
 				<Tabs.Root
 					value={activeValue}
 					onValueChange={(value) => setSelectedGroupId(Number(value))}

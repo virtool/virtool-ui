@@ -22,7 +22,7 @@ type HmmListProps = {
 export default function HmmList({ find, page, setSearch }: HmmListProps) {
 	const { data, isPending } = useListHmms(page, 25, find);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 

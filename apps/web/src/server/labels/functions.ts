@@ -65,7 +65,7 @@ export const getLabel = createServerFn({ method: "GET" })
 		try {
 			return await getLabelImpl(db, data.labelId);
 		} catch (err) {
-			rethrowAsHttp(err);
+			return rethrowAsHttp(err);
 		}
 	});
 
@@ -77,7 +77,7 @@ export const createLabel = createServerFn({ method: "POST" })
 			setResponseStatus(201);
 			return label;
 		} catch (err) {
-			rethrowAsHttp(err);
+			return rethrowAsHttp(err);
 		}
 	});
 
@@ -88,7 +88,7 @@ export const updateLabel = createServerFn({ method: "POST" })
 		try {
 			return await updateLabelImpl(db, labelId, normalizeValues(values));
 		} catch (err) {
-			rethrowAsHttp(err);
+			return rethrowAsHttp(err);
 		}
 	});
 
@@ -100,6 +100,6 @@ export const deleteLabel = createServerFn({ method: "POST" })
 			setResponseStatus(204);
 			return null;
 		} catch (err) {
-			rethrowAsHttp(err);
+			return rethrowAsHttp(err);
 		}
 	});

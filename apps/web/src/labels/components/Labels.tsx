@@ -24,7 +24,7 @@ export function Labels() {
 	const updateMutation = useUpdateLabel();
 	const removeMutation = useRemoveLabel();
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 

@@ -6,7 +6,7 @@ import { createFakeUserNested } from "@/tests/fake/user";
 import { SubtractionItem } from "../SubtractionItem";
 
 describe("<SubtractionItem />", () => {
-	let props: SubtractionMinimal | undefined;
+	let props: SubtractionMinimal;
 
 	beforeEach(() => {
 		const createdAt = new Date();
@@ -47,7 +47,9 @@ describe("<SubtractionItem />", () => {
 		"running",
 		"failed",
 	] as const)("should render progress bar for ", async (state) => {
-		props.job.state = state;
+		if (props.job) {
+			props.job.state = state;
+		}
 
 		await renderWithRouter(<SubtractionItem {...props} />);
 		expect(screen.getByRole("progressbar")).toBeInTheDocument();
@@ -61,13 +63,13 @@ describe("<SubtractionItem />", () => {
 		expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
 		expect(screen.queryByText("Complete")).not.toBeInTheDocument();
 		expect(
-			screen.getByText(`${props.user.handle} created`),
+			screen.getByText(`${props.user?.handle} created`),
 		).toBeInTheDocument();
 		expect(screen.getByText("1 year ago")).toBeInTheDocument();
 	});
 
-	it("should correctly render subtractions where jobs=null", async () => {
-		props.job = null;
+	it("should correctly render subtractions where job is absent", async () => {
+		props.job = undefined;
 		props.ready = false;
 
 		await renderWithRouter(<SubtractionItem {...props} />);

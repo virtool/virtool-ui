@@ -17,7 +17,7 @@ export const indexQueryKeys = {
 	list: (filters: Array<string | number | boolean>) =>
 		["indexes", "list", ...filters] as const,
 	infiniteLists: () => ["indexes", "list", "infinite"] as const,
-	infiniteList: (filters: Array<string | number | boolean>) =>
+	infiniteList: (filters: Array<string | number | boolean | undefined>) =>
 		["indexes", "list", "infinite", ...filters] as const,
 	details: () => ["indexes", "details"] as const,
 	detail: (id: string) => ["indexes", "detail", id] as const,

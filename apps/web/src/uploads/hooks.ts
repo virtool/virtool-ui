@@ -20,7 +20,7 @@ export function useValidateFiles(
 	);
 
 	useEffect(() => {
-		if (!isPending && selected.length) {
+		if (!isPending && data && selected.length) {
 			const items = data.pages.flatMap((page) => page.items);
 			const selectedFilesExist = selected.every((itemId) =>
 				items.some((item) => item.id === itemId),
@@ -34,13 +34,5 @@ export function useValidateFiles(
 				setSelected([]);
 			}
 		}
-	}, [
-		data,
-		selected.length,
-		hasNextPage,
-		setSelected,
-		selected.every,
-		isPending,
-		fetchNextPage,
-	]);
+	}, [data, selected, hasNextPage, setSelected, isPending, fetchNextPage]);
 }

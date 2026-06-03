@@ -16,7 +16,7 @@ export function drawSequencesChart(element, data, baseWidth) {
 	// Set up scales.
 	const y = scaleLinear()
 		.range([QUALITY_CHART_HEIGHT, 0])
-		.domain([0, max(data)]);
+		.domain([0, max(data) ?? 0]);
 
 	const x = scaleLinear().range([0, width]).domain([0, data.length]);
 

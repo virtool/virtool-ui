@@ -28,7 +28,7 @@ export default function UserDetail({ userId }: UserDetailProps) {
 
 	const mutation = useUpdateUser();
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 

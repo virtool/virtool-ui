@@ -16,7 +16,7 @@ import AboutDialog from "./AboutDialog";
 import { NavLink } from "./NavLink";
 
 type NavBarProps = {
-	administrator_role: AdministratorRoleName;
+	administrator_role: AdministratorRoleName | null;
 	handle: string;
 	setOpenDev?: (open: boolean) => void;
 };

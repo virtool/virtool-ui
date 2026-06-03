@@ -1,3 +1,4 @@
+import type { RefObject } from "react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 function subscribeToTime(callback: () => void) {
@@ -55,28 +56,25 @@ export function useDebouncedDraft<T>(
 	return [draft, setDraft];
 }
 
-function getSize(ref) {
-	return {
-		height: ref.current ? ref.current.offsetHeight : 0,
-		width: ref.current ? ref.current.offsetWidth : 0,
-	};
-}
-
 type Size = {
 	height: number;
 	width: number;
 };
 
 export function useElementSize<T extends HTMLElement>(): [
-	React.MutableRefObject<T>,
+	RefObject<T | null>,
 	Size,
 ] {
-	const ref = useRef(null);
+	const ref = useRef<T>(null);
 	const [size, setSize] = useState<Size>({ height: 0, width: 0 });
 
 	useEffect(() => {
 		function handleResize() {
-			setSize(getSize(ref));
+			const element = ref.current;
+			setSize({
+				height: element?.offsetHeight ?? 0,
+				width: element?.offsetWidth ?? 0,
+			});
 		}
 
 		handleResize();

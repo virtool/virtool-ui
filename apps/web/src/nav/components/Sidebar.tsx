@@ -2,10 +2,11 @@ import type { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import { useLocation } from "@tanstack/react-router";
 import { FolderOpen, List, Settings, Tag } from "lucide-react";
+import type { ReactNode } from "react";
 import SidebarLink from "./SidebarLink";
 
 type SidebarProps = {
-	administratorRole: AdministratorRoleName;
+	administratorRole: AdministratorRoleName | null;
 };
 
 /**
@@ -15,7 +16,7 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
 	const fullAdministrator = hasSufficientAdminRole("full", administratorRole);
 	const { pathname } = useLocation();
 
-	let links = null;
+	let links: ReactNode = null;
 
 	if (pathname.startsWith("/jobs")) {
 		links = (

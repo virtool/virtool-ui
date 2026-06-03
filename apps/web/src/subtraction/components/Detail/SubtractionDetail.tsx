@@ -56,7 +56,7 @@ export default function SubtractionDetail({
 		return <LoadingPlaceholder />;
 	}
 
-	if (!data.ready) {
+	if (!data.ready || !data.gc) {
 		return <LoadingPlaceholder message="Subtraction is still being imported" />;
 	}
 

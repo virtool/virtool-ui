@@ -11,6 +11,7 @@ function createBuildIndexJob(indexId: string): ServerJob {
 	return {
 		args: { index_id: indexId },
 		id: 123,
+		claimed_at: "2022-12-22T21:37:49.429000Z",
 		created_at: "2022-12-22T21:37:49.429000Z",
 		finished_at: "2022-12-22T21:38:49.429000Z",
 		progress: 100,

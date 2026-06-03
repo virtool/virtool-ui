@@ -23,7 +23,7 @@ export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
 	const { data, isPending } = useListGroups();
 	const mutation = useUpdateUser();
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 
