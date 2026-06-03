@@ -6,7 +6,7 @@ import Banner from "@banner/components/Banner";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Nav from "@nav/components/Nav";
 import Sidebar from "@nav/components/Sidebar";
-import UpdateBanner from "@nav/components/UpdateBanner";
+import UpdateToast from "@nav/components/UpdateToast";
 import type { QueryClient } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -95,8 +95,9 @@ function AuthenticatedLayout() {
 			<title>Virtool</title>
 			<meta charSet="utf-8" />
 
+			<UpdateToast />
+
 			<div className="bg-transparent fixed top-0 w-full z-50">
-				<UpdateBanner />
 				<Banner />
 				<Nav
 					administrator_role={data.administrator_role}
