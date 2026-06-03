@@ -1,3 +1,4 @@
+import { useServerVersionStore } from "@app/serverVersion";
 import type { QueryClient } from "@tanstack/react-query";
 import { reactQueryHandler } from "./reactQueryHandler";
 import { SseMessageSchema } from "./schema";
@@ -48,6 +49,17 @@ export function establishConnection(): void {
 		interval = 500;
 		connectionStatus = "connected";
 	};
+
+	connection.addEventListener("version", (event) => {
+		try {
+			const version = JSON.parse((event as MessageEvent).data);
+			if (typeof version === "string") {
+				useServerVersionStore.getState().setVersion(version);
+			}
+		} catch (error) {
+			window.console.error("Failed to parse SSE version", error);
+		}
+	});
 
 	connection.onmessage = (e) => {
 		try {

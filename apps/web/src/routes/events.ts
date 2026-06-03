@@ -34,6 +34,11 @@ async function handleEvents({
 
 			send(`: connected\n\n`);
 
+			// Announce the version serving this connection so the client can detect
+			// a redeploy: the SSE connection drops on restart and reconnects to the
+			// new instance, which reports its version here.
+			send(`event: version\ndata: ${JSON.stringify(__APP_VERSION__)}\n\n`);
+
 			keepaliveTimer = setInterval(() => {
 				send(`: keepalive\n\n`);
 			}, KEEPALIVE_MS);
