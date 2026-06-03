@@ -56,13 +56,6 @@ export function useDebouncedDraft<T>(
 	return [draft, setDraft];
 }
 
-function getSize<T extends HTMLElement>(ref: RefObject<T | null>): Size {
-	return {
-		height: ref.current ? ref.current.offsetHeight : 0,
-		width: ref.current ? ref.current.offsetWidth : 0,
-	};
-}
-
 type Size = {
 	height: number;
 	width: number;
@@ -77,7 +70,11 @@ export function useElementSize<T extends HTMLElement>(): [
 
 	useEffect(() => {
 		function handleResize() {
-			setSize(getSize(ref));
+			const element = ref.current;
+			setSize({
+				height: element?.offsetHeight ?? 0,
+				width: element?.offsetWidth ?? 0,
+			});
 		}
 
 		handleResize();
