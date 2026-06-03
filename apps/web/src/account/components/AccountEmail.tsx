@@ -15,7 +15,7 @@ type FormValues = {
 
 type EmailProps = {
 	/** The users current email address */
-	email: string;
+	email?: string;
 };
 
 /**

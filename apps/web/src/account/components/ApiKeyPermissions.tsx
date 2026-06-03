@@ -28,7 +28,7 @@ export default function ApiKeyPermissions({
 }: APIPermissionsProps) {
 	const { data: account, isPending } = useFetchAccount();
 
-	if (isPending) {
+	if (isPending || !account) {
 		return <LoadingPlaceholder />;
 	}
 
@@ -53,7 +53,7 @@ export default function ApiKeyPermissions({
 						label={permission.name}
 						onClick={
 							disabled
-								? null
+								? undefined
 								: () =>
 										onChange({
 											...keyPermissions,

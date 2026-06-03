@@ -27,7 +27,7 @@ export default function Banners() {
 	const setActiveMutation = useSetActiveBanner();
 	const clearActiveMutation = useClearActiveBanner();
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 

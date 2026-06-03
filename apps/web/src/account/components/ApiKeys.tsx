@@ -22,12 +22,11 @@ export default function ApiKeys({
 }: ApiKeysProps) {
 	const { data, isPending } = useFetchAPIKeys();
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder className="mt-36" />;
 	}
 
-	const keyComponents =
-		data.length && data.map((key) => <ApiKey key={key.id} apiKey={key} />);
+	const keyComponents = data.map((key) => <ApiKey key={key.id} apiKey={key} />);
 
 	return (
 		<div>

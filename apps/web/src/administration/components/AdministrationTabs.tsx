@@ -1,5 +1,6 @@
 import Tabs from "@base/Tabs";
 import TabsLink from "@base/TabsLink";
+import type { ReactNode } from "react";
 import type { AdministratorRoleName } from "../types";
 import { hasSufficientAdminRole } from "../utils";
 
@@ -10,7 +11,7 @@ type AdministratorTabsProps = {
 export default function AdministrationTabs({
 	administratorRole,
 }: AdministratorTabsProps) {
-	const tabs = [];
+	const tabs: ReactNode[] = [];
 
 	if (hasSufficientAdminRole("settings", administratorRole)) {
 		tabs.push(<TabsLink to="/administration/settings">Settings</TabsLink>);

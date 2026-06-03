@@ -4,7 +4,7 @@ import type { User } from "@users/types";
 export type QuickAnalyzeWorkflow = "nuvs" | "pathoscope";
 
 export type APIKeyMinimal = {
-	created_at?: string;
+	created_at: string;
 	groups: Array<GroupMinimal>;
 	id: string;
 	key?: string;
