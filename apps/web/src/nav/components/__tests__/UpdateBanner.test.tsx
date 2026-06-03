@@ -31,17 +31,19 @@ describe("<UpdateBanner />", () => {
 			value: { ...original, reload },
 		});
 
-		useServerVersionStore.setState({ version: "9.9.9" });
-		renderWithProviders(<UpdateBanner />);
+		try {
+			useServerVersionStore.setState({ version: "9.9.9" });
+			renderWithProviders(<UpdateBanner />);
 
-		expect(screen.getByText(MESSAGE)).toBeInTheDocument();
+			expect(screen.getByText(MESSAGE)).toBeInTheDocument();
 
-		await userEvent.click(screen.getByRole("button", { name: "Reload" }));
-		expect(reload).toHaveBeenCalledOnce();
-
-		Object.defineProperty(window, "location", {
-			configurable: true,
-			value: original,
-		});
+			await userEvent.click(screen.getByRole("button", { name: "Reload" }));
+			expect(reload).toHaveBeenCalledOnce();
+		} finally {
+			Object.defineProperty(window, "location", {
+				configurable: true,
+				value: original,
+			});
+		}
 	});
 });

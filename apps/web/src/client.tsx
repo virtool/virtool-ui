@@ -13,13 +13,23 @@ import { hydrateRoot } from "react-dom/client";
 // reload per session so a genuinely missing chunk surfaces the error instead of
 // looping.
 const PRELOAD_RELOAD_KEY = "vt-preload-reloaded";
-window.addEventListener("vite:preloadError", () => {
-	if (window.sessionStorage.getItem(PRELOAD_RELOAD_KEY)) {
-		return;
+
+function handlePreloadError() {
+	// sessionStorage can throw in Safari private mode or under storage-restriction
+	// policies. If it does, skip the guard and reload anyway rather than swallow
+	// the error and leave the user on a broken page.
+	try {
+		if (window.sessionStorage.getItem(PRELOAD_RELOAD_KEY)) {
+			return;
+		}
+		window.sessionStorage.setItem(PRELOAD_RELOAD_KEY, "1");
+	} catch {
+		// Ignore and fall through to the reload.
 	}
-	window.sessionStorage.setItem(PRELOAD_RELOAD_KEY, "1");
 	window.location.reload();
-});
+}
+
+window.addEventListener("vite:preloadError", handlePreloadError);
 
 startTransition(() => {
 	hydrateRoot(

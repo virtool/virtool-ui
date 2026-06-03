@@ -21,8 +21,9 @@ export default function AboutDialog({ open, setOpen }: AboutDialogProps) {
 			<DialogContent>
 				<DialogTitle>About Virtool</DialogTitle>
 				<p className="text-slate-600 pb-6">
-					Virtool runs as a server that stores your data and runs analyses and a
-					web app that you use in your browser to interact with it. Each part is
+					Virtool runs as three parts: a server that stores your data and runs
+					analyses, a web service that delivers the web app to your browser, and
+					the web app itself that you use to interact with Virtool. Each part is
 					released independently.
 				</p>
 
