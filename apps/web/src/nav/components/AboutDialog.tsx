@@ -1,4 +1,3 @@
-import { useServerVersionStore } from "@app/serverVersion";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import ExternalLink from "@base/ExternalLink";
 import { useRootQuery } from "@wall/queries";
@@ -9,19 +8,18 @@ type AboutDialogProps = {
 };
 
 /**
- * Dialog showing the Virtool server, web service, and web app versions and a
- * link to the documentation.
+ * Dialog showing the Virtool server and web app versions and a link to the
+ * documentation.
  */
 export default function AboutDialog({ open, setOpen }: AboutDialogProps) {
 	const { data } = useRootQuery();
-	const serverVersion = useServerVersionStore((state) => state.version);
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent>
 				<DialogTitle>About Virtool</DialogTitle>
 				<p className="text-slate-600 pb-6">
-					Virtool is made up of several parts that are each released
+					Virtool is made up of a server and a web app that are released
 					independently.
 				</p>
 
@@ -38,20 +36,11 @@ export default function AboutDialog({ open, setOpen }: AboutDialogProps) {
 							</dd>
 						</div>
 						<div className="flex">
-							<dt className="font-medium w-32 shrink-0">Web service</dt>
-							<dd>
-								<div className="font-mono">{serverVersion ?? "—"}</div>
-								<div className="text-slate-600 text-sm">
-									Serves the web app to your browser.
-								</div>
-							</dd>
-						</div>
-						<div className="flex">
 							<dt className="font-medium w-32 shrink-0">Web app</dt>
 							<dd>
 								<div className="font-mono">{__APP_VERSION__}</div>
 								<div className="text-slate-600 text-sm">
-									The pages running in your browser.
+									Runs in your browser to interact with the server.
 								</div>
 							</dd>
 						</div>
