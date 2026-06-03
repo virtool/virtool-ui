@@ -19,9 +19,8 @@ export default function AboutDialog({ open, setOpen }: AboutDialogProps) {
 			<DialogContent>
 				<DialogTitle>About Virtool</DialogTitle>
 				<p className="text-slate-600 pb-6">
-					Virtool runs as two pieces: a server that stores your data and runs
-					analyses, and a web app that you use in your browser to interact with
-					it. Each is released independently.
+					Virtool is made up of a server and a web app that are released
+					independently.
 				</p>
 
 				<section className="pb-6">
@@ -41,7 +40,7 @@ export default function AboutDialog({ open, setOpen }: AboutDialogProps) {
 							<dd>
 								<div className="font-mono">{__APP_VERSION__}</div>
 								<div className="text-slate-600 text-sm">
-									The pages you see in your browser.
+									Runs in your browser to interact with the server.
 								</div>
 							</dd>
 						</div>

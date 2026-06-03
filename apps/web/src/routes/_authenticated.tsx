@@ -6,6 +6,7 @@ import Banner from "@banner/components/Banner";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Nav from "@nav/components/Nav";
 import Sidebar from "@nav/components/Sidebar";
+import UpdateToast from "@nav/components/UpdateToast";
 import type { QueryClient } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -93,6 +94,8 @@ function AuthenticatedLayout() {
 		<>
 			<title>Virtool</title>
 			<meta charSet="utf-8" />
+
+			<UpdateToast />
 
 			<div className="bg-transparent fixed top-0 w-full z-50">
 				<Banner />
