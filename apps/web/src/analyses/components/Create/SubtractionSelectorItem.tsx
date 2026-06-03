@@ -4,7 +4,7 @@ import Label from "@base/Label";
 
 type SubtractionSelectorItemProps = {
 	id: string;
-	isDefault: boolean;
+	isDefault?: boolean;
 	name: string;
 	onClick: (id: string) => void;
 };

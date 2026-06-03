@@ -29,7 +29,7 @@ export default function DefaultSubtractions({
 	const { data: subtractionOptions, isPending } =
 		useFetchSubtractionsShortlist();
 
-	if (isPending) {
+	if (isPending || !subtractionOptions) {
 		return <LoadingPlaceholder />;
 	}
 

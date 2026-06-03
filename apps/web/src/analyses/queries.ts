@@ -17,7 +17,7 @@ import { formatData } from "./utils";
 export const analysesQueryKeys = {
 	all: () => ["analyses"] as const,
 	lists: () => ["analyses", "list"] as const,
-	list: (filters: Array<string | number | boolean | string[]>) =>
+	list: (filters: Array<string | number | boolean | string[] | undefined>) =>
 		["analyses", "list", ...filters] as const,
 	details: () => ["analyses", "details"] as const,
 	detail: (analysesId: string) => ["analyses", "details", analysesId] as const,

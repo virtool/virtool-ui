@@ -128,7 +128,12 @@ export function useSubtractionOptions(
 
 	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 
-	if (isPendingSample || isPendingSubtractionShortlist) {
+	if (
+		isPendingSample ||
+		isPendingSubtractionShortlist ||
+		!sample ||
+		!subtractionShortlist
+	) {
 		return {
 			defaultSubtractions: [],
 			subtractions: [],

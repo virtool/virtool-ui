@@ -17,15 +17,17 @@ export default function MlModelSelector({
 	onChange,
 	selected,
 }: MLModelSelectorProps) {
-	const mlModelItems = models.map(({ latest_release, name, description }) => (
-		<SelectItem
-			value={latest_release.id.toString()}
-			key={latest_release.id}
-			description={description}
-		>
-			{name}
-		</SelectItem>
-	));
+	const mlModelItems = models.map(({ latest_release, name, description }) =>
+		latest_release ? (
+			<SelectItem
+				value={latest_release.id.toString()}
+				key={latest_release.id}
+				description={description}
+			>
+				{name}
+			</SelectItem>
+		) : null,
+	);
 
 	return (
 		<div className="mb-8">

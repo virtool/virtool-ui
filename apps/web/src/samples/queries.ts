@@ -29,8 +29,9 @@ export type SampleLabel = Label & {
 export const samplesQueryKeys = {
 	all: () => ["samples"] as const,
 	lists: () => ["samples", "list"] as const,
-	list: (filters: Array<string | number | boolean | string[] | number[]>) =>
-		["samples", "list", ...filters] as const,
+	list: (
+		filters: Array<string | number | boolean | string[] | number[] | undefined>,
+	) => ["samples", "list", ...filters] as const,
 	details: () => ["samples", "details"] as const,
 	detail: (sampleId: string) => ["samples", "details", sampleId] as const,
 };
@@ -107,7 +108,7 @@ export function useCreateSample() {
 			subtractions: string[];
 			files: number[];
 			labels: number[];
-			group: string;
+			group: string | null;
 		}
 	>({
 		mutationFn: ({

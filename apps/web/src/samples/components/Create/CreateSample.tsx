@@ -39,7 +39,8 @@ const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
  */
 function getFileNameFromId(id: number, uploads: Upload[]): string {
 	const file = uploads.find((file) => file.id === id);
-	return file ? file.name_on_disk.match(extensionRegex)[1] : "";
+	const match = file?.name_on_disk.match(extensionRegex);
+	return match ? match[1] : "";
 }
 
 type FormValues = {
@@ -102,7 +103,13 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 		setValue("group", String(account?.primary_group?.id ?? ""));
 	}, [account, setValue]);
 
-	if (isPendingReads || isPendingGroups || isPendingAccount) {
+	if (
+		isPendingReads ||
+		isPendingGroups ||
+		isPendingAccount ||
+		!readsResponse ||
+		!groups
+	) {
 		return <LoadingPlaceholder className="mt-9" />;
 	}
 

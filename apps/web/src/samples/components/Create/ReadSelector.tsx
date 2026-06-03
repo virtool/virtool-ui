@@ -35,7 +35,7 @@ type ReadSelectorProps = {
 	/** A callback function to handle file selection */
 	onSelect: (selected: number[]) => void;
 	/** Errors occurred on sample creation */
-	error: string;
+	error?: string;
 	/** The selected uploads */
 	selected: number[];
 };
