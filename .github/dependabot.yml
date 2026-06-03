@@ -9,6 +9,10 @@ updates:
           prefix: "chore(deps)"
       cooldown:
           default-days: 1
+      ignore:
+          - dependency-name: "superagent"
+          - dependency-name: "@types/superagent"
+          - dependency-name: "nock"
       groups:
           tanstack:
               patterns:
