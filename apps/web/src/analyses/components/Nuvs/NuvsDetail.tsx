@@ -61,10 +61,9 @@ export default function NuvsDetail({
 
 	filtered = sortBy(filtered, [(orf) => orf.hits.length]).reverse();
 
-	const orfComponents = filtered.map((orf, index) => (
+	const orfComponents = filtered.map((orf) => (
 		<NuvsOrf
 			key={`${orf.index}-${orf.frame}-${orf.pos.join("-")}`}
-			index={index}
 			{...orf}
 			maxSequenceLength={maxSequenceLength}
 		/>

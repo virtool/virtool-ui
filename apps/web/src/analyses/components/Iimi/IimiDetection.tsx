@@ -1,7 +1,7 @@
 import AnalysisValue from "@analyses/components/AnalysisValue";
 
 type IimiDetectionTagProps = {
-	probability: number;
+	probability?: number;
 	result: boolean;
 };
 

@@ -36,10 +36,11 @@ function draw(element: HTMLElement, maxLength: number, sequenceLength: number) {
 export default function NuvsSequence({ maxSequenceLength, sequence }) {
 	const chartEl = useRef(null);
 
-	useEffect(
-		() => draw(chartEl.current, maxSequenceLength, sequence.length),
-		[maxSequenceLength, sequence],
-	);
+	useEffect(() => {
+		if (chartEl.current) {
+			draw(chartEl.current, maxSequenceLength, sequence.length);
+		}
+	}, [maxSequenceLength, sequence]);
 
 	return (
 		<div className="overflow-hidden">

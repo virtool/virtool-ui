@@ -63,7 +63,10 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 				/>
 				<div className="flex justify-end">
 					{ready ? (
-						<AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} />
+						<AnalysisItemRightIcon
+							canModify={canModify ?? false}
+							onRemove={onRemove}
+						/>
 					) : (
 						<ProgressCircle
 							progress={job?.progress ?? 0}
