@@ -63,8 +63,8 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1(d3-selection@3.0.0)
       downshift:
-        specifier: ^9.3.3
-        version: 9.3.3(react@19.2.6)
+        specifier: ^9.3.4
+        version: 9.3.4(react@19.2.6)
       drizzle-orm:
         specifier: ^0.45.2
         version: 0.45.2(@opentelemetry/api@1.9.1)(postgres@3.4.9)
@@ -2811,8 +2811,8 @@ packages:
     resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
     engines: {node: '>=12'}
 
-  downshift@9.3.3:
-    resolution: {integrity: sha512-otjI/WtoFcIXwPOyIQYkbrAZJA2Gjz67F8ENOh1RvmJalOg6fk0KEx4ljJSFuJB54ryc6doymPkCM+GjAZ7zjA==}
+  downshift@9.3.4:
+    resolution: {integrity: sha512-vcKzyAJw+SDM4txgzEeGHoJm0/UHdJLUa/B+UtBHcATK5d7tv8GXzGiP/k7wW2kD9jZktViFkpx/9nwbxityew==}
     peerDependencies:
       react: '>=16.12.0'
 
@@ -7135,9 +7135,9 @@ snapshots:
 
   dotenv@16.6.1: {}
 
-  downshift@9.3.3(react@19.2.6):
+  downshift@9.3.4(react@19.2.6):
     dependencies:
-      '@babel/runtime': 7.29.2
+      '@babel/runtime': 7.29.7
       compute-scroll-into-view: 3.1.1
       prop-types: 15.8.1
       react: 19.2.6
