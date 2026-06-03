@@ -26,7 +26,7 @@ export default function IndexFiles({ files }: IndexFilesProps) {
 					key={file.id}
 					downloadUrl={file.download_url}
 					name={file.name}
-					size={file.size}
+					size={file.size ?? 0}
 				/>
 			))}
 		</BoxGroup>

@@ -38,7 +38,7 @@ export default function OtuList({ find, page, setSearch }: OtuListProps) {
 		find,
 	);
 
-	if (isPendingOTUs || isPendingReference) {
+	if (isPendingOTUs || isPendingReference || !otus || !reference) {
 		return <LoadingPlaceholder />;
 	}
 

@@ -3,7 +3,7 @@ import type { JobState } from "@jobs/types";
 import { CircleCheck } from "lucide-react";
 
 type IndexItemIconProps = {
-	activeId: string;
+	activeId?: string;
 	id: string;
 	ready: boolean;
 	progress?: number;

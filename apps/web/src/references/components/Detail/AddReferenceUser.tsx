@@ -34,7 +34,7 @@ export default function AddReferenceUser({
 	const { data, isPending, isFetchingNextPage, fetchNextPage } =
 		useInfiniteFindUsers(25, term);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return null;
 	}
 

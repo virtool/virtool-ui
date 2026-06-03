@@ -20,7 +20,7 @@ export default function RebuildAlert({ page, refId }: RebuildAlertProps) {
 	const { hasPermission: hasRights } = useCheckReferenceRight(refId, "build");
 	const archived = useReferenceIsArchived(refId);
 
-	if (isPending || archived) {
+	if (isPending || archived || !data) {
 		return null;
 	}
 

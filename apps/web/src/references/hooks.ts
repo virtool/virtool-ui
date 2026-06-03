@@ -139,7 +139,7 @@ export function useCheckReferenceRight(
 	const { data: reference, isPending: isPendingReference } =
 		useFetchReference(referenceId);
 
-	if (isPendingAccount || isPendingReference) {
+	if (isPendingAccount || isPendingReference || !account || !reference) {
 		return { hasPermission: false, isPending: true };
 	}
 

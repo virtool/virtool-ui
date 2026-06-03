@@ -1,5 +1,6 @@
 import { formatIsolateName } from "@app/utils";
 import Alert from "@base/Alert";
+import type { ReactNode } from "react";
 import type { OtuIsolate } from "../types";
 
 type OtuIssuesProps = {
@@ -13,7 +14,7 @@ type OtuIssuesProps = {
  * Displays a message of any issues that occurred for the OTU
  */
 export default function OtuIssues({ isolates, issues }: OtuIssuesProps) {
-	const errors = [];
+	const errors: ReactNode[] = [];
 
 	// The OTU has no isolates associated with it.
 	if (typeof issues === "object" && issues.empty_otu) {
@@ -38,7 +39,7 @@ export default function OtuIssues({ isolates, issues }: OtuIssuesProps) {
 			// Get the entire isolate identified by isolate_id from the detail data.
 			const isolate = isolates.find((i) => i.id === isolateId);
 
-			return <li key={index}>{formatIsolateName(isolate)}</li>;
+			return <li key={index}>{isolate && formatIsolateName(isolate)}</li>;
 		});
 
 		errors.push(
@@ -59,7 +60,7 @@ export default function OtuIssues({ isolates, issues }: OtuIssuesProps) {
 				<li key={index}>
 					<span>
 						<em>{errorObject._id}</em> in isolate{" "}
-						<em>{formatIsolateName(isolate)}</em>
+						<em>{isolate && formatIsolateName(isolate)}</em>
 					</span>
 				</li>
 			);

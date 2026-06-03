@@ -29,7 +29,7 @@ export default function Indexes({
 	const { data, isPending } = useFindIndexes(page, 25, refId);
 	const archived = useReferenceIsArchived(refId);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 

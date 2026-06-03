@@ -31,7 +31,7 @@ export default function IndexDetail() {
 	if (isError) {
 		return <NotFound />;
 	}
-	if (isPendingIndex || isPendingReference) {
+	if (isPendingIndex || isPendingReference || !index || !reference) {
 		return <LoadingPlaceholder />;
 	}
 

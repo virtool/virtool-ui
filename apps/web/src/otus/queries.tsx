@@ -10,6 +10,7 @@ import {
 import { createContext, type ReactNode, useContext } from "react";
 import type { ErrorResponse } from "@/types/api";
 import { useFetchReference } from "../references/queries";
+import type { Reference } from "../references/types";
 import type {
 	Otu,
 	OtuHistory,
@@ -394,7 +395,12 @@ export function useRemoveSequence(otuId: string) {
 	});
 }
 
-const CurrentOTUContext = createContext(null);
+type CurrentOtuContextValue = {
+	otu: Otu;
+	reference: Reference;
+};
+
+const CurrentOTUContext = createContext<CurrentOtuContextValue | null>(null);
 
 /**
  * Initializes a hook to access the current OTU context within a component
@@ -402,7 +408,15 @@ const CurrentOTUContext = createContext(null);
  * @returns The current OTU context
  */
 export function useCurrentOtuContext() {
-	return useContext(CurrentOTUContext);
+	const context = useContext(CurrentOTUContext);
+
+	if (!context) {
+		throw new Error(
+			"useCurrentOtuContext must be used within a CurrentOtuContextProvider",
+		);
+	}
+
+	return context;
 }
 
 type CurrentOtuContextProviderProps = {
@@ -425,7 +439,7 @@ export function CurrentOtuContextProvider({
 	const { data: reference, isPending: isPendingReference } =
 		useFetchReference(refId);
 
-	if (isPendingOTU || isPendingReference) {
+	if (isPendingOTU || isPendingReference || !otu || !reference) {
 		return <LoadingPlaceholder />;
 	}
 

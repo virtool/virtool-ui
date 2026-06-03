@@ -7,7 +7,7 @@ import type { ReferenceBuild } from "@references/types";
 type LatestBuildProps = {
 	id: string;
 	/** Information related to the latest index build */
-	latestBuild: ReferenceBuild;
+	latestBuild: ReferenceBuild | null;
 };
 
 /**

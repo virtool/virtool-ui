@@ -20,7 +20,7 @@ type HistoryListProps = {
 export default function HistoryList({
 	archived,
 	history,
-	unbuilt,
+	unbuilt = false,
 }: HistoryListProps) {
 	const changes = sortBy(history, [(h) => h.otu.version]).reverse();
 

@@ -52,6 +52,10 @@ export default function CloneReference({
 	}, [reference, setValue]);
 
 	function onSubmit({ name }: FormValues) {
+		if (!reference) {
+			return;
+		}
+
 		mutation.mutate(
 			{
 				name,

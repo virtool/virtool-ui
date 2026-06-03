@@ -35,7 +35,7 @@ export default function ReferenceSettings({
 	const { refId } = routeApi.useParams();
 	const { data, isPending } = useFetchReference(refId);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 
