@@ -83,7 +83,7 @@ interface IimiCoverageChartProps {
 }
 
 export function SummaryChart({ seqs }: IimiCoverageChartProps) {
-	const chartEl = useRef(null);
+	const chartEl = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		const filteredSeqs = seqs.filter(Boolean);

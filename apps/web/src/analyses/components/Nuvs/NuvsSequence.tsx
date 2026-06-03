@@ -34,7 +34,7 @@ function draw(element: HTMLElement, maxLength: number, sequenceLength: number) {
 }
 
 export default function NuvsSequence({ maxSequenceLength, sequence }) {
-	const chartEl = useRef(null);
+	const chartEl = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		if (chartEl.current) {

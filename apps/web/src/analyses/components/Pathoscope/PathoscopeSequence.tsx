@@ -104,7 +104,7 @@ export default function PathoscopeSequence({
 	ratio,
 	yMax,
 }: CoverageChartProps) {
-	const chartEl = useRef<HTMLDivElement>(null);
+	const chartEl = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		if (chartEl.current) {
