@@ -171,6 +171,23 @@ describe("<CreateSample>", () => {
 		expect(field).toHaveValue("14T81");
 	});
 
+	it("should autofill the sample name from a fastq.gz filename", async () => {
+		const file = createFakeFile({ name: "sample_one.fastq.gz" });
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+
+		await renderWithRouter(<CreateSample labels={labels} />);
+
+		const field = await screen.findByRole("textbox", { name: "Name" });
+		expect(field).toHaveValue("");
+
+		await userEvent.click(screen.getByText(file.name));
+		await userEvent.click(screen.getByRole("button", { name: "Auto Fill" }));
+
+		expect(field).toHaveValue("sample_one");
+	});
+
 	it("should clear selections when reset button is clicked", async () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
 
