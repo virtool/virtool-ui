@@ -61,13 +61,6 @@ export type ReferenceRelease = {
 	size: number;
 };
 
-export type ReferenceTarget = {
-	description: string;
-	length: number;
-	name: string;
-	required: boolean;
-};
-
 /** Basic reference data for nested representation */
 export type ReferenceNested = {
 	/** The unique identifier */
@@ -126,7 +119,6 @@ export type Reference = ReferenceMinimal & {
 	groups: Array<ReferenceGroup>;
 	restrict_source_types: boolean;
 	source_types: Array<string>;
-	targets: ReferenceTarget[];
 	users: Array<ReferenceUser>;
 };
 

@@ -14,7 +14,6 @@ import type {
 	ReferenceInstalled,
 	ReferenceMinimal,
 	ReferenceSearchResult,
-	ReferenceTarget,
 	ReferenceUser,
 } from "./types";
 
@@ -258,10 +257,7 @@ export function useUpdateReference(refId: string, onSuccess?: () => void) {
 	const queryClient = useQueryClient();
 
 	const mutation = useMutation<Reference, ErrorResponse, unknown>({
-		mutationFn: (data: {
-			restrict_source_types?: boolean;
-			targets?: ReferenceTarget[];
-		}) => {
+		mutationFn: (data: { restrict_source_types?: boolean }) => {
 			return apiClient
 				.patch(`/refs/${refId}`)
 				.send(data)

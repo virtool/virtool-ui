@@ -3,22 +3,9 @@ import type {
 	Reference,
 	ReferenceMinimal,
 	ReferenceNested,
-	ReferenceTarget,
 } from "@references/types";
 import nock from "nock";
 import { createFakeUserNested } from "./user";
-
-/**
- * Create a fake reference target
- */
-export function createFakeReferenceTarget(): ReferenceTarget {
-	return {
-		description: faker.lorem.lines(1),
-		length: faker.number.int(),
-		name: faker.word.noun({ strategy: "any-length" }),
-		required: true,
-	};
-}
 
 /**
  * Create a fake reference nested
@@ -86,7 +73,6 @@ export function createFakeReference(overrides?: Partial<Reference>): Reference {
 		groups: [],
 		restrict_source_types: false,
 		source_types: ["isolate", "strain"],
-		targets: [createFakeReferenceTarget()],
 		users: [
 			{
 				...createFakeUserNested(),
