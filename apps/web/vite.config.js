@@ -1,9 +1,9 @@
+import path from "node:path";
 import { sentryTanstackStart } from "@sentry/tanstackstart-react/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import react from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
-import path from "path";
 import { defineConfig } from "vite";
 import pkg from "./package.json" with { type: "json" };
 
@@ -67,7 +67,7 @@ export default defineConfig(({ command }) => ({
 		}),
 		nitro(),
 		react({
-			include: "**/*.{tsx}",
+			include: "**/*.tsx",
 			babel: {
 				plugins: ["babel-plugin-react-compiler"],
 			},

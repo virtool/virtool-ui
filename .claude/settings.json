@@ -1,97 +1,96 @@
 {
-  "permissions": {
-    "allow": [
-      "Glob",
-      "Grep",
-      "Read",
-      "WebFetch",
-      "WebSearch",
-      "Bash(git status*)",
-      "Bash(git diff*)",
-      "Bash(git log*)",
-      "Bash(git branch*)",
-      "Bash(git fetch*)",
-      "Bash(git stash*)",
-      "Bash(git add *)",
-      "Bash(git commit *)",
-      "Bash(git mv *)",
-      "Bash(git rm *)",
-      "Bash(gh pr view*)",
-      "Bash(gh pr list*)",
-      "Bash(gh pr status*)",
-      "Bash(gh pr checks*)",
-      "Bash(gh pr diff*)",
-      "Bash(gh run list*)",
-      "Bash(gh run view*)",
-      "Bash(gh release list*)",
-      "Bash(gh release view*)",
-      "Bash(gh repo view*)",
-      "Bash(gh workflow list*)",
-      "Bash(gh workflow view*)",
-      "Bash(npm run test*)",
-      "Bash(npm run typecheck*)",
-      "Bash(npm run check*)",
-      "Bash(npm run format*)",
-      "Bash(npm run lint*)",
-      "Bash(npx biome *)",
-      "Bash(npm run develop*)",
-      "Bash(npm run build*)",
-      "Bash(npm run storybook*)",
-      "Bash(npx vitest*)",
-      "Bash(npx tsc *)",
-      "mcp__context7__resolve-library-id",
-      "mcp__context7__query-docs",
-      "mcp__linear-virtool__get_issue",
-      "mcp__linear-virtool__get_issue_status",
-      "mcp__linear-virtool__get_attachment",
-      "mcp__linear-virtool__get_document",
-      "mcp__linear-virtool__get_milestone",
-      "mcp__linear-virtool__get_project",
-      "mcp__linear-virtool__get_team",
-      "mcp__linear-virtool__get_user",
-      "mcp__linear-virtool__list_comments",
-      "mcp__linear-virtool__list_cycles",
-      "mcp__linear-virtool__list_documents",
-      "mcp__linear-virtool__list_issue_labels",
-      "mcp__linear-virtool__list_issue_statuses",
-      "mcp__linear-virtool__list_issues",
-      "mcp__linear-virtool__list_milestones",
-      "mcp__linear-virtool__list_project_labels",
-      "mcp__linear-virtool__list_projects",
-      "mcp__linear-virtool__list_teams",
-      "mcp__linear-virtool__list_users",
-      "mcp__linear-virtool__search_documentation",
-      "mcp__linear-virtool__extract_images"
-    ],
-    "deny": [
-      "Bash(rm -rf *)",
-      "Bash(git push --force*)",
-      "Bash(git reset --hard*)",
-      "Bash(git checkout -- .)",
-      "Bash(git clean -f*)",
-      "Bash(gh pr merge*)",
-      "Bash(gh pr close*)",
-      "Bash(gh issue close*)",
-      "Read(**/.env*)",
-      "Read(**/credentials*)",
-      "Read(**/*secret*)"
-    ]
-  },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; echo \"$f\" | grep -qE '/src/.*[.](ts|tsx|js|jsx|json|css)$' && npx biome check --fix --unsafe \"$f\" 2>/dev/null || true; }",
-            "statusMessage": "Formatting with biome..."
-          }
-        ]
-      }
-    ]
-  },
-  "attribution": {
-    "commit": ""
-  }
+	"permissions": {
+		"allow": [
+			"Glob",
+			"Grep",
+			"Read",
+			"WebFetch",
+			"WebSearch",
+			"Bash(git status*)",
+			"Bash(git diff*)",
+			"Bash(git log*)",
+			"Bash(git branch*)",
+			"Bash(git fetch*)",
+			"Bash(git stash*)",
+			"Bash(git add *)",
+			"Bash(git commit *)",
+			"Bash(git mv *)",
+			"Bash(git rm *)",
+			"Bash(gh pr view*)",
+			"Bash(gh pr list*)",
+			"Bash(gh pr status*)",
+			"Bash(gh pr checks*)",
+			"Bash(gh pr diff*)",
+			"Bash(gh run list*)",
+			"Bash(gh run view*)",
+			"Bash(gh release list*)",
+			"Bash(gh release view*)",
+			"Bash(gh repo view*)",
+			"Bash(gh workflow list*)",
+			"Bash(gh workflow view*)",
+			"Bash(npm run test*)",
+			"Bash(npm run typecheck*)",
+			"Bash(npm run check*)",
+			"Bash(npm run format*)",
+			"Bash(npm run lint*)",
+			"Bash(npx biome *)",
+			"Bash(npm run develop*)",
+			"Bash(npm run build*)",
+			"Bash(npm run storybook*)",
+			"Bash(npx vitest*)",
+			"Bash(npx tsc *)",
+			"mcp__context7__resolve-library-id",
+			"mcp__context7__query-docs",
+			"mcp__linear-virtool__get_issue",
+			"mcp__linear-virtool__get_issue_status",
+			"mcp__linear-virtool__get_attachment",
+			"mcp__linear-virtool__get_document",
+			"mcp__linear-virtool__get_milestone",
+			"mcp__linear-virtool__get_project",
+			"mcp__linear-virtool__get_team",
+			"mcp__linear-virtool__get_user",
+			"mcp__linear-virtool__list_comments",
+			"mcp__linear-virtool__list_cycles",
+			"mcp__linear-virtool__list_documents",
+			"mcp__linear-virtool__list_issue_labels",
+			"mcp__linear-virtool__list_issue_statuses",
+			"mcp__linear-virtool__list_issues",
+			"mcp__linear-virtool__list_milestones",
+			"mcp__linear-virtool__list_project_labels",
+			"mcp__linear-virtool__list_projects",
+			"mcp__linear-virtool__list_teams",
+			"mcp__linear-virtool__list_users",
+			"mcp__linear-virtool__search_documentation",
+			"mcp__linear-virtool__extract_images"
+		],
+		"deny": [
+			"Bash(rm -rf *)",
+			"Bash(git push --force*)",
+			"Bash(git reset --hard*)",
+			"Bash(git checkout -- .)",
+			"Bash(git clean -f*)",
+			"Bash(gh pr merge*)",
+			"Bash(gh pr close*)",
+			"Bash(gh issue close*)",
+			"Read(**/.env*)",
+			"Read(**/credentials*)",
+			"Read(**/*secret*)"
+		]
+	},
+	"hooks": {
+		"Stop": [
+			{
+				"hooks": [
+					{
+						"type": "command",
+						"command": "npx biome check --fix --unsafe . 2>/dev/null || true",
+						"statusMessage": "Formatting with biome..."
+					}
+				]
+			}
+		]
+	},
+	"attribution": {
+		"commit": ""
+	}
 }

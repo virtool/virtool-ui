@@ -11,14 +11,13 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SaveButton from "@base/SaveButton";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import type { Label } from "@labels/types";
 import { useCreateSample } from "@samples/queries";
 import { useNavigate } from "@tanstack/react-router";
 import { Clock, WandSparkles } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useInfiniteFindFiles } from "@/uploads/queries";
 import type { Upload } from "@/uploads/types";
@@ -75,7 +74,6 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 	const {
 		control,
 		formState: { errors },
-		hasRestored,
 		handleSubmit,
 		register,
 		reset,
@@ -98,6 +96,8 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 		},
 	});
 	const mutation = useCreateSample();
+
+	const [showMetadata, setShowMetadata] = useState(false);
 
 	useEffect(() => {
 		setValue("group", String(account?.primary_group?.id ?? ""));
@@ -167,61 +167,58 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 				className="grid grid-cols-[minmax(0,1150px)_max(320px,10%)] gap-x-[15px]"
 				onSubmit={handleSubmit(onSubmit)}
 			>
-				<div className="col-span-2 row-start-1">
-					<RestoredAlert
-						hasRestored={hasRestored}
-						name="sample"
-						resetForm={reset}
-					/>
-				</div>
-				<InputGroup className="col-start-1 row-start-2">
-					<InputLabel htmlFor="name">Name</InputLabel>
-					<InputContainer align="right" className="flex">
-						<InputSimple
-							id="name"
-							{...register("name", {
-								required: "Required Field",
-							})}
-						/>
-						{Boolean(watch("readFiles").length) && (
-							<InputIconButton
-								IconComponent={WandSparkles}
-								aria-label="Auto Fill"
-								tip="Auto Fill"
-								onClick={() => autofill(watch("readFiles"))}
+				<div className="col-start-1">
+					<InputGroup>
+						<InputLabel htmlFor="name">Name</InputLabel>
+						<InputContainer align="right" className="flex">
+							<InputSimple
+								id="name"
+								{...register("name", {
+									required: "Required Field",
+								})}
 							/>
-						)}
-					</InputContainer>
-					<InputError>{errors.name?.message}</InputError>
-				</InputGroup>
-				<div className="row-start-3">
-					<div className="grid grid-cols-2 gap-x-[15px]">
-						<Controller
-							control={control}
-							render={({ field: { onChange, value } }) => (
-								<SampleUserGroup
-									selected={value}
-									groups={groups}
-									onChange={onChange}
+							{Boolean(watch("readFiles").length) && (
+								<InputIconButton
+									IconComponent={WandSparkles}
+									aria-label="Auto Fill"
+									tip="Auto Fill"
+									onClick={() => autofill(watch("readFiles"))}
 								/>
 							)}
-							name="group"
-						/>
-						<InputGroup>
-							<InputLabel htmlFor="locale">Locale</InputLabel>
-							<InputSimple id="locale" {...register("locale")} />
-						</InputGroup>
+						</InputContainer>
+						<InputError>{errors.name?.message}</InputError>
+					</InputGroup>
 
-						<InputGroup>
-							<InputLabel htmlFor="isolate">Isolate</InputLabel>
-							<InputSimple id="isolate" {...register("isolate")} />
-						</InputGroup>
+					<Controller
+						control={control}
+						render={({ field: { onChange, value } }) => (
+							<SampleUserGroup
+								selected={value}
+								groups={groups}
+								onChange={onChange}
+							/>
+						)}
+						name="group"
+					/>
 
-						<InputGroup>
-							<InputLabel htmlFor="host">Host</InputLabel>
-							<InputSimple id="host" {...register("host")} />
-						</InputGroup>
-					</div>
+					{showMetadata && (
+						<div className="grid grid-cols-2 gap-x-[15px] mb-4">
+							<InputGroup>
+								<InputLabel htmlFor="locale">Locale</InputLabel>
+								<InputSimple id="locale" {...register("locale")} />
+							</InputGroup>
+
+							<InputGroup>
+								<InputLabel htmlFor="isolate">Isolate</InputLabel>
+								<InputSimple id="isolate" {...register("isolate")} />
+							</InputGroup>
+
+							<InputGroup>
+								<InputLabel htmlFor="host">Host</InputLabel>
+								<InputSimple id="host" {...register("host")} />
+							</InputGroup>
+						</div>
+					)}
 
 					<Controller
 						control={control}
@@ -251,25 +248,30 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 					/>
 				</div>
 
-				<Box className="flex items-center bg-blue-200 border-none col-start-2 row-start-2 mt-6 p-[15px]">
-					<SaveButton altText="Create" />
-					<p className="text-blue-800 font-medium ml-auto pl-4 text-center flex items-center mb-0">
-						<Icon icon={Clock} className="mr-[5px]" /> This will take some time.
-					</p>
-				</Box>
+				<div className="col-start-2">
+					<Box className="flex items-center bg-blue-200 border-none mt-6 p-[15px]">
+						<SaveButton altText="Create" />
+						<p className="text-blue-800 font-medium ml-auto pl-4 text-center flex items-center mb-0">
+							<Icon icon={Clock} className="mr-[5px]" /> This will take some
+							time.
+						</p>
+					</Box>
 
-				<Controller
-					control={control}
-					render={({ field: { value } }) => (
-						<Sidebar
-							defaultSubtractions={value.subtractionIds}
-							labels={labels}
-							onUpdate={setValue}
-							sampleLabels={value.labels}
-						/>
-					)}
-					name="sidebar"
-				/>
+					<Controller
+						control={control}
+						render={({ field: { value } }) => (
+							<Sidebar
+								defaultSubtractions={value.subtractionIds}
+								labels={labels}
+								onShowMetadataChange={setShowMetadata}
+								onUpdate={setValue}
+								sampleLabels={value.labels}
+								showMetadata={showMetadata}
+							/>
+						)}
+						name="sidebar"
+					/>
+				</div>
 			</form>
 		</>
 	);

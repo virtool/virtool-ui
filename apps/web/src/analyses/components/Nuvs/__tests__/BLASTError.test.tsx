@@ -1,11 +1,11 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderWithProviders } from "@tests/setup.tsx";
+import { renderWithProviders } from "@tests/setup";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import NuvsBlastError from "../NuvsBlastError.tsx";
+import NuvsBlastError from "../NuvsBlastError";
 
 describe("<BLASTError />", () => {
-	let props;
+	let props: { error: string; onBlast: () => void };
 
 	beforeEach(() => {
 		props = {

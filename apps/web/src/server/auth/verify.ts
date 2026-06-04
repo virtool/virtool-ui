@@ -34,8 +34,7 @@ export async function verifyAuthenticatedSession(
 		.limit(1);
 
 	if (
-		!row ||
-		row.sessionType !== "authenticated" ||
+		row?.sessionType !== "authenticated" ||
 		!row.tokenHash ||
 		row.userId === null
 	) {
