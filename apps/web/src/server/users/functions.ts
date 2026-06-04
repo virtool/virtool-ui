@@ -39,7 +39,7 @@ const findUsersSchema = z
 	.optional();
 
 const createUserSchema = z.object({
-	handle: z.string().min(1),
+	handle: z.string().trim().min(1),
 	password: z.string().min(1),
 	forceReset: z.boolean().default(false),
 });
@@ -48,10 +48,26 @@ const updateUserSchema = z.object({
 	userId: z.number().int().positive(),
 	active: z.boolean().optional(),
 	force_reset: z.boolean().optional(),
+	handle: z.string().trim().min(1).optional(),
 	password: z.string().min(1).optional(),
 	groups: z.array(z.number().int().positive()).optional(),
 	primary_group: z.number().int().positive().nullable().optional(),
 });
+
+const accountHandleSchema = z.object({
+	handle: z.string().trim().min(1),
+});
+
+// Reserved handle the Python service forbids; rejected before hitting the
+// database so we return a clear message rather than a unique-constraint error.
+// Trim defensively so whitespace-padded variants like " virtool" can't slip
+// past the check even if a caller skips the schema's trim.
+function checkReservedHandle(handle: string): void {
+	if (handle.trim().toLowerCase() === "virtool") {
+		setResponseStatus(400);
+		throw new Error("Reserved user name: virtool");
+	}
+}
 
 const setAdministratorRoleSchema = z.object({
 	userId: z.number().int().positive(),
@@ -68,7 +84,7 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 		throw new Error("User not found.");
 	}
 	if (err instanceof UserConflictError) {
-		setResponseStatus(400);
+		setResponseStatus(409);
 		throw new Error("User already exists.");
 	}
 	if (err instanceof GroupMembershipError) {
@@ -114,10 +130,7 @@ export const createUser = createServerFn({ method: "POST" })
 	.handler(async ({ data }) => {
 		await requireAdminRole(await requireSession(), "users");
 
-		if (data.handle.toLowerCase() === "virtool") {
-			setResponseStatus(400);
-			throw new Error("Reserved user name: virtool");
-		}
+		checkReservedHandle(data.handle);
 
 		try {
 			const user = await createUserImpl(db, {
@@ -146,8 +159,27 @@ export const updateUser = createServerFn({ method: "POST" })
 		}
 
 		const { userId, ...values } = data;
+		if (values.handle !== undefined) {
+			checkReservedHandle(values.handle);
+		}
 		try {
 			return await updateUserImpl(db, userId, values);
+		} catch (err) {
+			rethrowAsHttp(err);
+		}
+	});
+
+export const updateAccountHandle = createServerFn({ method: "POST" })
+	.inputValidator(accountHandleSchema)
+	.handler(async ({ data }) => {
+		const session = await requireSession();
+
+		checkReservedHandle(data.handle);
+
+		try {
+			return await updateUserImpl(db, session.userId, {
+				handle: data.handle,
+			});
 		} catch (err) {
 			rethrowAsHttp(err);
 		}

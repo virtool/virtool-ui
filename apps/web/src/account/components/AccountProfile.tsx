@@ -5,6 +5,7 @@ import { ShieldUser } from "lucide-react";
 import { useFetchAccount } from "../queries";
 import AccountEmail from "./AccountEmail";
 import AccountGroups from "./AccountGroups";
+import AccountHandle from "./AccountHandle";
 import AccountPassword from "./AccountPassword";
 
 /**
@@ -42,6 +43,7 @@ export default function AccountProfile() {
 				</div>
 			</div>
 
+			<AccountHandle handle={handle} />
 			<AccountPassword lastPasswordChange={last_password_change} />
 			<AccountEmail email={email} />
 			<AccountGroups groups={groups} />

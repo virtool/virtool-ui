@@ -1,6 +1,10 @@
 import AccountProfile from "@account/components/AccountProfile";
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import {
+	mockApiUpdateAccountHandle,
+	userServerFnMocks,
+} from "@tests/api/users";
 import {
 	createFakeAccount,
 	mockApiChangePassword,
@@ -60,7 +64,7 @@ describe("<AccountProfile />", () => {
 		const input = screen.getByLabelText("Email Address");
 		expect(input).toHaveValue("");
 
-		const button = screen.getAllByRole("button", { name: "Change" })[1];
+		const button = screen.getAllByRole("button", { name: "Change" })[2];
 
 		await userEvent.type(input, "invalid");
 		await userEvent.click(button);
@@ -75,6 +79,101 @@ describe("<AccountProfile />", () => {
 		await userEvent.click(button);
 	});
 
+	it("should render with the current handle", async () => {
+		const account = createFakeAccount({ handle: "current_handle" });
+
+		mockApiGetAccount(account);
+		renderWithProviders(<AccountProfile />);
+
+		await screen.findByText("Handle");
+		expect(screen.getByLabelText("Username")).toHaveValue("current_handle");
+	});
+
+	it("should change the handle", async () => {
+		const account = createFakeAccount({ handle: "old_handle" });
+
+		mockApiGetAccount(account);
+		const scope = mockApiUpdateAccountHandle(
+			{ ...account, handle: "new_handle" },
+			200,
+			undefined,
+			"new_handle",
+		);
+		renderWithProviders(<AccountProfile />);
+
+		await screen.findByText("Handle");
+		const input = screen.getByLabelText("Username");
+		const form = input.closest("form") as HTMLElement;
+
+		await userEvent.clear(input);
+		await userEvent.type(input, "new_handle");
+		await userEvent.click(within(form).getByRole("button", { name: "Change" }));
+
+		await waitFor(() => scope.done());
+	});
+
+	it("should show a conflict error when the handle is taken", async () => {
+		const account = createFakeAccount({ handle: "old_handle" });
+
+		mockApiGetAccount(account);
+		mockApiUpdateAccountHandle(undefined, 409, "User already exists.");
+		renderWithProviders(<AccountProfile />);
+
+		await screen.findByText("Handle");
+		const input = screen.getByLabelText("Username");
+		const form = input.closest("form") as HTMLElement;
+
+		await userEvent.clear(input);
+		await userEvent.type(input, "taken_handle");
+		await userEvent.click(within(form).getByRole("button", { name: "Change" }));
+
+		await waitFor(() =>
+			expect(screen.getByText("User already exists.")).toBeInTheDocument(),
+		);
+	});
+
+	it("should show an error when the handle is reserved", async () => {
+		const account = createFakeAccount({ handle: "old_handle" });
+
+		mockApiGetAccount(account);
+		mockApiUpdateAccountHandle(undefined, 400, "Reserved user name: virtool");
+		renderWithProviders(<AccountProfile />);
+
+		await screen.findByText("Handle");
+		const input = screen.getByLabelText("Username");
+		const form = input.closest("form") as HTMLElement;
+
+		await userEvent.clear(input);
+		await userEvent.type(input, "virtool");
+		await userEvent.click(within(form).getByRole("button", { name: "Change" }));
+
+		await waitFor(() =>
+			expect(
+				screen.getByText("Reserved user name: virtool"),
+			).toBeInTheDocument(),
+		);
+	});
+
+	it("should not submit an empty handle", async () => {
+		const account = createFakeAccount({ handle: "old_handle" });
+
+		mockApiGetAccount(account);
+		mockApiUpdateAccountHandle({ ...account });
+		renderWithProviders(<AccountProfile />);
+
+		await screen.findByText("Handle");
+		const input = screen.getByLabelText("Username");
+		const form = input.closest("form") as HTMLElement;
+
+		await userEvent.clear(input);
+		await userEvent.click(within(form).getByRole("button", { name: "Change" }));
+
+		expect(
+			await screen.findByText("Please specify a username"),
+		).toBeInTheDocument();
+		expect(userServerFnMocks.updateAccountHandle).not.toHaveBeenCalled();
+	});
+
 	it("should handle password changes", async () => {
 		const account = createFakeAccount({
 			administrator_role: "full",
@@ -84,7 +183,7 @@ describe("<AccountProfile />", () => {
 
 		expect(await screen.findByText("Password")).toBeInTheDocument();
 
-		const button = screen.getAllByRole("button", { name: "Change" })[0];
+		const button = screen.getAllByRole("button", { name: "Change" })[1];
 
 		const oldPasswordInput = screen.getByLabelText("Old Password");
 		const newPasswordInput = screen.getByLabelText("New Password");
@@ -122,7 +221,7 @@ describe("<AccountProfile />", () => {
 
 		await screen.findByText("Password");
 
-		const button = screen.getAllByRole("button", { name: "Change" })[0];
+		const button = screen.getAllByRole("button", { name: "Change" })[1];
 		const oldPasswordInput = screen.getByLabelText("Old Password");
 		const newPasswordInput = screen.getByLabelText("New Password");
 
