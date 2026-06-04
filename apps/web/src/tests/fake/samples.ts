@@ -55,7 +55,6 @@ export function createFakeSampleRead(overrides?: Partial<Read>): Read {
 		name_on_disk: faker.word.noun({ strategy: "any-length" }),
 		sample: faker.word.noun({ strategy: "any-length" }),
 		size: faker.number.int(),
-		upload: null,
 		uploaded_at: faker.date.past().toISOString(),
 	};
 

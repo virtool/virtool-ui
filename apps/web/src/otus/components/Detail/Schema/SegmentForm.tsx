@@ -27,7 +27,7 @@ type FormValues = {
 
 type SegmentFormProps = {
 	segmentName?: string;
-	molecule?: Molecule;
+	molecule?: Molecule | null;
 	required?: boolean;
 	/** A callback function to be called when the form is submitted */
 	onSubmit: (values: FormValues) => void;

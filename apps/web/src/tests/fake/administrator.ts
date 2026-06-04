@@ -46,7 +46,7 @@ export function createFakeSettings(overrides?: Partial<Settings>): Settings {
 		minimum_password_length: 8,
 		sample_all_read: faker.datatype.boolean(),
 		sample_all_write: faker.datatype.boolean(),
-		sample_group: null,
+		sample_group: "none",
 		sample_group_read: faker.datatype.boolean(),
 		sample_group_write: faker.datatype.boolean(),
 		sample_unique_names: faker.datatype.boolean(),

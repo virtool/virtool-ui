@@ -36,7 +36,6 @@ export function createFakeOTUSequence(
 		definition: faker.word.noun({ strategy: "any-length" }),
 		host: faker.word.noun({ strategy: "any-length" }),
 		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-		remote: null,
 		segment: null,
 		sequence: faker.word.noun({ strategy: "any-length" }),
 		target: null,
@@ -99,7 +98,7 @@ export function createFakeOtu(overrides?: Partial<Otu>): Otu {
 		last_indexed_version: null,
 		most_recent_change: createFakeHistoryNested(),
 		schema: Array.from({ length: 2 }, createFakeOtuSegment),
-		remote: remote || null,
+		remote,
 	};
 }
 
@@ -286,8 +285,8 @@ export function mockApiEditSequence(
 	definition: string,
 	host: string,
 	sequence: string,
-	segment?: string,
-	target?: string,
+	segment?: string | null,
+	target?: string | null,
 ) {
 	const OTUSequence = createFakeOTUSequence({
 		accession,

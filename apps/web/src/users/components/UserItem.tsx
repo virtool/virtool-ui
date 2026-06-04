@@ -12,7 +12,7 @@ type UserItemProps = {
 	handle: string;
 	id: number;
 	/** The primary group assigned to the user */
-	primary_group: GroupMinimal;
+	primary_group: GroupMinimal | null;
 };
 
 /**

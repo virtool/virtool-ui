@@ -52,7 +52,6 @@ export function createFakeSubtractionMinimal(
 			id: faker.number.int(),
 			name: `${faker.word.noun({ strategy: "any-length" })}s.fa`,
 		},
-		job: null,
 		nickname: faker.word.noun({ strategy: "any-length" }),
 		ready: true,
 		user: createFakeUserNested(),
