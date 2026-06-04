@@ -27,7 +27,7 @@ import ReadSelector from "./ReadSelector";
 import SampleUserGroup from "./SampleUserGroup";
 import Sidebar from "./Sidebar";
 
-const extensionRegex = /^(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
+const extensionRegex = /^(.*)\.(fq|fastq|fa|fasta)(\.gz)?$/i;
 
 /**
  * Gets a filename without extension, given the file ID and an array of all available read uploads.

@@ -188,6 +188,46 @@ describe("<CreateSample>", () => {
 		expect(field).toHaveValue("sample_one");
 	});
 
+	it.each([
+		["sample_one.fq", "sample_one"],
+		["sample_one.fastq", "sample_one"],
+		["sample_one.fa", "sample_one"],
+		["sample_one.fasta", "sample_one"],
+		["sample_one.FASTQ.GZ", "sample_one"],
+	])("should autofill the sample name from %s", async (fileName, expected) => {
+		const file = createFakeFile({ name: fileName });
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+
+		await renderWithRouter(<CreateSample labels={labels} />);
+
+		const field = await screen.findByRole("textbox", { name: "Name" });
+		expect(field).toHaveValue("");
+
+		await userEvent.click(screen.getByText(file.name));
+		await userEvent.click(screen.getByRole("button", { name: "Auto Fill" }));
+
+		expect(field).toHaveValue(expected);
+	});
+
+	it("should not autofill the sample name when the extension is invalid", async () => {
+		const file = createFakeFile({ name: "sample_one.fqst" });
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+
+		await renderWithRouter(<CreateSample labels={labels} />);
+
+		const field = await screen.findByRole("textbox", { name: "Name" });
+		expect(field).toHaveValue("");
+
+		await userEvent.click(screen.getByText(file.name));
+		await userEvent.click(screen.getByRole("button", { name: "Auto Fill" }));
+
+		expect(field).toHaveValue("");
+	});
+
 	it("should clear selections when reset button is clicked", async () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
 
