@@ -215,14 +215,13 @@ export function useUpdateLabel(
 	});
 
 	function onUpdate(label: number) {
+		const clicked = selectedLabels.find((item) => item.id === label);
+		const allLabeled = clicked?.allLabeled === true;
+
 		selectedSamples.forEach((sample) => {
 			const sampleLabelIds = sample.labels.map((l) => l.id);
-			const labelExists = selectedLabels.some((item) => item.id === label);
-			const allLabeled = selectedLabels.every(
-				(item) => item.allLabeled === true,
-			);
 
-			if (!labelExists || !allLabeled) {
+			if (!allLabeled) {
 				mutation.mutate({
 					sampleId: sample.id,
 					update: { labels: union(sampleLabelIds, [label]) },
