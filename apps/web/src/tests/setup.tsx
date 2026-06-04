@@ -83,7 +83,6 @@ export async function renderWithRouter(ui: ReactNode, path?: string) {
 		initialEntries: [path || "/"],
 	});
 
-	// @ts-expect-error createRouter requires strictNullChecks
 	const router = createRouter({
 		routeTree: rootRoute,
 		history: memoryHistory,
@@ -126,7 +125,6 @@ export function MemoryRouter({
 		});
 		rootRoute.addChildren([catchAllRoute]);
 
-		// @ts-expect-error createRouter requires strictNullChecks
 		return createRouter({
 			routeTree: rootRoute,
 			history: createMemoryHistory({ initialEntries: [path || "/"] }),
@@ -150,7 +148,6 @@ export async function renderHookWithRouter<T>(hook: () => T, path?: string) {
 	});
 	rootRoute.addChildren([catchAllRoute]);
 
-	// @ts-expect-error createRouter requires strictNullChecks
 	const router = createRouter({
 		routeTree: rootRoute,
 		history: createMemoryHistory({ initialEntries: [path || "/"] }),
@@ -189,7 +186,6 @@ export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 
 	const memoryHistory = createMemoryHistory({ initialEntries: [path] });
 
-	// @ts-expect-error createRouter requires strictNullChecks
 	const router = createRouter({
 		routeTree,
 		history: memoryHistory,

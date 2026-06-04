@@ -19,7 +19,10 @@ export function LatestBuild({ id, latestBuild }: LatestBuildProps) {
 			<BoxGroupSection className="flex items-center">
 				<div>
 					<strong>
-						<Link to={`/refs/${id}/indexes/${latestBuild.id}`}>
+						<Link
+							to="/refs/$refId/indexes/$indexId"
+							params={{ refId: id, indexId: latestBuild.id }}
+						>
 							Index {latestBuild.version}
 						</Link>
 					</strong>

@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_authenticated/samples/create")({
 function CreateSampleRoute() {
 	const { data: labels, isPending } = useFetchLabels();
 
-	if (isPending) {
+	if (isPending || !labels) {
 		return <LoadingPlaceholder />;
 	}
 

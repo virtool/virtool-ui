@@ -24,7 +24,11 @@ export default function OtuItem({
 			className="grid items-center"
 			style={{ gridTemplateColumns: "5fr 2fr 1fr" }}
 		>
-			<Link className="text-base font-medium" to={`/refs/${refId}/otus/${id}`}>
+			<Link
+				className="text-base font-medium"
+				to="/refs/$refId/otus/$otuId"
+				params={{ refId, otuId: id }}
+			>
 				{name}
 			</Link>
 			<span className="flex justify-start">{abbreviation}</span>

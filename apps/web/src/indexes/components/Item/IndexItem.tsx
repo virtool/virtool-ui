@@ -27,7 +27,11 @@ export function IndexItem({ activeId, index, refId }: IndexItemProps) {
 	return (
 		<BoxGroupSection>
 			<h3 className="grid grid-cols-3 mb-2 text-lg">
-				<Link className="font-medium" to={`/refs/${refId}/indexes/${index.id}`}>
+				<Link
+					className="font-medium"
+					to="/refs/$refId/indexes/$indexId"
+					params={{ refId, indexId: index.id }}
+				>
 					Version {index.version}
 				</Link>
 				<IndexItemDescription

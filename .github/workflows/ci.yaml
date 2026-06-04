@@ -78,8 +78,6 @@ jobs:
               run: pnpm install --frozen-lockfile
             - name: tsc
               run: pnpm typecheck
-            - name: tsc (strictNullChecks)
-              run: pnpm --filter @virtool/web run typecheck:strict
     test:
         name: Test
         runs-on: ubuntu-24.04

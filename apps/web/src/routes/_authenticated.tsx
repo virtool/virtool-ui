@@ -54,8 +54,7 @@ export const Route = createFileRoute("/_authenticated")({
 		} catch {
 			throw redirect({
 				to: "/login",
-				// biome-ignore lint/suspicious/noExplicitAny: route search type is `AnyRoute` because tsconfig has `strict: false` (see AppRouter.tsx)
-				search: { redirect: location.href } as any,
+				search: { redirect: location.href },
 			});
 		}
 	},
@@ -81,12 +80,7 @@ function AuthenticatedLayout() {
 
 	if (!data) {
 		return (
-			<Navigate
-				to="/login"
-				replace
-				// biome-ignore lint/suspicious/noExplicitAny: route search type is `AnyRoute` because tsconfig has `strict: false` (see AppRouter.tsx)
-				search={{ redirect: location.href } as any}
-			/>
+			<Navigate to="/login" replace search={{ redirect: location.href }} />
 		);
 	}
 

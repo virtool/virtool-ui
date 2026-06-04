@@ -22,7 +22,8 @@ export function SubtractionItem({
 		<BoxGroupSection className="grid grid-cols-5 items-center">
 			<Link
 				className="col-span-2 text-lg font-medium"
-				to={`/subtractions/${id}`}
+				to="/subtractions/$subtractionId"
+				params={{ subtractionId: id }}
 			>
 				{name}
 			</Link>

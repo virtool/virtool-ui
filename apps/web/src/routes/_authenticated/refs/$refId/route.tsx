@@ -37,7 +37,7 @@ export const Route = createFileRoute("/_authenticated/refs/$refId")({
 function ReferenceDetailLayout() {
 	const { refId } = Route.useParams();
 	const search = Route.useSearch();
-	const navigate = useNavigate();
+	const navigate = useNavigate({ from: Route.fullPath });
 	const { data } = useFetchReference(refId);
 	const isOtuDetail = useMatches().some(
 		(match) => match.routeId === "/_authenticated/refs/$refId/otus/$otuId",
@@ -49,19 +49,19 @@ function ReferenceDetailLayout() {
 
 	function setOpenArchiveReference(openArchiveReference: boolean) {
 		navigate({
-			search: ((prev: Record<string, unknown>) => ({
+			search: (prev: Record<string, unknown>) => ({
 				...prev,
 				openArchiveReference,
-			})) as never,
+			}),
 		});
 	}
 
 	function setOpenEditReference(openEditReference: boolean) {
 		navigate({
-			search: ((prev: Record<string, unknown>) => ({
+			search: (prev: Record<string, unknown>) => ({
 				...prev,
 				openEditReference,
-			})) as never,
+			}),
 		});
 	}
 
