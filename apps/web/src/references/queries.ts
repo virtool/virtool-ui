@@ -256,8 +256,17 @@ export function useCreateReference() {
 export function useUpdateReference(refId: string, onSuccess?: () => void) {
 	const queryClient = useQueryClient();
 
-	const mutation = useMutation<Reference, ErrorResponse, unknown>({
-		mutationFn: (data: { restrict_source_types?: boolean }) => {
+	const mutation = useMutation<
+		Reference,
+		ErrorResponse,
+		{
+			name?: string;
+			description?: string;
+			organism?: string;
+			restrict_source_types?: boolean;
+		}
+	>({
+		mutationFn: (data) => {
 			return apiClient
 				.patch(`/refs/${refId}`)
 				.send(data)
