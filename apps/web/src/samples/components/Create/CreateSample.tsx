@@ -27,7 +27,7 @@ import ReadSelector from "./ReadSelector";
 import SampleUserGroup from "./SampleUserGroup";
 import Sidebar from "./Sidebar";
 
-const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
+const extensionRegex = /^(.*)\.(fq|fastq|fa|fasta)(\.gz)?$/i;
 
 /**
  * Gets a filename without extension, given the file ID and an array of all available read uploads.
@@ -39,7 +39,7 @@ const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
  */
 function getFileNameFromId(id: number, uploads: Upload[]): string {
 	const file = uploads.find((file) => file.id === id);
-	const match = file?.name_on_disk.match(extensionRegex);
+	const match = file?.name.match(extensionRegex);
 	return match ? match[1] : "";
 }
 
