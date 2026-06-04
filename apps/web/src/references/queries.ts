@@ -14,7 +14,6 @@ import type {
 	ReferenceInstalled,
 	ReferenceMinimal,
 	ReferenceSearchResult,
-	ReferenceTarget,
 	ReferenceUser,
 } from "./types";
 
@@ -257,11 +256,17 @@ export function useCreateReference() {
 export function useUpdateReference(refId: string, onSuccess?: () => void) {
 	const queryClient = useQueryClient();
 
-	const mutation = useMutation<Reference, ErrorResponse, unknown>({
-		mutationFn: (data: {
+	const mutation = useMutation<
+		Reference,
+		ErrorResponse,
+		{
+			name?: string;
+			description?: string;
+			organism?: string;
 			restrict_source_types?: boolean;
-			targets?: ReferenceTarget[];
-		}) => {
+		}
+	>({
+		mutationFn: (data) => {
 			return apiClient
 				.patch(`/refs/${refId}`)
 				.send(data)
