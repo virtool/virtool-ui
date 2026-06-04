@@ -12,6 +12,7 @@ export const userServerFnMocks = {
 	getUser: vi.fn(),
 	createUser: vi.fn(),
 	updateUser: vi.fn(),
+	updateAccountHandle: vi.fn(),
 	setAdministratorRole: vi.fn(),
 	listAdministratorRoles: vi.fn(),
 };
@@ -82,6 +83,23 @@ export function mockApiEditUser(
 		userServerFnMocks.updateUser.mockResolvedValue({ ...user, ...update });
 	}
 	return makeScope(userServerFnMocks.updateUser);
+}
+
+/**
+ * Sets up updateAccountHandle to resolve with the updated user (or reject on a
+ * 4xx code, e.g. 409 for a duplicate handle).
+ */
+export function mockApiUpdateAccountHandle(
+	user?: User,
+	statusCode = 200,
+	message = "User already exists.",
+): MockScope {
+	if (statusCode >= 400) {
+		userServerFnMocks.updateAccountHandle.mockRejectedValue(new Error(message));
+	} else {
+		userServerFnMocks.updateAccountHandle.mockResolvedValue(user ?? {});
+	}
+	return makeScope(userServerFnMocks.updateAccountHandle);
 }
 
 /** Sets up listAdministratorRoles to resolve with the given roles. */

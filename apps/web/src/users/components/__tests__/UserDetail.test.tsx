@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiListGroups } from "@tests/api/groups";
 import {
@@ -187,6 +187,56 @@ describe("<UserDetail />", () => {
 		});
 	});
 
+	describe("<Handle />", () => {
+		it("should render with the current handle", async () => {
+			mockApiListGroups(groups);
+			const scope = mockApiGetUser(user.id, user);
+
+			renderWithProviders(<UserDetail userId={user.id} />);
+
+			expect(await screen.findByText("Change Handle")).toBeInTheDocument();
+			expect(screen.getByLabelText("handle")).toHaveValue(user.handle);
+
+			scope.done();
+		});
+
+		it("should submit a new handle", async () => {
+			mockApiListGroups(groups);
+			mockApiGetUser(user.id, user);
+			const scope = mockApiEditUser(user.id, 200, { handle: "new_handle" });
+
+			renderWithProviders(<UserDetail userId={user.id} />);
+
+			const input = await screen.findByLabelText("handle");
+			await userEvent.clear(input);
+			await userEvent.type(input, "new_handle");
+
+			const form = input.closest("form") as HTMLElement;
+			await userEvent.click(within(form).getByRole("button", { name: "Save" }));
+
+			await waitFor(() => scope.done());
+		});
+
+		it("should show a conflict error when the handle is taken", async () => {
+			mockApiListGroups(groups);
+			mockApiGetUser(user.id, user);
+			mockApiEditUser(user.id, 409, { message: "User already exists." });
+
+			renderWithProviders(<UserDetail userId={user.id} />);
+
+			const input = await screen.findByLabelText("handle");
+			await userEvent.clear(input);
+			await userEvent.type(input, "taken_handle");
+
+			const form = input.closest("form") as HTMLElement;
+			await userEvent.click(within(form).getByRole("button", { name: "Save" }));
+
+			await waitFor(() =>
+				expect(screen.getByText("User already exists.")).toBeInTheDocument(),
+			);
+		});
+	});
+
 	describe("<Password />", () => {
 		it("should render correctly", async () => {
 			mockApiListGroups(groups);
@@ -200,7 +250,12 @@ describe("<UserDetail />", () => {
 				screen.getByText("Force user to reset password on next login"),
 			).toBeInTheDocument();
 			expect(screen.getByLabelText("password")).toBeInTheDocument();
-			expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+			const passwordForm = screen
+				.getByLabelText("password")
+				.closest("form") as HTMLElement;
+			expect(
+				within(passwordForm).getByRole("button", { name: "Save" }),
+			).toBeInTheDocument();
 
 			scope.done();
 		});
@@ -214,8 +269,12 @@ describe("<UserDetail />", () => {
 
 			expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
-			await userEvent.type(screen.getByLabelText("password"), "newPassword");
-			await userEvent.click(screen.getByRole("button", { name: "Save" }));
+			const passwordInput = screen.getByLabelText("password");
+			await userEvent.type(passwordInput, "newPassword");
+			const passwordForm = passwordInput.closest("form") as HTMLElement;
+			await userEvent.click(
+				within(passwordForm).getByRole("button", { name: "Save" }),
+			);
 
 			scope.done();
 		});
@@ -232,7 +291,12 @@ describe("<UserDetail />", () => {
 
 			expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
-			await userEvent.click(screen.getByRole("button", { name: "Save" }));
+			const passwordForm = screen
+				.getByLabelText("password")
+				.closest("form") as HTMLElement;
+			await userEvent.click(
+				within(passwordForm).getByRole("button", { name: "Save" }),
+			);
 
 			await waitFor(() =>
 				expect(

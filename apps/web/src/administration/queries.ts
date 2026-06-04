@@ -209,6 +209,7 @@ export function useFetchUser(userId: number) {
 export type UserUpdate = {
 	active?: boolean;
 	force_reset?: boolean;
+	handle?: string;
 	password?: string;
 	groups?: number[];
 	primary_group?: number | null;

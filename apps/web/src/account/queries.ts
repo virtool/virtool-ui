@@ -3,6 +3,7 @@ import { apiClient } from "@app/api";
 import { resetClient } from "@app/utils";
 import type { Permissions } from "@groups/types";
 import { logoutFn } from "@server/auth/functions";
+import { updateAccountHandle } from "@server/users/functions";
 import {
 	queryOptions,
 	useMutation,
@@ -61,6 +62,26 @@ export function useUpdateAccount() {
 				.patch("/account")
 				.send({ update })
 				.then((res) => res.body),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+		},
+	});
+}
+
+/**
+ * Initializes a mutator for changing the current account's handle
+ *
+ * @returns A mutator for changing the account handle
+ */
+export function useUpdateHandle() {
+	const queryClient = useQueryClient();
+
+	return useMutation<
+		Awaited<ReturnType<typeof updateAccountHandle>>,
+		Error,
+		{ handle: string }
+	>({
+		mutationFn: ({ handle }) => updateAccountHandle({ data: { handle } }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
 		},

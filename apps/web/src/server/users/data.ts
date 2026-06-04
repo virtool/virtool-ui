@@ -73,6 +73,7 @@ export type CreateUserValues = {
 export type UserUpdateValues = {
 	active?: boolean;
 	force_reset?: boolean;
+	handle?: string;
 	password?: string;
 	groups?: number[];
 	primary_group?: number | null;
@@ -398,6 +399,9 @@ export async function updateUser(
 		patch.forceReset = values.force_reset;
 		patch.invalidateSessions = true;
 	}
+	if (values.handle !== undefined) {
+		patch.handle = values.handle;
+	}
 	if (values.password !== undefined) {
 		patch.password = await hashPassword(values.password);
 		patch.lastPasswordChange = new Date();
@@ -406,7 +410,14 @@ export async function updateUser(
 
 	await db.transaction(async (tx) => {
 		if (Object.keys(patch).length > 0) {
-			await tx.update(usersTable).set(patch).where(eq(usersTable.id, userId));
+			try {
+				await tx.update(usersTable).set(patch).where(eq(usersTable.id, userId));
+			} catch (error) {
+				if (isUniqueViolation(error)) {
+					throw new UserConflictError();
+				}
+				throw error;
+			}
 		}
 
 		if (values.groups !== undefined) {
