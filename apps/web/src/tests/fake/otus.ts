@@ -286,7 +286,7 @@ export function mockApiEditSequence(
 	host: string,
 	sequence: string,
 	segment?: string | null,
-	target?: string,
+	target?: string | null,
 ) {
 	const OTUSequence = createFakeOTUSequence({
 		accession,
