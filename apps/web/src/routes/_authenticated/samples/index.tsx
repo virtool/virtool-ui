@@ -22,7 +22,7 @@ function SamplesRoute() {
 	const navigate = Route.useNavigate();
 	const { data: labels, isPending } = useFetchLabels();
 
-	if (isPending) {
+	if (isPending || !labels) {
 		return <LoadingPlaceholder />;
 	}
 

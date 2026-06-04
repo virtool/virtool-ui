@@ -21,7 +21,9 @@ export default function IndexOTU({
 }: IndexOTUProps) {
 	return (
 		<BoxGroupSection className="flex justify-between">
-			<Link to={`/refs/${refId}/otus/${id}`}>{name}</Link>
+			<Link to="/refs/$refId/otus/$otuId" params={{ refId, otuId: id }}>
+				{name}
+			</Link>
 			<Badge>
 				{changeCount} {`change${changeCount > 1 ? "s" : ""}`}
 			</Badge>

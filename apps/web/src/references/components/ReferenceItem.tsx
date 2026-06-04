@@ -55,7 +55,11 @@ export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 
 	return (
 		<BoxGroupSection className="grid grid-cols-3 items-center gap-x-4">
-			<Link className="font-medium text-lg" to={`/refs/${id}`}>
+			<Link
+				className="font-medium text-lg"
+				to="/refs/$refId"
+				params={{ refId: id }}
+			>
 				{name}
 			</Link>
 			<Attribution time={created_at} user={user.handle} />

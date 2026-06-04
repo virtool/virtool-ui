@@ -35,7 +35,10 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 	const onRemove = useRemoveAnalysis(id);
 
 	const title = checkSupportedWorkflow(workflow) ? (
-		<Link to={`/samples/${analysis.sample.id}/analyses/${id}`}>
+		<Link
+			to="/samples/$sampleId/analyses/$analysisId"
+			params={{ sampleId: analysis.sample.id, analysisId: id }}
+		>
 			{getWorkflowDisplayName(workflow)}
 		</Link>
 	) : (
@@ -84,10 +87,15 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 					<Equal size={18} />
 					<SlashList className="m-0">
 						<li>
-							<Link to={`/refs/${reference.id}`}>{reference.name}</Link>
+							<Link to="/refs/$refId" params={{ refId: reference.id }}>
+								{reference.name}
+							</Link>
 						</li>
 						<li>
-							<Link to={`/refs/${reference.id}/indexes/${index.id}`}>
+							<Link
+								to="/refs/$refId/indexes/$indexId"
+								params={{ refId: reference.id, indexId: index.id }}
+							>
 								Index {index.version}
 							</Link>
 						</li>
@@ -99,7 +107,10 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 						key={subtraction.id}
 					>
 						<Icon icon={EqualNot} />
-						<Link to={`/subtractions/${subtraction.id}`}>
+						<Link
+							to="/subtractions/$subtractionId"
+							params={{ subtractionId: subtraction.id }}
+						>
 							{subtraction.name}
 						</Link>
 					</span>

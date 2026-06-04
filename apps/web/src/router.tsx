@@ -33,7 +33,6 @@ export function getRouter() {
 		},
 	});
 
-	// @ts-expect-error TanStack Router requires strictNullChecks which is not enabled in this project
 	const router = createRouter({
 		routeTree,
 		context: { queryClient },

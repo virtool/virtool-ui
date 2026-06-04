@@ -51,7 +51,8 @@ export default function SampleItem({
 				<div className="grid grid-cols-3 items-center">
 					<Link
 						className="text-lg font-medium overflow-hidden text-ellipsis whitespace-nowrap"
-						to={`/samples/${sample.id}`}
+						to="/samples/$sampleId"
+						params={{ sampleId: sample.id }}
 					>
 						{sample.name}
 					</Link>

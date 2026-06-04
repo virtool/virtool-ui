@@ -72,11 +72,17 @@ function OtuDetailLayout() {
 					</ViewHeaderIcons>
 				</ViewHeaderTitle>
 				<p className="flex font-medium items-center gap-2 py-2">
-					<Link to={`/refs/${refId}`}>{reference.name}</Link>
+					<Link to="/refs/$refId" params={{ refId }}>
+						{reference.name}
+					</Link>
 					<span className="text-slate-600">/</span>
-					<Link to={`/refs/${refId}/otus`}>OTUs</Link>
+					<Link to="/refs/$refId/otus" params={{ refId }}>
+						OTUs
+					</Link>
 					<span className="text-slate-600">/</span>
-					<Link to={`/refs/${refId}/otus/${otuId}`}>{name}</Link>
+					<Link to="/refs/$refId/otus/$otuId" params={{ refId, otuId }}>
+						{name}
+					</Link>
 				</p>
 			</ViewHeader>
 

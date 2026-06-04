@@ -129,7 +129,8 @@ export default function SequenceSegmentField({
 				<div>
 					<Link
 						className="font-medium"
-						to={`/refs/${refId}/otus/${otuId}/schema`}
+						to="/refs/$refId/otus/$otuId/schema"
+						params={{ refId, otuId }}
 					>
 						Add a Schema
 					</Link>

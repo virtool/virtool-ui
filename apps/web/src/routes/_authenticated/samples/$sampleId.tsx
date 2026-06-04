@@ -52,7 +52,7 @@ function SampleDetailLayout() {
 	const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
 	const navigate = useNavigate({ from: Route.fullPath });
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 
@@ -73,10 +73,10 @@ function SampleDetailLayout() {
 									tip="modify"
 									onClick={() =>
 										navigate({
-											search: ((prev: Record<string, unknown>) => ({
+											search: (prev: Record<string, unknown>) => ({
 												...prev,
 												openEditSample: true,
-											})) as never,
+											}),
 											replace: true,
 										})
 									}

@@ -12,7 +12,7 @@ export const Route = createFileRoute(
 function SampleDetailGeneralRoute() {
 	const { data: labels, isPending } = useFetchLabels();
 
-	if (isPending) {
+	if (isPending || !labels) {
 		return <LoadingPlaceholder />;
 	}
 

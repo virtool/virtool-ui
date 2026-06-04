@@ -34,7 +34,8 @@ export function UserItem({
 				<InitialIcon size="lg" handle={handle} />
 				{canEdit ? (
 					<Link
-						to={`/administration/users/${id}`}
+						to="/administration/users/$userId"
+						params={{ userId: String(id) }}
 						className="text-lg font-medium"
 					>
 						{handle}

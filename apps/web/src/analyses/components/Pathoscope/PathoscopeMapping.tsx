@@ -8,7 +8,9 @@ import { Bars } from "../Viewer/Bars";
 export function AnalysisMappingReferenceTitle({ index, reference }) {
 	return (
 		<div className="flex items-center [&_a]:mr-1">
-			<Link to={`/refs/${reference.id}`}>{reference.name}</Link>
+			<Link to="/refs/$refId" params={{ refId: reference.id }}>
+				{reference.name}
+			</Link>
 			<Label>{index.version}</Label>
 		</div>
 	);
@@ -17,7 +19,12 @@ export function AnalysisMappingReferenceTitle({ index, reference }) {
 export function AnalysisMappingSubtractionTitle({ subtractions }) {
 	return subtractions.map((subtraction, index) => (
 		<span key={subtraction.id}>
-			<Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
+			<Link
+				to="/subtractions/$subtractionId"
+				params={{ subtractionId: subtraction.id }}
+			>
+				{subtraction.name}
+			</Link>
 			{index !== subtractions.length - 1 ? ", " : ""}
 		</span>
 	));
