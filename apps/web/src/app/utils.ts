@@ -19,7 +19,7 @@ const alphanumeric =
  * Convert an integer in bytes to a nicely formatted string (eg. 10.2 GB).
  */
 export function byteSize(
-	bytes: number,
+	bytes: number | null,
 	spaceSeparated: boolean = false,
 ): string {
 	if (bytes) {

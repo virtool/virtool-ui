@@ -62,7 +62,7 @@ export type User = UserNested & {
 	permissions: Permissions;
 
 	/** Their primary group */
-	primary_group: GroupMinimal;
+	primary_group: GroupMinimal | null;
 };
 
 /** User search results from the API */

@@ -5,7 +5,7 @@ import Table from "@base/Table";
 type SequenceTableProps = {
 	definition: string;
 	host: string;
-	segment?: string;
+	segment?: string | null;
 	sequence: string;
 };
 

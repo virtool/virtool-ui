@@ -64,9 +64,9 @@ export type OtuSequence = {
 	host: string;
 	id: string;
 	remote?: OtuRemote;
-	segment?: string;
+	segment?: string | null;
 	sequence: string;
-	target?: string;
+	target?: string | null;
 };
 
 export type OtuIsolate = {
@@ -78,7 +78,7 @@ export type OtuIsolate = {
 };
 
 export type OtuSegment = {
-	molecule?: Molecule;
+	molecule?: Molecule | null;
 	name: string;
 	required: boolean;
 };
@@ -99,8 +99,8 @@ export type OtuMinimal = OtuNested & {
 /** A complete OTU */
 export type Otu = OtuMinimal & {
 	isolates: Array<OtuIsolate>;
-	issues?: { [key: string]: any } | boolean;
-	last_indexed_version?: number;
+	issues?: { [key: string]: any } | boolean | null;
+	last_indexed_version?: number | null;
 	most_recent_change: HistoryNested;
 	schema: Array<OtuSegment>;
 	remote?: OtuRemote;
