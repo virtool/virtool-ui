@@ -38,6 +38,12 @@ export function getRouter() {
 		routeTree,
 		context: { queryClient },
 		defaultPendingMinMs: 0,
+		// Preload routes on hover/touch/focus. Loaders back onto React Query via
+		// `ensureQueryData`, so a 0 preload stale time hands freshness decisions
+		// entirely to React Query's own `staleTime`/`gcTime` instead of letting
+		// the router's 30s default short-circuit preloads.
+		defaultPreload: "intent",
+		defaultPreloadStaleTime: 0,
 		scrollRestoration: true,
 	});
 
