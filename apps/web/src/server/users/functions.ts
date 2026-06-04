@@ -39,7 +39,7 @@ const findUsersSchema = z
 	.optional();
 
 const createUserSchema = z.object({
-	handle: z.string().min(1),
+	handle: z.string().trim().min(1),
 	password: z.string().min(1),
 	forceReset: z.boolean().default(false),
 });
@@ -48,20 +48,22 @@ const updateUserSchema = z.object({
 	userId: z.number().int().positive(),
 	active: z.boolean().optional(),
 	force_reset: z.boolean().optional(),
-	handle: z.string().min(1).optional(),
+	handle: z.string().trim().min(1).optional(),
 	password: z.string().min(1).optional(),
 	groups: z.array(z.number().int().positive()).optional(),
 	primary_group: z.number().int().positive().nullable().optional(),
 });
 
 const accountHandleSchema = z.object({
-	handle: z.string().min(1),
+	handle: z.string().trim().min(1),
 });
 
 // Reserved handle the Python service forbids; rejected before hitting the
 // database so we return a clear message rather than a unique-constraint error.
+// Trim defensively so whitespace-padded variants like " virtool" can't slip
+// past the check even if a caller skips the schema's trim.
 function checkReservedHandle(handle: string): void {
-	if (handle.toLowerCase() === "virtool") {
+	if (handle.trim().toLowerCase() === "virtool") {
 		setResponseStatus(400);
 		throw new Error("Reserved user name: virtool");
 	}

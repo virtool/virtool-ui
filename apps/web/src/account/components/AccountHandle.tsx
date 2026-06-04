@@ -6,6 +6,7 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useUpdateHandle } from "../queries";
 
@@ -26,8 +27,15 @@ export default function AccountHandle({ handle }: HandleProps) {
 		formState: { errors },
 		handleSubmit,
 		register,
+		reset,
 	} = useForm<FormValues>({ defaultValues: { handle } });
 	const mutation = useUpdateHandle();
+
+	// Keep the input in sync when the handle prop changes after a successful
+	// update and refetch.
+	useEffect(() => {
+		reset({ handle });
+	}, [handle, reset]);
 
 	function onSubmit(values: FormValues) {
 		mutation.mutate({ handle: values.handle });

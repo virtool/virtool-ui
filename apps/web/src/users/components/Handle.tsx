@@ -7,6 +7,7 @@ import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type HandleProps = {
@@ -29,7 +30,14 @@ export default function Handle({ id, handle }: HandleProps) {
 		formState: { errors },
 		handleSubmit,
 		register,
+		reset,
 	} = useForm<FormValues>({ defaultValues: { handle } });
+
+	// Keep the input in sync when the handle prop changes after a successful
+	// update and refetch.
+	useEffect(() => {
+		reset({ handle });
+	}, [handle, reset]);
 
 	return (
 		<BoxGroup>

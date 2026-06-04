@@ -235,6 +235,29 @@ describe("<UserDetail />", () => {
 				expect(screen.getByText("User already exists.")).toBeInTheDocument(),
 			);
 		});
+
+		it("should show an error when the handle is reserved", async () => {
+			mockApiListGroups(groups);
+			mockApiGetUser(user.id, user);
+			mockApiEditUser(user.id, 400, {
+				message: "Reserved user name: virtool",
+			});
+
+			renderWithProviders(<UserDetail userId={user.id} />);
+
+			const input = await screen.findByLabelText("handle");
+			await userEvent.clear(input);
+			await userEvent.type(input, "virtool");
+
+			const form = input.closest("form") as HTMLElement;
+			await userEvent.click(within(form).getByRole("button", { name: "Save" }));
+
+			await waitFor(() =>
+				expect(
+					screen.getByText("Reserved user name: virtool"),
+				).toBeInTheDocument(),
+			);
+		});
 	});
 
 	describe("<Password />", () => {
