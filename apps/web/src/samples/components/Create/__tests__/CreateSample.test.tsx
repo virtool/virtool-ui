@@ -27,9 +27,11 @@ async function setReadSelectorMode(
 	name: "Auto-pair" | "Manual",
 ): Promise<void> {
 	await userEvent.click(
-		screen.getByRole("combobox", { name: "Read selection mode" }),
+		screen.getByRole("button", { name: /^(Auto-pair|Manual)$/ }),
 	);
-	await userEvent.click(await screen.findByRole("option", { name }));
+	await userEvent.click(
+		await screen.findByRole("menuitem", { name: new RegExp(name) }),
+	);
 }
 
 describe("<CreateSample>", () => {
