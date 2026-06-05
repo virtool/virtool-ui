@@ -15,4 +15,4 @@ allowBuilds:
   ssh2: true
 
 overrides:
-  '@tanstack/router-core': '1.170.0'
+  '@tanstack/router-core': '1.171.9'
