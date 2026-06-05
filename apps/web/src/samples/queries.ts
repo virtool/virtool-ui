@@ -7,6 +7,7 @@ import {
 	useQuery,
 	useQueryClient,
 } from "@tanstack/react-query";
+import { fileQueryKeys } from "@uploads/queries";
 import { union } from "es-toolkit";
 import type { ErrorResponse } from "@/types/api";
 import type {
@@ -96,6 +97,8 @@ export function useFetchSample(sampleId: string) {
  * @returns A mutator for creating a sample
  */
 export function useCreateSample() {
+	const queryClient = useQueryClient();
+
 	return useMutation<
 		Sample,
 		ErrorResponse,
@@ -136,6 +139,12 @@ export function useCreateSample() {
 					group,
 				})
 				.then((res) => res.body),
+		onSuccess: () => {
+			// The created sample reserves its read files, so the server stops
+			// returning them. Refetch the uploads lists to drop them from the
+			// selector.
+			queryClient.invalidateQueries({ queryKey: fileQueryKeys.lists() });
+		},
 	});
 }
 
