@@ -56,8 +56,12 @@ function rowButton(name: string): HTMLElement {
 }
 
 async function setMode(name: "Auto-pair" | "Manual"): Promise<void> {
-	await userEvent.click(screen.getByRole("combobox"));
-	await userEvent.click(await screen.findByRole("option", { name }));
+	await userEvent.click(
+		screen.getByRole("button", { name: /^(Auto-pair|Manual)$/ }),
+	);
+	await userEvent.click(
+		await screen.findByRole("menuitem", { name: new RegExp(name) }),
+	);
 }
 
 describe("<ReadSelector>", () => {
@@ -67,7 +71,9 @@ describe("<ReadSelector>", () => {
 		mockApiListFiles([]);
 		renderWithProviders(<Harness files={[createFakeFile()]} />);
 
-		expect(screen.getByRole("combobox")).toHaveTextContent("Auto-pair");
+		expect(
+			screen.getByRole("button", { name: /^(Auto-pair|Manual)$/ }),
+		).toHaveTextContent("Auto-pair");
 	});
 
 	describe("Auto-pair mode", () => {
