@@ -9,11 +9,10 @@ import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("<Settings />", () => {
-	let path;
+	const path = "/administration/settings";
 
 	beforeEach(() => {
 		mockApiGetSettings(createFakeSettings());
-		path = "/administration/settings";
 	});
 
 	afterEach(() => nock.cleanAll());

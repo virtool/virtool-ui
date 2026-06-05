@@ -1,3 +1,4 @@
+import type { FormattedPathoscopeIsolate } from "@analyses/types";
 import { beforeEach, describe, expect, it } from "vitest";
 import {
 	fillAlign,
@@ -96,7 +97,7 @@ describe("median()", () => {
 });
 
 describe("mergeCoverage()", () => {
-	let isolates;
+	let isolates: FormattedPathoscopeIsolate[];
 
 	beforeEach(() => {
 		const coverages = [
@@ -104,7 +105,9 @@ describe("mergeCoverage()", () => {
 			[7, 5, 5, 1, 1, 2, 1, 5, 6, 2, 1, 0, 0, 0, 1, 3, 2],
 			[1, 1, 2, 3, 4, 4, 4, 4, 2, 2, 2, 3, 2, 1, 0, 1, 0],
 		];
-		isolates = coverages.map((c) => ({ filled: c }));
+		isolates = coverages.map(
+			(c) => ({ filled: c }) as FormattedPathoscopeIsolate,
+		);
 	});
 
 	it("should return merged coverage when all isolates have same length", () => {

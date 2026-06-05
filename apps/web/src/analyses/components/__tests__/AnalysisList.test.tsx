@@ -12,7 +12,7 @@ import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("<AnalysesToolbar />", () => {
-	let sample;
+	let sample: ReturnType<typeof createFakeSample>;
 
 	beforeEach(() => {
 		sample = createFakeSample();

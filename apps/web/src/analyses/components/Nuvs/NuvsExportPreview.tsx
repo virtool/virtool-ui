@@ -9,11 +9,11 @@ type NuVsExportPreviewProps = {
  */
 export default function NuvsExportPreview({ mode }: NuVsExportPreviewProps) {
 	let previewHeader = ">sequence_1|17SP002|RNA Polymerase";
-	let previewSequence;
-	let indexName;
-	let indexExample;
-	let barName;
-	let barExample;
+	let previewSequence: string;
+	let indexName: string;
+	let indexExample: string;
+	let barName: string;
+	let barExample: string;
 
 	if (mode === "contigs") {
 		indexName = "sequence index";
