@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/tanstackstart-react";
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { getCommonOptions } from "@virtool/sentry/browser";
+import { CONTENT_SCROLL_ID } from "./app/scroll";
 import { routeTree } from "./routeTree.gen";
 
 export function getRouter() {
@@ -43,7 +44,12 @@ export function getRouter() {
 		// the router's 30s default short-circuit preloads.
 		defaultPreload: "intent",
 		defaultPreloadStaleTime: 0,
+		// The document no longer scrolls — the authenticated shell scrolls an
+		// inner container so the navbar can stay full-bleed with a stable
+		// scrollbar gutter. Point scroll-to-top on navigation at that container;
+		// back/forward restoration of it is handled automatically by the watcher.
 		scrollRestoration: true,
+		scrollToTopSelectors: [`#${CONTENT_SCROLL_ID}`],
 	});
 
 	if (!router.isServer) {

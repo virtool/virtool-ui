@@ -28,8 +28,8 @@ html {
 	font-size: 14px;
 }
 
-body {
-	height: calc(100vh - 40px);
+@utility scrollbar-gutter-stable {
+	scrollbar-gutter: stable;
 }
 
 @layer base {
