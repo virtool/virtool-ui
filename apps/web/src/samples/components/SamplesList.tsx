@@ -51,7 +51,7 @@ export default function SamplesList({
 		filterLabels,
 		filterWorkflows,
 	);
-	const { isPending: isPendingIndexes } = useListIndexes(true);
+	const { isPending: isPendingIndexes } = useListIndexes({ ready: true });
 
 	const [selected, setSelected] = useState<string[]>([]);
 
