@@ -39,7 +39,7 @@ export default function NuvsExportPreview({ mode }: NuVsExportPreviewProps) {
 
 	return (
 		<div>
-			<label>Preview</label>
+			<h3>Preview</h3>
 			<div className="bg-gray-100 border border-gray-300 rounded shadow-inner text-gray-600 mb-4 min-h-5 p-5">
 				<p style={{ wordWrap: "break-word", marginBottom: 0 }}>
 					<code>{previewHeader}</code>
@@ -52,7 +52,7 @@ export default function NuvsExportPreview({ mode }: NuVsExportPreviewProps) {
 				</p>
 			</div>
 
-			<label>Header Fields</label>
+			<h3>Header Fields</h3>
 			<Table>
 				<thead>
 					<tr>
