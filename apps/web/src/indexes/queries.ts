@@ -51,22 +51,29 @@ export function useFindIndexes(
 	});
 }
 
+type ListIndexesOptions = {
+	/** Only return ready indexes */
+	ready: boolean;
+
+	/** Filter indexes by their reference's archived status */
+	archived?: boolean;
+};
+
 /**
  * Gets a list of ready indexes
  *
- * @param ready - Only return ready indexes
- * @param archived - Filter indexes by their reference's archived status
+ * @param options - The ready and archived filters to apply
  * @returns A list of ready indexes
  */
-export function useListIndexes(ready: boolean, archived?: boolean) {
+export function useListIndexes({ ready, archived }: ListIndexesOptions) {
+	const params = archived === undefined ? { ready } : { ready, archived };
+
 	return useQuery<IndexMinimal[]>({
-		queryKey: indexQueryKeys.list(
-			archived === undefined ? [ready] : [ready, archived],
-		),
+		queryKey: indexQueryKeys.list(Object.values(params)),
 		queryFn: () =>
 			apiClient
 				.get("/indexes")
-				.query(archived === undefined ? { ready } : { ready, archived })
+				.query(params)
 				.then((res) => res.body),
 	});
 }
