@@ -4,10 +4,6 @@ import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import Button from "@base/Button";
 import CompactScrollList from "@base/CompactScrollList";
-import Dropdown from "@base/Dropdown";
-import DropdownButton from "@base/DropdownButton";
-import DropdownMenuContent from "@base/DropdownMenuContent";
-import DropdownMenuItem from "@base/DropdownMenuItem";
 import Icon from "@base/Icon";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
@@ -15,6 +11,10 @@ import InputLabel from "@base/InputLabel";
 import InputSearch from "@base/InputSearch";
 import Link from "@base/Link";
 import NoneFoundSection from "@base/NoneFoundSection";
+import Select from "@base/Select";
+import SelectButton from "@base/SelectButton";
+import SelectContent from "@base/SelectContent";
+import SelectItem from "@base/SelectItem";
 import Toolbar from "@base/Toolbar";
 import type {
 	FetchNextPageOptions,
@@ -203,9 +203,30 @@ export default function ReadSelector({
 			),
 		);
 
+	const pairedStatus =
+		selected.length === 2
+			? "Paired"
+			: selected.length === 1
+				? "Unpaired"
+				: null;
+
 	return (
 		<InputGroup>
-			<InputLabel htmlFor="read-files-search">Read files</InputLabel>
+			<div className="flex items-center justify-between">
+				<InputLabel htmlFor="read-files-search">Read files</InputLabel>
+				{pairedStatus && (
+					<span
+						className={cn(
+							"rounded-md text-xs font-bold px-2 py-0.5",
+							pairedStatus === "Paired"
+								? "bg-green-100 text-green-700"
+								: "bg-gray-100 text-gray-500",
+						)}
+					>
+						{pairedStatus}
+					</span>
+				)}
+			</div>
 
 			{wasCleared && (
 				<Alert color="orange" icon={TriangleAlert} level>
@@ -245,25 +266,27 @@ export default function ReadSelector({
 					<Button className="inline-flex gap-2" type="button" onClick={reset}>
 						<Icon icon={Undo} /> Reset
 					</Button>
-					<Dropdown>
-						<DropdownButton className="inline-flex items-center gap-2">
-							{selectorModes.find((m) => m.value === mode)?.label}
-							<Icon icon={ChevronDown} />
-						</DropdownButton>
-						<DropdownMenuContent className="max-w-80">
+					<Select
+						value={mode}
+						onValueChange={(value) => setMode(value as SelectorMode)}
+					>
+						<SelectButton
+							aria-label="Read selection mode"
+							icon={ChevronDown}
+							placeholder="Selection mode"
+						/>
+						<SelectContent position="popper" align="end">
 							{selectorModes.map((selectorMode) => (
-								<DropdownMenuItem
+								<SelectItem
 									key={selectorMode.value}
-									onSelect={() => setMode(selectorMode.value)}
+									value={selectorMode.value}
+									description={selectorMode.description}
 								>
-									<div className="font-medium">{selectorMode.label}</div>
-									<div className="text-sm text-gray-600">
-										{selectorMode.description}
-									</div>
-								</DropdownMenuItem>
+									{selectorMode.label}
+								</SelectItem>
 							))}
-						</DropdownMenuContent>
-					</Dropdown>
+						</SelectContent>
+					</Select>
 				</Toolbar>
 				{noneFound || (
 					<>

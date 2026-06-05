@@ -8,6 +8,7 @@ type SelectButtonProps = {
 	className?: string;
 	icon: LucideIcon;
 	id?: string;
+	"aria-label"?: string;
 };
 
 export default function SelectButton({
@@ -15,9 +16,11 @@ export default function SelectButton({
 	icon: LucideIcon,
 	className,
 	id,
+	"aria-label": ariaLabel,
 }: SelectButtonProps) {
 	return (
 		<SelectPrimitive.Trigger
+			aria-label={ariaLabel}
 			className={cn(
 				"flex justify-between items-center px-2.5 py-1.5 bg-white border border-gray-300 rounded font-medium capitalize [&_svg]:ml-1",
 				className,

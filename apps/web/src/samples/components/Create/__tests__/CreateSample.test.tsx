@@ -23,6 +23,15 @@ function readRowButton(name: string): HTMLElement {
 	return screen.getByRole("button", { name: new RegExp(escapeRegExp(name)) });
 }
 
+async function setReadSelectorMode(
+	name: "Auto-pair" | "Manual",
+): Promise<void> {
+	await userEvent.click(
+		screen.getByRole("combobox", { name: "Read selection mode" }),
+	);
+	await userEvent.click(await screen.findByRole("option", { name }));
+}
+
 describe("<CreateSample>", () => {
 	const labels = [createFakeLabel()];
 	const subtractionShortlist = createFakeShortlistSubtraction();
@@ -147,6 +156,7 @@ describe("<CreateSample>", () => {
 		await userEvent.click(screen.getByText("Normal"));
 
 		// Select Files
+		await setReadSelectorMode("Manual");
 		await userEvent.click(screen.getByText(files[0].name));
 		await userEvent.click(screen.getByText(files[1].name));
 
@@ -253,10 +263,10 @@ describe("<CreateSample>", () => {
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
 		await userEvent.click(screen.getByText(file.name));
-		expect(screen.getByText("1 of 1 selected")).toBeInTheDocument();
+		expect(screen.getByText("Unpaired")).toBeInTheDocument();
 
 		await userEvent.click(screen.getByRole("button", { name: "Reset" }));
-		expect(screen.getByText("0 of 1 selected")).toBeInTheDocument();
+		expect(screen.queryByText("Unpaired")).not.toBeInTheDocument();
 	});
 
 	it("should be able to swap read orientation", async () => {
@@ -272,10 +282,11 @@ describe("<CreateSample>", () => {
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
+		await setReadSelectorMode("Manual");
 		await userEvent.click(screen.getByText(files[0].name));
 		await userEvent.click(screen.getByText(files[1].name));
 
-		expect(screen.getByText("2 of 2 selected")).toBeInTheDocument();
+		expect(screen.getByText("Paired")).toBeInTheDocument();
 		expect(
 			within(readRowButton(files[0].name)).getByText("LEFT"),
 		).toBeVisible();
@@ -300,6 +311,7 @@ describe("<CreateSample>", () => {
 
 		await userEvent.type(await screen.findByLabelText("Name"), "Sample B");
 
+		await setReadSelectorMode("Manual");
 		await userEvent.click(screen.getByText(files[0].name));
 
 		expect(
@@ -324,7 +336,6 @@ describe("<CreateSample>", () => {
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
 		await userEvent.click(screen.getByText(file.name));
-		expect(screen.getByText("1 of 1 selected")).toBeInTheDocument();
 
 		expect(within(readRowButton(file.name)).getByText("LEFT")).toBeVisible();
 		expect(within(readRowButton(file.name)).queryByText("RIGHT")).toBeNull();
