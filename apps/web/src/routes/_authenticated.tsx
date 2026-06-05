@@ -108,10 +108,10 @@ function AuthenticatedLayout() {
 					id={CONTENT_SCROLL_ID}
 					className="flex flex-1 min-h-0 overflow-y-auto scrollbar-gutter-stable"
 				>
-					<aside className="sticky top-0 self-start">
+					<aside className="sticky top-0 self-start pt-18">
 						<Sidebar administratorRole={data.administrator_role} />
 					</aside>
-					<main className="flex-1 min-w-0 px-9">
+					<main className="flex-1 min-w-0 p-18">
 						<Suspense fallback={<LoadingPlaceholder />}>
 							<Outlet />
 						</Suspense>
