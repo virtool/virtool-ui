@@ -4,6 +4,10 @@ import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import Button from "@base/Button";
 import CompactScrollList from "@base/CompactScrollList";
+import Dropdown from "@base/Dropdown";
+import DropdownButton from "@base/DropdownButton";
+import DropdownMenuContent from "@base/DropdownMenuContent";
+import DropdownMenuItem from "@base/DropdownMenuItem";
 import Icon from "@base/Icon";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
@@ -11,10 +15,6 @@ import InputLabel from "@base/InputLabel";
 import InputSearch from "@base/InputSearch";
 import Link from "@base/Link";
 import NoneFoundSection from "@base/NoneFoundSection";
-import Select from "@base/Select";
-import SelectButton from "@base/SelectButton";
-import SelectContent from "@base/SelectContent";
-import SelectItem from "@base/SelectItem";
 import Toolbar from "@base/Toolbar";
 import type {
 	FetchNextPageOptions,
@@ -266,27 +266,26 @@ export default function ReadSelector({
 					<Button className="inline-flex gap-2" type="button" onClick={reset}>
 						<Icon icon={Undo} /> Reset
 					</Button>
-					<Select
-						value={mode}
-						onValueChange={(value) => setMode(value as SelectorMode)}
-					>
-						<SelectButton
-							aria-label="Read selection mode"
-							icon={ChevronDown}
-							placeholder="Selection mode"
-						/>
-						<SelectContent position="popper" align="end">
+					<Dropdown>
+						<DropdownButton className="flex items-center gap-1.5">
+							{selectorModes.find((m) => m.value === mode)?.label}
+							<ChevronDown size={16} />
+						</DropdownButton>
+						<DropdownMenuContent className="max-w-72">
 							{selectorModes.map((selectorMode) => (
-								<SelectItem
+								<DropdownMenuItem
 									key={selectorMode.value}
-									value={selectorMode.value}
-									description={selectorMode.description}
+									onSelect={() => setMode(selectorMode.value)}
+									className="flex flex-col items-start"
 								>
-									{selectorMode.label}
-								</SelectItem>
+									<span className="font-medium">{selectorMode.label}</span>
+									<span className="text-xs text-gray-500">
+										{selectorMode.description}
+									</span>
+								</DropdownMenuItem>
 							))}
-						</SelectContent>
-					</Select>
+						</DropdownMenuContent>
+					</Dropdown>
 				</Toolbar>
 				{noneFound || (
 					<>
