@@ -88,7 +88,7 @@ type UseCompatibleIndexesResult = {
 };
 
 export function useCompatibleIndexes(): UseCompatibleIndexesResult {
-	const { data, isPending } = useListIndexes(true);
+	const { data, isPending } = useListIndexes(true, false);
 
 	const indexes = Object.values(
 		groupBy(data ?? [], (item) => item.reference.id),

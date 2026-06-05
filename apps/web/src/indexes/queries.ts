@@ -54,15 +54,19 @@ export function useFindIndexes(
 /**
  * Gets a list of ready indexes
  *
+ * @param ready - Only return ready indexes
+ * @param archived - Filter indexes by their reference's archived status
  * @returns A list of ready indexes
  */
-export function useListIndexes(ready: boolean) {
+export function useListIndexes(ready: boolean, archived?: boolean) {
 	return useQuery<IndexMinimal[]>({
-		queryKey: indexQueryKeys.list([ready]),
+		queryKey: indexQueryKeys.list(
+			archived === undefined ? [ready] : [ready, archived],
+		),
 		queryFn: () =>
 			apiClient
 				.get("/indexes")
-				.query({ ready })
+				.query(archived === undefined ? { ready } : { ready, archived })
 				.then((res) => res.body),
 	});
 }
