@@ -1,6 +1,7 @@
 import type { Connection } from "mongoose";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PgClient } from "../../db/pg";
+import { logger } from "../../logger";
 import { checkMongo, checkPostgres, summarizeReadiness } from "../data";
 
 vi.mock("../../logger", () => ({
@@ -44,6 +45,7 @@ describe("checkPostgres", () => {
 describe("checkMongo", () => {
 	afterEach(() => {
 		vi.useRealTimers();
+		vi.clearAllMocks();
 	});
 
 	it("reports ok when the ping resolves", async () => {
@@ -51,9 +53,11 @@ describe("checkMongo", () => {
 		expect(await checkMongo(connection)).toEqual({ ok: true });
 	});
 
-	it("reports not ok when the connection is not ready", async () => {
+	it("logs at info, not warn, when the connection is not ready", async () => {
 		const connection = fakeConnection(null);
 		expect(await checkMongo(connection)).toEqual({ ok: false });
+		expect(logger.info).toHaveBeenCalledTimes(1);
+		expect(logger.warn).not.toHaveBeenCalled();
 	});
 
 	it("reports not ok when the ping rejects", async () => {

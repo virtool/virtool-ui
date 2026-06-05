@@ -63,11 +63,16 @@ export async function checkPostgres(client: PgClient): Promise<StoreCheck> {
 
 /** Probe Mongo with a server ping. Never throws. */
 export async function checkMongo(connection: Connection): Promise<StoreCheck> {
+	const admin = connection.db?.admin();
+	if (!admin) {
+		// Expected transient race on cold start: the readiness probe can fire
+		// before the Mongoose connection finishes opening. Not a failure worth
+		// warning about.
+		logger.info("mongo connection is not ready");
+		return { ok: false };
+	}
+
 	try {
-		const admin = connection.db?.admin();
-		if (!admin) {
-			throw new Error("mongo connection is not ready");
-		}
 		await withTimeout(admin.ping(), CHECK_TIMEOUT_MS);
 		return { ok: true };
 	} catch (err) {
