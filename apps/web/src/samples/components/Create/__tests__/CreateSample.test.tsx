@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiListGroups } from "@tests/api/groups";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -13,6 +13,24 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import CreateSample from "../CreateSample";
+
+function escapeRegExp(value: string): string {
+	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** The read-list button whose accessible name contains `name`. */
+function readRowButton(name: string): HTMLElement {
+	return screen.getByRole("button", { name: new RegExp(escapeRegExp(name)) });
+}
+
+async function setReadSelectorMode(
+	name: "Auto-pair" | "Manual",
+): Promise<void> {
+	await userEvent.click(
+		screen.getByRole("combobox", { name: "Read selection mode" }),
+	);
+	await userEvent.click(await screen.findByRole("option", { name }));
+}
 
 describe("<CreateSample>", () => {
 	const labels = [createFakeLabel()];
@@ -127,12 +145,18 @@ describe("<CreateSample>", () => {
 
 		// Fill out main form.
 		await userEvent.type(screen.getByLabelText("Name"), "Sample T");
+
+		// Reveal the hidden metadata fields.
+		await userEvent.click(
+			screen.getByRole("switch", { name: "Show metadata fields" }),
+		);
 		await userEvent.type(await screen.findByLabelText("Isolate"), "Clone AB");
 		await userEvent.type(screen.getByLabelText("Host"), "Apple");
 		await userEvent.type(screen.getByLabelText("Locale"), "Earth");
 		await userEvent.click(screen.getByText("Normal"));
 
 		// Select Files
+		await setReadSelectorMode("Manual");
 		await userEvent.click(screen.getByText(files[0].name));
 		await userEvent.click(screen.getByText(files[1].name));
 
@@ -152,6 +176,36 @@ describe("<CreateSample>", () => {
 		await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
 		scope.done();
+	});
+
+	it("should toggle the metadata fields with the switch", async () => {
+		const file = createFakeFile();
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([]);
+
+		await renderWithRouter(<CreateSample labels={labels} />);
+
+		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
+
+		// Hidden by default.
+		expect(screen.queryByLabelText("Isolate")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Host")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Locale")).not.toBeInTheDocument();
+
+		const toggle = screen.getByRole("switch", { name: "Show metadata fields" });
+
+		// Visible after turning the switch on.
+		await userEvent.click(toggle);
+		expect(screen.getByLabelText("Isolate")).toBeInTheDocument();
+		expect(screen.getByLabelText("Host")).toBeInTheDocument();
+		expect(screen.getByLabelText("Locale")).toBeInTheDocument();
+
+		// Hidden again after turning the switch off.
+		await userEvent.click(toggle);
+		expect(screen.queryByLabelText("Isolate")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Host")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Locale")).not.toBeInTheDocument();
 	});
 
 	it("should be able to autofill the sample name", async () => {
@@ -239,14 +293,17 @@ describe("<CreateSample>", () => {
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
 		await userEvent.click(screen.getByText(file.name));
-		expect(screen.getByText("1 of 1 selected")).toBeInTheDocument();
+		expect(screen.getByText("Unpaired")).toBeInTheDocument();
 
 		await userEvent.click(screen.getByRole("button", { name: "Reset" }));
-		expect(screen.getByText("0 of 1 selected")).toBeInTheDocument();
+		expect(screen.queryByText("Unpaired")).not.toBeInTheDocument();
 	});
 
 	it("should be able to swap read orientation", async () => {
-		const files = [createFakeFile(), createFakeFile()];
+		const files = [
+			createFakeFile({ name: "alpha.fastq.gz" }),
+			createFakeFile({ name: "beta.fastq.gz" }),
+		];
 
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([]);
@@ -255,16 +312,27 @@ describe("<CreateSample>", () => {
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
+		await setReadSelectorMode("Manual");
 		await userEvent.click(screen.getByText(files[0].name));
 		await userEvent.click(screen.getByText(files[1].name));
 
-		expect(screen.getByText("2 of 2 selected")).toBeInTheDocument();
+		expect(screen.getByText("Paired")).toBeInTheDocument();
+		expect(
+			within(readRowButton(files[0].name)).getByText("LEFT"),
+		).toBeVisible();
 
-		await userEvent.click(await screen.getByRole("button", { name: "Swap" }));
+		await userEvent.click(screen.getByRole("button", { name: /swap reads/i }));
+
+		expect(
+			within(readRowButton(files[0].name)).getByText("RIGHT"),
+		).toBeVisible();
 	});
 
 	it("should show correct read orientations", async () => {
-		const files = [createFakeFile(), createFakeFile()];
+		const files = [
+			createFakeFile({ name: "alpha.fastq.gz" }),
+			createFakeFile({ name: "beta.fastq.gz" }),
+		];
 
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
@@ -273,18 +341,20 @@ describe("<CreateSample>", () => {
 
 		await userEvent.type(await screen.findByLabelText("Name"), "Sample B");
 
-		expect(screen.queryByText("LEFT")).not.toBeInTheDocument();
-		expect(screen.queryByText("RIGHT")).not.toBeInTheDocument();
-
+		await setReadSelectorMode("Manual");
 		await userEvent.click(screen.getByText(files[0].name));
 
-		expect(screen.queryByText("LEFT")).toBeInTheDocument();
-		expect(screen.queryByText("RIGHT")).not.toBeInTheDocument();
+		expect(
+			within(readRowButton(files[0].name)).getByText("LEFT"),
+		).toBeVisible();
+		expect(screen.getByText(/Unpaired/)).toBeInTheDocument();
 
 		await userEvent.click(screen.getByText(files[1].name));
 
-		expect(screen.queryByText("LEFT")).toBeInTheDocument();
-		expect(screen.queryByText("RIGHT")).toBeInTheDocument();
+		expect(
+			within(readRowButton(files[1].name)).getByText("RIGHT"),
+		).toBeVisible();
+		expect(screen.getByText(/Paired/)).toBeInTheDocument();
 	});
 
 	it("should render correct read orientations with 1 file selected", async () => {
@@ -296,9 +366,9 @@ describe("<CreateSample>", () => {
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
 		await userEvent.click(screen.getByText(file.name));
-		expect(screen.getByText("1 of 1 selected")).toBeInTheDocument();
 
-		expect(screen.getByText("LEFT")).toBeInTheDocument();
-		expect(screen.queryByText("RIGHT")).toBeNull();
+		expect(within(readRowButton(file.name)).getByText("LEFT")).toBeVisible();
+		expect(within(readRowButton(file.name)).queryByText("RIGHT")).toBeNull();
+		expect(screen.getByText(/Unpaired/)).toBeInTheDocument();
 	});
 });
