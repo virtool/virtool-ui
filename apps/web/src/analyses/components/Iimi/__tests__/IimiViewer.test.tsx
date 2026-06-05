@@ -1,4 +1,5 @@
 import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
+import type { FormattedIimiAnalysis, FormattedIimiHit } from "@analyses/types";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -23,8 +24,8 @@ function renderWithAnalysisSearch(
 }
 
 describe("<IimiViewer />", () => {
-	let formattedIimiAnalysis;
-	let predefinedHits;
+	let formattedIimiAnalysis: FormattedIimiAnalysis;
+	let predefinedHits: FormattedIimiHit[];
 
 	beforeEach(() => {
 		formattedIimiAnalysis = formatData({

@@ -146,7 +146,7 @@ export function median(values: number[]): number {
  * This is used to render a representative coverage chart for the parent OTU.
  */
 export function mergeCoverage(
-	isolates: FormattedPathoscopeIsolate[],
+	isolates: Pick<FormattedPathoscopeIsolate, "filled">[],
 ): number[] {
 	const longest = maxBy(isolates, (isolate) => isolate.filled.length);
 	if (!longest) {
