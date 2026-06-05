@@ -1,5 +1,6 @@
 import { accountQueryOptions, useFetchAccount } from "@account/queries";
 import { apiClient } from "@app/api";
+import { CONTENT_SCROLL_ID } from "@app/scroll";
 import * as Sse from "@app/sse/SseConnection";
 import type { Root } from "@app/types";
 import Banner from "@banner/components/Banner";
@@ -91,24 +92,31 @@ function AuthenticatedLayout() {
 
 			<UpdateToast />
 
-			<div className="bg-transparent fixed top-0 w-full z-50">
-				<Banner />
-				<Nav
-					administrator_role={data.administrator_role}
-					handle={data.handle}
-					setOpenDev={(openDev) => navigate({ search: { ...search, openDev } })}
-				/>
-			</div>
+			<div className="flex flex-col h-screen">
+				<div className="shrink-0 z-50">
+					<Banner />
+					<Nav
+						administrator_role={data.administrator_role}
+						handle={data.handle}
+						setOpenDev={(openDev) =>
+							navigate({ search: { ...search, openDev } })
+						}
+					/>
+				</div>
 
-			<div className="pt-30 flex">
-				<aside className="sticky top-30 self-start">
-					<Sidebar administratorRole={data.administrator_role} />
-				</aside>
-				<main className="flex-1 min-w-0 px-9">
-					<Suspense fallback={<LoadingPlaceholder />}>
-						<Outlet />
-					</Suspense>
-				</main>
+				<div
+					id={CONTENT_SCROLL_ID}
+					className="flex flex-1 min-h-0 overflow-y-auto scrollbar-gutter-stable"
+				>
+					<aside className="sticky top-0 self-start pt-18">
+						<Sidebar administratorRole={data.administrator_role} />
+					</aside>
+					<main className="flex-1 min-w-0 p-18">
+						<Suspense fallback={<LoadingPlaceholder />}>
+							<Outlet />
+						</Suspense>
+					</main>
+				</div>
 			</div>
 
 			<Suspense fallback={null}>
