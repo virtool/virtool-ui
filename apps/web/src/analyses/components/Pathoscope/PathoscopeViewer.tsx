@@ -22,7 +22,10 @@ export function PathoscopeViewer({ analysis, sample }: PathoscopeViewerProps) {
 
 	return (
 		<>
-			<AnalysisMapping detail={analysis} totalReads={sample.quality.count} />
+			<AnalysisMapping
+				detail={analysis}
+				totalReads={sample.quality?.count ?? 0}
+			/>
 			<PathoscopeToolbar analysisId={analysis.id} />
 			{showReads && (
 				<Alert color="orange" level>

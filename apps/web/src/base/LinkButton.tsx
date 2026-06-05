@@ -24,7 +24,7 @@ export default function LinkButton({
 		<Link
 			className={cn(buttonVariants({ color }), className)}
 			replace={replace}
-			search={search as never}
+			search={search}
 			to={to}
 		>
 			{children}

@@ -40,7 +40,11 @@ export default function JobItem({
 }: JobItemProps) {
 	return (
 		<BoxGroupSection className="grid grid-cols-3 text-lg">
-			<Link className="col-span-1 font-medium" to={`/jobs/${id}`}>
+			<Link
+				className="col-span-1 font-medium"
+				to="/jobs/$jobId"
+				params={{ jobId: String(id) }}
+			>
 				{getWorkflowDisplayName(workflow)}
 			</Link>
 			<Attribution className="col-span-1" time={createdAt} user={user.handle} />

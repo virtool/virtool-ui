@@ -88,7 +88,7 @@ type UseCompatibleIndexesResult = {
 };
 
 export function useCompatibleIndexes(): UseCompatibleIndexesResult {
-	const { data, isPending } = useListIndexes(true);
+	const { data, isPending } = useListIndexes({ ready: true, archived: false });
 
 	const indexes = Object.values(
 		groupBy(data ?? [], (item) => item.reference.id),
@@ -128,7 +128,12 @@ export function useSubtractionOptions(
 
 	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 
-	if (isPendingSample || isPendingSubtractionShortlist) {
+	if (
+		isPendingSample ||
+		isPendingSubtractionShortlist ||
+		!sample ||
+		!subtractionShortlist
+	) {
 		return {
 			defaultSubtractions: [],
 			subtractions: [],

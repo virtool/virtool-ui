@@ -5,9 +5,11 @@ import InitialIcon from "@base/InitialIcon";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { CircleAlert, ShieldUserIcon } from "lucide-react";
 import Label from "@/base/Label";
+import Handle from "./Handle";
 import Password from "./Password";
 import PrimaryGroup from "./PrimaryGroup";
 import { UserActivationBanner } from "./UserActivationBanner";
+import UserAdministratorRole from "./UserAdministratorRole";
 import UserGroups from "./UserGroups";
 import UserPermissions from "./UserPermissions";
 
@@ -27,7 +29,7 @@ export default function UserDetail({ userId }: UserDetailProps) {
 
 	const mutation = useUpdateUser();
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 
@@ -68,6 +70,10 @@ export default function UserDetail({ userId }: UserDetailProps) {
 					</Label>
 				)}
 			</header>
+
+			<UserAdministratorRole id={id} role={administrator_role} />
+
+			<Handle key={`handle-${id}`} id={id} handle={handle} />
 
 			<Password
 				key={id}

@@ -1,9 +1,24 @@
 import { randomBytes } from "node:crypto";
 import {
+	sentryGlobalFunctionMiddleware,
+	sentryGlobalRequestMiddleware,
+} from "@sentry/tanstackstart-react";
+import {
 	createCsrfMiddleware,
 	createMiddleware,
 	createStart,
 } from "@tanstack/react-start";
+
+import { loginFn, logoutFn, resetPasswordFn } from "./server/auth/functions";
+import { createAuthenticationMiddleware } from "./server/auth/middleware";
+import { errorLoggingMiddleware } from "./server/error-logging";
+
+// logoutFn must be exempt so stale or missing cookies can still be cleared.
+const authenticationMiddleware = createAuthenticationMiddleware([
+	loginFn,
+	logoutFn,
+	resetPasswordFn,
+]);
 
 const cspDirectives = [
 	"default-src 'self'",
@@ -53,7 +68,14 @@ const csrfMiddleware = createCsrfMiddleware({
 	filter: (ctx) => ctx.handlerType === "serverFn",
 });
 
+// Sentry middleware go first so request and server-function spans wrap the
+// csrf/csp/auth work rather than nesting inside it.
 export const startInstance = createStart(() => ({
 	defaultSsr: false,
-	requestMiddleware: [csrfMiddleware, cspNonce],
+	requestMiddleware: [sentryGlobalRequestMiddleware, csrfMiddleware, cspNonce],
+	functionMiddleware: [
+		sentryGlobalFunctionMiddleware,
+		errorLoggingMiddleware,
+		authenticationMiddleware,
+	],
 }));

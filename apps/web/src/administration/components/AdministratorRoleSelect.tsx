@@ -9,13 +9,15 @@ import SelectItem from "@base/SelectItem";
 import { ChevronDown } from "lucide-react";
 
 type RoleSelectProps = {
+	className?: string;
 	id: string;
 	onChange: (value: AdministratorRoleName) => void;
 	roles: AdministratorRole[];
-	value: AdministratorRoleName;
+	value?: AdministratorRoleName;
 };
 
 export default function AdministratorRoleSelect({
+	className,
 	id,
 	onChange,
 	roles,
@@ -24,7 +26,7 @@ export default function AdministratorRoleSelect({
 	return (
 		<Select value={value} onValueChange={onChange}>
 			<SelectButton
-				className="max-w-56"
+				className={className}
 				icon={ChevronDown}
 				id={id}
 				placeholder="Select administrator role"

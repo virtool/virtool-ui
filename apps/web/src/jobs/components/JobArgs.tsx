@@ -38,10 +38,15 @@ function AnalysisRows({ sample_id, analysis_id }: AnalysisRowsProps) {
 	return (
 		<>
 			<JobArgsRow title="Sample">
-				<Link to={`/samples/${sample_id}`}>{sample_id}</Link>
+				<Link to="/samples/$sampleId" params={{ sampleId: sample_id }}>
+					{sample_id}
+				</Link>
 			</JobArgsRow>
 			<JobArgsRow title="Analysis">
-				<Link to={`/samples/${sample_id}/analyses/${analysis_id}`}>
+				<Link
+					to="/samples/$sampleId/analyses/$analysisId"
+					params={{ sampleId: sample_id, analysisId: analysis_id }}
+				>
 					{analysis_id}
 				</Link>
 			</JobArgsRow>
@@ -57,15 +62,22 @@ type BuildIndexRowsProps = {
 	ref_id: string;
 };
 
-/** Rows showing important arguments when running an "build_index" workflow. */
+/** Rows showing important arguments when running a "build_index" workflow. */
 function BuildIndexRows({ index_id, ref_id }: BuildIndexRowsProps) {
 	return (
 		<>
 			<JobArgsRow title="Reference">
-				<Link to={`/refs/${ref_id}`}>{ref_id}</Link>
+				<Link to="/refs/$refId" params={{ refId: ref_id }}>
+					{ref_id}
+				</Link>
 			</JobArgsRow>
 			<JobArgsRow title="Index">
-				<Link to={`/refs/${ref_id}/indexes/${index_id}`}>{index_id}</Link>
+				<Link
+					to="/refs/$refId/indexes/$indexId"
+					params={{ refId: ref_id, indexId: index_id }}
+				>
+					{index_id}
+				</Link>
 			</JobArgsRow>
 		</>
 	);
@@ -80,7 +92,9 @@ type CreateSampleRowsProps = {
 function CreateSampleRows({ sample_id }: CreateSampleRowsProps) {
 	return (
 		<JobArgsRow title="Sample">
-			<Link to={`/samples/${sample_id}`}>{sample_id}</Link>
+			<Link to="/samples/$sampleId" params={{ sampleId: sample_id }}>
+				{sample_id}
+			</Link>
 		</JobArgsRow>
 	);
 }
@@ -94,7 +108,12 @@ type CreateSubtractionRowsProps = {
 function CreateSubtractionRows({ subtraction_id }: CreateSubtractionRowsProps) {
 	return (
 		<JobArgsRow title="Subtraction">
-			<Link to={`/subtractions/${subtraction_id}`}>{subtraction_id}</Link>
+			<Link
+				to="/subtractions/$subtractionId"
+				params={{ subtractionId: subtraction_id }}
+			>
+				{subtraction_id}
+			</Link>
 		</JobArgsRow>
 	);
 }

@@ -1,9 +1,9 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiListGroups } from "@tests/api/groups";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
-import { createFakeLabelNested, mockApiGetLabels } from "@tests/fake/labels";
+import { createFakeLabel } from "@tests/fake/labels";
 import { mockApiCreateSample } from "@tests/fake/samples";
 import {
 	createFakeShortlistSubtraction,
@@ -14,14 +14,33 @@ import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import CreateSample from "../CreateSample";
 
+function escapeRegExp(value: string): string {
+	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** The read-list button whose accessible name contains `name`. */
+function readRowButton(name: string): HTMLElement {
+	return screen.getByRole("button", { name: new RegExp(escapeRegExp(name)) });
+}
+
+async function setReadSelectorMode(
+	name: "Auto-pair" | "Manual",
+): Promise<void> {
+	await userEvent.click(
+		screen.getByRole("button", { name: /^(Auto-pair|Manual)$/ }),
+	);
+	await userEvent.click(
+		await screen.findByRole("menuitem", { name: new RegExp(name) }),
+	);
+}
+
 describe("<CreateSample>", () => {
-	const labels = [createFakeLabelNested()];
+	const labels = [createFakeLabel()];
 	const subtractionShortlist = createFakeShortlistSubtraction();
 
 	beforeEach(() => {
 		window.sessionStorage.clear();
 
-		mockApiGetLabels(labels);
 		mockApiGetAccount(createFakeAccount({ primary_group: null }));
 		mockApiListGroups([]);
 	});
@@ -36,14 +55,14 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile();
 		const filesScope = mockApiListFiles([file]);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 		expect(await screen.findByLabelText("loading")).toBeInTheDocument();
 
 		filesScope.done();
 	});
 
 	it("should show loader when there are no sample uploads to read", async () => {
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 		expect(await screen.findByLabelText("loading")).toBeInTheDocument();
 	});
 
@@ -53,7 +72,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 		expect(screen.queryByText("Required Field")).not.toBeInTheDocument();
@@ -89,7 +108,7 @@ describe("<CreateSample>", () => {
 			null,
 		);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		// Wait for the data to load.
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
@@ -121,19 +140,25 @@ describe("<CreateSample>", () => {
 			null,
 		);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		// Wait for the data to load.
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
 		// Fill out main form.
 		await userEvent.type(screen.getByLabelText("Name"), "Sample T");
+
+		// Reveal the hidden metadata fields.
+		await userEvent.click(
+			screen.getByRole("switch", { name: "Show metadata fields" }),
+		);
 		await userEvent.type(await screen.findByLabelText("Isolate"), "Clone AB");
 		await userEvent.type(screen.getByLabelText("Host"), "Apple");
 		await userEvent.type(screen.getByLabelText("Locale"), "Earth");
 		await userEvent.click(screen.getByText("Normal"));
 
 		// Select Files
+		await setReadSelectorMode("Manual");
 		await userEvent.click(screen.getByText(files[0].name));
 		await userEvent.click(screen.getByText(files[1].name));
 
@@ -155,13 +180,43 @@ describe("<CreateSample>", () => {
 		scope.done();
 	});
 
+	it("should toggle the metadata fields with the switch", async () => {
+		const file = createFakeFile();
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([]);
+
+		await renderWithRouter(<CreateSample labels={labels} />);
+
+		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
+
+		// Hidden by default.
+		expect(screen.queryByLabelText("Isolate")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Host")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Locale")).not.toBeInTheDocument();
+
+		const toggle = screen.getByRole("switch", { name: "Show metadata fields" });
+
+		// Visible after turning the switch on.
+		await userEvent.click(toggle);
+		expect(screen.getByLabelText("Isolate")).toBeInTheDocument();
+		expect(screen.getByLabelText("Host")).toBeInTheDocument();
+		expect(screen.getByLabelText("Locale")).toBeInTheDocument();
+
+		// Hidden again after turning the switch off.
+		await userEvent.click(toggle);
+		expect(screen.queryByLabelText("Isolate")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Host")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Locale")).not.toBeInTheDocument();
+	});
+
 	it("should be able to autofill the sample name", async () => {
 		const file = createFakeFile({ name: "14T81.fq.gz" });
 
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		const field = await screen.findByRole("textbox", { name: "Name" });
 		expect(field).toHaveValue("");
@@ -172,77 +227,150 @@ describe("<CreateSample>", () => {
 		expect(field).toHaveValue("14T81");
 	});
 
+	it("should autofill the sample name from a fastq.gz filename", async () => {
+		const file = createFakeFile({ name: "sample_one.fastq.gz" });
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+
+		await renderWithRouter(<CreateSample labels={labels} />);
+
+		const field = await screen.findByRole("textbox", { name: "Name" });
+		expect(field).toHaveValue("");
+
+		await userEvent.click(screen.getByText(file.name));
+		await userEvent.click(screen.getByRole("button", { name: "Auto Fill" }));
+
+		expect(field).toHaveValue("sample_one");
+	});
+
+	it.each([
+		["sample_one.fq", "sample_one"],
+		["sample_one.fastq", "sample_one"],
+		["sample_one.fa", "sample_one"],
+		["sample_one.fasta", "sample_one"],
+		["sample_one.FASTQ.GZ", "sample_one"],
+	])("should autofill the sample name from %s", async (fileName, expected) => {
+		const file = createFakeFile({ name: fileName });
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+
+		await renderWithRouter(<CreateSample labels={labels} />);
+
+		const field = await screen.findByRole("textbox", { name: "Name" });
+		expect(field).toHaveValue("");
+
+		await userEvent.click(screen.getByText(file.name));
+		await userEvent.click(screen.getByRole("button", { name: "Auto Fill" }));
+
+		expect(field).toHaveValue(expected);
+	});
+
+	it("should not autofill the sample name when the extension is invalid", async () => {
+		const file = createFakeFile({ name: "sample_one.fqst" });
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+
+		await renderWithRouter(<CreateSample labels={labels} />);
+
+		const field = await screen.findByRole("textbox", { name: "Name" });
+		expect(field).toHaveValue("");
+
+		await userEvent.click(screen.getByText(file.name));
+		await userEvent.click(screen.getByRole("button", { name: "Auto Fill" }));
+
+		expect(field).toHaveValue("");
+	});
+
 	it("should clear selections when reset button is clicked", async () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
 
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
 		await userEvent.click(screen.getByText(file.name));
-		expect(screen.getByText("1 of 1 selected")).toBeInTheDocument();
+		expect(screen.getByText("Unpaired")).toBeInTheDocument();
 
 		await userEvent.click(screen.getByRole("button", { name: "Reset" }));
-		expect(screen.getByText("0 of 1 selected")).toBeInTheDocument();
+		expect(screen.queryByText("Unpaired")).not.toBeInTheDocument();
 	});
 
 	it("should be able to swap read orientation", async () => {
-		const files = [createFakeFile(), createFakeFile()];
+		const files = [
+			createFakeFile({ name: "alpha.fastq.gz" }),
+			createFakeFile({ name: "beta.fastq.gz" }),
+		];
 
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
+		await setReadSelectorMode("Manual");
 		await userEvent.click(screen.getByText(files[0].name));
 		await userEvent.click(screen.getByText(files[1].name));
 
-		expect(screen.getByText("2 of 2 selected")).toBeInTheDocument();
+		expect(screen.getByText("Paired")).toBeInTheDocument();
+		expect(
+			within(readRowButton(files[0].name)).getByText("LEFT"),
+		).toBeVisible();
 
-		await userEvent.click(await screen.getByRole("button", { name: "Swap" }));
+		await userEvent.click(screen.getByRole("button", { name: /swap reads/i }));
+
+		expect(
+			within(readRowButton(files[0].name)).getByText("RIGHT"),
+		).toBeVisible();
 	});
 
 	it("should show correct read orientations", async () => {
-		const files = [createFakeFile(), createFakeFile()];
+		const files = [
+			createFakeFile({ name: "alpha.fastq.gz" }),
+			createFakeFile({ name: "beta.fastq.gz" }),
+		];
 
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		await userEvent.type(await screen.findByLabelText("Name"), "Sample B");
 
-		expect(screen.queryByText("LEFT")).not.toBeInTheDocument();
-		expect(screen.queryByText("RIGHT")).not.toBeInTheDocument();
-
+		await setReadSelectorMode("Manual");
 		await userEvent.click(screen.getByText(files[0].name));
 
-		expect(screen.queryByText("LEFT")).toBeInTheDocument();
-		expect(screen.queryByText("RIGHT")).not.toBeInTheDocument();
+		expect(
+			within(readRowButton(files[0].name)).getByText("LEFT"),
+		).toBeVisible();
+		expect(screen.getByText(/Unpaired/)).toBeInTheDocument();
 
 		await userEvent.click(screen.getByText(files[1].name));
 
-		expect(screen.queryByText("LEFT")).toBeInTheDocument();
-		expect(screen.queryByText("RIGHT")).toBeInTheDocument();
+		expect(
+			within(readRowButton(files[1].name)).getByText("RIGHT"),
+		).toBeVisible();
+		expect(screen.getByText(/Paired/)).toBeInTheDocument();
 	});
 
 	it("should render correct read orientations with 1 file selected", async () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
-		await renderWithRouter(<CreateSample />);
+		await renderWithRouter(<CreateSample labels={labels} />);
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
 		await userEvent.click(screen.getByText(file.name));
-		expect(screen.getByText("1 of 1 selected")).toBeInTheDocument();
 
-		expect(screen.getByText("LEFT")).toBeInTheDocument();
-		expect(screen.queryByText("RIGHT")).toBeNull();
+		expect(within(readRowButton(file.name)).getByText("LEFT")).toBeVisible();
+		expect(within(readRowButton(file.name)).queryByText("RIGHT")).toBeNull();
+		expect(screen.getByText(/Unpaired/)).toBeInTheDocument();
 	});
 });

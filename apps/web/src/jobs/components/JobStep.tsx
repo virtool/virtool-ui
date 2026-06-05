@@ -29,16 +29,18 @@ export default function JobStepItem({ step, state }: JobStepProps) {
 					}}
 				/>
 
-				<div className="flex gap-4">
-					<Badge className="flex gap-1.5 items-center">
-						<Clock size={16} />
-						{formatTime(new Date(step.startedAt))}
-					</Badge>
-					<Badge className="flex gap-1.5 items-center">
-						<Calendar size={16} />
-						{formatDate(new Date(step.startedAt))}
-					</Badge>
-				</div>
+				{step.startedAt && (
+					<div className="flex gap-4">
+						<Badge className="flex gap-1.5 items-center">
+							<Clock size={16} />
+							{formatTime(step.startedAt)}
+						</Badge>
+						<Badge className="flex gap-1.5 items-center">
+							<Calendar size={16} />
+							{formatDate(step.startedAt)}
+						</Badge>
+					</div>
+				)}
 			</div>
 		</BoxGroupSection>
 	);

@@ -45,7 +45,7 @@ export type SampleNested = SampleID & {
 	name: string;
 };
 
-/* Minimal Sample used for websocket messages and resource listings */
+/* Minimal Sample used for resource listings */
 export type SampleMinimal = SampleNested & {
 	created_at: string;
 	host: string;
@@ -114,4 +114,33 @@ export type Sample = SampleMinimal & {
 /* Sample search results from the API */
 export type SampleSearchResult = SearchResult & {
 	items: Array<SampleMinimal>;
+};
+
+/** Fields that can be changed when updating a sample */
+export type SampleUpdate = {
+	isolate?: string;
+	labels?: number[];
+	locale?: string;
+	name?: string;
+	notes?: string;
+	subtractions?: string[];
+};
+
+/** Data returned from API on sample rights update */
+export type SampleRightsUpdateReturn = {
+	all_read: boolean;
+	all_write: boolean;
+	group: number | string | null;
+	group_read: boolean;
+	group_write: boolean;
+	user: { [key: string]: string };
+};
+
+/** Fields that can be changed when updating a sample's rights */
+export type SampleRightsUpdate = {
+	group?: number | string | null;
+	group_read?: boolean;
+	group_write?: boolean;
+	all_read?: boolean;
+	all_write?: boolean;
 };

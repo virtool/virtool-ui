@@ -11,17 +11,20 @@ type PathoscopeListProps = {
 
 /** A list of Pathoscope hits. */
 export function PathoscopeList({ analysis, sample }: PathoscopeListProps) {
+	const hits = useSortAndFilterPathoscopeHits(
+		analysis,
+		sample.quality?.length[1] ?? 0,
+	);
+
 	return (
 		<Accordion type="single" collapsible>
-			{useSortAndFilterPathoscopeHits(analysis, sample.quality.length[1]).map(
-				(hit) => (
-					<PathoscopeItem
-						key={hit.id}
-						hit={hit}
-						mappedCount={analysis.results.readCount}
-					/>
-				),
-			)}
+			{hits.map((hit) => (
+				<PathoscopeItem
+					key={hit.id}
+					hit={hit}
+					mappedCount={analysis.results.readCount}
+				/>
+			))}
 		</Accordion>
 	);
 }

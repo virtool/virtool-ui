@@ -28,8 +28,8 @@ html {
 	font-size: 14px;
 }
 
-body {
-	height: calc(100vh - 40px);
+@utility scrollbar-gutter-stable {
+	scrollbar-gutter: stable;
 }
 
 @layer base {
@@ -46,12 +46,6 @@ body {
 		font-size: var(--text-base);
 		font-weight: var(--font-weight-medium);
 		margin: 5px 0 10px;
-	}
-
-	label {
-		display: inline-block;
-		font-weight: var(--font-weight-medium);
-		margin-bottom: calc(var(--spacing) * 2);
 	}
 
 	p {

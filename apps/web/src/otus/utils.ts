@@ -15,7 +15,7 @@ export default function sortSequencesBySegment(
 		const segmentNames = segments.map((s) => s.name);
 		return sortBy(sequences, [
 			(entry) => {
-				const index = segmentNames.indexOf(entry.segment);
+				const index = entry.segment ? segmentNames.indexOf(entry.segment) : -1;
 				return index !== -1 ? index : segmentNames.length;
 			},
 		]);

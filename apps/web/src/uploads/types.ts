@@ -11,7 +11,6 @@ export type Upload = {
 	id: number;
 	created_at: string;
 	name: string;
-	name_on_disk: string;
 	ready: boolean;
 	removed: boolean;
 	removed_at?: string;

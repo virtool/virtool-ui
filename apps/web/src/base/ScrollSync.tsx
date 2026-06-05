@@ -15,13 +15,18 @@ type ScrollSyncProps = {
  */
 export default function ScrollSync({ children, className }: ScrollSyncProps) {
 	const [scrollPixels, setScrollPixels] = useContext(ScrollSyncContext);
-	const ref = useRef(null);
+	const ref = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const element = ref.current as HTMLElement;
+		const element = ref.current;
+		if (!element) {
+			return;
+		}
 
 		function handleScroll() {
-			setScrollPixels(element.scrollLeft);
+			if (ref.current) {
+				setScrollPixels(ref.current.scrollLeft);
+			}
 		}
 
 		element.addEventListener("scroll", handleScroll);

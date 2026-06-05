@@ -10,11 +10,13 @@ import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
 import Logo from "@base/Logo";
 import { useRootQuery } from "@wall/queries";
-import { Bug } from "lucide-react";
+import { Bug, Info } from "lucide-react";
+import { useState } from "react";
+import AboutDialog from "./AboutDialog";
 import { NavLink } from "./NavLink";
 
 type NavBarProps = {
-	administrator_role: AdministratorRoleName;
+	administrator_role: AdministratorRoleName | null;
 	handle: string;
 	setOpenDev?: (open: boolean) => void;
 };
@@ -29,6 +31,7 @@ export default function Nav({
 }: NavBarProps) {
 	const mutation = useLogout();
 	const { data } = useRootQuery();
+	const [aboutOpen, setAboutOpen] = useState(false);
 
 	function onLogout() {
 		mutation.mutate();
@@ -55,8 +58,15 @@ export default function Nav({
 					/>
 				)}
 
+				<IconButton
+					onClick={() => setAboutOpen(true)}
+					IconComponent={Info}
+					tip="About"
+					color="gray"
+				/>
+
 				<Dropdown>
-					<DropdownMenuTrigger>
+					<DropdownMenuTrigger aria-label="User menu">
 						<div className="bg-transparent flex items-center">
 							<InitialIcon handle={handle} size="md" />
 						</div>
@@ -74,20 +84,12 @@ export default function Nav({
 								Administration{" "}
 							</DropdownMenuLink>
 						)}
-						<DropdownMenuItem>
-							<a
-								target="_blank"
-								href="https://virtool.ca/docs/manual/start/installation/"
-								rel="noopener noreferrer"
-								className="text-black hover:text-black"
-							>
-								Documentation
-							</a>
-						</DropdownMenuItem>
 						<DropdownMenuItem onSelect={onLogout}>Logout</DropdownMenuItem>
 					</DropdownMenuContent>
 				</Dropdown>
 			</div>
+
+			<AboutDialog open={aboutOpen} setOpen={setAboutOpen} />
 		</nav>
 	);
 }

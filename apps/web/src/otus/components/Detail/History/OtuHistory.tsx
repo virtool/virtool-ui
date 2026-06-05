@@ -15,7 +15,7 @@ export default function OtuHistory() {
 	const { data, isPending } = useFetchOtuHistory(otuId);
 	const archived = useReferenceIsArchived(refId);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 

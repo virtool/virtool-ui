@@ -13,18 +13,20 @@ export default function SampleQuality() {
 	const { sampleId } = routeApi.useParams();
 	const { data, isPending } = useFetchSample(sampleId);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 
 	return (
 		<div className="flex flex-col">
 			<LegacyAlert className="mb-5" showLegacy={data.is_legacy} />
-			<Quality
-				bases={data.quality.bases}
-				composition={data.quality.composition}
-				sequences={data.quality.sequences}
-			/>
+			{data.quality && (
+				<Quality
+					bases={data.quality.bases}
+					composition={data.quality.composition}
+					sequences={data.quality.sequences}
+				/>
+			)}
 		</div>
 	);
 }

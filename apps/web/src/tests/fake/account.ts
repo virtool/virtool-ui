@@ -1,4 +1,4 @@
-import type { Account, APIKeyMinimal } from "@account/types";
+import type { Account, AccountSettings, APIKeyMinimal } from "@account/types";
 import { faker } from "@faker-js/faker";
 import type { Permissions } from "@groups/types";
 import nock from "nock";
@@ -6,7 +6,7 @@ import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 import { createFakeUser } from "./user";
 
-const defaultSettings = {
+const defaultSettings: AccountSettings = {
 	quick_analyze_workflow: "pathoscope",
 	show_ids: true,
 	show_versions: true,

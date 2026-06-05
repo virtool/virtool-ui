@@ -52,6 +52,10 @@ export default function CloneReference({
 	}, [reference, setValue]);
 
 	function onSubmit({ name }: FormValues) {
+		if (!reference) {
+			return;
+		}
+
 		mutation.mutate(
 			{
 				name,
@@ -97,7 +101,10 @@ export default function CloneReference({
 						<InputError>{errors.name?.message}</InputError>
 					</InputGroup>
 					<DialogFooter>
-						<SaveButton disabled={!references.length} altText="Clone" />
+						<SaveButton
+							disabled={!references.length || !reference}
+							altText="Clone"
+						/>
 					</DialogFooter>
 				</form>
 			</DialogContent>

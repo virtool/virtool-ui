@@ -15,10 +15,18 @@ export function useKeyNavigation(
 				return;
 			}
 
-			if (e.key === "w" && previousIndex !== undefined) {
+			if (
+				e.key === "w" &&
+				previousIndex !== undefined &&
+				previousId !== undefined
+			) {
 				virtualizer.scrollToIndex(previousIndex);
 				onSetActiveId(previousId);
-			} else if (e.key === "s" && nextIndex !== undefined) {
+			} else if (
+				e.key === "s" &&
+				nextIndex !== undefined &&
+				nextId !== undefined
+			) {
 				virtualizer.scrollToIndex(nextIndex);
 				onSetActiveId(nextId);
 			}

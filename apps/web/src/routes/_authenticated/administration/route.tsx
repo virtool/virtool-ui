@@ -1,5 +1,4 @@
-import { fetchAccount } from "@account/api";
-import { accountKeys } from "@account/queries";
+import { accountQueryOptions } from "@account/queries";
 import AdministrationTabs from "@administration/components/AdministrationTabs";
 import { hasSufficientAdminRole } from "@administration/utils";
 import ContainerNarrow from "@base/ContainerNarrow";
@@ -12,10 +11,7 @@ export const Route = createFileRoute("/_authenticated/administration")({
 	beforeLoad: async ({ context }) => {
 		const { queryClient } = context;
 
-		const account = await queryClient.ensureQueryData({
-			queryKey: accountKeys.all(),
-			queryFn: fetchAccount,
-		});
+		const account = await queryClient.ensureQueryData(accountQueryOptions());
 
 		if (!hasSufficientAdminRole("users", account.administrator_role)) {
 			throw redirect({ to: "/" });

@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
 import type { User, UserNested } from "@users/types";
-import nock from "nock";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 
@@ -52,65 +51,4 @@ export function createFakeUser(overrides?: Partial<User>): User {
  */
 export function createFakeUsers(count: number): Array<User> {
 	return Array.from({ length: count || 1 }, createFakeUser);
-}
-
-type FindUsersQuery = {
-	administrator: boolean;
-	page: number;
-	per_page: number;
-	term: string;
-};
-
-/**
- * Mocks an API call for getting page of userSearchResults
- *
- * @param users - an array of users to return
- * @param query - the query parameters to match
- * @returns - a nock Scope for the mocked API call
- */
-export function mockApiFindUsers(users: Array<User>, query?: FindUsersQuery) {
-	return nock("http://localhost")
-		.get("/api/admin/users")
-		.query(query || true)
-		.reply(200, {
-			found_count: users.length,
-			items: users,
-			page: 1,
-			page_count: 1,
-			per_page: 25,
-			total_count: users.length,
-		});
-}
-
-/**
- * Mocks an API call for getting the user details
- *
- * @param userId - The users unique id
- * @param user - The details of the user
- * @returns A nock scope for the mocked API call
- */
-export function mockApiGetUser(userId: number, user: User) {
-	return nock("http://localhost")
-		.get(`/api/admin/users/${userId}`)
-		.reply(200, user);
-}
-
-/**
- * Mocks an API call for updating the user details
- *
- * @param userId - The users unique id
- * @param statusCode - The HTTP status code to simulate in the response
- * @param update - The update to apply to the user
- * @param user - The user details
- * @returns A nock scope for the mocked API call
- */
-export function mockApiEditUser(
-	userId: number,
-	statusCode: number,
-	update: object,
-	user?: User,
-) {
-	return nock("http://localhost")
-		.patch(`/api/admin/users/${userId}`)
-		.reply(statusCode, { ...user, ...update });
 }

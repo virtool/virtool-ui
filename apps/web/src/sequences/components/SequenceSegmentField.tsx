@@ -63,7 +63,7 @@ export default function SequenceSegmentField({
 	refId,
 	segments,
 }: SequenceSegmentFieldProps) {
-	const { control, setValue } = useFormContext<{ segment: string }>();
+	const { control, setValue } = useFormContext<{ segment: string | null }>();
 
 	if (hasSchema) {
 		const segmentOptions = segments.map((segment) => (
@@ -129,7 +129,8 @@ export default function SequenceSegmentField({
 				<div>
 					<Link
 						className="font-medium"
-						to={`/refs/${refId}/otus/${otuId}/schema`}
+						to="/refs/$refId/otus/$otuId/schema"
+						params={{ refId, otuId }}
 					>
 						Add a Schema
 					</Link>

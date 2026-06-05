@@ -11,7 +11,7 @@ type GenomeSequenceProps = {
 	id: string;
 	onEdit: () => void;
 	onRemove: () => void;
-	segment?: string;
+	segment?: string | null;
 	sequence: string;
 };
 

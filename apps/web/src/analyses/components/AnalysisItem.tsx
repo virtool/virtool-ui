@@ -6,8 +6,8 @@ import Icon from "@base/Icon";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
+import { useFetchJob } from "@jobs/queries";
 import { Equal, EqualNot } from "lucide-react";
-import { JobNestedSchema } from "@/jobs/types";
 import { useRemoveAnalysis } from "../queries";
 import type { AnalysisMinimal } from "../types";
 import { checkSupportedWorkflow } from "../utils";
@@ -35,7 +35,10 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 	const onRemove = useRemoveAnalysis(id);
 
 	const title = checkSupportedWorkflow(workflow) ? (
-		<Link to={`/samples/${analysis.sample.id}/analyses/${id}`}>
+		<Link
+			to="/samples/$sampleId/analyses/$analysisId"
+			params={{ sampleId: analysis.sample.id, analysisId: id }}
+		>
 			{getWorkflowDisplayName(workflow)}
 		</Link>
 	) : (
@@ -47,7 +50,10 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 		</div>
 	);
 
-	const job = analysis.job && JobNestedSchema.parse(analysis.job);
+	const { data: job } = useFetchJob(
+		analysis.job?.id ?? Number.NaN,
+		analysis.job,
+	);
 
 	return (
 		<Box className="text-gray-600 mb-2.5">
@@ -60,7 +66,10 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 				/>
 				<div className="flex justify-end">
 					{ready ? (
-						<AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} />
+						<AnalysisItemRightIcon
+							canModify={canModify ?? false}
+							onRemove={onRemove}
+						/>
 					) : (
 						<ProgressCircle
 							progress={job?.progress ?? 0}
@@ -78,10 +87,15 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 					<Equal size={18} />
 					<SlashList className="m-0">
 						<li>
-							<Link to={`/refs/${reference.id}`}>{reference.name}</Link>
+							<Link to="/refs/$refId" params={{ refId: reference.id }}>
+								{reference.name}
+							</Link>
 						</li>
 						<li>
-							<Link to={`/refs/${reference.id}/indexes/${index.id}`}>
+							<Link
+								to="/refs/$refId/indexes/$indexId"
+								params={{ refId: reference.id, indexId: index.id }}
+							>
 								Index {index.version}
 							</Link>
 						</li>
@@ -93,7 +107,10 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 						key={subtraction.id}
 					>
 						<Icon icon={EqualNot} />
-						<Link to={`/subtractions/${subtraction.id}`}>
+						<Link
+							to="/subtractions/$subtractionId"
+							params={{ subtractionId: subtraction.id }}
+						>
 							{subtraction.name}
 						</Link>
 					</span>

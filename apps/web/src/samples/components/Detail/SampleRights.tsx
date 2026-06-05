@@ -33,12 +33,18 @@ export default function SampleRights({ sampleId }: SampleRightsProps) {
 	const queryClient = useQueryClient();
 	const mutation = useUpdateSampleRights(sampleId);
 
-	if (isPendingSample || isPendingGroups || isPendingAccount) {
+	if (
+		isPendingSample ||
+		isPendingGroups ||
+		isPendingAccount ||
+		!sample ||
+		!account ||
+		!groups
+	) {
 		return <LoadingPlaceholder />;
 	}
 
-	const canModifyRights =
-		sample !== null && (hasPermission || sample.user.id === account.id);
+	const canModifyRights = hasPermission || sample.user.id === account.id;
 
 	const { group, group_read, group_write, all_read, all_write } = sample;
 

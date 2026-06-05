@@ -49,23 +49,27 @@ export default function CreatePathoscope({
 		},
 	});
 
-	if (isPendingIndexes || isPendingSubtractions) {
+	if (isPendingIndexes || isPendingSubtractions || !indexes) {
 		return null;
 	}
 
 	function onSubmit(values: CreatePathoscopeFormValues) {
 		const { indexId, subtractionIds } = values;
 
-		const refId = indexes.find((index) => index.id === indexId).reference.id;
+		const index = indexes.find((index) => index.id === indexId);
+		if (!index) {
+			return;
+		}
+		const refId = index.reference.id;
 
-		sampleIds.forEach((sampleId) =>
+		for (const sampleId of sampleIds) {
 			createAnalysis.mutate({
 				refId,
 				sampleId,
 				subtractionIds,
 				workflow: "pathoscope",
-			}),
-		);
+			});
+		}
 	}
 
 	return (

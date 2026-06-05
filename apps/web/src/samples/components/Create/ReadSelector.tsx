@@ -1,25 +1,56 @@
 import { cn } from "@app/utils";
+import Alert from "@base/Alert";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import Button from "@base/Button";
 import CompactScrollList from "@base/CompactScrollList";
+import Dropdown from "@base/Dropdown";
+import DropdownButton from "@base/DropdownButton";
+import DropdownMenuContent from "@base/DropdownMenuContent";
+import DropdownMenuItem from "@base/DropdownMenuItem";
 import Icon from "@base/Icon";
 import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
 import InputSearch from "@base/InputSearch";
 import Link from "@base/Link";
 import NoneFoundSection from "@base/NoneFoundSection";
-import PseudoLabel from "@base/PseudoLabel";
 import Toolbar from "@base/Toolbar";
 import type {
 	FetchNextPageOptions,
 	InfiniteData,
 	InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
-import { Repeat, Undo } from "lucide-react";
-import { type ReactNode, useEffect, useState } from "react";
+import { buildReadRows, detectMate, type ReadRow } from "@uploads/pairing";
+import { ChevronDown, TriangleAlert, Undo } from "lucide-react";
+import { useCallback, useState } from "react";
 import { useValidateFiles } from "@/uploads/hooks";
-import type { FileResponse } from "@/uploads/types";
-import ReadSelectorItem from "./ReadSelectorItem";
+import type { FileResponse, Upload } from "@/uploads/types";
+import ReadSelectorRow from "./ReadSelectorRow";
+import ReadSelectorSlots from "./ReadSelectorSlots";
+
+/** How a click mutates the selection. */
+type SelectorMode = "auto" | "manual";
+
+/** The selectable modes, with a label and an explanation for the dropdown. */
+const selectorModes: {
+	value: SelectorMode;
+	label: string;
+	description: string;
+}[] = [
+	{
+		value: "auto",
+		label: "Auto-pair",
+		description:
+			"Detected mate pairs collapse into a single row. Click a row to select that pair or file.",
+	},
+	{
+		value: "manual",
+		label: "Manual",
+		description:
+			"Every file is listed on its own. Click to pick up to two files, then swap their order if needed.",
+	},
+];
 
 type ReadSelectorProps = {
 	/** Samples uploads on current page */
@@ -35,13 +66,32 @@ type ReadSelectorProps = {
 	/** A callback function to handle file selection */
 	onSelect: (selected: number[]) => void;
 	/** Errors occurred on sample creation */
-	error: string;
-	/** The selected uploads */
+	error?: string;
+	/** The selected uploads, in [LEFT, RIGHT] order */
 	selected: number[];
 };
 
 /**
- * A list of read uploads with option to filter by file name
+ * Returns true when a selected file sits in the wrong slot given its detected
+ * mate side: an R2 file in LEFT or an R1 file in RIGHT. Files with no detected
+ * side never mismatch.
+ */
+function isMisplaced(file: Upload | undefined, slotIndex: number): boolean {
+	const side = file && detectMate(file.name)?.side;
+
+	if (side === undefined) {
+		return false;
+	}
+
+	return side === 1 ? slotIndex !== 0 : slotIndex !== 1;
+}
+
+/**
+ * Selects the one or two read files for a new sample. Two modes edit the same
+ * `selected` array: Auto-pair (default) collapses detected mate pairs and uses
+ * radio-style replace; Manual lists every file flat and toggles up to two.
+ * Switching modes never migrates data — it only changes how a click mutates the
+ * selection.
  */
 export default function ReadSelector({
 	data,
@@ -52,59 +102,86 @@ export default function ReadSelector({
 	error,
 	selected,
 }: ReadSelectorProps) {
-	useValidateFiles("reads", selected, onSelect);
-
 	const [term, setTerm] = useState("");
-	const [selectedFiles, setSelectedFiles] = useState(selected);
+	const [mode, setMode] = useState<SelectorMode>("auto");
+	const [wasCleared, setWasCleared] = useState(false);
+
+	const handleCleared = useCallback(() => setWasCleared(true), []);
+
+	useValidateFiles("reads", selected, onSelect, handleCleared);
 
 	const { total_count } = data.pages[0];
-
-	function handleSelect(selectedId: number) {
-		setSelectedFiles((prevArray) => {
-			if (prevArray.includes(selectedId)) {
-				const newArray = prevArray.filter((id) => id !== selectedId);
-				onSelect(newArray);
-				return newArray;
-			}
-			const newArray = [...prevArray, selectedId];
-			if (newArray.length === 3) {
-				newArray.shift();
-			}
-			onSelect(newArray);
-			return newArray;
-		});
-	}
-
-	useEffect(() => {
-		setSelectedFiles(selected);
-	}, [selected]);
-
-	function swap() {
-		onSelect(selected.slice().reverse());
-	}
-
-	function reset() {
-		setTerm("");
-		onSelect([]);
-	}
+	const items = data.pages.flatMap((page) => page.items);
 
 	const loweredFilter = term.toLowerCase();
-
-	const items = data.pages.flatMap((page) => page.items);
 	const files = items.filter(
 		(file) => !term || file.name.toLowerCase().includes(loweredFilter),
 	);
 
-	function renderRow(item) {
-		const index = selectedFiles.indexOf(item.id);
+	const rows: ReadRow[] =
+		mode === "auto"
+			? buildReadRows(files)
+			: files.map((file) => ({ kind: "single", file }));
+
+	// Auto-pair: clicking a row replaces the whole selection with that row's
+	// file(s); clicking the already-selected row clears it.
+	function replaceSingle(id: number) {
+		if (selected.length === 1 && selected[0] === id) {
+			onSelect([]);
+			return;
+		}
+
+		onSelect([id]);
+	}
+
+	function replacePair(leftId: number, rightId: number) {
+		if (selected.includes(leftId) && selected.includes(rightId)) {
+			onSelect([]);
+			return;
+		}
+
+		onSelect([leftId, rightId]);
+	}
+
+	// Manual: toggle a file in or out of the selection, capped at two. A third
+	// click is a quiet no-op.
+	function toggleFile(id: number) {
+		if (selected.includes(id)) {
+			onSelect(selected.filter((selectedId) => selectedId !== id));
+			return;
+		}
+
+		if (selected.length >= 2) {
+			return;
+		}
+
+		onSelect([...selected, id]);
+	}
+
+	function swap() {
+		onSelect([...selected].reverse());
+	}
+
+	function reset() {
+		setTerm("");
+		setWasCleared(false);
+		onSelect([]);
+	}
+
+	const onSelectSingle = mode === "auto" ? replaceSingle : toggleFile;
+
+	function renderRow(item: unknown) {
+		const row = item as ReadRow;
+		const key =
+			row.kind === "pair" ? `pair:${row.key}` : `single:${row.file.id}`;
 
 		return (
-			<ReadSelectorItem
-				{...item}
-				key={item.id}
-				index={index}
-				selected={index > -1}
-				onSelect={handleSelect}
+			<ReadSelectorRow
+				key={key}
+				row={row}
+				selected={selected}
+				onSelectSingle={onSelectSingle}
+				onSelectPair={replacePair}
 			/>
 		);
 	}
@@ -117,41 +194,98 @@ export default function ReadSelector({
 		</BoxGroup>
 	);
 
-	let pairedness: ReactNode | undefined;
+	const misplaced =
+		mode === "manual" &&
+		selected.some((id, index) =>
+			isMisplaced(
+				items.find((file) => file.id === id),
+				index,
+			),
+		);
 
-	if (selected.length === 1) {
-		pairedness = <span>Unpaired | </span>;
-	}
-
-	if (selected.length === 2) {
-		pairedness = <span>Paired | </span>;
-	}
+	const pairedStatus =
+		selected.length === 2
+			? "Paired"
+			: selected.length === 1
+				? "Unpaired"
+				: null;
 
 	return (
-		<div>
-			<label className="flex items-center font-medium [&_label]:m-0">
-				<PseudoLabel>Read files</PseudoLabel>
-				<span className="text-gray-500 ml-auto">
-					{pairedness}
-					{selected.length} of {total_count} selected
-				</span>
-			</label>
+		<InputGroup>
+			<div className="flex items-center justify-between">
+				<InputLabel htmlFor="read-files-search">Read files</InputLabel>
+				{pairedStatus && (
+					<span
+						className={cn(
+							"rounded-md text-xs font-bold px-2 py-0.5",
+							pairedStatus === "Paired"
+								? "bg-green-100 text-green-700"
+								: "bg-gray-100 text-gray-500",
+						)}
+					>
+						{pairedStatus}
+					</span>
+				)}
+			</div>
+
+			{wasCleared && (
+				<Alert color="orange" icon={TriangleAlert} level>
+					<span>
+						A previously selected read file is no longer available and was
+						removed from your selection.
+					</span>
+				</Alert>
+			)}
+
+			{misplaced && (
+				<Alert color="orange" icon={TriangleAlert} level>
+					<span>
+						A selected file looks like it belongs in the other slot based on its
+						name. Use the swap control if the LEFT / RIGHT order is wrong.
+					</span>
+				</Alert>
+			)}
+
+			<ReadSelectorSlots
+				selected={selected}
+				items={items}
+				onSwap={swap}
+				showSwap={mode === "manual"}
+			/>
 
 			<Box className={cn(error && "border-red-600")}>
 				<Toolbar>
 					<div className="flex-grow">
 						<InputSearch
+							id="read-files-search"
 							placeholder="Filename"
 							value={term}
 							onChange={(e) => setTerm(e.target.value)}
 						/>
 					</div>
-					<Button className="inline-flex gap-2" onClick={reset}>
+					<Button className="inline-flex gap-2" type="button" onClick={reset}>
 						<Icon icon={Undo} /> Reset
 					</Button>
-					<Button className="inline-flex gap-2" type="button" onClick={swap}>
-						<Icon icon={Repeat} /> Swap
-					</Button>
+					<Dropdown>
+						<DropdownButton className="flex items-center gap-1.5">
+							{selectorModes.find((m) => m.value === mode)?.label}
+							<ChevronDown size={16} />
+						</DropdownButton>
+						<DropdownMenuContent className="max-w-72">
+							{selectorModes.map((selectorMode) => (
+								<DropdownMenuItem
+									key={selectorMode.value}
+									onSelect={() => setMode(selectorMode.value)}
+									className="flex flex-col items-start"
+								>
+									<span className="font-medium">{selectorMode.label}</span>
+									<span className="text-xs text-gray-500">
+										{selectorMode.description}
+									</span>
+								</DropdownMenuItem>
+							))}
+						</DropdownMenuContent>
+					</Dropdown>
 				</Toolbar>
 				{noneFound || (
 					<>
@@ -160,7 +294,7 @@ export default function ReadSelector({
 							fetchNextPage={fetchNextPage}
 							isFetchingNextPage={isFetchingNextPage}
 							isPending={isPending}
-							items={files}
+							items={rows}
 							renderRow={renderRow}
 						/>
 
@@ -168,6 +302,6 @@ export default function ReadSelector({
 					</>
 				)}
 			</Box>
-		</div>
+		</InputGroup>
 	);
 }

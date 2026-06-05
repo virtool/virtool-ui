@@ -2,7 +2,17 @@ packages:
   - 'apps/*'
   - 'packages/*'
 
+# Reject lockfile entries published less than 24h ago. Guards against
+# brand-new supply-chain attacks that target popular packages.
+minimumReleaseAge: 1440
+
 allowBuilds:
   '@sentry/cli': true
   bcrypt: true
+  cpu-features: true
   esbuild: true
+  protobufjs: true
+  ssh2: true
+
+overrides:
+  '@tanstack/router-core': '1.171.9'

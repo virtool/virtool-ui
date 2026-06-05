@@ -1,7 +1,7 @@
 import { getRouteApi } from "@tanstack/react-router";
 import type { Otu } from "./types";
 
-const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
+const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId/otu");
 
 /**
  * A hook to get the active isolate id

@@ -9,7 +9,7 @@ function draw(element: HTMLElement, data: number[], width: number) {
 	const x = scaleLinear().range([0, width]).domain([0, data.length]);
 	const y = scaleLinear()
 		.range([height, 0])
-		.domain([0, max(data)]);
+		.domain([0, max(data) ?? 0]);
 
 	select(element).selectAll("*").remove();
 
@@ -38,7 +38,11 @@ type OtuCoverageProps = {
 export default function PathoscopeOtuCoverage({ filled }: OtuCoverageProps) {
 	const [ref, { width }] = useElementSize<HTMLDivElement>();
 
-	useLayoutEffect(() => draw(ref.current, filled, width));
+	useLayoutEffect(() => {
+		if (ref.current) {
+			draw(ref.current, filled, width);
+		}
+	});
 
 	return <div className="bg-blue-50 pt-2" ref={ref} />;
 }

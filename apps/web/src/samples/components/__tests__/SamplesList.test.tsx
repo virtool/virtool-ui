@@ -6,7 +6,7 @@ import {
 	createFakeIndexMinimal,
 	mockApiListIndexes,
 } from "@tests/fake/indexes";
-import { createFakeLabelNested, mockApiGetLabels } from "@tests/fake/labels";
+import { createFakeLabel } from "@tests/fake/labels";
 import { createFakeMLModelMinimal, mockApiGetModels } from "@tests/fake/ml";
 import {
 	createFakeSampleMinimal,
@@ -22,39 +22,46 @@ import { beforeEach, describe, expect, it } from "vitest";
 import SamplesList from "../SamplesList";
 
 type SamplesListSearch = {
-	labels?: number[];
+	filterLabels?: number[];
 	openQuickAnalyze?: boolean;
 	page?: number;
 	term?: string;
 	workflows?: string[];
 };
 
-function SamplesListHarness() {
+function SamplesListHarness({
+	labels,
+}: {
+	labels: ReturnType<typeof createFakeLabel>[];
+}) {
 	const [search, setSearch] = useState<SamplesListSearch>({ term: "" });
 
 	function handleSetSearch(next: SamplesListSearch) {
 		setSearch((prev) => ({ ...prev, ...next }));
 	}
 
-	return <SamplesList {...search} setSearch={handleSetSearch} />;
+	return (
+		<SamplesList labels={labels} {...search} setSearch={handleSetSearch} />
+	);
 }
 
 describe("<SamplesList />", () => {
 	let samples: ReturnType<typeof createFakeSampleMinimal>[];
+	let labels: ReturnType<typeof createFakeLabel>[];
 	const path = "/samples";
 
 	beforeEach(() => {
 		samples = [createFakeSampleMinimal(), createFakeSampleMinimal()];
+		labels = [createFakeLabel()];
 		mockApiGetSamples(samples);
 		mockApiGetHmms(createFakeHmmSearchResults());
 		mockApiListIndexes([createFakeIndexMinimal()]);
-		mockApiGetLabels([createFakeLabelNested()]);
 		mockApiGetModels([createFakeMLModelMinimal()]);
 		mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
 	});
 
 	it("should render correctly", async () => {
-		await renderWithRouter(<SamplesList />, path);
+		await renderWithRouter(<SamplesList labels={labels} />, path);
 		expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 		expect(screen.getByText(samples[0].name)).toBeInTheDocument();
@@ -65,7 +72,7 @@ describe("<SamplesList />", () => {
 		mockApiGetSamples(samples);
 		mockApiGetSamples(samples);
 		mockApiGetSamples(samples);
-		await renderWithRouter(<SamplesListHarness />, path);
+		await renderWithRouter(<SamplesListHarness labels={labels} />, path);
 		expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 		const inputElement = screen.getByPlaceholderText("Sample name");
@@ -81,7 +88,7 @@ describe("<SamplesList />", () => {
 				administrator_role: "full",
 			}),
 		);
-		await renderWithRouter(<SamplesList />, path);
+		await renderWithRouter(<SamplesList labels={labels} />, path);
 
 		expect(
 			await screen.findByRole("link", { name: "Create" }),
@@ -90,7 +97,7 @@ describe("<SamplesList />", () => {
 
 	it("should not render create button when [canModify=false]", async () => {
 		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
-		await renderWithRouter(<SamplesList />, path);
+		await renderWithRouter(<SamplesList labels={labels} />, path);
 
 		expect(
 			screen.queryByRole("link", { name: "Create" }),

@@ -1,0 +1,171 @@
+# Code style
+
+The basics live in `AGENTS.md`. This doc covers the longer-form rules:
+TypeScript conventions, naming, comments, and concurrency.
+
+## TypeScript: prefer `type` over `interface`
+
+Use `type` for all type definitions. Reserve `interface` only when
+declaration merging is explicitly needed (e.g. extending third-party
+module types).
+
+Bad:
+
+```ts
+interface User {
+  id: string
+  name: string
+}
+```
+
+Good:
+
+```ts
+type User = {
+  id: string
+  name: string
+}
+```
+
+## TypeScript: prefer literal unions over enums
+
+Use string literal unions instead of `enum`. Literals are plain values
+at runtime, require no import at call sites, and serialize naturally.
+
+Bad:
+
+```ts
+enum Status {
+  Pending = 'pending',
+  Running = 'running',
+  Complete = 'complete',
+}
+```
+
+Good:
+
+```ts
+type Status = 'pending' | 'running' | 'complete'
+```
+
+## TypeScript: document every exported type with a one-line JSDoc
+
+Every exported `type` (or `interface`, when declaration merging
+requires it) gets a `/** ... */` JSDoc comment, even when the name
+seems self-explanatory. The payoff is that hovering the symbol in any
+consumer shows what it represents without jumping to the definition.
+
+```ts
+/** Discriminated auth state: authenticated, awaiting forced reset, or anonymous. */
+export type AuthContext = …
+
+/** Read/write/clear access to the session cookie. Abstracts framework details. */
+export type CookieAdapter = { … }
+```
+
+## Naming: name functions after what they return or do
+
+- `is` prefix → type predicate or boolean, no side effects (`isAdmin`,
+  `isEmpty`, `isExpired`)
+- `has` prefix → boolean ownership check, no side effects (`hasRole`,
+  `hasPermission`)
+- `get` prefix → returns a value, no side effects (`getLifetime`,
+  `getExpiry`)
+- `check` / `validate` / `assert` → may throw, may have side effects,
+  returns void or an error (`checkAuth`, `assertDefined`)
+
+The line between `is` and `has` is loose in practice — don't
+overthink it. The important line is between all of those and
+`check`/`validate`/`assert`: if it can throw or has side effects, it
+is not an `is` or `has`.
+
+Prepositional names like `lifetimeFor` or `dataFor` are not in the
+rule — prefer `getLifetime` / `getData`.
+
+## Naming: do not suffix functions with their layer or mechanism
+
+Exported function names should describe the domain action or returned
+value, not the file, framework, or implementation layer that contains
+them. Avoid suffixes like `Fn`, `Core`, `Handler`, or `Impl` in
+exported names. Let the module path carry the layer:
+
+- `server/auth/core.ts` exports pure domain helpers (`login`, `logout`,
+  `getAuthState`).
+- `server/auth/functions.ts` exports the TanStack Start server
+  functions that wrap them.
+- React Query hooks living next to the feature's `api.ts` wrap those
+  server calls as `useLoginMutation`, `useAuth`, etc.
+
+When two imported functions with the same domain name meet in one
+file, use a local-only alias such as `login as loginImpl` at the
+import site. The alias is allowed because it is wiring glue, not
+exported API. Framework option names that the library dictates (e.g.
+React Query's `queryFn` and `mutationFn`) keep their upstream names.
+
+Import these model constants by their exported names. Do not alias
+them with `as` to avoid collisions; instead name other imports
+clearly enough that the model can keep its `*Document` name.
+
+## Comments: default to no comment; document the *why*, not the *what*
+
+Well-named code does not need a narrator. A comment is worth writing
+when removing it would make the next reader stop and wonder *why* —
+a hidden constraint, a coupling to something off-screen, a deliberate
+choice that looks wrong at first glance.
+
+**Exported types and interfaces** are the exception: each one gets a
+one-line JSDoc, even if the name is good.
+
+**Functions** usually do not need a comment — the name and signature
+carry the meaning. Add one when the *why* is non-obvious: a security
+invariant, a quirk being preserved for compatibility, an edge case
+the body handles silently.
+
+```ts
+// Honour the invalidate_sessions flag the Python side sets but never reads.
+if (user.invalidateSessions) { … }
+```
+
+**Constants** get a comment when the value choice or its coupling is
+non-obvious. `COOKIE_NAME = 'session'` does not. `COST = 12` does,
+because changing it invalidates pinned bcrypt fixtures elsewhere:
+
+```ts
+// Bcrypt cost factor. Matches the value passlib used on the Python side, which
+// is required for the pinned $2b$12$ fixture in password.test.ts and
+// session.test.ts to verify; raising this invalidates those fixtures.
+const COST = 12
+```
+
+Lifetime constants deserve a line if there is an invariant tied to
+them (e.g. a half-life refresh rule).
+
+What not to write:
+
+- Restating the code (`// increment i by 1`)
+- The current task (`// added for the auth flow`, `// fix for issue #123`)
+- The caller (`// used by LoginForm`) — those rot the moment something moves
+- Multi-paragraph essays — if a comment grows past two or three lines,
+  consider whether it belongs in a doc, a commit message, or a better
+  function name instead
+
+## Concurrency: run independent awaits in parallel
+
+Awaits with no data dependency belong in `Promise.all`. Serial chains
+pay the sum of all latencies instead of the slowest.
+
+```ts
+const [index, fasta, otus] = await Promise.all([
+  client.indexes.get({ id }),
+  client.indexes.fasta({ id }),
+  client.indexes.otus({ id }),
+]);
+```
+
+Skip when: a later call needs an earlier result; the calls share one
+Postgres transaction (single connection, serialised server-side
+regardless); or an early failure should short-circuit expensive later
+work (e.g. bcrypt verify before hash).
+
+Use `Promise.allSettled` when you need every result regardless of
+failures.

@@ -36,10 +36,8 @@ export function createFakeOTUSequence(
 		definition: faker.word.noun({ strategy: "any-length" }),
 		host: faker.word.noun({ strategy: "any-length" }),
 		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-		remote: null,
 		segment: null,
 		sequence: faker.word.noun({ strategy: "any-length" }),
-		target: null,
 	};
 
 	return { ...sequence, ...overrides };
@@ -99,7 +97,7 @@ export function createFakeOtu(overrides?: Partial<Otu>): Otu {
 		last_indexed_version: null,
 		most_recent_change: createFakeHistoryNested(),
 		schema: Array.from({ length: 2 }, createFakeOtuSegment),
-		remote: remote || null,
+		remote,
 	};
 }
 
@@ -236,7 +234,6 @@ export function mockApiRemoveIsolate(otuId: string, isolateId: string) {
  * @param host - The host for the sequence
  * @param sequence - The sequence characters assigned
  * @param segment - The segment assigned
- * @param target - The target assigned
  * @returns The nock scope for the mocked API call
  */
 export function mockApiAddSequence(
@@ -247,7 +244,6 @@ export function mockApiAddSequence(
 	host: string,
 	sequence: string,
 	segment?: string,
-	target?: string,
 ) {
 	const OTUSequence = createFakeOTUSequence({
 		accession,
@@ -255,7 +251,6 @@ export function mockApiAddSequence(
 		host,
 		sequence,
 		segment,
-		target,
 	});
 
 	return nock("http://localhost")
@@ -275,7 +270,6 @@ export function mockApiAddSequence(
  * @param host - The host for the sequence
  * @param sequence - The sequence characters assigned
  * @param segment - The segment assigned
- * @param target - The target assigned
  * @returns The nock scope for the mocked API call
  */
 export function mockApiEditSequence(
@@ -286,8 +280,7 @@ export function mockApiEditSequence(
 	definition: string,
 	host: string,
 	sequence: string,
-	segment?: string,
-	target?: string,
+	segment?: string | null,
 ) {
 	const OTUSequence = createFakeOTUSequence({
 		accession,
@@ -295,7 +288,6 @@ export function mockApiEditSequence(
 		host,
 		sequence,
 		segment,
-		target,
 	});
 
 	return nock("http://localhost")
@@ -305,7 +297,6 @@ export function mockApiEditSequence(
 			host,
 			segment,
 			sequence,
-			target,
 		})
 		.query(true)
 		.reply(201, OTUSequence);

@@ -31,7 +31,7 @@ export default function SubtractionList({
 }: SubtractionListProps) {
 	const { data, isPending } = useFindSubtractions(page, 25, find);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 

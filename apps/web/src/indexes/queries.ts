@@ -1,12 +1,6 @@
+import { apiClient } from "@app/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
-import {
-	createIndex,
-	findIndexes,
-	getIndex,
-	getUnbuiltChanges,
-	listIndexes,
-} from "./api";
 import type {
 	Index,
 	IndexMinimal,
@@ -23,7 +17,7 @@ export const indexQueryKeys = {
 	list: (filters: Array<string | number | boolean>) =>
 		["indexes", "list", ...filters] as const,
 	infiniteLists: () => ["indexes", "list", "infinite"] as const,
-	infiniteList: (filters: Array<string | number | boolean>) =>
+	infiniteList: (filters: Array<string | number | boolean | undefined>) =>
 		["indexes", "list", "infinite", ...filters] as const,
 	details: () => ["indexes", "details"] as const,
 	detail: (id: string) => ["indexes", "detail", id] as const,
@@ -46,19 +40,41 @@ export function useFindIndexes(
 ) {
 	return useQuery<IndexSearchResult>({
 		queryKey: indexQueryKeys.infiniteList([page, per_page, refId, term]),
-		queryFn: () => findIndexes(page, per_page, refId, term),
+		queryFn: () =>
+			apiClient
+				.get(`/refs/${refId}/indexes`)
+				.query({ find: term, page, per_page })
+				.then((res) => {
+					const { documents, ...rest } = res.body;
+					return { ...rest, items: documents };
+				}),
 	});
 }
+
+type ListIndexesOptions = {
+	/** Only return ready indexes */
+	ready: boolean;
+
+	/** Filter indexes by their reference's archived status */
+	archived?: boolean;
+};
 
 /**
  * Gets a list of ready indexes
  *
+ * @param options - The ready and archived filters to apply
  * @returns A list of ready indexes
  */
-export function useListIndexes(ready: boolean, term?: string) {
+export function useListIndexes({ ready, archived }: ListIndexesOptions) {
+	const params = archived === undefined ? { ready } : { ready, archived };
+
 	return useQuery<IndexMinimal[]>({
-		queryKey: indexQueryKeys.list([ready]),
-		queryFn: () => listIndexes({ ready, term }),
+		queryKey: indexQueryKeys.list(Object.values(params)),
+		queryFn: () =>
+			apiClient
+				.get("/indexes")
+				.query(params)
+				.then((res) => res.body),
 	});
 }
 
@@ -66,12 +82,14 @@ export function useListIndexes(ready: boolean, term?: string) {
  * Fetches a single index
  *
  * @param indexId - The id of the index to fetch
+ * @param enabled - Whether the query should run
  * @returns A single index
  */
-export function useFetchIndex(indexId: string) {
+export function useFetchIndex(indexId: string, enabled = true) {
 	return useQuery<Index, ErrorResponse>({
 		queryKey: indexQueryKeys.detail(indexId),
-		queryFn: () => getIndex(indexId),
+		queryFn: () => apiClient.get(`/indexes/${indexId}`).then((res) => res.body),
+		enabled: enabled && Boolean(indexId),
 	});
 }
 
@@ -83,7 +101,11 @@ export function useFetchIndex(indexId: string) {
  */
 export function useFetchUnbuiltChanges(refId: string) {
 	return useQuery<UnbuiltChangesSearchResults>({
-		queryFn: () => getUnbuiltChanges(refId),
+		queryFn: () =>
+			apiClient.get(`/refs/${refId}/history?unbuilt=true`).then((res) => {
+				const { documents, ...rest } = res.body;
+				return { ...rest, items: documents };
+			}),
 		queryKey: indexQueryKeys.detail(refId),
 	});
 }
@@ -96,7 +118,8 @@ export function useFetchUnbuiltChanges(refId: string) {
 export function useCreateIndex() {
 	const queryClient = useQueryClient();
 	return useMutation<Index, ErrorResponse, { refId: string }>({
-		mutationFn: ({ refId }) => createIndex(refId),
+		mutationFn: ({ refId }) =>
+			apiClient.post(`/refs/${refId}/indexes`).then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: indexQueryKeys.infiniteLists(),

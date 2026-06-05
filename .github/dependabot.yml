@@ -1,19 +1,18 @@
 version: 2
 updates:
     - package-ecosystem: "npm"
-      directories:
-          - "/"
-          - "/apps/web"
-          - "/packages/bio"
-          - "/packages/config"
-          - "/packages/contracts"
-          - "/packages/logger"
-          - "/packages/sentry"
+      directory: "/"
       schedule:
           interval: "weekly"
       open-pull-requests-limit: 10
       commit-message:
           prefix: "chore(deps)"
+      cooldown:
+          default-days: 1
+      ignore:
+          - dependency-name: "superagent"
+          - dependency-name: "@types/superagent"
+          - dependency-name: "nock"
       groups:
           tanstack:
               patterns:

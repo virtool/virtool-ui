@@ -6,33 +6,32 @@ import {
 	DialogTrigger,
 } from "@base/Dialog";
 import { useState } from "react";
-import { useRemoveLabel } from "../queries";
 
 type RemoveLabelProps = {
-	id: number;
 	name: string;
+	/** Resolves on success so the dialog can close. */
+	onConfirm: () => Promise<unknown>;
 };
 
 /**
- * Displays a dialog for removing a label
+ * Dialog confirming label removal. Pure presentation — deletion is delegated
+ * to `onConfirm`.
  */
-export function RemoveLabel({ id, name }: RemoveLabelProps) {
+export function RemoveLabel({ name, onConfirm }: RemoveLabelProps) {
 	const [open, setOpen] = useState(false);
-	const mutation = useRemoveLabel();
 
-	function handleSubmit() {
-		mutation.mutate(
-			{ labelId: id },
-			{
-				onSuccess: () => {
-					setOpen(false);
-				},
-			},
-		);
+	async function handleConfirm() {
+		try {
+			await onConfirm();
+			setOpen(false);
+		} catch {
+			// Leave the dialog open if deletion fails; surfacing the error is
+			// the caller's responsibility for now.
+		}
 	}
 
 	return (
-		<Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<Button as={DialogTrigger} color="red" size="small">
 				Delete
 			</Button>
@@ -42,7 +41,7 @@ export function RemoveLabel({ id, name }: RemoveLabelProps) {
 					Are you sure you want to delete the label <strong>{name}</strong>?
 				</p>
 				<footer className="mt-8 flex">
-					<Button type="button" color="red" onClick={handleSubmit}>
+					<Button type="button" color="red" onClick={handleConfirm}>
 						Delete
 					</Button>
 				</footer>

@@ -29,7 +29,7 @@ export default function AnalysisDetail() {
 	const { data: analysis, isPending } = useGetAnalysis(analysisId);
 	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 
-	if (isPending || isPendingSample) {
+	if (isPending || isPendingSample || !sample) {
 		return <LoadingPlaceholder />;
 	}
 

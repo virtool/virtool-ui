@@ -1,13 +1,13 @@
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+import path from "node:path";
+import { sentryTanstackStart } from "@sentry/tanstackstart-react/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import react from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
-import path from "path";
 import { defineConfig } from "vite";
 import pkg from "./package.json" with { type: "json" };
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
 	build: {
 		sourcemap: true,
 		rolldownOptions: {
@@ -16,7 +16,7 @@ export default defineConfig({
 					groups: [
 						{
 							name: "sentry",
-							test: /node_modules[\\/]@sentry[\\/]react/,
+							test: /node_modules[\\/]@sentry[\\/]/,
 						},
 					],
 				},
@@ -34,6 +34,7 @@ export default defineConfig({
 			"@administration": path.resolve("src/administration"),
 			"@analyses": path.resolve("src/analyses"),
 			"@app": path.resolve("src/app"),
+			"@banner": path.resolve("src/banner"),
 			"@base": path.resolve("src/base"),
 			"@dev": path.resolve("src/dev"),
 			"@forms": path.resolve("src/forms"),
@@ -42,7 +43,6 @@ export default defineConfig({
 			"@indexes": path.resolve("src/indexes"),
 			"@jobs": path.resolve("src/jobs"),
 			"@labels": path.resolve("src/labels"),
-			"@message": path.resolve("src/message"),
 			"@ml": path.resolve("src/ml"),
 			"@nav": path.resolve("src/nav"),
 			"@otus": path.resolve("src/otus"),
@@ -52,6 +52,7 @@ export default defineConfig({
 			"@sequences": path.resolve("src/sequences"),
 			"@server": path.resolve("src/server"),
 			"@subtraction": path.resolve("src/subtraction"),
+			"@tasks": path.resolve("src/tasks"),
 			"@tests": path.resolve("src/tests"),
 			"@uploads": path.resolve("src/uploads"),
 			"@users": path.resolve("src/users"),
@@ -66,16 +67,21 @@ export default defineConfig({
 		}),
 		nitro(),
 		react({
-			include: "**/*.{tsx}",
+			include: "**/*.tsx",
 			babel: {
 				plugins: ["babel-plugin-react-compiler"],
 			},
 		}),
-		sentryVitePlugin({
-			org: "cfia-virtool",
-			project: "cloud-ui",
-		}),
 		tailwindcss(),
+		// Build only: uploads source maps and adds route/middleware
+		// instrumentation. Kept out of dev/test so Sentry never loads there. Must
+		// come last.
+		command === "build" &&
+			sentryTanstackStart({
+				org: "cfia-virtool",
+				project: "cloud-ui",
+				authToken: process.env.SENTRY_AUTH_TOKEN,
+			}),
 	],
 	optimizeDeps: {
 		holdUntilCrawlEnd: false,
@@ -84,16 +90,43 @@ export default defineConfig({
 			"@tanstack/react-query",
 			"@tanstack/react-router",
 			"@tanstack/react-virtual",
+			"class-variance-authority",
+			"clsx",
 			"d3",
 			"d3-transition",
+			"downshift",
+			"es-toolkit",
+			"es-toolkit/array",
+			"es-toolkit/compat",
+			"es-toolkit/math",
+			"es-toolkit/object",
+			"es-toolkit/predicate",
+			"es-toolkit/string",
+			"fuse.js",
 			"lucide-react",
+			"marked",
+			"numbro",
 			"radix-ui",
+			"react-dropzone",
 			"react-hook-form",
+			"superagent",
+			"tailwind-merge",
 			"zod",
 			"zod/v4",
+			"zustand",
+			"zustand/middleware",
 		],
 	},
 	server: {
 		allowedHosts: ["virtool.local"],
+		warmup: {
+			clientFiles: [
+				"./src/routes/__root.tsx",
+				"./src/routes/_authenticated.tsx",
+				"./src/app/**/*.{ts,tsx}",
+				"./src/base/**/*.{ts,tsx}",
+				"./src/nav/**/*.{ts,tsx}",
+			],
+		},
 	},
-});
+}));

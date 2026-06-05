@@ -61,13 +61,6 @@ export type ReferenceRelease = {
 	size: number;
 };
 
-export type ReferenceTarget = {
-	description: string;
-	length: number;
-	name: string;
-	required: boolean;
-};
-
 /** Basic reference data for nested representation */
 export type ReferenceNested = {
 	/** The unique identifier */
@@ -107,12 +100,12 @@ export type ReferenceMinimal = ReferenceNested & {
 	cloned_from: ReferenceClonedFrom | null;
 	created_at: string;
 	imported_from: File | null;
-	installed: ReferenceInstalled;
+	installed: ReferenceInstalled | null;
 	internal_control: string | null;
-	latest_build: ReferenceBuild;
+	latest_build: ReferenceBuild | null;
 	organism: string;
 	otu_count: number;
-	release: ReferenceRelease;
+	release: ReferenceRelease | null;
 	remotes_from: ReferenceRemotesFrom | null;
 	task: Task;
 	unbuilt_change_count: number;
@@ -126,7 +119,6 @@ export type Reference = ReferenceMinimal & {
 	groups: Array<ReferenceGroup>;
 	restrict_source_types: boolean;
 	source_types: Array<string>;
-	targets: ReferenceTarget[];
 	users: Array<ReferenceUser>;
 };
 

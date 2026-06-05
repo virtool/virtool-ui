@@ -9,25 +9,26 @@ import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("<Settings />", () => {
-	let path;
+	const path = "/administration/settings";
 
 	beforeEach(() => {
 		mockApiGetSettings(createFakeSettings());
-		path = "/administration/settings";
 	});
 
 	afterEach(() => nock.cleanAll());
 
 	it("should render", async () => {
 		const account = createFakeAccount({ administrator_role: "full" });
-		await renderRoute(path, { account });
+		await renderRoute(path, {
+			account,
+			seed: (queryClient) => {
+				queryClient.setQueryData(["banner", "list"], []);
+			},
+		});
 
-		expect(await screen.findByText("Instance Message")).toBeInTheDocument();
+		expect(await screen.findByText("Banners")).toBeInTheDocument();
 		expect(screen.getByText("Settings")).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
-		expect(
-			screen.getByRole("textbox", { name: "Message" }),
-		).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Create" })).toBeInTheDocument();
 
 		expect(screen.getByText("JSON API")).toBeInTheDocument();
 	});
@@ -38,8 +39,8 @@ describe("<Settings />", () => {
 
 		expect(await screen.findByText("Users")).toBeInTheDocument();
 		expect(screen.getByText("Settings")).toBeInTheDocument();
-		expect(screen.getByText("Administrators")).toBeInTheDocument();
 		expect(screen.getByText("Groups")).toBeInTheDocument();
+		expect(screen.queryByText("Administrators")).not.toBeInTheDocument();
 	});
 
 	it("should render only groups and users for users administrators", async () => {

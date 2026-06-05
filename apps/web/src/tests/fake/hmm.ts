@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import type { Hmm, ServerHmmSearchResults } from "@hmm/types";
+import { createFakeTask } from "@tests/fake/tasks";
 import nock from "nock";
 
 /**
@@ -62,9 +63,7 @@ export function createFakeHmmSearchResults(
 			installed: {
 				ready: faker.datatype.boolean(),
 			},
-			task: {
-				complete: true,
-			},
+			task: createFakeTask({ complete: true }),
 		},
 		found_count: faker.number.int(),
 		page: faker.number.int(),

@@ -43,7 +43,7 @@ export default function TabsLink({
 					? cn(classname, "border-b-teal-700", "hover:border-b-teal-700")
 					: classname
 			}
-			search={search as never}
+			search={search}
 			to={to}
 		>
 			{children}

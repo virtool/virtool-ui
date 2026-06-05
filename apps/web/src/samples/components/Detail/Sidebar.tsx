@@ -1,19 +1,21 @@
-import type { LabelNested } from "@labels/types";
+import type { Label, LabelNested } from "@labels/types";
 import { useUpdateSample } from "@samples/queries";
 import type { SubtractionNested } from "@subtraction/types";
 import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
 import SampleLabels from "../Sidebar/SampleLabels";
 
 type SidebarProps = {
+	labels: Label[];
 	sampleId: string;
 	sampleLabels: Array<LabelNested>;
 	defaultSubtractions: Array<SubtractionNested>;
 };
 
 /**
- * Displays the sidebar for managing labels and subtractions associated with sample
+ * Sidebar for managing labels and subtractions on a sample.
  */
 export default function Sidebar({
+	labels,
 	sampleId,
 	sampleLabels,
 	defaultSubtractions,
@@ -23,6 +25,7 @@ export default function Sidebar({
 	return (
 		<div className="flex flex-col items-stretch w-80 z-0">
 			<SampleLabels
+				labels={labels}
 				onUpdate={(labels) => {
 					mutation.mutate({ update: { labels } });
 				}}

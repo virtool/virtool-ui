@@ -56,7 +56,7 @@ export default function CreateUser({
 				<DialogTitle>Create User</DialogTitle>
 				<CreateUserForm
 					onSubmit={handleSubmit}
-					error={mutation.isError && mutation.error.response?.body.message}
+					error={mutation.isError ? mutation.error.message : ""}
 				/>
 			</DialogContent>
 		</Dialog>

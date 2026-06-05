@@ -6,6 +6,7 @@ import Icon from "@base/Icon";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import { useQueryClient } from "@tanstack/react-query";
+import { useFetchTask } from "@tasks/queries";
 import { Info } from "lucide-react";
 import { useEffect } from "react";
 import { hmmQueryKeys, useInstallHmm, useListHmms } from "../queries";
@@ -20,7 +21,10 @@ export function HmmInstall() {
 		useCheckAdminRoleOrPermission("modify_hmm");
 	const installMutation = useInstallHmm();
 
-	const taskComplete = data?.status?.task?.complete;
+	const seedTask = data?.status?.task;
+	const { data: task } = useFetchTask(seedTask?.id ?? Number.NaN, seedTask);
+
+	const taskComplete = task?.complete;
 
 	useEffect(() => {
 		if (taskComplete) {
@@ -28,12 +32,12 @@ export function HmmInstall() {
 		}
 	}, [taskComplete, queryClient]);
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 
 	const {
-		status: { installed, task },
+		status: { installed },
 	} = data;
 
 	if (task && !installed) {

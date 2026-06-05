@@ -83,7 +83,7 @@ interface IimiCoverageChartProps {
 }
 
 export function SummaryChart({ seqs }: IimiCoverageChartProps) {
-	const chartEl = useRef(null);
+	const chartEl = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		const filteredSeqs = seqs.filter(Boolean);
@@ -93,13 +93,15 @@ export function SummaryChart({ seqs }: IimiCoverageChartProps) {
 			seqs.map((sequence) => (sequence ? sequence.untrustworthy_ranges : [])),
 		);
 
-		draw(
-			chartEl.current,
-			avgSeq,
-			avgSeq.length,
-			Math.max(...avgSeq, 10),
-			untrustworthyRanges,
-		);
+		if (chartEl.current) {
+			draw(
+				chartEl.current,
+				avgSeq,
+				avgSeq.length,
+				Math.max(...avgSeq, 10),
+				untrustworthyRanges,
+			);
+		}
 	}, [seqs]);
 
 	return (

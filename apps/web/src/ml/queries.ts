@@ -1,5 +1,5 @@
+import { apiClient } from "@app/api";
 import { useQuery } from "@tanstack/react-query";
-import { findModels } from "./api";
 import type { MLModelSearchResult } from "./types";
 
 export const modelQueryKeys = {
@@ -14,6 +14,6 @@ export const modelQueryKeys = {
 export function useFindModels() {
 	return useQuery<MLModelSearchResult>({
 		queryKey: modelQueryKeys.list([]),
-		queryFn: findModels,
+		queryFn: () => apiClient.get("/ml").then((response) => response.body),
 	});
 }

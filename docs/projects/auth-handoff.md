@@ -122,3 +122,50 @@ paths at the Node server.
   `/api/account/settings`, `/api/account/keys`) off Python.
 - A schema-drift check that diffs our Drizzle mirror against Python's
   `models.py`.
+
+## Sharp edges for the rest of the auth port
+
+Notes for whoever ports the remaining auth surface (admin checks, the
+`/reset` submission flow, change-password, API keys). These are
+behaviour points that aren't obvious from the Python source and bit us
+— or would have — in the ts-virtool prototype.
+
+### `administratorrole` enum hierarchy
+
+Postgres `administratorrole` has five values: `full`, `settings`,
+`spaces`, `users`, `base`. The hierarchy in
+`virtool/users/data.py::check_administrator_role` is numeric:
+
+- `base` = 1
+- `users`, `settings`, `spaces` = 2 (peers)
+- `full` = 3
+
+`spaces` is obsolete in product terms but still a valid enum value
+because Python writes it. Treat it as a level-2 peer when porting role
+checks. Removing the value from the enum requires a Python-side
+migration first.
+
+### `users.invalidate_sessions` becomes load-bearing
+
+Python sets `users.invalidate_sessions = true` in some flows
+(force-reset, role demotion) but never reads it back. Any TS port of
+session validation that honours the flag — deleting the user's
+sessions and self-clearing on next request — is a real behaviour
+change between stacks.
+
+If the TS side starts reading the flag while Python is still writing
+it, expect a wave of unexpected logouts the first time a flagged user
+hits a migrated endpoint. Intended behaviour, but worth flagging in
+the rollout note for that PR.
+
+### Sliding session refresh: `created_at` must never be mutated
+
+If we port Python's sliding-refresh logic (extend `expires_at` when
+more than half the lifetime has elapsed), the lifetime is
+reconstructed from `expires_at - created_at`. That makes
+`sessions.created_at` an invariant — `defaultNow()` on insert only,
+never an `UPDATE`. A future code path that touches `created_at` will
+silently misbehave: sessions either refresh too eagerly or never.
+
+Reset sessions are the exception: 10-minute absolute lifetime, no
+sliding refresh.

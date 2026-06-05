@@ -29,7 +29,6 @@ export function IimiIsolate({ name, sequences }: IimiIsolateProps) {
 						</p>
 						<CoverageChart
 							data={sequence.coverage}
-							id={sequence.id}
 							yMax={Math.max(sequence.maxDepth, 10)}
 							untrustworthyRanges={sequence.untrustworthy_ranges}
 						/>

@@ -8,38 +8,24 @@ type NuVsExportPreviewProps = {
  * Displays a preview of the Nuvs being exported
  */
 export default function NuvsExportPreview({ mode }: NuVsExportPreviewProps) {
-	let previewHeader = ">sequence_1|17SP002|RNA Polymerase";
-	let previewSequence;
-	let indexName;
-	let indexExample;
-	let barName;
-	let barExample;
+	const isContigs = mode === "contigs";
 
-	if (mode === "contigs") {
-		indexName = "sequence index";
-		indexExample = "sequence_1";
-
-		barName = "bar-separated ORF annotations";
-		barExample = "RNA Polymerase|cg30";
-
-		previewHeader += "|cg30";
-		previewSequence =
-			"CATTTTATCAATAACAATTAAAACAAACAAACAAAAAAACCTTACCAGCAGCAACAGCAAGATGGCCAAATAGGAACAGATAGGGAC";
-	} else {
-		indexName = "sequence index + orf index";
-		indexExample = "orf_1_1";
-
-		barName = "best annotation";
-		barExample = "RNA Polymerase";
-
-		previewHeader = previewHeader.replace("sequence_1", "orf_1_1");
-		previewSequence =
-			"ELREECRSLRSRCDQLEERVSAMEDEMNEMKREGKFREKRIKRNEQSLQEIWDYVKRPNLRLIGVPESDGENGTKLENTFREKSAME";
-	}
+	const previewHeader = isContigs
+		? ">sequence_1|17SP002|RNA Polymerase|cg30"
+		: ">orf_1_1|17SP002|RNA Polymerase";
+	const previewSequence = isContigs
+		? "CATTTTATCAATAACAATTAAAACAAACAAACAAAAAAACCTTACCAGCAGCAACAGCAAGATGGCCAAATAGGAACAGATAGGGAC"
+		: "ELREECRSLRSRCDQLEERVSAMEDEMNEMKREGKFREKRIKRNEQSLQEIWDYVKRPNLRLIGVPESDGENGTKLENTFREKSAME";
+	const indexName = isContigs ? "sequence index" : "sequence index + orf index";
+	const indexExample = isContigs ? "sequence_1" : "orf_1_1";
+	const barName = isContigs
+		? "bar-separated ORF annotations"
+		: "best annotation";
+	const barExample = isContigs ? "RNA Polymerase|cg30" : "RNA Polymerase";
 
 	return (
 		<div>
-			<label>Preview</label>
+			<h3>Preview</h3>
 			<div className="bg-gray-100 border border-gray-300 rounded shadow-inner text-gray-600 mb-4 min-h-5 p-5">
 				<p style={{ wordWrap: "break-word", marginBottom: 0 }}>
 					<code>{previewHeader}</code>
@@ -52,7 +38,7 @@ export default function NuvsExportPreview({ mode }: NuVsExportPreviewProps) {
 				</p>
 			</div>
 
-			<label>Header Fields</label>
+			<h3>Header Fields</h3>
 			<Table>
 				<thead>
 					<tr>

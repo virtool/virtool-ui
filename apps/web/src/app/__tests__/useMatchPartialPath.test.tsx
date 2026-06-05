@@ -27,7 +27,6 @@ async function renderWithTanStackRouter(
 	});
 	rootRoute.addChildren([catchAllRoute]);
 
-	// @ts-expect-error createRouter requires strictNullChecks which is not enabled project-wide
 	const router = createRouter({
 		routeTree: rootRoute,
 		history: createMemoryHistory({ initialEntries: [initialPath] }),

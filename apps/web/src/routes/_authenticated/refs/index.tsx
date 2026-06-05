@@ -26,7 +26,12 @@ function ReferencesRoute() {
 			createReferenceType={search.createReferenceType}
 			find={search.find}
 			page={search.page}
-			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+			setSearch={(next, options) =>
+				navigate({
+					search: { ...search, ...next },
+					replace: options?.replace,
+				})
+			}
 		/>
 	);
 }

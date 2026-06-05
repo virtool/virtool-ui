@@ -23,7 +23,9 @@ export default function SampleFileSizeWarning({
 		const showLink = !location.endsWith("/uploads");
 
 		const link = showLink ? (
-			<Link to={`/samples/${sampleId}/files`}>Check the file sizes</Link>
+			<Link to="/samples/$sampleId/files" params={{ sampleId }}>
+				Check the file sizes
+			</Link>
 		) : (
 			"Check the file sizes"
 		);

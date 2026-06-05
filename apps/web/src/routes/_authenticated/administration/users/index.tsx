@@ -1,3 +1,4 @@
+import { usersQueryOptions } from "@administration/queries";
 import { createFileRoute } from "@tanstack/react-router";
 import { ManageUsers } from "@users/components/ManageUsers";
 import { z } from "zod";
@@ -10,6 +11,11 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/_authenticated/administration/users/")({
 	validateSearch: searchSchema,
+	loaderDeps: ({ search: { page, status } }) => ({ page, status }),
+	loader: ({ context: { queryClient }, deps: { page, status } }) =>
+		queryClient.ensureQueryData(
+			usersQueryOptions(page, 25, "", undefined, status === "active"),
+		),
 	component: UsersRoute,
 });
 

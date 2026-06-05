@@ -3,6 +3,7 @@ import pino, {
 	type DestinationStream,
 	type Logger,
 	type LoggerOptions,
+	type StreamEntry,
 	type TransportMultiOptions,
 	type TransportPipelineOptions,
 	type TransportSingleOptions,
@@ -35,6 +36,13 @@ export interface CreateLoggerOptions {
 	env?: Record<string, string | undefined>;
 	/** Destination stream. Ignored when `transport` is set. */
 	destination?: DestinationStream;
+	/**
+	 * Extra destinations to fan out to alongside the primary one. Each record is
+	 * written to the primary destination and to every entry here whose level it
+	 * meets. Redaction is applied before any stream sees the record. Ignored when
+	 * `transport` is set.
+	 */
+	streams?: readonly StreamEntry<LogLevel>[];
 }
 
 export function createLogger(options: CreateLoggerOptions): Logger {
@@ -61,5 +69,17 @@ export function createLogger(options: CreateLoggerOptions): Logger {
 	if (options.transport) {
 		return pino({ ...pinoOptions, transport: options.transport });
 	}
+
+	if (options.streams && options.streams.length > 0) {
+		const primary: StreamEntry<LogLevel> = {
+			level,
+			stream: options.destination ?? pino.destination(1),
+		};
+		return pino(
+			pinoOptions,
+			pino.multistream<LogLevel>([primary, ...options.streams]),
+		);
+	}
+
 	return pino(pinoOptions, options.destination);
 }

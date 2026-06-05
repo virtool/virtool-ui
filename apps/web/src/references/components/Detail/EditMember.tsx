@@ -11,7 +11,7 @@ const rights = ["modify_otu", "build", "modify", "remove"];
 
 type EditReferenceMemberProps = {
 	editId?: string;
-	member: ReferenceGroup | ReferenceUser;
+	member?: ReferenceGroup | ReferenceUser;
 	noun: string;
 	refId: string;
 	unsetEditId?: () => void;
@@ -31,6 +31,10 @@ export default function EditReferenceMember({
 	const queryClient = useQueryClient();
 
 	function handleChange(key: string, enabled: boolean) {
+		if (!editId) {
+			return;
+		}
+
 		mutation.mutate(
 			{
 				refId,

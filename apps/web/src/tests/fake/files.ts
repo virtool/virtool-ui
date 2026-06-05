@@ -8,14 +8,11 @@ import { createFakeUserNested } from "./user";
  */
 export function createFakeFile(overrides?: Partial<Upload>): Upload {
 	const name = overrides?.name ?? `sample_${faker.number.int()}.fastq.gz`;
-	const name_on_disk =
-		overrides?.name_on_disk ?? `${faker.number.int()}-${name}`;
 
 	return {
 		id: faker.number.int(),
 		created_at: faker.date.past().toISOString(),
 		name,
-		name_on_disk,
 		ready: true,
 		removed: false,
 		removed_at: undefined,

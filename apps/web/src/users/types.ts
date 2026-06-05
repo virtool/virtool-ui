@@ -29,7 +29,7 @@ export type UserNested = {
 /** A Virtool user */
 export type User = UserNested & {
 	/** Their administrator role defining what resources they can modify */
-	administrator_role: AdministratorRoleName;
+	administrator_role: AdministratorRoleName | null;
 
 	/** Indicates if user is active */
 	active: boolean;
@@ -62,7 +62,7 @@ export type User = UserNested & {
 	permissions: Permissions;
 
 	/** Their primary group */
-	primary_group: GroupMinimal;
+	primary_group: GroupMinimal | null;
 };
 
 /** User search results from the API */

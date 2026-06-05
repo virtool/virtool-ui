@@ -8,7 +8,7 @@ import SampleRights from "./SampleRights";
 export default function SamplesSettings() {
 	const { data, isPending } = useFetchSettings();
 
-	if (isPending) {
+	if (isPending || !data) {
 		return <LoadingPlaceholder />;
 	}
 

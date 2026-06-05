@@ -40,23 +40,27 @@ export default function CreateIimi({
 		formState: { errors },
 	} = useForm<CreateIimiFormValues>();
 
-	if (isPendingIndexes || isPendingMlModels) {
+	if (isPendingIndexes || isPendingMlModels || !indexes || !mlModels) {
 		return null;
 	}
 
 	function onSubmit(values: CreateIimiFormValues) {
 		const { indexId, mlModel } = values;
 
-		const refId = indexes.find((index) => index.id === indexId).reference.id;
+		const index = indexes.find((index) => index.id === indexId);
+		if (!index) {
+			return;
+		}
+		const refId = index.reference.id;
 
-		sampleIds.forEach((sampleId) =>
+		for (const sampleId of sampleIds) {
 			createAnalysis.mutate({
 				mlModel,
 				refId,
 				sampleId,
 				workflow: "iimi",
-			}),
-		);
+			});
+		}
 	}
 
 	return (

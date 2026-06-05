@@ -32,14 +32,14 @@ export default function Schema() {
 	const [segmentToEdit, setSegmentToEdit] = useState<string | undefined>();
 	const [segmentToRemove, setSegmentToRemove] = useState<string | undefined>();
 
-	if (isPending || isPendingPermission) {
+	if (isPending || isPendingPermission || !data) {
 		return <LoadingPlaceholder />;
 	}
 
 	const { abbreviation, name, schema } = data;
 
 	function handleMoveUp(index: number) {
-		const updatedSchema = data.schema.slice();
+		const updatedSchema = schema.slice();
 		[updatedSchema[index], updatedSchema[index - 1]] = [
 			updatedSchema[index - 1],
 			updatedSchema[index],
@@ -48,7 +48,7 @@ export default function Schema() {
 	}
 
 	function handleMoveDown(index: number) {
-		const updatedSchema = data.schema.slice();
+		const updatedSchema = schema.slice();
 		[updatedSchema[index], updatedSchema[index + 1]] = [
 			updatedSchema[index + 1],
 			updatedSchema[index],

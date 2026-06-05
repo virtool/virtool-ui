@@ -8,7 +8,7 @@ COPY packages/config/package.json ./packages/config/
 COPY packages/contracts/package.json ./packages/contracts/
 COPY packages/logger/package.json ./packages/logger/
 COPY packages/sentry/package.json ./packages/sentry/
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 COPY biome.json ./
 COPY packages ./packages
 COPY apps/web ./apps/web

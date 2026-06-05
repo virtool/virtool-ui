@@ -1,3 +1,4 @@
+import type { RefObject } from "react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 function subscribeToTime(callback: () => void) {
@@ -9,11 +10,50 @@ export function useNow() {
 	return useSyncExternalStore(subscribeToTime, Date.now, Date.now);
 }
 
-function getSize(ref) {
-	return {
-		height: ref.current ? ref.current.offsetHeight : 0,
-		width: ref.current ? ref.current.offsetWidth : 0,
-	};
+/**
+ * Returns `value` delayed until it has been stable for `delayMs`.
+ */
+export function useDebouncedValue<T>(value: T, delayMs = 250): T {
+	const [debounced, setDebounced] = useState(value);
+
+	useEffect(() => {
+		const id = setTimeout(() => setDebounced(value), delayMs);
+		return () => clearTimeout(id);
+	}, [value, delayMs]);
+
+	return debounced;
+}
+
+/**
+ * Two-way binding for an input whose committed value lives in the parent (URL,
+ * store, etc.). Returns a local `draft` for the input and a setter; commits
+ * `draft` to `onChange` after it's been stable for `delayMs`, and resyncs
+ * `draft` when `value` changes externally (e.g. back/forward navigation).
+ */
+export function useDebouncedDraft<T>(
+	value: T,
+	onChange: (next: T) => void,
+	delayMs?: number,
+): [T, (next: T) => void] {
+	const [draft, setDraft] = useState(value);
+	const debouncedDraft = useDebouncedValue(draft, delayMs);
+	const lastSentRef = useRef(value);
+
+	useEffect(() => {
+		if (debouncedDraft !== value) {
+			lastSentRef.current = debouncedDraft;
+			onChange(debouncedDraft);
+		}
+	}, [debouncedDraft, onChange, value]);
+
+	useEffect(() => {
+		if (value !== lastSentRef.current) {
+			lastSentRef.current = value;
+			setDraft(value);
+		}
+	}, [value]);
+
+	return [draft, setDraft];
 }
 
 type Size = {
@@ -22,15 +62,19 @@ type Size = {
 };
 
 export function useElementSize<T extends HTMLElement>(): [
-	React.MutableRefObject<T>,
+	RefObject<T | null>,
 	Size,
 ] {
-	const ref = useRef(null);
+	const ref = useRef<T>(null);
 	const [size, setSize] = useState<Size>({ height: 0, width: 0 });
 
 	useEffect(() => {
 		function handleResize() {
-			setSize(getSize(ref));
+			const element = ref.current;
+			setSize({
+				height: element?.offsetHeight ?? 0,
+				width: element?.offsetWidth ?? 0,
+			});
 		}
 
 		handleResize();

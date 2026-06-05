@@ -11,8 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as EventsRouteImport } from './routes/events'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as HealthReadyRouteImport } from './routes/health/ready'
+import { Route as HealthLiveRouteImport } from './routes/health/live'
 import { Route as AuthenticatedSubtractionsRouteImport } from './routes/_authenticated/subtractions'
 import { Route as AuthenticatedSamplesRouteImport } from './routes/_authenticated/samples'
 import { Route as AuthenticatedJobsRouteImport } from './routes/_authenticated/jobs'
@@ -39,7 +42,6 @@ import { Route as AuthenticatedJobsJobIdRouteImport } from './routes/_authentica
 import { Route as AuthenticatedHmmsHmmIdRouteImport } from './routes/_authenticated/hmms/$hmmId'
 import { Route as AuthenticatedAdministrationSettingsRouteImport } from './routes/_authenticated/administration/settings'
 import { Route as AuthenticatedAdministrationGroupsRouteImport } from './routes/_authenticated/administration/groups'
-import { Route as AuthenticatedAdministrationAdministratorsRouteImport } from './routes/_authenticated/administration/administrators'
 import { Route as AuthenticatedAccountProfileRouteImport } from './routes/_authenticated/account/profile'
 import { Route as AuthenticatedAccountApiRouteImport } from './routes/_authenticated/account/api'
 import { Route as AuthenticatedRefsRefIdRouteRouteImport } from './routes/_authenticated/refs/$refId/route'
@@ -75,6 +77,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -83,6 +90,16 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const HealthReadyRoute = HealthReadyRouteImport.update({
+  id: '/health/ready',
+  path: '/health/ready',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HealthLiveRoute = HealthLiveRouteImport.update({
+  id: '/health/live',
+  path: '/health/live',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedSubtractionsRoute =
   AuthenticatedSubtractionsRouteImport.update({
@@ -228,12 +245,6 @@ const AuthenticatedAdministrationGroupsRoute =
   AuthenticatedAdministrationGroupsRouteImport.update({
     id: '/groups',
     path: '/groups',
-    getParentRoute: () => AuthenticatedAdministrationRouteRoute,
-  } as any)
-const AuthenticatedAdministrationAdministratorsRoute =
-  AuthenticatedAdministrationAdministratorsRouteImport.update({
-    id: '/administrators',
-    path: '/administrators',
     getParentRoute: () => AuthenticatedAdministrationRouteRoute,
   } as any)
 const AuthenticatedAccountProfileRoute =
@@ -382,6 +393,7 @@ const AuthenticatedRefsRefIdOtusOtuIdHistoryRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
+  '/events': typeof EventsRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
@@ -391,10 +403,11 @@ export interface FileRoutesByFullPath {
   '/jobs': typeof AuthenticatedJobsRouteWithChildren
   '/samples': typeof AuthenticatedSamplesRouteWithChildren
   '/subtractions': typeof AuthenticatedSubtractionsRouteWithChildren
+  '/health/live': typeof HealthLiveRoute
+  '/health/ready': typeof HealthReadyRoute
   '/refs/$refId': typeof AuthenticatedRefsRefIdRouteRouteWithChildren
   '/account/api': typeof AuthenticatedAccountApiRoute
   '/account/profile': typeof AuthenticatedAccountProfileRoute
-  '/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
   '/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
   '/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
   '/hmms/$hmmId': typeof AuthenticatedHmmsHmmIdRoute
@@ -437,12 +450,14 @@ export interface FileRoutesByFullPath {
   '/refs/$refId/otus/$otuId/': typeof AuthenticatedRefsRefIdOtusOtuIdIndexRoute
 }
 export interface FileRoutesByTo {
+  '/events': typeof EventsRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
+  '/health/live': typeof HealthLiveRoute
+  '/health/ready': typeof HealthReadyRoute
   '/': typeof AuthenticatedIndexRoute
   '/account/api': typeof AuthenticatedAccountApiRoute
   '/account/profile': typeof AuthenticatedAccountProfileRoute
-  '/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
   '/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
   '/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
   '/hmms/$hmmId': typeof AuthenticatedHmmsHmmIdRoute
@@ -484,6 +499,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/events': typeof EventsRoute
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/_authenticated/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
@@ -493,11 +509,12 @@ export interface FileRoutesById {
   '/_authenticated/jobs': typeof AuthenticatedJobsRouteWithChildren
   '/_authenticated/samples': typeof AuthenticatedSamplesRouteWithChildren
   '/_authenticated/subtractions': typeof AuthenticatedSubtractionsRouteWithChildren
+  '/health/live': typeof HealthLiveRoute
+  '/health/ready': typeof HealthReadyRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/refs/$refId': typeof AuthenticatedRefsRefIdRouteRouteWithChildren
   '/_authenticated/account/api': typeof AuthenticatedAccountApiRoute
   '/_authenticated/account/profile': typeof AuthenticatedAccountProfileRoute
-  '/_authenticated/administration/administrators': typeof AuthenticatedAdministrationAdministratorsRoute
   '/_authenticated/administration/groups': typeof AuthenticatedAdministrationGroupsRoute
   '/_authenticated/administration/settings': typeof AuthenticatedAdministrationSettingsRoute
   '/_authenticated/hmms/$hmmId': typeof AuthenticatedHmmsHmmIdRoute
@@ -543,6 +560,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/events'
     | '/login'
     | '/setup'
     | '/administration'
@@ -552,10 +570,11 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/samples'
     | '/subtractions'
+    | '/health/live'
+    | '/health/ready'
     | '/refs/$refId'
     | '/account/api'
     | '/account/profile'
-    | '/administration/administrators'
     | '/administration/groups'
     | '/administration/settings'
     | '/hmms/$hmmId'
@@ -598,12 +617,14 @@ export interface FileRouteTypes {
     | '/refs/$refId/otus/$otuId/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/events'
     | '/login'
     | '/setup'
+    | '/health/live'
+    | '/health/ready'
     | '/'
     | '/account/api'
     | '/account/profile'
-    | '/administration/administrators'
     | '/administration/groups'
     | '/administration/settings'
     | '/hmms/$hmmId'
@@ -644,6 +665,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_authenticated'
+    | '/events'
     | '/login'
     | '/setup'
     | '/_authenticated/administration'
@@ -653,11 +675,12 @@ export interface FileRouteTypes {
     | '/_authenticated/jobs'
     | '/_authenticated/samples'
     | '/_authenticated/subtractions'
+    | '/health/live'
+    | '/health/ready'
     | '/_authenticated/'
     | '/_authenticated/refs/$refId'
     | '/_authenticated/account/api'
     | '/_authenticated/account/profile'
-    | '/_authenticated/administration/administrators'
     | '/_authenticated/administration/groups'
     | '/_authenticated/administration/settings'
     | '/_authenticated/hmms/$hmmId'
@@ -702,8 +725,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  EventsRoute: typeof EventsRoute
   LoginRoute: typeof LoginRoute
   SetupRoute: typeof SetupRoute
+  HealthLiveRoute: typeof HealthLiveRoute
+  HealthReadyRoute: typeof HealthReadyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -722,6 +748,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -735,6 +768,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/health/ready': {
+      id: '/health/ready'
+      path: '/health/ready'
+      fullPath: '/health/ready'
+      preLoaderRoute: typeof HealthReadyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/health/live': {
+      id: '/health/live'
+      path: '/health/live'
+      fullPath: '/health/live'
+      preLoaderRoute: typeof HealthLiveRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/subtractions': {
       id: '/_authenticated/subtractions'
@@ -918,13 +965,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdministrationGroupsRouteImport
       parentRoute: typeof AuthenticatedAdministrationRouteRoute
     }
-    '/_authenticated/administration/administrators': {
-      id: '/_authenticated/administration/administrators'
-      path: '/administrators'
-      fullPath: '/administration/administrators'
-      preLoaderRoute: typeof AuthenticatedAdministrationAdministratorsRouteImport
-      parentRoute: typeof AuthenticatedAdministrationRouteRoute
-    }
     '/_authenticated/account/profile': {
       id: '/_authenticated/account/profile'
       path: '/profile'
@@ -1097,7 +1137,6 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdministrationRouteRouteChildren {
-  AuthenticatedAdministrationAdministratorsRoute: typeof AuthenticatedAdministrationAdministratorsRoute
   AuthenticatedAdministrationGroupsRoute: typeof AuthenticatedAdministrationGroupsRoute
   AuthenticatedAdministrationSettingsRoute: typeof AuthenticatedAdministrationSettingsRoute
   AuthenticatedAdministrationIndexRoute: typeof AuthenticatedAdministrationIndexRoute
@@ -1107,8 +1146,6 @@ interface AuthenticatedAdministrationRouteRouteChildren {
 
 const AuthenticatedAdministrationRouteRouteChildren: AuthenticatedAdministrationRouteRouteChildren =
   {
-    AuthenticatedAdministrationAdministratorsRoute:
-      AuthenticatedAdministrationAdministratorsRoute,
     AuthenticatedAdministrationGroupsRoute:
       AuthenticatedAdministrationGroupsRoute,
     AuthenticatedAdministrationSettingsRoute:
@@ -1357,8 +1394,11 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  EventsRoute: EventsRoute,
   LoginRoute: LoginRoute,
   SetupRoute: SetupRoute,
+  HealthLiveRoute: HealthLiveRoute,
+  HealthReadyRoute: HealthReadyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

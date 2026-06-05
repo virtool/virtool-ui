@@ -8,11 +8,11 @@ import type { GroupMinimal } from "@groups/types";
 import type { ReactElement } from "react";
 
 type UserItemProps = {
-	administrator_role: AdministratorRoleName;
+	administrator_role: AdministratorRoleName | null;
 	handle: string;
 	id: number;
 	/** The primary group assigned to the user */
-	primary_group: GroupMinimal;
+	primary_group: GroupMinimal | null;
 };
 
 /**
@@ -34,7 +34,8 @@ export function UserItem({
 				<InitialIcon size="lg" handle={handle} />
 				{canEdit ? (
 					<Link
-						to={`/administration/users/${id}`}
+						to="/administration/users/$userId"
+						params={{ userId: String(id) }}
 						className="text-lg font-medium"
 					>
 						{handle}

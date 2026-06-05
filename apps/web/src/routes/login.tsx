@@ -1,5 +1,4 @@
-import { fetchAccount } from "@account/api";
-import { accountKeys } from "@account/queries";
+import { accountQueryOptions } from "@account/queries";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import LoginWall from "@wall/components/LoginWall";
 import { z } from "zod/v4";
@@ -26,10 +25,7 @@ export const Route = createFileRoute("/login")({
 		const { queryClient } = context;
 
 		try {
-			await queryClient.ensureQueryData({
-				queryKey: accountKeys.all(),
-				queryFn: fetchAccount,
-			});
+			await queryClient.ensureQueryData(accountQueryOptions());
 		} catch {
 			return;
 		}

@@ -5,7 +5,7 @@ import type { OtuIsolate } from "@otus/types";
 import { getRouteApi } from "@tanstack/react-router";
 import { Star } from "lucide-react";
 
-const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
+const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId/otu");
 
 type IsolateItemProps = {
 	/** Whether the Isolate is selected */

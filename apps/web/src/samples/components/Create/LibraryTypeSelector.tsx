@@ -14,7 +14,7 @@ export default function LibraryTypeSelector({
 }: LibraryTypeSelectorProps) {
 	return (
 		<SelectBox
-			className="grid-cols-3 mb-6"
+			className="grid-cols-2 mb-6"
 			label="Library Type"
 			onValueChange={onSelect}
 			value={libraryType}

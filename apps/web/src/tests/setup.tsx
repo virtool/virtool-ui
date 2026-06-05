@@ -17,9 +17,40 @@ import {
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createContext, type ReactNode, useContext, useState } from "react";
-import { vi } from "vitest";
+import { beforeEach, vi } from "vitest";
 import { routeTree } from "@/routeTree.gen";
+import { groupServerFnMocks } from "./api/groups";
+import { jobServerFnMocks } from "./api/jobs";
+import { userServerFnMocks } from "./api/users";
 import { createFakeAccount } from "./fake/account";
+
+vi.mock("@server/groups/functions", () => groupServerFnMocks);
+// Resolve the mock lazily via dynamic import. A direct reference to the
+// imported `userServerFnMocks` binding races route modules (pulled in by
+// `routeTree`) that import the mocked module before this binding initializes.
+vi.mock("@server/users/functions", async () => {
+	const { userServerFnMocks } = await import("./api/users");
+	return userServerFnMocks;
+});
+vi.mock("@server/jobs/functions", async () => {
+	const { jobServerFnMocks } = await import("./api/jobs");
+	return jobServerFnMocks;
+});
+
+beforeEach(() => {
+	for (const fn of Object.values(groupServerFnMocks)) {
+		fn.mockReset();
+	}
+	for (const fn of [
+		...Object.values(userServerFnMocks),
+		...Object.values(jobServerFnMocks),
+	]) {
+		fn.mockReset();
+		// Default to a pending promise so an un-stubbed query renders its loading
+		// state instead of resolving to `undefined`.
+		fn.mockReturnValue(new Promise(() => {}));
+	}
+});
 
 process.env.TZ = "UTC";
 
@@ -52,7 +83,6 @@ export async function renderWithRouter(ui: ReactNode, path?: string) {
 		initialEntries: [path || "/"],
 	});
 
-	// @ts-expect-error createRouter requires strictNullChecks
 	const router = createRouter({
 		routeTree: rootRoute,
 		history: memoryHistory,
@@ -95,7 +125,6 @@ export function MemoryRouter({
 		});
 		rootRoute.addChildren([catchAllRoute]);
 
-		// @ts-expect-error createRouter requires strictNullChecks
 		return createRouter({
 			routeTree: rootRoute,
 			history: createMemoryHistory({ initialEntries: [path || "/"] }),
@@ -119,7 +148,6 @@ export async function renderHookWithRouter<T>(hook: () => T, path?: string) {
 	});
 	rootRoute.addChildren([catchAllRoute]);
 
-	// @ts-expect-error createRouter requires strictNullChecks
 	const router = createRouter({
 		routeTree: rootRoute,
 		history: createMemoryHistory({ initialEntries: [path || "/"] }),
@@ -158,7 +186,6 @@ export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 
 	const memoryHistory = createMemoryHistory({ initialEntries: [path] });
 
-	// @ts-expect-error createRouter requires strictNullChecks
 	const router = createRouter({
 		routeTree,
 		history: memoryHistory,
@@ -184,6 +211,23 @@ export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 
 	return { ...result, history, router, queryClient };
 }
+
+// jsdom does not implement EventSource; the SSE bridge constructs one when the
+// authenticated layout mounts, so any route-level test that renders it would
+// throw. A noop stand-in keeps the connection inert during tests.
+class FakeEventSource {
+	close() {}
+	addEventListener() {}
+	removeEventListener() {}
+	dispatchEvent() {
+		return true;
+	}
+	onopen: ((this: EventSource, ev: Event) => unknown) | null = null;
+	onmessage: ((this: EventSource, ev: MessageEvent) => unknown) | null = null;
+	onerror: ((this: EventSource, ev: Event) => unknown) | null = null;
+}
+// @ts-expect-error FakeEventSource only implements the surface SseConnection touches.
+window.EventSource = FakeEventSource;
 
 //mocks HTML element prototypes that are not implemented in jsdom
 window.HTMLElement.prototype.scrollIntoView = vi.fn();

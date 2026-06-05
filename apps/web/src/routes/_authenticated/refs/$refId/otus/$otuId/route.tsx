@@ -10,15 +10,9 @@ import { otuQueryOptions, useFetchOTU } from "@otus/queries";
 import { useReferenceIsArchived } from "@references/hooks";
 import { referenceQueryOptions, useFetchReference } from "@references/queries";
 import { createFileRoute, notFound, Outlet } from "@tanstack/react-router";
-import { z } from "zod/v4";
-
-const otuDetailSearchSchema = z.object({
-	activeIsolate: z.string().optional().catch(undefined),
-});
 
 export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 	{
-		validateSearch: otuDetailSearchSchema,
 		loader: async ({ context: { queryClient }, params: { refId, otuId } }) => {
 			try {
 				await Promise.all([
@@ -78,11 +72,17 @@ function OtuDetailLayout() {
 					</ViewHeaderIcons>
 				</ViewHeaderTitle>
 				<p className="flex font-medium items-center gap-2 py-2">
-					<Link to={`/refs/${refId}`}>{reference.name}</Link>
+					<Link to="/refs/$refId" params={{ refId }}>
+						{reference.name}
+					</Link>
 					<span className="text-slate-600">/</span>
-					<Link to={`/refs/${refId}/otus`}>OTUs</Link>
+					<Link to="/refs/$refId/otus" params={{ refId }}>
+						OTUs
+					</Link>
 					<span className="text-slate-600">/</span>
-					<Link to={`/refs/${refId}/otus/${otuId}`}>{name}</Link>
+					<Link to="/refs/$refId/otus/$otuId" params={{ refId, otuId }}>
+						{name}
+					</Link>
 				</p>
 			</ViewHeader>
 

@@ -8,11 +8,14 @@ import type { UploadType } from "./types";
  * @param type - The file type
  * @param selected - The selected file id
  * @param setSelected - A callback function to handle file selection
+ * @param onCleared - Called when a previously selected file can no longer be
+ *   found and the selection is reset, so the caller can notify the user
  */
 export function useValidateFiles(
 	type: UploadType,
 	selected: number[],
 	setSelected: (selected: number[]) => void,
+	onCleared?: () => void,
 ) {
 	const { data, isPending, fetchNextPage, hasNextPage } = useInfiniteFindFiles(
 		type,
@@ -20,7 +23,7 @@ export function useValidateFiles(
 	);
 
 	useEffect(() => {
-		if (!isPending && selected.length) {
+		if (!isPending && data && selected.length) {
 			const items = data.pages.flatMap((page) => page.items);
 			const selectedFilesExist = selected.every((itemId) =>
 				items.some((item) => item.id === itemId),
@@ -32,15 +35,16 @@ export function useValidateFiles(
 
 			if (!hasNextPage && !selectedFilesExist) {
 				setSelected([]);
+				onCleared?.();
 			}
 		}
 	}, [
 		data,
-		selected.length,
+		selected,
 		hasNextPage,
 		setSelected,
-		selected.every,
 		isPending,
 		fetchNextPage,
+		onCleared,
 	]);
 }

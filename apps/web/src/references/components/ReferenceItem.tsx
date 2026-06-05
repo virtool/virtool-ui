@@ -6,6 +6,7 @@ import IconButton from "@base/IconButton";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import type { ReferenceMinimal } from "@references/types";
+import { useFetchTask } from "@tasks/queries";
 import { Copy } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -20,16 +21,19 @@ type ReferenceItemProps = {
 export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 	const { archived, created_at, id, name, task, user } = reference;
 
+	const { data: liveTask } = useFetchTask(task?.id ?? Number.NaN, task);
+	const activeTask = liveTask ?? task;
+
 	const { hasPermission: canCreate } =
 		useCheckAdminRoleOrPermission("create_ref");
 
 	let end: ReactNode = null;
 
-	if (task && !task.complete) {
+	if (activeTask && !activeTask.complete) {
 		end = (
 			<ProgressCircle
-				progress={task.progress || 0}
-				state={task.complete ? "succeeded" : "running"}
+				progress={activeTask.progress || 0}
+				state={activeTask.complete ? "succeeded" : "running"}
 			/>
 		);
 	} else if (archived) {
@@ -51,7 +55,11 @@ export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 
 	return (
 		<BoxGroupSection className="grid grid-cols-3 items-center gap-x-4">
-			<Link className="font-medium text-lg" to={`/refs/${id}`}>
+			<Link
+				className="font-medium text-lg"
+				to="/refs/$refId"
+				params={{ refId: id }}
+			>
 				{name}
 			</Link>
 			<Attribution time={created_at} user={user.handle} />
