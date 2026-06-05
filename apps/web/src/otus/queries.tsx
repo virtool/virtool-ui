@@ -301,7 +301,6 @@ export function useCreateSequence(otuId: string) {
 			host: string;
 			sequence: string;
 			segment?: string;
-			target?: string;
 		}
 	>({
 		mutationFn: ({
@@ -311,11 +310,10 @@ export function useCreateSequence(otuId: string) {
 			host,
 			sequence,
 			segment,
-			target,
 		}) =>
 			apiClient
 				.post(`/otus/${otuId}/isolates/${isolateId}/sequences`)
-				.send({ accession, definition, host, sequence, segment, target })
+				.send({ accession, definition, host, sequence, segment })
 				.then((res) => res.body),
 
 		onSuccess: () => {
@@ -345,7 +343,6 @@ export function useEditSequence(otuId: string) {
 			host: string;
 			sequence: string;
 			segment?: string;
-			target?: string;
 		}
 	>({
 		mutationFn: ({
@@ -356,11 +353,10 @@ export function useEditSequence(otuId: string) {
 			host,
 			sequence,
 			segment,
-			target,
 		}) =>
 			apiClient
 				.patch(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`)
-				.send({ accession, definition, host, sequence, segment, target })
+				.send({ accession, definition, host, sequence, segment })
 				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({

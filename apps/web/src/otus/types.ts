@@ -66,7 +66,6 @@ export type OtuSequence = {
 	remote?: OtuRemote;
 	segment?: string | null;
 	sequence: string;
-	target?: string | null;
 };
 
 export type OtuIsolate = {
