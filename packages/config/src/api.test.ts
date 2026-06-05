@@ -3,7 +3,6 @@ import { parseApiConfig } from "./api";
 
 const minimalS3 = {
 	VT_POSTGRES_URL: "postgres://u:p@h:5432/v",
-	VT_MONGODB_URL: "mongodb://u:p@h:27017/v",
 	VT_STORAGE_BACKEND: "s3",
 	VT_STORAGE_S3_BUCKET: "virtool",
 	VT_STORAGE_S3_ENDPOINT: "http://garage:3900",
@@ -28,7 +27,6 @@ describe("parseApiConfig", () => {
 		expect(() =>
 			parseApiConfig({
 				VT_POSTGRES_URL: "postgres://u:p@h/v",
-				VT_MONGODB_URL: "mongodb://u:p@h/v",
 			} as NodeJS.ProcessEnv),
 		).toThrow(/VT_STORAGE_BACKEND/);
 	});
@@ -100,7 +98,6 @@ describe("parseApiConfig", () => {
 		expect(() =>
 			parseApiConfig({
 				VT_POSTGRES_URL: "postgres://u:p@h/v",
-				VT_MONGODB_URL: "mongodb://u:p@h/v",
 				VT_STORAGE_BACKEND: "s3",
 				VT_STORAGE_S3_ENDPOINT: "http://garage:3900",
 				VT_STORAGE_S3_ACCESS_KEY_ID: "ak",
@@ -113,7 +110,6 @@ describe("parseApiConfig", () => {
 		expect(() =>
 			parseApiConfig({
 				VT_POSTGRES_URL: "postgres://u:p@h/v",
-				VT_MONGODB_URL: "mongodb://u:p@h/v",
 				VT_STORAGE_BACKEND: "s3",
 				VT_STORAGE_S3_BUCKET: "virtool",
 				VT_STORAGE_S3_ACCESS_KEY_ID: "ak",
@@ -126,7 +122,6 @@ describe("parseApiConfig", () => {
 		expect(() =>
 			parseApiConfig({
 				VT_POSTGRES_URL: "postgres://u:p@h/v",
-				VT_MONGODB_URL: "mongodb://u:p@h/v",
 				VT_STORAGE_BACKEND: "s3",
 				VT_STORAGE_S3_BUCKET: "virtool",
 				VT_STORAGE_S3_ENDPOINT: "http://garage:3900",
@@ -137,7 +132,6 @@ describe("parseApiConfig", () => {
 	it("parses azure storage with required fields", () => {
 		const cfg = parseApiConfig({
 			VT_POSTGRES_URL: "postgres://u:p@h/v",
-			VT_MONGODB_URL: "mongodb://u:p@h/v",
 			VT_STORAGE_BACKEND: "azure",
 			VT_STORAGE_AZURE_ACCOUNT: "devstoreaccount1",
 			VT_STORAGE_AZURE_CONTAINER: "virtool",
@@ -154,7 +148,6 @@ describe("parseApiConfig", () => {
 	it("parses azure storage with an endpoint override", () => {
 		const cfg = parseApiConfig({
 			VT_POSTGRES_URL: "postgres://u:p@h/v",
-			VT_MONGODB_URL: "mongodb://u:p@h/v",
 			VT_STORAGE_BACKEND: "azure",
 			VT_STORAGE_AZURE_ACCOUNT: "devstoreaccount1",
 			VT_STORAGE_AZURE_CONTAINER: "virtool",
@@ -172,7 +165,6 @@ describe("parseApiConfig", () => {
 	it("parses local storage with required path", () => {
 		const cfg = parseApiConfig({
 			VT_POSTGRES_URL: "postgres://u:p@h/v",
-			VT_MONGODB_URL: "mongodb://u:p@h/v",
 			VT_STORAGE_BACKEND: "local",
 			VT_STORAGE_LOCAL_PATH: "/var/lib/virtool/storage",
 		} as NodeJS.ProcessEnv);
@@ -186,7 +178,6 @@ describe("parseApiConfig", () => {
 		expect(() =>
 			parseApiConfig({
 				VT_POSTGRES_URL: "postgres://u:p@h/v",
-				VT_MONGODB_URL: "mongodb://u:p@h/v",
 				VT_STORAGE_BACKEND: "local",
 			} as NodeJS.ProcessEnv),
 		).toThrow(/VT_STORAGE_LOCAL_PATH/);
@@ -196,7 +187,6 @@ describe("parseApiConfig", () => {
 		expect(() =>
 			parseApiConfig({
 				VT_POSTGRES_URL: "postgres://u:p@h/v",
-				VT_MONGODB_URL: "mongodb://u:p@h/v",
 				VT_STORAGE_BACKEND: "azure",
 			} as NodeJS.ProcessEnv),
 		).toThrow(/VT_STORAGE_AZURE/);

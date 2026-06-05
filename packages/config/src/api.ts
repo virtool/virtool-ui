@@ -5,7 +5,6 @@ import { buildStorage, type Storage, StorageEnvSchema } from "./storage";
 const ApiEnvSchema = z
 	.object({
 		VT_POSTGRES_URL: z.string().url(),
-		VT_MONGODB_URL: z.string().url(),
 		VT_WORKER_MODE: z
 			.enum(["embedded", "external", "both"])
 			.default("embedded"),
@@ -17,7 +16,6 @@ const ApiEnvSchema = z
 	.merge(StorageEnvSchema)
 	.transform((raw, ctx) => ({
 		postgresUrl: raw.VT_POSTGRES_URL,
-		mongodbUrl: raw.VT_MONGODB_URL,
 		workerMode: raw.VT_WORKER_MODE,
 		host: raw.VT_HOST,
 		port: raw.VT_PORT,
@@ -28,7 +26,6 @@ const ApiEnvSchema = z
 
 export type ApiConfig = {
 	postgresUrl: string;
-	mongodbUrl: string;
 	workerMode: "embedded" | "external" | "both";
 	host: string;
 	port: number;

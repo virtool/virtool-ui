@@ -102,21 +102,6 @@ import site. The alias is allowed because it is wiring glue, not
 exported API. Framework option names that the library dictates (e.g.
 React Query's `queryFn` and `mutationFn`) keep their upstream names.
 
-## Naming: Mongoose model exports end with `Document`
-
-Mongoose model constants exported from
-`apps/web/src/server/db/mongo/*.ts` use the domain name plus
-`Document`: `SampleDocument` today, and the same shape for any
-future model (`HmmDocument`, `SubtractionDocument`, etc.). Keep the
-underlying Mongoose model name unchanged
-(`registerModel("Sample", sampleSchema)`) so the collection identity
-stays stable.
-
-This is the deliberate exception to the "do not suffix" rule above —
-`Document` disambiguates the model constant from the inferred document
-shape, which uses the `*Doc` suffix (e.g. `SampleDoc =
-InferSchemaType<typeof sampleSchema>`).
-
 Import these model constants by their exported names. Do not alias
 them with `as` to avoid collisions; instead name other imports
 clearly enough that the model can keep its `*Document` name.

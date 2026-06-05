@@ -231,22 +231,25 @@ See [docs/auth.md](docs/auth.md) for the middleware composition, the
 session model, cookies, lifetimes, and the login / reset / logout
 flows.
 
-### Data stores: Postgres and Mongo
+### Data store: Postgres-first
 
-Virtool's data lives in two stores during the migration. Postgres
-(via Drizzle) owns users, groups, sessions, labels, jobs, and other
-fully-migrated domains; Mongo (via Mongoose / the Node driver) owns
-OTUs, sequences, references, samples, and the rest. Python is the
-sole owner of schema and migrations on both sides — TS code reads
-and writes against the schema Python defines. Mirror Python-side
+The TypeScript server reads and writes **Postgres only** (via
+Drizzle). Python is the sole owner of schema and migrations — TS code
+reads and writes against the schema Python defines. Mirror Python-side
 column defaults with Drizzle `.$defaultFn()`, never `.default()` —
 the real columns have no `server_default`, so `.default()` inserts
 `null`.
 
+Virtool's data is still being migrated out of Mongo by Python.
+Domains that have not yet landed in Postgres (OTUs, sequences,
+references, samples, and the rest) are simply not available from the
+TS server yet — there is no Mongoose / Mongo-driver layer here. Wait
+for Python to migrate a domain to Postgres before building its TS
+server functions, rather than reaching back into Mongo.
+
 See [docs/database.md](docs/database.md) for the per-domain
-ownership table, the `legacy_id` resolution rules, dual-store write
-coordination, the column-default convention, and notes on
-aggregation pipelines.
+ownership table, the `legacy_id` resolution rules, and the
+column-default convention.
 
 ### Server → client push runs over SSE with id-only frames
 
@@ -290,15 +293,11 @@ The basics:
 - **JSDoc:** Every exported `type` gets a one-line `/** ... */`.
 - **Naming:** `is`/`has`/`get` for pure reads; `check`/`validate`/
   `assert` for may-throw. Don't suffix exports with their layer
-  (`Fn`, `Core`, `Handler`, `Impl`). Exception: Mongoose model
-  constants end in `Document` (`SampleDocument`).
+  (`Fn`, `Core`, `Handler`, `Impl`).
 - **Comments:** Default to none. Document *why* when non-obvious, not
   *what*.
 - **Concurrency:** Independent awaits go in `Promise.all` — don't pay
   the sum of latencies.
-
-Per-collection Mongo schema references live in `docs/mongo/`. Update
-the relevant file when you change a collection's schema.
 
 See [docs/code-style.md](docs/code-style.md) for the full TypeScript,
 naming, comments, and concurrency rules with examples.
