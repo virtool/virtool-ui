@@ -91,14 +91,12 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
 
 interface IimiCoverageChartProps {
 	data: number[];
-	id: string;
 	yMax: number;
 	untrustworthyRanges: UntrustworthyRange[];
 }
 
 export function CoverageChart({
 	data,
-	id,
 	yMax,
 	untrustworthyRanges,
 }: IimiCoverageChartProps) {

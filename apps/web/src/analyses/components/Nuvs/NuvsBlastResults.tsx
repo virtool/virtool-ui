@@ -19,8 +19,8 @@ type BLASTResultsProps = {
  * Displays the results of the blast installed for the sequence
  */
 export default function NuvsBlastResults({ hits, onBlast }: BLASTResultsProps) {
-	const components = hits.map((hit, index) => (
-		<tr key={index}>
+	const components = hits.map((hit) => (
+		<tr key={hit.accession}>
 			<td>
 				<ExternalLink
 					href={`https://www.ncbi.nlm.nih.gov/nuccore/${hit.accession}`}
