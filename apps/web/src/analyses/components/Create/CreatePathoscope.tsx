@@ -62,14 +62,14 @@ export default function CreatePathoscope({
 		}
 		const refId = index.reference.id;
 
-		sampleIds.forEach((sampleId) =>
+		for (const sampleId of sampleIds) {
 			createAnalysis.mutate({
 				refId,
 				sampleId,
 				subtractionIds,
 				workflow: "pathoscope",
-			}),
-		);
+			});
+		}
 	}
 
 	return (
