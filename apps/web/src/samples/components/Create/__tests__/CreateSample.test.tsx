@@ -178,6 +178,36 @@ describe("<CreateSample>", () => {
 		scope.done();
 	});
 
+	it("should toggle the metadata fields with the switch", async () => {
+		const file = createFakeFile();
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([]);
+
+		await renderWithRouter(<CreateSample labels={labels} />);
+
+		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
+
+		// Hidden by default.
+		expect(screen.queryByLabelText("Isolate")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Host")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Locale")).not.toBeInTheDocument();
+
+		const toggle = screen.getByRole("switch", { name: "Show metadata fields" });
+
+		// Visible after turning the switch on.
+		await userEvent.click(toggle);
+		expect(screen.getByLabelText("Isolate")).toBeInTheDocument();
+		expect(screen.getByLabelText("Host")).toBeInTheDocument();
+		expect(screen.getByLabelText("Locale")).toBeInTheDocument();
+
+		// Hidden again after turning the switch off.
+		await userEvent.click(toggle);
+		expect(screen.queryByLabelText("Isolate")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Host")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Locale")).not.toBeInTheDocument();
+	});
+
 	it("should be able to autofill the sample name", async () => {
 		const file = createFakeFile({ name: "14T81.fq.gz" });
 
