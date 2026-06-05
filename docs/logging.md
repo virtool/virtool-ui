@@ -29,10 +29,12 @@ needs to censor additional fields.
 
 ## Sentry forwarding
 
-When `VT_SENTRY_DSN` is set, the server logger fans `info`-and-above
+When `VT_SENTRY_DSN` is set, the server logger fans `warn`-and-above
 records out to Sentry's structured logging API (`Sentry.logger`) in
-addition to stdout. There is no per-call-site wiring: every record that
-goes through `@virtool/logger` is forwarded automatically.
+addition to stdout. `info` and below stay stdout-only — dashboards and
+logs are the source of truth for those; Sentry is reserved for `warn`
+and worse. There is no per-call-site wiring: every record at or above
+that threshold is forwarded automatically.
 
 This is a plain pino destination stream
 (`apps/web/src/server/sentryLog.ts`), **not**
