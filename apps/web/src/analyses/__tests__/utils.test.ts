@@ -97,7 +97,7 @@ describe("median()", () => {
 });
 
 describe("mergeCoverage()", () => {
-	let isolates: FormattedPathoscopeIsolate[];
+	let isolates: Pick<FormattedPathoscopeIsolate, "filled">[];
 
 	beforeEach(() => {
 		const coverages = [
@@ -105,9 +105,7 @@ describe("mergeCoverage()", () => {
 			[7, 5, 5, 1, 1, 2, 1, 5, 6, 2, 1, 0, 0, 0, 1, 3, 2],
 			[1, 1, 2, 3, 4, 4, 4, 4, 2, 2, 2, 3, 2, 1, 0, 1, 0],
 		];
-		isolates = coverages.map(
-			(c) => ({ filled: c }) as FormattedPathoscopeIsolate,
-		);
+		isolates = coverages.map((filled) => ({ filled }));
 	});
 
 	it("should return merged coverage when all isolates have same length", () => {

@@ -8,34 +8,20 @@ type NuVsExportPreviewProps = {
  * Displays a preview of the Nuvs being exported
  */
 export default function NuvsExportPreview({ mode }: NuVsExportPreviewProps) {
-	let previewHeader = ">sequence_1|17SP002|RNA Polymerase";
-	let previewSequence: string;
-	let indexName: string;
-	let indexExample: string;
-	let barName: string;
-	let barExample: string;
+	const isContigs = mode === "contigs";
 
-	if (mode === "contigs") {
-		indexName = "sequence index";
-		indexExample = "sequence_1";
-
-		barName = "bar-separated ORF annotations";
-		barExample = "RNA Polymerase|cg30";
-
-		previewHeader += "|cg30";
-		previewSequence =
-			"CATTTTATCAATAACAATTAAAACAAACAAACAAAAAAACCTTACCAGCAGCAACAGCAAGATGGCCAAATAGGAACAGATAGGGAC";
-	} else {
-		indexName = "sequence index + orf index";
-		indexExample = "orf_1_1";
-
-		barName = "best annotation";
-		barExample = "RNA Polymerase";
-
-		previewHeader = previewHeader.replace("sequence_1", "orf_1_1");
-		previewSequence =
-			"ELREECRSLRSRCDQLEERVSAMEDEMNEMKREGKFREKRIKRNEQSLQEIWDYVKRPNLRLIGVPESDGENGTKLENTFREKSAME";
-	}
+	const previewHeader = isContigs
+		? ">sequence_1|17SP002|RNA Polymerase|cg30"
+		: ">orf_1_1|17SP002|RNA Polymerase";
+	const previewSequence = isContigs
+		? "CATTTTATCAATAACAATTAAAACAAACAAACAAAAAAACCTTACCAGCAGCAACAGCAAGATGGCCAAATAGGAACAGATAGGGAC"
+		: "ELREECRSLRSRCDQLEERVSAMEDEMNEMKREGKFREKRIKRNEQSLQEIWDYVKRPNLRLIGVPESDGENGTKLENTFREKSAME";
+	const indexName = isContigs ? "sequence index" : "sequence index + orf index";
+	const indexExample = isContigs ? "sequence_1" : "orf_1_1";
+	const barName = isContigs
+		? "bar-separated ORF annotations"
+		: "best annotation";
+	const barExample = isContigs ? "RNA Polymerase|cg30" : "RNA Polymerase";
 
 	return (
 		<div>
