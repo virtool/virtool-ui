@@ -53,14 +53,14 @@ export default function CreateIimi({
 		}
 		const refId = index.reference.id;
 
-		sampleIds.forEach((sampleId) =>
+		for (const sampleId of sampleIds) {
 			createAnalysis.mutate({
 				mlModel,
 				refId,
 				sampleId,
 				workflow: "iimi",
-			}),
-		);
+			});
+		}
 	}
 
 	return (

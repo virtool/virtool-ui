@@ -62,14 +62,14 @@ export default function CreateNuvs({
 		}
 		const refId = index.reference.id;
 
-		sampleIds.forEach((sampleId) =>
+		for (const sampleId of sampleIds) {
 			createAnalysis.mutate({
 				refId,
 				sampleId,
 				subtractionIds,
 				workflow: "nuvs",
-			}),
-		);
+			});
+		}
 	}
 
 	return (
