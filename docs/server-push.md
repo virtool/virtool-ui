@@ -55,10 +55,11 @@ The SSE handler emits one `data:` frame per event:
   with a warning — by design, so contract drift is loud.
 - `operation` — `"insert"`, `"update"`, or `"delete"`. `create` events
   map to `insert`; the other two pass through.
-- `id` — per-domain primary key type. Mongo-owned domains (`indexes`,
-  `references`, `roles`, `samples`) use string ids; the others use
-  number ids. A frame whose `id` type doesn't match its `domain` is
-  rejected at the parse boundary.
+- `id` — per-domain primary key type. Domains not yet migrated off
+  Mongo on the Python side (`indexes`, `references`, `roles`,
+  `samples`) use string ids; the others use number ids. A frame whose
+  `id` type doesn't match its `domain` is rejected at the parse
+  boundary.
 
 The handler also sends `: connected` on open and `: keepalive` every
 25 s to keep proxies and the browser's `EventSource` happy.

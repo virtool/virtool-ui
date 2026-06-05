@@ -18,7 +18,7 @@ The default. Fast, runs on every save. Covers:
 
 For server features under `apps/web/src/server/<feature>/` once their
 `data.ts` owns real persistence. Exercises schema bootstrap, indexes,
-and query semantics against a real Postgres or Mongo — mocks have
+and query semantics against a real Postgres — mocks have
 hidden bugs that real DBs catch.
 
 Bootstrap the schema in a sibling `test/fixtures.ts` (see "Shared

@@ -2,11 +2,9 @@ import { z } from "zod";
 
 const ServerEnvSchema = z
 	.object({
-		VT_MONGODB_URL: z.string().url(),
 		VT_POSTGRES_URL: z.string().url(),
 	})
 	.transform((raw) => ({
-		mongodbUrl: raw.VT_MONGODB_URL,
 		postgresUrl: raw.VT_POSTGRES_URL,
 	}));
 

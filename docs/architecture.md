@@ -23,11 +23,10 @@ corresponding endpoint migrates.
 
 **Schema and migrations stay in Python.** The Python repo owns the
 Alembic migration history and is the only process that applies schema
-changes to Postgres or to Mongo collections. TS server features read
-and write through Drizzle / the Node Mongo driver against the schema
-Python defines; they don't ship their own migrations. When a migrating
-endpoint needs a schema change, the change lands in Python's Alembic
-tree first and the TS code follows.
+changes to Postgres. TS server features read and write through Drizzle
+against the schema Python defines; they don't ship their own
+migrations. When a migrating endpoint needs a schema change, the
+change lands in Python's Alembic tree first and the TS code follows.
 
 Everything below — the three-file layering, the import-direction
 invariant, the auth carve-out — applies to the **new path** only.
@@ -55,7 +54,7 @@ They're how the layering is recognised at a glance and how the
 import-direction invariant stays enforceable.
 
 - `data.ts` — pure domain layer plus persistence and external IO
-  (drizzle / postgres / mongo, blob storage, outbound HTTP to upstream
+  (drizzle / postgres, blob storage, outbound HTTP to upstream
   services). No framework imports. Exports domain types, typed errors
   that extend `AppError`, and the functions that read or mutate
   persistent state or call external systems. Resources (db handle,

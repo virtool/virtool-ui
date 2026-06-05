@@ -1,29 +1,30 @@
 # Database
 
-Virtool's data lives in Postgres and Mongo, with different domains
-owned by each store. This document is the migration-era map: who owns
-what today, who owns schema changes, and the cross-store rules a TS
-server feature has to respect when it reaches into either store.
+The TypeScript server is **Postgres-first**: it reads and writes
+Postgres only, via Drizzle. Virtool's data is still being migrated out
+of Mongo, but that migration is entirely Python's concern — there is
+no Mongoose / Mongo-driver layer in this repo. A domain becomes
+available to the TS server when Python migrates it to Postgres, not
+before.
 
-This file covers cross-cutting constraints; per-collection Mongo
-shapes (document fields, validators, quirks) live in their own
-per-collection files.
+This document is the migration-era map: who owns what today, who owns
+schema changes, and the Postgres conventions a TS server feature has
+to respect.
 
 ## Python owns schema and migrations
 
 The Python repo (`../virtool`) is the only process that applies schema
-changes — Alembic migrations against Postgres, and Mongo collection /
-validator changes through its own migration framework. TS server
-features under `apps/web/src/server/<feature>/` read and write
-through Drizzle (Postgres) and Mongoose (Mongo) against the schema
-Python defines; they don't ship their own migrations.
+changes — Alembic migrations against Postgres, and any remaining Mongo
+collection changes through its own migration framework. TS server
+features under `apps/web/src/server/<feature>/` read and write through
+Drizzle against the Postgres schema Python defines; they don't ship
+their own migrations.
 
 When a migrating endpoint needs a schema change:
 
-1. Land the schema change in Python's Alembic / Mongo migration tree
-   first. Deploy it.
-2. Update the Drizzle schema in `apps/web/src/server/db/schema/` or
-   the Mongoose schema in `apps/web/src/server/db/mongo/` to match.
+1. Land the schema change in Python's Alembic tree first. Deploy it.
+2. Update the Drizzle schema in `apps/web/src/server/db/schema/` to
+   match.
 3. Then migrate the endpoint.
 
 This ordering is non-negotiable as long as Python is in production —
@@ -48,15 +49,16 @@ for a column that genuinely has a `server_default` in Python.
 
 ## Domain ownership today
 
-Snapshot of where each resource's primary record lives, as of the
-incremental migration's starting point. "Primary" means the source of
-truth — the side that gets written first and that the other side (if
-any) mirrors or annotates.
+Snapshot of where each resource's primary record lives. "Primary"
+means the source of truth — the side that gets written first and that
+the other side (if any) mirrors or annotates. A TS server feature can
+only be built for a domain whose primary record is in Postgres; the
+Mongo-primary rows are reachable only from Python.
 
 | Domain        | Mongo            | Postgres          | Notes                                     |
 | ------------- | ---------------- | ----------------- | ----------------------------------------- |
-| Users         | `legacy_id`      | **Primary**       | Fully migrated; Mongo handle retained     |
-| Groups        | `legacy_id`      | **Primary**       | Fully migrated; Mongo handle retained     |
+| Users         | `legacy_id`      | **Primary**       | Fully migrated                            |
+| Groups        | `legacy_id`      | **Primary**       | Fully migrated                            |
 | Sessions      | —                | **Primary**       | Postgres-only                             |
 | Messages      | —                | **Primary**       | Postgres-only                             |
 | Tasks         | —                | **Primary**       | Postgres-only                             |
@@ -64,96 +66,82 @@ any) mirrors or annotates.
 | Labels        | metadata         | **Primary**       | Dual; PG authoritative                    |
 | Uploads       | metadata         | **Primary**       | Dual; PG authoritative                    |
 | Indexes       | metadata         | **Primary**       | Dual; PG authoritative                    |
-| Samples       | **Primary**      | some fields       | Heavy Mongo aggregation                   |
-| Analyses      | **Primary**      | some fields       | Heavy Mongo aggregation                   |
-| OTUs          | **Primary**      | —                 | Mongo-only                                |
-| Sequences     | **Primary**      | —                 | Mongo-only                                |
-| References    | **Primary**      | —                 | Mongo-only                                |
-| HMMs          | **Primary**      | —                 | Mongo-only                                |
-| History       | **Primary**      | diffs             | Mixed; Mongo headers, PG diff blobs       |
+| Samples       | **Primary**      | some fields       | Not yet available to TS                   |
+| Analyses      | **Primary**      | some fields       | Not yet available to TS                   |
+| OTUs          | **Primary**      | —                 | Mongo-only; not available to TS           |
+| Sequences     | **Primary**      | —                 | Mongo-only; not available to TS           |
+| References    | **Primary**      | —                 | Mongo-only; not available to TS           |
+| HMMs          | **Primary**      | —                 | Mongo-only; not available to TS           |
+| History       | **Primary**      | diffs             | Mixed; not yet available to TS            |
 | Jobs          | —                | **Primary**       | Fully migrated                            |
-| Settings      | **Primary**      | —                 | Mongo-only                                |
-| API keys      | **Primary**      | —                 | Mongo-only                                |
+| Settings      | **Primary**      | —                 | Mongo-only; not available to TS           |
+| API keys      | **Primary**      | —                 | Mongo-only; not available to TS           |
 
-Use this to gauge migration cost per feature: a Postgres-only domain
-can land as a normal `data.ts` (see `labels/`); a Mongo-only or
-dual-owned domain pulls in the rules in the rest of this file.
+Use this to gauge migration readiness per feature: a Postgres-primary
+domain can land as a normal `data.ts` (see `labels/`). A Mongo-primary
+domain is **blocked** on Python migrating it to Postgres — don't try
+to reach back into Mongo to ship it early.
+
+## Postgres-first: wait for the migration, don't reach into Mongo
+
+The standing policy is that Python migrates a collection to Postgres
+*before* the corresponding TS server functions are written. This keeps
+the TS server single-store and avoids the work that a dual-store TS
+layer would otherwise pull in:
+
+- **No Mongo aggregation ports.** Samples, Analyses, OTUs, and
+  References list endpoints lean on Mongo `$facet` aggregation in
+  Python. Don't port those pipelines into TS — they'd only be
+  rewritten again once the collection lands in Postgres.
+- **No dual-store writes.** Python coordinates the rare write that
+  touches both stores (`both_transactions` in `virtool/data/topg.py`).
+  The TS side never opens a Mongo session; every `data.ts` works
+  against a single Postgres transaction (`db.transaction(...)`).
+
+If a domain you need is still Mongo-primary, the answer is to wait for
+its Postgres migration, not to add a Mongo client back to this repo.
+
+### Stubbed-out cross-store reads
+
+A migrated domain occasionally exposes a field that depends on a
+still-Mongo domain — e.g. a label's sample count, which needs the
+samples collection. Stub these to a neutral value (`0`, empty) until
+the dependency lands in Postgres, keeping the field in the response
+shape so the client contract is stable. `labels/data.ts` does this:
+every label reports `count: 0` until samples migrate.
 
 ## Legacy id resolution
 
 User and group rows in Postgres carry a `legacy_id text` column that
-holds the original Mongo `_id` string. Every Mongo collection that
-references a user or group still stores that reference as the legacy
-string handle in some documents and the new int id in others —
-backfills are not complete.
+holds the original Mongo `_id` string. Other Postgres tables that
+reference a user or group may still store that reference as the legacy
+string handle in some rows and the new int id in others — backfills
+are not complete.
 
-Concretely, a Mongo document's `user.id` (and `groups[]` items) may
-be:
+Concretely, a referencing row's `user_id` (or group reference) may be:
 
 - a Postgres `users.id` integer (post-backfill writes), or
 - a legacy Mongo handle string (pre-backfill writes).
 
-This means any query joining from Mongo to Postgres must accept both
-forms. The Python code does this with helpers in `virtool/data/topg.py`:
+Any query resolving such a reference must accept both forms. The
+Python code does this with helpers in `virtool/data/topg.py`:
 
 - `resolve_user_id(mongo_handle)` — look up the PG int id from a
   legacy string handle.
 - `get_user_id_single_variants(id)` — given either form, return both
-  forms for `$in` matching.
+  forms for matching.
 - `get_user_id_multi_variants(ids)` — same, for bulk queries.
 - `compose_legacy_id_single_expression` /
   `compose_legacy_id_multi_expression` — build the equivalent SQL
   side.
 
-TS port plan: when a server feature first needs cross-store id
-resolution, port these into `apps/web/src/server/db/legacy_id.ts` (or
-similar) and use them everywhere a `legacy_id` column or a `user.id` /
-`groups[]` Mongo field is touched. Don't reinvent per-feature.
+TS port plan: when a server feature first needs legacy-id resolution,
+port these into `apps/web/src/server/db/legacy_id.ts` (or similar) and
+use them everywhere a `legacy_id` column is touched. Don't reinvent
+per-feature.
 
-These helpers stay in the codebase until the backfills are complete
-and the `legacy_id` columns are dropped — likely a long time.
-
-## Dual-store writes (not yet needed in TS)
-
-Python coordinates writes that touch both stores through
-`both_transactions` in `virtool/data/topg.py`. It opens a Motor
-session and a SQLAlchemy `AsyncSession`, rolls both back on any
-throw, and retries on transient Mongo errors.
-
-No TS server feature writes to both stores today. `auth/` and
-`labels/` are Postgres-only. When the first dual-write feature
-migrates:
-
-- Postgres side: Drizzle transaction (`db.transaction(...)`).
-- Mongo side: Node Mongo driver `session.withTransaction(...)`.
-- Outer try / rollback-both on throw. Port the retry-on-transient
-  logic — Mongo Node driver transactions have different retry
-  semantics than Motor; verify against the Python behaviour rather
-  than copying the code.
-
-Until that day, Python remains the only process doing dual writes,
-and the TS side is free to assume single-store transactions in its
-`data.ts`.
-
-## Mongo aggregation pipelines
-
-Samples, Analyses, OTUs, and References use Mongo aggregation
-(`$facet` for filter + sort + paginate in one round-trip) on their
-list endpoints. There is no clean SQL equivalent, and the Node Mongo
-driver's aggregation API differs from Motor's.
-
-When migrating one of these endpoints, you have two choices per
-pipeline:
-
-- Port the pipeline as-is using the Node driver. Read-heavy and tedious
-  but mechanical.
-- Leave the endpoint in Python until the underlying collection
-  migrates to Postgres. Often the right call — porting a Mongo
-  aggregation only to rewrite it again post-Postgres-migration is
-  wasted work.
-
-Flag this in the migration plan for any Mongo-primary domain. Don't
-discover it mid-port.
+These helpers stay relevant until the backfills are complete and the
+`legacy_id` columns are dropped — likely a long time.
 
 ## If we ever own Postgres migrations from TS
 

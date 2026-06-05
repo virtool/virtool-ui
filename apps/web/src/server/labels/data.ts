@@ -1,6 +1,5 @@
 import { asc, eq, ilike } from "drizzle-orm";
 import type { PostgresError } from "postgres";
-import { SampleDocument } from "../db/mongo";
 import type { Db } from "../db/pg";
 import { type LabelRow, labels as labelsTable } from "../db/schema/labels";
 import { AppError } from "../errors";
@@ -43,31 +42,16 @@ function normalizeColor(color: string | null): string {
 	return color.startsWith("#") ? color : `#${color}`;
 }
 
-function toLabel(row: LabelRow, count = 0): Label {
+function toLabel(row: LabelRow): Label {
 	return {
 		id: row.id,
 		color: normalizeColor(row.color),
-		count,
+		// Stubbed to 0 until samples are migrated to Postgres; the per-label
+		// sample count cannot be computed without the samples store.
+		count: 0,
 		description: row.description ?? "",
 		name: row.name ?? "",
 	};
-}
-
-async function countSamplesByLabel(
-	labelIds: number[],
-): Promise<Map<number, number>> {
-	if (labelIds.length === 0) {
-		return new Map();
-	}
-
-	const rows = await SampleDocument.aggregate<{ _id: number; count: number }>([
-		{ $match: { labels: { $in: labelIds } } },
-		{ $unwind: "$labels" },
-		{ $match: { labels: { $in: labelIds } } },
-		{ $group: { _id: "$labels", count: { $sum: 1 } } },
-	]);
-
-	return new Map(rows.map((row) => [row._id, row.count]));
 }
 
 export async function findLabels(db: Db, term = ""): Promise<Label[]> {
@@ -77,9 +61,7 @@ export async function findLabels(db: Db, term = ""): Promise<Label[]> {
 		.where(term ? ilike(labelsTable.name, `%${term}%`) : undefined)
 		.orderBy(asc(labelsTable.name));
 
-	const counts = await countSamplesByLabel(rows.map((row) => row.id));
-
-	return rows.map((row) => toLabel(row, counts.get(row.id) ?? 0));
+	return rows.map((row) => toLabel(row));
 }
 
 export async function getLabel(db: Db, labelId: number): Promise<Label> {
@@ -92,8 +74,7 @@ export async function getLabel(db: Db, labelId: number): Promise<Label> {
 		throw new LabelNotFoundError();
 	}
 
-	const counts = await countSamplesByLabel([row.id]);
-	return toLabel(row, counts.get(row.id) ?? 0);
+	return toLabel(row);
 }
 
 export async function createLabel(db: Db, values: LabelValues): Promise<Label> {
@@ -109,7 +90,7 @@ export async function createLabel(db: Db, values: LabelValues): Promise<Label> {
 
 	await emit("labels", row.id, "create");
 
-	return toLabel(row, 0);
+	return toLabel(row);
 }
 
 export async function updateLabel(
@@ -141,8 +122,7 @@ export async function updateLabel(
 
 	await emit("labels", row.id, "update");
 
-	const counts = await countSamplesByLabel([row.id]);
-	return toLabel(row, counts.get(row.id) ?? 0);
+	return toLabel(row);
 }
 
 export async function deleteLabel(db: Db, labelId: number): Promise<void> {
