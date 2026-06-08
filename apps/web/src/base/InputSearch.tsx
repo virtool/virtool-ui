@@ -4,11 +4,6 @@ import Input from "./Input";
 import InputContainer from "./InputContainer";
 import InputIcon from "./InputIcon";
 
-type InputHandle = {
-	blur: () => void;
-	focus: () => void;
-};
-
 interface InputSearchProps {
 	"aria-label"?: string;
 	autoFocus?: boolean;
@@ -22,7 +17,7 @@ interface InputSearchProps {
 	name?: string;
 	placeholder?: string;
 	readOnly?: boolean;
-	ref?: Ref<InputHandle>;
+	ref?: Ref<HTMLInputElement>;
 	step?: number;
 	type?: string;
 	value: string | number;

@@ -4,20 +4,20 @@ import { mockApiEditUser } from "@tests/api/users";
 import { createFakeUser } from "@tests/fake/user";
 import { renderWithProviders } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
-import PrimaryGroup from "../PrimaryGroup";
+import PrimaryGroup, { type PrimaryGroupProps } from "../PrimaryGroup";
 
 describe("<PrimaryGroup />", () => {
-	let props;
+	let props: PrimaryGroupProps;
 
 	beforeEach(() => {
 		props = {
 			groups: [
-				{ id: "1", name: "foo" },
-				{ id: "2", name: "bar" },
-				{ id: "3", name: "baz" },
+				{ id: 1, legacy_id: null, name: "foo" },
+				{ id: 2, legacy_id: null, name: "bar" },
+				{ id: 3, legacy_id: null, name: "baz" },
 			],
-			id: "bob",
-			primaryGroup: { id: "2", name: "bar" },
+			id: 1,
+			primaryGroup: { id: 2, legacy_id: null, name: "bar" },
 		};
 	});
 

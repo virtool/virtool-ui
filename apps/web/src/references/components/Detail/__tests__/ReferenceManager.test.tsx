@@ -8,8 +8,8 @@ import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("<ReferenceManager />", () => {
-	let reference;
-	let path;
+	let reference: ReturnType<typeof createFakeReference>;
+	let path: string;
 
 	beforeEach(() => {
 		reference = createFakeReference();
@@ -43,6 +43,8 @@ describe("<ReferenceManager />", () => {
 
 		expect(await screen.findByText("Clone Reference")).toBeInTheDocument();
 		expect(screen.getByText("Source Reference"));
-		expect(screen.getByText(reference.cloned_from.name)).toBeInTheDocument();
+		expect(
+			screen.getByText(reference.cloned_from?.name ?? ""),
+		).toBeInTheDocument();
 	});
 });

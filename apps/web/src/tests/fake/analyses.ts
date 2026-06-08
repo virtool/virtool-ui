@@ -2,7 +2,7 @@ import type {
 	Analysis,
 	AnalysisMinimal,
 	Blast,
-	FormattedNuvsResults,
+	FormattedNuvsAnalysis,
 	IimiAnalysis,
 	IimiCoverage,
 	IimiHit,
@@ -44,19 +44,15 @@ export function createFakeAnalysisMinimal(
 	};
 }
 
-type FakeFormattedNuVsAnalysis = FakeFormattedNuVsHit & {
-	results?: FormattedNuvsResults;
-};
-
 /**
  * Create a fake formatted nuvs analysis object
  *
  * @param overrides - optional properties for creating an fake formatted nuvs analysis with specific values
  */
 export function createFakeFormattedNuVsAnalysis(
-	overrides?: FakeFormattedNuVsAnalysis,
-) {
-	const defaultAnalysis = {
+	overrides?: Partial<FormattedNuvsAnalysis>,
+): FormattedNuvsAnalysis {
+	const defaultAnalysis: FormattedNuvsAnalysis = {
 		...createFakeAnalysisMinimal(),
 		files: [],
 		maxSequenceLength: faker.number.int({ min: 800, max: 20000 }),

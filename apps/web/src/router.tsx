@@ -9,10 +9,13 @@ export function getRouter() {
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
-				retry: (failureCount: number, error: any) => {
+				retry: (
+					failureCount: number,
+					error: Error & { response?: { status?: number } },
+				) => {
 					// Superagent (legacy Python API) errors carry the HTTP status here.
 					const status = error.response?.status;
-					if ([401, 403, 404].includes(status)) {
+					if (status !== undefined && [401, 403, 404].includes(status)) {
 						return false;
 					}
 					// TanStack Start server-function errors cross the boundary as plain

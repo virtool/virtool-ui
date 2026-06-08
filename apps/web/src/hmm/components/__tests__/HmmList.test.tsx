@@ -7,7 +7,7 @@ import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("<HmmList />", () => {
-	let fakeHMMData;
+	let fakeHMMData: ReturnType<typeof createFakeHmmSearchResults>;
 	let path: string;
 
 	beforeEach(() => {
@@ -92,6 +92,8 @@ describe("<HmmList />", () => {
 				documents: [],
 				total_count: 0,
 				status: {
+					errors: [],
+					installed: null,
 					task: createFakeTask({
 						complete: false,
 						id: 21,

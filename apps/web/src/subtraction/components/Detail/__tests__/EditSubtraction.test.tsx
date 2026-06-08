@@ -6,11 +6,11 @@ import {
 } from "@tests/fake/subtractions";
 import { renderWithProviders } from "@tests/setup";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import EditSubtraction from "../EditSubtraction";
+import EditSubtraction, { type EditSubtractionProps } from "../EditSubtraction";
 
 describe("<EditSubtraction />", () => {
 	const subtraction = createFakeSubtraction();
-	let props;
+	let props: EditSubtractionProps;
 
 	beforeEach(() => {
 		props = {

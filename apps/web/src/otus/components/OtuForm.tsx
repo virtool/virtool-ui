@@ -14,7 +14,7 @@ type FormValues = {
 type OTUFormProps = {
 	abbreviation?: string;
 	/** Error message to be displayed */
-	error: string;
+	error?: string;
 	name?: string;
 	/** A callback function to be called when the form is submitted */
 	onSubmit: (values: FormValues) => void;

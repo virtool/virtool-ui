@@ -22,7 +22,7 @@ export interface InputProps {
 	name?: string;
 	placeholder?: string;
 	readOnly?: boolean;
-	ref?: Ref<any>;
+	ref?: Ref<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>;
 	register?: UseFormRegisterReturn;
 	step?: number;
 	type?: string;

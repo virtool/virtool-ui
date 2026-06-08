@@ -27,9 +27,9 @@ function renderWithAnalysisSearch(
 }
 
 describe("<NuvsViewer />", () => {
-	let props;
-	let sample;
-	let nuvs;
+	let sample: ReturnType<typeof createFakeSample>;
+	let nuvs: ReturnType<typeof createFakeFormattedNuVsAnalysis>;
+	let props: { detail: typeof nuvs; sample: typeof sample };
 
 	beforeEach(() => {
 		sample = createFakeSample();
@@ -60,7 +60,10 @@ describe("<NuvsViewer />", () => {
 		});
 
 		it("should render blast when clicked", async () => {
-			const scope = mockApiBlastNuVs(nuvs.id, nuvs.results.hits[0].index);
+			const scope = mockApiBlastNuVs(
+				nuvs.id,
+				String(nuvs.results.hits[0].index),
+			);
 			renderWithAnalysisSearch(<NuvsViewer {...props} />, {
 				activeHit: String(nuvs.results.hits[0].id),
 			});

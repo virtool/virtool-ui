@@ -1,13 +1,13 @@
 import { formatIsolateName } from "@app/utils";
 import Alert from "@base/Alert";
 import type { ReactNode } from "react";
-import type { OtuIsolate } from "../types";
+import type { OtuIsolate, OtuIssueReport } from "../types";
 
 type OtuIssuesProps = {
 	/** The isolates associated with the OTU */
 	isolates: OtuIsolate[];
 	/** The issues that occurred */
-	issues: { [key: string]: any } | boolean;
+	issues: OtuIssueReport | boolean;
 };
 
 /**
@@ -35,12 +35,12 @@ export default function OtuIssues({ isolates, issues }: OtuIssuesProps) {
 	// One or more isolates have no sequences associated with them.
 	if (typeof issues === "object" && issues.empty_isolate) {
 		// The empty_isolate property is an array of isolate_ids of empty isolates.
-		const emptyIsolates = issues.empty_isolate.map((isolateId, index) => {
+		const emptyIsolates = issues.empty_isolate.map((isolateId) => {
 			// Get the entire isolate identified by isolate_id from the detail data.
 			const isolate = isolates.find((i) => i.id === isolateId);
 
 			return (
-				<li key={index}>
+				<li key={isolateId}>
 					{isolate ? formatIsolateName(isolate) : "Unknown isolate"}
 				</li>
 			);
@@ -57,11 +57,11 @@ export default function OtuIssues({ isolates, issues }: OtuIssuesProps) {
 	// One or more sequence documents have no sequence field.
 	if (typeof issues === "object" && issues.empty_sequence) {
 		// Make a list of sequences that have no defined sequence field.
-		const emptySequences = issues.empty_sequence.map((errorObject, index) => {
+		const emptySequences = issues.empty_sequence.map((errorObject) => {
 			// Get the entire isolate object identified by the isolate_id.
 			const isolate = isolates.find((i) => i.id === errorObject.isolate_id);
 			return (
-				<li key={index}>
+				<li key={errorObject._id}>
 					<span>
 						<em>{errorObject._id}</em> in isolate{" "}
 						<em>{isolate ? formatIsolateName(isolate) : "Unknown isolate"}</em>

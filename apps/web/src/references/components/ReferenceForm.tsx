@@ -26,16 +26,13 @@ type ReferenceFormProps = {
  * Form input fields for organism, name and description
  */
 export function ReferenceForm({ errors, mode, register }: ReferenceFormProps) {
-	let organismComponent;
-
-	if (mode === "empty" || mode === "edit") {
-		organismComponent = (
+	const organismComponent =
+		mode === "empty" || mode === "edit" ? (
 			<InputGroup>
 				<InputLabel htmlFor="organism">Organism</InputLabel>
 				<InputSimple id="organism" {...register("organism")} />
 			</InputGroup>
-		);
-	}
+		) : null;
 
 	return (
 		<>

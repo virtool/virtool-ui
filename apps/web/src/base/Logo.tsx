@@ -56,7 +56,14 @@ export default function Logo({ className, height = 30, color }: LogoProps) {
 				className,
 			)}
 		>
-			<svg id="svg2" viewBox="0 0 512 512" height={height}>
+			<svg
+				id="svg2"
+				role="img"
+				aria-label="Virtool"
+				viewBox="0 0 512 512"
+				height={height}
+			>
+				<title>Virtool</title>
 				<defs id="defs125">
 					<clipPath id="clipPath4140">
 						<path d={clipPath} />

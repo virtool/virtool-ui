@@ -1,5 +1,5 @@
 import { cn } from "@app/utils";
-import type { ReactNode } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
 
 type BoxProps = {
 	children: ReactNode;
@@ -8,6 +8,20 @@ type BoxProps = {
 };
 
 function Box({ children, className = "", onClick, ...rest }: BoxProps) {
+	const interactiveProps = onClick
+		? {
+				onClick,
+				onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+					if (event.key === "Enter" || event.key === " ") {
+						event.preventDefault();
+						onClick();
+					}
+				},
+				role: "button",
+				tabIndex: 0,
+			}
+		: {};
+
 	return (
 		<div
 			className={cn(
@@ -22,7 +36,7 @@ function Box({ children, className = "", onClick, ...rest }: BoxProps) {
 				"rounded-sm",
 				className,
 			)}
-			onClick={onClick}
+			{...interactiveProps}
 			{...rest}
 		>
 			{children}

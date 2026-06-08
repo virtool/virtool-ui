@@ -39,6 +39,8 @@ export default function InitialIcon({
 
 	return (
 		<svg
+			role="img"
+			aria-label={handle}
 			className={cn("overflow-visible", className)}
 			style={{ height: sizeValue, width: sizeValue }}
 		>

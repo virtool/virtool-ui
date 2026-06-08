@@ -10,7 +10,7 @@ import { FileManager, type FileManagerProps } from "../FileManager";
 
 describe("<FileManager>", () => {
 	let props: FileManagerProps;
-	let path;
+	let path: string;
 
 	afterEach(() => {
 		vi.restoreAllMocks();

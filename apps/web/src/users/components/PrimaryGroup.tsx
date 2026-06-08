@@ -5,7 +5,7 @@ import InputSelect from "@base/InputSelect";
 import type { GroupMinimal } from "@groups/types";
 import { capitalize } from "es-toolkit/string";
 
-type PrimaryGroupProps = {
+export type PrimaryGroupProps = {
 	/** The groups associated with the user */
 	groups: GroupMinimal[];
 	/** The users unique id */

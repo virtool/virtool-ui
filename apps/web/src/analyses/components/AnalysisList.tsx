@@ -56,7 +56,7 @@ export default function AnalysesList({
 
 	return (
 		<ContainerNarrow>
-			<AnalysisHMMAlert installed={hmms.status.task?.complete} />
+			<AnalysisHMMAlert installed={Boolean(hmms.status.task?.complete)} />
 			<div className="flex justify-end pb-4">
 				{canCreate && (
 					<button

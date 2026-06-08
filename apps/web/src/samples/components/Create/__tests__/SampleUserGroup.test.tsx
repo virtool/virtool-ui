@@ -1,14 +1,16 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeGroupMinimal } from "@tests/fake/groups";
 import { renderWithProviders } from "@tests/setup";
+import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SampleUserGroup from "../SampleUserGroup";
 
 describe("SampleUserGroup", () => {
-	let props;
+	let props: ComponentProps<typeof SampleUserGroup>;
 	beforeEach(() => {
 		props = {
-			groups: [{ name: "bar", id: "bar_id" }],
+			groups: [createFakeGroupMinimal({ name: "bar" })],
 			onChange: vi.fn(),
 			selected: "",
 		};

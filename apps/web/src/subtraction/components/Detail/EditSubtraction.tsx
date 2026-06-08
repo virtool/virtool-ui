@@ -8,7 +8,7 @@ import { useUpdateSubtraction } from "@subtraction/queries";
 import type { Subtraction } from "@subtraction/types";
 import { useForm } from "react-hook-form";
 
-type EditSubtractionProps = {
+export type EditSubtractionProps = {
 	/** The subtraction data */
 	subtraction: Subtraction;
 	/** Indicates whether the modal for editing a subtraction is visible */

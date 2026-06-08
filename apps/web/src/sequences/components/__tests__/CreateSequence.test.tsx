@@ -8,8 +8,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import CreateSequence from "../CreateSequence";
 
 describe("<CreateSequence>", () => {
-	let otu;
-	let reference;
+	let otu: ReturnType<typeof createFakeOtu>;
+	let reference: ReturnType<typeof createFakeReference>;
 
 	function renderCreateSequence(setOpen = vi.fn()) {
 		return renderWithProviders(

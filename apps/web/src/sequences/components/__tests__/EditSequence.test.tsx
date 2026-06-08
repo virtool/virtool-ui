@@ -10,7 +10,7 @@ describe("<SequenceEdit>", () => {
 	const isolateId = "test_isolate_id";
 	const otuId = "test_otu_id";
 	const refId = "test_ref_id";
-	let activeSequence;
+	let activeSequence: ReturnType<typeof createFakeOTUSequence>;
 
 	function renderSequenceEdit(setOpen = vi.fn()) {
 		return renderWithProviders(

@@ -1,7 +1,7 @@
 import Checkbox from "@base/Checkbox";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 
-type UserGroupTypes = {
+export type UserGroupTypes = {
 	/** The group unique id */
 	id: string | number;
 

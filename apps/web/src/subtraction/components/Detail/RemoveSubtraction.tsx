@@ -3,7 +3,7 @@ import { useRemoveSubtraction } from "@subtraction/queries";
 import type { Subtraction } from "@subtraction/types";
 import { useNavigate } from "@tanstack/react-router";
 
-type RemoveSubtractionProps = {
+export type RemoveSubtractionProps = {
 	/** The subtraction data */
 	subtraction: Subtraction;
 	/** Indicates whether the modal for removing a subtraction is visible */
