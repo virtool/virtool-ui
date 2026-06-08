@@ -27,12 +27,7 @@ describe("<AnalysesToolbar />", () => {
 	function renderList() {
 		renderWithProviders(
 			<MemoryRouter>
-				<AnalysesList
-					openCreateAnalysis={false}
-					page={1}
-					sampleId={sample.id}
-					setSearch={() => {}}
-				/>
+				<AnalysesList onPageChange={() => {}} page={1} sampleId={sample.id} />
 			</MemoryRouter>,
 		);
 	}
