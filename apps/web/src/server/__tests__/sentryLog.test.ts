@@ -27,8 +27,7 @@ describe("createSentryLogStream", () => {
 		stream.write(`${JSON.stringify({ level: 40, msg: "watch out" })}\n`);
 
 		expect(logger.warn).toHaveBeenCalledTimes(1);
-		const [message] = logger.warn.mock.calls[0] ?? [];
-		expect(message).toBe("watch out");
+		expect(logger.warn).toHaveBeenCalledWith("watch out", expect.anything());
 	});
 
 	it("passes structured fields as attributes and drops the pino envelope", () => {
@@ -46,9 +45,7 @@ describe("createSentryLogStream", () => {
 			})}\n`,
 		);
 
-		const [message, attributes] = logger.info.mock.calls[0] ?? [];
-		expect(message).toBe("login");
-		expect(attributes).toEqual({ userId: "u1" });
+		expect(logger.info).toHaveBeenCalledWith("login", { userId: "u1" });
 	});
 
 	it("forwards already-redacted secret fields from a real logger", () => {
@@ -62,9 +59,13 @@ describe("createSentryLogStream", () => {
 
 		log.info({ password: "hunter2", headers: { cookie: "s=1" } }, "sign in");
 
-		const [, attributes] = logger.info.mock.calls[0] ?? [];
-		expect(attributes.password).toBe("[redacted]");
-		expect(attributes.headers).toEqual({ cookie: "[redacted]" });
+		expect(logger.info).toHaveBeenCalledWith(
+			"sign in",
+			expect.objectContaining({
+				password: "[redacted]",
+				headers: { cookie: "[redacted]" },
+			}),
+		);
 	});
 
 	it("ignores malformed lines", () => {

@@ -36,8 +36,10 @@ describe("<ResetForm />", () => {
 		await userEvent.click(screen.getByRole("button", { name: "Reset" }));
 
 		await waitFor(() => expect(resetPasswordMock).toHaveBeenCalledTimes(1));
-		const [resetArgs] = resetPasswordMock.mock.calls[0] ?? [];
-		expect(resetArgs).toEqual({ password, resetCode });
+		expect(resetPasswordMock).toHaveBeenCalledWith(
+			{ password, resetCode },
+			expect.anything(),
+		);
 	});
 
 	it("displays the thrown error message on reset failure", async () => {

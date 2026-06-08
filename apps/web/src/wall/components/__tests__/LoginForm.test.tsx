@@ -43,12 +43,14 @@ describe("<LoginForm />", () => {
 		await userEvent.click(screen.getByRole("button", { name: "Login" }));
 
 		await waitFor(() => expect(loginMock).toHaveBeenCalledTimes(1));
-		const [loginArgs] = loginMock.mock.calls[0] ?? [];
-		expect(loginArgs).toEqual({
-			handle,
-			password,
-			remember: true,
-		});
+		expect(loginMock).toHaveBeenCalledWith(
+			{
+				handle,
+				password,
+				remember: true,
+			},
+			expect.anything(),
+		);
 	});
 
 	it("displays the thrown error message on login failure", async () => {
