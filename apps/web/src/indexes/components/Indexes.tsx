@@ -14,7 +14,8 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId/indexes/");
 type IndexesProps = {
 	openRebuild: boolean;
 	page: number;
-	setSearch: (next: { openRebuild?: boolean; page?: number }) => void;
+	setOpenRebuild: (open: boolean) => void;
+	setSearch: (next: { page?: number }) => void;
 };
 
 /**
@@ -23,6 +24,7 @@ type IndexesProps = {
 export default function Indexes({
 	openRebuild,
 	page,
+	setOpenRebuild,
 	setSearch,
 }: IndexesProps) {
 	const { refId } = routeApi.useParams();
@@ -38,11 +40,7 @@ export default function Indexes({
 	return (
 		<>
 			{!archived && <RebuildAlert page={page} refId={refId} />}
-			<RebuildIndex
-				open={openRebuild}
-				setOpen={(openRebuild) => setSearch({ openRebuild })}
-				refId={refId}
-			/>
+			<RebuildIndex open={openRebuild} setOpen={setOpenRebuild} refId={refId} />
 			{items.length ? (
 				<Pagination
 					items={items}
