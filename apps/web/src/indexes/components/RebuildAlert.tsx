@@ -45,7 +45,7 @@ export default function RebuildAlert({ page, refId }: RebuildAlertProps) {
 					<Link
 						to="/refs/$refId/indexes"
 						params={{ refId }}
-						search={{ openRebuild: true }}
+						state={{ openRebuild: true }}
 					>
 						Rebuild the index
 					</Link>
