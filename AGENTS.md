@@ -95,9 +95,11 @@ currently configured in another repository.
 - After changing tests: run the specific test file with
   `pnpm --filter @virtool/web exec vitest run <path>`.
 - Full test suite only when asked or when changes are cross-cutting.
-- Always fix all lint errors and warnings. The main branch is guaranteed to
-  pass `pnpm check` cleanly, so any issues are caused by your changes — never
-  dismiss them as pre-existing.
+- Always fix all lint errors. Biome's lint rules are all set to `error` in
+  `biome.json` (there are no warn-level rules), and CI's `check-biome` job runs
+  `pnpm check` — so `pnpm check` must exit 0 before merging. The main branch is
+  guaranteed to pass `pnpm check` cleanly, so any issues are caused by your
+  changes — never dismiss them as pre-existing.
 - Always assume tests pass on `main` — CI enforces it. Any test failures you
   see locally are caused by your changes, never pre-existing. Do **not** use
   `git stash` (or any other working-tree-modifying command) to "check what
