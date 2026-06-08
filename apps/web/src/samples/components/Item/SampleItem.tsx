@@ -43,8 +43,12 @@ export default function SampleItem({
 
 	return (
 		<Box className="flex items-stretch basis-0 gap-4">
-			<div className="cursor-pointer flex" onClick={handleSelect}>
-				<Checkbox checked={checked} id={`SampleCheckbox${sample.id}`} />
+			<div className="flex">
+				<Checkbox
+					checked={checked}
+					id={`SampleCheckbox${sample.id}`}
+					onClick={handleSelect}
+				/>
 			</div>
 
 			<div className="flex flex-1 flex-col min-w-0">

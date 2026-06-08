@@ -7,10 +7,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import RemoveSequence from "../RemoveSequence";
 
 describe("<RemoveSequence />", () => {
-	let otu;
-	let isolate;
-	let sequence;
-	let isolateName;
+	let otu: ReturnType<typeof createFakeOtu>;
+	let isolate: ReturnType<typeof createFakeOtu>["isolates"][number];
+	let sequence: (typeof isolate)["sequences"][number];
+	let isolateName: string;
 
 	beforeEach(() => {
 		otu = createFakeOtu();

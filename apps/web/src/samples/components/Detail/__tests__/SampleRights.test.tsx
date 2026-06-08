@@ -14,8 +14,8 @@ import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("<SampleRights />", () => {
-	let sample;
-	let group;
+	let sample: ReturnType<typeof createFakeSample>;
+	let group: ReturnType<typeof createFakeGroup>;
 
 	beforeEach(() => {
 		sample = createFakeSample({

@@ -1,3 +1,4 @@
+import type { ServerTask } from "@tasks/types";
 import type { UserNested } from "@users/types";
 
 import type { SearchResult } from "../types/api";
@@ -47,7 +48,11 @@ export type HmmSearchResults = SearchResult & {
 	/** Gives information about each HMM */
 	items: HMMMinimal[];
 	/** The status of the HMMs */
-	status: { [key: string]: any };
+	status: {
+		errors: string[];
+		installed: { ready: boolean } | null;
+		task: ServerTask | null;
+	};
 };
 
 /** Wire-shape HMM search results returned by the backend before the UI transform */

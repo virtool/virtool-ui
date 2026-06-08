@@ -101,7 +101,7 @@ export function upload(file: File, fileType: UploadType) {
 	apiClient
 		.post("/uploads")
 		.query({ name: file.name, type: fileType })
-		.attach("file", file as any)
+		.attach("file", file)
 		.on("progress", onProgress)
 		.then(() => useUploaderStore.getState().removeUpload(localId))
 		.catch(() => useUploaderStore.getState().setFailure(localId));

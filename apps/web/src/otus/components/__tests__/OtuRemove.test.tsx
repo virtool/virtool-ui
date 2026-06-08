@@ -7,7 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import OtuRemove from "../OtuRemove";
 
 describe("<OtuRemove />", () => {
-	let otu;
+	let otu: ReturnType<typeof createFakeOtu>;
 
 	beforeEach(() => {
 		otu = createFakeOtu();

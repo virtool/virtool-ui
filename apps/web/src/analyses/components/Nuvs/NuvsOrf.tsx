@@ -40,13 +40,7 @@ function draw(element, maxLength, pos, strand) {
 	group.append("path").attr("d", d).attr("stroke-width", 1);
 }
 
-export default function NuvsOrf({
-	hits,
-	index,
-	maxSequenceLength,
-	pos,
-	strand,
-}) {
+export default function NuvsOrf({ hits, maxSequenceLength, pos, strand }) {
 	const chartEl = useRef(null);
 
 	useEffect(

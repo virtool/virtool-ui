@@ -3,16 +3,17 @@ import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
 import { createFakeReferenceMinimal } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
-import { beforeEach, describe, expect, it } from "vitest";
+import type { ComponentProps } from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ReferenceItem } from "../ReferenceItem";
 
 describe("<ReferenceItem />", () => {
-	let props;
+	let props: ComponentProps<typeof ReferenceItem>;
 
 	beforeEach(() => {
 		props = {
-			reference: {},
-			task: {},
+			onClone: vi.fn(),
+			reference: createFakeReferenceMinimal(),
 		};
 	});
 

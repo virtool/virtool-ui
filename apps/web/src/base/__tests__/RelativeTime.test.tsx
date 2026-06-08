@@ -4,7 +4,6 @@ import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import RelativeTime from "../RelativeTime";
 
 const fakeTime = "2019-02-10T17:11:00.000000Z";
-const RealDate = Date;
 
 describe("<RelativeTime />", () => {
 	beforeAll(() => {
@@ -45,6 +44,5 @@ describe("<RelativeTime />", () => {
 
 	afterAll(() => {
 		vi.useRealTimers();
-		Date = RealDate;
 	});
 });

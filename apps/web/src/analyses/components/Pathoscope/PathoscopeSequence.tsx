@@ -98,7 +98,6 @@ export default function PathoscopeSequence({
 	accession,
 	data,
 	definition,
-	id,
 	length,
 	maxGenomeLength,
 	ratio,

@@ -22,7 +22,10 @@ export function HmmInstall() {
 	const installMutation = useInstallHmm();
 
 	const seedTask = data?.status?.task;
-	const { data: task } = useFetchTask(seedTask?.id ?? Number.NaN, seedTask);
+	const { data: task } = useFetchTask(
+		seedTask?.id ?? Number.NaN,
+		seedTask ?? undefined,
+	);
 
 	const taskComplete = task?.complete;
 

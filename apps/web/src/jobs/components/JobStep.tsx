@@ -24,6 +24,7 @@ export default function JobStepItem({ step, state }: JobStepProps) {
 			<div className="">
 				<h4 className="font-medium text-lg">{step.name}</h4>
 				<p
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: step.description is a trusted, backend-defined workflow string rendered through marked's markdown parser, not user input
 					dangerouslySetInnerHTML={{
 						__html: marked.parseInline(step.description),
 					}}

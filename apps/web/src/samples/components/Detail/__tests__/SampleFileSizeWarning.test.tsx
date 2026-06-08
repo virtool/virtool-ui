@@ -1,11 +1,12 @@
 import { screen } from "@testing-library/react";
 import { createFakeSampleRead } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
+import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import SampleFileSizeWarning from "../SampleFileSizeWarning";
 
 describe("<SampleFileSizeWarning />", () => {
-	let props;
+	let props: ComponentProps<typeof SampleFileSizeWarning>;
 
 	beforeEach(() => {
 		props = {

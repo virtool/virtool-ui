@@ -25,6 +25,7 @@ export default function Circle({
 }: CircleProps) {
 	return (
 		<svg
+			aria-hidden="true"
 			width={size}
 			height={size}
 			viewBox="0 0 10 10"

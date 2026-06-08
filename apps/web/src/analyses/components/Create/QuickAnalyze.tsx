@@ -64,7 +64,7 @@ export default function QuickAnalyze({
 		<Dialog open={open} onOpenChange={setOpen}>
 			<CreateAnalysisDialogContent>
 				<DialogTitle>Quick Analyze</DialogTitle>
-				<HMMAlert installed={hmms.status.task?.complete} />
+				<HMMAlert installed={Boolean(hmms.status.task?.complete)} />
 
 				<Tabs.Root defaultValue="pathoscope">
 					<Tabs.List

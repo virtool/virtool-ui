@@ -3,11 +3,12 @@ import userEvent from "@testing-library/user-event";
 import { mockApiCreateIsolate } from "@tests/fake/otus";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
+import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AddIsolate from "../AddIsolate";
 
 describe("<AddIsolate />", () => {
-	let props;
+	let props: ComponentProps<typeof AddIsolate>;
 
 	beforeEach(() => {
 		props = {

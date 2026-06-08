@@ -1,13 +1,12 @@
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "@tests/setup";
+import type { ComponentProps } from "react";
 import { describe, expect, it } from "vitest";
 import OtuIssues from "../OtuIssues";
 
 describe("<OTUIssues />", () => {
-	let props;
-
 	it("renders correctly without issues", () => {
-		props = {
+		const props: ComponentProps<typeof OtuIssues> = {
 			issues: {
 				empty_otu: false,
 				isolate_inconsistency: false,
@@ -26,7 +25,7 @@ describe("<OTUIssues />", () => {
 	});
 
 	it("renders correctly with issues", () => {
-		props = {
+		const props: ComponentProps<typeof OtuIssues> = {
 			issues: {
 				empty_otu: true,
 				isolate_inconsistency: true,
@@ -40,7 +39,9 @@ describe("<OTUIssues />", () => {
 			},
 			isolates: [
 				{
+					default: false,
 					id: "test-isolate",
+					sequences: [],
 					source_type: "isolate",
 					source_name: "test",
 				},

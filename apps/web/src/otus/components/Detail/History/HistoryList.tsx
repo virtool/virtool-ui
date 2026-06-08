@@ -24,9 +24,9 @@ export default function HistoryList({
 }: HistoryListProps) {
 	const changes = sortBy(history, [(h) => h.otu.version]).reverse();
 
-	const changeComponents = changes.map((change, index) => (
+	const changeComponents = changes.map((change) => (
 		<Change
-			key={index}
+			key={change.id}
 			id={change.id}
 			archived={archived}
 			methodName={change.method_name}

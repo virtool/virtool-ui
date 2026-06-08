@@ -27,31 +27,31 @@
 						}
 					}
 				},
-				"useLiteralEnumMembers": "warn"
+				"useLiteralEnumMembers": "error"
 			},
 			"suspicious": {
-				"noImplicitAnyLet": "warn",
-				"noExplicitAny": "warn",
-				"noArrayIndexKey": "warn",
-				"useIterableCallbackReturn": "warn",
-				"noShadowRestrictedNames": "warn",
-				"noGlobalAssign": "warn"
+				"noImplicitAnyLet": "error",
+				"noExplicitAny": "error",
+				"noArrayIndexKey": "error",
+				"useIterableCallbackReturn": "error",
+				"noShadowRestrictedNames": "error",
+				"noGlobalAssign": "error"
 			},
 			"correctness": {
-				"noUnusedVariables": "warn",
-				"noUnusedFunctionParameters": "warn",
-				"noInvalidPositionAtImportRule": "warn"
+				"noUnusedVariables": "error",
+				"noUnusedFunctionParameters": "error",
+				"noInvalidPositionAtImportRule": "error"
 			},
 			"security": {
-				"noDangerouslySetInnerHtml": "warn"
+				"noDangerouslySetInnerHtml": "error"
 			},
 			"a11y": {
-				"noLabelWithoutControl": "warn",
-				"noSvgWithoutTitle": "warn",
-				"noStaticElementInteractions": "warn",
-				"useValidAnchor": "warn",
-				"useKeyWithClickEvents": "warn",
-				"useHtmlLang": "warn"
+				"noLabelWithoutControl": "error",
+				"noSvgWithoutTitle": "error",
+				"noStaticElementInteractions": "error",
+				"useValidAnchor": "error",
+				"useKeyWithClickEvents": "error",
+				"useHtmlLang": "error"
 			}
 		}
 	},

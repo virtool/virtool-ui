@@ -6,11 +6,13 @@ import {
 } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import RemoveSubtraction from "../RemoveSubtraction";
+import RemoveSubtraction, {
+	type RemoveSubtractionProps,
+} from "../RemoveSubtraction";
 
 describe("<RemoveSubtraction />", () => {
 	const subtraction = createFakeSubtraction();
-	let props;
+	let props: RemoveSubtractionProps;
 
 	beforeEach(() => {
 		props = {

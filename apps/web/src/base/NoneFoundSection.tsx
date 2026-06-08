@@ -15,11 +15,7 @@ export default function NoneFoundSection({
 	noun,
 	className,
 }: NoneFoundSectionProps) {
-	let childrenContainer;
-
-	if (children) {
-		childrenContainer = <span>. {children}.</span>;
-	}
+	const childrenContainer = children ? <span>. {children}.</span> : null;
 
 	return (
 		<BoxGroupSection

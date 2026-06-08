@@ -79,7 +79,7 @@ export type GenericAnalysis = AnalysisMinimal & {
 	files: Array<AnalysisFile>;
 
 	/** The results of the analysis that will be presented to the user */
-	results?: { [key: string]: any };
+	results?: { [key: string]: unknown };
 
 	workflow: AnalysisWorkflow;
 };
@@ -207,7 +207,7 @@ export type FormattedNuvsResults = {
 /** Mapping data for a single Nuvs hit */
 export type FormattedNuvsHit = {
 	annotatedOrfCount: number;
-	blast: Blast;
+	blast: Blast | null;
 	e: number;
 	families: string[];
 	id: number;

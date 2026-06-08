@@ -37,8 +37,8 @@ export default function SampleRights({ settings }: SampleRightsProps) {
 		(sample_group_read ? "r" : "") + (sample_group_write ? "w" : "");
 	const all = (sample_all_read ? "r" : "") + (sample_all_write ? "w" : "");
 
-	const options = rights.map((entry, index) => (
-		<option key={index} value={entry.value}>
+	const options = rights.map((entry) => (
+		<option key={entry.value} value={entry.value}>
 			{entry.label}
 		</option>
 	));

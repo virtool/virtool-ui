@@ -2,10 +2,10 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { UserGroup } from "../UserGroup";
+import { UserGroup, type UserGroupTypes } from "../UserGroup";
 
 describe("<UserGroup />", () => {
-	let props;
+	let props: UserGroupTypes;
 
 	beforeEach(() => {
 		props = {

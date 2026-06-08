@@ -1,12 +1,14 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeJobNested } from "@tests/fake/jobs";
 import { mockApiRemoveSample } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
+import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import DeleteSample from "../DeleteSample";
 
 describe("<DeleteSample />", () => {
-	let props;
+	let props: ComponentProps<typeof DeleteSample>;
 
 	beforeEach(() => {
 		props = {
@@ -24,7 +26,11 @@ describe("<DeleteSample />", () => {
 
 	it("should render delete button when sample has failed job", async () => {
 		await renderWithRouter(
-			<DeleteSample {...props} job={{ state: "failed" }} ready={false} />,
+			<DeleteSample
+				{...props}
+				job={createFakeJobNested({ state: "failed" })}
+				ready={false}
+			/>,
 		);
 
 		expect(screen.getByRole("button")).toBeInTheDocument();
@@ -32,7 +38,11 @@ describe("<DeleteSample />", () => {
 
 	it("does not render when sample has running job", async () => {
 		await renderWithRouter(
-			<DeleteSample {...props} ready={false} job={{ state: "running" }} />,
+			<DeleteSample
+				{...props}
+				ready={false}
+				job={createFakeJobNested({ state: "running" })}
+			/>,
 		);
 
 		expect(screen.queryByRole("button")).toBeNull();

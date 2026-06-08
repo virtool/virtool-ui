@@ -5,13 +5,14 @@ import {
 	mockApiGetReferenceDetail,
 } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
+import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import ReferenceDetailHeader from "../ReferenceDetailHeader";
 
 describe("<ReferenceDetailHeaderIcon />", () => {
-	let props;
-	let reference;
-	let path;
+	let props: ComponentProps<typeof ReferenceDetailHeader>;
+	let reference: ReturnType<typeof createFakeReference>;
+	let path: string;
 
 	beforeEach(() => {
 		reference = createFakeReference();

@@ -1,11 +1,12 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
+import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ReferenceRight } from "../ReferenceRight";
 
 describe("<ReferenceRight />", () => {
-	let props;
+	let props: ComponentProps<typeof ReferenceRight>;
 
 	beforeEach(() => {
 		props = {

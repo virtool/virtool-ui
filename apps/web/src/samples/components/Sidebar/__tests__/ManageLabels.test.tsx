@@ -1,7 +1,9 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeSampleMinimal } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
+import type { ComponentProps } from "react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import ManageLabels from "../ManageLabels";
 
@@ -23,15 +25,15 @@ function mockApiUpdateSampleLabels(sampleId: string) {
 }
 
 describe("<ManageLabels>", () => {
-	let props;
+	let props: ComponentProps<typeof ManageLabels>;
 
 	beforeEach(() => {
 		props = {
 			selectedSamples: [],
 			labels: [
-				{ color: "#C4B5FD", description: "", id: 1, name: "test" },
-				{ color: "#FCA5A5", description: "", id: 2, name: "label" },
-				{ color: "#1D4ED8", description: "", id: 3, name: "bar" },
+				{ color: "#C4B5FD", count: 0, description: "", id: 1, name: "test" },
+				{ color: "#FCA5A5", count: 0, description: "", id: 2, name: "label" },
+				{ color: "#1D4ED8", count: 0, description: "", id: 3, name: "bar" },
 			],
 		};
 	});
@@ -48,11 +50,11 @@ describe("<ManageLabels>", () => {
 
 	it("should display labels of one selected sample", async () => {
 		props.selectedSamples = [
-			{
+			createFakeSampleMinimal({
 				name: "Foo Sample",
 				id: "foo_sample",
 				labels: [{ color: "#C4B5FD", description: "", id: 1, name: "test" }],
-			},
+			}),
 		];
 		await renderWithRouter(<ManageLabels {...props} />);
 		await waitFor(() =>
@@ -64,16 +66,16 @@ describe("<ManageLabels>", () => {
 
 	it("should display labels of two selected samples", async () => {
 		props.selectedSamples = [
-			{
+			createFakeSampleMinimal({
 				name: "Foo Sample",
 				id: "foo_sample",
 				labels: [{ color: "#C4B5FD", description: "", id: 1, name: "test" }],
-			},
-			{
+			}),
+			createFakeSampleMinimal({
 				name: "Sample",
 				id: "sample",
 				labels: [{ color: "#FCA5A5", description: "", id: 2, name: "label" }],
-			},
+			}),
 		];
 		await renderWithRouter(<ManageLabels {...props} />);
 		await waitFor(() =>
@@ -91,19 +93,19 @@ describe("<ManageLabels>", () => {
 			// "test" (id 1) is on both samples, "label" (id 2) is on one only, so
 			// the selection has labels in mixed states.
 			props.selectedSamples = [
-				{
+				createFakeSampleMinimal({
 					name: "Foo Sample",
 					id: "foo_sample",
 					labels: [
 						{ color: "#C4B5FD", description: "", id: 1, name: "test" },
 						{ color: "#FCA5A5", description: "", id: 2, name: "label" },
 					],
-				},
-				{
+				}),
+				createFakeSampleMinimal({
 					name: "Bar Sample",
 					id: "bar_sample",
 					labels: [{ color: "#C4B5FD", description: "", id: 1, name: "test" }],
-				},
+				}),
 			];
 		});
 

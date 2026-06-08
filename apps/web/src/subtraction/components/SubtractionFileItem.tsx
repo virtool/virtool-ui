@@ -24,7 +24,6 @@ type SubtractionFileItemProps = {
  */
 export function SubtractionFileItem({
 	active,
-	error,
 	id,
 	name,
 	onClick,

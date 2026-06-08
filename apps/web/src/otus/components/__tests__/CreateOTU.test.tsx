@@ -11,7 +11,7 @@ import { mockApiCreateOTU } from "../../../tests/fake/otus";
 import OtuCreate from "../OtuCreate";
 
 describe("<OtuCreate />", () => {
-	let reference;
+	let reference: ReturnType<typeof createFakeReference>;
 
 	beforeEach(() => {
 		reference = createFakeReference();

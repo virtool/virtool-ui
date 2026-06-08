@@ -7,7 +7,5 @@ type PseudoLabelProps = {
 };
 
 export default function PseudoLabel({ children, className }: PseudoLabelProps) {
-	return (
-		<label className={cn("font-medium", "mb-2", className)}>{children}</label>
-	);
+	return <div className={cn("font-medium", "mb-2", className)}>{children}</div>;
 }

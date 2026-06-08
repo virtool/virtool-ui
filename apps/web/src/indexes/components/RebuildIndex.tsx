@@ -42,9 +42,7 @@ export default function RebuildIndex({
 			<DialogContent>
 				<DialogTitle>Rebuild Index</DialogTitle>
 				<form onSubmit={handleSubmit}>
-					<RebuildIndexError
-						error={mutation.isError && mutation.error.response.body.message}
-					/>
+					<RebuildIndexError error={mutation.error?.response?.body?.message} />
 					<RebuildHistory unbuilt={data} />
 					<DialogFooter>
 						<Button type="submit" color="blue">

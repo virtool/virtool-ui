@@ -49,7 +49,7 @@ export default function CreateAnalysis({
 		<Dialog open={open} onOpenChange={setOpen}>
 			<CreateAnalysisDialogContent>
 				<DialogTitle>Analyze</DialogTitle>
-				<HMMAlert installed={hmms.status.task?.complete} />
+				<HMMAlert installed={Boolean(hmms.status.task?.complete)} />
 				<Tabs.Root defaultValue="pathoscope">
 					<Tabs.List
 						className={cn(

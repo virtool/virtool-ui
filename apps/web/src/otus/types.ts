@@ -88,6 +88,24 @@ export type OtuNested = {
 	version: number;
 };
 
+/** A sequence record reported as missing its sequence field */
+export type OtuEmptySequence = {
+	_id: string;
+	isolate_id: string;
+};
+
+/** Validation issues that must be resolved before an OTU can be built into an index */
+export type OtuIssueReport = {
+	/** The ids of isolates that have no sequences, or false when there are none */
+	empty_isolate?: string[] | false;
+	/** Whether the OTU has no isolates associated with it */
+	empty_otu?: boolean;
+	/** Sequence records that have no defined sequence field, or false when there are none */
+	empty_sequence?: OtuEmptySequence[] | false;
+	/** Whether isolates have inconsistent numbers of sequences */
+	isolate_inconsistency?: boolean;
+};
+
 /** Basic data for list representations */
 export type OtuMinimal = OtuNested & {
 	abbreviation: string;
@@ -98,7 +116,7 @@ export type OtuMinimal = OtuNested & {
 /** A complete OTU */
 export type Otu = OtuMinimal & {
 	isolates: Array<OtuIsolate>;
-	issues?: { [key: string]: any } | boolean | null;
+	issues?: OtuIssueReport | boolean | null;
 	last_indexed_version?: number | null;
 	most_recent_change: HistoryNested;
 	schema: Array<OtuSegment>;

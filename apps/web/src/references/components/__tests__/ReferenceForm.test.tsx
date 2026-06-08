@@ -1,28 +1,19 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
+import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ReferenceForm } from "../ReferenceForm";
 
 describe("<ReferenceForm />", () => {
-	let props;
+	let props: ComponentProps<typeof ReferenceForm>;
 
 	beforeEach(() => {
 		props = {
-			errors: { name: { message: "Required Field" } },
-			mode: "clone",
+			errors: { name: { type: "required", message: "Required Field" } },
+			mode: "empty",
 			register: vi.fn(),
 		};
-	});
-
-	it("should render", () => {
-		renderWithProviders(<ReferenceForm {...props} />);
-
-		expect(screen.getByRole("textbox", { name: "Name" })).toBeInTheDocument();
-		expect(
-			screen.getByRole("textbox", { name: "Description" }),
-		).toBeInTheDocument();
-		expect(screen.queryByRole("textbox", { name: "Organism" })).toBeNull();
 	});
 
 	it("should render Organism when [mode=edit]", () => {

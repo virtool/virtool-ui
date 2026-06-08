@@ -5,7 +5,7 @@ export type ErrorResponse = {
 		statusText: string;
 		badRequest: boolean;
 		statusCode: number;
-		body: { [key: string]: any };
+		body: { message?: string; [key: string]: unknown };
 	};
 };
 

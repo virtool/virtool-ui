@@ -15,8 +15,8 @@ function formatSubtractionPath(subtraction: SubtractionMinimal) {
 }
 
 describe("<SubtractionDetail />", () => {
-	let subtraction;
-	let path;
+	let subtraction: ReturnType<typeof createFakeSubtraction>;
+	let path: string;
 
 	beforeEach(() => {
 		subtraction = createFakeSubtraction();

@@ -8,11 +8,13 @@ import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("<ReferenceManager />", () => {
-	let reference;
-	let path;
+	let reference: ReturnType<typeof createFakeReference>;
+	let path: string;
 
 	beforeEach(() => {
-		reference = createFakeReference();
+		reference = createFakeReference({
+			cloned_from: { id: "source-ref", name: "Source Reference Name" },
+		});
 		path = `/refs/${reference.id}/manage`;
 		mockApiGetReferenceDetail(reference);
 	});
@@ -38,11 +40,11 @@ describe("<ReferenceManager />", () => {
 		expect(screen.queryByText("Remote Reference")).toBeNull();
 	});
 
-	it("should render when [cloned_from={ Bar: 'Bee' }]", async () => {
+	it("should render clone source when [cloned_from] is set", async () => {
 		await renderRoute(path);
 
 		expect(await screen.findByText("Clone Reference")).toBeInTheDocument();
 		expect(screen.getByText("Source Reference"));
-		expect(screen.getByText(reference.cloned_from.name)).toBeInTheDocument();
+		expect(screen.getByText("Source Reference Name")).toBeInTheDocument();
 	});
 });

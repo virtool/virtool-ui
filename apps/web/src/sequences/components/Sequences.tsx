@@ -57,14 +57,14 @@ export default function Sequences({
 
 	return (
 		<>
-			<label className="flex items-center font-medium">
+			<div className="flex items-center font-medium">
 				<strong className="text-base pr-1">Sequences</strong>
 				<Badge>{sequences.length}</Badge>
 				<CreateSequenceLink
 					onCreate={() => setOpenCreate(true)}
 					refId={reference.id}
 				/>
-			</label>
+			</div>
 
 			<BoxGroup>{sequenceComponents}</BoxGroup>
 

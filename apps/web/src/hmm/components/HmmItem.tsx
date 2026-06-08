@@ -18,7 +18,7 @@ export default function HmmItem({ hmm }: HmmItemProps) {
 
 	const labelComponents = filteredFamilies
 		.slice(0, 3)
-		.map((family, i) => <Label key={i}>{family}</Label>);
+		.map((family) => <Label key={family}>{family}</Label>);
 
 	return (
 		<BoxGroupSection className="flex text-lg">

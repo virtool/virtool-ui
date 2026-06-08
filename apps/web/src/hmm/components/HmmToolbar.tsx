@@ -5,7 +5,7 @@ type HmmToolbarProps = {
 	/** Current search term used for filtering */
 	term: string;
 	/** A callback function to handle changes in search input */
-	onChange: (term: any) => void;
+	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 /**

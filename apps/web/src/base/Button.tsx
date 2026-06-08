@@ -1,10 +1,10 @@
 import { cn } from "@app/utils";
-import type { ComponentType, ReactNode } from "react";
+import type { ElementType, ReactNode } from "react";
 import { buttonVariants } from "./buttonVariants";
 
 export type ButtonProps = {
 	active?: boolean;
-	as?: string | ComponentType<any>;
+	as?: ElementType;
 	children: ReactNode;
 	className?: string;
 	color?: "blue" | "green" | "gray" | "purple" | "red";

@@ -7,8 +7,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import RemoveSegment from "../RemoveSegment";
 
 describe("<RemoveSegment />", () => {
-	let otu;
-	let segmentName;
+	let otu: ReturnType<typeof createFakeOtu>;
+	let segmentName: string;
 
 	beforeEach(() => {
 		otu = createFakeOtu();

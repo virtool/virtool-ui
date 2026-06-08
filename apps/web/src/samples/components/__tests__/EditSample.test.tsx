@@ -2,12 +2,13 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeSample, mockApiEditSample } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
+import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import EditSample from "../EditSample";
 
 describe("<Editsample />", () => {
-	let sample;
-	let props;
+	let sample: ReturnType<typeof createFakeSample>;
+	let props: ComponentProps<typeof EditSample>;
 
 	beforeEach(() => {
 		sample = createFakeSample();

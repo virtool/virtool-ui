@@ -10,7 +10,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import OtuToolbar from "../OtuToolbar";
 
 describe("<OtuToolbar />", () => {
-	let reference;
+	let reference: ReturnType<typeof createFakeReference>;
 
 	beforeEach(() => {
 		reference = createFakeReference();
