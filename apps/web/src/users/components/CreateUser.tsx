@@ -6,6 +6,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@base/Dialog";
+import { useState } from "react";
 import { CreateUserForm } from "./CreateUserForm";
 
 type NewUser = {
@@ -17,18 +18,11 @@ type NewUser = {
 	forceReset: boolean;
 };
 
-type CreateUserProps = {
-	open?: boolean;
-	setOpen?: (open: boolean) => void;
-};
-
 /**
  * A dialog for creating a new user
  */
-export default function CreateUser({
-	open = false,
-	setOpen = () => {},
-}: CreateUserProps) {
+export default function CreateUser() {
+	const [open, setOpen] = useState(false);
 	const mutation = useCreateUser();
 
 	function handleSubmit({ handle, password, forceReset }: NewUser) {
