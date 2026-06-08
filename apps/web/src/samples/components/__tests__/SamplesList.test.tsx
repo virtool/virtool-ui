@@ -23,7 +23,6 @@ import SamplesList from "../SamplesList";
 
 type SamplesListSearch = {
 	filterLabels?: number[];
-	openQuickAnalyze?: boolean;
 	page?: number;
 	term?: string;
 	workflows?: string[];
