@@ -1,7 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeOtu, mockApiRemoveSequence } from "@tests/fake/otus";
-import { renderWithProviders } from "@tests/setup";
+import { at, renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import RemoveSequence from "../RemoveSequence";
@@ -14,22 +14,11 @@ describe("<RemoveSequence />", () => {
 
 	beforeEach(() => {
 		otu = createFakeOtu();
-		const firstIsolate = otu.isolates[0];
-		if (!firstIsolate) {
-			throw new Error("expected an isolate");
-		}
-		isolate = firstIsolate;
-		const firstSequence = isolate.sequences[0];
-		if (!firstSequence) {
-			throw new Error("expected a sequence");
-		}
-		sequence = firstSequence;
-		const sourceTypeInitial = isolate.source_type[0];
-		if (!sourceTypeInitial) {
-			throw new Error("expected a source type");
-		}
+		isolate = at(otu.isolates, 0);
+		sequence = at(isolate.sequences, 0);
 		const sourceType =
-			sourceTypeInitial.toUpperCase() + isolate.source_type.slice(1);
+			isolate.source_type.charAt(0).toUpperCase() +
+			isolate.source_type.slice(1);
 		isolateName = `${sourceType} ${isolate.source_name}`;
 	});
 

@@ -16,7 +16,7 @@ import {
 	createFakeShortlistSubtraction,
 	mockApiGetShortlistSubtractions,
 } from "@tests/fake/subtractions";
-import { renderWithRouter } from "@tests/setup";
+import { at, renderWithRouter } from "@tests/setup";
 import { useState } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import SamplesList from "../SamplesList";
@@ -63,13 +63,7 @@ describe("<SamplesList />", () => {
 		await renderWithRouter(<SamplesList labels={labels} />, path);
 		expect(await screen.findByText("Samples")).toBeInTheDocument();
 
-		const [firstSample] = samples;
-
-		if (!firstSample) {
-			throw new Error("expected a sample");
-		}
-
-		expect(screen.getByText(firstSample.name)).toBeInTheDocument();
+		expect(screen.getByText(at(samples, 0).name)).toBeInTheDocument();
 		expect(screen.getByText("Labels")).toBeInTheDocument();
 	});
 

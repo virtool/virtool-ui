@@ -56,6 +56,20 @@ process.env.TZ = "UTC";
 
 faker.seed(1);
 
+/**
+ * Return the element at `index`, throwing if the array has no such element.
+ *
+ * Lets tests index into fixture data they built without a non-null assertion,
+ * which `noUncheckedIndexedAccess` would otherwise require.
+ */
+export function at<T>(items: readonly T[], index: number): T {
+	const item = items[index];
+	if (item === undefined) {
+		throw new Error(`expected an element at index ${index}`);
+	}
+	return item;
+}
+
 export function wrapWithProviders(ui: ReactNode) {
 	const queryClient = new QueryClient();
 

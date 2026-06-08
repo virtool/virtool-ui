@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeIimiAnalysis } from "@tests/fake/analyses";
+import { at } from "@tests/setup";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { formatData } from "../../../utils";
 import { IimiViewer } from "../IimiViewer";
@@ -35,15 +36,11 @@ describe("<IimiViewer />", () => {
 			workflow: "iimi",
 		});
 
-		const [baseHit] = formattedIimiAnalysis.results.hits;
-		if (!baseHit) {
-			throw new Error("expected fake analysis to contain at least one hit");
-		}
-		firstHit = baseHit;
+		firstHit = at(formattedIimiAnalysis.results.hits, 0);
 
 		predefinedHits = [
 			{
-				...baseHit,
+				...firstHit,
 				id: "high-prob",
 				name: "High Probability Virus",
 				abbreviation: "HPV",
@@ -51,7 +48,7 @@ describe("<IimiViewer />", () => {
 				coverage: 0.3,
 			},
 			{
-				...baseHit,
+				...firstHit,
 				id: "med-prob",
 				name: "Medium Probability Virus",
 				abbreviation: "MPV",
@@ -59,7 +56,7 @@ describe("<IimiViewer />", () => {
 				coverage: 0.8,
 			},
 			{
-				...baseHit,
+				...firstHit,
 				id: "low-prob",
 				name: "Low Probability Virus",
 				abbreviation: "LPV",
@@ -153,10 +150,7 @@ describe("<IimiViewer />", () => {
 		});
 		await userEvent.click(otu);
 
-		const isolate = firstHit.isolates[0];
-		if (!isolate) {
-			throw new Error("expected first hit to contain at least one isolate");
-		}
+		const isolate = at(firstHit.isolates, 0);
 		const expectedIsolateName = `${isolate.source_type} ${isolate.source_name}`;
 		expect(
 			screen.getByText(new RegExp(expectedIsolateName, "i")),

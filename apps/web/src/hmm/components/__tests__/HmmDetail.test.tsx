@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import { createFakeHmm, mockApiGetHmmDetail } from "@tests/fake/hmm";
-import { renderRoute } from "@tests/setup";
+import { at, renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -57,11 +57,8 @@ describe("<HmmDetail />", () => {
 			expect(await screen.findByText("Cluster Members")).toBeInTheDocument();
 			expect(screen.getByText(hmmDetail.entries.length)).toBeInTheDocument();
 
-			const firstEntry = hmmDetail.entries[0];
-			const secondEntry = hmmDetail.entries[1];
-			if (!firstEntry || !secondEntry) {
-				throw new Error("expected at least two entries");
-			}
+			const firstEntry = at(hmmDetail.entries, 0);
+			const secondEntry = at(hmmDetail.entries, 1);
 
 			expect(screen.getByText("Accession")).toBeInTheDocument();
 			expect(screen.getByText(firstEntry.accession)).toBeInTheDocument();

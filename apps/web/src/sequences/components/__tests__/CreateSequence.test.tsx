@@ -2,7 +2,7 @@ import { cleanup, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeOtu, mockApiAddSequence } from "@tests/fake/otus";
 import { createFakeReference } from "@tests/fake/references";
-import { renderWithProviders } from "@tests/setup";
+import { at, renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import CreateSequence from "../CreateSequence";
@@ -12,10 +12,7 @@ describe("<CreateSequence>", () => {
 	let reference: ReturnType<typeof createFakeReference>;
 
 	function renderCreateSequence(setOpen = vi.fn()) {
-		const isolate = otu.isolates[0];
-		if (!isolate) {
-			throw new Error("expected an isolate");
-		}
+		const isolate = at(otu.isolates, 0);
 		return renderWithProviders(
 			<CreateSequence
 				isolateId={isolate.id}
@@ -40,11 +37,8 @@ describe("<CreateSequence>", () => {
 	});
 
 	it("should update fields on typing", async () => {
-		const isolate = otu.isolates[0];
-		const segment = otu.schema[0];
-		if (!isolate || !segment) {
-			throw new Error("expected an isolate and a schema segment");
-		}
+		const isolate = at(otu.isolates, 0);
+		const segment = at(otu.schema, 0);
 
 		const scope = mockApiAddSequence(
 			otu.id,
@@ -121,11 +115,8 @@ describe("<CreateSequence>", () => {
 	});
 
 	it("should clear form cache after submitting", async () => {
-		const isolate = otu.isolates[0];
-		const segment = otu.schema[0];
-		if (!isolate || !segment) {
-			throw new Error("expected an isolate and a schema segment");
-		}
+		const isolate = at(otu.isolates, 0);
+		const segment = at(otu.schema, 0);
 
 		const scope = mockApiAddSequence(
 			otu.id,

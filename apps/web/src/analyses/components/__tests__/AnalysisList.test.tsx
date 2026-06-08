@@ -7,7 +7,7 @@ import {
 } from "@tests/fake/analyses";
 import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
-import { MemoryRouter, renderWithProviders } from "@tests/setup";
+import { at, MemoryRouter, renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -57,7 +57,7 @@ describe("<AnalysesToolbar />", () => {
 
 	it("should show analysis creation when user is in the correct group and write is enabled", async () => {
 		const account = createFakeAccount({ administrator_role: null });
-		sample.group = account.groups[0] ?? null;
+		sample.group = at(account.groups, 0);
 		sample.group_write = true;
 		mockApiGetAccount(account);
 		mockApiGetSampleDetail(sample);

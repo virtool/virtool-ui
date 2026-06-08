@@ -78,15 +78,9 @@ describe("<ReadSelector>", () => {
 
 	describe("Auto-pair mode", () => {
 		it("replaces the selection with a single file on click", async () => {
-			const files = [
-				createFakeFile({ name: "alpha.fastq.gz" }),
-				createFakeFile({ name: "beta.fastq.gz" }),
-			];
-			const [firstFile, secondFile] = files;
-
-			if (!firstFile || !secondFile) {
-				throw new Error("expected two files");
-			}
+			const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+			const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+			const files = [firstFile, secondFile];
 
 			mockApiListFiles(files);
 
@@ -155,16 +149,10 @@ describe("<ReadSelector>", () => {
 
 	describe("Manual mode", () => {
 		it("toggles up to two files, ignoring a third and supporting unselect", async () => {
-			const files = [
-				createFakeFile({ name: "alpha.fastq.gz" }),
-				createFakeFile({ name: "beta.fastq.gz" }),
-				createFakeFile({ name: "gamma.fastq.gz" }),
-			];
-			const [firstFile, secondFile, thirdFile] = files;
-
-			if (!firstFile || !secondFile || !thirdFile) {
-				throw new Error("expected three files");
-			}
+			const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+			const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+			const thirdFile = createFakeFile({ name: "gamma.fastq.gz" });
+			const files = [firstFile, secondFile, thirdFile];
 
 			mockApiListFiles(files);
 
@@ -206,15 +194,9 @@ describe("<ReadSelector>", () => {
 		});
 
 		it("swaps the LEFT and RIGHT reads", async () => {
-			const files = [
-				createFakeFile({ name: "alpha.fastq.gz" }),
-				createFakeFile({ name: "beta.fastq.gz" }),
-			];
-			const [firstFile, secondFile] = files;
-
-			if (!firstFile || !secondFile) {
-				throw new Error("expected two files");
-			}
+			const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+			const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+			const files = [firstFile, secondFile];
 
 			mockApiListFiles(files);
 
@@ -283,15 +265,9 @@ describe("<ReadSelector>", () => {
 
 		it("shows a hand-picked pair as two badged rows back in Auto-pair", async () => {
 			// Two files that do not auto-pair.
-			const files = [
-				createFakeFile({ name: "alpha.fastq.gz" }),
-				createFakeFile({ name: "beta.fastq.gz" }),
-			];
-			const [firstFile, secondFile] = files;
-
-			if (!firstFile || !secondFile) {
-				throw new Error("expected two files");
-			}
+			const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+			const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+			const files = [firstFile, secondFile];
 
 			mockApiListFiles(files);
 
@@ -322,15 +298,9 @@ describe("<ReadSelector>", () => {
 	});
 
 	it("resets the selection and search term", async () => {
-		const files = [
-			createFakeFile({ name: "alpha.fastq.gz" }),
-			createFakeFile({ name: "beta.fastq.gz" }),
-		];
-		const [firstFile, secondFile] = files;
-
-		if (!firstFile || !secondFile) {
-			throw new Error("expected two files");
-		}
+		const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+		const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+		const files = [firstFile, secondFile];
 
 		mockApiListFiles(files);
 

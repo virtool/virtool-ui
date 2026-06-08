@@ -8,6 +8,7 @@ import {
 	mockApiBlastNuVs,
 } from "@tests/fake/analyses";
 import { createFakeSample } from "@tests/fake/samples";
+import { at } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -36,11 +37,7 @@ describe("<NuvsViewer />", () => {
 		sample = createFakeSample();
 		nuvs = createFakeFormattedNuVsAnalysis();
 
-		const [hit] = nuvs.results.hits;
-		if (!hit) {
-			throw new Error("expected fake analysis to contain at least one hit");
-		}
-		firstHit = hit;
+		firstHit = at(nuvs.results.hits, 0);
 
 		props = {
 			detail: nuvs,

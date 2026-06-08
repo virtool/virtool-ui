@@ -64,10 +64,8 @@ describe("<AccountProfile />", () => {
 		const input = screen.getByLabelText("Email Address");
 		expect(input).toHaveValue("");
 
-		const button = screen.getAllByRole("button", { name: "Change" })[2];
-		if (!button) {
-			throw new Error("expected button");
-		}
+		const form = input.closest("form") as HTMLElement;
+		const button = within(form).getByRole("button", { name: "Change" });
 
 		await userEvent.type(input, "invalid");
 		await userEvent.click(button);
@@ -186,13 +184,10 @@ describe("<AccountProfile />", () => {
 
 		expect(await screen.findByText("Password")).toBeInTheDocument();
 
-		const button = screen.getAllByRole("button", { name: "Change" })[1];
-		if (!button) {
-			throw new Error("expected button");
-		}
-
 		const oldPasswordInput = screen.getByLabelText("Old Password");
 		const newPasswordInput = screen.getByLabelText("New Password");
+		const form = oldPasswordInput.closest("form") as HTMLElement;
+		const button = within(form).getByRole("button", { name: "Change" });
 
 		// Try without providing old password.
 		await userEvent.type(newPasswordInput, "long_enough_password");
@@ -227,12 +222,10 @@ describe("<AccountProfile />", () => {
 
 		await screen.findByText("Password");
 
-		const button = screen.getAllByRole("button", { name: "Change" })[1];
-		if (!button) {
-			throw new Error("expected button");
-		}
 		const oldPasswordInput = screen.getByLabelText("Old Password");
 		const newPasswordInput = screen.getByLabelText("New Password");
+		const form = oldPasswordInput.closest("form") as HTMLElement;
+		const button = within(form).getByRole("button", { name: "Change" });
 
 		await userEvent.type(oldPasswordInput, "old_password_123");
 		await userEvent.type(newPasswordInput, "new_password_123");

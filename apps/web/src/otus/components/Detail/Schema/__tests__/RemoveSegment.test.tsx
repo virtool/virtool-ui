@@ -1,7 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeOtu, mockApiEditOTU } from "@tests/fake/otus";
-import { renderWithProviders } from "@tests/setup";
+import { at, renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import RemoveSegment from "../RemoveSegment";
@@ -12,11 +12,7 @@ describe("<RemoveSegment />", () => {
 
 	beforeEach(() => {
 		otu = createFakeOtu();
-		const segment = otu.schema[0];
-		if (!segment) {
-			throw new Error("expected a schema segment");
-		}
-		segmentName = segment.name;
+		segmentName = at(otu.schema, 0).name;
 	});
 
 	afterEach(() => nock.cleanAll());

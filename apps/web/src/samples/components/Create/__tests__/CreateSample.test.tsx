@@ -35,7 +35,8 @@ async function setReadSelectorMode(
 }
 
 describe("<CreateSample>", () => {
-	const labels = [createFakeLabel()];
+	const firstLabel = createFakeLabel();
+	const labels = [firstLabel];
 	const subtractionShortlist = createFakeShortlistSubtraction();
 
 	beforeEach(() => {
@@ -123,17 +124,9 @@ describe("<CreateSample>", () => {
 	});
 
 	it("should submit when all form fields complete", async () => {
-		const files = [createFakeFile(), createFakeFile()];
-		const [firstFile, secondFile] = files;
-		const [firstLabel] = labels;
-
-		if (!firstFile || !secondFile) {
-			throw new Error("expected two files");
-		}
-
-		if (!firstLabel) {
-			throw new Error("expected a label");
-		}
+		const firstFile = createFakeFile();
+		const secondFile = createFakeFile();
+		const files = [firstFile, secondFile];
 
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([subtractionShortlist]);
@@ -312,15 +305,9 @@ describe("<CreateSample>", () => {
 	});
 
 	it("should be able to swap read orientation", async () => {
-		const files = [
-			createFakeFile({ name: "alpha.fastq.gz" }),
-			createFakeFile({ name: "beta.fastq.gz" }),
-		];
-		const [firstFile, secondFile] = files;
-
-		if (!firstFile || !secondFile) {
-			throw new Error("expected two files");
-		}
+		const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+		const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+		const files = [firstFile, secondFile];
 
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([]);
@@ -346,15 +333,9 @@ describe("<CreateSample>", () => {
 	});
 
 	it("should show correct read orientations", async () => {
-		const files = [
-			createFakeFile({ name: "alpha.fastq.gz" }),
-			createFakeFile({ name: "beta.fastq.gz" }),
-		];
-		const [firstFile, secondFile] = files;
-
-		if (!firstFile || !secondFile) {
-			throw new Error("expected two files");
-		}
+		const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+		const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+		const files = [firstFile, secondFile];
 
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
