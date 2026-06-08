@@ -19,14 +19,8 @@ import {
 } from "@tanstack/react-router";
 import { rootKeys } from "@wall/queries";
 import { lazy, Suspense, useEffect } from "react";
-import { z } from "zod/v4";
 
-const DevDialog = lazy(() => import("@dev/components/DeveloperDialog"));
 const UploadOverlay = lazy(() => import("@uploads/components/UploadOverlay"));
-
-const authenticatedSearchSchema = z.object({
-	openDev: z.boolean().optional().catch(undefined),
-});
 
 function setupSse(queryClient: QueryClient) {
 	Sse.init(queryClient);
@@ -37,7 +31,6 @@ function setupSse(queryClient: QueryClient) {
 }
 
 export const Route = createFileRoute("/_authenticated")({
-	validateSearch: authenticatedSearchSchema,
 	beforeLoad: async ({ context, location }) => {
 		const { queryClient } = context;
 
@@ -66,8 +59,6 @@ function AuthenticatedLayout() {
 	const queryClient = useQueryClient();
 	const { data, isPending } = useFetchAccount();
 	const location = useLocation();
-	const search = Route.useSearch();
-	const navigate = Route.useNavigate();
 
 	useEffect(() => {
 		if (data) {
@@ -98,9 +89,6 @@ function AuthenticatedLayout() {
 					<Nav
 						administrator_role={data.administrator_role}
 						handle={data.handle}
-						setOpenDev={(openDev) =>
-							navigate({ search: { ...search, openDev } })
-						}
 					/>
 				</div>
 
@@ -120,10 +108,6 @@ function AuthenticatedLayout() {
 			</div>
 
 			<Suspense fallback={null}>
-				<DevDialog
-					open={Boolean(search.openDev)}
-					setOpen={(openDev) => navigate({ search: { ...search, openDev } })}
-				/>
 				<UploadOverlay />
 			</Suspense>
 		</>

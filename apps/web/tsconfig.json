@@ -7,7 +7,6 @@
 			"@analyses/*": ["./src/analyses/*"],
 			"@app/*": ["./src/app/*"],
 			"@base/*": ["./src/base/*"],
-			"@dev/*": ["./src/dev/*"],
 			"@forms/*": ["./src/forms/*"],
 			"@groups/*": ["./src/groups/*"],
 			"@hmm/*": ["./src/hmm/*"],

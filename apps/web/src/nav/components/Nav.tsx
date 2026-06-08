@@ -9,8 +9,7 @@ import DropdownMenuTrigger from "@base/DropdownMenuTrigger";
 import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
 import Logo from "@base/Logo";
-import { useRootQuery } from "@wall/queries";
-import { Bug, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { useState } from "react";
 import AboutDialog from "./AboutDialog";
 import { NavLink } from "./NavLink";
@@ -18,19 +17,13 @@ import { NavLink } from "./NavLink";
 type NavBarProps = {
 	administrator_role: AdministratorRoleName | null;
 	handle: string;
-	setOpenDev?: (open: boolean) => void;
 };
 
 /**
  * Display the main navigation bar with links too root level views.
  */
-export default function Nav({
-	administrator_role,
-	handle,
-	setOpenDev = () => {},
-}: NavBarProps) {
+export default function Nav({ administrator_role, handle }: NavBarProps) {
 	const mutation = useLogout();
-	const { data } = useRootQuery();
 	const [aboutOpen, setAboutOpen] = useState(false);
 
 	function onLogout() {
@@ -49,15 +42,6 @@ export default function Nav({
 			</div>
 
 			<div className="flex gap-2 pr-4">
-				{data?.dev && (
-					<IconButton
-						onClick={() => setOpenDev(true)}
-						IconComponent={Bug}
-						tip="dev tools"
-						color="red"
-					/>
-				)}
-
 				<IconButton
 					onClick={() => setAboutOpen(true)}
 					IconComponent={Info}
