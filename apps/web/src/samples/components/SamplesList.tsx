@@ -19,11 +19,9 @@ import SampleLabels from "./Sidebar/ManageLabels";
 type SamplesListProps = {
 	labels: Label[];
 	filterLabels?: number[];
-	openQuickAnalyze?: boolean;
 	page?: number;
 	setSearch?: (next: {
 		labels?: number[];
-		openQuickAnalyze?: boolean;
 		page?: number;
 		term?: string;
 		workflows?: string[];
@@ -38,7 +36,6 @@ type SamplesListProps = {
 export default function SamplesList({
 	labels,
 	filterLabels = [],
-	openQuickAnalyze = false,
 	page: urlPage = 1,
 	setSearch = () => {},
 	term = "",
@@ -54,6 +51,7 @@ export default function SamplesList({
 	const { isPending: isPendingIndexes } = useListIndexes({ ready: true });
 
 	const [selected, setSelected] = useState<string[]>([]);
+	const [openQuickAnalyze, setOpenQuickAnalyze] = useState(false);
 
 	if (isPendingSamples || isPendingIndexes || !samples) {
 		return <LoadingPlaceholder />;
@@ -79,9 +77,7 @@ export default function SamplesList({
 				checked={selected.includes(item.id)}
 				handleSelect={handleSelect}
 				selectOnQuickAnalyze={selectOnQuickAnalyze}
-				setOpenQuickAnalyze={(openQuickAnalyze) =>
-					setSearch({ openQuickAnalyze })
-				}
+				setOpenQuickAnalyze={setOpenQuickAnalyze}
 			/>
 		);
 	}
@@ -91,7 +87,7 @@ export default function SamplesList({
 			<QuickAnalyze
 				open={openQuickAnalyze}
 				onClear={() => setSelected([])}
-				setOpen={(openQuickAnalyze) => setSearch({ openQuickAnalyze })}
+				setOpen={setOpenQuickAnalyze}
 				samples={intersectionWith(
 					items,
 					selected,
@@ -113,9 +109,7 @@ export default function SamplesList({
 					<SampleToolbar
 						selected={selected}
 						onClear={() => setSelected([])}
-						setOpenQuickAnalyze={(openQuickAnalyze) =>
-							setSearch({ openQuickAnalyze })
-						}
+						setOpenQuickAnalyze={setOpenQuickAnalyze}
 						term={term}
 						onChange={(e) => setSearch({ term: e.target.value })}
 					/>

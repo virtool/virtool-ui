@@ -9,7 +9,6 @@ const samplesSearchSchema = z.object({
 	page: z.number().default(1).catch(1),
 	labels: z.array(z.number()).default([]).catch([]),
 	workflows: z.array(z.string()).default([]).catch([]),
-	openQuickAnalyze: z.boolean().optional().catch(undefined),
 });
 
 export const Route = createFileRoute("/_authenticated/samples/")({
@@ -30,7 +29,6 @@ function SamplesRoute() {
 		<SamplesList
 			filterLabels={search.labels}
 			labels={labels}
-			openQuickAnalyze={Boolean(search.openQuickAnalyze)}
 			page={search.page}
 			term={search.term}
 			workflows={search.workflows}
