@@ -36,7 +36,6 @@ export default defineConfig(({ command }) => ({
 			"@app": path.resolve("src/app"),
 			"@banner": path.resolve("src/banner"),
 			"@base": path.resolve("src/base"),
-			"@dev": path.resolve("src/dev"),
 			"@forms": path.resolve("src/forms"),
 			"@groups": path.resolve("src/groups"),
 			"@hmm": path.resolve("src/hmm"),
