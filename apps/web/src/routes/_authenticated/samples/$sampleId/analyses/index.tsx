@@ -4,7 +4,6 @@ import { z } from "zod/v4";
 
 const analysesListSearchSchema = z.object({
 	page: z.number().default(1).catch(1),
-	openCreateAnalysis: z.boolean().optional().catch(undefined),
 });
 
 export const Route = createFileRoute(
@@ -16,15 +15,14 @@ export const Route = createFileRoute(
 
 function AnalysesRoute() {
 	const { sampleId } = Route.useParams();
-	const search = Route.useSearch();
+	const { page } = Route.useSearch();
 	const navigate = Route.useNavigate();
 
 	return (
 		<AnalysesList
-			openCreateAnalysis={Boolean(search.openCreateAnalysis)}
-			page={search.page}
+			onPageChange={(page) => navigate({ search: { page } })}
+			page={page}
 			sampleId={sampleId}
-			setSearch={(next) => navigate({ search: { ...search, ...next } })}
 		/>
 	);
 }

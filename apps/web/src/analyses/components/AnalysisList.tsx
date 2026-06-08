@@ -6,6 +6,7 @@ import Pagination from "@base/Pagination";
 import { useListHmms } from "@hmm/queries";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
+import { useState } from "react";
 import { useListAnalyses } from "../queries";
 import type { AnalysisMinimal } from "../types";
 import AnalysisItem from "./AnalysisItem";
@@ -13,10 +14,9 @@ import CreateAnalysis from "./Create/CreateAnalysis";
 import AnalysisHMMAlert from "./HMMAlert";
 
 type AnalysesListProps = {
-	openCreateAnalysis: boolean;
+	onPageChange: (page: number) => void;
 	page: number;
 	sampleId: string;
-	setSearch: (next: { openCreateAnalysis?: boolean; page?: number }) => void;
 };
 
 function renderRow() {
@@ -30,11 +30,11 @@ function renderRow() {
  * A list of analyses with filtering options
  */
 export default function AnalysesList({
-	openCreateAnalysis,
+	onPageChange,
 	page,
 	sampleId,
-	setSearch,
 }: AnalysesListProps) {
+	const [openCreateAnalysis, setOpenCreateAnalysis] = useState(false);
 	const { data: analyses, isPending: isPendingAnalyses } = useListAnalyses(
 		sampleId,
 		page,
@@ -66,7 +66,7 @@ export default function AnalysesList({
 					<button
 						type="button"
 						className={buttonVariants({ color: "blue" })}
-						onClick={() => setSearch({ openCreateAnalysis: true })}
+						onClick={() => setOpenCreateAnalysis(true)}
 					>
 						Create
 					</button>
@@ -79,7 +79,7 @@ export default function AnalysesList({
 					storedPage={analyses.page}
 					currentPage={page}
 					pageCount={analyses.page_count}
-					onPageChange={(page) => setSearch({ page })}
+					onPageChange={onPageChange}
 				/>
 			) : (
 				<NoneFoundBox noun="analyses" />
@@ -88,7 +88,7 @@ export default function AnalysesList({
 			<CreateAnalysis
 				hmms={hmms}
 				open={openCreateAnalysis}
-				setOpen={(openCreateAnalysis) => setSearch({ openCreateAnalysis })}
+				setOpen={setOpenCreateAnalysis}
 				sampleId={sampleId}
 			/>
 		</ContainerNarrow>
