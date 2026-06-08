@@ -9,6 +9,7 @@ import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { JobNestedSchema } from "@jobs/types";
 import DeleteSample from "@samples/components/Detail/DeleteSample";
+import EditSample from "@samples/components/EditSample";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { sampleQueryOptions, useFetchSample } from "@samples/queries";
 import {
@@ -16,17 +17,11 @@ import {
 	notFound,
 	Outlet,
 	useLocation,
-	useNavigate,
 } from "@tanstack/react-router";
 import { Key, Pencil } from "lucide-react";
-import { z } from "zod/v4";
-
-const sampleDetailSearchSchema = z.object({
-	openEditSample: z.boolean().optional().catch(undefined),
-});
+import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/samples/$sampleId")({
-	validateSearch: sampleDetailSearchSchema,
 	loader: async ({ context: { queryClient }, params: { sampleId } }) => {
 		try {
 			await queryClient.ensureQueryData(sampleQueryOptions(sampleId));
@@ -50,7 +45,7 @@ function SampleDetailLayout() {
 	const location = useLocation();
 	const { data, isPending } = useFetchSample(sampleId);
 	const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
-	const navigate = useNavigate({ from: Route.fullPath });
+	const [editOpen, setEditOpen] = useState(false);
 
 	if (isPending || !data) {
 		return <LoadingPlaceholder />;
@@ -71,15 +66,7 @@ function SampleDetailLayout() {
 									color="grayDark"
 									IconComponent={Pencil}
 									tip="modify"
-									onClick={() =>
-										navigate({
-											search: (prev: Record<string, unknown>) => ({
-												...prev,
-												openEditSample: true,
-											}),
-											replace: true,
-										})
-									}
+									onClick={() => setEditOpen(true)}
 								/>
 								<DeleteSample
 									id={sampleId}
@@ -111,6 +98,8 @@ function SampleDetailLayout() {
 			</Tabs>
 
 			<Outlet />
+
+			<EditSample open={editOpen} sample={data} setOpen={setEditOpen} />
 		</>
 	);
 }

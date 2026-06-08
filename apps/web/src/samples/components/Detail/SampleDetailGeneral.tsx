@@ -15,7 +15,6 @@ import { getLibraryTypeDisplayName } from "@samples/utils";
  */
 import { getRouteApi } from "@tanstack/react-router";
 import numbro from "numbro";
-import EditSample from "../EditSample";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";
 import Sidebar from "./Sidebar";
 
@@ -29,8 +28,6 @@ export default function SampleDetailGeneral({
 	labels,
 }: SampleDetailGeneralProps) {
 	const { sampleId } = routeApi.useParams();
-	const search = routeApi.useSearch();
-	const navigate = routeApi.useNavigate();
 	const { data, isPending } = useFetchSample(sampleId);
 	const { data: job } = useFetchJob(data?.job?.id ?? Number.NaN, data?.job);
 
@@ -135,14 +132,6 @@ export default function SampleDetailGeneral({
 					defaultSubtractions={data.subtractions}
 				/>
 			</ContainerSide>
-
-			<EditSample
-				open={Boolean(search.openEditSample)}
-				sample={data}
-				setOpen={(openEditSample) =>
-					navigate({ search: { ...search, openEditSample } })
-				}
-			/>
 		</div>
 	);
 }
