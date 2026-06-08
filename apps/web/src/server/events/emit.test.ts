@@ -22,7 +22,7 @@ describe("emit", () => {
 		await emit("labels", 7, "create");
 
 		expect(notify).toHaveBeenCalledTimes(1);
-		const [channel, payload] = notify.mock.calls[0];
+		const [channel, payload] = notify.mock.calls[0] ?? [];
 		expect(channel).toBe("client_events");
 		expect(JSON.parse(payload)).toEqual({
 			domain: "labels",
@@ -34,14 +34,14 @@ describe("emit", () => {
 	it("publishes a delete event", async () => {
 		await emit("labels", 12, "delete");
 
-		const [, payload] = notify.mock.calls[0];
+		const [, payload] = notify.mock.calls[0] ?? [];
 		expect(JSON.parse(payload).operation).toBe("delete");
 	});
 
 	it("accepts string resource ids", async () => {
 		await emit("samples", "abc123", "update");
 
-		const [, payload] = notify.mock.calls[0];
+		const [, payload] = notify.mock.calls[0] ?? [];
 		expect(JSON.parse(payload).resource_id).toBe("abc123");
 	});
 });

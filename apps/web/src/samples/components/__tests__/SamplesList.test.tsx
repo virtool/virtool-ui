@@ -63,7 +63,13 @@ describe("<SamplesList />", () => {
 		await renderWithRouter(<SamplesList labels={labels} />, path);
 		expect(await screen.findByText("Samples")).toBeInTheDocument();
 
-		expect(screen.getByText(samples[0].name)).toBeInTheDocument();
+		const [firstSample] = samples;
+
+		if (!firstSample) {
+			throw new Error("expected a sample");
+		}
+
+		expect(screen.getByText(firstSample.name)).toBeInTheDocument();
 		expect(screen.getByText("Labels")).toBeInTheDocument();
 	});
 

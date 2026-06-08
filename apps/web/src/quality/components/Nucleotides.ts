@@ -34,13 +34,17 @@ export function drawNucleotidesChart(
 
 	// Append the four plot lines to the SVG.
 	unzip(data).forEach((set: number[], index: number) => {
+		const serie = series[index];
+		if (!serie) {
+			return;
+		}
 		svg
 			.append("path")
 			.attr("class", "graph-line")
 			.attr("d", () => lineDrawer(set))
-			.attr("data-legend", () => series[index].label)
+			.attr("data-legend", () => serie.label)
 			.attr("fill", "none")
-			.attr("stroke", () => series[index].color);
+			.attr("stroke", () => serie.color);
 	});
 
 	// Append x-axis and label.

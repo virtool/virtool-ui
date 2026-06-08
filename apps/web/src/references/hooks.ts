@@ -56,7 +56,7 @@ export function useUpdateSourceTypes(
 			const updatedSourceTypes = data.body[key];
 
 			if (sourceTypes.length > updatedSourceTypes) {
-				setLastRemoved(difference(sourceTypes, updatedSourceTypes)[0]);
+				setLastRemoved(difference(sourceTypes, updatedSourceTypes)[0] ?? "");
 			} else {
 				setLastRemoved("");
 			}

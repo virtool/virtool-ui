@@ -65,6 +65,9 @@ describe("<AccountProfile />", () => {
 		expect(input).toHaveValue("");
 
 		const button = screen.getAllByRole("button", { name: "Change" })[2];
+		if (!button) {
+			throw new Error("expected button");
+		}
 
 		await userEvent.type(input, "invalid");
 		await userEvent.click(button);
@@ -184,6 +187,9 @@ describe("<AccountProfile />", () => {
 		expect(await screen.findByText("Password")).toBeInTheDocument();
 
 		const button = screen.getAllByRole("button", { name: "Change" })[1];
+		if (!button) {
+			throw new Error("expected button");
+		}
 
 		const oldPasswordInput = screen.getByLabelText("Old Password");
 		const newPasswordInput = screen.getByLabelText("New Password");
@@ -222,6 +228,9 @@ describe("<AccountProfile />", () => {
 		await screen.findByText("Password");
 
 		const button = screen.getAllByRole("button", { name: "Change" })[1];
+		if (!button) {
+			throw new Error("expected button");
+		}
 		const oldPasswordInput = screen.getByLabelText("Old Password");
 		const newPasswordInput = screen.getByLabelText("New Password");
 

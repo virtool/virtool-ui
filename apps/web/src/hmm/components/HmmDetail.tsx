@@ -46,7 +46,7 @@ export default function HmmDetail() {
 		</Label>
 	));
 
-	const title = data.names[0];
+	const title = data.names[0] ?? "";
 
 	return (
 		<div>

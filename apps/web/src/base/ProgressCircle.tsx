@@ -54,10 +54,12 @@ function getProgressColor(state: JobState): string {
 }
 
 function getTrackColor(color: string): string {
+	const fallback = colorToHex.greyLight ?? "#CBD5E0";
+
 	if (color === "grey") {
-		return colorToHex.greyLight;
+		return fallback;
 	}
-	return colorToHex[`${color}Lightest`] || colorToHex.greyLight;
+	return colorToHex[`${color}Lightest`] ?? fallback;
 }
 
 type ProgressCircleProps = {
@@ -71,7 +73,7 @@ export default function ProgressCircle({
 	size = "md",
 	state = "pending",
 }: ProgressCircleProps) {
-	const circleSize = progressCircleSizes[size];
+	const circleSize = progressCircleSizes[size] ?? 20;
 	const color = getProgressColor(state);
 	const radius = calculateRadius(circleSize);
 	const strokeWidth = calculateStrokeWidth(circleSize);

@@ -43,7 +43,8 @@ describe("<LoginForm />", () => {
 		await userEvent.click(screen.getByRole("button", { name: "Login" }));
 
 		await waitFor(() => expect(loginMock).toHaveBeenCalledTimes(1));
-		expect(loginMock.mock.calls[0][0]).toEqual({
+		const [loginArgs] = loginMock.mock.calls[0] ?? [];
+		expect(loginArgs).toEqual({
 			handle,
 			password,
 			remember: true,

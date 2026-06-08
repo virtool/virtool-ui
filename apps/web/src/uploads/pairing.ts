@@ -42,8 +42,14 @@ export function detectMate(name: string): Mate | null {
 		const match = pattern.exec(name);
 
 		if (match) {
-			const side = Number(match[1]) as 1 | 2;
-			const digitIndex = match.index + match[0].indexOf(match[1]);
+			const full = match[0];
+			const digit = match[1];
+			if (full === undefined || digit === undefined) {
+				continue;
+			}
+
+			const side = Number(digit) as 1 | 2;
+			const digitIndex = match.index + full.indexOf(digit);
 			const stem =
 				name.slice(0, digitIndex) + MATE_TOKEN + name.slice(digitIndex + 1);
 
@@ -87,6 +93,10 @@ export function buildReadRows(files: Upload[]): ReadRow[] {
 		}
 
 		const [first, second] = group;
+		if (first === undefined || second === undefined) {
+			continue;
+		}
+
 		const firstSide = mates.get(first.id)?.side;
 		const secondSide = mates.get(second.id)?.side;
 

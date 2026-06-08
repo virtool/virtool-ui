@@ -14,8 +14,13 @@ type SortConfig = {
 	order: "desc" | "asc";
 };
 
+const probabilityConfig: SortConfig = {
+	getValue: (item) => item.probability,
+	order: "desc",
+};
+
 const sortConfigs: Record<string, SortConfig> = {
-	probability: { getValue: (item) => item.probability, order: "desc" },
+	probability: probabilityConfig,
 	coverage: { getValue: (item) => item.coverage, order: "desc" },
 	name: { getValue: (item) => item.name, order: "asc" },
 };
@@ -38,11 +43,9 @@ export function IimiViewer({ detail }: { detail: FormattedIimiAnalysis }) {
 		(item) => item.probability && item.probability >= minimumProbability,
 	);
 
-	const sortedHits = orderBy(
-		hits,
-		[sortConfigs[sort].getValue],
-		[sortConfigs[sort].order],
-	);
+	const sortConfig = sortConfigs[sort] ?? probabilityConfig;
+
+	const sortedHits = orderBy(hits, [sortConfig.getValue], [sortConfig.order]);
 
 	return (
 		<>

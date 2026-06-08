@@ -57,25 +57,23 @@ describe("<HmmDetail />", () => {
 			expect(await screen.findByText("Cluster Members")).toBeInTheDocument();
 			expect(screen.getByText(hmmDetail.entries.length)).toBeInTheDocument();
 
+			const firstEntry = hmmDetail.entries[0];
+			const secondEntry = hmmDetail.entries[1];
+			if (!firstEntry || !secondEntry) {
+				throw new Error("expected at least two entries");
+			}
+
 			expect(screen.getByText("Accession")).toBeInTheDocument();
-			expect(
-				screen.getByText(hmmDetail.entries[0].accession),
-			).toBeInTheDocument();
-			expect(
-				screen.getByText(hmmDetail.entries[1].accession),
-			).toBeInTheDocument();
+			expect(screen.getByText(firstEntry.accession)).toBeInTheDocument();
+			expect(screen.getByText(secondEntry.accession)).toBeInTheDocument();
 
 			expect(screen.getByText("Name")).toBeInTheDocument();
-			expect(screen.getByText(hmmDetail.entries[0].name)).toBeInTheDocument();
-			expect(screen.getByText(hmmDetail.entries[1].name)).toBeInTheDocument();
+			expect(screen.getByText(firstEntry.name)).toBeInTheDocument();
+			expect(screen.getByText(secondEntry.name)).toBeInTheDocument();
 
 			expect(screen.getByText("Organism")).toBeInTheDocument();
-			expect(
-				screen.queryByText(hmmDetail.entries[0].organism),
-			).toBeInTheDocument();
-			expect(
-				screen.queryByText(hmmDetail.entries[1].organism),
-			).toBeInTheDocument();
+			expect(screen.queryByText(firstEntry.organism)).toBeInTheDocument();
+			expect(screen.queryByText(secondEntry.organism)).toBeInTheDocument();
 
 			scope.done();
 		});

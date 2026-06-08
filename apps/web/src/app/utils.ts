@@ -105,7 +105,7 @@ export function toThousand(num: number): string {
 export function toScientificNotation(num: number): string {
 	if (num < 0.01 || num > 1000) {
 		const [coefficient, exponent] = num.toExponential().split("e");
-		return `${numbro(coefficient).format("0.00")}E${exponent.replace("+", "")}`;
+		return `${numbro(coefficient).format("0.00")}E${(exponent ?? "").replace("+", "")}`;
 	}
 
 	return numbro(num).format("0.000");

@@ -23,12 +23,14 @@ describe("<HmmList />", () => {
 
 		expect(await screen.findByPlaceholderText("Name")).toBeInTheDocument();
 
-		expect(
-			screen.getByText(fakeHMMData.documents[0].cluster),
-		).toBeInTheDocument();
-		expect(
-			screen.getByText(fakeHMMData.documents[0].names[0]),
-		).toBeInTheDocument();
+		const document = fakeHMMData.documents[0];
+		const name = document?.names[0];
+		if (!document || !name) {
+			throw new Error("expected a document with a name");
+		}
+
+		expect(screen.getByText(document.cluster)).toBeInTheDocument();
+		expect(screen.getByText(name)).toBeInTheDocument();
 
 		scope.done();
 	});

@@ -9,7 +9,11 @@ import { ManageUsers } from "../ManageUsers";
 describe("<ManageUsers />", () => {
 	it("should render correctly with 3 users", async () => {
 		const users = createFakeUsers(3);
-		users[0].administrator_role = "full";
+		const [firstUser] = users;
+		if (!firstUser) {
+			throw new Error("expected user");
+		}
+		firstUser.administrator_role = "full";
 		await mockApiFindUsers(users);
 		const account = createFakeAccount({
 			administrator_role: "full",
@@ -42,6 +46,10 @@ describe("<ManageUsers />", () => {
 
 	it("should render correctly if account has insufficient permissions", async () => {
 		const users = createFakeUsers(3);
+		const [firstUser] = users;
+		if (!firstUser) {
+			throw new Error("expected user");
+		}
 
 		mockApiFindUsers(users);
 		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
@@ -52,7 +60,7 @@ describe("<ManageUsers />", () => {
 			await screen.findByText("You do not have permission to manage users."),
 		).toBeInTheDocument();
 		expect(screen.getByText("Contact an administrator.")).toBeInTheDocument();
-		expect(screen.queryByText(users[0].handle)).not.toBeInTheDocument();
+		expect(screen.queryByText(firstUser.handle)).not.toBeInTheDocument();
 		expect(
 			screen.queryByRole("button", { name: "Create" }),
 		).not.toBeInTheDocument();

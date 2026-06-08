@@ -29,11 +29,19 @@ function renderWithAnalysisSearch(
 describe("<NuvsViewer />", () => {
 	let sample: ReturnType<typeof createFakeSample>;
 	let nuvs: ReturnType<typeof createFakeFormattedNuVsAnalysis>;
+	let firstHit: (typeof nuvs.results.hits)[number];
 	let props: { detail: typeof nuvs; sample: typeof sample };
 
 	beforeEach(() => {
 		sample = createFakeSample();
 		nuvs = createFakeFormattedNuVsAnalysis();
+
+		const [hit] = nuvs.results.hits;
+		if (!hit) {
+			throw new Error("expected fake analysis to contain at least one hit");
+		}
+		firstHit = hit;
+
 		props = {
 			detail: nuvs,
 			sample: sample,
@@ -45,7 +53,7 @@ describe("<NuvsViewer />", () => {
 	describe("<NuVsDetail />", () => {
 		it("should render correctly", async () => {
 			renderWithAnalysisSearch(<NuvsViewer {...props} />, {
-				activeHit: String(nuvs.results.hits[0].id),
+				activeHit: String(firstHit.id),
 			});
 
 			expect(
@@ -60,12 +68,9 @@ describe("<NuvsViewer />", () => {
 		});
 
 		it("should render blast when clicked", async () => {
-			const scope = mockApiBlastNuVs(
-				nuvs.id,
-				String(nuvs.results.hits[0].index),
-			);
+			const scope = mockApiBlastNuVs(nuvs.id, String(firstHit.index));
 			renderWithAnalysisSearch(<NuvsViewer {...props} />, {
-				activeHit: String(nuvs.results.hits[0].id),
+				activeHit: String(firstHit.id),
 			});
 
 			await userEvent.click(
@@ -78,7 +83,7 @@ describe("<NuvsViewer />", () => {
 	describe("<NuVsExport />", () => {
 		it("should render export dialog when exporting", async () => {
 			renderWithAnalysisSearch(<NuvsViewer {...props} />, {
-				activeHit: String(nuvs.results.hits[0].id),
+				activeHit: String(firstHit.id),
 			});
 
 			await userEvent.click(screen.getByRole("button", { name: "Export" }));

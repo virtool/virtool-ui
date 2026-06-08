@@ -47,7 +47,7 @@ export default function Sequences({
 	));
 
 	let isolateName = `${activeIsolate.source_type} ${activeIsolate.source_name}`;
-	isolateName = isolateName[0].toUpperCase() + isolateName.slice(1);
+	isolateName = (isolateName[0] ?? "").toUpperCase() + isolateName.slice(1);
 
 	if (!sequenceComponents.length) {
 		sequenceComponents = [

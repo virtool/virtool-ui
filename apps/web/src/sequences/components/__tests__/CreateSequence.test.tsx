@@ -12,14 +12,18 @@ describe("<CreateSequence>", () => {
 	let reference: ReturnType<typeof createFakeReference>;
 
 	function renderCreateSequence(setOpen = vi.fn()) {
+		const isolate = otu.isolates[0];
+		if (!isolate) {
+			throw new Error("expected an isolate");
+		}
 		return renderWithProviders(
 			<CreateSequence
-				isolateId={otu.isolates[0].id}
+				isolateId={isolate.id}
 				open
 				otuId={otu.id}
 				refId={reference.id}
 				schema={otu.schema}
-				sequences={otu.isolates[0].sequences}
+				sequences={isolate.sequences}
 				setOpen={setOpen}
 			/>,
 		);
@@ -36,14 +40,20 @@ describe("<CreateSequence>", () => {
 	});
 
 	it("should update fields on typing", async () => {
+		const isolate = otu.isolates[0];
+		const segment = otu.schema[0];
+		if (!isolate || !segment) {
+			throw new Error("expected an isolate and a schema segment");
+		}
+
 		const scope = mockApiAddSequence(
 			otu.id,
-			otu.isolates[0].id,
+			isolate.id,
 			"user_typed_accession",
 			"user_typed_host",
 			"user_typed_definition",
 			"ATGRYKM",
-			otu.schema[0].name,
+			segment.name,
 		);
 
 		renderCreateSequence();
@@ -63,7 +73,7 @@ describe("<CreateSequence>", () => {
 
 		await userEvent.click(screen.getByRole("combobox"));
 		await userEvent.click(
-			await screen.findByRole("option", { name: otu.schema[0].name }),
+			await screen.findByRole("option", { name: segment.name }),
 		);
 		await userEvent.type(
 			screen.getByRole("textbox", { name: "Accession (ID)" }),
@@ -111,21 +121,27 @@ describe("<CreateSequence>", () => {
 	});
 
 	it("should clear form cache after submitting", async () => {
+		const isolate = otu.isolates[0];
+		const segment = otu.schema[0];
+		if (!isolate || !segment) {
+			throw new Error("expected an isolate and a schema segment");
+		}
+
 		const scope = mockApiAddSequence(
 			otu.id,
-			otu.isolates[0].id,
+			isolate.id,
 			"user_typed_accession",
 			"user_typed_host",
 			"user_typed_definition",
 			"ATGRYKM",
-			otu.schema[0].name,
+			segment.name,
 		);
 
 		renderCreateSequence();
 
 		await userEvent.click(await screen.findByRole("combobox"));
 		await userEvent.click(
-			await screen.findByRole("option", { name: otu.schema[0].name }),
+			await screen.findByRole("option", { name: segment.name }),
 		);
 		await userEvent.type(
 			screen.getByRole("textbox", { name: "Accession (ID)" }),

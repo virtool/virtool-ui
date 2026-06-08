@@ -14,10 +14,22 @@ describe("<RemoveSequence />", () => {
 
 	beforeEach(() => {
 		otu = createFakeOtu();
-		isolate = otu.isolates[0];
-		sequence = isolate.sequences[0];
+		const firstIsolate = otu.isolates[0];
+		if (!firstIsolate) {
+			throw new Error("expected an isolate");
+		}
+		isolate = firstIsolate;
+		const firstSequence = isolate.sequences[0];
+		if (!firstSequence) {
+			throw new Error("expected a sequence");
+		}
+		sequence = firstSequence;
+		const sourceTypeInitial = isolate.source_type[0];
+		if (!sourceTypeInitial) {
+			throw new Error("expected a source type");
+		}
 		const sourceType =
-			isolate.source_type[0].toUpperCase() + isolate.source_type.slice(1);
+			sourceTypeInitial.toUpperCase() + isolate.source_type.slice(1);
 		isolateName = `${sourceType} ${isolate.source_name}`;
 	});
 

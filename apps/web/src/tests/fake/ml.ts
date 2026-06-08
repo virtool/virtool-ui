@@ -48,7 +48,7 @@ export function createFakeMLModel(overrides?: Partial<MlModel>): MlModel {
 
 	return {
 		...createFakeMLModelMinimal(overrides),
-		latest_release: releases[0],
+		latest_release: releases[0] ?? null,
 		releases,
 		...overrides,
 	};

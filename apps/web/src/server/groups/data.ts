@@ -1,6 +1,7 @@
 import { asc, count, eq, ilike } from "drizzle-orm";
 import type { PostgresError } from "postgres";
 import { db } from "../db/pg";
+import { takeFirstOrThrow } from "../db/rows";
 import {
 	type GroupPermissions,
 	type GroupRow,
@@ -159,14 +160,16 @@ export async function getGroup(groupId: number): Promise<Group> {
 
 export async function createGroup(name: string): Promise<Group> {
 	try {
-		const [row] = await db
-			.insert(groupsTable)
-			.values({
-				name,
-				legacyId: null,
-				permissions: generateBasePermissions(),
-			})
-			.returning();
+		const row = takeFirstOrThrow(
+			await db
+				.insert(groupsTable)
+				.values({
+					name,
+					legacyId: null,
+					permissions: generateBasePermissions(),
+				})
+				.returning(),
+		);
 
 		await emit("groups", row.id, "create");
 

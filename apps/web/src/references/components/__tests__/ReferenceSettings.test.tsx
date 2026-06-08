@@ -51,9 +51,13 @@ test("GlobalSourceTypes", async () => {
 		.get("/api/settings")
 		.reply(200, { ...settings, default_source_types: ["Genotype"] });
 
-	await userEvent.click(
-		(await screen.findAllByRole("button", { name: "remove" }))[0],
-	);
+	const removeButton = (
+		await screen.findAllByRole("button", { name: "remove" })
+	)[0];
+	if (!removeButton) {
+		throw new Error("expected remove button");
+	}
+	await userEvent.click(removeButton);
 
 	await waitFor(() => {
 		expect(

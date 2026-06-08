@@ -25,6 +25,7 @@ function renderWithAnalysisSearch(
 
 describe("<IimiViewer />", () => {
 	let formattedIimiAnalysis: FormattedIimiAnalysis;
+	let firstHit: FormattedIimiHit;
 	let predefinedHits: FormattedIimiHit[];
 
 	beforeEach(() => {
@@ -34,9 +35,15 @@ describe("<IimiViewer />", () => {
 			workflow: "iimi",
 		});
 
+		const [baseHit] = formattedIimiAnalysis.results.hits;
+		if (!baseHit) {
+			throw new Error("expected fake analysis to contain at least one hit");
+		}
+		firstHit = baseHit;
+
 		predefinedHits = [
 			{
-				...formattedIimiAnalysis.results.hits[0],
+				...baseHit,
 				id: "high-prob",
 				name: "High Probability Virus",
 				abbreviation: "HPV",
@@ -44,7 +51,7 @@ describe("<IimiViewer />", () => {
 				coverage: 0.3,
 			},
 			{
-				...formattedIimiAnalysis.results.hits[0],
+				...baseHit,
 				id: "med-prob",
 				name: "Medium Probability Virus",
 				abbreviation: "MPV",
@@ -52,7 +59,7 @@ describe("<IimiViewer />", () => {
 				coverage: 0.8,
 			},
 			{
-				...formattedIimiAnalysis.results.hits[0],
+				...baseHit,
 				id: "low-prob",
 				name: "Low Probability Virus",
 				abbreviation: "LPV",
@@ -80,9 +87,7 @@ describe("<IimiViewer />", () => {
 		expect(screen.getByDisplayValue("0.500")).toBeInTheDocument();
 		expect(screen.getByText("Sort: PScore")).toBeInTheDocument();
 
-		expect(
-			screen.getByText(formattedIimiAnalysis.results.hits[0].name),
-		).toBeInTheDocument();
+		expect(screen.getByText(firstHit.name)).toBeInTheDocument();
 	});
 
 	it.each([
@@ -141,16 +146,17 @@ describe("<IimiViewer />", () => {
 			<IimiViewer detail={formattedIimiAnalysis} />,
 		);
 
-		expect(
-			screen.getByText(formattedIimiAnalysis.results.hits[0].name),
-		).toBeInTheDocument();
+		expect(screen.getByText(firstHit.name)).toBeInTheDocument();
 
 		const otu = screen.getByRole("button", {
-			name: new RegExp(formattedIimiAnalysis.results.hits[0].name),
+			name: new RegExp(firstHit.name),
 		});
 		await userEvent.click(otu);
 
-		const isolate = formattedIimiAnalysis.results.hits[0].isolates[0];
+		const isolate = firstHit.isolates[0];
+		if (!isolate) {
+			throw new Error("expected first hit to contain at least one isolate");
+		}
 		const expectedIsolateName = `${isolate.source_type} ${isolate.source_name}`;
 		expect(
 			screen.getByText(new RegExp(expectedIsolateName, "i")),

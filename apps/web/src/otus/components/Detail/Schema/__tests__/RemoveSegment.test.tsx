@@ -12,7 +12,11 @@ describe("<RemoveSegment />", () => {
 
 	beforeEach(() => {
 		otu = createFakeOtu();
-		segmentName = otu.schema[0].name;
+		const segment = otu.schema[0];
+		if (!segment) {
+			throw new Error("expected a schema segment");
+		}
+		segmentName = segment.name;
 	});
 
 	afterEach(() => nock.cleanAll());

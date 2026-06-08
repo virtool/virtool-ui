@@ -1,5 +1,6 @@
 import { count, desc, eq, inArray } from "drizzle-orm";
 import type { Db } from "../db/pg";
+import { takeFirstOrThrow } from "../db/rows";
 import {
 	type JobClaim,
 	type JobStep,
@@ -97,10 +98,9 @@ function buildCounts(
 	}
 
 	for (const row of rows) {
-		if (!counts[row.state]) {
-			counts[row.state] = {};
-		}
-		counts[row.state][row.workflow] = row.count;
+		const workflowCounts = counts[row.state] ?? {};
+		counts[row.state] = workflowCounts;
+		workflowCounts[row.workflow] = row.count;
 	}
 
 	return counts;
@@ -114,41 +114,43 @@ export async function findJobs(
 	// caller needs to scope jobs by user.
 	const stateFilter = states.length ? inArray(jobs.state, states) : undefined;
 
-	const [countRows, [{ value: totalCount }], foundCountResult, rows] =
-		await Promise.all([
-			db
-				.select({
-					state: jobs.state,
-					workflow: jobs.workflow,
-					count: count(),
-				})
-				.from(jobs)
-				.groupBy(jobs.state, jobs.workflow),
-			db.select({ value: count() }).from(jobs),
-			// Without a state filter the found count equals the total count, so
-			// skip the redundant query and reuse totalCount below.
-			stateFilter
-				? db.select({ value: count() }).from(jobs).where(stateFilter)
-				: undefined,
-			db
-				.select({
-					id: jobs.id,
-					created_at: jobs.created_at,
-					state: jobs.state,
-					steps: jobs.steps,
-					workflow: jobs.workflow,
-					userId: users.id,
-					handle: users.handle,
-				})
-				.from(jobs)
-				.innerJoin(users, eq(jobs.user_id, users.id))
-				.where(stateFilter)
-				.orderBy(desc(jobs.created_at))
-				.offset((page - 1) * perPage)
-				.limit(perPage),
-		]);
+	const [countRows, totalCountRows, foundCountRows, rows] = await Promise.all([
+		db
+			.select({
+				state: jobs.state,
+				workflow: jobs.workflow,
+				count: count(),
+			})
+			.from(jobs)
+			.groupBy(jobs.state, jobs.workflow),
+		db.select({ value: count() }).from(jobs),
+		// Without a state filter the found count equals the total count, so
+		// skip the redundant query and reuse totalCount below.
+		stateFilter
+			? db.select({ value: count() }).from(jobs).where(stateFilter)
+			: undefined,
+		db
+			.select({
+				id: jobs.id,
+				created_at: jobs.created_at,
+				state: jobs.state,
+				steps: jobs.steps,
+				workflow: jobs.workflow,
+				userId: users.id,
+				handle: users.handle,
+			})
+			.from(jobs)
+			.innerJoin(users, eq(jobs.user_id, users.id))
+			.where(stateFilter)
+			.orderBy(desc(jobs.created_at))
+			.offset((page - 1) * perPage)
+			.limit(perPage),
+	]);
 
-	const foundCount = foundCountResult ? foundCountResult[0].value : totalCount;
+	const totalCount = takeFirstOrThrow(totalCountRows).value;
+	const foundCount = foundCountRows
+		? takeFirstOrThrow(foundCountRows).value
+		: totalCount;
 
 	const items = rows.map((row) => ({
 		id: row.id,

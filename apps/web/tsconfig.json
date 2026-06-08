@@ -39,6 +39,7 @@
 		"module": "ESNext",
 		"moduleResolution": "bundler",
 		"noEmit": true,
+		"noUncheckedIndexedAccess": true,
 		"outDir": "./build/",
 		"rootDir": "./src",
 		"skipLibCheck": true,

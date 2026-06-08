@@ -126,18 +126,24 @@ export function formatNuvsData(detail) {
  * @param values - an array of numbers
  */
 export function median(values: number[]): number {
+	if (values.length === 0) {
+		return 0;
+	}
+
 	const sorted = values.slice().sort((a, b) => a - b);
 
 	const midIndex = (sorted.length - 1) / 2;
 
 	if (midIndex % 1 === 0) {
-		return sorted[midIndex];
+		// midIndex is an in-range integer index because the array is non-empty.
+		return sorted[midIndex] ?? 0;
 	}
 
-	const lowerIndex = Math.floor(midIndex);
-	const upperIndex = Math.ceil(midIndex);
+	// floor and ceil of midIndex are both in-range indices of the non-empty array.
+	const lower = sorted[Math.floor(midIndex)] ?? 0;
+	const upper = sorted[Math.ceil(midIndex)] ?? 0;
 
-	return Math.round((sorted[lowerIndex] + sorted[upperIndex]) / 2);
+	return Math.round((lower + upper) / 2);
 }
 
 /**
@@ -446,16 +452,18 @@ export function combineUntrustworthyRegions(
 		.flat()
 		.sort((a, b) => a[0] - b[0]);
 
-	if (sortedUntrustworthyRanges.length === 0) {
+	const first = sortedUntrustworthyRanges.shift();
+
+	if (first === undefined) {
 		return [];
 	}
 
-	const combined = [sortedUntrustworthyRanges.shift()] as [number, number][];
+	const combined: UntrustworthyRange[] = [first];
 
 	sortedUntrustworthyRanges.forEach((range) => {
 		const last = combined[combined.length - 1];
 
-		if (range[0] <= last[1]) {
+		if (last && range[0] <= last[1]) {
 			last[1] = range[1];
 		} else {
 			combined.push(range);
