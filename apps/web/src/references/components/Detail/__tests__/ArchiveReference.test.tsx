@@ -7,18 +7,8 @@ import {
 } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
-import { useState } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 import ArchiveReference from "../ArchiveReference";
-
-function ArchiveReferenceHarness({
-	detail,
-}: {
-	detail: ReturnType<typeof createFakeReference>;
-}) {
-	const [open, setOpen] = useState(true);
-	return <ArchiveReference detail={detail} open={open} setOpen={setOpen} />;
-}
 
 function getDialogTitle(verb: "Archive" | "Unarchive", name: string) {
 	return screen.queryByRole("heading", {
@@ -34,8 +24,9 @@ describe("<ArchiveReference />", () => {
 		const archived = { ...detail, archived: true };
 		const scope = mockApiArchiveReference(detail.id, archived);
 
-		await renderWithRouter(<ArchiveReferenceHarness detail={detail} />);
+		await renderWithRouter(<ArchiveReference detail={detail} />);
 
+		await userEvent.click(screen.getByRole("button", { name: "archive" }));
 		expect(getDialogTitle("Archive", detail.name)).toBeInTheDocument();
 
 		await userEvent.click(screen.getByRole("button", { name: "Archive" }));
@@ -52,8 +43,9 @@ describe("<ArchiveReference />", () => {
 		const unarchived = { ...detail, archived: false };
 		const scope = mockApiUnarchiveReference(detail.id, unarchived);
 
-		await renderWithRouter(<ArchiveReferenceHarness detail={detail} />);
+		await renderWithRouter(<ArchiveReference detail={detail} />);
 
+		await userEvent.click(screen.getByRole("button", { name: "unarchive" }));
 		expect(getDialogTitle("Unarchive", detail.name)).toBeInTheDocument();
 
 		await userEvent.click(screen.getByRole("button", { name: "Unarchive" }));
@@ -71,8 +63,9 @@ describe("<ArchiveReference />", () => {
 			.post(`/api/refs/${detail.id}/archive`)
 			.reply(409, { message: "The official reference cannot be archived." });
 
-		await renderWithRouter(<ArchiveReferenceHarness detail={detail} />);
+		await renderWithRouter(<ArchiveReference detail={detail} />);
 
+		await userEvent.click(screen.getByRole("button", { name: "archive" }));
 		await userEvent.click(screen.getByRole("button", { name: "Archive" }));
 
 		expect(
@@ -89,8 +82,9 @@ describe("<ArchiveReference />", () => {
 			.post(`/api/refs/${detail.id}/archive`)
 			.reply(409);
 
-		await renderWithRouter(<ArchiveReferenceHarness detail={detail} />);
+		await renderWithRouter(<ArchiveReference detail={detail} />);
 
+		await userEvent.click(screen.getByRole("button", { name: "archive" }));
 		await userEvent.click(screen.getByRole("button", { name: "Archive" }));
 
 		expect(
@@ -104,8 +98,9 @@ describe("<ArchiveReference />", () => {
 		const detail = createFakeReference({ archived: false });
 		const scope = mockApiArchiveReference(detail.id, detail, 500);
 
-		await renderWithRouter(<ArchiveReferenceHarness detail={detail} />);
+		await renderWithRouter(<ArchiveReference detail={detail} />);
 
+		await userEvent.click(screen.getByRole("button", { name: "archive" }));
 		await userEvent.click(screen.getByRole("button", { name: "Archive" }));
 
 		expect(
@@ -119,8 +114,9 @@ describe("<ArchiveReference />", () => {
 		const detail = createFakeReference({ archived: false });
 		const scope = mockApiArchiveReference(detail.id, detail);
 
-		await renderWithRouter(<ArchiveReferenceHarness detail={detail} />);
+		await renderWithRouter(<ArchiveReference detail={detail} />);
 
+		await userEvent.click(screen.getByRole("button", { name: "archive" }));
 		await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
 		await waitFor(() => {
