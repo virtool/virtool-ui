@@ -279,6 +279,14 @@ constraints, mappings, or decisions that apply to your work.
 - **Issue prefix**: `VIR`
 - **Default label**: Frontend
 
+### Issue conventions
+
+- Capitalize issue titles.
+- Place issues in **Todo** by default; use **Backlog** only when explicitly
+  asked. If an issue seems like it should be Backlog, say so and ask.
+- Never assign issues to anyone.
+- Label bugs as **Bug** in addition to any other labels.
+
 ## Code style
 
 The basics:
@@ -387,6 +395,11 @@ and make commits easier to find later.
 - Don't use `git -C <path>` unless necessary. It triggers permission prompts
   that aren't worth the trouble. Run git commands from the working directory
   instead.
+
+### GitHub
+
+- PR titles must follow Conventional Commits format so they can be cleanly
+  squash-merged into a single well-formed commit.
 
 ## Testing
 
