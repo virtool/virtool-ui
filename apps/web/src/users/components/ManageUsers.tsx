@@ -11,13 +11,8 @@ import CreateUser from "./CreateUser";
 import UsersList from "./UsersList";
 
 type ManageUsersProps = {
-	openCreateUser?: boolean;
 	page?: number;
-	setSearch?: (next: {
-		openCreateUser?: boolean;
-		page?: number;
-		status?: string;
-	}) => void;
+	setSearch?: (next: { page?: number; status?: string }) => void;
 	status?: string;
 };
 
@@ -25,7 +20,6 @@ type ManageUsersProps = {
  * Displays a list of editable users and tools for sorting through and creating users
  */
 export function ManageUsers({
-	openCreateUser = false,
 	page = 1,
 	setSearch = () => {},
 	status = "active",
@@ -56,10 +50,7 @@ export function ManageUsers({
 						<ToggleGroupItem value="active">Active</ToggleGroupItem>
 						<ToggleGroupItem value="deactivated">Deactivated</ToggleGroupItem>
 					</ToggleGroup>
-					<CreateUser
-						open={openCreateUser}
-						setOpen={(openCreateUser) => setSearch({ openCreateUser })}
-					/>
+					<CreateUser />
 				</Toolbar>
 
 				<UsersList

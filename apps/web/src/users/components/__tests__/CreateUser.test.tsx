@@ -3,22 +3,15 @@ import userEvent from "@testing-library/user-event";
 import { mockApiCreateUser } from "@tests/api/users";
 import { createFakeUser } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
-import { useState } from "react";
 import { describe, expect, it } from "vitest";
 import CreateUser from "../CreateUser";
-
-function CreateUserHarness() {
-	const [open, setOpen] = useState(false);
-
-	return <CreateUser open={open} setOpen={setOpen} />;
-}
 
 describe("<CreateUser />", () => {
 	it("creates user once form is submitted", async () => {
 		const usernameInput = "Username";
 		const passwordInput = "Password";
 		const scope = mockApiCreateUser(createFakeUser({ handle: usernameInput }));
-		await renderWithRouter(<CreateUserHarness />);
+		await renderWithRouter(<CreateUser />);
 
 		await userEvent.click(screen.getByRole("button"));
 
@@ -36,7 +29,7 @@ describe("<CreateUser />", () => {
 	});
 
 	it("should render correct username error message", async () => {
-		await renderWithRouter(<CreateUserHarness />);
+		await renderWithRouter(<CreateUser />);
 		await userEvent.click(screen.getByRole("button"));
 
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
