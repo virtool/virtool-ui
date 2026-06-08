@@ -4,8 +4,13 @@ import userEvent from "@testing-library/user-event";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { mockApiCreateSubtraction } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import SubtractionCreate from "../SubtractionCreate";
+
+async function openDialog() {
+	await renderWithRouter(<SubtractionCreate />);
+	await userEvent.click(screen.getByRole("button", { name: "Create" }));
+}
 
 describe("<SubtractionCreate />", () => {
 	afterEach(() => {
@@ -14,7 +19,7 @@ describe("<SubtractionCreate />", () => {
 
 	it("should render when no uploads available", async () => {
 		mockApiListFiles([]);
-		await renderWithRouter(<SubtractionCreate open setOpen={vi.fn()} />);
+		await openDialog();
 
 		expect(await screen.findByText(/no files found/i)).toBeInTheDocument();
 	});
@@ -25,7 +30,7 @@ describe("<SubtractionCreate />", () => {
 			type: "subtraction",
 		});
 		mockApiListFiles([file]);
-		await renderWithRouter(<SubtractionCreate open setOpen={vi.fn()} />);
+		await openDialog();
 
 		expect(await screen.findByText(file.name)).toBeInTheDocument();
 		await userEvent.click(await screen.findByText(/save/i));
@@ -49,7 +54,7 @@ describe("<SubtractionCreate />", () => {
 			file.id,
 		);
 
-		await renderWithRouter(<SubtractionCreate open setOpen={vi.fn()} />);
+		await openDialog();
 
 		await userEvent.type(await screen.findByLabelText("Name"), name);
 		await userEvent.type(screen.getByLabelText("Nickname"), nickname);
@@ -80,7 +85,7 @@ describe("<SubtractionCreate />", () => {
 		);
 		mockApiListFiles([file]);
 
-		await renderWithRouter(<SubtractionCreate open setOpen={vi.fn()} />);
+		await openDialog();
 
 		expect(await screen.findByDisplayValue(name)).toBeInTheDocument();
 		expect(await screen.findByDisplayValue(nickname)).toBeInTheDocument();
@@ -105,7 +110,7 @@ describe("<SubtractionCreate />", () => {
 			file.id,
 		);
 
-		await renderWithRouter(<SubtractionCreate open setOpen={vi.fn()} />);
+		await openDialog();
 
 		await userEvent.type(await screen.findByLabelText("Name"), name);
 		await userEvent.type(screen.getByLabelText("Nickname"), nickname);
