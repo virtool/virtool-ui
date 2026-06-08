@@ -15,7 +15,7 @@ const colorToHex: Record<string, string> = {
 	redLightest: "#FDE1D3",
 };
 
-const progressCircleSizes: Record<string, number> = {
+const progressCircleSizes: Record<sizes, number> = {
 	xs: 12,
 	sm: 16,
 	md: 20,
@@ -73,7 +73,7 @@ export default function ProgressCircle({
 	size = "md",
 	state = "pending",
 }: ProgressCircleProps) {
-	const circleSize = progressCircleSizes[size] ?? 20;
+	const circleSize = progressCircleSizes[size];
 	const color = getProgressColor(state);
 	const radius = calculateRadius(circleSize);
 	const strokeWidth = calculateStrokeWidth(circleSize);
