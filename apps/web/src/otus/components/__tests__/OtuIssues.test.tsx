@@ -25,7 +25,7 @@ describe("<OTUIssues />", () => {
 	});
 
 	it("renders correctly with issues", () => {
-		const props = {
+		const props: ComponentProps<typeof OtuIssues> = {
 			issues: {
 				empty_otu: true,
 				isolate_inconsistency: true,

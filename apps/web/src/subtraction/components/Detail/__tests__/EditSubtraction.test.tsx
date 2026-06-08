@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
 	createFakeSubtraction,
@@ -79,7 +79,7 @@ describe("<EditSubtraction />", () => {
 	it("should call onHide() when closed", async () => {
 		renderWithProviders(<EditSubtraction {...props} />);
 
-		fireEvent.keyDown(document, { key: "Escape" });
+		await userEvent.keyboard("{Escape}");
 
 		await waitFor(() => expect(props.onHide).toHaveBeenCalled());
 	});

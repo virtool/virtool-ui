@@ -66,7 +66,7 @@ describe("<PrimaryGroup />", () => {
 		const scope = mockApiEditUser(
 			props.id,
 			200,
-			{ primary_group: { id: "1", name: "foo" } },
+			{ primary_group: { id: 1, name: "foo" } },
 			userDetails,
 		);
 		renderWithProviders(<PrimaryGroup {...props} />);
