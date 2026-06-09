@@ -125,8 +125,9 @@ export default function NuvsExport({
 			<DialogContent>
 				<DialogTitle>Export Analysis</DialogTitle>
 				<form onSubmit={onSubmit}>
-					<InputLabel>Scope</InputLabel>
+					<InputLabel id="nuvs-export-scope-label">Scope</InputLabel>
 					<ToggleGroup
+						aria-labelledby="nuvs-export-scope-label"
 						className="flex mb-3"
 						value={mode}
 						onValueChange={setMode}
