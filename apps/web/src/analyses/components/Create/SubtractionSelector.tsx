@@ -54,8 +54,12 @@ export default function SubtractionSelector({
 		<CreateAnalysisField>
 			<CreateAnalysisFieldTitle>Subtractions</CreateAnalysisFieldTitle>
 			<div>
-				<InputLabel>Available</InputLabel>
-				<BoxGroup className="h-72">
+				<InputLabel id="subtractions-available-label">Available</InputLabel>
+				<BoxGroup
+					role="group"
+					aria-labelledby="subtractions-available-label"
+					className="h-72"
+				>
 					<CreateAnalysisSelectorSearch
 						label="Filter subtractions"
 						term={term}
@@ -83,8 +87,12 @@ export default function SubtractionSelector({
 				</BoxGroup>
 			</div>
 			<div className={cn("flex", "flex-col")}>
-				<InputLabel>Selected</InputLabel>
-				<BoxGroup className="overflow-y-auto h-72">
+				<InputLabel id="subtractions-selected-label">Selected</InputLabel>
+				<BoxGroup
+					role="group"
+					aria-labelledby="subtractions-selected-label"
+					className="overflow-y-auto h-72"
+				>
 					{selectedSubtractions.length ? (
 						selectedComponents
 					) : (
