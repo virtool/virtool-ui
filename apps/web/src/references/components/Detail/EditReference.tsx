@@ -38,8 +38,19 @@ export default function EditReference({ detail }: EditReferenceProps) {
 	const { mutation } = useUpdateReference(detail.id);
 
 	function handleEdit({ name, description, organism }) {
-		mutation.mutate({ name, description, organism });
-		setOpen(false);
+		mutation.mutate(
+			{ name, description, organism },
+			{
+				onSuccess: () => setOpen(false),
+			},
+		);
+	}
+
+	function handleOpenChange(next: boolean) {
+		if (!next) {
+			mutation.reset();
+			setOpen(false);
+		}
 	}
 
 	return (
@@ -50,7 +61,7 @@ export default function EditReference({ detail }: EditReferenceProps) {
 				tip="modify"
 				onClick={() => setOpen(true)}
 			/>
-			<Dialog open={open} onOpenChange={() => setOpen(false)}>
+			<Dialog open={open} onOpenChange={handleOpenChange}>
 				<DialogContent>
 					<DialogTitle>Edit Reference</DialogTitle>
 					<form onSubmit={handleSubmit((values) => handleEdit({ ...values }))}>
