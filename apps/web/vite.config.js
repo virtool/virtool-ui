@@ -64,7 +64,17 @@ export default defineConfig(({ command }) => ({
 				autoCodeSplitting: true,
 			},
 		}),
-		nitro(),
+		nitro({
+			// `@sentry/profiling-node` ships native `.node` addons the bundler can't
+			// inline. Tracing it (and its native helper) keeps the packages external
+			// and copies them into the server output, so the build doesn't choke on
+			// the binaries and the runtime import resolves. The dist image ships only
+			// `.output`, so the trace is what makes the package available at runtime.
+			traceDeps: [
+				"@sentry/profiling-node*",
+				"@sentry-internal/node-cpu-profiler*",
+			],
+		}),
 		react({
 			include: "**/*.tsx",
 			babel: {

@@ -14,7 +14,7 @@ reverse proxy.
 | -------------- | ------------------ | ---------------------------------------------- |
 | `-p`, `--port` | `VT_UI_PORT`       | The port the UI server should listen on        |
 | `-H`, `--host` | `VT_UI_HOST`       | The host the UI server should listen on        |
-| `--sentry-dsn` | `VT_UI_SENTRY_DSN` | The DSN that sentry will send logged errors to |
+| `--sentry-dsn` | `VT_SENTRY_DSN`    | The DSN that Sentry will send logged errors to |
 
 ## Development
 

@@ -7,7 +7,7 @@ import { readDsn } from "@virtool/sentry";
 const streams = readDsn()
 	? [
 			{
-				level: "warn" as const,
+				level: "info" as const,
 				stream: (await import("./sentryLog")).createSentryLogStream(),
 			},
 		]

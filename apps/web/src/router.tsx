@@ -61,13 +61,18 @@ export function getRouter() {
 		scrollToTopSelectors: [`#${CONTENT_SCROLL_ID}`],
 	});
 
-	if (!router.isServer) {
+	// `import.meta.env.SSR` is a compile-time constant, so the whole block is
+	// dead-code-eliminated from the server bundle. `browserProfilingIntegration`
+	// has no server stub (unlike the replay/tracing integrations), so leaving the
+	// reference in the SSR build would warn about an undefined import.
+	if (!import.meta.env.SSR) {
 		const options = getCommonOptions(import.meta.env);
 		if (options.dsn) {
 			Sentry.init({
 				...options,
 				integrations: [
 					Sentry.tanstackRouterBrowserTracingIntegration(router),
+					Sentry.browserProfilingIntegration(),
 					Sentry.replayIntegration(),
 				],
 			});

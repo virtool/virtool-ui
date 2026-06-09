@@ -7,11 +7,13 @@ export function readDsn(env: ImportMetaEnv): string | undefined {
 	return value && value.length > 0 ? value : undefined;
 }
 
+/** Shared Sentry options for browser-side SDK initialisation. */
 export type CommonBrowserSentryOptions = {
 	dsn: string | undefined;
 	environment: string;
 	sendDefaultPii: boolean;
 	tracesSampleRate: number;
+	profilesSampleRate: number;
 	replaysSessionSampleRate: number;
 	replaysOnErrorSampleRate: number;
 	enableLogs: boolean;
@@ -27,6 +29,9 @@ export function getCommonOptions(
 		environment,
 		sendDefaultPii: true,
 		tracesSampleRate: isProd ? 0.1 : 1.0,
+		// Relative to traced transactions, so the effective profiling rate is
+		// tracesSampleRate * profilesSampleRate.
+		profilesSampleRate: isProd ? 0.5 : 1.0,
 		replaysSessionSampleRate: isProd ? 0.1 : 0,
 		replaysOnErrorSampleRate: 1.0,
 		enableLogs: true,
