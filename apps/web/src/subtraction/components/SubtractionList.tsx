@@ -11,13 +11,8 @@ import SubtractionToolbar from "./SubtractionToolbar";
 
 type SubtractionListProps = {
 	find?: string;
-	openCreateSubtraction?: boolean;
 	page?: number;
-	setSearch?: (next: {
-		find?: string;
-		openCreateSubtraction?: boolean;
-		page?: number;
-	}) => void;
+	setSearch?: (next: { find?: string; page?: number }) => void;
 };
 
 /**
@@ -25,7 +20,6 @@ type SubtractionListProps = {
  */
 export default function SubtractionList({
 	find = "",
-	openCreateSubtraction = false,
 	page = 1,
 	setSearch = () => {},
 }: SubtractionListProps) {
@@ -50,14 +44,7 @@ export default function SubtractionList({
 				</ViewHeaderTitle>
 			</ViewHeader>
 
-			<SubtractionToolbar
-				openCreate={openCreateSubtraction}
-				setOpenCreate={(openCreateSubtraction) =>
-					setSearch({ openCreateSubtraction })
-				}
-				term={find}
-				handleChange={handleChange}
-			/>
+			<SubtractionToolbar term={find} handleChange={handleChange} />
 
 			{!items.length ? (
 				<NoneFoundBox key="subtractions" noun="subtractions" />

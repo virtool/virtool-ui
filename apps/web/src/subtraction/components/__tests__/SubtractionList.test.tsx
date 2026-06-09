@@ -12,7 +12,6 @@ import SubtractionList from "../SubtractionList";
 
 type SubtractionListSearch = {
 	find?: string;
-	openCreateSubtraction?: boolean;
 	page?: number;
 };
 
