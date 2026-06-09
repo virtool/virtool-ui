@@ -5,6 +5,7 @@ export function readDsn(): string | undefined {
 	return value && value.length > 0 ? value : undefined;
 }
 
+/** Shared Sentry options for server-side SDK initialisation. */
 export type CommonSentryOptions = {
 	dsn: string | undefined;
 	environment: string;

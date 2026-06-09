@@ -7,6 +7,7 @@ export function readDsn(env: ImportMetaEnv): string | undefined {
 	return value && value.length > 0 ? value : undefined;
 }
 
+/** Shared Sentry options for browser-side SDK initialisation. */
 export type CommonBrowserSentryOptions = {
 	dsn: string | undefined;
 	environment: string;
