@@ -1,8 +1,7 @@
 import { useCheckAdminRole } from "@administration/hooks";
-import { useFetchUser, useUpdateUser } from "@administration/queries";
+import { useSuspenseUser, useUpdateUser } from "@administration/queries";
 import Alert from "@base/Alert";
 import InitialIcon from "@base/InitialIcon";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { CircleAlert, ShieldUserIcon } from "lucide-react";
 import Label from "@/base/Label";
 import Handle from "./Handle";
@@ -22,16 +21,12 @@ type UserDetailProps = {
  * The detailed view of a user
  */
 export default function UserDetail({ userId }: UserDetailProps) {
-	const { data, isPending } = useFetchUser(userId);
+	const { data } = useSuspenseUser(userId);
 	const { hasPermission: canEdit } = useCheckAdminRole(
-		data?.administrator_role === null ? "users" : "full",
+		data.administrator_role === null ? "users" : "full",
 	);
 
 	const mutation = useUpdateUser();
-
-	if (isPending || !data) {
-		return <LoadingPlaceholder />;
-	}
 
 	if (!canEdit) {
 		return (

@@ -6,6 +6,7 @@ import {
 	useMutation,
 	useQuery,
 	useQueryClient,
+	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { createContext, type ReactNode, useContext } from "react";
 import type { ErrorResponse } from "@/types/api";
@@ -101,6 +102,14 @@ export function useFetchOTU(otuId: string) {
 	});
 }
 
+export function otuHistoryQueryOptions(otuId: string) {
+	return queryOptions<OtuHistory[], ErrorResponse>({
+		queryKey: OTUQueryKeys.history(otuId),
+		queryFn: () =>
+			apiClient.get(`/otus/${otuId}/history`).then((res) => res.body),
+	});
+}
+
 /**
  * Fetches the history of changes for a single OTU
  *
@@ -108,11 +117,17 @@ export function useFetchOTU(otuId: string) {
  * @returns A history list of changes for a single OTU
  */
 export function useFetchOtuHistory(otuId: string) {
-	return useQuery<OtuHistory[], ErrorResponse>({
-		queryKey: OTUQueryKeys.history(otuId),
-		queryFn: () =>
-			apiClient.get(`/otus/${otuId}/history`).then((res) => res.body),
-	});
+	return useQuery(otuHistoryQueryOptions(otuId));
+}
+
+/**
+ * Fetch an OTU's history, suspending until it resolves.
+ *
+ * `data` is always defined, and a failed request throws to the nearest route
+ * error boundary instead of resolving to `undefined`.
+ */
+export function useSuspenseOtuHistory(otuId: string) {
+	return useSuspenseQuery(otuHistoryQueryOptions(otuId));
 }
 
 /**

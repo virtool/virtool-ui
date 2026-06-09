@@ -5,6 +5,7 @@ import {
 	useMutation,
 	useQuery,
 	useQueryClient,
+	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { useState } from "react";
 import type { ErrorResponse } from "@/types/api";
@@ -373,6 +374,19 @@ export function referenceQueryOptions(refId: string) {
  */
 export function useFetchReference(refId: string) {
 	return useQuery(referenceQueryOptions(refId));
+}
+
+/**
+ * Fetch a reference, suspending until it resolves.
+ *
+ * `data` is always defined, and a failed request throws to the nearest route
+ * error boundary instead of resolving to `undefined`. Use this from components
+ * rendered under the `$refId` detail route, whose loader prefetches the
+ * reference — loading and errors are handled by the route's Suspense and
+ * `errorComponent` rather than inline.
+ */
+export function useSuspenseReference(refId: string) {
+	return useSuspenseQuery(referenceQueryOptions(refId));
 }
 
 /**

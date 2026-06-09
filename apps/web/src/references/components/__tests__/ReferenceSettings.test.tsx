@@ -31,12 +31,8 @@ test("GlobalSourceTypes", async () => {
 
 	renderWithProviders(<ReferenceSettings />);
 
-	// Wait for initial request to complete.
-	await waitFor(() =>
-		expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
-	);
-
-	expect(screen.getByText("Clone")).toBeInTheDocument();
+	// Wait for the settings to load (loading is absorbed by Suspense).
+	expect(await screen.findByText("Clone")).toBeInTheDocument();
 	expect(screen.getByText("Genotype")).toBeInTheDocument();
 
 	// Delete 'Clone'.
