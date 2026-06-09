@@ -40,6 +40,7 @@ export default function ApiKeyCreate() {
 		handleSubmit,
 		control,
 		register,
+		reset,
 	} = useForm<FormValues>({
 		defaultValues: {
 			name: "",
@@ -62,6 +63,7 @@ export default function ApiKeyCreate() {
 		if (!open) {
 			setCopied(false);
 			setNewKey("");
+			reset();
 		}
 	}
 
