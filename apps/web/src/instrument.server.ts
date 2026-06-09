@@ -9,10 +9,10 @@ import { getCommonOptions } from "@virtool/sentry";
 const options = getCommonOptions();
 
 if (options.dsn) {
-	// Load the profiler lazily and only when configured. `@sentry/profiling-node`
+	// Import the profiler lazily and only when configured. `@sentry/profiling-node`
 	// pulls in a native CommonJS addon that the Vite/Nitro SSR transform can't
-	// process, so a top-level import would break dev and tests where no DSN is
-	// set. Mirrors the DSN-gated `await import` used for the pino→Sentry stream.
+	// process, so a top-level import breaks dev and tests where no DSN is set.
+	// Mirrors the DSN-gated `await import` used for the pino→Sentry stream.
 	const { nodeProfilingIntegration } = await import("@sentry/profiling-node");
 	Sentry.init({
 		...options,
