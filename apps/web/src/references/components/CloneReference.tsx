@@ -77,18 +77,22 @@ export default function CloneReference({
 			<DialogContent>
 				<DialogTitle>Clone Reference</DialogTitle>
 				<form onSubmit={handleSubmit(onSubmit)}>
-					<InputLabel>Selected reference</InputLabel>
-					{reference && (
-						<Box className="flex items-center">
-							<strong>{reference.name}</strong>
-							<Badge className="ml-1.5">{reference.otu_count} OTUs</Badge>
-							<Attribution
-								className="ml-auto"
-								time={reference.created_at}
-								user={reference.user.handle}
-							/>
-						</Box>
-					)}
+					<dl>
+						<dt className="font-medium mb-2">Selected reference</dt>
+						<dd>
+							{reference && (
+								<Box className="flex items-center">
+									<strong>{reference.name}</strong>
+									<Badge className="ml-1.5">{reference.otu_count} OTUs</Badge>
+									<Attribution
+										className="ml-auto"
+										time={reference.created_at}
+										user={reference.user.handle}
+									/>
+								</Box>
+							)}
+						</dd>
+					</dl>
 					<InputGroup>
 						<InputLabel htmlFor="name">Name</InputLabel>
 						<InputSimple
