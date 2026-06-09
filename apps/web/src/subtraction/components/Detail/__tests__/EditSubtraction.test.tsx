@@ -5,41 +5,42 @@ import {
 	mockApiEditSubtraction,
 } from "@tests/fake/subtractions";
 import { renderWithProviders } from "@tests/setup";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import EditSubtraction, { type EditSubtractionProps } from "../EditSubtraction";
+import type { ComponentProps } from "react";
+import { beforeEach, describe, expect, it } from "vitest";
+import EditSubtraction from "../EditSubtraction";
 
 describe("<EditSubtraction />", () => {
 	const subtraction = createFakeSubtraction();
-	let props: EditSubtractionProps;
+	let props: ComponentProps<typeof EditSubtraction>;
 
 	beforeEach(() => {
-		props = {
-			subtraction,
-			show: true,
-			onHide: vi.fn(),
-		};
+		props = { subtraction };
 	});
 
-	it("should render when [show=false]", () => {
-		props.show = false;
+	it("should render trigger and keep dialog closed initially", () => {
 		renderWithProviders(<EditSubtraction {...props} />);
 
-		expect(screen.queryByRole("textbox", { name: "name" })).toBeNull();
-		expect(screen.queryByRole("textbox", { name: "nickname" })).toBeNull();
-		expect(screen.queryByRole("button", { name: "close" })).toBeNull();
-		expect(screen.queryByText("Save")).toBeNull();
+		expect(screen.getByRole("button", { name: "modify" })).toBeInTheDocument();
+		expect(screen.queryByLabelText("Name")).toBeNull();
+		expect(screen.queryByLabelText("Nickname")).toBeNull();
+	});
+
+	it("should open dialog when trigger is clicked", async () => {
+		renderWithProviders(<EditSubtraction {...props} />);
+
+		await userEvent.click(screen.getByRole("button", { name: "modify" }));
+
+		expect(screen.getByLabelText("Name")).toHaveValue(subtraction.name);
+		expect(screen.getByLabelText("Nickname")).toHaveValue(subtraction.nickname);
 	});
 
 	it("should render after name is changed", async () => {
 		renderWithProviders(<EditSubtraction {...props} />);
 
+		await userEvent.click(screen.getByRole("button", { name: "modify" }));
+
 		const nameInput = screen.getByLabelText("Name");
-		expect(nameInput).toBeInTheDocument();
-		expect(nameInput).toHaveValue(subtraction.name);
-
 		await userEvent.clear(nameInput);
-		expect(nameInput).toHaveValue("");
-
 		await userEvent.type(nameInput, "test");
 		expect(nameInput).toHaveValue("test");
 	});
@@ -47,20 +48,19 @@ describe("<EditSubtraction />", () => {
 	it("should render after nickname is changed", async () => {
 		renderWithProviders(<EditSubtraction {...props} />);
 
+		await userEvent.click(screen.getByRole("button", { name: "modify" }));
+
 		const nicknameInput = screen.getByLabelText("Nickname");
-		expect(nicknameInput).toBeInTheDocument();
-		expect(nicknameInput).toHaveValue(subtraction.nickname);
-
 		await userEvent.clear(nicknameInput);
-		expect(nicknameInput).toHaveValue("");
-
 		await userEvent.type(nicknameInput, "test");
 		expect(nicknameInput).toHaveValue("test");
 	});
 
-	it("should update subtraction when form is submitted", async () => {
+	it("should update subtraction and close dialog when form is submitted", async () => {
 		const scope = mockApiEditSubtraction(subtraction, "newName", "newNickname");
 		renderWithProviders(<EditSubtraction {...props} />);
+
+		await userEvent.click(screen.getByRole("button", { name: "modify" }));
 
 		const nameInput = screen.getByLabelText("Name");
 		await userEvent.clear(nameInput);
@@ -72,15 +72,18 @@ describe("<EditSubtraction />", () => {
 
 		await userEvent.click(screen.getByText("Save"));
 
-		expect(props.onHide).toHaveBeenCalled();
+		await waitFor(() => expect(screen.queryByLabelText("Name")).toBeNull());
 		scope.done();
 	});
 
-	it("should call onHide() when closed", async () => {
+	it("should close dialog on escape", async () => {
 		renderWithProviders(<EditSubtraction {...props} />);
+
+		await userEvent.click(screen.getByRole("button", { name: "modify" }));
+		expect(screen.getByLabelText("Name")).toBeInTheDocument();
 
 		await userEvent.keyboard("{Escape}");
 
-		await waitFor(() => expect(props.onHide).toHaveBeenCalled());
+		await waitFor(() => expect(screen.queryByLabelText("Name")).toBeNull());
 	});
 });

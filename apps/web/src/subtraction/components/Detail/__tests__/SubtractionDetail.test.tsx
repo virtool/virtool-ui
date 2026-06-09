@@ -69,7 +69,7 @@ describe("<SubtractionDetail />", () => {
 
 		expect(await screen.findByText(subtraction.name)).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "modify" })).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: "remove" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "delete" })).toBeInTheDocument();
 
 		scope.done();
 	});
@@ -84,7 +84,7 @@ describe("<SubtractionDetail />", () => {
 
 		expect(await screen.findByText(subtraction.name)).toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: "modify" })).toBeNull();
-		expect(screen.queryByRole("button", { name: "remove" })).toBeNull();
+		expect(screen.queryByRole("button", { name: "delete" })).toBeNull();
 
 		scope.done();
 	});
