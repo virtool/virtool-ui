@@ -1,6 +1,5 @@
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SectionHeader from "@base/SectionHeader";
-import { useFetchReference } from "@references/queries";
+import { useSuspenseReference } from "@references/queries";
 /**
  * The reference settings view allowing users to manage the reference
  */
@@ -15,16 +14,12 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId");
 
 export default function ReferenceSettings() {
 	const { refId } = routeApi.useParams();
-	const { data, isPending } = useFetchReference(refId);
+	const { data } = useSuspenseReference(refId);
 
 	const [editUserId, setEditUserId] = useState<string>();
 	const [editGroupId, setEditGroupId] = useState<string>();
 	const [openAddUser, setOpenAddUser] = useState(false);
 	const [openAddGroup, setOpenAddGroup] = useState(false);
-
-	if (isPending || !data) {
-		return <LoadingPlaceholder />;
-	}
 
 	return (
 		<>
