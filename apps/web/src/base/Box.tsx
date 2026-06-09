@@ -40,8 +40,8 @@ function Box({ children, className = "", onClick, ...rest }: BoxProps) {
 				"rounded-sm",
 				className,
 			)}
-			{...interactiveProps}
 			{...rest}
+			{...interactiveProps}
 		>
 			{children}
 		</div>

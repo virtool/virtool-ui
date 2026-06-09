@@ -4,6 +4,7 @@ import BoxGroup from "@base/BoxGroup";
 import InputLabel from "@base/InputLabel";
 import type { Subtraction, SubtractionOption } from "@subtraction/types";
 import { intersectionWith, xor } from "es-toolkit";
+import { useId } from "react";
 import CreateAnalysisField from "./CreateAnalysisField";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 import { CreateAnalysisSelectorSearch } from "./CreateAnalysisSelectorSearch";
@@ -23,6 +24,8 @@ export default function SubtractionSelector({
 	const [results, term, setTerm] = useFuse<SubtractionOption>(subtractions, [
 		"name",
 	]);
+	const availableLabelId = useId();
+	const selectedLabelId = useId();
 
 	const unselectedSubtractions = results.filter(
 		(subtraction: Subtraction) => !selected.includes(subtraction.id),
@@ -54,10 +57,10 @@ export default function SubtractionSelector({
 		<CreateAnalysisField>
 			<CreateAnalysisFieldTitle>Subtractions</CreateAnalysisFieldTitle>
 			<div>
-				<InputLabel id="subtractions-available-label">Available</InputLabel>
+				<InputLabel id={availableLabelId}>Available</InputLabel>
 				<BoxGroup
 					role="group"
-					aria-labelledby="subtractions-available-label"
+					aria-labelledby={availableLabelId}
 					className="h-72"
 				>
 					<CreateAnalysisSelectorSearch
@@ -87,10 +90,10 @@ export default function SubtractionSelector({
 				</BoxGroup>
 			</div>
 			<div className={cn("flex", "flex-col")}>
-				<InputLabel id="subtractions-selected-label">Selected</InputLabel>
+				<InputLabel id={selectedLabelId}>Selected</InputLabel>
 				<BoxGroup
 					role="group"
-					aria-labelledby="subtractions-selected-label"
+					aria-labelledby={selectedLabelId}
 					className="overflow-y-auto h-72"
 				>
 					{selectedSubtractions.length ? (

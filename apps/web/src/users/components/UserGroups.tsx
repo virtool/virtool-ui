@@ -6,6 +6,7 @@ import NoneFoundSection from "@base/NoneFoundSection";
 import { useListGroups } from "@groups/queries";
 import type { GroupMinimal } from "@groups/types";
 import { xor } from "es-toolkit/array";
+import { useId } from "react";
 import { UserGroup } from "./UserGroup";
 
 type UserGroupsType = {
@@ -22,6 +23,7 @@ type UserGroupsType = {
 export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
 	const { data, isPending } = useListGroups();
 	const mutation = useUpdateUser();
+	const labelId = useId();
 
 	if (isPending || !data) {
 		return <LoadingPlaceholder />;
@@ -41,11 +43,11 @@ export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
 
 	return (
 		<div>
-			<InputLabel id="user-groups-label">Groups</InputLabel>
+			<InputLabel id={labelId}>Groups</InputLabel>
 			<BoxGroup
 				role="listbox"
 				aria-multiselectable
-				aria-labelledby="user-groups-label"
+				aria-labelledby={labelId}
 				className="mb-4"
 			>
 				{data.length ? (
