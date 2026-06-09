@@ -34,22 +34,36 @@ const cspDirectives = [
 
 // Builds one response header for served HTML documents. Each builder receives
 // the per-response CSP nonce; those that don't need it ignore the argument.
-// Adding a document header is a new entry in `documentHeaders`, not another
-// edit to the middleware body.
 type DocumentHeader = (nonce: string) => [name: string, value: string];
 
-const documentHeaders: DocumentHeader[] = [
-	(nonce) => [
+function buildContentSecurityPolicy(
+	nonce: string,
+): [name: string, value: string] {
+	return [
 		"Content-Security-Policy",
 		[...cspDirectives, `script-src 'self' 'nonce-${nonce}'`].join("; "),
-	],
-	// Opt the document into the JS Self-Profiling API so Sentry's browser
-	// profiling integration can sample. A no-op in browsers without the API
-	// (Firefox, Safari), so it is safe to send unconditionally.
-	() => ["Document-Policy", "js-profiling"],
-	// HTML documents carry a per-request nonce and authenticated state; never
-	// let a shared cache hold onto them.
-	() => ["Cache-Control", "no-store"],
+	];
+}
+
+// Opt the document into the JS Self-Profiling API so Sentry's browser profiling
+// integration can sample. A no-op in browsers without the API (Firefox, Safari),
+// so it is safe to send unconditionally.
+function buildDocumentPolicy(): [name: string, value: string] {
+	return ["Document-Policy", "js-profiling"];
+}
+
+// HTML documents carry a per-request nonce and authenticated state; never let a
+// shared cache hold onto them.
+function buildCacheControl(): [name: string, value: string] {
+	return ["Cache-Control", "no-store"];
+}
+
+// Adding a document header is a new entry here, not another edit to the
+// middleware body.
+const documentHeaders: DocumentHeader[] = [
+	buildContentSecurityPolicy,
+	buildDocumentPolicy,
+	buildCacheControl,
 ];
 
 const documentHeadersMiddleware = createMiddleware().server(
@@ -69,7 +83,12 @@ const documentHeadersMiddleware = createMiddleware().server(
 			const [name, value] = build(nonce);
 			headers.set(name, value);
 		}
+		// `response.text()` already decoded the body, so the length and any
+		// encoding headers from the original response no longer describe it.
+		// Leaving them would make clients try to decode an already-decoded body.
 		headers.delete("content-length");
+		headers.delete("content-encoding");
+		headers.delete("transfer-encoding");
 
 		return {
 			...result,
@@ -89,8 +108,9 @@ const csrfMiddleware = createCsrfMiddleware({
 	filter: (ctx) => ctx.handlerType === "serverFn",
 });
 
-// Sentry middleware go first so request and server-function spans wrap the
-// csrf/header/auth work rather than nesting inside it.
+// Sentry middleware go first in each list so the request span wraps the
+// csrf/header request middleware and the function span wraps the auth function
+// middleware, rather than nesting inside them.
 export const startInstance = createStart(() => ({
 	defaultSsr: false,
 	requestMiddleware: [
