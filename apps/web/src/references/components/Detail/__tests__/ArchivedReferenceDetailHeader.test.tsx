@@ -24,6 +24,7 @@ describe("<ArchivedReferenceDetailHeader />", () => {
 		);
 		props = {
 			createdAt: reference.created_at,
+			detail: reference,
 			isRemote: false,
 			name: reference.name,
 			userHandle: reference.user.handle,

@@ -38,7 +38,8 @@ export function createFakeUser(overrides?: Partial<User>): User {
 		groups,
 		last_password_change: faker.date.past().toISOString(),
 		permissions: createFakePermissions(permissions),
-		primary_group: primary_group === undefined ? groups[0] : primary_group,
+		primary_group:
+			primary_group === undefined ? (groups[0] ?? null) : primary_group,
 		...rest,
 	};
 }

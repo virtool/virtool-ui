@@ -118,8 +118,12 @@ export function createFakeFormattedNuVsHit(overrides?: FakeFormattedNuVsHit) {
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetAnalyses(analyses: AnalysisMinimal[]) {
+	const [firstAnalysis] = analyses;
+	if (!firstAnalysis) {
+		throw new Error("expected at least one analysis");
+	}
 	return nock("http://localhost")
-		.get(`/api/samples/${analyses[0].sample.id}/analyses`)
+		.get(`/api/samples/${firstAnalysis.sample.id}/analyses`)
 		.query(true)
 		.reply(200, {
 			page: 1,

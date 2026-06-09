@@ -31,7 +31,12 @@ export default function ImportReference() {
 	});
 
 	function handleDrop(acceptedFiles: File[]) {
-		uploadMutation.mutate(acceptedFiles[0]);
+		const file = acceptedFiles[0];
+		if (file === undefined) {
+			return;
+		}
+
+		uploadMutation.mutate(file);
 	}
 
 	const uploadBarMessage =
@@ -57,7 +62,10 @@ export default function ImportReference() {
 							message={uploadBarMessage}
 							onDrop={(acceptedFiles) => {
 								handleDrop(acceptedFiles);
-								onChange(acceptedFiles[0].name);
+								const file = acceptedFiles[0];
+								if (file) {
+									onChange(file.name);
+								}
 							}}
 							multiple={false}
 						/>

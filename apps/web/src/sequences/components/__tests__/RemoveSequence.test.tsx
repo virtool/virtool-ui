@@ -1,7 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeOtu, mockApiRemoveSequence } from "@tests/fake/otus";
-import { renderWithProviders } from "@tests/setup";
+import { at, renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import RemoveSequence from "../RemoveSequence";
@@ -14,10 +14,11 @@ describe("<RemoveSequence />", () => {
 
 	beforeEach(() => {
 		otu = createFakeOtu();
-		isolate = otu.isolates[0];
-		sequence = isolate.sequences[0];
+		isolate = at(otu.isolates, 0);
+		sequence = at(isolate.sequences, 0);
 		const sourceType =
-			isolate.source_type[0].toUpperCase() + isolate.source_type.slice(1);
+			isolate.source_type.charAt(0).toUpperCase() +
+			isolate.source_type.slice(1);
 		isolateName = `${sourceType} ${isolate.source_name}`;
 	});
 

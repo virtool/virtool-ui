@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import { createFakeTask } from "@tests/fake/tasks";
-import { renderRoute } from "@tests/setup";
+import { at, renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -23,12 +23,11 @@ describe("<HmmList />", () => {
 
 		expect(await screen.findByPlaceholderText("Name")).toBeInTheDocument();
 
-		expect(
-			screen.getByText(fakeHMMData.documents[0].cluster),
-		).toBeInTheDocument();
-		expect(
-			screen.getByText(fakeHMMData.documents[0].names[0]),
-		).toBeInTheDocument();
+		const document = at(fakeHMMData.documents, 0);
+		const name = at(document.names, 0);
+
+		expect(screen.getByText(document.cluster)).toBeInTheDocument();
+		expect(screen.getByText(name)).toBeInTheDocument();
 
 		scope.done();
 	});

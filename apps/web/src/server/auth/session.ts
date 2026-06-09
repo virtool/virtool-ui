@@ -3,6 +3,7 @@ import { randomBytes } from "node:crypto";
 import { eq } from "drizzle-orm";
 
 import type { Db } from "../db/pg";
+import { takeFirstOrThrow } from "../db/rows";
 import { type SessionRow, sessions } from "../db/schema/sessions";
 import { hashToken, newSessionId, newSessionToken } from "./tokens";
 
@@ -43,18 +44,20 @@ export async function createAuthenticatedSession(
 		: SESSION_LIFETIME_NO_REMEMBER_MS;
 	const expiresAt = new Date(now.getTime() + lifetime);
 
-	const [row] = await db
-		.insert(sessions)
-		.values({
-			sessionId,
-			userId,
-			ip,
-			createdAt: now,
-			expiresAt,
-			tokenHash,
-			sessionType: "authenticated",
-		})
-		.returning();
+	const row = takeFirstOrThrow(
+		await db
+			.insert(sessions)
+			.values({
+				sessionId,
+				userId,
+				ip,
+				createdAt: now,
+				expiresAt,
+				tokenHash,
+				sessionType: "authenticated",
+			})
+			.returning(),
+	);
 
 	return { sessionId, token, row };
 }
@@ -82,19 +85,21 @@ export async function createResetSession(
 	const now = new Date();
 	const expiresAt = new Date(now.getTime() + RESET_LIFETIME_MS);
 
-	const [row] = await db
-		.insert(sessions)
-		.values({
-			sessionId,
-			userId,
-			ip,
-			createdAt: now,
-			expiresAt,
-			resetCode,
-			resetRemember: remember,
-			sessionType: "reset",
-		})
-		.returning();
+	const row = takeFirstOrThrow(
+		await db
+			.insert(sessions)
+			.values({
+				sessionId,
+				userId,
+				ip,
+				createdAt: now,
+				expiresAt,
+				resetCode,
+				resetRemember: remember,
+				sessionType: "reset",
+			})
+			.returning(),
+	);
 
 	return { sessionId, resetCode, row };
 }

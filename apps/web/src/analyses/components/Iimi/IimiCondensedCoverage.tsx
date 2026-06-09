@@ -13,8 +13,8 @@ export function IimiCondensedCoverage({
 		[(seqs) => seqs[0]?.length],
 	);
 
-	const charts = sequences.map((seqs) => {
-		return <SummaryChart key={seqs[0].id} seqs={seqs} />;
+	const charts = sequences.map((seqs, index) => {
+		return <SummaryChart key={seqs[0]?.id ?? index} seqs={seqs} />;
 	});
 
 	return <div>{charts}</div>;

@@ -15,7 +15,7 @@ const colorToHex: Record<string, string> = {
 	redLightest: "#FDE1D3",
 };
 
-const progressCircleSizes: Record<string, number> = {
+const progressCircleSizes: Record<sizes, number> = {
 	xs: 12,
 	sm: 16,
 	md: 20,
@@ -54,10 +54,12 @@ function getProgressColor(state: JobState): string {
 }
 
 function getTrackColor(color: string): string {
+	const fallback = colorToHex.greyLight ?? "#CBD5E0";
+
 	if (color === "grey") {
-		return colorToHex.greyLight;
+		return fallback;
 	}
-	return colorToHex[`${color}Lightest`] || colorToHex.greyLight;
+	return colorToHex[`${color}Lightest`] ?? fallback;
 }
 
 type ProgressCircleProps = {

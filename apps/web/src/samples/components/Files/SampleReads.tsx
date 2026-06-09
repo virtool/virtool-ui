@@ -14,8 +14,8 @@ type SampleReadsProps = {
  * Extract the read side (1 or 2) from a read filename like "reads_1.fq.gz"
  */
 function extractReadSide(name: string): number {
-	const match = name.match(/reads_(\d+)/);
-	return match ? parseInt(match[1], 10) : 1;
+	const digit = name.match(/reads_(\d+)/)?.[1];
+	return digit ? parseInt(digit, 10) : 1;
 }
 
 /**

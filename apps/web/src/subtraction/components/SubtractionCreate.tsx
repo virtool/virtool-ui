@@ -56,8 +56,13 @@ export default function SubtractionCreate() {
 	const mutation = useCreateSubtraction();
 
 	function onSubmit({ name, nickname, uploadId }: FormValues) {
+		const id = uploadId[0];
+		if (id === undefined) {
+			return;
+		}
+
 		mutation.mutate(
-			{ name, nickname, uploadId: uploadId[0] },
+			{ name, nickname, uploadId: id },
 			{
 				onSuccess: () => {
 					setOpen(false);
@@ -114,7 +119,7 @@ export default function SubtractionCreate() {
 									isFetchingNextPage={isFetchingNextPage}
 									fetchNextPage={fetchNextPage}
 									isPending={isPending}
-									foundCount={files.pages[0].found_count}
+									foundCount={files.pages[0]?.found_count ?? 0}
 									selected={value}
 								/>
 							)}

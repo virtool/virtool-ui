@@ -1,6 +1,7 @@
 import { asc, eq, ilike } from "drizzle-orm";
 import type { PostgresError } from "postgres";
 import type { Db } from "../db/pg";
+import { takeFirstOrThrow } from "../db/rows";
 import { type LabelRow, labels as labelsTable } from "../db/schema/labels";
 import { AppError } from "../errors";
 import { emit } from "../events/emit";
@@ -80,7 +81,9 @@ export async function getLabel(db: Db, labelId: number): Promise<Label> {
 export async function createLabel(db: Db, values: LabelValues): Promise<Label> {
 	let row: LabelRow;
 	try {
-		[row] = await db.insert(labelsTable).values(values).returning();
+		row = takeFirstOrThrow(
+			await db.insert(labelsTable).values(values).returning(),
+		);
 	} catch (error) {
 		if (isUniqueViolation(error)) {
 			throw new LabelConflictError();

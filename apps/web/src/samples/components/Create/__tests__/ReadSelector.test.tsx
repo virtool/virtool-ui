@@ -78,22 +78,27 @@ describe("<ReadSelector>", () => {
 
 	describe("Auto-pair mode", () => {
 		it("replaces the selection with a single file on click", async () => {
-			const files = [
-				createFakeFile({ name: "alpha.fastq.gz" }),
-				createFakeFile({ name: "beta.fastq.gz" }),
-			];
+			const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+			const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+			const files = [firstFile, secondFile];
+
 			mockApiListFiles(files);
 
 			renderWithProviders(<Harness files={files} />);
 
-			await userEvent.click(rowButton(files[0].name));
-			expect(within(rowButton(files[0].name)).getByText("LEFT")).toBeVisible();
+			await userEvent.click(rowButton(firstFile.name));
+			expect(within(rowButton(firstFile.name)).getByText("LEFT")).toBeVisible();
 			expect(screen.getByText("Unpaired")).toBeInTheDocument();
 
 			// A second click replaces rather than accumulates.
-			await userEvent.click(rowButton(files[1].name));
-			expect(rowButton(files[0].name)).toHaveAttribute("aria-pressed", "false");
-			expect(within(rowButton(files[1].name)).getByText("LEFT")).toBeVisible();
+			await userEvent.click(rowButton(secondFile.name));
+			expect(rowButton(firstFile.name)).toHaveAttribute(
+				"aria-pressed",
+				"false",
+			);
+			expect(
+				within(rowButton(secondFile.name)).getByText("LEFT"),
+			).toBeVisible();
 			expect(screen.getByText("Unpaired")).toBeInTheDocument();
 		});
 
@@ -144,30 +149,36 @@ describe("<ReadSelector>", () => {
 
 	describe("Manual mode", () => {
 		it("toggles up to two files, ignoring a third and supporting unselect", async () => {
-			const files = [
-				createFakeFile({ name: "alpha.fastq.gz" }),
-				createFakeFile({ name: "beta.fastq.gz" }),
-				createFakeFile({ name: "gamma.fastq.gz" }),
-			];
+			const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+			const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+			const thirdFile = createFakeFile({ name: "gamma.fastq.gz" });
+			const files = [firstFile, secondFile, thirdFile];
+
 			mockApiListFiles(files);
 
 			renderWithProviders(<Harness files={files} />);
 			await setMode("Manual");
 
-			await userEvent.click(rowButton(files[0].name));
-			await userEvent.click(rowButton(files[1].name));
+			await userEvent.click(rowButton(firstFile.name));
+			await userEvent.click(rowButton(secondFile.name));
 			expect(screen.getByText("Paired")).toBeInTheDocument();
 
 			// The third click is a quiet no-op — the file stays unselected.
-			await userEvent.click(rowButton(files[2].name));
-			expect(rowButton(files[2].name)).toHaveAttribute("aria-pressed", "false");
+			await userEvent.click(rowButton(thirdFile.name));
+			expect(rowButton(thirdFile.name)).toHaveAttribute(
+				"aria-pressed",
+				"false",
+			);
 			expect(screen.getByText("Paired")).toBeInTheDocument();
 
 			// Unselecting frees a slot for the third file.
-			await userEvent.click(rowButton(files[1].name));
-			expect(rowButton(files[1].name)).toHaveAttribute("aria-pressed", "false");
-			await userEvent.click(rowButton(files[2].name));
-			expect(rowButton(files[2].name)).toHaveAttribute("aria-pressed", "true");
+			await userEvent.click(rowButton(secondFile.name));
+			expect(rowButton(secondFile.name)).toHaveAttribute(
+				"aria-pressed",
+				"false",
+			);
+			await userEvent.click(rowButton(thirdFile.name));
+			expect(rowButton(thirdFile.name)).toHaveAttribute("aria-pressed", "true");
 		});
 
 		it("does not collapse detected pairs into a single row", async () => {
@@ -183,27 +194,33 @@ describe("<ReadSelector>", () => {
 		});
 
 		it("swaps the LEFT and RIGHT reads", async () => {
-			const files = [
-				createFakeFile({ name: "alpha.fastq.gz" }),
-				createFakeFile({ name: "beta.fastq.gz" }),
-			];
+			const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+			const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+			const files = [firstFile, secondFile];
+
 			mockApiListFiles(files);
 
 			renderWithProviders(<Harness files={files} />);
 			await setMode("Manual");
 
-			await userEvent.click(rowButton(files[0].name));
-			await userEvent.click(rowButton(files[1].name));
+			await userEvent.click(rowButton(firstFile.name));
+			await userEvent.click(rowButton(secondFile.name));
 
-			expect(within(rowButton(files[0].name)).getByText("LEFT")).toBeVisible();
-			expect(within(rowButton(files[1].name)).getByText("RIGHT")).toBeVisible();
+			expect(within(rowButton(firstFile.name)).getByText("LEFT")).toBeVisible();
+			expect(
+				within(rowButton(secondFile.name)).getByText("RIGHT"),
+			).toBeVisible();
 
 			await userEvent.click(
 				screen.getByRole("button", { name: /swap reads/i }),
 			);
 
-			expect(within(rowButton(files[0].name)).getByText("RIGHT")).toBeVisible();
-			expect(within(rowButton(files[1].name)).getByText("LEFT")).toBeVisible();
+			expect(
+				within(rowButton(firstFile.name)).getByText("RIGHT"),
+			).toBeVisible();
+			expect(
+				within(rowButton(secondFile.name)).getByText("LEFT"),
+			).toBeVisible();
 		});
 
 		it("warns, without blocking, when a file sits in the wrong slot by name", async () => {
@@ -248,45 +265,50 @@ describe("<ReadSelector>", () => {
 
 		it("shows a hand-picked pair as two badged rows back in Auto-pair", async () => {
 			// Two files that do not auto-pair.
-			const files = [
-				createFakeFile({ name: "alpha.fastq.gz" }),
-				createFakeFile({ name: "beta.fastq.gz" }),
-			];
+			const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+			const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+			const files = [firstFile, secondFile];
+
 			mockApiListFiles(files);
 
 			renderWithProviders(<Harness files={files} />);
 			await setMode("Manual");
 
-			await userEvent.click(rowButton(files[0].name));
-			await userEvent.click(rowButton(files[1].name));
+			await userEvent.click(rowButton(firstFile.name));
+			await userEvent.click(rowButton(secondFile.name));
 
 			await setMode("Auto-pair");
 
 			// They render as two separate single rows, each keeping its badge, and
 			// the slots stay filled.
-			expect(within(rowButton(files[0].name)).getByText("LEFT")).toBeVisible();
-			expect(within(rowButton(files[1].name)).getByText("RIGHT")).toBeVisible();
+			expect(within(rowButton(firstFile.name)).getByText("LEFT")).toBeVisible();
+			expect(
+				within(rowButton(secondFile.name)).getByText("RIGHT"),
+			).toBeVisible();
 			expect(screen.getByText("Paired")).toBeInTheDocument();
 
 			// The first Auto-pair click applies replace and collapses to one.
-			await userEvent.click(rowButton(files[0].name));
-			expect(rowButton(files[1].name)).toHaveAttribute("aria-pressed", "false");
+			await userEvent.click(rowButton(firstFile.name));
+			expect(rowButton(secondFile.name)).toHaveAttribute(
+				"aria-pressed",
+				"false",
+			);
 			expect(screen.getByText("Unpaired")).toBeInTheDocument();
 		});
 	});
 
 	it("resets the selection and search term", async () => {
-		const files = [
-			createFakeFile({ name: "alpha.fastq.gz" }),
-			createFakeFile({ name: "beta.fastq.gz" }),
-		];
+		const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+		const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+		const files = [firstFile, secondFile];
+
 		mockApiListFiles(files);
 
 		renderWithProviders(<Harness files={files} />);
 		await setMode("Manual");
 
-		await userEvent.click(rowButton(files[0].name));
-		await userEvent.click(rowButton(files[1].name));
+		await userEvent.click(rowButton(firstFile.name));
+		await userEvent.click(rowButton(secondFile.name));
 		expect(screen.getByText("Paired")).toBeInTheDocument();
 
 		await userEvent.click(screen.getByRole("button", { name: /reset/i }));
