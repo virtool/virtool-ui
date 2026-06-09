@@ -1,7 +1,6 @@
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { Quality } from "@quality/components/Quality";
 import { getRouteApi } from "@tanstack/react-router";
-import { useFetchSample } from "../queries";
+import { useSuspenseSample } from "../queries";
 import LegacyAlert from "./SampleFilesMessage";
 
 const routeApi = getRouteApi("/_authenticated/samples/$sampleId");
@@ -11,11 +10,7 @@ const routeApi = getRouteApi("/_authenticated/samples/$sampleId");
  */
 export default function SampleQuality() {
 	const { sampleId } = routeApi.useParams();
-	const { data, isPending } = useFetchSample(sampleId);
-
-	if (isPending || !data) {
-		return <LoadingPlaceholder />;
-	}
+	const { data } = useSuspenseSample(sampleId);
 
 	return (
 		<div className="flex flex-col">
