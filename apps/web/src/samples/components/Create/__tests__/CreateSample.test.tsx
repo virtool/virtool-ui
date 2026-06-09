@@ -35,7 +35,8 @@ async function setReadSelectorMode(
 }
 
 describe("<CreateSample>", () => {
-	const labels = [createFakeLabel()];
+	const firstLabel = createFakeLabel();
+	const labels = [firstLabel];
 	const subtractionShortlist = createFakeShortlistSubtraction();
 
 	beforeEach(() => {
@@ -123,7 +124,9 @@ describe("<CreateSample>", () => {
 	});
 
 	it("should submit when all form fields complete", async () => {
-		const files = [createFakeFile(), createFakeFile()];
+		const firstFile = createFakeFile();
+		const secondFile = createFakeFile();
+		const files = [firstFile, secondFile];
 
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([subtractionShortlist]);
@@ -134,8 +137,8 @@ describe("<CreateSample>", () => {
 			"Apple",
 			"Earth",
 			"normal",
-			[files[0].id, files[1].id],
-			[labels[0].id],
+			[firstFile.id, secondFile.id],
+			[firstLabel.id],
 			[subtractionShortlist.id],
 			null,
 		);
@@ -159,14 +162,14 @@ describe("<CreateSample>", () => {
 
 		// Select Files
 		await setReadSelectorMode("Manual");
-		await userEvent.click(screen.getByText(files[0].name));
-		await userEvent.click(screen.getByText(files[1].name));
+		await userEvent.click(screen.getByText(firstFile.name));
+		await userEvent.click(screen.getByText(secondFile.name));
 
 		// Select Labels
 		await userEvent.click(
 			screen.getByRole("button", { name: "select labels" }),
 		);
-		await userEvent.click(screen.getByText(labels[0].name));
+		await userEvent.click(screen.getByText(firstLabel.name));
 
 		// Select Subtractions
 		await userEvent.click(
@@ -302,10 +305,9 @@ describe("<CreateSample>", () => {
 	});
 
 	it("should be able to swap read orientation", async () => {
-		const files = [
-			createFakeFile({ name: "alpha.fastq.gz" }),
-			createFakeFile({ name: "beta.fastq.gz" }),
-		];
+		const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+		const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+		const files = [firstFile, secondFile];
 
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([]);
@@ -315,26 +317,25 @@ describe("<CreateSample>", () => {
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
 		await setReadSelectorMode("Manual");
-		await userEvent.click(screen.getByText(files[0].name));
-		await userEvent.click(screen.getByText(files[1].name));
+		await userEvent.click(screen.getByText(firstFile.name));
+		await userEvent.click(screen.getByText(secondFile.name));
 
 		expect(screen.getByText("Paired")).toBeInTheDocument();
 		expect(
-			within(readRowButton(files[0].name)).getByText("LEFT"),
+			within(readRowButton(firstFile.name)).getByText("LEFT"),
 		).toBeVisible();
 
 		await userEvent.click(screen.getByRole("button", { name: /swap reads/i }));
 
 		expect(
-			within(readRowButton(files[0].name)).getByText("RIGHT"),
+			within(readRowButton(firstFile.name)).getByText("RIGHT"),
 		).toBeVisible();
 	});
 
 	it("should show correct read orientations", async () => {
-		const files = [
-			createFakeFile({ name: "alpha.fastq.gz" }),
-			createFakeFile({ name: "beta.fastq.gz" }),
-		];
+		const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
+		const secondFile = createFakeFile({ name: "beta.fastq.gz" });
+		const files = [firstFile, secondFile];
 
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
@@ -344,17 +345,17 @@ describe("<CreateSample>", () => {
 		await userEvent.type(await screen.findByLabelText("Name"), "Sample B");
 
 		await setReadSelectorMode("Manual");
-		await userEvent.click(screen.getByText(files[0].name));
+		await userEvent.click(screen.getByText(firstFile.name));
 
 		expect(
-			within(readRowButton(files[0].name)).getByText("LEFT"),
+			within(readRowButton(firstFile.name)).getByText("LEFT"),
 		).toBeVisible();
 		expect(screen.getByText(/Unpaired/)).toBeInTheDocument();
 
-		await userEvent.click(screen.getByText(files[1].name));
+		await userEvent.click(screen.getByText(secondFile.name));
 
 		expect(
-			within(readRowButton(files[1].name)).getByText("RIGHT"),
+			within(readRowButton(secondFile.name)).getByText("RIGHT"),
 		).toBeVisible();
 		expect(screen.getByText(/Paired/)).toBeInTheDocument();
 	});

@@ -129,12 +129,13 @@ function watchUploadTiming(): void {
 
 	const newSamples = [...samples.slice(-9), loaded];
 
+	const last = newSamples[newSamples.length - 1];
+	const first = newSamples[0];
+
 	let speed: number;
 
-	if (newSamples.length > 1) {
-		speed =
-			Math.abs(newSamples[newSamples.length - 1] - newSamples[0]) /
-			newSamples.length;
+	if (newSamples.length > 1 && last !== undefined && first !== undefined) {
+		speed = Math.abs(last - first) / newSamples.length;
 	} else {
 		speed = 0;
 	}

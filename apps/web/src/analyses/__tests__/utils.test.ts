@@ -1,4 +1,5 @@
 import type { FormattedPathoscopeIsolate } from "@analyses/types";
+import { at } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 import {
 	fillAlign,
@@ -114,9 +115,9 @@ describe("mergeCoverage()", () => {
 	});
 
 	it("should return merged coverage when isolate lengths differ", () => {
-		isolates[0].filled.push(3);
-		isolates[0].filled.push(5);
-		isolates[2].filled.push(1);
+		at(isolates, 0).filled.push(3);
+		at(isolates, 0).filled.push(5);
+		at(isolates, 2).filled.push(1);
 		const merged = mergeCoverage(isolates);
 		expect(merged).toEqual([
 			7, 5, 5, 6, 6, 7, 9, 5, 6, 2, 2, 3, 2, 1, 1, 3, 2, 3, 5,

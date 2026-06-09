@@ -39,7 +39,7 @@ const extensionRegex = /^(.*)\.(fq|fastq|fa|fasta)(\.gz)?$/i;
 function getFileNameFromId(id: number, uploads: Upload[]): string {
 	const file = uploads.find((file) => file.id === id);
 	const match = file?.name.match(extensionRegex);
-	return match ? match[1] : "";
+	return match?.[1] ?? "";
 }
 
 type FormValues = {
@@ -116,7 +116,12 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 	const reads = readsResponse.pages.flatMap((page) => page.items);
 
 	function autofill(selected: number[]) {
-		const fileName = getFileNameFromId(selected[0], reads);
+		const id = selected[0];
+		if (id === undefined) {
+			return;
+		}
+
+		const fileName = getFileNameFromId(id, reads);
 		if (fileName) {
 			setValue("name", fileName);
 		}

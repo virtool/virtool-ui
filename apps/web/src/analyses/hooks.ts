@@ -124,7 +124,7 @@ export function useSubtractionOptions(
 		isPending: isPendingSubtractionShortlist,
 	} = useFetchSubtractionsShortlist(true);
 
-	const sampleId = sampleIds[0];
+	const sampleId = sampleIds[0] ?? "";
 
 	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 

@@ -35,12 +35,18 @@ export default function NuvsList({ detail }: NuVsListProps) {
 
 		if (windowIndex > 0) {
 			previousIndex = windowIndex - 1;
-			previousId = String(sortedHits[previousIndex].id);
+			const previousHit = sortedHits[previousIndex];
+			if (previousHit) {
+				previousId = String(previousHit.id);
+			}
 		}
 
 		if (windowIndex < sortedHits.length - 1) {
 			nextIndex = windowIndex + 1;
-			nextId = String(sortedHits[nextIndex].id);
+			const nextHit = sortedHits[nextIndex];
+			if (nextHit) {
+				nextId = String(nextHit.id);
+			}
 		}
 	}
 

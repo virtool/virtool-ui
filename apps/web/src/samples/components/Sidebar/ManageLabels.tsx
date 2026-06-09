@@ -13,11 +13,21 @@ function getSelectedLabels(document: SampleMinimal[]) {
 	const allLabels = document.flatMap((d) => d.labels);
 	const grouped = groupBy(allLabels, (label) => label.id);
 
-	return Object.values(grouped).map((labels) => ({
-		...labels[0],
-		count: labels.length,
-		allLabeled: labels.length === document.length,
-	}));
+	return Object.values(grouped).flatMap((labels) => {
+		const [first] = labels;
+
+		if (!first) {
+			return [];
+		}
+
+		return [
+			{
+				...first,
+				count: labels.length,
+				allLabeled: labels.length === document.length,
+			},
+		];
+	});
 }
 
 type ManageLabelsProps = {

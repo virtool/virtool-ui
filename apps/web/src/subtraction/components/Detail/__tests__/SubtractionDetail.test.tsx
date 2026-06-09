@@ -35,9 +35,9 @@ describe("<SubtractionDetail />", () => {
 		expect(
 			await screen.findByText(subtraction.linked_samples.length),
 		).toBeInTheDocument();
-		expect(
-			await screen.findByText(subtraction.files[0].name),
-		).toBeInTheDocument();
+		for (const file of subtraction.files) {
+			expect(await screen.findByText(file.name)).toBeInTheDocument();
+		}
 
 		scope.done();
 	});

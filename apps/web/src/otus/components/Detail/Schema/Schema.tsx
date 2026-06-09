@@ -40,19 +40,25 @@ export default function Schema() {
 
 	function handleMoveUp(index: number) {
 		const updatedSchema = schema.slice();
-		[updatedSchema[index], updatedSchema[index - 1]] = [
-			updatedSchema[index - 1],
-			updatedSchema[index],
-		];
+		const current = updatedSchema[index];
+		const previous = updatedSchema[index - 1];
+		if (!current || !previous) {
+			return;
+		}
+		updatedSchema[index] = previous;
+		updatedSchema[index - 1] = current;
 		handleUpdate(updatedSchema);
 	}
 
 	function handleMoveDown(index: number) {
 		const updatedSchema = schema.slice();
-		[updatedSchema[index], updatedSchema[index + 1]] = [
-			updatedSchema[index + 1],
-			updatedSchema[index],
-		];
+		const current = updatedSchema[index];
+		const next = updatedSchema[index + 1];
+		if (!current || !next) {
+			return;
+		}
+		updatedSchema[index] = next;
+		updatedSchema[index + 1] = current;
 		handleUpdate(updatedSchema);
 	}
 

@@ -43,7 +43,7 @@ export default function SidebarLink({
 	exclude,
 }: SidebarItemProps) {
 	const isActive = useMatchPartialPath(link, exclude);
-	const to = link.split("?")[0];
+	const to = link.split("?")[0] ?? link;
 	const search = parseLinkSearch(link);
 
 	return (

@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import { createFakeHmm, mockApiGetHmmDetail } from "@tests/fake/hmm";
-import { renderRoute } from "@tests/setup";
+import { at, renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
@@ -57,25 +57,20 @@ describe("<HmmDetail />", () => {
 			expect(await screen.findByText("Cluster Members")).toBeInTheDocument();
 			expect(screen.getByText(hmmDetail.entries.length)).toBeInTheDocument();
 
+			const firstEntry = at(hmmDetail.entries, 0);
+			const secondEntry = at(hmmDetail.entries, 1);
+
 			expect(screen.getByText("Accession")).toBeInTheDocument();
-			expect(
-				screen.getByText(hmmDetail.entries[0].accession),
-			).toBeInTheDocument();
-			expect(
-				screen.getByText(hmmDetail.entries[1].accession),
-			).toBeInTheDocument();
+			expect(screen.getByText(firstEntry.accession)).toBeInTheDocument();
+			expect(screen.getByText(secondEntry.accession)).toBeInTheDocument();
 
 			expect(screen.getByText("Name")).toBeInTheDocument();
-			expect(screen.getByText(hmmDetail.entries[0].name)).toBeInTheDocument();
-			expect(screen.getByText(hmmDetail.entries[1].name)).toBeInTheDocument();
+			expect(screen.getByText(firstEntry.name)).toBeInTheDocument();
+			expect(screen.getByText(secondEntry.name)).toBeInTheDocument();
 
 			expect(screen.getByText("Organism")).toBeInTheDocument();
-			expect(
-				screen.queryByText(hmmDetail.entries[0].organism),
-			).toBeInTheDocument();
-			expect(
-				screen.queryByText(hmmDetail.entries[1].organism),
-			).toBeInTheDocument();
+			expect(screen.queryByText(firstEntry.organism)).toBeInTheDocument();
+			expect(screen.queryByText(secondEntry.organism)).toBeInTheDocument();
 
 			scope.done();
 		});

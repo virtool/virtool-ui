@@ -1,6 +1,7 @@
 import type { UserNested } from "@users/types";
 import { desc, eq } from "drizzle-orm";
 import { db } from "../db/pg";
+import { takeFirstOrThrow } from "../db/rows";
 import { instanceMessages, type MessageColor } from "../db/schema/messages";
 import { users } from "../db/schema/users";
 import { AppError } from "../errors";
@@ -97,17 +98,19 @@ export async function createMessage(
 	userId: number,
 ): Promise<Message> {
 	const now = new Date();
-	const [row] = await db
-		.insert(instanceMessages)
-		.values({
-			active: false,
-			color,
-			message,
-			createdAt: now,
-			updatedAt: now,
-			userId,
-		})
-		.returning({ id: instanceMessages.id });
+	const row = takeFirstOrThrow(
+		await db
+			.insert(instanceMessages)
+			.values({
+				active: false,
+				color,
+				message,
+				createdAt: now,
+				updatedAt: now,
+				userId,
+			})
+			.returning({ id: instanceMessages.id }),
+	);
 
 	await emit("messages", row.id, "create");
 

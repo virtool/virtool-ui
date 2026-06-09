@@ -144,8 +144,8 @@ const JobCountsSchema = z
 	.record(z.string(), z.record(z.string(), z.number()))
 	.transform((counts) => {
 		const result: Partial<Record<JobState, number>> = {};
-		for (const state of Object.keys(counts) as JobState[]) {
-			result[state] = Object.values(counts[state]).reduce(
+		for (const [state, stateCounts] of Object.entries(counts)) {
+			result[state as JobState] = Object.values(stateCounts).reduce(
 				(sum, count) => sum + count,
 				0,
 			);

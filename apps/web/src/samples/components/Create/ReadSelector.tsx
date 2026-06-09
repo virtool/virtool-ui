@@ -110,7 +110,7 @@ export default function ReadSelector({
 
 	useValidateFiles("reads", selected, onSelect, handleCleared);
 
-	const { total_count } = data.pages[0];
+	const total_count = data.pages[0]?.total_count;
 	const items = data.pages.flatMap((page) => page.items);
 
 	const loweredFilter = term.toLowerCase();

@@ -14,6 +14,7 @@ import {
 import type { PostgresError } from "postgres";
 import { hashPassword } from "../auth/password";
 import type { Db } from "../db/pg";
+import { takeFirstOrThrow } from "../db/rows";
 import {
 	type GroupPermissions,
 	groups as groupsTable,
@@ -325,8 +326,7 @@ export async function getUser(db: Db, userId: number): Promise<User> {
 		throw new UserNotFoundError();
 	}
 
-	const [user] = await assembleUsers(db, [row]);
-	return user;
+	return takeFirstOrThrow(await assembleUsers(db, [row]));
 }
 
 /** Read a user's administrator role without assembling the full user. */
@@ -350,17 +350,19 @@ export async function createUser(
 	const password = await hashPassword(values.password);
 
 	try {
-		const [row] = await db
-			.insert(usersTable)
-			.values({
-				handle: values.handle,
-				password,
-				forceReset: values.forceReset,
-				lastPasswordChange: new Date(),
-				legacyId: null,
-				settings: DEFAULT_USER_SETTINGS,
-			})
-			.returning({ id: usersTable.id });
+		const row = takeFirstOrThrow(
+			await db
+				.insert(usersTable)
+				.values({
+					handle: values.handle,
+					password,
+					forceReset: values.forceReset,
+					lastPasswordChange: new Date(),
+					legacyId: null,
+					settings: DEFAULT_USER_SETTINGS,
+				})
+				.returning({ id: usersTable.id }),
+		);
 
 		await emit("users", row.id, "create");
 
