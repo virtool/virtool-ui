@@ -68,6 +68,7 @@ export function getRouter() {
 				...options,
 				integrations: [
 					Sentry.tanstackRouterBrowserTracingIntegration(router),
+					Sentry.browserProfilingIntegration(),
 					Sentry.replayIntegration(),
 				],
 			});

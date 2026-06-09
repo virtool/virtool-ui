@@ -10,16 +10,21 @@ export type CommonSentryOptions = {
 	environment: string;
 	sendDefaultPii: boolean;
 	tracesSampleRate: number;
+	profilesSampleRate: number;
 	enableLogs: boolean;
 };
 
 export function getCommonOptions(): CommonSentryOptions {
 	const environment = process.env.NODE_ENV ?? "development";
+	const isProd = environment === "production";
 	return {
 		dsn: readDsn(),
 		environment,
 		sendDefaultPii: true,
-		tracesSampleRate: environment === "production" ? 0.1 : 1.0,
+		tracesSampleRate: isProd ? 0.1 : 1.0,
+		// Relative to traced transactions, so the effective profiling rate is
+		// tracesSampleRate * profilesSampleRate.
+		profilesSampleRate: isProd ? 0.5 : 1.0,
 		enableLogs: true,
 	};
 }
