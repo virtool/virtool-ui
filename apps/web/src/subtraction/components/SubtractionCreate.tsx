@@ -106,12 +106,13 @@ export default function SubtractionCreate() {
 							<InputSimple id="nickname" {...register("nickname")} />
 						</InputGroup>
 
-						<InputLabel>Files</InputLabel>
+						<InputLabel id="subtraction-files-label">Files</InputLabel>
 						<Controller
 							name="uploadId"
 							control={control}
 							render={({ field: { onChange, value } }) => (
 								<SubtractionFileSelector
+									aria-labelledby="subtraction-files-label"
 									onClick={onChange}
 									error={errors.uploadId?.message ?? ""}
 									files={files}

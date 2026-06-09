@@ -14,6 +14,9 @@ function getScrollRatio(scrollListElement: HTMLElement): number {
 }
 
 type CompactScrollListProps = {
+	/** The id of the element that labels the list */
+	"aria-labelledby"?: string;
+
 	/** The class name of the scroll list */
 	className?: string;
 
@@ -39,6 +42,7 @@ type CompactScrollListProps = {
  * An infinitely scrolling list of items.
  */
 export default function CompactScrollList({
+	"aria-labelledby": ariaLabelledby,
 	className,
 	fetchNextPage,
 	isFetchingNextPage,
@@ -57,6 +61,7 @@ export default function CompactScrollList({
 
 	return (
 		<div
+			aria-labelledby={ariaLabelledby}
 			className={cn(
 				"mb-2",
 				"relative",
