@@ -1,11 +1,13 @@
 import { cn } from "@app/utils";
 import Button from "@base/Button";
+import { buttonVariants } from "@base/buttonVariants";
 import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
 	DialogTitle,
+	DialogTrigger,
 } from "@base/Dialog";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
@@ -25,18 +27,10 @@ type FormValues = {
 	permissions: Permissions;
 };
 
-type ApiKeyCreateProps = {
-	open?: boolean;
-	setOpen?: (open: boolean) => void;
-};
-
 /**
  * Displays a dialog to create an API key
  */
-export default function ApiKeyCreate({
-	open = false,
-	setOpen = () => {},
-}: ApiKeyCreateProps) {
+export default function ApiKeyCreate() {
 	const [copied, setCopied] = useState(false);
 	const [newKey, setNewKey] = useState("");
 	const mutation = useCreateAPIKey();
@@ -46,6 +40,7 @@ export default function ApiKeyCreate({
 		handleSubmit,
 		control,
 		register,
+		reset,
 	} = useForm<FormValues>({
 		defaultValues: {
 			name: "",
@@ -64,10 +59,12 @@ export default function ApiKeyCreate({
 
 	const showCreated = Boolean(newKey);
 
-	function handleHide() {
-		setCopied(false);
-		setOpen(false);
-		setNewKey("");
+	function handleOpenChange(open: boolean) {
+		if (!open) {
+			setCopied(false);
+			setNewKey("");
+			reset();
+		}
 	}
 
 	function onSubmit({ name, permissions }: FormValues) {
@@ -86,7 +83,10 @@ export default function ApiKeyCreate({
 	}
 
 	return (
-		<Dialog open={open} onOpenChange={handleHide}>
+		<Dialog onOpenChange={handleOpenChange}>
+			<DialogTrigger className={buttonVariants({ color: "blue" })}>
+				Create
+			</DialogTrigger>
 			<DialogContent>
 				<DialogTitle>Create API Key</DialogTitle>
 				<DialogDescription>

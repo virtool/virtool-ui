@@ -1,6 +1,5 @@
 import { cn } from "@app/utils";
 import BoxGroup from "@base/BoxGroup";
-import Button from "@base/Button";
 import ExternalLink from "@base/ExternalLink";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
@@ -8,18 +7,10 @@ import { useFetchAPIKeys } from "../queries";
 import ApiKey from "./ApiKey";
 import ApiKeyCreate from "./ApiKeyCreate";
 
-type ApiKeysProps = {
-	openCreateKey?: boolean;
-	setOpenCreateKey?: (open: boolean) => void;
-};
-
 /**
  * A component to manage and display API keys
  */
-export default function ApiKeys({
-	openCreateKey = false,
-	setOpenCreateKey = () => {},
-}: ApiKeysProps) {
+export default function ApiKeys() {
 	const { data, isPending } = useFetchAPIKeys();
 
 	if (isPending || !data) {
@@ -47,9 +38,7 @@ export default function ApiKeys({
 					</ExternalLink>
 					.
 				</h3>
-				<Button color="blue" onClick={() => setOpenCreateKey(true)}>
-					Create
-				</Button>
+				<ApiKeyCreate />
 			</header>
 
 			{keyComponents.length ? (
@@ -57,8 +46,6 @@ export default function ApiKeys({
 			) : (
 				<NoneFoundBox noun="API keys" />
 			)}
-
-			<ApiKeyCreate open={openCreateKey} setOpen={setOpenCreateKey} />
 		</div>
 	);
 }
