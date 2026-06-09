@@ -1,5 +1,4 @@
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import { useFetchOtuHistory } from "@otus/queries";
+import { useSuspenseOtuHistory } from "@otus/queries";
 import { useReferenceIsArchived } from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
 import { groupBy } from "es-toolkit";
@@ -12,12 +11,8 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
  */
 export default function OtuHistory() {
 	const { otuId, refId } = routeApi.useParams();
-	const { data, isPending } = useFetchOtuHistory(otuId);
+	const { data } = useSuspenseOtuHistory(otuId);
 	const archived = useReferenceIsArchived(refId);
-
-	if (isPending || !data) {
-		return <LoadingPlaceholder />;
-	}
 
 	const changes = groupBy(data, (change) =>
 		change.index.version === "unbuilt" ? "unbuilt" : "built",
