@@ -143,7 +143,7 @@ export const createUser = createServerFn({ method: "POST" })
 			setResponseStatus(201);
 			return user;
 		} catch (err) {
-			rethrowAsHttp(err);
+			throw rethrowAsHttp(err);
 		}
 	});
 
@@ -167,7 +167,7 @@ export const updateUser = createServerFn({ method: "POST" })
 		try {
 			return await updateUserImpl(db, userId, values);
 		} catch (err) {
-			rethrowAsHttp(err);
+			throw rethrowAsHttp(err);
 		}
 	});
 
@@ -183,7 +183,7 @@ export const updateAccountHandle = createServerFn({ method: "POST" })
 				handle: data.handle,
 			});
 		} catch (err) {
-			rethrowAsHttp(err);
+			throw rethrowAsHttp(err);
 		}
 	});
 
@@ -201,6 +201,6 @@ export const setAdministratorRole = createServerFn({ method: "POST" })
 		try {
 			return await setAdministratorRoleImpl(db, data.userId, data.role);
 		} catch (err) {
-			rethrowAsHttp(err);
+			throw rethrowAsHttp(err);
 		}
 	});
