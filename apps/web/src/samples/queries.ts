@@ -6,6 +6,7 @@ import {
 	useMutation,
 	useQuery,
 	useQueryClient,
+	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { fileQueryKeys } from "@uploads/queries";
 import { union } from "es-toolkit";
@@ -89,6 +90,19 @@ export function sampleQueryOptions(sampleId: string) {
 
 export function useFetchSample(sampleId: string) {
 	return useQuery(sampleQueryOptions(sampleId));
+}
+
+/**
+ * Fetch a sample, suspending until it resolves.
+ *
+ * `data` is always defined, and a failed request throws to the nearest route
+ * error boundary instead of resolving to `undefined`. Use this from
+ * components rendered under a route whose loader prefetches the sample (the
+ * `$sampleId` detail layout and its children) — loading and errors are handled
+ * by the route's Suspense and `errorComponent` rather than inline.
+ */
+export function useSuspenseSample(sampleId: string) {
+	return useSuspenseQuery(sampleQueryOptions(sampleId));
 }
 
 /**

@@ -175,9 +175,16 @@ into React Query hooks and `queryOptions`/`*QueryKeys` factories — there is no
 separate per-feature `api.ts` layer. Inline each `apiClient` call into the
 hook's `queryFn`/`mutationFn`; keep a module-private helper only when a request
 is shared across hooks or branches. Route loaders prefetch via the same
-`queryOptions` factories where appropriate. See
+`queryOptions` factories where appropriate.
+
+Loading and error states come in two tiers: primary route data uses
+`useSuspenseQuery` (loading via the route's `<Suspense>`, errors via the
+router's `defaultErrorComponent`, `@base/RouteError`), and secondary data
+stays on `useQuery` checking `isError` before `isPending` for an inline error.
+Never write `if (isPending || !data)` — on error it spins forever. See
 [docs/queries.md](docs/queries.md) for the query-key, `queryOptions`,
-route-loader prefetch, and mutation patterns.
+route-loader prefetch, the two-tier error/loading policy, and mutation
+patterns.
 
 ### Styling
 

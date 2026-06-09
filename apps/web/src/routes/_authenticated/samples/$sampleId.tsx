@@ -1,6 +1,5 @@
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Tabs from "@base/Tabs";
 import TabsLink from "@base/TabsLink";
 import ViewHeader from "@base/ViewHeader";
@@ -11,7 +10,7 @@ import { JobNestedSchema } from "@jobs/types";
 import DeleteSample from "@samples/components/Detail/DeleteSample";
 import EditSample from "@samples/components/EditSample";
 import { useCheckCanEditSample } from "@samples/hooks";
-import { sampleQueryOptions, useFetchSample } from "@samples/queries";
+import { sampleQueryOptions, useSuspenseSample } from "@samples/queries";
 import {
 	createFileRoute,
 	notFound,
@@ -43,13 +42,9 @@ export const Route = createFileRoute("/_authenticated/samples/$sampleId")({
 function SampleDetailLayout() {
 	const { sampleId } = Route.useParams();
 	const location = useLocation();
-	const { data, isPending } = useFetchSample(sampleId);
+	const { data } = useSuspenseSample(sampleId);
 	const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
 	const [editOpen, setEditOpen] = useState(false);
-
-	if (isPending || !data) {
-		return <LoadingPlaceholder />;
-	}
 
 	const { created_at, name, user } = data;
 	const job = data.job && JobNestedSchema.parse(data.job);
