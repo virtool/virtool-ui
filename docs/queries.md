@@ -100,7 +100,73 @@ calls in parallel with `Promise.all`.
 
 For data that isn't needed on initial render (e.g. a dialog that opens
 lazily), skip the loader and call `useQuery` where the data is consumed.
-Suspense queries (`useSuspenseQuery`) are not currently used.
+
+## Loading and error states: two tiers
+
+A query has three outcomes — pending, error, success — and a consumer has to
+account for all three. Pick the tier by how central the data is to the view,
+and never collapse pending and error into one branch. The guard
+`if (isPending || !data) return <LoadingPlaceholder />` is the anti-pattern: on
+error `data` is `undefined`, so a failed request falls into the loading branch
+and spins forever instead of showing the error.
+
+### Tier 1 — primary data, via Suspense and the route error boundary
+
+For the resource a route exists to show (detail pages, the record the URL is
+"about"), let the framework handle pending and error declaratively:
+
+1. Prefetch in the route `loader` with `ensureQueryData` (above).
+2. Read it in the component with `useSuspenseQuery` — expose a
+   `useSuspense*` hook next to the `useFetch*` one:
+
+   ```ts
+   export function useSuspenseSample(sampleId: string) {
+     return useSuspenseQuery(sampleQueryOptions(sampleId));
+   }
+   ```
+
+3. In the component, destructure `data` and use it directly — **no guard**.
+   `useSuspenseQuery` guarantees `data` is defined, and a failure throws.
+
+   ```tsx
+   function SampleDetailLayout() {
+     const { sampleId } = Route.useParams();
+     const { data } = useSuspenseSample(sampleId);
+     return <ViewHeader title={data.name} />;
+   }
+   ```
+
+Loading is absorbed by the `<Suspense>` boundary already wrapping the
+authenticated `<Outlet>`. Errors are caught by the router's
+`defaultErrorComponent` (`@base/RouteError`), wired once in `router.tsx`: it
+reads the HTTP status off the error and renders a permission message for 403,
+a not-found for 404, and a retryable message otherwise. A route only needs its
+own `errorComponent` when it wants bespoke copy.
+
+Keep a loader's `404 → notFound()` mapping where it exists — that routes a
+missing record to the dedicated `notFoundComponent` rather than the error
+boundary.
+
+### Tier 2 — secondary data, handled inline with `useQuery`
+
+For data that should fail without taking over the page — paginated lists using
+`keepPreviousData`, polling, sidebar widgets, anything optional — stay on
+`useQuery` and handle the states explicitly. Check `isError` **before**
+`isPending`, and render an inline error rather than a blocking one:
+
+```tsx
+const { data, isPending, isError } = useListSamples(page, perPage);
+
+if (isError) {
+  return <Alert color="red">Couldn't load samples.</Alert>;
+}
+if (isPending) {
+  return <LoadingPlaceholder />;
+}
+```
+
+The distinction is deliberate: Tier 1 escalates a failure to a full-route
+error state; Tier 2 contains it so the rest of the page keeps working.
 
 ## Pagination keeps the previous page on screen
 

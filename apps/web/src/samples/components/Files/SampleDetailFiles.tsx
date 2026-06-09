@@ -1,7 +1,6 @@
 import ContainerNarrow from "@base/ContainerNarrow";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SampleFileSizeWarning from "@samples/components/Detail/SampleFileSizeWarning";
-import { useFetchSample } from "@samples/queries";
+import { useSuspenseSample } from "@samples/queries";
 import { getRouteApi } from "@tanstack/react-router";
 import SampleFilesMessage from "../SampleFilesMessage";
 import SampleReads from "./SampleReads";
@@ -13,11 +12,7 @@ const routeApi = getRouteApi("/_authenticated/samples/$sampleId");
  */
 export default function SampleDetailFiles() {
 	const { sampleId } = routeApi.useParams();
-	const { data, isPending } = useFetchSample(sampleId);
-
-	if (isPending || !data) {
-		return <LoadingPlaceholder />;
-	}
+	const { data } = useSuspenseSample(sampleId);
 
 	return (
 		<ContainerNarrow>

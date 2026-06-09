@@ -1,3 +1,4 @@
+import RouteError from "@base/RouteError";
 import * as Sentry from "@sentry/tanstackstart-react";
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
@@ -40,6 +41,11 @@ export function getRouter() {
 	const router = createRouter({
 		routeTree,
 		context: { queryClient },
+		// Every route inherits this error boundary unless it sets its own
+		// `errorComponent`. It catches both rejected loaders and errors thrown
+		// from `useSuspenseQuery` during render, so a failed query surfaces a
+		// real error state instead of an indefinite loading placeholder.
+		defaultErrorComponent: RouteError,
 		defaultPendingMinMs: 0,
 		// Preload routes on hover/touch/focus. Loaders back onto React Query via
 		// `ensureQueryData`, so a 0 preload stale time hands freshness decisions
