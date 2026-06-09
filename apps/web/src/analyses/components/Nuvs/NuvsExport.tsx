@@ -9,7 +9,7 @@ import {
 	DialogTrigger,
 } from "@base/Dialog";
 import Icon from "@base/Icon";
-import PseudoLabel from "@base/PseudoLabel";
+import InputLabel from "@base/InputLabel";
 import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
 import { Download } from "lucide-react";
@@ -125,7 +125,7 @@ export default function NuvsExport({
 			<DialogContent>
 				<DialogTitle>Export Analysis</DialogTitle>
 				<form onSubmit={onSubmit}>
-					<PseudoLabel>Scope</PseudoLabel>
+					<InputLabel>Scope</InputLabel>
 					<ToggleGroup
 						className="flex mb-3"
 						value={mode}

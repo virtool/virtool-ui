@@ -6,7 +6,6 @@ import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
-import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
 import { useCloneReference } from "@references/queries";
 import type { ReferenceMinimal } from "@references/types";
@@ -78,7 +77,7 @@ export default function CloneReference({
 			<DialogContent>
 				<DialogTitle>Clone Reference</DialogTitle>
 				<form onSubmit={handleSubmit(onSubmit)}>
-					<PseudoLabel>Selected reference</PseudoLabel>
+					<InputLabel>Selected reference</InputLabel>
 					{reference && (
 						<Box className="flex items-center">
 							<strong>{reference.name}</strong>

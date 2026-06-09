@@ -1,7 +1,7 @@
 import { useFuse } from "@app/fuse";
 import { cn } from "@app/utils";
 import BoxGroup from "@base/BoxGroup";
-import PseudoLabel from "@base/PseudoLabel";
+import InputLabel from "@base/InputLabel";
 import type { Subtraction, SubtractionOption } from "@subtraction/types";
 import { intersectionWith, xor } from "es-toolkit";
 import CreateAnalysisField from "./CreateAnalysisField";
@@ -54,7 +54,7 @@ export default function SubtractionSelector({
 		<CreateAnalysisField>
 			<CreateAnalysisFieldTitle>Subtractions</CreateAnalysisFieldTitle>
 			<div>
-				<PseudoLabel>Available</PseudoLabel>
+				<InputLabel>Available</InputLabel>
 				<BoxGroup className="h-72">
 					<CreateAnalysisSelectorSearch
 						label="Filter subtractions"
@@ -83,7 +83,7 @@ export default function SubtractionSelector({
 				</BoxGroup>
 			</div>
 			<div className={cn("flex", "flex-col")}>
-				<PseudoLabel>Selected</PseudoLabel>
+				<InputLabel>Selected</InputLabel>
 				<BoxGroup className="overflow-y-auto h-72">
 					{selectedSubtractions.length ? (
 						selectedComponents

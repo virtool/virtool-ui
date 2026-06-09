@@ -12,7 +12,6 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
 import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
@@ -107,7 +106,7 @@ export default function SubtractionCreate() {
 							<InputSimple id="nickname" {...register("nickname")} />
 						</InputGroup>
 
-						<PseudoLabel>Files</PseudoLabel>
+						<InputLabel>Files</InputLabel>
 						<Controller
 							name="uploadId"
 							control={control}

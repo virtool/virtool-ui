@@ -7,7 +7,7 @@ import {
 } from "@administration/queries";
 import type { AdministratorRoleName } from "@administration/types";
 import IconButton from "@base/IconButton";
-import PseudoLabel from "@base/PseudoLabel";
+import InputLabel from "@base/InputLabel";
 import { Trash } from "lucide-react";
 
 type UserAdministratorRoleProps = {
@@ -43,7 +43,7 @@ export default function UserAdministratorRole({
 
 	return (
 		<div className="mb-4">
-			<PseudoLabel>Administrator Role</PseudoLabel>
+			<InputLabel htmlFor={`role-${id}`}>Administrator Role</InputLabel>
 			<div className="flex items-center gap-2">
 				<AdministratorRoleSelect
 					className="grow"

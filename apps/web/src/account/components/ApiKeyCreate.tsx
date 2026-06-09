@@ -13,7 +13,6 @@ import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
-import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
 import type { Permissions } from "@groups/types";
 import { useState } from "react";
@@ -131,7 +130,7 @@ export default function ApiKeyCreate() {
 							<InputError>{errors.name?.message}</InputError>
 						</InputGroup>
 
-						<PseudoLabel>Permissions</PseudoLabel>
+						<InputLabel>Permissions</InputLabel>
 						<Controller
 							control={control}
 							render={({ field: { onChange, value } }) => (
