@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/tanstackstart-react";
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
@@ -67,6 +68,7 @@ export const loginFn = createServerFn({ method: "POST" })
 /** Logout server function. Requires an authenticated session. */
 export const logoutFn = createServerFn({ method: "POST" }).handler(async () => {
 	await logout(db, realCookies);
+	Sentry.setUser(null);
 	return null;
 });
 

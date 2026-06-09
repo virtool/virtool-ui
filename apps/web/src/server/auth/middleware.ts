@@ -1,5 +1,6 @@
 import type { AdministratorRoleName } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
+import * as Sentry from "@sentry/tanstackstart-react";
 import { createMiddleware, createServerOnlyFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
@@ -104,6 +105,12 @@ export function createAuthenticationMiddleware(
 		const session: AuthenticatedSession | null = exceptionPaths.has(pathname)
 			? null
 			: await requireSession();
+		// Attach the user to the request's isolation scope so errors and logs
+		// from this handler are tied to the acting user. Id-only here — the
+		// handle isn't on the session and isn't worth a per-request lookup.
+		if (session) {
+			Sentry.setUser({ id: session.userId });
+		}
 		return next({ context: { session } });
 	});
 }

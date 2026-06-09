@@ -2,6 +2,7 @@ import type { Account, APIKeyMinimal } from "@account/types";
 import { apiClient } from "@app/api";
 import { resetClient } from "@app/utils";
 import type { Permissions } from "@groups/types";
+import * as Sentry from "@sentry/tanstackstart-react";
 import { logoutFn } from "@server/auth/functions";
 import { updateAccountHandle } from "@server/users/functions";
 import {
@@ -198,6 +199,7 @@ export function useLogout() {
 	return useMutation<null, ErrorResponse>({
 		mutationFn: () => logoutFn(),
 		onSuccess: () => {
+			Sentry.setUser(null);
 			resetClient();
 		},
 	});

@@ -8,6 +8,7 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Nav from "@nav/components/Nav";
 import Sidebar from "@nav/components/Sidebar";
 import UpdateToast from "@nav/components/UpdateToast";
+import * as Sentry from "@sentry/tanstackstart-react";
 import type { QueryClient } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -65,6 +66,12 @@ function AuthenticatedLayout() {
 			setupSse(queryClient);
 		}
 	}, [data, queryClient]);
+
+	useEffect(() => {
+		if (data) {
+			Sentry.setUser({ id: data.id, username: data.handle });
+		}
+	}, [data]);
 
 	if (isPending) {
 		return <LoadingPlaceholder />;
