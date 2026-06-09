@@ -1,4 +1,11 @@
-import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@base/Dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogTitle,
+	DialogTrigger,
+} from "@base/Dialog";
+import IconButton from "@base/IconButton";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
@@ -6,25 +13,20 @@ import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import { useUpdateSubtraction } from "@subtraction/queries";
 import type { Subtraction } from "@subtraction/types";
+import { Pencil } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export type EditSubtractionProps = {
 	/** The subtraction data */
 	subtraction: Subtraction;
-	/** Indicates whether the modal for editing a subtraction is visible */
-	show: boolean;
-	/** A callback function to hide the modal */
-	onHide: () => void;
 };
 
 /**
  * Dialog for editing an existing subtraction
  */
-export default function EditSubtraction({
-	subtraction,
-	show,
-	onHide,
-}: EditSubtractionProps) {
+export default function EditSubtraction({ subtraction }: EditSubtractionProps) {
+	const [open, setOpen] = useState(false);
 	const mutation = useUpdateSubtraction(subtraction.id);
 
 	const {
@@ -39,12 +41,14 @@ export default function EditSubtraction({
 	});
 
 	function onSubmit({ name, nickname }) {
-		mutation.mutate({ name, nickname });
-		onHide();
+		mutation.mutate({ name, nickname }, { onSuccess: () => setOpen(false) });
 	}
 
 	return (
-		<Dialog open={show} onOpenChange={onHide}>
+		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogTrigger asChild>
+				<IconButton IconComponent={Pencil} color="grayDark" tip="modify" />
+			</DialogTrigger>
 			<DialogContent>
 				<DialogTitle>Edit Subtraction</DialogTitle>
 				<form onSubmit={handleSubmit((values) => onSubmit({ ...values }))}>
