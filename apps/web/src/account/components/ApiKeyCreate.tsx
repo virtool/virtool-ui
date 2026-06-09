@@ -130,11 +130,15 @@ export default function ApiKeyCreate() {
 							<InputError>{errors.name?.message}</InputError>
 						</InputGroup>
 
-						<InputLabel>Permissions</InputLabel>
+						<InputLabel id="api-key-permissions-label">Permissions</InputLabel>
 						<Controller
 							control={control}
 							render={({ field: { onChange, value } }) => (
-								<ApiKeyPermissions keyPermissions={value} onChange={onChange} />
+								<ApiKeyPermissions
+									aria-labelledby="api-key-permissions-label"
+									keyPermissions={value}
+									onChange={onChange}
+								/>
 							)}
 							name="permissions"
 						/>
