@@ -121,7 +121,9 @@ export const getUser = createServerFn({ method: "GET" })
 		try {
 			return await getUserImpl(db, data.userId);
 		} catch (err) {
-			rethrowAsHttp(err);
+			// `throw` keeps the handler's inferred return type `User` rather than
+			// `User | undefined`, so suspense consumers get a non-nullable user.
+			throw rethrowAsHttp(err);
 		}
 	});
 

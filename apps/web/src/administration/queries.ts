@@ -13,6 +13,7 @@ import {
 	useMutation,
 	useQuery,
 	useQueryClient,
+	useSuspenseQuery,
 } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
 import type { AdministratorRoleName, Settings } from "./types";
@@ -40,15 +41,33 @@ export const settingsQueryKeys = {
 };
 
 /**
+ * Query options for the API settings.
+ */
+export function settingsQueryOptions() {
+	return queryOptions<Settings>({
+		queryKey: settingsQueryKeys.all(),
+		queryFn: () => apiClient.get("/settings").then((response) => response.body),
+	});
+}
+
+/**
  * Fetch the API settings.
  *
  * @returns The API settings.
  */
 export function useFetchSettings() {
-	return useQuery<Settings>({
-		queryKey: settingsQueryKeys.all(),
-		queryFn: () => apiClient.get("/settings").then((response) => response.body),
-	});
+	return useQuery(settingsQueryOptions());
+}
+
+/**
+ * Fetch the API settings, suspending until they resolve.
+ *
+ * `data` is always defined, and a failed request throws to the nearest route
+ * error boundary. Use this from components rendered under a route whose loader
+ * prefetches the settings.
+ */
+export function useSuspenseSettings() {
+	return useSuspenseQuery(settingsQueryOptions());
 }
 
 /**
@@ -203,6 +222,19 @@ export function userQueryOptions(userId: number) {
  */
 export function useFetchUser(userId: number) {
 	return useQuery(userQueryOptions(userId));
+}
+
+/**
+ * Fetches a single user, suspending until it resolves.
+ *
+ * `data` is always defined, and a failed request throws to the nearest route
+ * error boundary. Use this from components rendered under a route whose loader
+ * prefetches the user.
+ *
+ * @param userId - The id of the user to fetch
+ */
+export function useSuspenseUser(userId: number) {
+	return useSuspenseQuery(userQueryOptions(userId));
 }
 
 /** Values accepted when updating a user from the administration views. */
