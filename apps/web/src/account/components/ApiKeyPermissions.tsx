@@ -8,6 +8,7 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Checkbox from "@base/Checkbox";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import type { Permissions } from "@groups/types";
 import { sortBy } from "es-toolkit";
 
@@ -28,9 +29,13 @@ export default function ApiKeyPermissions({
 	keyPermissions,
 	onChange,
 }: APIPermissionsProps) {
-	const { data: account, isPending } = useFetchAccount();
+	const { data: account, isPending, isError } = useFetchAccount();
 
-	if (isPending || !account) {
+	if (isError && !account) {
+		return <QueryError noun="your account" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

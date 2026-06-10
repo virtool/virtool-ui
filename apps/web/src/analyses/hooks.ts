@@ -85,10 +85,14 @@ export function useGetActiveHit(matches) {
 type UseCompatibleIndexesResult = {
 	indexes: IndexMinimal[];
 	isPending: boolean;
+	isError: boolean;
 };
 
 export function useCompatibleIndexes(): UseCompatibleIndexesResult {
-	const { data, isPending } = useListIndexes({ ready: true, archived: false });
+	const { data, isPending, isError } = useListIndexes({
+		ready: true,
+		archived: false,
+	});
 
 	const indexes = Object.values(
 		groupBy(data ?? [], (item) => item.reference.id),
@@ -96,13 +100,14 @@ export function useCompatibleIndexes(): UseCompatibleIndexesResult {
 		.map((group) => maxBy(group, (item) => Number(item.version)))
 		.filter((index): index is IndexMinimal => index !== undefined);
 
-	return { indexes, isPending };
+	return { indexes, isPending, isError };
 }
 
 type UseSubtractionOptionsResult = {
 	defaultSubtractions: SubtractionOption[];
 	subtractions: SubtractionOption[];
 	isPending: boolean;
+	isError: boolean;
 };
 
 /**
@@ -122,11 +127,25 @@ export function useSubtractionOptions(
 	const {
 		data: subtractionShortlist,
 		isPending: isPendingSubtractionShortlist,
+		isError: isErrorSubtractionShortlist,
 	} = useFetchSubtractionsShortlist(true);
 
 	const sampleId = sampleIds[0] ?? "";
 
-	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
+	const {
+		data: sample,
+		isPending: isPendingSample,
+		isError: isErrorSample,
+	} = useFetchSample(sampleId);
+
+	if (isErrorSample || isErrorSubtractionShortlist) {
+		return {
+			defaultSubtractions: [],
+			subtractions: [],
+			isPending: false,
+			isError: true,
+		};
+	}
 
 	if (
 		isPendingSample ||
@@ -138,6 +157,7 @@ export function useSubtractionOptions(
 			defaultSubtractions: [],
 			subtractions: [],
 			isPending: true,
+			isError: false,
 		};
 	}
 
@@ -163,5 +183,6 @@ export function useSubtractionOptions(
 		defaultSubtractions,
 		subtractions,
 		isPending: false,
+		isError: false,
 	};
 }

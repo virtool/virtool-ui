@@ -151,22 +151,52 @@ boundary.
 
 For data that should fail without taking over the page — paginated lists using
 `keepPreviousData`, polling, sidebar widgets, anything optional — stay on
-`useQuery` and handle the states explicitly. Check `isError` **before**
-`isPending`, and render an inline error rather than a blocking one:
+`useQuery` and handle the states explicitly. Render the inline error with
+`@base/QueryError` (a red `Alert` taking a `noun`), and gate it on
+`isError && !data` — error **only when there's nothing to show** — then handle
+`isPending`:
 
 ```tsx
 const { data, isPending, isError } = useListSamples(page, perPage);
 
-if (isError) {
-  return <Alert color="red">Couldn't load samples.</Alert>;
+if (isError && !data) {
+  return <QueryError noun="samples" />;
 }
 if (isPending) {
   return <LoadingPlaceholder />;
 }
 ```
 
+The `&& !data` is load-bearing, not defensive. In React Query v5 `error` and
+`data` coexist: once a query has loaded successfully, `data` survives a later
+failed refetch (the retries-exhausted `refetchError` state). A bare
+`if (isError)` would blank an already-rendered list the moment a background
+refetch fails — the opposite of Tier 2's job. `isError && !data` shows the
+inline error only on an initial-load failure (the real "spins forever" case
+this replaces) and keeps stale data on screen through background errors. The
+guard still narrows `data` to defined for the success branch, because the only
+error state left past it carries `data`.
+
+`if (isPending || !data) return <LoadingPlaceholder />` remains the
+anti-pattern: it puts `!data` in the **loading** branch, so an initial-load
+failure (where `data` is `undefined`) spins forever instead of erroring.
+
+For a view backed by several `useQuery` calls, the same rule generalises —
+error only when something needed is still missing:
+
+```tsx
+if ((isErrorA || isErrorB) && (!dataA || !dataB)) {
+  return <QueryError noun="files" />;
+}
+if (isPendingA || isPendingB) {
+  return <LoadingPlaceholder />;
+}
+```
+
 The distinction is deliberate: Tier 1 escalates a failure to a full-route
-error state; Tier 2 contains it so the rest of the page keeps working.
+error state; Tier 2 contains it so the rest of the page keeps working. Make a
+view *eager* (error even with stale data on screen) only when staleness
+actively misleads — permissions, balances, live job status.
 
 ## Pagination keeps the previous page on screen
 

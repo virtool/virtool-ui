@@ -3,6 +3,7 @@ import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
+import QueryError from "@base/QueryError";
 import type { User } from "../types";
 import { UserItem } from "./UserItem";
 
@@ -23,7 +24,7 @@ export default function UsersList({
 	status,
 	term,
 }: UsersListProps) {
-	const { data, isPending } = useFindUsers(
+	const { data, isPending, isError } = useFindUsers(
 		urlPage,
 		25,
 		term,
@@ -31,7 +32,11 @@ export default function UsersList({
 		status === "active",
 	);
 
-	if (isPending || !data) {
+	if (isError && !data) {
+		return <QueryError noun="users" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

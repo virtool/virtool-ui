@@ -1,4 +1,5 @@
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import { useFetchLabels } from "@labels/queries";
 import SamplesList from "@samples/components/SamplesList";
 import { createFileRoute } from "@tanstack/react-router";
@@ -19,9 +20,13 @@ export const Route = createFileRoute("/_authenticated/samples/")({
 function SamplesRoute() {
 	const search = Route.useSearch();
 	const navigate = Route.useNavigate();
-	const { data: labels, isPending } = useFetchLabels();
+	const { data: labels, isPending, isError } = useFetchLabels();
 
-	if (isPending || !labels) {
+	if (isError && !labels) {
+		return <QueryError noun="labels" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

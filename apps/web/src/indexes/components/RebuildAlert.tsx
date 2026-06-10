@@ -16,11 +16,13 @@ type RebuildAlertProps = {
  * An alert that appears when the reference has unbuilt changes.
  */
 export default function RebuildAlert({ page, refId }: RebuildAlertProps) {
-	const { data, isPending } = useFindIndexes(page, 25, refId);
+	const { data, isPending, isError } = useFindIndexes(page, 25, refId);
 	const { hasPermission: hasRights } = useCheckReferenceRight(refId, "build");
 	const archived = useReferenceIsArchived(refId);
 
-	if (isPending || archived || !data) {
+	// Stay silent on error: this is a supplementary alert, and the index list
+	// that renders it already surfaces the failure.
+	if (isError || isPending || archived) {
 		return null;
 	}
 

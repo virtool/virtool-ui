@@ -5,6 +5,7 @@ import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
+import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
@@ -44,14 +45,22 @@ export function FileManager({
 	regex,
 	setPage = () => {},
 }: FileManagerProps) {
-	const { data: account, isPending: isPendingAccount } = useFetchAccount();
-	const { data: files, isPending: isPendingFiles } = useListFiles(
-		fileType,
-		page,
-		25,
-	);
+	const {
+		data: account,
+		isPending: isPendingAccount,
+		isError: isErrorAccount,
+	} = useFetchAccount();
+	const {
+		data: files,
+		isPending: isPendingFiles,
+		isError: isErrorFiles,
+	} = useListFiles(fileType, page, 25);
 
-	if (isPendingFiles || isPendingAccount || !account || !files) {
+	if ((isErrorAccount || isErrorFiles) && (!account || !files)) {
+		return <QueryError noun="files" />;
+	}
+
+	if (isPendingFiles || isPendingAccount) {
 		return <LoadingPlaceholder />;
 	}
 

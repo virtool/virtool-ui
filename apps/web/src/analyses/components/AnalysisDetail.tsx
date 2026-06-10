@@ -2,6 +2,7 @@ import NuvsViewer from "@analyses/components/Nuvs/NuvsViewer";
 import { getWorkflowDisplayName } from "@app/utils";
 import Box from "@base/Box";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import RelativeTime from "@base/RelativeTime";
 import SubviewHeader from "@base/SubviewHeader";
 import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
@@ -26,10 +27,18 @@ const routeApi = getRouteApi(
 /** Base component viewing all supported analysis */
 export default function AnalysisDetail() {
 	const { analysisId, sampleId } = routeApi.useParams();
-	const { data: analysis, isPending } = useGetAnalysis(analysisId);
-	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
+	const { data: analysis, isPending, isError } = useGetAnalysis(analysisId);
+	const {
+		data: sample,
+		isPending: isPendingSample,
+		isError: isSampleError,
+	} = useFetchSample(sampleId);
 
-	if (isPending || isPendingSample || !sample) {
+	if ((isError || isSampleError) && (!analysis || !sample)) {
+		return <QueryError noun="analysis" />;
+	}
+
+	if (isPending || isPendingSample) {
 		return <LoadingPlaceholder />;
 	}
 

@@ -1,6 +1,7 @@
 import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
+import QueryError from "@base/QueryError";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import type { OtuSegment } from "@otus/types";
 import {
@@ -26,13 +27,17 @@ export default function Schema() {
 		useCheckReferenceRight(refId, "modify_otu");
 	const archived = useReferenceIsArchived(refId);
 
-	const { data, isPending } = useFetchOTU(otuId);
+	const { data, isPending, isError } = useFetchOTU(otuId);
 	const mutation = useUpdateOTU(otuId);
 	const [openAddSegment, setOpenAddSegment] = useState(false);
 	const [segmentToEdit, setSegmentToEdit] = useState<string | undefined>();
 	const [segmentToRemove, setSegmentToRemove] = useState<string | undefined>();
 
-	if (isPending || isPendingPermission || !data) {
+	if (isError && !data) {
+		return <QueryError noun="schema" />;
+	}
+
+	if (isPending || isPendingPermission) {
 		return <LoadingPlaceholder />;
 	}
 

@@ -180,8 +180,11 @@ is shared across hooks or branches. Route loaders prefetch via the same
 Loading and error states come in two tiers: primary route data uses
 `useSuspenseQuery` (loading via the route's `<Suspense>`, errors via the
 router's `defaultErrorComponent`, `@base/RouteError`), and secondary data
-stays on `useQuery` checking `isError` before `isPending` for an inline error.
-Never write `if (isPending || !data)` — on error it spins forever. See
+stays on `useQuery`, gating an inline `@base/QueryError` on `isError && !data`
+(error only when there's nothing to show, so stale data survives a failed
+background refetch) before checking `isPending`. Never write
+`if (isPending || !data)` — that puts `!data` in the loading branch, so an
+initial-load failure spins forever. See
 [docs/queries.md](docs/queries.md) for the query-key, `queryOptions`,
 route-loader prefetch, the two-tier error/loading policy, and mutation
 patterns.

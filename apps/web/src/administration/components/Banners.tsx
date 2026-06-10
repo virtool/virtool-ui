@@ -10,6 +10,7 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundSection from "@base/NoneFoundSection";
+import QueryError from "@base/QueryError";
 import { RadioGroup, RadioGroupItem } from "@base/RadioGroup";
 import SectionHeader from "@base/SectionHeader";
 import BannerItem from "./BannerItem";
@@ -20,14 +21,18 @@ import CreateBanner from "./CreateBanner";
  * deactivate, and delete entries; the active row is shown to all users.
  */
 export default function Banners() {
-	const { data, isPending } = useFetchBanners();
+	const { data, isPending, isError } = useFetchBanners();
 	const createMutation = useCreateBanner();
 	const updateMutation = useUpdateBanner();
 	const deleteMutation = useDeleteBanner();
 	const setActiveMutation = useSetActiveBanner();
 	const clearActiveMutation = useClearActiveBanner();
 
-	if (isPending || !data) {
+	if (isError && !data) {
+		return <QueryError noun="banners" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

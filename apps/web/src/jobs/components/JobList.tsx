@@ -3,6 +3,7 @@ import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
+import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useFindJobs } from "../queries";
@@ -23,9 +24,13 @@ export default function JobsList({
 	setSearch = () => {},
 	states = initialState,
 }: JobsListProps) {
-	const { data, isPending } = useFindJobs(page, 25, states);
+	const { data, isPending, isError } = useFindJobs(page, 25, states);
 
-	if (isPending || !data) {
+	if (isError && !data) {
+		return <QueryError noun="jobs" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

@@ -2,6 +2,7 @@ import { cn } from "@app/utils";
 import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { Dialog, DialogTitle } from "@base/Dialog";
+import QueryError from "@base/QueryError";
 import { useListHmms } from "@hmm/queries";
 import type { SampleMinimal } from "@samples/types";
 import { Tabs } from "radix-ui";
@@ -43,7 +44,7 @@ export default function QuickAnalyze({
 	samples,
 	setOpen,
 }: QuickAnalyzeProps) {
-	const { data: hmms, isPending } = useListHmms(1, 1, "");
+	const { data: hmms, isPending, isError } = useListHmms(1, 1, "");
 
 	// The dialog should close when all selected samples have been analyzed and deselected.
 	useEffect(() => {
@@ -52,7 +53,18 @@ export default function QuickAnalyze({
 		}
 	}, [open, samples, setOpen]);
 
-	if (isPending || !hmms) {
+	if (isError && !hmms) {
+		return (
+			<Dialog open={open} onOpenChange={setOpen}>
+				<CreateAnalysisDialogContent>
+					<DialogTitle>Quick Analyze</DialogTitle>
+					<QueryError noun="HMMs" />
+				</CreateAnalysisDialogContent>
+			</Dialog>
+		);
+	}
+
+	if (isPending) {
 		return null;
 	}
 

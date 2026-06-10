@@ -2,6 +2,7 @@ import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
+import QueryError from "@base/QueryError";
 import { useReferenceIsArchived } from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
 import { useFindIndexes } from "../queries";
@@ -28,10 +29,14 @@ export default function Indexes({
 	setSearch,
 }: IndexesProps) {
 	const { refId } = routeApi.useParams();
-	const { data, isPending } = useFindIndexes(page, 25, refId);
+	const { data, isPending, isError } = useFindIndexes(page, 25, refId);
 	const archived = useReferenceIsArchived(refId);
 
-	if (isPending || !data) {
+	if (isError && !data) {
+		return <QueryError noun="indexes" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

@@ -3,6 +3,7 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
+import QueryError from "@base/QueryError";
 import RebuildAlert from "@indexes/components/RebuildAlert";
 import { useListOTUs } from "@otus/queries";
 import { useFetchReference } from "@references/queries";
@@ -29,16 +30,22 @@ type OtuListProps = {
 export default function OtuList({ find, page, setSearch }: OtuListProps) {
 	const { refId } = routeApi.useParams();
 	const [openCreate, setOpenCreate] = useState(false);
-	const { data: reference, isPending: isPendingReference } =
-		useFetchReference(refId);
-	const { data: otus, isPending: isPendingOTUs } = useListOTUs(
-		refId,
-		page,
-		25,
-		find,
-	);
+	const {
+		data: reference,
+		isPending: isPendingReference,
+		isError: isErrorReference,
+	} = useFetchReference(refId);
+	const {
+		data: otus,
+		isPending: isPendingOTUs,
+		isError: isErrorOTUs,
+	} = useListOTUs(refId, page, 25, find);
 
-	if (isPendingOTUs || isPendingReference || !otus || !reference) {
+	if ((isErrorReference || isErrorOTUs) && (!reference || !otus)) {
+		return <QueryError noun="OTUs" />;
+	}
+
+	if (isPendingOTUs || isPendingReference) {
 		return <LoadingPlaceholder />;
 	}
 

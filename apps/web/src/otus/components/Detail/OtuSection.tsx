@@ -1,4 +1,5 @@
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import { CurrentOtuContextProvider, useFetchOTU } from "@otus/queries";
 import { useFetchReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
@@ -13,10 +14,19 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
 export default function OtuSection() {
 	const { otuId, refId } = routeApi.useParams();
 
-	const { isPending: isPendingReference } = useFetchReference(refId);
-	const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
+	const { isPending: isPendingReference, isError: isErrorReference } =
+		useFetchReference(refId);
+	const {
+		data: otu,
+		isPending: isPendingOTU,
+		isError: isErrorOTU,
+	} = useFetchOTU(otuId);
 
-	if (isPendingReference || isPendingOTU || !otu) {
+	if ((isErrorReference || isErrorOTU) && !otu) {
+		return <QueryError noun="OTU" />;
+	}
+
+	if (isPendingReference || isPendingOTU) {
 		return <LoadingPlaceholder />;
 	}
 

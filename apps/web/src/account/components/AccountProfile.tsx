@@ -1,6 +1,7 @@
 import InitialIcon from "@base/InitialIcon";
 import Label from "@base/Label";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import { ShieldUser } from "lucide-react";
 import { useFetchAccount } from "../queries";
 import AccountEmail from "./AccountEmail";
@@ -12,9 +13,13 @@ import AccountPassword from "./AccountPassword";
  * Displays information related to the users account with options to reset password and email
  */
 export default function AccountProfile() {
-	const { data, isPending } = useFetchAccount();
+	const { data, isPending, isError } = useFetchAccount();
 
-	if (isPending || !data) {
+	if (isError && !data) {
+		return <QueryError noun="your account" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

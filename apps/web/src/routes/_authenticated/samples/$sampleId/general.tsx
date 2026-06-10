@@ -1,4 +1,5 @@
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import { useFetchLabels } from "@labels/queries";
 import SampleDetailGeneral from "@samples/components/Detail/SampleDetailGeneral";
 import { createFileRoute } from "@tanstack/react-router";
@@ -10,9 +11,13 @@ export const Route = createFileRoute(
 });
 
 function SampleDetailGeneralRoute() {
-	const { data: labels, isPending } = useFetchLabels();
+	const { data: labels, isPending, isError } = useFetchLabels();
 
-	if (isPending || !labels) {
+	if (isError && !labels) {
+		return <QueryError noun="labels" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

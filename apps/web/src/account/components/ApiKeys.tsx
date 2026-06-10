@@ -3,6 +3,7 @@ import BoxGroup from "@base/BoxGroup";
 import ExternalLink from "@base/ExternalLink";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
+import QueryError from "@base/QueryError";
 import { useFetchAPIKeys } from "../queries";
 import ApiKey from "./ApiKey";
 import ApiKeyCreate from "./ApiKeyCreate";
@@ -11,9 +12,13 @@ import ApiKeyCreate from "./ApiKeyCreate";
  * A component to manage and display API keys
  */
 export default function ApiKeys() {
-	const { data, isPending } = useFetchAPIKeys();
+	const { data, isPending, isError } = useFetchAPIKeys();
 
-	if (isPending || !data) {
+	if (isError && !data) {
+		return <QueryError noun="API keys" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder className="mt-36" />;
 	}
 

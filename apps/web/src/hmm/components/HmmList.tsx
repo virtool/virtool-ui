@@ -2,6 +2,7 @@ import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
+import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
@@ -20,9 +21,13 @@ type HmmListProps = {
  * A list of HMMs with filtering options
  */
 export default function HmmList({ find, page, setSearch }: HmmListProps) {
-	const { data, isPending } = useListHmms(page, 25, find);
+	const { data, isPending, isError } = useListHmms(page, 25, find);
 
-	if (isPending || !data) {
+	if (isError && !data) {
+		return <QueryError noun="HMMs" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

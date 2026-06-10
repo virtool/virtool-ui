@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import InitialIcon from "@base/InitialIcon";
 import InputSearch from "@base/InputSearch";
 import NoneFoundSection from "@base/NoneFoundSection";
+import QueryError from "@base/QueryError";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import Toolbar from "@base/Toolbar";
 import { useAddReferenceMember } from "@references/queries";
@@ -31,10 +32,26 @@ export default function AddReferenceUser({
 }: AddReferenceUserProps) {
 	const mutation = useAddReferenceMember(refId, "user");
 	const [term, setTerm] = useState("");
-	const { data, isPending, isFetchingNextPage, fetchNextPage } =
+	const { data, isPending, isError, isFetchingNextPage, fetchNextPage } =
 		useInfiniteFindUsers(25, term);
 
-	if (isPending || !data) {
+	function onOpenChange() {
+		onHide();
+		setTerm("");
+	}
+
+	if (isError && !data) {
+		return (
+			<Dialog open={show} onOpenChange={onOpenChange}>
+				<DialogContent>
+					<DialogTitle>Add User</DialogTitle>
+					<QueryError noun="users" />
+				</DialogContent>
+			</Dialog>
+		);
+	}
+
+	if (isPending) {
 		return null;
 	}
 
@@ -53,11 +70,6 @@ export default function AddReferenceUser({
 				{item.handle}
 			</SelectBoxGroupSection>
 		);
-	}
-
-	function onOpenChange() {
-		onHide();
-		setTerm("");
 	}
 
 	return (
