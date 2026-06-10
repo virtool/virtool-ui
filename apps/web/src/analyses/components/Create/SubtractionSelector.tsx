@@ -1,9 +1,10 @@
 import { useFuse } from "@app/fuse";
 import { cn } from "@app/utils";
 import BoxGroup from "@base/BoxGroup";
-import PseudoLabel from "@base/PseudoLabel";
+import InputLabel from "@base/InputLabel";
 import type { Subtraction, SubtractionOption } from "@subtraction/types";
 import { intersectionWith, xor } from "es-toolkit";
+import { useId } from "react";
 import CreateAnalysisField from "./CreateAnalysisField";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 import { CreateAnalysisSelectorSearch } from "./CreateAnalysisSelectorSearch";
@@ -23,6 +24,8 @@ export default function SubtractionSelector({
 	const [results, term, setTerm] = useFuse<SubtractionOption>(subtractions, [
 		"name",
 	]);
+	const availableLabelId = useId();
+	const selectedLabelId = useId();
 
 	const unselectedSubtractions = results.filter(
 		(subtraction: Subtraction) => !selected.includes(subtraction.id),
@@ -54,8 +57,12 @@ export default function SubtractionSelector({
 		<CreateAnalysisField>
 			<CreateAnalysisFieldTitle>Subtractions</CreateAnalysisFieldTitle>
 			<div>
-				<PseudoLabel>Available</PseudoLabel>
-				<BoxGroup className="h-72">
+				<InputLabel id={availableLabelId}>Available</InputLabel>
+				<BoxGroup
+					role="group"
+					aria-labelledby={availableLabelId}
+					className="h-72"
+				>
 					<CreateAnalysisSelectorSearch
 						label="Filter subtractions"
 						term={term}
@@ -83,8 +90,12 @@ export default function SubtractionSelector({
 				</BoxGroup>
 			</div>
 			<div className={cn("flex", "flex-col")}>
-				<PseudoLabel>Selected</PseudoLabel>
-				<BoxGroup className="overflow-y-auto h-72">
+				<InputLabel id={selectedLabelId}>Selected</InputLabel>
+				<BoxGroup
+					role="group"
+					aria-labelledby={selectedLabelId}
+					className="overflow-y-auto h-72"
+				>
 					{selectedSubtractions.length ? (
 						selectedComponents
 					) : (

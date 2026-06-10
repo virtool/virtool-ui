@@ -12,11 +12,10 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
 import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useInfiniteFindFiles } from "@/uploads/queries";
 import { useCreateSubtraction } from "../queries";
@@ -33,6 +32,7 @@ type FormValues = {
  */
 export default function SubtractionCreate() {
 	const [open, setOpen] = useState(false);
+	const filesLabelId = useId();
 
 	const {
 		hasRestored,
@@ -107,12 +107,13 @@ export default function SubtractionCreate() {
 							<InputSimple id="nickname" {...register("nickname")} />
 						</InputGroup>
 
-						<PseudoLabel>Files</PseudoLabel>
+						<InputLabel id={filesLabelId}>Files</InputLabel>
 						<Controller
 							name="uploadId"
 							control={control}
 							render={({ field: { onChange, value } }) => (
 								<SubtractionFileSelector
+									aria-labelledby={filesLabelId}
 									onClick={onChange}
 									error={errors.uploadId?.message ?? ""}
 									files={files}

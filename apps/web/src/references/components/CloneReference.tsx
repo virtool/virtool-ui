@@ -6,7 +6,6 @@ import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
-import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
 import { useCloneReference } from "@references/queries";
 import type { ReferenceMinimal } from "@references/types";
@@ -78,18 +77,22 @@ export default function CloneReference({
 			<DialogContent>
 				<DialogTitle>Clone Reference</DialogTitle>
 				<form onSubmit={handleSubmit(onSubmit)}>
-					<PseudoLabel>Selected reference</PseudoLabel>
-					{reference && (
-						<Box className="flex items-center">
-							<strong>{reference.name}</strong>
-							<Badge className="ml-1.5">{reference.otu_count} OTUs</Badge>
-							<Attribution
-								className="ml-auto"
-								time={reference.created_at}
-								user={reference.user.handle}
-							/>
-						</Box>
-					)}
+					<dl>
+						<dt className="font-medium mb-2">Selected reference</dt>
+						<dd>
+							{reference && (
+								<Box className="flex items-center">
+									<strong>{reference.name}</strong>
+									<Badge className="ml-1.5">{reference.otu_count} OTUs</Badge>
+									<Attribution
+										className="ml-auto"
+										time={reference.created_at}
+										user={reference.user.handle}
+									/>
+								</Box>
+							)}
+						</dd>
+					</dl>
 					<InputGroup>
 						<InputLabel htmlFor="name">Name</InputLabel>
 						<InputSimple

@@ -1,11 +1,12 @@
 import { useUpdateUser } from "@administration/queries";
 import BoxGroup from "@base/BoxGroup";
+import InputLabel from "@base/InputLabel";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundSection from "@base/NoneFoundSection";
-import PseudoLabel from "@base/PseudoLabel";
 import { useListGroups } from "@groups/queries";
 import type { GroupMinimal } from "@groups/types";
 import { xor } from "es-toolkit/array";
+import { useId } from "react";
 import { UserGroup } from "./UserGroup";
 
 type UserGroupsType = {
@@ -22,6 +23,7 @@ type UserGroupsType = {
 export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
 	const { data, isPending } = useListGroups();
 	const mutation = useUpdateUser();
+	const labelId = useId();
 
 	if (isPending || !data) {
 		return <LoadingPlaceholder />;
@@ -41,8 +43,13 @@ export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
 
 	return (
 		<div>
-			<PseudoLabel>Groups</PseudoLabel>
-			<BoxGroup className="mb-4">
+			<InputLabel id={labelId}>Groups</InputLabel>
+			<BoxGroup
+				role="listbox"
+				aria-multiselectable
+				aria-labelledby={labelId}
+				className="mb-4"
+			>
 				{data.length ? (
 					data.map(({ id, name }) => (
 						<UserGroup

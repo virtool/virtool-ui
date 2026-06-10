@@ -1,10 +1,14 @@
 import { cn } from "@app/utils";
-import type { ReactNode } from "react";
+import type { AriaRole, ReactNode } from "react";
 import Box from "./Box";
 
 type BoxGroupProps = {
 	children: ReactNode;
 	className?: string;
+	id?: string;
+	role?: AriaRole;
+	"aria-labelledby"?: string;
+	"aria-multiselectable"?: boolean;
 };
 
 export default function BoxGroup({

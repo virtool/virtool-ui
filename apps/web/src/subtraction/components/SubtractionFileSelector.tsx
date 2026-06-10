@@ -12,6 +12,9 @@ import type { FileResponse, Upload } from "@/uploads/types";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 type SubtractionFileSelectorProps = {
+	/** The id of the element that labels the file list */
+	"aria-labelledby"?: string;
+
 	/** The subtraction uploads */
 	files: InfiniteData<FileResponse>;
 
@@ -43,6 +46,7 @@ type SubtractionFileSelectorProps = {
  * A list of subtraction uploads
  */
 export function SubtractionFileSelector({
+	"aria-labelledby": ariaLabelledby,
 	files,
 	foundCount,
 	selected,
@@ -75,6 +79,7 @@ export function SubtractionFileSelector({
 	) : (
 		<>
 			<CompactScrollList
+				aria-labelledby={ariaLabelledby}
 				className="max-h-96"
 				fetchNextPage={fetchNextPage}
 				isFetchingNextPage={isFetchingNextPage}

@@ -13,10 +13,9 @@ import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
-import PseudoLabel from "@base/PseudoLabel";
 import SaveButton from "@base/SaveButton";
 import type { Permissions } from "@groups/types";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useCreateAPIKey } from "../queries";
 import CreateAPIKeyInfo from "./ApiKeyAdministratorInfo";
@@ -34,6 +33,7 @@ export default function ApiKeyCreate() {
 	const [copied, setCopied] = useState(false);
 	const [newKey, setNewKey] = useState("");
 	const mutation = useCreateAPIKey();
+	const permissionsLabelId = useId();
 
 	const {
 		formState: { errors },
@@ -131,11 +131,15 @@ export default function ApiKeyCreate() {
 							<InputError>{errors.name?.message}</InputError>
 						</InputGroup>
 
-						<PseudoLabel>Permissions</PseudoLabel>
+						<InputLabel id={permissionsLabelId}>Permissions</InputLabel>
 						<Controller
 							control={control}
 							render={({ field: { onChange, value } }) => (
-								<ApiKeyPermissions keyPermissions={value} onChange={onChange} />
+								<ApiKeyPermissions
+									aria-labelledby={permissionsLabelId}
+									keyPermissions={value}
+									onChange={onChange}
+								/>
 							)}
 							name="permissions"
 						/>

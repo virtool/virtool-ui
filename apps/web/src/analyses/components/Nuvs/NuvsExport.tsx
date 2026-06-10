@@ -9,11 +9,11 @@ import {
 	DialogTrigger,
 } from "@base/Dialog";
 import Icon from "@base/Icon";
-import PseudoLabel from "@base/PseudoLabel";
+import InputLabel from "@base/InputLabel";
 import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
 import { Download } from "lucide-react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import NuvsExportPreview from "./NuvsExportPreview";
 
 function getBestHit(items) {
@@ -96,6 +96,7 @@ export default function NuvsExport({
 }: NuvsExportProps) {
 	const [mode, setMode] = useState("contigs");
 	const [open, setOpen] = useState(false);
+	const scopeLabelId = useId();
 
 	function onSubmit(e) {
 		e.preventDefault();
@@ -125,8 +126,9 @@ export default function NuvsExport({
 			<DialogContent>
 				<DialogTitle>Export Analysis</DialogTitle>
 				<form onSubmit={onSubmit}>
-					<PseudoLabel>Scope</PseudoLabel>
+					<InputLabel id={scopeLabelId}>Scope</InputLabel>
 					<ToggleGroup
+						aria-labelledby={scopeLabelId}
 						className="flex mb-3"
 						value={mode}
 						onValueChange={setMode}

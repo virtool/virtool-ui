@@ -1,9 +1,13 @@
 import { cn } from "@app/utils";
-import type { KeyboardEvent, ReactNode } from "react";
+import type { AriaRole, KeyboardEvent, ReactNode } from "react";
 
 type BoxProps = {
 	children: ReactNode;
 	className?: string;
+	id?: string;
+	role?: AriaRole;
+	"aria-labelledby"?: string;
+	"aria-multiselectable"?: boolean;
 	onClick?: () => void;
 };
 
@@ -36,8 +40,8 @@ function Box({ children, className = "", onClick, ...rest }: BoxProps) {
 				"rounded-sm",
 				className,
 			)}
-			{...interactiveProps}
 			{...rest}
+			{...interactiveProps}
 		>
 			{children}
 		</div>
