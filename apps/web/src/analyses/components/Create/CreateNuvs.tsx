@@ -31,6 +31,7 @@ export default function CreateNuvs({
 }: CreateNuvsProps) {
 	const {
 		indexes,
+		hasData: hasIndexes,
 		isPending: isPendingIndexes,
 		isError: isErrorIndexes,
 	} = useCompatibleIndexes();
@@ -38,6 +39,7 @@ export default function CreateNuvs({
 	const {
 		defaultSubtractions,
 		subtractions,
+		hasData: hasSubtractions,
 		isPending: isPendingSubtractions,
 		isError: isErrorSubtractions,
 	} = useSubtractionOptions(sampleIds);
@@ -55,7 +57,10 @@ export default function CreateNuvs({
 		},
 	});
 
-	if (isErrorIndexes || isErrorSubtractions) {
+	if (
+		(isErrorIndexes && !hasIndexes) ||
+		(isErrorSubtractions && !hasSubtractions)
+	) {
 		return <QueryError noun="analysis options" />;
 	}
 

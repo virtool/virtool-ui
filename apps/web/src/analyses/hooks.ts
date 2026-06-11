@@ -84,6 +84,7 @@ export function useGetActiveHit(matches) {
 
 type UseCompatibleIndexesResult = {
 	indexes: IndexMinimal[];
+	hasData: boolean;
 	isPending: boolean;
 	isError: boolean;
 };
@@ -100,12 +101,13 @@ export function useCompatibleIndexes(): UseCompatibleIndexesResult {
 		.map((group) => maxBy(group, (item) => Number(item.version)))
 		.filter((index): index is IndexMinimal => index !== undefined);
 
-	return { indexes, isPending, isError };
+	return { indexes, hasData: data !== undefined, isPending, isError };
 }
 
 type UseSubtractionOptionsResult = {
 	defaultSubtractions: SubtractionOption[];
 	subtractions: SubtractionOption[];
+	hasData: boolean;
 	isPending: boolean;
 	isError: boolean;
 };
@@ -138,26 +140,15 @@ export function useSubtractionOptions(
 		isError: isErrorSample,
 	} = useFetchSample(sampleId);
 
-	if (isErrorSample || isErrorSubtractionShortlist) {
-		return {
-			defaultSubtractions: [],
-			subtractions: [],
-			isPending: false,
-			isError: true,
-		};
-	}
+	const isError = isErrorSample || isErrorSubtractionShortlist;
 
-	if (
-		isPendingSample ||
-		isPendingSubtractionShortlist ||
-		!sample ||
-		!subtractionShortlist
-	) {
+	if (sample === undefined || subtractionShortlist === undefined) {
 		return {
 			defaultSubtractions: [],
 			subtractions: [],
-			isPending: true,
-			isError: false,
+			hasData: false,
+			isPending: isPendingSample || isPendingSubtractionShortlist,
+			isError,
 		};
 	}
 
@@ -182,7 +173,8 @@ export function useSubtractionOptions(
 	return {
 		defaultSubtractions,
 		subtractions,
+		hasData: true,
 		isPending: false,
-		isError: false,
+		isError,
 	};
 }

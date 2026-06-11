@@ -32,6 +32,7 @@ export default function CreateIimi({
 }: CreateIimiProps) {
 	const {
 		indexes,
+		hasData: hasIndexes,
 		isPending: isPendingIndexes,
 		isError: isErrorIndexes,
 	} = useCompatibleIndexes();
@@ -49,7 +50,7 @@ export default function CreateIimi({
 		formState: { errors },
 	} = useForm<CreateIimiFormValues>();
 
-	if (isErrorIndexes || (isErrorMlModels && !mlModels)) {
+	if ((isErrorIndexes && !hasIndexes) || (isErrorMlModels && !mlModels)) {
 		return <QueryError noun="analysis options" />;
 	}
 
