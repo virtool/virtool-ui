@@ -14,15 +14,18 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
 export default function OtuSection() {
 	const { otuId, refId } = routeApi.useParams();
 
-	const { isPending: isPendingReference, isError: isErrorReference } =
-		useFetchReference(refId);
+	const {
+		data: reference,
+		isPending: isPendingReference,
+		isError: isErrorReference,
+	} = useFetchReference(refId);
 	const {
 		data: otu,
 		isPending: isPendingOTU,
 		isError: isErrorOTU,
 	} = useFetchOTU(otuId);
 
-	if ((isErrorReference || isErrorOTU) && !otu) {
+	if ((isErrorReference && !reference) || (isErrorOTU && !otu)) {
 		return <QueryError noun="OTU" />;
 	}
 

@@ -40,13 +40,25 @@ export default function Groups() {
 		}
 	}
 
-	const { data: selectedGroup } = useFetchGroup(selectedGroupId ?? 0);
+	const {
+		data: selectedGroup,
+		isPending: isPendingSelectedGroup,
+		isError: isErrorSelectedGroup,
+	} = useFetchGroup(selectedGroupId ?? 0);
 
 	if (isErrorGroups && !groups) {
 		return <QueryError noun="groups" />;
 	}
 
-	if (isPendingGroups || (groups.length && !selectedGroup)) {
+	if (isPendingGroups || !groups) {
+		return <LoadingPlaceholder className="mt-32" />;
+	}
+
+	if (isErrorSelectedGroup && groups.length && !selectedGroup) {
+		return <QueryError noun="selected group" />;
+	}
+
+	if (groups.length && isPendingSelectedGroup) {
 		return <LoadingPlaceholder className="mt-32" />;
 	}
 

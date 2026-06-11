@@ -56,7 +56,11 @@ export function FileManager({
 		isError: isErrorFiles,
 	} = useListFiles(fileType, page, 25);
 
-	if ((isErrorAccount || isErrorFiles) && (!account || !files)) {
+	if (isErrorAccount && !account) {
+		return <QueryError noun="account" />;
+	}
+
+	if (isErrorFiles && !files) {
 		return <QueryError noun="files" />;
 	}
 

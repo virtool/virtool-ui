@@ -34,7 +34,7 @@ export default function AnalysisDetail() {
 		isError: isSampleError,
 	} = useFetchSample(sampleId);
 
-	if ((isError || isSampleError) && (!analysis || !sample)) {
+	if ((isError && !analysis) || (isSampleError && !sample)) {
 		return <QueryError noun="analysis" />;
 	}
 

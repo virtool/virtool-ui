@@ -20,11 +20,11 @@ export function useCheckCanEditSample(sampleId: string) {
 		isError: isErrorSample,
 	} = useFetchSample(sampleId);
 
-	if (isErrorAccount || isErrorSample) {
+	if ((isErrorAccount && !account) || (isErrorSample && !sample)) {
 		return { hasPermission: false, isPending: false };
 	}
 
-	if (isPendingSample || isPendingAccount) {
+	if (isPendingSample || isPendingAccount || !account || !sample) {
 		return { hasPermission: false, isPending: true };
 	}
 

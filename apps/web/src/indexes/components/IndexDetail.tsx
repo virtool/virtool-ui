@@ -31,7 +31,7 @@ export default function IndexDetail() {
 		isError: isErrorReference,
 	} = useFetchReference(refId);
 
-	if ((isError || isErrorReference) && (!index || !reference)) {
+	if ((isError && !index) || (isErrorReference && !reference)) {
 		return <NotFound />;
 	}
 	if (isPendingIndex || isPendingReference) {

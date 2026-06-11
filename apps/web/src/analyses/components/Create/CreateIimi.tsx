@@ -49,7 +49,7 @@ export default function CreateIimi({
 		formState: { errors },
 	} = useForm<CreateIimiFormValues>();
 
-	if (isErrorIndexes || isErrorMlModels) {
+	if (isErrorIndexes || (isErrorMlModels && !mlModels)) {
 		return <QueryError noun="analysis options" />;
 	}
 
