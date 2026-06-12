@@ -25,13 +25,16 @@ export default function IndexDetail() {
 		isPending: isPendingIndex,
 		isError,
 	} = useFetchIndex(indexId);
-	const { data: reference, isPending: isPendingReference } =
-		useFetchReference(refId);
+	const {
+		data: reference,
+		isPending: isPendingReference,
+		isError: isErrorReference,
+	} = useFetchReference(refId);
 
-	if (isError) {
+	if ((isError && !index) || (isErrorReference && !reference)) {
 		return <NotFound />;
 	}
-	if (isPendingIndex || isPendingReference || !index || !reference) {
+	if (isPendingIndex || isPendingReference) {
 		return <LoadingPlaceholder />;
 	}
 

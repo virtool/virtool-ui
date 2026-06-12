@@ -1,6 +1,7 @@
 import { useCompatibleIndexes } from "@analyses/hooks";
 import { useCreateAnalysis } from "@analyses/queries";
 import Button from "@base/Button";
+import QueryError from "@base/QueryError";
 import { useFindModels } from "@ml/queries";
 import { Controller, useForm } from "react-hook-form";
 import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
@@ -29,8 +30,16 @@ export default function CreateIimi({
 	sampleCount,
 	sampleIds,
 }: CreateIimiProps) {
-	const { indexes, isPending: isPendingIndexes } = useCompatibleIndexes();
-	const { data: mlModels, isPending: isPendingMlModels } = useFindModels();
+	const {
+		indexes,
+		isPending: isPendingIndexes,
+		isError: isErrorIndexes,
+	} = useCompatibleIndexes();
+	const {
+		data: mlModels,
+		isPending: isPendingMlModels,
+		isError: isErrorMlModels,
+	} = useFindModels();
 
 	const createAnalysis = useCreateAnalysis();
 
@@ -40,7 +49,11 @@ export default function CreateIimi({
 		formState: { errors },
 	} = useForm<CreateIimiFormValues>();
 
-	if (isPendingIndexes || isPendingMlModels || !indexes || !mlModels) {
+	if (isErrorIndexes || (isErrorMlModels && !mlModels)) {
+		return <QueryError noun="analysis options" />;
+	}
+
+	if (isPendingIndexes || isPendingMlModels) {
 		return null;
 	}
 

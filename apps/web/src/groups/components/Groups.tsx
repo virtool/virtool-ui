@@ -1,6 +1,7 @@
 import Button from "@base/Button";
 import InputHeader from "@base/InputHeader";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import RemoveBanner from "@base/RemoveBanner";
 import { sortBy } from "es-toolkit/compat";
 import { Tabs } from "radix-ui";
@@ -26,7 +27,11 @@ export default function Groups() {
 		GroupMinimal[] | undefined | null
 	>(null);
 
-	const { data: groups, isPending: isPendingGroups } = useListGroups();
+	const {
+		data: groups,
+		isPending: isPendingGroups,
+		isError: isErrorGroups,
+	} = useListGroups();
 
 	if (groups !== prevGroups) {
 		setPrevGroups(groups);
@@ -35,9 +40,25 @@ export default function Groups() {
 		}
 	}
 
-	const { data: selectedGroup } = useFetchGroup(selectedGroupId ?? 0);
+	const {
+		data: selectedGroup,
+		isPending: isPendingSelectedGroup,
+		isError: isErrorSelectedGroup,
+	} = useFetchGroup(selectedGroupId ?? 0);
 
-	if (isPendingGroups || !groups || (groups.length && !selectedGroup)) {
+	if (isErrorGroups && !groups) {
+		return <QueryError noun="groups" />;
+	}
+
+	if (isPendingGroups || !groups) {
+		return <LoadingPlaceholder className="mt-32" />;
+	}
+
+	if (isErrorSelectedGroup && groups.length && !selectedGroup) {
+		return <QueryError noun="selected group" />;
+	}
+
+	if (groups.length && isPendingSelectedGroup) {
 		return <LoadingPlaceholder className="mt-32" />;
 	}
 

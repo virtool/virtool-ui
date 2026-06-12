@@ -3,6 +3,7 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
+import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
@@ -42,9 +43,18 @@ export default function ReferenceList({
 	page = 1,
 	setSearch = () => {},
 }: ReferenceListProps) {
-	const { data, isPending } = useFindReferences(page, 25, find, archived);
+	const { data, isPending, isError } = useFindReferences(
+		page,
+		25,
+		find,
+		archived,
+	);
 
-	if (isPending || !data) {
+	if (isError && !data) {
+		return <QueryError noun="references" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

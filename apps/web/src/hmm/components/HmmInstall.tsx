@@ -5,6 +5,7 @@ import Button from "@base/Button";
 import Icon from "@base/Icon";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
+import QueryError from "@base/QueryError";
 import { useQueryClient } from "@tanstack/react-query";
 import { useFetchTask } from "@tasks/queries";
 import { Info } from "lucide-react";
@@ -15,7 +16,7 @@ import { hmmQueryKeys, useInstallHmm, useListHmms } from "../queries";
  * Displays the installation progress information or provides the option to install HMMs
  */
 export function HmmInstall() {
-	const { data, isPending } = useListHmms(1, 25);
+	const { data, isPending, isError } = useListHmms(1, 25);
 	const queryClient = useQueryClient();
 	const { hasPermission: canInstall } =
 		useCheckAdminRoleOrPermission("modify_hmm");
@@ -35,7 +36,11 @@ export function HmmInstall() {
 		}
 	}, [taskComplete, queryClient]);
 
-	if (isPending || !data) {
+	if (isError && !data) {
+		return <QueryError noun="HMMs" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

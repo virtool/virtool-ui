@@ -9,10 +9,22 @@ import { useFetchSample } from "./queries";
  * @returns whether the current user has permission to edit the sample
  */
 export function useCheckCanEditSample(sampleId: string) {
-	const { data: account, isPending: isPendingAccount } = useFetchAccount();
-	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
+	const {
+		data: account,
+		isPending: isPendingAccount,
+		isError: isErrorAccount,
+	} = useFetchAccount();
+	const {
+		data: sample,
+		isPending: isPendingSample,
+		isError: isErrorSample,
+	} = useFetchSample(sampleId);
 
-	if (isPendingSample || isPendingAccount || !sample || !account) {
+	if ((isErrorAccount && !account) || (isErrorSample && !sample)) {
+		return { hasPermission: false, isPending: false };
+	}
+
+	if (isPendingSample || isPendingAccount || !account || !sample) {
 		return { hasPermission: false, isPending: true };
 	}
 

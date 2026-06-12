@@ -1,5 +1,6 @@
 import { apiClient } from "@app/api";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import {
 	keepPreviousData,
 	queryOptions,
@@ -446,11 +447,22 @@ export function CurrentOtuContextProvider({
 	otuId,
 	refId,
 }: CurrentOtuContextProviderProps) {
-	const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
-	const { data: reference, isPending: isPendingReference } =
-		useFetchReference(refId);
+	const {
+		data: otu,
+		isPending: isPendingOTU,
+		isError: isErrorOTU,
+	} = useFetchOTU(otuId);
+	const {
+		data: reference,
+		isPending: isPendingReference,
+		isError: isErrorReference,
+	} = useFetchReference(refId);
 
-	if (isPendingOTU || isPendingReference || !otu || !reference) {
+	if ((isErrorOTU || isErrorReference) && (!otu || !reference)) {
+		return <QueryError noun="OTU" />;
+	}
+
+	if (isPendingOTU || isPendingReference) {
 		return <LoadingPlaceholder />;
 	}
 

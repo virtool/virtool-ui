@@ -2,6 +2,7 @@ import BoxGroup from "@base/BoxGroup";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
+import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
@@ -23,9 +24,13 @@ export default function SubtractionList({
 	page = 1,
 	setSearch = () => {},
 }: SubtractionListProps) {
-	const { data, isPending } = useFindSubtractions(page, 25, find);
+	const { data, isPending, isError } = useFindSubtractions(page, 25, find);
 
-	if (isPending || !data) {
+	if (isError && !data) {
+		return <QueryError noun="subtractions" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

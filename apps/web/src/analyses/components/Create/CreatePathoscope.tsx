@@ -1,6 +1,7 @@
 import { useCompatibleIndexes, useSubtractionOptions } from "@analyses/hooks";
 import { useCreateAnalysis } from "@analyses/queries";
 import Button from "@base/Button";
+import QueryError from "@base/QueryError";
 import { Controller, useForm } from "react-hook-form";
 import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
 import { CreateAnalysisInputError } from "./CreateAnalysisInputError";
@@ -28,12 +29,17 @@ export default function CreatePathoscope({
 	sampleCount,
 	sampleIds,
 }: CreatePathoscopeProps) {
-	const { indexes, isPending: isPendingIndexes } = useCompatibleIndexes();
+	const {
+		indexes,
+		isPending: isPendingIndexes,
+		isError: isErrorIndexes,
+	} = useCompatibleIndexes();
 
 	const {
 		defaultSubtractions,
 		subtractions,
 		isPending: isPendingSubtractions,
+		isError: isErrorSubtractions,
 	} = useSubtractionOptions(sampleIds);
 
 	const createAnalysis = useCreateAnalysis();
@@ -49,7 +55,11 @@ export default function CreatePathoscope({
 		},
 	});
 
-	if (isPendingIndexes || isPendingSubtractions || !indexes) {
+	if (isErrorIndexes || isErrorSubtractions) {
+		return <QueryError noun="analysis options" />;
+	}
+
+	if (isPendingIndexes || isPendingSubtractions) {
 		return null;
 	}
 

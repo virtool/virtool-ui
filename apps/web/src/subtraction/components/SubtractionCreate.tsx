@@ -12,6 +12,7 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import SaveButton from "@base/SaveButton";
 import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
@@ -49,6 +50,7 @@ export default function SubtractionCreate() {
 	const {
 		data: files,
 		isPending,
+		isError,
 		isFetchingNextPage,
 		fetchNextPage,
 	} = useInfiniteFindFiles("subtraction", 25);
@@ -82,7 +84,9 @@ export default function SubtractionCreate() {
 				<DialogDescription>
 					Create a new subtraction from a FASTA file.
 				</DialogDescription>
-				{isPending || !files ? (
+				{isError && !files ? (
+					<QueryError noun="files" />
+				) : isPending ? (
 					<LoadingPlaceholder className="mt-9" />
 				) : (
 					<form onSubmit={handleSubmit(onSubmit)}>

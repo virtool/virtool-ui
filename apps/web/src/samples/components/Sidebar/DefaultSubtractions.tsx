@@ -1,5 +1,6 @@
 import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import SideBarSection from "@base/SideBarSection";
 import SidebarHeader from "@base/SidebarHeader";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
@@ -26,10 +27,17 @@ export default function DefaultSubtractions({
 	defaultSubtractions,
 	onUpdate,
 }: DefaultSubtractionsProps) {
-	const { data: subtractionOptions, isPending } =
-		useFetchSubtractionsShortlist();
+	const {
+		data: subtractionOptions,
+		isPending,
+		isError,
+	} = useFetchSubtractionsShortlist();
 
-	if (isPending || !subtractionOptions) {
+	if (isError && !subtractionOptions) {
+		return <QueryError noun="subtractions" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

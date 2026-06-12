@@ -3,6 +3,7 @@ import BoxGroup from "@base/BoxGroup";
 import InputLabel from "@base/InputLabel";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundSection from "@base/NoneFoundSection";
+import QueryError from "@base/QueryError";
 import { useListGroups } from "@groups/queries";
 import type { GroupMinimal } from "@groups/types";
 import { xor } from "es-toolkit/array";
@@ -21,11 +22,15 @@ type UserGroupsType = {
  * A list of user groups
  */
 export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
-	const { data, isPending } = useListGroups();
+	const { data, isPending, isError } = useListGroups();
 	const mutation = useUpdateUser();
 	const labelId = useId();
 
-	if (isPending || !data) {
+	if (isError && !data) {
+		return <QueryError noun="groups" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

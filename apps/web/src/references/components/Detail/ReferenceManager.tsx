@@ -3,6 +3,7 @@ import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";
 import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import Contributors from "@indexes/components/Contributors";
 import { useFetchReference } from "@references/queries";
 /**
@@ -17,9 +18,13 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId");
 
 export default function ReferenceManager() {
 	const { refId } = routeApi.useParams();
-	const { data: reference, isPending } = useFetchReference(refId);
+	const { data: reference, isPending, isError } = useFetchReference(refId);
 
-	if (isPending || !reference) {
+	if (isError && !reference) {
+		return <QueryError noun="reference" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

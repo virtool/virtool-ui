@@ -1,4 +1,5 @@
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import { useFetchLabels } from "@labels/queries";
 import CreateSample from "@samples/components/Create/CreateSample";
 import { createFileRoute } from "@tanstack/react-router";
@@ -8,9 +9,13 @@ export const Route = createFileRoute("/_authenticated/samples/create")({
 });
 
 function CreateSampleRoute() {
-	const { data: labels, isPending } = useFetchLabels();
+	const { data: labels, isPending, isError } = useFetchLabels();
 
-	if (isPending || !labels) {
+	if (isError && !labels) {
+		return <QueryError noun="labels" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

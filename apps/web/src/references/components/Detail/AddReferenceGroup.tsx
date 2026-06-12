@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import InitialIcon from "@base/InitialIcon";
 import InputSearch from "@base/InputSearch";
 import NoneFoundSection from "@base/NoneFoundSection";
+import QueryError from "@base/QueryError";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import Toolbar from "@base/Toolbar";
 import { useInfiniteFindGroups } from "@groups/queries";
@@ -31,10 +32,26 @@ export default function AddReferenceGroup({
 }: AddReferenceGroupProps) {
 	const mutation = useAddReferenceMember(refId, "group");
 	const [term, setTerm] = useState("");
-	const { data, isPending, isFetchingNextPage, fetchNextPage } =
+	const { data, isPending, isError, isFetchingNextPage, fetchNextPage } =
 		useInfiniteFindGroups(25, term);
 
-	if (isPending || !data) {
+	function onOpenChange() {
+		onHide();
+		setTerm("");
+	}
+
+	if (isError && !data) {
+		return (
+			<Dialog open={show} onOpenChange={onOpenChange}>
+				<DialogContent>
+					<DialogTitle>Add Group</DialogTitle>
+					<QueryError noun="groups" />
+				</DialogContent>
+			</Dialog>
+		);
+	}
+
+	if (isPending) {
 		return null;
 	}
 
@@ -53,11 +70,6 @@ export default function AddReferenceGroup({
 				{item.name}
 			</SelectBoxGroupSection>
 		);
-	}
-
-	function onOpenChange() {
-		onHide();
-		setTerm("");
 	}
 
 	return (

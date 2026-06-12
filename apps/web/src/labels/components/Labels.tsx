@@ -2,6 +2,7 @@ import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundSection from "@base/NoneFoundSection";
+import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderSubtitle from "@base/ViewHeaderSubtitle";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
@@ -19,12 +20,16 @@ import { LabelItem } from "./LabelItem";
  * for the labels management page.
  */
 export function Labels() {
-	const { data, isPending } = useFetchLabels();
+	const { data, isPending, isError } = useFetchLabels();
 	const createMutation = useCreateLabel();
 	const updateMutation = useUpdateLabel();
 	const removeMutation = useRemoveLabel();
 
-	if (isPending || !data) {
+	if (isError && !data) {
+		return <QueryError noun="labels" />;
+	}
+
+	if (isPending) {
 		return <LoadingPlaceholder />;
 	}
 

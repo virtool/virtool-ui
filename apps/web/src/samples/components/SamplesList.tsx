@@ -2,6 +2,7 @@ import QuickAnalyze from "@analyses/components/Create/QuickAnalyze";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
+import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
@@ -41,19 +42,22 @@ export default function SamplesList({
 	term = "",
 	workflows: filterWorkflows = [],
 }: SamplesListProps) {
-	const { data: samples, isPending: isPendingSamples } = useListSamples(
-		urlPage,
-		25,
-		term,
-		filterLabels,
-		filterWorkflows,
-	);
-	const { isPending: isPendingIndexes } = useListIndexes({ ready: true });
+	const {
+		data: samples,
+		isPending: isPendingSamples,
+		isError: isErrorSamples,
+	} = useListSamples(urlPage, 25, term, filterLabels, filterWorkflows);
+	const { isPending: isPendingIndexes, isError: isErrorIndexes } =
+		useListIndexes({ ready: true });
 
 	const [selected, setSelected] = useState<string[]>([]);
 	const [openQuickAnalyze, setOpenQuickAnalyze] = useState(false);
 
-	if (isPendingSamples || isPendingIndexes || !samples) {
+	if ((isErrorSamples || isErrorIndexes) && !samples) {
+		return <QueryError noun="samples" />;
+	}
+
+	if (isPendingSamples || isPendingIndexes) {
 		return <LoadingPlaceholder />;
 	}
 
