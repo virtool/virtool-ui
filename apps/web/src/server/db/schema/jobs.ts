@@ -3,8 +3,11 @@
 // migrations from this side. Keep the columns in sync with
 // `../../../../../../virtool/virtool/jobs/pg.py`.
 //
-// The legacy Mongo `args` field is not a column; workflow resource ids live in
-// the `job_*` junction tables and are recombined into `args` when a job is read.
+// The legacy Mongo `args` field is not a column. A job's sample and index
+// resources live in the `job_samples` / `job_indexes` junction tables, while
+// its subtraction and analysis resources are found on the owning rows
+// (`subtractions.job_id`, `analyses.job_id`). All are recombined into `args`
+// when a job is read.
 
 import {
 	boolean,
@@ -60,14 +63,4 @@ export const jobSamples = pgTable("job_samples", {
 export const jobIndexes = pgTable("job_indexes", {
 	job_id: integer("job_id").primaryKey(),
 	index_id: text("index_id").notNull(),
-});
-
-export const jobSubtractions = pgTable("job_subtractions", {
-	job_id: integer("job_id").primaryKey(),
-	subtraction_id: text("subtraction_id").notNull(),
-});
-
-export const jobAnalyses = pgTable("job_analyses", {
-	job_id: integer("job_id").primaryKey(),
-	analysis_id: text("analysis_id").notNull(),
 });
