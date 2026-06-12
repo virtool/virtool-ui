@@ -4,7 +4,6 @@ import type { HmmSearchResults } from "@hmm/types";
 import { Tabs } from "radix-ui";
 import HMMAlert from "../HMMAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
-import CreateIimi from "./CreateIimi";
 import CreateNuvs from "./CreateNuvs";
 import CreatePathoscope from "./CreatePathoscope";
 import { getCompatibleWorkflows } from "./workflows";
@@ -95,9 +94,6 @@ export default function CreateAnalysis({
 							</Tabs.Trigger>
 						))}
 					</Tabs.List>
-					<Content value="iimi">
-						<CreateIimi sampleCount={1} sampleIds={sampleIds} />
-					</Content>
 					<Content value="nuvs">
 						<CreateNuvs sampleCount={1} sampleIds={sampleIds} />
 					</Content>

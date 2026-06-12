@@ -42,7 +42,6 @@ export default defineConfig(({ command }) => ({
 			"@indexes": path.resolve("src/indexes"),
 			"@jobs": path.resolve("src/jobs"),
 			"@labels": path.resolve("src/labels"),
-			"@ml": path.resolve("src/ml"),
 			"@nav": path.resolve("src/nav"),
 			"@otus": path.resolve("src/otus"),
 			"@quality": path.resolve("src/quality"),

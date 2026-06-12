@@ -95,7 +95,6 @@ export function useGetAnalysis(analysisId: string) {
 }
 
 export type CreateAnalysisParams = {
-	mlModel?: string;
 	refId?: string;
 	sampleId: string;
 	subtractionIds?: string[];
@@ -106,14 +105,13 @@ export function useCreateAnalysis() {
 	const queryClient = useQueryClient();
 
 	return useMutation<GenericAnalysis, unknown, CreateAnalysisParams>({
-		mutationFn: ({ mlModel, refId, sampleId, subtractionIds, workflow }) =>
+		mutationFn: ({ refId, sampleId, subtractionIds, workflow }) =>
 			apiClient
 				.post(`/samples/${sampleId}/analyses`)
 				.send({
 					workflow,
 					ref_id: refId,
 					subtractions: subtractionIds,
-					ml: mlModel,
 				})
 				.then((res) => res.body),
 

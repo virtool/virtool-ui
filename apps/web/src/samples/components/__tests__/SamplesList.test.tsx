@@ -7,7 +7,6 @@ import {
 	mockApiListIndexes,
 } from "@tests/fake/indexes";
 import { createFakeLabel } from "@tests/fake/labels";
-import { createFakeMLModelMinimal, mockApiGetModels } from "@tests/fake/ml";
 import {
 	createFakeSampleMinimal,
 	mockApiGetSamples,
@@ -55,7 +54,6 @@ describe("<SamplesList />", () => {
 		mockApiGetSamples(samples);
 		mockApiGetHmms(createFakeHmmSearchResults());
 		mockApiListIndexes([createFakeIndexMinimal()]);
-		mockApiGetModels([createFakeMLModelMinimal()]);
 		mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
 	});
 
