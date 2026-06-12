@@ -1,15 +1,15 @@
 import { count, desc, eq, inArray } from "drizzle-orm";
 import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
+import { analyses } from "../db/schema/analyses";
 import {
 	type JobClaim,
 	type JobStep,
-	jobAnalyses,
 	jobIndexes,
 	jobSamples,
-	jobSubtractions,
 	jobs,
 } from "../db/schema/jobs";
+import { subtractions } from "../db/schema/subtractions";
 import { users } from "../db/schema/users";
 import { AppError } from "../errors";
 
@@ -187,23 +187,25 @@ export async function getJob(db: Db, jobId: number): Promise<Job> {
 			handle: users.handle,
 			sample_id: jobSamples.sample_id,
 			index_id: jobIndexes.index_id,
-			subtraction_id: jobSubtractions.subtraction_id,
-			analysis_id: jobAnalyses.analysis_id,
+			subtraction_id: subtractions.id,
+			analysis_id: analyses.legacy_id,
 		})
 		.from(jobs)
 		.innerJoin(users, eq(jobs.user_id, users.id))
 		.leftJoin(jobSamples, eq(jobs.id, jobSamples.job_id))
 		.leftJoin(jobIndexes, eq(jobs.id, jobIndexes.job_id))
-		.leftJoin(jobSubtractions, eq(jobs.id, jobSubtractions.job_id))
-		.leftJoin(jobAnalyses, eq(jobs.id, jobAnalyses.job_id))
+		.leftJoin(subtractions, eq(jobs.id, subtractions.job_id))
+		.leftJoin(analyses, eq(jobs.id, analyses.job_id))
 		.where(eq(jobs.id, jobId));
 
 	if (!row) {
 		throw new JobNotFoundError();
 	}
 
-	// `args` is reconstructed from the resource junction tables — the legacy
-	// Mongo `args` field is not stored as a column.
+	// `args` is reconstructed from the related resources — the legacy Mongo
+	// `args` field is not stored as a column. Samples and indexes come from the
+	// `job_*` junction tables; the subtraction and analysis are found on the
+	// owning rows.
 	const args: Record<string, string> = {};
 	if (row.sample_id != null) {
 		args.sample_id = row.sample_id;
@@ -212,7 +214,7 @@ export async function getJob(db: Db, jobId: number): Promise<Job> {
 		args.index_id = row.index_id;
 	}
 	if (row.subtraction_id != null) {
-		args.subtraction_id = row.subtraction_id;
+		args.subtraction_id = String(row.subtraction_id);
 	}
 	if (row.analysis_id != null) {
 		args.analysis_id = row.analysis_id;
