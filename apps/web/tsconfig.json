@@ -14,7 +14,6 @@
 			"@jobs/*": ["./src/jobs/*"],
 			"@banner/*": ["./src/banner/*"],
 			"@labels/*": ["./src/labels/*"],
-			"@ml/*": ["./src/ml/*"],
 			"@nav/*": ["./src/nav/*"],
 			"@otus/*": ["./src/otus/*"],
 			"@quality/*": ["./src/quality/*"],

@@ -5,7 +5,6 @@ import { groupQueryKeys } from "@groups/queries";
 import { indexQueryKeys } from "@indexes/queries";
 import { jobQueryKeys } from "@jobs/queries";
 import { labelQueryKeys } from "@labels/queries";
-import { modelQueryKeys } from "@ml/queries";
 import { referenceQueryKeys } from "@references/queries";
 import { samplesQueryKeys } from "@samples/queries";
 import type { QueryClient } from "@tanstack/react-query";
@@ -26,7 +25,6 @@ const keyFactories: Record<SseDomain, KeyFactory> = {
 	jobs: jobQueryKeys,
 	labels: labelQueryKeys,
 	messages: bannerQueryKeys,
-	models: modelQueryKeys,
 	references: referenceQueryKeys,
 	roles: roleQueryKeys,
 	tasks: taskQueryKeys,

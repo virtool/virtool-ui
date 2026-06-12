@@ -13,11 +13,6 @@ export const nuvsWorkflow = {
 	name: "NuVs",
 };
 
-export const iimiWorkflow = {
-	id: "iimi",
-	name: "Iimi",
-};
-
 export const workflows = [pathoscopeWorkflow, nuvsWorkflow] as workflow[];
 
 export function getCompatibleWorkflows(hasHmm: boolean): workflow[] {

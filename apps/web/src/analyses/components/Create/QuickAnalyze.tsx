@@ -10,7 +10,6 @@ import { useEffect } from "react";
 import HMMAlert from "../HMMAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
-import CreateIimi from "./CreateIimi";
 import CreateNuvs from "./CreateNuvs";
 import CreatePathoscope from "./CreatePathoscope";
 import { getCompatibleWorkflows } from "./workflows";
@@ -143,9 +142,6 @@ export default function QuickAnalyze({
 							</BoxGroupSection>
 						))}
 					</div>
-					<Content value="iimi">
-						<CreateIimi sampleCount={sampleIds.length} sampleIds={sampleIds} />
-					</Content>
 					<Content value="nuvs">
 						<CreateNuvs sampleCount={sampleIds.length} sampleIds={sampleIds} />
 					</Content>
