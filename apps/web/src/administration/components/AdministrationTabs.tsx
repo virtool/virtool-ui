@@ -22,5 +22,5 @@ export default function AdministrationTabs({
 		tabs.push(<NavTab to="/administration/groups">Groups</NavTab>);
 	}
 
-	return <NavTabs>{...tabs}</NavTabs>;
+	return <NavTabs>{tabs}</NavTabs>;
 }
