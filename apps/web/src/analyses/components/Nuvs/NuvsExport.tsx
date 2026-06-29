@@ -9,11 +9,9 @@ import {
 	DialogTrigger,
 } from "@base/Dialog";
 import Icon from "@base/Icon";
-import InputLabel from "@base/InputLabel";
-import ToggleGroup from "@base/ToggleGroup";
-import ToggleGroupItem from "@base/ToggleGroupItem";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@base/Tabs";
 import { Download } from "lucide-react";
-import { useId, useState } from "react";
+import { useState } from "react";
 import NuvsExportPreview from "./NuvsExportPreview";
 
 function getBestHit(items) {
@@ -96,7 +94,6 @@ export default function NuvsExport({
 }: NuvsExportProps) {
 	const [mode, setMode] = useState("contigs");
 	const [open, setOpen] = useState(false);
-	const scopeLabelId = useId();
 
 	function onSubmit(e) {
 		e.preventDefault();
@@ -106,7 +103,7 @@ export default function NuvsExport({
 				analysisId,
 				exportContigData(results.hits, sampleName),
 				sampleName,
-				"configs",
+				"contigs",
 			);
 		} else {
 			downloadData(
@@ -126,18 +123,18 @@ export default function NuvsExport({
 			<DialogContent>
 				<DialogTitle>Export Analysis</DialogTitle>
 				<form onSubmit={onSubmit}>
-					<InputLabel id={scopeLabelId}>Scope</InputLabel>
-					<ToggleGroup
-						aria-labelledby={scopeLabelId}
-						className="flex mb-3"
-						value={mode}
-						onValueChange={setMode}
-					>
-						<ToggleGroupItem value="contigs">Contigs</ToggleGroupItem>
-						<ToggleGroupItem value="orfs">ORFs</ToggleGroupItem>
-					</ToggleGroup>
-
-					<NuvsExportPreview mode={mode} />
+					<Tabs value={mode} onValueChange={setMode}>
+						<TabsList aria-label="Scope" className="mb-3">
+							<TabsTrigger value="contigs">Contigs</TabsTrigger>
+							<TabsTrigger value="orfs">ORFs</TabsTrigger>
+						</TabsList>
+						<TabsContent value="contigs">
+							<NuvsExportPreview mode="contigs" />
+						</TabsContent>
+						<TabsContent value="orfs">
+							<NuvsExportPreview mode="orfs" />
+						</TabsContent>
+					</Tabs>
 
 					<DialogFooter>
 						<Button type="submit" className="inline-flex gap-1.5">

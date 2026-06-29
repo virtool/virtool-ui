@@ -3,8 +3,8 @@ import InputHeader from "@base/InputHeader";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import RemoveBanner from "@base/RemoveBanner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@base/Tabs";
 import { sortBy } from "es-toolkit/compat";
-import { Tabs } from "radix-ui";
 import { useState } from "react";
 import {
 	useFetchGroup,
@@ -75,31 +75,20 @@ export default function Groups() {
 			</header>
 
 			{groups.length && selectedGroup ? (
-				<Tabs.Root
+				<Tabs
+					variant="vertical"
 					value={activeValue}
 					onValueChange={(value) => setSelectedGroupId(Number(value))}
-					orientation="vertical"
-					className="gap-x-4 grid grid-cols-4"
 				>
-					<Tabs.List
-						aria-label="Groups"
-						className="col-span-1 flex flex-col self-start bg-white border border-gray-300 rounded-sm overflow-hidden"
-					>
+					<TabsList aria-label="Groups">
 						{sortedGroups.map((group) => (
-							<Tabs.Trigger
-								key={group.id}
-								value={String(group.id)}
-								className="px-6 py-3 text-left text-gray-500 cursor-pointer transition-colors hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600/50 data-[state=active]:shadow-[inset_3px_0_0_var(--color-virtool)] data-[state=active]:text-gray-900 data-[state=active]:font-medium"
-							>
+							<TabsTrigger key={group.id} value={String(group.id)}>
 								{group.name}
-							</Tabs.Trigger>
+							</TabsTrigger>
 						))}
-					</Tabs.List>
+					</TabsList>
 
-					<Tabs.Content
-						value={activeValue}
-						className="col-span-3 focus:outline-none"
-					>
+					<TabsContent value={activeValue}>
 						<InputHeader
 							id="name"
 							value={selectedGroup.name}
@@ -118,8 +107,8 @@ export default function Groups() {
 							buttonText="Delete"
 							onClick={() => removeMutation.mutate({ id: selectedGroup.id })}
 						/>
-					</Tabs.Content>
-				</Tabs.Root>
+					</TabsContent>
+				</Tabs>
 			) : (
 				<div className="bg-gray-200 flex items-center h-48 justify-center rounded-md text-gray-600">
 					No Groups Exist
