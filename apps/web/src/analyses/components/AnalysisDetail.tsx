@@ -13,11 +13,9 @@ import { CircleAlert } from "lucide-react";
 import type { ReactNode } from "react";
 import { useGetAnalysis } from "../queries";
 import type {
-	FormattedIimiAnalysis,
 	FormattedNuvsAnalysis,
 	FormattedPathoscopeAnalysis,
 } from "../types";
-import { IimiViewer } from "./Iimi/IimiViewer";
 import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";
 
 const routeApi = getRouteApi(
@@ -63,8 +61,6 @@ export default function AnalysisDetail() {
 		content = (
 			<NuvsViewer detail={analysis as FormattedNuvsAnalysis} sample={sample} />
 		);
-	} else if (analysis.workflow === "iimi") {
-		content = <IimiViewer detail={analysis as FormattedIimiAnalysis} />;
 	} else {
 		return (
 			<Box className="flex justify-center items-center">

@@ -87,7 +87,6 @@ export type GenericAnalysis = AnalysisMinimal & {
 export type Analysis =
 	| FormattedPathoscopeAnalysis
 	| FormattedNuvsAnalysis
-	| IimiAnalysis
 	| GenericAnalysis;
 
 export type FormattedPathoscopeAnalysis = AnalysisMinimal & {
@@ -287,88 +286,7 @@ export type AnalysisSearchResult = SearchResult & {
 	items: AnalysisMinimal[];
 };
 
-export type AnalysisWorkflow = "iimi" | "pathoscope" | "nuvs";
+export type AnalysisWorkflow = "pathoscope" | "nuvs";
 
 /** Read depths of a sequence mapped by position to an array */
 export type PositionMappedReadDepths = number[];
-
-/** regions of a sequence where there is a greater chance of erroneous read mapping*/
-export type UntrustworthyRange = [number, number];
-
-/** RLE encoded coverage data output from Iimi workflow analysis*/
-export type IimiCoverage = {
-	/** The length in base-pairs of the corresponding coverage depth*/
-	lengths: number[];
-
-	/** The coverage depths */
-	values: number[];
-};
-
-/** The data for a segment of an isolates genome */
-export type IimiSequence = {
-	id: string;
-	coverage: IimiCoverage;
-
-	/** The total base pairs of the sequence*/
-	length: number;
-
-	/** The probability that the sequence is present in the sample */
-	probability?: number;
-
-	/** Whether the ML workflow determined this sequence was present in the sample*/
-	result: boolean;
-
-	/** regions of the sequence with high similarity between references */
-	untrustworthy_ranges: UntrustworthyRange[];
-};
-
-/** The results of the Immi analysis for an individual isolate*/
-export type IimiIsolate = {
-	id: string;
-	sequences: IimiSequence[];
-	source_name: string;
-	source_type: string;
-};
-
-/** An OTU which has mapped reads as a result of the iimi workflow*/
-export type IimiHit = {
-	id: string;
-	abbreviation: string;
-	isolates: IimiIsolate[];
-	name: string;
-	result: boolean;
-};
-
-/** Complete iimi prediction results*/
-export type IimiAnalysis = AnalysisMinimal & {
-	files: Array<AnalysisFile>;
-	results: {
-		hits: IimiHit[];
-	};
-	workflow: AnalysisWorkflow;
-};
-
-/** iimi prediction results for a segment of virus formatted for display */
-export type FormattedIimiSequence = Omit<IimiSequence, "coverage"> & {
-	maxDepth: number;
-	coverage: PositionMappedReadDepths;
-};
-
-/** iimi prediction results for a virus isolate formatted for display */
-export type FormattedIimiIsolate = Omit<IimiIsolate, "sequences"> & {
-	sequences: FormattedIimiSequence[];
-};
-
-/** iimi prediction results for a complete virus formatted for display */
-export type FormattedIimiHit = Omit<IimiHit, "isolates"> & {
-	probability: number;
-	coverage: number;
-	isolates: FormattedIimiIsolate[];
-};
-
-/** Complete iimi prediction results formatted for display*/
-export type FormattedIimiAnalysis = Omit<IimiAnalysis, "results"> & {
-	results: {
-		hits: FormattedIimiHit[];
-	};
-};
