@@ -1,6 +1,6 @@
 import Badge from "@base/Badge";
-import Tabs from "@base/Tabs";
-import TabsLink from "@base/TabsLink";
+import NavTab from "@base/NavTab";
+import NavTabs from "@base/NavTabs";
 
 type ReferenceDetailTabsProps = {
 	id: string;
@@ -15,13 +15,13 @@ export default function ReferenceDetailTabs({
 	otuCount,
 }: ReferenceDetailTabsProps) {
 	return (
-		<Tabs>
-			<TabsLink to={`/refs/${id}/manage`}>Manage</TabsLink>
-			<TabsLink to={`/refs/${id}/otus`}>
+		<NavTabs>
+			<NavTab to={`/refs/${id}/manage`}>Manage</NavTab>
+			<NavTab to={`/refs/${id}/otus`}>
 				OTUs <Badge>{otuCount}</Badge>
-			</TabsLink>
-			<TabsLink to={`/refs/${id}/indexes`}>Indexes</TabsLink>
-			<TabsLink to={`/refs/${id}/settings`}>Settings</TabsLink>
-		</Tabs>
+			</NavTab>
+			<NavTab to={`/refs/${id}/indexes`}>Indexes</NavTab>
+			<NavTab to={`/refs/${id}/settings`}>Settings</NavTab>
+		</NavTabs>
 	);
 }

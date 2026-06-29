@@ -1,7 +1,7 @@
 import Badge from "@base/Badge";
 import Link from "@base/Link";
-import Tabs from "@base/Tabs";
-import TabsLink from "@base/TabsLink";
+import NavTab from "@base/NavTab";
+import NavTabs from "@base/NavTabs";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
@@ -86,11 +86,11 @@ function OtuDetailLayout() {
 				</p>
 			</ViewHeader>
 
-			<Tabs>
-				<TabsLink to={`/refs/${refId}/otus/${otuId}/otu`}>OTU</TabsLink>
-				<TabsLink to={`/refs/${refId}/otus/${otuId}/schema`}>Schema</TabsLink>
-				<TabsLink to={`/refs/${refId}/otus/${otuId}/history`}>History</TabsLink>
-			</Tabs>
+			<NavTabs>
+				<NavTab to={`/refs/${refId}/otus/${otuId}/otu`}>OTU</NavTab>
+				<NavTab to={`/refs/${refId}/otus/${otuId}/schema`}>Schema</NavTab>
+				<NavTab to={`/refs/${refId}/otus/${otuId}/history`}>History</NavTab>
+			</NavTabs>
 
 			<Outlet />
 		</>

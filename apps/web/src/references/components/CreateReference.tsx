@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import Tabs from "@base/Tabs";
-import TabsLink from "@base/TabsLink";
+import NavTab from "@base/NavTab";
+import NavTabs from "@base/NavTabs";
 import EmptyReference from "./EmptyReference";
 import ImportReference from "./ImportReference";
 
@@ -25,22 +25,22 @@ export function CreateReference({
 		>
 			<DialogContent size="lg">
 				<DialogTitle>Create Reference</DialogTitle>
-				<Tabs>
-					<TabsLink
+				<NavTabs>
+					<NavTab
 						to="."
 						search={{ createReferenceType: "empty" }}
 						isActive={createReferenceType === "empty"}
 					>
 						Empty
-					</TabsLink>
-					<TabsLink
+					</NavTab>
+					<NavTab
 						to="."
 						search={{ createReferenceType: "import" }}
 						isActive={createReferenceType === "import"}
 					>
 						Import
-					</TabsLink>
-				</Tabs>
+					</NavTab>
+				</NavTabs>
 
 				{createReferenceType === "import" ? (
 					<ImportReference />

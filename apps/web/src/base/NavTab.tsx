@@ -3,7 +3,7 @@ import { cn } from "@app/utils";
 import Link from "@base/Link";
 import type { ReactNode } from "react";
 
-type TabsLinkProps = {
+type NavTabProps = {
 	children: ReactNode;
 	className?: string;
 	isActive?: boolean;
@@ -14,13 +14,13 @@ type TabsLinkProps = {
 /**
  * A navigation link with active state styling
  */
-export default function TabsLink({
+export default function NavTab({
 	children,
 	className,
 	isActive,
 	search,
 	to,
-}: TabsLinkProps) {
+}: NavTabProps) {
 	isActive = useMatchPartialPath(to) || isActive;
 
 	const classname = cn(

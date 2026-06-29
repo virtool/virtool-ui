@@ -1,7 +1,7 @@
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
-import Tabs from "@base/Tabs";
-import TabsLink from "@base/TabsLink";
+import NavTab from "@base/NavTab";
+import NavTabs from "@base/NavTabs";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
@@ -76,21 +76,21 @@ function SampleDetailLayout() {
 				<ViewHeaderAttribution time={created_at} user={user.handle} />
 			</ViewHeader>
 
-			<Tabs>
-				<TabsLink to={`/samples/${sampleId}/general`}>General</TabsLink>
+			<NavTabs>
+				<NavTab to={`/samples/${sampleId}/general`}>General</NavTab>
 				{data.ready && (
 					<>
-						<TabsLink to={`/samples/${sampleId}/files`}>Files</TabsLink>
-						<TabsLink to={`/samples/${sampleId}/quality`}>Quality</TabsLink>
-						<TabsLink to={`/samples/${sampleId}/analyses`}>Analyses</TabsLink>
+						<NavTab to={`/samples/${sampleId}/files`}>Files</NavTab>
+						<NavTab to={`/samples/${sampleId}/quality`}>Quality</NavTab>
+						<NavTab to={`/samples/${sampleId}/analyses`}>Analyses</NavTab>
 						{canModify && (
-							<TabsLink to={`/samples/${sampleId}/rights`}>
+							<NavTab to={`/samples/${sampleId}/rights`}>
 								<Icon icon={Key} />
-							</TabsLink>
+							</NavTab>
 						)}
 					</>
 				)}
-			</Tabs>
+			</NavTabs>
 
 			<Outlet />
 

@@ -1,5 +1,5 @@
-import Tabs from "@base/Tabs";
-import TabsLink from "@base/TabsLink";
+import NavTab from "@base/NavTab";
+import NavTabs from "@base/NavTabs";
 import type { ReactNode } from "react";
 import type { AdministratorRoleName } from "../types";
 import { hasSufficientAdminRole } from "../utils";
@@ -14,15 +14,13 @@ export default function AdministrationTabs({
 	const tabs: ReactNode[] = [];
 
 	if (hasSufficientAdminRole("settings", administratorRole)) {
-		tabs.push(<TabsLink to="/administration/settings">Settings</TabsLink>);
+		tabs.push(<NavTab to="/administration/settings">Settings</NavTab>);
 	}
 
 	if (hasSufficientAdminRole("users", administratorRole)) {
-		tabs.push(
-			<TabsLink to="/administration/users?status=active">Users</TabsLink>,
-		);
-		tabs.push(<TabsLink to="/administration/groups">Groups</TabsLink>);
+		tabs.push(<NavTab to="/administration/users?status=active">Users</NavTab>);
+		tabs.push(<NavTab to="/administration/groups">Groups</NavTab>);
 	}
 
-	return <Tabs>{...tabs}</Tabs>;
+	return <NavTabs>{tabs}</NavTabs>;
 }
