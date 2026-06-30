@@ -3,8 +3,9 @@ import DropdownButton from "@base/DropdownButton";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
+import type { AnalysisWorkflow } from "../../types";
 
-const sortKeys = {
+const sortKeys: Record<AnalysisWorkflow, string[]> = {
 	pathoscope: ["coverage", "depth", "weight"],
 	nuvs: ["length", "e", "orfs"],
 };
@@ -21,7 +22,7 @@ const sortTitles = {
 };
 
 interface AnalysisViewerSortProps {
-	workflow: string;
+	workflow: AnalysisWorkflow;
 	sortKey: string;
 	onSelect: (key: string) => void;
 }

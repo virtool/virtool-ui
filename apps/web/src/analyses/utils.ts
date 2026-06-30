@@ -12,6 +12,7 @@ import {
 	sumBy,
 } from "es-toolkit/compat";
 import type {
+	AnalysisWorkflow,
 	FormattedPathoscopeAnalysis,
 	FormattedPathoscopeIsolate,
 	NuvsOrf,
@@ -275,7 +276,7 @@ export function formatData(detail) {
 	return detail;
 }
 
-const supportedWorkflows = ["pathoscope", "nuvs"];
+const supportedWorkflows: AnalysisWorkflow[] = ["pathoscope", "nuvs"];
 
 export function checkSupportedWorkflow(workflow) {
 	return supportedWorkflows.includes(workflow);
