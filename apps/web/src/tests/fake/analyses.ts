@@ -3,12 +3,6 @@ import type {
 	AnalysisMinimal,
 	Blast,
 	FormattedNuvsAnalysis,
-	IimiAnalysis,
-	IimiCoverage,
-	IimiHit,
-	IimiIsolate,
-	IimiSequence,
-	UntrustworthyRange,
 } from "@analyses/types";
 import { faker } from "@faker-js/faker";
 import nock from "nock";
@@ -185,80 +179,4 @@ export function mockApiBlastNuVs(analysisId: string, sequenceIndex: string) {
 	return nock("http://localhost")
 		.put(`/api/analyses/${analysisId}/${sequenceIndex}/blast`)
 		.reply(200);
-}
-
-/**
- * Create a fake iimi analysis object
- */
-export function createFakeIimiAnalysis(): IimiAnalysis {
-	return {
-		...createFakeAnalysisMinimal(),
-		files: [],
-		results: {
-			hits: [createFakeIimiHit()],
-		},
-		workflow: "iimi",
-	};
-}
-
-/**
- * Create a fake iimi hit object
- */
-export function createFakeIimiHit(): IimiHit {
-	return {
-		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-		abbreviation: faker.string.alpha({ casing: "upper", length: 3 }),
-		isolates: [createFakeIimiIsolate()],
-		name: faker.word.noun({ strategy: "any-length" }),
-		result: faker.datatype.boolean(),
-	};
-}
-
-/**
- * Create a fake iimi isolate object
- */
-export function createFakeIimiIsolate(): IimiIsolate {
-	return {
-		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-		sequences: [createFakeIimiSequence()],
-		source_name: faker.word.noun({ strategy: "any-length" }),
-		source_type: faker.helpers.arrayElement(["isolate", "strain", "genotype"]),
-	};
-}
-
-/**
- * Create a fake iimi sequence object
- */
-export function createFakeIimiSequence(): IimiSequence {
-	const length = faker.number.int({ min: 1000, max: 50000 });
-	return {
-		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-		coverage: createFakeIimiCoverage(),
-		length,
-		probability: faker.number.float({ min: 0.5, max: 1 }),
-		result: faker.datatype.boolean(),
-		untrustworthy_ranges: Array.from(
-			{ length: faker.number.int({ min: 0, max: 3 }) },
-			() =>
-				[
-					faker.number.int({ min: 0, max: length - 100 }),
-					faker.number.int({ min: 100, max: length }),
-				] as UntrustworthyRange,
-		),
-	};
-}
-
-/**
- * Create a fake iimi coverage object
- */
-export function createFakeIimiCoverage(): IimiCoverage {
-	const segmentCount = faker.number.int({ min: 10, max: 100 });
-	return {
-		lengths: Array.from({ length: segmentCount }, () =>
-			faker.number.int({ min: 10, max: 1000 }),
-		),
-		values: Array.from({ length: segmentCount }, () =>
-			faker.number.int({ min: 0, max: 500 }),
-		),
-	};
 }

@@ -15,7 +15,6 @@ export const Workflow = z.literal([
 	"create_subtraction",
 	"nuvs",
 	"pathoscope",
-	"iimi",
 ]);
 export type Workflow = z.infer<typeof Workflow>;
 

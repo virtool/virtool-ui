@@ -78,7 +78,6 @@ export function formatIsolateName(isolate: object): string {
 export const workflowDisplayNames = {
 	create_sample: "Create Sample",
 	create_subtraction: "Create Subtraction",
-	iimi: "Iimi",
 	nuvs: "Nuvs",
 	pathoscope: "Pathoscope",
 	build_index: "Build Index",
