@@ -44,11 +44,7 @@ export default function RebuildAlert({ page, refId }: RebuildAlertProps) {
 			<Alert color="orange" level icon={Info}>
 				<span>
 					<span>There are unbuilt changes. </span>
-					<Link
-						to="/refs/$refId/indexes"
-						params={{ refId }}
-						state={{ openRebuild: true }}
-					>
+					<Link to="/refs/$refId/indexes" params={{ refId }}>
 						Rebuild the index
 					</Link>
 					<span> to use the changes in future analyses.</span>

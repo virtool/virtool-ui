@@ -1,14 +1,8 @@
 import { useFuse } from "@app/fuse";
-import { cn } from "@app/utils";
-import BoxGroup from "@base/BoxGroup";
-import InputLabel from "@base/InputLabel";
-import type { Subtraction, SubtractionOption } from "@subtraction/types";
-import { intersectionWith, xor } from "es-toolkit";
-import { useId } from "react";
-import CreateAnalysisField from "./CreateAnalysisField";
-import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
-import { CreateAnalysisSelectorSearch } from "./CreateAnalysisSelectorSearch";
-import SubtractionSelectorItem from "./SubtractionSelectorItem";
+import Label from "@base/Label";
+import MultiSelectComboBox from "@base/MultiSelectComboBox";
+import type { SubtractionOption } from "@subtraction/types";
+import { intersectionWith } from "es-toolkit";
 
 type SubtractionSelectorProps = {
 	selected: string[];
@@ -24,87 +18,46 @@ export default function SubtractionSelector({
 	const [results, term, setTerm] = useFuse<SubtractionOption>(subtractions, [
 		"name",
 	]);
-	const availableLabelId = useId();
-	const selectedLabelId = useId();
-
-	const unselectedSubtractions = results.filter(
-		(subtraction: Subtraction) => !selected.includes(subtraction.id),
-	);
 
 	const selectedSubtractions = intersectionWith(
 		subtractions,
 		selected,
-		(subtraction: Subtraction, id: string) => subtraction.id === id,
+		(subtraction, id) => subtraction.id === id,
 	);
 
-	function handleClick(id) {
-		return onChange(xor(selected, [id]));
+	function handleChange(next: SubtractionOption[]) {
+		onChange(next.map((subtraction) => subtraction.id));
 	}
 
-	const selectedComponents = selectedSubtractions.map(
-		({ id, isDefault, name }) => (
-			<SubtractionSelectorItem
-				id={id}
-				isDefault={isDefault}
-				key={id}
-				name={name}
-				onClick={handleClick}
-			/>
-		),
-	);
-
 	return (
-		<CreateAnalysisField>
-			<CreateAnalysisFieldTitle>Subtractions</CreateAnalysisFieldTitle>
-			<div>
-				<InputLabel id={availableLabelId}>Available</InputLabel>
-				<BoxGroup
-					role="group"
-					aria-labelledby={availableLabelId}
-					className="h-72"
-				>
-					<CreateAnalysisSelectorSearch
-						label="Filter subtractions"
-						term={term}
-						onChange={setTerm}
-					/>
-					<BoxGroup
-						className={cn(
-							"border-none",
-							"bg-slate-100",
-							"m-0",
-							"h-52",
-							"overflow-y-auto",
-						)}
-					>
-						{unselectedSubtractions.map(({ id, name, isDefault }) => (
-							<SubtractionSelectorItem
-								key={id}
-								id={id}
-								name={name}
-								onClick={handleClick}
-								isDefault={isDefault}
-							/>
-						))}
-					</BoxGroup>
-				</BoxGroup>
-			</div>
-			<div className={cn("flex", "flex-col")}>
-				<InputLabel id={selectedLabelId}>Selected</InputLabel>
-				<BoxGroup
-					role="group"
-					aria-labelledby={selectedLabelId}
-					className="overflow-y-auto h-72"
-				>
-					{selectedSubtractions.length ? (
-						selectedComponents
-					) : (
-						<div className="absolute inset-0 bg-slate-100">
-							<span>Nothing selected</span>
-						</div>
-					)}
-				</BoxGroup>
-			</div>
-		</CreateAnalysisField>
+		<div className="mb-8">
+			<MultiSelectComboBox<SubtractionOption>
+				label="Subtractions"
+				items={results}
+				selectedItems={selectedSubtractions}
+				onChange={handleChange}
+				term={term}
+				onTermChange={setTerm}
+				itemToKey={(subtraction) => subtraction.id}
+				itemToString={(subtraction) => subtraction.name}
+				placeholder="Select subtractions"
+				renderOption={(subtraction) => (
+					<>
+						<span className="overflow-hidden text-ellipsis">
+							{subtraction.name}
+						</span>
+						{subtraction.isDefault ? <Label>Default</Label> : null}
+					</>
+				)}
+				renderChip={(subtraction) => (
+					<>
+						{subtraction.name}
+						{subtraction.isDefault ? (
+							<span className="text-gray-500">(default)</span>
+						) : null}
+					</>
+				)}
+			/>
+		</div>
 	);
 }
