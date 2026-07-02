@@ -41,6 +41,7 @@ not per-handler. The wiring lives in `apps/web/src/start.ts`:
 
 ```ts
 const authenticationMiddleware = createAuthenticationMiddleware([
+  createFirstUserFn,
   loginFn,
   logoutFn,
   resetPasswordFn,
@@ -162,6 +163,30 @@ function. It delegates to `core.login`, which:
 
 The `resetCode` is returned in the response body (not a cookie) so the
 client can hold it in JS for the duration of the reset flow.
+
+## First-user setup
+
+A fresh instance has no users; the root document reports
+`first_user: true` and the `_authenticated` guard redirects to
+`/setup`. `createFirstUserFn` (`server/auth/functions.ts`) is the
+public server function that bootstraps the instance. It is unauthenticated
+by necessity — it runs before any user or session exists — and delegates
+to `core.createFirstUser`, which:
+
+1. Rejects with `FirstUserExistsError` (→ 409) if any user already
+   exists, so the endpoint can't be used to mint further accounts once
+   setup is done.
+2. Creates the user as a full administrator (`administrator_role =
+   "full"`, `force_reset = false`).
+3. Mints an authenticated session and sets both cookies — the first
+   user is logged in without a separate login step.
+
+The client mutation (`useCreateFirstUser` in `wall/queries.ts`) drops
+the cached `root` and `account` documents on success so the guard
+refetches them fresh instead of reusing the pre-setup snapshot (which
+still says `first_user: true` and would bounce the user back to
+`/setup`). It then navigates to `/`; the now-authenticated guard admits
+the user.
 
 ## Forced password reset
 
