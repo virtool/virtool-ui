@@ -1,10 +1,10 @@
 import { useCompatibleIndexes, useSubtractionOptions } from "@analyses/hooks";
 import { useCreateAnalysis } from "@analyses/queries";
 import Button from "@base/Button";
+import { DialogFooter } from "@base/Dialog";
+import InputError from "@base/InputError";
 import QueryError from "@base/QueryError";
 import { Controller, useForm } from "react-hook-form";
-import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
-import { CreateAnalysisInputError } from "./CreateAnalysisInputError";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import IndexSelector from "./IndexSelector";
 import SubtractionSelector from "./SubtractionSelector";
@@ -133,11 +133,11 @@ export default function CreateAnalysisForm({
 				rules={{ required: true }}
 			/>
 
-			<CreateAnalysisInputError>
+			<InputError className="-mt-6 mb-1">
 				{errors.indexId && "A reference must be selected"}
-			</CreateAnalysisInputError>
+			</InputError>
 
-			<CreateAnalysisFooter>
+			<DialogFooter className="items-center justify-between mt-2.5 [&_button]:ml-auto">
 				<CreateAnalysisSummary
 					sampleCount={sampleCount}
 					indexCount={watch("indexId") ? 1 : 0}
@@ -145,7 +145,7 @@ export default function CreateAnalysisForm({
 				<Button type="submit" color="blue">
 					Create
 				</Button>
-			</CreateAnalysisFooter>
+			</DialogFooter>
 		</form>
 	);
 }
