@@ -1,34 +1,43 @@
 import { useCompatibleIndexes, useSubtractionOptions } from "@analyses/hooks";
 import { useCreateAnalysis } from "@analyses/queries";
 import Button from "@base/Button";
+import { DialogFooter } from "@base/Dialog";
+import InputError from "@base/InputError";
 import QueryError from "@base/QueryError";
 import { Controller, useForm } from "react-hook-form";
-import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
-import { CreateAnalysisInputError } from "./CreateAnalysisInputError";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import IndexSelector from "./IndexSelector";
 import SubtractionSelector from "./SubtractionSelector";
+import WorkflowSelector from "./WorkflowSelector";
+import type { workflow } from "./workflows";
 
-type CreateNuvsFormValues = {
+type CreateAnalysisFormValues = {
 	indexId: string;
 	subtractionIds: string[];
+	workflow: string;
 };
 
-type CreateNuvsProps = {
+type CreateAnalysisFormProps = {
+	/** The workflows compatible with the selected sample(s) */
+	compatibleWorkflows: workflow[];
+
 	/** The number of samples selected */
 	sampleCount: number;
 
-	/** The id of the sample being used */
+	/** The ids of the samples being analyzed */
 	sampleIds: string[];
 };
 
 /**
- * Form for creating a new Nuvs analysis.
+ * Form for creating an analysis. The subtraction and reference inputs are
+ * shared across every workflow, so the workflow is picked with a radio group
+ * rather than switching between separate forms.
  */
-export default function CreateNuvs({
+export default function CreateAnalysisForm({
+	compatibleWorkflows,
 	sampleCount,
 	sampleIds,
-}: CreateNuvsProps) {
+}: CreateAnalysisFormProps) {
 	const {
 		indexes,
 		isPending: isPendingIndexes,
@@ -49,9 +58,10 @@ export default function CreateNuvs({
 		handleSubmit,
 		formState: { errors },
 		watch,
-	} = useForm<CreateNuvsFormValues>({
+	} = useForm<CreateAnalysisFormValues>({
 		defaultValues: {
 			subtractionIds: defaultSubtractions.map((subtraction) => subtraction.id),
+			workflow: compatibleWorkflows[0]?.id,
 		},
 	});
 
@@ -63,8 +73,8 @@ export default function CreateNuvs({
 		return null;
 	}
 
-	function onSubmit(values: CreateNuvsFormValues) {
-		const { indexId, subtractionIds } = values;
+	function onSubmit(values: CreateAnalysisFormValues) {
+		const { indexId, subtractionIds, workflow } = values;
 
 		const index = indexes.find((index) => index.id === indexId);
 		if (!index) {
@@ -77,15 +87,30 @@ export default function CreateNuvs({
 				refId,
 				sampleId,
 				subtractionIds,
-				workflow: "nuvs",
+				workflow,
 			});
 		}
 	}
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
+			{compatibleWorkflows.length > 1 && (
+				<Controller
+					control={control}
+					name="workflow"
+					render={({ field: { onChange, value } }) => (
+						<WorkflowSelector
+							workflows={compatibleWorkflows}
+							selected={value}
+							onChange={onChange}
+						/>
+					)}
+				/>
+			)}
+
 			<Controller
 				control={control}
+				name="subtractionIds"
 				render={({ field: { onChange, value } }) => (
 					<SubtractionSelector
 						subtractions={subtractions}
@@ -93,11 +118,11 @@ export default function CreateNuvs({
 						onChange={onChange}
 					/>
 				)}
-				name="subtractionIds"
 			/>
 
 			<Controller
 				control={control}
+				name="indexId"
 				render={({ field: { onChange, value } }) => (
 					<IndexSelector
 						indexes={indexes}
@@ -105,23 +130,22 @@ export default function CreateNuvs({
 						onChange={onChange}
 					/>
 				)}
-				name="indexId"
 				rules={{ required: true }}
 			/>
 
-			<CreateAnalysisInputError>
+			<InputError className="-mt-6 mb-1">
 				{errors.indexId && "A reference must be selected"}
-			</CreateAnalysisInputError>
+			</InputError>
 
-			<CreateAnalysisFooter>
+			<DialogFooter className="items-center justify-between mt-2.5 [&_button]:ml-auto">
 				<CreateAnalysisSummary
 					sampleCount={sampleCount}
 					indexCount={watch("indexId") ? 1 : 0}
 				/>
 				<Button type="submit" color="blue">
-					Start
+					Create
 				</Button>
-			</CreateAnalysisFooter>
+			</DialogFooter>
 		</form>
 	);
 }

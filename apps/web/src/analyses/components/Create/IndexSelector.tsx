@@ -1,5 +1,6 @@
 import { cn } from "@app/utils";
 import Label from "@base/Label";
+import NoneFoundBox from "@base/NoneFoundBox";
 import Select from "@base/Select";
 import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
@@ -69,16 +70,22 @@ export default function IndexSelector({
 	return (
 		<div className="mb-8">
 			<CreateAnalysisFieldTitle>Reference</CreateAnalysisFieldTitle>
-			<Select value={selected} onValueChange={onChange}>
-				<SelectButton
-					className={cn("flex", "w-full")}
-					placeholder="Select a reference"
-					icon={ChevronDown}
-				/>
-				<SelectContent position="popper" align="start">
-					{indexItems}
-				</SelectContent>
-			</Select>
+			{indexes.length ? (
+				<Select value={selected} onValueChange={onChange}>
+					<SelectButton
+						className={cn("flex", "w-full")}
+						placeholder="Select a reference"
+						icon={ChevronDown}
+					/>
+					<SelectContent position="popper" align="start">
+						{indexItems}
+					</SelectContent>
+				</Select>
+			) : (
+				<NoneFoundBox noun="references">
+					Build a reference index before running an analysis.
+				</NoneFoundBox>
+			)}
 		</div>
 	);
 }

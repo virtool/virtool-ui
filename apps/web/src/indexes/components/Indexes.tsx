@@ -3,33 +3,30 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
-import { useReferenceIsArchived } from "@references/hooks";
+import Toolbar from "@base/Toolbar";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
 import { useFindIndexes } from "../queries";
 import { IndexItem } from "./Item/IndexItem";
-import RebuildAlert from "./RebuildAlert";
 import RebuildIndex from "./RebuildIndex";
 
 const routeApi = getRouteApi("/_authenticated/refs/$refId/indexes/");
 
 type IndexesProps = {
-	openRebuild: boolean;
 	page: number;
-	setOpenRebuild: (open: boolean) => void;
 	setSearch: (next: { page?: number }) => void;
 };
 
 /**
  * Displays a list of reference indexes
  */
-export default function Indexes({
-	openRebuild,
-	page,
-	setOpenRebuild,
-	setSearch,
-}: IndexesProps) {
+export default function Indexes({ page, setSearch }: IndexesProps) {
 	const { refId } = routeApi.useParams();
 	const { data, isPending, isError } = useFindIndexes(page, 25, refId);
+	const { hasPermission: canBuild } = useCheckReferenceRight(refId, "build");
 	const archived = useReferenceIsArchived(refId);
 
 	if (isError && !data) {
@@ -40,12 +37,16 @@ export default function Indexes({
 		return <LoadingPlaceholder />;
 	}
 
-	const { items, page: storedPage, page_count } = data;
+	const { items, change_count, page: storedPage, page_count } = data;
 
 	return (
 		<>
-			{!archived && <RebuildAlert page={page} refId={refId} />}
-			<RebuildIndex open={openRebuild} setOpen={setOpenRebuild} refId={refId} />
+			{!archived && canBuild && change_count > 0 && (
+				<Toolbar>
+					<div className="flex-grow" />
+					<RebuildIndex refId={refId} />
+				</Toolbar>
+			)}
 			{items.length ? (
 				<Pagination
 					items={items}

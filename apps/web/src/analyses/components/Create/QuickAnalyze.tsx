@@ -1,17 +1,12 @@
-import { cn } from "@app/utils";
-import Badge from "@base/Badge";
-import BoxGroupSection from "@base/BoxGroupSection";
 import { Dialog, DialogTitle } from "@base/Dialog";
 import QueryError from "@base/QueryError";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@base/Tabs";
 import { useListHmms } from "@hmm/queries";
 import type { SampleMinimal } from "@samples/types";
 import { useEffect } from "react";
 import HMMAlert from "../HMMAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
-import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
-import CreateNuvs from "./CreateNuvs";
-import CreatePathoscope from "./CreatePathoscope";
+import CreateAnalysisForm from "./CreateAnalysisForm";
+import { SelectedSamples } from "./SelectedSamples";
 import { getCompatibleWorkflows } from "./workflows";
 
 type QuickAnalyzeProps = {
@@ -66,43 +61,13 @@ export default function QuickAnalyze({
 				<DialogTitle>Quick Analyze</DialogTitle>
 				<HMMAlert installed={Boolean(hmms.status.task?.complete)} />
 
-				<Tabs defaultValue="pathoscope">
-					<TabsList className="mb-4">
-						{compatibleWorkflows.map((workflow) => (
-							<TabsTrigger key={workflow.id} value={workflow.id}>
-								{workflow.name}
-							</TabsTrigger>
-						))}
-					</TabsList>
-					<CreateAnalysisFieldTitle>
-						Compatible Samples <Badge>{samples.length}</Badge>
-					</CreateAnalysisFieldTitle>
-					<div
-						className={cn(
-							"border",
-							"border-gray-300",
-							"mb-4",
-							"max-h-32",
-							"overflow-y-scroll",
-							"rounded-sm",
-						)}
-					>
-						{samples.map(({ id, name }) => (
-							<BoxGroupSection key={id} disabled>
-								{name}
-							</BoxGroupSection>
-						))}
-					</div>
-					<TabsContent value="nuvs">
-						<CreateNuvs sampleCount={sampleIds.length} sampleIds={sampleIds} />
-					</TabsContent>
-					<TabsContent value="pathoscope">
-						<CreatePathoscope
-							sampleCount={sampleIds.length}
-							sampleIds={sampleIds}
-						/>
-					</TabsContent>
-				</Tabs>
+				<SelectedSamples samples={samples} />
+
+				<CreateAnalysisForm
+					compatibleWorkflows={compatibleWorkflows}
+					sampleCount={sampleIds.length}
+					sampleIds={sampleIds}
+				/>
 			</CreateAnalysisDialogContent>
 		</Dialog>
 	);
