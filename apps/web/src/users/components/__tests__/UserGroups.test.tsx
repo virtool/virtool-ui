@@ -118,6 +118,24 @@ describe("<UserGroups />", () => {
 		);
 	});
 
+	it("selects 'No primary group' by default when there is no primary group", async () => {
+		mockApiListGroups(allGroups);
+
+		renderWithProviders(
+			<UserGroups
+				userId={userId}
+				memberGroups={[member, other]}
+				primaryGroup={null}
+			/>,
+		);
+
+		expect(
+			await screen.findByRole("radio", { name: "No primary group" }),
+		).toBeChecked();
+		expect(screen.getByRole("radio", { name: "foo" })).not.toBeChecked();
+		expect(screen.getByRole("radio", { name: "bar" })).not.toBeChecked();
+	});
+
 	it("sets the primary group when a radio is selected", async () => {
 		mockApiListGroups(allGroups);
 		mockApiEditUser(userId, 200, {});
@@ -135,6 +153,29 @@ describe("<UserGroups />", () => {
 		await waitFor(() =>
 			expect(userServerFnMocks.updateUser).toHaveBeenCalledWith({
 				data: { userId, primary_group: 2 },
+			}),
+		);
+	});
+
+	it("clears the primary group when 'No primary group' is selected", async () => {
+		mockApiListGroups(allGroups);
+		mockApiEditUser(userId, 200, {});
+
+		renderWithProviders(
+			<UserGroups
+				userId={userId}
+				memberGroups={[member, other]}
+				primaryGroup={member}
+			/>,
+		);
+
+		await userEvent.click(
+			await screen.findByRole("radio", { name: "No primary group" }),
+		);
+
+		await waitFor(() =>
+			expect(userServerFnMocks.updateUser).toHaveBeenCalledWith({
+				data: { userId, primary_group: null },
 			}),
 		);
 	});

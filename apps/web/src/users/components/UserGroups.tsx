@@ -4,7 +4,6 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import ComboBox from "@base/ComboBox";
 import Icon from "@base/Icon";
-import InputLabel from "@base/InputLabel";
 import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
@@ -182,7 +181,7 @@ export default function UserGroups({
 
 	return (
 		<div className="mb-4">
-			<InputLabel>Groups</InputLabel>
+			<span className="font-medium mb-2 inline-block">Groups</span>
 			{renderAdd()}
 			{renderMembership()}
 		</div>
