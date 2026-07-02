@@ -1,0 +1,23 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"noEmit": false,
+		"outDir": "./dist-types",
+		"rootDir": "./src",
+		"lib": ["DOM", "DOM.Iterable", "ESNext"],
+		"typeRoots": [
+			"../../node_modules/@types",
+			"node_modules/@types",
+			"./src/types"
+		],
+		"types": ["node"]
+	},
+	"include": [
+		"src/server/**/*",
+		"src/server.ts",
+		"src/start.ts",
+		"src/instrument.server.ts"
+	]
+}

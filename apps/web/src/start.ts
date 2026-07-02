@@ -1,22 +1,20 @@
-import { randomBytes } from "node:crypto";
 import {
 	sentryGlobalFunctionMiddleware,
 	sentryGlobalRequestMiddleware,
 } from "@sentry/tanstackstart-react";
 import {
-	createCsrfMiddleware,
-	createMiddleware,
-	createStart,
-} from "@tanstack/react-start";
-
-import {
 	createFirstUserFn,
 	loginFn,
 	logoutFn,
 	resetPasswordFn,
-} from "./server/auth/functions";
-import { createAuthenticationMiddleware } from "./server/auth/middleware";
-import { errorLoggingMiddleware } from "./server/error-logging";
+} from "@server/auth/functions";
+import { createAuthenticationMiddleware } from "@server/auth/middleware";
+import { errorLoggingMiddleware } from "@server/error-logging";
+import {
+	createCsrfMiddleware,
+	createMiddleware,
+	createStart,
+} from "@tanstack/react-start";
 
 // logoutFn must be exempt so stale or missing cookies can still be cleared.
 // createFirstUserFn runs before any user or session exists.
@@ -83,7 +81,9 @@ const documentHeadersMiddleware = createMiddleware().server(
 		}
 
 		const html = await response.text();
-		const nonce = randomBytes(16).toString("base64");
+		const nonce = btoa(
+			String.fromCharCode(...crypto.getRandomValues(new Uint8Array(16))),
+		);
 		const body = html.replace(/<script(?=[\s>])/g, `<script nonce="${nonce}"`);
 		const headers = new Headers(response.headers);
 		for (const build of documentHeaders) {

@@ -1,0 +1,37 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"types": [],
+		"lib": ["DOM", "DOM.Iterable", "ESNext"],
+		"paths": {
+			"@/*": ["./src/*"],
+			"@account/*": ["./src/account/*"],
+			"@administration/*": ["./src/administration/*"],
+			"@analyses/*": ["./src/analyses/*"],
+			"@app/*": ["./src/app/*"],
+			"@base/*": ["./src/base/*"],
+			"@forms/*": ["./src/forms/*"],
+			"@groups/*": ["./src/groups/*"],
+			"@hmm/*": ["./src/hmm/*"],
+			"@indexes/*": ["./src/indexes/*"],
+			"@jobs/*": ["./src/jobs/*"],
+			"@banner/*": ["./src/banner/*"],
+			"@labels/*": ["./src/labels/*"],
+			"@nav/*": ["./src/nav/*"],
+			"@otus/*": ["./src/otus/*"],
+			"@quality/*": ["./src/quality/*"],
+			"@references/*": ["./src/references/*"],
+			"@samples/*": ["./src/samples/*"],
+			"@sequences/*": ["./src/sequences/*"],
+			"@server/*": ["./dist-types/server/*"],
+			"@subtraction/*": ["./src/subtraction/*"],
+			"@tasks/*": ["./src/tasks/*"],
+			"@tests/*": ["./src/tests/*"],
+			"@uploads/*": ["./src/uploads/*"],
+			"@users/*": ["./src/users/*"],
+			"@wall/*": ["./src/wall/*"]
+		}
+	},
+	"include": ["src/**/*"],
+	"exclude": ["src/server/**", "src/server.ts", "src/instrument.server.ts"]
+}
