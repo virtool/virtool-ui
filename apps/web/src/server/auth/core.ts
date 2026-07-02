@@ -5,7 +5,12 @@ import { and, eq, sql } from "drizzle-orm";
 import type { Db } from "../db/pg";
 import { sessions } from "../db/schema/sessions";
 import { users } from "../db/schema/users";
-import { createUser, getUserCount, type User } from "../users/data";
+import {
+	createUser,
+	getUserCount,
+	type User,
+	UserConflictError,
+} from "../users/data";
 import type { CookieAdapter } from "./cookies";
 import { hashPassword, verifyPassword } from "./password";
 import {
@@ -82,6 +87,12 @@ export type CreateFirstUserInput = {
  * further accounts. On success an authenticated session is written and the
  * session cookies are set, so the caller lands in the app without a separate
  * login step.
+ *
+ * The count check and insert are not a single atomic statement — Python owns
+ * the schema, so we can't add a DB-level "single user" constraint here. A
+ * concurrent bootstrap that wins the insert instead trips the existing unique
+ * handle index; that `UserConflictError` is surfaced as the same
+ * already-set-up outcome as the count guard.
  */
 export async function createFirstUser(
 	db: Db,
@@ -92,12 +103,20 @@ export async function createFirstUser(
 		throw new FirstUserExistsError();
 	}
 
-	const user = await createUser(db, {
-		handle: input.handle,
-		password: input.password,
-		forceReset: false,
-		administratorRole: "full",
-	});
+	let user: User;
+	try {
+		user = await createUser(db, {
+			handle: input.handle,
+			password: input.password,
+			forceReset: false,
+			administratorRole: "full",
+		});
+	} catch (err) {
+		if (err instanceof UserConflictError) {
+			throw new FirstUserExistsError();
+		}
+		throw err;
+	}
 
 	const { sessionId, token } = await createAuthenticatedSession(db, {
 		userId: user.id,

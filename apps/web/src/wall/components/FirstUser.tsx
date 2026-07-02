@@ -68,7 +68,11 @@ export default function FirstUser() {
 				<Button type="submit" color="blue">
 					Create User
 				</Button>
-				{mutation.isError && <InputError>{mutation.error.message}</InputError>}
+				{mutation.isError && (
+					<InputError>
+						{mutation.error.message || "Could not create user"}
+					</InputError>
+				)}
 			</form>
 		</WallContainer>
 	);
