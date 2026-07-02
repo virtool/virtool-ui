@@ -23,6 +23,26 @@ describe("ErrorState", () => {
 		expect(container.querySelector("svg")).toHaveClass("text-orange-500");
 	});
 
+	it("should hide the decorative default icon from assistive tech", () => {
+		const { container } = render(<ErrorState />);
+		expect(container.querySelector("svg")).toHaveAttribute(
+			"aria-hidden",
+			"true",
+		);
+	});
+
+	it("should render a custom icon in place of the default", () => {
+		const { container } = render(
+			<ErrorState icon={<svg data-testid="custom-icon" />} />,
+		);
+		expect(
+			container.querySelector('[data-testid="custom-icon"]'),
+		).toBeInTheDocument();
+		expect(
+			container.querySelector(".lucide-circle-alert"),
+		).not.toBeInTheDocument();
+	});
+
 	it("should render children as the action", () => {
 		render(
 			<ErrorState>

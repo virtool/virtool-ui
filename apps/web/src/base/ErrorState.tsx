@@ -8,6 +8,7 @@ type ErrorStateProps = {
 	children?: ReactNode;
 	className?: string;
 	color?: ErrorStateColor;
+	icon?: ReactNode;
 	message?: string;
 };
 
@@ -26,12 +27,19 @@ const iconColors: Record<ErrorStateColor, string> = {
  * The shared primitive behind the route-level `RouteError` retryable branch and
  * any view that needs a generic "something went wrong" fallback in place of its
  * content. Pass the recovery affordance (e.g. a "Try again" button) as
- * `children`.
+ * `children`, and override the default icon with `icon` when a different visual
+ * fits.
  */
 export default function ErrorState({
 	children,
 	className,
 	color = "red",
+	icon = (
+		<CircleAlert
+			className={cn("size-10", iconColors[color])}
+			aria-hidden="true"
+		/>
+	),
 	message = "Something went wrong",
 }: ErrorStateProps) {
 	return (
@@ -41,7 +49,7 @@ export default function ErrorState({
 				className,
 			)}
 		>
-			<CircleAlert className={cn("size-10", iconColors[color])} />
+			{icon}
 			<strong className="text-base">{message}</strong>
 			{children}
 		</div>
