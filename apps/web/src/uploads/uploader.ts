@@ -101,6 +101,9 @@ export function upload(file: File, fileType: UploadType) {
 	apiClient
 		.post("/uploads")
 		.query({ name: file.name, type: fileType })
+		// @ts-expect-error A browser File is a valid multipart value at runtime; superagent's
+		// Node-flavored types (Blob from node:buffer) reject the DOM File. Remove once browser
+		// code no longer resolves @types/node globals.
 		.attach("file", file)
 		.on("progress", onProgress)
 		.then(() => useUploaderStore.getState().removeUpload(localId))
