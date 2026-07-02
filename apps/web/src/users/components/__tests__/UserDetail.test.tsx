@@ -11,7 +11,7 @@ import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { administratorRoles } from "@tests/fake/administrator";
 import { createFakeGroup } from "@tests/fake/groups";
 import { createFakeUser } from "@tests/fake/user";
-import { renderWithProviders } from "@tests/setup";
+import { renderWithProviders, renderWithRouter } from "@tests/setup";
 import UserDetail from "@users/components/UserDetail";
 import type { User } from "@users/types";
 import nock from "nock";
@@ -68,13 +68,17 @@ describe("<UserDetail />", () => {
 			expect(screen.getByLabelText("Group 2")).toBeInTheDocument();
 			expect(screen.getByLabelText("Group 3")).toBeInTheDocument();
 
-			expect(screen.getByText("Primary Group")).toBeInTheDocument();
-			expect(screen.getByRole("option", { name: "None" })).toBeInTheDocument();
 			expect(
-				screen.getByRole("option", { name: "Group 1" }),
+				screen.getByRole("radiogroup", { name: "Primary group" }),
 			).toBeInTheDocument();
 			expect(
-				screen.getByRole("option", { name: "Group 4" }),
+				screen.getByRole("radio", { name: "No primary group" }),
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole("radio", { name: "Group 1" }),
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole("radio", { name: "Group 4" }),
 			).toBeInTheDocument();
 
 			expect(screen.getByText("Permissions")).toBeInTheDocument();
@@ -168,20 +172,26 @@ describe("<UserDetail />", () => {
 			expect(await screen.findByLabelText("Group 1")).toBeInTheDocument();
 			expect(screen.getByLabelText("Group 3")).toBeInTheDocument();
 		});
-		it("should render NoneFound when items = []", async () => {
-			const user = createFakeUser({ groups: [] });
+		it("should point to group creation when no groups exist", async () => {
+			const user = createFakeUser({ groups: [], primary_group: null });
 
 			mockApiListGroups([]);
 
 			const scope = mockApiGetUser(user.id, user);
 
-			renderWithProviders(<UserDetail userId={user.id} />);
+			await renderWithRouter(<UserDetail userId={user.id} />);
 
 			expect(await screen.findByText("Groups")).toBeInTheDocument();
-			expect(await screen.findByText("No groups found")).toBeInTheDocument();
+			expect(
+				await screen.findByText(/No groups have been created yet/),
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole("link", { name: "Manage groups" }),
+			).toBeInTheDocument();
 			expect(screen.queryByLabelText("group3")).not.toBeInTheDocument();
-			expect(screen.getByText("Primary Group")).toBeInTheDocument();
-			expect(screen.getByRole("option", { name: "None" })).toBeInTheDocument();
+			expect(
+				screen.queryByRole("radiogroup", { name: "Primary group" }),
+			).not.toBeInTheDocument();
 
 			scope.done();
 		});
