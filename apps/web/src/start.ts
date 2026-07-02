@@ -71,6 +71,16 @@ const documentHeaders: DocumentHeader[] = [
 	buildCacheControl,
 ];
 
+// Per-request CSP nonce. Deliberately uses the Web Crypto and `btoa` globals
+// rather than node:crypto/Buffer: this file is reachable from the browser
+// program (routeTree.gen.ts imports it) and must type-check without Node types.
+// Both globals exist in our Node runtime, so the server middleware is safe.
+function generateNonce(): string {
+	return btoa(
+		String.fromCharCode(...crypto.getRandomValues(new Uint8Array(16))),
+	);
+}
+
 const documentHeadersMiddleware = createMiddleware().server(
 	async ({ next }) => {
 		const result = await next();
@@ -81,9 +91,7 @@ const documentHeadersMiddleware = createMiddleware().server(
 		}
 
 		const html = await response.text();
-		const nonce = btoa(
-			String.fromCharCode(...crypto.getRandomValues(new Uint8Array(16))),
-		);
+		const nonce = generateNonce();
 		const body = html.replace(/<script(?=[\s>])/g, `<script nonce="${nonce}"`);
 		const headers = new Headers(response.headers);
 		for (const build of documentHeaders) {
