@@ -53,11 +53,7 @@ export default function RebuildIndex({ refId }: RebuildIndexProps) {
 						/>
 						<RebuildHistory unbuilt={data} />
 						<DialogFooter>
-							<Button
-								type="submit"
-								color="blue"
-								disabled={mutation.isPending}
-							>
+							<Button type="submit" color="blue" disabled={mutation.isPending}>
 								Start
 							</Button>
 						</DialogFooter>
