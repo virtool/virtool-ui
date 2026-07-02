@@ -6,6 +6,8 @@ __pycache__
 /build
 node_modules
 dist
+dist-types
+*.tsbuildinfo
 .output
 .nitro
 doc

@@ -229,6 +229,20 @@ invariant in full, the labels (minimal) and auth (carve-out) shapes,
 the pure-policy-vs-framework-shell principle, and when to introduce
 `service.ts`.
 
+### Client-reachable files import server modules via `@server/*`
+
+`apps/web` type-checks as two projects (`pnpm typecheck` runs both):
+`tsconfig.server.json` (Node types) for `src/server`, and
+`tsconfig.app.json` (DOM lib, no Node types) for browser code, which
+resolves `@server/*` to the server project's emitted declarations.
+
+Any file reachable from the browser program — including framework
+entries pulled in by `routeTree.gen.ts`, like `start.ts` — must import
+server modules through the `@server/*` alias, never a relative
+`./server/*` path. A relative import bypasses the declaration remap and
+drags the server source graph (and `@types/node` globals) back into the
+browser program.
+
 ### Authentication is enforced by global middleware
 
 Every TanStack Start server function is authenticated by default.

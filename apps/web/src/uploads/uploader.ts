@@ -101,9 +101,12 @@ export function upload(file: File, fileType: UploadType) {
 	apiClient
 		.post("/uploads")
 		.query({ name: file.name, type: fileType })
-		// @ts-expect-error A browser File is a valid multipart value at runtime; superagent's
-		// Node-flavored types (Blob from node:buffer) reject the DOM File. Remove once browser
-		// code no longer resolves @types/node globals.
+		// @ts-expect-error A browser File is a valid multipart value at runtime, but
+		// superagent's `.attach` types are Node-flavored (Blob/Buffer/ReadStream) and its
+		// deps (form-data, undici-types) pull @types/node globals into the browser program
+		// via `/// <reference types="node" />`, so the DOM File is rejected. The browser/server
+		// tsconfig split does not remove this; it goes away when superagent is dropped in favour
+		// of server functions. Remove this directive then.
 		.attach("file", file)
 		.on("progress", onProgress)
 		.then(() => useUploaderStore.getState().removeUpload(localId))
