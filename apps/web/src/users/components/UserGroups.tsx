@@ -5,6 +5,7 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import ComboBox from "@base/ComboBox";
 import Icon from "@base/Icon";
 import InputLabel from "@base/InputLabel";
+import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import { RadioGroup, RadioGroupItem } from "@base/RadioGroup";
@@ -81,6 +82,27 @@ export default function UserGroups({
 			return <LoadingPlaceholder />;
 		}
 
+		if (data.length === 0) {
+			return (
+				<p className="text-gray-500">
+					No groups have been created yet.{" "}
+					<Link
+						to="/administration/groups"
+						className="text-blue-600 hover:underline"
+					>
+						Manage groups
+					</Link>
+					.
+				</p>
+			);
+		}
+
+		if (availableGroups.length === 0) {
+			return (
+				<p className="text-gray-500">This user is a member of every group.</p>
+			);
+		}
+
 		return (
 			<ComboBox
 				items={availableGroups}
@@ -97,12 +119,9 @@ export default function UserGroups({
 		);
 	}
 
-	return (
-		<div className="mb-4">
-			<InputLabel>Groups</InputLabel>
-			{renderAdd()}
-
-			{memberGroups.length ? (
+	function renderMembership() {
+		if (memberGroups.length) {
+			return (
 				<RadioGroup
 					className="mt-4"
 					aria-label="Primary group"
@@ -146,11 +165,26 @@ export default function UserGroups({
 						</BoxGroupSection>
 					</BoxGroup>
 				</RadioGroup>
-			) : (
-				<p className="mt-4 text-gray-500">
-					This user is not a member of any groups.
-				</p>
-			)}
+			);
+		}
+
+		// When no groups exist at all, renderAdd already explains the situation.
+		if (data?.length === 0) {
+			return null;
+		}
+
+		return (
+			<p className="mt-4 text-gray-500">
+				This user is not a member of any groups.
+			</p>
+		);
+	}
+
+	return (
+		<div className="mb-4">
+			<InputLabel>Groups</InputLabel>
+			{renderAdd()}
+			{renderMembership()}
 		</div>
 	);
 }

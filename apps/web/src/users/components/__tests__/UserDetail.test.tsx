@@ -11,7 +11,7 @@ import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { administratorRoles } from "@tests/fake/administrator";
 import { createFakeGroup } from "@tests/fake/groups";
 import { createFakeUser } from "@tests/fake/user";
-import { renderWithProviders } from "@tests/setup";
+import { renderWithProviders, renderWithRouter } from "@tests/setup";
 import UserDetail from "@users/components/UserDetail";
 import type { User } from "@users/types";
 import nock from "nock";
@@ -172,18 +172,21 @@ describe("<UserDetail />", () => {
 			expect(await screen.findByLabelText("Group 1")).toBeInTheDocument();
 			expect(screen.getByLabelText("Group 3")).toBeInTheDocument();
 		});
-		it("should show an empty message when the user has no groups", async () => {
+		it("should point to group creation when no groups exist", async () => {
 			const user = createFakeUser({ groups: [], primary_group: null });
 
 			mockApiListGroups([]);
 
 			const scope = mockApiGetUser(user.id, user);
 
-			renderWithProviders(<UserDetail userId={user.id} />);
+			await renderWithRouter(<UserDetail userId={user.id} />);
 
 			expect(await screen.findByText("Groups")).toBeInTheDocument();
 			expect(
-				await screen.findByText("This user is not a member of any groups."),
+				await screen.findByText(/No groups have been created yet/),
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole("link", { name: "Manage groups" }),
 			).toBeInTheDocument();
 			expect(screen.queryByLabelText("group3")).not.toBeInTheDocument();
 			expect(

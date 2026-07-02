@@ -5,7 +5,7 @@ import { mockApiListGroups } from "@tests/api/groups";
 import { mockApiEditUser, userServerFnMocks } from "@tests/api/users";
 import { createFakeGroup } from "@tests/fake/groups";
 import { createFakeUser } from "@tests/fake/user";
-import { renderWithProviders } from "@tests/setup";
+import { renderWithProviders, renderWithRouter } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 import UserGroups from "../UserGroups";
 
@@ -53,6 +53,45 @@ describe("<UserGroups />", () => {
 		expect(
 			await screen.findByText("This user is not a member of any groups."),
 		).toBeInTheDocument();
+	});
+
+	it("hides the combobox when the user is in every group", async () => {
+		mockApiListGroups(allGroups);
+
+		renderWithProviders(
+			<UserGroups
+				userId={userId}
+				memberGroups={[member, other]}
+				primaryGroup={member}
+			/>,
+		);
+
+		expect(
+			await screen.findByText("This user is a member of every group."),
+		).toBeInTheDocument();
+		expect(
+			screen.queryByRole("button", { name: /add group/i }),
+		).not.toBeInTheDocument();
+		expect(screen.getByRole("radio", { name: "foo" })).toBeInTheDocument();
+	});
+
+	it("points to group creation when no groups exist", async () => {
+		mockApiListGroups([]);
+
+		await renderWithRouter(
+			<UserGroups userId={userId} memberGroups={[]} primaryGroup={null} />,
+		);
+
+		expect(
+			await screen.findByText(/No groups have been created yet/),
+		).toBeInTheDocument();
+		expect(screen.getByRole("link", { name: "Manage groups" })).toHaveAttribute(
+			"href",
+			"/administration/groups",
+		);
+		expect(
+			screen.queryByText("This user is not a member of any groups."),
+		).not.toBeInTheDocument();
 	});
 
 	it("adds a group through the combobox", async () => {
