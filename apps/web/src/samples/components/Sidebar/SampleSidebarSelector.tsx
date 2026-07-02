@@ -65,17 +65,19 @@ export default function SampleSidebarSelector({
 		</SampleSidebarSelectorItem>
 	));
 
+	if (!items.length) {
+		return null;
+	}
+
 	return (
 		<Popover
 			trigger={
-				!items.length || (
-					<SidebarHeaderButton
-						aria-label={`select ${selectionType}`}
-						type="button"
-					>
-						<Icon icon={Pen} />
-					</SidebarHeaderButton>
-				)
+				<SidebarHeaderButton
+					aria-label={`select ${selectionType}`}
+					type="button"
+				>
+					<Icon icon={Pen} />
+				</SidebarHeaderButton>
 			}
 		>
 			<BoxGroupSearch
