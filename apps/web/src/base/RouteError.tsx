@@ -2,6 +2,7 @@ import { useQueryErrorResetBoundary } from "@tanstack/react-query";
 import { type ErrorComponentProps, useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 import Button from "./Button";
+import ErrorState from "./ErrorState";
 import NotFound from "./NotFound";
 
 function getStatus(error: unknown): number | undefined {
@@ -74,11 +75,10 @@ export default function RouteError({ error }: ErrorComponentProps) {
 	}
 
 	return (
-		<div className="flex flex-col items-center justify-center h-96 gap-4">
-			<strong className="text-base">Something went wrong</strong>
+		<ErrorState>
 			<Button color="blue" onClick={() => router.invalidate()}>
 				Try again
 			</Button>
-		</div>
+		</ErrorState>
 	);
 }

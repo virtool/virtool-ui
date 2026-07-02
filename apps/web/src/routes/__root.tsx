@@ -1,6 +1,7 @@
 import "@app/style.css";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
+import RouteError from "@base/RouteError";
 import { type QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
@@ -34,6 +35,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 	shellComponent: RootShell,
 	component: RootComponent,
 	pendingComponent: LoadingPlaceholder,
+	errorComponent: RouteError,
 	notFoundComponent: NotFoundComponent,
 });
 
