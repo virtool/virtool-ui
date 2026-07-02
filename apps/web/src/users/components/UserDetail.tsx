@@ -6,7 +6,6 @@ import { CircleAlert, ShieldUserIcon } from "lucide-react";
 import Label from "@/base/Label";
 import Handle from "./Handle";
 import Password from "./Password";
-import PrimaryGroup from "./PrimaryGroup";
 import { UserActivationBanner } from "./UserActivationBanner";
 import UserAdministratorRole from "./UserAdministratorRole";
 import UserGroups from "./UserGroups";
@@ -79,8 +78,11 @@ export default function UserDetail({ userId }: UserDetailProps) {
 
 			<div className="mb-4 md:grid md:grid-cols-2 md:gap-x-4">
 				<div>
-					<UserGroups userId={id} memberGroups={groups} />
-					<PrimaryGroup groups={groups} id={id} primaryGroup={primary_group} />
+					<UserGroups
+						userId={id}
+						memberGroups={groups}
+						primaryGroup={primary_group}
+					/>
 				</div>
 				<UserPermissions permissions={permissions} />
 			</div>

@@ -10,16 +10,17 @@ function ComboboxTriggerButton({
 	TriggerButtonProps,
 	selectedItem,
 	renderRow,
+	placeholder,
 	id,
 }) {
 	return (
 		<button
-			className="flex justify-between items-center px-2.5 py-1.5 bg-white border border-gray-300 rounded font-medium capitalize w-full [&_svg]:ml-1"
+			className="flex justify-between items-center px-2.5 py-2 bg-white border border-gray-300 rounded font-medium capitalize w-full [&_svg]:ml-1"
 			{...TriggerButtonProps}
 			id={id}
 			type="button"
 		>
-			{selectedItem ? renderRow(selectedItem) : "Select user"}
+			{selectedItem ? renderRow(selectedItem) : placeholder}
 			<Icon icon={ChevronDown} />
 		</button>
 	);
@@ -41,6 +42,8 @@ type ComboBoxProps = {
 	onFilter: (term: string) => void;
 	onChange: (item: unknown) => void;
 	itemToString?: (item: unknown) => string;
+	/** Text shown on the trigger when nothing is selected */
+	placeholder?: string;
 	id?: string;
 };
 
@@ -56,6 +59,7 @@ export default function ComboBox({
 	onFilter,
 	onChange,
 	itemToString,
+	placeholder = "Select…",
 	id,
 }: ComboBoxProps) {
 	itemToString = itemToString || defaultToString;
@@ -87,6 +91,7 @@ export default function ComboBox({
 				TriggerButtonProps={getToggleButtonProps()}
 				selectedItem={selectedItem}
 				renderRow={renderRow}
+				placeholder={placeholder}
 				id={id}
 			/>
 			<ul

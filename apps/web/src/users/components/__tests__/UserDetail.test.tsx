@@ -68,13 +68,17 @@ describe("<UserDetail />", () => {
 			expect(screen.getByLabelText("Group 2")).toBeInTheDocument();
 			expect(screen.getByLabelText("Group 3")).toBeInTheDocument();
 
-			expect(screen.getByText("Primary Group")).toBeInTheDocument();
-			expect(screen.getByRole("option", { name: "None" })).toBeInTheDocument();
 			expect(
-				screen.getByRole("option", { name: "Group 1" }),
+				screen.getByRole("radiogroup", { name: "Primary group" }),
 			).toBeInTheDocument();
 			expect(
-				screen.getByRole("option", { name: "Group 4" }),
+				screen.getByRole("radio", { name: "No primary group" }),
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole("radio", { name: "Group 1" }),
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole("radio", { name: "Group 4" }),
 			).toBeInTheDocument();
 
 			expect(screen.getByText("Permissions")).toBeInTheDocument();
@@ -168,8 +172,8 @@ describe("<UserDetail />", () => {
 			expect(await screen.findByLabelText("Group 1")).toBeInTheDocument();
 			expect(screen.getByLabelText("Group 3")).toBeInTheDocument();
 		});
-		it("should render NoneFound when items = []", async () => {
-			const user = createFakeUser({ groups: [] });
+		it("should show an empty message when the user has no groups", async () => {
+			const user = createFakeUser({ groups: [], primary_group: null });
 
 			mockApiListGroups([]);
 
@@ -178,10 +182,13 @@ describe("<UserDetail />", () => {
 			renderWithProviders(<UserDetail userId={user.id} />);
 
 			expect(await screen.findByText("Groups")).toBeInTheDocument();
-			expect(await screen.findByText("No groups found")).toBeInTheDocument();
+			expect(
+				await screen.findByText("This user is not a member of any groups."),
+			).toBeInTheDocument();
 			expect(screen.queryByLabelText("group3")).not.toBeInTheDocument();
-			expect(screen.getByText("Primary Group")).toBeInTheDocument();
-			expect(screen.getByRole("option", { name: "None" })).toBeInTheDocument();
+			expect(
+				screen.queryByRole("radiogroup", { name: "Primary group" }),
+			).not.toBeInTheDocument();
 
 			scope.done();
 		});
