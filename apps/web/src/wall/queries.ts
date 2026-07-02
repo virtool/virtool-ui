@@ -1,7 +1,11 @@
 import { accountKeys } from "@account/queries";
 import { apiClient } from "@app/api";
 import type { Root } from "@app/types";
-import { loginFn, resetPasswordFn } from "@server/auth/functions";
+import {
+	createFirstUserFn,
+	loginFn,
+	resetPasswordFn,
+} from "@server/auth/functions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import type { ErrorResponse } from "@/types/api";
@@ -32,6 +36,33 @@ export function useRootQuery() {
 	return useQuery<Root, ErrorResponse>({
 		queryKey: rootKeys.all(),
 		queryFn: () => apiClient.get("/").then((res) => res.body),
+	});
+}
+
+/**
+ * Initializes a mutator for creating the first instance user.
+ *
+ * The new user is authenticated by the server function, so on success the
+ * cached root and account documents are dropped. That forces the authenticated
+ * route guard to refetch them instead of reusing the pre-setup snapshot, which
+ * would otherwise redirect straight back to `/setup`.
+ *
+ * @returns A mutator for creating the first instance user.
+ */
+export function useCreateFirstUser() {
+	const queryClient = useQueryClient();
+
+	return useMutation<
+		Awaited<ReturnType<typeof createFirstUserFn>>,
+		Error,
+		{ handle: string; password: string }
+	>({
+		mutationFn: ({ handle, password }) =>
+			createFirstUserFn({ data: { handle, password } }),
+		onSuccess: () => {
+			queryClient.removeQueries({ queryKey: rootKeys.all() });
+			queryClient.removeQueries({ queryKey: accountKeys.all() });
+		},
 	});
 }
 

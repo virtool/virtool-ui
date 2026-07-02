@@ -68,6 +68,7 @@ export type CreateUserValues = {
 	handle: string;
 	password: string;
 	forceReset: boolean;
+	administratorRole?: AdministratorRoleName | null;
 };
 
 /** Partial values accepted when updating a user. */
@@ -266,6 +267,12 @@ export function listAdministratorRoles(): AdministratorRole[] {
 	return ADMINISTRATOR_ROLES;
 }
 
+/** Count all user rows. Used to detect the first-user setup bootstrap. */
+export async function getUserCount(db: Db): Promise<number> {
+	const [row] = await db.select({ value: count() }).from(usersTable);
+	return row?.value ?? 0;
+}
+
 export async function findUsers(
 	db: Db,
 	filters: FindUsersFilters,
@@ -357,6 +364,7 @@ export async function createUser(
 					handle: values.handle,
 					password,
 					forceReset: values.forceReset,
+					administratorRole: values.administratorRole ?? null,
 					lastPasswordChange: new Date(),
 					legacyId: null,
 					settings: DEFAULT_USER_SETTINGS,

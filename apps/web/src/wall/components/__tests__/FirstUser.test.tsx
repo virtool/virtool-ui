@@ -1,44 +1,63 @@
+import { accountKeys } from "@account/queries";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderWithRouter } from "@tests/setup";
+import { mockApiCreateFirstUser } from "@tests/api/auth";
+import { createFakeAccount } from "@tests/fake/account";
+import { renderRoute } from "@tests/setup";
 import nock from "nock";
-import { describe, expect, it } from "vitest";
-import FirstUser from "../FirstUser";
+import { afterEach, describe, expect, it } from "vitest";
 
 describe("<FirstUser />", () => {
-	it("creates first user and redirects to / on success", async () => {
-		const usernameInput = "Username";
-		const passwordInput = "Password";
-		const scope = nock("http://localhost")
-			.put("/api/users/first", {
-				handle: usernameInput,
-				password: passwordInput,
-				force_reset: false,
-			})
-			.reply(201, {
-				handle: usernameInput,
-				password: passwordInput,
-			});
+	afterEach(() => nock.cleanAll());
 
-		const { router } = await renderWithRouter(<FirstUser />, "/setup");
+	async function renderSetup() {
+		return renderRoute("/setup", {
+			seed: (queryClient) => {
+				// A fresh instance: the root reports the setup is needed and no
+				// account has been fetched yet.
+				queryClient.setQueryData(["root"], { first_user: true });
+				queryClient.removeQueries({ queryKey: accountKeys.all() });
+			},
+		});
+	}
 
-		const usernameField = screen.getByLabelText("username");
-		const passwordField = screen.getByLabelText("password");
+	it("creates the first user and lands in the authenticated app", async () => {
+		const account = createFakeAccount();
+		const scope = mockApiCreateFirstUser({
+			id: account.id,
+			handle: account.handle,
+		});
 
-		expect(usernameField).toHaveValue("");
-		expect(passwordField).toHaveValue("");
+		// After setup the root reports no first user, and the session created by
+		// the server function authenticates the account fetch, so the guard
+		// admits the user instead of bouncing back to /setup.
+		nock("http://localhost").get("/api/").reply(200, { first_user: false });
+		nock("http://localhost").get("/api/account").reply(200, account);
 
-		await userEvent.type(usernameField, usernameInput);
-		expect(usernameField).toHaveValue(usernameInput);
+		const { router } = await renderSetup();
 
-		await userEvent.type(passwordField, passwordInput);
-		expect(passwordField).toHaveValue(passwordInput);
-
+		await userEvent.type(screen.getByLabelText("username"), account.handle);
+		await userEvent.type(screen.getByLabelText("password"), "supersecret");
 		await userEvent.click(screen.getByRole("button", { name: /Create User/i }));
 
 		await waitFor(() => {
-			expect(router.state.location.pathname).toBe("/");
+			expect(router.state.location.pathname).toBe("/samples");
 		});
-		expect(scope.isDone()).toBe(true);
+		scope.done();
+	});
+
+	it("shows an error and stays on /setup when creation fails", async () => {
+		mockApiCreateFirstUser(undefined, 409);
+
+		const { router } = await renderSetup();
+
+		await userEvent.type(screen.getByLabelText("username"), "bob");
+		await userEvent.type(screen.getByLabelText("password"), "supersecret");
+		await userEvent.click(screen.getByRole("button", { name: /Create User/i }));
+
+		expect(
+			await screen.findByText("Virtool already has a user."),
+		).toBeInTheDocument();
+		expect(router.state.location.pathname).toBe("/setup");
 	});
 });

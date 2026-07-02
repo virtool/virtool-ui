@@ -3,11 +3,9 @@ import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
-import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useCreateFirstUser } from "@users/queries";
 import { useForm } from "react-hook-form";
-import { rootKeys } from "../queries";
+import { useCreateFirstUser } from "../queries";
 import { WallContainer } from "./WallContainer";
 import { WallTitle } from "./WallTitle";
 
@@ -21,24 +19,14 @@ type FormValues = {
  */
 export default function FirstUser() {
 	const mutation = useCreateFirstUser();
-	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 
 	const { handleSubmit, register } = useForm<FormValues>();
 
 	function onSubmit(data: FormValues) {
 		mutation.mutate(
-			{
-				handle: data.username,
-				password: data.password,
-				forceReset: false,
-			},
-			{
-				onSuccess: async () => {
-					await queryClient.invalidateQueries({ queryKey: rootKeys.all() });
-					navigate({ to: "/" });
-				},
-			},
+			{ handle: data.username, password: data.password },
+			{ onSuccess: () => navigate({ to: "/" }) },
 		);
 	}
 
@@ -81,7 +69,9 @@ export default function FirstUser() {
 					Create User
 				</Button>
 				{mutation.isError && (
-					<InputError>{mutation.error.response?.body.message}</InputError>
+					<InputError>
+						{mutation.error.message || "Could not create user"}
+					</InputError>
 				)}
 			</form>
 		</WallContainer>

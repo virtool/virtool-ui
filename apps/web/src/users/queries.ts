@@ -1,10 +1,5 @@
 import { apiClient } from "@app/api";
-import {
-	keepPreviousData,
-	useInfiniteQuery,
-	useMutation,
-} from "@tanstack/react-query";
-import type { ErrorResponse } from "@/types/api";
+import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import type { UserResponse } from "./types";
 
 /**
@@ -45,24 +40,5 @@ export function useInfiniteFindUsers(per_page: number, term: string) {
 			return (lastPage.page || 1) + 1;
 		},
 		placeholderData: keepPreviousData,
-	});
-}
-
-/**
- * Hook for creating the first user in an instance.
- * This is typically used for instance initialization.
- *
- * @returns A mutation function for user creation.
- */
-export function useCreateFirstUser() {
-	return useMutation<
-		unknown,
-		ErrorResponse,
-		{ handle: string; password: string; forceReset: boolean }
-	>({
-		mutationFn: ({ handle, password, forceReset }) =>
-			apiClient
-				.put("/users/first")
-				.send({ handle, password, force_reset: forceReset }),
 	});
 }

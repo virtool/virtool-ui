@@ -6,6 +6,8 @@ import { z } from "zod";
 import { db } from "../db/pg";
 import { realCookies } from "./cookies";
 import {
+	createFirstUser,
+	FirstUserExistsError,
 	InvalidCredentialsError,
 	InvalidResetSessionError,
 	login,
@@ -23,6 +25,11 @@ const loginSchema = z.object({
 const resetPasswordSchema = z.object({
 	password: z.string().min(1),
 	reset_code: z.string().min(1),
+});
+
+const createFirstUserSchema = z.object({
+	handle: z.string().trim().min(1),
+	password: z.string().min(1),
 });
 
 // Wrapped in createServerOnlyFn so the compiler strips this body and its
@@ -60,6 +67,31 @@ export const loginFn = createServerFn({ method: "POST" })
 			if (err instanceof InvalidCredentialsError) {
 				setResponseStatus(400);
 				throw new Error("Invalid handle or password.");
+			}
+			throw err;
+		}
+	});
+
+/**
+ * First-user setup server function. Unauthenticated by necessity — it runs
+ * before any user (and therefore any session) exists, and it establishes the
+ * session for the user it creates.
+ */
+export const createFirstUserFn = createServerFn({ method: "POST" })
+	.inputValidator(createFirstUserSchema)
+	.handler(async ({ data }) => {
+		try {
+			const user = await createFirstUser(db, realCookies, {
+				handle: data.handle,
+				password: data.password,
+				ip: getClientIp(),
+			});
+			setResponseStatus(201);
+			return user;
+		} catch (err) {
+			if (err instanceof FirstUserExistsError) {
+				setResponseStatus(409);
+				throw new Error("Virtool already has a user.");
 			}
 			throw err;
 		}

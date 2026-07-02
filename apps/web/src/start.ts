@@ -9,12 +9,19 @@ import {
 	createStart,
 } from "@tanstack/react-start";
 
-import { loginFn, logoutFn, resetPasswordFn } from "./server/auth/functions";
+import {
+	createFirstUserFn,
+	loginFn,
+	logoutFn,
+	resetPasswordFn,
+} from "./server/auth/functions";
 import { createAuthenticationMiddleware } from "./server/auth/middleware";
 import { errorLoggingMiddleware } from "./server/error-logging";
 
 // logoutFn must be exempt so stale or missing cookies can still be cleared.
+// createFirstUserFn runs before any user or session exists.
 const authenticationMiddleware = createAuthenticationMiddleware([
+	createFirstUserFn,
 	loginFn,
 	logoutFn,
 	resetPasswordFn,

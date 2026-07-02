@@ -5,6 +5,12 @@ import { and, eq, sql } from "drizzle-orm";
 import type { Db } from "../db/pg";
 import { sessions } from "../db/schema/sessions";
 import { users } from "../db/schema/users";
+import {
+	createUser,
+	getUserCount,
+	type User,
+	UserConflictError,
+} from "../users/data";
 import type { CookieAdapter } from "./cookies";
 import { hashPassword, verifyPassword } from "./password";
 import {
@@ -56,6 +62,71 @@ export class PasswordReuseError extends Error {
 		super("Cannot reuse current password");
 		this.name = "PasswordReuseError";
 	}
+}
+
+/** First-user setup ran but the instance already has at least one user. */
+export class FirstUserExistsError extends Error {
+	constructor() {
+		super("Instance already has a user");
+		this.name = "FirstUserExistsError";
+	}
+}
+
+/** Inputs to create and authenticate the first instance user. */
+export type CreateFirstUserInput = {
+	handle: string;
+	password: string;
+	ip: string;
+};
+
+/**
+ * Create the first instance user and log them in.
+ *
+ * The first user is always a full administrator. Creation is rejected once any
+ * user exists, so the unauthenticated bootstrap endpoint can't be used to mint
+ * further accounts. On success an authenticated session is written and the
+ * session cookies are set, so the caller lands in the app without a separate
+ * login step.
+ *
+ * The count check and insert are not a single atomic statement — Python owns
+ * the schema, so we can't add a DB-level "single user" constraint here. A
+ * concurrent bootstrap that wins the insert instead trips the existing unique
+ * handle index; that `UserConflictError` is surfaced as the same
+ * already-set-up outcome as the count guard.
+ */
+export async function createFirstUser(
+	db: Db,
+	cookies: CookieAdapter,
+	input: CreateFirstUserInput,
+): Promise<User> {
+	if ((await getUserCount(db)) > 0) {
+		throw new FirstUserExistsError();
+	}
+
+	let user: User;
+	try {
+		user = await createUser(db, {
+			handle: input.handle,
+			password: input.password,
+			forceReset: false,
+			administratorRole: "full",
+		});
+	} catch (err) {
+		if (err instanceof UserConflictError) {
+			throw new FirstUserExistsError();
+		}
+		throw err;
+	}
+
+	const { sessionId, token } = await createAuthenticatedSession(db, {
+		userId: user.id,
+		ip: input.ip,
+		remember: false,
+	});
+	cookies.setSessionId(sessionId);
+	cookies.setSessionToken(token);
+
+	return user;
 }
 
 export async function login(
