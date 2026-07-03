@@ -26,7 +26,7 @@
 		"clsx": "^2.1.1",
 		"d3": "^7.9.0",
 		"d3-transition": "^3.0.1",
-		"downshift": "^9.3.6",
+		"downshift": "^9.4.0",
 		"drizzle-orm": "^0.45.2",
 		"es-toolkit": "^1.47.0",
 		"fuse.js": "^7.4.2",
