@@ -9,6 +9,7 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSelect from "@base/InputSelect";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import { useListGroups } from "@groups/queries";
 import {
 	samplesQueryKeys,
@@ -26,12 +27,32 @@ type SampleRightsProps = {
  */
 export default function SampleRights({ sampleId }: SampleRightsProps) {
 	const { hasPermission } = useCheckAdminRole("full");
-	const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
-	const { data: account, isPending: isPendingAccount } = useFetchAccount();
-	const { data: groups, isPending: isPendingGroups } = useListGroups();
+	const {
+		data: sample,
+		isPending: isPendingSample,
+		isError: isErrorSample,
+	} = useFetchSample(sampleId);
+	const {
+		data: account,
+		isPending: isPendingAccount,
+		isError: isErrorAccount,
+	} = useFetchAccount();
+	const {
+		data: groups,
+		isPending: isPendingGroups,
+		isError: isErrorGroups,
+	} = useListGroups();
 
 	const queryClient = useQueryClient();
 	const mutation = useUpdateSampleRights(sampleId);
+
+	if (
+		(isErrorSample && !sample) ||
+		(isErrorAccount && !account) ||
+		(isErrorGroups && !groups)
+	) {
+		return <QueryError noun="sample rights" />;
+	}
 
 	if (
 		isPendingSample ||
