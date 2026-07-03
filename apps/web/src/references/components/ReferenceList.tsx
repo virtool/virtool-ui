@@ -11,7 +11,6 @@ import { useFindReferences } from "../queries";
 import Clone from "./CloneReference";
 import { CreateReference } from "./CreateReference";
 import { ReferenceItem } from "./ReferenceItem";
-import ReferenceOfficial from "./ReferenceOfficial";
 import ReferenceToolbar from "./ReferenceToolbar";
 
 type ReferenceListProps = {
@@ -58,13 +57,7 @@ export default function ReferenceList({
 		return <LoadingPlaceholder />;
 	}
 
-	const {
-		items,
-		page: storedPage,
-		page_count,
-		total_count,
-		official_installed,
-	} = data;
+	const { items, page: storedPage, page_count, total_count } = data;
 
 	return (
 		<>
@@ -90,7 +83,6 @@ export default function ReferenceList({
 						setSearch({ createReferenceType })
 					}
 				/>
-				<ReferenceOfficial officialInstalled={official_installed} />
 				{!items.length ? (
 					<NoneFoundBox
 						noun={archived ? "archived references" : "references"}
