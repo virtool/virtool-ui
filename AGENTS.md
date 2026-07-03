@@ -415,7 +415,8 @@ and make commits easier to find later.
 ### Other rules
 
 - Title: lowercase, no period, under 72 characters.
-- Scope is optional but preferred.
+- Scope is optional. Allowed scope: `deps` (dependency changes). Do not scope
+  by domain.
 - Don't push or create PRs unless asked.
 - Don't include a Test plan section in pull request descriptions or comments.
 - Don't use `git -C <path>` unless necessary. It triggers permission prompts
