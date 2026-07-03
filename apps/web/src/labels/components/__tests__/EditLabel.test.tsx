@@ -15,7 +15,7 @@ describe("<EditLabel>", () => {
 		const onSubmit = vi.fn().mockResolvedValue(undefined);
 		renderWithProviders(<EditLabel {...baseProps} onSubmit={onSubmit} />);
 
-		await userEvent.click(screen.getByText("Edit"));
+		await userEvent.click(screen.getByRole("button", { name: "edit label" }));
 
 		const descriptionInput = screen.getByLabelText("Description");
 		const nameInput = screen.getByLabelText("Name");

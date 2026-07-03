@@ -1,12 +1,11 @@
-import Button from "@base/Button";
 import {
 	Dialog,
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
 } from "@base/Dialog";
-import Icon from "@base/Icon";
-import { Pen } from "lucide-react";
+import IconButton from "@base/IconButton";
+import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { LabelForm } from "./LabelForm";
 
@@ -57,10 +56,9 @@ export function EditLabel({
 
 	return (
 		<Dialog open={open} onOpenChange={handleOpenChange}>
-			<Button as={DialogTrigger} size="small">
-				<Icon icon={Pen} />
-				<span>Edit</span>
-			</Button>
+			<DialogTrigger asChild>
+				<IconButton IconComponent={Pencil} color="grayDark" tip="edit label" />
+			</DialogTrigger>
 			<DialogContent>
 				<DialogTitle>Edit a label</DialogTitle>
 				<LabelForm

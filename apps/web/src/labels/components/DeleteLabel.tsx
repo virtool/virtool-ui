@@ -5,9 +5,11 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@base/Dialog";
+import IconButton from "@base/IconButton";
+import { Trash } from "lucide-react";
 import { useState } from "react";
 
-type RemoveLabelProps = {
+type DeleteLabelProps = {
 	name: string;
 	/** Resolves on success so the dialog can close. */
 	onConfirm: () => Promise<unknown>;
@@ -17,7 +19,7 @@ type RemoveLabelProps = {
  * Dialog confirming label removal. Pure presentation — deletion is delegated
  * to `onConfirm`.
  */
-export function RemoveLabel({ name, onConfirm }: RemoveLabelProps) {
+export function DeleteLabel({ name, onConfirm }: DeleteLabelProps) {
 	const [open, setOpen] = useState(false);
 
 	async function handleConfirm() {
@@ -32,9 +34,9 @@ export function RemoveLabel({ name, onConfirm }: RemoveLabelProps) {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<Button as={DialogTrigger} color="red" size="small">
-				Delete
-			</Button>
+			<DialogTrigger asChild>
+				<IconButton IconComponent={Trash} color="red" tip="delete label" />
+			</DialogTrigger>
 			<DialogContent>
 				<DialogTitle>Delete Label</DialogTitle>
 				<p className="text-base">
