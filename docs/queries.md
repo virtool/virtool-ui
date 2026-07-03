@@ -138,10 +138,15 @@ For the resource a route exists to show (detail pages, the record the URL is
 
 Loading is absorbed by the `<Suspense>` boundary already wrapping the
 authenticated `<Outlet>`. Errors are caught by the router's
-`defaultErrorComponent` (`@base/RouteError`), wired once in `router.tsx`: it
-reads the HTTP status off the error and renders a permission message for 403,
-a not-found for 404, and a retryable message otherwise. A route only needs its
-own `errorComponent` when it wants bespoke copy.
+`defaultErrorComponent` (`@base/RouteError`), wired once in `router.tsx`, and
+by the root route's own `errorComponent` (also `@base/RouteError`, in
+`routes/__root.tsx`) which catches failures in the root shell that the default
+wouldn't. `RouteError` reads the HTTP status off the error and renders a
+permission message for 403, a not-found for 404, and otherwise the shared
+`@base/ErrorState` primitive (a centered icon + message + "Try again" action).
+A route only needs its own `errorComponent` when it wants bespoke copy; reach
+for `@base/ErrorState` directly when a non-route view needs the same generic
+"something went wrong" fallback.
 
 Keep a loader's `404 → notFound()` mapping where it exists — that routes a
 missing record to the dedicated `notFoundComponent` rather than the error
