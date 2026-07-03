@@ -46,14 +46,17 @@ export default function AnalysesList({
 		isPending: isPendingHmms,
 		isError: isErrorHmms,
 	} = useListHmms(1, 25);
-	const { isPending: isPendingSample, isError: isErrorSample } =
-		useFetchSample(sampleId);
+	const {
+		data: sample,
+		isPending: isPendingSample,
+		isError: isErrorSample,
+	} = useFetchSample(sampleId);
 	const { hasPermission: canCreate } = useCheckCanEditSample(sampleId);
 
 	if (
 		(isErrorAnalyses && !analyses) ||
 		(isErrorHmms && !hmms) ||
-		isErrorSample
+		(isErrorSample && !sample)
 	) {
 		return <QueryError noun="analyses" />;
 	}
