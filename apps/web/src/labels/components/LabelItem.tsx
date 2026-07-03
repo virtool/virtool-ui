@@ -1,5 +1,6 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import SampleLabel from "@samples/components/Label/SampleLabel";
+import { Link } from "@tanstack/react-router";
 import { DeleteLabel } from "./DeleteLabel";
 import { EditLabel, type UpdatedLabel } from "./EditLabel";
 
@@ -26,7 +27,13 @@ export function LabelItem({
 	return (
 		<BoxGroupSection className="flex items-center">
 			<div className="min-w-3/10">
-				<SampleLabel name={name} color={color} />
+				<Link to="/samples" search={{ labels: [id] }}>
+					<SampleLabel
+						name={name}
+						color={color}
+						className="cursor-pointer hover:bg-gray-50"
+					/>
+				</Link>
 			</div>
 			{description}
 			<div className="absolute top-0 right-0 bottom-0 flex items-center gap-1 pr-4 text-lg">
