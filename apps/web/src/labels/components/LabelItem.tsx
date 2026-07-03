@@ -1,7 +1,7 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import SampleLabel from "@samples/components/Label/SampleLabel";
+import { DeleteLabel } from "./DeleteLabel";
 import { EditLabel, type UpdatedLabel } from "./EditLabel";
-import { RemoveLabel } from "./RemoveLabel";
 
 type LabelItemProps = {
 	color: string;
@@ -36,7 +36,7 @@ export function LabelItem({
 					name={name}
 					onSubmit={(values) => onEdit(id, values)}
 				/>
-				<RemoveLabel name={name} onConfirm={() => onRemove(id)} />
+				<DeleteLabel name={name} onConfirm={() => onRemove(id)} />
 			</div>
 		</BoxGroupSection>
 	);
