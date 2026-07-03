@@ -3,6 +3,7 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
+import QueryError from "@base/QueryError";
 import { useListHmms } from "@hmm/queries";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
@@ -35,14 +36,30 @@ export default function AnalysesList({
 	sampleId,
 }: AnalysesListProps) {
 	const [openCreateAnalysis, setOpenCreateAnalysis] = useState(false);
-	const { data: analyses, isPending: isPendingAnalyses } = useListAnalyses(
-		sampleId,
-		page,
-		25,
-	);
-	const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
-	const { isPending: isPendingSample } = useFetchSample(sampleId);
+	const {
+		data: analyses,
+		isPending: isPendingAnalyses,
+		isError: isErrorAnalyses,
+	} = useListAnalyses(sampleId, page, 25);
+	const {
+		data: hmms,
+		isPending: isPendingHmms,
+		isError: isErrorHmms,
+	} = useListHmms(1, 25);
+	const {
+		data: sample,
+		isPending: isPendingSample,
+		isError: isErrorSample,
+	} = useFetchSample(sampleId);
 	const { hasPermission: canCreate } = useCheckCanEditSample(sampleId);
+
+	if (
+		(isErrorAnalyses && !analyses) ||
+		(isErrorHmms && !hmms) ||
+		(isErrorSample && !sample)
+	) {
+		return <QueryError noun="analyses" />;
+	}
 
 	if (
 		isPendingAnalyses ||
