@@ -22,4 +22,17 @@ describe("<DeleteLabel>", () => {
 			expect(screen.queryByText(/are you sure/i)).not.toBeInTheDocument(),
 		);
 	});
+
+	it("keeps the dialog open when deletion fails", async () => {
+		const onConfirm = vi.fn().mockRejectedValue(new Error("oops"));
+		renderWithProviders(<DeleteLabel name="Foo" onConfirm={onConfirm} />);
+
+		await userEvent.click(screen.getByRole("button", { name: "delete label" }));
+		await userEvent.click(screen.getByRole("button", { name: "Delete" }));
+
+		await waitFor(() => expect(onConfirm).toHaveBeenCalledOnce());
+		expect(
+			screen.getByText(/are you sure you want to delete the label/i),
+		).toBeInTheDocument();
+	});
 });
