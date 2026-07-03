@@ -12,7 +12,6 @@ import { useFetchReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
 import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";
-import RemoteReference from "./Remote";
 
 const routeApi = getRouteApi("/_authenticated/refs/$refId");
 
@@ -28,14 +27,8 @@ export default function ReferenceManager() {
 		return <LoadingPlaceholder />;
 	}
 
-	const {
-		cloned_from,
-		contributors,
-		description,
-		latest_build,
-		organism,
-		remotes_from,
-	} = reference;
+	const { cloned_from, contributors, description, latest_build, organism } =
+		reference;
 
 	return (
 		<ContainerNarrow>
@@ -57,7 +50,6 @@ export default function ReferenceManager() {
 				</BoxGroupTable>
 			</BoxGroup>
 
-			{remotes_from && <RemoteReference detail={reference} />}
 			{cloned_from && <Clone source={cloned_from} />}
 
 			<BoxGroup>
