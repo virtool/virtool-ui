@@ -33,13 +33,6 @@ describe("<ReferenceManager />", () => {
 		expect(screen.getByText("No contributors found")).toBeInTheDocument();
 	});
 
-	it("should render when [remotes_from=null]", async () => {
-		await renderRoute(path);
-
-		expect(await screen.findByText("General")).toBeInTheDocument();
-		expect(screen.queryByText("Remote Reference")).toBeNull();
-	});
-
 	it("should render clone source when [cloned_from] is set", async () => {
 		await renderRoute(path);
 

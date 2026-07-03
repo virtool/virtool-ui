@@ -12,7 +12,6 @@ import type { ErrorResponse } from "@/types/api";
 import type {
 	Reference,
 	ReferenceGroup,
-	ReferenceInstalled,
 	ReferenceMinimal,
 	ReferenceSearchResult,
 	ReferenceUser,
@@ -141,28 +140,6 @@ export function useCloneReference() {
 				.post("/refs")
 				.send({ name, description, clone_from: refId })
 				.then((res) => res.body),
-	});
-}
-
-/**
- * Initializes a mutator for remotely installing a reference
- *
- * @returns A mutator for remotely installing a reference
- */
-export function useRemoteReference() {
-	const queryClient = useQueryClient();
-
-	return useMutation<Reference, unknown, { remotes_from: string }>({
-		mutationFn: ({ remotes_from }) =>
-			apiClient
-				.post("/refs")
-				.send({ remote_from: remotes_from })
-				.then((res) => res.body),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: referenceQueryKeys.lists(),
-			});
-		},
 	});
 }
 
@@ -387,45 +364,6 @@ export function useFetchReference(refId: string) {
  */
 export function useSuspenseReference(refId: string) {
 	return useSuspenseQuery(referenceQueryOptions(refId));
-}
-
-/**
- * Checks if an update is available for a remote reference
- *
- * @param refId - The unique identifier of the reference
- */
-export function useCheckReferenceUpdates(refId: string) {
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: () =>
-			apiClient.get(`/refs/${refId}/release`).then((response) => response.body),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: referenceQueryKeys.detail(refId),
-			});
-		},
-	});
-}
-
-/**
- * Update a reference from a remote source
- *
- * @param refId - The unique identifier of the reference
- */
-export function useUpdateRemoteReference(refId: string) {
-	const queryClient = useQueryClient();
-	return useMutation<ReferenceInstalled, ErrorResponse>({
-		mutationFn: () =>
-			apiClient
-				.post(`/refs/${refId}/updates`)
-				.send({})
-				.then((response) => response.body),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: referenceQueryKeys.detail(refId),
-			});
-		},
-	});
 }
 
 /**

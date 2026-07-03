@@ -124,5 +124,4 @@ export type Reference = ReferenceMinimal & {
 
 export type ReferenceSearchResult = SearchResult & {
 	items: Array<ReferenceMinimal>;
-	official_installed: boolean;
 };
