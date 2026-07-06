@@ -82,7 +82,7 @@ export default function IsolateDetail() {
 							<IconButton
 								IconComponent={Pencil}
 								color="grayDark"
-								tip="edit isolate"
+								tip="edit name"
 								onClick={() => setOpenEdit(true)}
 							/>
 							{!activeIsolate.default && (
@@ -101,7 +101,7 @@ export default function IsolateDetail() {
 							<IconButton
 								IconComponent={Trash}
 								color="red"
-								tip="remove isolate"
+								tip="delete"
 								onClick={() => setOpenRemove(true)}
 							/>
 						</>
