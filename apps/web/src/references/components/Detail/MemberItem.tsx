@@ -1,6 +1,7 @@
 import BoxGroupSection from "@base/BoxGroupSection";
-import Button from "@base/Button";
+import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
+import { Pencil, Trash } from "lucide-react";
 
 function MemberItemIcon({ handle }) {
 	return (
@@ -43,12 +44,18 @@ export default function MemberItem({
 			{handleOrName}
 			{canModify && (
 				<span className="flex items-center gap-1 ml-auto">
-					<Button onClick={() => onEdit(id)} size="small">
-						Edit
-					</Button>
-					<Button onClick={() => onRemove(id)} size="small" color="red">
-						Remove
-					</Button>
+					<IconButton
+						IconComponent={Pencil}
+						color="grayDark"
+						tip="edit member"
+						onClick={() => onEdit(id)}
+					/>
+					<IconButton
+						IconComponent={Trash}
+						color="red"
+						tip="remove member"
+						onClick={() => onRemove(id)}
+					/>
 				</span>
 			)}
 		</BoxGroupSection>
