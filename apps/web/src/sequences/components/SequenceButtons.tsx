@@ -37,7 +37,7 @@ export default function SequenceButtons({
 	const href = `/api/otus/${otu.id}/isolates/${isolateId}/sequences/${id}.fa`;
 
 	return (
-		<span className="flex items-center ml-auto gap-1 pl-5">
+		<span className="flex items-center ml-auto gap-1 pl-5 -mr-2.5">
 			{canModify && !archived && (
 				<>
 					<IconButton

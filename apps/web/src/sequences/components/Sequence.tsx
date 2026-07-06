@@ -1,3 +1,4 @@
+import { cn } from "@app/utils";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { useExpanded } from "../hooks";
 import SequenceButtons from "./SequenceButtons";
@@ -32,8 +33,10 @@ export default function Sequence({
 
 	return (
 		<BoxGroupSection
-			onClick={expand}
-			className="flex flex-wrap items-start cursor-pointer hover:bg-gray-50"
+			onClick={expanded ? undefined : expand}
+			className={cn("flex flex-wrap items-start", {
+				"cursor-pointer hover:bg-gray-50": !expanded,
+			})}
 		>
 			<SequenceAccessionValue accession={accession} />
 			<SequenceTitleValue value={segment || definition} />
