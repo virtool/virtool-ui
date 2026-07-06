@@ -19,7 +19,14 @@ export default function SequenceTable({
 	sequence,
 }: SequenceTableProps) {
 	return (
-		<Table className={cn("mt-2.5", "table-fixed")}>
+		<Table
+			className={cn(
+				"mt-2.5",
+				"table-fixed",
+				"[&_th:first-child]:pl-0",
+				"[&_td:last-child]:pr-0",
+			)}
+		>
 			<tbody>
 				<tr>
 					<th>Definition</th>

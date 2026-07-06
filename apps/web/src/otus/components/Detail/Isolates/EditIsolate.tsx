@@ -49,13 +49,14 @@ export default function EditIsolate({
 			<DialogPortal>
 				<DialogOverlay />
 				<DialogContent>
-					<DialogTitle>Edit Isolate</DialogTitle>
+					<DialogTitle>Edit Isolate Name</DialogTitle>
 					<IsolateForm
 						sourceType={capitalize(sourceType)}
 						sourceName={sourceName}
 						allowedSourceTypes={allowedSourceTypes}
 						restrictSourceTypes={restrictSourceTypes}
 						onSubmit={handleSubmit}
+						showIsolateName={false}
 					/>
 				</DialogContent>
 			</DialogPortal>

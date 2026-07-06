@@ -21,6 +21,8 @@ type IsolateFormProps = {
 	/** A callback function to be called when the form is submitted */
 	onSubmit: (values: IsolateFormValues) => void;
 	allowedSourceTypes: string[];
+	/** Whether to show the read-only isolate name preview */
+	showIsolateName?: boolean;
 };
 
 /**
@@ -32,6 +34,7 @@ export default function IsolateForm({
 	restrictSourceTypes,
 	onSubmit,
 	allowedSourceTypes,
+	showIsolateName = true,
 }: IsolateFormProps) {
 	const { register, handleSubmit, watch } = useForm({
 		defaultValues: {
@@ -60,17 +63,19 @@ export default function IsolateForm({
 				</InputGroup>
 			</div>
 
-			<InputGroup>
-				<InputLabel htmlFor="isolateName">Isolate Name</InputLabel>
-				<Input
-					id="isolateName"
-					value={formatIsolateName({
-						sourceName: watch("sourceName"),
-						sourceType: watch("sourceType"),
-					})}
-					readOnly
-				/>
-			</InputGroup>
+			{showIsolateName && (
+				<InputGroup>
+					<InputLabel htmlFor="isolateName">Isolate Name</InputLabel>
+					<Input
+						id="isolateName"
+						value={formatIsolateName({
+							sourceName: watch("sourceName"),
+							sourceType: watch("sourceType"),
+						})}
+						readOnly
+					/>
+				</InputGroup>
+			)}
 
 			<DialogFooter>
 				<SaveButton />

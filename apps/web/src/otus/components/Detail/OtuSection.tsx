@@ -1,42 +1,32 @@
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import QueryError from "@base/QueryError";
-import { CurrentOtuContextProvider, useFetchOTU } from "@otus/queries";
-import { useFetchReference } from "@references/queries";
-import { getRouteApi } from "@tanstack/react-router";
+import { CurrentOtuContextProvider, useCurrentOtuContext } from "@otus/queries";
+import { getRouteApi, Outlet } from "@tanstack/react-router";
 import OtuIssues from "../OtuIssues";
-import IsolateEditor from "./Isolates/IsolateEditor";
 
 const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
 
 /**
- * Displays a component for managing the OTU
+ * Provides the current OTU context to the isolate list and detail routes
  */
 export default function OtuSection() {
 	const { otuId, refId } = routeApi.useParams();
 
-	const {
-		data: reference,
-		isPending: isPendingReference,
-		isError: isErrorReference,
-	} = useFetchReference(refId);
-	const {
-		data: otu,
-		isPending: isPendingOTU,
-		isError: isErrorOTU,
-	} = useFetchOTU(otuId);
-
-	if ((isErrorReference && !reference) || (isErrorOTU && !otu)) {
-		return <QueryError noun="OTU" />;
-	}
-
-	if (isPendingReference || isPendingOTU) {
-		return <LoadingPlaceholder />;
-	}
-
 	return (
 		<CurrentOtuContextProvider otuId={otuId} refId={refId}>
-			{otu.issues && <OtuIssues issues={otu.issues} isolates={otu.isolates} />}
-			<IsolateEditor />
+			<OtuSectionIssues />
+			<Outlet />
 		</CurrentOtuContextProvider>
 	);
+}
+
+/**
+ * Shows any OTU issues above both the isolate list and detail routes
+ */
+function OtuSectionIssues() {
+	const { otu } = useCurrentOtuContext();
+
+	if (!otu.issues) {
+		return null;
+	}
+
+	return <OtuIssues issues={otu.issues} isolates={otu.isolates} />;
 }

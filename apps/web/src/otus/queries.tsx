@@ -247,6 +247,8 @@ export function useCreateIsolate(otuId: string) {
  * @returns A mutator for setting an isolate as the default resource for an OTU
  */
 export function useSetIsolateAsDefault() {
+	const queryClient = useQueryClient();
+
 	return useMutation<
 		OtuIsolate,
 		ErrorResponse,
@@ -256,6 +258,11 @@ export function useSetIsolateAsDefault() {
 			apiClient
 				.put(`/otus/${otuId}/isolates/${isolateId}/default`)
 				.then((res) => res.body),
+		onSuccess: (_, { otuId }) => {
+			queryClient.invalidateQueries({
+				queryKey: OTUQueryKeys.detail(otuId),
+			});
+		},
 	});
 }
 
@@ -265,6 +272,8 @@ export function useSetIsolateAsDefault() {
  * @returns A mutator for editing an OTU isolate
  */
 export function useUpdateIsolate() {
+	const queryClient = useQueryClient();
+
 	return useMutation<
 		OtuIsolate,
 		unknown,
@@ -280,6 +289,11 @@ export function useUpdateIsolate() {
 				.patch(`/otus/${otuId}/isolates/${isolateId}`)
 				.send({ source_type: sourceType, source_name: sourceName })
 				.then((res) => res.body),
+		onSuccess: (_, { otuId }) => {
+			queryClient.invalidateQueries({
+				queryKey: OTUQueryKeys.detail(otuId),
+			});
+		},
 	});
 }
 
@@ -289,12 +303,19 @@ export function useUpdateIsolate() {
  * @returns A mutator for removing an OTU isolate
  */
 export function useRemoveIsolate() {
+	const queryClient = useQueryClient();
+
 	return useMutation<null, ErrorResponse, { otuId: string; isolateId: string }>(
 		{
 			mutationFn: ({ otuId, isolateId }) =>
 				apiClient
 					.delete(`/otus/${otuId}/isolates/${isolateId}`)
 					.then((res) => res.body),
+			onSuccess: (_, { otuId }) => {
+				queryClient.invalidateQueries({
+					queryKey: OTUQueryKeys.detail(otuId),
+				});
+			},
 		},
 	);
 }

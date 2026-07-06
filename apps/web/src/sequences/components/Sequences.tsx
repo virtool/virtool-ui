@@ -1,5 +1,6 @@
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupSection from "@base/BoxGroupSection";
 import NoneFoundSection from "@base/NoneFoundSection";
 import { useCurrentOtuContext } from "@otus/queries";
 import type { OtuIsolate, OtuSequence } from "@otus/types";
@@ -7,15 +8,34 @@ import sortSequencesBySegment from "@otus/utils";
 import { useReferenceIsArchived } from "@references/hooks";
 import { useState } from "react";
 import CreateSequence from "./CreateSequence";
-import CreateSequenceLink from "./CreateSequenceLink";
 import RemoveSequence from "./RemoveSequence";
 import Sequence from "./Sequence";
 import SequenceEdit from "./SequenceEdit";
+import {
+	SEQUENCE_ACCESSION_COLUMN,
+	SEQUENCE_TITLE_COLUMN,
+} from "./SequenceValues";
+
+/**
+ * Column headings for the sequence list, aligned to each row's cells.
+ */
+function SequenceListHeader() {
+	return (
+		<BoxGroupSection className="flex items-center bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
+			<span className={SEQUENCE_ACCESSION_COLUMN}>Accession</span>
+			<span className={SEQUENCE_TITLE_COLUMN}>Definition / Segment</span>
+		</BoxGroupSection>
+	);
+}
 
 type IsolateSequencesProps = {
 	/** The Isolate that is currently selected */
 	activeIsolate: OtuIsolate;
 	otuId: string;
+	/** Whether the create sequence dialog is open */
+	openCreate: boolean;
+	/** Called to change whether the create sequence dialog is open */
+	setOpenCreate: (open: boolean) => void;
 };
 
 /**
@@ -24,10 +44,11 @@ type IsolateSequencesProps = {
 export default function Sequences({
 	activeIsolate,
 	otuId,
+	openCreate,
+	setOpenCreate,
 }: IsolateSequencesProps) {
 	const { otu, reference } = useCurrentOtuContext();
 	const archived = useReferenceIsArchived(reference.id);
-	const [openCreate, setOpenCreate] = useState(false);
 	const [sequenceToEdit, setSequenceToEdit] = useState<
 		OtuSequence | undefined
 	>();
@@ -49,7 +70,9 @@ export default function Sequences({
 	let isolateName = `${activeIsolate.source_type} ${activeIsolate.source_name}`;
 	isolateName = (isolateName[0] ?? "").toUpperCase() + isolateName.slice(1);
 
-	if (!sequenceComponents.length) {
+	const hasSequences = sequenceComponents.length > 0;
+
+	if (!hasSequences) {
 		sequenceComponents = [
 			<NoneFoundSection noun="sequences" key="noSequences" />,
 		];
@@ -57,16 +80,15 @@ export default function Sequences({
 
 	return (
 		<>
-			<div className="flex items-center font-medium">
+			<div className="flex items-center font-medium mb-2">
 				<strong className="text-base pr-1">Sequences</strong>
 				<Badge>{sequences.length}</Badge>
-				<CreateSequenceLink
-					onCreate={() => setOpenCreate(true)}
-					refId={reference.id}
-				/>
 			</div>
 
-			<BoxGroup>{sequenceComponents}</BoxGroup>
+			<BoxGroup>
+				{hasSequences && <SequenceListHeader />}
+				{sequenceComponents}
+			</BoxGroup>
 
 			<CreateSequence
 				isolateId={activeIsolate.id}

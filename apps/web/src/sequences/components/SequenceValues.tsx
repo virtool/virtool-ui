@@ -1,25 +1,15 @@
-export function SequenceTitleValue({ label, value }) {
+import { cn } from "@app/utils";
+
+/** Column-width classes shared by the sequence list header and each row's cells. */
+export const SEQUENCE_ACCESSION_COLUMN = "w-24 shrink-0 mr-5 min-w-0";
+export const SEQUENCE_TITLE_COLUMN = "flex-1 min-w-0";
+
+export function SequenceAccessionValue({ accession }: { accession: string }) {
 	return (
-		<div className="flex flex-col min-w-0 flex-1">
-			<p className="m-0 overflow-hidden text-ellipsis whitespace-nowrap">
-				{value}
-			</p>
-			<small className="m-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-500 text-xs font-bold uppercase">
-				{label}
-			</small>
-		</div>
+		<div className={cn(SEQUENCE_ACCESSION_COLUMN, "truncate")}>{accession}</div>
 	);
 }
 
-export function SequenceAccessionValue({ accession }) {
-	return (
-		<div className="flex flex-col min-w-0 w-24 mr-5">
-			<p className="m-0 overflow-hidden text-ellipsis whitespace-nowrap">
-				{accession}
-			</p>
-			<small className="m-0 overflow-hidden text-ellipsis whitespace-nowrap text-gray-500 text-xs font-bold uppercase">
-				ACCESSION
-			</small>
-		</div>
-	);
+export function SequenceTitleValue({ value }: { value: string }) {
+	return <div className={cn(SEQUENCE_TITLE_COLUMN, "truncate")}>{value}</div>;
 }

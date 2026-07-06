@@ -1,21 +1,21 @@
-import { cn } from "@app/utils";
+import Button from "@base/Button";
 import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
 } from "@references/hooks";
 
-type CreateSequenceLinkProps = {
+type CreateSequenceButtonProps = {
 	onCreate: () => void;
 	refId: string;
 };
 
 /**
- * Displays a link to add a sequence
+ * Displays a button to add a sequence
  */
-export default function CreateSequenceLink({
+export default function CreateSequenceButton({
 	onCreate,
 	refId,
-}: CreateSequenceLinkProps) {
+}: CreateSequenceButtonProps) {
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		refId,
 		"modify_otu",
@@ -24,19 +24,9 @@ export default function CreateSequenceLink({
 
 	if (canModify && !archived) {
 		return (
-			<button
-				className={cn(
-					"ml-auto",
-					"cursor-pointer",
-					"bg-transparent",
-					"border-0",
-					"p-0",
-				)}
-				onClick={onCreate}
-				type="button"
-			>
+			<Button color="blue" size="small" onClick={onCreate}>
 				Create Sequence
-			</button>
+			</Button>
 		);
 	}
 

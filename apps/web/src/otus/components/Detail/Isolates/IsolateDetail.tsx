@@ -1,54 +1,65 @@
 import { formatIsolateName } from "@app/utils";
-import Box from "@base/Box";
+import Alert from "@base/Alert";
 import IconButton from "@base/IconButton";
-import Label from "@base/Label";
 import { useCurrentOtuContext, useSetIsolateAsDefault } from "@otus/queries";
-import type { OtuIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
-import { useReferenceIsArchived } from "@references/hooks";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
+import CreateSequenceButton from "@sequences/components/CreateSequenceButton";
 import Sequences from "@sequences/components/Sequences";
+import { getRouteApi, Navigate } from "@tanstack/react-router";
 import { Pencil, Star, Trash } from "lucide-react";
 import { useState } from "react";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./RemoveIsolate";
 
-type IsolateDetailProps = {
-	/** The Isolate that is currently selected */
-	activeIsolate: OtuIsolate;
-	allowedSourceTypes: string[];
-	/** Whether the user has permission to modify the Isolate */
-	canModify: boolean;
-	otuId: string;
-	/** Indicates whether the source types are restricted */
-	restrictSourceTypes: boolean;
-};
+const routeApi = getRouteApi(
+	"/_authenticated/refs/$refId/otus/$otuId/isolates/$isolateId",
+);
 
 /**
- * Display and edit information for Isolates
+ * Display and edit information for the selected Isolate
  */
-export default function IsolateDetail({
-	activeIsolate,
-	allowedSourceTypes,
-	canModify,
-	otuId,
-	restrictSourceTypes,
-}: IsolateDetailProps) {
+export default function IsolateDetail() {
+	const { refId, otuId, isolateId } = routeApi.useParams();
+	const { otu, reference } = useCurrentOtuContext();
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openRemove, setOpenRemove] = useState(false);
+	const [openCreateSequence, setOpenCreateSequence] = useState(false);
 	const mutation = useSetIsolateAsDefault();
-	const { reference } = useCurrentOtuContext();
+	const { hasPermission: canModify } = useCheckReferenceRight(
+		reference.id,
+		"modify_otu",
+	);
 	const archived = useReferenceIsArchived(reference.id);
+	const canModifyIsolates = canModify && !archived;
+
+	const activeIsolate = otu.isolates.find(
+		(isolate) => isolate.id === isolateId,
+	);
+
+	if (!activeIsolate) {
+		return (
+			<Navigate
+				to="/refs/$refId/otus/$otuId/isolates"
+				params={{ refId, otuId }}
+				replace
+			/>
+		);
+	}
 
 	return (
-		<div className="flex-1 min-h-0 min-w-0">
+		<div className="flex-1 min-w-0">
 			<EditIsolate
 				key={activeIsolate.id}
 				otuId={otuId}
 				isolateId={activeIsolate.id}
 				sourceType={activeIsolate.source_type}
 				sourceName={activeIsolate.source_name}
-				allowedSourceTypes={allowedSourceTypes}
-				restrictSourceTypes={restrictSourceTypes}
+				allowedSourceTypes={reference.source_types}
+				restrictSourceTypes={reference.restrict_source_types}
 				show={openEdit}
 				onHide={() => setOpenEdit(false)}
 			/>
@@ -61,27 +72,21 @@ export default function IsolateDetail({
 				show={openRemove}
 			/>
 
-			<Box className="flex items-center text-base justify-between">
-				<div className="font-bold">{formatIsolateName(activeIsolate)}</div>
-				<div>
-					{activeIsolate.default && (
-						<Label color="green">
-							<Star size={14} />
-							Default Isolate
-						</Label>
-					)}
-					{canModify && !archived && (
+			<div className="flex items-center justify-between gap-3 mb-4">
+				<h2 className="text-xl font-semibold truncate min-w-0">
+					{formatIsolateName(activeIsolate)}
+				</h2>
+				<div className="flex items-center gap-1 shrink-0">
+					{canModifyIsolates && (
 						<>
 							<IconButton
-								className="pl-1"
 								IconComponent={Pencil}
 								color="grayDark"
-								tip="edit isolate"
+								tip="edit name"
 								onClick={() => setOpenEdit(true)}
 							/>
 							{!activeIsolate.default && (
 								<IconButton
-									className="pl-1"
 									IconComponent={Star}
 									color="green"
 									tip="set as default"
@@ -94,24 +99,43 @@ export default function IsolateDetail({
 								/>
 							)}
 							<IconButton
-								className="pl-1"
 								IconComponent={Trash}
 								color="red"
-								tip="remove isolate"
+								tip="delete"
 								onClick={() => setOpenRemove(true)}
 							/>
 						</>
 					)}
 					<DownloadLink
-						className="ml-1"
 						href={`/api/otus/${otuId}/isolates/${activeIsolate.id}.fa`}
 					>
 						FASTA
 					</DownloadLink>
+					<CreateSequenceButton
+						onCreate={() => setOpenCreateSequence(true)}
+						refId={reference.id}
+					/>
 				</div>
-			</Box>
+			</div>
 
-			<Sequences otuId={otuId} activeIsolate={activeIsolate} />
+			{activeIsolate.default && (
+				<Alert color="green" icon={Star} className="items-start">
+					<div>
+						<p className="m-0 font-semibold">Default isolate</p>
+						<p className="m-0 font-normal">
+							Virtool uses this isolate to represent the OTU wherever a single
+							isolate is needed. Each OTU has exactly one default isolate.
+						</p>
+					</div>
+				</Alert>
+			)}
+
+			<Sequences
+				otuId={otuId}
+				activeIsolate={activeIsolate}
+				openCreate={openCreateSequence}
+				setOpenCreate={setOpenCreateSequence}
+			/>
 		</div>
 	);
 }

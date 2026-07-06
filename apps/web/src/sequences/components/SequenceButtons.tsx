@@ -37,7 +37,7 @@ export default function SequenceButtons({
 	const href = `/api/otus/${otu.id}/isolates/${isolateId}/sequences/${id}.fa`;
 
 	return (
-		<span className="flex items-center ml-auto pl-5">
+		<span className="flex items-center ml-auto gap-1 pl-5 -mr-2.5">
 			{canModify && !archived && (
 				<>
 					<IconButton
@@ -45,20 +45,16 @@ export default function SequenceButtons({
 						color="grayDark"
 						tip="Edit"
 						onClick={onEdit}
-						className="ml-0.5"
 					/>
 					<IconButton
 						IconComponent={Trash}
 						color="red"
 						tip="Remove"
 						onClick={onRemove}
-						className="ml-0.5"
 					/>
 				</>
 			)}
-			<div className="ml-4 mr-1">
-				<DownloadLink href={href}>FASTA</DownloadLink>
-			</div>
+			<DownloadLink href={href}>FASTA</DownloadLink>
 			<CloseButton onClick={onCollapse} />
 		</span>
 	);
