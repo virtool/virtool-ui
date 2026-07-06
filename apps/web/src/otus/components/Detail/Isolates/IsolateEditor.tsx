@@ -8,13 +8,10 @@ import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
 } from "@references/hooks";
-import { getRouteApi } from "@tanstack/react-router";
+import { Outlet } from "@tanstack/react-router";
 import { useState } from "react";
 import AddIsolate from "./AddIsolate";
-import IsolateDetail from "./IsolateDetail";
 import IsolateItem from "./IsolateItem";
-
-const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId/otu");
 
 /**
  * Displays a component for managing the isolates
@@ -22,7 +19,6 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId/otu");
 export default function IsolateEditor() {
 	const { otu, reference } = useCurrentOtuContext();
 	const { isolates } = otu;
-	const { activeIsolate: activeIsolateId } = routeApi.useSearch();
 	const [openAdd, setOpenAdd] = useState(false);
 	const { restrict_source_types, source_types } = reference;
 
@@ -32,16 +28,8 @@ export default function IsolateEditor() {
 	);
 	const archived = useReferenceIsArchived(reference.id);
 
-	const activeIsolate = isolates.length
-		? isolates.find((i) => i.id === (activeIsolateId || isolates[0]?.id))
-		: null;
-
 	const isolateComponents = isolates.map((isolate) => (
-		<IsolateItem
-			key={isolate.id}
-			isolate={isolate}
-			active={isolate.id === activeIsolate?.id}
-		/>
+		<IsolateItem key={isolate.id} isolate={isolate} />
 	));
 
 	const addIsolateLink =
@@ -55,21 +43,6 @@ export default function IsolateEditor() {
 			</button>
 		) : null;
 
-	const body = activeIsolate ? (
-		<div className="flex">
-			<ScrollArea>{isolateComponents}</ScrollArea>
-			<IsolateDetail
-				canModify={canModify}
-				otuId={otu.id}
-				activeIsolate={activeIsolate}
-				allowedSourceTypes={source_types}
-				restrictSourceTypes={restrict_source_types}
-			/>
-		</div>
-	) : (
-		<NoneFoundBox noun="isolates" />
-	);
-
 	return (
 		<>
 			<SubviewHeader>
@@ -81,7 +54,14 @@ export default function IsolateEditor() {
 					{addIsolateLink}
 				</SubviewHeaderTitle>
 			</SubviewHeader>
-			{body}
+			{isolates.length ? (
+				<div className="flex">
+					<ScrollArea>{isolateComponents}</ScrollArea>
+					<Outlet />
+				</div>
+			) : (
+				<NoneFoundBox noun="isolates" />
+			)}
 			<AddIsolate
 				allowedSourceTypes={source_types}
 				otuId={otu.id}

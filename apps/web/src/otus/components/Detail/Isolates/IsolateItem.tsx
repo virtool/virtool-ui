@@ -1,6 +1,6 @@
-import { cn, formatIsolateName } from "@app/utils";
-import BoxGroupSection from "@base/BoxGroupSection";
+import { formatIsolateName } from "@app/utils";
 import Icon from "@base/Icon";
+import Link from "@base/Link";
 import type { OtuIsolate } from "@otus/types";
 import { getRouteApi } from "@tanstack/react-router";
 import { Star } from "lucide-react";
@@ -8,32 +8,26 @@ import { Star } from "lucide-react";
 const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId/otu");
 
 type IsolateItemProps = {
-	/** Whether the Isolate is selected */
-	active: boolean;
 	isolate: OtuIsolate;
 };
 
 /**
  * A condensed isolate item for use in a list of isolates
  */
-export default function IsolateItem({ active, isolate }: IsolateItemProps) {
-	const navigate = routeApi.useNavigate();
-	const search = routeApi.useSearch();
+export default function IsolateItem({ isolate }: IsolateItemProps) {
+	const { refId, otuId } = routeApi.useParams();
 
 	return (
-		<BoxGroupSection
-			className={cn(
-				"flex items-center border-none cursor-pointer hover:bg-gray-50",
-				{
-					"shadow-[inset_3px_0_0_var(--color-virtool)]": active,
-				},
-			)}
-			onClick={() =>
-				navigate({ search: { ...search, activeIsolate: isolate.id } })
-			}
+		<Link
+			to="/refs/$refId/otus/$otuId/otu/$isolateId"
+			params={{ refId, otuId, isolateId: isolate.id }}
+			className="flex items-center w-full py-3 px-6 text-inherit cursor-pointer hover:bg-gray-50"
+			activeProps={{
+				className: "shadow-[inset_3px_0_0_var(--color-virtool)]",
+			}}
 		>
 			<span className="truncate">{formatIsolateName(isolate)}</span>
 			{isolate.default && <Icon icon={Star} className="ml-auto" />}
-		</BoxGroupSection>
+		</Link>
 	);
 }
