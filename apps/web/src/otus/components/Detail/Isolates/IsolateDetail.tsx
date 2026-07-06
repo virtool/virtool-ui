@@ -1,7 +1,6 @@
 import { formatIsolateName } from "@app/utils";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
-import Link from "@base/Link";
 import { useCurrentOtuContext, useSetIsolateAsDefault } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import {
@@ -10,7 +9,7 @@ import {
 } from "@references/hooks";
 import Sequences from "@sequences/components/Sequences";
 import { getRouteApi, Navigate } from "@tanstack/react-router";
-import { ArrowLeft, Pencil, Star, Trash } from "lucide-react";
+import { Pencil, Star, Trash } from "lucide-react";
 import { useState } from "react";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./RemoveIsolate";
@@ -70,15 +69,6 @@ export default function IsolateDetail() {
 				otuId={otuId}
 				show={openRemove}
 			/>
-
-			<Link
-				to="/refs/$refId/otus/$otuId/isolates"
-				params={{ refId, otuId }}
-				className="inline-flex items-center gap-1 mb-4 text-sm font-medium"
-			>
-				<ArrowLeft size={14} />
-				Isolates
-			</Link>
 
 			<div className="flex items-center justify-between gap-3 mb-4">
 				<div className="flex items-center gap-3 min-w-0">
