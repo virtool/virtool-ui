@@ -5,7 +5,7 @@ export const Route = createFileRoute(
 )({
 	beforeLoad: () => {
 		throw Route.redirect({
-			to: "/refs/$refId/otus/$otuId/otu",
+			to: "/refs/$refId/otus/$otuId/isolates",
 		});
 	},
 });

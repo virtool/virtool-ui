@@ -2,7 +2,7 @@ import { getRouteApi } from "@tanstack/react-router";
 import type { Otu } from "./types";
 
 const routeApi = getRouteApi(
-	"/_authenticated/refs/$refId/otus/$otuId/otu/$isolateId",
+	"/_authenticated/refs/$refId/otus/$otuId/isolates/$isolateId",
 );
 
 /**

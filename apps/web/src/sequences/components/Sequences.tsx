@@ -7,7 +7,7 @@ import sortSequencesBySegment from "@otus/utils";
 import { useReferenceIsArchived } from "@references/hooks";
 import { useState } from "react";
 import CreateSequence from "./CreateSequence";
-import CreateSequenceLink from "./CreateSequenceLink";
+import CreateSequenceButton from "./CreateSequenceButton";
 import RemoveSequence from "./RemoveSequence";
 import Sequence from "./Sequence";
 import SequenceEdit from "./SequenceEdit";
@@ -57,13 +57,15 @@ export default function Sequences({
 
 	return (
 		<>
-			<div className="flex items-center font-medium">
+			<div className="flex items-center font-medium mb-2">
 				<strong className="text-base pr-1">Sequences</strong>
 				<Badge>{sequences.length}</Badge>
-				<CreateSequenceLink
-					onCreate={() => setOpenCreate(true)}
-					refId={reference.id}
-				/>
+				<div className="ml-auto">
+					<CreateSequenceButton
+						onCreate={() => setOpenCreate(true)}
+						refId={reference.id}
+					/>
+				</div>
 			</div>
 
 			<BoxGroup>{sequenceComponents}</BoxGroup>

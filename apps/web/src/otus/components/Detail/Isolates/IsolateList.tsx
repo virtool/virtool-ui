@@ -1,0 +1,163 @@
+import { useFuse } from "@app/fuse";
+import { getContentScrollElement } from "@app/scroll";
+import { formatIsolateName } from "@app/utils";
+import Button from "@base/Button";
+import InputSearch from "@base/InputSearch";
+import NoneFoundBox from "@base/NoneFoundBox";
+import SubviewHeader from "@base/SubviewHeader";
+import Toolbar from "@base/Toolbar";
+import { useCurrentOtuContext } from "@otus/queries";
+import type { OtuIsolate } from "@otus/types";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
+import { getRouteApi } from "@tanstack/react-router";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useLayoutEffect, useRef, useState } from "react";
+import OtuIssues from "../../OtuIssues";
+import AddIsolate from "./AddIsolate";
+import IsolateItem from "./IsolateItem";
+import RemoveIsolate from "./RemoveIsolate";
+
+const routeApi = getRouteApi(
+	"/_authenticated/refs/$refId/otus/$otuId/isolates/",
+);
+
+const ISOLATE_SEARCH_KEYS = [
+	"source_name",
+	"sequences.accession",
+	"sequences.definition",
+];
+
+const ROW_HEIGHT = 48;
+
+/**
+ * A virtualized, searchable list of an OTU's isolates
+ */
+export default function IsolateList() {
+	const { refId, otuId } = routeApi.useParams();
+	const { otu, reference } = useCurrentOtuContext();
+	const { isolates } = otu;
+	const { restrict_source_types, source_types } = reference;
+
+	const [openAdd, setOpenAdd] = useState(false);
+	const [isolateToRemove, setIsolateToRemove] = useState<OtuIsolate | null>(
+		null,
+	);
+
+	const { hasPermission: canModify } = useCheckReferenceRight(
+		reference.id,
+		"modify",
+	);
+	const archived = useReferenceIsArchived(reference.id);
+	const canModifyIsolates = canModify && !archived;
+
+	const [results, term, setTerm] = useFuse<OtuIsolate>(
+		isolates,
+		ISOLATE_SEARCH_KEYS,
+	);
+
+	const listRef = useRef<HTMLDivElement>(null);
+	const [scrollMargin, setScrollMargin] = useState(0);
+
+	useLayoutEffect(() => {
+		const scrollElement = getContentScrollElement();
+		if (listRef.current && scrollElement) {
+			const top =
+				listRef.current.getBoundingClientRect().top -
+				scrollElement.getBoundingClientRect().top +
+				scrollElement.scrollTop;
+			setScrollMargin(top);
+		}
+	});
+
+	const virtualizer = useVirtualizer({
+		count: results.length,
+		getScrollElement: getContentScrollElement,
+		estimateSize: () => ROW_HEIGHT,
+		overscan: 8,
+		scrollMargin,
+	});
+
+	return (
+		<>
+			{otu.issues && <OtuIssues issues={otu.issues} isolates={isolates} />}
+
+			<SubviewHeader>
+				<Toolbar>
+					<InputSearch
+						placeholder="Name, accession, or definition"
+						value={term}
+						onChange={(e) => setTerm(e.target.value)}
+					/>
+					{canModifyIsolates && (
+						<Button color="blue" onClick={() => setOpenAdd(true)}>
+							Create
+						</Button>
+					)}
+				</Toolbar>
+			</SubviewHeader>
+
+			{results.length ? (
+				<>
+					{term && (
+						<p className="mb-2 text-sm text-gray-500">
+							Showing {results.length} of {isolates.length}
+						</p>
+					)}
+					<div className="border border-gray-300 rounded overflow-hidden">
+						<div
+							ref={listRef}
+							className="relative w-full"
+							style={{ height: virtualizer.getTotalSize() }}
+						>
+							{virtualizer.getVirtualItems().map((virtualRow) => {
+								const isolate = results[virtualRow.index];
+								if (!isolate) {
+									return null;
+								}
+								return (
+									<div
+										key={isolate.id}
+										className="absolute left-0 top-0 w-full"
+										style={{
+											height: virtualRow.size,
+											transform: `translateY(${virtualRow.start - scrollMargin}px)`,
+										}}
+									>
+										<IsolateItem
+											isolate={isolate}
+											refId={refId}
+											otuId={otuId}
+											canRemove={canModifyIsolates}
+											onRemove={setIsolateToRemove}
+										/>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+				</>
+			) : (
+				<NoneFoundBox noun="isolates" />
+			)}
+
+			<AddIsolate
+				allowedSourceTypes={source_types}
+				otuId={otu.id}
+				restrictSourceTypes={restrict_source_types}
+				show={openAdd}
+				onHide={() => setOpenAdd(false)}
+			/>
+
+			<RemoveIsolate
+				id={isolateToRemove?.id ?? ""}
+				name={isolateToRemove ? formatIsolateName(isolateToRemove) : ""}
+				onHide={() => setIsolateToRemove(null)}
+				otuId={otuId}
+				show={Boolean(isolateToRemove)}
+			/>
+		</>
+	);
+}

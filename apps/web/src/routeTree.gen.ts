@@ -65,9 +65,9 @@ import { Route as AuthenticatedRefsRefIdOtusOtuIdRouteRouteImport } from './rout
 import { Route as AuthenticatedRefsRefIdOtusOtuIdIndexRouteImport } from './routes/_authenticated/refs/$refId/otus/$otuId/index'
 import { Route as AuthenticatedRefsRefIdOtusOtuIdSchemaRouteImport } from './routes/_authenticated/refs/$refId/otus/$otuId/schema'
 import { Route as AuthenticatedRefsRefIdOtusOtuIdHistoryRouteImport } from './routes/_authenticated/refs/$refId/otus/$otuId/history'
-import { Route as AuthenticatedRefsRefIdOtusOtuIdOtuRouteRouteImport } from './routes/_authenticated/refs/$refId/otus/$otuId/otu/route'
-import { Route as AuthenticatedRefsRefIdOtusOtuIdOtuIndexRouteImport } from './routes/_authenticated/refs/$refId/otus/$otuId/otu/index'
-import { Route as AuthenticatedRefsRefIdOtusOtuIdOtuIsolateIdRouteImport } from './routes/_authenticated/refs/$refId/otus/$otuId/otu/$isolateId'
+import { Route as AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteImport } from './routes/_authenticated/refs/$refId/otus/$otuId/isolates/route'
+import { Route as AuthenticatedRefsRefIdOtusOtuIdIsolatesIndexRouteImport } from './routes/_authenticated/refs/$refId/otus/$otuId/isolates/index'
+import { Route as AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRouteImport } from './routes/_authenticated/refs/$refId/otus/$otuId/isolates/$isolateId'
 
 const SetupRoute = SetupRouteImport.update({
   id: '/setup',
@@ -386,23 +386,23 @@ const AuthenticatedRefsRefIdOtusOtuIdHistoryRoute =
     path: '/history',
     getParentRoute: () => AuthenticatedRefsRefIdOtusOtuIdRouteRoute,
   } as any)
-const AuthenticatedRefsRefIdOtusOtuIdOtuRouteRoute =
-  AuthenticatedRefsRefIdOtusOtuIdOtuRouteRouteImport.update({
-    id: '/otu',
-    path: '/otu',
+const AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRoute =
+  AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteImport.update({
+    id: '/isolates',
+    path: '/isolates',
     getParentRoute: () => AuthenticatedRefsRefIdOtusOtuIdRouteRoute,
   } as any)
-const AuthenticatedRefsRefIdOtusOtuIdOtuIndexRoute =
-  AuthenticatedRefsRefIdOtusOtuIdOtuIndexRouteImport.update({
+const AuthenticatedRefsRefIdOtusOtuIdIsolatesIndexRoute =
+  AuthenticatedRefsRefIdOtusOtuIdIsolatesIndexRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => AuthenticatedRefsRefIdOtusOtuIdOtuRouteRoute,
+    getParentRoute: () => AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRoute,
   } as any)
-const AuthenticatedRefsRefIdOtusOtuIdOtuIsolateIdRoute =
-  AuthenticatedRefsRefIdOtusOtuIdOtuIsolateIdRouteImport.update({
+const AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRoute =
+  AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRouteImport.update({
     id: '/$isolateId',
     path: '/$isolateId',
-    getParentRoute: () => AuthenticatedRefsRefIdOtusOtuIdOtuRouteRoute,
+    getParentRoute: () => AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -458,12 +458,12 @@ export interface FileRoutesByFullPath {
   '/refs/$refId/indexes/': typeof AuthenticatedRefsRefIdIndexesIndexRoute
   '/refs/$refId/otus/': typeof AuthenticatedRefsRefIdOtusIndexRoute
   '/samples/$sampleId/analyses/': typeof AuthenticatedSamplesSampleIdAnalysesIndexRoute
-  '/refs/$refId/otus/$otuId/otu': typeof AuthenticatedRefsRefIdOtusOtuIdOtuRouteRouteWithChildren
+  '/refs/$refId/otus/$otuId/isolates': typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteWithChildren
   '/refs/$refId/otus/$otuId/history': typeof AuthenticatedRefsRefIdOtusOtuIdHistoryRoute
   '/refs/$refId/otus/$otuId/schema': typeof AuthenticatedRefsRefIdOtusOtuIdSchemaRoute
   '/refs/$refId/otus/$otuId/': typeof AuthenticatedRefsRefIdOtusOtuIdIndexRoute
-  '/refs/$refId/otus/$otuId/otu/$isolateId': typeof AuthenticatedRefsRefIdOtusOtuIdOtuIsolateIdRoute
-  '/refs/$refId/otus/$otuId/otu/': typeof AuthenticatedRefsRefIdOtusOtuIdOtuIndexRoute
+  '/refs/$refId/otus/$otuId/isolates/$isolateId': typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRoute
+  '/refs/$refId/otus/$otuId/isolates/': typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesIndexRoute
 }
 export interface FileRoutesByTo {
   '/events': typeof EventsRoute
@@ -510,8 +510,8 @@ export interface FileRoutesByTo {
   '/refs/$refId/otus/$otuId/history': typeof AuthenticatedRefsRefIdOtusOtuIdHistoryRoute
   '/refs/$refId/otus/$otuId/schema': typeof AuthenticatedRefsRefIdOtusOtuIdSchemaRoute
   '/refs/$refId/otus/$otuId': typeof AuthenticatedRefsRefIdOtusOtuIdIndexRoute
-  '/refs/$refId/otus/$otuId/otu/$isolateId': typeof AuthenticatedRefsRefIdOtusOtuIdOtuIsolateIdRoute
-  '/refs/$refId/otus/$otuId/otu': typeof AuthenticatedRefsRefIdOtusOtuIdOtuIndexRoute
+  '/refs/$refId/otus/$otuId/isolates/$isolateId': typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRoute
+  '/refs/$refId/otus/$otuId/isolates': typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -568,12 +568,12 @@ export interface FileRoutesById {
   '/_authenticated/refs/$refId/indexes/': typeof AuthenticatedRefsRefIdIndexesIndexRoute
   '/_authenticated/refs/$refId/otus/': typeof AuthenticatedRefsRefIdOtusIndexRoute
   '/_authenticated/samples/$sampleId/analyses/': typeof AuthenticatedSamplesSampleIdAnalysesIndexRoute
-  '/_authenticated/refs/$refId/otus/$otuId/otu': typeof AuthenticatedRefsRefIdOtusOtuIdOtuRouteRouteWithChildren
+  '/_authenticated/refs/$refId/otus/$otuId/isolates': typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteWithChildren
   '/_authenticated/refs/$refId/otus/$otuId/history': typeof AuthenticatedRefsRefIdOtusOtuIdHistoryRoute
   '/_authenticated/refs/$refId/otus/$otuId/schema': typeof AuthenticatedRefsRefIdOtusOtuIdSchemaRoute
   '/_authenticated/refs/$refId/otus/$otuId/': typeof AuthenticatedRefsRefIdOtusOtuIdIndexRoute
-  '/_authenticated/refs/$refId/otus/$otuId/otu/$isolateId': typeof AuthenticatedRefsRefIdOtusOtuIdOtuIsolateIdRoute
-  '/_authenticated/refs/$refId/otus/$otuId/otu/': typeof AuthenticatedRefsRefIdOtusOtuIdOtuIndexRoute
+  '/_authenticated/refs/$refId/otus/$otuId/isolates/$isolateId': typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRoute
+  '/_authenticated/refs/$refId/otus/$otuId/isolates/': typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -630,12 +630,12 @@ export interface FileRouteTypes {
     | '/refs/$refId/indexes/'
     | '/refs/$refId/otus/'
     | '/samples/$sampleId/analyses/'
-    | '/refs/$refId/otus/$otuId/otu'
+    | '/refs/$refId/otus/$otuId/isolates'
     | '/refs/$refId/otus/$otuId/history'
     | '/refs/$refId/otus/$otuId/schema'
     | '/refs/$refId/otus/$otuId/'
-    | '/refs/$refId/otus/$otuId/otu/$isolateId'
-    | '/refs/$refId/otus/$otuId/otu/'
+    | '/refs/$refId/otus/$otuId/isolates/$isolateId'
+    | '/refs/$refId/otus/$otuId/isolates/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/events'
@@ -682,8 +682,8 @@ export interface FileRouteTypes {
     | '/refs/$refId/otus/$otuId/history'
     | '/refs/$refId/otus/$otuId/schema'
     | '/refs/$refId/otus/$otuId'
-    | '/refs/$refId/otus/$otuId/otu/$isolateId'
-    | '/refs/$refId/otus/$otuId/otu'
+    | '/refs/$refId/otus/$otuId/isolates/$isolateId'
+    | '/refs/$refId/otus/$otuId/isolates'
   id:
     | '__root__'
     | '/_authenticated'
@@ -739,12 +739,12 @@ export interface FileRouteTypes {
     | '/_authenticated/refs/$refId/indexes/'
     | '/_authenticated/refs/$refId/otus/'
     | '/_authenticated/samples/$sampleId/analyses/'
-    | '/_authenticated/refs/$refId/otus/$otuId/otu'
+    | '/_authenticated/refs/$refId/otus/$otuId/isolates'
     | '/_authenticated/refs/$refId/otus/$otuId/history'
     | '/_authenticated/refs/$refId/otus/$otuId/schema'
     | '/_authenticated/refs/$refId/otus/$otuId/'
-    | '/_authenticated/refs/$refId/otus/$otuId/otu/$isolateId'
-    | '/_authenticated/refs/$refId/otus/$otuId/otu/'
+    | '/_authenticated/refs/$refId/otus/$otuId/isolates/$isolateId'
+    | '/_authenticated/refs/$refId/otus/$otuId/isolates/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1150,26 +1150,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRefsRefIdOtusOtuIdHistoryRouteImport
       parentRoute: typeof AuthenticatedRefsRefIdOtusOtuIdRouteRoute
     }
-    '/_authenticated/refs/$refId/otus/$otuId/otu': {
-      id: '/_authenticated/refs/$refId/otus/$otuId/otu'
-      path: '/otu'
-      fullPath: '/refs/$refId/otus/$otuId/otu'
-      preLoaderRoute: typeof AuthenticatedRefsRefIdOtusOtuIdOtuRouteRouteImport
+    '/_authenticated/refs/$refId/otus/$otuId/isolates': {
+      id: '/_authenticated/refs/$refId/otus/$otuId/isolates'
+      path: '/isolates'
+      fullPath: '/refs/$refId/otus/$otuId/isolates'
+      preLoaderRoute: typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteImport
       parentRoute: typeof AuthenticatedRefsRefIdOtusOtuIdRouteRoute
     }
-    '/_authenticated/refs/$refId/otus/$otuId/otu/': {
-      id: '/_authenticated/refs/$refId/otus/$otuId/otu/'
+    '/_authenticated/refs/$refId/otus/$otuId/isolates/': {
+      id: '/_authenticated/refs/$refId/otus/$otuId/isolates/'
       path: '/'
-      fullPath: '/refs/$refId/otus/$otuId/otu/'
-      preLoaderRoute: typeof AuthenticatedRefsRefIdOtusOtuIdOtuIndexRouteImport
-      parentRoute: typeof AuthenticatedRefsRefIdOtusOtuIdOtuRouteRoute
+      fullPath: '/refs/$refId/otus/$otuId/isolates/'
+      preLoaderRoute: typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesIndexRouteImport
+      parentRoute: typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRoute
     }
-    '/_authenticated/refs/$refId/otus/$otuId/otu/$isolateId': {
-      id: '/_authenticated/refs/$refId/otus/$otuId/otu/$isolateId'
+    '/_authenticated/refs/$refId/otus/$otuId/isolates/$isolateId': {
+      id: '/_authenticated/refs/$refId/otus/$otuId/isolates/$isolateId'
       path: '/$isolateId'
-      fullPath: '/refs/$refId/otus/$otuId/otu/$isolateId'
-      preLoaderRoute: typeof AuthenticatedRefsRefIdOtusOtuIdOtuIsolateIdRouteImport
-      parentRoute: typeof AuthenticatedRefsRefIdOtusOtuIdOtuRouteRoute
+      fullPath: '/refs/$refId/otus/$otuId/isolates/$isolateId'
+      preLoaderRoute: typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRouteImport
+      parentRoute: typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRoute
     }
   }
 }
@@ -1201,26 +1201,26 @@ const AuthenticatedAdministrationRouteRouteWithChildren =
     AuthenticatedAdministrationRouteRouteChildren,
   )
 
-interface AuthenticatedRefsRefIdOtusOtuIdOtuRouteRouteChildren {
-  AuthenticatedRefsRefIdOtusOtuIdOtuIsolateIdRoute: typeof AuthenticatedRefsRefIdOtusOtuIdOtuIsolateIdRoute
-  AuthenticatedRefsRefIdOtusOtuIdOtuIndexRoute: typeof AuthenticatedRefsRefIdOtusOtuIdOtuIndexRoute
+interface AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteChildren {
+  AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRoute: typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRoute
+  AuthenticatedRefsRefIdOtusOtuIdIsolatesIndexRoute: typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesIndexRoute
 }
 
-const AuthenticatedRefsRefIdOtusOtuIdOtuRouteRouteChildren: AuthenticatedRefsRefIdOtusOtuIdOtuRouteRouteChildren =
+const AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteChildren: AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteChildren =
   {
-    AuthenticatedRefsRefIdOtusOtuIdOtuIsolateIdRoute:
-      AuthenticatedRefsRefIdOtusOtuIdOtuIsolateIdRoute,
-    AuthenticatedRefsRefIdOtusOtuIdOtuIndexRoute:
-      AuthenticatedRefsRefIdOtusOtuIdOtuIndexRoute,
+    AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRoute:
+      AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRoute,
+    AuthenticatedRefsRefIdOtusOtuIdIsolatesIndexRoute:
+      AuthenticatedRefsRefIdOtusOtuIdIsolatesIndexRoute,
   }
 
-const AuthenticatedRefsRefIdOtusOtuIdOtuRouteRouteWithChildren =
-  AuthenticatedRefsRefIdOtusOtuIdOtuRouteRoute._addFileChildren(
-    AuthenticatedRefsRefIdOtusOtuIdOtuRouteRouteChildren,
+const AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteWithChildren =
+  AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRoute._addFileChildren(
+    AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteChildren,
   )
 
 interface AuthenticatedRefsRefIdOtusOtuIdRouteRouteChildren {
-  AuthenticatedRefsRefIdOtusOtuIdOtuRouteRoute: typeof AuthenticatedRefsRefIdOtusOtuIdOtuRouteRouteWithChildren
+  AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRoute: typeof AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteWithChildren
   AuthenticatedRefsRefIdOtusOtuIdHistoryRoute: typeof AuthenticatedRefsRefIdOtusOtuIdHistoryRoute
   AuthenticatedRefsRefIdOtusOtuIdSchemaRoute: typeof AuthenticatedRefsRefIdOtusOtuIdSchemaRoute
   AuthenticatedRefsRefIdOtusOtuIdIndexRoute: typeof AuthenticatedRefsRefIdOtusOtuIdIndexRoute
@@ -1228,8 +1228,8 @@ interface AuthenticatedRefsRefIdOtusOtuIdRouteRouteChildren {
 
 const AuthenticatedRefsRefIdOtusOtuIdRouteRouteChildren: AuthenticatedRefsRefIdOtusOtuIdRouteRouteChildren =
   {
-    AuthenticatedRefsRefIdOtusOtuIdOtuRouteRoute:
-      AuthenticatedRefsRefIdOtusOtuIdOtuRouteRouteWithChildren,
+    AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRoute:
+      AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteWithChildren,
     AuthenticatedRefsRefIdOtusOtuIdHistoryRoute:
       AuthenticatedRefsRefIdOtusOtuIdHistoryRoute,
     AuthenticatedRefsRefIdOtusOtuIdSchemaRoute:
