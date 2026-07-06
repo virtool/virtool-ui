@@ -11,6 +11,10 @@ on:
 permissions:
     contents: read
 
+concurrency:
+    group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 env:
     REGISTRY: ghcr.io
     NODE_VERSION: 22
@@ -20,6 +24,7 @@ jobs:
     build:
         name: Build
         runs-on: ubuntu-24.04
+        timeout-minutes: 20
         steps:
             - name: Checkout
               uses: actions/checkout@v7
@@ -29,77 +34,46 @@ jobs:
                   target: dist
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-    check-commit:
-        name: Check / Commit
-        runs-on: ubuntu-24.04
-        if: github.event_name == 'pull_request'
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v7
-              with:
-                  fetch-depth: 0
-            - name: Lint
-              uses: wagoid/commitlint-github-action@v6
     check-biome:
         name: Check / Biome
         runs-on: ubuntu-24.04
+        timeout-minutes: 10
         steps:
-            - name: Checkout
-              uses: actions/checkout@v7
-            - name: Setup pnpm
-              uses: pnpm/action-setup@v6
-              with:
-                  version: ${{ env.PNPM_VERSION }}
-            - name: Setup NodeJS
-              uses: actions/setup-node@v6
+            - name: Setup
+              uses: ./.github/actions/setup
               with:
                   node-version: ${{ env.NODE_VERSION }}
-                  cache: pnpm
-            - name: Install
-              run: pnpm install --frozen-lockfile
+                  pnpm-version: ${{ env.PNPM_VERSION }}
             - name: Run Biome
               run: pnpm check
     check-typescript:
         name: Check / Typescript
         runs-on: ubuntu-24.04
+        timeout-minutes: 10
         steps:
-            - name: Checkout
-              uses: actions/checkout@v7
-            - name: Setup pnpm
-              uses: pnpm/action-setup@v6
-              with:
-                  version: ${{ env.PNPM_VERSION }}
-            - name: Setup NodeJS
-              uses: actions/setup-node@v6
+            - name: Setup
+              uses: ./.github/actions/setup
               with:
                   node-version: ${{ env.NODE_VERSION }}
-                  cache: pnpm
-            - name: Install
-              run: pnpm install --frozen-lockfile
+                  pnpm-version: ${{ env.PNPM_VERSION }}
             - name: tsc
               run: pnpm typecheck
     test:
         name: Test
         runs-on: ubuntu-24.04
+        timeout-minutes: 15
         steps:
-            - name: Checkout
-              uses: actions/checkout@v7
-            - name: Setup pnpm
-              uses: pnpm/action-setup@v6
-              with:
-                  version: ${{ env.PNPM_VERSION }}
-            - name: Setup NodeJS
-              uses: actions/setup-node@v6
+            - name: Setup
+              uses: ./.github/actions/setup
               with:
                   node-version: ${{ env.NODE_VERSION }}
-                  cache: pnpm
-            - name: Install
-              run: pnpm install --frozen-lockfile
+                  pnpm-version: ${{ env.PNPM_VERSION }}
             - name: Test
               run: pnpm test
     release:
         name: Publish / Release
         runs-on: ubuntu-24.04
+        timeout-minutes: 15
         needs: [test, build]
         if: github.event_name == 'push'
         outputs:
@@ -107,22 +81,20 @@ jobs:
         permissions:
             contents: write
         steps:
-            - name: Checkout
-              uses: actions/checkout@v7
-            - name: Setup NodeJS
-              uses: actions/setup-node@v6
+            - name: Setup
+              uses: ./.github/actions/setup
               with:
                   node-version: ${{ env.NODE_VERSION }}
-            - name: Install semantic-release
-              run: npm i semantic-release@v23.0.7 @semantic-release/exec@v6.0.3 conventional-changelog-conventionalcommits@7.0.2
+                  pnpm-version: ${{ env.PNPM_VERSION }}
             - name: Run semantic-release
               id: semantic
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: npx semantic-release
+              run: pnpm exec semantic-release
     publish-ghcr:
         name: Publish / GHCR
         runs-on: ubuntu-24.04
+        timeout-minutes: 20
         if: github.repository_owner == 'Virtool' && github.event_name == 'push' && needs.release.outputs.git-tag != ''
         needs: [release]
         permissions:
