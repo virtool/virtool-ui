@@ -80,7 +80,7 @@ export default function IsolateDetail() {
 				Isolates
 			</Link>
 
-			<div className="flex items-center justify-between gap-3 border-b border-gray-200 pb-4 mb-4">
+			<div className="flex items-center justify-between gap-3 mb-4">
 				<div className="flex items-center gap-3 min-w-0">
 					<h2 className="text-xl font-semibold truncate">
 						{formatIsolateName(activeIsolate)}

@@ -3,7 +3,6 @@ import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
 } from "@references/hooks";
-import { Plus } from "lucide-react";
 
 type CreateSequenceButtonProps = {
 	onCreate: () => void;
@@ -26,8 +25,7 @@ export default function CreateSequenceButton({
 	if (canModify && !archived) {
 		return (
 			<Button color="blue" size="small" onClick={onCreate}>
-				<Plus size={14} />
-				Create Sequence
+				Create
 			</Button>
 		);
 	}
