@@ -1,9 +1,12 @@
+import { useFuse } from "@app/fuse";
+import Button from "@base/Button";
+import InputSearch from "@base/InputSearch";
 import NoneFoundBox from "@base/NoneFoundBox";
 import ScrollArea from "@base/ScrollArea";
 import SubviewHeader from "@base/SubviewHeader";
-import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
-import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
+import Toolbar from "@base/Toolbar";
 import { useCurrentOtuContext } from "@otus/queries";
+import type { OtuIsolate } from "@otus/types";
 import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
@@ -12,6 +15,12 @@ import { Outlet } from "@tanstack/react-router";
 import { useState } from "react";
 import AddIsolate from "./AddIsolate";
 import IsolateItem from "./IsolateItem";
+
+const ISOLATE_SEARCH_KEYS = [
+	"source_name",
+	"sequences.accession",
+	"sequences.definition",
+];
 
 /**
  * Displays a component for managing the isolates
@@ -28,33 +37,32 @@ export default function IsolateEditor() {
 	);
 	const archived = useReferenceIsArchived(reference.id);
 
-	const isolateComponents = isolates.map((isolate) => (
+	const [results, term, setTerm] = useFuse<OtuIsolate>(
+		isolates,
+		ISOLATE_SEARCH_KEYS,
+	);
+
+	const isolateComponents = results.map((isolate) => (
 		<IsolateItem key={isolate.id} isolate={isolate} />
 	));
-
-	const addIsolateLink =
-		canModify && !archived ? (
-			<button
-				className="ml-auto cursor-pointer self-end text-sm font-medium bg-transparent border-0 p-0"
-				onClick={() => setOpenAdd(true)}
-				type="button"
-			>
-				Add Isolate
-			</button>
-		) : null;
 
 	return (
 		<>
 			<SubviewHeader>
-				<SubviewHeaderTitle className="flex items-center">
-					Isolates{" "}
-					<ViewHeaderTitleBadge>
-						{isolateComponents.length}
-					</ViewHeaderTitleBadge>
-					{addIsolateLink}
-				</SubviewHeaderTitle>
+				<Toolbar>
+					<InputSearch
+						placeholder="Name, accession, or definition"
+						value={term}
+						onChange={(e) => setTerm(e.target.value)}
+					/>
+					{canModify && !archived && (
+						<Button color="blue" onClick={() => setOpenAdd(true)}>
+							Create
+						</Button>
+					)}
+				</Toolbar>
 			</SubviewHeader>
-			{isolates.length ? (
+			{isolateComponents.length ? (
 				<div className="flex">
 					<ScrollArea>{isolateComponents}</ScrollArea>
 					<Outlet />
