@@ -1,17 +1,18 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupSection from "@base/BoxGroupSection";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
-import Table from "@base/Table";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useFetchSubtraction } from "@subtraction/queries";
 import type { NucleotideComposition } from "@subtraction/types";
+import { getSubtractionFastaName } from "@subtraction/utils";
 import numbro from "numbro";
 import { SubtractionAttribution } from "../Attribution";
 import DeleteSubtraction from "./DeleteSubtraction";
 import EditSubtraction from "./EditSubtraction";
-import SubtractionFiles from "./SubtractionFiles";
 
 function calculateGc(nucleotides: NucleotideComposition) {
 	return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format(
@@ -45,6 +46,9 @@ export default function SubtractionDetail() {
 		return <LoadingPlaceholder message="Subtraction is still being imported" />;
 	}
 
+	const fastaFile = data.files.find((file) => file.type === "fasta");
+	const fastaName = getSubtractionFastaName(data.name);
+
 	return (
 		<>
 			<ViewHeader title={data.name}>
@@ -64,31 +68,63 @@ export default function SubtractionDetail() {
 					/>
 				) : null}
 			</ViewHeader>
-			<Table>
-				<tbody>
-					<tr>
-						<th>Nickname</th>
-						<td>{data.nickname}</td>
-					</tr>
-					<tr>
-						<th>File</th>
-						<td>{data.file.name || data.file.id}</td>
-					</tr>
-					<tr>
-						<th>Sequence Count</th>
-						<td>{data.count}</td>
-					</tr>
-					<tr>
-						<th>GC Estimate</th>
-						<td>{calculateGc(data.gc)}</td>
-					</tr>
-					<tr>
-						<th>Linked Samples</th>
-						<td>{data.linked_samples.length}</td>
-					</tr>
-				</tbody>
-			</Table>
-			<SubtractionFiles files={data.files} />
+			<BoxGroup>
+				<BoxGroupSection className="flex items-center justify-between">
+					<div>
+						<span className="font-medium">Nickname</span>
+						<p className="m-0 text-gray-500">
+							Alternative name for this subtraction
+						</p>
+					</div>
+					<span>{data.nickname}</span>
+				</BoxGroupSection>
+				<BoxGroupSection className="flex items-center justify-between">
+					<div>
+						<span className="font-medium">File</span>
+						<p className="m-0 text-gray-500">
+							Download the subtraction's FASTA file
+						</p>
+					</div>
+					{fastaFile ? (
+						<a
+							className="font-medium"
+							download={fastaName}
+							href={`/api${fastaFile.download_url}`}
+						>
+							{fastaName}
+						</a>
+					) : (
+						<span>None</span>
+					)}
+				</BoxGroupSection>
+				<BoxGroupSection className="flex items-center justify-between">
+					<div>
+						<span className="font-medium">Sequence Count</span>
+						<p className="m-0 text-gray-500">
+							Number of sequences in the subtraction
+						</p>
+					</div>
+					<span>{data.count}</span>
+				</BoxGroupSection>
+				<BoxGroupSection className="flex items-center justify-between">
+					<div>
+						<span className="font-medium">GC Estimate</span>
+						<p className="m-0 text-gray-500">
+							Estimated GC content of the subtraction genome
+						</p>
+					</div>
+					<span>{calculateGc(data.gc)}</span>
+				</BoxGroupSection>
+				<BoxGroupSection className="flex items-center justify-between">
+					<div>
+						<span className="font-medium">Linked Samples</span>
+						<p className="m-0 text-gray-500">
+							Samples that reference this subtraction
+						</p>
+					</div>
+					<span>{data.linked_samples.length}</span>
+				</BoxGroupSection>
+			</BoxGroup>
 		</>
 	);
 }

@@ -1,4 +1,5 @@
 import type { SubtractionMinimal } from "@subtraction/types";
+import { getSubtractionFastaName } from "@subtraction/utils";
 import { screen } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
@@ -31,13 +32,17 @@ describe("<SubtractionDetail />", () => {
 
 		expect(await screen.findByText(subtraction.name)).toBeInTheDocument();
 		expect(await screen.findByText(subtraction.nickname)).toBeInTheDocument();
-		expect(await screen.findByText(subtraction.file.name)).toBeInTheDocument();
 		expect(
 			await screen.findByText(subtraction.linked_samples.length),
 		).toBeInTheDocument();
-		for (const file of subtraction.files) {
-			expect(await screen.findByText(file.name)).toBeInTheDocument();
-		}
+
+		const fastaName = getSubtractionFastaName(subtraction.name);
+		const download = await screen.findByRole("link", { name: fastaName });
+		expect(download).toHaveAttribute(
+			"href",
+			`/api${subtraction.files[0]?.download_url}`,
+		);
+		expect(download).toHaveAttribute("download", fastaName);
 
 		scope.done();
 	});
@@ -85,18 +90,6 @@ describe("<SubtractionDetail />", () => {
 		expect(await screen.findByText(subtraction.name)).toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: "modify" })).toBeNull();
 		expect(screen.queryByRole("button", { name: "delete" })).toBeNull();
-
-		scope.done();
-	});
-
-	it("should render file id when name is empty", async () => {
-		const subtraction = createFakeSubtraction({
-			file: { id: 999, name: "" },
-		});
-		const scope = mockApiGetSubtractionDetail(subtraction);
-		await renderRoute(formatSubtractionPath(subtraction));
-
-		expect(await screen.findByText("999")).toBeInTheDocument();
 
 		scope.done();
 	});
