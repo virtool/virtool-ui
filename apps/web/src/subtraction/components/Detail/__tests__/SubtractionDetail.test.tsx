@@ -1,4 +1,5 @@
 import type { SubtractionMinimal } from "@subtraction/types";
+import { getSubtractionFastaName } from "@subtraction/utils";
 import { screen } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
@@ -35,14 +36,13 @@ describe("<SubtractionDetail />", () => {
 			await screen.findByText(subtraction.linked_samples.length),
 		).toBeInTheDocument();
 
-		const fastaName = `${subtraction.name
-			.toLowerCase()
-			.replace(/\s+/g, "_")}.fa.gz`;
+		const fastaName = getSubtractionFastaName(subtraction.name);
 		const download = await screen.findByRole("link", { name: fastaName });
 		expect(download).toHaveAttribute(
 			"href",
 			`/api${subtraction.files[0]?.download_url}`,
 		);
+		expect(download).toHaveAttribute("download", fastaName);
 
 		scope.done();
 	});

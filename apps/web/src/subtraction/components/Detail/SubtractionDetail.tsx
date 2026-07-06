@@ -8,6 +8,7 @@ import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useFetchSubtraction } from "@subtraction/queries";
 import type { NucleotideComposition } from "@subtraction/types";
+import { getSubtractionFastaName } from "@subtraction/utils";
 import numbro from "numbro";
 import { SubtractionAttribution } from "../Attribution";
 import DeleteSubtraction from "./DeleteSubtraction";
@@ -46,7 +47,7 @@ export default function SubtractionDetail() {
 	}
 
 	const fastaFile = data.files.find((file) => file.type === "fasta");
-	const fastaName = `${data.name.toLowerCase().replace(/\s+/g, "_")}.fa.gz`;
+	const fastaName = getSubtractionFastaName(data.name);
 
 	return (
 		<>
@@ -85,7 +86,11 @@ export default function SubtractionDetail() {
 						</p>
 					</div>
 					{fastaFile ? (
-						<a className="font-medium" href={`/api${fastaFile.download_url}`}>
+						<a
+							className="font-medium"
+							download={fastaName}
+							href={`/api${fastaFile.download_url}`}
+						>
 							{fastaName}
 						</a>
 					) : (
