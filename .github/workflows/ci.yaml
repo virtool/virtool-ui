@@ -39,6 +39,8 @@ jobs:
         runs-on: ubuntu-24.04
         timeout-minutes: 10
         steps:
+            - name: Checkout
+              uses: actions/checkout@v7
             - name: Setup
               uses: ./.github/actions/setup
               with:
@@ -51,6 +53,8 @@ jobs:
         runs-on: ubuntu-24.04
         timeout-minutes: 10
         steps:
+            - name: Checkout
+              uses: actions/checkout@v7
             - name: Setup
               uses: ./.github/actions/setup
               with:
@@ -63,6 +67,8 @@ jobs:
         runs-on: ubuntu-24.04
         timeout-minutes: 15
         steps:
+            - name: Checkout
+              uses: actions/checkout@v7
             - name: Setup
               uses: ./.github/actions/setup
               with:
@@ -81,6 +87,8 @@ jobs:
         permissions:
             contents: write
         steps:
+            - name: Checkout
+              uses: actions/checkout@v7
             - name: Setup
               uses: ./.github/actions/setup
               with:
