@@ -25,7 +25,7 @@ export default function CreateSequenceButton({
 	if (canModify && !archived) {
 		return (
 			<Button color="blue" size="small" onClick={onCreate}>
-				Create
+				Create Sequence
 			</Button>
 		);
 	}

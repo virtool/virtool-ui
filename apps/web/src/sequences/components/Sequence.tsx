@@ -31,29 +31,29 @@ export default function Sequence({
 	const { expanded, expand, collapse } = useExpanded();
 
 	return (
-		<BoxGroupSection onClick={expand}>
-			<div className="flex items-start">
-				<SequenceAccessionValue accession={accession} />
-				<SequenceTitleValue
-					label={segment ? "SEGMENT" : "DEFINITION"}
-					value={segment || definition}
-				/>
-				{expanded && (
-					<SequenceButtons
-						id={id}
-						onCollapse={collapse}
-						onEdit={onEdit}
-						onRemove={onRemove}
-					/>
-				)}
-			</div>
+		<BoxGroupSection
+			onClick={expand}
+			className="flex flex-wrap items-start cursor-pointer hover:bg-gray-50"
+		>
+			<SequenceAccessionValue accession={accession} />
+			<SequenceTitleValue value={segment || definition} />
 			{expanded && (
-				<SequenceTable
-					definition={definition}
-					host={host}
-					segment={segment}
-					sequence={sequence}
+				<SequenceButtons
+					id={id}
+					onCollapse={collapse}
+					onEdit={onEdit}
+					onRemove={onRemove}
 				/>
+			)}
+			{expanded && (
+				<div className="basis-full">
+					<SequenceTable
+						definition={definition}
+						host={host}
+						segment={segment}
+						sequence={sequence}
+					/>
+				</div>
 			)}
 		</BoxGroupSection>
 	);
