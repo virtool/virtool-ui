@@ -23,6 +23,56 @@ describe("<IsolateItem />", () => {
 		expect(screen.getByText(formatIsolateName(isolate))).toBeInTheDocument();
 	});
 
+	it("should link to the isolate detail route", async () => {
+		const isolate = createFakeOTUIsolate();
+
+		await renderWithRouter(
+			<IsolateItem
+				isolate={isolate}
+				refId="ref-1"
+				otuId="otu-1"
+				canRemove
+				onRemove={vi.fn()}
+			/>,
+		);
+
+		expect(
+			screen.getByRole("link", { name: formatIsolateName(isolate) }),
+		).toHaveAttribute("href", `/refs/ref-1/otus/otu-1/isolates/${isolate.id}`);
+	});
+
+	it("should render a default indicator when [isolate.default=true]", async () => {
+		const isolate = { ...createFakeOTUIsolate(), default: true };
+
+		const { container } = await renderWithRouter(
+			<IsolateItem
+				isolate={isolate}
+				refId="ref-1"
+				otuId="otu-1"
+				canRemove
+				onRemove={vi.fn()}
+			/>,
+		);
+
+		expect(container.querySelector(".lucide-star")).not.toBeNull();
+	});
+
+	it("should not render a default indicator when [isolate.default=false]", async () => {
+		const isolate = { ...createFakeOTUIsolate(), default: false };
+
+		const { container } = await renderWithRouter(
+			<IsolateItem
+				isolate={isolate}
+				refId="ref-1"
+				otuId="otu-1"
+				canRemove
+				onRemove={vi.fn()}
+			/>,
+		);
+
+		expect(container.querySelector(".lucide-star")).toBeNull();
+	});
+
 	it("should call onRemove with the isolate when the remove button is clicked", async () => {
 		const isolate = createFakeOTUIsolate();
 		const onRemove = vi.fn();

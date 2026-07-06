@@ -13,5 +13,6 @@ const routeApi = getRouteApi(
  */
 export function useGetActiveIsolateId(otu: Otu) {
 	const { isolateId } = routeApi.useParams();
-	return isolateId || otu.isolates[0]?.id;
+	const hasIsolate = otu.isolates.some((isolate) => isolate.id === isolateId);
+	return hasIsolate ? isolateId : otu.isolates[0]?.id;
 }

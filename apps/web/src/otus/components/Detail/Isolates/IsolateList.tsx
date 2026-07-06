@@ -15,7 +15,6 @@ import {
 import { getRouteApi } from "@tanstack/react-router";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useLayoutEffect, useRef, useState } from "react";
-import OtuIssues from "../../OtuIssues";
 import AddIsolate from "./AddIsolate";
 import IsolateItem from "./IsolateItem";
 import RemoveIsolate from "./RemoveIsolate";
@@ -48,7 +47,7 @@ export default function IsolateList() {
 
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		reference.id,
-		"modify",
+		"modify_otu",
 	);
 	const archived = useReferenceIsArchived(reference.id);
 	const canModifyIsolates = canModify && !archived;
@@ -70,7 +69,7 @@ export default function IsolateList() {
 				scrollElement.scrollTop;
 			setScrollMargin(top);
 		}
-	});
+	}, []);
 
 	const virtualizer = useVirtualizer({
 		count: results.length,
@@ -82,8 +81,6 @@ export default function IsolateList() {
 
 	return (
 		<>
-			{otu.issues && <OtuIssues issues={otu.issues} isolates={isolates} />}
-
 			<SubviewHeader>
 				<Toolbar>
 					<InputSearch

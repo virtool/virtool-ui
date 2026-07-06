@@ -31,7 +31,7 @@ export default function IsolateDetail() {
 	const mutation = useSetIsolateAsDefault();
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		reference.id,
-		"modify",
+		"modify_otu",
 	);
 	const archived = useReferenceIsArchived(reference.id);
 	const canModifyIsolates = canModify && !archived;
