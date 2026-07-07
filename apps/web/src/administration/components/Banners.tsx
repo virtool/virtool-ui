@@ -8,11 +8,12 @@ import {
 } from "@banner/queries";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFoundSection from "@base/NoneFoundSection";
 import QueryError from "@base/QueryError";
 import { RadioGroup, RadioGroupItem } from "@base/RadioGroup";
 import SectionHeader from "@base/SectionHeader";
+import { Megaphone } from "lucide-react";
 import BannerItem from "./BannerItem";
 import CreateBanner from "./CreateBanner";
 
@@ -92,7 +93,17 @@ export default function Banners() {
 				</RadioGroup>
 			) : (
 				<BoxGroup>
-					<NoneFoundSection noun="banners" />
+					<BoxGroupSection>
+						<Empty className="h-72">
+							<EmptyMedia className="text-gray-400">
+								<Megaphone size={40} strokeWidth={1.5} />
+							</EmptyMedia>
+							<EmptyTitle>No banners found</EmptyTitle>
+							<EmptyDescription>
+								No banners have been created yet.
+							</EmptyDescription>
+						</Empty>
+					</BoxGroupSection>
 				</BoxGroup>
 			)}
 		</section>

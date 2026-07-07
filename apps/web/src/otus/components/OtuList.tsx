@@ -1,13 +1,26 @@
+import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
+import Button from "@base/Button";
 import ContainerNarrow from "@base/ContainerNarrow";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyMedia,
+	EmptyTitle,
+} from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
 import RebuildAlert from "@indexes/components/RebuildAlert";
 import { useListOTUs } from "@otus/queries";
+import {
+	useCheckReferenceRight,
+	useReferenceIsArchived,
+} from "@references/hooks";
 import { useFetchReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
+import { Inbox, SearchX } from "lucide-react";
 import { useState } from "react";
 import OtuCreate from "./OtuCreate";
 import OtuItem from "./OtuItem";
@@ -40,6 +53,11 @@ export default function OtuList({ find, page, setSearch }: OtuListProps) {
 		isPending: isPendingOTUs,
 		isError: isErrorOTUs,
 	} = useListOTUs(refId, page, 25, find);
+	const { hasPermission: canModifyOtu } = useCheckReferenceRight(
+		refId,
+		"modify_otu",
+	);
+	const archived = useReferenceIsArchived(refId);
 
 	if ((isErrorReference || isErrorOTUs) && (!reference || !otus)) {
 		return <QueryError noun="OTUs" />;
@@ -51,16 +69,21 @@ export default function OtuList({ find, page, setSearch }: OtuListProps) {
 
 	const { items, page: storedPage, page_count } = otus;
 
+	const canCreate = canModifyOtu && !reference.remotes_from && !archived;
+	const isUnfilteredEmpty = !items.length && !find;
+
 	return (
 		<ContainerNarrow>
 			<RebuildAlert page={page} refId={refId} />
-			<OtuToolbar
-				term={find}
-				setTerm={(find) => setSearch({ find, page: 1 }, { replace: true })}
-				onCreate={() => setOpenCreate(true)}
-				refId={refId}
-				remotesFrom={reference.remotes_from}
-			/>
+			{!isUnfilteredEmpty && (
+				<OtuToolbar
+					term={find}
+					setTerm={(find) => setSearch({ find, page: 1 }, { replace: true })}
+					onCreate={() => setOpenCreate(true)}
+					refId={refId}
+					remotesFrom={reference.remotes_from}
+				/>
+			)}
 			<OtuCreate open={openCreate} setOpen={setOpenCreate} refId={refId} />
 
 			{items.length ? (
@@ -78,7 +101,30 @@ export default function OtuList({ find, page, setSearch }: OtuListProps) {
 					</BoxGroup>
 				</Pagination>
 			) : (
-				<NoneFoundBox noun="OTUs" />
+				<Box>
+					<Empty className="h-72">
+						<EmptyMedia className="text-gray-400">
+							{find ? (
+								<SearchX size={40} strokeWidth={1.5} />
+							) : (
+								<Inbox size={40} strokeWidth={1.5} />
+							)}
+						</EmptyMedia>
+						<EmptyTitle>No OTUs found</EmptyTitle>
+						<EmptyDescription>
+							{find
+								? "No OTUs match your search."
+								: "This reference has no OTUs yet."}
+						</EmptyDescription>
+						{isUnfilteredEmpty && canCreate && (
+							<EmptyContent>
+								<Button color="blue" onClick={() => setOpenCreate(true)}>
+									Create OTU
+								</Button>
+							</EmptyContent>
+						)}
+					</Empty>
+				</Box>
 			)}
 		</ContainerNarrow>
 	);

@@ -69,10 +69,7 @@ export default defineConfig(({ command }) => ({
 			// and copies them into the server output, so the build doesn't choke on
 			// the binaries and the runtime import resolves. The dist image ships only
 			// `.output`, so the trace is what makes the package available at runtime.
-			traceDeps: [
-				"@sentry/profiling-node*",
-				"@sentry/node-cpu-profiler*",
-			],
+			traceDeps: ["@sentry/profiling-node*", "@sentry/node-cpu-profiler*"],
 		}),
 		react({
 			include: "**/*.tsx",

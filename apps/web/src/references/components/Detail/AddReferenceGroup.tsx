@@ -1,15 +1,17 @@
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupSection from "@base/BoxGroupSection";
 import CompactScrollList from "@base/CompactScrollList";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import InitialIcon from "@base/InitialIcon";
 import InputSearch from "@base/InputSearch";
-import NoneFoundSection from "@base/NoneFoundSection";
 import QueryError from "@base/QueryError";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import Toolbar from "@base/Toolbar";
 import { useInfiniteFindGroups } from "@groups/queries";
 import { useAddReferenceMember } from "@references/queries";
 import type { ReferenceGroup } from "@references/types";
+import { Users } from "lucide-react";
 import { useState } from "react";
 
 type AddReferenceGroupProps = {
@@ -94,7 +96,17 @@ export default function AddReferenceGroup({
 					/>
 				) : (
 					<BoxGroup>
-						<NoneFoundSection noun="other groups" />
+						<BoxGroupSection>
+							<Empty className="py-12">
+								<EmptyMedia className="text-gray-400">
+									<Users size={40} strokeWidth={1.5} />
+								</EmptyMedia>
+								<EmptyTitle>No other groups found</EmptyTitle>
+								<EmptyDescription>
+									There are no other groups to add.
+								</EmptyDescription>
+							</Empty>
+						</BoxGroupSection>
 					</BoxGroup>
 				)}
 			</DialogContent>

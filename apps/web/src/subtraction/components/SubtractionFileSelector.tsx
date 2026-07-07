@@ -1,12 +1,20 @@
+import Box from "@base/Box";
 import CompactScrollList from "@base/CompactScrollList";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyMedia,
+	EmptyTitle,
+} from "@base/Empty";
 import InputError from "@base/InputError";
 import Link from "@base/Link";
-import NoneFoundBox from "@base/NoneFoundBox";
 import type { InfiniteData } from "@tanstack/react-query";
 import type {
 	FetchNextPageOptions,
 	InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
+import { Files } from "lucide-react";
 import { useValidateFiles } from "@/uploads/hooks";
 import type { FileResponse, Upload } from "@/uploads/types";
 import { SubtractionFileItem } from "./SubtractionFileItem";
@@ -73,9 +81,20 @@ export function SubtractionFileSelector({
 	}
 
 	return foundCount === 0 ? (
-		<NoneFoundBox noun="files">
-			<Link to="/subtractions/files">Upload some</Link>
-		</NoneFoundBox>
+		<Box>
+			<Empty className="py-12">
+				<EmptyMedia className="text-gray-400">
+					<Files size={40} strokeWidth={1.5} />
+				</EmptyMedia>
+				<EmptyTitle>No files found</EmptyTitle>
+				<EmptyDescription>
+					Upload subtraction files to get started.
+				</EmptyDescription>
+				<EmptyContent>
+					<Link to="/subtractions/files">Upload some</Link>
+				</EmptyContent>
+			</Empty>
+		</Box>
 	) : (
 		<>
 			<CompactScrollList

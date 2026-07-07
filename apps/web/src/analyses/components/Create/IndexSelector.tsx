@@ -1,12 +1,13 @@
 import { cn } from "@app/utils";
+import Box from "@base/Box";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import Label from "@base/Label";
-import NoneFoundBox from "@base/NoneFoundBox";
 import Select from "@base/Select";
 import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
 import type { IndexMinimal } from "@indexes/types";
 import { sortBy } from "es-toolkit";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Library } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
@@ -82,9 +83,17 @@ export default function IndexSelector({
 					</SelectContent>
 				</Select>
 			) : (
-				<NoneFoundBox noun="references">
-					Build a reference index before running an analysis.
-				</NoneFoundBox>
+				<Box>
+					<Empty className="py-12">
+						<EmptyMedia className="text-gray-400">
+							<Library size={40} strokeWidth={1.5} />
+						</EmptyMedia>
+						<EmptyTitle>No references found</EmptyTitle>
+						<EmptyDescription>
+							Build a reference index before running an analysis.
+						</EmptyDescription>
+					</Empty>
+				</Box>
 			)}
 		</div>
 	);

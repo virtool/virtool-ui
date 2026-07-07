@@ -1,11 +1,13 @@
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupSection from "@base/BoxGroupSection";
 import ContainerNarrow from "@base/ContainerNarrow";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFoundSection from "@base/NoneFoundSection";
 import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderSubtitle from "@base/ViewHeaderSubtitle";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import { Tags } from "lucide-react";
 import {
 	useCreateLabel,
 	useFetchLabels,
@@ -64,7 +66,17 @@ export function Labels() {
 						/>
 					))
 				) : (
-					<NoneFoundSection noun="labels" />
+					<BoxGroupSection>
+						<Empty className="h-72">
+							<EmptyMedia className="text-gray-400">
+								<Tags size={40} strokeWidth={1.5} />
+							</EmptyMedia>
+							<EmptyTitle>No labels found</EmptyTitle>
+							<EmptyDescription>
+								No labels have been created yet.
+							</EmptyDescription>
+						</Empty>
+					</BoxGroupSection>
 				)}
 			</BoxGroup>
 		</ContainerNarrow>

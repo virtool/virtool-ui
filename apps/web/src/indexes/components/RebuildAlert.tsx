@@ -4,7 +4,7 @@ import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
 } from "@references/hooks";
-import { AlertCircle, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { useFindIndexes } from "../queries";
 
 type RebuildAlertProps = {
@@ -26,18 +26,7 @@ export default function RebuildAlert({ page, refId }: RebuildAlertProps) {
 		return null;
 	}
 
-	const { total_otu_count, change_count } = data;
-
-	if (total_otu_count === 0 && hasRights) {
-		return (
-			<Alert color="orange" level icon={AlertCircle}>
-				<strong>
-					At least one OTU must be added to the database before an index can be
-					built.
-				</strong>
-			</Alert>
-		);
-	}
+	const { change_count } = data;
 
 	if (change_count && hasRights) {
 		return (

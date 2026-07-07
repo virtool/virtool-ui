@@ -1,7 +1,8 @@
 import { cn } from "@app/utils";
+import { FileText } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import NoneFound from "./NoneFound";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "./Empty";
 
 type MarkdownProps = {
 	markdown?: string;
@@ -18,7 +19,13 @@ export default function Markdown({ markdown = "" }: MarkdownProps) {
 			{markdown ? (
 				<ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
 			) : (
-				<NoneFound noun="notes" />
+				<Empty className="py-12">
+					<EmptyMedia className="text-gray-400">
+						<FileText size={40} strokeWidth={1.5} />
+					</EmptyMedia>
+					<EmptyTitle>No notes found</EmptyTitle>
+					<EmptyDescription>No notes have been added yet.</EmptyDescription>
+				</Empty>
 			)}
 		</div>
 	);

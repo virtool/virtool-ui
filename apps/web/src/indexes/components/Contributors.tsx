@@ -1,8 +1,10 @@
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
-import NoneFoundSection from "@base/NoneFoundSection";
+import BoxGroupSection from "@base/BoxGroupSection";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import { sortBy } from "es-toolkit";
+import { Users } from "lucide-react";
 import type { IndexContributor } from "../types";
 import Contributor from "./Contributor";
 
@@ -22,7 +24,17 @@ export default function Contributors({ contributors }: ContributorsProps) {
 
 	if (contributorComponents.length === 0) {
 		contributorComponents.push(
-			<NoneFoundSection key="noneFound" noun="contributors" />,
+			<BoxGroupSection key="noneFound" className="py-10">
+				<Empty>
+					<EmptyMedia className="text-gray-400">
+						<Users size={40} strokeWidth={1.5} />
+					</EmptyMedia>
+					<EmptyTitle>No contributors found</EmptyTitle>
+					<EmptyDescription>
+						No one has contributed changes to this reference yet.
+					</EmptyDescription>
+				</Empty>
+			</BoxGroupSection>,
 		);
 	}
 

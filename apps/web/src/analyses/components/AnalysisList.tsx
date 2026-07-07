@@ -1,12 +1,14 @@
+import Box from "@base/Box";
 import { buttonVariants } from "@base/buttonVariants";
 import ContainerNarrow from "@base/ContainerNarrow";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
 import { useListHmms } from "@hmm/queries";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
+import { Microscope } from "lucide-react";
 import { useState } from "react";
 import { useListAnalyses } from "../queries";
 import type { AnalysisMinimal } from "../types";
@@ -99,7 +101,17 @@ export default function AnalysesList({
 					onPageChange={onPageChange}
 				/>
 			) : (
-				<NoneFoundBox noun="analyses" />
+				<Box>
+					<Empty className="h-72">
+						<EmptyMedia className="text-gray-400">
+							<Microscope size={40} strokeWidth={1.5} />
+						</EmptyMedia>
+						<EmptyTitle>No analyses found</EmptyTitle>
+						<EmptyDescription>
+							This sample has no analyses yet.
+						</EmptyDescription>
+					</Empty>
+				</Box>
 			)}
 
 			<CreateAnalysis

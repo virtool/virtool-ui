@@ -37,7 +37,7 @@ describe("<HmmList />", () => {
 		const scope = mockApiGetHmms(fakeHMMData);
 		await renderRoute(path);
 
-		expect(await screen.findByText("No HMMs found.")).toBeInTheDocument();
+		expect(await screen.findByText("No HMMs found")).toBeInTheDocument();
 
 		scope.done();
 	});

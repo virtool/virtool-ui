@@ -1,8 +1,9 @@
 import BoxGroupSection from "@base/BoxGroupSection";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import Link from "@base/Link";
-import NoneFoundSection from "@base/NoneFoundSection";
 import RelativeTime from "@base/RelativeTime";
 import type { ReferenceBuild } from "@references/types";
+import { Boxes } from "lucide-react";
 
 type LatestBuildProps = {
 	id: string;
@@ -35,5 +36,17 @@ export function LatestBuild({ id, latestBuild }: LatestBuildProps) {
 		);
 	}
 
-	return <NoneFoundSection noun="index builds" />;
+	return (
+		<BoxGroupSection className="py-10">
+			<Empty>
+				<EmptyMedia className="text-gray-400">
+					<Boxes size={40} strokeWidth={1.5} />
+				</EmptyMedia>
+				<EmptyTitle>No index builds found</EmptyTitle>
+				<EmptyDescription>
+					This reference has no built indexes yet.
+				</EmptyDescription>
+			</Empty>
+		</BoxGroupSection>
+	);
 }

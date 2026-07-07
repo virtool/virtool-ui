@@ -1,6 +1,13 @@
+import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyMedia,
+	EmptyTitle,
+} from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
 import Toolbar from "@base/Toolbar";
@@ -9,6 +16,7 @@ import {
 	useReferenceIsArchived,
 } from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
+import { Inbox } from "lucide-react";
 import { useFindIndexes } from "../queries";
 import { IndexItem } from "./Item/IndexItem";
 import RebuildIndex from "./RebuildIndex";
@@ -39,9 +47,11 @@ export default function Indexes({ page, setSearch }: IndexesProps) {
 
 	const { items, change_count, page: storedPage, page_count } = data;
 
+	const canBuildIndex = !archived && canBuild && change_count > 0;
+
 	return (
 		<>
-			{!archived && canBuild && change_count > 0 && (
+			{items.length > 0 && canBuildIndex && (
 				<Toolbar>
 					<div className="flex-grow" />
 					<RebuildIndex refId={refId} />
@@ -69,7 +79,24 @@ export default function Indexes({ page, setSearch }: IndexesProps) {
 					</BoxGroup>
 				</Pagination>
 			) : (
-				<NoneFoundBox noun="indexes" />
+				<Box>
+					<Empty className="h-72">
+						<EmptyMedia className="text-gray-400">
+							<Inbox size={40} strokeWidth={1.5} />
+						</EmptyMedia>
+						<EmptyTitle>No indexes found</EmptyTitle>
+						<EmptyDescription>
+							{change_count > 0
+								? "This reference has unbuilt changes."
+								: "This reference has no indexes yet."}
+						</EmptyDescription>
+						{canBuildIndex && (
+							<EmptyContent>
+								<RebuildIndex refId={refId} />
+							</EmptyContent>
+						)}
+					</Empty>
+				</Box>
 			)}
 		</>
 	);

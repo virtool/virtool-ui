@@ -1,11 +1,13 @@
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import { Cog, SearchX } from "lucide-react";
 import { useFindJobs } from "../queries";
 import type { JobState } from "../types";
 import { JobFilters } from "./Filters/JobFilters";
@@ -43,12 +45,8 @@ export default function JobsList({
 		totalCount,
 	} = data;
 
-	const emptyMessage =
-		totalCount === 0
-			? "No jobs found"
-			: foundCount === 0
-				? "No jobs matching filters"
-				: null;
+	const isEmpty = totalCount === 0 || foundCount === 0;
+	const isFiltered = totalCount > 0 && foundCount === 0;
 
 	return (
 		<>
@@ -57,9 +55,23 @@ export default function JobsList({
 			</ViewHeader>
 			<div className="flex gap-4">
 				<ContainerNarrow>
-					{emptyMessage ? (
-						<Box className="flex items-center justify-center h-full text-gray-500">
-							<h3 className="font-semibold">{emptyMessage}</h3>
+					{isEmpty ? (
+						<Box>
+							<Empty className="h-72">
+								<EmptyMedia className="text-gray-400">
+									{isFiltered ? (
+										<SearchX size={40} strokeWidth={1.5} />
+									) : (
+										<Cog size={40} strokeWidth={1.5} />
+									)}
+								</EmptyMedia>
+								<EmptyTitle>No jobs found</EmptyTitle>
+								<EmptyDescription>
+									{isFiltered
+										? "No jobs match your filters."
+										: "No jobs have been run yet."}
+								</EmptyDescription>
+							</Empty>
 						</Box>
 					) : (
 						<Pagination
