@@ -71,7 +71,7 @@ export default defineConfig(({ command }) => ({
 			// `.output`, so the trace is what makes the package available at runtime.
 			traceDeps: [
 				"@sentry/profiling-node*",
-				"@sentry-internal/node-cpu-profiler*",
+				"@sentry/node-cpu-profiler*",
 			],
 		}),
 		react({
