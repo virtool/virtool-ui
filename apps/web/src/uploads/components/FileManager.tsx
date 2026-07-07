@@ -3,7 +3,7 @@ import { checkAdminRoleOrPermissionsFromAccount } from "@administration/utils";
 import Alert from "@base/Alert";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
-import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
@@ -11,7 +11,7 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { capitalize } from "es-toolkit";
-import { AlertCircle, CircleAlert } from "lucide-react";
+import { AlertCircle, FileUp } from "lucide-react";
 import type { ReactNode } from "react";
 import type { Accept } from "react-dropzone";
 import { useListFiles } from "../queries";
@@ -113,11 +113,16 @@ export function FileManager({
 
 			{files.found_count === 0 ? (
 				<Box>
-					<Empty orientation="horizontal">
-						<EmptyMedia>
-							<CircleAlert size={18} />
+					<Empty className="h-72">
+						<EmptyMedia className="text-gray-400">
+							<FileUp size={40} strokeWidth={1.5} />
 						</EmptyMedia>
 						<EmptyTitle>No files found</EmptyTitle>
+						<EmptyDescription>
+							{canUpload
+								? "Upload a file to get started."
+								: "No files have been uploaded yet."}
+						</EmptyDescription>
 					</Empty>
 				</Box>
 			) : (

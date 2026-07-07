@@ -2,11 +2,11 @@ import { objectHasProperty } from "@app/common";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
-import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import { useCheckReferenceRight } from "@references/hooks";
 import { useRemoveReferenceUser } from "@references/queries";
 import type { ReferenceGroup, ReferenceUser } from "@references/types";
-import { CircleAlert } from "lucide-react";
+import { Users } from "lucide-react";
 import AddReferenceGroup from "./AddReferenceGroup";
 import AddReferenceUser from "./AddReferenceUser";
 import EditReferenceMember from "./EditMember";
@@ -85,11 +85,14 @@ export default function ReferenceMembers({
 					})
 				) : (
 					<BoxGroupSection>
-						<Empty orientation="horizontal">
-							<EmptyMedia>
-								<CircleAlert size={18} />
+						<Empty className="h-72">
+							<EmptyMedia className="text-gray-400">
+								<Users size={40} strokeWidth={1.5} />
 							</EmptyMedia>
 							<EmptyTitle>No {plural} found</EmptyTitle>
+							<EmptyDescription>
+								{`This reference has no ${plural} yet.`}
+							</EmptyDescription>
 						</Empty>
 					</BoxGroupSection>
 				)}

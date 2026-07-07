@@ -9,7 +9,13 @@ import Dropdown from "@base/Dropdown";
 import DropdownButton from "@base/DropdownButton";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
-import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyMedia,
+	EmptyTitle,
+} from "@base/Empty";
 import Icon from "@base/Icon";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
@@ -23,7 +29,7 @@ import type {
 	InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
 import { buildReadRows, detectMate, type ReadRow } from "@uploads/pairing";
-import { ChevronDown, CircleAlert, TriangleAlert, Undo } from "lucide-react";
+import { ChevronDown, Files, TriangleAlert, Undo } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useValidateFiles } from "@/uploads/hooks";
 import type { FileResponse, Upload } from "@/uploads/types";
@@ -190,12 +196,17 @@ export default function ReadSelector({
 	const noneFound = total_count === 0 && (
 		<BoxGroup>
 			<BoxGroupSection>
-				<Empty orientation="horizontal">
-					<EmptyMedia>
-						<CircleAlert size={18} />
+				<Empty className="py-12">
+					<EmptyMedia className="text-gray-400">
+						<Files size={40} strokeWidth={1.5} />
 					</EmptyMedia>
 					<EmptyTitle>No files found</EmptyTitle>
-					<Link to="/samples/files">Upload some</Link>
+					<EmptyDescription>
+						Upload read files to run a sample.
+					</EmptyDescription>
+					<EmptyContent>
+						<Link to="/samples/files">Upload some</Link>
+					</EmptyContent>
 				</Empty>
 			</BoxGroupSection>
 		</BoxGroup>

@@ -1,13 +1,13 @@
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
-import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
-import { CircleAlert } from "lucide-react";
+import { Boxes, SearchX } from "lucide-react";
 import { useListHmms } from "../queries";
 import { HmmInstall } from "./HmmInstall";
 import HmmItem from "./HmmItem";
@@ -75,11 +75,18 @@ export default function HmmList({ find, page, setSearch }: HmmListProps) {
 						</Pagination>
 					) : (
 						<Box>
-							<Empty orientation="horizontal">
-								<EmptyMedia>
-									<CircleAlert size={18} />
+							<Empty className="h-72">
+								<EmptyMedia className="text-gray-400">
+									{find ? (
+										<SearchX size={40} strokeWidth={1.5} />
+									) : (
+										<Boxes size={40} strokeWidth={1.5} />
+									)}
 								</EmptyMedia>
 								<EmptyTitle>No HMMs found</EmptyTitle>
+								<EmptyDescription>
+									{find ? "No HMMs match your search." : "No HMMs to show."}
+								</EmptyDescription>
 							</Empty>
 						</Box>
 					)}

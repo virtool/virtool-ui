@@ -1,8 +1,8 @@
 import { cn } from "@app/utils";
-import { CircleAlert } from "lucide-react";
+import { FileText } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Empty, EmptyMedia, EmptyTitle } from "./Empty";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "./Empty";
 
 type MarkdownProps = {
 	markdown?: string;
@@ -19,11 +19,12 @@ export default function Markdown({ markdown = "" }: MarkdownProps) {
 			{markdown ? (
 				<ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
 			) : (
-				<Empty orientation="horizontal">
-					<EmptyMedia>
-						<CircleAlert size={18} />
+				<Empty className="py-12">
+					<EmptyMedia className="text-gray-400">
+						<FileText size={40} strokeWidth={1.5} />
 					</EmptyMedia>
 					<EmptyTitle>No notes found</EmptyTitle>
+					<EmptyDescription>No notes have been added yet.</EmptyDescription>
 				</Empty>
 			)}
 		</div>

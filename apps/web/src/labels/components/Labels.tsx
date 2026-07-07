@@ -1,13 +1,13 @@
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import ContainerNarrow from "@base/ContainerNarrow";
-import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderSubtitle from "@base/ViewHeaderSubtitle";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import { CircleAlert } from "lucide-react";
+import { Tags } from "lucide-react";
 import {
 	useCreateLabel,
 	useFetchLabels,
@@ -67,11 +67,14 @@ export function Labels() {
 					))
 				) : (
 					<BoxGroupSection>
-						<Empty orientation="horizontal">
-							<EmptyMedia>
-								<CircleAlert size={18} />
+						<Empty className="h-72">
+							<EmptyMedia className="text-gray-400">
+								<Tags size={40} strokeWidth={1.5} />
 							</EmptyMedia>
 							<EmptyTitle>No labels found</EmptyTitle>
+							<EmptyDescription>
+								No labels have been created yet.
+							</EmptyDescription>
 						</Empty>
 					</BoxGroupSection>
 				)}

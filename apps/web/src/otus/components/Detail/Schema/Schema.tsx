@@ -1,5 +1,5 @@
 import BoxGroup from "@base/BoxGroup";
-import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
@@ -9,7 +9,7 @@ import {
 	useReferenceIsArchived,
 } from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
-import { CircleAlert } from "lucide-react";
+import { Component } from "lucide-react";
 import { useState } from "react";
 import Box from "@/base/Box";
 import Button from "@/base/Button";
@@ -104,11 +104,14 @@ export default function Schema() {
 				</BoxGroup>
 			) : (
 				<Box>
-					<Empty orientation="horizontal">
-						<EmptyMedia>
-							<CircleAlert size={18} />
+					<Empty className="h-72">
+						<EmptyMedia className="text-gray-400">
+							<Component size={40} strokeWidth={1.5} />
 						</EmptyMedia>
 						<EmptyTitle>No segments found</EmptyTitle>
+						<EmptyDescription>
+							This schema has no segments yet.
+						</EmptyDescription>
 					</Empty>
 				</Box>
 			)}

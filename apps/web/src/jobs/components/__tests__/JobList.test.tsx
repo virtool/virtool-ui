@@ -54,7 +54,7 @@ describe("<JobsList />", () => {
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
 		);
 		expect(
-			await screen.findByText("No jobs matching filters"),
+			await screen.findByText("No jobs match your filters."),
 		).toBeInTheDocument();
 
 		scope.done();

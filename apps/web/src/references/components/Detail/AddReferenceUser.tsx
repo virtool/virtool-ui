@@ -2,7 +2,7 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import CompactScrollList from "@base/CompactScrollList";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import InitialIcon from "@base/InitialIcon";
 import InputSearch from "@base/InputSearch";
 import QueryError from "@base/QueryError";
@@ -11,7 +11,7 @@ import Toolbar from "@base/Toolbar";
 import { useAddReferenceMember } from "@references/queries";
 import type { ReferenceUser } from "@references/types";
 import { useInfiniteFindUsers } from "@users/queries";
-import { CircleAlert } from "lucide-react";
+import { Users } from "lucide-react";
 import { useState } from "react";
 
 type AddReferenceUserProps = {
@@ -99,11 +99,14 @@ export default function AddReferenceUser({
 				) : (
 					<BoxGroup>
 						<BoxGroupSection>
-							<Empty orientation="horizontal">
-								<EmptyMedia>
-									<CircleAlert size={18} />
+							<Empty className="py-12">
+								<EmptyMedia className="text-gray-400">
+									<Users size={40} strokeWidth={1.5} />
 								</EmptyMedia>
 								<EmptyTitle>No other users found</EmptyTitle>
+								<EmptyDescription>
+									There are no other users to add.
+								</EmptyDescription>
 							</Empty>
 						</BoxGroupSection>
 					</BoxGroup>

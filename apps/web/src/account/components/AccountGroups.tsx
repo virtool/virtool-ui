@@ -2,9 +2,9 @@ import { cn } from "@app/utils";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
-import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
+import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import type { GroupMinimal } from "@groups/types";
-import { CircleAlert } from "lucide-react";
+import { Users } from "lucide-react";
 
 type AccountGroupsProps = {
 	/** A list of groups associated with the account */
@@ -41,11 +41,14 @@ export default function AccountGroups({ groups }: AccountGroupsProps) {
 							</span>
 						))
 				) : (
-					<Empty orientation="horizontal">
-						<EmptyMedia>
-							<CircleAlert size={18} />
+					<Empty className="h-72">
+						<EmptyMedia className="text-gray-400">
+							<Users size={40} strokeWidth={1.5} />
 						</EmptyMedia>
 						<EmptyTitle>No groups found</EmptyTitle>
+						<EmptyDescription>
+							You do not belong to any groups.
+						</EmptyDescription>
 					</Empty>
 				)}
 			</BoxGroupSection>
