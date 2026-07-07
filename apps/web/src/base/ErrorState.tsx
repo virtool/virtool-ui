@@ -1,16 +1,9 @@
 import { cn } from "@app/utils";
 import { CircleAlert } from "lucide-react";
 import type { ReactNode } from "react";
+import { Empty, EmptyContent, EmptyMedia, EmptyTitle } from "./Empty";
 
 type ErrorStateColor = "blue" | "green" | "gray" | "orange" | "purple" | "red";
-
-type ErrorStateProps = {
-	children?: ReactNode;
-	className?: string;
-	color?: ErrorStateColor;
-	icon?: ReactNode;
-	message?: string;
-};
 
 const iconColors: Record<ErrorStateColor, string> = {
 	blue: "text-blue-500",
@@ -19,6 +12,14 @@ const iconColors: Record<ErrorStateColor, string> = {
 	orange: "text-orange-500",
 	purple: "text-purple-500",
 	red: "text-red-500",
+};
+
+type ErrorStateProps = {
+	children?: ReactNode;
+	className?: string;
+	color?: ErrorStateColor;
+	icon?: ReactNode;
+	message?: string;
 };
 
 /**
@@ -43,15 +44,10 @@ export default function ErrorState({
 	message = "Something went wrong",
 }: ErrorStateProps) {
 	return (
-		<div
-			className={cn(
-				"flex flex-col items-center justify-center h-96 gap-4",
-				className,
-			)}
-		>
-			{icon}
-			<strong className="text-base">{message}</strong>
-			{children}
-		</div>
+		<Empty className={cn("h-96", className)}>
+			<EmptyMedia>{icon}</EmptyMedia>
+			<EmptyTitle>{message}</EmptyTitle>
+			{children ? <EmptyContent>{children}</EmptyContent> : null}
+		</Empty>
 	);
 }

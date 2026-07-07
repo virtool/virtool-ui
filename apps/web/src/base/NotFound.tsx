@@ -1,3 +1,4 @@
+import { Empty, EmptyTitle } from "./Empty";
 import Label from "./Label";
 
 type NotFoundProps = {
@@ -10,11 +11,11 @@ export default function NotFound({
 	message = "Not found",
 }: NotFoundProps) {
 	return (
-		<div className="flex flex-col items-center justify-center h-96">
+		<Empty className="h-96">
 			<Label className="text-5xl" color="red">
 				{status}
 			</Label>
-			<strong className="text-base pt-4">{message}</strong>
-		</div>
+			<EmptyTitle>{message}</EmptyTitle>
+		</Empty>
 	);
 }
