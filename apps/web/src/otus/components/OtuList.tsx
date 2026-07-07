@@ -1,13 +1,15 @@
+import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
 import RebuildAlert from "@indexes/components/RebuildAlert";
 import { useListOTUs } from "@otus/queries";
 import { useFetchReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
+import { CircleAlert } from "lucide-react";
 import { useState } from "react";
 import OtuCreate from "./OtuCreate";
 import OtuItem from "./OtuItem";
@@ -78,7 +80,14 @@ export default function OtuList({ find, page, setSearch }: OtuListProps) {
 					</BoxGroup>
 				</Pagination>
 			) : (
-				<NoneFoundBox noun="OTUs" />
+				<Box>
+					<Empty orientation="horizontal">
+						<EmptyMedia>
+							<CircleAlert size={18} />
+						</EmptyMedia>
+						<EmptyTitle>No OTUs found</EmptyTitle>
+					</Empty>
+				</Box>
 			)}
 		</ContainerNarrow>
 	);

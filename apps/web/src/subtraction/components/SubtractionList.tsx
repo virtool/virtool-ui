@@ -1,11 +1,13 @@
+import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
+import { CircleAlert } from "lucide-react";
 import { useFindSubtractions } from "../queries";
 import { SubtractionItem } from "./SubtractionItem";
 import SubtractionToolbar from "./SubtractionToolbar";
@@ -52,7 +54,14 @@ export default function SubtractionList({
 			<SubtractionToolbar term={find} handleChange={handleChange} />
 
 			{!items.length ? (
-				<NoneFoundBox key="subtractions" noun="subtractions" />
+				<Box key="subtractions">
+					<Empty orientation="horizontal">
+						<EmptyMedia>
+							<CircleAlert size={18} />
+						</EmptyMedia>
+						<EmptyTitle>No subtractions found</EmptyTitle>
+					</Empty>
+				</Box>
 			) : (
 				<Pagination
 					items={items}

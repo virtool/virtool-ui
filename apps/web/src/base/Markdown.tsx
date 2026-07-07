@@ -1,7 +1,8 @@
 import { cn } from "@app/utils";
+import { CircleAlert } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import NoneFound from "./NoneFound";
+import { Empty, EmptyMedia, EmptyTitle } from "./Empty";
 
 type MarkdownProps = {
 	markdown?: string;
@@ -18,7 +19,12 @@ export default function Markdown({ markdown = "" }: MarkdownProps) {
 			{markdown ? (
 				<ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
 			) : (
-				<NoneFound noun="notes" />
+				<Empty orientation="horizontal">
+					<EmptyMedia>
+						<CircleAlert size={18} />
+					</EmptyMedia>
+					<EmptyTitle>No notes found</EmptyTitle>
+				</Empty>
 			)}
 		</div>
 	);

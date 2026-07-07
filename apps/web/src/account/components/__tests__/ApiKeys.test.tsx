@@ -48,7 +48,7 @@ describe("<ApiKeys />", () => {
 			name: /Manage API keys for accessing the/,
 		});
 
-		expect(screen.getByText("No API keys found.")).toBeInTheDocument();
+		expect(screen.getByText("No API keys found")).toBeInTheDocument();
 
 		await user.click(screen.getByRole("button", { name: "Create" }));
 

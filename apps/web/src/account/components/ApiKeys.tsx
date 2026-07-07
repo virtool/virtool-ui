@@ -1,9 +1,11 @@
 import { cn } from "@app/utils";
+import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import ExternalLink from "@base/ExternalLink";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFoundBox from "@base/NoneFoundBox";
 import QueryError from "@base/QueryError";
+import { CircleAlert } from "lucide-react";
 import { useFetchAPIKeys } from "../queries";
 import ApiKey from "./ApiKey";
 import ApiKeyCreate from "./ApiKeyCreate";
@@ -49,7 +51,14 @@ export default function ApiKeys() {
 			{keyComponents.length ? (
 				<BoxGroup>{keyComponents}</BoxGroup>
 			) : (
-				<NoneFoundBox noun="API keys" />
+				<Box>
+					<Empty orientation="horizontal">
+						<EmptyMedia>
+							<CircleAlert size={18} />
+						</EmptyMedia>
+						<EmptyTitle>No API keys found</EmptyTitle>
+					</Empty>
+				</Box>
 			)}
 		</div>
 	);

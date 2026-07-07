@@ -1,8 +1,9 @@
 import BoxGroupSection from "@base/BoxGroupSection";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import Link from "@base/Link";
-import NoneFoundSection from "@base/NoneFoundSection";
 import RelativeTime from "@base/RelativeTime";
 import type { ReferenceBuild } from "@references/types";
+import { CircleAlert } from "lucide-react";
 
 type LatestBuildProps = {
 	id: string;
@@ -35,5 +36,14 @@ export function LatestBuild({ id, latestBuild }: LatestBuildProps) {
 		);
 	}
 
-	return <NoneFoundSection noun="index builds" />;
+	return (
+		<BoxGroupSection>
+			<Empty orientation="horizontal">
+				<EmptyMedia>
+					<CircleAlert size={18} />
+				</EmptyMedia>
+				<EmptyTitle>No index builds found</EmptyTitle>
+			</Empty>
+		</BoxGroupSection>
+	);
 }

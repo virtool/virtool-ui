@@ -1,6 +1,7 @@
 import QuickAnalyze from "@analyses/components/Create/QuickAnalyze";
+import Box from "@base/Box";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
@@ -11,6 +12,7 @@ import type { Label } from "@labels/types";
 import { useListSamples } from "@samples/queries";
 import type { SampleMinimal } from "@samples/types";
 import { intersectionWith, union, xor } from "es-toolkit/array";
+import { CircleAlert } from "lucide-react";
 import { useState } from "react";
 import SampleFilters from "./Filter/SampleFilters";
 import SampleItem from "./Item/SampleItem";
@@ -120,7 +122,14 @@ export default function SamplesList({
 				</div>
 				<div className="row-start-2 min-w-xl">
 					{!items.length ? (
-						<NoneFoundBox key="noSample" noun="samples" />
+						<Box key="noSample">
+							<Empty orientation="horizontal">
+								<EmptyMedia>
+									<CircleAlert size={18} />
+								</EmptyMedia>
+								<EmptyTitle>No samples found</EmptyTitle>
+							</Empty>
+						</Box>
 					) : (
 						<Pagination
 							items={items}

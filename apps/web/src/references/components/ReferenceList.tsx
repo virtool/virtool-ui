@@ -1,12 +1,14 @@
+import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
+import { CircleAlert } from "lucide-react";
 import { useFindReferences } from "../queries";
 import Clone from "./CloneReference";
 import { CreateReference } from "./CreateReference";
@@ -84,9 +86,16 @@ export default function ReferenceList({
 					}
 				/>
 				{!items.length ? (
-					<NoneFoundBox
-						noun={archived ? "archived references" : "references"}
-					/>
+					<Box>
+						<Empty orientation="horizontal">
+							<EmptyMedia>
+								<CircleAlert size={18} />
+							</EmptyMedia>
+							<EmptyTitle>
+								No {archived ? "archived references" : "references"} found
+							</EmptyTitle>
+						</Empty>
+					</Box>
 				) : (
 					<Pagination
 						items={items}

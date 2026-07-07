@@ -8,11 +8,12 @@ import {
 } from "@banner/queries";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFoundSection from "@base/NoneFoundSection";
 import QueryError from "@base/QueryError";
 import { RadioGroup, RadioGroupItem } from "@base/RadioGroup";
 import SectionHeader from "@base/SectionHeader";
+import { CircleAlert } from "lucide-react";
 import BannerItem from "./BannerItem";
 import CreateBanner from "./CreateBanner";
 
@@ -92,7 +93,14 @@ export default function Banners() {
 				</RadioGroup>
 			) : (
 				<BoxGroup>
-					<NoneFoundSection noun="banners" />
+					<BoxGroupSection>
+						<Empty orientation="horizontal">
+							<EmptyMedia>
+								<CircleAlert size={18} />
+							</EmptyMedia>
+							<EmptyTitle>No banners found</EmptyTitle>
+						</Empty>
+					</BoxGroupSection>
 				</BoxGroup>
 			)}
 		</section>

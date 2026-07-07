@@ -1,8 +1,10 @@
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
-import NoneFoundSection from "@base/NoneFoundSection";
+import BoxGroupSection from "@base/BoxGroupSection";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import { sortBy } from "es-toolkit";
+import { CircleAlert } from "lucide-react";
 import type { IndexContributor } from "../types";
 import Contributor from "./Contributor";
 
@@ -22,7 +24,14 @@ export default function Contributors({ contributors }: ContributorsProps) {
 
 	if (contributorComponents.length === 0) {
 		contributorComponents.push(
-			<NoneFoundSection key="noneFound" noun="contributors" />,
+			<BoxGroupSection key="noneFound">
+				<Empty orientation="horizontal">
+					<EmptyMedia>
+						<CircleAlert size={18} />
+					</EmptyMedia>
+					<EmptyTitle>No contributors found</EmptyTitle>
+				</Empty>
+			</BoxGroupSection>,
 		);
 	}
 

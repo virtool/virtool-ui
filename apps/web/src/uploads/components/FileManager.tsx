@@ -1,16 +1,17 @@
 import { useFetchAccount } from "@account/queries";
 import { checkAdminRoleOrPermissionsFromAccount } from "@administration/utils";
 import Alert from "@base/Alert";
+import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { capitalize } from "es-toolkit";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, CircleAlert } from "lucide-react";
 import type { ReactNode } from "react";
 import type { Accept } from "react-dropzone";
 import { useListFiles } from "../queries";
@@ -111,7 +112,14 @@ export function FileManager({
 			)}
 
 			{files.found_count === 0 ? (
-				<NoneFoundBox noun="files" />
+				<Box>
+					<Empty orientation="horizontal">
+						<EmptyMedia>
+							<CircleAlert size={18} />
+						</EmptyMedia>
+						<EmptyTitle>No files found</EmptyTitle>
+					</Empty>
+				</Box>
 			) : (
 				<Pagination
 					items={files.items}

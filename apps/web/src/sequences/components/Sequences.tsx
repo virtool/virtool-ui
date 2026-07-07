@@ -1,11 +1,12 @@
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
-import NoneFoundSection from "@base/NoneFoundSection";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import { useCurrentOtuContext } from "@otus/queries";
 import type { OtuIsolate, OtuSequence } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
 import { useReferenceIsArchived } from "@references/hooks";
+import { CircleAlert } from "lucide-react";
 import { useState } from "react";
 import CreateSequence from "./CreateSequence";
 import RemoveSequence from "./RemoveSequence";
@@ -74,7 +75,14 @@ export default function Sequences({
 
 	if (!hasSequences) {
 		sequenceComponents = [
-			<NoneFoundSection noun="sequences" key="noSequences" />,
+			<BoxGroupSection key="noSequences">
+				<Empty orientation="horizontal">
+					<EmptyMedia>
+						<CircleAlert size={18} />
+					</EmptyMedia>
+					<EmptyTitle>No sequences found</EmptyTitle>
+				</Empty>
+			</BoxGroupSection>,
 		];
 	}
 

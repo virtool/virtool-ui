@@ -1,9 +1,10 @@
 import { useFuse } from "@app/fuse";
 import { getContentScrollElement } from "@app/scroll";
 import { formatIsolateName } from "@app/utils";
+import Box from "@base/Box";
 import Button from "@base/Button";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import InputSearch from "@base/InputSearch";
-import NoneFoundBox from "@base/NoneFoundBox";
 import SubviewHeader from "@base/SubviewHeader";
 import Toolbar from "@base/Toolbar";
 import { useCurrentOtuContext } from "@otus/queries";
@@ -14,6 +15,7 @@ import {
 } from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { CircleAlert } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
 import AddIsolate from "./AddIsolate";
 import IsolateItem from "./IsolateItem";
@@ -137,7 +139,14 @@ export default function IsolateList() {
 					</div>
 				</>
 			) : (
-				<NoneFoundBox noun="isolates" />
+				<Box>
+					<Empty orientation="horizontal">
+						<EmptyMedia>
+							<CircleAlert size={18} />
+						</EmptyMedia>
+						<EmptyTitle>No isolates found</EmptyTitle>
+					</Empty>
+				</Box>
 			)}
 
 			<AddIsolate

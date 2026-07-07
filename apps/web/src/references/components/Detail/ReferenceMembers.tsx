@@ -1,10 +1,12 @@
 import { objectHasProperty } from "@app/common";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
-import NoneFoundSection from "@base/NoneFoundSection";
+import BoxGroupSection from "@base/BoxGroupSection";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import { useCheckReferenceRight } from "@references/hooks";
 import { useRemoveReferenceUser } from "@references/queries";
 import type { ReferenceGroup, ReferenceUser } from "@references/types";
+import { CircleAlert } from "lucide-react";
 import AddReferenceGroup from "./AddReferenceGroup";
 import AddReferenceUser from "./AddReferenceUser";
 import EditReferenceMember from "./EditMember";
@@ -82,7 +84,14 @@ export default function ReferenceMembers({
 						);
 					})
 				) : (
-					<NoneFoundSection noun={plural} />
+					<BoxGroupSection>
+						<Empty orientation="horizontal">
+							<EmptyMedia>
+								<CircleAlert size={18} />
+							</EmptyMedia>
+							<EmptyTitle>No {plural} found</EmptyTitle>
+						</Empty>
+					</BoxGroupSection>
 				)}
 			</BoxGroup>
 			{noun === "user" ? (

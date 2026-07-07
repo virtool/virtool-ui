@@ -1,12 +1,14 @@
+import Box from "@base/Box";
 import CompactScrollList from "@base/CompactScrollList";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import InputError from "@base/InputError";
 import Link from "@base/Link";
-import NoneFoundBox from "@base/NoneFoundBox";
 import type { InfiniteData } from "@tanstack/react-query";
 import type {
 	FetchNextPageOptions,
 	InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
+import { CircleAlert } from "lucide-react";
 import { useValidateFiles } from "@/uploads/hooks";
 import type { FileResponse, Upload } from "@/uploads/types";
 import { SubtractionFileItem } from "./SubtractionFileItem";
@@ -73,9 +75,15 @@ export function SubtractionFileSelector({
 	}
 
 	return foundCount === 0 ? (
-		<NoneFoundBox noun="files">
-			<Link to="/subtractions/files">Upload some</Link>
-		</NoneFoundBox>
+		<Box>
+			<Empty orientation="horizontal">
+				<EmptyMedia>
+					<CircleAlert size={18} />
+				</EmptyMedia>
+				<EmptyTitle>No files found</EmptyTitle>
+				<Link to="/subtractions/files">Upload some</Link>
+			</Empty>
+		</Box>
 	) : (
 		<>
 			<CompactScrollList

@@ -2,19 +2,20 @@ import { cn } from "@app/utils";
 import Alert from "@base/Alert";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupSection from "@base/BoxGroupSection";
 import Button from "@base/Button";
 import CompactScrollList from "@base/CompactScrollList";
 import Dropdown from "@base/Dropdown";
 import DropdownButton from "@base/DropdownButton";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
+import { Empty, EmptyMedia, EmptyTitle } from "@base/Empty";
 import Icon from "@base/Icon";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSearch from "@base/InputSearch";
 import Link from "@base/Link";
-import NoneFoundSection from "@base/NoneFoundSection";
 import Toolbar from "@base/Toolbar";
 import type {
 	FetchNextPageOptions,
@@ -22,7 +23,7 @@ import type {
 	InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
 import { buildReadRows, detectMate, type ReadRow } from "@uploads/pairing";
-import { ChevronDown, TriangleAlert, Undo } from "lucide-react";
+import { ChevronDown, CircleAlert, TriangleAlert, Undo } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useValidateFiles } from "@/uploads/hooks";
 import type { FileResponse, Upload } from "@/uploads/types";
@@ -188,9 +189,15 @@ export default function ReadSelector({
 
 	const noneFound = total_count === 0 && (
 		<BoxGroup>
-			<NoneFoundSection noun="files">
-				<Link to="/samples/files">Upload some</Link>
-			</NoneFoundSection>
+			<BoxGroupSection>
+				<Empty orientation="horizontal">
+					<EmptyMedia>
+						<CircleAlert size={18} />
+					</EmptyMedia>
+					<EmptyTitle>No files found</EmptyTitle>
+					<Link to="/samples/files">Upload some</Link>
+				</Empty>
+			</BoxGroupSection>
 		</BoxGroup>
 	);
 
