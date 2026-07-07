@@ -56,7 +56,7 @@ export const findMessages = createServerFn({ method: "GET" }).handler(
 );
 
 export const createMessage = createServerFn({ method: "POST" })
-	.inputValidator(createMessageSchema)
+	.validator(createMessageSchema)
 	.handler(async ({ data }) => {
 		const session = await requireSession();
 		await requireAdminRole(session, "settings");
@@ -70,7 +70,7 @@ export const createMessage = createServerFn({ method: "POST" })
 	});
 
 export const updateMessage = createServerFn({ method: "POST" })
-	.inputValidator(updateMessageSchema)
+	.validator(updateMessageSchema)
 	.handler(async ({ data }) => {
 		const session = await requireSession();
 		await requireAdminRole(session, "settings");
@@ -86,7 +86,7 @@ export const updateMessage = createServerFn({ method: "POST" })
 	});
 
 export const deleteMessage = createServerFn({ method: "POST" })
-	.inputValidator(idSchema)
+	.validator(idSchema)
 	.handler(async ({ data }) => {
 		const session = await requireSession();
 		await requireAdminRole(session, "settings");
@@ -100,7 +100,7 @@ export const deleteMessage = createServerFn({ method: "POST" })
 	});
 
 export const setActiveMessage = createServerFn({ method: "POST" })
-	.inputValidator(idSchema)
+	.validator(idSchema)
 	.handler(async ({ data }) => {
 		const session = await requireSession();
 		await requireAdminRole(session, "settings");

@@ -46,7 +46,7 @@ const getClientIp = createServerOnlyFn((): string => {
 
 /** Login server function. Unauthenticated by necessity — this *creates* the session. */
 export const loginFn = createServerFn({ method: "POST" })
-	.inputValidator(loginSchema)
+	.validator(loginSchema)
 	.handler(async ({ data }) => {
 		try {
 			const result = await login(db, realCookies, {
@@ -78,7 +78,7 @@ export const loginFn = createServerFn({ method: "POST" })
  * session for the user it creates.
  */
 export const createFirstUserFn = createServerFn({ method: "POST" })
-	.inputValidator(createFirstUserSchema)
+	.validator(createFirstUserSchema)
 	.handler(async ({ data }) => {
 		try {
 			const user = await createFirstUser(db, realCookies, {
@@ -110,7 +110,7 @@ export const logoutFn = createServerFn({ method: "POST" }).handler(async () => {
  * carried by the `reset_code` returned from `loginFn`.
  */
 export const resetPasswordFn = createServerFn({ method: "POST" })
-	.inputValidator(resetPasswordSchema)
+	.validator(resetPasswordSchema)
 	.handler(async ({ data }) => {
 		try {
 			await resetPassword(db, realCookies, {

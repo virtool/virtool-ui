@@ -20,7 +20,7 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 });
 
 export const getTask = createServerFn({ method: "GET" })
-	.inputValidator(taskIdSchema)
+	.validator(taskIdSchema)
 	.handler(async ({ data }) => {
 		try {
 			return await getTaskImpl(data.taskId);
