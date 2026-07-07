@@ -34,11 +34,11 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 });
 
 export const findJobs = createServerFn({ method: "GET" })
-	.inputValidator(findJobsSchema)
+	.validator(findJobsSchema)
 	.handler(async ({ data }) => findJobsImpl(db, data));
 
 export const getJob = createServerFn({ method: "GET" })
-	.inputValidator(jobIdSchema)
+	.validator(jobIdSchema)
 	.handler(async ({ data }) => {
 		try {
 			return await getJobImpl(db, data.jobId);

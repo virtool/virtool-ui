@@ -56,11 +56,11 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 });
 
 export const findLabels = createServerFn({ method: "GET" })
-	.inputValidator(findLabelsSchema)
+	.validator(findLabelsSchema)
 	.handler(async ({ data }) => findLabelsImpl(db, data?.term ?? ""));
 
 export const getLabel = createServerFn({ method: "GET" })
-	.inputValidator(labelIdSchema)
+	.validator(labelIdSchema)
 	.handler(async ({ data }) => {
 		try {
 			return await getLabelImpl(db, data.labelId);
@@ -70,7 +70,7 @@ export const getLabel = createServerFn({ method: "GET" })
 	});
 
 export const createLabel = createServerFn({ method: "POST" })
-	.inputValidator(labelValuesSchema)
+	.validator(labelValuesSchema)
 	.handler(async ({ data }) => {
 		try {
 			const label = await createLabelImpl(db, normalizeValues(data));
@@ -82,7 +82,7 @@ export const createLabel = createServerFn({ method: "POST" })
 	});
 
 export const updateLabel = createServerFn({ method: "POST" })
-	.inputValidator(labelIdSchema.extend(labelValuesSchema.partial().shape))
+	.validator(labelIdSchema.extend(labelValuesSchema.partial().shape))
 	.handler(async ({ data }) => {
 		const { labelId, ...values } = data;
 		try {
@@ -93,7 +93,7 @@ export const updateLabel = createServerFn({ method: "POST" })
 	});
 
 export const deleteLabel = createServerFn({ method: "POST" })
-	.inputValidator(labelIdSchema)
+	.validator(labelIdSchema)
 	.handler(async ({ data }) => {
 		try {
 			await deleteLabelImpl(db, data.labelId);

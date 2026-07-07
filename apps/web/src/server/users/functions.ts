@@ -102,7 +102,7 @@ export const listAdministratorRoles = createServerFn({ method: "GET" }).handler(
 );
 
 export const findUsers = createServerFn({ method: "GET" })
-	.inputValidator(findUsersSchema)
+	.validator(findUsersSchema)
 	.handler(async ({ data }) => {
 		await requireAdminRole(await requireSession(), "users");
 		return findUsersImpl(db, {
@@ -115,7 +115,7 @@ export const findUsers = createServerFn({ method: "GET" })
 	});
 
 export const getUser = createServerFn({ method: "GET" })
-	.inputValidator(userIdSchema)
+	.validator(userIdSchema)
 	.handler(async ({ data }) => {
 		await requireAdminRole(await requireSession(), "users");
 		try {
@@ -128,7 +128,7 @@ export const getUser = createServerFn({ method: "GET" })
 	});
 
 export const createUser = createServerFn({ method: "POST" })
-	.inputValidator(createUserSchema)
+	.validator(createUserSchema)
 	.handler(async ({ data }) => {
 		await requireAdminRole(await requireSession(), "users");
 
@@ -148,7 +148,7 @@ export const createUser = createServerFn({ method: "POST" })
 	});
 
 export const updateUser = createServerFn({ method: "POST" })
-	.inputValidator(updateUserSchema)
+	.validator(updateUserSchema)
 	.handler(async ({ data }) => {
 		const session = await requireSession();
 		await requireAdminRole(session, "users");
@@ -172,7 +172,7 @@ export const updateUser = createServerFn({ method: "POST" })
 	});
 
 export const updateAccountHandle = createServerFn({ method: "POST" })
-	.inputValidator(accountHandleSchema)
+	.validator(accountHandleSchema)
 	.handler(async ({ data }) => {
 		const session = await requireSession();
 
@@ -188,7 +188,7 @@ export const updateAccountHandle = createServerFn({ method: "POST" })
 	});
 
 export const setAdministratorRole = createServerFn({ method: "POST" })
-	.inputValidator(setAdministratorRoleSchema)
+	.validator(setAdministratorRoleSchema)
 	.handler(async ({ data }) => {
 		const session = await requireSession();
 		await requireAdminRole(session, "full");

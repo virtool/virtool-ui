@@ -68,13 +68,13 @@ export const listGroups = createServerFn({ method: "GET" }).handler(async () =>
 );
 
 export const findGroups = createServerFn({ method: "GET" })
-	.inputValidator(findGroupsSchema)
+	.validator(findGroupsSchema)
 	.handler(async ({ data }) =>
 		findGroupsImpl(data?.term ?? "", data?.page ?? 1, data?.per_page ?? 25),
 	);
 
 export const getGroup = createServerFn({ method: "GET" })
-	.inputValidator(groupIdSchema)
+	.validator(groupIdSchema)
 	.handler(async ({ data }) => {
 		try {
 			return await getGroupImpl(data.groupId);
@@ -84,7 +84,7 @@ export const getGroup = createServerFn({ method: "GET" })
 	});
 
 export const createGroup = createServerFn({ method: "POST" })
-	.inputValidator(createGroupSchema)
+	.validator(createGroupSchema)
 	.handler(async ({ data }) => {
 		try {
 			const group = await createGroupImpl(data.name);
@@ -96,7 +96,7 @@ export const createGroup = createServerFn({ method: "POST" })
 	});
 
 export const updateGroup = createServerFn({ method: "POST" })
-	.inputValidator(updateGroupSchema)
+	.validator(updateGroupSchema)
 	.handler(async ({ data }) => {
 		const { groupId, ...values } = data;
 		try {
@@ -107,7 +107,7 @@ export const updateGroup = createServerFn({ method: "POST" })
 	});
 
 export const deleteGroup = createServerFn({ method: "POST" })
-	.inputValidator(groupIdSchema)
+	.validator(groupIdSchema)
 	.handler(async ({ data }) => {
 		try {
 			await deleteGroupImpl(data.groupId);
