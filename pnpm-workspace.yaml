@@ -7,7 +7,7 @@ packages:
 minimumReleaseAge: 1440
 
 allowBuilds:
-  '@sentry-internal/node-cpu-profiler': true
+  '@sentry/node-cpu-profiler': true
   '@sentry/cli': true
   bcrypt: true
   cpu-features: true
