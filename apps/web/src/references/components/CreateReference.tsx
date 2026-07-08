@@ -1,52 +1,54 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import NavTab from "@base/NavTab";
-import NavTabs from "@base/NavTabs";
-import EmptyReference from "./EmptyReference";
-import ImportReference from "./ImportReference";
+import { SelectBox, SelectBoxItem } from "@base/SelectBox";
+import { useState } from "react";
+import { CreateReferenceForm } from "./CreateReferenceForm";
 
 type CreateReferenceProps = {
-	createReferenceType?: string;
-	setCreateReferenceType: (type?: string) => void;
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
 };
 
 /**
  * The create reference view with options to create an empty reference or import a reference
  */
-export function CreateReference({
-	createReferenceType,
-	setCreateReferenceType,
-}: CreateReferenceProps) {
+export function CreateReference({ open, onOpenChange }: CreateReferenceProps) {
+	const [mode, setMode] = useState<"empty" | "import">("empty");
+
+	function handleOpenChange(open: boolean) {
+		onOpenChange(open);
+		if (!open) {
+			setMode("empty");
+		}
+	}
+
+	function handleSuccess() {
+		onOpenChange(false);
+		setMode("empty");
+	}
+
 	return (
-		<Dialog
-			open={Boolean(createReferenceType)}
-			onOpenChange={() => {
-				setCreateReferenceType(undefined);
-			}}
-		>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogContent size="lg">
 				<DialogTitle>Create Reference</DialogTitle>
-				<NavTabs>
-					<NavTab
-						to="."
-						search={{ createReferenceType: "empty" }}
-						isActive={createReferenceType === "empty"}
-					>
-						Empty
-					</NavTab>
-					<NavTab
-						to="."
-						search={{ createReferenceType: "import" }}
-						isActive={createReferenceType === "import"}
-					>
-						Import
-					</NavTab>
-				</NavTabs>
-
-				{createReferenceType === "import" ? (
-					<ImportReference />
-				) : (
-					<EmptyReference />
-				)}
+				<SelectBox
+					className="grid-cols-2"
+					label="Method"
+					onValueChange={(value) => setMode(value as "empty" | "import")}
+					value={mode}
+				>
+					<SelectBoxItem value="empty">
+						<div>Empty</div>
+						<span>Start from a blank reference.</span>
+					</SelectBoxItem>
+					<SelectBoxItem value="import">
+						<div>Import</div>
+						<span>
+							Create a reference from a file previously exported from another
+							Virtool reference.
+						</span>
+					</SelectBoxItem>
+				</SelectBox>
+				<CreateReferenceForm mode={mode} onSuccess={handleSuccess} />
 			</DialogContent>
 		</Dialog>
 	);

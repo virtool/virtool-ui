@@ -16,7 +16,6 @@ import ReferenceList from "../ReferenceList";
 type ReferenceListSearch = {
 	archived?: boolean;
 	cloneReferenceId?: string;
-	createReferenceType?: string;
 	find?: string;
 	page?: number;
 };

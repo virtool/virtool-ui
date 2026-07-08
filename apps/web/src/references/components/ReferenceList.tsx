@@ -9,6 +9,7 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { Library } from "lucide-react";
+import { useState } from "react";
 import { useFindReferences } from "../queries";
 import Clone from "./CloneReference";
 import { CreateReference } from "./CreateReference";
@@ -18,14 +19,12 @@ import ReferenceToolbar from "./ReferenceToolbar";
 type ReferenceListProps = {
 	archived?: boolean;
 	cloneReferenceId?: string;
-	createReferenceType?: string;
 	find?: string;
 	page?: number;
 	setSearch?: (
 		next: {
 			archived?: boolean;
 			cloneReferenceId?: string;
-			createReferenceType?: string;
 			find?: string;
 			page?: number;
 		},
@@ -39,11 +38,12 @@ type ReferenceListProps = {
 export default function ReferenceList({
 	archived = false,
 	cloneReferenceId,
-	createReferenceType,
 	find = "",
 	page = 1,
 	setSearch = () => {},
 }: ReferenceListProps) {
+	const [isCreateReferenceOpen, setIsCreateReferenceOpen] = useState(false);
+
 	const { data, isPending, isError } = useFindReferences(
 		page,
 		25,
@@ -73,17 +73,13 @@ export default function ReferenceList({
 				<ReferenceToolbar
 					archived={archived}
 					find={find}
+					onCreate={() => setIsCreateReferenceOpen(true)}
 					setArchived={(archived) => setSearch({ archived, page: 1 })}
-					setCreateReferenceType={(createReferenceType) =>
-						setSearch({ createReferenceType })
-					}
 					setFind={(find) => setSearch({ find, page: 1 }, { replace: true })}
 				/>
 				<CreateReference
-					createReferenceType={createReferenceType}
-					setCreateReferenceType={(createReferenceType) =>
-						setSearch({ createReferenceType })
-					}
+					open={isCreateReferenceOpen}
+					onOpenChange={setIsCreateReferenceOpen}
 				/>
 				{!items.length ? (
 					<Box>

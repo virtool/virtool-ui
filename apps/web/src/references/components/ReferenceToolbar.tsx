@@ -9,8 +9,8 @@ import Toolbar from "@base/Toolbar";
 type ReferenceToolbarProps = {
 	archived: boolean;
 	find: string;
+	onCreate: () => void;
 	setArchived: (archived: boolean) => void;
-	setCreateReferenceType: (type: string) => void;
 	setFind: (find: string) => void;
 };
 
@@ -20,8 +20,8 @@ type ReferenceToolbarProps = {
 export default function ReferenceToolbar({
 	archived,
 	find,
+	onCreate,
 	setArchived,
-	setCreateReferenceType,
 	setFind,
 }: ReferenceToolbarProps) {
 	const { hasPermission: canCreate } =
@@ -46,7 +46,7 @@ export default function ReferenceToolbar({
 				<ToggleGroupItem value="archived">Archived</ToggleGroupItem>
 			</ToggleGroup>
 			{canCreate && (
-				<Button color="blue" onClick={() => setCreateReferenceType("empty")}>
+				<Button color="blue" onClick={onCreate}>
 					Create
 				</Button>
 			)}
