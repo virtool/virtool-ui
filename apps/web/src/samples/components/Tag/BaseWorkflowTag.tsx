@@ -1,11 +1,11 @@
+import { cn } from "@app/utils";
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
-import { cn } from "@/app/utils";
 
-interface BaseWorkflowTagProps<T extends ElementType = "div"> {
+type BaseWorkflowTagProps<T extends ElementType = "div"> = {
 	as?: T;
 	children: ReactNode;
 	className?: string;
-}
+};
 
 /**
  * Base workflow tag component.
@@ -24,10 +24,10 @@ export function BaseWorkflowTag<T extends ElementType = "div">({
 	return (
 		<Component
 			className={cn(
-				"flex items-center bg-purple-800 text-white text-sm font-bold px-2 py-1.5",
+				"flex items-center gap-1.5 bg-purple-800 text-white text-sm font-bold px-2 py-1.5",
 				"first:rounded-l-sm last:rounded-r-sm",
 				"[&:not(:last-child)]:border-r-2 [&:not(:last-child)]:border-purple-400",
-				"[&_svg]:leading-[inherit] [&_span:last-child]:ml-0.5",
+				"[&_svg]:leading-[inherit]",
 				className,
 			)}
 			{...props}
