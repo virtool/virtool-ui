@@ -1,11 +1,11 @@
+import { cn } from "@app/utils";
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
-import { cn } from "@/app/utils";
 
-interface BaseWorkflowTagProps<T extends ElementType = "div"> {
+type BaseWorkflowTagProps<T extends ElementType = "div"> = {
 	as?: T;
 	children: ReactNode;
 	className?: string;
-}
+};
 
 /**
  * Base workflow tag component.
