@@ -51,7 +51,7 @@ export default function SelectItem({
 	return (
 		<SelectPrimitive.Item
 			className={cn(
-				"font-medium flex flex-col items-start py-1.5 pr-9 pl-6 mb-1 capitalize",
+				"font-medium flex flex-col items-start py-1.5 pr-9 pl-6 capitalize",
 				selectItemStateClasses,
 			)}
 			data-slot="select-item"

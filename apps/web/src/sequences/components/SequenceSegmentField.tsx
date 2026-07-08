@@ -37,7 +37,7 @@ function SequenceSegment({ name, required }: SequenceSegmentProps) {
 	return (
 		<SelectPrimitive.Item
 			className={cn(
-				"font-medium py-1.5 pl-6 pr-9 mb-1 capitalize",
+				"font-medium py-1.5 pl-6 pr-9 capitalize",
 				selectItemStateClasses,
 			)}
 			data-slot="select-item"

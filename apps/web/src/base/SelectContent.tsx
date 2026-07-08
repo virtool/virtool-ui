@@ -17,7 +17,9 @@ export default function SelectContent({ children }: SelectContentProps) {
 				<SelectPrimitive.ScrollUpButton className="my-1 flex justify-center hover:bg-gray-50">
 					<Icon icon={ChevronUp} />
 				</SelectPrimitive.ScrollUpButton>
-				<SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
+				<SelectPrimitive.Viewport className="p-1">
+					{children}
+				</SelectPrimitive.Viewport>
 				<SelectPrimitive.ScrollDownButton className="my-1 flex justify-center hover:bg-gray-50">
 					<Icon icon={ChevronDown} />
 				</SelectPrimitive.ScrollDownButton>
