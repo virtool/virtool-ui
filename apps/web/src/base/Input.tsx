@@ -6,6 +6,7 @@ import {
 	inputBaseClasses,
 	inputErrorClasses,
 	inputFocusClasses,
+	inputHeightClass,
 } from "./styles";
 
 export interface InputProps {
@@ -64,6 +65,7 @@ export default function Input({
 			autoFocus={autoFocus}
 			className={cn(
 				inputBaseClasses,
+				Component !== "textarea" && inputHeightClass,
 				error ? inputErrorClasses : inputFocusClasses,
 				{
 					"read-only:bg-gray-100": Component !== "select",

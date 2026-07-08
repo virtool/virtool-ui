@@ -128,6 +128,7 @@ export default function CreateAnalysisForm({
 						indexes={indexes}
 						selected={value}
 						onChange={onChange}
+						invalid={Boolean(errors.indexId)}
 					/>
 				)}
 				rules={{ required: true }}

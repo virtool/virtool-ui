@@ -5,6 +5,8 @@ import Label from "@base/Label";
 import Select from "@base/Select";
 import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
+import { SelectItemIndicator } from "@base/SelectItem";
+import { selectItemStateClasses } from "@base/styles";
 import type { IndexMinimal } from "@indexes/types";
 import { sortBy } from "es-toolkit";
 import { ChevronDown, Library } from "lucide-react";
@@ -25,14 +27,17 @@ function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps) {
 				"flex",
 				"items-center",
 				"justify-between",
+				"gap-2",
 				"py-1.5",
 				"px-6",
 				"text-base",
-				"hover:bg-gray-100",
+				selectItemStateClasses,
 			)}
+			data-slot="select-item"
 			key={id}
 			value={id}
 		>
+			<SelectItemIndicator />
 			<SelectPrimitive.ItemText className="whitespace-nowrap">
 				{name}
 			</SelectPrimitive.ItemText>
@@ -47,6 +52,8 @@ type IndexSelectorProps = {
 	indexes: IndexMinimal[];
 	selected: string;
 	onChange: (value: string) => void;
+	/** Whether the field is in an invalid state (e.g. required but empty) */
+	invalid?: boolean;
 };
 
 /**
@@ -56,6 +63,7 @@ export default function IndexSelector({
 	indexes,
 	selected,
 	onChange,
+	invalid,
 }: IndexSelectorProps) {
 	const sortedIndexes = sortBy(indexes, [(index) => index.reference.name]);
 
@@ -74,13 +82,12 @@ export default function IndexSelector({
 			{indexes.length ? (
 				<Select value={selected} onValueChange={onChange}>
 					<SelectButton
+						aria-invalid={invalid}
 						className={cn("flex", "w-full")}
 						placeholder="Select a reference"
 						icon={ChevronDown}
 					/>
-					<SelectContent position="popper" align="start">
-						{indexItems}
-					</SelectContent>
+					<SelectContent>{indexItems}</SelectContent>
 				</Select>
 			) : (
 				<Box>

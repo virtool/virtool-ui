@@ -5,6 +5,7 @@ import type { ReactElement } from "react";
 import WrapRow from "./ComboBoxItem";
 import Icon from "./Icon";
 import InputSearch from "./InputSearch";
+import { inputHeightClass } from "./styles";
 
 function ComboboxTriggerButton({
 	TriggerButtonProps,
@@ -15,7 +16,10 @@ function ComboboxTriggerButton({
 }) {
 	return (
 		<button
-			className="flex justify-between items-center px-2.5 py-2 bg-white border border-gray-300 rounded font-medium capitalize w-full [&_svg]:ml-1"
+			className={cn(
+				"flex justify-between items-center px-2.5 bg-white border border-gray-300 rounded font-medium capitalize w-full [&_svg]:ml-1",
+				inputHeightClass,
+			)}
 			{...TriggerButtonProps}
 			id={id}
 			type="button"

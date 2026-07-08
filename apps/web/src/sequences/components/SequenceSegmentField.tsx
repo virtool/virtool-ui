@@ -1,3 +1,4 @@
+import { cn } from "@app/utils";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import InputGroup from "@base/InputGroup";
@@ -6,7 +7,8 @@ import Link from "@base/Link";
 import Select from "@base/Select";
 import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
-import SelectItem from "@base/SelectItem";
+import SelectItem, { SelectItemIndicator } from "@base/SelectItem";
+import { selectItemStateClasses } from "@base/styles";
 import type { OtuSegment } from "@otus/types";
 import { ChevronDown, CircleAlert } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
@@ -34,10 +36,15 @@ type SequenceSegmentProps = {
 function SequenceSegment({ name, required }: SequenceSegmentProps) {
 	return (
 		<SelectPrimitive.Item
-			className="text-sm font-medium py-1 pl-6 pr-9 relative select-none mb-1 capitalize hover:bg-gray-50 hover:border-0"
+			className={cn(
+				"text-sm font-medium py-1 pl-6 pr-9 mb-1 capitalize",
+				selectItemStateClasses,
+			)}
+			data-slot="select-item"
 			value={name}
 			key={name}
 		>
+			<SelectItemIndicator />
 			<SelectPrimitive.ItemText>
 				<div className="flex items-center font-medium w-full">
 					<span>{name}</span>
@@ -97,7 +104,7 @@ export default function SequenceSegmentField({
 									}
 								>
 									<SelectButton icon={ChevronDown} />
-									<SelectContent position="popper" align="start">
+									<SelectContent>
 										<SelectItem key="None" value="None" description="">
 											None
 										</SelectItem>

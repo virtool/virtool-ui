@@ -141,6 +141,7 @@ export default function MultiSelectComboBox<Item>({
 						"flex-wrap",
 						"items-center",
 						"gap-1.5",
+						"min-h-10",
 						"bg-white",
 						"border",
 						"border-gray-300",

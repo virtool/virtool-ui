@@ -1,16 +1,18 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
+import type { ReactNode } from "react";
 import Icon from "./Icon";
 
-export default function SelectContent({ children, position, align }) {
+type SelectContentProps = {
+	children: ReactNode;
+};
+
+export default function SelectContent({ children }: SelectContentProps) {
 	return (
 		<SelectPrimitive.Portal>
 			<SelectPrimitive.Content
-				className="origin-top animate-contentOpen bg-white rounded-md shadow-md overflow-hidden z-50 max-h-[var(--radix-select-content-available-height)] min-w-[var(--radix-select-trigger-width)] first:mt-2.5"
-				position={position}
-				align={align}
-				side="bottom"
-				avoidCollisions={false}
+				className="origin-top bg-white rounded-md border border-gray-300 shadow-md overflow-hidden z-50 max-h-96 min-w-32 data-[state=open]:animate-contentShow data-[state=closed]:animate-contentHide"
+				data-slot="select-content"
 			>
 				<SelectPrimitive.ScrollUpButton className="my-1 flex justify-center hover:bg-gray-50">
 					<Icon icon={ChevronUp} />
