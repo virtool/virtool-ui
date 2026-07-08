@@ -37,7 +37,7 @@ function SequenceSegment({ name, required }: SequenceSegmentProps) {
 	return (
 		<SelectPrimitive.Item
 			className={cn(
-				"text-sm font-medium py-1 pl-6 pr-9 mb-1 capitalize",
+				"font-medium py-1.5 pl-6 pr-9 mb-1 capitalize",
 				selectItemStateClasses,
 			)}
 			data-slot="select-item"
@@ -105,7 +105,7 @@ export default function SequenceSegmentField({
 								>
 									<SelectButton icon={ChevronDown} />
 									<SelectContent>
-										<SelectItem key="None" value="None" description="">
+										<SelectItem key="None" value="None">
 											None
 										</SelectItem>
 										{segmentOptions}
