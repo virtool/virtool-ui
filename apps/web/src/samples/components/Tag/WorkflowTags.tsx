@@ -47,7 +47,7 @@ export default function WorkflowTags({ id, workflows }: WorkflowTagsProps) {
 					View
 				</BaseWorkflowTag>
 				{!workflowTags.length && (
-					<BaseWorkflowTag className="bg-purple-50 border border-purple-400 text-purple-900 gap-3 [&_span:last-child]:ml-0">
+					<BaseWorkflowTag className="bg-purple-50 border border-purple-400 text-purple-900">
 						No Analyses
 					</BaseWorkflowTag>
 				)}
