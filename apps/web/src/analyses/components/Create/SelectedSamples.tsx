@@ -17,7 +17,7 @@ export function SelectedSamples({ samples }: SelectedSamplesProps) {
 	return (
 		<>
 			<CreateAnalysisFieldTitle>
-				Compatible Samples <Badge>{samples.length}</Badge>
+				Selected Samples <Badge>{samples.length}</Badge>
 			</CreateAnalysisFieldTitle>
 			<div
 				className={cn(
