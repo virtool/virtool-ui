@@ -1,8 +1,14 @@
 import { cn } from "@app/utils";
 
-type LoaderColor = "blue" | "green" | "gray" | "orange" | "purple" | "red";
+export type LoaderColor =
+	| "blue"
+	| "green"
+	| "gray"
+	| "orange"
+	| "purple"
+	| "red";
 
-const colorToClass: Record<LoaderColor, string> = {
+export const colorToClass: Record<LoaderColor, string> = {
 	blue: "border-t-blue-600 border-x-blue-600",
 	green: "border-t-green-600 border-x-green-600",
 	gray: "border-t-gray-500 border-x-gray-500",
