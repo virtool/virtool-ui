@@ -50,6 +50,7 @@ export function CreateReferenceForm({
 		formState: { errors },
 		handleSubmit,
 		register,
+		setError,
 	} = useForm<FormValues>({
 		defaultValues: {
 			name: "",
@@ -71,6 +72,9 @@ export function CreateReferenceForm({
 	function onSubmit(values: FormValues) {
 		if (mode === "import") {
 			if (uploadId === null) {
+				setError("upload", {
+					message: "Please wait for the upload to finish",
+				});
 				return;
 			}
 

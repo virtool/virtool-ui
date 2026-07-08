@@ -89,6 +89,33 @@ describe("<CreateReferenceForm />", () => {
 			expect(scope.isDone()).toBeTruthy();
 		});
 
+		it("should surface an error when submitted before the upload finishes", async () => {
+			nock("http://localhost")
+				.post("/api/uploads?name=external.json.gz&type=reference")
+				.delay(100)
+				.reply(200, { id: 12, name: "external.json.gz" });
+
+			await renderWithRouter(
+				<CreateReferenceForm mode="import" onSuccess={() => {}} />,
+			);
+
+			await userEvent.upload(
+				screen.getByLabelText("Upload file"),
+				new File(['{"test": true}'], "external.json.gz", {
+					type: "application/gzip",
+				}),
+			);
+			await userEvent.type(
+				screen.getByRole("textbox", { name: "Name" }),
+				"External",
+			);
+			await userEvent.click(screen.getByRole("button", { name: "Create" }));
+
+			expect(
+				screen.getByText("Please wait for the upload to finish"),
+			).toBeInTheDocument();
+		});
+
 		it("should display errors when file or name missing", async () => {
 			await renderWithRouter(
 				<CreateReferenceForm mode="import" onSuccess={() => {}} />,
