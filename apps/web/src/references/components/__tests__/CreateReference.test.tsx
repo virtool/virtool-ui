@@ -1,4 +1,4 @@
-import { screen, within } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import { describe, expect, it } from "vitest";
@@ -13,37 +13,54 @@ describe("<CreateReference />", () => {
 		expect(screen.queryByText("Create Reference")).not.toBeInTheDocument();
 	});
 
-	it("should default to the Empty tab when opened", () => {
+	it("should default to the Empty mode when opened", () => {
 		renderWithProviders(
 			<CreateReference open={true} onOpenChange={() => {}} />,
 		);
 
 		expect(screen.getByText("Create Reference")).toBeInTheDocument();
-		expect(screen.getByRole("tab", { name: "Empty" })).toHaveAttribute(
+		expect(screen.getByRole("radio", { name: "Empty" })).toHaveAttribute(
 			"data-state",
-			"active",
+			"on",
 		);
+		expect(
+			screen.getByRole("textbox", { name: "Organism" }),
+		).toBeInTheDocument();
 	});
 
-	it("should preserve input values when switching between tabs", async () => {
+	it("should preserve name and description when switching between modes", async () => {
 		renderWithProviders(
 			<CreateReference open={true} onOpenChange={() => {}} />,
 		);
 
-		const emptyPanel = screen.getByRole("tabpanel", { name: "Empty" });
 		await userEvent.type(
-			within(emptyPanel).getByRole("textbox", { name: "Name" }),
+			screen.getByRole("textbox", { name: "Name" }),
 			"Test Reference",
 		);
+		await userEvent.type(
+			screen.getByRole("textbox", { name: "Description" }),
+			"A description",
+		);
 
-		await userEvent.click(screen.getByRole("tab", { name: "Import" }));
-		await userEvent.click(screen.getByRole("tab", { name: "Empty" }));
+		await userEvent.click(screen.getByRole("radio", { name: "Import" }));
 
+		expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(
+			"Test Reference",
+		);
+		expect(screen.getByRole("textbox", { name: "Description" })).toHaveValue(
+			"A description",
+		);
 		expect(
-			within(screen.getByRole("tabpanel", { name: "Empty" })).getByRole(
-				"textbox",
-				{ name: "Name" },
-			),
-		).toHaveValue("Test Reference");
+			screen.queryByRole("textbox", { name: "Organism" }),
+		).not.toBeInTheDocument();
+
+		await userEvent.click(screen.getByRole("radio", { name: "Empty" }));
+
+		expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(
+			"Test Reference",
+		);
+		expect(screen.getByRole("textbox", { name: "Description" })).toHaveValue(
+			"A description",
+		);
 	});
 });
