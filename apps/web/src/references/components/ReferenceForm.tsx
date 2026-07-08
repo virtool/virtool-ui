@@ -3,6 +3,7 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import TextArea from "@base/TextArea";
+import { useId } from "react";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 
 export type ReferenceFormMode = "edit" | "empty";
@@ -26,20 +27,24 @@ type ReferenceFormProps = {
  * Form input fields for organism, name and description
  */
 export function ReferenceForm({ errors, mode, register }: ReferenceFormProps) {
+	const nameId = useId();
+	const organismId = useId();
+	const descriptionId = useId();
+
 	const organismComponent =
 		mode === "empty" || mode === "edit" ? (
 			<InputGroup>
-				<InputLabel htmlFor="organism">Organism</InputLabel>
-				<InputSimple id="organism" {...register("organism")} />
+				<InputLabel htmlFor={organismId}>Organism</InputLabel>
+				<InputSimple id={organismId} {...register("organism")} />
 			</InputGroup>
 		) : null;
 
 	return (
 		<>
 			<InputGroup className="pb-0">
-				<InputLabel htmlFor="name">Name</InputLabel>
+				<InputLabel htmlFor={nameId}>Name</InputLabel>
 				<InputSimple
-					id="name"
+					id={nameId}
 					{...register("name", { required: "Required Field" })}
 				/>
 				<InputError>{errors.name?.message}</InputError>
@@ -48,8 +53,8 @@ export function ReferenceForm({ errors, mode, register }: ReferenceFormProps) {
 			{organismComponent}
 
 			<InputGroup>
-				<InputLabel htmlFor="description">Description</InputLabel>
-				<TextArea id="description" {...register("description")} />
+				<InputLabel htmlFor={descriptionId}>Description</InputLabel>
+				<TextArea id={descriptionId} {...register("description")} />
 			</InputGroup>
 		</>
 	);

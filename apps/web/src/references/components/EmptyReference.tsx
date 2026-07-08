@@ -11,10 +11,14 @@ type FormValues = {
 	organism: string;
 };
 
+type EmptyReferenceProps = {
+	onSuccess?: () => void;
+};
+
 /**
  * A form for creating an empty reference
  */
-export default function EmptyReference() {
+export default function EmptyReference({ onSuccess }: EmptyReferenceProps) {
 	const navigate = useNavigate();
 
 	const mutation = useCreateReference();
@@ -37,6 +41,7 @@ export default function EmptyReference() {
 				mutation.mutate(values, {
 					onSuccess: () => {
 						navigate({ to: "/refs" });
+						onSuccess?.();
 					},
 				}),
 			)}

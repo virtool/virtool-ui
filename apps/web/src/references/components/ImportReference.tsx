@@ -7,12 +7,19 @@ import InputSimple from "@base/InputSimple";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import SaveButton from "@base/SaveButton";
 import { useNavigate } from "@tanstack/react-router";
+import { useId } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { UploadBar } from "@/uploads/components/UploadBar";
 import { useImportReference, useUploadReference } from "../queries";
 
-export default function ImportReference() {
+type ImportReferenceProps = {
+	onSuccess?: () => void;
+};
+
+export default function ImportReference({ onSuccess }: ImportReferenceProps) {
 	const navigate = useNavigate();
+	const nameId = useId();
+	const descriptionId = useId();
 
 	const importMutation = useImportReference();
 	const { uploadMutation, fileName, uploadId, progress } = useUploadReference();
@@ -85,20 +92,25 @@ export default function ImportReference() {
 					}
 					importMutation.mutate(
 						{ ...values, importFrom: uploadId },
-						{ onSuccess: () => navigate({ to: "/refs", replace: true }) },
+						{
+							onSuccess: () => {
+								navigate({ to: "/refs", replace: true });
+								onSuccess?.();
+							},
+						},
 					);
 				})}
 			>
 				<InputGroup>
-					<InputLabel htmlFor="name">Name</InputLabel>
-					<InputSimple id="name" {...register("name", { required: true })} />
+					<InputLabel htmlFor={nameId}>Name</InputLabel>
+					<InputSimple id={nameId} {...register("name", { required: true })} />
 					<InputError>{errors.name?.type && "A name is required."}</InputError>
 				</InputGroup>
 				<InputGroup>
-					<InputLabel htmlFor="description">Description</InputLabel>
+					<InputLabel htmlFor={descriptionId}>Description</InputLabel>
 					<InputSimple
 						as="textarea"
-						id="description"
+						id={descriptionId}
 						{...register("description")}
 					/>
 				</InputGroup>

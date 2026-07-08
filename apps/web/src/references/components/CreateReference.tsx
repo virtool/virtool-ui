@@ -1,52 +1,59 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import NavTab from "@base/NavTab";
-import NavTabs from "@base/NavTabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@base/Tabs";
+import { useState } from "react";
 import EmptyReference from "./EmptyReference";
 import ImportReference from "./ImportReference";
 
 type CreateReferenceProps = {
-	createReferenceType?: string;
-	setCreateReferenceType: (type?: string) => void;
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
 };
 
 /**
  * The create reference view with options to create an empty reference or import a reference
  */
-export function CreateReference({
-	createReferenceType,
-	setCreateReferenceType,
-}: CreateReferenceProps) {
+export function CreateReference({ open, onOpenChange }: CreateReferenceProps) {
+	const [tab, setTab] = useState<"empty" | "import">("empty");
+
+	function handleOpenChange(open: boolean) {
+		onOpenChange(open);
+		if (!open) {
+			setTab("empty");
+		}
+	}
+
+	function handleSuccess() {
+		onOpenChange(false);
+		setTab("empty");
+	}
+
 	return (
-		<Dialog
-			open={Boolean(createReferenceType)}
-			onOpenChange={() => {
-				setCreateReferenceType(undefined);
-			}}
-		>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogContent size="lg">
 				<DialogTitle>Create Reference</DialogTitle>
-				<NavTabs>
-					<NavTab
-						to="."
-						search={{ createReferenceType: "empty" }}
-						isActive={createReferenceType === "empty"}
+				<Tabs
+					value={tab}
+					onValueChange={(value) => setTab(value as "empty" | "import")}
+				>
+					<TabsList>
+						<TabsTrigger value="empty">Empty</TabsTrigger>
+						<TabsTrigger value="import">Import</TabsTrigger>
+					</TabsList>
+					<TabsContent
+						value="empty"
+						forceMount
+						className="data-[state=inactive]:hidden"
 					>
-						Empty
-					</NavTab>
-					<NavTab
-						to="."
-						search={{ createReferenceType: "import" }}
-						isActive={createReferenceType === "import"}
+						<EmptyReference onSuccess={handleSuccess} />
+					</TabsContent>
+					<TabsContent
+						value="import"
+						forceMount
+						className="data-[state=inactive]:hidden"
 					>
-						Import
-					</NavTab>
-				</NavTabs>
-
-				{createReferenceType === "import" ? (
-					<ImportReference />
-				) : (
-					<EmptyReference />
-				)}
+						<ImportReference onSuccess={handleSuccess} />
+					</TabsContent>
+				</Tabs>
 			</DialogContent>
 		</Dialog>
 	);
