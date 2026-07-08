@@ -22,7 +22,7 @@ export default function SelectButton({
 		<SelectPrimitive.Trigger
 			aria-label={ariaLabel}
 			className={cn(
-				"flex justify-between items-center px-2.5 py-1.5 bg-white border border-gray-300 rounded font-medium capitalize [&_svg]:ml-1",
+				"flex justify-between items-center px-2.5 py-2 bg-white border border-gray-300 rounded font-medium capitalize [&_svg]:ml-1",
 				className,
 			)}
 			id={id}

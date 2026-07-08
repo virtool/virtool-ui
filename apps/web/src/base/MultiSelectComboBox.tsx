@@ -146,7 +146,7 @@ export default function MultiSelectComboBox<Item>({
 						"border-gray-300",
 						"rounded",
 						"px-2",
-						"py-1.5",
+						"py-2",
 						"focus-within:border-blue-500",
 						"focus-within:ring",
 						"focus-within:ring-blue-500/30",
