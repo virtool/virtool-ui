@@ -25,7 +25,7 @@ export default function WorkflowTag({
 		<BaseWorkflowTag>
 			<WorkflowLabelIcon>
 				{workflowState === "pending" ? (
-					<Loader size="10px" color="white" />
+					<Loader size="10px" color="gray" />
 				) : (
 					<Icon icon={CheckCircle} size={14} />
 				)}

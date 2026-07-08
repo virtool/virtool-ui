@@ -1,22 +1,31 @@
 import { cn } from "@app/utils";
 
-const colorToClass: Record<string, string> = {
-	blue: "border-blue-600",
-	green: "border-green-600",
-	grey: "border-gray-400",
-	greyDark: "border-gray-500",
-	red: "border-red-600",
+export type LoaderColor =
+	| "blue"
+	| "green"
+	| "gray"
+	| "orange"
+	| "purple"
+	| "red";
+
+export const colorToClass: Record<LoaderColor, string> = {
+	blue: "border-t-blue-600 border-x-blue-600",
+	green: "border-t-green-600 border-x-green-600",
+	gray: "border-t-gray-500 border-x-gray-500",
+	orange: "border-t-orange-600 border-x-orange-600",
+	purple: "border-t-purple-600 border-x-purple-600",
+	red: "border-t-red-600 border-x-red-600",
 };
 
 interface LoaderProps {
 	className?: string;
-	color?: string;
+	color?: LoaderColor;
 	size?: string;
 }
 
 export default function Loader({
 	className,
-	color = "greyDark",
+	color = "gray",
 	size = "22px",
 }: LoaderProps) {
 	return (
@@ -25,7 +34,7 @@ export default function Loader({
 			aria-label="loading"
 			className={cn(
 				"animate-rotate inline-block rounded-full border-2 border-b-transparent",
-				colorToClass[color] || "border-gray-500",
+				colorToClass[color],
 				className,
 			)}
 			style={{ width: size, height: size }}
