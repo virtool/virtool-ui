@@ -1,13 +1,17 @@
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
-import InputSelect from "@base/InputSelect";
+import Select from "@base/Select";
+import SelectButton from "@base/SelectButton";
+import SelectContent from "@base/SelectContent";
+import SelectItem from "@base/SelectItem";
 import type { GroupMinimal } from "@groups/types";
+import { ChevronDown } from "lucide-react";
 
 type SampleUserGroupProps = {
 	selected: string;
 	groups: GroupMinimal[];
 	/** A callback function to handle the user group change */
-	onChange: () => void;
+	onChange: (value: string) => void;
 };
 
 /**
@@ -18,21 +22,22 @@ export default function SampleUserGroup({
 	groups,
 	onChange,
 }: SampleUserGroupProps) {
-	const groupComponents = groups.map((group) => (
-		<option className="capitalize" key={group.id} value={group.id}>
-			{group.name}
-		</option>
-	));
-
 	return (
 		<InputGroup>
 			<InputLabel htmlFor="userGroups">User Group</InputLabel>
-			<InputSelect id="userGroups" value={selected} onChange={onChange}>
-				<option key="none" value="none">
-					None
-				</option>
-				{groupComponents}
-			</InputSelect>
+			<Select value={selected || "none"} onValueChange={onChange}>
+				<SelectButton className="w-full" icon={ChevronDown} id="userGroups" />
+				<SelectContent>
+					<SelectItem key="none" value="none">
+						None
+					</SelectItem>
+					{groups.map((group) => (
+						<SelectItem key={group.id} value={String(group.id)}>
+							{group.name}
+						</SelectItem>
+					))}
+				</SelectContent>
+			</Select>
 		</InputGroup>
 	);
 }
