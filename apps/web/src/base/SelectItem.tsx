@@ -1,6 +1,7 @@
 import { cn } from "@app/utils";
 import { Check } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
+import type { ReactNode } from "react";
 import { selectItemStateClasses } from "./styles";
 
 /**
@@ -15,7 +16,21 @@ export function SelectItemIndicator() {
 	);
 }
 
-export default function SelectItem({ value, children, description }) {
+/** Props for the shared Select item. */
+type SelectItemProps = {
+	/** The item's label, rendered as the selected value on the trigger. */
+	children: ReactNode;
+	/** An optional description rendered on a second line beneath the label. */
+	description?: string;
+	/** The value committed to the Select when the item is chosen. */
+	value: string;
+};
+
+export default function SelectItem({
+	value,
+	children,
+	description,
+}: SelectItemProps) {
 	return (
 		<SelectPrimitive.Item
 			className={cn(
