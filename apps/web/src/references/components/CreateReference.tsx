@@ -1,6 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import ToggleGroup from "@base/ToggleGroup";
-import ToggleGroupItem from "@base/ToggleGroupItem";
+import { SelectBox, SelectBoxItem } from "@base/SelectBox";
 import { useState } from "react";
 import { CreateReferenceForm } from "./CreateReferenceForm";
 
@@ -31,14 +30,24 @@ export function CreateReference({ open, onOpenChange }: CreateReferenceProps) {
 		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogContent size="lg">
 				<DialogTitle>Create Reference</DialogTitle>
-				<ToggleGroup
-					className="mb-4"
-					value={mode}
+				<SelectBox
+					className="grid-cols-2"
+					label="Method"
 					onValueChange={(value) => setMode(value as "empty" | "import")}
+					value={mode}
 				>
-					<ToggleGroupItem value="empty">Empty</ToggleGroupItem>
-					<ToggleGroupItem value="import">Import</ToggleGroupItem>
-				</ToggleGroup>
+					<SelectBoxItem value="empty">
+						<div>Empty</div>
+						<span>Start from a blank reference.</span>
+					</SelectBoxItem>
+					<SelectBoxItem value="import">
+						<div>Import</div>
+						<span>
+							Create a reference from a file previously exported from another
+							Virtool reference.
+						</span>
+					</SelectBoxItem>
+				</SelectBox>
 				<CreateReferenceForm mode={mode} onSuccess={handleSuccess} />
 			</DialogContent>
 		</Dialog>

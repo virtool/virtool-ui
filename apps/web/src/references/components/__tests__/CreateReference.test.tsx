@@ -19,7 +19,7 @@ describe("<CreateReference />", () => {
 		);
 
 		expect(screen.getByText("Create Reference")).toBeInTheDocument();
-		expect(screen.getByRole("radio", { name: "Empty" })).toHaveAttribute(
+		expect(screen.getByRole("radio", { name: /Empty/i })).toHaveAttribute(
 			"data-state",
 			"on",
 		);
@@ -42,7 +42,7 @@ describe("<CreateReference />", () => {
 			"A description",
 		);
 
-		await userEvent.click(screen.getByRole("radio", { name: "Import" }));
+		await userEvent.click(screen.getByRole("radio", { name: /Import/i }));
 
 		expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(
 			"Test Reference",
@@ -54,7 +54,7 @@ describe("<CreateReference />", () => {
 			screen.queryByRole("textbox", { name: "Organism" }),
 		).not.toBeInTheDocument();
 
-		await userEvent.click(screen.getByRole("radio", { name: "Empty" }));
+		await userEvent.click(screen.getByRole("radio", { name: /Empty/i }));
 
 		expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(
 			"Test Reference",

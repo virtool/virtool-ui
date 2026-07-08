@@ -13,7 +13,7 @@ describe("<CreateReferenceForm />", () => {
 				<CreateReferenceForm mode="empty" onSuccess={() => {}} />,
 			);
 
-			await userEvent.click(screen.getByRole("button", { name: "Save" }));
+			await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
 			expect(screen.getByText("Required Field")).toBeInTheDocument();
 		});
@@ -35,9 +35,9 @@ describe("<CreateReferenceForm />", () => {
 				screen.getByRole("textbox", { name: "Name" }),
 				"Test Reference",
 			);
-			await userEvent.click(screen.getByRole("button", { name: "Save" }));
+			await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
-			await screen.findByRole("button", { name: "Save" });
+			await screen.findByRole("button", { name: "Create" });
 			expect(succeeded).toBe(true);
 			scope.done();
 		});
@@ -84,7 +84,7 @@ describe("<CreateReferenceForm />", () => {
 				screen.getByRole("textbox", { name: "Description" }),
 				"External reference",
 			);
-			await userEvent.click(screen.getByRole("button", { name: "Import" }));
+			await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
 			expect(scope.isDone()).toBeTruthy();
 		});
@@ -99,7 +99,7 @@ describe("<CreateReferenceForm />", () => {
 			).not.toBeInTheDocument();
 			expect(screen.queryByText("Required Field")).not.toBeInTheDocument();
 
-			await userEvent.click(screen.getByRole("button", { name: "Import" }));
+			await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
 			expect(
 				screen.getByText("A reference file must be uploaded"),

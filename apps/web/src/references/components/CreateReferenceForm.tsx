@@ -1,4 +1,3 @@
-import Alert from "@base/Alert";
 import { DialogFooter } from "@base/Dialog";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
@@ -113,38 +112,29 @@ export function CreateReferenceForm({
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			{mode === "import" && (
-				<>
-					<Alert>
-						<strong>
-							Create a reference from a file previously exported from another
-							Virtool reference.
-						</strong>
-					</Alert>
+				<Controller
+					control={control}
+					name="upload"
+					rules={{ required: "A reference file must be uploaded" }}
+					render={({ field: { onChange } }) => (
+						<div className="mb-4">
+							<ProgressBarAffixed color="green" now={progress} />
+							<UploadBar
+								message={uploadBarMessage}
+								onDrop={(acceptedFiles) => {
+									handleDrop(acceptedFiles);
+									const file = acceptedFiles[0];
+									if (file) {
+										onChange(file.name);
+									}
+								}}
+								multiple={false}
+							/>
 
-					<Controller
-						control={control}
-						name="upload"
-						rules={{ required: "A reference file must be uploaded" }}
-						render={({ field: { onChange } }) => (
-							<div className="mb-4">
-								<ProgressBarAffixed color="green" now={progress} />
-								<UploadBar
-									message={uploadBarMessage}
-									onDrop={(acceptedFiles) => {
-										handleDrop(acceptedFiles);
-										const file = acceptedFiles[0];
-										if (file) {
-											onChange(file.name);
-										}
-									}}
-									multiple={false}
-								/>
-
-								<InputError>{errors.upload?.message}</InputError>
-							</div>
-						)}
-					/>
-				</>
+							<InputError>{errors.upload?.message}</InputError>
+						</div>
+					)}
+				/>
 			)}
 
 			<InputGroup className="pb-0">
@@ -170,7 +160,7 @@ export function CreateReferenceForm({
 
 			<DialogFooter>
 				<SaveButton
-					altText={mode === "import" ? "Import" : "Save"}
+					altText="Create"
 					disabled={mode === "import" && progress > 0 && uploadId === null}
 				/>
 			</DialogFooter>
