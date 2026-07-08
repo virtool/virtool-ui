@@ -44,4 +44,15 @@ describe("SampleUserGroup", () => {
 
 		expect(props.onChange).toHaveBeenCalledWith(String(group.id));
 	});
+
+	it("should call onChange with an empty value when None is selected", async () => {
+		renderWithProviders(
+			<SampleUserGroup {...props} selected={String(group.id)} />,
+		);
+
+		await userEvent.click(screen.getByLabelText("User Group"));
+		await userEvent.click(screen.getByRole("option", { name: "None" }));
+
+		expect(props.onChange).toHaveBeenCalledWith("");
+	});
 });

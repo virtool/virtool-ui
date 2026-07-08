@@ -7,6 +7,12 @@ import SelectItem from "@base/SelectItem";
 import type { GroupMinimal } from "@groups/types";
 import { ChevronDown } from "lucide-react";
 
+/**
+ * Stands in for an unset group. Radix reserves the empty string, so the absence
+ * of a group can't be modelled by the item's value directly.
+ */
+const noGroup = "none";
+
 type SampleUserGroupProps = {
 	selected: string;
 	groups: GroupMinimal[];
@@ -25,10 +31,13 @@ export default function SampleUserGroup({
 	return (
 		<InputGroup>
 			<InputLabel htmlFor="userGroups">User Group</InputLabel>
-			<Select value={selected || "none"} onValueChange={onChange}>
+			<Select
+				value={selected || noGroup}
+				onValueChange={(value) => onChange(value === noGroup ? "" : value)}
+			>
 				<SelectButton className="w-full" icon={ChevronDown} id="userGroups" />
 				<SelectContent>
-					<SelectItem key="none" value="none">
+					<SelectItem key={noGroup} value={noGroup}>
 						None
 					</SelectItem>
 					{groups.map((group) => (
