@@ -19,9 +19,8 @@ type SampleItemProps = {
 	/** Callback to handle sample selection */
 	handleSelect: () => void;
 
-	/** Callback to handle sample selection on end icon quick analysis */
-	selectOnQuickAnalyze: () => void;
-	setOpenQuickAnalyze: (open: boolean) => void;
+	/** Callback to open a quick analysis scoped to this sample */
+	onQuickAnalyze: () => void;
 };
 
 /**
@@ -31,20 +30,15 @@ export default function SampleItem({
 	sample,
 	checked,
 	handleSelect,
-	selectOnQuickAnalyze,
-	setOpenQuickAnalyze,
+	onQuickAnalyze,
 }: SampleItemProps) {
-	function onQuickAnalyze() {
-		selectOnQuickAnalyze();
-		setOpenQuickAnalyze(true);
-	}
-
 	const { data: job } = useFetchJob(sample.job?.id ?? Number.NaN, sample.job);
 
 	return (
 		<Box className="flex items-stretch basis-0 gap-4">
 			<div className="flex">
 				<Checkbox
+					ariaLabel={`Select ${sample.name}`}
 					checked={checked}
 					id={`SampleCheckbox${sample.id}`}
 					onClick={handleSelect}
@@ -66,6 +60,7 @@ export default function SampleItem({
 							<WorkflowTags id={sample.id} workflows={sample.workflows} />
 						)}
 						<EndIcon
+							ariaLabel={`Quick analyze ${sample.name}`}
 							progress={job?.progress ?? 0}
 							state={job?.state}
 							onClick={onQuickAnalyze}

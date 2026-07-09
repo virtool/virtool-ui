@@ -134,11 +134,11 @@ export default function CreateAnalysisForm({
 				rules={{ required: true }}
 			/>
 
-			<InputError className="-mt-6 mb-1">
+			<InputError className="mb-0">
 				{errors.indexId && "A reference must be selected"}
 			</InputError>
 
-			<DialogFooter className="items-center justify-between mt-2.5 [&_button]:ml-auto">
+			<DialogFooter className="items-center justify-between">
 				<CreateAnalysisSummary
 					sampleCount={sampleCount}
 					indexCount={watch("indexId") ? 1 : 0}

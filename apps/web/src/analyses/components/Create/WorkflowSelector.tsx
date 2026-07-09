@@ -1,7 +1,4 @@
-import BoxGroup from "@base/BoxGroup";
-import BoxGroupSection from "@base/BoxGroupSection";
-import { RadioGroup, RadioGroupItem } from "@base/RadioGroup";
-import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
+import { SelectBox, SelectBoxItem } from "@base/SelectBox";
 import type { workflow } from "./workflows";
 
 type WorkflowSelectorProps = {
@@ -16,7 +13,7 @@ type WorkflowSelectorProps = {
 };
 
 /**
- * A radio group for choosing which analysis workflow to run.
+ * A boxed picker for choosing which analysis workflow to run.
  */
 export default function WorkflowSelector({
 	workflows,
@@ -24,33 +21,20 @@ export default function WorkflowSelector({
 	onChange,
 }: WorkflowSelectorProps) {
 	return (
-		<div>
-			<CreateAnalysisFieldTitle>Workflow</CreateAnalysisFieldTitle>
-			<RadioGroup
-				aria-label="Workflow"
-				value={selected}
+		<div className="mb-6">
+			<SelectBox
+				className="grid-cols-2"
+				label="Workflow"
 				onValueChange={onChange}
+				value={selected}
 			>
-				<BoxGroup>
-					{workflows.map((workflow) => (
-						<BoxGroupSection
-							key={workflow.id}
-							className="flex items-center gap-3"
-						>
-							<RadioGroupItem
-								id={`workflow-${workflow.id}`}
-								value={workflow.id}
-							/>
-							<label
-								htmlFor={`workflow-${workflow.id}`}
-								className="grow cursor-pointer"
-							>
-								{workflow.name}
-							</label>
-						</BoxGroupSection>
-					))}
-				</BoxGroup>
-			</RadioGroup>
+				{workflows.map(({ description, id, name }) => (
+					<SelectBoxItem key={id} value={id}>
+						<div>{name}</div>
+						<span>{description}</span>
+					</SelectBoxItem>
+				))}
+			</SelectBox>
 		</div>
 	);
 }

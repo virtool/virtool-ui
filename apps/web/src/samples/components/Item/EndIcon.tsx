@@ -5,6 +5,9 @@ import { ChartArea } from "lucide-react";
 import { cn } from "@/app/utils";
 
 type SampleItemEndIconProps = {
+	/** Accessible name for the quick analyze button */
+	ariaLabel: string;
+
 	/** Progress of the job responsible for creating the sample */
 	progress: number;
 
@@ -25,6 +28,7 @@ type SampleItemEndIconProps = {
  * Icon indicating the status of sample
  */
 export default function SampleItemEndIcon({
+	ariaLabel,
 	onClick,
 	ready,
 	progress,
@@ -40,6 +44,7 @@ export default function SampleItemEndIcon({
 		return (
 			<div className={containerClasses}>
 				<IconButton
+					ariaLabel={ariaLabel}
 					className="text-lg"
 					color="green"
 					IconComponent={ChartArea}

@@ -4,6 +4,8 @@ import Tooltip from "./Tooltip";
 import type { IconColor } from "./types";
 
 export type IconButtonProps = {
+	/** Accessible name for the button. Defaults to ``tip``. */
+	ariaLabel?: string;
 	className?: string;
 	color?: IconColor;
 	IconComponent: LucideIcon;
@@ -17,6 +19,7 @@ export type IconButtonProps = {
  * A styled clickable icon with tooltip describing its action
  */
 export default function IconButton({
+	ariaLabel,
 	className,
 	color = "black",
 	IconComponent,
@@ -55,7 +58,7 @@ export default function IconButton({
 				},
 				className,
 			)}
-			aria-label={tip}
+			aria-label={ariaLabel ?? tip}
 			type="button"
 			onClick={onClick}
 		>

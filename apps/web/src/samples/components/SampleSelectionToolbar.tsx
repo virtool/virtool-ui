@@ -5,9 +5,12 @@ import { AreaChart } from "lucide-react";
 type SampleSelectionToolbarProps = {
 	/** A callback function to clear selected samples */
 	onClear: () => void;
+
+	/** A callback to open a quick analysis scoped to the selected samples */
+	onQuickAnalyze: () => void;
+
 	/** A list of selected samples */
 	selected: string[];
-	setOpenQuickAnalyze: (open: boolean) => void;
 };
 
 /**
@@ -15,15 +18,15 @@ type SampleSelectionToolbarProps = {
  */
 export default function SampleSelectionToolbar({
 	onClear,
+	onQuickAnalyze,
 	selected,
-	setOpenQuickAnalyze,
 }: SampleSelectionToolbarProps) {
 	return (
 		<div className="flex items-center mb-4 [&_button]:h-10 [&_button:first-child]:flex [&_button:first-child]:flex-1 [&_button:first-child]:items-center [&_button:first-child]:justify-start [&_button:first-child]:mr-0.5">
 			<Button onClick={onClear}>
 				Clear selection of {selected.length} samples
 			</Button>
-			<Button color="green" onClick={() => setOpenQuickAnalyze(true)}>
+			<Button color="green" onClick={onQuickAnalyze}>
 				<Icon icon={AreaChart} /> Quick Analyze
 			</Button>
 		</div>
