@@ -1,10 +1,12 @@
-import { cn, getWorkflowDisplayName } from "@app/utils";
+import { getWorkflowDisplayName } from "@app/utils";
 import Dropdown from "@base/Dropdown";
 import DropdownButton from "@base/DropdownButton";
 import DropdownMenuCheckboxItem from "@base/DropdownMenuCheckboxItem";
 import DropdownMenuContent from "@base/DropdownMenuContent";
+import DropdownMenuGroup from "@base/DropdownMenuGroup";
 import DropdownMenuItem from "@base/DropdownMenuItem";
 import DropdownMenuLabel from "@base/DropdownMenuLabel";
+import DropdownMenuSeparator from "@base/DropdownMenuSeparator";
 import {
 	filterableWorkflows,
 	formatWorkflowFilter,
@@ -12,6 +14,7 @@ import {
 	workflowFilterStates,
 } from "@samples/utils";
 import { Workflow } from "lucide-react";
+import { Fragment } from "react";
 
 type WorkflowFilterDropdownProps = {
 	/** Deselects every workflow state. */
@@ -38,43 +41,46 @@ export default function WorkflowFilterDropdown({
 				<Workflow size={16} />
 				Workflows
 			</DropdownButton>
-			<DropdownMenuContent className="max-h-80 overflow-y-auto w-64 py-1">
+			<DropdownMenuContent className="w-64">
 				{filterableWorkflows.map((workflow, index) => {
 					const workflowName = getWorkflowDisplayName(workflow);
+					const labelId = `workflow-filter-${workflow}`;
 
 					return (
-						<div
-							className={cn(index > 0 && "border-gray-200 border-t mt-1 pt-1")}
-							key={workflow}
-						>
-							<DropdownMenuLabel>{workflowName}</DropdownMenuLabel>
-							{workflowFilterStates.map((state) => {
-								const value = formatWorkflowFilter({ state, workflow });
-								const stateName = getWorkflowFilterStateDisplayName(state);
+						<Fragment key={workflow}>
+							{index > 0 && <DropdownMenuSeparator />}
+							<DropdownMenuGroup aria-labelledby={labelId}>
+								<DropdownMenuLabel id={labelId}>
+									{workflowName}
+								</DropdownMenuLabel>
+								{workflowFilterStates.map((state) => {
+									const value = formatWorkflowFilter({ state, workflow });
+									const stateName = getWorkflowFilterStateDisplayName(state);
 
-								return (
-									<DropdownMenuCheckboxItem
-										aria-label={`${workflowName} ${stateName}`}
-										checked={selected.includes(value)}
-										key={state}
-										onCheckedChange={() => onToggle(value)}
-										// Keep the menu open so several states can be toggled at once.
-										onSelect={(e) => e.preventDefault()}
-									>
-										{stateName}
-									</DropdownMenuCheckboxItem>
-								);
-							})}
-						</div>
+									return (
+										<DropdownMenuCheckboxItem
+											aria-label={`${workflowName} ${stateName}`}
+											checked={selected.includes(value)}
+											key={state}
+											onCheckedChange={() => onToggle(value)}
+											// Keep the menu open so several states can be toggled at once.
+											onSelect={(e) => e.preventDefault()}
+										>
+											{stateName}
+										</DropdownMenuCheckboxItem>
+									);
+								})}
+							</DropdownMenuGroup>
+						</Fragment>
 					);
 				})}
 				{selected.length > 0 && (
-					<DropdownMenuItem
-						className="border-gray-200 border-t mt-1 text-blue-600"
-						onSelect={onClear}
-					>
-						Clear
-					</DropdownMenuItem>
+					<>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem color="blue" onSelect={onClear}>
+							Clear
+						</DropdownMenuItem>
+					</>
 				)}
 			</DropdownMenuContent>
 		</Dropdown>

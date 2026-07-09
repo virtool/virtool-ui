@@ -10,7 +10,7 @@ const DropdownMenuLabel = forwardRef<
 		<DropdownMenu.Label
 			ref={ref}
 			className={cn(
-				"font-medium px-4 py-1.5 text-gray-500 text-xs tracking-wide uppercase",
+				"font-medium px-2 py-1.5 text-gray-500 text-xs tracking-wide uppercase",
 				className,
 			)}
 			{...props}

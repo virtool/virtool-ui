@@ -3,6 +3,7 @@ import DropdownButton from "@base/DropdownButton";
 import DropdownMenuCheckboxItem from "@base/DropdownMenuCheckboxItem";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
+import DropdownMenuSeparator from "@base/DropdownMenuSeparator";
 import type { Label } from "@labels/types";
 import { Tag } from "lucide-react";
 
@@ -39,9 +40,9 @@ export default function LabelFilterDropdown({
 				<Tag size={16} />
 				Labels
 			</DropdownButton>
-			<DropdownMenuContent className="max-h-80 overflow-y-auto w-64 py-1">
+			<DropdownMenuContent className="w-64">
 				{labels.length === 0 ? (
-					<p className="px-4 py-2.5 text-gray-500 text-sm">
+					<p className="px-2 py-1.5 text-gray-500 text-sm">
 						No labels have been created.
 					</p>
 				) : (
@@ -63,12 +64,12 @@ export default function LabelFilterDropdown({
 					))
 				)}
 				{selected.length > 0 && (
-					<DropdownMenuItem
-						className="border-gray-200 border-t mt-1 text-blue-600"
-						onSelect={onClear}
-					>
-						Clear
-					</DropdownMenuItem>
+					<>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem color="blue" onSelect={onClear}>
+							Clear
+						</DropdownMenuItem>
+					</>
 				)}
 			</DropdownMenuContent>
 		</Dropdown>

@@ -1,7 +1,8 @@
 import Dropdown from "@base/Dropdown";
 import DropdownButton from "@base/DropdownButton";
 import DropdownMenuContent from "@base/DropdownMenuContent";
-import DropdownMenuItem from "@base/DropdownMenuItem";
+import DropdownMenuRadioGroup from "@base/DropdownMenuRadioGroup";
+import DropdownMenuRadioItem from "@base/DropdownMenuRadioItem";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 import type { AnalysisWorkflow } from "../../types";
 
@@ -41,11 +42,13 @@ export function AnalysisViewerSort({
 				<ChevronDown size={18} />
 			</DropdownButton>
 			<DropdownMenuContent>
-				{sortKeys[workflow].map((key) => (
-					<DropdownMenuItem key={key} onSelect={() => onSelect(key)}>
-						{sortTitles[key]}
-					</DropdownMenuItem>
-				))}
+				<DropdownMenuRadioGroup value={sortKey} onValueChange={onSelect}>
+					{sortKeys[workflow].map((key) => (
+						<DropdownMenuRadioItem key={key} value={key}>
+							{sortTitles[key]}
+						</DropdownMenuRadioItem>
+					))}
+				</DropdownMenuRadioGroup>
 			</DropdownMenuContent>
 		</Dropdown>
 	);

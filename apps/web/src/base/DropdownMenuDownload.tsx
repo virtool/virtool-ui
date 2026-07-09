@@ -1,8 +1,19 @@
+import type { ReactNode } from "react";
 import DropdownMenuItem from "./DropdownMenuItem";
 
-export default function DropdownMenuDownload({ children, href }) {
+type DropdownMenuDownloadProps = {
+	children: ReactNode;
+	className?: string;
+	href: string;
+};
+
+export default function DropdownMenuDownload({
+	children,
+	className,
+	href,
+}: DropdownMenuDownloadProps) {
 	return (
-		<DropdownMenuItem asChild>
+		<DropdownMenuItem asChild className={className}>
 			<a href={href} download>
 				{children}
 			</a>
