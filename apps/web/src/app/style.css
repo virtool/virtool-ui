@@ -32,6 +32,16 @@ html {
 	scrollbar-gutter: stable;
 }
 
+/* Shared column tracks for the samples list. Applied to every row and to the
+   list header so the columns line up instead of being sized per row. */
+@utility grid-cols-sample {
+	grid-template-columns:
+		min-content
+		minmax(0, 1fr)
+		minmax(0, 1fr)
+		minmax(0, 1fr);
+}
+
 @layer base {
 	h1 {
 		font-size: var(--text-4xl);

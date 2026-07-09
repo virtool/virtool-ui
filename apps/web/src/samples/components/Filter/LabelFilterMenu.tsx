@@ -3,10 +3,7 @@ import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
 import DropdownMenuSeparator from "@base/DropdownMenuSeparator";
 import type { Label } from "@labels/types";
-
-function getHexColor(color: string) {
-	return color.startsWith("#") ? color : `#${color}`;
-}
+import { getHexColor } from "@samples/labels";
 
 type LabelFilterMenuProps = {
 	/** All available labels. */

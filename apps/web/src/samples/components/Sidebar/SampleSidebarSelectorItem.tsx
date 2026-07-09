@@ -1,5 +1,5 @@
 import Icon from "@base/Icon";
-import { Check, Minus } from "lucide-react";
+import { Check } from "lucide-react";
 import type { ReactNode } from "react";
 
 type SampleSidebarSelectorItemProps = {
@@ -8,7 +8,6 @@ type SampleSidebarSelectorItemProps = {
 	name: string;
 	/** A callback function to handle item selection */
 	onClick: (id: string | number) => void;
-	partiallySelected: boolean;
 	selected: boolean;
 };
 
@@ -20,7 +19,6 @@ export default function SampleSidebarSelectorItem({
 	id,
 	name,
 	onClick,
-	partiallySelected,
 	selected,
 }: SampleSidebarSelectorItemProps) {
 	return (
@@ -31,7 +29,7 @@ export default function SampleSidebarSelectorItem({
 			aria-label={name}
 		>
 			<div className="flex items-center justify-center text-gray-500 mr-1 w-8">
-				{selected && <Icon icon={partiallySelected ? Minus : Check} />}
+				{selected && <Icon icon={Check} />}
 			</div>
 			<div className="flex items-center">{children}</div>
 		</button>

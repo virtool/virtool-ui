@@ -1,3 +1,4 @@
+import { cn } from "@app/utils";
 import { range } from "es-toolkit/math";
 import { type ReactElement, type ReactNode, useEffect } from "react";
 import PaginationContent from "./PaginationContent";
@@ -22,21 +23,27 @@ function getPageRange(
 
 type PaginationProps = {
 	children?: ReactNode;
+	/** Rendered above the rows, inside the element `rowsClassName` styles */
+	header?: ReactNode;
 	items: object[];
 	renderRow?: (item: object) => ReactElement;
 	storedPage: number;
 	currentPage: number;
 	pageCount: number;
 	onPageChange?: (page: number) => void;
+	/** Extra classes for the element wrapping the rendered rows */
+	rowsClassName?: string;
 };
 
 export default function Pagination({
 	children,
 	currentPage,
+	header,
 	items,
 	onPageChange = () => {},
 	pageCount,
 	renderRow,
+	rowsClassName,
 	storedPage,
 }: PaginationProps) {
 	useEffect(() => {
@@ -61,7 +68,8 @@ export default function Pagination({
 
 	return (
 		<div>
-			<div className="pb-1.5">
+			<div className={cn("pb-1.5", rowsClassName)}>
+				{header}
 				{entries}
 				{children}
 			</div>

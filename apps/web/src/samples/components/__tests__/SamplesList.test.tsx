@@ -337,6 +337,113 @@ describe("<SamplesList />", () => {
 		});
 	});
 
+	describe("select all", () => {
+		it("should show the sample count until something is selected", async () => {
+			await renderWithRouter(<SamplesList labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			expect(screen.getByText("2 samples")).toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: `Select ${at(samples, 0).name}` }),
+			);
+
+			expect(screen.queryByText("2 samples")).not.toBeInTheDocument();
+			expect(screen.getByText("1 selected")).toBeInTheDocument();
+		});
+
+		it("should count the samples matching the filters, not every visible sample", async () => {
+			nock.cleanAll();
+			mockApiListUsers(users);
+			mockApiGetHmms(createFakeHmmSearchResults());
+			mockApiListIndexes([createFakeIndexMinimal()]);
+			mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
+			mockApiGetSamples(samples, { found_count: 2, total_count: 17 });
+
+			await renderWithRouter(<SamplesList labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			expect(screen.getByText("2 samples")).toBeInTheDocument();
+			expect(screen.queryByText("17 samples")).not.toBeInTheDocument();
+		});
+
+		it("should select every sample on the page", async () => {
+			await renderWithRouter(<SamplesList labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: "Select all samples" }),
+			);
+
+			for (const sample of samples) {
+				expect(
+					screen.getByRole("checkbox", { name: `Select ${sample.name}` }),
+				).toBeChecked();
+			}
+		});
+
+		it("should clear the selection when some samples are already selected", async () => {
+			await renderWithRouter(<SamplesList labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: `Select ${at(samples, 0).name}` }),
+			);
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: "Select all samples" }),
+			);
+
+			for (const sample of samples) {
+				expect(
+					screen.getByRole("checkbox", { name: `Select ${sample.name}` }),
+				).not.toBeChecked();
+			}
+		});
+
+		it("should show a mixed state when only some samples are selected", async () => {
+			await renderWithRouter(<SamplesList labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			const selectAll = screen.getByRole("checkbox", {
+				name: "Select all samples",
+			});
+			expect(selectAll).not.toBeChecked();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: `Select ${at(samples, 0).name}` }),
+			);
+			expect(selectAll).toBePartiallyChecked();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: `Select ${at(samples, 1).name}` }),
+			);
+			expect(selectAll).toBeChecked();
+		});
+
+		it("should clear the selection when a filter changes", async () => {
+			mockApiGetSamples(samples);
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: `Select ${at(samples, 0).name}` }),
+			);
+			expect(screen.getByText("1 selected")).toBeInTheDocument();
+
+			const label = at(labels, 0);
+
+			await userEvent.click(screen.getByRole("button", { name: "Labels" }));
+			await userEvent.click(
+				await screen.findByRole("menuitemcheckbox", {
+					name: new RegExp(label.name),
+				}),
+			);
+
+			expect(await screen.findByText("2 samples")).toBeInTheDocument();
+			expect(screen.queryByText("1 selected")).not.toBeInTheDocument();
+		});
+	});
+
 	describe("quick analyze", () => {
 		it("should scope to the clicked sample, ignoring the selection", async () => {
 			await renderWithRouter(<SamplesList labels={labels} />, path);
@@ -380,21 +487,55 @@ describe("<SamplesList />", () => {
 			).not.toBeInTheDocument();
 		});
 
-		it("should count a single-sample selection from the toolbar", async () => {
+		it("should count a single-sample selection from the header", async () => {
 			await renderWithRouter(<SamplesList labels={labels} />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(
 				screen.getByRole("checkbox", { name: `Select ${at(samples, 0).name}` }),
 			);
-			await userEvent.click(
-				screen.getByRole("button", { name: "Quick Analyze" }),
-			);
+			await userEvent.click(screen.getByRole("button", { name: "Analyze" }));
 
 			const dialog = await screen.findByRole("dialog");
 
 			const title = within(dialog).getByText("Selected Samples");
 			expect(within(title).getByText("1")).toBeInTheDocument();
+		});
+
+		it("should include every selected sample when triggered from the header", async () => {
+			await renderWithRouter(<SamplesList labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: "Select all samples" }),
+			);
+			await userEvent.click(screen.getByRole("button", { name: "Analyze" }));
+
+			const dialog = await screen.findByRole("dialog");
+
+			const title = within(dialog).getByText("Selected Samples");
+			expect(within(title).getByText("2")).toBeInTheDocument();
+
+			for (const sample of samples) {
+				expect(within(dialog).getByText(sample.name)).toBeInTheDocument();
+			}
+		});
+
+		it("should not show the quick analyze button until samples are selected", async () => {
+			await renderWithRouter(<SamplesList labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			expect(
+				screen.queryByRole("button", { name: "Analyze" }),
+			).not.toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: `Select ${at(samples, 0).name}` }),
+			);
+
+			expect(
+				screen.getByRole("button", { name: "Analyze" }),
+			).toBeInTheDocument();
 		});
 
 		it("should leave the existing selection intact after a row is analyzed", async () => {
@@ -424,30 +565,6 @@ describe("<SamplesList />", () => {
 			expect(
 				screen.getByRole("checkbox", { name: `Select ${clickedSample.name}` }),
 			).not.toBeChecked();
-		});
-
-		it("should include every selected sample when triggered from the toolbar", async () => {
-			await renderWithRouter(<SamplesList labels={labels} />, path);
-			expect(await screen.findByText("Samples")).toBeInTheDocument();
-
-			for (const sample of samples) {
-				await userEvent.click(
-					screen.getByRole("checkbox", { name: `Select ${sample.name}` }),
-				);
-			}
-
-			await userEvent.click(
-				screen.getByRole("button", { name: "Quick Analyze" }),
-			);
-
-			const dialog = await screen.findByRole("dialog");
-
-			const title = within(dialog).getByText("Selected Samples");
-			expect(within(title).getByText("2")).toBeInTheDocument();
-
-			for (const sample of samples) {
-				expect(within(dialog).getByText(sample.name)).toBeInTheDocument();
-			}
 		});
 	});
 
