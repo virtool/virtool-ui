@@ -17,9 +17,6 @@ type SampleSidebarSelectorProps = {
 	/** A callback function to handle sidebar item selection */
 	onUpdate: (id: string | number) => void;
 
-	/** List of label ids applied to some, but not all selected samples */
-	partiallySelectedItems?: number[];
-
 	/** The styled component for the list items */
 	render: (result: {
 		color?: string;
@@ -44,7 +41,6 @@ export default function SampleSidebarSelector({
 	render,
 	items,
 	selectedIds,
-	partiallySelectedItems = [],
 	onUpdate,
 	selectionType,
 	manageLink,
@@ -57,7 +53,6 @@ export default function SampleSidebarSelector({
 		<SampleSidebarSelectorItem
 			key={item.id}
 			selected={selectedIds.includes(item.id)}
-			partiallySelected={partiallySelectedItems.includes(item.id as number)}
 			{...item}
 			onClick={onUpdate}
 		>

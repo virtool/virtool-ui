@@ -44,6 +44,12 @@ export type User = {
 	primary_group: UserGroupReference | null;
 };
 
+/** A user reduced to what a selector or filter needs to show. */
+export type UserOption = {
+	id: number;
+	handle: string;
+};
+
 /** A page of user search results. */
 export type UserSearchResults = {
 	items: User[];
@@ -271,6 +277,15 @@ export function listAdministratorRoles(): AdministratorRole[] {
 export async function getUserCount(db: Db): Promise<number> {
 	const [row] = await db.select({ value: count() }).from(usersTable);
 	return row?.value ?? 0;
+}
+
+/** List every active user, for populating selectors and filters. */
+export async function listUsers(db: Db): Promise<UserOption[]> {
+	return db
+		.select({ id: usersTable.id, handle: usersTable.handle })
+		.from(usersTable)
+		.where(eq(usersTable.active, true))
+		.orderBy(asc(sql`lower(${usersTable.handle})`));
 }
 
 export async function findUsers(

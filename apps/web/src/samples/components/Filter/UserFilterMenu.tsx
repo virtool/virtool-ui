@@ -1,0 +1,101 @@
+import { useFetchAccount } from "@account/queries";
+import DropdownMenuCheckboxItem from "@base/DropdownMenuCheckboxItem";
+import DropdownMenuContent from "@base/DropdownMenuContent";
+import DropdownMenuItem from "@base/DropdownMenuItem";
+import DropdownMenuSeparator from "@base/DropdownMenuSeparator";
+import Input from "@base/Input";
+import QueryError from "@base/QueryError";
+import { useListUsers } from "@users/queries";
+import type { UserNested } from "@users/types";
+import { useState } from "react";
+
+type UserFilterMenuProps = {
+	/** Deselects every user. */
+	onClear: () => void;
+
+	/** Toggles a single user. */
+	onToggle: (userId: number) => void;
+
+	/** The ids of the selected users. */
+	selected: number[];
+};
+
+/**
+ * A dropdown menu for selecting the users whose samples are shown
+ */
+export default function UserFilterMenu({
+	onClear,
+	onToggle,
+	selected,
+}: UserFilterMenuProps) {
+	const { data: users, isError, isPending } = useListUsers();
+	const { data: account } = useFetchAccount();
+	const [term, setTerm] = useState("");
+
+	const matches = (users ?? []).filter((user) =>
+		user.handle.toLowerCase().includes(term.toLowerCase()),
+	);
+
+	// Filtering to your own samples is the common case, so lift yourself out of
+	// the alphabetical list.
+	const self = matches.find((user) => user.id === account?.id);
+	const others = matches.filter((user) => user.id !== account?.id);
+
+	function renderUser(user: UserNested, isSelf: boolean) {
+		return (
+			<DropdownMenuCheckboxItem
+				checked={selected.includes(user.id)}
+				key={user.id}
+				onCheckedChange={() => onToggle(user.id)}
+				// Keep the menu open so several users can be toggled at once.
+				onSelect={(e) => e.preventDefault()}
+			>
+				<span className="flex-grow truncate">{user.handle}</span>
+				{isSelf && (
+					<span className="shrink-0 pl-2 text-gray-500 text-sm">You</span>
+				)}
+			</DropdownMenuCheckboxItem>
+		);
+	}
+
+	return (
+		<DropdownMenuContent className="w-64">
+			<div className="sticky top-0 bg-white p-1">
+				<Input
+					aria-label="Filter users"
+					onChange={(e) => setTerm((e.target as HTMLInputElement).value)}
+					// The menu's typeahead would otherwise swallow every keystroke
+					// and move focus onto the matching user.
+					onKeyDown={(e) => e.stopPropagation()}
+					placeholder="Handle"
+					value={term}
+				/>
+			</div>
+			{isError && !users ? (
+				<QueryError noun="users" />
+			) : isPending ? (
+				<p className="px-2 py-1.5 text-gray-500 text-sm">Loading users...</p>
+			) : matches.length === 0 ? (
+				<p className="px-2 py-1.5 text-gray-500 text-sm">No users found.</p>
+			) : (
+				<>
+					{self && (
+						<>
+							{renderUser(self, true)}
+							{others.length > 0 && <DropdownMenuSeparator />}
+						</>
+					)}
+					{others.map((user) => renderUser(user, false))}
+				</>
+			)}
+			{selected.length > 0 && (
+				<>
+					<DropdownMenuSeparator />
+					<DropdownMenuItem color="blue" onSelect={onClear}>
+						Clear
+					</DropdownMenuItem>
+				</>
+			)}
+		</DropdownMenuContent>
+	);
+}

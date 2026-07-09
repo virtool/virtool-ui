@@ -1,5 +1,5 @@
 import type { AdministratorRole } from "@administration/types";
-import type { User } from "@users/types";
+import type { User, UserNested } from "@users/types";
 import { expect, vi } from "vitest";
 
 /**
@@ -9,6 +9,7 @@ import { expect, vi } from "vitest";
  */
 export const userServerFnMocks = {
 	findUsers: vi.fn(),
+	listUsers: vi.fn(),
 	getUser: vi.fn(),
 	createUser: vi.fn(),
 	updateUser: vi.fn(),
@@ -39,6 +40,14 @@ export function mockApiFindUsers(users: User[]): MockScope {
 		total_count: users.length,
 	});
 	return makeScope(userServerFnMocks.findUsers);
+}
+
+/** Sets up listUsers to resolve with the given users, reduced to id and handle. */
+export function mockApiListUsers(users: UserNested[]): MockScope {
+	userServerFnMocks.listUsers.mockResolvedValue(
+		users.map(({ handle, id }) => ({ handle, id })),
+	);
+	return makeScope(userServerFnMocks.listUsers);
 }
 
 /** Sets up getUser to resolve with the given user when matched by id. */

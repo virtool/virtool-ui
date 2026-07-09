@@ -1,9 +1,7 @@
 import { PostgreSqlContainer } from "@testcontainers/postgresql";
 
-let postgres: Awaited<ReturnType<PostgreSqlContainer["start"]>> | undefined;
-
 export async function setup() {
-	postgres = await new PostgreSqlContainer("postgres:18")
+	const postgres = await new PostgreSqlContainer("postgres:18")
 		.withDatabase("virtool")
 		.withUsername("virtool")
 		.withPassword("virtool")
@@ -13,6 +11,7 @@ export async function setup() {
 	process.env.VT_POSTGRES_URL = postgres.getConnectionUri();
 }
 
-export async function teardown() {
-	await postgres?.stop();
-}
+// Left empty on purpose. stop() removes the container, so withReuse() finds
+// nothing to match on the next run and starts a fresh one. Clean up with
+// `docker rm -f` when the container is no longer wanted.
+export async function teardown() {}

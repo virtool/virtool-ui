@@ -4,8 +4,8 @@ import { createFakeSampleMinimal } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import type { ComponentProps } from "react";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import ManageLabels from "../ManageLabels";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import SampleLabelsSelector from "../SampleLabelsSelector";
 
 /**
  * Mocks the sample-update endpoint and captures the request body so tests can
@@ -24,11 +24,12 @@ function mockApiUpdateSampleLabels(sampleId: string) {
 	return captured;
 }
 
-describe("<ManageLabels>", () => {
-	let props: ComponentProps<typeof ManageLabels>;
+describe("<SampleLabelsSelector>", () => {
+	let props: ComponentProps<typeof SampleLabelsSelector>;
 
 	beforeEach(() => {
 		props = {
+			onLabelsUpdated: vi.fn(),
 			selectedSamples: [],
 			labels: [
 				{ color: "#C4B5FD", count: 0, description: "", id: 1, name: "test" },
@@ -38,52 +39,49 @@ describe("<ManageLabels>", () => {
 		};
 	});
 
-	it("should be disabled if no labels exist", async () => {
+	it("should offer a path to create labels when none exist", async () => {
 		props.labels = [];
-		await renderWithRouter(<ManageLabels {...props} />);
-		await waitFor(() =>
-			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
-		);
+		await renderWithRouter(<SampleLabelsSelector {...props} />);
 
-		expect(screen.getByText("Create one")).toBeInTheDocument();
+		await userEvent.click(screen.getByRole("button", { name: "Edit labels" }));
+
+		expect(await screen.findByText("No labels found.")).toBeInTheDocument();
+		expect(
+			screen.getByRole("menuitem", { name: "Manage labels" }),
+		).toHaveAttribute("href", "/samples/labels");
 	});
 
-	it("should display labels of one selected sample", async () => {
-		props.selectedSamples = [
-			createFakeSampleMinimal({
-				name: "Foo Sample",
-				id: "foo_sample",
-				labels: [{ color: "#C4B5FD", description: "", id: 1, name: "test" }],
-			}),
-		];
-		await renderWithRouter(<ManageLabels {...props} />);
-		await waitFor(() =>
-			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
-		);
+	it("should list every label and a link to manage them", async () => {
+		await renderWithRouter(<SampleLabelsSelector {...props} />);
 
-		expect(screen.getByText("test")).toBeInTheDocument();
+		await userEvent.click(screen.getByRole("button", { name: "Edit labels" }));
+
+		for (const label of props.labels) {
+			expect(
+				screen.getByRole("menuitemcheckbox", { name: label.name }),
+			).toBeInTheDocument();
+		}
+
+		expect(
+			screen.getByRole("menuitem", { name: "Manage labels" }),
+		).toHaveAttribute("href", "/samples/labels");
 	});
 
-	it("should display labels of two selected samples", async () => {
-		props.selectedSamples = [
-			createFakeSampleMinimal({
-				name: "Foo Sample",
-				id: "foo_sample",
-				labels: [{ color: "#C4B5FD", description: "", id: 1, name: "test" }],
-			}),
-			createFakeSampleMinimal({
-				name: "Sample",
-				id: "sample",
-				labels: [{ color: "#FCA5A5", description: "", id: 2, name: "label" }],
-			}),
-		];
-		await renderWithRouter(<ManageLabels {...props} />);
-		await waitFor(() =>
-			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
+	it("should narrow the list to labels matching the search term", async () => {
+		await renderWithRouter(<SampleLabelsSelector {...props} />);
+
+		await userEvent.click(screen.getByRole("button", { name: "Edit labels" }));
+		await userEvent.type(
+			screen.getByRole("textbox", { name: "Filter labels" }),
+			"ba",
 		);
 
-		expect(screen.getByText("test")).toBeInTheDocument();
-		expect(screen.getByText("label")).toBeInTheDocument();
+		expect(
+			screen.getByRole("menuitemcheckbox", { name: "bar" }),
+		).toBeInTheDocument();
+		expect(
+			screen.queryByRole("menuitemcheckbox", { name: "test" }),
+		).not.toBeInTheDocument();
 	});
 
 	describe("toggling a label with mixed labels across the selection", () => {
@@ -109,17 +107,34 @@ describe("<ManageLabels>", () => {
 			];
 		});
 
-		async function openSelectorAndClick(labelName: string) {
-			await renderWithRouter(<ManageLabels {...props} />);
-			await waitFor(() =>
-				expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
-			);
+		async function openSelector() {
+			await renderWithRouter(<SampleLabelsSelector {...props} />);
 
 			await userEvent.click(
-				screen.getByRole("button", { name: "select labels" }),
+				screen.getByRole("button", { name: "Edit labels" }),
 			);
-			await userEvent.click(screen.getByRole("button", { name: labelName }));
 		}
+
+		async function openSelectorAndClick(labelName: string) {
+			await openSelector();
+			await userEvent.click(
+				screen.getByRole("menuitemcheckbox", { name: labelName }),
+			);
+		}
+
+		it("checks fully-applied labels and marks partial ones indeterminate", async () => {
+			await openSelector();
+
+			expect(
+				screen.getByRole("menuitemcheckbox", { name: "test" }),
+			).toHaveAttribute("aria-checked", "true");
+			expect(
+				screen.getByRole("menuitemcheckbox", { name: "label" }),
+			).toHaveAttribute("aria-checked", "mixed");
+			expect(
+				screen.getByRole("menuitemcheckbox", { name: "bar" }),
+			).toHaveAttribute("aria-checked", "false");
+		});
 
 		it("removes a fully-applied label from every sample", async () => {
 			const foo = mockApiUpdateSampleLabels("foo_sample");

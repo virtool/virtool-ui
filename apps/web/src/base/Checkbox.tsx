@@ -1,12 +1,12 @@
 import { cn } from "@app/utils";
-import { Check } from "lucide-react";
+import { Check, Minus } from "lucide-react";
 import { Checkbox as CheckboxPrimitive } from "radix-ui";
 import type { ReactNode } from "react";
 import Icon from "./Icon";
 
 type CheckboxProps = {
 	ariaLabel?: string;
-	checked?: boolean;
+	checked?: boolean | "indeterminate";
 	label?: string;
 	labelComponent?: ReactNode;
 	disabled?: boolean;
@@ -22,6 +22,9 @@ function Checkbox({
 	labelComponent,
 	onClick,
 }: CheckboxProps) {
+	const isIndeterminate = checked === "indeterminate";
+	const isEmpty = checked === false;
+
 	return (
 		<div className="inline-flex items-center gap-3">
 			<CheckboxPrimitive.Root
@@ -29,13 +32,13 @@ function Checkbox({
 				checked={checked}
 				className={cn(
 					{
-						"bg-cyan-700": checked,
-						"border-gray-50": !checked,
+						"bg-cyan-700": !isEmpty,
+						"border-gray-50": isEmpty,
 					},
 					"border-2",
 					{
-						"border-gray-300": !checked,
-						"border-cyan-700": checked,
+						"border-gray-300": isEmpty,
+						"border-cyan-700": !isEmpty,
 					},
 					"cursor-pointer",
 					"inline-flex",
@@ -49,8 +52,8 @@ function Checkbox({
 			>
 				<CheckboxPrimitive.Indicator forceMount>
 					<Icon
-						className={cn({ invisible: !checked }, "text-white")}
-						icon={Check}
+						className={cn({ invisible: isEmpty }, "text-white")}
+						icon={isIndeterminate ? Minus : Check}
 					/>
 				</CheckboxPrimitive.Indicator>
 			</CheckboxPrimitive.Root>

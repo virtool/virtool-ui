@@ -5,6 +5,7 @@ import Dropdown from "@base/Dropdown";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
 import DropdownMenuLink from "@base/DropdownMenuLink";
+import DropdownMenuSeparator from "@base/DropdownMenuSeparator";
 import DropdownMenuTrigger from "@base/DropdownMenuTrigger";
 import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
@@ -55,12 +56,12 @@ export default function Nav({ administrator_role, handle }: NavBarProps) {
 							<InitialIcon handle={handle} size="md" />
 						</div>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent>
+					<DropdownMenuContent align="end">
 						<DropdownMenuLink to="/account">
 							Signed in as <strong>{handle}</strong>
 						</DropdownMenuLink>
 
-						<div />
+						<DropdownMenuSeparator />
 
 						<DropdownMenuLink to="/account">Account</DropdownMenuLink>
 						{hasSufficientAdminRole("users", administrator_role) && (

@@ -35,45 +35,38 @@ export default function SampleItem({
 	const { data: job } = useFetchJob(sample.job?.id ?? Number.NaN, sample.job);
 
 	return (
-		<Box className="flex items-stretch basis-0 gap-4">
-			<div className="flex">
-				<Checkbox
-					ariaLabel={`Select ${sample.name}`}
-					checked={checked}
-					id={`SampleCheckbox${sample.id}`}
-					onClick={handleSelect}
+		<Box className="grid grid-cols-sample items-center gap-x-4 gap-y-2.5 border-0 mb-0 py-2.5 rounded-none">
+			<Checkbox
+				ariaLabel={`Select ${sample.name}`}
+				checked={checked}
+				id={`SampleCheckbox${sample.id}`}
+				onClick={handleSelect}
+			/>
+			<Link
+				className="text-lg font-medium overflow-hidden text-ellipsis whitespace-nowrap"
+				to="/samples/$sampleId"
+				params={{ sampleId: sample.id }}
+			>
+				{sample.name}
+			</Link>
+			<Attribution time={sample.created_at} user={sample.user.handle} />
+			<div className="flex justify-end items-center gap-2">
+				{sample.ready && (
+					<WorkflowTags id={sample.id} workflows={sample.workflows} />
+				)}
+				<EndIcon
+					ariaLabel={`Quick analyze ${sample.name}`}
+					progress={job?.progress ?? 0}
+					state={job?.state}
+					onClick={onQuickAnalyze}
+					ready={sample.ready}
 				/>
 			</div>
-
-			<div className="flex flex-1 flex-col min-w-0">
-				<div className="grid grid-cols-3 items-center">
-					<Link
-						className="text-lg font-medium overflow-hidden text-ellipsis whitespace-nowrap"
-						to="/samples/$sampleId"
-						params={{ sampleId: sample.id }}
-					>
-						{sample.name}
-					</Link>
-					<Attribution time={sample.created_at} user={sample.user.handle} />
-					<div className="flex justify-end items-center gap-2">
-						{sample.ready && (
-							<WorkflowTags id={sample.id} workflows={sample.workflows} />
-						)}
-						<EndIcon
-							ariaLabel={`Quick analyze ${sample.name}`}
-							progress={job?.progress ?? 0}
-							state={job?.state}
-							onClick={onQuickAnalyze}
-							ready={sample.ready}
-						/>
-					</div>
-				</div>
-				<div className="flex mt-2.5 [&>*:not(:last-child)]:mr-1">
-					<SampleLibraryTypeLabel libraryType={sample.library_type} />
-					{sample.labels.map((label) => (
-						<SampleLabel {...label} key={label.id} size="sm" />
-					))}
-				</div>
+			<div className="col-start-2 col-span-3 flex gap-1">
+				<SampleLibraryTypeLabel libraryType={sample.library_type} />
+				{sample.labels.map((label) => (
+					<SampleLabel {...label} key={label.id} size="sm" />
+				))}
 			</div>
 		</Box>
 	);

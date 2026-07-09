@@ -1,5 +1,5 @@
 import { apiClient } from "@app/api";
-import type { Label } from "@labels/types";
+import type { LabelNested } from "@labels/types";
 import {
 	keepPreviousData,
 	queryOptions,
@@ -20,7 +20,8 @@ import type {
 	SampleUpdate,
 } from "./types";
 
-export type SampleLabel = Label & {
+/** A label carried by at least one of the selected samples */
+export type SampleLabel = LabelNested & {
 	/** Whether all selected samples contain the label */
 	allLabeled: boolean;
 };
@@ -58,6 +59,7 @@ function updateSample(sampleId: string, update: SampleUpdate): Promise<Sample> {
  * @param term - The search term to filter samples by
  * @param labels - The labels to filter the samples by
  * @param workflows - The workflows to filter the samples by
+ * @param users - The ids of the users to filter the samples by
  */
 export function useListSamples(
 	page: number,
@@ -65,13 +67,28 @@ export function useListSamples(
 	term?: string,
 	labels?: number[],
 	workflows?: string[],
+	users?: number[],
 ) {
 	return useQuery<SampleSearchResult, ErrorResponse>({
-		queryKey: samplesQueryKeys.list([page, per_page, term, labels, workflows]),
+		queryKey: samplesQueryKeys.list([
+			page,
+			per_page,
+			term,
+			labels,
+			workflows,
+			users,
+		]),
 		queryFn: () =>
 			apiClient
 				.get("/samples")
-				.query({ page, per_page, find: term, label: labels, workflows })
+				.query({
+					page,
+					per_page,
+					find: term,
+					label: labels,
+					workflows,
+					user: users,
+				})
 				.then((res) => {
 					const { documents, ...rest } = res.body;
 					return { ...rest, items: documents };
@@ -214,51 +231,43 @@ export function useUpdateSampleRights(sampleId: string) {
 }
 
 /**
- * Updates the labels for selected samples
+ * Initialize a mutator that adds or removes a label across the selected samples
  *
- * @param selectedLabels - The initial labels associated with the sample
+ * The label is removed when every selected sample already carries it, and added
+ * otherwise. The samples are patched concurrently and the list is invalidated
+ * once, after they all settle. The mutation resolves with the updated samples.
+ *
+ * @param selectedLabels - The labels carried by the selected samples
  * @param selectedSamples - The selected samples
+ * @returns A mutator taking the id of the label to toggle
  */
 export function useUpdateLabel(
 	selectedLabels: SampleLabel[],
 	selectedSamples: SampleMinimal[],
 ) {
 	const queryClient = useQueryClient();
-	const mutation = useMutation<
-		Sample,
-		ErrorResponse,
-		{ sampleId: string; update: SampleUpdate }
-	>({
-		mutationFn: ({ sampleId, update }) => updateSample(sampleId, update),
+
+	return useMutation<Sample[], ErrorResponse, number>({
+		mutationFn: (labelId) => {
+			const clicked = selectedLabels.find((label) => label.id === labelId);
+			const allLabeled = clicked?.allLabeled === true;
+
+			return Promise.all(
+				selectedSamples.map((sample) => {
+					const labelIds = sample.labels.map((label) => label.id);
+
+					return updateSample(sample.id, {
+						labels: allLabeled
+							? labelIds.filter((id) => id !== labelId)
+							: union(labelIds, [labelId]),
+					});
+				}),
+			);
+		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: samplesQueryKeys.lists(),
 			});
 		},
 	});
-
-	function onUpdate(label: number) {
-		const clicked = selectedLabels.find((item) => item.id === label);
-		const allLabeled = clicked?.allLabeled === true;
-
-		selectedSamples.forEach((sample) => {
-			const sampleLabelIds = sample.labels.map((l) => l.id);
-
-			if (!allLabeled) {
-				mutation.mutate({
-					sampleId: sample.id,
-					update: { labels: union(sampleLabelIds, [label]) },
-				});
-			} else {
-				mutation.mutate({
-					sampleId: sample.id,
-					update: {
-						labels: sampleLabelIds.filter((id) => label !== id),
-					},
-				});
-			}
-		});
-	}
-
-	return onUpdate;
 }

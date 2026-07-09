@@ -102,17 +102,26 @@ export function createFakeSample(overrides?: Partial<Sample>): Sample {
  * Creates a mocked API call for getting a paginated list of samples
  *
  * @param samples - The sample documents
+ * @param counts - Overrides for the counts, which otherwise both match the
+ *   number of documents. ``total_count`` is every sample the user may see and
+ *   ``found_count`` is only those matching the filters.
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetSamples(samples: SampleMinimal[]) {
-	return nock("http://localhost").get("/api/samples").query(true).reply(200, {
-		page: 1,
-		page_count: 1,
-		per_page: 5,
-		total_count: samples.length,
-		found_count: samples.length,
-		documents: samples,
-	});
+export function mockApiGetSamples(
+	samples: SampleMinimal[],
+	counts: { found_count?: number; total_count?: number } = {},
+) {
+	return nock("http://localhost")
+		.get("/api/samples")
+		.query(true)
+		.reply(200, {
+			page: 1,
+			page_count: 1,
+			per_page: 5,
+			total_count: counts.total_count ?? samples.length,
+			found_count: counts.found_count ?? samples.length,
+			documents: samples,
+		});
 }
 
 /**

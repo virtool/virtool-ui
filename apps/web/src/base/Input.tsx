@@ -31,6 +31,7 @@ export interface InputProps {
 	onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 	onChange?: (event: React.ChangeEvent) => void;
 	onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
+	onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 export default function Input({
@@ -54,6 +55,7 @@ export default function Input({
 	onBlur,
 	onChange,
 	onFocus,
+	onKeyDown,
 }: InputProps) {
 	const errorContext = useContext(InputContext);
 	const error = errorProp || errorContext;
@@ -85,6 +87,7 @@ export default function Input({
 			onBlur={onBlur}
 			onChange={onChange}
 			onFocus={onFocus}
+			onKeyDown={onKeyDown}
 		>
 			{children}
 		</Component>

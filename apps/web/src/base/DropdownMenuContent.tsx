@@ -1,38 +1,48 @@
 import { cn } from "@app/utils";
 import { DropdownMenu } from "radix-ui";
-import type { ReactNode } from "react";
-
-type DropdownMenuContentProps = {
-	children: ReactNode;
-	className?: string;
-};
+import { type ComponentPropsWithoutRef, forwardRef } from "react";
 
 /**
- * Displays the content of the dropdown menu to the users
+ * The floating panel of a dropdown menu, portalled out of the trigger's
+ * stacking context and aligned to the trigger's start edge.
  */
-export default function DropdownMenuContent({
-	children,
-	className,
-}: DropdownMenuContentProps) {
+const DropdownMenuContent = forwardRef<
+	HTMLDivElement,
+	ComponentPropsWithoutRef<typeof DropdownMenu.Content>
+>(function DropdownMenuContent(
+	{ align = "start", className, sideOffset = 4, ...props },
+	ref,
+) {
 	return (
-		<DropdownMenu.Content
-			className={cn(
-				"animate-slideDown",
-				"bg-white",
-				"border",
-				"border-gray-300",
-				"rounded-md",
-				"shadow-lg",
-				"mx-2",
-				"my-0",
-				"flex",
-				"flex-col",
-				"text-base",
-				"z-10",
-				className,
-			)}
-		>
-			{children}
-		</DropdownMenu.Content>
+		<DropdownMenu.Portal>
+			<DropdownMenu.Content
+				ref={ref}
+				align={align}
+				sideOffset={sideOffset}
+				className={cn(
+					"bg-white",
+					"border",
+					"border-gray-300",
+					"flex",
+					"flex-col",
+					"max-h-(--radix-dropdown-menu-content-available-height)",
+					"min-w-32",
+					"origin-(--radix-dropdown-menu-content-transform-origin)",
+					"overflow-x-hidden",
+					"overflow-y-auto",
+					"p-1",
+					"rounded-md",
+					"shadow-lg",
+					"text-sm",
+					"z-50",
+					"data-[state=closed]:animate-dropdownMenuClose",
+					"data-[state=open]:animate-dropdownMenuOpen",
+					className,
+				)}
+				{...props}
+			/>
+		</DropdownMenu.Portal>
 	);
-}
+});
+
+export default DropdownMenuContent;

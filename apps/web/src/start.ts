@@ -35,6 +35,11 @@ const cspDirectives = [
 	"img-src 'self' data:",
 	"connect-src 'self' *.sentry.io",
 	"style-src 'self' 'unsafe-inline'",
+	// Without this, `script-src` is the fallback and its nonce cannot be carried
+	// by a blob URL, so every blob-backed worker is blocked. Vite's HMR client
+	// spawns one to poll for the dev server after a dropped socket, and Sentry's
+	// replay compression worker is blob-backed too.
+	"worker-src 'self' blob:",
 ];
 
 // Builds one response header for served HTML documents. Each builder receives
