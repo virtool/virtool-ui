@@ -30,24 +30,26 @@ export function CreateReference({ open, onOpenChange }: CreateReferenceProps) {
 		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogContent size="lg">
 				<DialogTitle>Create Reference</DialogTitle>
-				<SelectBox
-					className="grid-cols-2"
-					label="Method"
-					onValueChange={(value) => setMode(value as "empty" | "import")}
-					value={mode}
-				>
-					<SelectBoxItem value="empty">
-						<div>Empty</div>
-						<span>Start from a blank reference.</span>
-					</SelectBoxItem>
-					<SelectBoxItem value="import">
-						<div>Import</div>
-						<span>
-							Create a reference from a file previously exported from another
-							Virtool reference.
-						</span>
-					</SelectBoxItem>
-				</SelectBox>
+				<div className="mb-4">
+					<SelectBox
+						className="grid-cols-2"
+						label="Method"
+						onValueChange={(value) => setMode(value as "empty" | "import")}
+						value={mode}
+					>
+						<SelectBoxItem value="empty">
+							<div>Empty</div>
+							<span>Start from a blank reference.</span>
+						</SelectBoxItem>
+						<SelectBoxItem value="import">
+							<div>Import</div>
+							<span>
+								Create a reference from a file previously exported from another
+								Virtool reference.
+							</span>
+						</SelectBoxItem>
+					</SelectBox>
+				</div>
 				<CreateReferenceForm mode={mode} onSuccess={handleSuccess} />
 			</DialogContent>
 		</Dialog>

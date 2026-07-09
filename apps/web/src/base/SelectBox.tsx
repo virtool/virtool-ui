@@ -21,7 +21,7 @@ export function SelectBox({
 	const labelId = useId();
 
 	return (
-		<div className="mb-4">
+		<div>
 			<InputLabel id={labelId}>{label}</InputLabel>
 			<ToggleGroup.Root
 				aria-labelledby={labelId}
