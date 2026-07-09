@@ -10,6 +10,7 @@ import {
 	getAdministratorRole as getAdministratorRoleImpl,
 	getUser as getUserImpl,
 	listAdministratorRoles as listAdministratorRolesImpl,
+	listUsers as listUsersImpl,
 	setAdministratorRole as setAdministratorRoleImpl,
 	UserConflictError,
 	UserNotFoundError,
@@ -99,6 +100,12 @@ export const listAdministratorRoles = createServerFn({ method: "GET" }).handler(
 		await requireAdminRole(await requireSession(), "base");
 		return listAdministratorRolesImpl();
 	},
+);
+
+// Any authenticated user can see who else exists — the handles are already
+// visible on samples, jobs, and analyses they can read.
+export const listUsers = createServerFn({ method: "GET" }).handler(async () =>
+	listUsersImpl(db),
 );
 
 export const findUsers = createServerFn({ method: "GET" })

@@ -1,5 +1,6 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mockApiListUsers } from "@tests/api/users";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import {
@@ -15,6 +16,7 @@ import {
 	createFakeShortlistSubtraction,
 	mockApiGetShortlistSubtractions,
 } from "@tests/fake/subtractions";
+import { createFakeUserNested } from "@tests/fake/user";
 import { at, renderWithRouter } from "@tests/setup";
 import { useState } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -24,6 +26,7 @@ type SamplesListSearch = {
 	labels?: number[];
 	page?: number;
 	term?: string;
+	user?: number;
 	workflows?: string[];
 };
 
@@ -46,6 +49,7 @@ function SamplesListHarness({
 			page={search.page}
 			setSearch={handleSetSearch}
 			term={search.term}
+			user={search.user}
 			workflows={search.workflows}
 		/>
 	);
@@ -54,11 +58,19 @@ function SamplesListHarness({
 describe("<SamplesList />", () => {
 	let samples: ReturnType<typeof createFakeSampleMinimal>[];
 	let labels: ReturnType<typeof createFakeLabel>[];
+	let users: ReturnType<typeof createFakeUserNested>[];
 	const path = "/samples";
 
 	beforeEach(() => {
 		samples = [createFakeSampleMinimal(), createFakeSampleMinimal()];
 		labels = [createFakeLabel()];
+		// Handles are fixed so neither is a substring of the other, keeping the
+		// search-input assertions unambiguous.
+		users = [
+			{ ...createFakeUserNested(), handle: "amelia" },
+			{ ...createFakeUserNested(), handle: "bilbo" },
+		];
+		mockApiListUsers(users);
 		mockApiGetSamples(samples);
 		mockApiGetHmms(createFakeHmmSearchResults());
 		mockApiListIndexes([createFakeIndexMinimal()]);
@@ -241,6 +253,83 @@ describe("<SamplesList />", () => {
 
 			expect(
 				screen.queryByRole("button", { name: removeChipName }),
+			).not.toBeInTheDocument();
+		});
+	});
+
+	describe("user filtering", () => {
+		it("should show a chip for a user selected in the dropdown", async () => {
+			mockApiGetSamples(samples);
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("button", { name: "User" }));
+			await userEvent.click(
+				await screen.findByRole("menuitemradio", { name: at(users, 0).handle }),
+			);
+
+			const chip = await screen.findByRole("button", {
+				name: "Remove user filter",
+			});
+			expect(chip).toHaveTextContent(at(users, 0).handle);
+		});
+
+		it("should list the logged-in user first, tagged as You", async () => {
+			const self = at(users, 1);
+			mockApiGetAccount(
+				createFakeAccount({ id: self.id, handle: self.handle }),
+			);
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("button", { name: "User" }));
+
+			const items = await screen.findAllByRole("menuitemradio");
+			expect(items.map((item) => item.textContent)).toEqual([
+				`${self.handle}You`,
+				at(users, 0).handle,
+			]);
+		});
+
+		it("should narrow the user list as the search input is typed in", async () => {
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("button", { name: "User" }));
+			await userEvent.type(
+				await screen.findByLabelText("Filter users"),
+				at(users, 1).handle,
+			);
+
+			expect(
+				screen.queryByRole("menuitemradio", { name: at(users, 0).handle }),
+			).not.toBeInTheDocument();
+			expect(
+				screen.getByRole("menuitemradio", { name: at(users, 1).handle }),
+			).toBeInTheDocument();
+		});
+
+		it("should remove the chip when the dropdown is cleared", async () => {
+			mockApiGetSamples(samples);
+			mockApiGetSamples(samples);
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("button", { name: "User" }));
+			await userEvent.click(
+				await screen.findByRole("menuitemradio", { name: at(users, 0).handle }),
+			);
+			expect(
+				await screen.findByRole("button", { name: "Remove user filter" }),
+			).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("button", { name: "User" }));
+			await userEvent.click(
+				await screen.findByRole("menuitem", { name: "Clear" }),
+			);
+
+			expect(
+				screen.queryByRole("button", { name: "Remove user filter" }),
 			).not.toBeInTheDocument();
 		});
 	});

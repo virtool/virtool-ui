@@ -58,6 +58,7 @@ function updateSample(sampleId: string, update: SampleUpdate): Promise<Sample> {
  * @param term - The search term to filter samples by
  * @param labels - The labels to filter the samples by
  * @param workflows - The workflows to filter the samples by
+ * @param user - The id of the user to filter the samples by
  */
 export function useListSamples(
 	page: number,
@@ -65,13 +66,21 @@ export function useListSamples(
 	term?: string,
 	labels?: number[],
 	workflows?: string[],
+	user?: number,
 ) {
 	return useQuery<SampleSearchResult, ErrorResponse>({
-		queryKey: samplesQueryKeys.list([page, per_page, term, labels, workflows]),
+		queryKey: samplesQueryKeys.list([
+			page,
+			per_page,
+			term,
+			labels,
+			workflows,
+			user,
+		]),
 		queryFn: () =>
 			apiClient
 				.get("/samples")
-				.query({ page, per_page, find: term, label: labels, workflows })
+				.query({ page, per_page, find: term, label: labels, workflows, user })
 				.then((res) => {
 					const { documents, ...rest } = res.body;
 					return { ...rest, items: documents };

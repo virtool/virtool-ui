@@ -1,6 +1,11 @@
 import { apiClient } from "@app/api";
-import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
-import type { UserResponse } from "./types";
+import { listUsers } from "@server/users/functions";
+import {
+	keepPreviousData,
+	useInfiniteQuery,
+	useQuery,
+} from "@tanstack/react-query";
+import type { UserNested, UserResponse } from "./types";
 
 /**
  * Factory object for generating user query keys
@@ -16,6 +21,18 @@ export const userQueryKeys = {
 	details: () => ["users", "details"] as const,
 	detail: (user_id: string) => ["users", "details", user_id] as const,
 };
+
+/**
+ * Fetch every active user, for populating selectors and filters
+ *
+ * @returns A list of users with their ids and handles
+ */
+export function useListUsers() {
+	return useQuery<UserNested[]>({
+		queryKey: userQueryKeys.list([]),
+		queryFn: () => listUsers(),
+	});
+}
 
 /**
  * Setup query for fetching user search results for infinite scrolling view

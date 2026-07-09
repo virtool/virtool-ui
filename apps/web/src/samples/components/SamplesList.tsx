@@ -14,7 +14,7 @@ import type { SampleMinimal } from "@samples/types";
 import { intersectionWith, xor } from "es-toolkit/array";
 import { FlaskConical, SearchX } from "lucide-react";
 import { useState } from "react";
-import FilterChips from "./Filter/FilterChips";
+import FilterBar from "./Filter/FilterBar";
 import SampleItem from "./Item/SampleItem";
 import SampleToolbar from "./SamplesToolbar";
 import SampleLabels from "./Sidebar/ManageLabels";
@@ -34,9 +34,11 @@ type SamplesListProps = {
 		labels?: number[];
 		page?: number;
 		term?: string;
+		user?: number;
 		workflows?: string[];
 	}) => void;
 	term?: string;
+	user?: number;
 	workflows?: string[];
 };
 
@@ -49,13 +51,21 @@ export default function SamplesList({
 	page: urlPage = 1,
 	setSearch = () => {},
 	term = "",
+	user: filterUser,
 	workflows: filterWorkflows = [],
 }: SamplesListProps) {
 	const {
 		data: samples,
 		isPending: isPendingSamples,
 		isError: isErrorSamples,
-	} = useListSamples(urlPage, 25, term, filterLabels, filterWorkflows);
+	} = useListSamples(
+		urlPage,
+		25,
+		term,
+		filterLabels,
+		filterWorkflows,
+		filterUser,
+	);
 	const { isPending: isPendingIndexes, isError: isErrorIndexes } =
 		useListIndexes({ ready: true });
 
@@ -126,17 +136,24 @@ export default function SamplesList({
 						</ViewHeaderTitle>
 					</ViewHeader>
 					<SampleToolbar
-						labels={labels}
 						selected={selected}
 						onClear={() => setSelected([])}
-						onClearLabels={() => setSearch({ labels: [] })}
-						onClearWorkflows={() => setSearch({ workflows: [] })}
 						onQuickAnalyze={() =>
 							openQuickAnalyzeFor({
 								fromSelection: true,
 								samples: selectedSamples,
 							})
 						}
+						term={term}
+						onChange={(e) => setSearch({ term: e.target.value })}
+					/>
+					<FilterBar
+						labels={labels}
+						onClearLabels={() => setSearch({ labels: [] })}
+						onClearTerm={() => setSearch({ term: "" })}
+						onClearUser={() => setSearch({ user: undefined })}
+						onClearWorkflows={() => setSearch({ workflows: [] })}
+						onSelectUser={(userId) => setSearch({ user: userId })}
 						onToggleLabel={(labelId) =>
 							setSearch({ labels: xor(filterLabels, [labelId]) })
 						}
@@ -144,20 +161,7 @@ export default function SamplesList({
 							setSearch({ workflows: xor(filterWorkflows, [workflow]) })
 						}
 						selectedLabels={filterLabels}
-						selectedWorkflows={filterWorkflows}
-						term={term}
-						onChange={(e) => setSearch({ term: e.target.value })}
-					/>
-					<FilterChips
-						labels={labels}
-						onClearTerm={() => setSearch({ term: "" })}
-						onRemoveLabel={(labelId) =>
-							setSearch({ labels: xor(filterLabels, [labelId]) })
-						}
-						onRemoveWorkflow={(workflow) =>
-							setSearch({ workflows: xor(filterWorkflows, [workflow]) })
-						}
-						selectedLabels={filterLabels}
+						selectedUser={filterUser}
 						selectedWorkflows={filterWorkflows}
 						term={term}
 					/>

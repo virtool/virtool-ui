@@ -9,6 +9,7 @@ const samplesSearchSchema = z.object({
 	term: z.string().default("").catch(""),
 	page: z.number().default(1).catch(1),
 	labels: z.array(z.number()).default([]).catch([]),
+	user: z.number().optional().catch(undefined),
 	workflows: z.array(z.string()).default([]).catch([]),
 });
 
@@ -36,6 +37,7 @@ function SamplesRoute() {
 			labels={labels}
 			page={search.page}
 			term={search.term}
+			user={search.user}
 			workflows={search.workflows}
 			setSearch={(next) => navigate({ search: { ...search, ...next } })}
 		/>
