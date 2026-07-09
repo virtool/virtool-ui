@@ -14,6 +14,7 @@ import type { SampleMinimal } from "@samples/types";
 import { intersectionWith, xor } from "es-toolkit/array";
 import { FlaskConical, SearchX } from "lucide-react";
 import { useState } from "react";
+import FilterChips from "./Filter/FilterChips";
 import SampleFilters from "./Filter/SampleFilters";
 import SampleItem from "./Item/SampleItem";
 import SampleToolbar from "./SamplesToolbar";
@@ -126,16 +127,31 @@ export default function SamplesList({
 						</ViewHeaderTitle>
 					</ViewHeader>
 					<SampleToolbar
+						labels={labels}
 						selected={selected}
 						onClear={() => setSelected([])}
+						onClearLabels={() => setSearch({ labels: [] })}
 						onQuickAnalyze={() =>
 							openQuickAnalyzeFor({
 								fromSelection: true,
 								samples: selectedSamples,
 							})
 						}
+						onToggleLabel={(labelId) =>
+							setSearch({ labels: xor(filterLabels, [labelId]) })
+						}
+						selectedLabels={filterLabels}
 						term={term}
 						onChange={(e) => setSearch({ term: e.target.value })}
+					/>
+					<FilterChips
+						labels={labels}
+						onClearTerm={() => setSearch({ term: "" })}
+						onRemoveLabel={(labelId) =>
+							setSearch({ labels: xor(filterLabels, [labelId]) })
+						}
+						selectedLabels={filterLabels}
+						term={term}
 					/>
 				</div>
 				<div className="row-start-2 min-w-xl">
@@ -172,9 +188,6 @@ export default function SamplesList({
 					<SampleLabels labels={labels} selectedSamples={selectedSamples} />
 				) : (
 					<SampleFilters
-						labels={labels}
-						onClickLabels={(e) => setSearch({ labels: xor(filterLabels, [e]) })}
-						selectedLabels={filterLabels}
 						selectedWorkflows={filterWorkflows}
 						onClickWorkflows={(workflows) => setSearch({ workflows })}
 					/>

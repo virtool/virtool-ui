@@ -21,12 +21,13 @@ import { beforeEach, describe, expect, it } from "vitest";
 import SamplesList from "../SamplesList";
 
 type SamplesListSearch = {
-	filterLabels?: number[];
+	labels?: number[];
 	page?: number;
 	term?: string;
 	workflows?: string[];
 };
 
+/** Mirrors the route, which maps the ``labels`` search param onto ``filterLabels``. */
 function SamplesListHarness({
 	labels,
 }: {
@@ -39,7 +40,14 @@ function SamplesListHarness({
 	}
 
 	return (
-		<SamplesList labels={labels} {...search} setSearch={handleSetSearch} />
+		<SamplesList
+			filterLabels={search.labels}
+			labels={labels}
+			page={search.page}
+			setSearch={handleSetSearch}
+			term={search.term}
+			workflows={search.workflows}
+		/>
 	);
 }
 
@@ -62,7 +70,7 @@ describe("<SamplesList />", () => {
 		expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 		expect(screen.getByText(at(samples, 0).name)).toBeInTheDocument();
-		expect(screen.getByText("Labels")).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Labels" })).toBeInTheDocument();
 	});
 
 	it("should call onChange when search input changes in toolbar", async () => {
@@ -99,6 +107,65 @@ describe("<SamplesList />", () => {
 		expect(
 			screen.queryByRole("link", { name: "Create" }),
 		).not.toBeInTheDocument();
+	});
+
+	describe("label filtering", () => {
+		it("should show a chip for a label selected in the dropdown", async () => {
+			mockApiGetSamples(samples);
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			const label = at(labels, 0);
+
+			await userEvent.click(screen.getByRole("button", { name: "Labels" }));
+			await userEvent.click(
+				screen.getByRole("button", { name: new RegExp(label.name) }),
+			);
+
+			expect(
+				await screen.findByRole("button", {
+					name: `Remove ${label.name} label filter`,
+				}),
+			).toBeInTheDocument();
+		});
+
+		it("should remove every chip when the dropdown is cleared", async () => {
+			mockApiGetSamples(samples);
+			mockApiGetSamples(samples);
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			const label = at(labels, 0);
+			const removeChipName = `Remove ${label.name} label filter`;
+
+			await userEvent.click(screen.getByRole("button", { name: "Labels" }));
+			await userEvent.click(
+				screen.getByRole("button", { name: new RegExp(label.name) }),
+			);
+			expect(
+				await screen.findByRole("button", { name: removeChipName }),
+			).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("button", { name: "Clear" }));
+
+			expect(
+				screen.queryByRole("button", { name: removeChipName }),
+			).not.toBeInTheDocument();
+		});
+
+		it("should show a chip for the search term", async () => {
+			mockApiGetSamples(samples);
+			mockApiGetSamples(samples);
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.type(screen.getByPlaceholderText("Sample name"), "Foo");
+
+			expect(
+				await screen.findByRole("button", { name: "Clear search term" }),
+			).toBeInTheDocument();
+			expect(screen.getByText("Search")).toBeInTheDocument();
+		});
 	});
 
 	describe("quick analyze", () => {
