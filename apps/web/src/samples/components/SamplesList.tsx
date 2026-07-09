@@ -1,6 +1,13 @@
 import QuickAnalyze from "@analyses/components/Create/QuickAnalyze";
 import Box from "@base/Box";
-import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
+import Button from "@base/Button";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyMedia,
+	EmptyTitle,
+} from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
@@ -91,6 +98,24 @@ export default function SamplesList({
 
 	const { items, page, page_count, total_count } = samples;
 
+	// An empty list means "nothing created yet" only when nothing is narrowing
+	// it. Otherwise the samples exist and the filters are hiding them.
+	const isFiltered =
+		Boolean(term) ||
+		filterLabels.length > 0 ||
+		filterWorkflows.length > 0 ||
+		filterUser !== undefined;
+
+	function clearFilters() {
+		setSearch({
+			labels: [],
+			page: 1,
+			term: "",
+			user: undefined,
+			workflows: [],
+		});
+	}
+
 	const selectedSamples = intersectionWith(
 		items,
 		selected,
@@ -171,18 +196,27 @@ export default function SamplesList({
 						<Box key="noSample">
 							<Empty className="h-72">
 								<EmptyMedia className="text-gray-400">
-									{term ? (
+									{isFiltered ? (
 										<SearchX size={40} strokeWidth={1.5} />
 									) : (
 										<FlaskConical size={40} strokeWidth={1.5} />
 									)}
 								</EmptyMedia>
-								<EmptyTitle>No samples found</EmptyTitle>
+								<EmptyTitle>
+									{isFiltered ? "No matching samples" : "No samples"}
+								</EmptyTitle>
 								<EmptyDescription>
-									{term
-										? "No samples match your search."
+									{isFiltered
+										? "No samples match the current filters."
 										: "No samples have been created yet."}
 								</EmptyDescription>
+								{isFiltered && (
+									<EmptyContent>
+										<Button onClick={clearFilters} size="small">
+											Clear filters
+										</Button>
+									</EmptyContent>
+								)}
 							</Empty>
 						</Box>
 					) : (

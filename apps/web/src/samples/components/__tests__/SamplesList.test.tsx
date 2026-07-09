@@ -18,8 +18,9 @@ import {
 } from "@tests/fake/subtractions";
 import { createFakeUserNested } from "@tests/fake/user";
 import { at, renderWithRouter } from "@tests/setup";
+import nock from "nock";
 import { useState } from "react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import SamplesList from "../SamplesList";
 
 type SamplesListSearch = {
@@ -32,11 +33,13 @@ type SamplesListSearch = {
 
 /** Mirrors the route, which maps the ``labels`` search param onto ``filterLabels``. */
 function SamplesListHarness({
+	initialSearch = { term: "" },
 	labels,
 }: {
+	initialSearch?: SamplesListSearch;
 	labels: ReturnType<typeof createFakeLabel>[];
 }) {
-	const [search, setSearch] = useState<SamplesListSearch>({ term: "" });
+	const [search, setSearch] = useState<SamplesListSearch>(initialSearch);
 
 	function handleSetSearch(next: SamplesListSearch) {
 		setSearch((prev) => ({ ...prev, ...next }));
@@ -445,6 +448,72 @@ describe("<SamplesList />", () => {
 			for (const sample of samples) {
 				expect(within(dialog).getByText(sample.name)).toBeInTheDocument();
 			}
+		});
+	});
+
+	describe("empty state", () => {
+		beforeEach(() => {
+			// The default samples interceptor is already registered, and it would
+			// answer the request before any empty one added here.
+			nock.cleanAll();
+			mockApiGetSamples([]).persist();
+			mockApiGetHmms(createFakeHmmSearchResults());
+			mockApiListIndexes([createFakeIndexMinimal()]);
+			mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
+		});
+
+		afterEach(() => nock.cleanAll());
+
+		it("should say no samples exist when no filters are active", async () => {
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+
+			expect(await screen.findByText("No samples")).toBeInTheDocument();
+			expect(
+				screen.getByText("No samples have been created yet."),
+			).toBeInTheDocument();
+			expect(
+				screen.queryByRole("button", { name: "Clear filters" }),
+			).not.toBeInTheDocument();
+		});
+
+		it.each([
+			["a search term", { term: "ferret" }],
+			["a label", { labels: [1] }],
+			["a workflow", { workflows: ["pathoscope_bowtie:complete"] }],
+			["a user", { user: 1 }],
+		])("should say no samples match when %s is active", async (_, search) => {
+			await renderWithRouter(
+				<SamplesListHarness initialSearch={search} labels={labels} />,
+				path,
+			);
+
+			expect(
+				await screen.findByText("No matching samples"),
+			).toBeInTheDocument();
+			expect(
+				screen.getByText("No samples match the current filters."),
+			).toBeInTheDocument();
+			expect(screen.queryByText("No samples")).not.toBeInTheDocument();
+		});
+
+		it("should clear every filter when clear filters is clicked", async () => {
+			await renderWithRouter(
+				<SamplesListHarness
+					initialSearch={{ labels: [at(labels, 0).id], term: "ferret" }}
+					labels={labels}
+				/>,
+				path,
+			);
+
+			await userEvent.click(
+				await screen.findByRole("button", { name: "Clear filters" }),
+			);
+
+			expect(await screen.findByText("No samples")).toBeInTheDocument();
+			expect(screen.getByPlaceholderText("Sample name")).toHaveValue("");
+			expect(
+				screen.queryByRole("button", { name: "Remove user filter" }),
+			).not.toBeInTheDocument();
 		});
 	});
 });
