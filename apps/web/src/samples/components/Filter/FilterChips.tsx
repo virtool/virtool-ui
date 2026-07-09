@@ -5,7 +5,6 @@ import {
 	getWorkflowFilterStateDisplayName,
 	parseWorkflowFilters,
 } from "@samples/utils";
-import { X } from "lucide-react";
 import type { ReactNode } from "react";
 
 type FilterChipProps = {
@@ -16,17 +15,14 @@ type FilterChipProps = {
 
 function FilterChip({ children, onRemove, removeLabel }: FilterChipProps) {
 	return (
-		<span className="inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-2 py-0.5 text-sm">
+		<button
+			aria-label={removeLabel}
+			className="inline-flex cursor-pointer items-center gap-1.5 border-gray-300 border-l px-2 py-0.5 hover:bg-gray-100"
+			onClick={onRemove}
+			type="button"
+		>
 			{children}
-			<button
-				aria-label={removeLabel}
-				className="cursor-pointer text-gray-400 hover:text-gray-700"
-				onClick={onRemove}
-				type="button"
-			>
-				<X size={14} />
-			</button>
-		</span>
+		</button>
 	);
 }
 
@@ -37,10 +33,11 @@ type FilterChipGroupProps = {
 
 function FilterChipGroup({ children, title }: FilterChipGroupProps) {
 	return (
-		<div className="flex items-center gap-2">
-			<span className="font-medium text-gray-500 text-sm">{title}</span>
-			<span className="h-4 w-px bg-gray-300" />
-			<div className="flex flex-wrap items-center gap-1.5">{children}</div>
+		<div className="flex items-stretch overflow-hidden rounded-md border border-gray-300 bg-white text-sm">
+			<span className="flex items-center px-2 py-0.5 font-medium text-gray-500">
+				{title}
+			</span>
+			{children}
 		</div>
 	);
 }
@@ -105,7 +102,7 @@ export default function FilterChips({
 							removeLabel={`Remove ${label.name} label filter`}
 						>
 							<span
-								className="size-2.5 rounded-full"
+								className="size-2.5 shrink-0 rounded-full"
 								style={{
 									backgroundColor: label.color.startsWith("#")
 										? label.color
