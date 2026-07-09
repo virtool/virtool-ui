@@ -2,7 +2,6 @@ import { Dialog, DialogTitle } from "@base/Dialog";
 import QueryError from "@base/QueryError";
 import { useListHmms } from "@hmm/queries";
 import type { SampleMinimal } from "@samples/types";
-import { useEffect } from "react";
 import HMMAlert from "../HMMAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
 import CreateAnalysisForm from "./CreateAnalysisForm";
@@ -11,16 +10,14 @@ import { getCompatibleWorkflows } from "./workflows";
 
 type QuickAnalyzeProps = {
 	open: boolean;
-	/** A callback function to clear selected samples */
-	onClear: () => void;
 	setOpen: (open: boolean) => void;
 
-	/** The selected samples */
+	/** The samples to analyze */
 	samples: SampleMinimal[];
 };
 
 /**
- * A form for triggering quick analyses on selected samples
+ * A form for triggering quick analyses on the passed samples
  */
 export default function QuickAnalyze({
 	open,
@@ -28,13 +25,6 @@ export default function QuickAnalyze({
 	setOpen,
 }: QuickAnalyzeProps) {
 	const { data: hmms, isPending, isError } = useListHmms(1, 1, "");
-
-	// The dialog should close when all selected samples have been analyzed and deselected.
-	useEffect(() => {
-		if (open && samples.length === 0) {
-			setOpen(false);
-		}
-	}, [open, samples, setOpen]);
 
 	if (isError && !hmms) {
 		return (

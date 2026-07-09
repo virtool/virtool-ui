@@ -11,7 +11,7 @@ import { useListIndexes } from "@indexes/queries";
 import type { Label } from "@labels/types";
 import { useListSamples } from "@samples/queries";
 import type { SampleMinimal } from "@samples/types";
-import { intersectionWith, union, xor } from "es-toolkit/array";
+import { intersectionWith, xor } from "es-toolkit/array";
 import { FlaskConical, SearchX } from "lucide-react";
 import { useState } from "react";
 import SampleFilters from "./Filter/SampleFilters";
@@ -54,6 +54,16 @@ export default function SamplesList({
 
 	const [selected, setSelected] = useState<string[]>([]);
 	const [openQuickAnalyze, setOpenQuickAnalyze] = useState(false);
+	const [quickAnalyzeSamples, setQuickAnalyzeSamples] = useState<
+		SampleMinimal[]
+	>([]);
+
+	// Held separately from ``selected`` so a row's quick analyze can ignore the
+	// checkbox selection, and so the samples outlive the dialog's exit animation.
+	function openQuickAnalyzeFor(samples: SampleMinimal[]) {
+		setQuickAnalyzeSamples(samples);
+		setOpenQuickAnalyze(true);
+	}
 
 	if ((isErrorSamples || isErrorIndexes) && !samples) {
 		return <QueryError noun="samples" />;
@@ -65,15 +75,15 @@ export default function SamplesList({
 
 	const { items, page, page_count, total_count } = samples;
 
+	const selectedSamples = intersectionWith(
+		items,
+		selected,
+		(item, id) => item.id === id,
+	);
+
 	function renderRow(item: SampleMinimal) {
 		function handleSelect() {
 			setSelected(xor(selected, [item.id]));
-		}
-
-		function selectOnQuickAnalyze() {
-			if (!selected.includes(item.id)) {
-				setSelected(union(selected, [item.id]));
-			}
 		}
 
 		return (
@@ -82,8 +92,7 @@ export default function SamplesList({
 				sample={item}
 				checked={selected.includes(item.id)}
 				handleSelect={handleSelect}
-				selectOnQuickAnalyze={selectOnQuickAnalyze}
-				setOpenQuickAnalyze={setOpenQuickAnalyze}
+				onQuickAnalyze={() => openQuickAnalyzeFor([item])}
 			/>
 		);
 	}
@@ -92,13 +101,8 @@ export default function SamplesList({
 		<>
 			<QuickAnalyze
 				open={openQuickAnalyze}
-				onClear={() => setSelected([])}
 				setOpen={setOpenQuickAnalyze}
-				samples={intersectionWith(
-					items,
-					selected,
-					(item, id) => item.id === id,
-				)}
+				samples={quickAnalyzeSamples}
 			/>
 			<div
 				className="grid gap-4"
@@ -115,7 +119,7 @@ export default function SamplesList({
 					<SampleToolbar
 						selected={selected}
 						onClear={() => setSelected([])}
-						setOpenQuickAnalyze={setOpenQuickAnalyze}
+						onQuickAnalyze={() => openQuickAnalyzeFor(selectedSamples)}
 						term={term}
 						onChange={(e) => setSearch({ term: e.target.value })}
 					/>
@@ -151,14 +155,7 @@ export default function SamplesList({
 					)}
 				</div>
 				{selected.length ? (
-					<SampleLabels
-						labels={labels}
-						selectedSamples={intersectionWith(
-							items,
-							selected,
-							(item, id) => item.id === id,
-						)}
-					/>
+					<SampleLabels labels={labels} selectedSamples={selectedSamples} />
 				) : (
 					<SampleFilters
 						labels={labels}
