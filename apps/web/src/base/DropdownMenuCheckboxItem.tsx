@@ -1,4 +1,3 @@
-import { cn } from "@app/utils";
 import { Check, Minus } from "lucide-react";
 import { DropdownMenu } from "radix-ui";
 import { type ComponentPropsWithoutRef, forwardRef } from "react";
@@ -20,8 +19,6 @@ const DropdownMenuCheckboxItem = forwardRef<
 	{ checked, children, className, color = "gray", ...props },
 	ref,
 ) {
-	const isIndeterminate = checked === "indeterminate";
-
 	return (
 		<DropdownMenu.CheckboxItem
 			ref={ref}
@@ -29,19 +26,12 @@ const DropdownMenuCheckboxItem = forwardRef<
 			className={getDropdownMenuItemClassName(color, className)}
 			{...props}
 		>
-			<span
-				className={cn(
-					"border-2 flex items-center justify-center rounded shrink-0 size-4",
-					checked === false
-						? "border-gray-300"
-						: "bg-blue-600 border-blue-600 text-white",
-				)}
-			>
+			<span className="flex items-center justify-center shrink-0 size-4">
 				<DropdownMenu.ItemIndicator>
-					{isIndeterminate ? (
-						<Minus className="size-3" strokeWidth={3} />
+					{checked === "indeterminate" ? (
+						<Minus className="size-3.5" strokeWidth={3} />
 					) : (
-						<Check className="size-3" strokeWidth={3} />
+						<Check className="size-3.5" strokeWidth={3} />
 					)}
 				</DropdownMenu.ItemIndicator>
 			</span>
