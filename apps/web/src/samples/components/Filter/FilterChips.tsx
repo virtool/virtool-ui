@@ -1,4 +1,10 @@
+import { getWorkflowDisplayName } from "@app/utils";
 import type { Label } from "@labels/types";
+import {
+	formatWorkflowFilter,
+	getWorkflowFilterStateDisplayName,
+	parseWorkflowFilters,
+} from "@samples/utils";
 import { X } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -49,8 +55,14 @@ type FilterChipsProps = {
 	/** Deselects a single label. */
 	onRemoveLabel: (labelId: number) => void;
 
+	/** Deselects a single ``workflow:state`` filter. */
+	onRemoveWorkflow: (value: string) => void;
+
 	/** Selected label IDs. */
 	selectedLabels: number[];
+
+	/** Selected ``workflow:state`` filters. */
+	selectedWorkflows: string[];
 
 	/** The active search term. */
 	term: string;
@@ -63,12 +75,15 @@ export default function FilterChips({
 	labels,
 	onClearTerm,
 	onRemoveLabel,
+	onRemoveWorkflow,
 	selectedLabels,
+	selectedWorkflows,
 	term,
 }: FilterChipsProps) {
 	const selected = labels.filter((label) => selectedLabels.includes(label.id));
+	const workflows = parseWorkflowFilters(selectedWorkflows);
 
-	if (!term && selected.length === 0) {
+	if (!term && selected.length === 0 && workflows.length === 0) {
 		return null;
 	}
 
@@ -100,6 +115,27 @@ export default function FilterChips({
 							{label.name}
 						</FilterChip>
 					))}
+				</FilterChipGroup>
+			)}
+			{workflows.length > 0 && (
+				<FilterChipGroup title="Workflows">
+					{workflows.map(({ state, workflow }) => {
+						const workflowName = getWorkflowDisplayName(workflow);
+						const stateName = getWorkflowFilterStateDisplayName(state);
+
+						return (
+							<FilterChip
+								key={formatWorkflowFilter({ state, workflow })}
+								onRemove={() =>
+									onRemoveWorkflow(formatWorkflowFilter({ state, workflow }))
+								}
+								removeLabel={`Remove ${workflowName} ${stateName} filter`}
+							>
+								<span className="text-gray-500">{workflowName}</span>
+								{stateName}
+							</FilterChip>
+						);
+					})}
 				</FilterChipGroup>
 			)}
 		</div>

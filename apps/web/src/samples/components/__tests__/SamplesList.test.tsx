@@ -119,7 +119,9 @@ describe("<SamplesList />", () => {
 
 			await userEvent.click(screen.getByRole("button", { name: "Labels" }));
 			await userEvent.click(
-				await screen.findByRole("menuitem", { name: new RegExp(label.name) }),
+				await screen.findByRole("menuitemcheckbox", {
+					name: new RegExp(label.name),
+				}),
 			);
 
 			expect(
@@ -140,7 +142,9 @@ describe("<SamplesList />", () => {
 
 			await userEvent.click(screen.getByRole("button", { name: "Labels" }));
 			await userEvent.click(
-				await screen.findByRole("menuitem", { name: new RegExp(label.name) }),
+				await screen.findByRole("menuitemcheckbox", {
+					name: new RegExp(label.name),
+				}),
 			);
 			expect(
 				await screen.findByRole("button", { name: removeChipName }),
@@ -165,6 +169,79 @@ describe("<SamplesList />", () => {
 				await screen.findByRole("button", { name: "Clear search term" }),
 			).toBeInTheDocument();
 			expect(screen.getByText("Search")).toBeInTheDocument();
+		});
+	});
+
+	describe("workflow filtering", () => {
+		it("should show a chip for a workflow state selected in the dropdown", async () => {
+			mockApiGetSamples(samples);
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("button", { name: "Workflows" }));
+
+			const item = await screen.findByRole("menuitemcheckbox", {
+				name: "Pathoscope Complete",
+			});
+			expect(item).toHaveAttribute("aria-checked", "false");
+
+			await userEvent.click(item);
+
+			expect(
+				await screen.findByRole("button", {
+					name: "Remove Pathoscope Complete filter",
+				}),
+			).toBeInTheDocument();
+		});
+
+		it("should keep the menu open and check both states toggled for one workflow", async () => {
+			mockApiGetSamples(samples);
+			mockApiGetSamples(samples);
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("button", { name: "Workflows" }));
+
+			await userEvent.click(
+				await screen.findByRole("menuitemcheckbox", {
+					name: "Nuvs In progress",
+				}),
+			);
+			await userEvent.click(
+				screen.getByRole("menuitemcheckbox", { name: "Nuvs Complete" }),
+			);
+
+			expect(
+				screen.getByRole("menuitemcheckbox", { name: "Nuvs In progress" }),
+			).toHaveAttribute("aria-checked", "true");
+			expect(
+				screen.getByRole("menuitemcheckbox", { name: "Nuvs Complete" }),
+			).toHaveAttribute("aria-checked", "true");
+		});
+
+		it("should remove every workflow chip when the dropdown is cleared", async () => {
+			mockApiGetSamples(samples);
+			mockApiGetSamples(samples);
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			const removeChipName = "Remove Pathoscope Not analyzed filter";
+
+			await userEvent.click(screen.getByRole("button", { name: "Workflows" }));
+			await userEvent.click(
+				await screen.findByRole("menuitemcheckbox", {
+					name: "Pathoscope Not analyzed",
+				}),
+			);
+			expect(
+				await screen.findByRole("button", { name: removeChipName }),
+			).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("menuitem", { name: "Clear" }));
+
+			expect(
+				screen.queryByRole("button", { name: removeChipName }),
+			).not.toBeInTheDocument();
 		});
 	});
 

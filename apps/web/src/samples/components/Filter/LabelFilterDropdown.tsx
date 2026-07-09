@@ -1,9 +1,10 @@
 import Dropdown from "@base/Dropdown";
 import DropdownButton from "@base/DropdownButton";
+import DropdownMenuCheckboxItem from "@base/DropdownMenuCheckboxItem";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
 import type { Label } from "@labels/types";
-import { Check, Tag } from "lucide-react";
+import { Tag } from "lucide-react";
 
 function getHexColor(color: string) {
 	return color.startsWith("#") ? color : `#${color}`;
@@ -44,29 +45,22 @@ export default function LabelFilterDropdown({
 						No labels have been created.
 					</p>
 				) : (
-					labels.map((label) => {
-						const isSelected = selected.includes(label.id);
-
-						return (
-							<DropdownMenuItem
-								className="flex items-center gap-2"
-								key={label.id}
-								// Keep the menu open so several labels can be toggled at once.
-								onSelect={(e) => {
-									e.preventDefault();
-									onToggle(label.id);
-								}}
-							>
-								<span
-									className="rounded-full shrink-0 size-3"
-									style={{ backgroundColor: getHexColor(label.color) }}
-								/>
-								<span className="flex-grow truncate">{label.name}</span>
-								<span className="text-gray-400 text-sm">{label.count}</span>
-								{isSelected && <Check className="text-blue-600" size={16} />}
-							</DropdownMenuItem>
-						);
-					})
+					labels.map((label) => (
+						<DropdownMenuCheckboxItem
+							checked={selected.includes(label.id)}
+							key={label.id}
+							onCheckedChange={() => onToggle(label.id)}
+							// Keep the menu open so several labels can be toggled at once.
+							onSelect={(e) => e.preventDefault()}
+						>
+							<span
+								className="rounded-full shrink-0 size-3"
+								style={{ backgroundColor: getHexColor(label.color) }}
+							/>
+							<span className="flex-grow truncate">{label.name}</span>
+							<span className="text-gray-400 text-sm">{label.count}</span>
+						</DropdownMenuCheckboxItem>
+					))
 				)}
 				{selected.length > 0 && (
 					<DropdownMenuItem

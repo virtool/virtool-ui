@@ -15,7 +15,6 @@ import { intersectionWith, xor } from "es-toolkit/array";
 import { FlaskConical, SearchX } from "lucide-react";
 import { useState } from "react";
 import FilterChips from "./Filter/FilterChips";
-import SampleFilters from "./Filter/SampleFilters";
 import SampleItem from "./Item/SampleItem";
 import SampleToolbar from "./SamplesToolbar";
 import SampleLabels from "./Sidebar/ManageLabels";
@@ -131,6 +130,7 @@ export default function SamplesList({
 						selected={selected}
 						onClear={() => setSelected([])}
 						onClearLabels={() => setSearch({ labels: [] })}
+						onClearWorkflows={() => setSearch({ workflows: [] })}
 						onQuickAnalyze={() =>
 							openQuickAnalyzeFor({
 								fromSelection: true,
@@ -140,7 +140,11 @@ export default function SamplesList({
 						onToggleLabel={(labelId) =>
 							setSearch({ labels: xor(filterLabels, [labelId]) })
 						}
+						onToggleWorkflow={(workflow) =>
+							setSearch({ workflows: xor(filterWorkflows, [workflow]) })
+						}
 						selectedLabels={filterLabels}
+						selectedWorkflows={filterWorkflows}
 						term={term}
 						onChange={(e) => setSearch({ term: e.target.value })}
 					/>
@@ -150,7 +154,11 @@ export default function SamplesList({
 						onRemoveLabel={(labelId) =>
 							setSearch({ labels: xor(filterLabels, [labelId]) })
 						}
+						onRemoveWorkflow={(workflow) =>
+							setSearch({ workflows: xor(filterWorkflows, [workflow]) })
+						}
 						selectedLabels={filterLabels}
+						selectedWorkflows={filterWorkflows}
 						term={term}
 					/>
 				</div>
@@ -184,13 +192,8 @@ export default function SamplesList({
 						/>
 					)}
 				</div>
-				{selected.length ? (
+				{selected.length > 0 && (
 					<SampleLabels labels={labels} selectedSamples={selectedSamples} />
-				) : (
-					<SampleFilters
-						selectedWorkflows={filterWorkflows}
-						onClickWorkflows={(workflows) => setSearch({ workflows })}
-					/>
 				)}
 			</div>
 		</>

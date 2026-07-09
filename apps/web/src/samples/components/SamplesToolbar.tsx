@@ -5,6 +5,7 @@ import Toolbar from "@base/Toolbar";
 import type { Label } from "@labels/types";
 import type { ChangeEvent } from "react";
 import LabelFilterDropdown from "./Filter/LabelFilterDropdown";
+import WorkflowFilterDropdown from "./Filter/WorkflowFilterDropdown";
 import SampleSelectionToolbar from "./SampleSelectionToolbar";
 
 type SampleSearchToolbarProps = {
@@ -16,11 +17,20 @@ type SampleSearchToolbarProps = {
 	/** Deselects every label. */
 	onClearLabels: () => void;
 
+	/** Deselects every workflow state. */
+	onClearWorkflows: () => void;
+
 	/** Toggles a single label. */
 	onToggleLabel: (labelId: number) => void;
 
+	/** Toggles a single ``workflow:state`` filter. */
+	onToggleWorkflow: (value: string) => void;
+
 	/** Selected label IDs. */
 	selectedLabels: number[];
+
+	/** Selected ``workflow:state`` filters. */
+	selectedWorkflows: string[];
 
 	term: string;
 };
@@ -29,8 +39,11 @@ function SampleSearchToolbar({
 	labels,
 	onChange,
 	onClearLabels,
+	onClearWorkflows,
 	onToggleLabel,
+	onToggleWorkflow,
 	selectedLabels,
+	selectedWorkflows,
 	term,
 }: SampleSearchToolbarProps) {
 	const { hasPermission: canCreate } =
@@ -50,6 +63,11 @@ function SampleSearchToolbar({
 				onClear={onClearLabels}
 				onToggle={onToggleLabel}
 				selected={selectedLabels}
+			/>
+			<WorkflowFilterDropdown
+				onClear={onClearWorkflows}
+				onToggle={onToggleWorkflow}
+				selected={selectedWorkflows}
 			/>
 			{canCreate && (
 				<LinkButton color="blue" to="/samples/create">
@@ -79,10 +97,13 @@ export default function SampleToolbar({
 	selected,
 	onClear,
 	onClearLabels,
+	onClearWorkflows,
 	onChange,
 	onQuickAnalyze,
 	onToggleLabel,
+	onToggleWorkflow,
 	selectedLabels,
+	selectedWorkflows,
 	term,
 }: SampleToolbarProps) {
 	return selected.length ? (
@@ -96,8 +117,11 @@ export default function SampleToolbar({
 			labels={labels}
 			onChange={onChange}
 			onClearLabels={onClearLabels}
+			onClearWorkflows={onClearWorkflows}
 			onToggleLabel={onToggleLabel}
+			onToggleWorkflow={onToggleWorkflow}
 			selectedLabels={selectedLabels}
+			selectedWorkflows={selectedWorkflows}
 			term={term}
 		/>
 	);
