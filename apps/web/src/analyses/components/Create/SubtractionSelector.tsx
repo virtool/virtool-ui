@@ -30,7 +30,7 @@ export default function SubtractionSelector({
 	}
 
 	return (
-		<div className="mb-8">
+		<div className="mb-6">
 			<MultiSelectComboBox<SubtractionOption>
 				label="Subtractions"
 				items={results}

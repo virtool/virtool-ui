@@ -24,14 +24,14 @@ export default function WorkflowSelector({
 	onChange,
 }: WorkflowSelectorProps) {
 	return (
-		<div>
+		<div className="mb-6">
 			<CreateAnalysisFieldTitle>Workflow</CreateAnalysisFieldTitle>
 			<RadioGroup
 				aria-label="Workflow"
 				value={selected}
 				onValueChange={onChange}
 			>
-				<BoxGroup>
+				<BoxGroup className="mb-0">
 					{workflows.map((workflow) => (
 						<BoxGroupSection
 							key={workflow.id}

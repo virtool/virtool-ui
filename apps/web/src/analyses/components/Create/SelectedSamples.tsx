@@ -25,7 +25,7 @@ export function SelectedSamples({
 	samples,
 }: SelectedSamplesProps) {
 	return (
-		<>
+		<div className="mb-6">
 			<CreateAnalysisFieldTitle>
 				{fromSelection ? (
 					<>
@@ -36,7 +36,7 @@ export function SelectedSamples({
 				)}
 			</CreateAnalysisFieldTitle>
 			<div
-				className={cn("border", "border-gray-300", "mb-2", "rounded-sm", {
+				className={cn("border", "border-gray-300", "rounded-sm", {
 					"max-h-32 overflow-y-scroll": fromSelection,
 				})}
 			>
@@ -46,6 +46,6 @@ export function SelectedSamples({
 					</BoxGroupSection>
 				))}
 			</div>
-		</>
+		</div>
 	);
 }

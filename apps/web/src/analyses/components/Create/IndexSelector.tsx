@@ -77,7 +77,7 @@ export default function IndexSelector({
 	));
 
 	return (
-		<div className="mb-8">
+		<div>
 			<CreateAnalysisFieldTitle>Reference</CreateAnalysisFieldTitle>
 			{indexes.length ? (
 				<Select value={selected} onValueChange={onChange}>
@@ -90,7 +90,7 @@ export default function IndexSelector({
 					<SelectContent>{indexItems}</SelectContent>
 				</Select>
 			) : (
-				<Box>
+				<Box className="mb-0">
 					<Empty className="py-12">
 						<EmptyMedia className="text-gray-400">
 							<Library size={40} strokeWidth={1.5} />
