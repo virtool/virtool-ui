@@ -1,6 +1,10 @@
 import { cn } from "@app/utils";
 import React from "react";
-import { inputBaseClasses, inputFocusClasses } from "./styles";
+import {
+	inputBaseClasses,
+	inputFocusClasses,
+	inputHeightClass,
+} from "./styles";
 
 export interface InputSimpleProps
 	extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -15,6 +19,7 @@ const InputSimple = React.forwardRef<HTMLInputElement, InputSimpleProps>(
 				ref={ref}
 				className={cn(
 					inputBaseClasses,
+					inputHeightClass,
 					inputFocusClasses,
 					"read-only:bg-gray-100",
 					className,

@@ -31,7 +31,7 @@ export default function AdministratorRoleSelect({
 				id={id}
 				placeholder="Select administrator role"
 			/>
-			<SelectContent position="popper" align="start">
+			<SelectContent>
 				{roles.map((role) => (
 					<SelectItem
 						value={role.id}

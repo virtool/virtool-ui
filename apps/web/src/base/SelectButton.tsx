@@ -2,6 +2,8 @@ import { cn } from "@app/utils";
 import Icon from "@base/Icon";
 import type { LucideIcon } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
+import type { AriaAttributes } from "react";
+import { inputFocusClasses, inputHeightClass } from "./styles";
 
 type SelectButtonProps = {
 	placeholder?: string;
@@ -9,6 +11,8 @@ type SelectButtonProps = {
 	icon: LucideIcon;
 	id?: string;
 	"aria-label"?: string;
+	/** Marks the trigger invalid, turning its border and focus ring red */
+	"aria-invalid"?: AriaAttributes["aria-invalid"];
 };
 
 export default function SelectButton({
@@ -17,14 +21,21 @@ export default function SelectButton({
 	className,
 	id,
 	"aria-label": ariaLabel,
+	"aria-invalid": ariaInvalid,
 }: SelectButtonProps) {
 	return (
 		<SelectPrimitive.Trigger
+			aria-invalid={ariaInvalid}
 			aria-label={ariaLabel}
 			className={cn(
-				"flex justify-between items-center px-2.5 py-1.5 bg-white border border-gray-300 rounded font-medium capitalize [&_svg]:ml-1",
+				"flex justify-between items-center px-2.5 bg-white border rounded font-medium capitalize [&_svg]:ml-1",
+				inputHeightClass,
+				inputFocusClasses,
+				"data-[placeholder]:text-gray-400",
+				"aria-invalid:border-red-500 aria-invalid:focus-visible:border-red-500 aria-invalid:focus-visible:ring-2 aria-invalid:focus-visible:ring-red-500/50",
 				className,
 			)}
+			data-slot="select-trigger"
 			id={id}
 		>
 			<SelectPrimitive.Value placeholder={placeholder} />

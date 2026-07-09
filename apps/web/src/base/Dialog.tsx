@@ -1,6 +1,13 @@
 import { cn } from "@app/utils";
 import { Dialog as DialogPrimitive } from "radix-ui";
-import type { ReactElement, ReactNode } from "react";
+import { type ReactElement, type ReactNode, useRef } from "react";
+
+/**
+ * Whether a viewport point falls within a rectangle, inclusive of its edges.
+ */
+function isPointWithinRect(x: number, y: number, rect: DOMRect): boolean {
+	return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+}
 
 export const Dialog = DialogPrimitive.Root;
 export const DialogClose = DialogPrimitive.Close;
@@ -39,10 +46,28 @@ export function DialogContent({
 	className,
 	size,
 }: DialogContentProps) {
+	const contentRef = useRef<HTMLDivElement>(null);
+
 	return (
 		<DialogPrimitive.Portal>
 			<DialogOverlay />
 			<DialogPrimitive.Content
+				ref={contentRef}
+				onPointerDownOutside={(event) => {
+					// An open popover-style child (e.g. a Radix Select) sets
+					// pointer-events:none on this content while it is open, so a
+					// press on the dialog's own body falls through to the
+					// full-screen overlay and reads as an outside press that would
+					// close the dialog. A genuine outside press lands beyond the
+					// content box, so ignore any press whose coordinates are inside
+					// it — the child popover closes, the dialog stays open.
+					const { clientX, clientY } = event.detail.originalEvent;
+					const rect = contentRef.current?.getBoundingClientRect();
+
+					if (rect && isPointWithinRect(clientX, clientY, rect)) {
+						event.preventDefault();
+					}
+				}}
 				className={cn(
 					"data-[state=open]:animate-contentShow",
 					"data-[state=closed]:animate-contentHide",
