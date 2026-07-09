@@ -19,6 +19,13 @@ import SampleItem from "./Item/SampleItem";
 import SampleToolbar from "./SamplesToolbar";
 import SampleLabels from "./Sidebar/ManageLabels";
 
+type QuickAnalyzeTarget = {
+	/** Whether the samples came from the list selection rather than a single sample */
+	fromSelection: boolean;
+
+	samples: SampleMinimal[];
+};
+
 type SamplesListProps = {
 	labels: Label[];
 	filterLabels?: number[];
@@ -54,14 +61,13 @@ export default function SamplesList({
 
 	const [selected, setSelected] = useState<string[]>([]);
 	const [openQuickAnalyze, setOpenQuickAnalyze] = useState(false);
-	const [quickAnalyzeSamples, setQuickAnalyzeSamples] = useState<
-		SampleMinimal[]
-	>([]);
+	const [quickAnalyzeTarget, setQuickAnalyzeTarget] =
+		useState<QuickAnalyzeTarget>({ fromSelection: false, samples: [] });
 
 	// Held separately from ``selected`` so a row's quick analyze can ignore the
 	// checkbox selection, and so the samples outlive the dialog's exit animation.
-	function openQuickAnalyzeFor(samples: SampleMinimal[]) {
-		setQuickAnalyzeSamples(samples);
+	function openQuickAnalyzeFor(target: QuickAnalyzeTarget) {
+		setQuickAnalyzeTarget(target);
 		setOpenQuickAnalyze(true);
 	}
 
@@ -92,7 +98,9 @@ export default function SamplesList({
 				sample={item}
 				checked={selected.includes(item.id)}
 				handleSelect={handleSelect}
-				onQuickAnalyze={() => openQuickAnalyzeFor([item])}
+				onQuickAnalyze={() =>
+					openQuickAnalyzeFor({ fromSelection: false, samples: [item] })
+				}
 			/>
 		);
 	}
@@ -100,9 +108,10 @@ export default function SamplesList({
 	return (
 		<>
 			<QuickAnalyze
+				fromSelection={quickAnalyzeTarget.fromSelection}
 				open={openQuickAnalyze}
 				setOpen={setOpenQuickAnalyze}
-				samples={quickAnalyzeSamples}
+				samples={quickAnalyzeTarget.samples}
 			/>
 			<div
 				className="grid gap-4"
@@ -119,7 +128,12 @@ export default function SamplesList({
 					<SampleToolbar
 						selected={selected}
 						onClear={() => setSelected([])}
-						onQuickAnalyze={() => openQuickAnalyzeFor(selectedSamples)}
+						onQuickAnalyze={() =>
+							openQuickAnalyzeFor({
+								fromSelection: true,
+								samples: selectedSamples,
+							})
+						}
 						term={term}
 						onChange={(e) => setSearch({ term: e.target.value })}
 					/>

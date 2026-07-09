@@ -7,17 +7,33 @@ import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 type SelectedSamplesProps = {
 	/** The samples selected for the open quick analysis dialog. */
 	samples: SampleMinimal[];
+
+	/**
+	 * Whether the samples came from the list selection rather than a single
+	 * sample. A selection is titled in the plural and counted, even when only one
+	 * sample is in it.
+	 */
+	fromSelection: boolean;
 };
 
 /**
  * Displays the sample selected for the analyses that will be started by the open
  * quick analysis dialog.
  */
-export function SelectedSamples({ samples }: SelectedSamplesProps) {
+export function SelectedSamples({
+	fromSelection,
+	samples,
+}: SelectedSamplesProps) {
 	return (
 		<>
 			<CreateAnalysisFieldTitle>
-				Selected Samples <Badge>{samples.length}</Badge>
+				{fromSelection ? (
+					<>
+						Selected Samples <Badge>{samples.length}</Badge>
+					</>
+				) : (
+					"Selected Sample"
+				)}
 			</CreateAnalysisFieldTitle>
 			<div
 				className={cn(

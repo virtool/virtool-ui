@@ -126,6 +126,41 @@ describe("<SamplesList />", () => {
 			).not.toBeInTheDocument();
 		});
 
+		it("should title a single clicked sample without a count", async () => {
+			await renderWithRouter(<SamplesList labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("button", {
+					name: `Quick analyze ${at(samples, 0).name}`,
+				}),
+			);
+
+			const dialog = await screen.findByRole("dialog");
+
+			expect(within(dialog).getByText("Selected Sample")).toBeInTheDocument();
+			expect(
+				within(dialog).queryByText("Selected Samples"),
+			).not.toBeInTheDocument();
+		});
+
+		it("should count a single-sample selection from the toolbar", async () => {
+			await renderWithRouter(<SamplesList labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: `Select ${at(samples, 0).name}` }),
+			);
+			await userEvent.click(
+				screen.getByRole("button", { name: "Quick Analyze" }),
+			);
+
+			const dialog = await screen.findByRole("dialog");
+
+			const title = within(dialog).getByText("Selected Samples");
+			expect(within(title).getByText("1")).toBeInTheDocument();
+		});
+
 		it("should leave the existing selection intact after a row is analyzed", async () => {
 			await renderWithRouter(<SamplesList labels={labels} />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
@@ -170,6 +205,9 @@ describe("<SamplesList />", () => {
 			);
 
 			const dialog = await screen.findByRole("dialog");
+
+			const title = within(dialog).getByText("Selected Samples");
+			expect(within(title).getByText("2")).toBeInTheDocument();
 
 			for (const sample of samples) {
 				expect(within(dialog).getByText(sample.name)).toBeInTheDocument();

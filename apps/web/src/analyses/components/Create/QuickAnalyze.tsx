@@ -9,6 +9,9 @@ import { SelectedSamples } from "./SelectedSamples";
 import { getCompatibleWorkflows } from "./workflows";
 
 type QuickAnalyzeProps = {
+	/** Whether the samples came from the list selection rather than a single sample */
+	fromSelection: boolean;
+
 	open: boolean;
 	setOpen: (open: boolean) => void;
 
@@ -20,6 +23,7 @@ type QuickAnalyzeProps = {
  * A form for triggering quick analyses on the passed samples
  */
 export default function QuickAnalyze({
+	fromSelection,
 	open,
 	samples,
 	setOpen,
@@ -51,7 +55,7 @@ export default function QuickAnalyze({
 				<DialogTitle>Quick Analyze</DialogTitle>
 				<HMMAlert installed={Boolean(hmms.status.task?.complete)} />
 
-				<SelectedSamples samples={samples} />
+				<SelectedSamples fromSelection={fromSelection} samples={samples} />
 
 				<CreateAnalysisForm
 					compatibleWorkflows={compatibleWorkflows}
