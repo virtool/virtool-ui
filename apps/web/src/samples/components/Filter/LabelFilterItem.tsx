@@ -20,13 +20,14 @@ export default function LabelFilterItem({
 	return (
 		<BaseSampleLabel
 			as="button"
+			type="button"
 			color={color}
 			className={cn(
 				"cursor-pointer my-1 mr-2 last:mr-0",
 				"hover:bg-gray-50 hover:border-blue-300",
-				"focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-				pressed && "border-blue-500 ring-2 ring-blue-200",
-				pressed && "bg-blue-50",
+				"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1",
+				pressed &&
+					"border-gray-400 bg-gray-300 hover:bg-gray-300 hover:border-gray-400",
 			)}
 			aria-pressed={pressed}
 			onClick={() => onClick(id)}
