@@ -10,8 +10,8 @@ type SelectedSamplesProps = {
 
 	/**
 	 * Whether the samples came from the list selection rather than a single
-	 * sample. A selection is titled in the plural and counted, even when only one
-	 * sample is in it.
+	 * sample. A selection is titled in the plural, counted even when only one
+	 * sample is in it, and scrolls once it outgrows the dialog.
 	 */
 	fromSelection: boolean;
 };
@@ -36,14 +36,9 @@ export function SelectedSamples({
 				)}
 			</CreateAnalysisFieldTitle>
 			<div
-				className={cn(
-					"border",
-					"border-gray-300",
-					"mb-2",
-					"max-h-32",
-					"overflow-y-scroll",
-					"rounded-sm",
-				)}
+				className={cn("border", "border-gray-300", "mb-2", "rounded-sm", {
+					"max-h-32 overflow-y-scroll": fromSelection,
+				})}
 			>
 				{samples.map(({ id, name }) => (
 					<BoxGroupSection key={id} disabled>
