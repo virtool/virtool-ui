@@ -41,7 +41,7 @@ export default function SampleListHeader({
 	const selectedCount = selectedSamples.length;
 
 	return (
-		<div className="flex items-center gap-4 bg-gray-50 px-4 py-2.5 text-sm font-medium text-gray-600">
+		<div className="flex items-center gap-4 bg-gray-50 px-4 h-14 text-sm font-medium text-gray-600">
 			<Checkbox
 				ariaLabel="Select all samples"
 				checked={checked}
