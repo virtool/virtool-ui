@@ -1,8 +1,13 @@
-import { cn } from "@app/utils";
-import { buttonVariants } from "@base/buttonVariants";
-import Popover from "@base/Popover";
+import Dropdown from "@base/Dropdown";
+import DropdownButton from "@base/DropdownButton";
+import DropdownMenuContent from "@base/DropdownMenuContent";
+import DropdownMenuItem from "@base/DropdownMenuItem";
 import type { Label } from "@labels/types";
 import { Check, Tag } from "lucide-react";
+
+function getHexColor(color: string) {
+	return color.startsWith("#") ? color : `#${color}`;
+}
 
 type LabelFilterDropdownProps = {
 	/** All available labels. */
@@ -28,69 +33,50 @@ export default function LabelFilterDropdown({
 	selected,
 }: LabelFilterDropdownProps) {
 	return (
-		<Popover
-			align="end"
-			trigger={
-				<button className={cn(buttonVariants(), "gap-2")} type="button">
-					<Tag size={16} />
-					Labels
-					{selected.length > 0 && (
-						<span className="bg-gray-400 font-semibold px-1.5 rounded-full text-sm text-white">
-							{selected.length}
-						</span>
-					)}
-				</button>
-			}
-		>
-			<div className="flex items-center justify-between border-b border-gray-200 px-3 py-2">
-				<span className="font-medium text-sm text-gray-600">
-					Filter by label
-				</span>
-				<button
-					className="cursor-pointer text-blue-600 text-sm hover:underline disabled:cursor-default disabled:text-gray-400 disabled:no-underline"
-					disabled={selected.length === 0}
-					onClick={onClear}
-					type="button"
-				>
-					Clear
-				</button>
-			</div>
-			<div className="max-h-72 overflow-y-auto py-1">
+		<Dropdown>
+			<DropdownButton className="gap-2">
+				<Tag size={16} />
+				Labels
+			</DropdownButton>
+			<DropdownMenuContent className="max-h-80 overflow-y-auto w-64 py-1">
 				{labels.length === 0 ? (
-					<p className="px-3 py-2 text-gray-500 text-sm">
+					<p className="px-4 py-2.5 text-gray-500 text-sm">
 						No labels have been created.
 					</p>
 				) : (
 					labels.map((label) => {
-						const pressed = selected.includes(label.id);
+						const isSelected = selected.includes(label.id);
 
 						return (
-							<button
-								aria-pressed={pressed}
-								className={cn(
-									"flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left",
-									"hover:bg-gray-50 focus-visible:bg-gray-50 focus-visible:outline-none",
-								)}
+							<DropdownMenuItem
+								className="flex items-center gap-2"
 								key={label.id}
-								onClick={() => onToggle(label.id)}
-								type="button"
+								// Keep the menu open so several labels can be toggled at once.
+								onSelect={(e) => {
+									e.preventDefault();
+									onToggle(label.id);
+								}}
 							>
 								<span
-									className="size-3 shrink-0 rounded-full"
-									style={{
-										backgroundColor: label.color.startsWith("#")
-											? label.color
-											: `#${label.color}`,
-									}}
+									className="rounded-full shrink-0 size-3"
+									style={{ backgroundColor: getHexColor(label.color) }}
 								/>
 								<span className="flex-grow truncate">{label.name}</span>
 								<span className="text-gray-400 text-sm">{label.count}</span>
-								{pressed && <Check className="text-blue-600" size={16} />}
-							</button>
+								{isSelected && <Check className="text-blue-600" size={16} />}
+							</DropdownMenuItem>
 						);
 					})
 				)}
-			</div>
-		</Popover>
+				{selected.length > 0 && (
+					<DropdownMenuItem
+						className="border-gray-200 border-t mt-1 text-blue-600"
+						onSelect={onClear}
+					>
+						Clear
+					</DropdownMenuItem>
+				)}
+			</DropdownMenuContent>
+		</Dropdown>
 	);
 }

@@ -119,7 +119,7 @@ describe("<SamplesList />", () => {
 
 			await userEvent.click(screen.getByRole("button", { name: "Labels" }));
 			await userEvent.click(
-				screen.getByRole("button", { name: new RegExp(label.name) }),
+				await screen.findByRole("menuitem", { name: new RegExp(label.name) }),
 			);
 
 			expect(
@@ -140,13 +140,13 @@ describe("<SamplesList />", () => {
 
 			await userEvent.click(screen.getByRole("button", { name: "Labels" }));
 			await userEvent.click(
-				screen.getByRole("button", { name: new RegExp(label.name) }),
+				await screen.findByRole("menuitem", { name: new RegExp(label.name) }),
 			);
 			expect(
 				await screen.findByRole("button", { name: removeChipName }),
 			).toBeInTheDocument();
 
-			await userEvent.click(screen.getByRole("button", { name: "Clear" }));
+			await userEvent.click(screen.getByRole("menuitem", { name: "Clear" }));
 
 			expect(
 				screen.queryByRole("button", { name: removeChipName }),
