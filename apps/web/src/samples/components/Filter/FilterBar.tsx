@@ -2,6 +2,7 @@ import { cn, getWorkflowDisplayName } from "@app/utils";
 import Dropdown from "@base/Dropdown";
 import DropdownMenuTrigger from "@base/DropdownMenuTrigger";
 import type { Label } from "@labels/types";
+import { getHexColor } from "@samples/labels";
 import {
 	formatWorkflowFilter,
 	getWorkflowFilterStateDisplayName,
@@ -76,7 +77,10 @@ function FilterGroup({ children, icon, menu, title }: FilterGroupProps) {
 	}
 
 	return (
-		<Dropdown>
+		// Non-modal so the group's chips stay visible and clickable while its menu
+		// is open. A modal menu would `aria-hidden` them along with the rest of the
+		// page.
+		<Dropdown modal={false}>
 			{shell}
 			{menu}
 		</Dropdown>
@@ -138,7 +142,9 @@ export default function FilterBar({
 	selectedWorkflows,
 	term,
 }: FilterBarProps) {
-	const { data: users } = useListUsers();
+	// Shares a query key with the menu's own list, so this resolves from the cache
+	// rather than issuing a second request.
+	const { data: users, isPending: isPendingUsers } = useListUsers();
 
 	const selected = labels.filter((label) => selectedLabels.includes(label.id));
 	const workflows = parseWorkflowFilters(selectedWorkflows);
@@ -168,7 +174,12 @@ export default function FilterBar({
 			>
 				{selectedUser !== undefined && (
 					<FilterChip onRemove={onClearUser} removeLabel="Remove user filter">
-						{selectedHandle ?? `User ${selectedUser}`}
+						{selectedHandle ??
+							(isPendingUsers ? (
+								<span className="h-3 w-16 animate-pulse rounded-sm bg-gray-200" />
+							) : (
+								`User ${selectedUser}`
+							))}
 					</FilterChip>
 				)}
 			</FilterGroup>
@@ -192,11 +203,7 @@ export default function FilterBar({
 					>
 						<span
 							className="size-2.5 shrink-0 rounded-full"
-							style={{
-								backgroundColor: label.color.startsWith("#")
-									? label.color
-									: `#${label.color}`,
-							}}
+							style={{ backgroundColor: getHexColor(label.color) }}
 						/>
 						{label.name}
 					</FilterChip>
