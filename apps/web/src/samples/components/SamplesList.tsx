@@ -16,8 +16,8 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useListIndexes } from "@indexes/queries";
 import type { Label } from "@labels/types";
 import { useListSamples } from "@samples/queries";
-import type { SampleMinimal } from "@samples/types";
-import { difference, intersectionWith, union, xor } from "es-toolkit/array";
+import type { Sample, SampleMinimal } from "@samples/types";
+import { xor } from "es-toolkit/array";
 import { FlaskConical, SearchX } from "lucide-react";
 import { useState } from "react";
 import FilterBar from "./Filter/FilterBar";
@@ -93,7 +93,9 @@ export default function SamplesList({
 	const { isPending: isPendingIndexes, isError: isErrorIndexes } =
 		useListIndexes({ ready: true });
 
-	const [selected, setSelected] = useState<string[]>([]);
+	// The samples themselves are held, not just their ids: the selection outlives
+	// the page they were checked on, and the bulk actions need their labels.
+	const [selected, setSelected] = useState<SampleMinimal[]>([]);
 	const [openQuickAnalyze, setOpenQuickAnalyze] = useState(false);
 	const [quickAnalyzeTarget, setQuickAnalyzeTarget] =
 		useState<QuickAnalyzeTarget>({ fromSelection: false, samples: [] });
@@ -149,42 +151,67 @@ export default function SamplesList({
 		});
 	}
 
-	const selectedSamples = intersectionWith(
-		items,
-		selected,
-		(item, id) => item.id === id,
+	const itemsById = new Map(items.map((item) => [item.id, item]));
+	const selectedIds = new Set(selected.map((sample) => sample.id));
+
+	// The bulk actions apply to the whole selection, including samples checked on
+	// pages that are no longer fetched. Those still on this page are re-read from
+	// the fetched page so a refetch doesn't leave the actions holding a stale copy.
+	const selectedSamples = selected.map(
+		(sample) => itemsById.get(sample.id) ?? sample,
 	);
 
-	// Select-all reflects and acts on the current page only. The selection
-	// itself survives pagination, so ids from other pages are left alone.
-	const pageIds = items.map((item) => item.id);
+	// Select-all reflects and acts on the current page only. The selection itself
+	// survives pagination, so samples from other pages are left alone.
+	const pageSelectedCount = items.filter((item) =>
+		selectedIds.has(item.id),
+	).length;
 
 	function getSelectAllState(): boolean | "indeterminate" {
-		if (selectedSamples.length === 0) {
+		if (pageSelectedCount === 0) {
 			return false;
 		}
 
-		return selectedSamples.length === items.length ? true : "indeterminate";
+		return pageSelectedCount === items.length ? true : "indeterminate";
 	}
 
 	function handleSelectAll() {
 		setSelected(
-			selectedSamples.length === 0
-				? union(selected, pageIds)
-				: difference(selected, pageIds),
+			pageSelectedCount === items.length
+				? selected.filter((sample) => !itemsById.has(sample.id))
+				: [...selected, ...items.filter((item) => !selectedIds.has(item.id))],
+		);
+	}
+
+	// A selected sample from an unfetched page won't be refreshed by invalidating
+	// the list, so its labels are taken from the update response instead.
+	function handleLabelsUpdated(updated: Sample[]) {
+		const labelsById = new Map(
+			updated.map((sample) => [sample.id, sample.labels]),
+		);
+
+		setSelected((previous) =>
+			previous.map((sample) => {
+				const labels = labelsById.get(sample.id);
+				return labels ? { ...sample, labels } : sample;
+			}),
 		);
 	}
 
 	function renderRow(item: SampleMinimal) {
 		function handleSelect() {
-			setSelected(xor(selected, [item.id]));
+			setSelected(
+				selectedIds.has(item.id)
+					? selected.filter((sample) => sample.id !== item.id)
+					: [...selected, item],
+			);
 		}
 
 		return (
 			<SampleItem
 				key={item.id}
 				sample={item}
-				checked={selected.includes(item.id)}
+				checked={selectedIds.has(item.id)}
 				handleSelect={handleSelect}
 				onQuickAnalyze={() =>
 					openQuickAnalyzeFor({ fromSelection: false, samples: [item] })
@@ -272,6 +299,7 @@ export default function SamplesList({
 									checked={getSelectAllState()}
 									found={found_count}
 									labels={labels}
+									onLabelsUpdated={handleLabelsUpdated}
 									onSelectAll={handleSelectAll}
 									onQuickAnalyze={() =>
 										openQuickAnalyzeFor({

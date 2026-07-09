@@ -2,7 +2,7 @@ import Button from "@base/Button";
 import Checkbox from "@base/Checkbox";
 import Icon from "@base/Icon";
 import type { Label } from "@labels/types";
-import type { SampleMinimal } from "@samples/types";
+import type { Sample, SampleMinimal } from "@samples/types";
 import { AreaChart } from "lucide-react";
 import SampleLabelsSelector from "./SampleLabelsSelector";
 
@@ -15,6 +15,9 @@ type SampleListHeaderProps = {
 
 	/** Every label that exists */
 	labels: Label[];
+
+	/** Callback receiving the patched samples after a bulk label edit */
+	onLabelsUpdated: (samples: Sample[]) => void;
 
 	/** Callback to select or deselect every sample on the page */
 	onSelectAll: () => void;
@@ -34,6 +37,7 @@ export default function SampleListHeader({
 	checked,
 	found,
 	labels,
+	onLabelsUpdated,
 	onSelectAll,
 	onQuickAnalyze,
 	selectedSamples,
@@ -57,6 +61,7 @@ export default function SampleListHeader({
 				<div className="ml-auto flex items-center gap-2">
 					<SampleLabelsSelector
 						labels={labels}
+						onLabelsUpdated={onLabelsUpdated}
 						selectedSamples={selectedSamples}
 					/>
 					<Button color="blue" size="small" onClick={onQuickAnalyze}>

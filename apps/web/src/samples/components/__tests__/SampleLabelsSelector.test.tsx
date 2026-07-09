@@ -4,7 +4,7 @@ import { createFakeSampleMinimal } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import type { ComponentProps } from "react";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import SampleLabelsSelector from "../SampleLabelsSelector";
 
 /**
@@ -29,6 +29,7 @@ describe("<SampleLabelsSelector>", () => {
 
 	beforeEach(() => {
 		props = {
+			onLabelsUpdated: vi.fn(),
 			selectedSamples: [],
 			labels: [
 				{ color: "#C4B5FD", count: 0, description: "", id: 1, name: "test" },
@@ -38,13 +39,16 @@ describe("<SampleLabelsSelector>", () => {
 		};
 	});
 
-	it("should render nothing when no labels exist", async () => {
+	it("should offer a path to create labels when none exist", async () => {
 		props.labels = [];
 		await renderWithRouter(<SampleLabelsSelector {...props} />);
 
+		await userEvent.click(screen.getByRole("button", { name: "Edit labels" }));
+
+		expect(await screen.findByText("No labels found.")).toBeInTheDocument();
 		expect(
-			screen.queryByRole("button", { name: "Edit labels" }),
-		).not.toBeInTheDocument();
+			screen.getByRole("menuitem", { name: "Manage labels" }),
+		).toHaveAttribute("href", "/samples/labels");
 	});
 
 	it("should list every label and a link to manage them", async () => {

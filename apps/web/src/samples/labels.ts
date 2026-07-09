@@ -24,12 +24,6 @@ export function getSelectedLabels(samples: SampleMinimal[]): SampleLabel[] {
 			return [];
 		}
 
-		return [
-			{
-				...first,
-				count: labels.length,
-				allLabeled: labels.length === samples.length,
-			},
-		];
+		return [{ ...first, allLabeled: labels.length === samples.length }];
 	});
 }

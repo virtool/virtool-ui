@@ -9,13 +9,16 @@ import Input from "@base/Input";
 import type { Label } from "@labels/types";
 import { getHexColor, getSelectedLabels } from "@samples/labels";
 import { useUpdateLabel } from "@samples/queries";
-import type { SampleMinimal } from "@samples/types";
+import type { Sample, SampleMinimal } from "@samples/types";
 import { Tag } from "lucide-react";
 import { useState } from "react";
 
 type SampleLabelsSelectorProps = {
 	/** Every label that exists */
 	labels: Label[];
+
+	/** Called with the patched samples once a label has been added or removed */
+	onLabelsUpdated: (samples: Sample[]) => void;
 
 	/** The samples the label edits apply to */
 	selectedSamples: SampleMinimal[];
@@ -26,15 +29,15 @@ type SampleLabelsSelectorProps = {
  */
 export default function SampleLabelsSelector({
 	labels,
+	onLabelsUpdated,
 	selectedSamples,
 }: SampleLabelsSelectorProps) {
 	const selectedLabels = getSelectedLabels(selectedSamples);
-	const onUpdateLabel = useUpdateLabel(selectedLabels, selectedSamples);
+	const { mutate: updateLabel } = useUpdateLabel(
+		selectedLabels,
+		selectedSamples,
+	);
 	const [term, setTerm] = useState("");
-
-	if (labels.length === 0) {
-		return null;
-	}
 
 	const matches = labels.filter((label) =>
 		label.name.toLowerCase().includes(term.toLowerCase()),
@@ -77,7 +80,9 @@ export default function SampleLabelsSelector({
 						<DropdownMenuCheckboxItem
 							checked={getChecked(label.id)}
 							key={label.id}
-							onCheckedChange={() => onUpdateLabel(label.id)}
+							onCheckedChange={() =>
+								updateLabel(label.id, { onSuccess: onLabelsUpdated })
+							}
 							// Keep the menu open so several labels can be toggled at once.
 							onSelect={(e) => e.preventDefault()}
 						>

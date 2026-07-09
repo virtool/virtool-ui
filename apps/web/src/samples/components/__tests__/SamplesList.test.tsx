@@ -58,6 +58,44 @@ function SamplesListHarness({
 	);
 }
 
+/**
+ * Serves a one-sample page for each of two pages, so a selection can be made on
+ * one page and asserted on from the other.
+ *
+ * @returns The sample on each page, in page order
+ */
+function mockApiGetSamplePages() {
+	const documents = [
+		createFakeSampleMinimal({ name: "Page One Sample" }),
+		createFakeSampleMinimal({ name: "Page Two Sample" }),
+	] as const;
+
+	nock.cleanAll();
+
+	documents.forEach((document, index) => {
+		const page = index + 1;
+
+		nock("http://localhost")
+			.persist()
+			.get("/api/samples")
+			.query((query) => Number(query.page ?? 1) === page)
+			.reply(200, {
+				page,
+				page_count: documents.length,
+				per_page: 1,
+				total_count: documents.length,
+				found_count: documents.length,
+				documents: [document],
+			});
+	});
+
+	mockApiGetHmms(createFakeHmmSearchResults());
+	mockApiListIndexes([createFakeIndexMinimal()]);
+	mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
+
+	return documents;
+}
+
 describe("<SamplesList />", () => {
 	let samples: ReturnType<typeof createFakeSampleMinimal>[];
 	let labels: ReturnType<typeof createFakeLabel>[];
@@ -79,6 +117,10 @@ describe("<SamplesList />", () => {
 		mockApiListIndexes([createFakeIndexMinimal()]);
 		mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
 	});
+
+	// The paged sample mocks are persistent, so they have to be torn down rather
+	// than left to be overwritten by the next test's interceptors.
+	afterEach(() => nock.cleanAll());
 
 	it("should render correctly", async () => {
 		await renderWithRouter(<SamplesList labels={labels} />, path);
@@ -382,7 +424,7 @@ describe("<SamplesList />", () => {
 			}
 		});
 
-		it("should clear the selection when some samples are already selected", async () => {
+		it("should complete the selection when only some samples are selected", async () => {
 			await renderWithRouter(<SamplesList labels={labels} />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -392,6 +434,24 @@ describe("<SamplesList />", () => {
 			await userEvent.click(
 				screen.getByRole("checkbox", { name: "Select all samples" }),
 			);
+
+			for (const sample of samples) {
+				expect(
+					screen.getByRole("checkbox", { name: `Select ${sample.name}` }),
+				).toBeChecked();
+			}
+		});
+
+		it("should clear the selection when every sample is already selected", async () => {
+			await renderWithRouter(<SamplesList labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			const selectAll = screen.getByRole("checkbox", {
+				name: "Select all samples",
+			});
+
+			await userEvent.click(selectAll);
+			await userEvent.click(selectAll);
 
 			for (const sample of samples) {
 				expect(
@@ -418,6 +478,32 @@ describe("<SamplesList />", () => {
 				screen.getByRole("checkbox", { name: `Select ${at(samples, 1).name}` }),
 			);
 			expect(selectAll).toBeChecked();
+		});
+
+		it("should leave samples selected on other pages alone", async () => {
+			const [first, second] = mockApiGetSamplePages();
+
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: `Select ${first.name}` }),
+			);
+			await userEvent.click(screen.getByRole("button", { name: "2" }));
+
+			expect(await screen.findByText(second.name)).toBeInTheDocument();
+
+			// Selecting and clearing this page must not touch the page-one selection.
+			const selectAll = screen.getByRole("checkbox", {
+				name: "Select all samples",
+			});
+			expect(selectAll).not.toBeChecked();
+
+			await userEvent.click(selectAll);
+			expect(screen.getByText("2 selected")).toBeInTheDocument();
+
+			await userEvent.click(selectAll);
+			expect(screen.getByText("1 selected")).toBeInTheDocument();
 		});
 
 		it("should clear the selection when a filter changes", async () => {
@@ -519,6 +605,32 @@ describe("<SamplesList />", () => {
 			for (const sample of samples) {
 				expect(within(dialog).getByText(sample.name)).toBeInTheDocument();
 			}
+		});
+
+		it("should include samples selected on an earlier page", async () => {
+			const [first, second] = mockApiGetSamplePages();
+
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: `Select ${first.name}` }),
+			);
+			await userEvent.click(screen.getByRole("button", { name: "2" }));
+
+			expect(await screen.findByText(second.name)).toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: `Select ${second.name}` }),
+			);
+			await userEvent.click(screen.getByRole("button", { name: "Analyze" }));
+
+			const dialog = await screen.findByRole("dialog");
+
+			const title = within(dialog).getByText("Selected Samples");
+			expect(within(title).getByText("2")).toBeInTheDocument();
+			expect(within(dialog).getByText(first.name)).toBeInTheDocument();
+			expect(within(dialog).getByText(second.name)).toBeInTheDocument();
 		});
 
 		it("should not show the quick analyze button until samples are selected", async () => {
