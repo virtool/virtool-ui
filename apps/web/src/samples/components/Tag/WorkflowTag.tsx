@@ -3,7 +3,6 @@ import Loader from "@base/Loader";
 import type { WorkflowState } from "@samples/types";
 import { CheckCircle } from "lucide-react";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
-import { WorkflowLabelIcon } from "./WorkflowLabelIcon";
 
 type SampleItemWorkflowTagProps = {
 	displayName: string;
@@ -23,13 +22,13 @@ export default function WorkflowTag({
 }: SampleItemWorkflowTagProps) {
 	return (
 		<BaseWorkflowTag>
-			<WorkflowLabelIcon>
+			<span className="w-3.5">
 				{workflowState === "pending" ? (
 					<Loader size="10px" color="gray" />
 				) : (
 					<Icon icon={CheckCircle} size={14} />
 				)}
-			</WorkflowLabelIcon>
+			</span>
 			<span>{displayName}</span>
 		</BaseWorkflowTag>
 	);

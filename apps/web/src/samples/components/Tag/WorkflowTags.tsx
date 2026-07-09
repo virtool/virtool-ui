@@ -1,7 +1,6 @@
 import { getWorkflowDisplayName } from "@app/utils";
 import Link from "@base/Link";
 import type { SampleWorkflows } from "@samples/types";
-import type { ReactElement } from "react";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import WorkflowTag from "./WorkflowTag";
 
@@ -21,38 +20,30 @@ type WorkflowTagsProps = {
  * @returns The workflow tags for a sample.
  */
 export default function WorkflowTags({ id, workflows }: WorkflowTagsProps) {
-	const workflowTags = Object.entries(workflows).reduce<ReactElement[]>(
-		(tags, [key, value]) => {
-			if (value === "complete" || value === "pending") {
-				tags.push(
-					<WorkflowTag
-						key={key}
-						displayName={getWorkflowDisplayName(key)}
-						workflowState={value}
-					/>,
-				);
-			}
-			return tags;
-		},
-		[],
-	);
+	const workflowTags = Object.entries(workflows)
+		.filter(([, value]) => value === "complete" || value === "pending")
+		.map(([key, value]) => (
+			<WorkflowTag
+				key={key}
+				displayName={getWorkflowDisplayName(key)}
+				workflowState={value}
+			/>
+		));
 	return (
-		<div className="flex items-center">
-			<div className="flex items-stretch">
-				<BaseWorkflowTag
-					as={Link}
-					className="bg-purple-400 border-purple-400 border-l-0"
-					to={`/samples/${id}/analyses`}
-				>
-					View
+		<div className="flex items-stretch">
+			<BaseWorkflowTag
+				as={Link}
+				className="bg-purple-400 border-purple-400 border-l-0"
+				to={`/samples/${id}/analyses`}
+			>
+				View
+			</BaseWorkflowTag>
+			{!workflowTags.length && (
+				<BaseWorkflowTag className="bg-purple-50 border border-purple-400 text-purple-900">
+					No Analyses
 				</BaseWorkflowTag>
-				{!workflowTags.length && (
-					<BaseWorkflowTag className="bg-purple-50 border border-purple-400 text-purple-900 gap-3 [&_span:last-child]:ml-0">
-						No Analyses
-					</BaseWorkflowTag>
-				)}
-				{workflowTags}
-			</div>
+			)}
+			{workflowTags}
 		</div>
 	);
 }
