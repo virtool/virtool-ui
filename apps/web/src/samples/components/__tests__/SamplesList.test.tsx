@@ -27,7 +27,7 @@ type SamplesListSearch = {
 	labels?: number[];
 	page?: number;
 	term?: string;
-	user?: number;
+	users?: number[];
 	workflows?: string[];
 };
 
@@ -52,7 +52,7 @@ function SamplesListHarness({
 			page={search.page}
 			setSearch={handleSetSearch}
 			term={search.term}
-			user={search.user}
+			users={search.users}
 			workflows={search.workflows}
 		/>
 	);
@@ -308,15 +308,46 @@ describe("<SamplesList />", () => {
 			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
-			await userEvent.click(screen.getByRole("button", { name: "User" }));
+			await userEvent.click(screen.getByRole("button", { name: "Users" }));
 			await userEvent.click(
-				await screen.findByRole("menuitemradio", { name: at(users, 0).handle }),
+				await screen.findByRole("menuitemcheckbox", {
+					name: at(users, 0).handle,
+				}),
 			);
 
 			const chip = await screen.findByRole("button", {
-				name: "Remove user filter",
+				name: `Remove ${at(users, 0).handle} user filter`,
 			});
 			expect(chip).toHaveTextContent(at(users, 0).handle);
+		});
+
+		it("should show a chip for each of several users selected at once", async () => {
+			mockApiGetSamples(samples);
+			mockApiGetSamples(samples);
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("button", { name: "Users" }));
+			await userEvent.click(
+				await screen.findByRole("menuitemcheckbox", {
+					name: at(users, 0).handle,
+				}),
+			);
+			// The menu stays open, so the second user is toggled without reopening it.
+			await userEvent.click(
+				screen.getByRole("menuitemcheckbox", { name: at(users, 1).handle }),
+			);
+
+			expect(
+				await screen.findByRole("button", {
+					name: `Remove ${at(users, 0).handle} user filter`,
+				}),
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole("button", {
+					name: `Remove ${at(users, 1).handle} user filter`,
+				}),
+			).toBeInTheDocument();
 		});
 
 		it("should list the logged-in user first, tagged as You", async () => {
@@ -327,9 +358,9 @@ describe("<SamplesList />", () => {
 			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
-			await userEvent.click(screen.getByRole("button", { name: "User" }));
+			await userEvent.click(screen.getByRole("button", { name: "Users" }));
 
-			const items = await screen.findAllByRole("menuitemradio");
+			const items = await screen.findAllByRole("menuitemcheckbox");
 			expect(items.map((item) => item.textContent)).toEqual([
 				`${self.handle}You`,
 				at(users, 0).handle,
@@ -340,41 +371,42 @@ describe("<SamplesList />", () => {
 			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
-			await userEvent.click(screen.getByRole("button", { name: "User" }));
+			await userEvent.click(screen.getByRole("button", { name: "Users" }));
 			await userEvent.type(
 				await screen.findByLabelText("Filter users"),
 				at(users, 1).handle,
 			);
 
 			expect(
-				screen.queryByRole("menuitemradio", { name: at(users, 0).handle }),
+				screen.queryByRole("menuitemcheckbox", { name: at(users, 0).handle }),
 			).not.toBeInTheDocument();
 			expect(
-				screen.getByRole("menuitemradio", { name: at(users, 1).handle }),
+				screen.getByRole("menuitemcheckbox", { name: at(users, 1).handle }),
 			).toBeInTheDocument();
 		});
 
-		it("should remove the chip when the dropdown is cleared", async () => {
+		it("should remove every chip when the dropdown is cleared", async () => {
 			mockApiGetSamples(samples);
 			mockApiGetSamples(samples);
 			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
-			await userEvent.click(screen.getByRole("button", { name: "User" }));
+			const removeChipName = `Remove ${at(users, 0).handle} user filter`;
+
+			await userEvent.click(screen.getByRole("button", { name: "Users" }));
 			await userEvent.click(
-				await screen.findByRole("menuitemradio", { name: at(users, 0).handle }),
+				await screen.findByRole("menuitemcheckbox", {
+					name: at(users, 0).handle,
+				}),
 			);
 			expect(
-				await screen.findByRole("button", { name: "Remove user filter" }),
+				await screen.findByRole("button", { name: removeChipName }),
 			).toBeInTheDocument();
 
-			await userEvent.click(screen.getByRole("button", { name: "User" }));
-			await userEvent.click(
-				await screen.findByRole("menuitem", { name: "Clear" }),
-			);
+			await userEvent.click(screen.getByRole("menuitem", { name: "Clear" }));
 
 			expect(
-				screen.queryByRole("button", { name: "Remove user filter" }),
+				screen.queryByRole("button", { name: removeChipName }),
 			).not.toBeInTheDocument();
 		});
 	});
@@ -709,7 +741,7 @@ describe("<SamplesList />", () => {
 			["a search term", { term: "ferret" }],
 			["a label", { labels: [1] }],
 			["a workflow", { workflows: ["pathoscope_bowtie:complete"] }],
-			["a user", { user: 1 }],
+			["a user", { users: [1] }],
 		])("should say no samples match when %s is active", async (_, search) => {
 			await renderWithRouter(
 				<SamplesListHarness initialSearch={search} labels={labels} />,

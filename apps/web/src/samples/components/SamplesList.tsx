@@ -40,13 +40,13 @@ function getFilterKey(
 	term: string,
 	labels: number[],
 	workflows: string[],
-	user?: number,
+	users: number[],
 ): string {
 	return JSON.stringify([
 		term,
 		[...labels].sort((a, b) => a - b),
 		[...workflows].sort(),
-		user,
+		[...users].sort((a, b) => a - b),
 	]);
 }
 
@@ -58,11 +58,11 @@ type SamplesListProps = {
 		labels?: number[];
 		page?: number;
 		term?: string;
-		user?: number;
+		users?: number[];
 		workflows?: string[];
 	}) => void;
 	term?: string;
-	user?: number;
+	users?: number[];
 	workflows?: string[];
 };
 
@@ -75,7 +75,7 @@ export default function SamplesList({
 	page: urlPage = 1,
 	setSearch = () => {},
 	term = "",
-	user: filterUser,
+	users: filterUsers = [],
 	workflows: filterWorkflows = [],
 }: SamplesListProps) {
 	const {
@@ -88,7 +88,7 @@ export default function SamplesList({
 		term,
 		filterLabels,
 		filterWorkflows,
-		filterUser,
+		filterUsers,
 	);
 	const { isPending: isPendingIndexes, isError: isErrorIndexes } =
 		useListIndexes({ ready: true });
@@ -107,7 +107,7 @@ export default function SamplesList({
 		term,
 		filterLabels,
 		filterWorkflows,
-		filterUser,
+		filterUsers,
 	);
 	const [previousFilterKey, setPreviousFilterKey] = useState(filterKey);
 
@@ -139,14 +139,14 @@ export default function SamplesList({
 		Boolean(term) ||
 		filterLabels.length > 0 ||
 		filterWorkflows.length > 0 ||
-		filterUser !== undefined;
+		filterUsers.length > 0;
 
 	function clearFilters() {
 		setSearch({
 			labels: [],
 			page: 1,
 			term: "",
-			user: undefined,
+			users: [],
 			workflows: [],
 		});
 	}
@@ -246,17 +246,19 @@ export default function SamplesList({
 						labels={labels}
 						onClearLabels={() => setSearch({ labels: [] })}
 						onClearTerm={() => setSearch({ term: "" })}
-						onClearUser={() => setSearch({ user: undefined })}
+						onClearUsers={() => setSearch({ users: [] })}
 						onClearWorkflows={() => setSearch({ workflows: [] })}
-						onSelectUser={(userId) => setSearch({ user: userId })}
 						onToggleLabel={(labelId) =>
 							setSearch({ labels: xor(filterLabels, [labelId]) })
+						}
+						onToggleUser={(userId) =>
+							setSearch({ users: xor(filterUsers, [userId]) })
 						}
 						onToggleWorkflow={(workflow) =>
 							setSearch({ workflows: xor(filterWorkflows, [workflow]) })
 						}
 						selectedLabels={filterLabels}
-						selectedUser={filterUser}
+						selectedUsers={filterUsers}
 						selectedWorkflows={filterWorkflows}
 						term={term}
 					/>

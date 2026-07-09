@@ -1,31 +1,31 @@
 import { useFetchAccount } from "@account/queries";
+import DropdownMenuCheckboxItem from "@base/DropdownMenuCheckboxItem";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
-import DropdownMenuRadioGroup from "@base/DropdownMenuRadioGroup";
-import DropdownMenuRadioItem from "@base/DropdownMenuRadioItem";
 import DropdownMenuSeparator from "@base/DropdownMenuSeparator";
 import Input from "@base/Input";
 import QueryError from "@base/QueryError";
 import { useListUsers } from "@users/queries";
+import type { UserNested } from "@users/types";
 import { useState } from "react";
 
 type UserFilterMenuProps = {
-	/** Clears the selected user. */
+	/** Deselects every user. */
 	onClear: () => void;
 
-	/** Selects the user that samples are filtered by. */
-	onSelect: (userId: number) => void;
+	/** Toggles a single user. */
+	onToggle: (userId: number) => void;
 
-	/** The id of the selected user. */
-	selected?: number;
+	/** The ids of the selected users. */
+	selected: number[];
 };
 
 /**
- * A dropdown menu for selecting the user whose samples are shown
+ * A dropdown menu for selecting the users whose samples are shown
  */
 export default function UserFilterMenu({
 	onClear,
-	onSelect,
+	onToggle,
 	selected,
 }: UserFilterMenuProps) {
 	const { data: users, isError, isPending } = useListUsers();
@@ -40,6 +40,23 @@ export default function UserFilterMenu({
 	// the alphabetical list.
 	const self = matches.find((user) => user.id === account?.id);
 	const others = matches.filter((user) => user.id !== account?.id);
+
+	function renderUser(user: UserNested, isSelf: boolean) {
+		return (
+			<DropdownMenuCheckboxItem
+				checked={selected.includes(user.id)}
+				key={user.id}
+				onCheckedChange={() => onToggle(user.id)}
+				// Keep the menu open so several users can be toggled at once.
+				onSelect={(e) => e.preventDefault()}
+			>
+				<span className="flex-grow truncate">{user.handle}</span>
+				{isSelf && (
+					<span className="shrink-0 pl-2 text-gray-500 text-sm">You</span>
+				)}
+			</DropdownMenuCheckboxItem>
+		);
+	}
 
 	return (
 		<DropdownMenuContent className="w-64">
@@ -61,27 +78,17 @@ export default function UserFilterMenu({
 			) : matches.length === 0 ? (
 				<p className="px-2 py-1.5 text-gray-500 text-sm">No users found.</p>
 			) : (
-				<DropdownMenuRadioGroup
-					onValueChange={(value) => onSelect(Number(value))}
-					value={selected === undefined ? "" : String(selected)}
-				>
+				<>
 					{self && (
 						<>
-							<DropdownMenuRadioItem value={String(self.id)}>
-								<span className="flex-grow truncate">{self.handle}</span>
-								<span className="shrink-0 pl-2 text-gray-500 text-sm">You</span>
-							</DropdownMenuRadioItem>
+							{renderUser(self, true)}
 							{others.length > 0 && <DropdownMenuSeparator />}
 						</>
 					)}
-					{others.map((user) => (
-						<DropdownMenuRadioItem key={user.id} value={String(user.id)}>
-							<span className="flex-grow truncate">{user.handle}</span>
-						</DropdownMenuRadioItem>
-					))}
-				</DropdownMenuRadioGroup>
+					{others.map((user) => renderUser(user, false))}
+				</>
 			)}
-			{selected !== undefined && (
+			{selected.length > 0 && (
 				<>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem color="blue" onSelect={onClear}>

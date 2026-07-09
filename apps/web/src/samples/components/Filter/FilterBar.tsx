@@ -9,7 +9,7 @@ import {
 	parseWorkflowFilters,
 } from "@samples/utils";
 import { useListUsers } from "@users/queries";
-import { Search, Tag, User, Workflow } from "lucide-react";
+import { Search, Tag, Users, Workflow } from "lucide-react";
 import type { ReactNode } from "react";
 import LabelFilterMenu from "./LabelFilterMenu";
 import UserFilterMenu from "./UserFilterMenu";
@@ -97,8 +97,8 @@ type FilterBarProps = {
 	/** Clears the search term. */
 	onClearTerm: () => void;
 
-	/** Deselects the selected user. */
-	onClearUser: () => void;
+	/** Deselects every user. */
+	onClearUsers: () => void;
 
 	/** Deselects every workflow state. */
 	onClearWorkflows: () => void;
@@ -106,8 +106,8 @@ type FilterBarProps = {
 	/** Toggles a single label. */
 	onToggleLabel: (labelId: number) => void;
 
-	/** Selects the user whose samples are shown. */
-	onSelectUser: (userId: number) => void;
+	/** Toggles a single user. */
+	onToggleUser: (userId: number) => void;
 
 	/** Toggles a single ``workflow:state`` filter. */
 	onToggleWorkflow: (value: string) => void;
@@ -115,8 +115,8 @@ type FilterBarProps = {
 	/** Selected label IDs. */
 	selectedLabels: number[];
 
-	/** The id of the selected user. */
-	selectedUser?: number;
+	/** The ids of the selected users. */
+	selectedUsers: number[];
 
 	/** Selected ``workflow:state`` filters. */
 	selectedWorkflows: string[];
@@ -132,13 +132,13 @@ export default function FilterBar({
 	labels,
 	onClearLabels,
 	onClearTerm,
-	onClearUser,
+	onClearUsers,
 	onClearWorkflows,
-	onSelectUser,
 	onToggleLabel,
+	onToggleUser,
 	onToggleWorkflow,
 	selectedLabels,
-	selectedUser,
+	selectedUsers,
 	selectedWorkflows,
 	term,
 }: FilterBarProps) {
@@ -148,9 +148,7 @@ export default function FilterBar({
 
 	const selected = labels.filter((label) => selectedLabels.includes(label.id));
 	const workflows = parseWorkflowFilters(selectedWorkflows);
-	const selectedHandle = users?.find(
-		(user) => user.id === selectedUser,
-	)?.handle;
+	const handlesById = new Map(users?.map((user) => [user.id, user.handle]));
 
 	return (
 		<div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-3">
@@ -162,26 +160,34 @@ export default function FilterBar({
 				</FilterGroup>
 			)}
 			<FilterGroup
-				icon={<User size={14} />}
+				icon={<Users size={14} />}
 				menu={
 					<UserFilterMenu
-						onClear={onClearUser}
-						onSelect={onSelectUser}
-						selected={selectedUser}
+						onClear={onClearUsers}
+						onToggle={onToggleUser}
+						selected={selectedUsers}
 					/>
 				}
-				title="User"
+				title="Users"
 			>
-				{selectedUser !== undefined && (
-					<FilterChip onRemove={onClearUser} removeLabel="Remove user filter">
-						{selectedHandle ??
-							(isPendingUsers ? (
-								<span className="h-3 w-16 animate-pulse rounded-sm bg-gray-200" />
-							) : (
-								`User ${selectedUser}`
-							))}
-					</FilterChip>
-				)}
+				{selectedUsers.map((userId) => {
+					const handle = handlesById.get(userId);
+
+					return (
+						<FilterChip
+							key={userId}
+							onRemove={() => onToggleUser(userId)}
+							removeLabel={`Remove ${handle ?? `User ${userId}`} user filter`}
+						>
+							{handle ??
+								(isPendingUsers ? (
+									<span className="h-3 w-16 animate-pulse rounded-sm bg-gray-200" />
+								) : (
+									`User ${userId}`
+								))}
+						</FilterChip>
+					);
+				})}
 			</FilterGroup>
 			<FilterGroup
 				icon={<Tag size={14} />}
