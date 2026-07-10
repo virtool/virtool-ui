@@ -11,6 +11,7 @@ import {
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
+import { useListSelection } from "@base/useListSelection";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useListIndexes } from "@indexes/queries";
@@ -19,7 +20,7 @@ import { useListSamples } from "@samples/queries";
 import type { Sample, SampleMinimal } from "@samples/types";
 import { xor } from "es-toolkit/array";
 import { FlaskConical, SearchX } from "lucide-react";
-import { useState } from "react";
+import { type MouseEvent, useState } from "react";
 import FilterBar from "./Filter/FilterBar";
 import SampleItem from "./Item/SampleItem";
 import SampleListHeader from "./SampleListHeader";
@@ -94,27 +95,23 @@ export default function SamplesList({
 		useListIndexes({ ready: true });
 
 	// The samples themselves are held, not just their ids: the selection outlives
-	// the page they were checked on, and the bulk actions need their labels.
-	const [selected, setSelected] = useState<SampleMinimal[]>([]);
-	const [openQuickAnalyze, setOpenQuickAnalyze] = useState(false);
-	const [quickAnalyzeTarget, setQuickAnalyzeTarget] =
-		useState<QuickAnalyzeTarget>({ fromSelection: false, samples: [] });
-
-	// Selection survives pagination, but not a change to the filters: the ids
-	// would otherwise linger unseen and re-check themselves if the user paged
-	// back to them.
+	// the page they were checked on, and the bulk actions need their labels. It
+	// survives pagination but resets when the filters change (via ``resetKey``),
+	// otherwise samples would linger unseen and re-check themselves if the user
+	// paged back to them.
 	const filterKey = getFilterKey(
 		term,
 		filterLabels,
 		filterWorkflows,
 		filterUsers,
 	);
-	const [previousFilterKey, setPreviousFilterKey] = useState(filterKey);
-
-	if (previousFilterKey !== filterKey) {
-		setPreviousFilterKey(filterKey);
-		setSelected([]);
-	}
+	const selection = useListSelection<SampleMinimal>({
+		getKey: (sample) => sample.id,
+		resetKey: filterKey,
+	});
+	const [openQuickAnalyze, setOpenQuickAnalyze] = useState(false);
+	const [quickAnalyzeTarget, setQuickAnalyzeTarget] =
+		useState<QuickAnalyzeTarget>({ fromSelection: false, samples: [] });
 
 	// Held separately from ``selected`` so a row's quick analyze can ignore the
 	// checkbox selection, and so the samples outlive the dialog's exit animation.
@@ -152,36 +149,13 @@ export default function SamplesList({
 	}
 
 	const itemsById = new Map(items.map((item) => [item.id, item]));
-	const selectedIds = new Set(selected.map((sample) => sample.id));
 
 	// The bulk actions apply to the whole selection, including samples checked on
 	// pages that are no longer fetched. Those still on this page are re-read from
 	// the fetched page so a refetch doesn't leave the actions holding a stale copy.
-	const selectedSamples = selected.map(
+	const selectedSamples = selection.selected.map(
 		(sample) => itemsById.get(sample.id) ?? sample,
 	);
-
-	// Select-all reflects and acts on the current page only. The selection itself
-	// survives pagination, so samples from other pages are left alone.
-	const pageSelectedCount = items.filter((item) =>
-		selectedIds.has(item.id),
-	).length;
-
-	function getSelectAllState(): boolean | "indeterminate" {
-		if (pageSelectedCount === 0) {
-			return false;
-		}
-
-		return pageSelectedCount === items.length ? true : "indeterminate";
-	}
-
-	function handleSelectAll() {
-		setSelected(
-			pageSelectedCount === items.length
-				? selected.filter((sample) => !itemsById.has(sample.id))
-				: [...selected, ...items.filter((item) => !selectedIds.has(item.id))],
-		);
-	}
 
 	// A selected sample from an unfetched page won't be refreshed by invalidating
 	// the list, so its labels are taken from the update response instead.
@@ -190,7 +164,7 @@ export default function SamplesList({
 			updated.map((sample) => [sample.id, sample.labels]),
 		);
 
-		setSelected((previous) =>
+		selection.setSelected((previous) =>
 			previous.map((sample) => {
 				const labels = labelsById.get(sample.id);
 				return labels ? { ...sample, labels } : sample;
@@ -199,19 +173,18 @@ export default function SamplesList({
 	}
 
 	function renderRow(item: SampleMinimal) {
-		function handleSelect() {
-			setSelected(
-				selectedIds.has(item.id)
-					? selected.filter((sample) => sample.id !== item.id)
-					: [...selected, item],
-			);
+		function handleSelect(event: MouseEvent) {
+			selection.select(item, {
+				shiftKey: event.shiftKey,
+				visibleItems: items,
+			});
 		}
 
 		return (
 			<SampleItem
 				key={item.id}
 				sample={item}
-				checked={selectedIds.has(item.id)}
+				checked={selection.isSelected(item)}
 				handleSelect={handleSelect}
 				onQuickAnalyze={() =>
 					openQuickAnalyzeFor({ fromSelection: false, samples: [item] })
@@ -298,11 +271,11 @@ export default function SamplesList({
 							currentPage={urlPage}
 							header={
 								<SampleListHeader
-									checked={getSelectAllState()}
+									checked={selection.getVisibleState(items)}
 									found={found_count}
 									labels={labels}
 									onLabelsUpdated={handleLabelsUpdated}
-									onSelectAll={handleSelectAll}
+									onSelectAll={() => selection.toggleVisible(items)}
 									onQuickAnalyze={() =>
 										openQuickAnalyzeFor({
 											fromSelection: true,
