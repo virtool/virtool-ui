@@ -11,7 +11,7 @@ type CheckboxProps = {
 	labelComponent?: ReactNode;
 	disabled?: boolean;
 	id: string;
-	onClick?: (event: MouseEvent) => void;
+	onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 };
 
 function Checkbox({

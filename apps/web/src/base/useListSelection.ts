@@ -104,35 +104,39 @@ export function useListSelection<T>({
 		const end = Math.max(anchorIndex, clickedIndex);
 		const range = visibleItems.slice(start, end + 1);
 		const rangeKeys = new Set(range.map(getKey));
-		const shouldSelect = !selectedKeys.has(clickedKey);
 
 		setSelected((previous) => {
-			if (shouldSelect) {
-				const existingKeys = new Set(previous.map(getKey));
-				return [
-					...previous,
-					...range.filter((candidate) => !existingKeys.has(getKey(candidate))),
-				];
+			const previousKeys = new Set(previous.map(getKey));
+
+			if (previousKeys.has(clickedKey)) {
+				return previous.filter(
+					(candidate) => !rangeKeys.has(getKey(candidate)),
+				);
 			}
 
-			return previous.filter((candidate) => !rangeKeys.has(getKey(candidate)));
+			return [
+				...previous,
+				...range.filter((candidate) => !previousKeys.has(getKey(candidate))),
+			];
 		});
 	}
 
 	function toggleVisible(visibleItems: T[]) {
 		const visibleKeys = new Set(visibleItems.map(getKey));
-		const allSelected = visibleItems.every((item) =>
-			selectedKeys.has(getKey(item)),
-		);
 
-		setSelected((previous) =>
-			allSelected
+		setSelected((previous) => {
+			const previousKeys = new Set(previous.map(getKey));
+			const allSelected = visibleItems.every((item) =>
+				previousKeys.has(getKey(item)),
+			);
+
+			return allSelected
 				? previous.filter((item) => !visibleKeys.has(getKey(item)))
 				: [
 						...previous,
-						...visibleItems.filter((item) => !selectedKeys.has(getKey(item))),
-					],
-		);
+						...visibleItems.filter((item) => !previousKeys.has(getKey(item))),
+					];
+		});
 	}
 
 	function getVisibleState(visibleItems: T[]): boolean | "indeterminate" {

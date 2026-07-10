@@ -173,7 +173,7 @@ export default function SamplesList({
 	}
 
 	function renderRow(item: SampleMinimal) {
-		function handleSelect(event: MouseEvent) {
+		function handleSelect(event: MouseEvent<HTMLButtonElement>) {
 			selection.select(item, {
 				shiftKey: event.shiftKey,
 				visibleItems: items,

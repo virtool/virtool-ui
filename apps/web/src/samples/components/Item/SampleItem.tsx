@@ -18,7 +18,7 @@ type SampleItemProps = {
 	checked: boolean;
 
 	/** Callback to handle sample selection, receiving the checkbox click event */
-	handleSelect: (event: MouseEvent) => void;
+	handleSelect: (event: MouseEvent<HTMLButtonElement>) => void;
 
 	/** Callback to open a quick analysis scoped to this sample */
 	onQuickAnalyze: () => void;
