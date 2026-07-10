@@ -1,7 +1,7 @@
 import { cn } from "@app/utils";
 import { Check, Minus } from "lucide-react";
 import { Checkbox as CheckboxPrimitive } from "radix-ui";
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import Icon from "./Icon";
 
 type CheckboxProps = {
@@ -11,7 +11,7 @@ type CheckboxProps = {
 	labelComponent?: ReactNode;
 	disabled?: boolean;
 	id: string;
-	onClick?: () => void;
+	onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 };
 
 function Checkbox({

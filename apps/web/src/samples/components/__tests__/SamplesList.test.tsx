@@ -96,6 +96,25 @@ function mockApiGetSamplePages() {
 	return documents;
 }
 
+/**
+ * Serves a single page of named samples, so a contiguous range can be
+ * shift-selected within one page.
+ *
+ * @returns The sample documents, in page order
+ */
+function mockApiGetSampleRange(names: string[]) {
+	nock.cleanAll();
+
+	const documents = names.map((name) => createFakeSampleMinimal({ name }));
+
+	mockApiGetHmms(createFakeHmmSearchResults());
+	mockApiListIndexes([createFakeIndexMinimal()]);
+	mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
+	mockApiGetSamples(documents);
+
+	return documents;
+}
+
 describe("<SamplesList />", () => {
 	let samples: ReturnType<typeof createFakeSampleMinimal>[];
 	let labels: ReturnType<typeof createFakeLabel>[];
@@ -559,6 +578,116 @@ describe("<SamplesList />", () => {
 
 			expect(await screen.findByText("2 samples")).toBeInTheDocument();
 			expect(screen.queryByText("1 selected")).not.toBeInTheDocument();
+		});
+	});
+
+	describe("shift-click range select", () => {
+		function checkboxFor(name: string) {
+			return screen.getByRole("checkbox", { name: `Select ${name}` });
+		}
+
+		// A single user-event session is used per test so a held shift modifier
+		// carries across to the click; the default per-call helpers reset it.
+		function withShift(user: ReturnType<typeof userEvent.setup>) {
+			return async function shiftSelect(name: string) {
+				await user.keyboard("{Shift>}");
+				await user.click(checkboxFor(name));
+				await user.keyboard("{/Shift}");
+			};
+		}
+
+		async function renderRange(names: string[]) {
+			const documents = mockApiGetSampleRange(names);
+			await renderWithRouter(<SamplesList labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+			return documents;
+		}
+
+		const fourNames = [
+			"Range Sample 1",
+			"Range Sample 2",
+			"Range Sample 3",
+			"Range Sample 4",
+		];
+
+		it("should select a contiguous range when a row is shift-clicked", async () => {
+			const user = userEvent.setup();
+			const shiftSelect = withShift(user);
+			const range = await renderRange(fourNames);
+
+			await user.click(checkboxFor(at(range, 0).name));
+			await shiftSelect(at(range, 2).name);
+
+			expect(checkboxFor(at(range, 0).name)).toBeChecked();
+			expect(checkboxFor(at(range, 1).name)).toBeChecked();
+			expect(checkboxFor(at(range, 2).name)).toBeChecked();
+			expect(checkboxFor(at(range, 3).name)).not.toBeChecked();
+			expect(screen.getByText("3 selected")).toBeInTheDocument();
+		});
+
+		it("should select the same range regardless of click direction", async () => {
+			const user = userEvent.setup();
+			const shiftSelect = withShift(user);
+			const range = await renderRange(fourNames);
+
+			await user.click(checkboxFor(at(range, 2).name));
+			await shiftSelect(at(range, 0).name);
+
+			expect(checkboxFor(at(range, 0).name)).toBeChecked();
+			expect(checkboxFor(at(range, 1).name)).toBeChecked();
+			expect(checkboxFor(at(range, 2).name)).toBeChecked();
+			expect(checkboxFor(at(range, 3).name)).not.toBeChecked();
+		});
+
+		it("should deselect the range when the shift-clicked row was selected", async () => {
+			const user = userEvent.setup();
+			const shiftSelect = withShift(user);
+			const range = await renderRange(fourNames);
+
+			await user.click(checkboxFor(at(range, 0).name));
+			await shiftSelect(at(range, 3).name);
+			expect(screen.getByText("4 selected")).toBeInTheDocument();
+
+			await shiftSelect(at(range, 0).name);
+
+			for (const sample of range) {
+				expect(checkboxFor(sample.name)).not.toBeChecked();
+			}
+			expect(screen.getByText("4 samples")).toBeInTheDocument();
+		});
+
+		it("should anchor the range on the most recent shift-click", async () => {
+			const user = userEvent.setup();
+			const shiftSelect = withShift(user);
+			const range = await renderRange([...fourNames, "Range Sample 5"]);
+
+			await user.click(checkboxFor(at(range, 0).name));
+			await shiftSelect(at(range, 4).name);
+			await shiftSelect(at(range, 2).name);
+
+			expect(checkboxFor(at(range, 0).name)).toBeChecked();
+			expect(checkboxFor(at(range, 1).name)).toBeChecked();
+			expect(checkboxFor(at(range, 2).name)).not.toBeChecked();
+			expect(checkboxFor(at(range, 3).name)).not.toBeChecked();
+			expect(checkboxFor(at(range, 4).name)).not.toBeChecked();
+			expect(screen.getByText("2 selected")).toBeInTheDocument();
+		});
+
+		it("should fall back to a single toggle when the anchor is on another page", async () => {
+			const user = userEvent.setup();
+			const shiftSelect = withShift(user);
+			const [first, second] = mockApiGetSamplePages();
+
+			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			expect(await screen.findByText("Samples")).toBeInTheDocument();
+
+			await user.click(checkboxFor(first.name));
+			await user.click(screen.getByRole("button", { name: "2" }));
+			expect(await screen.findByText(second.name)).toBeInTheDocument();
+
+			await shiftSelect(second.name);
+
+			expect(screen.getByText("2 selected")).toBeInTheDocument();
 		});
 	});
 

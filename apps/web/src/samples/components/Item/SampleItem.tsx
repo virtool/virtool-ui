@@ -4,6 +4,7 @@ import Checkbox from "@base/Checkbox";
 import Link from "@base/Link";
 import { useFetchJob } from "@jobs/queries";
 import type { SampleMinimal } from "@samples/types";
+import type { MouseEvent } from "react";
 import SampleLabel from "../Label/SampleLabel";
 import SampleLibraryTypeLabel from "../Label/SampleLibraryTypeLabel";
 import WorkflowTags from "../Tag/WorkflowTags";
@@ -16,8 +17,8 @@ type SampleItemProps = {
 	/** Whether the sample is selected */
 	checked: boolean;
 
-	/** Callback to handle sample selection */
-	handleSelect: () => void;
+	/** Callback to handle sample selection, receiving the checkbox click event */
+	handleSelect: (event: MouseEvent<HTMLButtonElement>) => void;
 
 	/** Callback to open a quick analysis scoped to this sample */
 	onQuickAnalyze: () => void;
