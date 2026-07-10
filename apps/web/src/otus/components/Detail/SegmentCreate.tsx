@@ -9,7 +9,7 @@ type FormValues = {
 	required: boolean;
 };
 
-type AddSegmentProps = {
+type SegmentCreateProps = {
 	abbreviation: string;
 	name: string;
 	open?: boolean;
@@ -22,14 +22,14 @@ type AddSegmentProps = {
 /**
  * Displays a dialog for adding a segment
  */
-export default function AddSegment({
+export default function SegmentCreate({
 	otuId,
 	name,
 	abbreviation,
 	open = false,
 	schema,
 	setOpen = () => {},
-}: AddSegmentProps) {
+}: SegmentCreateProps) {
 	const mutation = useUpdateOTU(otuId);
 
 	function handleSubmit({ segmentName, molecule, required }: FormValues) {

@@ -9,7 +9,7 @@ type FormValues = {
 	required: boolean;
 };
 
-type EditSegmentProps = {
+type SegmentEditProps = {
 	abbreviation: string;
 	editSegmentName?: string;
 	name: string;
@@ -22,14 +22,14 @@ type EditSegmentProps = {
 /**
  * Displays a dialog to edit a segment
  */
-export default function EditSegment({
+export default function SegmentEdit({
 	abbreviation,
 	editSegmentName,
 	otuId,
 	name,
 	schema,
 	unsetEditSegmentName = () => {},
-}: EditSegmentProps) {
+}: SegmentEditProps) {
 	const mutation = useUpdateOTU(otuId);
 
 	const segment = schema.find((s) => s.name === editSegmentName);

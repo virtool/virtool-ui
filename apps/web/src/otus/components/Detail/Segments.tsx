@@ -13,17 +13,17 @@ import { Component } from "lucide-react";
 import { useState } from "react";
 import Box from "@/base/Box";
 import Button from "@/base/Button";
-import AddSegment from "./AddSegment";
-import EditSegment from "./EditSegment";
 import RemoveSegment from "./RemoveSegment";
 import Segment from "./Segment";
+import SegmentCreate from "./SegmentCreate";
+import SegmentEdit from "./SegmentEdit";
 
 const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
 
 /**
- * Displays a component allowing users to manage the otu schema
+ * Displays a component allowing users to manage the otu segments
  */
-export default function Schema() {
+export default function Segments() {
 	const { refId, otuId } = routeApi.useParams();
 	const { hasPermission: canModify, isPending: isPendingPermission } =
 		useCheckReferenceRight(refId, "modify_otu");
@@ -116,7 +116,7 @@ export default function Schema() {
 				</Box>
 			)}
 
-			<AddSegment
+			<SegmentCreate
 				abbreviation={abbreviation}
 				name={name}
 				otuId={otuId}
@@ -124,7 +124,7 @@ export default function Schema() {
 				schema={schema}
 				setOpen={setOpenAddSegment}
 			/>
-			<EditSegment
+			<SegmentEdit
 				abbreviation={abbreviation}
 				editSegmentName={archived ? undefined : segmentToEdit}
 				name={name}
