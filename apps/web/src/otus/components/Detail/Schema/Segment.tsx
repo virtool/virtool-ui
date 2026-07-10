@@ -52,16 +52,16 @@ export default function Segment({
 			{canModify && (
 				<div className="flex">
 					<IconButton
-						IconComponent={Trash}
-						color="red"
-						tip="remove segment"
-						onClick={onRemove}
-					/>
-					<IconButton
 						IconComponent={Pencil}
 						color="grayDark"
 						tip="edit segment"
 						onClick={() => setEditSegmentName(segment.name)}
+					/>
+					<IconButton
+						IconComponent={Trash}
+						color="red"
+						tip="remove segment"
+						onClick={onRemove}
 					/>
 				</div>
 			)}
