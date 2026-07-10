@@ -170,18 +170,48 @@ export type UpdateOTUProps = {
 export function useUpdateOTU(otuId: string) {
 	const queryClient = useQueryClient();
 
-	return useMutation<Otu, ErrorResponse, UpdateOTUProps>({
-		mutationFn: ({ otuId, name, abbreviation, schema }) =>
-			apiClient
-				.patch(`/otus/${otuId}`)
-				.send({ name, abbreviation, schema })
-				.then((res) => res.body),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: OTUQueryKeys.detail(otuId),
-			});
+	return useMutation<Otu, ErrorResponse, UpdateOTUProps, { previousOtu?: Otu }>(
+		{
+			mutationFn: ({ otuId, name, abbreviation, schema }) =>
+				apiClient
+					.patch(`/otus/${otuId}`)
+					.send({ name, abbreviation, schema })
+					.then((res) => res.body),
+			onMutate: async ({ name, abbreviation, schema }) => {
+				await queryClient.cancelQueries({
+					queryKey: OTUQueryKeys.detail(otuId),
+				});
+
+				const previousOtu = queryClient.getQueryData<Otu>(
+					OTUQueryKeys.detail(otuId),
+				);
+
+				if (previousOtu) {
+					queryClient.setQueryData<Otu>(OTUQueryKeys.detail(otuId), {
+						...previousOtu,
+						...(name !== undefined && { name }),
+						...(abbreviation !== undefined && { abbreviation }),
+						...(schema !== undefined && { schema }),
+					});
+				}
+
+				return { previousOtu };
+			},
+			onError: (_error, _variables, context) => {
+				if (context?.previousOtu) {
+					queryClient.setQueryData(
+						OTUQueryKeys.detail(otuId),
+						context.previousOtu,
+					);
+				}
+			},
+			onSettled: () => {
+				queryClient.invalidateQueries({
+					queryKey: OTUQueryKeys.detail(otuId),
+				});
+			},
 		},
-	});
+	);
 }
 
 /**
