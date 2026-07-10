@@ -2,8 +2,22 @@ import BoxGroup from "@base/BoxGroup";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
+import {
+	closestCenter,
+	DndContext,
+	type DragEndEvent,
+	KeyboardSensor,
+	PointerSensor,
+	useSensor,
+	useSensors,
+} from "@dnd-kit/core";
+import {
+	arrayMove,
+	SortableContext,
+	sortableKeyboardCoordinates,
+	verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
-import type { OtuSegment } from "@otus/types";
 import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
@@ -35,6 +49,13 @@ export default function Segments() {
 	const [segmentToEdit, setSegmentToEdit] = useState<string | undefined>();
 	const [segmentToRemove, setSegmentToRemove] = useState<string | undefined>();
 
+	const sensors = useSensors(
+		useSensor(PointerSensor),
+		useSensor(KeyboardSensor, {
+			coordinateGetter: sortableKeyboardCoordinates,
+		}),
+	);
+
 	if (isError && !data) {
 		return <QueryError noun="schema" />;
 	}
@@ -45,32 +66,14 @@ export default function Segments() {
 
 	const { abbreviation, name, schema } = data;
 
-	function handleMoveUp(index: number) {
-		const updatedSchema = schema.slice();
-		const current = updatedSchema[index];
-		const previous = updatedSchema[index - 1];
-		if (!current || !previous) {
+	function handleDragEnd({ active, over }: DragEndEvent) {
+		if (!over || active.id === over.id) {
 			return;
 		}
-		updatedSchema[index] = previous;
-		updatedSchema[index - 1] = current;
-		handleUpdate(updatedSchema);
-	}
 
-	function handleMoveDown(index: number) {
-		const updatedSchema = schema.slice();
-		const current = updatedSchema[index];
-		const next = updatedSchema[index + 1];
-		if (!current || !next) {
-			return;
-		}
-		updatedSchema[index] = next;
-		updatedSchema[index + 1] = current;
-		handleUpdate(updatedSchema);
-	}
-
-	function handleUpdate(updatedSchema: OtuSegment[]) {
-		mutation.mutate({ otuId, schema: updatedSchema });
+		const oldIndex = schema.findIndex((s) => s.name === active.id);
+		const newIndex = schema.findIndex((s) => s.name === over.id);
+		mutation.mutate({ otuId, schema: arrayMove(schema, oldIndex, newIndex) });
 	}
 
 	return (
@@ -87,21 +90,28 @@ export default function Segments() {
 				)
 			)}
 			{schema.length ? (
-				<BoxGroup>
-					{schema.map((segment, index) => (
-						<Segment
-							key={segment.name}
-							canModify={canModify && !archived}
-							segment={segment}
-							first={index === 0}
-							last={index === schema.length - 1}
-							onMoveUp={() => handleMoveUp(index)}
-							onMoveDown={() => handleMoveDown(index)}
-							onRemove={() => setSegmentToRemove(segment.name)}
-							setEditSegmentName={setSegmentToEdit}
-						/>
-					))}
-				</BoxGroup>
+				<DndContext
+					sensors={sensors}
+					collisionDetection={closestCenter}
+					onDragEnd={handleDragEnd}
+				>
+					<SortableContext
+						items={schema.map((segment) => segment.name)}
+						strategy={verticalListSortingStrategy}
+					>
+						<BoxGroup>
+							{schema.map((segment) => (
+								<Segment
+									key={segment.name}
+									canModify={canModify && !archived}
+									segment={segment}
+									onRemove={() => setSegmentToRemove(segment.name)}
+									setEditSegmentName={setSegmentToEdit}
+								/>
+							))}
+						</BoxGroup>
+					</SortableContext>
+				</DndContext>
 			) : (
 				<Box>
 					<Empty className="h-72">

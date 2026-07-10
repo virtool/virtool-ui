@@ -1,5 +1,6 @@
 import { cn } from "@app/utils";
 import type { LucideIcon } from "lucide-react";
+import type { ComponentPropsWithRef } from "react";
 import Tooltip from "./Tooltip";
 import type { IconColor } from "./types";
 
@@ -9,11 +10,10 @@ export type IconButtonProps = {
 	className?: string;
 	color?: IconColor;
 	IconComponent: LucideIcon;
-	onClick?: () => void;
 	size?: number;
 	tip: string;
 	tipPlacement?: "top" | "right" | "bottom" | "left";
-};
+} & Omit<ComponentPropsWithRef<"button">, "className" | "color" | "size">;
 
 /**
  * A styled clickable icon with tooltip describing its action
@@ -23,13 +23,15 @@ export default function IconButton({
 	className,
 	color = "black",
 	IconComponent,
-	onClick,
+	ref,
 	size,
 	tip,
 	tipPlacement,
+	...rest
 }: IconButtonProps) {
 	const iconButton = (
 		<button
+			ref={ref}
 			className={cn(
 				"bg-inherit",
 				"border-none",
@@ -60,7 +62,7 @@ export default function IconButton({
 			)}
 			aria-label={ariaLabel ?? tip}
 			type="button"
-			onClick={onClick}
+			{...rest}
 		>
 			<IconComponent size={size ?? "1.2em"} />
 		</button>
