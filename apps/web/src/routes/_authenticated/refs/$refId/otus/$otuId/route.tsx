@@ -87,7 +87,7 @@ function OtuDetailLayout() {
 
 			<NavTabs>
 				<NavTab to={`/refs/${refId}/otus/${otuId}/isolates`}>Isolates</NavTab>
-				<NavTab to={`/refs/${refId}/otus/${otuId}/schema`}>Segments</NavTab>
+				<NavTab to={`/refs/${refId}/otus/${otuId}/segments`}>Segments</NavTab>
 				<NavTab to={`/refs/${refId}/otus/${otuId}/history`}>History</NavTab>
 			</NavTabs>
 
