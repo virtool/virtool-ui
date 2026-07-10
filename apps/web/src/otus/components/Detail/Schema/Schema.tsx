@@ -81,7 +81,7 @@ export default function Schema() {
 				canModify && (
 					<div className="flex justify-end mb-3">
 						<Button color="blue" onClick={() => setOpenAddSegment(true)}>
-							Add Segment
+							Create
 						</Button>
 					</div>
 				)
