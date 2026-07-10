@@ -6,6 +6,8 @@ import {
 	closestCenter,
 	DndContext,
 	type DragEndEvent,
+	DragOverlay,
+	type DragStartEvent,
 	KeyboardSensor,
 	PointerSensor,
 	useSensor,
@@ -28,7 +30,7 @@ import { useState } from "react";
 import Box from "@/base/Box";
 import Button from "@/base/Button";
 import RemoveSegment from "./RemoveSegment";
-import Segment from "./Segment";
+import Segment, { SegmentItem } from "./Segment";
 import SegmentCreate from "./SegmentCreate";
 import SegmentEdit from "./SegmentEdit";
 
@@ -48,6 +50,9 @@ export default function Segments() {
 	const [openAddSegment, setOpenAddSegment] = useState(false);
 	const [segmentToEdit, setSegmentToEdit] = useState<string | undefined>();
 	const [segmentToRemove, setSegmentToRemove] = useState<string | undefined>();
+	const [activeSegmentName, setActiveSegmentName] = useState<string | null>(
+		null,
+	);
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -66,7 +71,13 @@ export default function Segments() {
 
 	const { abbreviation, name, schema } = data;
 
+	function handleDragStart({ active }: DragStartEvent) {
+		setActiveSegmentName(String(active.id));
+	}
+
 	function handleDragEnd({ active, over }: DragEndEvent) {
+		setActiveSegmentName(null);
+
 		if (!over || active.id === over.id) {
 			return;
 		}
@@ -75,6 +86,10 @@ export default function Segments() {
 		const newIndex = schema.findIndex((s) => s.name === over.id);
 		mutation.mutate({ otuId, schema: arrayMove(schema, oldIndex, newIndex) });
 	}
+
+	const activeSegment = activeSegmentName
+		? schema.find((s) => s.name === activeSegmentName)
+		: undefined;
 
 	return (
 		<div>
@@ -93,7 +108,9 @@ export default function Segments() {
 				<DndContext
 					sensors={sensors}
 					collisionDetection={closestCenter}
+					onDragStart={handleDragStart}
 					onDragEnd={handleDragEnd}
+					onDragCancel={() => setActiveSegmentName(null)}
 				>
 					<SortableContext
 						items={schema.map((segment) => segment.name)}
@@ -111,6 +128,18 @@ export default function Segments() {
 							))}
 						</BoxGroup>
 					</SortableContext>
+					<DragOverlay>
+						{activeSegment ? (
+							<BoxGroup className="mb-0 shadow-lg">
+								<SegmentItem
+									canModify={canModify && !archived}
+									segment={activeSegment}
+									onRemove={() => undefined}
+									setEditSegmentName={() => undefined}
+								/>
+							</BoxGroup>
+						) : null}
+					</DragOverlay>
 				</DndContext>
 			) : (
 				<Box>
