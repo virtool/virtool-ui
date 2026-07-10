@@ -79,7 +79,8 @@ describe("<SampleSettings />", () => {
 		await waitFor(() =>
 			expect(screen.getByText("Sample Settings")).toBeInTheDocument(),
 		);
-		await userEvent.selectOptions(screen.getByLabelText("Group Rights"), "rw");
+		await userEvent.click(screen.getByLabelText("Group Rights"));
+		await userEvent.click(screen.getByRole("option", { name: "Read & write" }));
 
 		scope.done();
 	});
@@ -95,10 +96,8 @@ describe("<SampleSettings />", () => {
 		await waitFor(() =>
 			expect(screen.getByText("Sample Settings")).toBeInTheDocument(),
 		);
-		await userEvent.selectOptions(
-			screen.getByLabelText("All Users' Rights"),
-			"rw",
-		);
+		await userEvent.click(screen.getByLabelText("All Users' Rights"));
+		await userEvent.click(screen.getByRole("option", { name: "Read & write" }));
 
 		scope.done();
 	});

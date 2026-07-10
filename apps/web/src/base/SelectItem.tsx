@@ -37,6 +37,8 @@ export function SelectItemIndicator({
 type SelectItemProps = {
 	/** The item's label, rendered as the selected value on the trigger. */
 	children: ReactNode;
+	/** Extra classes merged onto the item, e.g. `normal-case` to opt out of the default capitalization. */
+	className?: string;
 	/** An optional description rendered on a second line beneath the label. */
 	description?: string;
 	/** The value committed to the Select when the item is chosen. */
@@ -46,6 +48,7 @@ type SelectItemProps = {
 export default function SelectItem({
 	value,
 	children,
+	className,
 	description,
 }: SelectItemProps) {
 	return (
@@ -53,6 +56,7 @@ export default function SelectItem({
 			className={cn(
 				"font-medium flex flex-col items-start py-1.5 pr-9 pl-6 capitalize",
 				selectItemStateClasses,
+				className,
 			)}
 			data-slot="select-item"
 			value={value}

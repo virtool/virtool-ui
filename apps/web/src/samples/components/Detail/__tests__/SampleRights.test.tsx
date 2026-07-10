@@ -54,7 +54,8 @@ describe("<SampleRights />", () => {
 		renderWithProviders(<SampleRights sampleId={sample.id} />);
 
 		expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
-		await userEvent.selectOptions(screen.getByLabelText("Group"), group.name);
+		await userEvent.click(screen.getByLabelText("Group"));
+		await userEvent.click(screen.getByRole("option", { name: group.name }));
 
 		await scope.done();
 	});
@@ -68,7 +69,8 @@ describe("<SampleRights />", () => {
 		renderWithProviders(<SampleRights sampleId={sample.id} />);
 
 		expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
-		await userEvent.selectOptions(screen.getByLabelText("Group Rights"), "rw");
+		await userEvent.click(screen.getByLabelText("Group Rights"));
+		await userEvent.click(screen.getByRole("option", { name: "Read & write" }));
 
 		await scope.done();
 	});
@@ -82,10 +84,8 @@ describe("<SampleRights />", () => {
 		renderWithProviders(<SampleRights sampleId={sample.id} />);
 
 		expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
-		await userEvent.selectOptions(
-			screen.getByLabelText("All Users' Rights"),
-			"rw",
-		);
+		await userEvent.click(screen.getByLabelText("All Users' Rights"));
+		await userEvent.click(screen.getByRole("option", { name: "Read & write" }));
 
 		await scope.done();
 	});

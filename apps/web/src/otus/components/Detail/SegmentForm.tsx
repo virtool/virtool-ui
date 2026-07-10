@@ -3,10 +3,14 @@ import { DialogFooter } from "@base/Dialog";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
-import InputSelect from "@base/InputSelect";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
+import Select from "@base/Select";
+import SelectButton from "@base/SelectButton";
+import SelectContent from "@base/SelectContent";
+import SelectItem from "@base/SelectItem";
 import { Molecule, type OtuSegment } from "@otus/types";
+import { ChevronDown } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 
 const moleculeTypes = [
@@ -58,12 +62,6 @@ export default function SegmentForm({
 		},
 	});
 
-	const molecules = moleculeTypes.map((molecule) => (
-		<option key={molecule} value={molecule}>
-			{molecule || "None"}
-		</option>
-	));
-
 	return (
 		<form onSubmit={handleSubmit((values) => onSubmit({ ...values }))}>
 			<div className="grid gap-4" style={{ gridTemplateColumns: "3fr 1fr" }}>
@@ -85,9 +83,35 @@ export default function SegmentForm({
 
 				<InputGroup>
 					<InputLabel htmlFor="molecule">Molecule Type</InputLabel>
-					<InputSelect id="molecule" {...register("molecule")}>
-						{molecules}
-					</InputSelect>
+					<Controller
+						name="molecule"
+						control={control}
+						render={({ field: { onChange, value } }) => (
+							<Select
+								value={value || "none"}
+								onValueChange={(value) =>
+									onChange(value === "none" ? "" : value)
+								}
+							>
+								<SelectButton
+									className="w-full normal-case"
+									icon={ChevronDown}
+									id="molecule"
+								/>
+								<SelectContent>
+									{moleculeTypes.map((molecule) => (
+										<SelectItem
+											className="normal-case"
+											key={molecule || "none"}
+											value={molecule || "none"}
+										>
+											{molecule || "None"}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						)}
+					/>
 				</InputGroup>
 
 				<Controller

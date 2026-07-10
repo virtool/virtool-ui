@@ -31,10 +31,11 @@ describe("<AddIsolate />", () => {
 	});
 
 	describe("<IsolateForm />", () => {
-		it("should render with source types restricted", () => {
+		it("should render with source types restricted", async () => {
 			renderWithProviders(<AddIsolate {...props} />);
 
-			expect(screen.getByRole("combobox")).toBeInTheDocument();
+			await userEvent.click(screen.getByLabelText("Source Type"));
+
 			expect(
 				screen.getByRole("option", { name: "Unknown" }),
 			).toBeInTheDocument();
@@ -63,19 +64,21 @@ describe("<AddIsolate />", () => {
 			const scope = mockApiCreateIsolate(props.otuId, sourceName, sourceType);
 			renderWithProviders(<AddIsolate {...props} />);
 
-			await userEvent.selectOptions(
-				screen.getByLabelText("Source Type"),
-				`${sourceType}`,
+			await userEvent.click(screen.getByLabelText("Source Type"));
+			await userEvent.click(
+				screen.getByRole("option", {
+					name: new RegExp(`^${sourceType}$`, "i"),
+				}),
 			);
 
-			if (sourceType !== "Unknown") {
+			if (sourceName) {
 				await userEvent.type(
 					screen.getByRole("textbox", { name: "Source Name" }),
 					`${sourceName}`,
 				);
 			}
 
-			await userEvent.click(screen.getByRole("button"));
+			await userEvent.click(screen.getByRole("button", { name: "Save" }));
 			scope.done();
 		});
 

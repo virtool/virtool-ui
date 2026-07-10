@@ -5,14 +5,8 @@ import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
-import InputSelect from "@base/InputSelect";
 import { SelectBox, SelectBoxItem } from "@base/SelectBox";
-
-const rights = [
-	{ label: "None", value: "" },
-	{ label: "Read", value: "r" },
-	{ label: "Read & write", value: "rw" },
-];
+import RightsSelect from "./RightsSelect";
 
 type SampleRightsProps = {
 	/** The settings data used for configuring sample rights */
@@ -36,12 +30,6 @@ export default function SampleRights({ settings }: SampleRightsProps) {
 	const group =
 		(sample_group_read ? "r" : "") + (sample_group_write ? "w" : "");
 	const all = (sample_all_read ? "r" : "") + (sample_all_write ? "w" : "");
-
-	const options = rights.map((entry) => (
-		<option key={entry.value} value={entry.value}>
-			{entry.label}
-		</option>
-	));
 
 	return (
 		<BoxGroup>
@@ -81,34 +69,30 @@ export default function SampleRights({ settings }: SampleRightsProps) {
 
 				<InputGroup>
 					<InputLabel htmlFor="group">Group Rights</InputLabel>
-					<InputSelect
+					<RightsSelect
 						id="group"
 						value={group}
-						onChange={(e) =>
+						onChange={(value) =>
 							mutation.mutate({
-								sample_group_read: e.target.value.includes("r"),
-								sample_group_write: e.target.value.includes("w"),
+								sample_group_read: value.includes("r"),
+								sample_group_write: value.includes("w"),
 							})
 						}
-					>
-						{options}
-					</InputSelect>
+					/>
 				</InputGroup>
 
 				<InputGroup>
 					<InputLabel htmlFor="all">All {"Users'"} Rights</InputLabel>
-					<InputSelect
+					<RightsSelect
 						id="all"
 						value={all}
-						onChange={(e) =>
+						onChange={(value) =>
 							mutation.mutate({
-								sample_all_read: e.target.value.includes("r"),
-								sample_all_write: e.target.value.includes("w"),
+								sample_all_read: value.includes("r"),
+								sample_all_write: value.includes("w"),
 							})
 						}
-					>
-						{options}
-					</InputSelect>
+					/>
 				</InputGroup>
 			</BoxGroupSection>
 		</BoxGroup>
