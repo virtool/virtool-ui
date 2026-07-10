@@ -1,6 +1,7 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
+import Tooltip from "@base/Tooltip";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { OtuSegment } from "@otus/types";
@@ -37,14 +38,17 @@ export default function Segment({
 			}}
 		>
 			{canModify && (
-				<IconButton
-					IconComponent={GripVertical}
-					color="grayDark"
-					tip="drag to reorder"
-					className="cursor-grab active:cursor-grabbing"
-					{...attributes}
-					{...listeners}
-				/>
+				<Tooltip tip="drag to reorder">
+					<button
+						type="button"
+						aria-label="drag to reorder"
+						className="flex items-center justify-center p-2.5 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing outline-none"
+						{...attributes}
+						{...listeners}
+					>
+						<GripVertical size="1.2em" />
+					</button>
+				</Tooltip>
 			)}
 
 			<strong className="flex-1 truncate">{segment.name}</strong>
