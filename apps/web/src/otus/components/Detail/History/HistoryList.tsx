@@ -6,8 +6,6 @@ import { sortBy } from "es-toolkit";
 import Change from "./Change";
 
 type HistoryListProps = {
-	/** Whether revert is disabled because the parent reference is archived */
-	archived?: boolean;
 	/** The history of built or unbuilt changes */
 	history: OtuHistory[];
 	/** Whether the changes are unbuilt */
@@ -15,10 +13,9 @@ type HistoryListProps = {
 };
 
 /**
- * Displays a history list of changes with options to revert the OTU
+ * Displays a history list of changes made to the OTU
  */
 export default function HistoryList({
-	archived,
 	history,
 	unbuilt = false,
 }: HistoryListProps) {
@@ -27,14 +24,11 @@ export default function HistoryList({
 	const changeComponents = changes.map((change) => (
 		<Change
 			key={change.id}
-			id={change.id}
-			archived={archived}
 			methodName={change.method_name}
 			otu={change.otu}
 			user={change.user}
 			description={change.description}
 			createdAt={change.created_at}
-			unbuilt={unbuilt}
 		/>
 	));
 

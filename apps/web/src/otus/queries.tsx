@@ -227,25 +227,6 @@ export function useRemoveOtu() {
 }
 
 /**
- * Initializes a mutator for reverting an otu to how it was before a given change
- *
- * @returns A mutator for reverting an otu to how it was before a given change
- */
-export function useRevertOtu(otuId: string) {
-	const queryClient = useQueryClient();
-
-	return useMutation<null, ErrorResponse, { changeId: string }>({
-		mutationFn: ({ changeId }) =>
-			apiClient.delete(`/history/${changeId}`).then((res) => res.body),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: OtuQueryKeys.detail(otuId),
-			});
-		},
-	});
-}
-
-/**
  * Initializes a mutator for creating an OTU isolate
  *
  * @returns A mutator for creating an OTU isolate
