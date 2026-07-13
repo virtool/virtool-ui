@@ -175,7 +175,7 @@ describe("<FileManager>", () => {
 			).not.toBeInTheDocument();
 		});
 
-		it("should hide checkboxes if user lacks permission to delete", async () => {
+		it("should hide checkboxes when there is nothing to do with a selection", async () => {
 			mockApiGetAccount(createFakeAccount({ administrator_role: null }));
 			mockApiListFiles([createFakeFile({ name: "one.fq.gz" })], true);
 
@@ -188,6 +188,97 @@ describe("<FileManager>", () => {
 			expect(
 				screen.queryByRole("checkbox", { name: "Select one.fq.gz" }),
 			).not.toBeInTheDocument();
+		});
+	});
+
+	describe("selection action", () => {
+		const first = createFakeFile({ name: "one.fq.gz" });
+		const second = createFakeFile({ name: "two.fq.gz" });
+
+		// Stands in for the create-samples action: it names the files it was given
+		// and hands them back as consumed when clicked.
+		function renderWithSelectionAction() {
+			return renderWithRouter(
+				<FileManager
+					{...props}
+					renderSelectionAction={(selected, deselect) => (
+						<button type="button" onClick={() => deselect(selected)}>
+							{`Consume ${selected.length}`}
+						</button>
+					)}
+				/>,
+				path,
+			);
+		}
+
+		it("should show the action once files are selected, given the selection", async () => {
+			mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+			mockApiListFiles([first, second], true);
+
+			await renderWithSelectionAction();
+
+			expect(await screen.findByText("2 files")).toBeInTheDocument();
+			expect(
+				screen.queryByRole("button", { name: /Consume/ }),
+			).not.toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: "Select one.fq.gz" }),
+			);
+
+			expect(
+				screen.getByRole("button", { name: "Consume 1" }),
+			).toBeInTheDocument();
+		});
+
+		it("should make files selectable without permission to delete them", async () => {
+			mockApiGetAccount(
+				createFakeAccount({
+					administrator_role: null,
+					permissions: {
+						...createFakeAccount().permissions,
+						create_sample: true,
+						remove_file: false,
+					},
+				}),
+			);
+			mockApiListFiles([first], true);
+
+			await renderWithSelectionAction();
+
+			await userEvent.click(
+				await screen.findByRole("checkbox", { name: "Select one.fq.gz" }),
+			);
+
+			expect(
+				screen.getByRole("button", { name: "Consume 1" }),
+			).toBeInTheDocument();
+			expect(
+				screen.queryByRole("button", { name: "Delete" }),
+			).not.toBeInTheDocument();
+		});
+
+		it("should drop the files the action consumed, leaving the rest selected", async () => {
+			mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+			mockApiListFiles([first, second], true);
+
+			await renderWithSelectionAction();
+
+			await userEvent.click(
+				await screen.findByRole("checkbox", { name: "Select one.fq.gz" }),
+			);
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: "Select two.fq.gz" }),
+			);
+
+			expect(screen.getByText("2 selected")).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("button", { name: "Consume 2" }));
+
+			expect(screen.getByText("2 files")).toBeInTheDocument();
+			expect(
+				screen.getByRole("checkbox", { name: "Select one.fq.gz" }),
+			).not.toBeChecked();
 		});
 	});
 });

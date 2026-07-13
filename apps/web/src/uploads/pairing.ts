@@ -86,6 +86,25 @@ export function stripMateToken(name: string): string {
 }
 
 /**
+ * The read files a row is made of, in [LEFT, RIGHT] order. A single row yields
+ * one file; a pair row yields its two mates.
+ *
+ * @param row - the row to read the files from
+ */
+export function getReadRowReads(row: ReadRow): Upload[] {
+	return row.kind === "pair" ? [row.left, row.right] : [row.file];
+}
+
+/**
+ * A stable key identifying a row, unique among the rows built from one list.
+ *
+ * @param row - the row to key
+ */
+export function getReadRowKey(row: ReadRow): string {
+	return row.kind === "pair" ? row.key : String(row.file.id);
+}
+
+/**
  * Groups read uploads into selector rows, collapsing detected mate pairs into a
  * single pair row. A pair is two files whose names are identical except for the
  * mate token. Lone mates, ambiguous groups (three or more files sharing a
@@ -159,4 +178,21 @@ export function buildReadRows(files: Upload[]): ReadRow[] {
 	}
 
 	return rows;
+}
+
+/**
+ * The read files a sample created from ``upload`` will use: the file itself,
+ * plus its mate in [LEFT, RIGHT] order when one is detected among ``uploads``.
+ * Only files in ``uploads`` are considered, so a mate that isn't listed
+ * alongside it won't be found.
+ *
+ * @param upload - the read file the sample will be created from
+ * @param uploads - the read files listed alongside it, used to detect its mate
+ */
+export function getReadsForUpload(upload: Upload, uploads: Upload[]): Upload[] {
+	const row = buildReadRows(uploads).find((candidate) =>
+		getReadRowReads(candidate).some((read) => read.id === upload.id),
+	);
+
+	return row ? getReadRowReads(row) : [upload];
 }

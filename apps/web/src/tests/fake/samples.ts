@@ -243,6 +243,22 @@ export function mockApiCreateSample(
 }
 
 /**
+ * Creates a mocked API call for a sample creation the API rejects.
+ *
+ * The request is matched on its name alone, so that one sample of a batch can
+ * be rejected without restating the rest of its payload.
+ *
+ * @param name - The name of the sample to reject
+ * @param message - The reason the API gives for rejecting it
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiCreateSampleFailure(name: string, message: string) {
+	return nock("http://localhost")
+		.post("/api/samples", (body) => body.name === name)
+		.reply(400, { message });
+}
+
+/**
  * Creates a mocked API call for removing a sample
  *
  * @param sampleId - The id of the sample being removed

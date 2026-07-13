@@ -13,6 +13,7 @@ import { fileQueryKeys } from "@uploads/keys";
 import { union } from "es-toolkit";
 import type { ErrorResponse } from "@/types/api";
 import type {
+	CreateSampleRequest,
 	Sample,
 	SampleMinimal,
 	SampleRightsUpdate,
@@ -111,6 +112,38 @@ export function useSuspenseSample(sampleId: string) {
 }
 
 /**
+ * Creates a sample.
+ *
+ * Shared by the single-sample create hook and the bulk create hook.
+ */
+function createSample({
+	name,
+	isolate,
+	host,
+	locale,
+	libraryType,
+	subtractions,
+	files,
+	labels,
+	group,
+}: CreateSampleRequest): Promise<Sample> {
+	return apiClient
+		.post("/samples")
+		.send({
+			name,
+			isolate,
+			host,
+			locale,
+			subtractions,
+			files,
+			library_type: libraryType,
+			labels,
+			group,
+		})
+		.then((res) => res.body);
+}
+
+/**
  * Initialize a mutator for creating a sample
  *
  * @returns A mutator for creating a sample
@@ -118,50 +151,63 @@ export function useSuspenseSample(sampleId: string) {
 export function useCreateSample() {
 	const queryClient = useQueryClient();
 
-	return useMutation<
-		Sample,
-		ErrorResponse,
-		{
-			name: string;
-			isolate: string;
-			host: string;
-			locale: string;
-			libraryType: string;
-			subtractions: string[];
-			files: number[];
-			labels: number[];
-			group: string | null;
-		}
-	>({
-		mutationFn: ({
-			name,
-			isolate,
-			host,
-			locale,
-			libraryType,
-			subtractions,
-			files,
-			labels,
-			group,
-		}) =>
-			apiClient
-				.post("/samples")
-				.send({
-					name,
-					isolate,
-					host,
-					locale,
-					subtractions,
-					files,
-					library_type: libraryType,
-					labels,
-					group,
-				})
-				.then((res) => res.body),
+	return useMutation<Sample, ErrorResponse, CreateSampleRequest>({
+		mutationFn: createSample,
 		onSuccess: () => {
 			// The created sample reserves its read files, so the server stops
 			// returning them. Refetch the uploads lists to drop them from the
 			// selector.
+			queryClient.invalidateQueries({ queryKey: fileQueryKeys.lists() });
+		},
+	});
+}
+
+/**
+ * The result of creating one sample in a batch. A batch reports every sample's
+ * outcome rather than failing as a whole, so the samples that were created
+ * aren't lost when one of their siblings is rejected.
+ */
+export type SampleCreationOutcome =
+	| { status: "created"; sample: Sample }
+	| { status: "failed"; message: string };
+
+/**
+ * Initialize a mutator for creating several samples at once.
+ *
+ * Every sample is requested, even when an earlier one fails. The outcomes are
+ * returned in the order the requests were given, so the caller can match each
+ * one back to the row it came from.
+ *
+ * @returns A mutator for creating several samples
+ */
+export function useCreateSamples() {
+	const queryClient = useQueryClient();
+
+	return useMutation<
+		SampleCreationOutcome[],
+		ErrorResponse,
+		CreateSampleRequest[]
+	>({
+		mutationFn: (requests) =>
+			Promise.all(
+				requests.map((request) =>
+					createSample(request).then(
+						(sample): SampleCreationOutcome => ({
+							status: "created",
+							sample,
+						}),
+						(error: ErrorResponse): SampleCreationOutcome => ({
+							status: "failed",
+							message:
+								error.response?.body.message ?? "Could not create sample",
+						}),
+					),
+				),
+			),
+		// Settled, not success: samples created before a sibling failed still
+		// reserve their read files, so the uploads lists have to be refreshed
+		// either way.
+		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: fileQueryKeys.lists() });
 		},
 	});

@@ -8,6 +8,10 @@ type MultiSelectComboBoxProps<Item> = {
 	/** The text label associated with the combobox input */
 	label: string;
 
+	/** Hides the label visually, keeping it for assistive technology. Use when
+	 * the combobox sits in a row that is already labelled by its column. */
+	hideLabel?: boolean;
+
 	/** The full set of selectable items, already filtered by `term` */
 	items: Item[];
 
@@ -48,6 +52,7 @@ type MultiSelectComboBoxProps<Item> = {
  */
 export default function MultiSelectComboBox<Item>({
 	label,
+	hideLabel = false,
 	items,
 	selectedItems,
 	onChange,
@@ -128,7 +133,7 @@ export default function MultiSelectComboBox<Item>({
 	return (
 		<div>
 			<label
-				className="block text-base mb-2.5"
+				className={cn(hideLabel ? "sr-only" : "block text-base mb-2.5")}
 				{...labelProps}
 				htmlFor={labelProps.htmlFor}
 			>

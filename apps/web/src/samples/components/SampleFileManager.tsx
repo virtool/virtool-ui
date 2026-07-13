@@ -3,6 +3,7 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import type { Label } from "@labels/types";
 import { FileManager } from "@uploads/components/FileManager";
 import CreateSampleFromFile from "./Create/CreateSampleFromFile";
+import CreateSamples from "./Create/CreateSamples";
 
 type SampleFileManagerProps = {
 	labels: Label[];
@@ -45,6 +46,17 @@ export default function SampleFileManager({
 									labels={labels}
 									upload={upload}
 									uploads={uploads}
+								/>
+							)
+						: undefined
+				}
+				renderSelectionAction={
+					canCreate
+						? (selected, deselect) => (
+								<CreateSamples
+									labels={labels}
+									onCreated={deselect}
+									uploads={selected}
 								/>
 							)
 						: undefined

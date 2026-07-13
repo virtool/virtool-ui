@@ -20,7 +20,7 @@ import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import type { Label } from "@labels/types";
 import { useCreateSample } from "@samples/queries";
-import { getSampleNameFromReads } from "@samples/utils";
+import { getCreateSampleRequest, getSampleNameFromReads } from "@samples/utils";
 import { useInfiniteFindFiles } from "@uploads/queries";
 import { WandSparkles } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -112,36 +112,13 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 		}
 	}
 
-	function onSubmit({
-		name,
-		isolate,
-		host,
-		locale,
-		libraryType,
-		readFiles,
-		group,
-		labels: sampleLabels,
-		subtractionIds,
-	}: FormValues) {
-		mutation.mutate(
-			{
-				name,
-				isolate,
-				host,
-				locale,
-				libraryType,
-				subtractions: subtractionIds,
-				files: readFiles,
-				labels: sampleLabels,
-				group: group || null,
+	function onSubmit(values: FormValues) {
+		mutation.mutate(getCreateSampleRequest(values, values.readFiles), {
+			onSuccess: () => {
+				reset();
+				setOpen(false);
 			},
-			{
-				onSuccess: () => {
-					reset();
-					setOpen(false);
-				},
-			},
-		);
+		});
 	}
 
 	return (

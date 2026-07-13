@@ -33,6 +33,7 @@ import { ChevronDown, Files, TriangleAlert, Undo } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useValidateFiles } from "@/uploads/hooks";
 import type { FileResponse, Upload } from "@/uploads/types";
+import ReadPairBadge from "./ReadPairBadge";
 import ReadSelectorRow from "./ReadSelectorRow";
 import ReadSelectorSlots from "./ReadSelectorSlots";
 
@@ -221,29 +222,11 @@ export default function ReadSelector({
 			),
 		);
 
-	const pairedStatus =
-		selected.length === 2
-			? "Paired"
-			: selected.length === 1
-				? "Unpaired"
-				: null;
-
 	return (
 		<InputGroup>
 			<div className="flex items-center justify-between">
 				<InputLabel htmlFor="read-files-search">Read files</InputLabel>
-				{pairedStatus && (
-					<span
-						className={cn(
-							"rounded-md text-xs font-bold px-2 py-0.5",
-							pairedStatus === "Paired"
-								? "bg-green-100 text-green-700"
-								: "bg-gray-100 text-gray-500",
-						)}
-					>
-						{pairedStatus}
-					</span>
-				)}
+				<ReadPairBadge count={selected.length} />
 			</div>
 
 			{wasCleared && (

@@ -1,7 +1,7 @@
 import type { JobNested } from "@jobs/types";
 import { stripMateToken } from "@uploads/pairing";
 import type { Upload } from "@uploads/types";
-import type { LibraryType } from "./types";
+import type { CreateSampleRequest, LibraryType } from "./types";
 
 /** The workflows that samples can be filtered by. */
 export const filterableWorkflows = ["pathoscope", "nuvs"];
@@ -93,6 +93,46 @@ export function getSampleNameFromReads(reads: Upload[]): string {
 	}
 
 	return reads.length > 1 ? stripMateToken(name) : name;
+}
+
+/**
+ * The sample fields a create-sample form collects. The metadata fields are
+ * optional because not every form offers them.
+ */
+export type CreateSampleFormValues = {
+	group: string;
+	host?: string;
+	isolate?: string;
+	labels: number[];
+	libraryType: string;
+	locale?: string;
+	name: string;
+	subtractionIds: string[];
+};
+
+/**
+ * Builds the request for creating a sample from the values a create-sample form
+ * collected and the read files the sample will be created from. Metadata a form
+ * doesn't offer is sent empty, and an unset group is sent as ``null``.
+ *
+ * @param values - the collected form values
+ * @param files - the ids of the read files, in [LEFT, RIGHT] order
+ */
+export function getCreateSampleRequest(
+	values: CreateSampleFormValues,
+	files: number[],
+): CreateSampleRequest {
+	return {
+		files,
+		group: values.group || null,
+		host: values.host ?? "",
+		isolate: values.isolate ?? "",
+		labels: values.labels,
+		libraryType: values.libraryType,
+		locale: values.locale ?? "",
+		name: values.name,
+		subtractions: values.subtractionIds,
+	};
 }
 
 /**

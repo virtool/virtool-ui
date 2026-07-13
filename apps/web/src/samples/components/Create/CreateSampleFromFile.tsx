@@ -1,5 +1,4 @@
 import { useFetchAccount } from "@account/queries";
-import { cn } from "@app/utils";
 import {
 	Dialog,
 	DialogContent,
@@ -18,8 +17,8 @@ import Switch from "@base/Switch";
 import { useListGroups } from "@groups/queries";
 import type { Label } from "@labels/types";
 import { useCreateSample } from "@samples/queries";
-import { getSampleNameFromReads } from "@samples/utils";
-import { buildReadRows } from "@uploads/pairing";
+import { getCreateSampleRequest, getSampleNameFromReads } from "@samples/utils";
+import { getReadsForUpload } from "@uploads/pairing";
 import type { Upload } from "@uploads/types";
 import { CirclePlus } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -27,25 +26,9 @@ import { Controller, useForm } from "react-hook-form";
 import DefaultSubtractionSelector from "./DefaultSubtractionSelector";
 import LabelSelector from "./LabelSelector";
 import LibraryTypeSelector from "./LibraryTypeSelector";
+import ReadPairBadge from "./ReadPairBadge";
+import ReadSlot from "./ReadSlot";
 import SampleUserGroup from "./SampleUserGroup";
-
-/**
- * The read files a sample created from ``upload`` will use: the file itself,
- * plus its mate in [LEFT, RIGHT] order when one is detected among ``uploads``.
- */
-function getReads(upload: Upload, uploads: Upload[]): Upload[] {
-	const row = buildReadRows(uploads).find((row) =>
-		row.kind === "pair"
-			? row.left.id === upload.id || row.right.id === upload.id
-			: row.file.id === upload.id,
-	);
-
-	if (row?.kind === "pair") {
-		return [row.left, row.right];
-	}
-
-	return [upload];
-}
 
 type ReadFilesProps = {
 	/** The read files the sample will be created from, in [LEFT, RIGHT] order */
@@ -57,39 +40,20 @@ type ReadFilesProps = {
  * dialog was opened on and can't be changed here.
  */
 function ReadFiles({ reads }: ReadFilesProps) {
-	const paired = reads.length > 1;
-
 	return (
 		<InputGroup>
 			<div className="flex items-center justify-between">
 				<InputLabel>Read Files</InputLabel>
-				<span
-					className={cn(
-						"rounded-md text-xs font-bold px-2 py-0.5",
-						paired
-							? "bg-green-100 text-green-700"
-							: "bg-gray-100 text-gray-500",
-					)}
-				>
-					{paired ? "Paired" : "Unpaired"}
-				</span>
+				<ReadPairBadge count={reads.length} />
 			</div>
 			<div className="flex gap-2">
 				{reads.map((read, index) => (
-					<div
+					<ReadSlot
 						key={read.id}
-						className="flex-1 min-w-0 rounded-md border border-gray-300 bg-gray-50 p-3"
-					>
-						<div className="text-xs font-bold text-gray-500 tracking-wide">
-							{index === 0 ? "LEFT" : "RIGHT"}
-							<span className="ml-1 font-medium text-gray-400">
-								{index === 0 ? "R1" : "R2"}
-							</span>
-						</div>
-						<div className="truncate font-mono font-medium mt-1">
-							{read.name}
-						</div>
-					</div>
+						file={read}
+						label={index === 0 ? "LEFT" : "RIGHT"}
+						sub={index === 0 ? "R1" : "R2"}
+					/>
 				))}
 			</div>
 		</InputGroup>
@@ -153,28 +117,12 @@ function CreateSampleFromFileForm({
 		setValue("group", String(account?.primary_group?.id ?? ""));
 	}, [account, setValue]);
 
-	function onSubmit({
-		name,
-		isolate,
-		host,
-		locale,
-		libraryType,
-		group,
-		labels: sampleLabels,
-		subtractionIds,
-	}: FormValues) {
+	function onSubmit(values: FormValues) {
 		mutation.mutate(
-			{
-				name,
-				isolate,
-				host,
-				locale,
-				libraryType,
-				subtractions: subtractionIds,
-				files: reads.map((read) => read.id),
-				labels: sampleLabels,
-				group: group || null,
-			},
+			getCreateSampleRequest(
+				values,
+				reads.map((read) => read.id),
+			),
 			{ onSuccess: onClose },
 		);
 	}
@@ -323,7 +271,7 @@ export default function CreateSampleFromFile({
 				<CreateSampleFromFileForm
 					labels={labels}
 					onClose={() => setOpen(false)}
-					reads={getReads(upload, uploads)}
+					reads={getReadsForUpload(upload, uploads)}
 				/>
 			</DialogContent>
 		</Dialog>

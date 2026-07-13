@@ -1,4 +1,5 @@
 import { useFuse } from "@app/fuse";
+import { cn } from "@app/utils";
 import Label from "@base/Label";
 import Link from "@base/Link";
 import MultiSelectComboBox from "@base/MultiSelectComboBox";
@@ -6,6 +7,15 @@ import type { SubtractionOption } from "@subtraction/types";
 import { intersectionWith } from "es-toolkit";
 
 type SubtractionSelectorProps = {
+	/** Overrides the spacing around the combobox */
+	className?: string;
+
+	/** Suppresses the "no subtractions yet" hint, which would repeat in a list of rows */
+	hideEmptyHint?: boolean;
+
+	/** Hides the label visually, keeping it for assistive technology */
+	hideLabel?: boolean;
+
 	/** The ids of the currently selected subtractions */
 	selected: string[];
 
@@ -15,7 +25,7 @@ type SubtractionSelectorProps = {
 	/** Called with the next selection when a subtraction is added or removed */
 	onChange: (selected: string[]) => void;
 
-	/** The text label for the combobox */
+	/** The combobox's accessible name, which must be unique on the page */
 	label?: string;
 };
 
@@ -23,6 +33,9 @@ type SubtractionSelectorProps = {
  * A combobox for selecting subtractions.
  */
 export default function SubtractionSelector({
+	className,
+	hideEmptyHint = false,
+	hideLabel = false,
 	selected,
 	subtractions,
 	onChange,
@@ -43,9 +56,10 @@ export default function SubtractionSelector({
 	}
 
 	return (
-		<div className="mb-6">
+		<div className={cn("mb-6", className)}>
 			<MultiSelectComboBox<SubtractionOption>
 				label={label}
+				hideLabel={hideLabel}
 				items={results}
 				selectedItems={selectedSubtractions}
 				onChange={handleChange}
@@ -71,7 +85,7 @@ export default function SubtractionSelector({
 					</>
 				)}
 			/>
-			{Boolean(subtractions.length) || (
+			{!subtractions.length && !hideEmptyHint && (
 				<div className="flex mt-2 text-gray-600 [&_a]:ml-1 [&_a]:text-sm [&_a]:font-medium">
 					No subtractions found. <Link to="/subtractions">Create one</Link>.
 				</div>
