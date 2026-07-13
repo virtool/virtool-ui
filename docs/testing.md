@@ -16,18 +16,43 @@ The default. Fast, runs on every save. Covers:
 
 ### Integration — Vitest against a real database
 
-Intended for server features under `apps/web/src/server/<feature>/`
-once their `data.ts` owns real persistence: exercising schema
-bootstrap, indexes, and query semantics against a real Postgres, since
-mocks hide bugs that real DBs catch.
+For server features under `apps/web/src/server/<feature>/` whose code
+owns real persistence: exercising schema bootstrap, indexes, and query
+semantics against a real Postgres, since mocks hide bugs that real DBs
+catch. A session check that forgets to filter on `users.active` passes
+against a stubbed query builder and fails against Postgres.
 
-**No integration tests exist yet.** Every test in the repo today is a
-unit test — the server tests under `apps/web/src/server/` all cover
-pure functions (token and password helpers, the Sentry log stream, the
-event emitters) and none connects to a database. Add the first
-integration suite when a feature's `data.ts` genuinely owns
-persistence; don't retrofit one onto features that still call the
-Python API.
+`src/tests/globalSetup.ts` starts one Postgres container for the whole
+run and exports `VT_POSTGRES_URL`. Call `createTestDatabase()` from
+`@server/db/test/fixtures` in `beforeAll` to get an isolated database
+with the schema already applied, and `drop()` it in `afterAll`:
+
+```ts
+let database: TestDatabase;
+
+beforeAll(async () => {
+    database = await createTestDatabase();
+}, 60_000);
+
+afterAll(async () => {
+    await database.drop();
+});
+```
+
+Each call creates its **own** database, because Vitest runs test files
+in parallel workers against that single container — sharing `public`
+would let one file's seed data and truncations leak into another's.
+
+The schema is materialized by diffing the Drizzle schema against an
+empty one with `drizzle-kit`, so it tracks `src/server/db/schema/`
+automatically and there is no second copy of the DDL to keep in step.
+`drizzle-kit` is a test-only dependency and this is **not** a migration
+path — Python still owns the real schema, and nothing here is ever
+pushed at a real database.
+
+`auth/verify.test.ts` is the worked example. Add integration tests as
+each feature's persistence lands; don't retrofit them onto features
+that still call the Python API.
 
 ## Where to mock the network boundary
 
