@@ -33,13 +33,6 @@ function draw({
 
 	width *= ratio;
 
-	console.table({
-		width,
-		xMin,
-		maxGenomeLength,
-		ratio,
-	});
-
 	const x = scaleLinear().range([0, width]).domain([0, length]);
 	const y = scaleLinear().range([height, 0]).domain([0, yMax]);
 
