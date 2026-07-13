@@ -9,6 +9,7 @@ type LinkButtonProps = {
 	color?: "blue" | "gray" | "green" | "red";
 	replace?: boolean;
 	search?: Record<string, unknown>;
+	size?: "small" | "large";
 	to: string;
 };
 
@@ -18,11 +19,12 @@ export default function LinkButton({
 	color = "gray",
 	replace = false,
 	search,
+	size = "large",
 	to,
 }: LinkButtonProps) {
 	return (
 		<Link
-			className={cn(buttonVariants({ color }), className)}
+			className={cn(buttonVariants({ color, size }), "gap-1.5", className)}
 			replace={replace}
 			search={search}
 			to={to}

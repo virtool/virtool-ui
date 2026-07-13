@@ -1,18 +1,18 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import ContainerNarrow from "@base/ContainerNarrow";
-import type { Label } from "@labels/types";
+import Icon from "@base/Icon";
+import LinkButton from "@base/LinkButton";
+import LinkIconButton from "@base/LinkIconButton";
 import { FileManager } from "@uploads/components/FileManager";
-import CreateSampleFromFile from "./Create/CreateSampleFromFile";
-import CreateSamples from "./Create/CreateSamples";
+import { getReadsForUpload } from "@uploads/pairing";
+import { CirclePlus } from "lucide-react";
 
 type SampleFileManagerProps = {
-	labels: Label[];
 	page: number;
 	setPage: (page: number) => void;
 };
 
 export default function SampleFileManager({
-	labels,
 	page,
 	setPage,
 }: SampleFileManagerProps) {
@@ -42,22 +42,33 @@ export default function SampleFileManager({
 				renderItemAction={
 					canCreate
 						? (upload, uploads) => (
-								<CreateSampleFromFile
-									labels={labels}
-									upload={upload}
-									uploads={uploads}
+								<LinkIconButton
+									color="blue"
+									IconComponent={CirclePlus}
+									search={{
+										// The file's mate comes along, so a pair creates one
+										// paired sample rather than two unpaired ones.
+										upload: getReadsForUpload(upload, uploads).map(
+											(read) => read.id,
+										),
+									}}
+									tip="create sample"
+									to="/samples/create"
 								/>
 							)
 						: undefined
 				}
 				renderSelectionAction={
 					canCreate
-						? (selected, deselect) => (
-								<CreateSamples
-									labels={labels}
-									onCreated={deselect}
-									uploads={selected}
-								/>
+						? (selected) => (
+								<LinkButton
+									color="blue"
+									search={{ upload: selected.map((upload) => upload.id) }}
+									size="small"
+									to="/samples/create"
+								>
+									<Icon icon={CirclePlus} /> Create Samples
+								</LinkButton>
 							)
 						: undefined
 				}

@@ -1,6 +1,8 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiListGroups } from "@tests/api/groups";
+import { mockApiGetLabels } from "@tests/api/labels";
+import { mockApiGetUploads } from "@tests/api/uploads";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile } from "@tests/fake/files";
 import { createFakeLabel } from "@tests/fake/labels";
@@ -12,49 +14,42 @@ import {
 	createFakeShortlistSubtraction,
 	mockApiGetShortlistSubtractions,
 } from "@tests/fake/subtractions";
-import { renderWithRouter } from "@tests/setup";
+import { renderRoute } from "@tests/setup";
 import type { Upload } from "@uploads/types";
 import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import CreateSamples from "../CreateSamples";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-describe("<CreateSamples>", () => {
+describe("/samples/create", () => {
 	const label = createFakeLabel();
 	const subtractionShortlist = createFakeShortlistSubtraction();
 
-	const onCreated = vi.fn();
-
 	beforeEach(() => {
-		onCreated.mockClear();
 		mockApiGetAccount(createFakeAccount({ primary_group: null }));
 		mockApiListGroups([]);
+		mockApiGetLabels([label]);
 		mockApiGetShortlistSubtractions([subtractionShortlist]);
 	});
 
 	afterEach(() => nock.cleanAll());
 
-	async function renderDialog(uploads: Upload[]) {
-		await renderWithRouter(
-			<CreateSamples
-				labels={[label]}
-				onCreated={onCreated}
-				uploads={uploads}
-			/>,
-		);
+	/** Renders the route with the given uploads available and named in the URL. */
+	function renderCreate(available: Upload[], ids?: number[]) {
+		mockApiGetUploads(available);
 
-		await userEvent.click(
-			screen.getByRole("button", { name: "Create Samples" }),
-		);
+		const search = (ids ?? available.map((upload) => upload.id))
+			.map((id) => `upload=${id}`)
+			.join("&");
+
+		return renderRoute(`/samples/create?${search}`);
 	}
 
-	/** Waits for the form's queries to settle, then finds its submit button. */
 	function findSaveButton(count: number) {
 		return screen.findByRole("button", {
 			name: count === 1 ? "Create Sample" : `Create ${count} Samples`,
 		});
 	}
 
-	it("should create one sample per selected file, named after it", async () => {
+	it("should create one sample per read file, named after it", async () => {
 		const first = createFakeFile({ name: "sample_one.fastq.gz" });
 		const second = createFakeFile({ name: "sample_two.fastq.gz" });
 
@@ -83,7 +78,7 @@ describe("<CreateSamples>", () => {
 			),
 		];
 
-		await renderDialog([first, second]);
+		await renderCreate([first, second]);
 
 		expect(
 			await screen.findByRole("textbox", {
@@ -117,8 +112,8 @@ describe("<CreateSamples>", () => {
 			null,
 		);
 
-		// Given R2 first, to prove the reads are sent in [LEFT, RIGHT] order.
-		await renderDialog([right, left]);
+		// Named R2-first in the URL, to prove the reads are sent [LEFT, RIGHT].
+		await renderCreate([right, left]);
 
 		expect(
 			await screen.findByRole("textbox", {
@@ -163,7 +158,7 @@ describe("<CreateSamples>", () => {
 			),
 		];
 
-		await renderDialog([first, second]);
+		await renderCreate([first, second]);
 
 		const field = await screen.findByRole("textbox", {
 			name: "Name for sample_one.fastq.gz",
@@ -192,6 +187,45 @@ describe("<CreateSamples>", () => {
 		for (const scope of scopes) {
 			scope.done();
 		}
+	});
+
+	it("should collect metadata for a sample when the fields are shown", async () => {
+		const file = createFakeFile({ name: "sample_one.fastq.gz" });
+
+		const scope = mockApiCreateSample(
+			"sample_one",
+			"Clone AB",
+			"Apple",
+			"Earth",
+			"normal",
+			[file.id],
+			[],
+			[],
+			null,
+		);
+
+		await renderCreate([file]);
+
+		await userEvent.click(
+			await screen.findByRole("switch", { name: "Metadata Fields" }),
+		);
+
+		await userEvent.type(
+			screen.getByRole("textbox", { name: "Isolate for sample_one.fastq.gz" }),
+			"Clone AB",
+		);
+		await userEvent.type(
+			screen.getByRole("textbox", { name: "Host for sample_one.fastq.gz" }),
+			"Apple",
+		);
+		await userEvent.type(
+			screen.getByRole("textbox", { name: "Locale for sample_one.fastq.gz" }),
+			"Earth",
+		);
+
+		await userEvent.click(await findSaveButton(1));
+
+		scope.done();
 	});
 
 	it("should apply the library type to every sample in the batch", async () => {
@@ -223,7 +257,7 @@ describe("<CreateSamples>", () => {
 			),
 		];
 
-		await renderDialog([first, second]);
+		await renderCreate([first, second]);
 
 		await userEvent.click(await screen.findByText("sRNA"));
 		await userEvent.click(await findSaveButton(2));
@@ -236,110 +270,112 @@ describe("<CreateSamples>", () => {
 	it("should require a name for every sample", async () => {
 		const file = createFakeFile({ name: "sample_one.fastq.gz" });
 
-		await renderDialog([file]);
+		await renderCreate([file]);
 
-		const field = await screen.findByRole("textbox", {
-			name: "Name for sample_one.fastq.gz",
-		});
-		await userEvent.clear(field);
-
+		await userEvent.clear(
+			await screen.findByRole("textbox", {
+				name: "Name for sample_one.fastq.gz",
+			}),
+		);
 		await userEvent.click(await findSaveButton(1));
 
+		// Nothing is requested: nock would throw on an unmocked POST.
 		expect(await screen.findByText("Required Field")).toBeInTheDocument();
-		// Nothing was requested: nock would throw on an unmocked POST.
 	});
 
-	describe("when the API rejects one of the samples", () => {
+	it("should keep a rejected sample, with its reason, and drop the created one", async () => {
 		const first = createFakeFile({ name: "sample_one.fastq.gz" });
 		const second = createFakeFile({ name: "sample_two.fastq.gz" });
 
-		function mockPartialFailure() {
-			return [
-				mockApiCreateSample(
-					"sample_one",
-					"",
-					"",
-					"",
-					"normal",
-					[first.id],
-					[],
-					[],
-					null,
-				),
-				mockApiCreateSampleFailure("sample_two", "Name already in use"),
-			];
+		const scopes = [
+			mockApiCreateSample(
+				"sample_one",
+				"",
+				"",
+				"",
+				"normal",
+				[first.id],
+				[],
+				[],
+				null,
+			),
+			mockApiCreateSampleFailure("sample_two", "Name already in use"),
+		];
+
+		await renderCreate([first, second]);
+
+		await userEvent.click(await findSaveButton(2));
+
+		expect(await screen.findByText("Name already in use")).toBeInTheDocument();
+
+		expect(
+			screen.queryByRole("textbox", { name: "Name for sample_one.fastq.gz" }),
+		).not.toBeInTheDocument();
+		expect(
+			screen.getByRole("textbox", { name: "Name for sample_two.fastq.gz" }),
+		).toBeInTheDocument();
+		expect(await findSaveButton(1)).toBeInTheDocument();
+
+		for (const scope of scopes) {
+			scope.done();
 		}
+	});
 
-		it("should keep the rejected sample, with its reason, and drop the created one", async () => {
-			const scopes = mockPartialFailure();
+	describe("when a named read file is gone", () => {
+		it("should warn, and create samples from the ones that remain", async () => {
+			const file = createFakeFile({ name: "sample_one.fastq.gz" });
+			const removed = createFakeFile({ name: "sample_two.fastq.gz" });
 
-			await renderDialog([first, second]);
+			const scope = mockApiCreateSample(
+				"sample_one",
+				"",
+				"",
+				"",
+				"normal",
+				[file.id],
+				[],
+				[],
+				null,
+			);
 
-			await userEvent.click(await findSaveButton(2));
+			// The URL names both, but only one is still available.
+			await renderCreate([file], [file.id, removed.id]);
 
 			expect(
-				await screen.findByText("Name already in use"),
+				await screen.findByText(/1 selected read file is no longer available/),
 			).toBeInTheDocument();
-
-			// The created sample's row is gone; the rejected one remains to be fixed.
 			expect(
-				screen.queryByRole("textbox", { name: "Name for sample_one.fastq.gz" }),
+				screen.queryByRole("textbox", {
+					name: "Name for sample_two.fastq.gz",
+				}),
 			).not.toBeInTheDocument();
+
+			await userEvent.click(await findSaveButton(1));
+
+			scope.done();
+		});
+
+		it("should show an empty state when none remain", async () => {
+			const removed = createFakeFile({ name: "sample_one.fastq.gz" });
+
+			await renderCreate([], [removed.id]);
+
 			expect(
-				screen.getByRole("textbox", { name: "Name for sample_two.fastq.gz" }),
+				await screen.findByText("No read files selected"),
 			).toBeInTheDocument();
-			expect(await findSaveButton(1)).toBeInTheDocument();
-
-			for (const scope of scopes) {
-				scope.done();
-			}
-		});
-
-		it("should deselect only the files of the samples that were created", async () => {
-			const scopes = mockPartialFailure();
-
-			await renderDialog([first, second]);
-
-			await userEvent.click(await findSaveButton(2));
-
-			await screen.findByText("Name already in use");
-
-			expect(onCreated).toHaveBeenCalledWith([first]);
-
-			for (const scope of scopes) {
-				scope.done();
-			}
+			expect(
+				screen.getByRole("link", { name: "Browse Read Files" }),
+			).toBeInTheDocument();
 		});
 	});
 
-	it("should deselect every file and close once all the samples are created", async () => {
-		const file = createFakeFile({ name: "sample_one.fastq.gz" });
+	it("should show an empty state when no read files are named", async () => {
+		mockApiGetUploads([]);
 
-		const scope = mockApiCreateSample(
-			"sample_one",
-			"",
-			"",
-			"",
-			"normal",
-			[file.id],
-			[],
-			[],
-			null,
-		);
+		await renderRoute("/samples/create");
 
-		await renderDialog([file]);
-
-		await userEvent.click(await findSaveButton(1));
-
-		await waitForDialogToClose();
-
-		expect(onCreated).toHaveBeenCalledWith([file]);
-
-		scope.done();
+		expect(
+			await screen.findByText("No read files selected"),
+		).toBeInTheDocument();
 	});
-
-	async function waitForDialogToClose() {
-		await screen.findByRole("button", { name: "Create Samples" });
-		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-	}
 });

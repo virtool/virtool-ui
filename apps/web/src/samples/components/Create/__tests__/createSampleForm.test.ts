@@ -1,9 +1,9 @@
 import { createFakeFile } from "@tests/fake/files";
 import { describe, expect, it } from "vitest";
 import {
-	getCreateSamplesDefaultValues,
+	getCreateSampleFormValues,
 	getSampleDrafts,
-} from "../createSamples";
+} from "../createSampleForm";
 
 describe("getSampleDrafts", () => {
 	it("makes one paired draft from both mates of a pair", () => {
@@ -46,15 +46,13 @@ describe("getSampleDrafts", () => {
 	});
 });
 
-describe("getCreateSamplesDefaultValues", () => {
+describe("getCreateSampleFormValues", () => {
 	it("names each sample after the read files it will be created from", () => {
 		const r1 = createFakeFile({ name: "sample_one_R1.fastq.gz" });
 		const r2 = createFakeFile({ name: "sample_one_R2.fastq.gz" });
 		const single = createFakeFile({ name: "sample_two.fastq.gz" });
 
-		const values = getCreateSamplesDefaultValues(
-			getSampleDrafts([r1, r2, single]),
-		);
+		const values = getCreateSampleFormValues(getSampleDrafts([r1, r2, single]));
 
 		expect(values.samples.map((sample) => sample.name)).toEqual([
 			"sample_one",
@@ -63,7 +61,7 @@ describe("getCreateSamplesDefaultValues", () => {
 	});
 
 	it("starts every sample with no labels and no subtractions", () => {
-		const values = getCreateSamplesDefaultValues(
+		const values = getCreateSampleFormValues(
 			getSampleDrafts([createFakeFile({ name: "one.fastq.gz" })]),
 		);
 
@@ -74,7 +72,7 @@ describe("getCreateSamplesDefaultValues", () => {
 	});
 
 	it("shares one library type and group across the batch", () => {
-		const values = getCreateSamplesDefaultValues(
+		const values = getCreateSampleFormValues(
 			getSampleDrafts([createFakeFile({ name: "one.fastq.gz" })]),
 		);
 

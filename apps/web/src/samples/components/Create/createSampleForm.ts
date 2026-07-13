@@ -15,24 +15,27 @@ export type SampleDraft = {
 	reads: Upload[];
 };
 
-/** The values collected for one sample in the multi-sample creation form. */
-export type CreateSamplesSampleValues = {
+/** The values collected for one sample in the create-sample form. */
+export type SampleValues = {
 	/** The key of the draft the sample is created from */
 	key: string;
 
+	host: string;
+	isolate: string;
 	labels: number[];
+	locale: string;
 	name: string;
 	subtractionIds: string[];
 };
 
 /**
- * The values collected by the multi-sample creation form. The library type and
- * group are set once and shared by every sample in the batch.
+ * The values collected by the create-sample form. The library type and group
+ * are set once and shared by every sample being created.
  */
-export type CreateSamplesFormValues = {
+export type CreateSampleFormValues = {
 	group: string;
 	libraryType: string;
-	samples: CreateSamplesSampleValues[];
+	samples: SampleValues[];
 };
 
 /**
@@ -60,15 +63,18 @@ export function getSampleDrafts(uploads: Upload[]): SampleDraft[] {
  *
  * @param drafts - the samples to be created
  */
-export function getCreateSamplesDefaultValues(
+export function getCreateSampleFormValues(
 	drafts: SampleDraft[],
-): CreateSamplesFormValues {
+): CreateSampleFormValues {
 	return {
 		group: "",
 		libraryType: "normal",
 		samples: drafts.map((draft) => ({
 			key: draft.key,
+			host: "",
+			isolate: "",
 			labels: [],
+			locale: "",
 			name: getSampleNameFromReads(draft.reads),
 			subtractionIds: [],
 		})),

@@ -195,16 +195,14 @@ describe("<FileManager>", () => {
 		const first = createFakeFile({ name: "one.fq.gz" });
 		const second = createFakeFile({ name: "two.fq.gz" });
 
-		// Stands in for the create-samples action: it names the files it was given
-		// and hands them back as consumed when clicked.
+		// Stands in for the create-samples link, which is handed the selected files
+		// so it can name them in its target.
 		function renderWithSelectionAction() {
 			return renderWithRouter(
 				<FileManager
 					{...props}
-					renderSelectionAction={(selected, deselect) => (
-						<button type="button" onClick={() => deselect(selected)}>
-							{`Consume ${selected.length}`}
-						</button>
+					renderSelectionAction={(selected) => (
+						<span>{`Selected ${selected.map((upload) => upload.name).join(", ")}`}</span>
 					)}
 				/>,
 				path,
@@ -218,16 +216,17 @@ describe("<FileManager>", () => {
 			await renderWithSelectionAction();
 
 			expect(await screen.findByText("2 files")).toBeInTheDocument();
-			expect(
-				screen.queryByRole("button", { name: /Consume/ }),
-			).not.toBeInTheDocument();
+			expect(screen.queryByText(/Selected/)).not.toBeInTheDocument();
 
 			await userEvent.click(
 				screen.getByRole("checkbox", { name: "Select one.fq.gz" }),
 			);
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: "Select two.fq.gz" }),
+			);
 
 			expect(
-				screen.getByRole("button", { name: "Consume 1" }),
+				screen.getByText("Selected one.fq.gz, two.fq.gz"),
 			).toBeInTheDocument();
 		});
 
@@ -250,35 +249,10 @@ describe("<FileManager>", () => {
 				await screen.findByRole("checkbox", { name: "Select one.fq.gz" }),
 			);
 
-			expect(
-				screen.getByRole("button", { name: "Consume 1" }),
-			).toBeInTheDocument();
+			expect(screen.getByText("Selected one.fq.gz")).toBeInTheDocument();
 			expect(
 				screen.queryByRole("button", { name: "Delete" }),
 			).not.toBeInTheDocument();
-		});
-
-		it("should drop the files the action consumed, leaving the rest selected", async () => {
-			mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
-			mockApiListFiles([first, second], true);
-
-			await renderWithSelectionAction();
-
-			await userEvent.click(
-				await screen.findByRole("checkbox", { name: "Select one.fq.gz" }),
-			);
-			await userEvent.click(
-				screen.getByRole("checkbox", { name: "Select two.fq.gz" }),
-			);
-
-			expect(screen.getByText("2 selected")).toBeInTheDocument();
-
-			await userEvent.click(screen.getByRole("button", { name: "Consume 2" }));
-
-			expect(screen.getByText("2 files")).toBeInTheDocument();
-			expect(
-				screen.getByRole("checkbox", { name: "Select one.fq.gz" }),
-			).not.toBeChecked();
 		});
 	});
 });

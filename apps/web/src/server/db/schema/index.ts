@@ -12,4 +12,5 @@ export * from "./sessions";
 export * from "./settings";
 export * from "./subtractions";
 export * from "./tasks";
+export * from "./uploads";
 export * from "./users";

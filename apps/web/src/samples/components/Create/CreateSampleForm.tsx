@@ -1,56 +1,52 @@
 import { useFetchAccount } from "@account/queries";
 import BoxGroup from "@base/BoxGroup";
-import Button from "@base/Button";
-import {
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogTitle,
-	DialogTrigger,
-} from "@base/Dialog";
-import Icon from "@base/Icon";
 import InputError from "@base/InputError";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import SaveButton from "@base/SaveButton";
+import Switch from "@base/Switch";
 import { useListGroups } from "@groups/queries";
 import type { Label } from "@labels/types";
 import { useCreateSamples } from "@samples/queries";
 import { getCreateSampleRequest } from "@samples/utils";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import type { Upload } from "@uploads/types";
-import { CirclePlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import CreateSamplesRow from "./CreateSamplesRow";
+import CreateSampleRow from "./CreateSampleRow";
 import {
-	type CreateSamplesFormValues,
-	getCreateSamplesDefaultValues,
+	type CreateSampleFormValues,
+	getCreateSampleFormValues,
 	getSampleDrafts,
-} from "./createSamples";
+} from "./createSampleForm";
 import LibraryTypeSelector from "./LibraryTypeSelector";
 import SampleUserGroup from "./SampleUserGroup";
 
-type CreateSamplesFormProps = {
+type CreateSampleFormProps = {
 	/** All labels available for selection */
 	labels: Label[];
 
-	/** Closes the dialog once every sample has been created */
-	onClose: () => void;
+	/** Called once every sample has been created */
+	onCreated: () => void;
 
-	/** Drops the read files of the created samples from the file selection */
-	onCreated: (reads: Upload[]) => void;
-
-	/** The selected read files the samples will be created from */
+	/** The read files the samples will be created from */
 	uploads: Upload[];
 };
 
-function CreateSamplesForm({
+/**
+ * Creates a sample from each of the given read files. Detected mate pairs
+ * become one paired sample rather than two, so passing both mates yields a
+ * single row.
+ *
+ * A sample the API rejects keeps its row and carries the reason, while the
+ * siblings that were created are dropped — so a partial failure can be
+ * corrected and retried instead of started over.
+ */
+export default function CreateSampleForm({
 	labels,
-	onClose,
 	onCreated,
 	uploads,
-}: CreateSamplesFormProps) {
+}: CreateSampleFormProps) {
 	const { data: groups, isPending: isPendingGroups } = useListGroups();
 	const { data: account, isPending: isPendingAccount } = useFetchAccount();
 	const {
@@ -59,13 +55,13 @@ function CreateSamplesForm({
 		isError: isErrorSubtractions,
 	} = useFetchSubtractionsShortlist();
 
-	// The drafts are fixed for the life of the dialog: the uploads lists refetch
-	// as samples are created, and the rows must not shift under the user.
+	// The drafts are fixed for the life of the form: samples are created one
+	// request at a time, and the rows must not shift under the user as they go.
 	const [drafts] = useState(() => getSampleDrafts(uploads));
 	const readsByKey = new Map(drafts.map((draft) => [draft.key, draft.reads]));
 
-	const { control, handleSubmit, setValue } = useForm<CreateSamplesFormValues>({
-		defaultValues: getCreateSamplesDefaultValues(drafts),
+	const { control, handleSubmit, setValue } = useForm<CreateSampleFormValues>({
+		defaultValues: getCreateSampleFormValues(drafts),
 	});
 
 	const { fields, remove } = useFieldArray({ control, name: "samples" });
@@ -73,12 +69,13 @@ function CreateSamplesForm({
 	const mutation = useCreateSamples();
 
 	const [failures, setFailures] = useState<Record<string, string>>({});
+	const [showMetadata, setShowMetadata] = useState(false);
 
 	useEffect(() => {
 		setValue("group", String(account?.primary_group?.id ?? ""));
 	}, [account, setValue]);
 
-	function onSubmit({ group, libraryType, samples }: CreateSamplesFormValues) {
+	function onSubmit({ group, libraryType, samples }: CreateSampleFormValues) {
 		const requests = samples.map((sample) =>
 			getCreateSampleRequest(
 				{ ...sample, group, libraryType },
@@ -106,10 +103,9 @@ function CreateSamplesForm({
 				});
 
 				setFailures(nextFailures);
-				onCreated(created.flatMap((key) => readsByKey.get(key) ?? []));
 
 				if (created.length === samples.length) {
-					onClose();
+					onCreated();
 					return;
 				}
 
@@ -164,21 +160,36 @@ function CreateSamplesForm({
 				name="libraryType"
 			/>
 
+			<div className="flex items-center justify-end gap-2 pb-2">
+				<label
+					htmlFor="showMetadata"
+					className="font-medium text-gray-600 text-sm"
+				>
+					Metadata Fields
+				</label>
+				<Switch
+					id="showMetadata"
+					checked={showMetadata}
+					onCheckedChange={setShowMetadata}
+				/>
+			</div>
+
 			<BoxGroup>
 				{fields.map((field, index) => (
-					<CreateSamplesRow
+					<CreateSampleRow
 						control={control}
 						failure={failures[field.key]}
 						index={index}
 						key={field.id}
 						labels={labels}
 						reads={readsByKey.get(field.key) ?? []}
+						showMetadata={showMetadata}
 						subtractions={subtractions}
 					/>
 				))}
 			</BoxGroup>
 
-			<DialogFooter>
+			<div className="flex justify-end pt-4">
 				<SaveButton
 					altText={
 						fields.length === 1
@@ -186,52 +197,7 @@ function CreateSamplesForm({
 							: `Create ${fields.length} Samples`
 					}
 				/>
-			</DialogFooter>
+			</div>
 		</form>
-	);
-}
-
-type CreateSamplesProps = {
-	/** All labels available for selection */
-	labels: Label[];
-
-	/** Drops the read files of the created samples from the file selection */
-	onCreated: (reads: Upload[]) => void;
-
-	/** The selected read files the samples will be created from */
-	uploads: Upload[];
-};
-
-/**
- * Creates a sample from each of the read files selected in the file manager.
- * Detected mate pairs become one paired sample rather than two, so selecting
- * both mates yields a single row.
- *
- * A sample the API rejects keeps its row and carries the reason, while the
- * siblings that were created are dropped — so a partial failure can be
- * corrected and retried instead of started over.
- */
-export default function CreateSamples({
-	labels,
-	onCreated,
-	uploads,
-}: CreateSamplesProps) {
-	const [open, setOpen] = useState(false);
-
-	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<Button as={DialogTrigger} color="blue" size="small">
-				<Icon icon={CirclePlus} /> Create Samples
-			</Button>
-			<DialogContent size="lg" className="max-h-[90vh] overflow-y-auto">
-				<DialogTitle>Create Samples</DialogTitle>
-				<CreateSamplesForm
-					labels={labels}
-					onClose={() => setOpen(false)}
-					onCreated={onCreated}
-					uploads={uploads}
-				/>
-			</DialogContent>
-		</Dialog>
 	);
 }

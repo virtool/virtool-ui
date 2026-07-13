@@ -35,6 +35,7 @@ import { Route as AuthenticatedSubtractionsSubtractionIdRouteImport } from './ro
 import { Route as AuthenticatedSamplesSettingsRouteImport } from './routes/_authenticated/samples/settings'
 import { Route as AuthenticatedSamplesLabelsRouteImport } from './routes/_authenticated/samples/labels'
 import { Route as AuthenticatedSamplesFilesRouteImport } from './routes/_authenticated/samples/files'
+import { Route as AuthenticatedSamplesCreateRouteImport } from './routes/_authenticated/samples/create'
 import { Route as AuthenticatedSamplesSampleIdRouteImport } from './routes/_authenticated/samples/$sampleId'
 import { Route as AuthenticatedRefsSettingsRouteImport } from './routes/_authenticated/refs/settings'
 import { Route as AuthenticatedJobsJobIdRouteImport } from './routes/_authenticated/jobs/$jobId'
@@ -206,6 +207,12 @@ const AuthenticatedSamplesFilesRoute =
   AuthenticatedSamplesFilesRouteImport.update({
     id: '/files',
     path: '/files',
+    getParentRoute: () => AuthenticatedSamplesRoute,
+  } as any)
+const AuthenticatedSamplesCreateRoute =
+  AuthenticatedSamplesCreateRouteImport.update({
+    id: '/create',
+    path: '/create',
     getParentRoute: () => AuthenticatedSamplesRoute,
   } as any)
 const AuthenticatedSamplesSampleIdRoute =
@@ -421,6 +428,7 @@ export interface FileRoutesByFullPath {
   '/jobs/$jobId': typeof AuthenticatedJobsJobIdRoute
   '/refs/settings': typeof AuthenticatedRefsSettingsRoute
   '/samples/$sampleId': typeof AuthenticatedSamplesSampleIdRouteWithChildren
+  '/samples/create': typeof AuthenticatedSamplesCreateRoute
   '/samples/files': typeof AuthenticatedSamplesFilesRoute
   '/samples/labels': typeof AuthenticatedSamplesLabelsRoute
   '/samples/settings': typeof AuthenticatedSamplesSettingsRoute
@@ -471,6 +479,7 @@ export interface FileRoutesByTo {
   '/hmms/$hmmId': typeof AuthenticatedHmmsHmmIdRoute
   '/jobs/$jobId': typeof AuthenticatedJobsJobIdRoute
   '/refs/settings': typeof AuthenticatedRefsSettingsRoute
+  '/samples/create': typeof AuthenticatedSamplesCreateRoute
   '/samples/files': typeof AuthenticatedSamplesFilesRoute
   '/samples/labels': typeof AuthenticatedSamplesLabelsRoute
   '/samples/settings': typeof AuthenticatedSamplesSettingsRoute
@@ -529,6 +538,7 @@ export interface FileRoutesById {
   '/_authenticated/jobs/$jobId': typeof AuthenticatedJobsJobIdRoute
   '/_authenticated/refs/settings': typeof AuthenticatedRefsSettingsRoute
   '/_authenticated/samples/$sampleId': typeof AuthenticatedSamplesSampleIdRouteWithChildren
+  '/_authenticated/samples/create': typeof AuthenticatedSamplesCreateRoute
   '/_authenticated/samples/files': typeof AuthenticatedSamplesFilesRoute
   '/_authenticated/samples/labels': typeof AuthenticatedSamplesLabelsRoute
   '/_authenticated/samples/settings': typeof AuthenticatedSamplesSettingsRoute
@@ -590,6 +600,7 @@ export interface FileRouteTypes {
     | '/jobs/$jobId'
     | '/refs/settings'
     | '/samples/$sampleId'
+    | '/samples/create'
     | '/samples/files'
     | '/samples/labels'
     | '/samples/settings'
@@ -640,6 +651,7 @@ export interface FileRouteTypes {
     | '/hmms/$hmmId'
     | '/jobs/$jobId'
     | '/refs/settings'
+    | '/samples/create'
     | '/samples/files'
     | '/samples/labels'
     | '/samples/settings'
@@ -697,6 +709,7 @@ export interface FileRouteTypes {
     | '/_authenticated/jobs/$jobId'
     | '/_authenticated/refs/settings'
     | '/_authenticated/samples/$sampleId'
+    | '/_authenticated/samples/create'
     | '/_authenticated/samples/files'
     | '/_authenticated/samples/labels'
     | '/_authenticated/samples/settings'
@@ -925,6 +938,13 @@ declare module '@tanstack/react-router' {
       path: '/files'
       fullPath: '/samples/files'
       preLoaderRoute: typeof AuthenticatedSamplesFilesRouteImport
+      parentRoute: typeof AuthenticatedSamplesRoute
+    }
+    '/_authenticated/samples/create': {
+      id: '/_authenticated/samples/create'
+      path: '/create'
+      fullPath: '/samples/create'
+      preLoaderRoute: typeof AuthenticatedSamplesCreateRouteImport
       parentRoute: typeof AuthenticatedSamplesRoute
     }
     '/_authenticated/samples/$sampleId': {
@@ -1362,6 +1382,7 @@ const AuthenticatedSamplesSampleIdRouteWithChildren =
 
 interface AuthenticatedSamplesRouteChildren {
   AuthenticatedSamplesSampleIdRoute: typeof AuthenticatedSamplesSampleIdRouteWithChildren
+  AuthenticatedSamplesCreateRoute: typeof AuthenticatedSamplesCreateRoute
   AuthenticatedSamplesFilesRoute: typeof AuthenticatedSamplesFilesRoute
   AuthenticatedSamplesLabelsRoute: typeof AuthenticatedSamplesLabelsRoute
   AuthenticatedSamplesSettingsRoute: typeof AuthenticatedSamplesSettingsRoute
@@ -1371,6 +1392,7 @@ interface AuthenticatedSamplesRouteChildren {
 const AuthenticatedSamplesRouteChildren: AuthenticatedSamplesRouteChildren = {
   AuthenticatedSamplesSampleIdRoute:
     AuthenticatedSamplesSampleIdRouteWithChildren,
+  AuthenticatedSamplesCreateRoute: AuthenticatedSamplesCreateRoute,
   AuthenticatedSamplesFilesRoute: AuthenticatedSamplesFilesRoute,
   AuthenticatedSamplesLabelsRoute: AuthenticatedSamplesLabelsRoute,
   AuthenticatedSamplesSettingsRoute: AuthenticatedSamplesSettingsRoute,

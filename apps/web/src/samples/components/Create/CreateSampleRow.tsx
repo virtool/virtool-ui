@@ -6,13 +6,41 @@ import SubtractionSelector from "@subtraction/components/SubtractionSelector";
 import type { SubtractionOption } from "@subtraction/types";
 import type { Upload } from "@uploads/types";
 import { type Control, useController } from "react-hook-form";
-import type { CreateSamplesFormValues } from "./createSamples";
+import type { CreateSampleFormValues } from "./createSampleForm";
 import LabelSelector from "./LabelSelector";
 import ReadPairBadge from "./ReadPairBadge";
 
-type CreateSamplesRowProps = {
+type MetadataFieldProps = {
+	control: Control<CreateSampleFormValues>;
+	fileName: string;
+	index: number;
+	label: string;
+	name: "host" | "isolate" | "locale";
+};
+
+function MetadataField({
+	control,
+	fileName,
+	index,
+	label,
+	name,
+}: MetadataFieldProps) {
+	const { field } = useController({
+		control,
+		name: `samples.${index}.${name}`,
+	});
+
+	return (
+		<div>
+			<span className="block text-sm text-gray-600 mb-1">{label}</span>
+			<InputSimple {...field} aria-label={`${label} for ${fileName}`} />
+		</div>
+	);
+}
+
+type CreateSampleRowProps = {
 	/** The form the row's fields belong to */
-	control: Control<CreateSamplesFormValues>;
+	control: Control<CreateSampleFormValues>;
 
 	/** The message from the API when this sample could not be created */
 	failure?: string;
@@ -26,26 +54,30 @@ type CreateSamplesRowProps = {
 	/** The read files the sample will be created from, in [LEFT, RIGHT] order */
 	reads: Upload[];
 
+	/** Whether to collect the optional metadata fields */
+	showMetadata: boolean;
+
 	/** All subtractions available for selection */
 	subtractions: SubtractionOption[];
 };
 
 /**
- * One sample in the multi-sample creation dialog. Its read files are fixed —
- * they come from the file manager selection the dialog was opened on — while
- * its name, labels, and subtractions are set here.
+ * One sample in the create-sample form. Its read files are fixed — they come
+ * from the uploads named in the URL — while its name, labels, subtractions, and
+ * optional metadata are set here.
  *
  * Each field is named after the sample's first read file, so that the rows'
  * controls are distinguishable from one another.
  */
-export default function CreateSamplesRow({
+export default function CreateSampleRow({
 	control,
 	failure,
 	index,
 	labels,
 	reads,
+	showMetadata,
 	subtractions,
-}: CreateSamplesRowProps) {
+}: CreateSampleRowProps) {
 	const {
 		field: name,
 		fieldState: { error: nameError },
@@ -112,6 +144,32 @@ export default function CreateSamplesRow({
 					subtractions={subtractions}
 				/>
 			</div>
+
+			{showMetadata && (
+				<div className="grid grid-cols-3 gap-4">
+					<MetadataField
+						control={control}
+						fileName={fileName}
+						index={index}
+						label="Locale"
+						name="locale"
+					/>
+					<MetadataField
+						control={control}
+						fileName={fileName}
+						index={index}
+						label="Isolate"
+						name="isolate"
+					/>
+					<MetadataField
+						control={control}
+						fileName={fileName}
+						index={index}
+						label="Host"
+						name="host"
+					/>
+				</div>
+			)}
 
 			{failure && <InputError>{failure}</InputError>}
 		</BoxGroupSection>
