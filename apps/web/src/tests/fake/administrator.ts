@@ -1,7 +1,6 @@
-import type { AdministratorRole } from "@administration/types";
+import type { AdministratorRole, Settings } from "@administration/types";
 import { faker } from "@faker-js/faker";
 import nock from "nock";
-import type { Settings } from "@/types/api";
 
 export const administratorRoles: AdministratorRole[] = [
 	{
