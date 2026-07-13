@@ -1,6 +1,6 @@
-import { userQueryOptions } from "@administration/queries";
 import { createFileRoute } from "@tanstack/react-router";
 import UserDetail from "@users/components/UserDetail";
+import { userQueryOptions } from "@users/queries";
 
 export const Route = createFileRoute(
 	"/_authenticated/administration/users/$userId",

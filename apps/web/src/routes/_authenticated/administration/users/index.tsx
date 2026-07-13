@@ -1,6 +1,6 @@
-import { usersQueryOptions } from "@administration/queries";
 import { createFileRoute } from "@tanstack/react-router";
 import { ManageUsers } from "@users/components/ManageUsers";
+import { usersQueryOptions } from "@users/queries";
 import { z } from "zod";
 
 const searchSchema = z.object({
