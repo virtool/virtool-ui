@@ -17,11 +17,11 @@ export const colorToClass: Record<LoaderColor, string> = {
 	red: "border-t-red-600 border-x-red-600",
 };
 
-interface LoaderProps {
+type LoaderProps = {
 	className?: string;
 	color?: LoaderColor;
 	size?: string;
-}
+};
 
 export default function Loader({
 	className,

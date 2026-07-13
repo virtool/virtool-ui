@@ -88,13 +88,14 @@ the server function caller.
 
 ## Deployment note
 
-TanStack Start runs in SPA mode (`spa.enabled: true` in `vite.config.js`).
-Server functions still work in SPA mode but require the deployment to
-route the `/_serverFn/*` path to a Node process. Tilt + minikube is
-already configured for this; the `apps/web/scripts/serve.mjs` static
-`sirv` server is for the SPA shell and is *not* sufficient on its own once
-this PR ships. Confirm the production deploy points the auth-bearing
-paths at the Node server.
+The app builds through Nitro (the `nitro` plugin in `vite.config.js`) to a
+Node server at `.output/server/index.mjs`, which `pnpm --filter @virtool/web
+start` runs. That server serves the app shell *and* handles `/_serverFn/*`,
+so server functions work in the normal deploy with no extra routing.
+
+This replaced an earlier setup that served a static SPA shell with `sirv`
+and could not route `/_serverFn/*` to a Node process. That static server is
+gone, along with the `sirv` dependency.
 
 ## What is in this first PR
 

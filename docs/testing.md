@@ -16,17 +16,18 @@ The default. Fast, runs on every save. Covers:
 
 ### Integration — Vitest against a real database
 
-For server features under `apps/web/src/server/<feature>/` once their
-`data.ts` owns real persistence. Exercises schema bootstrap, indexes,
-and query semantics against a real Postgres — mocks have
-hidden bugs that real DBs catch.
+Intended for server features under `apps/web/src/server/<feature>/`
+once their `data.ts` owns real persistence: exercising schema
+bootstrap, indexes, and query semantics against a real Postgres, since
+mocks hide bugs that real DBs catch.
 
-Bootstrap the schema in a sibling `test/fixtures.ts` (see "Shared
-test fixtures" below) and connect a real db handle per suite.
-
-Today only `auth/` is on this side of the line. Add integration tests
-as each feature's `data.ts` lands; don't retrofit them onto features
-that still call the Python API.
+**No integration tests exist yet.** Every test in the repo today is a
+unit test — the server tests under `apps/web/src/server/` all cover
+pure functions (token and password helpers, the Sentry log stream, the
+event emitters) and none connects to a database. Add the first
+integration suite when a feature's `data.ts` genuinely owns
+persistence; don't retrofit one onto features that still call the
+Python API.
 
 ## Where to mock the network boundary
 
@@ -74,25 +75,20 @@ list) is fine.
 
 ## Shared test fixtures
 
-When two or more `*.test.ts` files share the same bootstrap, seed
-data, or test-double factories, extract them into a sibling
-`test/fixtures.ts` module rather than copy-pasting. The cost of
-duplication is silent drift — a real example: three auth test files
-each carried their own copy of the schema SQL, and one of them
-quietly lost the `users_handle_lower_unique` index without anyone
-noticing.
+When two or more test files share the same bootstrap, seed data, or
+test-double factories, extract them into a shared module next to the
+tests it serves rather than copy-pasting. The cost of duplication is
+silent drift: each copy is free to fall out of step with the others,
+and the one that does is the one nobody re-reads.
 
 Reach for extraction at the second or third copy, not later. Things
-worth sharing:
-
-- DDL / schema bootstrap (`SCHEMA_SQL`)
-- Seed helpers (`seedAlice(db, hash)`)
-- Test-double factories (`makeCookies()`)
-- Pinned fixture constants (e.g. a known plaintext + bcrypt hash
-  pair)
+worth sharing: schema bootstrap, seed helpers, test-double factories,
+and pinned fixture constants (e.g. a known plaintext + hash pair).
 
 The shared module goes next to the tests it serves — not in a
 top-level `test/` directory — so it travels with the code under test.
+Cross-cutting fakes for the SPA are the exception; those already live
+in `apps/web/src/tests/fake/`.
 
 Before creating a fixture, check whether one already exists. Look for
 a sibling `test/` directory next to the code under test, and grep for

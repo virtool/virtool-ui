@@ -6,7 +6,7 @@ import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import { Controller, useForm } from "react-hook-form";
 
-interface CreateUserFormProps {
+type CreateUserFormProps = {
 	/** The user's handle or username */
 	handle?: string;
 	/** The user's password */
@@ -19,7 +19,7 @@ interface CreateUserFormProps {
 		password: string;
 		forceReset: boolean;
 	}) => void;
-}
+};
 
 /**
  * A form component for creating a new user

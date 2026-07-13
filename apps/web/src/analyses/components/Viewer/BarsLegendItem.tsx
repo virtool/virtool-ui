@@ -1,11 +1,11 @@
 import { cn, toThousand } from "@app/utils";
 import { type BarColor, bgColorClasses } from "./colors";
 
-interface BarsLegendItemProps {
+type BarsLegendItemProps = {
 	color: BarColor;
 	count: number;
 	title: string;
-}
+};
 
 export function BarsLegendItem({ color, count, title }: BarsLegendItemProps) {
 	return (
