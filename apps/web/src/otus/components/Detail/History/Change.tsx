@@ -1,9 +1,7 @@
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";
-import IconButton from "@base/IconButton";
 import Label from "@base/Label";
-import { useRevertOtu } from "@otus/queries";
 import type { OtuNested } from "@otus/types";
 import type { UserNested } from "@users/types";
 import {
@@ -13,7 +11,6 @@ import {
 	Dna,
 	FileUp,
 	FlaskConical,
-	History,
 	Link,
 	Pencil,
 	PlusSquare,
@@ -90,13 +87,10 @@ function getMethodIcon(methodName: string) {
 }
 
 type ChangeProps = {
-	id: string;
-	archived?: boolean;
 	createdAt: string;
 	description: string;
 	methodName: string;
 	otu: OtuNested;
-	unbuilt: boolean;
 	user: UserNested;
 };
 
@@ -104,26 +98,14 @@ type ChangeProps = {
  * A condensed change item for use in a list of changes
  */
 export default function Change({
-	id,
-	archived = false,
 	createdAt,
 	description,
 	methodName,
 	otu,
-	unbuilt,
 	user,
 }: ChangeProps) {
-	const mutation = useRevertOtu(otu.id);
-
-	const showRevert = unbuilt && !archived;
-
 	return (
-		<BoxGroupSection
-			className="grid items-center"
-			style={{
-				gridTemplateColumns: showRevert ? "42px 2fr 1fr 15px" : "42px 2fr 1fr",
-			}}
-		>
+		<BoxGroupSection className="grid grid-cols-[42px_2fr_1fr] items-center">
 			<div>
 				<Label>{otu.version}</Label>
 			</div>
@@ -134,14 +116,6 @@ export default function Change({
 			</div>
 
 			<Attribution time={createdAt} user={user.handle} verb="" />
-
-			{showRevert && (
-				<IconButton
-					IconComponent={History}
-					tip="revert"
-					onClick={() => mutation.mutate({ changeId: id })}
-				/>
-			)}
 		</BoxGroupSection>
 	);
 }
