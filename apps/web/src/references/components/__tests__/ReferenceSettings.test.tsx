@@ -9,7 +9,6 @@ const settings = {
 	default_source_types: ["Clone", "Genotype"],
 	enable_api: true,
 	enable_sentry: true,
-	hmm_slug: "virtool/virtool-hmm",
 	minimum_password_length: 9,
 	sample_all_read: true,
 	sample_all_write: true,

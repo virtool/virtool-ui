@@ -41,14 +41,12 @@ export function createFakeSettings(overrides?: Partial<Settings>): Settings {
 		default_source_types: [faker.word.noun({ strategy: "any-length" })],
 		enable_api: faker.datatype.boolean(),
 		enable_sentry: faker.datatype.boolean(),
-		hmm_slug: "virtool/virtool-hmm",
 		minimum_password_length: 8,
 		sample_all_read: faker.datatype.boolean(),
 		sample_all_write: faker.datatype.boolean(),
 		sample_group: "none",
 		sample_group_read: faker.datatype.boolean(),
 		sample_group_write: faker.datatype.boolean(),
-		sample_unique_names: faker.datatype.boolean(),
 	};
 
 	return { ...defaultSettings, ...overrides };

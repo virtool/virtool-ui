@@ -6,9 +6,10 @@ import { z } from "zod";
 // generated with this cost, and any new hashes we write must keep it.
 const COST = 12;
 
-// Hardcoded because the `minimum_password_length` instance setting still lives
-// in Mongo, which this server cannot read. VIR-2743 replaces this with the
-// configured value once VIR-2742 lands the settings model in Postgres.
+// Still hardcoded, but no longer because it has to be: the
+// `minimum_password_length` instance setting is readable from Postgres via
+// `getSettings`. VIR-2743 replaces this constant with the configured value,
+// which means threading a database read into password validation.
 export const MINIMUM_PASSWORD_LENGTH = 8;
 
 /**

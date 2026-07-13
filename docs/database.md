@@ -74,7 +74,7 @@ Mongo-primary rows are reachable only from Python.
 | HMMs          | **Primary**      | —                 | Mongo-only; not available to TS           |
 | History       | **Primary**      | diffs             | Mixed; not yet available to TS            |
 | Jobs          | —                | **Primary**       | Fully migrated                            |
-| Settings      | **Primary**      | —                 | Mongo-only; not available to TS           |
+| Settings      | —                | **Primary**       | Postgres-only; singleton row              |
 | API keys      | **Primary**      | —                 | Mongo-only; not available to TS           |
 
 Use this to gauge migration readiness per feature: a Postgres-primary

@@ -12,7 +12,17 @@ import SampleSettings from "../SampleSettings";
 
 describe("<SampleSettings />", () => {
 	beforeEach(() => {
-		mockApiGetSettings(createFakeSettings());
+		// The rights start denied so that selecting "Read & write" is always a
+		// change. Left to the fake's random booleans, they can start as read &
+		// write, making the click a no-op and the expected PATCH never fire.
+		mockApiGetSettings(
+			createFakeSettings({
+				sample_all_read: false,
+				sample_all_write: false,
+				sample_group_read: false,
+				sample_group_write: false,
+			}),
+		);
 	});
 
 	afterEach(() => nock.cleanAll());
