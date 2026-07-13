@@ -186,21 +186,19 @@ export default function Segments() {
 				schema={schema}
 				unsetEditSegmentName={() => setSegmentToEdit(undefined)}
 			/>
-			{schema.length ? (
-				<RemoveSegment
-					abbreviation={abbreviation}
-					name={name}
-					open={Boolean(segmentToRemove)}
-					otuId={otuId}
-					schema={schema}
-					segmentName={segmentToRemove}
-					setOpen={(open) => {
-						if (!open) {
-							setSegmentToRemove(undefined);
-						}
-					}}
-				/>
-			) : null}
+			<RemoveSegment
+				abbreviation={abbreviation}
+				name={name}
+				open={Boolean(segmentToRemove)}
+				otuId={otuId}
+				schema={schema}
+				segmentName={segmentToRemove}
+				setOpen={(open) => {
+					if (!open) {
+						setSegmentToRemove(undefined);
+					}
+				}}
+			/>
 		</div>
 	);
 }
