@@ -27,6 +27,12 @@
 						}
 					}
 				},
+				"useConsistentTypeDefinitions": {
+					"level": "error",
+					"options": {
+						"style": "type"
+					}
+				},
 				"useLiteralEnumMembers": "error"
 			},
 			"suspicious": {
@@ -61,5 +67,17 @@
 				"organizeImports": "on"
 			}
 		}
-	}
+	},
+	"overrides": [
+		{
+			"includes": ["apps/web/src/server/**"],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						"noConsole": "error"
+					}
+				}
+			}
+		}
+	]
 }

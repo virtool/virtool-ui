@@ -2,10 +2,10 @@ import { cn } from "@app/utils";
 import type { ElementType, ReactNode } from "react";
 import Icon, { type IconProps } from "./Icon";
 
-export interface InputIconProps extends Partial<IconProps> {
+export type InputIconProps = Partial<IconProps> & {
 	as?: ElementType;
 	children?: ReactNode;
-}
+};
 
 export default function InputIcon({
 	as: Component = "div",

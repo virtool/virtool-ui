@@ -4,7 +4,7 @@ import Input from "./Input";
 import InputContainer from "./InputContainer";
 import InputIcon from "./InputIcon";
 
-interface InputSearchProps {
+type InputSearchProps = {
 	"aria-label"?: string;
 	autoFocus?: boolean;
 	children?: ReactNode;
@@ -24,7 +24,7 @@ interface InputSearchProps {
 	onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
-}
+};
 
 export default function InputSearch({ ref, ...props }: InputSearchProps) {
 	return (

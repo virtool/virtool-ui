@@ -1,7 +1,7 @@
-interface CreateAnalysisSummaryProps {
+type CreateAnalysisSummaryProps = {
 	indexCount: number;
 	sampleCount: number;
-}
+};
 
 export function CreateAnalysisSummary({
 	indexCount,

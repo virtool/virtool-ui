@@ -66,7 +66,15 @@ export function getRouter() {
 	// has no server stub (unlike the replay/tracing integrations), so leaving the
 	// reference in the SSR build would warn about an undefined import.
 	if (!import.meta.env.SSR) {
-		const options = getCommonOptions(import.meta.env);
+		// Name the keys rather than passing the env object whole. Vite serializes
+		// every `VT_`-prefixed variable present at build time into the bundle for
+		// a whole-object reference, which would ship server-only secrets like
+		// VT_STORAGE_S3_SECRET_ACCESS_KEY to the browser. A member access inlines
+		// only the key it names. Guarded by src/app/__tests__/clientEnv.test.ts.
+		const options = getCommonOptions({
+			MODE: import.meta.env.MODE,
+			VT_SENTRY_DSN: import.meta.env.VT_SENTRY_DSN,
+		});
 		if (options.dsn) {
 			Sentry.init({
 				...options,
@@ -83,6 +91,7 @@ export function getRouter() {
 }
 
 declare module "@tanstack/react-router" {
+	// biome-ignore lint/style/useConsistentTypeDefinitions: module augmentation merges into TanStack Router's Register interface
 	interface Register {
 		router: ReturnType<typeof getRouter>;
 	}

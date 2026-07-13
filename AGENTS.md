@@ -13,7 +13,6 @@ This is a **pnpm monorepo**:
   here.
 - `packages/` — shared, framework-agnostic libraries published as workspace
   packages:
-  - `@virtool/config` — zod-validated environment schema
   - `@virtool/logger` — pino wrapper, server-side log defaults and
     `child({...})` pattern
   - `@virtool/bio` — sequence utilities (complement, translation, etc.)
@@ -36,6 +35,27 @@ Routing between topics is `AGENTS.md`'s job, not the docs'. If you
 find yourself wanting to write "see other-doc.md", either the detail
 belongs in `AGENTS.md` as the routing layer, or the two docs need to
 be reorganised so each is complete on its own.
+
+**`AGENTS.md` is updated in the same commit as the change that
+invalidates it.** It is the first file every agent and contributor
+reads. A stale line does not merely fail to help — it actively
+misleads, sending readers to deleted files and dead APIs.
+
+Before committing, check whether your change contradicts anything in
+this file. It does if you have:
+
+- removed, added, or replaced a dependency listed under **Key libraries**;
+- deleted, moved, or renamed a file or directory named anywhere in this
+  document;
+- added or removed a top-level feature directory under `apps/web/src/`;
+- changed a command in the **Commands** table, or changed what one does;
+- added, removed, or changed a lint rule this file describes as enforced;
+- completed or abandoned a project listed under **Projects**;
+- changed the shape of an API this file tells agents to call.
+
+"I'll update the docs afterwards" is how a doc goes stale. There is no
+afterwards — the commit that removes the last `styled.` call site is the
+commit that removes styled-components from this file.
 
 **When to update what:**
 
@@ -73,6 +93,7 @@ pnpm check                        # biome check (whole repo)
 | Lint + format | `pnpm check` |
 | Format only | `pnpm format` |
 | Test (single run, all packages) | `pnpm test` |
+| Test (watch, web app) | `pnpm --filter @virtool/web test:watch` |
 | Test (filtered) | `pnpm --filter @virtool/web exec vitest run src/path/to/file` |
 | Build | `pnpm build` |
 
@@ -119,13 +140,15 @@ module:
 - `src/app/` - App shell, routing, theme, shared utilities
 - `src/base/` - Shared UI components (buttons, dialogs, forms, tables, etc.)
 - `src/forms/` - Form components and patterns
-- `src/groups/` - User groups
-- `src/hmm/`, `src/indexes/`, `src/ml/` - Bioinformatics features
+- `src/groups/`, `src/users/` - User groups and users
+- `src/hmm/`, `src/indexes/` - Bioinformatics features
 - `src/otus/`, `src/sequences/`, `src/references/`, `src/samples/` - Core data
   models
 - `src/subtraction/` - Subtraction management
-- `src/labels/`, `src/jobs/`, `src/uploads/` - Supporting features
-- `src/nav/` - Navigation
+- `src/quality/` - Sequence quality charts
+- `src/labels/`, `src/jobs/`, `src/uploads/`, `src/tasks/` - Supporting features
+- `src/nav/`, `src/banner/`, `src/wall/` - Navigation, banners, and the
+  unauthenticated wall
 - `src/server/` - TanStack Start server features (server functions,
   middleware, db, auth) — the new path for backend responsibility
   migrating into this repo
@@ -134,9 +157,11 @@ module:
 
 ### Path aliases
 
-Every feature directory has a `@name` alias (e.g., `@app/utils`, `@base/Button`,
-`@samples/queries`). The catch-all `@/*` maps to `apps/web/src/*`. Prefer
-specific aliases over `@/`.
+Feature directories have a `@name` alias (e.g., `@app/utils`, `@base/Button`,
+`@samples/queries`) — see `paths` in `apps/web/tsconfig.json` for the
+authoritative list. A few directories (`src/types/`, `src/routes/`) have no
+alias and are reached through the catch-all `@/*`, which maps to
+`apps/web/src/*`. Prefer specific aliases over `@/`.
 
 ### Key libraries
 
@@ -146,8 +171,7 @@ specific aliases over `@/`.
 - **zustand** for client state
 - **react-hook-form** + **zod v4** for forms and validation
 - **superagent** for API calls (via `@app/api.ts` client)
-- **styled-components** for CSS-in-JS (legacy, still in use)
-- **Tailwind CSS v4** for utility styles (preferred for new code)
+- **Tailwind CSS v4** for all styling
 - **Radix UI** primitives for accessible components
 - **CVA** (`class-variance-authority`) for component variants
 - **Lucide React** for icons
@@ -191,15 +215,15 @@ patterns.
 
 ### Styling
 
-- Use Tailwind utility classes for new code.
+- Styling is Tailwind utility classes. There is no CSS-in-JS; styled-components
+  has been removed from the repo.
 - Use the `cn()` function from `@app/utils` for conditional classes (combines
   `clsx` + `tailwind-merge`).
 - Don't use arbitrary Tailwind classes like `max-h-[210px]`.
-- Existing styled-components are fine to maintain; prefer Tailwind for new work.
-- Design tokens and theme are in `apps/web/src/app/theme.ts`. Check there
-  before inventing colors or spacing values.
-- Tailwind theme customization is in `apps/web/src/app/style.css` via
-  `@theme`.
+- Design tokens — colors, spacing, fonts — are defined in
+  `apps/web/src/app/style.css` under `@theme`, with keyframes in
+  `apps/web/src/app/animations.css`. Check there before inventing a color or
+  spacing value, and add a token rather than hardcoding a hex.
 
 ### Base component color props
 
@@ -286,6 +310,33 @@ See [docs/database.md](docs/database.md) for the per-domain
 ownership table, the `legacy_id` resolution rules, and the
 column-default convention.
 
+### Files live in object storage, shared with Python
+
+Uploads, reads, analysis results, indexes, subtractions, HMM profiles,
+and caches live in S3 or Azure Blob — **the same bucket Python uses**.
+`src/server/storage/` exposes a five-method streaming interface
+(`read`, `write`, `delete`, `list`, `size`); there are no paths, file
+handles, or presigned URLs. Keys are built by `keys.ts` and must stay
+byte-for-byte identical to Python's — a divergence silently reads
+nothing and orphans what it writes. There is no filesystem backend.
+
+The backend is built once at startup and **passed into `data.ts`
+functions as an argument, the way `db` is**. `deletePrefix` never
+throws; it returns failures, and callers must log them.
+
+Client code must never reference the whole `import.meta.env` object.
+Vite would serialize every `VT_`-prefixed variable — including
+`VT_STORAGE_S3_SECRET_ACCESS_KEY` — into the browser bundle. Read named
+keys instead; `src/app/__tests__/clientEnv.test.ts` enforces this.
+
+Unit-test anything that stores files against `MemoryStorage`. The
+backends themselves are tested against real Garage and Azurite
+containers in the `storage` Vitest project.
+
+See [docs/storage.md](docs/storage.md) for the interface, the key
+layout, the backend configuration and its both-or-neither credential
+rule, the three S3 quirks, and the testing setup.
+
 ### Server → client push runs over SSE with id-only frames
 
 Server-pushed cache invalidations are delivered over a single SSE
@@ -305,7 +356,8 @@ Ongoing projects are documented in `docs/projects/`. These correspond to Linear
 projects. If your task relates to a project, check that directory for
 constraints, mappings, or decisions that apply to your work.
 
-- **Remove styled-components**: `docs/projects/remove-styled-components.md`
+- **Auth handoff** (login moves from Python to TanStack Start):
+  `docs/projects/auth-handoff.md`
 
 ## Linear
 
@@ -326,13 +378,17 @@ constraints, mappings, or decisions that apply to your work.
 
 The basics:
 
-- **Functions:** Use function declarations, not arrow functions
-  (`func-style` enforced).
+- **Functions:** Use function declarations, not arrow functions. This is a
+  convention, not a lint rule — Biome has no `func-style` equivalent, so
+  nothing catches a violation but review.
 - **Imports:** Biome organises imports automatically.
 - **Conditionals:** Always use curly braces with `if`/`else`.
 - **Prefer `const`** over `let`.
-- **Types:** Use `type`, not `interface` (unless declaration merging
-  is required). Prefer string literal unions over `enum`.
+- **Types:** Use `type`, not `interface`. Enforced by Biome's
+  `useConsistentTypeDefinitions`. The exception is declaration merging —
+  augmenting `Window` or TanStack Router's `Register` requires an
+  `interface`; those sites carry a `biome-ignore` explaining why. Prefer
+  string literal unions over `enum`.
 - **JSDoc:** Every exported `type` gets a one-line `/** ... */`.
 - **Naming:** `is`/`has`/`get` for pure reads; `check`/`validate`/
   `assert` for may-throw. Don't suffix exports with their layer
@@ -352,8 +408,9 @@ naming, comments, and concurrency rules with examples.
 Every Virtool-owned env var must start with `VT_`. The prefix keeps our
 variables clearly separated from third-party ones (`SENTRY_*`, `NODE_*`,
 cloud-provider injected vars) and matches the `envPrefix` Vite is configured
-to expose. This applies to schema keys in `packages/config/src/`,
-`.env.example`, and any `process.env.*` reads anywhere in the app.
+to expose. This applies to the zod schema keys in
+`apps/web/src/server/config.ts`, `apps/web/.env.example`, and any
+`process.env.*` reads anywhere in the app.
 
 Good: `VT_WORKER_MODE`, `VT_WORKER_CONCURRENCY`, `VT_POSTGRES_URL`.
 
@@ -364,12 +421,22 @@ The only exception is upstream-defined names (e.g. `SENTRY_AUTH_TOKEN`,
 
 ## Logging
 
-Server code logs through `@virtool/logger`, not `console.*`. Build child
-loggers with `ctx.logger.child({...})` to attach scoped context (request id,
-job id, user id) rather than threading metadata through every log call.
+Server code logs through `@virtool/logger`, not `console.*` — Biome's
+`noConsole` enforces this under `apps/web/src/server/`.
+
+Import the `logger` singleton from `@server/logger` and call it directly:
+
+```ts
+logger.warn({ err }, "postgres health check failed");
+```
+
 Pass structured fields as the first arg and the message as the second —
 never interpolate values into the message string, that defeats the
 redaction list and makes records ungreppable.
+
+There is no request-scoped logger. `logger.child({...})` is available for
+attaching scoped context, but nothing in the server currently uses it and
+no `context.logger` exists — don't write code that assumes one.
 
 When `VT_SENTRY_DSN` is set, server logs at `info` and above are
 forwarded to Sentry automatically (via a pino destination stream, not
@@ -439,8 +506,14 @@ and make commits easier to find later.
 
 ## Testing
 
-- **Framework:** Vitest with jsdom environment (web app); Vitest node
-  env for packages.
+- **Framework:** Vitest; Vitest node env for packages.
+- **Projects (web app):** `web` runs browser code under jsdom.
+  `server` runs `src/server/**` under **node** — server code runs on
+  Node in production, and under jsdom its typed arrays come from a
+  different realm, so bytes compare unequal to identical bytes.
+  `storage` runs the storage backends against real Garage and Azurite
+  containers. `pnpm test` runs all three; use `--project <name>` to
+  narrow.
 - **Test location:** `__tests__/` directories alongside source files
   (web), or sibling `*.test.ts` files (packages).
 - **Test files:** `ComponentName.test.tsx` or `functionName.test.ts`.
@@ -449,8 +522,7 @@ and make commits easier to find later.
 - **Setup:** `apps/web/src/tests/setup.tsx` provides
   `renderWithProviders()`, `renderWithRouter()`, and `MemoryRouter`.
 - **Fixtures/fakes:** `apps/web/src/tests/fake/` has factory functions
-  for test data. Shared bootstrap and seed data go in a sibling
-  `test/fixtures.ts` next to the code under test.
+  for test data.
 - **Assertions:** Use explicit `expect()` assertions, not snapshots.
 - **User interaction:** Use `@testing-library/user-event` over
   `fireEvent`.

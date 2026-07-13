@@ -1,9 +1,9 @@
 import Button from "./Button";
 
-interface SaveButtonProps {
+type SaveButtonProps = {
 	altText?: string;
 	disabled?: boolean;
-}
+};
 
 export default function SaveButton({
 	altText = "Save",

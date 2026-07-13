@@ -6,10 +6,10 @@ const colorToClass: Record<string, string> = {
 	red: "bg-red-600",
 };
 
-interface ProgressBarProps {
+type ProgressBarProps = {
 	now: number;
 	color?: string;
-}
+};
 
 export default function ProgressBar({ now, color = "blue" }: ProgressBarProps) {
 	return (
