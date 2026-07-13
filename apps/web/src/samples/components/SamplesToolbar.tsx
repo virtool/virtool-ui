@@ -1,19 +1,24 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import InputSearch from "@base/InputSearch";
-import LinkButton from "@base/LinkButton";
 import Toolbar from "@base/Toolbar";
+import type { Label } from "@labels/types";
 import type { ChangeEvent } from "react";
+import CreateSample from "./Create/CreateSample";
 
 type SampleToolbarProps = {
+	labels: Label[];
 	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-
 	term: string;
 };
 
 /**
  * A toolbar allowing samples to be filtered by name
  */
-export default function SampleToolbar({ onChange, term }: SampleToolbarProps) {
+export default function SampleToolbar({
+	labels,
+	onChange,
+	term,
+}: SampleToolbarProps) {
 	const { hasPermission: canCreate } =
 		useCheckAdminRoleOrPermission("create_sample");
 
@@ -26,11 +31,7 @@ export default function SampleToolbar({ onChange, term }: SampleToolbarProps) {
 					placeholder="Sample name"
 				/>
 			</div>
-			{canCreate && (
-				<LinkButton color="blue" to="/samples/create">
-					Create
-				</LinkButton>
-			)}
+			{canCreate && <CreateSample labels={labels} />}
 		</Toolbar>
 	);
 }

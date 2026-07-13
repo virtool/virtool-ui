@@ -212,6 +212,7 @@ export default function SamplesList({
 						<ViewHeaderTitle>Samples</ViewHeaderTitle>
 					</ViewHeader>
 					<SampleToolbar
+						labels={labels}
 						term={term}
 						onChange={(e) => setSearch({ term: e.target.value })}
 					/>

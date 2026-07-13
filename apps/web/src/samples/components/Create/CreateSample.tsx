@@ -1,5 +1,12 @@
 import { useFetchAccount } from "@account/queries";
-import Box from "@base/Box";
+import Button from "@base/Button";
+import {
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogTitle,
+	DialogTrigger,
+} from "@base/Dialog";
 import Icon from "@base/Icon";
 import InputContainer from "@base/InputContainer";
 import InputError from "@base/InputError";
@@ -9,22 +16,23 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SaveButton from "@base/SaveButton";
-import ViewHeader from "@base/ViewHeader";
-import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import SideBarSection from "@base/SideBarSection";
+import SidebarHeader from "@base/SidebarHeader";
+import Switch from "@base/Switch";
 import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import type { Label } from "@labels/types";
 import { useCreateSample } from "@samples/queries";
-import { useNavigate } from "@tanstack/react-router";
 import { Clock, WandSparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useInfiniteFindFiles } from "@/uploads/queries";
 import type { Upload } from "@/uploads/types";
+import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
+import SampleLabels from "../Sidebar/SampleLabels";
 import LibraryTypeSelector from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
 import SampleUserGroup from "./SampleUserGroup";
-import Sidebar from "./Sidebar";
 
 const extensionRegex = /^(.*)\.(fq|fastq|fa|fasta)(\.gz)?$/i;
 
@@ -50,7 +58,8 @@ type FormValues = {
 	libraryType: string;
 	readFiles: number[];
 	group: string;
-	sidebar: { labels: number[]; subtractionIds: string[] };
+	labels: number[];
+	subtractionIds: string[];
 };
 
 type CreateSampleProps = {
@@ -58,10 +67,10 @@ type CreateSampleProps = {
 };
 
 /**
- * A form for creating a sample. Caller provides labels.
+ * A dialog for creating a sample. Caller provides labels.
  */
 export default function CreateSample({ labels }: CreateSampleProps) {
-	const navigate = useNavigate();
+	const [open, setOpen] = useState(false);
 
 	const { data: groups, isPending: isPendingGroups } = useListGroups();
 	const { data: account, isPending: isPendingAccount } = useFetchAccount();
@@ -89,10 +98,8 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 			libraryType: "normal",
 			readFiles: [],
 			group: "",
-			sidebar: {
-				labels: [],
-				subtractionIds: [],
-			},
+			labels: [],
+			subtractionIds: [],
 		},
 	});
 	const mutation = useCreateSample();
@@ -103,17 +110,13 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 		setValue("group", String(account?.primary_group?.id ?? ""));
 	}, [account, setValue]);
 
-	if (
+	const reads = readsResponse?.pages.flatMap((page) => page.items) ?? [];
+	const isLoading =
 		isPendingReads ||
 		isPendingGroups ||
 		isPendingAccount ||
 		!readsResponse ||
-		!groups
-	) {
-		return <LoadingPlaceholder className="mt-9" />;
-	}
-
-	const reads = readsResponse.pages.flatMap((page) => page.items);
+		!groups;
 
 	function autofill(selected: number[]) {
 		const id = selected[0];
@@ -135,10 +138,9 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 		libraryType,
 		readFiles,
 		group,
-		sidebar,
+		labels: sampleLabels,
+		subtractionIds,
 	}: FormValues) {
-		const { labels, subtractionIds } = sidebar;
-
 		mutation.mutate(
 			{
 				name,
@@ -148,136 +150,159 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 				libraryType,
 				subtractions: subtractionIds,
 				files: readFiles,
-				labels,
+				labels: sampleLabels,
 				group: group || null,
 			},
 			{
 				onSuccess: () => {
 					reset();
-					navigate({ to: "/samples" });
+					setOpen(false);
 				},
 			},
 		);
 	}
 
 	return (
-		<>
-			<ViewHeader title="Create Sample">
-				<ViewHeaderTitle>Create Sample</ViewHeaderTitle>
+		<Dialog open={open} onOpenChange={setOpen}>
+			<Button as={DialogTrigger} color="blue">
+				Create
+			</Button>
+			<DialogContent size="lg" className="max-h-[90vh] overflow-y-auto">
+				<DialogTitle>Create Sample</DialogTitle>
 				<InputError className="text-left">
 					{mutation.isError && mutation.error.response?.body.message}
 				</InputError>
-			</ViewHeader>
-			<form
-				className="grid grid-cols-[minmax(0,1150px)_max(320px,10%)] gap-x-[15px]"
-				onSubmit={handleSubmit(onSubmit)}
-			>
-				<div className="col-start-1">
-					<InputGroup>
-						<InputLabel htmlFor="name">Name</InputLabel>
-						<InputContainer align="right" className="flex">
-							<InputSimple
-								id="name"
-								{...register("name", {
-									required: "Required Field",
-								})}
-							/>
-							{Boolean(watch("readFiles").length) && (
-								<InputIconButton
-									IconComponent={WandSparkles}
-									aria-label="Auto Fill"
-									tip="Auto Fill"
-									onClick={() => autofill(watch("readFiles"))}
+				{isLoading ? (
+					<LoadingPlaceholder className="mt-9" />
+				) : (
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<InputGroup>
+							<InputLabel htmlFor="name">Name</InputLabel>
+							<InputContainer align="right" className="flex">
+								<InputSimple
+									id="name"
+									{...register("name", {
+										required: "Required Field",
+									})}
+								/>
+								{Boolean(watch("readFiles").length) && (
+									<InputIconButton
+										IconComponent={WandSparkles}
+										aria-label="Auto Fill"
+										tip="Auto Fill"
+										onClick={() => autofill(watch("readFiles"))}
+									/>
+								)}
+							</InputContainer>
+							<InputError>{errors.name?.message}</InputError>
+						</InputGroup>
+
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<SampleUserGroup
+									selected={value}
+									groups={groups}
+									onChange={onChange}
 								/>
 							)}
-						</InputContainer>
-						<InputError>{errors.name?.message}</InputError>
-					</InputGroup>
+							name="group"
+						/>
 
-					<Controller
-						control={control}
-						render={({ field: { onChange, value } }) => (
-							<SampleUserGroup
-								selected={value}
-								groups={groups}
-								onChange={onChange}
-							/>
+						<SideBarSection>
+							<SidebarHeader>
+								Metadata
+								<Switch
+									aria-label="Show metadata fields"
+									checked={showMetadata}
+									onCheckedChange={setShowMetadata}
+								/>
+							</SidebarHeader>
+							<p className="text-gray-600 text-sm mb-0">
+								Show fields for locale, isolate, and host.
+							</p>
+						</SideBarSection>
+
+						{showMetadata && (
+							<div className="grid grid-cols-2 gap-x-[15px] mb-4">
+								<InputGroup>
+									<InputLabel htmlFor="locale">Locale</InputLabel>
+									<InputSimple id="locale" {...register("locale")} />
+								</InputGroup>
+
+								<InputGroup>
+									<InputLabel htmlFor="isolate">Isolate</InputLabel>
+									<InputSimple id="isolate" {...register("isolate")} />
+								</InputGroup>
+
+								<InputGroup>
+									<InputLabel htmlFor="host">Host</InputLabel>
+									<InputSimple id="host" {...register("host")} />
+								</InputGroup>
+							</div>
 						)}
-						name="group"
-					/>
 
-					{showMetadata && (
-						<div className="grid grid-cols-2 gap-x-[15px] mb-4">
-							<InputGroup>
-								<InputLabel htmlFor="locale">Locale</InputLabel>
-								<InputSimple id="locale" {...register("locale")} />
-							</InputGroup>
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<LibraryTypeSelector libraryType={value} onSelect={onChange} />
+							)}
+							name="libraryType"
+						/>
 
-							<InputGroup>
-								<InputLabel htmlFor="isolate">Isolate</InputLabel>
-								<InputSimple id="isolate" {...register("isolate")} />
-							</InputGroup>
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<SampleLabels
+									labels={labels}
+									sampleLabels={value}
+									onUpdate={onChange}
+								/>
+							)}
+							name="labels"
+						/>
 
-							<InputGroup>
-								<InputLabel htmlFor="host">Host</InputLabel>
-								<InputSimple id="host" {...register("host")} />
-							</InputGroup>
-						</div>
-					)}
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<DefaultSubtractions
+									defaultSubtractions={value}
+									onUpdate={onChange}
+								/>
+							)}
+							name="subtractionIds"
+						/>
 
-					<Controller
-						control={control}
-						render={({ field: { onChange, value } }) => (
-							<LibraryTypeSelector libraryType={value} onSelect={onChange} />
-						)}
-						name="libraryType"
-					/>
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<ReadSelector
+									data={readsResponse}
+									isFetchingNextPage={isFetchingNextPage}
+									fetchNextPage={fetchNextPage}
+									isPending={isPendingReads}
+									selected={value}
+									onSelect={onChange}
+									error={errors.readFiles?.message}
+								/>
+							)}
+							name="readFiles"
+							rules={{
+								required:
+									"At least one read file must be attached to the sample",
+							}}
+						/>
 
-					<Controller
-						control={control}
-						render={({ field: { onChange, value } }) => (
-							<ReadSelector
-								data={readsResponse}
-								isFetchingNextPage={isFetchingNextPage}
-								fetchNextPage={fetchNextPage}
-								isPending={isPendingReads}
-								selected={value}
-								onSelect={onChange}
-								error={errors.readFiles?.message}
-							/>
-						)}
-						name="readFiles"
-						rules={{
-							required: "At least one read file must be attached to the sample",
-						}}
-					/>
-				</div>
-
-				<div className="col-start-2">
-					<Box className="flex items-center bg-blue-200 border-none mt-6 p-[15px]">
-						<SaveButton altText="Create" />
-						<p className="text-blue-800 font-medium ml-auto pl-4 text-center flex items-center mb-0">
-							<Icon icon={Clock} className="mr-[5px]" /> This will take some
-							time.
-						</p>
-					</Box>
-
-					<Controller
-						control={control}
-						render={({ field: { value } }) => (
-							<Sidebar
-								defaultSubtractions={value.subtractionIds}
-								labels={labels}
-								onShowMetadataChange={setShowMetadata}
-								onUpdate={setValue}
-								sampleLabels={value.labels}
-								showMetadata={showMetadata}
-							/>
-						)}
-						name="sidebar"
-					/>
-				</div>
-			</form>
-		</>
+						<DialogFooter className="items-center justify-between">
+							<p className="text-gray-600 text-sm flex items-center mb-0">
+								<Icon icon={Clock} className="mr-[5px]" /> This will take some
+								time.
+							</p>
+							<SaveButton />
+						</DialogFooter>
+					</form>
+				)}
+			</DialogContent>
+		</Dialog>
 	);
 }
