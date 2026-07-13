@@ -2,6 +2,7 @@ import type { FormattedPathoscopeIsolate } from "@analyses/types";
 import { at } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 import {
+	downsampleDepths,
 	fillAlign,
 	formatPathoscopeData,
 	formatSequence,
@@ -122,5 +123,36 @@ describe("mergeCoverage()", () => {
 		expect(merged).toEqual([
 			7, 5, 5, 6, 6, 7, 9, 5, 6, 2, 2, 3, 2, 1, 1, 3, 2, 3, 5,
 		]);
+	});
+});
+
+describe("downsampleDepths()", () => {
+	it("should return the depths unchanged when there are fewer than width", () => {
+		const depths = [1, 2, 3, 4, 5];
+		expect(downsampleDepths(depths, 10)).toBe(depths);
+	});
+
+	it("should return the depths unchanged when the width is zero", () => {
+		const depths = [1, 2, 3, 4, 5];
+		expect(downsampleDepths(depths, 0)).toBe(depths);
+	});
+
+	it("should return an empty array when there are no depths", () => {
+		expect(downsampleDepths([], 10)).toEqual([]);
+	});
+
+	it("should return one bucket per pixel when there are more depths than width", () => {
+		const depths = Array.from({ length: 1000 }, (_, index) => index);
+		expect(downsampleDepths(depths, 200)).toHaveLength(200);
+	});
+
+	it("should take the maximum depth in each bucket", () => {
+		const depths = [1, 2, 3, 4, 5, 6, 7, 8];
+		expect(downsampleDepths(depths, 4)).toEqual([2, 4, 6, 8]);
+	});
+
+	it("should preserve a peak that a sampling downsample would skip", () => {
+		const depths = [0, 0, 0, 0, 0, 900, 0, 0, 0, 0];
+		expect(downsampleDepths(depths, 5)).toEqual([0, 0, 900, 0, 0]);
 	});
 });

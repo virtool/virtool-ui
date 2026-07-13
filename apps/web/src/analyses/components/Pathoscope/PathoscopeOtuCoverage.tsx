@@ -1,34 +1,23 @@
+import { downsampleDepths } from "@analyses/utils";
 import { useElementSize } from "@app/hooks";
-import { area, max, scaleLinear, select } from "d3";
-import { useLayoutEffect } from "react";
-import "./area.css";
+import { area, max, scaleLinear } from "d3";
 
-function draw(element: HTMLElement, data: number[], width: number) {
-	const height = 60;
+const height = 60;
 
-	const x = scaleLinear().range([0, width]).domain([0, data.length]);
+function buildDepthPath(filled: number[], width: number): string {
+	const depths = downsampleDepths(filled, width);
+
+	const x = scaleLinear().range([0, width]).domain([0, depths.length]);
 	const y = scaleLinear()
 		.range([height, 0])
-		.domain([0, max(data) ?? 0]);
+		.domain([0, max(depths) || 1]);
 
-	select(element).selectAll("*").remove();
+	const path = area<number>()
+		.x((_, index) => x(index))
+		.y0(height)
+		.y1((depth) => y(depth));
 
-	const svg = select(element)
-		.append("svg")
-		.attr("width", width)
-		.attr("height", height)
-		.append("g");
-
-	const areaDrawer = area<number>()
-		.x((_, i) => x(i))
-		.y0((d) => y(d))
-		.y1(height);
-
-	svg
-		.append("path")
-		.datum(data)
-		.attr("class", "depth-area")
-		.attr("d", areaDrawer);
+	return path(depths) ?? "";
 }
 
 type OtuCoverageProps = {
@@ -38,11 +27,14 @@ type OtuCoverageProps = {
 export default function PathoscopeOtuCoverage({ filled }: OtuCoverageProps) {
 	const [ref, { width }] = useElementSize<HTMLDivElement>();
 
-	useLayoutEffect(() => {
-		if (ref.current) {
-			draw(ref.current, filled, width);
-		}
-	});
+	const d = width > 0 ? buildDepthPath(filled, width) : "";
 
-	return <div className="bg-blue-50 pt-2" ref={ref} />;
+	return (
+		<div className="bg-blue-50 pt-2" ref={ref}>
+			<svg width={width} height={height} role="img">
+				<title>Read depth across the reference genome</title>
+				{d && <path className="fill-blue-500" d={d} />}
+			</svg>
+		</div>
+	);
 }
