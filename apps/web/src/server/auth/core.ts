@@ -218,6 +218,10 @@ export async function resetPassword(
 		throw new InvalidResetSessionError();
 	}
 
+	// Bound here rather than read off `row` below: the narrowing above does not
+	// survive into the transaction callback.
+	const userId = row.userId;
+
 	if (!constantTimeEqualHex(row.resetCode, input.resetCode)) {
 		await invalidateSession(db, sessionId);
 		throw new InvalidResetSessionError();
@@ -231,7 +235,7 @@ export async function resetPassword(
 	const [user] = await db
 		.select({ password: users.password })
 		.from(users)
-		.where(eq(users.id, row.userId))
+		.where(eq(users.id, userId))
 		.limit(1);
 
 	if (!user) {
@@ -243,29 +247,44 @@ export async function resetPassword(
 		throw new PasswordReuseError();
 	}
 
-	// Match Python's order in `virtool.account.data.AccountData.reset`:
+	// Hashing is CPU-bound and slow by design, so it happens before the
+	// transaction opens rather than holding one idle for the duration.
+	const newHash = await hashPassword(input.password);
+
+	const remember = row.resetRemember ?? false;
+
+	// The three writes are one unit: a failure partway through must not leave the
+	// password changed with no session to show for it.
+	//
+	// Within the transaction they keep Python's order in
+	// `virtool.account.data.AccountData.reset`:
 	//   delete_by_user → users.update → sessions.create_authenticated.
 	// Sequencing matters so a user mid-reset sees the same behaviour regardless
 	// of which backend serves them during the transition.
-	await invalidateUserSessions(db, row.userId);
+	const { sessionId: newSessionId, token } = await db.transaction(
+		async (tx) => {
+			await invalidateUserSessions(tx, userId);
 
-	const newHash = await hashPassword(input.password);
+			await tx
+				.update(users)
+				.set({
+					password: newHash,
+					forceReset: false,
+					lastPasswordChange: new Date(),
+					invalidateSessions: true,
+				})
+				.where(eq(users.id, userId));
 
-	await db
-		.update(users)
-		.set({
-			password: newHash,
-			forceReset: false,
-			lastPasswordChange: new Date(),
-			invalidateSessions: true,
-		})
-		.where(eq(users.id, row.userId));
-
-	const remember = row.resetRemember ?? false;
-	const { sessionId: newSessionId, token } = await createAuthenticatedSession(
-		db,
-		{ userId: row.userId, ip: input.ip, remember },
+			return createAuthenticatedSession(tx, {
+				userId,
+				ip: input.ip,
+				remember,
+			});
+		},
 	);
+
+	// Only after the commit. A rolled-back reset must leave the browser holding
+	// no new session.
 	cookies.setSessionId(newSessionId);
 	cookies.setSessionToken(token);
 }

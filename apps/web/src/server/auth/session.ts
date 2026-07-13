@@ -2,7 +2,7 @@ import { randomBytes } from "node:crypto";
 
 import { eq } from "drizzle-orm";
 
-import type { Db } from "../db/pg";
+import type { DbOrTx } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import { type SessionRow, sessions } from "../db/schema/sessions";
 import { hashToken, newSessionId, newSessionToken } from "./tokens";
@@ -32,7 +32,7 @@ export type CreateAuthenticatedSessionResult = {
 };
 
 export async function createAuthenticatedSession(
-	db: Db,
+	db: DbOrTx,
 	{ userId, ip, remember }: CreateAuthenticatedSessionInput,
 ): Promise<CreateAuthenticatedSessionResult> {
 	const sessionId = newSessionId();
@@ -77,7 +77,7 @@ export type CreateResetSessionResult = {
 };
 
 export async function createResetSession(
-	db: Db,
+	db: DbOrTx,
 	{ userId, ip, remember }: CreateResetSessionInput,
 ): Promise<CreateResetSessionResult> {
 	const sessionId = newSessionId();
@@ -105,14 +105,14 @@ export async function createResetSession(
 }
 
 export async function invalidateSession(
-	db: Db,
+	db: DbOrTx,
 	sessionId: string,
 ): Promise<void> {
 	await db.delete(sessions).where(eq(sessions.sessionId, sessionId));
 }
 
 export async function invalidateUserSessions(
-	db: Db,
+	db: DbOrTx,
 	userId: number,
 ): Promise<void> {
 	await db.delete(sessions).where(eq(sessions.userId, userId));

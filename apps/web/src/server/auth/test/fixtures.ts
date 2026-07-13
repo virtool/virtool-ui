@@ -18,17 +18,25 @@ export type SeededSession = {
  *
  * `handle` is unique (case-insensitively), so a test seeding a second user must
  * pass a distinct one.
+ *
+ * `password` defaults to a placeholder that is not a real bcrypt hash. A test
+ * that exercises a code path which verifies the stored password must pass a
+ * hash from `hashPassword`.
  */
 export async function seedUser(
 	db: Db,
 	{
 		active = true,
 		administratorRole = null,
+		forceReset = false,
 		handle = "alice",
+		password = Buffer.from("not-a-real-hash"),
 	}: {
 		active?: boolean;
 		administratorRole?: AdministratorRoleName | null;
+		forceReset?: boolean;
 		handle?: string;
+		password?: Buffer;
 	} = {},
 ): Promise<number> {
 	const [user] = await db
@@ -36,9 +44,10 @@ export async function seedUser(
 		.values({
 			active,
 			administratorRole,
+			forceReset,
 			handle,
 			lastPasswordChange: new Date(),
-			password: Buffer.from("not-a-real-hash"),
+			password,
 			settings: {},
 		})
 		.returning({ id: users.id });

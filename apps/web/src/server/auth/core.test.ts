@@ -1,0 +1,246 @@
+import { eq } from "drizzle-orm";
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
+
+import type { Db } from "../db/pg";
+import { sessions } from "../db/schema/sessions";
+import { users } from "../db/schema/users";
+import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
+import type { CookieAdapter } from "./cookies";
+import {
+	InvalidResetSessionError,
+	PasswordReuseError,
+	resetPassword,
+} from "./core";
+import { hashPassword, verifyPassword } from "./password";
+import * as sessionModule from "./session";
+import { seedSession, seedUser } from "./test/fixtures";
+
+// `createAuthenticatedSession` is the third and last write in the reset. Making
+// it fail is how we drive the partial failure the transaction has to undo. The
+// rest of the module keeps its real behaviour — the other two writes must
+// actually hit the database for a rollback to be worth asserting.
+vi.mock("./session", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("./session")>();
+	return {
+		...actual,
+		createAuthenticatedSession: vi.fn(actual.createAuthenticatedSession),
+	};
+});
+
+const { createResetSession } = sessionModule;
+const createAuthenticatedSession = vi.mocked(
+	sessionModule.createAuthenticatedSession,
+);
+
+const OLD_PASSWORD = "old-password";
+const NEW_PASSWORD = "new-password";
+
+type FakeCookies = CookieAdapter & {
+	sessionId: string | undefined;
+	token: string | undefined;
+};
+
+function fakeCookies(sessionId?: string): FakeCookies {
+	return {
+		sessionId,
+		token: undefined,
+		getSessionId() {
+			return this.sessionId;
+		},
+		getSessionToken() {
+			return this.token;
+		},
+		setSessionId(value: string) {
+			this.sessionId = value;
+		},
+		setSessionToken(value: string) {
+			this.token = value;
+		},
+		clear() {
+			this.sessionId = undefined;
+			this.token = undefined;
+		},
+	};
+}
+
+let database: TestDatabase;
+let db: Db;
+
+beforeAll(async () => {
+	database = await createTestDatabase();
+	db = database.db;
+}, 60_000);
+
+afterAll(async () => {
+	await database.drop();
+});
+
+beforeEach(async () => {
+	vi.mocked(createAuthenticatedSession).mockClear();
+	await db.delete(sessions);
+	await db.delete(users);
+});
+
+/** Seed a force-reset user with a real bcrypt hash, plus a live reset session. */
+async function seedResetFlow() {
+	const userId = await seedUser(db, {
+		forceReset: true,
+		password: await hashPassword(OLD_PASSWORD),
+	});
+
+	const { sessionId, resetCode } = await createResetSession(db, {
+		userId,
+		ip: "127.0.0.1",
+		remember: false,
+	});
+
+	return { userId, sessionId, resetCode };
+}
+
+function readUser(userId: number) {
+	return db
+		.select()
+		.from(users)
+		.where(eq(users.id, userId))
+		.limit(1)
+		.then((rows) => rows[0]);
+}
+
+describe("resetPassword", () => {
+	it("changes the password and sets the session cookies", async () => {
+		const { userId, sessionId, resetCode } = await seedResetFlow();
+		const cookies = fakeCookies(sessionId);
+
+		await resetPassword(db, cookies, {
+			password: NEW_PASSWORD,
+			resetCode,
+			ip: "127.0.0.1",
+		});
+
+		const user = await readUser(userId);
+		expect(user).toBeDefined();
+		expect(await verifyPassword(NEW_PASSWORD, user?.password as Buffer)).toBe(
+			true,
+		);
+		expect(user?.forceReset).toBe(false);
+
+		// The reset session is gone and an authenticated one took its place.
+		const rows = await db
+			.select()
+			.from(sessions)
+			.where(eq(sessions.userId, userId));
+		expect(rows).toHaveLength(1);
+		expect(rows[0]?.sessionType).toBe("authenticated");
+
+		expect(cookies.sessionId).toBe(rows[0]?.sessionId);
+		expect(cookies.token).toBeDefined();
+	});
+
+	it("rolls the password back when the session write fails", async () => {
+		const { userId, sessionId, resetCode } = await seedResetFlow();
+		const before = await readUser(userId);
+
+		// A session the user already holds. It must survive the failed reset —
+		// `invalidateUserSessions` runs first and has to be undone too.
+		const existing = await seedSession(db, userId);
+
+		const cookies = fakeCookies(sessionId);
+
+		createAuthenticatedSession.mockRejectedValueOnce(
+			new Error("session insert failed"),
+		);
+
+		await expect(
+			resetPassword(db, cookies, {
+				password: NEW_PASSWORD,
+				resetCode,
+				ip: "127.0.0.1",
+			}),
+		).rejects.toThrow("session insert failed");
+
+		// The password is untouched: the old one still works, the new one does not.
+		const after = await readUser(userId);
+		expect(await verifyPassword(OLD_PASSWORD, after?.password as Buffer)).toBe(
+			true,
+		);
+		expect(await verifyPassword(NEW_PASSWORD, after?.password as Buffer)).toBe(
+			false,
+		);
+		expect(after?.forceReset).toBe(true);
+		expect(after?.lastPasswordChange).toEqual(before?.lastPasswordChange);
+		expect(after?.invalidateSessions).toBe(before?.invalidateSessions);
+
+		// The session deletion rolled back with it.
+		const surviving = await db
+			.select()
+			.from(sessions)
+			.where(eq(sessions.sessionId, existing.sessionId));
+		expect(surviving).toHaveLength(1);
+
+		// And the browser was told nothing.
+		expect(cookies.sessionId).toBe(sessionId);
+		expect(cookies.token).toBeUndefined();
+	});
+
+	it("rejects a password matching the current one", async () => {
+		const { userId, sessionId, resetCode } = await seedResetFlow();
+		const cookies = fakeCookies(sessionId);
+
+		await expect(
+			resetPassword(db, cookies, {
+				password: OLD_PASSWORD,
+				resetCode,
+				ip: "127.0.0.1",
+			}),
+		).rejects.toThrow(PasswordReuseError);
+
+		expect(createAuthenticatedSession).not.toHaveBeenCalled();
+
+		const user = await readUser(userId);
+		expect(user?.forceReset).toBe(true);
+	});
+
+	it("rejects a wrong reset code and burns the session", async () => {
+		const { userId, sessionId, resetCode } = await seedResetFlow();
+		const cookies = fakeCookies(sessionId);
+
+		await expect(
+			resetPassword(db, cookies, {
+				password: NEW_PASSWORD,
+				resetCode: "0".repeat(resetCode.length),
+				ip: "127.0.0.1",
+			}),
+		).rejects.toThrow(InvalidResetSessionError);
+
+		const rows = await db
+			.select()
+			.from(sessions)
+			.where(eq(sessions.userId, userId));
+		expect(rows).toHaveLength(0);
+
+		const user = await readUser(userId);
+		expect(await verifyPassword(OLD_PASSWORD, user?.password as Buffer)).toBe(
+			true,
+		);
+	});
+
+	it("rejects when there is no session cookie", async () => {
+		await seedResetFlow();
+
+		await expect(
+			resetPassword(db, fakeCookies(), {
+				password: NEW_PASSWORD,
+				resetCode: "whatever",
+				ip: "127.0.0.1",
+			}),
+		).rejects.toThrow(InvalidResetSessionError);
+	});
+});
