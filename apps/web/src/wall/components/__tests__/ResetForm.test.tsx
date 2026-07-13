@@ -3,7 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-const { resetPasswordMock } = vi.hoisted(() => ({
+const { navigateMock, resetPasswordMock } = vi.hoisted(() => ({
+	navigateMock: vi.fn(),
 	resetPasswordMock: vi.fn(),
 }));
 
@@ -17,10 +18,16 @@ vi.mock("../../queries", async () => {
 	};
 });
 
+vi.mock("@tanstack/react-router", async (importOriginal) => ({
+	...(await importOriginal<typeof import("@tanstack/react-router")>()),
+	useNavigate: () => navigateMock,
+}));
+
 import ResetForm from "../ResetForm";
 
 describe("<ResetForm />", () => {
 	afterEach(() => {
+		navigateMock.mockReset();
 		resetPasswordMock.mockReset();
 	});
 
@@ -55,5 +62,45 @@ describe("<ResetForm />", () => {
 		await userEvent.click(screen.getByRole("button", { name: "Reset" }));
 
 		expect(await screen.findByText(errorMessage)).toBeInTheDocument();
+	});
+
+	it("rejects a password shorter than eight characters without submitting", async () => {
+		renderWithProviders(<ResetForm resetCode="test_reset_code" />);
+
+		await userEvent.type(screen.getByLabelText("Password"), "short12");
+		await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+
+		expect(
+			await screen.findByText(
+				"Password does not meet minimum length requirement (8)",
+			),
+		).toBeInTheDocument();
+		expect(resetPasswordMock).not.toHaveBeenCalled();
+	});
+
+	it("navigates to the redirect on a successful reset", async () => {
+		resetPasswordMock.mockResolvedValue({ login: false, reset: false });
+
+		renderWithProviders(
+			<ResetForm redirect="/samples" resetCode="test_reset_code" />,
+		);
+
+		await userEvent.type(screen.getByLabelText("Password"), "P@ssword123");
+		await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+
+		await waitFor(() =>
+			expect(navigateMock).toHaveBeenCalledWith({ to: "/samples" }),
+		);
+	});
+
+	it("navigates to the root when no redirect is provided", async () => {
+		resetPasswordMock.mockResolvedValue({ login: false, reset: false });
+
+		renderWithProviders(<ResetForm resetCode="test_reset_code" />);
+
+		await userEvent.type(screen.getByLabelText("Password"), "P@ssword123");
+		await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+
+		await waitFor(() => expect(navigateMock).toHaveBeenCalledWith({ to: "/" }));
 	});
 });

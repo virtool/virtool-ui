@@ -3,24 +3,38 @@ import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
+import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useResetPasswordMutation } from "../queries";
 import { WallTitle } from "./WallTitle";
 
 type ResetFormProps = {
+	/** URL to navigate to after a successful reset. Defaults to "/". */
+	redirect?: string;
 	/** Code required for password reset. */
 	resetCode: string;
 };
 
 /** Handles the password reset process. */
-export default function ResetForm({ resetCode }: ResetFormProps) {
-	const { register, handleSubmit } = useForm({
+export default function ResetForm({ redirect, resetCode }: ResetFormProps) {
+	const {
+		formState: { errors },
+		register,
+		handleSubmit,
+	} = useForm({
 		defaultValues: { password: "" },
 	});
 	const resetPasswordMutation = useResetPasswordMutation();
+	const navigate = useNavigate();
 
 	function onSubmit({ password }) {
-		resetPasswordMutation.mutate({ password, resetCode });
+		resetPasswordMutation.mutate(
+			{ password, resetCode },
+			// The reset already authenticated us: it rotated the session cookies
+			// and invalidated the account query. Without this the user sits on the
+			// form with no feedback.
+			{ onSuccess: () => navigate({ to: redirect ?? "/" }) },
+		);
 	}
 
 	const { error, isError } = resetPasswordMutation;
@@ -38,8 +52,18 @@ export default function ResetForm({ resetCode }: ResetFormProps) {
 						id="password"
 						type="password"
 						autoComplete="new-password"
-						{...register("password")}
+						{...register("password", {
+							required: "Password does not meet minimum length requirement (8)",
+							minLength: {
+								value: 8,
+								message:
+									"Password does not meet minimum length requirement (8)",
+							},
+						})}
 					/>
+					{errors.password?.message && (
+						<InputError>{errors.password.message}</InputError>
+					)}
 					{isError && (
 						<InputError>
 							{error?.message || "An error occurred during password reset"}
