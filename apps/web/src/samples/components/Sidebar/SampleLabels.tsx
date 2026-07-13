@@ -27,7 +27,7 @@ export default function SampleLabels({
 	return (
 		<SideBarSection>
 			<SidebarHeader>
-				Labels
+				<span>Labels</span>
 				<SampleSidebarSelector
 					render={({ name, color }) => (
 						<SampleLabel name={name} color={color} size="sm" />

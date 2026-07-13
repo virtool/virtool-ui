@@ -211,7 +211,7 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 
 						<SideBarSection>
 							<SidebarHeader>
-								Metadata
+								<span>Metadata</span>
 								<Switch
 									aria-label="Show metadata fields"
 									checked={showMetadata}
