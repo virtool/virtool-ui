@@ -1,7 +1,11 @@
 import { useFetchAccount } from "@account/queries";
 import { type ApiResponse, apiClient } from "@app/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+	type QueryKey,
+	useMutation,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { difference, union } from "es-toolkit/array";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -41,7 +45,7 @@ export function useSourceTypesForm(sourceTypes: string[]) {
 export function useUpdateSourceTypes(
 	key: "default_source_types" | "source_types",
 	path: string,
-	queryKey: readonly string[],
+	queryKey: QueryKey,
 	sourceTypes: string[],
 ) {
 	const queryClient = useQueryClient();

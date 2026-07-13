@@ -1,5 +1,6 @@
 import type { Account, APIKeyMinimal } from "@account/types";
 import { apiClient } from "@app/api";
+import { createQueryKeys } from "@app/queryKeys";
 import { resetClient } from "@app/utils";
 import type { Permissions } from "@groups/types";
 import * as Sentry from "@sentry/tanstackstart-react";
@@ -19,12 +20,18 @@ export type AccountUpdate = {
 	email?: string;
 };
 
+const accountKeys = createQueryKeys("account");
+
 /**
- * Factory object for generating account query keys
+ * Query keys for the logged-in user's account.
+ *
+ * The account is a singleton, so it is cached at `all()` itself. `apiKeys()`
+ * is the sub-collection of the account's API keys, nested under `all()` so
+ * that any account mutation refreshes it too.
  */
-export const accountKeys = {
-	all: () => ["account"],
-	details: () => ["account", "details"] as const,
+export const accountQueryKeys = {
+	...accountKeys,
+	apiKeys: () => [...accountKeys.all(), "keys"] as const,
 };
 
 /**
@@ -35,7 +42,7 @@ export const accountKeys = {
  */
 export function accountQueryOptions() {
 	return queryOptions<Account, ErrorResponse>({
-		queryKey: accountKeys.all(),
+		queryKey: accountQueryKeys.all(),
 		queryFn: () => apiClient.get("/account").then((response) => response.body),
 	});
 }
@@ -64,7 +71,7 @@ export function useUpdateAccount() {
 				.send({ update })
 				.then((res) => res.body),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
 		},
 	});
 }
@@ -84,7 +91,7 @@ export function useUpdateHandle() {
 	>({
 		mutationFn: ({ handle }) => updateAccountHandle({ data: { handle } }),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
 		},
 	});
 }
@@ -108,7 +115,7 @@ export function useChangePassword() {
 				.send({ old_password, password })
 				.then((res) => res.body),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
 		},
 	});
 }
@@ -120,7 +127,7 @@ export function useChangePassword() {
  */
 export function useFetchAPIKeys() {
 	return useQuery<APIKeyMinimal[]>({
-		queryKey: accountKeys.details(),
+		queryKey: accountQueryKeys.apiKeys(),
 		queryFn: () => apiClient.get("/account/keys").then((res) => res.body),
 	});
 }
@@ -144,7 +151,7 @@ export function useCreateAPIKey() {
 				.send({ name, permissions })
 				.then((res) => res.body),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
 		},
 	});
 }
@@ -168,7 +175,7 @@ export function useUpdateApiKey() {
 				.send({ permissions })
 				.then((res) => res.body),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
 		},
 	});
 }
@@ -185,7 +192,7 @@ export function useRemoveAPIKey() {
 		mutationFn: ({ keyId }) =>
 			apiClient.delete(`/account/keys/${keyId}`).then((res) => res.body),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
 		},
 	});
 }

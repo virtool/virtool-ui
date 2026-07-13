@@ -1,15 +1,10 @@
+import { createQueryKeys } from "@app/queryKeys";
 import { getTask } from "@server/tasks/functions";
 import { useQuery } from "@tanstack/react-query";
 import { type ServerTask, TaskSchema } from "./types";
 
-/**
- * Factory object for generating task query keys
- */
-export const taskQueryKeys = {
-	all: () => ["tasks"] as const,
-	details: () => ["tasks", "details"] as const,
-	detail: (taskId: number) => ["tasks", "details", taskId] as const,
-};
+/** Query keys for tasks. */
+export const taskQueryKeys = createQueryKeys("tasks");
 
 /**
  * Fetch a task by its id

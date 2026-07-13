@@ -18,7 +18,7 @@ import {
 	redirect,
 	useLocation,
 } from "@tanstack/react-router";
-import { rootKeys } from "@wall/queries";
+import { rootQueryKeys } from "@wall/queries";
 import { lazy, Suspense, useEffect } from "react";
 
 const UploadOverlay = lazy(() => import("@uploads/components/UploadOverlay"));
@@ -36,7 +36,7 @@ export const Route = createFileRoute("/_authenticated")({
 		const { queryClient } = context;
 
 		const rootData = await queryClient.ensureQueryData<Root>({
-			queryKey: rootKeys.all(),
+			queryKey: rootQueryKeys.all(),
 			queryFn: () => apiClient.get("/").then((res) => res.body),
 		});
 

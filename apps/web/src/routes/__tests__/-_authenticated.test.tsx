@@ -1,4 +1,4 @@
-import { accountKeys } from "@account/queries";
+import { accountQueryKeys } from "@account/queries";
 import { waitFor } from "@testing-library/react";
 import { renderRoute } from "@tests/setup";
 import nock from "nock";
@@ -12,7 +12,7 @@ describe("<AuthenticatedLayout />", () => {
 
 		const { router } = await renderRoute("/samples", {
 			seed: (queryClient) => {
-				queryClient.removeQueries({ queryKey: accountKeys.all() });
+				queryClient.removeQueries({ queryKey: accountQueryKeys.all() });
 			},
 		});
 

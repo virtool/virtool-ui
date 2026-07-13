@@ -1,3 +1,5 @@
+import type { AdministratorRoleName } from "@administration/types";
+
 import type { Db } from "../../db/pg";
 import { sessions } from "../../db/schema/sessions";
 import { users } from "../../db/schema/users";
@@ -10,18 +12,30 @@ export type SeededSession = {
 	userId: number;
 };
 
-/** Insert a user, active unless told otherwise, and return its id. */
+/**
+ * Insert a user, active and with no administrator role unless told otherwise,
+ * and return its id.
+ *
+ * `handle` is unique (case-insensitively), so a test seeding a second user must
+ * pass a distinct one.
+ */
 export async function seedUser(
 	db: Db,
 	{
 		active = true,
+		administratorRole = null,
 		handle = "alice",
-	}: { active?: boolean; handle?: string } = {},
+	}: {
+		active?: boolean;
+		administratorRole?: AdministratorRoleName | null;
+		handle?: string;
+	} = {},
 ): Promise<number> {
 	const [user] = await db
 		.insert(users)
 		.values({
 			active,
+			administratorRole,
 			handle,
 			lastPasswordChange: new Date(),
 			password: Buffer.from("not-a-real-hash"),

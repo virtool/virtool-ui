@@ -16,7 +16,8 @@ The pure layer is split by primitive rather than collapsed into one
 - `core.ts` — login / logout / password-reset domain logic
 - `session.ts` — session row CRUD
 - `tokens.ts` — session id and token generation, hashing
-- `password.ts` — bcrypt wrappers
+- `password.ts` — bcrypt wrappers and `passwordSchema`, the shared rule
+  for a password being set
 - `cookies.ts` — `CookieAdapter` type (framework-agnostic cookie I/O)
 - `verify.ts` — request verification (pure, given a cookie adapter and
   db handle)
@@ -37,15 +38,24 @@ should look like labels.
 ## Authentication middleware
 
 Authentication is enforced globally at the server-function boundary,
-not per-handler. The wiring lives in `apps/web/src/start.ts`:
+not per-handler. The exempt endpoints live in
+`server/auth/exceptions.ts`:
 
 ```ts
-const authenticationMiddleware = createAuthenticationMiddleware([
+export const authenticationExceptions: ReadonlyArray<{ url: string }> = [
   createFirstUserFn,
   loginFn,
   logoutFn,
   resetPasswordFn,
-]);
+];
+```
+
+and are wired up in `apps/web/src/start.ts`:
+
+```ts
+const authenticationMiddleware = createAuthenticationMiddleware(
+  authenticationExceptions,
+);
 
 export const startInstance = createStart(() => ({
   defaultSsr: false,
@@ -59,6 +69,13 @@ being listed in the `exceptions` array — passed as **server-function
 references**, not URL strings. The middleware derives the path from
 each fn's bound `url`, so the exception list can't drift out of sync
 with a rename.
+
+The list is a standalone module rather than an inline array so it can
+be asserted on: `middleware.test.ts` pins its exact contents, and a fn
+added to it by mistake fails that test instead of silently becoming
+publicly callable. Its type is annotated rather than inferred — an
+inferred type would name TanStack's server-fn types transitively and
+break declaration emit for `@server/*` importers.
 
 The middleware lives in `server/auth/middleware.ts` and exposes three
 helpers:
@@ -211,6 +228,31 @@ Step (5) must match the Python order in
 `virtool.account.data.AccountData.reset` so a user mid-reset sees the
 same behaviour regardless of which backend serves them
 (`core.ts:175-200`).
+
+On success the client navigates away from the wall. The reset has
+already rotated the cookies, so the user is authenticated; leaving them
+on the form would strand them there.
+
+## Password length
+
+`passwordSchema` (`server/auth/password.ts`) is the single rule for a
+password being **set**. It is applied by `resetPasswordSchema`,
+`createFirstUserSchema`, `createUserSchema`, and `updateUserSchema`.
+
+It is deliberately **not** applied to `loginSchema`. Login authenticates
+an existing credential rather than setting a new one, and a user whose
+stored password predates the rule must still be able to log in — the
+forced-reset flow that replaces it is only reachable through login.
+
+The minimum is hardcoded at 8. The `minimum_password_length` instance
+setting still lives in Mongo, which this server cannot read; VIR-2743
+switches to the configured value once VIR-2742 lands a settings model in
+Postgres.
+
+The TanStack Start compiler strips `.validator()` from the client build,
+so this schema never runs in the browser and produces no user-facing
+message on its own. It is a backstop. Forms carry their own
+`react-hook-form` `minLength` rule, and that is what the user sees.
 
 A reset session is invalidated by:
 

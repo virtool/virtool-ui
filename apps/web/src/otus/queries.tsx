@@ -1,4 +1,5 @@
 import { apiClient } from "@app/api";
+import { createQueryKeys } from "@app/queryKeys";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import {
@@ -32,21 +33,17 @@ export function getGenbank(accession: string) {
 	return apiClient.get(`/genbank/${accession}`).then((res) => res.body);
 }
 
+const otuKeys = createQueryKeys("otus");
+
 /**
- * Factory for generating react-query keys for otu related queries.
+ * Query keys for OTUs.
+ *
+ * `history()` nests under the OTU's own detail key, so the mutations that
+ * invalidate a detail also refresh the change history they just added to.
  */
-export const OtuQueryKeys = {
-	all: () => ["OTU"] as const,
-	lists: () => ["OTU", "list"] as const,
-	list: (filters: Array<string | number | boolean>) =>
-		["OTU", "list", ...filters] as const,
-	infiniteLists: () => ["OTU", "list", "infinite"] as const,
-	infiniteList: (filters: Array<string | number | boolean>) =>
-		["OTU", "list", "infinite", ...filters] as const,
-	details: () => ["OTU", "detail"] as const,
-	detail: (id: string) => ["OTU", "detail", id] as const,
-	histories: () => ["OTU", "detail", "history"] as const,
-	history: (id: string) => ["OTU", "detail", "history", id] as const,
+export const otuQueryKeys = {
+	...otuKeys,
+	history: (id: string) => [...otuKeys.detail(id), "history"] as const,
 };
 
 /**
@@ -65,7 +62,7 @@ export function useListOtus(
 	term: string,
 ) {
 	return useQuery<OtuSearchResult>({
-		queryKey: OtuQueryKeys.list([page, per_page, term]),
+		queryKey: otuQueryKeys.list([page, per_page, term]),
 		queryFn: () =>
 			apiClient
 				.get(`/refs/${refId}/otus`)
@@ -80,7 +77,7 @@ export function useListOtus(
 
 export function otuQueryOptions(otuId: string) {
 	return queryOptions<Otu, ErrorResponse>({
-		queryKey: OtuQueryKeys.detail(otuId),
+		queryKey: otuQueryKeys.detail(otuId),
 		queryFn: () => apiClient.get(`/otus/${otuId}`).then((res) => res.body),
 	});
 }
@@ -105,7 +102,7 @@ export function useFetchOtu(otuId: string) {
 
 export function otuHistoryQueryOptions(otuId: string) {
 	return queryOptions<OtuHistory[], ErrorResponse>({
-		queryKey: OtuQueryKeys.history(otuId),
+		queryKey: otuQueryKeys.history(otuId),
 		queryFn: () =>
 			apiClient.get(`/otus/${otuId}/history`).then((res) => res.body),
 	});
@@ -150,7 +147,7 @@ export function useCreateOtu(refId: string) {
 				.send({ name, abbreviation })
 				.then((res) => res.body),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: OtuQueryKeys.lists() });
+			queryClient.invalidateQueries({ queryKey: otuQueryKeys.lists() });
 		},
 	});
 }
@@ -179,15 +176,15 @@ export function useUpdateOtu(otuId: string) {
 					.then((res) => res.body),
 			onMutate: async ({ name, abbreviation, schema }) => {
 				await queryClient.cancelQueries({
-					queryKey: OtuQueryKeys.detail(otuId),
+					queryKey: otuQueryKeys.detail(otuId),
 				});
 
 				const previousOtu = queryClient.getQueryData<Otu>(
-					OtuQueryKeys.detail(otuId),
+					otuQueryKeys.detail(otuId),
 				);
 
 				if (previousOtu) {
-					queryClient.setQueryData<Otu>(OtuQueryKeys.detail(otuId), {
+					queryClient.setQueryData<Otu>(otuQueryKeys.detail(otuId), {
 						...previousOtu,
 						...(name !== undefined && { name }),
 						...(abbreviation !== undefined && { abbreviation }),
@@ -200,14 +197,14 @@ export function useUpdateOtu(otuId: string) {
 			onError: (_error, _variables, context) => {
 				if (context?.previousOtu) {
 					queryClient.setQueryData(
-						OtuQueryKeys.detail(otuId),
+						otuQueryKeys.detail(otuId),
 						context.previousOtu,
 					);
 				}
 			},
 			onSettled: () => {
 				queryClient.invalidateQueries({
-					queryKey: OtuQueryKeys.detail(otuId),
+					queryKey: otuQueryKeys.detail(otuId),
 				});
 			},
 		},
@@ -246,7 +243,7 @@ export function useCreateIsolate(otuId: string) {
 				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: OtuQueryKeys.detail(otuId),
+				queryKey: otuQueryKeys.detail(otuId),
 			});
 		},
 	});
@@ -271,7 +268,7 @@ export function useSetIsolateAsDefault() {
 				.then((res) => res.body),
 		onSuccess: (_, { otuId }) => {
 			queryClient.invalidateQueries({
-				queryKey: OtuQueryKeys.detail(otuId),
+				queryKey: otuQueryKeys.detail(otuId),
 			});
 		},
 	});
@@ -302,7 +299,7 @@ export function useUpdateIsolate() {
 				.then((res) => res.body),
 		onSuccess: (_, { otuId }) => {
 			queryClient.invalidateQueries({
-				queryKey: OtuQueryKeys.detail(otuId),
+				queryKey: otuQueryKeys.detail(otuId),
 			});
 		},
 	});
@@ -324,7 +321,7 @@ export function useRemoveIsolate() {
 					.then((res) => res.body),
 			onSuccess: (_, { otuId }) => {
 				queryClient.invalidateQueries({
-					queryKey: OtuQueryKeys.detail(otuId),
+					queryKey: otuQueryKeys.detail(otuId),
 				});
 			},
 		},
@@ -366,7 +363,7 @@ export function useCreateSequence(otuId: string) {
 
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: OtuQueryKeys.detail(otuId),
+				queryKey: otuQueryKeys.detail(otuId),
 			});
 		},
 	});
@@ -408,7 +405,7 @@ export function useEditSequence(otuId: string) {
 				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: OtuQueryKeys.detail(otuId),
+				queryKey: otuQueryKeys.detail(otuId),
 			});
 		},
 	});
@@ -433,7 +430,7 @@ export function useRemoveSequence(otuId: string) {
 				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: OtuQueryKeys.detail(otuId),
+				queryKey: otuQueryKeys.detail(otuId),
 			});
 		},
 	});

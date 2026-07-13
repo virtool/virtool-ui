@@ -1,4 +1,5 @@
 import { apiClient } from "@app/api";
+import { createQueryKeys } from "@app/queryKeys";
 import {
 	keepPreviousData,
 	useInfiniteQuery,
@@ -8,14 +9,13 @@ import {
 import type { ErrorResponse } from "@/types/api";
 import type { FileResponse, UploadType } from "./types";
 
-export const fileQueryKeys = {
-	all: () => ["files"] as const,
-	lists: () => ["files", "list"] as const,
-	list: (type: string, filters: Array<string | number | boolean>) =>
-		["files", "list", type, ...filters] as const,
-	infiniteList: (type: string, filters: Array<string | number | boolean>) =>
-		["files", "list", "infinite", type, ...filters] as const,
-};
+/**
+ * Query keys for uploaded files.
+ *
+ * The upload type leads the filters, so every list of a given type sits under
+ * a common prefix.
+ */
+export const fileQueryKeys = createQueryKeys("uploads");
 
 function findFiles(
 	type: UploadType,
@@ -38,7 +38,7 @@ function findFiles(
 
 export function useListFiles(type: UploadType, page, per_page: number) {
 	return useQuery<FileResponse, ErrorResponse>({
-		queryKey: fileQueryKeys.list(type, [page, per_page]),
+		queryKey: fileQueryKeys.list([type, page, per_page]),
 		queryFn: () => findFiles(type, page, per_page),
 		placeholderData: keepPreviousData,
 	});
@@ -50,7 +50,7 @@ export function useInfiniteFindFiles(
 	term?: string,
 ) {
 	return useInfiniteQuery<FileResponse>({
-		queryKey: fileQueryKeys.infiniteList(type, [per_page]),
+		queryKey: fileQueryKeys.infiniteList([type, per_page]),
 		queryFn: ({ pageParam }) =>
 			findFiles(type, pageParam as number, per_page, term),
 		initialPageParam: 1,
