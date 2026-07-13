@@ -4,6 +4,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { getCommonOptions } from "@virtool/sentry/browser";
 import { CONTENT_SCROLL_ID } from "./app/scroll";
+import { scheduleReplay } from "./app/sentryReplay";
 import { routeTree } from "./routeTree.gen";
 
 export function getRouter() {
@@ -81,9 +82,11 @@ export function getRouter() {
 				integrations: [
 					Sentry.tanstackRouterBrowserTracingIntegration(router),
 					Sentry.browserProfilingIntegration(),
-					Sentry.replayIntegration(),
 				],
 			});
+			// Replay is registered after first paint rather than here — see
+			// `scheduleReplay`. Its sample rates still come from `options`.
+			scheduleReplay();
 		}
 	}
 
