@@ -13,10 +13,30 @@ export default defineConfig(({ command }) => ({
 		rolldownOptions: {
 			output: {
 				advancedChunks: {
+					// Rolldown assigns a module to a group by `test`, not by how the
+					// module is reached, so a group matching all of `@sentry/` would
+					// capture Replay into the eager chunk even though `scheduleReplay`
+					// only ever reaches it through a dynamic import. Replay needs its own
+					// group, at a higher priority than the catch-all, to land in a chunk
+					// of its own. Higher priority wins; array order does not decide.
+					// The `replay` pattern deliberately also matches `@sentry/replay-canvas`.
 					groups: [
+						{
+							name: "sentry-replay",
+							test: /node_modules[\\/]@sentry[\\/]replay/,
+							priority: 20,
+							// A captured module normally drags its dependencies into the
+							// group with it. Replay depends on `@sentry/core`, which the
+							// eager `sentry` chunk needs too — so recursive capture pulls
+							// core into this chunk and the eager chunk then imports it back
+							// *statically*, undoing the deferral. Keep the group to the
+							// modules its `test` actually matches.
+							includeDependenciesRecursively: false,
+						},
 						{
 							name: "sentry",
 							test: /node_modules[\\/]@sentry[\\/]/,
+							priority: 10,
 						},
 					],
 				},
