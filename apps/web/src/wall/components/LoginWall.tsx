@@ -13,7 +13,7 @@ export default function LoginWall() {
 	return (
 		<WallContainer>
 			{resetCode ? (
-				<ResetForm resetCode={resetCode} />
+				<ResetForm redirect={redirect} resetCode={resetCode} />
 			) : (
 				<LoginForm redirect={redirect} setResetCode={setResetCode} />
 			)}

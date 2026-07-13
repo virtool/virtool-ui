@@ -15,7 +15,11 @@ import {
 	PasswordReuseError,
 	resetPassword,
 } from "./core";
+import { passwordSchema } from "./password";
 
+// `password` is deliberately not length-checked here. Login authenticates an
+// existing credential rather than setting a new one, and rejecting a short
+// stored password would lock the user out of the reset flow that fixes it.
 const loginSchema = z.object({
 	handle: z.string().min(1),
 	password: z.string().min(1),
@@ -23,13 +27,13 @@ const loginSchema = z.object({
 });
 
 const resetPasswordSchema = z.object({
-	password: z.string().min(1),
+	password: passwordSchema,
 	reset_code: z.string().min(1),
 });
 
 const createFirstUserSchema = z.object({
 	handle: z.string().trim().min(1),
-	password: z.string().min(1),
+	password: passwordSchema,
 });
 
 // Wrapped in createServerOnlyFn so the compiler strips this body and its

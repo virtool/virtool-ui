@@ -2,6 +2,7 @@ import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireAdminRole, requireSession } from "../auth/middleware";
+import { passwordSchema } from "../auth/password";
 import { db } from "../db/pg";
 import {
 	createUser as createUserImpl,
@@ -41,7 +42,7 @@ const findUsersSchema = z
 
 const createUserSchema = z.object({
 	handle: z.string().trim().min(1),
-	password: z.string().min(1),
+	password: passwordSchema,
 	forceReset: z.boolean().default(false),
 });
 
@@ -50,7 +51,7 @@ const updateUserSchema = z.object({
 	active: z.boolean().optional(),
 	force_reset: z.boolean().optional(),
 	handle: z.string().trim().min(1).optional(),
-	password: z.string().min(1).optional(),
+	password: passwordSchema.optional(),
 	groups: z.array(z.number().int().positive()).optional(),
 	primary_group: z.number().int().positive().nullable().optional(),
 });
