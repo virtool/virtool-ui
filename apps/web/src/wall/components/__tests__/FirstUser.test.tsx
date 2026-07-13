@@ -1,4 +1,4 @@
-import { accountKeys } from "@account/queries";
+import { accountQueryKeys } from "@account/queries";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiCreateFirstUser } from "@tests/api/auth";
@@ -16,7 +16,7 @@ describe("<FirstUser />", () => {
 				// A fresh instance: the root reports the setup is needed and no
 				// account has been fetched yet.
 				queryClient.setQueryData(["root"], { first_user: true });
-				queryClient.removeQueries({ queryKey: accountKeys.all() });
+				queryClient.removeQueries({ queryKey: accountQueryKeys.all() });
 			},
 		});
 	}

@@ -1,4 +1,5 @@
 import { apiClient } from "@app/api";
+import { createQueryKeys } from "@app/queryKeys";
 import { samplesQueryKeys } from "@samples/queries";
 import {
 	keepPreviousData,
@@ -11,17 +12,8 @@ import type { ErrorResponse } from "@/types/api";
 import type { Analysis, AnalysisSearchResult, GenericAnalysis } from "./types";
 import { formatData } from "./utils";
 
-/**
- * Factory object for generating analyses query keys
- */
-export const analysesQueryKeys = {
-	all: () => ["analyses"] as const,
-	lists: () => ["analyses", "list"] as const,
-	list: (filters: Array<string | number | boolean | string[] | undefined>) =>
-		["analyses", "list", ...filters] as const,
-	details: () => ["analyses", "details"] as const,
-	detail: (analysesId: string) => ["analyses", "details", analysesId] as const,
-};
+/** Query keys for analyses. */
+export const analysesQueryKeys = createQueryKeys("analyses");
 
 /**
  * Fetch a page of analyses search results from the API

@@ -1,3 +1,4 @@
+import { createQueryKeys } from "@app/queryKeys";
 import {
 	createGroup,
 	deleteGroup,
@@ -21,19 +22,8 @@ import type {
 	PermissionsUpdate,
 } from "./types";
 
-/**
- * Factory for generating react-query keys for group-related queries.
- */
-export const groupQueryKeys = {
-	all: () => ["groups"] as const,
-	lists: () => ["groups", "list"] as const,
-	list: (filters) => ["groups", "list", ...filters] as const,
-	infiniteLists: () => ["groups", "list", "infinite"] as const,
-	infiniteList: (filters: Array<string | number | boolean>) =>
-		["groups", "list", "infinite", ...filters] as const,
-	details: () => ["groups", "details"] as const,
-	detail: (id) => ["groups", "detail", id] as const,
-};
+/** Query keys for groups. */
+export const groupQueryKeys = createQueryKeys("groups");
 
 /**
  * Setup query for fetching group search results for infinite scrolling view

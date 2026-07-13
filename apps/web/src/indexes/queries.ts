@@ -1,4 +1,5 @@
 import { apiClient } from "@app/api";
+import { createQueryKeys } from "@app/queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
 import type {
@@ -11,16 +12,18 @@ import type {
 /**
  * Factory for generating react-query keys for index related queries.
  */
+const indexKeys = createQueryKeys("indexes");
+
+/**
+ * Query keys for indexes.
+ *
+ * `unbuilt()` is the list of a reference's changes that no index covers yet. It
+ * is keyed by reference rather than by index, so it gets its own namespace
+ * instead of sharing the index details one.
+ */
 export const indexQueryKeys = {
-	all: () => ["indexes"] as const,
-	lists: () => ["indexes", "list"] as const,
-	list: (filters: Array<string | number | boolean>) =>
-		["indexes", "list", ...filters] as const,
-	infiniteLists: () => ["indexes", "list", "infinite"] as const,
-	infiniteList: (filters: Array<string | number | boolean | undefined>) =>
-		["indexes", "list", "infinite", ...filters] as const,
-	details: () => ["indexes", "details"] as const,
-	detail: (id: string) => ["indexes", "detail", id] as const,
+	...indexKeys,
+	unbuilt: (refId: string) => [...indexKeys.all(), "unbuilt", refId] as const,
 };
 
 /**
@@ -39,7 +42,7 @@ export function useFindIndexes(
 	term?: string,
 ) {
 	return useQuery<IndexSearchResult>({
-		queryKey: indexQueryKeys.infiniteList([page, per_page, refId, term]),
+		queryKey: indexQueryKeys.list([page, per_page, refId, term]),
 		queryFn: () =>
 			apiClient
 				.get(`/refs/${refId}/indexes`)
@@ -106,7 +109,7 @@ export function useFetchUnbuiltChanges(refId: string) {
 				const { documents, ...rest } = res.body;
 				return { ...rest, items: documents };
 			}),
-		queryKey: indexQueryKeys.detail(refId),
+		queryKey: indexQueryKeys.unbuilt(refId),
 	});
 }
 
@@ -122,7 +125,7 @@ export function useCreateIndex() {
 			apiClient.post(`/refs/${refId}/indexes`).then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: indexQueryKeys.infiniteLists(),
+				queryKey: indexQueryKeys.all(),
 			});
 		},
 	});

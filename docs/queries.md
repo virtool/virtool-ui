@@ -19,69 +19,98 @@ logic lives directly inside the hook's `queryFn`/`mutationFn` (or a
 module-private helper only when the same request is shared by more than one
 hook or selected between branches.
 
-## Query keys come from a per-feature factory
+## Query keys come from `createQueryKeys`
 
 A query key is a tuple of primitives that uniquely identifies a cached
-request. Every feature that caches data exports a single `*QueryKeys`
-factory:
-
-```ts
-export const samplesQueryKeys = {
-  all: () => ["samples"] as const,
-  lists: () => ["samples", "list"] as const,
-  list: (filters: Array<string | number | boolean | string[] | number[]>) =>
-    ["samples", "list", ...filters] as const,
-  details: () => ["samples", "details"] as const,
-  detail: (sampleId: string) => ["samples", "details", sampleId] as const,
-};
-```
-
-Keys must be:
+request. Keys must be:
 
 - **Distinct** — every request with different parameters gets a different
   key. `list([5, 25])` and `list([6, 25])` are different keys.
 - **Deterministic** — the same parameters always produce the same key. Pick
-  an argument order in the factory and stick to it across call sites.
+  an argument order and stick to it across call sites.
 - **Hierarchical** — invalidating a shorter key invalidates every longer
   key beneath it. `invalidateQueries({ queryKey: samplesQueryKeys.lists() })`
-  marks every paginated list stale; `samplesQueryKeys.all()` marks every
-  sample query stale, lists and details alike.
+  marks every cached list of samples stale; `samplesQueryKeys.all()` marks
+  every sample query stale, lists and details alike.
 
-One factory per feature keeps the hierarchy visible in a single place and
-prevents accidental collisions between modules.
-
-### Every list variant nests under `lists()`
-
-A feature often caches the same collection more than one way — paginated,
-infinite-scrolling, or as a flat list for a selector. All of them nest
-beneath `lists()`, distinguished by a segment that follows it:
+Nothing hand-writes a key. Every feature that caches data exports a
+`*QueryKeys` built by `createQueryKeys(domain)` from `@app/queryKeys`:
 
 ```ts
-export const userQueryKeys = {
-  all: () => ["users"] as const,
-  lists: () => ["users", "list"] as const,
-  list: (filters: Array<string | number | boolean | undefined>) =>
-    ["users", "list", ...filters] as const,
-  nested: () => ["users", "list", "nested"] as const,
-  infiniteLists: () => ["users", "list", "infinite"] as const,
-  infiniteList: (filters: Array<string | number | boolean | undefined>) =>
-    ["users", "list", "infinite", ...filters] as const,
-  details: () => ["users", "details"] as const,
-  detail: (userId: number) => ["users", "details", userId] as const,
-};
+export const samplesQueryKeys = createQueryKeys("samples");
 ```
+
+That yields seven members — `all`, `lists`, `list`, `infiniteLists`,
+`infiniteList`, `details`, and `detail`:
+
+```ts
+samplesQueryKeys.all();               // ["samples"]
+samplesQueryKeys.lists();             // ["samples", "list"]
+samplesQueryKeys.list([5, 25]);       // ["samples", "list", 5, 25]
+samplesQueryKeys.infiniteList([25]);  // ["samples", "list", "infinite", 25]
+samplesQueryKeys.details();           // ["samples", "details"]
+samplesQueryKeys.detail("abc");       // ["samples", "details", "abc"]
+```
+
+The hierarchy holds *by construction*: every list variant extends `lists()`
+and every detail extends `details()`, because the factory builds the longer
+keys by spreading the shorter ones. A feature cannot end up with a
+`details()` that fails to invalidate its own `detail(id)`, and a domain that
+caches nothing under a member simply never calls it — an unused member costs
+nothing, so there is no reason to trim the set.
 
 This is what makes a single `invalidateQueries({ queryKey: lists() })` in a
 mutation's `onSuccess` — or in the SSE handler — refresh *every* cached view
-of the collection. Hoisting a variant to a sibling of `lists()` (say,
-`["users", "infiniteList"]`) silently removes it from that invalidation:
-nothing fails to compile and no test breaks, the list just stops updating.
+of the collection.
+
+### Extra members derive from a base key
+
+A feature sometimes caches something that is none of the seven shapes: a
+flat list for a selector, an OTU's change history, the one active banner.
+Spread the factory and derive the extra member **from a base key**, so it
+lands inside the hierarchy rather than beside it:
+
+```ts
+const userKeys = createQueryKeys("users");
+
+export const userQueryKeys = {
+  ...userKeys,
+  nested: () => [...userKeys.lists(), "nested"] as const,
+};
+```
+
+Because `nested()` extends `lists()`, one `lists()` invalidation still
+refreshes it. Hoisting it to a sibling instead (say, `["users", "nested"]`)
+silently removes it from that invalidation: nothing fails to compile and no
+test breaks, the selector just stops updating.
+
+Derive from the key whose invalidation *should* reach the new member. An
+OTU's history nests under that OTU's `detail(id)`, so the mutations that
+invalidate the OTU also refresh the history they just appended to. A
+reference's unbuilt changes are keyed by reference, not by index, so they
+get their own segment under `all()` rather than squatting in the index
+details namespace.
 
 Give each variant its own segment rather than letting it land on a prefix
 that is already a key. `list([])` collapses to `["users", "list"]` — exactly
 `lists()` — which parks a real cache entry on the invalidation prefix, where
-any `setQueryData(lists(), …)` would clobber it. That is what `nested()` is
-for.
+any `setQueryData(lists(), …)` would clobber it. A collection with no filters
+should key off `lists()` deliberately, not arrive there by passing an empty
+filter array.
+
+### The SSE handler declares what each domain caches
+
+`app/sse/reactQueryHandler.ts` maps a pushed frame to the narrowest key it
+can invalidate: `detail(id)` for an update, `lists()` for an insert or
+delete. Not every domain caches both — the account is a singleton cached at
+`all()`, tasks cache no list, labels cache no detail — and invalidating a key
+nothing is cached under is a **silent no-op**, not an error.
+
+So the handler's registry states, per domain, whether it caches details and
+whether it caches lists, and falls back to `all()` when it doesn't. Do not
+try to infer that from the keys: every domain has every member now, so their
+presence says nothing about what is cached. When a feature starts caching a
+shape it didn't before, flip its flag in that registry.
 
 ## Share query config with `queryOptions()`
 

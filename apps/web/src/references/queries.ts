@@ -1,4 +1,5 @@
 import { apiClient } from "@app/api";
+import { createQueryKeys } from "@app/queryKeys";
 import {
 	keepPreviousData,
 	queryOptions,
@@ -17,17 +18,8 @@ import type {
 	ReferenceUser,
 } from "./types";
 
-/**
- * Factory for generating react-query keys for reference related queries.
- */
-export const referenceQueryKeys = {
-	all: () => ["reference"] as const,
-	lists: () => ["reference", "list"] as const,
-	list: (filters: Array<string | number | boolean | undefined>) =>
-		["reference", "list", "single", ...filters] as const,
-	details: () => ["reference", "detail"] as const,
-	detail: (refId: string) => ["reference", "detail", refId] as const,
-};
+/** Query keys for references. */
+export const referenceQueryKeys = createQueryKeys("references");
 
 /**
  * Adds a member (user or group) to a reference.

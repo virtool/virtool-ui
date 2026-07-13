@@ -1,3 +1,4 @@
+import { createQueryKeys } from "@app/queryKeys";
 import {
 	createLabel,
 	deleteLabel,
@@ -7,12 +8,8 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Label } from "./types";
 
-export const labelQueryKeys = {
-	all: () => ["label"] as const,
-	lists: () => ["label", "list"] as const,
-	list: (filters: Array<string | number | boolean>) =>
-		["label", "list", "single", ...filters] as const,
-};
+/** Query keys for labels. */
+export const labelQueryKeys = createQueryKeys("labels");
 
 /**
  * Fetch a list of labels from the API
@@ -21,7 +18,7 @@ export const labelQueryKeys = {
  */
 export function useFetchLabels() {
 	return useQuery<Label[]>({
-		queryKey: labelQueryKeys.list([]),
+		queryKey: labelQueryKeys.lists(),
 		queryFn: () => findLabels(),
 	});
 }

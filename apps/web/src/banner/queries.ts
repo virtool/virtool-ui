@@ -1,3 +1,4 @@
+import { createQueryKeys } from "@app/queryKeys";
 import {
 	clearActiveMessage,
 	createMessage,
@@ -10,13 +11,17 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Banner, BannerColor } from "./types";
 
+const bannerKeys = createQueryKeys("banner");
+
 /**
- * Factory for generating react-query keys for banner related queries.
+ * Query keys for banners.
+ *
+ * `active()` is the single banner shown to every user, which is a distinct
+ * resource from the admin list rather than a member of it.
  */
 export const bannerQueryKeys = {
-	all: () => ["banner"] as const,
-	lists: () => ["banner", "list"] as const,
-	active: () => ["banner", "active"] as const,
+	...bannerKeys,
+	active: () => [...bannerKeys.all(), "active"] as const,
 };
 
 /**
