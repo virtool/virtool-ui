@@ -1,0 +1,298 @@
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
+
+import type { Db } from "../db/pg";
+import { sessions } from "../db/schema/sessions";
+import { users } from "../db/schema/users";
+import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
+
+const getRequest = vi.fn();
+const setResponseStatus = vi.fn();
+const setUser = vi.fn();
+
+vi.mock("@tanstack/react-start/server", () => ({
+	deleteCookie: vi.fn(),
+	getCookie: vi.fn(),
+	getRequest,
+	setCookie: vi.fn(),
+	setResponseStatus,
+}));
+
+vi.mock("@sentry/tanstackstart-react", () => ({
+	captureException: vi.fn(),
+	setUser,
+}));
+
+// The middleware reads the `db` singleton at module scope. A getter defers the
+// read until a handler actually runs, by which point beforeAll has pointed it
+// at this file's isolated database.
+let db: Db;
+vi.mock("../db/pg", () => ({
+	client: {},
+	get db() {
+		return db;
+	},
+}));
+
+const { authenticationExceptions } = await import("./exceptions");
+const {
+	createAuthenticationMiddleware,
+	ForbiddenError,
+	requireAdminRole,
+	requireAuthenticatedRequest,
+	requireSession,
+	UnauthorizedError,
+} = await import("./middleware");
+const { createFirstUserFn, loginFn, logoutFn, resetPasswordFn } = await import(
+	"./functions"
+);
+const { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } = await import("./cookies");
+const { seedSession, seedUser } = await import("./test/fixtures");
+
+let database: TestDatabase;
+
+beforeAll(async () => {
+	database = await createTestDatabase();
+	db = database.db;
+}, 60_000);
+
+afterAll(async () => {
+	await database.drop();
+});
+
+beforeEach(async () => {
+	vi.clearAllMocks();
+	await db.delete(sessions);
+	await db.delete(users);
+});
+
+/** The middleware's server handler, which `createMiddleware` stores verbatim. */
+type ServerHandler = (options: {
+	next: (options?: unknown) => Promise<unknown>;
+}) => Promise<unknown>;
+
+function serverHandler(exceptions: ReadonlyArray<{ url: string }>) {
+	const middleware = createAuthenticationMiddleware(exceptions);
+	return (middleware as unknown as { options: { server: ServerHandler } })
+		.options.server;
+}
+
+function cookieHeader(sessionId: string, token: string): string {
+	return `${SESSION_ID_COOKIE}=${sessionId}; ${SESSION_TOKEN_COOKIE}=${token}`;
+}
+
+function requestFor(url: string, cookie?: string) {
+	return new Request(new URL(url, "https://virtool.test"), {
+		headers: cookie ? { cookie } : undefined,
+	});
+}
+
+describe("authenticationExceptions", () => {
+	// The list is the whole security boundary: anything on it is publicly
+	// callable. A fn added here by mistake is a silent hole, so pin the contents
+	// rather than just the middleware's handling of them.
+	it("exempts exactly the four unauthenticated endpoints", () => {
+		expect(authenticationExceptions).toHaveLength(4);
+		expect(authenticationExceptions.map((fn) => fn.url).sort()).toEqual(
+			[createFirstUserFn, loginFn, logoutFn, resetPasswordFn]
+				.map((fn) => fn.url)
+				.sort(),
+		);
+	});
+});
+
+describe("createAuthenticationMiddleware", () => {
+	it.each([
+		["createFirstUserFn", () => createFirstUserFn],
+		["loginFn", () => loginFn],
+		["logoutFn", () => logoutFn],
+		["resetPasswordFn", () => resetPasswordFn],
+	])("lets an unauthenticated call reach %s", async (_label, get) => {
+		getRequest.mockReturnValue(requestFor(get().url));
+		const next = vi.fn().mockResolvedValue("result");
+
+		await serverHandler(authenticationExceptions)({ next });
+
+		expect(next).toHaveBeenCalledWith({ context: { session: null } });
+		expect(setUser).not.toHaveBeenCalled();
+	});
+
+	it("rejects an unauthenticated call to a fn that is not excepted", async () => {
+		getRequest.mockReturnValue(requestFor("/_serverFn/somethingElse"));
+		const next = vi.fn();
+
+		await expect(
+			serverHandler(authenticationExceptions)({ next }),
+		).rejects.toBeInstanceOf(UnauthorizedError);
+
+		expect(setResponseStatus).toHaveBeenCalledWith(401);
+		expect(next).not.toHaveBeenCalled();
+	});
+
+	it("attaches the resolved session to the handler context", async () => {
+		const userId = await seedUser(db);
+		const { sessionId, token } = await seedSession(db, userId);
+
+		getRequest.mockReturnValue(
+			requestFor("/_serverFn/somethingElse", cookieHeader(sessionId, token)),
+		);
+		const next = vi.fn().mockResolvedValue("result");
+
+		await serverHandler(authenticationExceptions)({ next });
+
+		expect(next).toHaveBeenCalledWith({ context: { session: { userId } } });
+	});
+
+	it("ties the acting user to the sentry scope", async () => {
+		const userId = await seedUser(db);
+		const { sessionId, token } = await seedSession(db, userId);
+
+		getRequest.mockReturnValue(
+			requestFor("/_serverFn/somethingElse", cookieHeader(sessionId, token)),
+		);
+
+		await serverHandler(authenticationExceptions)({
+			next: vi.fn().mockResolvedValue("result"),
+		});
+
+		expect(setUser).toHaveBeenCalledWith({ id: userId });
+	});
+
+	it("rejects a session whose user has been deactivated", async () => {
+		const userId = await seedUser(db, { active: false });
+		const { sessionId, token } = await seedSession(db, userId);
+
+		getRequest.mockReturnValue(
+			requestFor("/_serverFn/somethingElse", cookieHeader(sessionId, token)),
+		);
+
+		await expect(
+			serverHandler(authenticationExceptions)({ next: vi.fn() }),
+		).rejects.toBeInstanceOf(UnauthorizedError);
+	});
+
+	it("authenticates every call when there are no exceptions", async () => {
+		getRequest.mockReturnValue(requestFor(loginFn.url));
+
+		await expect(serverHandler([])({ next: vi.fn() })).rejects.toBeInstanceOf(
+			UnauthorizedError,
+		);
+	});
+
+	// The path is compared as a pathname, so a query string must not defeat the
+	// match and turn a public endpoint into a 401.
+	it("matches an exception carrying a query string", async () => {
+		getRequest.mockReturnValue(requestFor(`${loginFn.url}?createServerFn`));
+		const next = vi.fn().mockResolvedValue("result");
+
+		await serverHandler(authenticationExceptions)({ next });
+
+		expect(next).toHaveBeenCalledWith({ context: { session: null } });
+	});
+
+	it("does not treat a path that merely extends an exception as excepted", async () => {
+		getRequest.mockReturnValue(requestFor(`${loginFn.url}Extra`));
+
+		await expect(
+			serverHandler(authenticationExceptions)({ next: vi.fn() }),
+		).rejects.toBeInstanceOf(UnauthorizedError);
+	});
+});
+
+describe("requireSession", () => {
+	it("resolves the session carried by the request cookies", async () => {
+		const userId = await seedUser(db);
+		const { sessionId, token } = await seedSession(db, userId);
+
+		getRequest.mockReturnValue(
+			requestFor("/_serverFn/me", cookieHeader(sessionId, token)),
+		);
+
+		expect(await requireSession()).toEqual({ userId });
+	});
+
+	it("throws and sets a 401 when the request has no cookies", async () => {
+		getRequest.mockReturnValue(requestFor("/_serverFn/me"));
+
+		await expect(requireSession()).rejects.toBeInstanceOf(UnauthorizedError);
+		expect(setResponseStatus).toHaveBeenCalledWith(401);
+	});
+});
+
+describe("requireAuthenticatedRequest", () => {
+	it("resolves the session for a raw request", async () => {
+		const userId = await seedUser(db);
+		const { sessionId, token } = await seedSession(db, userId);
+
+		expect(
+			await requireAuthenticatedRequest(
+				requestFor("/events", cookieHeader(sessionId, token)),
+			),
+		).toEqual({ userId });
+	});
+
+	// Raw route handlers run outside the server-function context, so this returns
+	// a Response for the caller to return rather than throwing.
+	it("returns a 401 response rather than throwing", async () => {
+		const result = await requireAuthenticatedRequest(requestFor("/events"));
+
+		expect(result).toBeInstanceOf(Response);
+		expect((result as Response).status).toBe(401);
+	});
+});
+
+describe("requireAdminRole", () => {
+	it("rejects a user with no administrator role", async () => {
+		const userId = await seedUser(db);
+
+		await expect(requireAdminRole({ userId }, "base")).rejects.toBeInstanceOf(
+			ForbiddenError,
+		);
+		expect(setResponseStatus).toHaveBeenCalledWith(403);
+	});
+
+	it("rejects a session whose user no longer exists", async () => {
+		await expect(
+			requireAdminRole({ userId: 404 }, "base"),
+		).rejects.toBeInstanceOf(ForbiddenError);
+	});
+
+	it.each([
+		"full",
+		"settings",
+		"spaces",
+		"users",
+		"base",
+	] as const)("allows a full administrator to satisfy a %s requirement", async (requiredRole) => {
+		const userId = await seedUser(db, { administratorRole: "full" });
+
+		await expect(
+			requireAdminRole({ userId }, requiredRole),
+		).resolves.toBeUndefined();
+	});
+
+	// `full` is the strongest role and `base` the weakest, so a role satisfies a
+	// requirement it outranks. Easy to invert; pin both directions.
+	it("allows a stronger role to satisfy a weaker requirement", async () => {
+		const userId = await seedUser(db, { administratorRole: "settings" });
+
+		await expect(
+			requireAdminRole({ userId }, "users"),
+		).resolves.toBeUndefined();
+	});
+
+	it("rejects a weaker role against a stronger requirement", async () => {
+		const userId = await seedUser(db, { administratorRole: "base" });
+
+		await expect(
+			requireAdminRole({ userId }, "settings"),
+		).rejects.toBeInstanceOf(ForbiddenError);
+	});
+});
