@@ -9,6 +9,7 @@ export * from "./jobs";
 export * from "./labels";
 export * from "./messages";
 export * from "./sessions";
+export * from "./settings";
 export * from "./subtractions";
 export * from "./tasks";
 export * from "./users";
