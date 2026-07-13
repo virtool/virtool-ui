@@ -21,12 +21,39 @@ For server features under `apps/web/src/server/<feature>/` once their
 and query semantics against a real Postgres — mocks have
 hidden bugs that real DBs catch.
 
-Bootstrap the schema in a sibling `test/fixtures.ts` (see "Shared
-test fixtures" below) and connect a real db handle per suite.
+`src/tests/globalSetup.ts` starts a `postgres:18` testcontainer once
+per run and exports `VT_POSTGRES_URL`. Bootstrap the schema in a
+sibling `test/fixtures.ts` (see "Shared test fixtures" below) and
+connect a real db handle per suite. Give each suite its own Postgres
+schema — `createTestDb(namespace)` in
+`server/jobs/test/fixtures.ts` is the reference — so suites in
+parallel workers can't see each other's rows.
 
-Today only `auth/` is on this side of the line. Add integration tests
-as each feature's `data.ts` lands; don't retrofit them onto features
-that still call the Python API.
+The real schema is owned by Python's Alembic migrations, so fixture
+DDL is a hand-written mirror of the Drizzle schemas under
+`server/db/schema/`. When you add a column there, add it to the
+fixture DDL too, or the suite will pass against a table the app
+can't actually read.
+
+`server/jobs/` is the reference suite. Add integration tests as each
+feature's `data.ts` lands; don't retrofit them onto features that
+still call the Python API.
+
+### Two Vitest projects
+
+`apps/web/vitest.config.js` defines two projects, because the two
+layers need different environments:
+
+- **`web`** — jsdom, loads `src/tests/setup.tsx`, covers
+  `src/**/*.test.{ts,tsx}` and excludes `src/server/**`.
+- **`server`** — node, no setup file, covers
+  `src/server/**/*.test.ts`.
+
+Server tests must run under node: `setup.tsx` assigns to `window` and
+pulls in the router tree, neither of which belongs in a test that
+talks to Postgres. A `// @vitest-environment node` docblock alone is
+not enough — setup files still load — which is why the split is at
+the project level.
 
 ## Where to mock the network boundary
 

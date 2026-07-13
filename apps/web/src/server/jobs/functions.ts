@@ -1,12 +1,14 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { getSessionAdminRole, requireSession } from "../auth/middleware";
 import { db } from "../db/pg";
 import {
 	findJobs as findJobsImpl,
 	getJob as getJobImpl,
 	JOB_STATES,
 	JobNotFoundError,
+	resolveJobScope,
 } from "./data";
 
 const jobStateSchema = z.enum(JOB_STATES);
@@ -33,15 +35,25 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	throw err;
 });
 
+// Jobs expose the owning user's handle and the ids of the samples, indexes and
+// analyses they ran against. Administrators read across the instance; everyone
+// else is restricted to the jobs they own.
+const scopeForSession = createServerOnlyFn(async (): Promise<number | null> => {
+	const session = await requireSession();
+	return resolveJobScope(session.userId, await getSessionAdminRole(session));
+});
+
 export const findJobs = createServerFn({ method: "GET" })
 	.validator(findJobsSchema)
-	.handler(async ({ data }) => findJobsImpl(db, data));
+	.handler(async ({ data }) =>
+		findJobsImpl(db, { ...data, scopeUserId: await scopeForSession() }),
+	);
 
 export const getJob = createServerFn({ method: "GET" })
 	.validator(jobIdSchema)
 	.handler(async ({ data }) => {
 		try {
-			return await getJobImpl(db, data.jobId);
+			return await getJobImpl(db, data.jobId, await scopeForSession());
 		} catch (err) {
 			await rethrowAsHttp(err);
 		}

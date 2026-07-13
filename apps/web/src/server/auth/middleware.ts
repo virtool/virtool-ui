@@ -26,6 +26,28 @@ export class ForbiddenError extends Error {
 }
 
 /**
+ * Read the session user's `administrator_role` from the upstream users table.
+ * Returns `null` for a user with no role, or one that no longer exists.
+ *
+ * Use this where a missing role changes behaviour rather than ending the
+ * request — scoping a query to the acting user, say. Use
+ * {@link requireAdminRole} where a missing role is a hard 403.
+ */
+export const getSessionAdminRole = createServerOnlyFn(
+	async (
+		session: AuthenticatedSession,
+	): Promise<AdministratorRoleName | null> => {
+		const [row] = await db
+			.select({ administratorRole: users.administratorRole })
+			.from(users)
+			.where(eq(users.id, session.userId))
+			.limit(1);
+
+		return row?.administratorRole ?? null;
+	},
+);
+
+/**
  * Throw `ForbiddenError` (and 403) if the session user lacks the required
  * administrator role. Reads the user's `administrator_role` from the upstream
  * users table; users with a null role are always rejected.
@@ -35,17 +57,9 @@ export const requireAdminRole = createServerOnlyFn(
 		session: AuthenticatedSession,
 		requiredRole: AdministratorRoleName,
 	): Promise<void> => {
-		const [row] = await db
-			.select({ administratorRole: users.administratorRole })
-			.from(users)
-			.where(eq(users.id, session.userId))
-			.limit(1);
+		const role = await getSessionAdminRole(session);
 
-		if (
-			!row ||
-			row.administratorRole === null ||
-			!hasSufficientAdminRole(requiredRole, row.administratorRole)
-		) {
+		if (!hasSufficientAdminRole(requiredRole, role)) {
 			setResponseStatus(403);
 			throw new ForbiddenError();
 		}

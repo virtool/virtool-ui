@@ -1,4 +1,5 @@
-import { count, desc, eq, inArray } from "drizzle-orm";
+import type { AdministratorRoleName } from "@administration/types";
+import { and, count, desc, eq, inArray } from "drizzle-orm";
 import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import { analyses } from "../db/schema/analyses";
@@ -65,6 +66,12 @@ export type JobSearchResult = {
 export type FindJobsOptions = {
 	page: number;
 	perPage: number;
+	/**
+	 * Restrict the result to jobs owned by this user, or `null` to read across
+	 * every user. Required rather than optional so a caller can't omit it and
+	 * silently get an instance-wide read.
+	 */
+	scopeUserId: number | null;
 	states: JobState[];
 };
 
@@ -108,11 +115,20 @@ function buildCounts(
 
 export async function findJobs(
 	db: Db,
-	{ page, perPage, states }: FindJobsOptions,
+	{ page, perPage, scopeUserId, states }: FindJobsOptions,
 ): Promise<JobSearchResult> {
-	// TODO: the Python endpoint also accepts a `users` filter; add it here if a
-	// caller needs to scope jobs by user.
+	// The owner scope is the authorization boundary, so it has to constrain the
+	// aggregates as well as the page of items. Counts and totals taken over the
+	// whole table would leak instance-wide activity to a scoped caller even
+	// though they can't see the jobs behind the numbers.
+	//
+	// Note this is not the Python endpoint's caller-supplied `users` filter,
+	// which narrows a search the caller is already entitled to make. That filter
+	// is still unimplemented here.
+	const ownerFilter =
+		scopeUserId === null ? undefined : eq(jobs.user_id, scopeUserId);
 	const stateFilter = states.length ? inArray(jobs.state, states) : undefined;
+	const foundFilter = and(ownerFilter, stateFilter);
 
 	const [countRows, totalCountRows, foundCountRows, rows] = await Promise.all([
 		db
@@ -122,12 +138,13 @@ export async function findJobs(
 				count: count(),
 			})
 			.from(jobs)
+			.where(ownerFilter)
 			.groupBy(jobs.state, jobs.workflow),
-		db.select({ value: count() }).from(jobs),
+		db.select({ value: count() }).from(jobs).where(ownerFilter),
 		// Without a state filter the found count equals the total count, so
 		// skip the redundant query and reuse totalCount below.
 		stateFilter
-			? db.select({ value: count() }).from(jobs).where(stateFilter)
+			? db.select({ value: count() }).from(jobs).where(foundFilter)
 			: undefined,
 		db
 			.select({
@@ -141,7 +158,7 @@ export async function findJobs(
 			})
 			.from(jobs)
 			.innerJoin(users, eq(jobs.user_id, users.id))
-			.where(stateFilter)
+			.where(foundFilter)
 			.orderBy(desc(jobs.created_at))
 			.offset((page - 1) * perPage)
 			.limit(perPage),
@@ -172,7 +189,27 @@ export async function findJobs(
 	};
 }
 
-export async function getJob(db: Db, jobId: number): Promise<Job> {
+/**
+ * A job is readable by its owner, and by any administrator. Returns the user id
+ * a read should be restricted to, or `null` to read across every user.
+ */
+export function resolveJobScope(
+	userId: number,
+	adminRole: AdministratorRoleName | null,
+): number | null {
+	return adminRole === null ? userId : null;
+}
+
+/**
+ * Fetch a single job. A `scopeUserId` restricts the read to that user's jobs,
+ * so a job owned by someone else is reported as missing rather than forbidden —
+ * a 403 would confirm the job exists to a caller who can't see it.
+ */
+export async function getJob(
+	db: Db,
+	jobId: number,
+	scopeUserId: number | null,
+): Promise<Job> {
 	const [row] = await db
 		.select({
 			id: jobs.id,
@@ -196,7 +233,12 @@ export async function getJob(db: Db, jobId: number): Promise<Job> {
 		.leftJoin(jobIndexes, eq(jobs.id, jobIndexes.job_id))
 		.leftJoin(subtractions, eq(jobs.id, subtractions.job_id))
 		.leftJoin(analyses, eq(jobs.id, analyses.job_id))
-		.where(eq(jobs.id, jobId));
+		.where(
+			and(
+				eq(jobs.id, jobId),
+				scopeUserId === null ? undefined : eq(jobs.user_id, scopeUserId),
+			),
+		);
 
 	if (!row) {
 		throw new JobNotFoundError();
