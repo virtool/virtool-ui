@@ -3,6 +3,7 @@ import { jobQueryKeys } from "@jobs/queries";
 import { labelQueryKeys } from "@labels/queries";
 import { samplesQueryKeys } from "@samples/queries";
 import { QueryClient } from "@tanstack/react-query";
+import { userQueryKeys } from "@users/queries";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { reactQueryHandler } from "../reactQueryHandler";
 import type { SseMessage } from "../schema";
@@ -54,6 +55,44 @@ describe("reactQueryHandler", () => {
 		expect(invalidate).toHaveBeenCalledExactlyOnceWith({
 			queryKey: roleQueryKeys.all(),
 		});
+	});
+
+	it("marks every user list variant stale on insert", () => {
+		const paginated = userQueryKeys.list([1, 25, ""]);
+		const infinite = userQueryKeys.infiniteList([25, ""]);
+		const nested = userQueryKeys.nested();
+
+		queryClient.setQueryData(paginated, { documents: [] });
+		queryClient.setQueryData(infinite, { pages: [] });
+		queryClient.setQueryData(nested, []);
+
+		reactQueryHandler(queryClient)({
+			domain: "users",
+			operation: "insert",
+			id: 7,
+		});
+
+		for (const queryKey of [paginated, infinite, nested]) {
+			expect(queryClient.getQueryState(queryKey)?.isInvalidated).toBe(true);
+		}
+	});
+
+	it("marks only the matching user detail stale on update", () => {
+		queryClient.setQueryData(userQueryKeys.detail(7), { id: 7 });
+		queryClient.setQueryData(userQueryKeys.detail(8), { id: 8 });
+
+		reactQueryHandler(queryClient)({
+			domain: "users",
+			operation: "update",
+			id: 7,
+		});
+
+		expect(
+			queryClient.getQueryState(userQueryKeys.detail(7))?.isInvalidated,
+		).toBe(true);
+		expect(
+			queryClient.getQueryState(userQueryKeys.detail(8))?.isInvalidated,
+		).toBe(false);
 	});
 
 	it("ignores messages for unknown domains", () => {

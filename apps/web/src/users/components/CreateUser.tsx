@@ -1,4 +1,3 @@
-import { useCreateUser } from "@administration/queries";
 import Button from "@base/Button";
 import {
 	Dialog,
@@ -6,6 +5,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@base/Dialog";
+import { useCreateUser } from "@users/queries";
 import { useState } from "react";
 import { CreateUserForm } from "./CreateUserForm";
 

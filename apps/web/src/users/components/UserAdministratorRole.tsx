@@ -1,13 +1,11 @@
 import { useFetchAccount } from "@account/queries";
 import AdministratorRoleSelect from "@administration/components/AdministratorRoleSelect";
 import { useCheckAdminRole } from "@administration/hooks";
-import {
-	useGetAdministratorRoles,
-	useSetAdministratorRole,
-} from "@administration/queries";
+import { useGetAdministratorRoles } from "@administration/queries";
 import type { AdministratorRoleName } from "@administration/types";
 import IconButton from "@base/IconButton";
 import InputLabel from "@base/InputLabel";
+import { useSetAdministratorRole } from "@users/queries";
 import { Trash } from "lucide-react";
 
 type UserAdministratorRoleProps = {

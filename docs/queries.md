@@ -50,6 +50,39 @@ Keys must be:
 One factory per feature keeps the hierarchy visible in a single place and
 prevents accidental collisions between modules.
 
+### Every list variant nests under `lists()`
+
+A feature often caches the same collection more than one way — paginated,
+infinite-scrolling, or as a flat list for a selector. All of them nest
+beneath `lists()`, distinguished by a segment that follows it:
+
+```ts
+export const userQueryKeys = {
+  all: () => ["users"] as const,
+  lists: () => ["users", "list"] as const,
+  list: (filters: Array<string | number | boolean | undefined>) =>
+    ["users", "list", ...filters] as const,
+  nested: () => ["users", "list", "nested"] as const,
+  infiniteLists: () => ["users", "list", "infinite"] as const,
+  infiniteList: (filters: Array<string | number | boolean | undefined>) =>
+    ["users", "list", "infinite", ...filters] as const,
+  details: () => ["users", "details"] as const,
+  detail: (userId: number) => ["users", "details", userId] as const,
+};
+```
+
+This is what makes a single `invalidateQueries({ queryKey: lists() })` in a
+mutation's `onSuccess` — or in the SSE handler — refresh *every* cached view
+of the collection. Hoisting a variant to a sibling of `lists()` (say,
+`["users", "infiniteList"]`) silently removes it from that invalidation:
+nothing fails to compile and no test breaks, the list just stops updating.
+
+Give each variant its own segment rather than letting it land on a prefix
+that is already a key. `list([])` collapses to `["users", "list"]` — exactly
+`lists()` — which parks a real cache entry on the invalidation prefix, where
+any `setQueryData(lists(), …)` would clobber it. That is what `nested()` is
+for.
+
 ## Share query config with `queryOptions()`
 
 Declare a query's key and fetcher once with the `queryOptions()` helper, then
