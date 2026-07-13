@@ -177,15 +177,19 @@ describe("<CreateSample>", () => {
 
 		// Select Labels
 		await userEvent.click(
-			screen.getByRole("button", { name: "select labels" }),
+			screen.getByRole("button", { name: "Toggle Labels menu" }),
 		);
-		await userEvent.click(screen.getByText(firstLabel.name));
+		await userEvent.click(
+			screen.getByRole("option", { name: firstLabel.name }),
+		);
 
 		// Select Subtractions
 		await userEvent.click(
-			screen.getByRole("button", { name: "select default subtractions" }),
+			screen.getByRole("button", { name: "Toggle Default Subtractions menu" }),
 		);
-		await userEvent.click(screen.getByText(subtractionShortlist.name));
+		await userEvent.click(
+			screen.getByRole("option", { name: subtractionShortlist.name }),
+		);
 
 		// Submit.
 		await submitForm();

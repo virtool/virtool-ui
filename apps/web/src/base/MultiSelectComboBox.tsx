@@ -6,7 +6,7 @@ import Icon from "./Icon";
 
 type MultiSelectComboBoxProps<Item> = {
 	/** The text label associated with the combobox input */
-	label: ReactNode;
+	label: string;
 
 	/** The full set of selectable items, already filtered by `term` */
 	items: Item[];
@@ -193,7 +193,7 @@ export default function MultiSelectComboBox<Item>({
 					/>
 					<button
 						type="button"
-						aria-label="toggle menu"
+						aria-label={`Toggle ${label} menu`}
 						className="text-gray-500 hover:text-gray-800"
 						{...getToggleButtonProps()}
 					>

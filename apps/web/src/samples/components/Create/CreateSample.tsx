@@ -28,8 +28,8 @@ import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useInfiniteFindFiles } from "@/uploads/queries";
 import type { Upload } from "@/uploads/types";
-import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
-import SampleLabels from "../Sidebar/SampleLabels";
+import DefaultSubtractionSelector from "./DefaultSubtractionSelector";
+import LabelSelector from "./LabelSelector";
 import LibraryTypeSelector from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
 import SampleUserGroup from "./SampleUserGroup";
@@ -253,10 +253,10 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 						<Controller
 							control={control}
 							render={({ field: { onChange, value } }) => (
-								<SampleLabels
+								<LabelSelector
 									labels={labels}
-									sampleLabels={value}
-									onUpdate={onChange}
+									selected={value}
+									onChange={onChange}
 								/>
 							)}
 							name="labels"
@@ -265,9 +265,9 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 						<Controller
 							control={control}
 							render={({ field: { onChange, value } }) => (
-								<DefaultSubtractions
-									defaultSubtractions={value}
-									onUpdate={onChange}
+								<DefaultSubtractionSelector
+									selected={value}
+									onChange={onChange}
 								/>
 							)}
 							name="subtractionIds"
