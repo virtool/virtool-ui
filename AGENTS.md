@@ -243,6 +243,15 @@ server modules through the `@server/*` alias, never a relative
 drags the server source graph (and `@types/node` globals) back into the
 browser program.
 
+Because the app project consumes emitted declarations, anything exported
+from `src/server` must have a type that can be *named* portably. If an
+export's inferred type references a transitive dependency, declaration
+emit fails (`TS2883`), that file emits no `.d.ts`, and every `@server/*`
+import of it breaks with `TS2307`. Annotate the export explicitly with a
+type re-exported from the direct dependency — as `src/server/logger.ts`
+does with `Logger` from `@virtool/logger` rather than letting the type be
+inferred as pino's.
+
 ### Authentication is enforced by global middleware
 
 Every TanStack Start server function is authenticated by default.

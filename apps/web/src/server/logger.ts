@@ -1,4 +1,4 @@
-import { createLogger } from "@virtool/logger";
+import { createLogger, type Logger } from "@virtool/logger";
 import { readDsn } from "@virtool/sentry";
 
 // Only pull in the Sentry SDK when a DSN is configured. Without one (the Vite
@@ -13,4 +13,4 @@ const streams = readDsn()
 		]
 	: undefined;
 
-export const logger = createLogger({ name: "web", streams });
+export const logger: Logger = createLogger({ name: "web", streams });
