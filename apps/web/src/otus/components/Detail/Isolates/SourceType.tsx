@@ -1,9 +1,13 @@
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
-import InputSelect from "@base/InputSelect";
 import InputSimple from "@base/InputSimple";
+import Select from "@base/Select";
+import SelectButton from "@base/SelectButton";
+import SelectContent from "@base/SelectContent";
+import SelectItem from "@base/SelectItem";
 import { capitalize } from "es-toolkit";
-import type { UseFormRegister, UseFormWatch } from "react-hook-form";
+import { ChevronDown } from "lucide-react";
+import { type Control, Controller } from "react-hook-form";
 
 type IsolateFormValues = {
 	sourceName: string;
@@ -12,12 +16,10 @@ type IsolateFormValues = {
 
 type SourceTypeProps = {
 	allowedSourceTypes: string[];
-	/** Function to register form fields */
-	register: UseFormRegister<IsolateFormValues>;
+	/** Controls the form field */
+	control: Control<IsolateFormValues>;
 	/** Indicates whether the source types are restricted */
 	restrictSourceTypes: boolean;
-	/** Watches for changes in form values */
-	watch: UseFormWatch<IsolateFormValues>;
 };
 
 /**
@@ -25,26 +27,36 @@ type SourceTypeProps = {
  */
 export function SourceType({
 	allowedSourceTypes,
-	register,
+	control,
 	restrictSourceTypes,
-	watch,
 }: SourceTypeProps) {
 	if (restrictSourceTypes) {
-		const optionComponents = allowedSourceTypes.map((sourceType) => (
-			<option key={sourceType} value={capitalize(sourceType)}>
-				{capitalize(sourceType)}
-			</option>
-		));
-
 		return (
 			<InputGroup>
 				<InputLabel htmlFor="sourceType">Source Type</InputLabel>
-				<InputSelect id="sourceType" {...register("sourceType")}>
-					<option key="default" value="unknown">
-						Unknown
-					</option>
-					{optionComponents}
-				</InputSelect>
+				<Controller
+					name="sourceType"
+					control={control}
+					render={({ field: { onChange, value } }) => (
+						<Select value={value} onValueChange={onChange}>
+							<SelectButton
+								className="w-full"
+								icon={ChevronDown}
+								id="sourceType"
+							/>
+							<SelectContent>
+								<SelectItem key="default" value="unknown">
+									Unknown
+								</SelectItem>
+								{allowedSourceTypes.map((sourceType) => (
+									<SelectItem key={sourceType} value={capitalize(sourceType)}>
+										{capitalize(sourceType)}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					)}
+				/>
 			</InputGroup>
 		);
 	}
@@ -52,10 +64,16 @@ export function SourceType({
 	return (
 		<InputGroup>
 			<InputLabel htmlFor="sourceType">Source Type</InputLabel>
-			<InputSimple
-				id="sourceType"
-				{...register("sourceType")}
-				value={capitalize(watch("sourceType"))}
+			<Controller
+				name="sourceType"
+				control={control}
+				render={({ field: { onChange, value } }) => (
+					<InputSimple
+						id="sourceType"
+						onChange={onChange}
+						value={capitalize(value)}
+					/>
+				)}
 			/>
 		</InputGroup>
 	);

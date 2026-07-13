@@ -7,16 +7,27 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import ContainerNarrow from "@base/ContainerNarrow";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
-import InputSelect from "@base/InputSelect";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
+import Select from "@base/Select";
+import SelectButton from "@base/SelectButton";
+import SelectContent from "@base/SelectContent";
+import SelectItem from "@base/SelectItem";
 import { useListGroups } from "@groups/queries";
+import RightsSelect from "@samples/components/RightsSelect";
 import {
 	samplesQueryKeys,
 	useFetchSample,
 	useUpdateSampleRights,
 } from "@samples/queries";
 import { useQueryClient } from "@tanstack/react-query";
+import { ChevronDown } from "lucide-react";
+
+/**
+ * Stands in for an unset group. Radix reserves the empty string, so the absence
+ * of a group can't be modelled by the item's value directly.
+ */
+const noGroup = "none";
 
 type SampleRightsProps = {
 	sampleId: string;
@@ -69,10 +80,10 @@ export default function SampleRights({ sampleId }: SampleRightsProps) {
 
 	const { group, group_read, group_write, all_read, all_write } = sample;
 
-	function handleChangeGroup(e) {
-		const value = e.target.value === "" ? null : parseInt(e.target.value, 10);
+	function handleChangeGroup(value: string) {
+		const group = value === "" ? null : parseInt(value, 10);
 		mutation.mutate(
-			{ update: { group: value } },
+			{ update: { group } },
 			{
 				onSuccess: () => {
 					queryClient.invalidateQueries({
@@ -83,12 +94,12 @@ export default function SampleRights({ sampleId }: SampleRightsProps) {
 		);
 	}
 
-	function handleChangeRights(e, scope) {
+	function handleChangeRights(value: string, scope) {
 		mutation.mutate(
 			{
 				update: {
-					[`${scope}_read`]: e.target.value.includes("r"),
-					[`${scope}_write`]: e.target.value.includes("w"),
+					[`${scope}_read`]: value.includes("r"),
+					[`${scope}_write`]: value.includes("w"),
 				},
 			},
 			{
@@ -123,46 +134,42 @@ export default function SampleRights({ sampleId }: SampleRightsProps) {
 				<BoxGroupSection>
 					<InputGroup>
 						<InputLabel htmlFor="group">Group</InputLabel>
-						<InputSelect
-							id="group"
-							value={selectedGroupId}
-							onChange={handleChangeGroup}
+						<Select
+							value={selectedGroupId || noGroup}
+							onValueChange={(value) =>
+								handleChangeGroup(value === noGroup ? "" : value)
+							}
 						>
-							<option key="none" value="">
-								None
-							</option>
-							{groups.map((group) => (
-								<option key={group.id} value={group.id.toString()}>
-									{group.name}
-								</option>
-							))}
-						</InputSelect>
+							<SelectButton className="w-full" icon={ChevronDown} id="group" />
+							<SelectContent>
+								<SelectItem key={noGroup} value={noGroup}>
+									None
+								</SelectItem>
+								{groups.map((group) => (
+									<SelectItem key={group.id} value={group.id.toString()}>
+										{group.name}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
 					</InputGroup>
 
 					<InputGroup>
 						<InputLabel htmlFor="groupRights">Group Rights</InputLabel>
-						<InputSelect
+						<RightsSelect
 							id="groupRights"
 							value={groupRights}
-							onChange={(e) => handleChangeRights(e, "group")}
-						>
-							<option value="">None</option>
-							<option value="r">Read</option>
-							<option value="rw">Read & write</option>
-						</InputSelect>
+							onChange={(value) => handleChangeRights(value, "group")}
+						/>
 					</InputGroup>
 
 					<InputGroup>
 						<InputLabel htmlFor="allUsers">All {"Users'"} Rights</InputLabel>
-						<InputSelect
+						<RightsSelect
 							id="allUsers"
 							value={allRights}
-							onChange={(e) => handleChangeRights(e, "all")}
-						>
-							<option value="">None</option>
-							<option value="r">Read</option>
-							<option value="rw">Read & write</option>
-						</InputSelect>
+							onChange={(value) => handleChangeRights(value, "all")}
+						/>
 					</InputGroup>
 				</BoxGroupSection>
 			</BoxGroup>
