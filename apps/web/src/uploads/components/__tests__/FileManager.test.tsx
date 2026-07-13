@@ -2,7 +2,11 @@ import { formatPath } from "@app/hooks";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
+import {
+	createFakeFile,
+	mockApiDeleteFile,
+	mockApiListFiles,
+} from "@tests/fake/files";
 import { renderWithRouter } from "@tests/setup";
 import { upload } from "@uploads/uploader";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -106,5 +110,84 @@ describe("<FileManager>", () => {
 		);
 
 		expect(await screen.findByText("Test Message")).toBeInTheDocument();
+	});
+
+	describe("selection", () => {
+		it("should delete every selected file", async () => {
+			const first = createFakeFile({ name: "one.fq.gz" });
+			const second = createFakeFile({ name: "two.fq.gz" });
+			const unselected = createFakeFile({ name: "three.fq.gz" });
+			const files = [first, second, unselected];
+
+			mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+			mockApiListFiles(files, true);
+			mockApiListFiles(files, true);
+
+			const firstScope = mockApiDeleteFile(first.id);
+			const secondScope = mockApiDeleteFile(second.id);
+			const unselectedScope = mockApiDeleteFile(unselected.id);
+
+			await renderWithRouter(<FileManager {...props} />, path);
+
+			expect(await screen.findByText("3 files")).toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: "Select one.fq.gz" }),
+			);
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: "Select two.fq.gz" }),
+			);
+
+			expect(screen.getByText("2 selected")).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("button", { name: "Delete" }));
+
+			await waitFor(() => {
+				expect(firstScope.isDone()).toBe(true);
+				expect(secondScope.isDone()).toBe(true);
+			});
+
+			expect(unselectedScope.isDone()).toBe(false);
+		});
+
+		it("should select and deselect every file on the page", async () => {
+			const files = [
+				createFakeFile({ name: "one.fq.gz" }),
+				createFakeFile({ name: "two.fq.gz" }),
+			];
+
+			mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+			mockApiListFiles(files, true);
+
+			await renderWithRouter(<FileManager {...props} />, path);
+
+			const selectAll = await screen.findByRole("checkbox", {
+				name: "Select all files",
+			});
+
+			await userEvent.click(selectAll);
+			expect(screen.getByText("2 selected")).toBeInTheDocument();
+
+			await userEvent.click(selectAll);
+			expect(screen.getByText("2 files")).toBeInTheDocument();
+			expect(
+				screen.queryByRole("button", { name: "Delete" }),
+			).not.toBeInTheDocument();
+		});
+
+		it("should hide checkboxes if user lacks permission to delete", async () => {
+			mockApiGetAccount(createFakeAccount({ administrator_role: null }));
+			mockApiListFiles([createFakeFile({ name: "one.fq.gz" })], true);
+
+			await renderWithRouter(<FileManager {...props} />, path);
+
+			expect(await screen.findByText("one.fq.gz")).toBeInTheDocument();
+			expect(
+				screen.queryByRole("checkbox", { name: "Select all files" }),
+			).not.toBeInTheDocument();
+			expect(
+				screen.queryByRole("checkbox", { name: "Select one.fq.gz" }),
+			).not.toBeInTheDocument();
+		});
 	});
 });

@@ -1,19 +1,24 @@
 import { byteSize } from "@app/utils";
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
+import Checkbox from "@base/Checkbox";
 import IconButton from "@base/IconButton";
 import RelativeTime from "@base/RelativeTime";
 import type { UserNested } from "@users/types";
 import { Trash } from "lucide-react";
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import { useDeleteFile } from "../queries";
 
 export type UploadItemProps = {
 	/** An extra control shown beside the remove button. */
 	action?: ReactNode;
 	canDelete: boolean;
+	/** Whether the file is selected. */
+	checked?: boolean;
 	id: number;
 	name: string;
+	/** Selects the file. Omitting it hides the checkbox. */
+	onSelect?: (event: MouseEvent<HTMLButtonElement>) => void;
 	size: number;
 	uploaded_at: string;
 	user: UserNested | null;
@@ -22,8 +27,10 @@ export type UploadItemProps = {
 export default function UploadItem({
 	action,
 	canDelete,
+	checked = false,
 	id,
 	name,
+	onSelect,
 	size,
 	uploaded_at,
 	user,
@@ -32,34 +39,44 @@ export default function UploadItem({
 
 	return (
 		<BoxGroupSection>
-			<div className="grid grid-cols-3">
-				<div className="flex font-medium items-center text-lg">{name}</div>
-				<div className="flex">
-					{user === null ? (
-						<span>
-							Retrieved <RelativeTime time={uploaded_at} />
-						</span>
-					) : (
-						<Attribution
-							time={uploaded_at}
-							user={user.handle}
-							verb="uploaded"
-						/>
-					)}
-				</div>
-				<div className="flex font-medium items-center gap-6 justify-end text-lg">
-					<div>{byteSize(size, true)}</div>
-					<span className="flex items-center gap-1">
-						{action}
-						{canDelete && (
-							<IconButton
-								color="red"
-								IconComponent={Trash}
-								tip="remove"
-								onClick={() => handleRemove({ id })}
+			<div className="flex items-center gap-4">
+				{onSelect && (
+					<Checkbox
+						ariaLabel={`Select ${name}`}
+						checked={checked}
+						id={`UploadCheckbox${id}`}
+						onClick={onSelect}
+					/>
+				)}
+				<div className="grid grid-cols-3 grow min-w-0">
+					<div className="flex font-medium items-center text-lg">{name}</div>
+					<div className="flex">
+						{user === null ? (
+							<span>
+								Retrieved <RelativeTime time={uploaded_at} />
+							</span>
+						) : (
+							<Attribution
+								time={uploaded_at}
+								user={user.handle}
+								verb="uploaded"
 							/>
 						)}
-					</span>
+					</div>
+					<div className="flex font-medium items-center gap-6 justify-end text-lg">
+						<div>{byteSize(size, true)}</div>
+						<span className="flex items-center gap-1">
+							{action}
+							{canDelete && (
+								<IconButton
+									color="red"
+									IconComponent={Trash}
+									tip="remove"
+									onClick={() => handleRemove({ id })}
+								/>
+							)}
+						</span>
+					</div>
 				</div>
 			</div>
 		</BoxGroupSection>
