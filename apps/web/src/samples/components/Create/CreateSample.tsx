@@ -149,7 +149,7 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 			<Button as={DialogTrigger} color="blue">
 				Create
 			</Button>
-			<DialogContent size="xl" className="max-h-[90vh] overflow-y-auto">
+			<DialogContent size="lg" className="max-h-[90vh] overflow-y-auto">
 				<div className="flex items-center justify-between pb-4">
 					<DialogTitle className="pb-0">Create Sample</DialogTitle>
 					<div className="flex items-center gap-2">
@@ -173,122 +173,108 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 					<LoadingPlaceholder className="mt-9" />
 				) : (
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<div className="grid grid-cols-2 gap-x-12">
-							<div>
+						<InputGroup>
+							<InputLabel htmlFor="name">Name</InputLabel>
+							<InputContainer align="right" className="flex">
+								<InputSimple
+									id="name"
+									{...register("name", {
+										required: "Required Field",
+									})}
+								/>
+								{Boolean(watch("readFiles").length) && (
+									<InputIconButton
+										IconComponent={WandSparkles}
+										aria-label="Auto Fill"
+										tip="Auto Fill"
+										onClick={() => autofill(watch("readFiles"))}
+									/>
+								)}
+							</InputContainer>
+							<InputError>{errors.name?.message}</InputError>
+						</InputGroup>
+
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<SampleUserGroup
+									selected={value}
+									groups={groups}
+									onChange={onChange}
+								/>
+							)}
+							name="group"
+						/>
+
+						{showMetadata && (
+							<div className="grid grid-cols-2 gap-x-[15px] mb-4">
 								<InputGroup>
-									<InputLabel htmlFor="name">Name</InputLabel>
-									<InputContainer align="right" className="flex">
-										<InputSimple
-											id="name"
-											{...register("name", {
-												required: "Required Field",
-											})}
-										/>
-										{Boolean(watch("readFiles").length) && (
-											<InputIconButton
-												IconComponent={WandSparkles}
-												aria-label="Auto Fill"
-												tip="Auto Fill"
-												onClick={() => autofill(watch("readFiles"))}
-											/>
-										)}
-									</InputContainer>
-									<InputError>{errors.name?.message}</InputError>
+									<InputLabel htmlFor="locale">Locale</InputLabel>
+									<InputSimple id="locale" {...register("locale")} />
 								</InputGroup>
 
-								<Controller
-									control={control}
-									render={({ field: { onChange, value } }) => (
-										<SampleUserGroup
-											selected={value}
-											groups={groups}
-											onChange={onChange}
-										/>
-									)}
-									name="group"
-								/>
+								<InputGroup>
+									<InputLabel htmlFor="isolate">Isolate</InputLabel>
+									<InputSimple id="isolate" {...register("isolate")} />
+								</InputGroup>
 
-								{showMetadata && (
-									<div className="grid grid-cols-2 gap-x-[15px] mb-4">
-										<InputGroup>
-											<InputLabel htmlFor="locale">Locale</InputLabel>
-											<InputSimple id="locale" {...register("locale")} />
-										</InputGroup>
-
-										<InputGroup>
-											<InputLabel htmlFor="isolate">Isolate</InputLabel>
-											<InputSimple id="isolate" {...register("isolate")} />
-										</InputGroup>
-
-										<InputGroup>
-											<InputLabel htmlFor="host">Host</InputLabel>
-											<InputSimple id="host" {...register("host")} />
-										</InputGroup>
-									</div>
-								)}
-
-								<Controller
-									control={control}
-									render={({ field: { onChange, value } }) => (
-										<LibraryTypeSelector
-											libraryType={value}
-											onSelect={onChange}
-										/>
-									)}
-									name="libraryType"
-								/>
-
-								<Controller
-									control={control}
-									render={({ field: { onChange, value } }) => (
-										<LabelSelector
-											labels={labels}
-											selected={value}
-											onChange={onChange}
-										/>
-									)}
-									name="labels"
-								/>
-
-								<Controller
-									control={control}
-									render={({ field: { onChange, value } }) => (
-										<DefaultSubtractionSelector
-											selected={value}
-											onChange={onChange}
-										/>
-									)}
-									name="subtractionIds"
-								/>
+								<InputGroup>
+									<InputLabel htmlFor="host">Host</InputLabel>
+									<InputSimple id="host" {...register("host")} />
+								</InputGroup>
 							</div>
+						)}
 
-							{/* The absolutely positioned inner box gives this column no
-							    intrinsic height, so the left column alone sizes the row and
-							    the read selector stretches to match it. */}
-							<div className="relative">
-								<div className="absolute inset-0 flex flex-col">
-									<Controller
-										control={control}
-										render={({ field: { onChange, value } }) => (
-											<ReadSelector
-												data={readsResponse}
-												isFetchingNextPage={isFetchingNextPage}
-												fetchNextPage={fetchNextPage}
-												isPending={isPendingReads}
-												selected={value}
-												onSelect={onChange}
-												error={errors.readFiles?.message}
-											/>
-										)}
-										name="readFiles"
-										rules={{
-											required:
-												"At least one read file must be attached to the sample",
-										}}
-									/>
-								</div>
-							</div>
-						</div>
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<LibraryTypeSelector libraryType={value} onSelect={onChange} />
+							)}
+							name="libraryType"
+						/>
+
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<LabelSelector
+									labels={labels}
+									selected={value}
+									onChange={onChange}
+								/>
+							)}
+							name="labels"
+						/>
+
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<DefaultSubtractionSelector
+									selected={value}
+									onChange={onChange}
+								/>
+							)}
+							name="subtractionIds"
+						/>
+
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<ReadSelector
+									data={readsResponse}
+									isFetchingNextPage={isFetchingNextPage}
+									fetchNextPage={fetchNextPage}
+									isPending={isPendingReads}
+									selected={value}
+									onSelect={onChange}
+									error={errors.readFiles?.message}
+								/>
+							)}
+							name="readFiles"
+							rules={{
+								required:
+									"At least one read file must be attached to the sample",
+							}}
+						/>
 
 						<DialogFooter>
 							<SaveButton />

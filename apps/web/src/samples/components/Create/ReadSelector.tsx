@@ -229,7 +229,7 @@ export default function ReadSelector({
 				: null;
 
 	return (
-		<InputGroup className="flex flex-col flex-1 min-h-0">
+		<InputGroup>
 			<div className="flex items-center justify-between">
 				<InputLabel htmlFor="read-files-search">Read files</InputLabel>
 				{pairedStatus && (
@@ -271,12 +271,7 @@ export default function ReadSelector({
 				showSwap={mode === "manual"}
 			/>
 
-			<Box
-				className={cn(
-					"flex flex-col flex-1 min-h-0 mb-0",
-					error && "border-red-600",
-				)}
-			>
+			<Box className={cn(error && "border-red-600")}>
 				<Toolbar>
 					<div className="flex-grow">
 						<InputSearch
@@ -313,7 +308,7 @@ export default function ReadSelector({
 				{noneFound || (
 					<>
 						<CompactScrollList
-							className="border border-gray-300 rounded flex-1 min-h-0"
+							className="border border-gray-300 rounded h-54"
 							fetchNextPage={fetchNextPage}
 							isFetchingNextPage={isFetchingNextPage}
 							isPending={isPending}

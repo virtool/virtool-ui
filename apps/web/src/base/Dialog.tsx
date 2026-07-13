@@ -35,7 +35,7 @@ export function DialogOverlay() {
 type DialogContentProps = {
 	children: ReactNode;
 	className?: string;
-	size?: "sm" | "lg" | "xl";
+	size?: "sm" | "lg";
 };
 
 /**
@@ -84,7 +84,6 @@ export function DialogContent({
 					"z-50",
 					"w-[600px]",
 					{ "w-[900px]": size === "lg" },
-					{ "w-[1200px]": size === "xl" },
 					"max-w-[90vw]",
 					className,
 				)}
