@@ -6,9 +6,14 @@ const viteConfig = viteConfigFn({ command: "serve", mode: "test" });
 
 export default defineConfig({
 	...viteConfig,
-	plugins: viteConfig.plugins
-		.flat(Infinity)
-		.filter((plugin) => !String(plugin?.name ?? "").startsWith("sentry")),
+	// Nitro is the server bundler; tests never ask it to serve anything, and it
+	// holds file handles open that stall Vitest's shutdown for ten seconds. Sentry
+	// is dropped for the same reason it is kept out of dev: it should never load
+	// here.
+	plugins: viteConfig.plugins.flat(Infinity).filter((plugin) => {
+		const name = String(plugin?.name ?? "");
+		return !name.startsWith("sentry") && !name.startsWith("nitro");
+	}),
 	test: {
 		globals: true,
 		silent: false,
@@ -17,10 +22,12 @@ export default defineConfig({
 			{
 				extends: true,
 				test: {
+					// No globalSetup: the client transform strips server function bodies
+					// and the server-only imports behind them, so nothing here reaches
+					// Postgres. Component tests must not need Docker.
 					name: "web",
 					environment: "jsdom",
 					setupFiles: ["./src/tests/setup.tsx"],
-					globalSetup: ["./src/tests/globalSetup.ts"],
 					include: ["src/**/*.test.{ts,tsx}"],
 					exclude: ["src/server/**"],
 				},
