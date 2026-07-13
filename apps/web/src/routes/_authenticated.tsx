@@ -1,6 +1,7 @@
 import { accountQueryOptions, useFetchAccount } from "@account/queries";
 import { apiClient } from "@app/api";
 import { CONTENT_SCROLL_ID } from "@app/scroll";
+import { armSessionEnd } from "@app/session";
 import * as Sse from "@app/sse/SseConnection";
 import type { Root } from "@app/types";
 import Banner from "@banner/components/Banner";
@@ -25,8 +26,7 @@ const UploadOverlay = lazy(() => import("@uploads/components/UploadOverlay"));
 
 function setupSse(queryClient: QueryClient) {
 	Sse.init(queryClient);
-	const status = Sse.getConnectionStatus();
-	if (status === "initializing" || status === "abandoned") {
+	if (Sse.getConnectionStatus() === "initializing") {
 		Sse.establishConnection();
 	}
 }
@@ -63,6 +63,10 @@ function AuthenticatedLayout() {
 
 	useEffect(() => {
 		if (data) {
+			// A 401 only means the session ended once we know there was one. Until
+			// this runs, the account fetches on the wall and in the route guard are
+			// allowed to 401 without ending anything.
+			armSessionEnd();
 			setupSse(queryClient);
 		}
 	}, [data, queryClient]);

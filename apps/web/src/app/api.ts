@@ -1,4 +1,5 @@
-import Superagent, { type Request } from "superagent";
+import { endSession } from "@app/session";
+import Superagent, { type Request, type Response } from "superagent";
 
 export type { Response as ApiResponse } from "superagent";
 
@@ -16,7 +17,20 @@ function prefixRequestUrl(request: Request) {
 	return request;
 }
 
+function handleUnauthorized(request: Request) {
+	// Superagent emits `response` for every parsed response before it decides
+	// whether the status was a failure, so a 401 is visible here.
+	request.on("response", (response: Response) => {
+		if (response.status === 401) {
+			endSession();
+		}
+	});
+
+	return request;
+}
+
 agent.accept("application/json");
 agent.use(prefixRequestUrl);
+agent.use(handleUnauthorized);
 
 export const apiClient = agent;

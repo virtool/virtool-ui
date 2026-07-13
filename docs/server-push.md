@@ -87,14 +87,49 @@ in load metrics.
 
 ## Auth and session expiry
 
-- The SSE handshake runs through `requireAuthenticatedRequest`, so an
-  unauthenticated `EventSource` request gets a 401 before the stream
-  opens. (Raw `Request` handlers in `createFileRoute` run outside the
-  server-function async-local context, so they call the helper
-  directly instead of relying on middleware.)
-- There is no in-stream session-revocation signal. A revoked session
-  stays connected until the next server-function call fails auth,
-  which then triggers the client-side reset.
+The SSE handshake runs through `requireAuthenticatedRequest`, so an
+unauthenticated `EventSource` request gets a 401 before the stream
+opens. (Raw `Request` handlers in `createFileRoute` run outside the
+server-function async-local context, so they call the helper directly
+instead of relying on middleware.)
+
+### Revoking a connected session
+
+The handshake is the only time a stream is authenticated, so a session
+deleted underneath a connected client — by a deactivation, a password
+change, a forced reset — would otherwise leave the stream up. A watch
+(`server/events/revocation.ts`) re-runs the gate every `KEEPALIVE_MS`
+and closes the stream once it fails.
+
+**Closing the stream is the entire revocation signal.** There is no
+`session-revoked` frame. The client reconnects, the handshake answers
+401, and it ends the session from there — one path to test and to
+reason about, at the cost of one extra round trip on a connection that
+is going away regardless.
+
+### Why the client has to ask
+
+`EventSource` gives the application a bare `error` event with **no
+status code**, and the spec says so outright ("little to no information
+can be made available in the events themselves"). All the client gets is
+`readyState`, and it only separates two things:
+
+| What happened | `readyState` in `onerror` | Browser retries? |
+| --- | --- | --- |
+| Any non-200 — 401, but also 502, 503 | `CLOSED` | **no** |
+| Transport dropped, or the stream ended | `CONNECTING` | yes |
+
+So a revoked session and a proxy 502 mid-deploy are *indistinguishable*
+at the point of failure. `SseConnection.ts` reads `readyState` before
+calling `close()` (which would force it to `CLOSED` and destroy the
+signal); on `CLOSED` it asks `HEAD /events`, and only a 401 abandons the
+connection and ends the session. Anything else backs off and reconnects.
+Treating every `CLOSED` as a revoked session would sign every user out
+during a deploy.
+
+Note the corollary: a browser **never** reconnects on its own after a
+401. Any endless reconnect loop against a revoked session is the
+application's own doing.
 
 ## Pure / wired split
 
@@ -121,18 +156,15 @@ in load metrics.
 
 ## Follow-ups
 
-- **Session-revocation signal.** Add a periodic session check in
-  `routes/events.ts` that closes the stream when the session is
-  revoked, or emit a dedicated `event: session-revoked` frame the
-  client can handle like a forced logout.
 - **Per-user filtering.** The handler forwards every `client_events`
   payload to every authenticated client; `ClientEvent` has no
   user/scope field. Decide whether to carry that broadcast-all model
   forward or add a scope field as more domains move onto push.
-- **One reconnect mechanism.** `SseConnection.ts` layers a manual
-  `setTimeout` reconnect on top of the browser's built-in
-  `EventSource` auto-reconnect. Pick one — drop `onerror` reconnect
-  or switch to `fetch` streaming with full manual control.
+- **Revocation latency.** The watch is a poll, so a revoked session
+  keeps its stream for up to `KEEPALIVE_MS`, and the cost is one
+  indexed session lookup per connected client per tick. If either
+  becomes a problem, publish revocations onto `client_events` and let
+  the route close the matching streams on the event instead.
 - **Dedicated nested-job fetch (Approach B).** Job-nested sites
   (`sample.job`, `index.job`, `analysis.job`, `subtraction.job`) keep
   their live `progress`/`state` fresh by mounting `useFetchJob(id)`

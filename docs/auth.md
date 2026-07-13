@@ -271,15 +271,38 @@ both cookies (`core.ts:104`). It's listed in the middleware's
 
 ### Client side
 
-The only client-side logout path today is user-initiated: `useLogout`
-in `account/queries.ts:149` runs `logoutFn()` and then calls
-`resetClient()`.
+A logout is either user-initiated or forced. The user-initiated path is
+`useLogout` in `account/queries.ts:149`, which runs `logoutFn()` and
+then calls `resetClient()`.
 
-There is no 401 interceptor on the SuperAgent client and no in-stream
-session-revocation signal on the SSE connection — a revoked session
-stays connected until the next server-function call fails auth. Auth
-state on initial load is checked by `routes/_authenticated.tsx`'s
-`beforeLoad`, which redirects to `/login` if `fetchAccount` throws.
+A forced logout is what happens when the session is revoked underneath a
+running tab — deactivation, a password change, a forced reset. Every
+route into it converges on `endSession` (`app/session.ts`), which clears
+`sessionStorage` and loads `/login?reason=session-ended&redirect=…`. The
+full document load is what drops everything held in memory, and the
+`reason` puts a "Your session ended" message on the wall. Three things
+can call it:
+
+- **`app/api.ts`** — a SuperAgent plugin that ends the session on any
+  401 from the Python API.
+- **`router.tsx`** — the query and mutation cache `onError`, matching
+  `UnauthorizedError` by name. Server-function errors cross the boundary
+  as plain `Error`s with only the name preserved, so there is no status
+  to match on.
+- **`app/sse/SseConnection.ts`** — on a 401 from the `/events`
+  handshake. The `EventSource` error event carries no status, so it
+  confirms with a `HEAD /events` before ending anything.
+
+`endSession` is inert until `armSessionEnd` runs, which
+`routes/_authenticated.tsx` does once an authenticated load has
+succeeded. This is load-bearing, not defensive: the login wall and the
+authenticated route guard both fetch the account and *expect* a 401 when
+nobody is logged in. Without the arming step a first-time visitor would
+be told their session ended, and the wall could reload itself in a loop.
+
+Auth state on initial load is still checked by
+`routes/_authenticated.tsx`'s `beforeLoad`, which redirects to `/login`
+if `fetchAccount` throws.
 
 ### `resetClient`
 

@@ -12,6 +12,7 @@ function isSafeRedirect(value: string): boolean {
 }
 
 const loginSearchSchema = z.object({
+	reason: z.literal("session-ended").optional().catch(undefined),
 	redirect: z
 		.string()
 		.optional()

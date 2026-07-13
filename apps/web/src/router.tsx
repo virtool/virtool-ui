@@ -1,14 +1,26 @@
 import RouteError from "@base/RouteError";
 import * as Sentry from "@sentry/tanstackstart-react";
-import { QueryClient } from "@tanstack/react-query";
+import { MutationCache, QueryCache, QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { getCommonOptions } from "@virtool/sentry/browser";
 import { CONTENT_SCROLL_ID } from "./app/scroll";
 import { scheduleReplay } from "./app/sentryReplay";
+import { endSession } from "./app/session";
 import { routeTree } from "./routeTree.gen";
+
+// Server-function errors cross the boundary as plain `Error`s with only their
+// name preserved, so a 401 has to be matched by name. Superagent calls are
+// covered by the interceptor in `app/api.ts` instead.
+function handleAuthenticationError(error: Error): void {
+	if (error.name === "UnauthorizedError") {
+		endSession();
+	}
+}
 
 export function getRouter() {
 	const queryClient = new QueryClient({
+		queryCache: new QueryCache({ onError: handleAuthenticationError }),
+		mutationCache: new MutationCache({ onError: handleAuthenticationError }),
 		defaultOptions: {
 			queries: {
 				retry: (
