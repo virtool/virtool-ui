@@ -1,5 +1,5 @@
 import RemoveDialog from "@base/RemoveDialog";
-import { useRemoveOTU } from "../queries";
+import { useRemoveOtu } from "../queries";
 
 type RemoveOtuProps = {
 	id: string;
@@ -19,7 +19,7 @@ export default function OtuRemove({
 	onRemoved,
 	setOpen = () => {},
 }: RemoveOtuProps) {
-	const mutation = useRemoveOTU();
+	const mutation = useRemoveOtu();
 
 	function handleConfirm() {
 		mutation.mutate({ otuId: id }, { onSuccess: onRemoved });

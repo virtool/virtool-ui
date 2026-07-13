@@ -1,5 +1,5 @@
 import { cn } from "@app/utils";
-import type { ElementType, KeyboardEvent, ReactNode } from "react";
+import type { ElementType, KeyboardEvent, ReactNode, Ref } from "react";
 
 type BoxGroupSectionProps = {
 	active?: boolean;
@@ -10,6 +10,7 @@ type BoxGroupSectionProps = {
 	disabled?: boolean;
 	onClick?: () => void;
 	onKeyDown?: (e: KeyboardEvent) => void;
+	ref?: Ref<HTMLDivElement>;
 	role?: string;
 	style?: React.CSSProperties;
 	tabIndex?: number;

@@ -1,6 +1,6 @@
 import { cleanup, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeOTUSequence, mockApiEditSequence } from "@tests/fake/otus";
+import { createFakeOtuSequence, mockApiEditSequence } from "@tests/fake/otus";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -10,7 +10,7 @@ describe("<SequenceEdit>", () => {
 	const isolateId = "test_isolate_id";
 	const otuId = "test_otu_id";
 	const refId = "test_ref_id";
-	let activeSequence: ReturnType<typeof createFakeOTUSequence>;
+	let activeSequence: ReturnType<typeof createFakeOtuSequence>;
 
 	function renderSequenceEdit(setOpen = vi.fn()) {
 		return renderWithProviders(
@@ -28,7 +28,7 @@ describe("<SequenceEdit>", () => {
 	}
 
 	beforeEach(() => {
-		activeSequence = createFakeOTUSequence({
+		activeSequence = createFakeOtuSequence({
 			accession: "initial_accession",
 			definition: "initial_definition",
 			host: "initial_host",

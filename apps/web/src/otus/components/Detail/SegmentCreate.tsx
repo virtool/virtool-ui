@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import { useUpdateOTU } from "@otus/queries";
+import { useUpdateOtu } from "@otus/queries";
 import type { Molecule, OtuSegment } from "@otus/types";
 import SegmentForm from "./SegmentForm";
 
@@ -9,7 +9,7 @@ type FormValues = {
 	required: boolean;
 };
 
-type AddSegmentProps = {
+type SegmentCreateProps = {
 	abbreviation: string;
 	name: string;
 	open?: boolean;
@@ -22,15 +22,15 @@ type AddSegmentProps = {
 /**
  * Displays a dialog for adding a segment
  */
-export default function AddSegment({
+export default function SegmentCreate({
 	otuId,
 	name,
 	abbreviation,
 	open = false,
 	schema,
 	setOpen = () => {},
-}: AddSegmentProps) {
-	const mutation = useUpdateOTU(otuId);
+}: SegmentCreateProps) {
+	const mutation = useUpdateOtu(otuId);
 
 	function handleSubmit({ segmentName, molecule, required }: FormValues) {
 		mutation.mutate(

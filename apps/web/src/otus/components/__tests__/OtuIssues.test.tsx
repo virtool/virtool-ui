@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 import { describe, expect, it } from "vitest";
 import OtuIssues from "../OtuIssues";
 
-describe("<OTUIssues />", () => {
+describe("<OtuIssues />", () => {
 	it("renders correctly without issues", () => {
 		const props: ComponentProps<typeof OtuIssues> = {
 			issues: {

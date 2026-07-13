@@ -25,7 +25,7 @@ type PathoscopeToolbarProps = {
 /** A selection of filters and toggles for pathoscope data presentation */
 export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 	const { search, setSearch } = useAnalysisSearch();
-	const filterOTUs = search.filterOtus ?? true;
+	const filterOtus = search.filterOtus ?? true;
 	const filterIsolates = search.filterIsolates ?? true;
 	const find = search.find ?? "";
 	const showReads = search.reads ?? false;
@@ -60,7 +60,7 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 			<Tooltip tip="Hide OTUs with low coverage support">
 				<ButtonToggle
 					onPressedChange={(filterOtus) => setSearch({ filterOtus })}
-					pressed={Boolean(filterOTUs)}
+					pressed={Boolean(filterOtus)}
 				>
 					Filter OTUs
 				</ButtonToggle>

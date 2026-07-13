@@ -1,8 +1,8 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import { useCreateOTU } from "../queries";
+import { useCreateOtu } from "../queries";
 import OtuForm from "./OtuForm";
 
-type CreateOTUProps = {
+type CreateOtuProps = {
 	open: boolean;
 	refId: string;
 	setOpen: (open: boolean) => void;
@@ -11,8 +11,8 @@ type CreateOTUProps = {
 /**
  * Displays a dialog to create an OTU
  */
-export default function OtuCreate({ open, refId, setOpen }: CreateOTUProps) {
-	const mutation = useCreateOTU(refId);
+export default function OtuCreate({ open, refId, setOpen }: CreateOtuProps) {
+	const mutation = useCreateOtu(refId);
 
 	function handleSubmit({ name, abbreviation }) {
 		mutation.mutate(

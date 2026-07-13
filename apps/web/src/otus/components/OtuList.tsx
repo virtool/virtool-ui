@@ -13,7 +13,7 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
 import RebuildAlert from "@indexes/components/RebuildAlert";
-import { useListOTUs } from "@otus/queries";
+import { useListOtus } from "@otus/queries";
 import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
@@ -50,20 +50,20 @@ export default function OtuList({ find, page, setSearch }: OtuListProps) {
 	} = useFetchReference(refId);
 	const {
 		data: otus,
-		isPending: isPendingOTUs,
-		isError: isErrorOTUs,
-	} = useListOTUs(refId, page, 25, find);
+		isPending: isPendingOtus,
+		isError: isErrorOtus,
+	} = useListOtus(refId, page, 25, find);
 	const { hasPermission: canModifyOtu } = useCheckReferenceRight(
 		refId,
 		"modify_otu",
 	);
 	const archived = useReferenceIsArchived(refId);
 
-	if ((isErrorReference || isErrorOTUs) && (!reference || !otus)) {
+	if ((isErrorReference || isErrorOtus) && (!reference || !otus)) {
 		return <QueryError noun="OTUs" />;
 	}
 
-	if (isPendingOTUs || isPendingReference) {
+	if (isPendingOtus || isPendingReference) {
 		return <LoadingPlaceholder />;
 	}
 

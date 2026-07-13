@@ -35,7 +35,9 @@ export default function IsolateItem({
 				params={{ refId, otuId, isolateId: isolate.id }}
 				className="flex flex-1 items-center min-w-0 h-full py-3 px-6 text-inherit"
 			>
-				<span className="truncate">{formatIsolateName(isolate)}</span>
+				<span className="truncate font-medium">
+					{formatIsolateName(isolate)}
+				</span>
 				{isolate.default && <Icon icon={Star} className="ml-2" />}
 			</Link>
 			{canRemove && (

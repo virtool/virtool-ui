@@ -1,6 +1,6 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeOtu, mockApiEditOTU } from "@tests/fake/otus";
+import { createFakeOtu, mockApiEditOtu } from "@tests/fake/otus";
 import { at, renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -56,7 +56,7 @@ describe("<RemoveSegment />", () => {
 	});
 
 	it("should call API and close dialog when Confirm is clicked", async () => {
-		const scope = mockApiEditOTU(otu, {
+		const scope = mockApiEditOtu(otu, {
 			abbreviation: otu.abbreviation,
 			name: otu.name,
 			otuId: otu.id,

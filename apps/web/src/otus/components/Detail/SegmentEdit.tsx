@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import { useUpdateOTU } from "@otus/queries";
+import { useUpdateOtu } from "@otus/queries";
 import type { Molecule, OtuSegment } from "@otus/types";
 import SegmentForm from "./SegmentForm";
 
@@ -9,7 +9,7 @@ type FormValues = {
 	required: boolean;
 };
 
-type EditSegmentProps = {
+type SegmentEditProps = {
 	abbreviation: string;
 	editSegmentName?: string;
 	name: string;
@@ -22,15 +22,15 @@ type EditSegmentProps = {
 /**
  * Displays a dialog to edit a segment
  */
-export default function EditSegment({
+export default function SegmentEdit({
 	abbreviation,
 	editSegmentName,
 	otuId,
 	name,
 	schema,
 	unsetEditSegmentName = () => {},
-}: EditSegmentProps) {
-	const mutation = useUpdateOTU(otuId);
+}: SegmentEditProps) {
+	const mutation = useUpdateOtu(otuId);
 
 	const segment = schema.find((s) => s.name === editSegmentName);
 

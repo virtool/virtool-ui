@@ -74,7 +74,9 @@ export default function SegmentForm({
 						{...register("segmentName", {
 							required: "Name required",
 							validate: (value) =>
-								schema.find((s) => s.name === value) &&
+								schema
+									.filter((s) => s.name !== segmentName)
+									.find((s) => s.name === value) &&
 								"Segment names must be unique. This name is currently in use.",
 						})}
 					/>
@@ -95,7 +97,7 @@ export default function SegmentForm({
 						<Checkbox
 							checked={value}
 							id={`SegmentCheckbox-${segmentName}`}
-							label="Segment Required"
+							label="Required"
 							onClick={() => onChange(!value)}
 						/>
 					)}

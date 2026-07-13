@@ -19,7 +19,7 @@ export default function OtuIssues({ isolates, issues }: OtuIssuesProps) {
 	// The OTU has no isolates associated with it.
 	if (issues && typeof issues === "object" && issues.empty_otu) {
 		errors.push(
-			<li key="emptyOTU">There are no isolates associated with this OTU</li>,
+			<li key="emptyOtu">There are no isolates associated with this OTU</li>,
 		);
 	}
 

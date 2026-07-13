@@ -11,7 +11,7 @@ type FormValues = {
 	abbreviation: string;
 };
 
-type OTUFormProps = {
+type OtuFormProps = {
 	abbreviation?: string;
 	/** Error message to be displayed */
 	error?: string;
@@ -28,7 +28,7 @@ export default function OtuForm({
 	error,
 	name,
 	onSubmit,
-}: OTUFormProps) {
+}: OtuFormProps) {
 	const {
 		formState: { errors },
 		register,
