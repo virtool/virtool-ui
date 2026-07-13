@@ -408,8 +408,9 @@ naming, comments, and concurrency rules with examples.
 Every Virtool-owned env var must start with `VT_`. The prefix keeps our
 variables clearly separated from third-party ones (`SENTRY_*`, `NODE_*`,
 cloud-provider injected vars) and matches the `envPrefix` Vite is configured
-to expose. This applies to schema keys in `packages/config/src/`,
-`.env.example`, and any `process.env.*` reads anywhere in the app.
+to expose. This applies to the zod schema keys in
+`apps/web/src/server/config.ts`, `apps/web/.env.example`, and any
+`process.env.*` reads anywhere in the app.
 
 Good: `VT_WORKER_MODE`, `VT_WORKER_CONCURRENCY`, `VT_POSTGRES_URL`.
 
