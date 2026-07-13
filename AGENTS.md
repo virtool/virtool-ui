@@ -13,7 +13,6 @@ This is a **pnpm monorepo**:
   here.
 - `packages/` — shared, framework-agnostic libraries published as workspace
   packages:
-  - `@virtool/config` — zod-validated environment schema
   - `@virtool/logger` — pino wrapper, server-side log defaults and
     `child({...})` pattern
   - `@virtool/bio` — sequence utilities (complement, translation, etc.)
