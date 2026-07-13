@@ -1,11 +1,14 @@
 import { cn } from "@app/utils";
 import type { LucideIcon } from "lucide-react";
+import type { ElementType } from "react";
 import Tooltip from "./Tooltip";
 import type { IconColor } from "./types";
 
 export type IconButtonProps = {
 	/** Accessible name for the button. Defaults to ``tip``. */
 	ariaLabel?: string;
+	/** The element to render as. Defaults to ``button``. */
+	as?: ElementType;
 	className?: string;
 	color?: IconColor;
 	IconComponent: LucideIcon;
@@ -20,6 +23,7 @@ export type IconButtonProps = {
  */
 export default function IconButton({
 	ariaLabel,
+	as = "button",
 	className,
 	color = "black",
 	IconComponent,
@@ -28,8 +32,10 @@ export default function IconButton({
 	tip,
 	tipPlacement,
 }: IconButtonProps) {
+	const As = as;
+
 	const iconButton = (
-		<button
+		<As
 			className={cn(
 				"bg-inherit",
 				"border-none",
@@ -64,7 +70,7 @@ export default function IconButton({
 			onClick={onClick}
 		>
 			<IconComponent size={size ?? "1.2em"} />
-		</button>
+		</As>
 	);
 
 	return (

@@ -21,12 +21,14 @@ const MATE_TOKEN = "#";
 /**
  * Mate-token patterns in priority order. Each captures a single `1`/`2` digit.
  * The prefixes (`_R`, `_`, `.`) contain no digits, so the captured digit's
- * position can be located within the match.
+ * position can be located within the match. `separator` is what the match is
+ * replaced with when the token is stripped — the dotted pattern consumes the
+ * dots on both sides and must leave one behind.
  */
 const MATE_PATTERNS = [
-	/_R([12])(?=[._]|$)/i,
-	/_([12])(?=[._]|$)/,
-	/\.([12])\./,
+	{ pattern: /_R([12])(?=[._]|$)/i, separator: "" },
+	{ pattern: /_([12])(?=[._]|$)/, separator: "" },
+	{ pattern: /\.([12])\./, separator: "." },
 ];
 
 /**
@@ -38,7 +40,7 @@ const MATE_PATTERNS = [
  * @param name - the filename to inspect
  */
 export function detectMate(name: string): Mate | null {
-	for (const pattern of MATE_PATTERNS) {
+	for (const { pattern } of MATE_PATTERNS) {
 		const match = pattern.exec(name);
 
 		if (match) {
@@ -58,6 +60,29 @@ export function detectMate(name: string): Mate | null {
 	}
 
 	return null;
+}
+
+/**
+ * Removes a mate token from a filename, leaving the name unchanged when no
+ * recognised token is present. Used to name a sample after the pair of reads it
+ * is created from rather than after one of its mates.
+ *
+ * @param name - the filename to strip
+ */
+export function stripMateToken(name: string): string {
+	for (const { pattern, separator } of MATE_PATTERNS) {
+		const match = pattern.exec(name);
+
+		if (match) {
+			return (
+				name.slice(0, match.index) +
+				separator +
+				name.slice(match.index + match[0].length)
+			);
+		}
+	}
+
+	return name;
 }
 
 /**

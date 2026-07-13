@@ -20,32 +20,16 @@ import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import type { Label } from "@labels/types";
 import { useCreateSample } from "@samples/queries";
+import { getSampleNameFromReads } from "@samples/utils";
+import { useInfiniteFindFiles } from "@uploads/queries";
 import { WandSparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
-import { useInfiniteFindFiles } from "@/uploads/queries";
-import type { Upload } from "@/uploads/types";
 import DefaultSubtractionSelector from "./DefaultSubtractionSelector";
 import LabelSelector from "./LabelSelector";
 import LibraryTypeSelector from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
 import SampleUserGroup from "./SampleUserGroup";
-
-const extensionRegex = /^(.*)\.(fq|fastq|fa|fasta)(\.gz)?$/i;
-
-/**
- * Gets a filename without extension, given the file ID and an array of all available read uploads.
- * Used to autofill the name for a new sample based on the selected read file(s).
- *
- * @param id - the file ID
- * @param uploads - all available read uploads
- * @returns The filename without its extension
- */
-function getFileNameFromId(id: number, uploads: Upload[]): string {
-	const file = uploads.find((file) => file.id === id);
-	const match = file?.name.match(extensionRegex);
-	return match?.[1] ?? "";
-}
 
 type FormValues = {
 	name: string;
@@ -116,14 +100,15 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 		!groups;
 
 	function autofill(selected: number[]) {
-		const id = selected[0];
-		if (id === undefined) {
-			return;
-		}
+		const selectedReads = selected.flatMap((id) => {
+			const file = reads.find((read) => read.id === id);
+			return file ? [file] : [];
+		});
 
-		const fileName = getFileNameFromId(id, reads);
-		if (fileName) {
-			setValue("name", fileName);
+		const name = getSampleNameFromReads(selectedReads);
+
+		if (name) {
+			setValue("name", name);
 		}
 	}
 

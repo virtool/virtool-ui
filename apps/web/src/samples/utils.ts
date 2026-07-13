@@ -1,4 +1,6 @@
 import type { JobNested } from "@jobs/types";
+import { stripMateToken } from "@uploads/pairing";
+import type { Upload } from "@uploads/types";
 import type { LibraryType } from "./types";
 
 /** The workflows that samples can be filtered by. */
@@ -71,6 +73,26 @@ const libraryTypes = {
 
 export function getLibraryTypeDisplayName(libraryType: LibraryType) {
 	return libraryTypes[libraryType];
+}
+
+const extensionRegex = /^(.*)\.(fq|fastq|fa|fasta)(\.gz)?$/i;
+
+/**
+ * Derives a sample name from the read files it will be created from. The read
+ * extension is dropped, and for a pair the mate token (eg. ``_R1``) is dropped
+ * too, so both mates yield the same name. Returns an empty string when the
+ * first file doesn't look like a read file.
+ *
+ * @param reads - the read files, in [LEFT, RIGHT] order
+ */
+export function getSampleNameFromReads(reads: Upload[]): string {
+	const name = reads[0]?.name.match(extensionRegex)?.[1];
+
+	if (!name) {
+		return "";
+	}
+
+	return reads.length > 1 ? stripMateToken(name) : name;
 }
 
 /**

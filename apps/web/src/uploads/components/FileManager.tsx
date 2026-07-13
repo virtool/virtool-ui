@@ -15,7 +15,7 @@ import { AlertCircle, FileUp } from "lucide-react";
 import type { ReactNode } from "react";
 import type { Accept } from "react-dropzone";
 import { useListFiles } from "../queries";
-import type { UploadType } from "../types";
+import type { Upload, UploadType } from "../types";
 import { upload } from "../uploader";
 import { UploadBar } from "./UploadBar";
 import UploadItem from "./UploadItem";
@@ -35,6 +35,10 @@ export type FileManagerProps = {
 	/* A regular expression to validate file names. */
 	regex?: RegExp;
 
+	/* Renders an extra control on each file item, given the file and the other
+	   files listed with it. */
+	renderItemAction?: (upload: Upload, uploads: Upload[]) => ReactNode;
+
 	setPage?: (page: number) => void;
 };
 
@@ -44,6 +48,7 @@ export function FileManager({
 	message,
 	page = 1,
 	regex,
+	renderItemAction,
 	setPage = () => {},
 }: FileManagerProps) {
 	const {
@@ -135,7 +140,12 @@ export function FileManager({
 				>
 					<BoxGroup>
 						{files.items.map((item) => (
-							<UploadItem {...item} canDelete={canDelete} key={item.id} />
+							<UploadItem
+								{...item}
+								action={renderItemAction?.(item, files.items)}
+								canDelete={canDelete}
+								key={item.id}
+							/>
 						))}
 					</BoxGroup>
 				</Pagination>

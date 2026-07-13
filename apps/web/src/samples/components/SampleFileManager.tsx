@@ -1,15 +1,23 @@
+import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import ContainerNarrow from "@base/ContainerNarrow";
+import type { Label } from "@labels/types";
 import { FileManager } from "@uploads/components/FileManager";
+import CreateSampleFromFile from "./Create/CreateSampleFromFile";
 
 type SampleFileManagerProps = {
+	labels: Label[];
 	page: number;
 	setPage: (page: number) => void;
 };
 
 export default function SampleFileManager({
+	labels,
 	page,
 	setPage,
 }: SampleFileManagerProps) {
+	const { hasPermission: canCreate } =
+		useCheckAdminRoleOrPermission("create_sample");
+
 	return (
 		<ContainerNarrow>
 			<FileManager
@@ -30,6 +38,17 @@ export default function SampleFileManager({
 					</div>
 				}
 				regex={/\.f(ast)?q(\.gz)?$/}
+				renderItemAction={
+					canCreate
+						? (upload, uploads) => (
+								<CreateSampleFromFile
+									labels={labels}
+									upload={upload}
+									uploads={uploads}
+								/>
+							)
+						: undefined
+				}
 				setPage={setPage}
 			/>
 		</ContainerNarrow>

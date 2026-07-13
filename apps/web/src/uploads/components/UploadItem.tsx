@@ -5,9 +5,12 @@ import IconButton from "@base/IconButton";
 import RelativeTime from "@base/RelativeTime";
 import type { UserNested } from "@users/types";
 import { Trash } from "lucide-react";
+import type { ReactNode } from "react";
 import { useDeleteFile } from "../queries";
 
 export type UploadItemProps = {
+	/** An extra control shown beside the remove button. */
+	action?: ReactNode;
 	canDelete: boolean;
 	id: number;
 	name: string;
@@ -17,6 +20,7 @@ export type UploadItemProps = {
 };
 
 export default function UploadItem({
+	action,
 	canDelete,
 	id,
 	name,
@@ -45,14 +49,17 @@ export default function UploadItem({
 				</div>
 				<div className="flex font-medium items-center gap-6 justify-end text-lg">
 					<div>{byteSize(size, true)}</div>
-					{canDelete && (
-						<IconButton
-							color="red"
-							IconComponent={Trash}
-							tip="remove"
-							onClick={() => handleRemove({ id })}
-						/>
-					)}
+					<span className="flex items-center gap-1">
+						{action}
+						{canDelete && (
+							<IconButton
+								color="red"
+								IconComponent={Trash}
+								tip="remove"
+								onClick={() => handleRemove({ id })}
+							/>
+						)}
+					</span>
 				</div>
 			</div>
 		</BoxGroupSection>
