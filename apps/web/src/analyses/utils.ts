@@ -154,6 +154,43 @@ export function mergeCoverage(
 	);
 }
 
+/**
+ * Reduce a per-position depth array to at most one value per pixel column.
+ *
+ * Coverage arrays are as long as the reference genome, which is orders of
+ * magnitude more points than a chart a few hundred pixels wide can show. Each
+ * bucket keeps its maximum depth so that narrow peaks survive.
+ *
+ * @param depths - the per-position read depths
+ * @param width - the width of the chart in pixels
+ */
+export function downsampleDepths(depths: number[], width: number): number[] {
+	if (width <= 0 || depths.length <= width) {
+		return depths;
+	}
+
+	const buckets: number[] = [];
+
+	for (let index = 0; index < width; index++) {
+		const start = Math.floor((index * depths.length) / width);
+		const end = Math.floor(((index + 1) * depths.length) / width);
+
+		let peak = depths[start] ?? 0;
+
+		for (let position = start + 1; position < end; position++) {
+			const depth = depths[position] ?? 0;
+
+			if (depth > peak) {
+				peak = depth;
+			}
+		}
+
+		buckets.push(peak);
+	}
+
+	return buckets;
+}
+
 export function formatSequence(sequence, readCount) {
 	return {
 		...sequence,
