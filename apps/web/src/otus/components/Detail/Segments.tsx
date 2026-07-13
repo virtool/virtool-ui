@@ -20,6 +20,7 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useFetchOtu, useUpdateOtu } from "@otus/queries";
+import type { OtuSegment } from "@otus/types";
 import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
@@ -53,6 +54,7 @@ export default function Segments() {
 	const [activeSegmentName, setActiveSegmentName] = useState<string | null>(
 		null,
 	);
+	const [pendingSchema, setPendingSchema] = useState<OtuSegment[] | null>(null);
 
 	const sensors = useSensors(
 		useSensor(PointerSensor),
@@ -69,7 +71,9 @@ export default function Segments() {
 		return <LoadingPlaceholder />;
 	}
 
-	const { abbreviation, name, schema } = data;
+	const { abbreviation, name } = data;
+
+	const schema = pendingSchema ?? data.schema;
 
 	function handleDragStart({ active }: DragStartEvent) {
 		setActiveSegmentName(String(active.id));
@@ -84,7 +88,18 @@ export default function Segments() {
 
 		const oldIndex = schema.findIndex((s) => s.name === active.id);
 		const newIndex = schema.findIndex((s) => s.name === over.id);
-		mutation.mutate({ otuId, schema: arrayMove(schema, oldIndex, newIndex) });
+		const reordered = arrayMove(schema, oldIndex, newIndex);
+
+		// The reordered list must render in the same commit that dnd-kit drops
+		// its transforms, or the items snap back before the query cache catches
+		// up. React Query notifies observers asynchronously, so the optimistic
+		// update in useUpdateOtu lands too late to be that source of truth.
+		setPendingSchema(reordered);
+
+		mutation.mutate(
+			{ otuId, schema: reordered },
+			{ onSettled: () => setPendingSchema(null) },
+		);
 	}
 
 	const activeSegment = activeSegmentName
