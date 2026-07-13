@@ -186,10 +186,10 @@ export async function renderHookWithRouter<T>(hook: () => T, path?: string) {
 	});
 }
 
-interface RenderRouteOptions {
+type RenderRouteOptions = {
 	account?: Account;
 	seed?: (queryClient: QueryClient) => void;
-}
+};
 
 export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 	const history: string[] = [];

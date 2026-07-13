@@ -83,6 +83,7 @@ export function getRouter() {
 }
 
 declare module "@tanstack/react-router" {
+	// biome-ignore lint/style/useConsistentTypeDefinitions: module augmentation merges into TanStack Router's Register interface
 	interface Register {
 		router: ReturnType<typeof getRouter>;
 	}

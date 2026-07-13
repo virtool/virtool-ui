@@ -2,9 +2,9 @@ import Alert from "@base/Alert";
 import Link from "@base/Link";
 import { CircleAlert } from "lucide-react";
 
-interface AnalysisHMMAlertProps {
+type AnalysisHMMAlertProps = {
 	installed: boolean;
-}
+};
 
 /** Banner informing the user when HMMs are not installed */
 export default function AnalysisHMMAlert({ installed }: AnalysisHMMAlertProps) {

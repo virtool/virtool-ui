@@ -7,7 +7,7 @@ import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import type { UploadInProgress, UploadType } from "./types";
 
-interface UploaderState {
+type UploaderState = {
 	/** The ID of the interval that tracks the upload progress. */
 	intervalId?: number;
 
@@ -34,7 +34,7 @@ interface UploaderState {
 
 	/** Set the progress of an upload. */
 	setProgress: (localId: string, loaded: number, progress: number) => void;
-}
+};
 
 /**
  * Zustand store to track the current uploads and their progress.

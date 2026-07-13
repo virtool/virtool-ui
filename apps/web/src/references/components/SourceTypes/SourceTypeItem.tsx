@@ -2,11 +2,11 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import { Trash } from "lucide-react";
 
-interface SourceTypeItemProps {
+type SourceTypeItemProps = {
 	disabled?: boolean;
 	sourceType: string;
 	onRemove: (sourceType: string) => void;
-}
+};
 
 export function SourceTypeItem({
 	onRemove,
