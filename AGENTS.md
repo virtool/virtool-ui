@@ -13,7 +13,6 @@ This is a **pnpm monorepo**:
   here.
 - `packages/` — shared, framework-agnostic libraries published as workspace
   packages:
-  - `@virtool/config` — zod-validated environment schema
   - `@virtool/logger` — pino wrapper, server-side log defaults and
     `child({...})` pattern
   - `@virtool/bio` — sequence utilities (complement, translation, etc.)
@@ -311,6 +310,33 @@ See [docs/database.md](docs/database.md) for the per-domain
 ownership table, the `legacy_id` resolution rules, and the
 column-default convention.
 
+### Files live in object storage, shared with Python
+
+Uploads, reads, analysis results, indexes, subtractions, HMM profiles,
+and caches live in S3 or Azure Blob — **the same bucket Python uses**.
+`src/server/storage/` exposes a five-method streaming interface
+(`read`, `write`, `delete`, `list`, `size`); there are no paths, file
+handles, or presigned URLs. Keys are built by `keys.ts` and must stay
+byte-for-byte identical to Python's — a divergence silently reads
+nothing and orphans what it writes. There is no filesystem backend.
+
+The backend is built once at startup and **passed into `data.ts`
+functions as an argument, the way `db` is**. `deletePrefix` never
+throws; it returns failures, and callers must log them.
+
+Client code must never reference the whole `import.meta.env` object.
+Vite would serialize every `VT_`-prefixed variable — including
+`VT_STORAGE_S3_SECRET_ACCESS_KEY` — into the browser bundle. Read named
+keys instead; `src/app/__tests__/clientEnv.test.ts` enforces this.
+
+Unit-test anything that stores files against `MemoryStorage`. The
+backends themselves are tested against real Garage and Azurite
+containers in the `storage` Vitest project.
+
+See [docs/storage.md](docs/storage.md) for the interface, the key
+layout, the backend configuration and its both-or-neither credential
+rule, the three S3 quirks, and the testing setup.
+
 ### Server → client push runs over SSE with id-only frames
 
 Server-pushed cache invalidations are delivered over a single SSE
@@ -479,8 +505,14 @@ and make commits easier to find later.
 
 ## Testing
 
-- **Framework:** Vitest with jsdom environment (web app); Vitest node
-  env for packages.
+- **Framework:** Vitest; Vitest node env for packages.
+- **Projects (web app):** `web` runs browser code under jsdom.
+  `server` runs `src/server/**` under **node** — server code runs on
+  Node in production, and under jsdom its typed arrays come from a
+  different realm, so bytes compare unequal to identical bytes.
+  `storage` runs the storage backends against real Garage and Azurite
+  containers. `pnpm test` runs all three; use `--project <name>` to
+  narrow.
 - **Test location:** `__tests__/` directories alongside source files
   (web), or sibling `*.test.ts` files (packages).
 - **Test files:** `ComponentName.test.tsx` or `functionName.test.ts`.

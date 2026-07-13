@@ -1,0 +1,77 @@
+/**
+ * Storage keys, which must stay byte-for-byte identical to the ones Python
+ * builds. Both processes read and write the same bucket, so a divergence here
+ * does not fail loudly — it silently reads nothing and orphans what it writes.
+ */
+
+/** Key for an uploaded file. */
+export function uploadFileKey(nameOnDisk: string): string {
+	return `files/${nameOnDisk}`;
+}
+
+/** Key for an analysis file. */
+export function analysisFileKey(nameOnDisk: string): string {
+	return `analyses/${nameOnDisk}`;
+}
+
+/**
+ * The prefix segment a sample's files live under, fixed for the sample's life.
+ * Mongo-migrated samples keep their legacy id; Postgres-native ones use the
+ * integer primary key.
+ */
+export function sampleStorageId(
+	sampleId: number,
+	legacyId: string | null,
+): string {
+	return legacyId || String(sampleId);
+}
+
+/** Key for a sample file. */
+export function sampleFileKey(storageId: string, filename: string): string {
+	return `samples/${storageId}/${filename}`;
+}
+
+/** Prefix holding every file for a sample. */
+export function samplePrefix(storageId: string): string {
+	return `samples/${storageId}/`;
+}
+
+// Subtraction ids may contain spaces. Python substitutes underscores when
+// composing the key, so the same subtraction resolves to the same key here.
+function normalizeSubtractionId(subtractionId: string): string {
+	return subtractionId.replaceAll(" ", "_");
+}
+
+/** Key for a subtraction file. */
+export function subtractionFileKey(
+	subtractionId: string,
+	filename: string,
+): string {
+	return `subtractions/${normalizeSubtractionId(subtractionId)}/${filename}`;
+}
+
+/** Prefix holding every file for a subtraction. */
+export function subtractionPrefix(subtractionId: string): string {
+	return `subtractions/${normalizeSubtractionId(subtractionId)}/`;
+}
+
+/** Key for an index file. */
+export function indexFileKey(indexId: string, filename: string): string {
+	return `indexes/${indexId}/${filename}`;
+}
+
+/** Prefix holding every file for an index. */
+export function indexPrefix(indexId: string): string {
+	return `indexes/${indexId}/`;
+}
+
+/** Key for a cache. Persisted on the cache row rather than recomputed. */
+export function cacheKey(uuid: string): string {
+	return `caches/v1/${uuid}`;
+}
+
+/** Key for the HMM profiles blob. */
+export const HMM_PROFILES_KEY = "hmm/profiles.hmm";
+
+/** Key for the HMM annotations blob. */
+export const HMM_ANNOTATIONS_KEY = "hmm/annotations.json.gz";
