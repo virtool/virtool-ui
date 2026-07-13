@@ -1,4 +1,5 @@
 import { apiClient } from "@app/api";
+import { createQueryKeys } from "@app/queryKeys";
 import {
 	keepPreviousData,
 	useMutation,
@@ -8,17 +9,8 @@ import {
 import type { ErrorResponse } from "@/types/api";
 import type { HMMInstalled, Hmm, HmmSearchResults } from "./types";
 
-/**
- * Factory object for generating hmm query keys
- */
-export const hmmQueryKeys = {
-	all: () => ["hmm"] as const,
-	lists: () => ["hmm", "list"] as const,
-	list: (filters: Array<string | number | boolean | string[] | undefined>) =>
-		["hmm", "list", ...filters] as const,
-	details: () => ["hmm", "details"] as const,
-	detail: (hmmId: string) => ["hmm", "details", hmmId] as const,
-};
+/** Query keys for HMMs. */
+export const hmmQueryKeys = createQueryKeys("hmms");
 
 /**
  * Fetch a page of hmm search results from the API

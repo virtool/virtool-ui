@@ -1,4 +1,5 @@
 import { apiClient } from "@app/api";
+import { createQueryKeys } from "@app/queryKeys";
 import {
 	keepPreviousData,
 	useMutation,
@@ -12,18 +13,18 @@ import type {
 	SubtractionSearchResult,
 } from "./types";
 
+const subtractionKeys = createQueryKeys("subtractions");
+
 /**
- * Factory object for generating subtraction query keys
+ * Query keys for subtractions.
+ *
+ * `shortlist()` is the reduced list used to populate selectors. It nests under
+ * `lists()` so that a list invalidation refreshes it too.
  */
 export const subtractionQueryKeys = {
-	all: () => ["subtraction"] as const,
-	lists: () => ["subtraction", "list"] as const,
-	list: (filters: Array<string | number | boolean>) =>
-		["subtraction", "list", ...filters] as const,
-	details: () => ["subtraction", "details"] as const,
-	detail: (subtractionId: string) =>
-		["subtraction", "details", subtractionId] as const,
-	shortlist: () => ["subtraction", "list", "short"] as const,
+	...subtractionKeys,
+	shortlist: (ready?: boolean) =>
+		[...subtractionKeys.lists(), "short", ready] as const,
 };
 
 /**
@@ -139,7 +140,7 @@ export function useRemoveSubtraction() {
  */
 export function useFetchSubtractionsShortlist(ready?: boolean) {
 	return useQuery<SubtractionOption[]>({
-		queryKey: [...subtractionQueryKeys.shortlist(), ready],
+		queryKey: subtractionQueryKeys.shortlist(ready),
 		queryFn: () =>
 			apiClient
 				.get("/subtractions")

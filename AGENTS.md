@@ -195,11 +195,19 @@ Use the superagent-based client in `apps/web/src/app/api.ts`. API errors have
 the shape `error.response?.body.message`.
 
 Each feature owns a `queries.ts` module that folds its request logic directly
-into React Query hooks and `queryOptions`/`*QueryKeys` factories — there is no
-separate per-feature `api.ts` layer. Inline each `apiClient` call into the
-hook's `queryFn`/`mutationFn`; keep a module-private helper only when a request
-is shared across hooks or branches. Route loaders prefetch via the same
+into React Query hooks and `queryOptions` factories — there is no separate
+per-feature `api.ts` layer. Inline each `apiClient` call into the hook's
+`queryFn`/`mutationFn`; keep a module-private helper only when a request is
+shared across hooks or branches. Route loaders prefetch via the same
 `queryOptions` factories where appropriate.
+
+Query keys are **not** hand-written. A feature's `*QueryKeys` comes from
+`createQueryKeys(domain)` in `@app/queryKeys`, which returns `all`, `lists`,
+`list`, `infiniteLists`, `infiniteList`, `details`, and `detail` — every list
+variant extending `lists()` and every detail extending `details()` by
+construction. A feature that caches something outside those seven shapes
+spreads the result and derives the extra member from a base key, so it stays
+inside the hierarchy.
 
 Loading and error states come in two tiers: primary route data uses
 `useSuspenseQuery` (loading via the route's `<Suspense>`, errors via the

@@ -1,5 +1,6 @@
-import { accountKeys } from "@account/queries";
+import { accountQueryKeys } from "@account/queries";
 import { apiClient } from "@app/api";
+import { createQueryKeys } from "@app/queryKeys";
 import type { Root } from "@app/types";
 import {
 	createFirstUserFn,
@@ -22,10 +23,8 @@ export type ResetPasswordResult = {
 	reset: false;
 };
 
-/** Key factory function for the root document */
-export const rootKeys = {
-	all: () => ["root"],
-};
+/** Query keys for the root document. */
+export const rootQueryKeys = createQueryKeys("root");
 
 /**
  * Initializes a query for fetching the root document.
@@ -34,7 +33,7 @@ export const rootKeys = {
  */
 export function useRootQuery() {
 	return useQuery<Root, ErrorResponse>({
-		queryKey: rootKeys.all(),
+		queryKey: rootQueryKeys.all(),
 		queryFn: () => apiClient.get("/").then((res) => res.body),
 	});
 }
@@ -60,8 +59,8 @@ export function useCreateFirstUser() {
 		mutationFn: ({ handle, password }) =>
 			createFirstUserFn({ data: { handle, password } }),
 		onSuccess: () => {
-			queryClient.removeQueries({ queryKey: rootKeys.all() });
-			queryClient.removeQueries({ queryKey: accountKeys.all() });
+			queryClient.removeQueries({ queryKey: rootQueryKeys.all() });
+			queryClient.removeQueries({ queryKey: accountQueryKeys.all() });
 		},
 	});
 }
@@ -83,7 +82,7 @@ export function useLoginMutation() {
 			loginFn({ data: { handle, password, remember } }),
 		onSuccess: (data) => {
 			if (!data.reset) {
-				queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+				queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
 			}
 		},
 	});
@@ -105,7 +104,7 @@ export function useResetPasswordMutation() {
 		mutationFn: ({ password, resetCode }) =>
 			resetPasswordFn({ data: { password, reset_code: resetCode } }),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
 		},
 	});
 }

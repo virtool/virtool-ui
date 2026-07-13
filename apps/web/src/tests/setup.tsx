@@ -1,3 +1,4 @@
+import { accountQueryKeys } from "@account/queries";
 import type { Account } from "@account/types";
 import { faker } from "@faker-js/faker";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -9,6 +10,7 @@ import {
 	Outlet,
 	RouterProvider,
 } from "@tanstack/react-router";
+import { rootQueryKeys } from "@wall/queries";
 import "@testing-library/jest-dom/vitest";
 import {
 	fireEvent,
@@ -197,9 +199,11 @@ export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 		defaultOptions: { queries: { retry: false } },
 	});
 
-	queryClient.setQueryData(["root"], { first_user: false });
-	queryClient.setQueryData(["account"], opts?.account ?? createFakeAccount());
-	queryClient.setQueryData(["message"], { message: "" });
+	queryClient.setQueryData(rootQueryKeys.all(), { first_user: false });
+	queryClient.setQueryData(
+		accountQueryKeys.all(),
+		opts?.account ?? createFakeAccount(),
+	);
 
 	if (opts?.seed) {
 		opts.seed(queryClient);

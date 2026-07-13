@@ -1,5 +1,6 @@
 import type { AdministratorRoleName } from "@administration/types";
 import { apiClient } from "@app/api";
+import { createQueryKeys } from "@app/queryKeys";
 import {
 	createUser,
 	findUsers,
@@ -19,23 +20,17 @@ import {
 } from "@tanstack/react-query";
 import type { UserNested, UserResponse } from "./types";
 
+const userKeys = createQueryKeys("users");
+
 /**
- * Factory object for generating user query keys
+ * Query keys for users.
  *
- * Every list variant — paginated, nested, and infinite — nests under `lists()`,
- * so a single `lists()` invalidation refreshes all of them.
+ * `nested()` is the flat list used to populate selectors. It nests under
+ * `lists()`, so a single `lists()` invalidation refreshes every list variant.
  */
 export const userQueryKeys = {
-	all: () => ["users"] as const,
-	lists: () => ["users", "list"] as const,
-	list: (filters: Array<string | number | boolean | undefined>) =>
-		["users", "list", ...filters] as const,
-	nested: () => ["users", "list", "nested"] as const,
-	infiniteLists: () => ["users", "list", "infinite"] as const,
-	infiniteList: (filters: Array<string | number | boolean | undefined>) =>
-		["users", "list", "infinite", ...filters] as const,
-	details: () => ["users", "details"] as const,
-	detail: (userId: number) => ["users", "details", userId] as const,
+	...userKeys,
+	nested: () => [...userKeys.lists(), "nested"] as const,
 };
 
 /**

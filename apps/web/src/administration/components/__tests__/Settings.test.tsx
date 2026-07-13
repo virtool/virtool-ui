@@ -1,3 +1,4 @@
+import { bannerQueryKeys } from "@banner/queries";
 import { screen } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
 import {
@@ -22,7 +23,7 @@ describe("<Settings />", () => {
 		await renderRoute(path, {
 			account,
 			seed: (queryClient) => {
-				queryClient.setQueryData(["banner", "list"], []);
+				queryClient.setQueryData(bannerQueryKeys.lists(), []);
 			},
 		});
 

@@ -1,4 +1,5 @@
 import { apiClient } from "@app/api";
+import { createQueryKeys } from "@app/queryKeys";
 import type { LabelNested } from "@labels/types";
 import {
 	keepPreviousData,
@@ -26,18 +27,8 @@ export type SampleLabel = LabelNested & {
 	allLabeled: boolean;
 };
 
-/**
- * Factory for generating react-query keys for samples related queries.
- */
-export const samplesQueryKeys = {
-	all: () => ["samples"] as const,
-	lists: () => ["samples", "list"] as const,
-	list: (
-		filters: Array<string | number | boolean | string[] | number[] | undefined>,
-	) => ["samples", "list", ...filters] as const,
-	details: () => ["samples", "details"] as const,
-	detail: (sampleId: string) => ["samples", "details", sampleId] as const,
-};
+/** Query keys for samples. */
+export const samplesQueryKeys = createQueryKeys("samples");
 
 /**
  * Updates the data for a sample.
