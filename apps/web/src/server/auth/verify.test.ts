@@ -7,7 +7,11 @@ import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
 import { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } from "./cookies";
 import { seedSession, seedUser } from "./test/fixtures";
 import { newSessionToken } from "./tokens";
-import { verifyAuthenticatedSession, verifyRequest } from "./verify";
+import {
+	parseCookieHeader,
+	verifyAuthenticatedSession,
+	verifyRequest,
+} from "./verify";
 
 let database: TestDatabase;
 let db: Db;
@@ -109,12 +113,66 @@ describe("verifyAuthenticatedSession", () => {
 	});
 });
 
+describe("parseCookieHeader", () => {
+	it("returns nothing for a request that sent no cookie header", () => {
+		expect(parseCookieHeader(null)).toEqual({});
+	});
+
+	it("parses a pair of cookies", () => {
+		expect(parseCookieHeader("session_id=abc; session_token=def")).toEqual({
+			session_id: "abc",
+			session_token: "def",
+		});
+	});
+
+	it("trims the whitespace around names and values", () => {
+		expect(parseCookieHeader("  session_id  =  abc  ")).toEqual({
+			session_id: "abc",
+		});
+	});
+
+	it("decodes a percent-encoded value", () => {
+		expect(parseCookieHeader("session_id=a%20b%3Bc")).toEqual({
+			session_id: "a b;c",
+		});
+	});
+
+	// Splitting on the last `=` would corrupt any base64-padded value.
+	it("splits on the first equals sign only", () => {
+		expect(parseCookieHeader("session_token=aGk=")).toEqual({
+			session_token: "aGk=",
+		});
+	});
+
+	it("skips segments with no equals sign", () => {
+		expect(parseCookieHeader("broken; session_id=abc")).toEqual({
+			session_id: "abc",
+		});
+	});
+
+	it("skips a segment with an empty name", () => {
+		expect(parseCookieHeader("=orphan; session_id=abc")).toEqual({
+			session_id: "abc",
+		});
+	});
+
+	it("keeps a cookie with an empty value", () => {
+		expect(parseCookieHeader("session_id=")).toEqual({ session_id: "" });
+	});
+});
+
 describe("verifyRequest", () => {
 	function request(cookie: string): Request {
 		return new Request("https://virtool.test/events", {
 			headers: { cookie },
 		});
 	}
+
+	it("rejects a request that sent no cookies at all", async () => {
+		expect(
+			await verifyRequest(db, new Request("https://virtool.test/events")),
+		).toBeNull();
+	});
 
 	it("resolves the session from the cookie header", async () => {
 		const userId = await seedUser(db);

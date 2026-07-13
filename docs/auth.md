@@ -38,15 +38,24 @@ should look like labels.
 ## Authentication middleware
 
 Authentication is enforced globally at the server-function boundary,
-not per-handler. The wiring lives in `apps/web/src/start.ts`:
+not per-handler. The exempt endpoints live in
+`server/auth/exceptions.ts`:
 
 ```ts
-const authenticationMiddleware = createAuthenticationMiddleware([
+export const authenticationExceptions: ReadonlyArray<{ url: string }> = [
   createFirstUserFn,
   loginFn,
   logoutFn,
   resetPasswordFn,
-]);
+];
+```
+
+and are wired up in `apps/web/src/start.ts`:
+
+```ts
+const authenticationMiddleware = createAuthenticationMiddleware(
+  authenticationExceptions,
+);
 
 export const startInstance = createStart(() => ({
   defaultSsr: false,
@@ -60,6 +69,13 @@ being listed in the `exceptions` array — passed as **server-function
 references**, not URL strings. The middleware derives the path from
 each fn's bound `url`, so the exception list can't drift out of sync
 with a rename.
+
+The list is a standalone module rather than an inline array so it can
+be asserted on: `middleware.test.ts` pins its exact contents, and a fn
+added to it by mistake fails that test instead of silently becoming
+publicly callable. Its type is annotated rather than inferred — an
+inferred type would name TanStack's server-fn types transitively and
+break declaration emit for `@server/*` importers.
 
 The middleware lives in `server/auth/middleware.ts` and exposes three
 helpers:

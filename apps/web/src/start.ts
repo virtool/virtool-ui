@@ -2,12 +2,7 @@ import {
 	sentryGlobalFunctionMiddleware,
 	sentryGlobalRequestMiddleware,
 } from "@sentry/tanstackstart-react";
-import {
-	createFirstUserFn,
-	loginFn,
-	logoutFn,
-	resetPasswordFn,
-} from "@server/auth/functions";
+import { authenticationExceptions } from "@server/auth/exceptions";
 import { createAuthenticationMiddleware } from "@server/auth/middleware";
 import { errorLoggingMiddleware } from "@server/error-logging";
 import {
@@ -16,14 +11,9 @@ import {
 	createStart,
 } from "@tanstack/react-start";
 
-// logoutFn must be exempt so stale or missing cookies can still be cleared.
-// createFirstUserFn runs before any user or session exists.
-const authenticationMiddleware = createAuthenticationMiddleware([
-	createFirstUserFn,
-	loginFn,
-	logoutFn,
-	resetPasswordFn,
-]);
+const authenticationMiddleware = createAuthenticationMiddleware(
+	authenticationExceptions,
+);
 
 const cspDirectives = [
 	"default-src 'self'",
