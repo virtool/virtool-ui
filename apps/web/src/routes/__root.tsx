@@ -2,6 +2,7 @@ import "@app/style.css";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
 import RouteError from "@base/RouteError";
+import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 import { type QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
@@ -29,6 +30,17 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 				rel: "shortcut icon",
 				href: "/images/favicon.ico",
 				type: "image/x-icon",
+			},
+			// Only the roman latin face is on the first-paint path. The italic and
+			// the other unicode-range slices load on demand. `crossOrigin` is
+			// required even same-origin: fonts fetch in CORS mode, and a preload
+			// without it is fetched twice.
+			{
+				rel: "preload",
+				href: interLatin,
+				as: "font",
+				type: "font/woff2",
+				crossOrigin: "anonymous",
 			},
 		],
 	}),
