@@ -192,6 +192,15 @@ export async function findJobs(
 /**
  * A job is readable by its owner, and by any administrator. Returns the user id
  * a read should be restricted to, or `null` to read across every user.
+ *
+ * Ownership is a coarser rule than we would like. A job that produced a shared
+ * resource — a sample with `all_read`, an index on a reference the caller
+ * belongs to — is readable through that resource but not through here, so the
+ * nested job cards seeded from those resources stop refetching progress once
+ * the job owner isn't the viewer. The rule we want is "readable if you can read
+ * the resource it produced", but sample and reference permissions live in Mongo
+ * on the Python side; Postgres has no `samples` table and no rights data, so
+ * this side cannot evaluate that check yet. Revisit when those domains migrate.
  */
 export function resolveJobScope(
 	userId: number,
