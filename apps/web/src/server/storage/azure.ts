@@ -71,10 +71,13 @@ export function createAzureStorage(config: AzureConfig): StorageBackend {
 		async write(key: string, data: AsyncIterable<Uint8Array>): Promise<number> {
 			let written = 0;
 
-			async function* count(): AsyncIterable<Uint8Array> {
+			// The Azure SDK pools incoming chunks with Buffer.copy, so a plain
+			// Uint8Array reaches it as an object with no copy method and the upload
+			// dies. Wrap each chunk as a Buffer view — no copy, same bytes.
+			async function* count(): AsyncIterable<Buffer> {
 				for await (const chunk of data) {
 					written += chunk.byteLength;
-					yield chunk;
+					yield Buffer.from(chunk.buffer, chunk.byteOffset, chunk.byteLength);
 				}
 			}
 

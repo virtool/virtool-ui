@@ -35,6 +35,22 @@ export default defineConfig({
 					environment: "node",
 					globalSetup: ["./src/tests/globalSetup.ts"],
 					include: ["src/server/**/*.test.ts"],
+					exclude: ["src/server/storage/__tests__/integration.test.ts"],
+				},
+			},
+			{
+				extends: true,
+				test: {
+					// The storage backends against the same services Python tests with:
+					// Garage for S3 and Azurite for Azure Blob. Everything else fakes
+					// storage with MemoryStorage and never starts these containers.
+					name: "storage",
+					environment: "node",
+					globalSetup: ["./src/server/storage/test/globalSetup.ts"],
+					include: ["src/server/storage/__tests__/integration.test.ts"],
+					// Garage has to lay out a cluster before it serves any S3 traffic.
+					testTimeout: 30_000,
+					hookTimeout: 120_000,
 				},
 			},
 		],

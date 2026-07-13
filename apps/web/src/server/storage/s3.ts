@@ -10,9 +10,14 @@ import { Upload } from "@aws-sdk/lib-storage";
 import type { StorageConfig } from "../config";
 import { StorageError, StorageKeyNotFoundError } from "./errors";
 import type { StorageBackend, StorageObjectInfo } from "./types";
-import { STORAGE_CHUNK_SIZE } from "./types";
 
 type S3Config = Extract<StorageConfig, { kind: "s3" }>;
+
+/**
+ * S3 rejects a multipart upload whose parts are under 5 MiB, so this is a floor
+ * rather than a preference — it is not the streaming chunk size.
+ */
+export const S3_MIN_PART_SIZE = 5 * 1024 * 1024;
 
 function isNotFound(error: unknown): boolean {
 	const { name, $metadata } = error as {
@@ -44,6 +49,12 @@ export function createS3Storage(config: S3Config): StorageBackend {
 	const client = new S3Client({
 		region: config.region,
 		endpoint: config.endpoint,
+		// A multipart object's stored checksum is a composite of its parts, which
+		// real S3 marks with a `-N` suffix so the SDK knows not to check it against
+		// the whole body. Garage returns it unsuffixed, so the SDK compares a
+		// per-part checksum to the full object and every large read fails. Uploads
+		// still send checksums; only the response-side comparison is dropped.
+		responseChecksumValidation: "WHEN_REQUIRED",
 		// Custom endpoints (MinIO, Garage) serve buckets as a path segment. Real
 		// AWS is left on virtual-hosted addressing, which is what it expects.
 		forcePathStyle: Boolean(config.endpoint),
@@ -94,7 +105,7 @@ export function createS3Storage(config: S3Config): StorageBackend {
 				await new Upload({
 					client,
 					params: { Bucket: bucket, Key: key, Body: Readable.from(count()) },
-					partSize: STORAGE_CHUNK_SIZE,
+					partSize: S3_MIN_PART_SIZE,
 				}).done();
 			} catch (error) {
 				throw new StorageError(
