@@ -23,6 +23,13 @@ async function loadReplay(): Promise<void> {
 	getClient()?.addIntegration(replayIntegration());
 }
 
+// An idle callback with no `timeout` has no deadline: a busy load or a
+// backgrounded tab can postpone it indefinitely, and until it fires there is no
+// error buffer at all. Bound the wait so Replay is registered within a
+// predictable window of first paint, while still yielding to idle if the browser
+// gets there sooner.
+const REPLAY_IDLE_TIMEOUT_MS = 2000;
+
 export function scheduleReplay(): void {
 	function start() {
 		// A failed Replay load must never take the app down with it.
@@ -30,7 +37,7 @@ export function scheduleReplay(): void {
 	}
 
 	if (typeof requestIdleCallback === "function") {
-		requestIdleCallback(start);
+		requestIdleCallback(start, { timeout: REPLAY_IDLE_TIMEOUT_MS });
 		return;
 	}
 

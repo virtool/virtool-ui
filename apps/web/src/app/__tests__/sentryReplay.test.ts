@@ -28,6 +28,17 @@ describe("scheduleReplay", () => {
 		expect(addIntegration).not.toHaveBeenCalled();
 	});
 
+	it("bounds the idle wait so Replay cannot be postponed indefinitely", () => {
+		const requestIdleCallback = vi.fn(() => 1);
+		vi.stubGlobal("requestIdleCallback", requestIdleCallback);
+
+		scheduleReplay();
+
+		expect(requestIdleCallback).toHaveBeenCalledWith(expect.any(Function), {
+			timeout: 2000,
+		});
+	});
+
 	it("registers Replay once the browser goes idle", async () => {
 		let idleCallback: (() => void) | undefined;
 		vi.stubGlobal(
