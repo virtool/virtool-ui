@@ -1,5 +1,5 @@
 import { accountKeys } from "@account/queries";
-import { roleQueryKeys, userQueryKeys } from "@administration/queries";
+import { roleQueryKeys } from "@administration/queries";
 import { bannerQueryKeys } from "@banner/queries";
 import { groupQueryKeys } from "@groups/queries";
 import { indexQueryKeys } from "@indexes/queries";
@@ -10,6 +10,7 @@ import { samplesQueryKeys } from "@samples/queries";
 import type { QueryClient } from "@tanstack/react-query";
 import { taskQueryKeys } from "@tasks/queries";
 import { fileQueryKeys } from "@uploads/queries";
+import { userQueryKeys } from "@users/queries";
 import type { SseDomain, SseMessage } from "./schema";
 
 type KeyFactory = {

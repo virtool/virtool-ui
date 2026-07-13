@@ -523,6 +523,10 @@ and make commits easier to find later.
   `renderWithProviders()`, `renderWithRouter()`, and `MemoryRouter`.
 - **Fixtures/fakes:** `apps/web/src/tests/fake/` has factory functions
   for test data.
+- **Database tests:** `createTestDatabase()` from
+  `@server/db/test/fixtures` gives a suite its own isolated Postgres
+  database with the schema applied. Test files run in parallel, so
+  never share one database between them.
 - **Assertions:** Use explicit `expect()` assertions, not snapshots.
 - **User interaction:** Use `@testing-library/user-event` over
   `fireEvent`.

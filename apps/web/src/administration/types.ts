@@ -21,6 +21,9 @@ export type AdministratorRoleName =
 	| "users"
 	| "base";
 
+/**
+ * Instance-wide settings
+ */
 export type Settings = {
 	default_source_types: string[];
 	enable_api: boolean;

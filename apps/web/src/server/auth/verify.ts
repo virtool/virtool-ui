@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 
 import type { Db } from "../db/pg";
 import { sessions } from "../db/schema/sessions";
+import { users } from "../db/schema/users";
 import { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } from "./cookies";
 import { hashToken } from "./tokens";
 
@@ -14,9 +15,9 @@ export type AuthenticatedSession = {
 
 /**
  * Resolve an authenticated session from cookie values. Returns `null` for any
- * non-fatal failure (missing cookies, unknown session, wrong type, expired, or
- * token mismatch) so callers can respond with a single 401 without leaking
- * which check failed.
+ * non-fatal failure (missing cookies, unknown session, wrong type, expired,
+ * deactivated user, or token mismatch) so callers can respond with a single 401
+ * without leaking which check failed.
  */
 export async function verifyAuthenticatedSession(
 	db: Db,
@@ -27,16 +28,27 @@ export async function verifyAuthenticatedSession(
 		return null;
 	}
 
+	// Deactivating a user does not delete their sessions, so `active` has to be
+	// checked on every request rather than trusted at login. The inner join only
+	// drops anonymous sessions, which carry no user_id and are rejected anyway.
 	const [row] = await db
-		.select()
+		.select({
+			userId: sessions.userId,
+			sessionType: sessions.sessionType,
+			tokenHash: sessions.tokenHash,
+			expiresAt: sessions.expiresAt,
+			active: users.active,
+		})
 		.from(sessions)
+		.innerJoin(users, eq(users.id, sessions.userId))
 		.where(eq(sessions.sessionId, sessionId))
 		.limit(1);
 
 	if (
 		row?.sessionType !== "authenticated" ||
 		!row.tokenHash ||
-		row.userId === null
+		row.userId === null ||
+		!row.active
 	) {
 		return null;
 	}

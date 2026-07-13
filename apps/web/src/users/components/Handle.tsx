@@ -1,4 +1,3 @@
-import { useUpdateUser } from "@administration/queries";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
@@ -7,6 +6,7 @@ import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
+import { useUpdateUser } from "@users/queries";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
