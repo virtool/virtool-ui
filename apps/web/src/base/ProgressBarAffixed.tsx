@@ -6,12 +6,12 @@ const colorToClass: Record<string, string> = {
 	red: "bg-red-600",
 };
 
-interface ProgressBarAffixedProps {
+type ProgressBarAffixedProps = {
 	bottom?: boolean;
 	className?: string;
 	color?: string;
 	now: number;
-}
+};
 
 export default function ProgressBarAffixed({
 	bottom,

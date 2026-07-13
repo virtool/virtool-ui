@@ -2,9 +2,9 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 
-interface CloneProps {
+type CloneProps = {
 	source: { id: string; name: string };
-}
+};
 
 export function Clone({ source }: CloneProps) {
 	return (

@@ -3,14 +3,14 @@ import type { ReactNode } from "react";
 import { buttonVariants } from "./buttonVariants";
 import Link from "./Link";
 
-interface LinkButtonProps {
+type LinkButtonProps = {
 	children?: ReactNode;
 	className?: string;
 	color?: "blue" | "gray" | "green" | "red";
 	replace?: boolean;
 	search?: Record<string, unknown>;
 	to: string;
-}
+};
 
 export default function LinkButton({
 	children,

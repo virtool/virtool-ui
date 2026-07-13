@@ -21,7 +21,7 @@ export type LoggerTransport =
 	| TransportPipelineOptions;
 
 /** Options for `createLogger`. */
-export interface CreateLoggerOptions {
+export type CreateLoggerOptions = {
 	/** Service identifier baked into every log record as `name`. */
 	name: string;
 	/** Override the level resolved from env. */
@@ -43,7 +43,7 @@ export interface CreateLoggerOptions {
 	 * `transport` is set.
 	 */
 	streams?: readonly StreamEntry<LogLevel>[];
-}
+};
 
 export function createLogger(options: CreateLoggerOptions): Logger {
 	const env = options.env ?? process.env;

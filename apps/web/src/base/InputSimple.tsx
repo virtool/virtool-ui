@@ -6,11 +6,10 @@ import {
 	inputHeightClass,
 } from "./styles";
 
-export interface InputSimpleProps
-	extends React.InputHTMLAttributes<HTMLInputElement> {
+export type InputSimpleProps = React.InputHTMLAttributes<HTMLInputElement> & {
 	className?: string;
 	as?: string;
-}
+};
 
 const InputSimple = React.forwardRef<HTMLInputElement, InputSimpleProps>(
 	({ className, ...props }, ref) => {

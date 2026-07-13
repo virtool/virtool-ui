@@ -1,9 +1,9 @@
 import { SourceTypeItem } from "./SourceTypeItem";
 
-interface SourceTypeListProps {
+type SourceTypeListProps = {
 	sourceTypes: string[];
 	onRemove: (sourceType: string) => void;
-}
+};
 
 export default function SourceTypeList({
 	sourceTypes,

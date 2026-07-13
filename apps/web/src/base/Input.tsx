@@ -9,7 +9,7 @@ import {
 	inputHeightClass,
 } from "./styles";
 
-export interface InputProps {
+export type InputProps = {
 	"aria-label"?: string;
 	as?: ElementType;
 	autoFocus?: boolean;
@@ -32,7 +32,7 @@ export interface InputProps {
 	onChange?: (event: React.ChangeEvent) => void;
 	onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
 	onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-}
+};
 
 export default function Input({
 	"aria-label": ariaLabel,

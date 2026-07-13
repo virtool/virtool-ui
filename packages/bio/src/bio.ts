@@ -106,13 +106,13 @@ export function translate(sequence: string): string {
 	return out;
 }
 
-export interface Orf {
+export type Orf = {
 	pro: string;
 	nuc: string;
 	frame: number;
 	strand: 1 | -1;
 	pos: [number, number];
-}
+};
 
 export function findOrfs(sequence: string): Orf[] {
 	const orfs: Orf[] = [];
@@ -193,11 +193,11 @@ export function parseFasta(content: string): Array<[string, string]> {
 	return records;
 }
 
-export interface FastqRecord {
+export type FastqRecord = {
 	header: string;
 	sequence: string;
 	quality: string;
-}
+};
 
 export async function* parseFastq(
 	lines: AsyncIterable<string> | Iterable<string>,

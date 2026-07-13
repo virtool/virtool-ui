@@ -22,11 +22,11 @@ const sortTitles = {
 	name: "Name",
 };
 
-interface AnalysisViewerSortProps {
+type AnalysisViewerSortProps = {
 	workflow: AnalysisWorkflow;
 	sortKey: string;
 	onSelect: (key: string) => void;
-}
+};
 
 export function AnalysisViewerSort({
 	workflow,

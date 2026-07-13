@@ -9,18 +9,28 @@ with sane defaults: JSON output, redaction of `password` / `token` /
 `info` in production, `debug` elsewhere).
 
 The web app constructs one logger at bootstrap with a service `name`
-(`apps/web/src/server/logger.ts` exports it as `web`). Inside request
-handling reach for `ctx.logger` rather than re-importing the singleton,
-and spawn a child for per-request context:
+(`apps/web/src/server/logger.ts` exports it as `web`). Import that
+singleton and call it directly:
 
 ```ts
-const log = ctx.logger.child({ requestId })
-log.info({ userId }, 'login')
+import { logger } from "@server/logger";
+
+logger.info({ userId }, "login");
 ```
 
 Pass structured fields as the first arg, message as the second — never
 interpolate values into the message string, that defeats the redaction
 list and makes records ungreppable.
+
+There is no request-scoped logger and no `context.logger`. `logger.child({...})`
+exists — it is pino's — and is the right tool if you ever need to bind
+repeated context (a request id, a job id) across several call sites, but
+nothing in the server uses it today. Don't write code that assumes a
+per-request logger is threaded through for you.
+
+Biome's `noConsole` rule is enabled for `apps/web/src/server/` in
+`biome.json`, so reaching for `console.*` there fails `pnpm check`.
+Client code is unaffected.
 
 The default redaction paths are defined in
 `packages/logger/src/config.ts` (`DEFAULT_REDACT_PATHS`). Extra paths can
@@ -29,12 +39,12 @@ needs to censor additional fields.
 
 ## Sentry forwarding
 
-When `VT_SENTRY_DSN` is set, the server logger fans `warn`-and-above
+When `VT_SENTRY_DSN` is set, the server logger fans `info`-and-above
 records out to Sentry's structured logging API (`Sentry.logger`) in
-addition to stdout. `info` and below stay stdout-only — dashboards and
-logs are the source of truth for those; Sentry is reserved for `warn`
-and worse. There is no per-call-site wiring: every record at or above
-that threshold is forwarded automatically.
+addition to stdout. `debug` and `trace` stay stdout-only. The threshold
+is the `level` of the Sentry stream in `apps/web/src/server/logger.ts`.
+There is no per-call-site wiring: every record at or above that
+threshold is forwarded automatically.
 
 This is a plain pino destination stream
 (`apps/web/src/server/sentryLog.ts`), **not**
