@@ -137,6 +137,16 @@ describe("downsampleDepths()", () => {
 		expect(downsampleDepths(depths, 0)).toBe(depths);
 	});
 
+	it("should return the depths unchanged when the width is negative", () => {
+		const depths = [1, 2, 3, 4, 5];
+		expect(downsampleDepths(depths, -1)).toBe(depths);
+	});
+
+	it("should return the depths unchanged when the width equals the depth count", () => {
+		const depths = [1, 2, 3, 4, 5];
+		expect(downsampleDepths(depths, depths.length)).toBe(depths);
+	});
+
 	it("should return an empty array when there are no depths", () => {
 		expect(downsampleDepths([], 10)).toEqual([]);
 	});

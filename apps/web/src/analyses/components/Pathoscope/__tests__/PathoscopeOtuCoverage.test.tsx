@@ -42,9 +42,14 @@ describe("<PathoscopeOtuCoverage />", () => {
 
 		renderWithProviders(<PathoscopeOtuCoverage filled={filled} />);
 
-		const d = screen.getByRole("img").querySelector("path")?.getAttribute("d");
+		const d =
+			screen.getByRole("img").querySelector("path")?.getAttribute("d") ?? "";
 
-		// One point along the top edge and one along the baseline per pixel column.
-		expect(d?.match(/L/g)).toHaveLength(799);
+		const xValues = [...d.matchAll(/[ML]([\d.]+),/g)].map((match) =>
+			Number(match[1]),
+		);
+
+		// The 30,000 depths collapse to one x per pixel column, not one per position.
+		expect(new Set(xValues).size).toBe(400);
 	});
 });

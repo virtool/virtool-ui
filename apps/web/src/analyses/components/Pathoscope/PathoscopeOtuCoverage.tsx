@@ -31,7 +31,12 @@ export default function PathoscopeOtuCoverage({ filled }: OtuCoverageProps) {
 
 	return (
 		<div className="bg-blue-50 pt-2" ref={ref}>
-			<svg width={width} height={height} role="img">
+			<svg
+				width={width}
+				height={height}
+				role="img"
+				aria-label="Read depth across the reference genome"
+			>
 				<title>Read depth across the reference genome</title>
 				{d && <path className="fill-blue-500" d={d} />}
 			</svg>
