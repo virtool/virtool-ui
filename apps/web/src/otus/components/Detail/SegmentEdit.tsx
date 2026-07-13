@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import { useUpdateOTU } from "@otus/queries";
+import { useUpdateOtu } from "@otus/queries";
 import type { Molecule, OtuSegment } from "@otus/types";
 import SegmentForm from "./SegmentForm";
 
@@ -30,7 +30,7 @@ export default function SegmentEdit({
 	schema,
 	unsetEditSegmentName = () => {},
 }: SegmentEditProps) {
-	const mutation = useUpdateOTU(otuId);
+	const mutation = useUpdateOtu(otuId);
 
 	const segment = schema.find((s) => s.name === editSegmentName);
 

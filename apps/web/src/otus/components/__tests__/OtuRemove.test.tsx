@@ -1,6 +1,6 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeOtu, mockApiRemoveOTU } from "@tests/fake/otus";
+import { createFakeOtu, mockApiRemoveOtu } from "@tests/fake/otus";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -49,7 +49,7 @@ describe("<OtuRemove />", () => {
 	});
 
 	it("should call onRemoved after successful removal", async () => {
-		const scope = mockApiRemoveOTU(otu.id);
+		const scope = mockApiRemoveOtu(otu.id);
 		const onRemoved = vi.fn();
 
 		renderWithProviders(

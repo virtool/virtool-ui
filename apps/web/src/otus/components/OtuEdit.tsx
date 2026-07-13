@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import { useUpdateOTU } from "@otus/queries";
+import { useUpdateOtu } from "@otus/queries";
 import OtuForm from "./OtuForm";
 
 type OtuEditProps = {
@@ -20,7 +20,7 @@ export default function OtuEdit({
 	otuId,
 	setOpen = () => {},
 }: OtuEditProps) {
-	const mutation = useUpdateOTU(otuId);
+	const mutation = useUpdateOtu(otuId);
 
 	function handleSubmit({ name, abbreviation }) {
 		mutation.mutate(

@@ -1,14 +1,14 @@
 import { formatIsolateName } from "@app/utils";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeOTUIsolate } from "@tests/fake/otus";
+import { createFakeOtuIsolate } from "@tests/fake/otus";
 import { renderWithRouter } from "@tests/setup";
 import { describe, expect, it, vi } from "vitest";
 import IsolateItem from "../IsolateItem";
 
 describe("<IsolateItem />", () => {
 	it("should render the isolate name", async () => {
-		const isolate = createFakeOTUIsolate();
+		const isolate = createFakeOtuIsolate();
 
 		await renderWithRouter(
 			<IsolateItem
@@ -24,7 +24,7 @@ describe("<IsolateItem />", () => {
 	});
 
 	it("should link to the isolate detail route", async () => {
-		const isolate = createFakeOTUIsolate();
+		const isolate = createFakeOtuIsolate();
 
 		await renderWithRouter(
 			<IsolateItem
@@ -42,7 +42,7 @@ describe("<IsolateItem />", () => {
 	});
 
 	it("should render a default indicator when [isolate.default=true]", async () => {
-		const isolate = { ...createFakeOTUIsolate(), default: true };
+		const isolate = { ...createFakeOtuIsolate(), default: true };
 
 		const { container } = await renderWithRouter(
 			<IsolateItem
@@ -58,7 +58,7 @@ describe("<IsolateItem />", () => {
 	});
 
 	it("should not render a default indicator when [isolate.default=false]", async () => {
-		const isolate = { ...createFakeOTUIsolate(), default: false };
+		const isolate = { ...createFakeOtuIsolate(), default: false };
 
 		const { container } = await renderWithRouter(
 			<IsolateItem
@@ -74,7 +74,7 @@ describe("<IsolateItem />", () => {
 	});
 
 	it("should call onRemove with the isolate when the remove button is clicked", async () => {
-		const isolate = createFakeOTUIsolate();
+		const isolate = createFakeOtuIsolate();
 		const onRemove = vi.fn();
 
 		await renderWithRouter(
@@ -95,7 +95,7 @@ describe("<IsolateItem />", () => {
 	});
 
 	it("should not render a remove button when [canRemove=false]", async () => {
-		const isolate = createFakeOTUIsolate();
+		const isolate = createFakeOtuIsolate();
 
 		await renderWithRouter(
 			<IsolateItem

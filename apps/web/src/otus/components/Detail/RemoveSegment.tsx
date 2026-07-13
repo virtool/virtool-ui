@@ -1,5 +1,5 @@
 import RemoveDialog from "@base/RemoveDialog";
-import { useUpdateOTU } from "@otus/queries";
+import { useUpdateOtu } from "@otus/queries";
 import type { OtuSegment } from "@otus/types";
 
 type RemoveSegmentProps = {
@@ -24,7 +24,7 @@ export default function RemoveSegment({
 	segmentName,
 	setOpen = () => {},
 }: RemoveSegmentProps) {
-	const mutation = useUpdateOTU(otuId);
+	const mutation = useUpdateOtu(otuId);
 
 	function handleSubmit() {
 		if (!segmentName) {

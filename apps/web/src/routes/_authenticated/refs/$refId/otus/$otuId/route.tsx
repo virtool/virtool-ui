@@ -6,7 +6,7 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { OtuHeaderIcons } from "@otus/components/Detail/OtuHeaderIcons";
-import { otuQueryOptions, useFetchOTU } from "@otus/queries";
+import { otuQueryOptions, useFetchOtu } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { useReferenceIsArchived } from "@references/hooks";
 import { referenceQueryOptions, useFetchReference } from "@references/queries";
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 function OtuDetailLayout() {
 	const { refId, otuId } = Route.useParams();
 	const navigate = Route.useNavigate();
-	const { data: otu } = useFetchOTU(otuId);
+	const { data: otu } = useFetchOtu(otuId);
 	const { data: reference } = useFetchReference(refId);
 	const archived = useReferenceIsArchived(refId);
 

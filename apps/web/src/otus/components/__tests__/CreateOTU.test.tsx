@@ -7,7 +7,7 @@ import {
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { mockApiCreateOTU } from "../../../tests/fake/otus";
+import { mockApiCreateOtu } from "../../../tests/fake/otus";
 import OtuCreate from "../OtuCreate";
 
 describe("<OtuCreate />", () => {
@@ -41,7 +41,7 @@ describe("<OtuCreate />", () => {
 	});
 
 	it("should create OTU without abbreviation", async () => {
-		const scope = mockApiCreateOTU(reference.id, "TestName", "");
+		const scope = mockApiCreateOtu(reference.id, "TestName", "");
 		renderWithProviders(
 			<OtuCreate open refId={reference.id} setOpen={vi.fn()} />,
 		);
@@ -53,7 +53,7 @@ describe("<OtuCreate />", () => {
 	});
 
 	it("should create OTU with abbreviation", async () => {
-		const scope = mockApiCreateOTU(
+		const scope = mockApiCreateOtu(
 			reference.id,
 			"TestName",
 			"TestAbbreviation",

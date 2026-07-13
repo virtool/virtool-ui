@@ -35,7 +35,7 @@ export function getGenbank(accession: string) {
 /**
  * Factory for generating react-query keys for otu related queries.
  */
-export const OTUQueryKeys = {
+export const OtuQueryKeys = {
 	all: () => ["OTU"] as const,
 	lists: () => ["OTU", "list"] as const,
 	list: (filters: Array<string | number | boolean>) =>
@@ -58,14 +58,14 @@ export const OTUQueryKeys = {
  * @param term - The search term to filter indexes by
  * @returns A page of OTU search results
  */
-export function useListOTUs(
+export function useListOtus(
 	refId: string,
 	page: number,
 	per_page: number,
 	term: string,
 ) {
 	return useQuery<OtuSearchResult>({
-		queryKey: OTUQueryKeys.list([page, per_page, term]),
+		queryKey: OtuQueryKeys.list([page, per_page, term]),
 		queryFn: () =>
 			apiClient
 				.get(`/refs/${refId}/otus`)
@@ -80,7 +80,7 @@ export function useListOTUs(
 
 export function otuQueryOptions(otuId: string) {
 	return queryOptions<Otu, ErrorResponse>({
-		queryKey: OTUQueryKeys.detail(otuId),
+		queryKey: OtuQueryKeys.detail(otuId),
 		queryFn: () => apiClient.get(`/otus/${otuId}`).then((res) => res.body),
 	});
 }
@@ -91,7 +91,7 @@ export function otuQueryOptions(otuId: string) {
  * @param otuId - The id of the OTU to fetch
  * @returns A single OTU
  */
-export function useFetchOTU(otuId: string) {
+export function useFetchOtu(otuId: string) {
 	return useQuery<Otu, ErrorResponse>({
 		...otuQueryOptions(otuId),
 		retry: (failureCount, error) => {
@@ -105,7 +105,7 @@ export function useFetchOTU(otuId: string) {
 
 export function otuHistoryQueryOptions(otuId: string) {
 	return queryOptions<OtuHistory[], ErrorResponse>({
-		queryKey: OTUQueryKeys.history(otuId),
+		queryKey: OtuQueryKeys.history(otuId),
 		queryFn: () =>
 			apiClient.get(`/otus/${otuId}/history`).then((res) => res.body),
 	});
@@ -136,7 +136,7 @@ export function useSuspenseOtuHistory(otuId: string) {
  *
  * @returns A mutator for creating an OTU
  */
-export function useCreateOTU(refId: string) {
+export function useCreateOtu(refId: string) {
 	const queryClient = useQueryClient();
 
 	return useMutation<
@@ -150,12 +150,12 @@ export function useCreateOTU(refId: string) {
 				.send({ name, abbreviation })
 				.then((res) => res.body),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: OTUQueryKeys.lists() });
+			queryClient.invalidateQueries({ queryKey: OtuQueryKeys.lists() });
 		},
 	});
 }
 
-export type UpdateOTUProps = {
+export type UpdateOtuProps = {
 	otuId: string;
 	name?: string;
 	abbreviation?: string;
@@ -167,10 +167,10 @@ export type UpdateOTUProps = {
  *
  * @returns A mutator for editing an OTU
  */
-export function useUpdateOTU(otuId: string) {
+export function useUpdateOtu(otuId: string) {
 	const queryClient = useQueryClient();
 
-	return useMutation<Otu, ErrorResponse, UpdateOTUProps, { previousOtu?: Otu }>(
+	return useMutation<Otu, ErrorResponse, UpdateOtuProps, { previousOtu?: Otu }>(
 		{
 			mutationFn: ({ otuId, name, abbreviation, schema }) =>
 				apiClient
@@ -179,15 +179,15 @@ export function useUpdateOTU(otuId: string) {
 					.then((res) => res.body),
 			onMutate: async ({ name, abbreviation, schema }) => {
 				await queryClient.cancelQueries({
-					queryKey: OTUQueryKeys.detail(otuId),
+					queryKey: OtuQueryKeys.detail(otuId),
 				});
 
 				const previousOtu = queryClient.getQueryData<Otu>(
-					OTUQueryKeys.detail(otuId),
+					OtuQueryKeys.detail(otuId),
 				);
 
 				if (previousOtu) {
-					queryClient.setQueryData<Otu>(OTUQueryKeys.detail(otuId), {
+					queryClient.setQueryData<Otu>(OtuQueryKeys.detail(otuId), {
 						...previousOtu,
 						...(name !== undefined && { name }),
 						...(abbreviation !== undefined && { abbreviation }),
@@ -200,14 +200,14 @@ export function useUpdateOTU(otuId: string) {
 			onError: (_error, _variables, context) => {
 				if (context?.previousOtu) {
 					queryClient.setQueryData(
-						OTUQueryKeys.detail(otuId),
+						OtuQueryKeys.detail(otuId),
 						context.previousOtu,
 					);
 				}
 			},
 			onSettled: () => {
 				queryClient.invalidateQueries({
-					queryKey: OTUQueryKeys.detail(otuId),
+					queryKey: OtuQueryKeys.detail(otuId),
 				});
 			},
 		},
@@ -219,7 +219,7 @@ export function useUpdateOTU(otuId: string) {
  *
  * @returns A mutator for removing an OTU isolate
  */
-export function useRemoveOTU() {
+export function useRemoveOtu() {
 	return useMutation<null, ErrorResponse, { otuId: string }>({
 		mutationFn: ({ otuId }) =>
 			apiClient.delete(`/otus/${otuId}`).then((res) => res.body),
@@ -231,7 +231,7 @@ export function useRemoveOTU() {
  *
  * @returns A mutator for reverting an otu to how it was before a given change
  */
-export function useRevertOTU(otuId: string) {
+export function useRevertOtu(otuId: string) {
 	const queryClient = useQueryClient();
 
 	return useMutation<null, ErrorResponse, { changeId: string }>({
@@ -239,7 +239,7 @@ export function useRevertOTU(otuId: string) {
 			apiClient.delete(`/history/${changeId}`).then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: OTUQueryKeys.detail(otuId),
+				queryKey: OtuQueryKeys.detail(otuId),
 			});
 		},
 	});
@@ -265,7 +265,7 @@ export function useCreateIsolate(otuId: string) {
 				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: OTUQueryKeys.detail(otuId),
+				queryKey: OtuQueryKeys.detail(otuId),
 			});
 		},
 	});
@@ -290,7 +290,7 @@ export function useSetIsolateAsDefault() {
 				.then((res) => res.body),
 		onSuccess: (_, { otuId }) => {
 			queryClient.invalidateQueries({
-				queryKey: OTUQueryKeys.detail(otuId),
+				queryKey: OtuQueryKeys.detail(otuId),
 			});
 		},
 	});
@@ -321,7 +321,7 @@ export function useUpdateIsolate() {
 				.then((res) => res.body),
 		onSuccess: (_, { otuId }) => {
 			queryClient.invalidateQueries({
-				queryKey: OTUQueryKeys.detail(otuId),
+				queryKey: OtuQueryKeys.detail(otuId),
 			});
 		},
 	});
@@ -343,7 +343,7 @@ export function useRemoveIsolate() {
 					.then((res) => res.body),
 			onSuccess: (_, { otuId }) => {
 				queryClient.invalidateQueries({
-					queryKey: OTUQueryKeys.detail(otuId),
+					queryKey: OtuQueryKeys.detail(otuId),
 				});
 			},
 		},
@@ -385,7 +385,7 @@ export function useCreateSequence(otuId: string) {
 
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: OTUQueryKeys.detail(otuId),
+				queryKey: OtuQueryKeys.detail(otuId),
 			});
 		},
 	});
@@ -427,7 +427,7 @@ export function useEditSequence(otuId: string) {
 				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: OTUQueryKeys.detail(otuId),
+				queryKey: OtuQueryKeys.detail(otuId),
 			});
 		},
 	});
@@ -452,7 +452,7 @@ export function useRemoveSequence(otuId: string) {
 				.then((res) => res.body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: OTUQueryKeys.detail(otuId),
+				queryKey: OtuQueryKeys.detail(otuId),
 			});
 		},
 	});
@@ -463,7 +463,7 @@ type CurrentOtuContextValue = {
 	reference: Reference;
 };
 
-const CurrentOTUContext = createContext<CurrentOtuContextValue | null>(null);
+const CurrentOtuContext = createContext<CurrentOtuContextValue | null>(null);
 
 /**
  * Initializes a hook to access the current OTU context within a component
@@ -471,7 +471,7 @@ const CurrentOTUContext = createContext<CurrentOtuContextValue | null>(null);
  * @returns The current OTU context
  */
 export function useCurrentOtuContext() {
-	const context = useContext(CurrentOTUContext);
+	const context = useContext(CurrentOtuContext);
 
 	if (!context) {
 		throw new Error(
@@ -500,26 +500,26 @@ export function CurrentOtuContextProvider({
 }: CurrentOtuContextProviderProps) {
 	const {
 		data: otu,
-		isPending: isPendingOTU,
-		isError: isErrorOTU,
-	} = useFetchOTU(otuId);
+		isPending: isPendingOtu,
+		isError: isErrorOtu,
+	} = useFetchOtu(otuId);
 	const {
 		data: reference,
 		isPending: isPendingReference,
 		isError: isErrorReference,
 	} = useFetchReference(refId);
 
-	if ((isErrorOTU || isErrorReference) && (!otu || !reference)) {
+	if ((isErrorOtu || isErrorReference) && (!otu || !reference)) {
 		return <QueryError noun="OTU" />;
 	}
 
-	if (isPendingOTU || isPendingReference) {
+	if (isPendingOtu || isPendingReference) {
 		return <LoadingPlaceholder />;
 	}
 
 	return (
-		<CurrentOTUContext.Provider value={{ otu, reference }}>
+		<CurrentOtuContext.Provider value={{ otu, reference }}>
 			{children}
-		</CurrentOTUContext.Provider>
+		</CurrentOtuContext.Provider>
 	);
 }

@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import type { UpdateOTUProps } from "@otus/queries";
+import type { UpdateOtuProps } from "@otus/queries";
 import type {
 	HistoryNested,
 	Otu,
@@ -28,7 +28,7 @@ export function createFakeHistoryNested(): HistoryNested {
 /**
  * Create a fake OTU sequence
  */
-export function createFakeOTUSequence(
+export function createFakeOtuSequence(
 	overrides?: Partial<OtuSequence>,
 ): OtuSequence {
 	const sequence = {
@@ -46,11 +46,11 @@ export function createFakeOTUSequence(
 /**
  * Create a fake OTU isolate
  */
-export function createFakeOTUIsolate(): OtuIsolate {
+export function createFakeOtuIsolate(): OtuIsolate {
 	return {
 		default: false,
 		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
-		sequences: [createFakeOTUSequence()],
+		sequences: [createFakeOtuSequence()],
 		source_name: faker.word.noun({ strategy: "any-length" }),
 		source_type: faker.word.noun({ strategy: "any-length" }),
 	};
@@ -70,10 +70,10 @@ export function createFakeOtuSegment(): OtuSegment {
 /**
  * Create a fake minimal OTU
  */
-export function createFakeOTUMinimal(
+export function createFakeOtuMinimal(
 	overrides?: Partial<OtuMinimal>,
 ): OtuMinimal {
-	const defaultOTUMinimal = {
+	const defaultOtuMinimal = {
 		abbreviation: `${faker.string.fromCharacters("AHJKYUIQWE", { min: 2, max: 4 })}V`,
 		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
 		name: faker.word.noun({ strategy: "any-length" }),
@@ -82,7 +82,7 @@ export function createFakeOTUMinimal(
 		version: faker.number.int({ max: 10 }),
 	};
 
-	return { ...defaultOTUMinimal, ...overrides };
+	return { ...defaultOtuMinimal, ...overrides };
 }
 
 /**
@@ -91,8 +91,8 @@ export function createFakeOTUMinimal(
 export function createFakeOtu(overrides?: Partial<Otu>): Otu {
 	const { isolates, issues, remote, ...props } = overrides || {};
 	return {
-		...createFakeOTUMinimal(props),
-		isolates: isolates || [createFakeOTUIsolate()],
+		...createFakeOtuMinimal(props),
+		isolates: isolates || [createFakeOtuIsolate()],
 		issues: issues || null,
 		last_indexed_version: null,
 		most_recent_change: createFakeHistoryNested(),
@@ -117,16 +117,16 @@ export function mockApiGetOtu(otu: Otu) {
 /**
  * Sets up a mocked API route for fetching a list of OTUs
  *
- * @param OTUMinimal - The OTU documents
+ * @param otus - The OTU documents
  * @param refId - The id of the reference which the OTUs belong to
  * @returns The nock scope for the mocked API call
  */
-export function mockApiFindOtus(OTUMinimal: OtuMinimal[], refId: string) {
+export function mockApiFindOtus(otus: OtuMinimal[], refId: string) {
 	return nock("http://localhost")
 		.get(`/api/refs/${refId}/otus`)
 		.query(true)
 		.reply(200, {
-			documents: OTUMinimal,
+			documents: otus,
 			modified_count: faker.number.int(),
 			found_count: faker.number.int(),
 			page: faker.number.int(),
@@ -144,19 +144,19 @@ export function mockApiFindOtus(OTUMinimal: OtuMinimal[], refId: string) {
  * @param abbreviation - The shorthand name for the new otu
  * @returns The nock scope for the mocked API call
  */
-export function mockApiCreateOTU(
+export function mockApiCreateOtu(
 	refId: string,
 	name: string,
 	abbreviation: string,
 ) {
-	const OTU = createFakeOtu({
+	const otu = createFakeOtu({
 		name,
 		abbreviation,
 	});
 
 	return nock("http://localhost")
 		.post(`/api/refs/${refId}/otus`, { name, abbreviation })
-		.reply(201, OTU);
+		.reply(201, otu);
 }
 
 /**
@@ -166,12 +166,12 @@ export function mockApiCreateOTU(
  * @param update - The update to apply to the OTU
  * @returns A nock scope for the mocked API call
  */
-export function mockApiEditOTU(otu: Otu, update: UpdateOTUProps) {
-	const OTUDetail = { otu, ...update };
+export function mockApiEditOtu(otu: Otu, update: UpdateOtuProps) {
+	const otuDetail = { otu, ...update };
 
 	return nock("http://localhost")
 		.patch(`/api/otus/${otu.id}`)
-		.reply(200, OTUDetail);
+		.reply(200, otuDetail);
 }
 
 /**
@@ -180,7 +180,7 @@ export function mockApiEditOTU(otu: Otu, update: UpdateOTUProps) {
  * @param otuId - The id of the OTU being removed
  * @returns The nock scope for the mocked API call
  */
-export function mockApiRemoveOTU(otuId: string) {
+export function mockApiRemoveOtu(otuId: string) {
 	return nock("http://localhost").delete(`/api/otus/${otuId}`).reply(200);
 }
 
@@ -245,7 +245,7 @@ export function mockApiAddSequence(
 	sequence: string,
 	segment?: string,
 ) {
-	const OTUSequence = createFakeOTUSequence({
+	const fakeSequence = createFakeOtuSequence({
 		accession,
 		definition,
 		host,
@@ -256,7 +256,7 @@ export function mockApiAddSequence(
 	return nock("http://localhost")
 		.post(`/api/otus/${otuId}/isolates/${isolateId}/sequences`)
 		.query(true)
-		.reply(201, OTUSequence);
+		.reply(201, fakeSequence);
 }
 
 /**
@@ -282,7 +282,7 @@ export function mockApiEditSequence(
 	sequence: string,
 	segment?: string | null,
 ) {
-	const OTUSequence = createFakeOTUSequence({
+	const fakeSequence = createFakeOtuSequence({
 		accession,
 		definition,
 		host,
@@ -299,7 +299,7 @@ export function mockApiEditSequence(
 			sequence,
 		})
 		.query(true)
-		.reply(201, OTUSequence);
+		.reply(201, fakeSequence);
 }
 
 /**

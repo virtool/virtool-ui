@@ -19,7 +19,7 @@ import {
 	sortableKeyboardCoordinates,
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { useFetchOTU, useUpdateOTU } from "@otus/queries";
+import { useFetchOtu, useUpdateOtu } from "@otus/queries";
 import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
@@ -45,8 +45,8 @@ export default function Segments() {
 		useCheckReferenceRight(refId, "modify_otu");
 	const archived = useReferenceIsArchived(refId);
 
-	const { data, isPending, isError } = useFetchOTU(otuId);
-	const mutation = useUpdateOTU(otuId);
+	const { data, isPending, isError } = useFetchOtu(otuId);
+	const mutation = useUpdateOtu(otuId);
 	const [openAddSegment, setOpenAddSegment] = useState(false);
 	const [segmentToEdit, setSegmentToEdit] = useState<string | undefined>();
 	const [segmentToRemove, setSegmentToRemove] = useState<string | undefined>();

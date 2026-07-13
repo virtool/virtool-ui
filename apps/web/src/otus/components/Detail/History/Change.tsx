@@ -3,7 +3,7 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import Label from "@base/Label";
-import { useRevertOTU } from "@otus/queries";
+import { useRevertOtu } from "@otus/queries";
 import type { OtuNested } from "@otus/types";
 import type { UserNested } from "@users/types";
 import {
@@ -113,7 +113,7 @@ export default function Change({
 	unbuilt,
 	user,
 }: ChangeProps) {
-	const mutation = useRevertOTU(otu.id);
+	const mutation = useRevertOtu(otu.id);
 
 	const showRevert = unbuilt && !archived;
 
