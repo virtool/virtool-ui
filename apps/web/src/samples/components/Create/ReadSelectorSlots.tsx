@@ -69,7 +69,7 @@ export default function ReadSelectorSlots({
 	showSwap,
 }: ReadSelectorSlotsProps) {
 	return (
-		<div className="flex items-center gap-2 mb-4">
+		<div className="flex items-stretch gap-2 mb-4">
 			<ReadSlot
 				label="LEFT"
 				sub="R1"
@@ -84,7 +84,7 @@ export default function ReadSelectorSlots({
 					disabled={selected.length < 2}
 					onClick={onSwap}
 					className={cn(
-						"shrink-0 rounded-md border border-gray-300 p-2 text-gray-600",
+						"shrink-0 self-center rounded-md border border-gray-300 p-2 text-gray-600",
 						"hover:bg-gray-100 disabled:opacity-40 disabled:hover:bg-transparent",
 						"focus:outline-none focus:ring-2 focus:ring-blue-600/50",
 					)}

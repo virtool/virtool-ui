@@ -163,7 +163,7 @@ describe("<CreateSample>", () => {
 
 		// Reveal the hidden metadata fields.
 		await userEvent.click(
-			screen.getByRole("switch", { name: "Show metadata fields" }),
+			screen.getByRole("switch", { name: "Metadata Fields" }),
 		);
 		await userEvent.type(await screen.findByLabelText("Isolate"), "Clone AB");
 		await userEvent.type(screen.getByLabelText("Host"), "Apple");
@@ -213,7 +213,7 @@ describe("<CreateSample>", () => {
 		expect(screen.queryByLabelText("Host")).not.toBeInTheDocument();
 		expect(screen.queryByLabelText("Locale")).not.toBeInTheDocument();
 
-		const toggle = screen.getByRole("switch", { name: "Show metadata fields" });
+		const toggle = screen.getByRole("switch", { name: "Metadata Fields" });
 
 		// Visible after turning the switch on.
 		await userEvent.click(toggle);
