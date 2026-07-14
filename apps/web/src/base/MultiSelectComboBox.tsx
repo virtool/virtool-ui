@@ -3,6 +3,7 @@ import { useCombobox, useMultipleSelection } from "downshift";
 import { ChevronDown, X } from "lucide-react";
 import type { ReactNode } from "react";
 import Icon from "./Icon";
+import InputLabel from "./InputLabel";
 
 type MultiSelectComboBoxProps<Item> = {
 	/** The text label associated with the combobox input */
@@ -132,13 +133,13 @@ export default function MultiSelectComboBox<Item>({
 
 	return (
 		<div>
-			<label
-				className={cn(hideLabel ? "sr-only" : "block text-base mb-2.5")}
-				{...labelProps}
+			<InputLabel
+				className={cn(hideLabel && "sr-only")}
 				htmlFor={labelProps.htmlFor}
+				id={labelProps.id}
 			>
 				{label}
-			</label>
+			</InputLabel>
 			<div className="relative">
 				<div
 					className={cn(
