@@ -1,4 +1,5 @@
 import { useFetchAccount } from "@account/account";
+import Button from "@base/Button";
 import {
 	Collapsible,
 	CollapsibleContent,
@@ -13,12 +14,22 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SaveButton from "@base/SaveButton";
+import Switch from "@base/Switch";
+import {
+	Toast,
+	ToastClose,
+	ToastDescription,
+	ToastProvider,
+	ToastTitle,
+	ToastViewport,
+} from "@base/Toast";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import type { Label } from "@labels/types";
 import { useCreateSample } from "@samples/queries";
+import type { Sample } from "@samples/types";
 import { getCreateSampleRequest, getSampleNameFromReads } from "@samples/utils";
 import { useNavigate } from "@tanstack/react-router";
 import { useInfiniteFindFiles } from "@uploads/queries";
@@ -41,6 +52,18 @@ type FormValues = {
 	group: string;
 	labels: number[];
 	subtractionIds: string[];
+};
+
+const emptyValues: FormValues = {
+	name: "",
+	isolate: "",
+	host: "",
+	locale: "",
+	libraryType: "normal",
+	readFiles: [],
+	group: "",
+	labels: [],
+	subtractionIds: [],
 };
 
 type CreateSampleProps = {
@@ -71,21 +94,13 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 		watch,
 	} = usePersistentForm<FormValues>({
 		formName: "createSample",
-		defaultValues: {
-			name: "",
-			isolate: "",
-			host: "",
-			locale: "",
-			libraryType: "normal",
-			readFiles: [],
-			group: "",
-			labels: [],
-			subtractionIds: [],
-		},
+		defaultValues: emptyValues,
 	});
 	const mutation = useCreateSample();
 
 	const [showMetadata, setShowMetadata] = useState(false);
+	const [createMore, setCreateMore] = useState(false);
+	const [createdSample, setCreatedSample] = useState<Sample | null>(null);
 
 	useEffect(() => {
 		setValue("group", String(account?.primary_group?.id ?? ""));
@@ -112,10 +127,30 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 		}
 	}
 
+	// Restores the account's default group instead of blanking it — the user
+	// never chose it, so clearing it would be a surprise.
+	function clearForm() {
+		reset({
+			...emptyValues,
+			group: String(account?.primary_group?.id ?? ""),
+		});
+	}
+
+	function handleReset() {
+		clearForm();
+		mutation.reset();
+	}
+
 	function onSubmit(values: FormValues) {
 		mutation.mutate(getCreateSampleRequest(values, values.readFiles), {
-			onSuccess: () => {
-				reset();
+			onSuccess: (sample) => {
+				clearForm();
+
+				if (createMore) {
+					setCreatedSample(sample);
+					return;
+				}
+
 				navigate({ to: "/samples" });
 			},
 		});
@@ -243,14 +278,59 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 							}}
 						/>
 
-						{/* Sticky so the action stays in reach while the read selector is
-						    scrolled, without leaving the end of the form. */}
-						<div className="sticky bottom-0 flex justify-end border-gray-300 border-t bg-white py-4">
-							<SaveButton />
+						{/* Sticky so the actions stay in reach while the read selector is
+						    scrolled, without leaving the end of the form. The backdrop
+						    runs to the bottom of the viewport and fades to transparent
+						    across its top padding, so the read selector dissolves as it
+						    passes under the bar instead of butting up against it. */}
+						<div className="sticky bottom-0 z-10 mt-4 bg-linear-to-b from-white/0 to-white to-40% pt-10 pb-4">
+							<div className="flex items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-3 shadow-lg">
+								<div className="flex items-center gap-2">
+									<Switch
+										id="create-more"
+										checked={createMore}
+										onCheckedChange={setCreateMore}
+									/>
+									<label
+										className="cursor-pointer text-gray-700 text-sm"
+										htmlFor="create-more"
+									>
+										Create more
+									</label>
+								</div>
+
+								<div className="flex gap-2">
+									<Button onClick={handleReset} type="button">
+										Reset Form
+									</Button>
+									<SaveButton />
+								</div>
+							</div>
 						</div>
 					</>
 				)}
 			</form>
+
+			<ToastProvider>
+				{createdSample && (
+					<Toast
+						key={createdSample.id}
+						onOpenChange={(open) => {
+							if (!open) {
+								setCreatedSample(null);
+							}
+						}}
+						open
+					>
+						<div>
+							<ToastTitle>Sample created</ToastTitle>
+							<ToastDescription>{createdSample.name}</ToastDescription>
+						</div>
+						<ToastClose />
+					</Toast>
+				)}
+				<ToastViewport />
+			</ToastProvider>
 		</ContainerNarrow>
 	);
 }

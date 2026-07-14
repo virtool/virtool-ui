@@ -317,6 +317,64 @@ describe("<CreateSample>", () => {
 		expect(screen.queryByText("Unpaired")).not.toBeInTheDocument();
 	});
 
+	it("should clear the form when the form reset button is clicked", async () => {
+		const file = createFakeFile({ name: "large.fastq.gz" });
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([]);
+
+		await renderPage();
+
+		await userEvent.type(await screen.findByLabelText("Name"), "Sample A");
+
+		await userEvent.click(
+			screen.getByRole("button", { name: "Show Metadata Fields" }),
+		);
+		await userEvent.type(await screen.findByLabelText("Host"), "Apple");
+
+		await userEvent.click(screen.getByText(file.name));
+		expect(screen.getByText("Unpaired")).toBeInTheDocument();
+
+		await userEvent.click(screen.getByRole("button", { name: "Reset Form" }));
+
+		expect(screen.getByLabelText("Name")).toHaveValue("");
+		expect(screen.getByLabelText("Host")).toHaveValue("");
+		expect(screen.queryByText("Unpaired")).not.toBeInTheDocument();
+	});
+
+	it("should stay on the cleared form after creating when 'Create more' is on", async () => {
+		const file = createFakeFile();
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([]);
+
+		const scope = mockApiCreateSample(
+			"Sample A",
+			"",
+			"",
+			"",
+			"normal",
+			[file.id],
+			[],
+			[],
+			null,
+		);
+
+		await renderPage();
+
+		await userEvent.click(screen.getByRole("switch", { name: "Create more" }));
+
+		await userEvent.type(await screen.findByLabelText("Name"), "Sample A");
+		await userEvent.click(screen.getByText(file.name));
+
+		await submitForm();
+
+		expect(await screen.findByText("Sample created")).toBeInTheDocument();
+		expect(screen.getByLabelText("Name")).toHaveValue("");
+
+		scope.done();
+	});
+
 	it("should be able to swap read orientation", async () => {
 		const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
 		const secondFile = createFakeFile({ name: "beta.fastq.gz" });
