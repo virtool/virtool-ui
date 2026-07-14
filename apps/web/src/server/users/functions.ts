@@ -132,12 +132,9 @@ export const findUsers = createServerFn({ method: "GET" })
 // Not on the authentication exception list, so an anonymous call gets a 401.
 // The login wall and the authenticated route guard both rely on that: a
 // rejected call is how they learn there is no session.
-export const getAccount = createServerFn({ method: "GET" }).handler(
-	async () => {
-		const session = await requireSession();
-		return getAccountImpl(db, session.userId);
-	},
-);
+export const getAccount = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
+	.handler(async ({ context }) => getAccountImpl(db, context.session.userId));
 
 export const getUser = createServerFn({ method: "GET" })
 	.middleware([adminRole("users")])
