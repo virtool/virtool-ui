@@ -37,7 +37,7 @@ export default function ResetForm({ redirect, resetCode }: ResetFormProps) {
 		);
 	}
 
-	const { error, isError } = resetPasswordMutation;
+	const { error, isError, isPending } = resetPasswordMutation;
 
 	return (
 		<>
@@ -70,7 +70,9 @@ export default function ResetForm({ redirect, resetCode }: ResetFormProps) {
 						</InputError>
 					)}
 				</InputGroup>
-				<Button type="submit" color="blue">
+				{/* A reset code is single-use. Letting a double-click fire a second
+				    submission only ever earns the user an error. */}
+				<Button type="submit" color="blue" disabled={isPending}>
 					Reset
 				</Button>
 			</form>
