@@ -296,15 +296,46 @@ type re-exported from the direct dependency — as `src/server/logger.ts`
 does with `Logger` from `@virtool/logger` rather than letting the type be
 inferred as pino's.
 
-### Authentication is enforced by global middleware
+### Every server function declares an authorization policy
 
-Every TanStack Start server function is authenticated by default.
-Public endpoints opt out by being passed as **server-function
-references** to the middleware's `exceptions` array, not by
-per-handler guards. The resolved session lands on `context.session`.
-Raw `Request` handlers in `createFileRoute` (e.g. SSE routes) call
-`requireAuthenticatedRequest(request)` instead, because they run
-outside the server-function async-local context.
+Every server function names who may call it, as middleware, from
+`@server/auth/policy`:
+
+```ts
+export const deleteGroup = createServerFn({ method: "POST" })
+	.middleware([adminRole("base")])
+	.validator(groupIdSchema)
+	.handler(async ({ context, data }) => { ... });
+```
+
+The four policies are `open()` (no session — login and friends),
+`authenticated()` (any signed-in user), `adminRole(role)`, and
+`permission(name)`. The policy resolves the session and puts it on
+`context.session`, typed non-nullable for everything but `open()`.
+Handlers read it from there — do not call `requireSession()` in a
+handler, that costs a second lookup.
+
+**This is not optional.** `server/__tests__/authorization.test.ts` calls
+every exported server function with no session and fails the build on
+any that does not refuse, so a function built without a policy breaks
+CI by name. It also pins `authenticationExceptions` in both directions:
+`open()` and that list must agree. Add a new `functions.ts` and register
+it in that test's `MODULES` — a missing module fails too.
+
+A policy states the *floor*. A rule that depends on the row — an
+administrator editing another administrator — still belongs in the
+handler, after the read (`users/functions.ts` is the example). Never put
+a role check in `data.ts`.
+
+Do not try to wrap `createServerFn` in a factory that takes the policy
+as an argument. The Vite plugin matches that call syntactically at the
+definition site; behind a factory it stops treating the function as a
+server function at all — no RPC endpoint, and the handler body ships to
+the browser. This was tried and reverted.
+
+Raw `Request` handlers in `createFileRoute` (e.g. SSE routes) run
+outside the server-function context and call
+`requireAuthenticatedRequest(request)` instead.
 
 See [docs/auth.md](docs/auth.md) for the middleware composition, the
 session model, cookies, lifetimes, and the login / reset / logout
@@ -547,6 +578,12 @@ and make commits easier to find later.
   `@server/db/test/fixtures` gives a suite its own isolated Postgres
   database with the schema applied. Test files run in parallel, so
   never share one database between them.
+- **Server functions:** a test cannot call a server function by
+  importing it — the Vite plugin moves the handler body into a virtual
+  `?tss-serverfn-split` module, so invoking the import runs none of your
+  code and a naive test passes while asserting nothing. Import the split
+  module and call it through `callServerFn` from `@server/test/serverFn`
+  (`groups/functions.test.ts` is the worked example).
 - **Assertions:** Use explicit `expect()` assertions, not snapshots.
 - **User interaction:** Use `@testing-library/user-event` over
   `fireEvent`.

@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { open } from "../auth/policy";
 
 import { db } from "../db/pg";
 import { getSettings } from "./data";
@@ -17,9 +18,9 @@ export type PasswordPolicy = {
  * that row is instance configuration that no unauthenticated caller has any
  * business reading.
  */
-export const getPasswordPolicyFn = createServerFn({ method: "GET" }).handler(
-	async (): Promise<PasswordPolicy> => {
+export const getPasswordPolicyFn = createServerFn({ method: "GET" })
+	.middleware([open()])
+	.handler(async (): Promise<PasswordPolicy> => {
 		const { minimumPasswordLength } = await getSettings(db);
 		return { minimumPasswordLength };
-	},
-);
+	});

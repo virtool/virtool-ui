@@ -58,6 +58,42 @@ pushed at a real database.
 each feature's persistence lands; don't retrofit them onto features
 that still call the Python API.
 
+### Testing a server function's handler
+
+A test **cannot** call a server function by importing it and invoking
+it. The Vite plugin splits every `createServerFn` in two: the module you
+import keeps only a client stub, and the handler body moves into a
+virtual `?tss-serverfn-split` sibling. Calling the import runs none of
+your code — it either throws `No Start context found in
+AsyncLocalStorage` or quietly resolves `undefined`. A test written the
+obvious way passes while asserting nothing, which for an authorization
+test is worse than having no test.
+
+Import the split module and call the handler through `callServerFn` from
+`@server/test/serverFn`:
+
+```ts
+const handlers = (await import(
+    "./functions.ts?tss-serverfn-split"
+)) as SplitServerFnModule;
+
+await expect(
+    callServerFn(handlers, "deleteGroup", { groupId }),
+).rejects.toBeInstanceOf(ForbiddenError);
+```
+
+This runs the real handler: its validator, its authorization guard, and
+its `data.ts` calls against the test database. `callServerFn`
+deliberately runs it *without* the global authentication middleware, so
+what a test pins is the handler's own guard — which is the thing that
+must not regress.
+
+Mock `@tanstack/react-start/server` to capture `getRequest` and
+`setResponseStatus`, then drive authentication by pointing `getRequest`
+at a `Request` carrying the session cookies from `seedUser` / `seedSession`
+(`@server/auth/test/fixtures`). `groups/functions.test.ts` is the worked
+example.
+
 ## Where to mock the network boundary
 
 The right boundary depends on whether the feature has migrated from
