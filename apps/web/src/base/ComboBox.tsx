@@ -1,5 +1,5 @@
 import { cn } from "@app/cn";
-import { useCombobox } from "downshift";
+import { type UseComboboxReturnValue, useCombobox } from "downshift";
 import { ChevronDown } from "lucide-react";
 import type { ReactElement } from "react";
 import WrapRow from "./ComboBoxItem";
@@ -30,7 +30,11 @@ function ComboboxTriggerButton({
 	);
 }
 
-function ComboBoxSearch({ getInputProps }) {
+type ComboBoxSearchProps = {
+	getInputProps: UseComboboxReturnValue<unknown>["getInputProps"];
+};
+
+function ComboBoxSearch({ getInputProps }: ComboBoxSearchProps) {
 	return (
 		<div className="mx-1 my-2.5">
 			<InputSearch {...getInputProps()} />

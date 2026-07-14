@@ -4,6 +4,7 @@ import {
 	inputBaseClasses,
 	inputFocusClasses,
 	inputHeightClass,
+	inputInvalidClasses,
 } from "./styles";
 
 export type InputSimpleProps = React.InputHTMLAttributes<HTMLInputElement> & {
@@ -20,6 +21,7 @@ const InputSimple = React.forwardRef<HTMLInputElement, InputSimpleProps>(
 					inputBaseClasses,
 					inputHeightClass,
 					inputFocusClasses,
+					inputInvalidClasses,
 					"read-only:bg-gray-100",
 					className,
 				)}
