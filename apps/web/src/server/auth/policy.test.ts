@@ -9,11 +9,14 @@ import {
 } from "vitest";
 
 import type { Db } from "../db/pg";
-import { takeFirstOrThrow } from "../db/rows";
 import { type GroupPermissions, groups, userGroups } from "../db/schema/groups";
 import { sessions } from "../db/schema/sessions";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
+import {
+	addToGroup as addToGroupImpl,
+	seedGroup as seedGroupImpl,
+} from "../groups/test/fixtures";
 
 vi.mock("@tanstack/react-start/server", () => ({
 	deleteCookie: vi.fn(),
@@ -52,37 +55,15 @@ beforeEach(async () => {
 	await db.delete(groups);
 });
 
-const NO_PERMISSIONS: GroupPermissions = {
-	cancel_job: false,
-	create_ref: false,
-	create_sample: false,
-	modify_hmm: false,
-	modify_subtraction: false,
-	remove_file: false,
-	remove_job: false,
-	upload_file: false,
-};
-
-async function seedGroup(
+function seedGroup(
 	name: string,
 	permissions: Partial<GroupPermissions>,
 ): Promise<number> {
-	const row = takeFirstOrThrow(
-		await db
-			.insert(groups)
-			.values({
-				legacyId: null,
-				name,
-				permissions: { ...NO_PERMISSIONS, ...permissions },
-			})
-			.returning({ id: groups.id }),
-	);
-
-	return row.id;
+	return seedGroupImpl(db, { name, permissions });
 }
 
-async function addToGroup(userId: number, groupId: number): Promise<void> {
-	await db.insert(userGroups).values({ groupId, userId });
+function addToGroup(userId: number, groupId: number): Promise<void> {
+	return addToGroupImpl(db, userId, groupId);
 }
 
 describe("hasPermission", () => {

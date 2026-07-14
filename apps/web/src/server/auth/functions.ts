@@ -112,7 +112,13 @@ export const createFirstUserFn = createServerFn({ method: "POST" })
 		}
 	});
 
-/** Logout server function. Requires an authenticated session. */
+/**
+ * Logout server function. Unauthenticated by necessity, and idempotent — a
+ * caller whose session has already expired still needs its stale cookies
+ * cleared, and refusing them with a 401 would strand the browser holding
+ * credentials it cannot use. `logout` invalidates the session only if the
+ * cookie names one, then clears the cookies either way.
+ */
 export const logoutFn = createServerFn({ method: "POST" })
 	.middleware([open()])
 	.handler(async () => {

@@ -16,6 +16,7 @@ import { sessions } from "../db/schema/sessions";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
 import { callServerFn, type SplitServerFnModule } from "../test/serverFn";
+import { NO_PERMISSIONS, seedGroup as seedGroupImpl } from "./test/fixtures";
 
 const getRequest = vi.fn();
 const setResponseStatus = vi.fn();
@@ -78,17 +79,6 @@ beforeEach(async () => {
 	);
 });
 
-const NO_PERMISSIONS: GroupPermissions = {
-	cancel_job: false,
-	create_ref: false,
-	create_sample: false,
-	modify_hmm: false,
-	modify_subtraction: false,
-	remove_file: false,
-	remove_job: false,
-	upload_file: false,
-};
-
 /** Authenticate the next call as a user with the given administrator role. */
 async function signIn(
 	administratorRole: "full" | "base" | null,
@@ -107,17 +97,8 @@ async function signIn(
 	return userId;
 }
 
-async function seedGroup(
-	permissions: GroupPermissions = NO_PERMISSIONS,
-): Promise<number> {
-	const row = takeFirstOrThrow(
-		await db
-			.insert(groups)
-			.values({ legacyId: null, name: "technicians", permissions })
-			.returning({ id: groups.id }),
-	);
-
-	return row.id;
+function seedGroup(): Promise<number> {
+	return seedGroupImpl(db);
 }
 
 function call(name: string, data?: unknown) {
