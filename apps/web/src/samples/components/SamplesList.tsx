@@ -1,6 +1,7 @@
 import QuickAnalyze from "@analyses/components/Create/QuickAnalyze";
 import Box from "@base/Box";
 import Button from "@base/Button";
+import ContainerNarrow from "@base/ContainerNarrow";
 import {
 	Empty,
 	EmptyContent,
@@ -201,98 +202,89 @@ export default function SamplesList({
 				setOpen={setOpenQuickAnalyze}
 				samples={quickAnalyzeTarget.samples}
 			/>
-			<div
-				className="grid gap-4"
-				style={{
-					gridTemplateColumns: "minmax(auto, 1150px) max(320px, 10%)",
-				}}
-			>
-				<div className="col-start-1">
-					<ViewHeader title="Samples">
-						<ViewHeaderTitle>Samples</ViewHeaderTitle>
-					</ViewHeader>
-					<SampleToolbar
-						term={term}
-						onChange={(e) => setSearch({ term: e.target.value })}
-					/>
-					<FilterBar
-						labels={labels}
-						onClearLabels={() => setSearch({ labels: [] })}
-						onClearTerm={() => setSearch({ term: "" })}
-						onClearUsers={() => setSearch({ users: [] })}
-						onClearWorkflows={() => setSearch({ workflows: [] })}
-						onToggleLabel={(labelId) =>
-							setSearch({ labels: xor(filterLabels, [labelId]) })
-						}
-						onToggleUser={(userId) =>
-							setSearch({ users: xor(filterUsers, [userId]) })
-						}
-						onToggleWorkflow={(workflow) =>
-							setSearch({ workflows: xor(filterWorkflows, [workflow]) })
-						}
-						selectedLabels={filterLabels}
-						selectedUsers={filterUsers}
-						selectedWorkflows={filterWorkflows}
-						term={term}
-					/>
-				</div>
-				<div className="row-start-2 min-w-xl">
-					{!items.length ? (
-						<Box key="noSample">
-							<Empty className="h-72">
-								<EmptyMedia className="text-gray-400">
-									{isFiltered ? (
-										<SearchX size={40} strokeWidth={1.5} />
-									) : (
-										<FlaskConical size={40} strokeWidth={1.5} />
-									)}
-								</EmptyMedia>
-								<EmptyTitle>
-									{isFiltered ? "No matching samples" : "No samples"}
-								</EmptyTitle>
-								<EmptyDescription>
-									{isFiltered
-										? "No samples match the current filters."
-										: "No samples have been created yet."}
-								</EmptyDescription>
-								{isFiltered && (
-									<EmptyContent>
-										<Button onClick={clearFilters} size="small">
-											Clear filters
-										</Button>
-									</EmptyContent>
+			<ContainerNarrow>
+				<ViewHeader title="Samples">
+					<ViewHeaderTitle>Samples</ViewHeaderTitle>
+				</ViewHeader>
+				<SampleToolbar
+					term={term}
+					onChange={(e) => setSearch({ term: e.target.value })}
+				/>
+				<FilterBar
+					labels={labels}
+					onClearLabels={() => setSearch({ labels: [] })}
+					onClearTerm={() => setSearch({ term: "" })}
+					onClearUsers={() => setSearch({ users: [] })}
+					onClearWorkflows={() => setSearch({ workflows: [] })}
+					onToggleLabel={(labelId) =>
+						setSearch({ labels: xor(filterLabels, [labelId]) })
+					}
+					onToggleUser={(userId) =>
+						setSearch({ users: xor(filterUsers, [userId]) })
+					}
+					onToggleWorkflow={(workflow) =>
+						setSearch({ workflows: xor(filterWorkflows, [workflow]) })
+					}
+					selectedLabels={filterLabels}
+					selectedUsers={filterUsers}
+					selectedWorkflows={filterWorkflows}
+					term={term}
+				/>
+				{!items.length ? (
+					<Box key="noSample">
+						<Empty className="h-72">
+							<EmptyMedia className="text-gray-400">
+								{isFiltered ? (
+									<SearchX size={40} strokeWidth={1.5} />
+								) : (
+									<FlaskConical size={40} strokeWidth={1.5} />
 								)}
-							</Empty>
-						</Box>
-					) : (
-						<Pagination
-							items={items}
-							storedPage={page}
-							currentPage={urlPage}
-							header={
-								<SampleListHeader
-									checked={selection.getVisibleState(items)}
-									found={found_count}
-									labels={labels}
-									onLabelsUpdated={handleLabelsUpdated}
-									onSelectAll={() => selection.toggleVisible(items)}
-									onQuickAnalyze={() =>
-										openQuickAnalyzeFor({
-											fromSelection: true,
-											samples: selectedSamples,
-										})
-									}
-									selectedSamples={selectedSamples}
-								/>
-							}
-							renderRow={renderRow}
-							pageCount={page_count}
-							onPageChange={(page) => setSearch({ page })}
-							rowsClassName="pb-0 rounded-sm border-1 border-gray-300 overflow-hidden [&>*:not(:first-child)]:border-t-1 [&>*:not(:first-child)]:border-gray-300"
-						/>
-					)}
-				</div>
-			</div>
+							</EmptyMedia>
+							<EmptyTitle>
+								{isFiltered ? "No matching samples" : "No samples"}
+							</EmptyTitle>
+							<EmptyDescription>
+								{isFiltered
+									? "No samples match the current filters."
+									: "No samples have been created yet."}
+							</EmptyDescription>
+							{isFiltered && (
+								<EmptyContent>
+									<Button onClick={clearFilters} size="small">
+										Clear filters
+									</Button>
+								</EmptyContent>
+							)}
+						</Empty>
+					</Box>
+				) : (
+					<Pagination
+						items={items}
+						storedPage={page}
+						currentPage={urlPage}
+						header={
+							<SampleListHeader
+								checked={selection.getVisibleState(items)}
+								found={found_count}
+								labels={labels}
+								onLabelsUpdated={handleLabelsUpdated}
+								onSelectAll={() => selection.toggleVisible(items)}
+								onQuickAnalyze={() =>
+									openQuickAnalyzeFor({
+										fromSelection: true,
+										samples: selectedSamples,
+									})
+								}
+								selectedSamples={selectedSamples}
+							/>
+						}
+						renderRow={renderRow}
+						pageCount={page_count}
+						onPageChange={(page) => setSearch({ page })}
+						rowsClassName="pb-0 rounded-sm border-1 border-gray-300 overflow-hidden [&>*:not(:first-child)]:border-t-1 [&>*:not(:first-child)]:border-gray-300"
+					/>
+				)}
+			</ContainerNarrow>
 		</>
 	);
 }

@@ -3,10 +3,15 @@ import { useCombobox, useMultipleSelection } from "downshift";
 import { ChevronDown, X } from "lucide-react";
 import type { ReactNode } from "react";
 import Icon from "./Icon";
+import InputLabel from "./InputLabel";
 
 type MultiSelectComboBoxProps<Item> = {
 	/** The text label associated with the combobox input */
-	label: ReactNode;
+	label: string;
+
+	/** Hides the label visually, keeping it for assistive technology. Use when
+	 * the combobox sits in a row that is already labelled by its column. */
+	hideLabel?: boolean;
 
 	/** The full set of selectable items, already filtered by `term` */
 	items: Item[];
@@ -48,6 +53,7 @@ type MultiSelectComboBoxProps<Item> = {
  */
 export default function MultiSelectComboBox<Item>({
 	label,
+	hideLabel = false,
 	items,
 	selectedItems,
 	onChange,
@@ -127,13 +133,13 @@ export default function MultiSelectComboBox<Item>({
 
 	return (
 		<div>
-			<label
-				className="block text-base mb-2.5"
-				{...labelProps}
+			<InputLabel
+				className={cn(hideLabel && "sr-only")}
 				htmlFor={labelProps.htmlFor}
+				id={labelProps.id}
 			>
 				{label}
-			</label>
+			</InputLabel>
 			<div className="relative">
 				<div
 					className={cn(
@@ -193,7 +199,7 @@ export default function MultiSelectComboBox<Item>({
 					/>
 					<button
 						type="button"
-						aria-label="toggle menu"
+						aria-label={`Toggle ${label} menu`}
 						className="text-gray-500 hover:text-gray-800"
 						{...getToggleButtonProps()}
 					>

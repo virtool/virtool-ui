@@ -13,6 +13,7 @@ import { fileQueryKeys } from "@uploads/keys";
 import { union } from "es-toolkit";
 import type { ErrorResponse } from "@/types/api";
 import type {
+	CreateSampleRequest,
 	Sample,
 	SampleMinimal,
 	SampleRightsUpdate,
@@ -111,6 +112,38 @@ export function useSuspenseSample(sampleId: string) {
 }
 
 /**
+ * Creates a sample.
+ *
+ * Shared by the single-sample create hook and the bulk create hook.
+ */
+function createSample({
+	name,
+	isolate,
+	host,
+	locale,
+	libraryType,
+	subtractions,
+	files,
+	labels,
+	group,
+}: CreateSampleRequest): Promise<Sample> {
+	return apiClient
+		.post("/samples")
+		.send({
+			name,
+			isolate,
+			host,
+			locale,
+			subtractions,
+			files,
+			library_type: libraryType,
+			labels,
+			group,
+		})
+		.then((res) => res.body);
+}
+
+/**
  * Initialize a mutator for creating a sample
  *
  * @returns A mutator for creating a sample
@@ -118,46 +151,8 @@ export function useSuspenseSample(sampleId: string) {
 export function useCreateSample() {
 	const queryClient = useQueryClient();
 
-	return useMutation<
-		Sample,
-		ErrorResponse,
-		{
-			name: string;
-			isolate: string;
-			host: string;
-			locale: string;
-			libraryType: string;
-			subtractions: string[];
-			files: number[];
-			labels: number[];
-			group: string | null;
-		}
-	>({
-		mutationFn: ({
-			name,
-			isolate,
-			host,
-			locale,
-			libraryType,
-			subtractions,
-			files,
-			labels,
-			group,
-		}) =>
-			apiClient
-				.post("/samples")
-				.send({
-					name,
-					isolate,
-					host,
-					locale,
-					subtractions,
-					files,
-					library_type: libraryType,
-					labels,
-					group,
-				})
-				.then((res) => res.body),
+	return useMutation<Sample, ErrorResponse, CreateSampleRequest>({
+		mutationFn: createSample,
 		onSuccess: () => {
 			// The created sample reserves its read files, so the server stops
 			// returning them. Refetch the uploads lists to drop them from the

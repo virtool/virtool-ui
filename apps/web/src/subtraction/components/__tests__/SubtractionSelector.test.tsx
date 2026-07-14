@@ -1,9 +1,9 @@
+import type { SubtractionOption } from "@subtraction/types";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import { useState } from "react";
 import { describe, expect, it } from "vitest";
-import type { SubtractionOption } from "@/subtraction/types";
 import SubtractionSelector from "../SubtractionSelector";
 
 const subtractions: SubtractionOption[] = [
@@ -26,7 +26,9 @@ function Harness({ initialSelected = [] }: { initialSelected?: string[] }) {
 }
 
 async function openMenu(): Promise<void> {
-	await userEvent.click(screen.getByRole("button", { name: /toggle menu/i }));
+	await userEvent.click(
+		screen.getByRole("button", { name: "Toggle Subtractions menu" }),
+	);
 }
 
 describe("<SubtractionSelector>", () => {

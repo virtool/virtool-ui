@@ -111,7 +111,7 @@ export function CreateReferenceForm({
 	}
 
 	const uploadBarMessage =
-		fileName || (progress === 0 ? "Drag file here to upload" : "Uploading...");
+		fileName || (progress > 0 ? "Uploading..." : undefined);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>

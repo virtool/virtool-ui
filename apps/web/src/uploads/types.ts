@@ -1,7 +1,7 @@
 import type { UserNested } from "@users/types";
 import type { SearchResult } from "@/types/api";
 
-export type UploadType = "hmm" | "reference" | "reads" | "subtraction";
+export type UploadType = "reference" | "reads" | "subtraction";
 
 export type FileResponse = SearchResult & {
 	items: Upload[];

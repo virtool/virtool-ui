@@ -1,6 +1,12 @@
 import { createFakeFile } from "@tests/fake/files";
 import { describe, expect, it } from "vitest";
-import { buildReadRows, detectMate } from "./pairing";
+import {
+	buildReadRows,
+	detectMate,
+	getReadRowKey,
+	getReadRowReads,
+	getReadsForUpload,
+} from "./pairing";
 
 describe("detectMate", () => {
 	it.each([
@@ -93,5 +99,62 @@ describe("buildReadRows", () => {
 		expect(rows).toHaveLength(2);
 		expect(rows[0]).toMatchObject({ kind: "single", file: { id: single.id } });
 		expect(rows[1]).toMatchObject({ kind: "pair", left: { id: r1.id } });
+	});
+});
+
+describe("getReadRowReads", () => {
+	it("returns a pair's mates in [LEFT, RIGHT] order", () => {
+		const r1 = createFakeFile({ name: "sample_R1.fastq.gz" });
+		const r2 = createFakeFile({ name: "sample_R2.fastq.gz" });
+
+		// Given in R2, R1 order to prove the reads come back ordered by side.
+		const [row] = buildReadRows([r2, r1]);
+
+		expect(row && getReadRowReads(row)).toEqual([r1, r2]);
+	});
+
+	it("returns a single row's lone file", () => {
+		const file = createFakeFile({ name: "sample.fastq.gz" });
+		const [row] = buildReadRows([file]);
+
+		expect(row && getReadRowReads(row)).toEqual([file]);
+	});
+});
+
+describe("getReadRowKey", () => {
+	it("gives each row of a list a distinct key", () => {
+		const rows = buildReadRows([
+			createFakeFile({ name: "sample_R1.fastq.gz" }),
+			createFakeFile({ name: "sample_R2.fastq.gz" }),
+			createFakeFile({ name: "other.fastq.gz" }),
+			createFakeFile({ name: "another.fastq.gz" }),
+		]);
+
+		const keys = rows.map(getReadRowKey);
+
+		expect(keys).toHaveLength(3);
+		expect(new Set(keys).size).toBe(3);
+	});
+});
+
+describe("getReadsForUpload", () => {
+	it("includes the mate of a paired file, in [LEFT, RIGHT] order", () => {
+		const r1 = createFakeFile({ name: "sample_R1.fastq.gz" });
+		const r2 = createFakeFile({ name: "sample_R2.fastq.gz" });
+
+		expect(getReadsForUpload(r2, [r1, r2])).toEqual([r1, r2]);
+	});
+
+	it("returns an unpaired file alone", () => {
+		const file = createFakeFile({ name: "sample.fastq.gz" });
+		const other = createFakeFile({ name: "other.fastq.gz" });
+
+		expect(getReadsForUpload(file, [file, other])).toEqual([file]);
+	});
+
+	it("returns the file alone when its mate isn't listed alongside it", () => {
+		const r1 = createFakeFile({ name: "sample_R1.fastq.gz" });
+
+		expect(getReadsForUpload(r1, [r1])).toEqual([r1]);
 	});
 });

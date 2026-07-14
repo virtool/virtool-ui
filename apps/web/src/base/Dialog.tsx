@@ -84,6 +84,7 @@ export function DialogContent({
 					"z-50",
 					"w-[600px]",
 					{ "w-[900px]": size === "lg" },
+					"max-w-[90vw]",
 					className,
 				)}
 			>

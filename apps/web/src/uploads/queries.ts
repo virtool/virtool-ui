@@ -4,6 +4,7 @@ import {
 	useInfiniteQuery,
 	useMutation,
 	useQuery,
+	useQueryClient,
 } from "@tanstack/react-query";
 import { fileQueryKeys } from "@uploads/keys";
 import type { ErrorResponse } from "@/types/api";
@@ -64,5 +65,36 @@ export function useDeleteFile() {
 	return useMutation<null, unknown, { id: number }>({
 		mutationFn: ({ id }) =>
 			apiClient.delete(`/uploads/${id}`).then((res) => res.body),
+	});
+}
+
+/**
+ * Initializes a mutator for deleting several files at once
+ *
+ * @returns A mutator for deleting several files
+ */
+export function useDeleteFiles() {
+	const queryClient = useQueryClient();
+
+	return useMutation<void, ErrorResponse, { ids: number[] }>({
+		mutationFn: async ({ ids }) => {
+			// Every request has to finish before the mutation settles. Rejecting on
+			// the first failure would let the list refetch while the rest are still
+			// in flight, so files that did get deleted would linger in the list.
+			const results = await Promise.allSettled(
+				ids.map((id) => apiClient.delete(`/uploads/${id}`)),
+			);
+
+			const failure = results.find((result) => result.status === "rejected");
+
+			if (failure) {
+				throw failure.reason;
+			}
+		},
+		// Settled, not success: a partial failure still removed some of the files,
+		// so the list has to be refreshed either way.
+		onSettled: () => {
+			queryClient.invalidateQueries({ queryKey: fileQueryKeys.lists() });
+		},
 	});
 }

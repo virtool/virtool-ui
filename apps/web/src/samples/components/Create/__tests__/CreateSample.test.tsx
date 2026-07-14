@@ -48,8 +48,17 @@ describe("<CreateSample>", () => {
 
 	afterEach(() => nock.cleanAll());
 
+	/**
+	 * Renders the page and waits for its fields to replace the loading state.
+	 * Save sits in the header, so it is present while the page is still loading.
+	 */
+	async function renderPage() {
+		await renderWithRouter(<CreateSample labels={labels} />);
+		await screen.findByLabelText("Name");
+	}
+
 	async function submitForm() {
-		await userEvent.click(screen.getByRole("button", { name: "Create" }));
+		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 	}
 
 	it("should show loader when there are no subtractions", async () => {
@@ -73,7 +82,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
+		await renderPage();
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 		expect(screen.queryByText("Required Field")).not.toBeInTheDocument();
@@ -83,7 +92,7 @@ describe("<CreateSample>", () => {
 			),
 		).not.toBeInTheDocument();
 
-		await userEvent.click(screen.getByRole("button", { name: "Create" }));
+		await submitForm();
 
 		expect(screen.getByText("Required Field")).toBeInTheDocument();
 		expect(
@@ -109,7 +118,7 @@ describe("<CreateSample>", () => {
 			null,
 		);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
+		await renderPage();
 
 		// Wait for the data to load.
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
@@ -143,7 +152,7 @@ describe("<CreateSample>", () => {
 			null,
 		);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
+		await renderPage();
 
 		// Wait for the data to load.
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
@@ -153,7 +162,7 @@ describe("<CreateSample>", () => {
 
 		// Reveal the hidden metadata fields.
 		await userEvent.click(
-			screen.getByRole("switch", { name: "Show metadata fields" }),
+			screen.getByRole("button", { name: "Show Metadata Fields" }),
 		);
 		await userEvent.type(await screen.findByLabelText("Isolate"), "Clone AB");
 		await userEvent.type(screen.getByLabelText("Host"), "Apple");
@@ -167,29 +176,33 @@ describe("<CreateSample>", () => {
 
 		// Select Labels
 		await userEvent.click(
-			screen.getByRole("button", { name: "select labels" }),
+			screen.getByRole("button", { name: "Toggle Labels menu" }),
 		);
-		await userEvent.click(screen.getByText(firstLabel.name));
+		await userEvent.click(
+			screen.getByRole("option", { name: firstLabel.name }),
+		);
 
 		// Select Subtractions
 		await userEvent.click(
-			screen.getByRole("button", { name: "select default subtractions" }),
+			screen.getByRole("button", { name: "Toggle Default Subtractions menu" }),
 		);
-		await userEvent.click(screen.getByText(subtractionShortlist.name));
+		await userEvent.click(
+			screen.getByRole("option", { name: subtractionShortlist.name }),
+		);
 
 		// Submit.
-		await userEvent.click(screen.getByRole("button", { name: "Create" }));
+		await submitForm();
 
 		scope.done();
 	});
 
-	it("should toggle the metadata fields with the switch", async () => {
+	it("should show and hide the metadata fields", async () => {
 		const file = createFakeFile();
 
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
+		await renderPage();
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
@@ -198,7 +211,7 @@ describe("<CreateSample>", () => {
 		expect(screen.queryByLabelText("Host")).not.toBeInTheDocument();
 		expect(screen.queryByLabelText("Locale")).not.toBeInTheDocument();
 
-		const toggle = screen.getByRole("switch", { name: "Show metadata fields" });
+		const toggle = screen.getByRole("button", { name: "Show Metadata Fields" });
 
 		// Visible after turning the switch on.
 		await userEvent.click(toggle);
@@ -219,7 +232,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
+		await renderPage();
 
 		const field = await screen.findByRole("textbox", { name: "Name" });
 		expect(field).toHaveValue("");
@@ -236,7 +249,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
+		await renderPage();
 
 		const field = await screen.findByRole("textbox", { name: "Name" });
 		expect(field).toHaveValue("");
@@ -259,7 +272,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
+		await renderPage();
 
 		const field = await screen.findByRole("textbox", { name: "Name" });
 		expect(field).toHaveValue("");
@@ -276,7 +289,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
+		await renderPage();
 
 		const field = await screen.findByRole("textbox", { name: "Name" });
 		expect(field).toHaveValue("");
@@ -293,7 +306,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
+		await renderPage();
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
@@ -304,6 +317,64 @@ describe("<CreateSample>", () => {
 		expect(screen.queryByText("Unpaired")).not.toBeInTheDocument();
 	});
 
+	it("should clear the form when the form reset button is clicked", async () => {
+		const file = createFakeFile({ name: "large.fastq.gz" });
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([]);
+
+		await renderPage();
+
+		await userEvent.type(await screen.findByLabelText("Name"), "Sample A");
+
+		await userEvent.click(
+			screen.getByRole("button", { name: "Show Metadata Fields" }),
+		);
+		await userEvent.type(await screen.findByLabelText("Host"), "Apple");
+
+		await userEvent.click(screen.getByText(file.name));
+		expect(screen.getByText("Unpaired")).toBeInTheDocument();
+
+		await userEvent.click(screen.getByRole("button", { name: "Reset Form" }));
+
+		expect(screen.getByLabelText("Name")).toHaveValue("");
+		expect(screen.getByLabelText("Host")).toHaveValue("");
+		expect(screen.queryByText("Unpaired")).not.toBeInTheDocument();
+	});
+
+	it("should stay on the cleared form after creating when 'Create more' is on", async () => {
+		const file = createFakeFile();
+
+		mockApiListFiles([file]);
+		mockApiGetShortlistSubtractions([]);
+
+		const scope = mockApiCreateSample(
+			"Sample A",
+			"",
+			"",
+			"",
+			"normal",
+			[file.id],
+			[],
+			[],
+			null,
+		);
+
+		await renderPage();
+
+		await userEvent.click(screen.getByRole("switch", { name: "Create more" }));
+
+		await userEvent.type(await screen.findByLabelText("Name"), "Sample A");
+		await userEvent.click(screen.getByText(file.name));
+
+		await submitForm();
+
+		expect(await screen.findByText("Sample created")).toBeInTheDocument();
+		expect(screen.getByLabelText("Name")).toHaveValue("");
+
+		scope.done();
+	});
+
 	it("should be able to swap read orientation", async () => {
 		const firstFile = createFakeFile({ name: "alpha.fastq.gz" });
 		const secondFile = createFakeFile({ name: "beta.fastq.gz" });
@@ -312,7 +383,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
+		await renderPage();
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
@@ -340,7 +411,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
+		await renderPage();
 
 		await userEvent.type(await screen.findByLabelText("Name"), "Sample B");
 
@@ -364,7 +435,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
-		await renderWithRouter(<CreateSample labels={labels} />);
+		await renderPage();
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 

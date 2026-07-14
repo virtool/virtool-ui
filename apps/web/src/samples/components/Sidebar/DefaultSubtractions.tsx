@@ -44,7 +44,7 @@ export default function DefaultSubtractions({
 	return (
 		<SideBarSection>
 			<SidebarHeader>
-				Default Subtractions
+				<span>Default Subtractions</span>
 				<SampleSidebarSelector
 					render={({ name }) => <SubtractionInner name={name} />}
 					items={subtractionOptions}

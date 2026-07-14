@@ -1,6 +1,11 @@
 import { useFetchAccount } from "@account/account";
-import Box from "@base/Box";
-import Icon from "@base/Icon";
+import Button from "@base/Button";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "@base/Collapsible";
+import ContainerNarrow from "@base/ContainerNarrow";
 import InputContainer from "@base/InputContainer";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
@@ -9,38 +14,33 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SaveButton from "@base/SaveButton";
+import Switch from "@base/Switch";
+import {
+	Toast,
+	ToastClose,
+	ToastDescription,
+	ToastProvider,
+	ToastTitle,
+	ToastViewport,
+} from "@base/Toast";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import type { Label } from "@labels/types";
 import { useCreateSample } from "@samples/queries";
+import type { Sample } from "@samples/types";
+import { getCreateSampleRequest, getSampleNameFromReads } from "@samples/utils";
 import { useNavigate } from "@tanstack/react-router";
-import { Clock, WandSparkles } from "lucide-react";
+import { useInfiniteFindFiles } from "@uploads/queries";
+import { WandSparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
-import { useInfiniteFindFiles } from "@/uploads/queries";
-import type { Upload } from "@/uploads/types";
+import DefaultSubtractionSelector from "./DefaultSubtractionSelector";
+import LabelSelector from "./LabelSelector";
 import LibraryTypeSelector from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
 import SampleUserGroup from "./SampleUserGroup";
-import Sidebar from "./Sidebar";
-
-const extensionRegex = /^(.*)\.(fq|fastq|fa|fasta)(\.gz)?$/i;
-
-/**
- * Gets a filename without extension, given the file ID and an array of all available read uploads.
- * Used to autofill the name for a new sample based on the selected read file(s).
- *
- * @param id - the file ID
- * @param uploads - all available read uploads
- * @returns The filename without its extension
- */
-function getFileNameFromId(id: number, uploads: Upload[]): string {
-	const file = uploads.find((file) => file.id === id);
-	const match = file?.name.match(extensionRegex);
-	return match?.[1] ?? "";
-}
 
 type FormValues = {
 	name: string;
@@ -50,7 +50,20 @@ type FormValues = {
 	libraryType: string;
 	readFiles: number[];
 	group: string;
-	sidebar: { labels: number[]; subtractionIds: string[] };
+	labels: number[];
+	subtractionIds: string[];
+};
+
+const emptyValues: FormValues = {
+	name: "",
+	isolate: "",
+	host: "",
+	locale: "",
+	libraryType: "normal",
+	readFiles: [],
+	group: "",
+	labels: [],
+	subtractionIds: [],
 };
 
 type CreateSampleProps = {
@@ -58,7 +71,7 @@ type CreateSampleProps = {
 };
 
 /**
- * A form for creating a sample. Caller provides labels.
+ * A page for creating a sample. Caller provides labels.
  */
 export default function CreateSample({ labels }: CreateSampleProps) {
 	const navigate = useNavigate();
@@ -81,203 +94,243 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 		watch,
 	} = usePersistentForm<FormValues>({
 		formName: "createSample",
-		defaultValues: {
-			name: "",
-			isolate: "",
-			host: "",
-			locale: "",
-			libraryType: "normal",
-			readFiles: [],
-			group: "",
-			sidebar: {
-				labels: [],
-				subtractionIds: [],
-			},
-		},
+		defaultValues: emptyValues,
 	});
 	const mutation = useCreateSample();
 
 	const [showMetadata, setShowMetadata] = useState(false);
+	const [createMore, setCreateMore] = useState(false);
+	const [createdSample, setCreatedSample] = useState<Sample | null>(null);
 
 	useEffect(() => {
 		setValue("group", String(account?.primary_group?.id ?? ""));
 	}, [account, setValue]);
 
-	if (
+	const reads = readsResponse?.pages.flatMap((page) => page.items) ?? [];
+	const isLoading =
 		isPendingReads ||
 		isPendingGroups ||
 		isPendingAccount ||
 		!readsResponse ||
-		!groups
-	) {
-		return <LoadingPlaceholder className="mt-9" />;
-	}
-
-	const reads = readsResponse.pages.flatMap((page) => page.items);
+		!groups;
 
 	function autofill(selected: number[]) {
-		const id = selected[0];
-		if (id === undefined) {
-			return;
-		}
+		const selectedReads = selected.flatMap((id) => {
+			const file = reads.find((read) => read.id === id);
+			return file ? [file] : [];
+		});
 
-		const fileName = getFileNameFromId(id, reads);
-		if (fileName) {
-			setValue("name", fileName);
+		const name = getSampleNameFromReads(selectedReads);
+
+		if (name) {
+			setValue("name", name);
 		}
 	}
 
-	function onSubmit({
-		name,
-		isolate,
-		host,
-		locale,
-		libraryType,
-		readFiles,
-		group,
-		sidebar,
-	}: FormValues) {
-		const { labels, subtractionIds } = sidebar;
+	// Restores the account's default group instead of blanking it — the user
+	// never chose it, so clearing it would be a surprise.
+	function clearForm() {
+		reset({
+			...emptyValues,
+			group: String(account?.primary_group?.id ?? ""),
+		});
+	}
 
-		mutation.mutate(
-			{
-				name,
-				isolate,
-				host,
-				locale,
-				libraryType,
-				subtractions: subtractionIds,
-				files: readFiles,
-				labels,
-				group: group || null,
+	function handleReset() {
+		clearForm();
+		mutation.reset();
+	}
+
+	function onSubmit(values: FormValues) {
+		mutation.mutate(getCreateSampleRequest(values, values.readFiles), {
+			onSuccess: (sample) => {
+				clearForm();
+
+				if (createMore) {
+					setCreatedSample(sample);
+					return;
+				}
+
+				navigate({ to: "/samples" });
 			},
-			{
-				onSuccess: () => {
-					reset();
-					navigate({ to: "/samples" });
-				},
-			},
-		);
+		});
 	}
 
 	return (
-		<>
-			<ViewHeader title="Create Sample">
-				<ViewHeaderTitle>Create Sample</ViewHeaderTitle>
-				<InputError className="text-left">
-					{mutation.isError && mutation.error.response?.body.message}
-				</InputError>
-			</ViewHeader>
-			<form
-				className="grid grid-cols-[minmax(0,1150px)_max(320px,10%)] gap-x-[15px]"
-				onSubmit={handleSubmit(onSubmit)}
-			>
-				<div className="col-start-1">
-					<InputGroup>
-						<InputLabel htmlFor="name">Name</InputLabel>
-						<InputContainer align="right" className="flex">
-							<InputSimple
-								id="name"
-								{...register("name", {
-									required: "Required Field",
-								})}
-							/>
-							{Boolean(watch("readFiles").length) && (
-								<InputIconButton
-									IconComponent={WandSparkles}
-									aria-label="Auto Fill"
-									tip="Auto Fill"
-									onClick={() => autofill(watch("readFiles"))}
+		<ContainerNarrow>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<ViewHeader title="Create Sample">
+					<ViewHeaderTitle>Create Sample</ViewHeaderTitle>
+					<InputError className="text-left">
+						{mutation.isError && mutation.error.response?.body.message}
+					</InputError>
+				</ViewHeader>
+
+				{isLoading ? (
+					<LoadingPlaceholder className="mt-9" />
+				) : (
+					<>
+						<InputGroup>
+							<InputLabel htmlFor="name">Name</InputLabel>
+							<InputContainer align="right" className="flex">
+								<InputSimple
+									id="name"
+									{...register("name", {
+										required: "Required Field",
+									})}
+								/>
+								{Boolean(watch("readFiles").length) && (
+									<InputIconButton
+										IconComponent={WandSparkles}
+										aria-label="Auto Fill"
+										tip="Auto Fill"
+										onClick={() => autofill(watch("readFiles"))}
+									/>
+								)}
+							</InputContainer>
+							<InputError>{errors.name?.message}</InputError>
+						</InputGroup>
+
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<SampleUserGroup
+									selected={value}
+									groups={groups}
+									onChange={onChange}
 								/>
 							)}
-						</InputContainer>
-						<InputError>{errors.name?.message}</InputError>
-					</InputGroup>
+							name="group"
+						/>
 
-					<Controller
-						control={control}
-						render={({ field: { onChange, value } }) => (
-							<SampleUserGroup
-								selected={value}
-								groups={groups}
-								onChange={onChange}
-							/>
-						)}
-						name="group"
-					/>
+						<Collapsible
+							className="mb-4"
+							open={showMetadata}
+							onOpenChange={setShowMetadata}
+						>
+							<CollapsibleTrigger>Show Metadata Fields</CollapsibleTrigger>
+							<CollapsibleContent className="grid grid-cols-2 gap-x-[15px] pt-4">
+								<InputGroup>
+									<InputLabel htmlFor="locale">Locale</InputLabel>
+									<InputSimple id="locale" {...register("locale")} />
+								</InputGroup>
 
-					{showMetadata && (
-						<div className="grid grid-cols-2 gap-x-[15px] mb-4">
-							<InputGroup>
-								<InputLabel htmlFor="locale">Locale</InputLabel>
-								<InputSimple id="locale" {...register("locale")} />
-							</InputGroup>
+								<InputGroup>
+									<InputLabel htmlFor="isolate">Isolate</InputLabel>
+									<InputSimple id="isolate" {...register("isolate")} />
+								</InputGroup>
 
-							<InputGroup>
-								<InputLabel htmlFor="isolate">Isolate</InputLabel>
-								<InputSimple id="isolate" {...register("isolate")} />
-							</InputGroup>
+								<InputGroup>
+									<InputLabel htmlFor="host">Host</InputLabel>
+									<InputSimple id="host" {...register("host")} />
+								</InputGroup>
+							</CollapsibleContent>
+						</Collapsible>
 
-							<InputGroup>
-								<InputLabel htmlFor="host">Host</InputLabel>
-								<InputSimple id="host" {...register("host")} />
-							</InputGroup>
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<LibraryTypeSelector libraryType={value} onSelect={onChange} />
+							)}
+							name="libraryType"
+						/>
+
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<LabelSelector
+									labels={labels}
+									selected={value}
+									onChange={onChange}
+								/>
+							)}
+							name="labels"
+						/>
+
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<DefaultSubtractionSelector
+									selected={value}
+									onChange={onChange}
+								/>
+							)}
+							name="subtractionIds"
+						/>
+
+						<Controller
+							control={control}
+							render={({ field: { onChange, value } }) => (
+								<ReadSelector
+									data={readsResponse}
+									isFetchingNextPage={isFetchingNextPage}
+									fetchNextPage={fetchNextPage}
+									isPending={isPendingReads}
+									selected={value}
+									onSelect={onChange}
+									error={errors.readFiles?.message}
+								/>
+							)}
+							name="readFiles"
+							rules={{
+								required:
+									"At least one read file must be attached to the sample",
+							}}
+						/>
+
+						{/* Sticky so the actions stay in reach while the read selector is
+						    scrolled, without leaving the end of the form. The backdrop
+						    runs to the bottom of the viewport and fades to transparent
+						    across its top padding, so the read selector dissolves as it
+						    passes under the bar instead of butting up against it. */}
+						<div className="sticky bottom-0 z-10 mt-4 bg-linear-to-b from-white/0 to-white to-40% pt-10 pb-4">
+							<div className="flex items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-3 shadow-lg">
+								<div className="flex items-center gap-2">
+									<Switch
+										id="create-more"
+										checked={createMore}
+										onCheckedChange={setCreateMore}
+									/>
+									<label
+										className="cursor-pointer text-gray-700 text-sm"
+										htmlFor="create-more"
+									>
+										Create more
+									</label>
+								</div>
+
+								<div className="flex gap-2">
+									<Button onClick={handleReset} type="button">
+										Reset Form
+									</Button>
+									<SaveButton />
+								</div>
+							</div>
 						</div>
-					)}
-
-					<Controller
-						control={control}
-						render={({ field: { onChange, value } }) => (
-							<LibraryTypeSelector libraryType={value} onSelect={onChange} />
-						)}
-						name="libraryType"
-					/>
-
-					<Controller
-						control={control}
-						render={({ field: { onChange, value } }) => (
-							<ReadSelector
-								data={readsResponse}
-								isFetchingNextPage={isFetchingNextPage}
-								fetchNextPage={fetchNextPage}
-								isPending={isPendingReads}
-								selected={value}
-								onSelect={onChange}
-								error={errors.readFiles?.message}
-							/>
-						)}
-						name="readFiles"
-						rules={{
-							required: "At least one read file must be attached to the sample",
-						}}
-					/>
-				</div>
-
-				<div className="col-start-2">
-					<Box className="flex items-center bg-blue-200 border-none mt-6 p-[15px]">
-						<SaveButton altText="Create" />
-						<p className="text-blue-800 font-medium ml-auto pl-4 text-center flex items-center mb-0">
-							<Icon icon={Clock} className="mr-[5px]" /> This will take some
-							time.
-						</p>
-					</Box>
-
-					<Controller
-						control={control}
-						render={({ field: { value } }) => (
-							<Sidebar
-								defaultSubtractions={value.subtractionIds}
-								labels={labels}
-								onShowMetadataChange={setShowMetadata}
-								onUpdate={setValue}
-								sampleLabels={value.labels}
-								showMetadata={showMetadata}
-							/>
-						)}
-						name="sidebar"
-					/>
-				</div>
+					</>
+				)}
 			</form>
-		</>
+
+			<ToastProvider>
+				{createdSample && (
+					<Toast
+						key={createdSample.id}
+						onOpenChange={(open) => {
+							if (!open) {
+								setCreatedSample(null);
+							}
+						}}
+						open
+					>
+						<div>
+							<ToastTitle>Sample created</ToastTitle>
+							<ToastDescription>{createdSample.name}</ToastDescription>
+						</div>
+						<ToastClose />
+					</Toast>
+				)}
+				<ToastViewport />
+			</ToastProvider>
+		</ContainerNarrow>
 	);
 }
