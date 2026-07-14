@@ -1,3 +1,4 @@
+import { passwordPolicyQueryOptions } from "@administration/queries";
 import { createFileRoute } from "@tanstack/react-router";
 import { ManageUsers } from "@users/components/ManageUsers";
 import { usersQueryOptions } from "@users/queries";
@@ -12,9 +13,14 @@ export const Route = createFileRoute("/_authenticated/administration/users/")({
 	validateSearch: searchSchema,
 	loaderDeps: ({ search: { page, status } }) => ({ page, status }),
 	loader: ({ context: { queryClient }, deps: { page, status } }) =>
-		queryClient.ensureQueryData(
-			usersQueryOptions(page, 25, "", undefined, status === "active"),
-		),
+		Promise.all([
+			queryClient.ensureQueryData(
+				usersQueryOptions(page, 25, "", undefined, status === "active"),
+			),
+			// For the create-user form. Prefetched, not ensured: a failure here must
+			// not take down the page.
+			queryClient.prefetchQuery(passwordPolicyQueryOptions()),
+		]),
 	component: UsersRoute,
 });
 

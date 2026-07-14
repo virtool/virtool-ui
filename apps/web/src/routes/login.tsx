@@ -34,14 +34,9 @@ export const Route = createFileRoute("/login")({
 		throw redirect({ to: search.redirect ?? "/" });
 	},
 	// The forced-reset form this route can render sets a password before there is
-	// a session, so it needs the policy up front.
-	loader: async ({ context }) => {
-		try {
-			await context.queryClient.ensureQueryData(passwordPolicyQueryOptions());
-		} catch {
-			// A failed policy read must not take down the wall. The form falls back
-			// to the default minimum, and the server enforces the real one anyway.
-		}
-	},
+	// a session, so it needs the policy up front. prefetchQuery rather than
+	// ensureQueryData: a failed policy read must not take down the wall.
+	loader: ({ context }) =>
+		context.queryClient.prefetchQuery(passwordPolicyQueryOptions()),
 	component: LoginWall,
 });

@@ -73,7 +73,10 @@ export default function Password({
 								autoComplete="new-password-for-other-user"
 								{...register("password", passwordRules)}
 							/>
-							<InputError>{errors.password?.message}</InputError>
+							<InputError>
+								{errors.password?.message ||
+									(mutation.isError && mutation.error.message)}
+							</InputError>
 						</InputContainer>
 					</InputGroup>
 

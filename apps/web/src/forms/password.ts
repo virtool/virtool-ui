@@ -1,31 +1,37 @@
 import { passwordPolicyQueryOptions } from "@administration/queries";
-import {
-	DEFAULT_MINIMUM_PASSWORD_LENGTH,
-	formatMinimumPasswordLengthMessage,
-} from "@server/auth/passwordPolicy";
+import { formatMinimumPasswordLengthMessage } from "@server/auth/passwordPolicy";
 import { useQuery } from "@tanstack/react-query";
 
 /** react-hook-form rules for a field that sets a new password. */
 export type PasswordRules = {
 	required: string;
-	minLength: { value: number; message: string };
+	minLength?: { value: number; message: string };
 };
 
 /**
  * Rules for a field that sets a new password, enforcing the instance's
  * configured minimum length.
  *
- * Falls back to the default minimum while the policy is in flight or if its
- * request failed. The server enforces the configured value on submit either
- * way, so a missing policy can only make this check more permissive than the
- * server's — never stricter, which would block a password the server accepts.
+ * While the policy is in flight, or if its request failed, no length rule is
+ * applied at all. The configured minimum can be *lower* than the default, so
+ * guessing one here would reject passwords the server accepts and leave the
+ * user unable to proceed. Omitting the rule instead defers to the server, which
+ * is the only authority on the setting and rejects a short password with a
+ * message quoting it.
  */
 export function usePasswordRules(): PasswordRules {
 	const { data } = useQuery(passwordPolicyQueryOptions());
 
-	const minimum =
-		data?.minimumPasswordLength ?? DEFAULT_MINIMUM_PASSWORD_LENGTH;
-	const message = formatMinimumPasswordLengthMessage(minimum);
+	if (!data) {
+		return { required: "Please provide a password" };
+	}
 
-	return { required: message, minLength: { value: minimum, message } };
+	const message = formatMinimumPasswordLengthMessage(
+		data.minimumPasswordLength,
+	);
+
+	return {
+		required: message,
+		minLength: { value: data.minimumPasswordLength, message },
+	};
 }

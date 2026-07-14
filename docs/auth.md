@@ -285,12 +285,22 @@ configuration no unauthenticated caller should read.
 
 Client-side, `usePasswordRules()` (`forms/password.ts`) turns it into the
 `react-hook-form` rules every password form spreads into `register`, so
-the message quotes the configured value. It falls back to
-`DEFAULT_MINIMUM_PASSWORD_LENGTH` while the query is in flight or if it
-failed — the fallback can only be *more* permissive than the server, never
-stricter, so it cannot block a password the server would accept. The
-`/login` and `/setup` loaders prefetch the policy, and each swallows a
-failure rather than taking down the wall.
+the message quotes the configured value.
+
+Until the policy resolves — and if it fails outright — the hook applies
+**no length rule at all**. Do not be tempted to fall back to the default
+of 8: the configured minimum can be *lower* than the default, so a guess
+would reject passwords the server accepts and strand the user on a form
+that will not submit. Omitting the rule defers to the server, which is
+the only authority on the setting and rejects a short password with a 400
+quoting it. That makes the server's message load-bearing, so every
+password form must render its mutation error.
+
+Every route that renders a password form prefetches the policy so this
+window is not hit in practice: `/login`, `/setup`, the account profile,
+and the two admin user routes. They use `prefetchQuery`, not
+`ensureQueryData` — a failed settings read must not take down the wall or
+the page.
 
 ## Logout
 

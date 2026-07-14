@@ -3,13 +3,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import FirstUser from "@wall/components/FirstUser";
 
 export const Route = createFileRoute("/setup")({
-	loader: async ({ context }) => {
-		try {
-			await context.queryClient.ensureQueryData(passwordPolicyQueryOptions());
-		} catch {
-			// A failed policy read must not take down setup. The form falls back to
-			// the default minimum, and the server enforces the real one anyway.
-		}
-	},
+	// prefetchQuery rather than ensureQueryData: a failed policy read must not
+	// take down setup. The form then applies no length rule and the server, which
+	// is authoritative, rejects a short password with a message quoting it.
+	loader: ({ context }) =>
+		context.queryClient.prefetchQuery(passwordPolicyQueryOptions()),
 	component: FirstUser,
 });
