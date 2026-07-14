@@ -16,9 +16,13 @@ describe("getSampleNameFromReads", () => {
 		expect(getSampleNameFromReads([file])).toBe("sample_one");
 	});
 
-	it("drops the mate token so both mates of a pair yield one name", () => {
-		const r1 = createFakeFile({ name: "sample_one_R1.fastq.gz" });
-		const r2 = createFakeFile({ name: "sample_one_R2.fastq.gz" });
+	it.each([
+		["_R", "sample_one_R1.fastq.gz", "sample_one_R2.fastq.gz"],
+		["_", "sample_one_1.fastq.gz", "sample_one_2.fastq.gz"],
+		["dotted", "sample_one.1.fastq.gz", "sample_one.2.fastq.gz"],
+	])("drops the %s mate token so both mates of a pair yield one name", (_convention, left, right) => {
+		const r1 = createFakeFile({ name: left });
+		const r2 = createFakeFile({ name: right });
 
 		expect(getSampleNameFromReads([r1, r2])).toBe("sample_one");
 	});

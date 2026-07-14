@@ -86,13 +86,18 @@ const extensionRegex = /^(.*)\.(fq|fastq|fa|fasta)(\.gz)?$/i;
  * @param reads - the read files, in [LEFT, RIGHT] order
  */
 export function getSampleNameFromReads(reads: Upload[]): string {
-	const name = reads[0]?.name.match(extensionRegex)?.[1];
+	const first = reads[0]?.name;
 
-	if (!name) {
+	if (first === undefined) {
 		return "";
 	}
 
-	return reads.length > 1 ? stripMateToken(name) : name;
+	// The mate token goes before the extension does. The dotted convention
+	// (``sample.1.fastq.gz``) is recognised by the dot that follows the digit,
+	// and dropping the extension first would take that dot away.
+	const name = reads.length > 1 ? stripMateToken(first) : first;
+
+	return name.match(extensionRegex)?.[1] ?? "";
 }
 
 /**
