@@ -190,6 +190,49 @@ describe("resetPassword", () => {
 		expect(cookies.token).toBeUndefined();
 	});
 
+	it("lets only one of two concurrent resets for the same code win", async () => {
+		const { userId, sessionId, resetCode } = await seedResetFlow();
+
+		const first = fakeCookies(sessionId);
+		const second = fakeCookies(sessionId);
+
+		// A double-clicked submit. Both pass validation and the reuse check before
+		// either commits — neither has written yet, so both still read the old hash.
+		const results = await Promise.allSettled([
+			resetPassword(db, first, {
+				password: NEW_PASSWORD,
+				resetCode,
+				ip: "127.0.0.1",
+			}),
+			resetPassword(db, second, {
+				password: NEW_PASSWORD,
+				resetCode,
+				ip: "127.0.0.1",
+			}),
+		]);
+
+		const fulfilled = results.filter((r) => r.status === "fulfilled");
+		const rejected = results.filter((r) => r.status === "rejected");
+
+		expect(fulfilled).toHaveLength(1);
+		expect(rejected).toHaveLength(1);
+		expect((rejected[0] as PromiseRejectedResult).reason).toBeInstanceOf(
+			InvalidResetSessionError,
+		);
+
+		// The loser rolled back rather than deleting the winner's session, so the
+		// one surviving session is the one whose cookies the winner was handed.
+		const rows = await db
+			.select()
+			.from(sessions)
+			.where(eq(sessions.userId, userId));
+		expect(rows).toHaveLength(1);
+		expect(rows[0]?.sessionType).toBe("authenticated");
+
+		const winner = [first, second].find((c) => c.token !== undefined);
+		expect(winner?.sessionId).toBe(rows[0]?.sessionId);
+	});
+
 	it("rejects a password matching the current one", async () => {
 		const { userId, sessionId, resetCode } = await seedResetFlow();
 		const cookies = fakeCookies(sessionId);

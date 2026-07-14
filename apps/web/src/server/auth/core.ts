@@ -14,6 +14,7 @@ import {
 import type { CookieAdapter } from "./cookies";
 import { hashPassword, verifyPassword } from "./password";
 import {
+	consumeResetSession,
 	createAuthenticatedSession,
 	createResetSession,
 	invalidateSession,
@@ -253,16 +254,29 @@ export async function resetPassword(
 
 	const remember = row.resetRemember ?? false;
 
-	// The three writes are one unit: a failure partway through must not leave the
+	// The writes are one unit: a failure partway through must not leave the
 	// password changed with no session to show for it.
 	//
-	// Within the transaction they keep Python's order in
+	// Consuming the reset session first makes the code single-use under
+	// concurrency. Everything above — validation, the reuse check, the hash —
+	// takes no lock, so two submissions of the same code can both reach this
+	// point; only the one that deletes the row proceeds. Without it the loser
+	// would go on to invalidate the sessions of the winner, handing the browser
+	// cookies for a session that no longer exists.
+	//
+	// The remaining writes keep Python's order in
 	// `virtool.account.data.AccountData.reset`:
 	//   delete_by_user → users.update → sessions.create_authenticated.
 	// Sequencing matters so a user mid-reset sees the same behaviour regardless
-	// of which backend serves them during the transition.
+	// of which backend serves them during the transition. `delete_by_user` would
+	// have removed the reset session anyway, so consuming it above leaves the
+	// committed state identical.
 	const { sessionId: newSessionId, token } = await db.transaction(
 		async (tx) => {
+			if (!(await consumeResetSession(tx, sessionId))) {
+				throw new InvalidResetSessionError();
+			}
+
 			await invalidateUserSessions(tx, userId);
 
 			await tx
