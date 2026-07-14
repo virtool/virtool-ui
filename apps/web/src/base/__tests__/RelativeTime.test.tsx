@@ -111,6 +111,11 @@ describe("<RelativeTime />", () => {
 		unmount();
 		expect(clearInterval).toHaveBeenCalledTimes(1);
 
+		// And starts again for a later mount. Navigating away from a list and back
+		// must not leave the page with a clock that never ticks.
+		renderWithProviders(<RelativeTime time="2019-04-22T10:20:20Z" />);
+		expect(setInterval).toHaveBeenCalledTimes(2);
+
 		setInterval.mockRestore();
 		clearInterval.mockRestore();
 	});

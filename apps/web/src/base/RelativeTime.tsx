@@ -43,6 +43,12 @@ function subscribe(listener: () => void) {
 	};
 }
 
+// Also serves as the server snapshot. `start.ts` sets `defaultSsr: false` and no
+// route opts back in, so route components — and every relative time inside them
+// — render on the client, never on the server. `now` is therefore the browser's
+// page-load time, not a long-lived Node process's start time. A route that opts
+// into `ssr: true` would break that: the snapshot would be the server's module
+// import time, so timestamps would render stale and disagree with hydration.
 function getNow() {
 	return now;
 }
