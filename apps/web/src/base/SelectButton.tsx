@@ -31,7 +31,7 @@ export default function SelectButton({
 				"flex justify-between items-center px-2.5 bg-white border rounded font-medium capitalize [&_svg]:ml-1",
 				inputHeightClass,
 				inputFocusClasses,
-				"data-[placeholder]:text-gray-400",
+				"data-[placeholder]:text-gray-500",
 				"aria-invalid:border-red-500 aria-invalid:focus-visible:border-red-500 aria-invalid:focus-visible:ring-2 aria-invalid:focus-visible:ring-red-500/50",
 				className,
 			)}

@@ -41,7 +41,7 @@ export default function ReadSlot({
 		>
 			<div className="text-xs font-bold text-gray-500 tracking-wide">
 				{label}
-				<span className="ml-1 font-medium text-gray-400">{sub}</span>
+				<span className="ml-1 font-medium text-gray-500">{sub}</span>
 			</div>
 			{file && (
 				<div className="truncate font-mono font-medium mt-1">{file.name}</div>
@@ -53,7 +53,7 @@ export default function ReadSlot({
 				</div>
 			)}
 			{!file && !missing && placeholder && (
-				<div className="mt-1 text-gray-400">{placeholder}</div>
+				<div className="mt-1 text-gray-500">{placeholder}</div>
 			)}
 		</div>
 	);
