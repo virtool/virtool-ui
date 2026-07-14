@@ -296,15 +296,33 @@ type re-exported from the direct dependency — as `src/server/logger.ts`
 does with `Logger` from `@virtool/logger` rather than letting the type be
 inferred as pino's.
 
-### Authentication is enforced by global middleware
+### Authentication is global, authorization is per-handler
 
 Every TanStack Start server function is authenticated by default.
 Public endpoints opt out by being passed as **server-function
 references** to the middleware's `exceptions` array, not by
-per-handler guards. The resolved session lands on `context.session`.
-Raw `Request` handlers in `createFileRoute` (e.g. SSE routes) call
-`requireAuthenticatedRequest(request)` instead, because they run
-outside the server-function async-local context.
+per-handler guards. Raw `Request` handlers in `createFileRoute` (e.g.
+SSE routes) call `requireAuthenticatedRequest(request)` instead,
+because they run outside the server-function async-local context.
+
+**Authentication is not authorization.** The middleware establishes
+only *who* is calling. Every handler that is not open to all
+authenticated users states its own rule as its first statement, before
+any `data.ts` call — `await requireAdminRole(await requireSession(),
+"base")`. Handlers resolve the session with `requireSession()` rather
+than reading `context.session`, which nothing currently uses. Never put
+a role check in `data.ts`.
+
+Some endpoints are open to all authenticated users on purpose — the
+group list, the job list and job detail. That is a decision, not an
+oversight; leave them unguarded and say so in a comment where it isn't
+obvious.
+
+Endpoints migrated from Python have arrived without the role checks
+their Python counterparts had, and the omission is silent — an
+unauthorized endpoint looks exactly like an authorized one. A new server
+function gets its authorization decided explicitly and a test that pins
+the 403.
 
 See [docs/auth.md](docs/auth.md) for the middleware composition, the
 session model, cookies, lifetimes, and the login / reset / logout
@@ -547,6 +565,12 @@ and make commits easier to find later.
   `@server/db/test/fixtures` gives a suite its own isolated Postgres
   database with the schema applied. Test files run in parallel, so
   never share one database between them.
+- **Server functions:** a test cannot call a server function by
+  importing it — the Vite plugin moves the handler body into a virtual
+  `?tss-serverfn-split` module, so invoking the import runs none of your
+  code and a naive test passes while asserting nothing. Import the split
+  module and call it through `callServerFn` from `@server/test/serverFn`
+  (`groups/functions.test.ts` is the worked example).
 - **Assertions:** Use explicit `expect()` assertions, not snapshots.
 - **User interaction:** Use `@testing-library/user-event` over
   `fireEvent`.

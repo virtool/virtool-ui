@@ -1,0 +1,220 @@
+import { eq } from "drizzle-orm";
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
+
+import type { Db } from "../db/pg";
+import { takeFirstOrThrow } from "../db/rows";
+import { type GroupPermissions, groups } from "../db/schema/groups";
+import { sessions } from "../db/schema/sessions";
+import { users } from "../db/schema/users";
+import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
+import { callServerFn, type SplitServerFnModule } from "../test/serverFn";
+
+const getRequest = vi.fn();
+const setResponseStatus = vi.fn();
+
+vi.mock("@tanstack/react-start/server", () => ({
+	deleteCookie: vi.fn(),
+	getCookie: vi.fn(),
+	getRequest,
+	setCookie: vi.fn(),
+	setResponseStatus,
+}));
+
+vi.mock("@sentry/tanstackstart-react", () => ({
+	captureException: vi.fn(),
+	setUser: vi.fn(),
+}));
+
+// The handlers read the `db` singleton at module scope. A getter defers the
+// read until a handler actually runs, by which point beforeAll has pointed it
+// at this file's isolated database.
+let db: Db;
+vi.mock("../db/pg", () => ({
+	client: {},
+	get db() {
+		return db;
+	},
+}));
+
+vi.mock("../events/emit", () => ({ emit: vi.fn() }));
+
+const handlers = (await import(
+	"./functions.ts?tss-serverfn-split"
+)) as SplitServerFnModule;
+const { ForbiddenError, UnauthorizedError } = await import(
+	"../auth/middleware"
+);
+const { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } = await import(
+	"../auth/cookies"
+);
+const { seedSession, seedUser } = await import("../auth/test/fixtures");
+
+let database: TestDatabase;
+
+beforeAll(async () => {
+	database = await createTestDatabase();
+	db = database.db;
+}, 60_000);
+
+afterAll(async () => {
+	await database.drop();
+});
+
+beforeEach(async () => {
+	vi.clearAllMocks();
+	await db.delete(sessions);
+	await db.delete(users);
+	await db.delete(groups);
+	getRequest.mockReturnValue(
+		new Request("https://virtool.test/_serverFn/test"),
+	);
+});
+
+const NO_PERMISSIONS: GroupPermissions = {
+	cancel_job: false,
+	create_ref: false,
+	create_sample: false,
+	modify_hmm: false,
+	modify_subtraction: false,
+	remove_file: false,
+	remove_job: false,
+	upload_file: false,
+};
+
+/** Authenticate the next call as a user with the given administrator role. */
+async function signIn(
+	administratorRole: "full" | "base" | null,
+): Promise<number> {
+	const userId = await seedUser(db, { administratorRole });
+	const { sessionId, token } = await seedSession(db, userId);
+
+	getRequest.mockReturnValue(
+		new Request("https://virtool.test/_serverFn/test", {
+			headers: {
+				cookie: `${SESSION_ID_COOKIE}=${sessionId}; ${SESSION_TOKEN_COOKIE}=${token}`,
+			},
+		}),
+	);
+
+	return userId;
+}
+
+async function seedGroup(
+	permissions: GroupPermissions = NO_PERMISSIONS,
+): Promise<number> {
+	const row = takeFirstOrThrow(
+		await db
+			.insert(groups)
+			.values({ legacyId: null, name: "technicians", permissions })
+			.returning({ id: groups.id }),
+	);
+
+	return row.id;
+}
+
+function call(name: string, data?: unknown) {
+	return callServerFn(handlers, name, data);
+}
+
+describe("createGroup", () => {
+	it("refuses a user with no administrator role", async () => {
+		await signIn(null);
+
+		await expect(
+			call("createGroup", { name: "hackers" }),
+		).rejects.toBeInstanceOf(ForbiddenError);
+		expect(setResponseStatus).toHaveBeenCalledWith(403);
+		expect(await db.select().from(groups)).toHaveLength(0);
+	});
+
+	it("refuses an unauthenticated caller", async () => {
+		await expect(
+			call("createGroup", { name: "hackers" }),
+		).rejects.toBeInstanceOf(UnauthorizedError);
+		expect(setResponseStatus).toHaveBeenCalledWith(401);
+	});
+
+	it("allows an administrator", async () => {
+		await signIn("base");
+
+		const group = (await call("createGroup", { name: "technicians" })) as {
+			name: string;
+		};
+
+		expect(group.name).toBe("technicians");
+	});
+});
+
+describe("updateGroup", () => {
+	it("refuses a user with no administrator role", async () => {
+		const groupId = await seedGroup();
+		await signIn(null);
+
+		await expect(
+			call("updateGroup", { groupId, name: "renamed" }),
+		).rejects.toBeInstanceOf(ForbiddenError);
+		expect(setResponseStatus).toHaveBeenCalledWith(403);
+	});
+
+	// The exploit itself: a group's permissions are unioned into every member's,
+	// so a writable group is a self-service permission grant. Pin the row, not
+	// just the status code.
+	it("does not let a permissionless user grant themselves permissions", async () => {
+		const groupId = await seedGroup();
+		await signIn(null);
+
+		await expect(
+			call("updateGroup", {
+				groupId,
+				permissions: { create_ref: true, upload_file: true },
+			}),
+		).rejects.toBeInstanceOf(ForbiddenError);
+
+		const row = takeFirstOrThrow(
+			await db.select().from(groups).where(eq(groups.id, groupId)),
+		);
+		expect(row.permissions).toEqual(NO_PERMISSIONS);
+	});
+
+	it("allows an administrator", async () => {
+		const groupId = await seedGroup();
+		await signIn("base");
+
+		const group = (await call("updateGroup", {
+			groupId,
+			permissions: { create_ref: true },
+		})) as { permissions: GroupPermissions };
+
+		expect(group.permissions).toEqual({ ...NO_PERMISSIONS, create_ref: true });
+	});
+});
+
+describe("deleteGroup", () => {
+	it("refuses a user with no administrator role", async () => {
+		const groupId = await seedGroup();
+		await signIn(null);
+
+		await expect(call("deleteGroup", { groupId })).rejects.toBeInstanceOf(
+			ForbiddenError,
+		);
+		expect(setResponseStatus).toHaveBeenCalledWith(403);
+		expect(await db.select().from(groups)).toHaveLength(1);
+	});
+
+	it("allows an administrator", async () => {
+		const groupId = await seedGroup();
+		await signIn("base");
+
+		await call("deleteGroup", { groupId });
+
+		expect(await db.select().from(groups)).toHaveLength(0);
+	});
+});

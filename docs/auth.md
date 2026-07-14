@@ -82,24 +82,27 @@ publicly callable. Its type is annotated rather than inferred — an
 inferred type would name TanStack's server-fn types transitively and
 break declaration emit for `@server/*` importers.
 
-The middleware lives in `server/auth/middleware.ts` and exposes three
+The middleware lives in `server/auth/middleware.ts` and exposes these
 helpers:
 
 - **`createAuthenticationMiddleware(exceptions)`** — builds the global
   function middleware. Resolves the session for every non-exception
-  call and attaches it to `context.session`. Downstream server
-  functions read it from their handler context — they do not call
-  `requireSession()` themselves.
+  call and attaches it to `context.session`.
 - **`requireSession()`** — the server-only resolver that the middleware
   delegates to. Throws `UnauthorizedError` and sets a 401 response
-  status on failure. Use directly only when authentication has to be
-  enforced *outside* the middleware-wrapped path (rare; the global
-  middleware covers normal server functions).
+  status on failure. A handler that needs the session calls this rather
+  than reading `context.session`, so it authenticates on its own terms
+  even if the global middleware's exception list ever regresses. Nothing
+  currently reads `context.session`.
 - **`requireAuthenticatedRequest(request)`** — for raw `Request`
   handlers in `createFileRoute` (e.g. SSE / streaming routes like
   `routes/events.ts`). These run outside the server-function
   async-local context, so the middleware can't reach them. Returns a
   401 `Response` on failure for the caller to `return` directly.
+- **`requireAdminRole(session, role)`** — throws `ForbiddenError` and
+  sets a 403 when the session user does not hold at least `role`. Roles
+  are ranked `full` (strongest) through `base` (weakest), so `"base"`
+  means "any administrator".
 
 Verification itself is pure: `verify.ts` exports `verifyRequest(db,
 request)` and `verifyAuthenticatedSession(db, sessionId, sessionToken)`
@@ -116,13 +119,40 @@ publicly callable. Default-on with an explicit opt-out flips the
 failure mode: forgetting to list a fn in `exceptions` produces a 401
 the moment you test it, not a security hole.
 
-### Permissions are not middleware (yet)
+### Authentication is global, authorization is per-handler
 
-Permission checks currently live inside the relevant `data.ts` /
-`service.ts` functions, not as a separate middleware layer. If a
-`requirePermission(...)` middleware lands later, it will compose with
-authentication the same way — global where it makes sense, explicit
-opt-outs by fn reference.
+The middleware answers *who is calling*, never *what they may do*. Every
+authorization check is written explicitly at the top of the handler in
+`functions.ts`, before any call into `data.ts`:
+
+```ts
+export const deleteGroup = createServerFn({ method: "POST" })
+	.validator(groupIdSchema)
+	.handler(async ({ data }) => {
+		await requireAdminRole(await requireSession(), "base");
+		...
+	});
+```
+
+`data.ts` stays a pure persistence layer and assumes its caller has
+already been authorized — never put a role check there.
+
+Not every endpoint needs a rule. Reads that are open to all
+authenticated users by design — the group list, the job list — carry no
+guard, and that is a decision, not an oversight. Ordinary users need the
+group list to set sample rights and pick a primary group, and jobs are
+visible to everyone on the instance. Say so in a comment where it is not
+obvious, so the next reader can tell a deliberate omission from a
+forgotten one.
+
+This is the layer that has bitten us. Endpoints migrated from Python
+arrived without the role checks their Python counterparts had, and
+because authentication *is* automatic, an unauthorized endpoint looks
+exactly like an authorized one until someone reads the handler. When you
+add a server function, decide its authorization explicitly, and write
+the test that pins a 403 — a hole here is silent. A
+`requirePermission(...)` middleware and a CI-checked table of
+deliberately open endpoints are planned to make the omission loud.
 
 ## Session model
 

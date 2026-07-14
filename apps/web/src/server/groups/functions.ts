@@ -1,6 +1,7 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { requireAdminRole, requireSession } from "../auth/middleware";
 import {
 	createGroup as createGroupImpl,
 	deleteGroup as deleteGroupImpl,
@@ -83,9 +84,16 @@ export const getGroup = createServerFn({ method: "GET" })
 		}
 	});
 
+// A group's permissions are unioned into every member's, so anyone who can
+// write a group can grant themselves any permission. All three mutations are
+// administrator-only, as they were in the Python service they replaced. The
+// reads above stay open: ordinary users need the group list to set sample
+// rights and to pick a primary group.
 export const createGroup = createServerFn({ method: "POST" })
 	.validator(createGroupSchema)
 	.handler(async ({ data }) => {
+		await requireAdminRole(await requireSession(), "base");
+
 		try {
 			const group = await createGroupImpl(data.name);
 			setResponseStatus(201);
@@ -98,6 +106,8 @@ export const createGroup = createServerFn({ method: "POST" })
 export const updateGroup = createServerFn({ method: "POST" })
 	.validator(updateGroupSchema)
 	.handler(async ({ data }) => {
+		await requireAdminRole(await requireSession(), "base");
+
 		const { groupId, ...values } = data;
 		try {
 			return await updateGroupImpl(groupId, values);
@@ -109,6 +119,8 @@ export const updateGroup = createServerFn({ method: "POST" })
 export const deleteGroup = createServerFn({ method: "POST" })
 	.validator(groupIdSchema)
 	.handler(async ({ data }) => {
+		await requireAdminRole(await requireSession(), "base");
+
 		try {
 			await deleteGroupImpl(data.groupId);
 			setResponseStatus(204);
