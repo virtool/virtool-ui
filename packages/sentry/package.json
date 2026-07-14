@@ -8,6 +8,6 @@
 		"./browser": "./src/browser.ts"
 	},
 	"scripts": {
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.browser.json"
 	}
 }
