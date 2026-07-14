@@ -103,11 +103,10 @@ and closes the stream once it fails.
 
 The watch is exactly as sharp as the gate it runs, and no sharper. It
 catches a session row that is gone (a logout elsewhere, a self-service
-reset, expiry) and a user who has been deactivated. It does **not** catch
-an admin-initiated password change or forced reset: those only set
-`users.invalidate_sessions`, which nothing on the TypeScript side reads,
-so they do not revoke a session here or anywhere else in this server yet.
-Closing that hole belongs in the auth gate, not here.
+reset, an admin-initiated deactivation, password change, or forced reset
+— all of which now delete the user's session rows) and a user who has
+been deactivated. It closes on the next tick after the gate stops
+verifying.
 
 **Closing the stream is the entire revocation signal.** There is no
 `session-revoked` frame. The client reconnects, the handshake answers

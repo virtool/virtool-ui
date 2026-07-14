@@ -13,6 +13,7 @@ import {
 } from "drizzle-orm";
 import type { PostgresError } from "postgres";
 import { hashPassword } from "../auth/password";
+import { invalidateUserSessions } from "../auth/session";
 import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import {
@@ -453,16 +454,15 @@ export async function updateUser(
 		throw new UserNotFoundError();
 	}
 
-	// Match the Python service: changes to credentials or activation invalidate
-	// the user's existing sessions on their next request.
+	// Changing credentials or activation revokes every existing session for the
+	// user, in the same transaction as the change that triggered it, so there is
+	// no window where the old password still authenticates.
 	const patch: Partial<typeof usersTable.$inferInsert> = {};
 	if (values.active !== undefined) {
 		patch.active = values.active;
-		patch.invalidateSessions = true;
 	}
 	if (values.force_reset !== undefined) {
 		patch.forceReset = values.force_reset;
-		patch.invalidateSessions = true;
 	}
 	if (values.handle !== undefined) {
 		patch.handle = values.handle;
@@ -470,8 +470,12 @@ export async function updateUser(
 	if (values.password !== undefined) {
 		patch.password = await hashPassword(values.password);
 		patch.lastPasswordChange = new Date();
-		patch.invalidateSessions = true;
 	}
+
+	const revokeSessions =
+		values.active !== undefined ||
+		values.force_reset !== undefined ||
+		values.password !== undefined;
 
 	await db.transaction(async (tx) => {
 		if (Object.keys(patch).length > 0) {
@@ -483,6 +487,10 @@ export async function updateUser(
 				}
 				throw error;
 			}
+		}
+
+		if (revokeSessions) {
+			await invalidateUserSessions(tx, userId);
 		}
 
 		if (values.groups !== undefined) {

@@ -232,27 +232,25 @@ holding only a reset cookie returns 401.
 `verifyAuthenticatedSession` (`server/auth/verify.ts`) rejects a session
 when the row is missing, the type is not `authenticated`, the token hash
 does not match, the row has expired, or **`users.active` is false**. That
-last one is why deactivation takes effect immediately: `active` is
-re-read on every request rather than trusted at login.
+last one is why deactivation takes effect immediately even for a session
+that has slipped through revocation: `active` is re-read on every request
+rather than trusted at login.
 
-**`users.invalidate_sessions` is written but never read.** It is set to
-`true` on an admin's change to a user's `active`, `password`, or
-`force_reset` (`server/users/data.ts:421-433`) and on a self-service
-reset (`core.ts:260`), mirroring Python, whose service invalidates the
-user's sessions on their next request. Nothing on the TypeScript side
-consumes it. The consequence is concrete: an admin changing a user's
-password or forcing a reset **does not revoke that user's existing
-sessions here** — the deactivation case is covered only because it also
-flips `active`. The self-service reset path is fine for a different
-reason: `core.ts:250` deletes the rows outright via
-`invalidateUserSessions`.
+**An admin's change to a user's `active`, `password`, or `force_reset`
+deletes that user's sessions outright.** `updateUser`
+(`server/users/data.ts`) calls `invalidateUserSessions` inside the same
+transaction as the change, so revocation is atomic with the change that
+triggered it — there is no window where the old password still
+authenticates. The self-service reset path does the same
+(`invalidateUserSessions` in `core.ts` before minting the new session).
 
-Do not "fix" this by rejecting sessions whose user has
-`invalidate_sessions` set. The reset flow sets the flag `true` and *then*
-creates the new authenticated session (`core.ts:254-265`), and nothing
-clears it, so that gate would reject the fresh session on its first
-request and lock the user out permanently. The fix is to delete the
-session rows at the point of invalidation — that is VIR-2671's job.
+`users.invalidate_sessions` is a NOT NULL column with no server default
+that Python still writes but nothing on either side reads; the TypeScript
+mirror keeps a `$defaultFn(() => false)` only so `createUser` inserts
+satisfy the constraint. Dropping the column is Python's Alembic change to
+make. Do not resurrect it as a gate: rejecting sessions whose user has
+the flag set would lock users out, because the reset flow would set it
+and then mint a fresh session that the gate immediately rejects.
 
 ## Session lifetimes
 
@@ -329,8 +327,8 @@ password and the `resetCode` returned from the previous login.
    (`PasswordReuseError`).
 5. Invalidates **all** of the user's existing sessions
    (`invalidateUserSessions`), updates the password / clears
-   `forceReset` / sets `lastPasswordChange` / sets `invalidateSessions`,
-   then mints a new authenticated session and rotates both cookies.
+   `forceReset` / sets `lastPasswordChange`, then mints a new
+   authenticated session and rotates both cookies.
 
 Step (5) must match the Python order in
 `virtool.account.data.AccountData.reset` so a user mid-reset sees the
@@ -421,11 +419,11 @@ A logout is either user-initiated or forced. The user-initiated path is
 then calls `resetClient()`.
 
 A forced logout is what happens when the session stops verifying
-underneath a running tab — its row deleted, it expired, or its user was
-deactivated. (An admin-initiated password change or forced reset only
-sets `users.invalidate_sessions`, which nothing here reads yet, so it
-does not revoke a session — see **Session invalidation** below.) Every
-route into a forced logout converges on `endSession` (`app/session.ts`),
+underneath a running tab — its row deleted (including by an
+admin-initiated deactivation, password change, or forced reset, all of
+which now delete the user's session rows; see **Session invalidation**
+below), it expired, or its user was deactivated. Every route into a
+forced logout converges on `endSession` (`app/session.ts`),
 which clears
 `sessionStorage` and loads `/login?reason=session-ended&redirect=…`. The
 full document load is what drops everything held in memory, and the
