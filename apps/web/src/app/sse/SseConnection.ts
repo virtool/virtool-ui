@@ -1,5 +1,6 @@
 import { useServerVersionStore } from "@app/serverVersion";
 import { endSession } from "@app/session";
+import * as Sentry from "@sentry/tanstackstart-react";
 import type { QueryClient } from "@tanstack/react-query";
 import { reactQueryHandler } from "./reactQueryHandler";
 import { SseMessageSchema } from "./schema";
@@ -27,7 +28,7 @@ export function init(queryClient: QueryClient): void {
 		if (parsed.success) {
 			handler(parsed.data);
 		} else {
-			window.console.warn("Invalid SSE message", parsed.error);
+			Sentry.captureException(parsed.error);
 		}
 	};
 }
@@ -111,7 +112,7 @@ export function establishConnection(): void {
 				useServerVersionStore.getState().setVersion(version);
 			}
 		} catch (error) {
-			window.console.error("Failed to parse SSE version", error);
+			Sentry.captureException(error);
 		}
 	});
 
@@ -119,7 +120,7 @@ export function establishConnection(): void {
 		try {
 			handleMessage?.(JSON.parse(e.data));
 		} catch (error) {
-			window.console.error("Failed to parse SSE message", error);
+			Sentry.captureException(error);
 		}
 	};
 
