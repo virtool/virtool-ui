@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 
 type BaseWorkflowTagProps<T extends ElementType = "div"> = {

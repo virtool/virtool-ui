@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { type ReactElement, type ReactNode, useRef } from "react";
 

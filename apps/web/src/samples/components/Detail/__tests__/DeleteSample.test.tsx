@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mockApiRemoveSample } from "@tests/api/samples";
 import { createFakeJobNested } from "@tests/fake/jobs";
-import { mockApiRemoveSample } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
 import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it } from "vitest";

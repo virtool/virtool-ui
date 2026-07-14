@@ -1,5 +1,6 @@
 import { screen } from "@testing-library/react";
-import { createFakeHmm, mockApiGetHmmDetail } from "@tests/fake/hmm";
+import { mockApiGetHmmDetail } from "@tests/api/hmm";
+import { createFakeHmm } from "@tests/fake/hmm";
 import { at, renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";

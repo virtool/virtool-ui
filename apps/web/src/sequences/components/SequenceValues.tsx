@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 
 /** Column-width classes shared by the sequence list header and each row's cells. */
 export const SEQUENCE_ACCESSION_COLUMN = "w-24 shrink-0 mr-5 min-w-0";

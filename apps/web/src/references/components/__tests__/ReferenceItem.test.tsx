@@ -1,7 +1,8 @@
 import { screen } from "@testing-library/react";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
 import { createFakeReferenceMinimal } from "@tests/fake/references";
+import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -67,7 +68,7 @@ describe("<ReferenceItem />", () => {
 	});
 
 	it("should render the clone button when the user has create_ref and the reference is not archived", async () => {
-		mockApiGetAccount(
+		mockGetAccount(
 			createFakeAccount({
 				permissions: createFakePermissions({ create_ref: true }),
 			}),
@@ -81,7 +82,7 @@ describe("<ReferenceItem />", () => {
 	});
 
 	it("should not render the clone button when [archived=true]", async () => {
-		mockApiGetAccount(
+		mockGetAccount(
 			createFakeAccount({
 				permissions: createFakePermissions({ create_ref: true }),
 			}),

@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { ToggleGroup } from "radix-ui";
 import { type ReactNode, useId } from "react";
 import InputLabel from "./InputLabel";

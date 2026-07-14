@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { cva } from "class-variance-authority";
 import { Tabs as TabsPrimitive } from "radix-ui";
 import { type ComponentProps, createContext, useContext } from "react";

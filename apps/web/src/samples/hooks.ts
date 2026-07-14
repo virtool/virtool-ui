@@ -1,4 +1,4 @@
-import { useFetchAccount } from "@account/queries";
+import { useFetchAccount } from "@account/account";
 import { hasSufficientAdminRole } from "@administration/utils";
 import { useFetchSample } from "./queries";
 

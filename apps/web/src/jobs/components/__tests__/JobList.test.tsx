@@ -1,13 +1,13 @@
 import { screen, waitFor } from "@testing-library/react";
-import { mockApiGetJobs } from "@tests/api/jobs";
 import { createFakeServerJobMinimal } from "@tests/fake/jobs";
+import { mockFindJobs } from "@tests/server-fn/jobs";
 import { renderWithRouter } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 import JobsList from "../JobList";
 
 describe("<JobsList />", () => {
 	it("should render", async () => {
-		const scope = mockApiGetJobs([
+		const findJobs = mockFindJobs([
 			createFakeServerJobMinimal({
 				progress: 100,
 				state: "succeeded",
@@ -22,7 +22,7 @@ describe("<JobsList />", () => {
 		);
 		expect(screen.getByText("Create Sample")).toBeInTheDocument();
 
-		scope.done();
+		expect(findJobs).toHaveBeenCalled();
 	});
 
 	it("should show spinner while loading", async () => {
@@ -31,7 +31,7 @@ describe("<JobsList />", () => {
 	});
 
 	it("should show message when there are no unarchived jobs", async () => {
-		const scope = mockApiGetJobs([]);
+		const findJobs = mockFindJobs([]);
 		await renderWithRouter(<JobsList />);
 
 		await waitFor(() =>
@@ -39,11 +39,11 @@ describe("<JobsList />", () => {
 		);
 		expect(screen.getByText("No jobs found")).toBeInTheDocument();
 
-		scope.done();
+		expect(findJobs).toHaveBeenCalled();
 	});
 
 	it("should show message when no jobs match filters", async () => {
-		const scope = mockApiGetJobs(
+		const findJobs = mockFindJobs(
 			[createFakeServerJobMinimal({ progress: 100, state: "succeeded" })],
 			0,
 		);
@@ -57,6 +57,6 @@ describe("<JobsList />", () => {
 			await screen.findByText("No jobs match your filters."),
 		).toBeInTheDocument();
 
-		scope.done();
+		expect(findJobs).toHaveBeenCalled();
 	});
 });

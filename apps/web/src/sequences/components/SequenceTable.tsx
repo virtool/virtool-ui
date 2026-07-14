@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import Badge from "@base/Badge";
 import Table from "@base/Table";
 

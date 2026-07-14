@@ -1,14 +1,15 @@
 import SampleRights from "@samples/components/Detail/SampleRights";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiListGroups } from "@tests/api/groups";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeGroup } from "@tests/fake/groups";
 import {
-	createFakeSample,
 	mockApiGetSampleDetail,
 	mockApiUpdateSampleRights,
-} from "@tests/fake/samples";
+} from "@tests/api/samples";
+import { createFakeAccount } from "@tests/fake/account";
+import { createFakeGroup } from "@tests/fake/groups";
+import { createFakeSample } from "@tests/fake/samples";
+import { mockListGroups } from "@tests/server-fn/groups";
+import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -26,13 +27,13 @@ describe("<SampleRights />", () => {
 		});
 		group = createFakeGroup();
 		mockApiGetSampleDetail(sample);
-		mockApiListGroups([group]);
+		mockListGroups([group]);
 	});
 
 	afterEach(() => nock.cleanAll());
 
 	it("should render", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+		mockGetAccount(createFakeAccount({ administrator_role: "full" }));
 		renderWithProviders(<SampleRights sampleId={sample.id} />);
 
 		expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
@@ -42,14 +43,14 @@ describe("<SampleRights />", () => {
 	});
 
 	it("should return Not allowed panel when [canModifyRights=false]", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
+		mockGetAccount(createFakeAccount({ administrator_role: null }));
 		renderWithProviders(<SampleRights sampleId={sample.id} />);
 
 		expect(await screen.findByText("Not allowed")).toBeInTheDocument();
 	});
 
 	it("should handle group change when input is changed", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+		mockGetAccount(createFakeAccount({ administrator_role: "full" }));
 		const scope = mockApiUpdateSampleRights(sample, { group: group.id });
 		renderWithProviders(<SampleRights sampleId={sample.id} />);
 
@@ -61,7 +62,7 @@ describe("<SampleRights />", () => {
 	});
 
 	it("should handle group rights change when input is changed", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+		mockGetAccount(createFakeAccount({ administrator_role: "full" }));
 		const scope = mockApiUpdateSampleRights(sample, {
 			group_read: true,
 			group_write: true,
@@ -76,7 +77,7 @@ describe("<SampleRights />", () => {
 	});
 
 	it("should handle all users' rights change when input is changed", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+		mockGetAccount(createFakeAccount({ administrator_role: "full" }));
 		const scope = mockApiUpdateSampleRights(sample, {
 			all_read: true,
 			all_write: true,

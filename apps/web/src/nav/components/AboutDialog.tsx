@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import ExternalLink from "@base/ExternalLink";
-import { useRootQuery } from "@wall/queries";
+import { useRootQuery } from "@nav/queries";
 
 type AboutDialogProps = {
 	open: boolean;

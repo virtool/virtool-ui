@@ -1,8 +1,8 @@
+import { cn } from "@app/cn";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import type { Permissions } from "@groups/types";
 import { Check, X } from "lucide-react";
-import { cn } from "@/app/utils";
 
 const permissionDescriptions: Record<keyof Permissions, string> = {
 	cancel_job: "Cancel running jobs",

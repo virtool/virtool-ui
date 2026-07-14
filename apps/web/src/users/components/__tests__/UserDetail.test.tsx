@@ -1,16 +1,17 @@
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiListGroups } from "@tests/api/groups";
-import {
-	mockApiEditUser,
-	mockApiGetUser,
-	mockApiListAdministratorRoles,
-	mockApiSetAdministratorRole,
-} from "@tests/api/users";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeAccount } from "@tests/fake/account";
 import { administratorRoles } from "@tests/fake/administrator";
 import { createFakeGroup } from "@tests/fake/groups";
 import { createFakeUser } from "@tests/fake/user";
+import { mockListGroups } from "@tests/server-fn/groups";
+import {
+	mockGetAccount,
+	mockGetUser,
+	mockListAdministratorRoles,
+	mockSetAdministratorRole,
+	mockUpdateUser,
+} from "@tests/server-fn/users";
 import { renderWithProviders, renderWithRouter } from "@tests/setup";
 import UserDetail from "@users/components/UserDetail";
 import type { User } from "@users/types";
@@ -34,21 +35,21 @@ describe("<UserDetail />", () => {
 			})),
 			active: true,
 		});
-		mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+		mockGetAccount(createFakeAccount({ administrator_role: "full" }));
 	});
 
 	afterEach(() => nock.cleanAll());
 
 	describe("<UserDetail />", () => {
 		it("should render correctly when administrator_role = AdministratorRoles.FULL, canModifyUser=true and 5 groups exist", async () => {
-			mockApiListGroups(groups);
+			mockListGroups(groups);
 
 			const userDetail = createFakeUser({
 				administrator_role: "full",
 				groups,
 			});
 
-			const scope = mockApiGetUser(userDetail.id, userDetail);
+			const getUser = mockGetUser(userDetail.id, userDetail);
 
 			renderWithProviders(<UserDetail userId={userDetail.id} />);
 
@@ -88,12 +89,12 @@ describe("<UserDetail />", () => {
 			expect(screen.getByText("cancel_job")).toBeInTheDocument();
 			expect(screen.getByText("create_sample")).toBeInTheDocument();
 
-			scope.done();
+			expect(getUser).toHaveBeenCalled();
 		});
 
 		it("should render correctly when [administrator_role=null] and canModifyUser=false", async () => {
-			mockApiListGroups(groups);
-			const scope = mockApiGetUser(user.id, user);
+			mockListGroups(groups);
+			const getUser = mockGetUser(user.id, user);
 
 			renderWithProviders(<UserDetail userId={user.id} />);
 
@@ -103,14 +104,14 @@ describe("<UserDetail />", () => {
 			expect(screen.getByText("Group 4")).toBeInTheDocument();
 			expect(screen.getByText("create_sample")).toBeInTheDocument();
 
-			scope.done();
+			expect(getUser).toHaveBeenCalled();
 		});
 
 		it("should render correctly when user has insufficient permissions", async () => {
 			nock.cleanAll();
-			mockApiGetAccount(createFakeAccount({ administrator_role: "users" }));
+			mockGetAccount(createFakeAccount({ administrator_role: "users" }));
 			const adminUser = createFakeUser({ administrator_role: "full" });
-			const scope = mockApiGetUser(adminUser.id, adminUser);
+			const getUser = mockGetUser(adminUser.id, adminUser);
 
 			renderWithProviders(<UserDetail userId={adminUser.id} />);
 
@@ -124,27 +125,27 @@ describe("<UserDetail />", () => {
 			expect(screen.queryByText(adminUser.handle)).not.toBeInTheDocument();
 			expect(screen.queryByText("Permissions")).not.toBeInTheDocument();
 
-			scope.done();
+			expect(getUser).toHaveBeenCalled();
 		});
 
 		it("should handle user deactivation", async () => {
-			mockApiListGroups(groups);
-			mockApiGetUser(user.id, user);
-			const scope = mockApiEditUser(user.id, 200, { active: false });
+			mockListGroups(groups);
+			mockGetUser(user.id, user);
+			const updateUser = mockUpdateUser(user.id, 200, { active: false });
 			renderWithProviders(<UserDetail userId={user.id} />);
 
 			await userEvent.click(
 				await screen.findByRole("button", { name: "Deactivate" }),
 			);
 
-			scope.done();
+			expect(updateUser).toHaveBeenCalled();
 		});
 
 		it("should handle user reactivation", async () => {
-			mockApiListGroups(groups);
+			mockListGroups(groups);
 			const inactiveUser = createFakeUser({ active: false });
-			mockApiGetUser(inactiveUser.id, inactiveUser);
-			const scope = mockApiEditUser(inactiveUser.id, 200, {
+			mockGetUser(inactiveUser.id, inactiveUser);
+			const updateUser = mockUpdateUser(inactiveUser.id, 200, {
 				active: true,
 			});
 			renderWithProviders(<UserDetail userId={inactiveUser.id} />);
@@ -153,20 +154,20 @@ describe("<UserDetail />", () => {
 				await screen.findByRole("button", { name: "Activate" }),
 			);
 
-			scope.done();
+			expect(updateUser).toHaveBeenCalled();
 		});
 	});
 
 	describe("<UserGroups />", () => {
 		it("should render correctly", async () => {
-			const groupScope = mockApiListGroups(groups);
-			const scope = mockApiGetUser(user.id, user);
+			const listGroups = mockListGroups(groups);
+			const getUser = mockGetUser(user.id, user);
 
 			renderWithProviders(<UserDetail userId={user.id} />);
 
 			await waitFor(() => {
-				scope.done();
-				groupScope.done();
+				expect(getUser).toHaveBeenCalled();
+				expect(listGroups).toHaveBeenCalled();
 			});
 
 			expect(await screen.findByLabelText("Group 1")).toBeInTheDocument();
@@ -175,9 +176,9 @@ describe("<UserDetail />", () => {
 		it("should point to group creation when no groups exist", async () => {
 			const user = createFakeUser({ groups: [], primary_group: null });
 
-			mockApiListGroups([]);
+			mockListGroups([]);
 
-			const scope = mockApiGetUser(user.id, user);
+			const getUser = mockGetUser(user.id, user);
 
 			await renderWithRouter(<UserDetail userId={user.id} />);
 
@@ -193,27 +194,27 @@ describe("<UserDetail />", () => {
 				screen.queryByRole("radiogroup", { name: "Primary group" }),
 			).not.toBeInTheDocument();
 
-			scope.done();
+			expect(getUser).toHaveBeenCalled();
 		});
 	});
 
 	describe("<Handle />", () => {
 		it("should render with the current handle", async () => {
-			mockApiListGroups(groups);
-			const scope = mockApiGetUser(user.id, user);
+			mockListGroups(groups);
+			const getUser = mockGetUser(user.id, user);
 
 			renderWithProviders(<UserDetail userId={user.id} />);
 
 			expect(await screen.findByText("Change Handle")).toBeInTheDocument();
 			expect(screen.getByLabelText("handle")).toHaveValue(user.handle);
 
-			scope.done();
+			expect(getUser).toHaveBeenCalled();
 		});
 
 		it("should submit a new handle", async () => {
-			mockApiListGroups(groups);
-			mockApiGetUser(user.id, user);
-			const scope = mockApiEditUser(user.id, 200, { handle: "new_handle" });
+			mockListGroups(groups);
+			mockGetUser(user.id, user);
+			const updateUser = mockUpdateUser(user.id, 200, { handle: "new_handle" });
 
 			renderWithProviders(<UserDetail userId={user.id} />);
 
@@ -224,13 +225,13 @@ describe("<UserDetail />", () => {
 			const form = input.closest("form") as HTMLElement;
 			await userEvent.click(within(form).getByRole("button", { name: "Save" }));
 
-			await waitFor(() => scope.done());
+			await waitFor(() => expect(updateUser).toHaveBeenCalled());
 		});
 
 		it("should show a conflict error when the handle is taken", async () => {
-			mockApiListGroups(groups);
-			mockApiGetUser(user.id, user);
-			mockApiEditUser(user.id, 409, { message: "User already exists." });
+			mockListGroups(groups);
+			mockGetUser(user.id, user);
+			mockUpdateUser(user.id, 409, { message: "User already exists." });
 
 			renderWithProviders(<UserDetail userId={user.id} />);
 
@@ -247,9 +248,9 @@ describe("<UserDetail />", () => {
 		});
 
 		it("should show an error when the handle is reserved", async () => {
-			mockApiListGroups(groups);
-			mockApiGetUser(user.id, user);
-			mockApiEditUser(user.id, 400, {
+			mockListGroups(groups);
+			mockGetUser(user.id, user);
+			mockUpdateUser(user.id, 400, {
 				message: "Reserved user name: virtool",
 			});
 
@@ -272,8 +273,8 @@ describe("<UserDetail />", () => {
 
 	describe("<Password />", () => {
 		it("should render correctly", async () => {
-			mockApiListGroups(groups);
-			const scope = mockApiGetUser(user.id, user);
+			mockListGroups(groups);
+			const getUser = mockGetUser(user.id, user);
 
 			renderWithProviders(<UserDetail userId={user.id} />);
 
@@ -290,13 +291,13 @@ describe("<UserDetail />", () => {
 				within(passwordForm).getByRole("button", { name: "Save" }),
 			).toBeInTheDocument();
 
-			scope.done();
+			expect(getUser).toHaveBeenCalled();
 		});
 
 		it("should submit when password is long enough", async () => {
-			mockApiListGroups(groups);
-			mockApiEditUser(user.id, 200, { password: "newPassword" }, user);
-			const scope = mockApiGetUser(user.id, user);
+			mockListGroups(groups);
+			mockUpdateUser(user.id, 200, { password: "newPassword" }, user);
+			const getUser = mockGetUser(user.id, user);
 
 			renderWithProviders(<UserDetail userId={user.id} />);
 
@@ -309,16 +310,16 @@ describe("<UserDetail />", () => {
 				within(passwordForm).getByRole("button", { name: "Save" }),
 			);
 
-			scope.done();
+			expect(getUser).toHaveBeenCalled();
 		});
 
 		it("should display error when password is not long enough", async () => {
-			mockApiListGroups(groups);
-			mockApiEditUser(user.id, 400, {
+			mockListGroups(groups);
+			mockUpdateUser(user.id, 400, {
 				id: "bad_request",
 				message: "Password does not meet minimum length requirement (8)",
 			});
-			const scope = mockApiGetUser(user.id, user);
+			const getUser = mockGetUser(user.id, user);
 
 			renderWithProviders(<UserDetail userId={user.id} />);
 
@@ -339,13 +340,13 @@ describe("<UserDetail />", () => {
 				).toBeInTheDocument(),
 			);
 
-			scope.done();
+			expect(getUser).toHaveBeenCalled();
 		});
 	});
 
 	describe("<UserPermissions />", () => {
 		it("should render permissions correctly", async () => {
-			mockApiListGroups(groups);
+			mockListGroups(groups);
 
 			const permissions = {
 				cancel_job: true,
@@ -360,7 +361,7 @@ describe("<UserDetail />", () => {
 
 			const user = createFakeUser({ permissions });
 
-			const scope = mockApiGetUser(user.id, user);
+			const getUser = mockGetUser(user.id, user);
 
 			renderWithProviders(<UserDetail userId={user.id} />);
 
@@ -375,22 +376,20 @@ describe("<UserDetail />", () => {
 			expect(screen.getByLabelText("remove_file:false")).toBeInTheDocument();
 			expect(screen.getByLabelText("upload_file:false")).toBeInTheDocument();
 
-			scope.done();
+			expect(getUser).toHaveBeenCalled();
 		});
 	});
 
 	describe("<UserAdministratorRole />", () => {
 		beforeEach(() => {
-			mockApiListGroups(groups);
-			mockApiGetAccount(
-				createFakeAccount({ id: 1, administrator_role: "full" }),
-			);
-			mockApiListAdministratorRoles(administratorRoles);
+			mockListGroups(groups);
+			mockGetAccount(createFakeAccount({ id: 1, administrator_role: "full" }));
+			mockListAdministratorRoles(administratorRoles);
 		});
 
 		it("shows the role selector when managing another user", async () => {
 			const target = createFakeUser({ id: 2, administrator_role: null });
-			mockApiGetUser(target.id, target);
+			mockGetUser(target.id, target);
 
 			renderWithProviders(<UserDetail userId={target.id} />);
 
@@ -400,8 +399,8 @@ describe("<UserDetail />", () => {
 
 		it("lets a full administrator remove a user's role", async () => {
 			const target = createFakeUser({ id: 2, administrator_role: "users" });
-			mockApiGetUser(target.id, target);
-			const scope = mockApiSetAdministratorRole(target);
+			mockGetUser(target.id, target);
+			const setAdministratorRole = mockSetAdministratorRole(target);
 
 			renderWithProviders(<UserDetail userId={target.id} />);
 
@@ -411,19 +410,19 @@ describe("<UserDetail />", () => {
 				}),
 			);
 
-			await waitFor(() => scope.done());
+			await waitFor(() => expect(setAdministratorRole).toHaveBeenCalled());
 		});
 
 		it("is hidden for a full administrator viewing their own account", async () => {
 			const self = createFakeUser({ id: 1, administrator_role: "full" });
-			const scope = mockApiGetUser(self.id, self);
+			const getUser = mockGetUser(self.id, self);
 
 			renderWithProviders(<UserDetail userId={self.id} />);
 
 			expect(await screen.findByText("Change Password")).toBeInTheDocument();
 			expect(screen.queryByText("Administrator Role")).not.toBeInTheDocument();
 
-			scope.done();
+			expect(getUser).toHaveBeenCalled();
 		});
 	});
 });

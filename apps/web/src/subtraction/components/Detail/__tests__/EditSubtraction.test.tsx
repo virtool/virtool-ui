@@ -1,9 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-	createFakeSubtraction,
-	mockApiEditSubtraction,
-} from "@tests/fake/subtractions";
+import { mockApiEditSubtraction } from "@tests/api/subtractions";
+import { createFakeSubtraction } from "@tests/fake/subtractions";
 import { renderWithProviders } from "@tests/setup";
 import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it } from "vitest";

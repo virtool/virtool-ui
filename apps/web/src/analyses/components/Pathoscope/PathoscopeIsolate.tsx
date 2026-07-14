@@ -1,5 +1,5 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
-import { toScientificNotation } from "@app/utils";
+import { toScientificNotation } from "@app/format";
 import ScrollSync from "@base/ScrollSync";
 import PathoscopeSequence from "./PathoscopeSequence";
 

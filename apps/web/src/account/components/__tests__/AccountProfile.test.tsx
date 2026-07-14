@@ -1,15 +1,13 @@
 import AccountProfile from "@account/components/AccountProfile";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mockApiChangePassword } from "@tests/api/account";
+import { createFakeAccount } from "@tests/fake/account";
 import {
-	mockApiUpdateAccountHandle,
+	mockGetAccount,
+	mockUpdateAccountHandle,
 	userServerFnMocks,
-} from "@tests/api/users";
-import {
-	createFakeAccount,
-	mockApiChangePassword,
-	mockApiGetAccount,
-} from "@tests/fake/account";
+} from "@tests/server-fn/users";
 import { renderWithProviders } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 
@@ -19,7 +17,7 @@ describe("<AccountProfile />", () => {
 			administrator_role: "full",
 		});
 
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		renderWithProviders(<AccountProfile />);
 
 		expect(await screen.findByText(account.handle)).toBeInTheDocument();
@@ -29,7 +27,7 @@ describe("<AccountProfile />", () => {
 	it("should render when not administrator", async () => {
 		const account = createFakeAccount({ administrator_role: null });
 
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		renderWithProviders(<AccountProfile />);
 
 		expect(await screen.findByText(account.handle)).toBeInTheDocument();
@@ -41,7 +39,7 @@ describe("<AccountProfile />", () => {
 			email: "virtool.devs@gmail.com",
 		});
 
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		renderWithProviders(<AccountProfile />);
 
 		expect(await screen.findByText("Email Address")).toBeInTheDocument();
@@ -57,7 +55,7 @@ describe("<AccountProfile />", () => {
 			email: "",
 		});
 
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		renderWithProviders(<AccountProfile />);
 
 		await screen.findByText("Email Address");
@@ -83,7 +81,7 @@ describe("<AccountProfile />", () => {
 	it("should render with the current handle", async () => {
 		const account = createFakeAccount({ handle: "current_handle" });
 
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		renderWithProviders(<AccountProfile />);
 
 		await screen.findByText("Handle");
@@ -93,8 +91,8 @@ describe("<AccountProfile />", () => {
 	it("should change the handle", async () => {
 		const account = createFakeAccount({ handle: "old_handle" });
 
-		mockApiGetAccount(account);
-		const scope = mockApiUpdateAccountHandle(
+		mockGetAccount(account);
+		const updateAccountHandle = mockUpdateAccountHandle(
 			{ ...account, handle: "new_handle" },
 			200,
 			undefined,
@@ -110,14 +108,14 @@ describe("<AccountProfile />", () => {
 		await userEvent.type(input, "new_handle");
 		await userEvent.click(within(form).getByRole("button", { name: "Change" }));
 
-		await waitFor(() => scope.done());
+		await waitFor(() => expect(updateAccountHandle).toHaveBeenCalled());
 	});
 
 	it("should show a conflict error when the handle is taken", async () => {
 		const account = createFakeAccount({ handle: "old_handle" });
 
-		mockApiGetAccount(account);
-		mockApiUpdateAccountHandle(undefined, 409, "User already exists.");
+		mockGetAccount(account);
+		mockUpdateAccountHandle(undefined, 409, "User already exists.");
 		renderWithProviders(<AccountProfile />);
 
 		await screen.findByText("Handle");
@@ -136,8 +134,8 @@ describe("<AccountProfile />", () => {
 	it("should show an error when the handle is reserved", async () => {
 		const account = createFakeAccount({ handle: "old_handle" });
 
-		mockApiGetAccount(account);
-		mockApiUpdateAccountHandle(undefined, 400, "Reserved user name: virtool");
+		mockGetAccount(account);
+		mockUpdateAccountHandle(undefined, 400, "Reserved user name: virtool");
 		renderWithProviders(<AccountProfile />);
 
 		await screen.findByText("Handle");
@@ -158,8 +156,8 @@ describe("<AccountProfile />", () => {
 	it("should not submit an empty handle", async () => {
 		const account = createFakeAccount({ handle: "old_handle" });
 
-		mockApiGetAccount(account);
-		mockApiUpdateAccountHandle({ ...account });
+		mockGetAccount(account);
+		mockUpdateAccountHandle({ ...account });
 		renderWithProviders(<AccountProfile />);
 
 		await screen.findByText("Handle");
@@ -179,7 +177,7 @@ describe("<AccountProfile />", () => {
 		const account = createFakeAccount({
 			administrator_role: "full",
 		});
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		renderWithProviders(<AccountProfile />);
 
 		expect(await screen.findByText("Password")).toBeInTheDocument();
@@ -215,7 +213,7 @@ describe("<AccountProfile />", () => {
 			administrator_role: "full",
 		});
 
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		mockApiChangePassword(account);
 
 		renderWithProviders(<AccountProfile />);

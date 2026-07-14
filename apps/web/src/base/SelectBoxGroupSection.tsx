@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import type { KeyboardEvent, ReactNode } from "react";
 import BoxGroupSection from "./BoxGroupSection";
 

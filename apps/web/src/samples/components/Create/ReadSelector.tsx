@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import Alert from "@base/Alert";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
