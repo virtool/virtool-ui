@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiGetGroup, mockApiListGroups } from "@tests/api/groups";
 import { createFakeGroup } from "@tests/fake/groups";
 import { createFakePermissions } from "@tests/fake/permissions";
+import { mockGetGroup, mockListGroups } from "@tests/server-fn/groups";
 import { renderWithRouter } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 import Groups from "../Groups";
@@ -20,7 +20,7 @@ describe("Groups", () => {
 	});
 
 	it("should render correctly when no groups exist", async () => {
-		mockApiListGroups([]);
+		mockListGroups([]);
 		await renderWithRouter(<Groups />);
 
 		expect(await screen.findByText("No Groups Exist")).toBeInTheDocument();
@@ -32,8 +32,8 @@ describe("Groups", () => {
 
 	it("should render correctly when one groups exists and group contains no members", async () => {
 		const group = createFakeGroup();
-		mockApiListGroups([group]);
-		mockApiGetGroup(group);
+		mockListGroups([group]);
+		mockGetGroup(group);
 		await renderWithRouter(<Groups />);
 
 		expect(
@@ -49,7 +49,7 @@ describe("Groups", () => {
 	});
 
 	it("should render create new group view correctly", async () => {
-		mockApiListGroups([]);
+		mockListGroups([]);
 		await renderWithRouter(<Groups />);
 
 		expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -65,8 +65,8 @@ describe("Groups", () => {
 		const group = createFakeGroup({
 			users: [{ handle: "testUser1", id: 1 }],
 		});
-		mockApiListGroups([group]);
-		mockApiGetGroup(group);
+		mockListGroups([group]);
+		mockGetGroup(group);
 		await renderWithRouter(<Groups />);
 
 		expect(await screen.findByText("Members")).toBeInTheDocument();
@@ -93,8 +93,8 @@ describe("Groups", () => {
 			name: "Group 2",
 		});
 
-		mockApiListGroups([group1, group2]);
-		mockApiGetGroup(group1);
+		mockListGroups([group1, group2]);
+		mockGetGroup(group1);
 
 		await renderWithRouter(<Groups />);
 

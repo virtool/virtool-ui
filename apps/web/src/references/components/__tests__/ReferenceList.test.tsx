@@ -1,12 +1,13 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakePermissions } from "@tests/fake/permissions";
 import {
-	createFakeReferenceMinimal,
 	mockApiCloneReference,
 	mockApiGetReferences,
-} from "@tests/fake/references";
+} from "@tests/api/references";
+import { createFakeAccount } from "@tests/fake/account";
+import { createFakePermissions } from "@tests/fake/permissions";
+import { createFakeReferenceMinimal } from "@tests/fake/references";
+import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import { useState } from "react";
@@ -46,7 +47,7 @@ describe("<ReferenceList />", () => {
 	it("should render correctly", async () => {
 		const permissions = createFakePermissions({ create_ref: true });
 		const account = createFakeAccount({ permissions: permissions });
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		const scope = mockApiGetReferences([references]);
 		await renderWithRouter(<ReferenceList />);
 
@@ -87,7 +88,7 @@ describe("<ReferenceList />", () => {
 		it("should not render creation button when [canCreate=false]", async () => {
 			const permissions = createFakePermissions({ create_ref: false });
 			const account = createFakeAccount({ permissions: permissions });
-			mockApiGetAccount(account);
+			mockGetAccount(account);
 			const scope = mockApiGetReferences([references]);
 			await renderWithRouter(<ReferenceList />);
 
@@ -172,7 +173,7 @@ describe("<ReferenceList />", () => {
 		it("handleSubmit() should mutate with correct input", async () => {
 			const permissions = createFakePermissions({ create_ref: true });
 			const account = createFakeAccount({ permissions: permissions });
-			mockApiGetAccount(account);
+			mockGetAccount(account);
 			const getReferencesScope = mockApiGetReferences([references]);
 			const cloneReferenceScope = mockApiCloneReference(
 				`Clone of ${references.name}`,
@@ -194,7 +195,7 @@ describe("<ReferenceList />", () => {
 		it("handleSubmit() should mutate with changed input", async () => {
 			const permissions = createFakePermissions({ create_ref: true });
 			const account = createFakeAccount({ permissions: permissions });
-			mockApiGetAccount(account);
+			mockGetAccount(account);
 			const getReferencesScope = mockApiGetReferences([references]);
 			const cloneReferenceScope = mockApiCloneReference(
 				"newName",
@@ -218,7 +219,7 @@ describe("<ReferenceList />", () => {
 		it("should display an error when name input is cleared", async () => {
 			const permissions = createFakePermissions({ create_ref: true });
 			const account = createFakeAccount({ permissions: permissions });
-			mockApiGetAccount(account);
+			mockGetAccount(account);
 			const scope = mockApiGetReferences([references]);
 			await renderWithRouter(<ReferenceListHarness />);
 

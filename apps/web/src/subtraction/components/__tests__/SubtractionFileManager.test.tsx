@@ -1,8 +1,10 @@
 import { formatPath } from "@app/hooks";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
+import { mockApiListFiles } from "@tests/api/files";
+import { createFakeAccount } from "@tests/fake/account";
+import { createFakeFile } from "@tests/fake/files";
+import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 import { SubtractionFileManager } from "../SubtractionFileManager";
@@ -17,7 +19,7 @@ describe("<SubtractionFileManager />", () => {
 	const path = formatPath("/subtractions/uploads", { page: 1 });
 
 	it("should reject uploads that don't pass validation", async () => {
-		mockApiGetAccount(
+		mockGetAccount(
 			createFakeAccount({
 				administrator_role: "full",
 			}),

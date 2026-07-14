@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
+import { createFakeUserNested } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 import type { SubtractionMinimal } from "@/subtraction/types";
-import { createFakeUserNested } from "@/tests/fake/user";
 import { SubtractionItem } from "../SubtractionItem";
 
 describe("<SubtractionItem />", () => {

@@ -1,11 +1,8 @@
 import { faker } from "@faker-js/faker";
 import type { IndexFile, IndexMinimal, IndexNested } from "@indexes/types";
-import { merge } from "es-toolkit";
-import nock from "nock";
 import { createFakeServerJobNested } from "./jobs";
 import { createFakeReferenceNested } from "./references";
 import { createFakeUserNested } from "./user";
-import type { BaseFakeSearchResultOptions } from "./utils";
 
 export function createFakeIndexNested(
 	overrides?: Partial<IndexNested>,
@@ -47,59 +44,4 @@ export function createFakeIndexFile(overrides?: Partial<IndexFile>): IndexFile {
 	};
 
 	return { ...defaultIndexFile, ...overrides };
-}
-
-type IndexSearchResults = BaseFakeSearchResultOptions & {
-	documents: IndexMinimal[];
-	modified_otu_count?: number;
-	total_otu_count?: number;
-	change_count?: number;
-};
-
-export function mockApiFindIndexes(
-	refId: string,
-	_page: number,
-	searchResults: IndexSearchResults,
-) {
-	const defaultSearchResults = {
-		page: 1,
-		page_count: 1,
-		total_count: searchResults.documents.length,
-		found_count: searchResults.documents.length,
-		per_page: 25,
-	};
-
-	return nock("http://localhost")
-		.get(`/api/refs/${refId}/indexes`)
-		.query(true)
-		.reply(200, merge(defaultSearchResults, searchResults));
-}
-
-/**
- * Creates a mocked API call for getting a list of indexes
- *
- * @param indexMinimal - The index minimal documents
- * @returns The nock scope for the mocked API call
- */
-export function mockApiListIndexes(indexMinimal: IndexMinimal[]) {
-	return nock("http://localhost")
-		.get("/api/indexes")
-		.query(true)
-		.reply(200, indexMinimal);
-}
-
-/**
- * Creates a mocked API call for getting a list of unbuilt changes for a reference
- *
- * @param refId - The id of the reference to fetch unbuilt changes for
- * @returns The nock scope for the mocked API call
- */
-export function mockApiGetUnbuiltChanges(refId: string) {
-	return nock("http://localhost")
-		.get(`/api/refs/${refId}/history?unbuilt=true`)
-		.reply(200);
-}
-
-export function mockApiBuildIndexes(refId: string) {
-	return nock("http://localhost").post(`/api/refs/${refId}/indexes`).reply(201);
 }

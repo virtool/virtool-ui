@@ -152,7 +152,7 @@ module:
 - `src/server/` - TanStack Start server features (server functions,
   middleware, db, auth) — the new path for backend responsibility
   migrating into this repo
-- `src/tests/` - Test setup, fakes, and API mocks
+- `src/tests/` - Test setup, fakes, REST mocks, and server-function mocks
 - `src/types/` - Shared type definitions
 
 ### Path aliases
@@ -593,8 +593,21 @@ and make commits easier to find later.
   expect, vi } from "vitest"`).
 - **Setup:** `apps/web/src/tests/setup.tsx` provides
   `renderWithProviders()`, `renderWithRouter()`, and `MemoryRouter`.
-- **Fixtures/fakes:** `apps/web/src/tests/fake/` has factory functions
-  for test data.
+- **Test doubles** split three ways by what they do, and a helper lives
+  in exactly one of them:
+  - `src/tests/fake/` — `createFake*` data generators. No mocking.
+  - `src/tests/api/` — nock interceptors for Python REST endpoints,
+    named `mockApi<Thing>`. Returns a nock scope; `scope.done()`
+    asserts the request fired.
+  - `src/tests/server-fn/` — `vi.fn()` stubs over the TanStack Start
+    server functions, named `mock<ServerFnName>` after the function
+    they stub. Returns the `vi.fn()` itself, so assert with
+    `expect(getUser).toHaveBeenCalled()`.
+
+  A domain moving from the Python API to a server function moves its
+  helper from `api/` to `server-fn/`. Files under `server-fn/` mirror
+  the mocked `@server/<feature>/functions` module, not the client
+  feature — `getAccount` is stubbed from `server-fn/users.ts`.
 - **Database tests:** `createTestDatabase()` from
   `@server/db/test/fixtures` gives a suite its own isolated Postgres
   database with the schema applied. Test files run in parallel, so

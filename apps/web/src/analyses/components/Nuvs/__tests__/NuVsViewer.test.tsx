@@ -3,10 +3,8 @@ import NuvsViewer from "@analyses/components/Nuvs/NuvsViewer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-	createFakeFormattedNuVsAnalysis,
-	mockApiBlastNuVs,
-} from "@tests/fake/analyses";
+import { mockApiBlastNuVs } from "@tests/api/analyses";
+import { createFakeFormattedNuVsAnalysis } from "@tests/fake/analyses";
 import { createFakeSample } from "@tests/fake/samples";
 import { at } from "@tests/setup";
 import nock from "nock";

@@ -1,9 +1,9 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
-	mockApiGetPasswordPolicy,
+	mockGetPasswordPolicy,
 	settingsServerFnMocks,
-} from "@tests/api/settings";
+} from "@tests/server-fn/settings";
 import { renderWithProviders } from "@tests/setup";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -83,7 +83,7 @@ describe("<ResetForm />", () => {
 	});
 
 	it("rejects a password shorter than the configured minimum without submitting", async () => {
-		mockApiGetPasswordPolicy(12);
+		mockGetPasswordPolicy(12);
 
 		renderWithProviders(<ResetForm resetCode="test_reset_code" />);
 
@@ -101,7 +101,7 @@ describe("<ResetForm />", () => {
 	});
 
 	it("accepts a password shorter than the default when the configured minimum is lower", async () => {
-		mockApiGetPasswordPolicy(4);
+		mockGetPasswordPolicy(4);
 		resetPasswordMock.mockResolvedValue({ login: false, reset: false });
 
 		renderWithProviders(<ResetForm resetCode="test_reset_code" />);
@@ -129,7 +129,7 @@ describe("<ResetForm />", () => {
 	});
 
 	it("accepts a password that meets the configured minimum", async () => {
-		mockApiGetPasswordPolicy(12);
+		mockGetPasswordPolicy(12);
 		resetPasswordMock.mockResolvedValue({ login: false, reset: false });
 
 		renderWithProviders(<ResetForm resetCode="test_reset_code" />);

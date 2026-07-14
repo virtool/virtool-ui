@@ -1,8 +1,9 @@
 import { accountQueryKeys } from "@account/keys";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiCreateFirstUser } from "@tests/api/auth";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeAccount } from "@tests/fake/account";
+import { mockCreateFirstUser } from "@tests/server-fn/auth";
+import { mockGetAccount } from "@tests/server-fn/users";
 import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, describe, expect, it } from "vitest";
@@ -23,7 +24,7 @@ describe("<FirstUser />", () => {
 
 	it("creates the first user and lands in the authenticated app", async () => {
 		const account = createFakeAccount();
-		const scope = mockApiCreateFirstUser({
+		const createFirstUser = mockCreateFirstUser({
 			id: account.id,
 			handle: account.handle,
 		});
@@ -32,7 +33,7 @@ describe("<FirstUser />", () => {
 		// the server function authenticates the account fetch, so the guard
 		// admits the user instead of bouncing back to /setup.
 		nock("http://localhost").get("/api/").reply(200, { first_user: false });
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 
 		const { router } = await renderSetup();
 
@@ -43,11 +44,11 @@ describe("<FirstUser />", () => {
 		await waitFor(() => {
 			expect(router.state.location.pathname).toBe("/samples");
 		});
-		scope.done();
+		expect(createFirstUser).toHaveBeenCalled();
 	});
 
 	it("shows an error and stays on /setup when creation fails", async () => {
-		mockApiCreateFirstUser(undefined, 409);
+		mockCreateFirstUser(undefined, 409);
 
 		const { router } = await renderSetup();
 

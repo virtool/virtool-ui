@@ -1,6 +1,7 @@
+import type { Account } from "@account/types";
 import type { AdministratorRole } from "@administration/types";
 import type { User, UserNested } from "@users/types";
-import { expect, vi } from "vitest";
+import { expect, type Mock, vi } from "vitest";
 
 /**
  * Mock handles for the `@server/users/functions` server-fn module. Wired in
@@ -19,19 +20,8 @@ export const userServerFnMocks = {
 	listAdministratorRoles: vi.fn(),
 };
 
-/** Asserts that the corresponding mock was called at least once. */
-export type MockScope = { done(): void };
-
-function makeScope(fn: ReturnType<typeof vi.fn>): MockScope {
-	return {
-		done() {
-			expect(fn).toHaveBeenCalled();
-		},
-	};
-}
-
 /** Sets up findUsers to resolve with a single page containing the given users. */
-export function mockApiFindUsers(users: User[]): MockScope {
+export function mockFindUsers(users: User[]): Mock {
 	userServerFnMocks.findUsers.mockResolvedValue({
 		items: users,
 		found_count: users.length,
@@ -40,51 +30,73 @@ export function mockApiFindUsers(users: User[]): MockScope {
 		per_page: 25,
 		total_count: users.length,
 	});
-	return makeScope(userServerFnMocks.findUsers);
+	return userServerFnMocks.findUsers;
 }
 
 /** Sets up listUsers to resolve with the given users, reduced to id and handle. */
-export function mockApiListUsers(users: UserNested[]): MockScope {
+export function mockListUsers(users: UserNested[]): Mock {
 	userServerFnMocks.listUsers.mockResolvedValue(
 		users.map(({ handle, id }) => ({ handle, id })),
 	);
-	return makeScope(userServerFnMocks.listUsers);
+	return userServerFnMocks.listUsers;
+}
+
+/** Sets up getAccount to resolve with the given account. */
+export function mockGetAccount(account: Account): Mock {
+	userServerFnMocks.getAccount.mockResolvedValue(account);
+	return userServerFnMocks.getAccount;
+}
+
+/**
+ * Sets up getAccount to reject the way it does for an anonymous caller.
+ *
+ * The global authentication middleware rejects an unauthenticated call with
+ * `UnauthorizedError`, and the route guards on `/login` and `/_authenticated`
+ * read that rejection as "nobody is signed in".
+ */
+export function mockGetAccountUnauthorized(): Mock {
+	const error = new Error("Unauthorized");
+	error.name = "UnauthorizedError";
+
+	userServerFnMocks.getAccount.mockRejectedValue(error);
+
+	return userServerFnMocks.getAccount;
 }
 
 /** Sets up getUser to resolve with the given user when matched by id. */
-export function mockApiGetUser(userId: number, user: User): MockScope {
+export function mockGetUser(userId: number, user: User): Mock {
 	userServerFnMocks.getUser.mockImplementation(
 		async ({ data }: { data: { userId: number } }) => {
 			if (data.userId === userId) {
 				return user;
 			}
-			throw new Error(`unexpected userId in mockApiGetUser: ${data.userId}`);
+			throw new Error(`unexpected userId in mockGetUser: ${data.userId}`);
 		},
 	);
-	return makeScope(userServerFnMocks.getUser);
+	return userServerFnMocks.getUser;
 }
 
 /** Sets up createUser to resolve with the given user (or reject on a 4xx code). */
-export function mockApiCreateUser(
+export function mockCreateUser(
 	user?: User,
 	statusCode = 201,
 	message = "User already exists.",
-): MockScope {
+): Mock {
 	if (statusCode >= 400) {
 		userServerFnMocks.createUser.mockRejectedValue(new Error(message));
 	} else {
 		userServerFnMocks.createUser.mockResolvedValue(user ?? {});
 	}
-	return makeScope(userServerFnMocks.createUser);
+	return userServerFnMocks.createUser;
 }
 
 /** Sets up updateUser to resolve with the merged user (or reject on a 4xx code). */
-export function mockApiEditUser(
+export function mockUpdateUser(
 	_userId: number | string,
 	statusCode: number,
 	update: Record<string, unknown>,
 	user?: User,
-): MockScope {
+): Mock {
 	if (statusCode >= 400) {
 		const message =
 			typeof update.message === "string" ? update.message : "Bad request.";
@@ -92,7 +104,7 @@ export function mockApiEditUser(
 	} else {
 		userServerFnMocks.updateUser.mockResolvedValue({ ...user, ...update });
 	}
-	return makeScope(userServerFnMocks.updateUser);
+	return userServerFnMocks.updateUser;
 }
 
 /**
@@ -102,12 +114,12 @@ export function mockApiEditUser(
  * When `expectedHandle` is given, the resolved variant also asserts the payload
  * carried the expected handle so callers can verify the value actually sent.
  */
-export function mockApiUpdateAccountHandle(
+export function mockUpdateAccountHandle(
 	user?: User,
 	statusCode = 200,
 	message = "User already exists.",
 	expectedHandle?: string,
-): MockScope {
+): Mock {
 	if (statusCode >= 400) {
 		userServerFnMocks.updateAccountHandle.mockRejectedValue(new Error(message));
 	} else {
@@ -120,19 +132,17 @@ export function mockApiUpdateAccountHandle(
 			},
 		);
 	}
-	return makeScope(userServerFnMocks.updateAccountHandle);
+	return userServerFnMocks.updateAccountHandle;
 }
 
 /** Sets up listAdministratorRoles to resolve with the given roles. */
-export function mockApiListAdministratorRoles(
-	roles: AdministratorRole[],
-): MockScope {
+export function mockListAdministratorRoles(roles: AdministratorRole[]): Mock {
 	userServerFnMocks.listAdministratorRoles.mockResolvedValue(roles);
-	return makeScope(userServerFnMocks.listAdministratorRoles);
+	return userServerFnMocks.listAdministratorRoles;
 }
 
 /** Sets up setAdministratorRole to resolve with the given user. */
-export function mockApiSetAdministratorRole(user: User): MockScope {
+export function mockSetAdministratorRole(user: User): Mock {
 	userServerFnMocks.setAdministratorRole.mockResolvedValue(user);
-	return makeScope(userServerFnMocks.setAdministratorRole);
+	return userServerFnMocks.setAdministratorRole;
 }
