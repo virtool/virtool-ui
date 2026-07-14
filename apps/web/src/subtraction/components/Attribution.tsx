@@ -23,7 +23,7 @@ export function SubtractionAttribution({
 		return <AttributionWithName user={handle} />;
 	}
 	return (
-		<div className="top-1/2 min-h-5 text-xs italic text-gray-400">
+		<div className="top-1/2 min-h-5 text-xs italic text-gray-500">
 			Creator and timestamp unavailable
 		</div>
 	);
