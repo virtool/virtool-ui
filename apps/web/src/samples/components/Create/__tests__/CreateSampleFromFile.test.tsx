@@ -129,7 +129,7 @@ describe("<CreateSampleFromFile>", () => {
 		await userEvent.type(field, "Sample A");
 
 		await userEvent.click(
-			screen.getByRole("switch", { name: "Metadata Fields" }),
+			screen.getByRole("button", { name: "Show Metadata Fields" }),
 		);
 		await userEvent.type(await screen.findByLabelText("Isolate"), "Clone AB");
 		await userEvent.type(screen.getByLabelText("Host"), "Apple");

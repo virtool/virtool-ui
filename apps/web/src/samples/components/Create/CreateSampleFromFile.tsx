@@ -1,5 +1,10 @@
 import { useFetchAccount } from "@account/queries";
 import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "@base/Collapsible";
+import {
 	Dialog,
 	DialogContent,
 	DialogFooter,
@@ -13,7 +18,6 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SaveButton from "@base/SaveButton";
-import Switch from "@base/Switch";
 import { useListGroups } from "@groups/queries";
 import type { Label } from "@labels/types";
 import { useCreateSample } from "@samples/queries";
@@ -129,22 +133,7 @@ function CreateSampleFromFileForm({
 
 	return (
 		<>
-			<div className="flex items-center justify-between pb-4">
-				<DialogTitle className="pb-0">Create Sample</DialogTitle>
-				<div className="flex items-center gap-2">
-					<label
-						htmlFor="showMetadata"
-						className="font-medium text-gray-600 text-sm"
-					>
-						Metadata Fields
-					</label>
-					<Switch
-						id="showMetadata"
-						checked={showMetadata}
-						onCheckedChange={setShowMetadata}
-					/>
-				</div>
-			</div>
+			<DialogTitle>Create Sample</DialogTitle>
 
 			<InputError className="text-left">
 				{mutation.isError && mutation.error.response?.body.message}
@@ -177,8 +166,13 @@ function CreateSampleFromFileForm({
 						name="group"
 					/>
 
-					{showMetadata && (
-						<div className="grid grid-cols-3 gap-x-4">
+					<Collapsible
+						className="mb-4"
+						open={showMetadata}
+						onOpenChange={setShowMetadata}
+					>
+						<CollapsibleTrigger>Show Metadata Fields</CollapsibleTrigger>
+						<CollapsibleContent className="grid grid-cols-3 gap-x-4 pt-4">
 							<InputGroup>
 								<InputLabel htmlFor="locale">Locale</InputLabel>
 								<InputSimple id="locale" {...register("locale")} />
@@ -193,8 +187,8 @@ function CreateSampleFromFileForm({
 								<InputLabel htmlFor="host">Host</InputLabel>
 								<InputSimple id="host" {...register("host")} />
 							</InputGroup>
-						</div>
-					)}
+						</CollapsibleContent>
+					</Collapsible>
 
 					<Controller
 						control={control}

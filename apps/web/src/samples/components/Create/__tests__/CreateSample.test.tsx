@@ -162,7 +162,7 @@ describe("<CreateSample>", () => {
 
 		// Reveal the hidden metadata fields.
 		await userEvent.click(
-			screen.getByRole("switch", { name: "Show Metadata Fields" }),
+			screen.getByRole("button", { name: "Show Metadata Fields" }),
 		);
 		await userEvent.type(await screen.findByLabelText("Isolate"), "Clone AB");
 		await userEvent.type(screen.getByLabelText("Host"), "Apple");
@@ -196,7 +196,7 @@ describe("<CreateSample>", () => {
 		scope.done();
 	});
 
-	it("should toggle the metadata fields with the switch", async () => {
+	it("should show and hide the metadata fields", async () => {
 		const file = createFakeFile();
 
 		mockApiListFiles([file]);
@@ -211,7 +211,7 @@ describe("<CreateSample>", () => {
 		expect(screen.queryByLabelText("Host")).not.toBeInTheDocument();
 		expect(screen.queryByLabelText("Locale")).not.toBeInTheDocument();
 
-		const toggle = screen.getByRole("switch", { name: "Show Metadata Fields" });
+		const toggle = screen.getByRole("button", { name: "Show Metadata Fields" });
 
 		// Visible after turning the switch on.
 		await userEvent.click(toggle);

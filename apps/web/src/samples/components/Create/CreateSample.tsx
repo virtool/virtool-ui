@@ -1,4 +1,9 @@
 import { useFetchAccount } from "@account/queries";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "@base/Collapsible";
 import ContainerNarrow from "@base/ContainerNarrow";
 import InputContainer from "@base/InputContainer";
 import InputError from "@base/InputError";
@@ -8,7 +13,6 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SaveButton from "@base/SaveButton";
-import Switch from "@base/Switch";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { usePersistentForm } from "@forms/hooks";
@@ -164,22 +168,13 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 							name="group"
 						/>
 
-						<div className="flex items-center gap-2 mb-4">
-							<Switch
-								id="showMetadata"
-								checked={showMetadata}
-								onCheckedChange={setShowMetadata}
-							/>
-							<label
-								htmlFor="showMetadata"
-								className="font-medium text-gray-600 text-sm"
-							>
-								Show Metadata Fields
-							</label>
-						</div>
-
-						{showMetadata && (
-							<div className="grid grid-cols-2 gap-x-[15px] mb-4">
+						<Collapsible
+							className="mb-4"
+							open={showMetadata}
+							onOpenChange={setShowMetadata}
+						>
+							<CollapsibleTrigger>Show Metadata Fields</CollapsibleTrigger>
+							<CollapsibleContent className="grid grid-cols-2 gap-x-[15px] pt-4">
 								<InputGroup>
 									<InputLabel htmlFor="locale">Locale</InputLabel>
 									<InputSimple id="locale" {...register("locale")} />
@@ -194,8 +189,8 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 									<InputLabel htmlFor="host">Host</InputLabel>
 									<InputSimple id="host" {...register("host")} />
 								</InputGroup>
-							</div>
-						)}
+							</CollapsibleContent>
+						</Collapsible>
 
 						<Controller
 							control={control}
