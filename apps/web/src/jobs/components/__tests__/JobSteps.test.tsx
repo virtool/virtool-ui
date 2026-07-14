@@ -30,4 +30,25 @@ describe("<JobSteps />", () => {
 		expect(screen.getByText("Build index")).toBeInTheDocument();
 		expect(screen.getByText("Building search index")).toBeInTheDocument();
 	});
+
+	it("should escape HTML in a step description", () => {
+		const description = `Downloading <img src="x" onerror="alert(1)"> files`;
+
+		const { container } = renderWithProviders(
+			<JobSteps
+				state="running"
+				steps={[
+					{
+						id: "download_files",
+						name: "Download files",
+						description,
+						startedAt: new Date("2024-04-12T21:50:19.108000Z"),
+					},
+				]}
+			/>,
+		);
+
+		expect(container.querySelector("img")).toBeNull();
+		expect(screen.getByText(description)).toBeInTheDocument();
+	});
 });

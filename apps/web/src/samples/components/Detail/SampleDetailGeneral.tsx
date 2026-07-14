@@ -3,7 +3,6 @@ import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";
 import ContainerNarrow from "@base/ContainerNarrow";
 import ContainerSide from "@base/ContainerSide";
-import Markdown from "@base/Markdown";
 import JobItem from "@jobs/components/JobItem";
 import { useFetchJob } from "@jobs/queries";
 import type { Label } from "@labels/types";
@@ -15,6 +14,7 @@ import { getLibraryTypeDisplayName } from "@samples/utils";
 import { getRouteApi } from "@tanstack/react-router";
 import numbro from "numbro";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";
+import SampleNotes from "./SampleNotes";
 import Sidebar from "./Sidebar";
 
 const routeApi = getRouteApi("/_authenticated/samples/$sampleId");
@@ -114,7 +114,7 @@ export default function SampleDetailGeneral({
 							<h2>Notes</h2>
 							<p>Additional notes about the sample.</p>
 						</BoxGroupHeader>
-						<Markdown markdown={data.notes} />
+						<SampleNotes notes={data.notes} />
 					</BoxGroup>
 				)}
 			</ContainerNarrow>

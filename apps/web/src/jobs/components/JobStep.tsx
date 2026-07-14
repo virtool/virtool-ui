@@ -1,6 +1,6 @@
 import BoxGroupSection from "@base/BoxGroupSection";
+import Markdown from "@base/Markdown";
 import { Calendar, Clock } from "lucide-react";
-import { marked } from "marked";
 import { formatDate, formatTime } from "@/app/date";
 import Badge from "@/base/Badge";
 import type { JobState, JobStep } from "../types";
@@ -23,12 +23,7 @@ export default function JobStepItem({ step, state }: JobStepProps) {
 
 			<div className="">
 				<h4 className="font-medium text-lg">{step.name}</h4>
-				<p
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: step.description is a trusted, backend-defined workflow string rendered through marked's markdown parser, not user input
-					dangerouslySetInnerHTML={{
-						__html: marked.parseInline(step.description),
-					}}
-				/>
+				<Markdown markdown={step.description} />
 
 				{step.startedAt && (
 					<div className="flex gap-4">

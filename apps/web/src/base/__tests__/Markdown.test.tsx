@@ -33,6 +33,18 @@ describe("<Markdown />", () => {
 		);
 	});
 
+	it("should escape raw HTML rather than rendering it", () => {
+		const { container } = renderWithProviders(
+			<Markdown markdown={`<img src="x" onerror="alert(1)"> <b>bold</b>`} />,
+		);
+
+		expect(container.querySelector("img")).toBeNull();
+		expect(container.querySelector("b")).toBeNull();
+		expect(
+			screen.getByText(`<img src="x" onerror="alert(1)"> <b>bold</b>`),
+		).toBeInTheDocument();
+	});
+
 	it("should render table", () => {
 		renderWithProviders(<Markdown markdown={markdown} />);
 
