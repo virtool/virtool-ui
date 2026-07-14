@@ -1,7 +1,7 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
-import { requireAdminRole, requireSession } from "../auth/middleware";
+import { adminRole, authenticated } from "../auth/policy";
 import {
 	createGroup as createGroupImpl,
 	deleteGroup as deleteGroupImpl,
@@ -64,17 +64,21 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	throw err;
 });
 
-export const listGroups = createServerFn({ method: "GET" }).handler(async () =>
-	listGroupsImpl(),
-);
+// Ordinary users need the group list to set sample rights and to pick a primary
+// group, so the reads are open to any signed-in user.
+export const listGroups = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
+	.handler(async () => listGroupsImpl());
 
 export const findGroups = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
 	.validator(findGroupsSchema)
 	.handler(async ({ data }) =>
 		findGroupsImpl(data?.term ?? "", data?.page ?? 1, data?.per_page ?? 25),
 	);
 
 export const getGroup = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
 	.validator(groupIdSchema)
 	.handler(async ({ data }) => {
 		try {
@@ -86,14 +90,11 @@ export const getGroup = createServerFn({ method: "GET" })
 
 // A group's permissions are unioned into every member's, so anyone who can
 // write a group can grant themselves any permission. All three mutations are
-// administrator-only, as they were in the Python service they replaced. The
-// reads above stay open: ordinary users need the group list to set sample
-// rights and to pick a primary group.
+// administrator-only, as they were in the Python service they replaced.
 export const createGroup = createServerFn({ method: "POST" })
+	.middleware([adminRole("base")])
 	.validator(createGroupSchema)
 	.handler(async ({ data }) => {
-		await requireAdminRole(await requireSession(), "base");
-
 		try {
 			const group = await createGroupImpl(data.name);
 			setResponseStatus(201);
@@ -104,10 +105,9 @@ export const createGroup = createServerFn({ method: "POST" })
 	});
 
 export const updateGroup = createServerFn({ method: "POST" })
+	.middleware([adminRole("base")])
 	.validator(updateGroupSchema)
 	.handler(async ({ data }) => {
-		await requireAdminRole(await requireSession(), "base");
-
 		const { groupId, ...values } = data;
 		try {
 			return await updateGroupImpl(groupId, values);
@@ -117,10 +117,9 @@ export const updateGroup = createServerFn({ method: "POST" })
 	});
 
 export const deleteGroup = createServerFn({ method: "POST" })
+	.middleware([adminRole("base")])
 	.validator(groupIdSchema)
 	.handler(async ({ data }) => {
-		await requireAdminRole(await requireSession(), "base");
-
 		try {
 			await deleteGroupImpl(data.groupId);
 			setResponseStatus(204);

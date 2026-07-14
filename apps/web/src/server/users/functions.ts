@@ -1,8 +1,9 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
-import { requireAdminRole, requireSession } from "../auth/middleware";
+import { requireAdminRole } from "../auth/middleware";
 import { PasswordTooShortError } from "../auth/passwordPolicy";
+import { adminRole, authenticated } from "../auth/policy";
 import { checkConfiguredPasswordLength } from "../auth/service";
 import { db } from "../db/pg";
 import {
@@ -104,23 +105,20 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	throw err;
 });
 
-export const listAdministratorRoles = createServerFn({ method: "GET" }).handler(
-	async () => {
-		await requireAdminRole(await requireSession(), "base");
-		return listAdministratorRolesImpl();
-	},
-);
+export const listAdministratorRoles = createServerFn({ method: "GET" })
+	.middleware([adminRole("base")])
+	.handler(async () => listAdministratorRolesImpl());
 
 // Any authenticated user can see who else exists — the handles are already
 // visible on samples, jobs, and analyses they can read.
-export const listUsers = createServerFn({ method: "GET" }).handler(async () =>
-	listUsersImpl(db),
-);
+export const listUsers = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
+	.handler(async () => listUsersImpl(db));
 
 export const findUsers = createServerFn({ method: "GET" })
+	.middleware([adminRole("users")])
 	.validator(findUsersSchema)
 	.handler(async ({ data }) => {
-		await requireAdminRole(await requireSession(), "users");
 		return findUsersImpl(db, {
 			term: data?.term ?? "",
 			page: data?.page ?? 1,
@@ -131,9 +129,9 @@ export const findUsers = createServerFn({ method: "GET" })
 	});
 
 export const getUser = createServerFn({ method: "GET" })
+	.middleware([adminRole("users")])
 	.validator(userIdSchema)
 	.handler(async ({ data }) => {
-		await requireAdminRole(await requireSession(), "users");
 		try {
 			return await getUserImpl(db, data.userId);
 		} catch (err) {
@@ -144,10 +142,9 @@ export const getUser = createServerFn({ method: "GET" })
 	});
 
 export const createUser = createServerFn({ method: "POST" })
+	.middleware([adminRole("users")])
 	.validator(createUserSchema)
 	.handler(async ({ data }) => {
-		await requireAdminRole(await requireSession(), "users");
-
 		checkReservedHandle(data.handle);
 
 		try {
@@ -166,16 +163,15 @@ export const createUser = createServerFn({ method: "POST" })
 	});
 
 export const updateUser = createServerFn({ method: "POST" })
+	.middleware([adminRole("users")])
 	.validator(updateUserSchema)
-	.handler(async ({ data }) => {
-		const session = await requireSession();
-		await requireAdminRole(session, "users");
-
-		// Editing a user who is themselves an administrator requires the full
-		// role, mirroring the privilege check in the Python service.
+	.handler(async ({ context, data }) => {
+		// A policy states the floor. This one depends on the target row, so it can
+		// only be checked here: editing a user who is themselves an administrator
+		// requires the full role, mirroring the Python service.
 		const targetRole = await getAdministratorRoleImpl(db, data.userId);
 		if (targetRole !== null) {
-			await requireAdminRole(session, "full");
+			await requireAdminRole(context.session, "full");
 		}
 
 		const { userId, ...values } = data;
@@ -193,14 +189,13 @@ export const updateUser = createServerFn({ method: "POST" })
 	});
 
 export const updateAccountHandle = createServerFn({ method: "POST" })
+	.middleware([authenticated()])
 	.validator(accountHandleSchema)
-	.handler(async ({ data }) => {
-		const session = await requireSession();
-
+	.handler(async ({ context, data }) => {
 		checkReservedHandle(data.handle);
 
 		try {
-			return await updateUserImpl(db, session.userId, {
+			return await updateUserImpl(db, context.session.userId, {
 				handle: data.handle,
 			});
 		} catch (err) {
@@ -209,12 +204,10 @@ export const updateAccountHandle = createServerFn({ method: "POST" })
 	});
 
 export const setAdministratorRole = createServerFn({ method: "POST" })
+	.middleware([adminRole("full")])
 	.validator(setAdministratorRoleSchema)
-	.handler(async ({ data }) => {
-		const session = await requireSession();
-		await requireAdminRole(session, "full");
-
-		if (session.userId === data.userId) {
+	.handler(async ({ context, data }) => {
+		if (context.session.userId === data.userId) {
 			setResponseStatus(400);
 			throw new Error("Cannot change own role");
 		}

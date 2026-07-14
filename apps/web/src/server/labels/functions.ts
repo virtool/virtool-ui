@@ -1,6 +1,7 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { authenticated } from "../auth/policy";
 import { db } from "../db/pg";
 import {
 	createLabel as createLabelImpl,
@@ -56,10 +57,12 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 });
 
 export const findLabels = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
 	.validator(findLabelsSchema)
 	.handler(async ({ data }) => findLabelsImpl(db, data?.term ?? ""));
 
 export const getLabel = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
 	.validator(labelIdSchema)
 	.handler(async ({ data }) => {
 		try {
@@ -70,6 +73,7 @@ export const getLabel = createServerFn({ method: "GET" })
 	});
 
 export const createLabel = createServerFn({ method: "POST" })
+	.middleware([authenticated()])
 	.validator(labelValuesSchema)
 	.handler(async ({ data }) => {
 		try {
@@ -82,6 +86,7 @@ export const createLabel = createServerFn({ method: "POST" })
 	});
 
 export const updateLabel = createServerFn({ method: "POST" })
+	.middleware([authenticated()])
 	.validator(labelIdSchema.extend(labelValuesSchema.partial().shape))
 	.handler(async ({ data }) => {
 		const { labelId, ...values } = data;
@@ -93,6 +98,7 @@ export const updateLabel = createServerFn({ method: "POST" })
 	});
 
 export const deleteLabel = createServerFn({ method: "POST" })
+	.middleware([authenticated()])
 	.validator(labelIdSchema)
 	.handler(async ({ data }) => {
 		try {

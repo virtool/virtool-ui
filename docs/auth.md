@@ -90,10 +90,10 @@ helpers:
   call and attaches it to `context.session`.
 - **`requireSession()`** — the server-only resolver that the middleware
   delegates to. Throws `UnauthorizedError` and sets a 401 response
-  status on failure. A handler that needs the session calls this rather
-  than reading `context.session`, so it authenticates on its own terms
-  even if the global middleware's exception list ever regresses. Nothing
-  currently reads `context.session`.
+  status on failure. Handlers do **not** call this; they read
+  `context.session`, which their policy put there. Calling it in a
+  handler buys a second Postgres lookup for a session that has already
+  been resolved.
 - **`requireAuthenticatedRequest(request)`** — for raw `Request`
   handlers in `createFileRoute` (e.g. SSE / streaming routes like
   `routes/events.ts`). These run outside the server-function
@@ -119,40 +119,86 @@ publicly callable. Default-on with an explicit opt-out flips the
 failure mode: forgetting to list a fn in `exceptions` produces a 401
 the moment you test it, not a security hole.
 
-### Authentication is global, authorization is per-handler
+## Authorization: every server function declares a policy
 
-The middleware answers *who is calling*, never *what they may do*. Every
-authorization check is written explicitly at the top of the handler in
-`functions.ts`, before any call into `data.ts`:
+The authentication middleware answers *who is calling*, never *what they
+may do*. That second question is answered by a policy, declared as
+middleware on the function itself, from `server/auth/policy.ts`:
 
 ```ts
 export const deleteGroup = createServerFn({ method: "POST" })
+	.middleware([adminRole("base")])
 	.validator(groupIdSchema)
-	.handler(async ({ data }) => {
-		await requireAdminRole(await requireSession(), "base");
-		...
-	});
+	.handler(async ({ context, data }) => { ... });
 ```
 
-`data.ts` stays a pure persistence layer and assumes its caller has
+There are four:
+
+- **`open()`** — callable with no session. Reserved for the endpoints
+  that *establish* one: login, first-user setup, logout, and the
+  password policy the reset form reads before it has anywhere to
+  authenticate to. A function declared `open()` must also appear in
+  `authenticationExceptions`.
+- **`authenticated()`** — any signed-in user. The deliberate choice for
+  reads that carry no secret: the job list, the group list (ordinary
+  users need it to set sample rights and pick a primary group), labels.
+  Not a fallback for "I haven't decided yet".
+- **`adminRole(role)`** — an administrator holding at least `role`.
+  Roles rank `full` (strongest) through `base` (weakest), so
+  `adminRole("base")` means "any administrator".
+- **`permission(name)`** — a user granted `name` through the union of
+  their groups' permissions, or an administrator whose role covers it.
+  Mirrors `checkAdminRoleOrPermissionsFromAccount` on the client; the
+  two must agree, or the UI offers an action the server then refuses.
+
+The policy resolves the session once and puts it on `context.session`,
+typed non-nullable for every policy but `open()`. Handlers read it from
+there.
+
+A policy states the **floor**. A rule that depends on the row being
+touched cannot be expressed at the door — an administrator editing
+another administrator needs the `full` role, and that is only knowable
+after the target user is read. Those checks stay in the handler, after
+the read, with `requireAdminRole`. `updateUser` is the worked example.
+`data.ts` remains a pure persistence layer that assumes its caller has
 already been authorized — never put a role check there.
 
-Not every endpoint needs a rule. Reads that are open to all
-authenticated users by design — the group list, the job list — carry no
-guard, and that is a decision, not an oversight. Ordinary users need the
-group list to set sample rights and pick a primary group, and jobs are
-visible to everyone on the instance. Say so in a comment where it is not
-obvious, so the next reader can tell a deliberate omission from a
-forgotten one.
+### What makes a policy non-optional
 
-This is the layer that has bitten us. Endpoints migrated from Python
-arrived without the role checks their Python counterparts had, and
-because authentication *is* automatic, an unauthorized endpoint looks
-exactly like an authorized one until someone reads the handler. When you
-add a server function, decide its authorization explicitly, and write
-the test that pins a 403 — a hole here is silent. A
-`requirePermission(...)` middleware and a CI-checked table of
-deliberately open endpoints are planned to make the omission loud.
+Nothing in the type system forces one. `server/__tests__/authorization.test.ts`
+does: it calls **every** exported server function with no session and
+fails on any that does not refuse. A function built without a policy has
+no guard of its own, so an anonymous call reaches its handler instead of
+being rejected, and CI names it. The same test pins
+`authenticationExceptions` from both sides — an `open()` function left
+out of the list is unreachable, and a listed function that isn't `open()`
+is publicly callable — and fails if a new `functions.ts` appears that
+nobody registered in it.
+
+This exists because the failure mode here is silent. Endpoints migrated
+from Python arrived without the role checks their Python counterparts
+had, and because authentication *is* automatic, an unauthorized endpoint
+looks exactly like an authorized one. Three group endpoints shipped as a
+privilege-escalation path that way (VIR-2665).
+
+### The factory that does not work
+
+The obvious way to make a policy mandatory is to require it as an
+argument, so the type checker rejects a server function without one:
+
+```ts
+// Does not work. Do not reintroduce this.
+export function serverFn(policy: Policy, options) {
+	return createServerFn(options).middleware([policyMiddleware(policy)]);
+}
+```
+
+The Vite plugin matches `createServerFn` **syntactically at the
+definition site**. Behind a factory it no longer recognises the call, so
+the function is never split or registered: it gets no `url`, no RPC
+endpoint, and its handler body — `db` import and all — is bundled into
+the browser. It looks like it compiles. This was built, caught by a test,
+and reverted; the middleware form above is what the framework supports.
 
 ## Session model
 

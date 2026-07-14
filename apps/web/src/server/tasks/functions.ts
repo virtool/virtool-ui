@@ -1,6 +1,7 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { authenticated } from "../auth/policy";
 import { getTask as getTaskImpl, TaskNotFoundError } from "./data";
 
 const taskIdSchema = z.object({
@@ -20,6 +21,7 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 });
 
 export const getTask = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
 	.validator(taskIdSchema)
 	.handler(async ({ data }) => {
 		try {
