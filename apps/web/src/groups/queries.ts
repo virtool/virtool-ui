@@ -1,4 +1,4 @@
-import { createQueryKeys } from "@app/queryKeys";
+import { groupQueryKeys } from "@groups/keys";
 import {
 	createGroup,
 	deleteGroup,
@@ -21,9 +21,6 @@ import type {
 	GroupSearchResults,
 	PermissionsUpdate,
 } from "./types";
-
-/** Query keys for groups. */
-export const groupQueryKeys = createQueryKeys("groups");
 
 /**
  * Setup query for fetching group search results for infinite scrolling view

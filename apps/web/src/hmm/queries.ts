@@ -1,5 +1,5 @@
 import { apiClient } from "@app/api";
-import { createQueryKeys } from "@app/queryKeys";
+import { hmmQueryKeys } from "@hmm/keys";
 import {
 	keepPreviousData,
 	useMutation,
@@ -8,9 +8,6 @@ import {
 } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
 import type { HMMInstalled, Hmm, HmmSearchResults } from "./types";
-
-/** Query keys for HMMs. */
-export const hmmQueryKeys = createQueryKeys("hmms");
 
 /**
  * Fetch a page of hmm search results from the API

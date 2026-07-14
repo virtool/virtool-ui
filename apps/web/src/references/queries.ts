@@ -1,5 +1,5 @@
 import { apiClient } from "@app/api";
-import { createQueryKeys } from "@app/queryKeys";
+import { referenceQueryKeys } from "@references/keys";
 import {
 	keepPreviousData,
 	queryOptions,
@@ -17,9 +17,6 @@ import type {
 	ReferenceSearchResult,
 	ReferenceUser,
 } from "./types";
-
-/** Query keys for references. */
-export const referenceQueryKeys = createQueryKeys("references");
 
 /**
  * Adds a member (user or group) to a reference.

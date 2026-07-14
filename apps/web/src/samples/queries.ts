@@ -1,6 +1,6 @@
 import { apiClient } from "@app/api";
-import { createQueryKeys } from "@app/queryKeys";
 import type { LabelNested } from "@labels/types";
+import { samplesQueryKeys } from "@samples/keys";
 import {
 	keepPreviousData,
 	queryOptions,
@@ -9,7 +9,7 @@ import {
 	useQueryClient,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import { fileQueryKeys } from "@uploads/queries";
+import { fileQueryKeys } from "@uploads/keys";
 import { union } from "es-toolkit";
 import type { ErrorResponse } from "@/types/api";
 import type {
@@ -26,9 +26,6 @@ export type SampleLabel = LabelNested & {
 	/** Whether all selected samples contain the label */
 	allLabeled: boolean;
 };
-
-/** Query keys for samples. */
-export const samplesQueryKeys = createQueryKeys("samples");
 
 /**
  * Updates the data for a sample.

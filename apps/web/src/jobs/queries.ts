@@ -1,4 +1,4 @@
-import { createQueryKeys } from "@app/queryKeys";
+import { jobQueryKeys } from "@jobs/keys";
 import { findJobs, getJob } from "@server/jobs/functions";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
@@ -8,9 +8,6 @@ import {
 	type ServerJob,
 	type ServerJobNested,
 } from "./types";
-
-/** Query keys for jobs. */
-export const jobQueryKeys = createQueryKeys("jobs");
 
 /**
  * Fetch a page of job search results from the API

@@ -10,7 +10,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useFetchTask } from "@tasks/queries";
 import { Info } from "lucide-react";
 import { useEffect } from "react";
-import { hmmQueryKeys, useInstallHmm, useListHmms } from "../queries";
+import { hmmQueryKeys } from "../keys";
+import { useInstallHmm, useListHmms } from "../queries";
 
 /**
  * Displays the installation progress information or provides the option to install HMMs

@@ -1,8 +1,6 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
-import {
-	referenceQueryKeys,
-	useUpdateReferenceMember,
-} from "@references/queries";
+import { referenceQueryKeys } from "@references/keys";
+import { useUpdateReferenceMember } from "@references/queries";
 import type { ReferenceGroup, ReferenceUser } from "@references/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { ReferenceRight } from "./ReferenceRight";

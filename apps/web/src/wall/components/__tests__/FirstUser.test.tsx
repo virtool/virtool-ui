@@ -1,4 +1,4 @@
-import { accountQueryKeys } from "@account/queries";
+import { accountQueryKeys } from "@account/keys";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiCreateFirstUser } from "@tests/api/auth";

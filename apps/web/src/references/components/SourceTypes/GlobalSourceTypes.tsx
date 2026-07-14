@@ -1,4 +1,4 @@
-import { settingsQueryKeys } from "@administration/queries";
+import { settingsQueryKeys } from "@administration/keys";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";

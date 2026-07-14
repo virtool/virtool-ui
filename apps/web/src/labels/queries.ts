@@ -1,4 +1,4 @@
-import { createQueryKeys } from "@app/queryKeys";
+import { labelQueryKeys } from "@labels/keys";
 import {
 	createLabel,
 	deleteLabel,
@@ -7,9 +7,6 @@ import {
 } from "@server/labels/functions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Label } from "./types";
-
-/** Query keys for labels. */
-export const labelQueryKeys = createQueryKeys("labels");
 
 /**
  * Fetch a list of labels from the API

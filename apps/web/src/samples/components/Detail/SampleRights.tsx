@@ -15,11 +15,8 @@ import SelectContent from "@base/SelectContent";
 import SelectItem from "@base/SelectItem";
 import { useListGroups } from "@groups/queries";
 import RightsSelect from "@samples/components/RightsSelect";
-import {
-	samplesQueryKeys,
-	useFetchSample,
-	useUpdateSampleRights,
-} from "@samples/queries";
+import { samplesQueryKeys } from "@samples/keys";
+import { useFetchSample, useUpdateSampleRights } from "@samples/queries";
 import { useQueryClient } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
 

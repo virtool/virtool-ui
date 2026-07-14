@@ -1,5 +1,9 @@
+import {
+	passwordPolicyQueryKeys,
+	roleQueryKeys,
+	settingsQueryKeys,
+} from "@administration/keys";
 import { apiClient } from "@app/api";
-import { createQueryKeys } from "@app/queryKeys";
 import { getPasswordPolicyFn } from "@server/settings/functions";
 import { listAdministratorRoles } from "@server/users/functions";
 import {
@@ -25,9 +29,6 @@ export type SettingsUpdate = {
 	sample_group_write?: boolean;
 };
 
-/** Query keys for the server settings. */
-export const settingsQueryKeys = createQueryKeys("settings");
-
 /**
  * Query options for the API settings.
  */
@@ -37,9 +38,6 @@ export function settingsQueryOptions() {
 		queryFn: () => apiClient.get("/settings").then((response) => response.body),
 	});
 }
-
-/** Query keys for the instance password policy. */
-export const passwordPolicyQueryKeys = createQueryKeys("passwordPolicy");
 
 /**
  * Query options for the instance password policy.
@@ -100,9 +98,6 @@ export function useUpdateSettings() {
 		},
 	});
 }
-
-/** Query keys for administrator roles. */
-export const roleQueryKeys = createQueryKeys("roles");
 
 /**
  * Query options for fetching the list of valid administrator roles.

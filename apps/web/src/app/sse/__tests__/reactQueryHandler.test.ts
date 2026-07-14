@@ -1,18 +1,19 @@
-import { accountQueryKeys } from "@account/queries";
-import { roleQueryKeys } from "@administration/queries";
-import { bannerQueryKeys } from "@banner/queries";
-import { groupQueryKeys } from "@groups/queries";
-import { indexQueryKeys } from "@indexes/queries";
-import { jobQueryKeys } from "@jobs/queries";
-import { labelQueryKeys } from "@labels/queries";
-import { referenceQueryKeys } from "@references/queries";
-import { samplesQueryKeys } from "@samples/queries";
+import { accountQueryKeys } from "@account/keys";
+import { roleQueryKeys } from "@administration/keys";
+import { bannerQueryKeys } from "@banner/keys";
+import { groupQueryKeys } from "@groups/keys";
+import { indexQueryKeys } from "@indexes/keys";
+import { jobQueryKeys } from "@jobs/keys";
+import { labelQueryKeys } from "@labels/keys";
+import { referenceQueryKeys } from "@references/keys";
+import { samplesQueryKeys } from "@samples/keys";
 import { QueryClient } from "@tanstack/react-query";
-import { taskQueryKeys } from "@tasks/queries";
-import { fileQueryKeys } from "@uploads/queries";
-import { userQueryKeys } from "@users/queries";
+import { taskQueryKeys } from "@tasks/keys";
+import { fileQueryKeys } from "@uploads/keys";
+import { userQueryKeys } from "@users/keys";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { reactQueryHandler } from "../reactQueryHandler";
+import handlerSource from "../reactQueryHandler.ts?raw";
 import type { SseMessage } from "../schema";
 
 describe("reactQueryHandler", () => {
@@ -236,5 +237,19 @@ describe("reactQueryHandler", () => {
 			id: 1,
 		} as unknown as SseMessage);
 		expect(invalidate).not.toHaveBeenCalled();
+	});
+
+	// The handler needs keys, not hooks. Importing a feature's `queries` module
+	// for a key drags its `queryFn` bodies — superagent, zod, the server function
+	// stubs — into the chunk every authenticated page loads, and nothing else
+	// would fail if it did.
+	it("imports keys only, never a feature's queries module", () => {
+		const specifiers = [...handlerSource.matchAll(/from\s+"([^"]+)"/g)].map(
+			([, specifier]) => specifier,
+		);
+
+		expect(specifiers).not.toEqual(
+			expect.arrayContaining([expect.stringMatching(/queries$/)]),
+		);
 	});
 });

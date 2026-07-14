@@ -1,5 +1,4 @@
 import { apiClient } from "@app/api";
-import { createQueryKeys } from "@app/queryKeys";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import {
@@ -14,6 +13,7 @@ import { createContext, type ReactNode, useContext } from "react";
 import type { ErrorResponse } from "@/types/api";
 import { useFetchReference } from "../references/queries";
 import type { Reference } from "../references/types";
+import { otuQueryKeys } from "./keys";
 import type {
 	Otu,
 	OtuHistory,
@@ -32,19 +32,6 @@ import type {
 export function getGenbank(accession: string) {
 	return apiClient.get(`/genbank/${accession}`).then((res) => res.body);
 }
-
-const otuKeys = createQueryKeys("otus");
-
-/**
- * Query keys for OTUs.
- *
- * `history()` nests under the OTU's own detail key, so the mutations that
- * invalidate a detail also refresh the change history they just added to.
- */
-export const otuQueryKeys = {
-	...otuKeys,
-	history: (id: string) => [...otuKeys.detail(id), "history"] as const,
-};
 
 /**
  * Fetches a page of OTU search results from the API

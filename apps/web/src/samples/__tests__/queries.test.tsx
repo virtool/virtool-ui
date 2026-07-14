@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import { mockApiCreateSample } from "@tests/fake/samples";
-import { fileQueryKeys } from "@uploads/queries";
+import { fileQueryKeys } from "@uploads/keys";
 import nock from "nock";
 import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";

@@ -1,4 +1,4 @@
-import { accountQueryKeys } from "@account/queries";
+import { accountQueryKeys } from "@account/keys";
 import type { Account } from "@account/types";
 import { faker } from "@faker-js/faker";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ import {
 	Outlet,
 	RouterProvider,
 } from "@tanstack/react-router";
-import { rootQueryKeys } from "@wall/queries";
+import { rootQueryKeys } from "@wall/keys";
 import "@testing-library/jest-dom/vitest";
 import {
 	fireEvent,

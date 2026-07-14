@@ -1,6 +1,5 @@
 import type { AdministratorRoleName } from "@administration/types";
 import { apiClient } from "@app/api";
-import { createQueryKeys } from "@app/queryKeys";
 import {
 	createUser,
 	findUsers,
@@ -18,20 +17,8 @@ import {
 	useQueryClient,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
+import { userQueryKeys } from "@users/keys";
 import type { UserNested, UserResponse } from "./types";
-
-const userKeys = createQueryKeys("users");
-
-/**
- * Query keys for users.
- *
- * `nested()` is the flat list used to populate selectors. It nests under
- * `lists()`, so a single `lists()` invalidation refreshes every list variant.
- */
-export const userQueryKeys = {
-	...userKeys,
-	nested: () => [...userKeys.lists(), "nested"] as const,
-};
 
 /**
  * Fetch every active user, for populating selectors and filters

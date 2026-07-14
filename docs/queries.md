@@ -11,13 +11,16 @@ the underlying transport. Two transports coexist while the backend migrates:
   `apps/web/src/server/<feature>/`, called from the SPA via React Query
   hooks.
 
-Either way, the cache surface is the same: each feature owns a `queries.ts`
-module that exports a `*QueryKeys` factory, `queryOptions`-based helpers,
-and `use*` hooks. There is no separate per-feature `api.ts` — the request
-logic lives directly inside the hook's `queryFn`/`mutationFn` (or a
-`queryOptions` factory). Inline the `apiClient` call; reach for a
-module-private helper only when the same request is shared by more than one
-hook or selected between branches.
+Either way, the cache surface is the same. A feature splits it across two
+modules:
+
+- `keys.ts` — the `*QueryKeys` factory, and nothing else.
+- `queries.ts` — `queryOptions`-based helpers and `use*` hooks.
+
+There is no separate per-feature `api.ts` — the request logic lives directly
+inside the hook's `queryFn`/`mutationFn` (or a `queryOptions` factory).
+Inline the `apiClient` call; reach for a module-private helper only when the
+same request is shared by more than one hook or selected between branches.
 
 ## Query keys come from `createQueryKeys`
 
@@ -34,9 +37,13 @@ request. Keys must be:
   every sample query stale, lists and details alike.
 
 Nothing hand-writes a key. Every feature that caches data exports a
-`*QueryKeys` built by `createQueryKeys(domain)` from `@app/queryKeys`:
+`*QueryKeys` built by `createQueryKeys(domain)` from `@app/queryKeys`, out of
+its own `keys.ts`:
 
 ```ts
+// src/samples/keys.ts
+import { createQueryKeys } from "@app/queryKeys";
+
 export const samplesQueryKeys = createQueryKeys("samples");
 ```
 
@@ -63,6 +70,34 @@ This is what makes a single `invalidateQueries({ queryKey: lists() })` in a
 mutation's `onSuccess` — or in the SSE handler — refresh *every* cached view
 of the collection.
 
+### `keys.ts` imports nothing but `@app/queryKeys`
+
+Keys live apart from the hooks because a key is a pure function over
+primitives, while the hooks around it drag in the whole request layer:
+superagent, zod, and the TanStack Start server-function stubs. Anything that
+only needs to *invalidate* a cache — the SSE handler, a route's `beforeLoad`,
+a mutation in a neighbouring feature — imports `@<feature>/keys` and pays
+none of that.
+
+This is not a style preference. The SSE handler invalidates twelve domains,
+so importing each one's `queries.ts` for its key put five feature query
+modules and four server-function stubs — and, through them, a duplicate copy
+of zod — into the chunk that every authenticated page loads. Moving those
+twelve imports to `keys.ts` cut that chunk by 40 KB gzipped.
+
+Two rules keep it that way:
+
+- **`keys.ts` imports `@app/queryKeys` and nothing else.** No types from
+  `./types`, no constants from elsewhere in the feature. If a key needs a
+  value that isn't a primitive it takes, the key is wrong.
+- **`queries.ts` does not re-export its keys.** It imports them from
+  `./keys` like everyone else. A convenience re-export is a second, heavier
+  door onto the same value, and it is the one an import completion will
+  offer.
+
+`reactQueryHandler.test.ts` asserts the handler imports no `queries` module,
+because nothing else would fail if it did.
+
 ### Extra members derive from a base key
 
 A feature sometimes caches something that is none of the seven shapes: a
@@ -71,6 +106,7 @@ Spread the factory and derive the extra member **from a base key**, so it
 lands inside the hierarchy rather than beside it:
 
 ```ts
+// src/users/keys.ts
 const userKeys = createQueryKeys("users");
 
 export const userQueryKeys = {
