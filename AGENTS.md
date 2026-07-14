@@ -165,7 +165,8 @@ alias and are reached through the catch-all `@/*`, which maps to
 
 ### Key libraries
 
-- **React 19** with React Compiler (babel plugin)
+- **React 19** with React Compiler, run as a Babel pass over `.ts` and `.tsx`
+  via `@rolldown/plugin-babel` + `reactCompilerPreset` (see below)
 - **TanStack Router** for routing
 - **React Query** (`@tanstack/react-query`) for server state
 - **zustand** for client state
@@ -175,6 +176,36 @@ alias and are reached through the catch-all `@/*`, which maps to
 - **Radix UI** primitives for accessible components
 - **CVA** (`class-variance-authority`) for component variants
 - **Lucide React** for icons
+
+### The React Compiler memoizes render, so render must be pure
+
+The compiler is a Babel pass, wired up in `apps/web/vite.config.js` as
+`babel({ presets: [reactCompilerPreset()] })` alongside `react()` —
+`@vitejs/plugin-react` v6 removed its own `babel` option, so the compiler
+cannot be configured on the `react()` plugin. It covers **both `.ts` and
+`.tsx`** (every feature's `queries.ts` included) and runs only on the client
+environment, so `src/server/` is never compiled.
+
+Because the compiler caches render output against its inputs, code that
+worked by accident under un-memoized render will now break:
+
+- **Never read the clock, randomness, or other ambient state during render.**
+  It will be computed once and cached, and a `setTick` counter will *not* force
+  recomputation — the compiler can see the real inputs never changed. Subscribe
+  to it with `useSyncExternalStore` and derive the value from the snapshot, so
+  render stays a pure function of props and snapshot. `useRelativeTime` in
+  `@base/RelativeTime` is the worked example: one shared 8s ticker for the whole
+  page, rather than an interval per instance.
+- **Never spread a `react-hook-form` return value** (`{ ...methods }`).
+  `useForm` returns a stable object whose `formState` is a Proxy that must be
+  re-read each render; a spread gets cached and pins `formState` to its first
+  snapshot, so validation errors silently stop rendering.
+- **Sync props into a form with `useForm({ values })`, not a `reset()` effect.**
+  `values` deep-compares, so an unrelated re-render cannot wipe a validation
+  error the way a re-fired `reset()` does.
+
+Opt a single function out with a `"use no memo"` directive — useful for
+bisecting a suspected compiler interaction, but a fix, not a resting place.
 
 ### Nothing heavy in a route's critical exports
 

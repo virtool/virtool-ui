@@ -1,8 +1,9 @@
 import path from "node:path";
+import babel from "@rolldown/plugin-babel";
 import { sentryTanstackStart } from "@sentry/tanstackstart-react/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-import react from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 import pkg from "./package.json" with { type: "json" };
@@ -94,11 +95,13 @@ export default defineConfig(({ command, mode }) => ({
 				// `.output`, so the trace is what makes the package available at runtime.
 				traceDeps: ["@sentry/profiling-node*", "@sentry/node-cpu-profiler*"],
 			}),
-		react({
-			include: "**/*.tsx",
-			babel: {
-				plugins: ["babel-plugin-react-compiler"],
-			},
+		react(),
+		// The React Compiler is a Babel plugin; oxc has no native equivalent yet.
+		// `reactCompilerPreset` confines Babel to the client environment and to
+		// files whose source looks like a component or hook, so the server graph
+		// never reaches it.
+		babel({
+			presets: [reactCompilerPreset()],
 		}),
 		tailwindcss(),
 		// Build only: uploads source maps and adds route/middleware
@@ -128,7 +131,6 @@ export default defineConfig(({ command, mode }) => ({
 			"es-toolkit/compat",
 			"es-toolkit/math",
 			"es-toolkit/object",
-			"es-toolkit/predicate",
 			"es-toolkit/string",
 			"fuse.js",
 			"lucide-react",

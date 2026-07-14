@@ -5,7 +5,7 @@
  * `sideEffects: false`, so its import survives tree-shaking even when only
  * unrelated exports of the importing module are used. Co-locating these with
  * the general utilities put numbro into every bundle that wanted, say,
- * `getSessionStorage`.
+ * `resetClient`.
  */
 import numbro from "numbro";
 

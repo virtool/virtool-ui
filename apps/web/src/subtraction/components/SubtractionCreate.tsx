@@ -14,10 +14,8 @@ import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import SaveButton from "@base/SaveButton";
-import { RestoredAlert } from "@forms/components/RestoredAlert";
-import { usePersistentForm } from "@forms/hooks";
 import { useId, useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useInfiniteFindFiles } from "@/uploads/queries";
 import { useCreateSubtraction } from "../queries";
 import { SubtractionFileSelector } from "./SubtractionFileSelector";
@@ -36,14 +34,12 @@ export default function SubtractionCreate() {
 	const filesLabelId = useId();
 
 	const {
-		hasRestored,
 		formState: { errors },
 		control,
 		register,
 		handleSubmit,
 		reset,
-	} = usePersistentForm<FormValues>({
-		formName: "createSubtraction",
+	} = useForm<FormValues>({
 		defaultValues: { name: "", nickname: "", uploadId: [] },
 	});
 
@@ -90,11 +86,6 @@ export default function SubtractionCreate() {
 					<LoadingPlaceholder className="mt-9" />
 				) : (
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<RestoredAlert
-							hasRestored={hasRestored}
-							name="subtraction"
-							resetForm={reset}
-						/>
 						<InputGroup>
 							<InputLabel htmlFor="name">Name</InputLabel>
 							<InputSimple

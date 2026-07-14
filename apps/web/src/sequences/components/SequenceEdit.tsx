@@ -70,7 +70,6 @@ export default function SequenceEdit({
 				<SequenceForm
 					activeSequence={activeSequence}
 					hasSchema={schema.length > 0}
-					noun="edit"
 					onSubmit={onSubmit}
 					otuId={otuId}
 					refId={refId}

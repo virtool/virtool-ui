@@ -25,7 +25,6 @@ import {
 } from "@base/Toast";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import type { Label } from "@labels/types";
 import { useCreateSample } from "@samples/queries";
@@ -35,7 +34,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useInfiniteFindFiles } from "@uploads/queries";
 import { WandSparkles } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import DefaultSubtractionSelector from "./DefaultSubtractionSelector";
 import LabelSelector from "./LabelSelector";
 import LibraryTypeSelector from "./LibraryTypeSelector";
@@ -92,8 +91,7 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 		reset,
 		setValue,
 		watch,
-	} = usePersistentForm<FormValues>({
-		formName: "createSample",
+	} = useForm<FormValues>({
 		defaultValues: emptyValues,
 	});
 	const mutation = useCreateSample();

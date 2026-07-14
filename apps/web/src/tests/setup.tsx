@@ -106,9 +106,22 @@ export function wrapWithProviders(ui: ReactNode) {
 }
 
 export function renderWithProviders(ui: ReactNode) {
-	const { rerender, ...rest } = rtlRender(wrapWithProviders(ui));
+	// The client is built once and reused, so `rerender` re-renders the same tree
+	// instead of handing React a new provider on every call.
+	const queryClient = new QueryClient();
 
-	return { ...rest, rerender };
+	function wrap(node: ReactNode) {
+		return (
+			<QueryClientProvider client={queryClient}>{node}</QueryClientProvider>
+		);
+	}
+
+	// Re-wrap on rerender. Passing the bare element would change the type of the
+	// root, so React would unmount and remount the tree rather than re-render it,
+	// silently discarding effects, state, and the providers themselves.
+	const { rerender, ...rest } = rtlRender(wrap(ui));
+
+	return { ...rest, rerender: (node: ReactNode) => rerender(wrap(node)) };
 }
 
 export async function renderWithRouter(ui: ReactNode, path?: string) {
