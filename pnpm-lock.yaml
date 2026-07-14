@@ -250,10 +250,6 @@ importers:
       zod:
         specifier: ^4.3.6
         version: 4.4.3
-    devDependencies:
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   packages/logger:
     dependencies:
