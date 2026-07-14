@@ -22,8 +22,12 @@ semantics against a real Postgres, since mocks hide bugs that real DBs
 catch. A session check that forgets to filter on `users.active` passes
 against a stubbed query builder and fails against Postgres.
 
-`src/tests/globalSetup.ts` starts one Postgres container for the whole
-run and exports `VT_POSTGRES_URL`. Call `createTestDatabase()` from
+`src/tests/globalSetup.ts` starts one Postgres container for the
+`server` project and exports `VT_POSTGRES_URL`. It is wired only into
+that project: the `web` project's jsdom tests never reach Postgres,
+because the client transform strips server function bodies along with
+the server-only imports behind them. Component tests therefore run
+without Docker. Call `createTestDatabase()` from
 `@server/db/test/fixtures` in `beforeAll` to get an isolated database
 with the schema already applied, and `drop()` it in `afterAll`:
 

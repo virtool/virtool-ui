@@ -200,6 +200,5 @@ export async function setup() {
 	await Promise.all([startGarage(), startAzurite()]);
 }
 
-// Left empty on purpose, matching the postgres setup: stop() would remove the
-// container and defeat withReuse() on the next run.
-export async function teardown() {}
+// There is deliberately no teardown, matching the postgres setup: stop() would
+// remove the containers and defeat withReuse() on the next run.

@@ -18,7 +18,7 @@ export async function setup() {
 	process.env.VT_STORAGE_S3_BUCKET = "virtool-test";
 }
 
-// Left empty on purpose. stop() removes the container, so withReuse() finds
-// nothing to match on the next run and starts a fresh one. Clean up with
-// `docker rm -f` when the container is no longer wanted.
-export async function teardown() {}
+// There is deliberately no teardown. stop() would remove the container, so
+// withReuse() would find nothing to match on the next run and pay a fresh boot
+// every time. Clean up with `docker rm -f` when the container is no longer
+// wanted.
