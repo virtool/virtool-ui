@@ -1,13 +1,9 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-	createFakeAccount,
-	createFakeApiKey,
-	mockApiCreateApiKey,
-	mockApiGetAccount,
-	mockApiGetApiKeys,
-} from "@tests/fake/account";
+import { mockApiCreateApiKey, mockApiGetApiKeys } from "@tests/api/account";
+import { createFakeAccount, createFakeApiKey } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
+import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import { afterEach, describe, expect, it } from "vitest";
@@ -30,7 +26,7 @@ describe("<ApiKeys />", () => {
 	it("should render and function when loaded", async () => {
 		const user = userEvent.setup();
 
-		mockApiGetAccount(
+		mockGetAccount(
 			createFakeAccount({
 				administrator_role: "full",
 			}),
@@ -95,7 +91,7 @@ describe("<ApiKeys />", () => {
 	});
 
 	it("should show administrator notice when appropriate", async () => {
-		mockApiGetAccount(
+		mockGetAccount(
 			createFakeAccount({
 				administrator_role: "full",
 			}),
@@ -121,7 +117,7 @@ describe("<ApiKeys />", () => {
 	it("should be able to edit keys", async () => {
 		const key = createFakeApiKey();
 
-		mockApiGetAccount(
+		mockGetAccount(
 			createFakeAccount({
 				permissions: {
 					cancel_job: true,

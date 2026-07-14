@@ -4,7 +4,6 @@ import {
 	settingsQueryKeys,
 } from "@administration/keys";
 import { apiClient } from "@app/api";
-import { getPasswordPolicyFn } from "@server/settings/functions";
 import { listAdministratorRoles } from "@server/users/functions";
 import {
 	queryOptions,
@@ -36,19 +35,6 @@ export function settingsQueryOptions() {
 	return queryOptions<Settings>({
 		queryKey: settingsQueryKeys.all(),
 		queryFn: () => apiClient.get("/settings").then((response) => response.body),
-	});
-}
-
-/**
- * Query options for the instance password policy.
- *
- * Unlike the settings above, this is readable without a session — the
- * first-user and forced-reset forms need it before one exists.
- */
-export function passwordPolicyQueryOptions() {
-	return queryOptions({
-		queryKey: passwordPolicyQueryKeys.all(),
-		queryFn: () => getPasswordPolicyFn(),
 	});
 }
 

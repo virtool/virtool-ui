@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import type { ElementType, KeyboardEvent, ReactNode, Ref } from "react";
 
 type BoxGroupSectionProps = {

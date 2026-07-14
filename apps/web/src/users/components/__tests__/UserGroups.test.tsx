@@ -1,10 +1,10 @@
 import type { Group } from "@groups/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiListGroups } from "@tests/api/groups";
-import { mockApiEditUser, userServerFnMocks } from "@tests/api/users";
 import { createFakeGroup } from "@tests/fake/groups";
 import { createFakeUser } from "@tests/fake/user";
+import { mockListGroups } from "@tests/server-fn/groups";
+import { mockUpdateUser, userServerFnMocks } from "@tests/server-fn/users";
 import { renderWithProviders, renderWithRouter } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 import UserGroups from "../UserGroups";
@@ -23,7 +23,7 @@ describe("<UserGroups />", () => {
 	});
 
 	it("renders members as radios with remove buttons", async () => {
-		mockApiListGroups(allGroups);
+		mockListGroups(allGroups);
 
 		renderWithProviders(
 			<UserGroups
@@ -44,7 +44,7 @@ describe("<UserGroups />", () => {
 	});
 
 	it("shows an empty message when the user has no groups", async () => {
-		mockApiListGroups(allGroups);
+		mockListGroups(allGroups);
 
 		renderWithProviders(
 			<UserGroups userId={userId} memberGroups={[]} primaryGroup={null} />,
@@ -56,7 +56,7 @@ describe("<UserGroups />", () => {
 	});
 
 	it("hides the combobox when the user is in every group", async () => {
-		mockApiListGroups(allGroups);
+		mockListGroups(allGroups);
 
 		renderWithProviders(
 			<UserGroups
@@ -76,7 +76,7 @@ describe("<UserGroups />", () => {
 	});
 
 	it("points to group creation when no groups exist", async () => {
-		mockApiListGroups([]);
+		mockListGroups([]);
 
 		await renderWithRouter(
 			<UserGroups userId={userId} memberGroups={[]} primaryGroup={null} />,
@@ -95,8 +95,8 @@ describe("<UserGroups />", () => {
 	});
 
 	it("adds a group through the combobox", async () => {
-		mockApiListGroups(allGroups);
-		mockApiEditUser(userId, 200, {});
+		mockListGroups(allGroups);
+		mockUpdateUser(userId, 200, {});
 
 		renderWithProviders(
 			<UserGroups
@@ -119,7 +119,7 @@ describe("<UserGroups />", () => {
 	});
 
 	it("selects 'No primary group' by default when there is no primary group", async () => {
-		mockApiListGroups(allGroups);
+		mockListGroups(allGroups);
 
 		renderWithProviders(
 			<UserGroups
@@ -137,8 +137,8 @@ describe("<UserGroups />", () => {
 	});
 
 	it("sets the primary group when a radio is selected", async () => {
-		mockApiListGroups(allGroups);
-		mockApiEditUser(userId, 200, {});
+		mockListGroups(allGroups);
+		mockUpdateUser(userId, 200, {});
 
 		renderWithProviders(
 			<UserGroups
@@ -158,8 +158,8 @@ describe("<UserGroups />", () => {
 	});
 
 	it("clears the primary group when 'No primary group' is selected", async () => {
-		mockApiListGroups(allGroups);
-		mockApiEditUser(userId, 200, {});
+		mockListGroups(allGroups);
+		mockUpdateUser(userId, 200, {});
 
 		renderWithProviders(
 			<UserGroups
@@ -181,8 +181,8 @@ describe("<UserGroups />", () => {
 	});
 
 	it("removes a group and clears the primary when the primary is removed", async () => {
-		mockApiListGroups(allGroups);
-		mockApiEditUser(userId, 200, {});
+		mockListGroups(allGroups);
+		mockUpdateUser(userId, 200, {});
 
 		renderWithProviders(
 			<UserGroups
@@ -204,8 +204,8 @@ describe("<UserGroups />", () => {
 	});
 
 	it("removes a non-primary group without touching the primary", async () => {
-		mockApiListGroups(allGroups);
-		mockApiEditUser(userId, 200, {});
+		mockListGroups(allGroups);
+		mockUpdateUser(userId, 200, {});
 
 		renderWithProviders(
 			<UserGroups

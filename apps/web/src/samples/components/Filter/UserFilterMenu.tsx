@@ -1,4 +1,4 @@
-import { useFetchAccount } from "@account/queries";
+import { useFetchAccount } from "@account/account";
 import DropdownMenuCheckboxItem from "@base/DropdownMenuCheckboxItem";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";

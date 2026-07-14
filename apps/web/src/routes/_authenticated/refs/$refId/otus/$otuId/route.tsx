@@ -6,15 +6,21 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { OtuHeaderIcons } from "@otus/components/Detail/OtuHeaderIcons";
-import { otuQueryOptions, useFetchOtu } from "@otus/queries";
+import { useFetchOtu } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { useReferenceIsArchived } from "@references/hooks";
-import { referenceQueryOptions, useFetchReference } from "@references/queries";
+import { useFetchReference } from "@references/queries";
 import { createFileRoute, notFound, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 	{
 		loader: async ({ context: { queryClient }, params: { refId, otuId } }) => {
+			const [{ otuQueryOptions }, { referenceQueryOptions }] =
+				await Promise.all([
+					import("@otus/queries"),
+					import("@references/queries"),
+				]);
+
 			try {
 				await Promise.all([
 					queryClient.ensureQueryData(referenceQueryOptions(refId)),

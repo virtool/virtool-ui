@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import type { ComponentProps, Ref } from "react";
 
 type PaginationContentProps = ComponentProps<"ul"> & {

@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import Button from "@base/Button";
 import { buttonVariants } from "@base/buttonVariants";
 import {

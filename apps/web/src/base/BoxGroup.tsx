@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import type { AriaRole, ReactNode } from "react";
 import Box from "./Box";
 

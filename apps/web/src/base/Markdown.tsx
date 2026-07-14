@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 

@@ -1,4 +1,4 @@
-import { useFetchAccount } from "@account/queries";
+import { useFetchAccount } from "@account/account";
 import { type ApiResponse, apiClient } from "@app/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {

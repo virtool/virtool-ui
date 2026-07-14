@@ -182,13 +182,36 @@ router runs the loader during navigation, so the cache is warm by the time
 the component mounts — `useQuery` inside the page hits the cache
 immediately:
 
+The `queryOptions` factory is pulled in with a **dynamic import inside the
+loader body**, never a static import at the top of the route file:
+
 ```ts
 export const Route = createFileRoute("/_authenticated/samples/$sampleId")({
   loader: async ({ context: { queryClient }, params: { sampleId } }) => {
+    const { sampleQueryOptions } = await import("@samples/queries");
     await queryClient.ensureQueryData(sampleQueryOptions(sampleId));
   },
   component: SampleDetail,
 });
+```
+
+`loader` is a *critical* route export: `routeTree.gen.ts` imports it
+statically, so a top-level `import { sampleQueryOptions } from
+"@samples/queries"` puts that module — and through it `@app/api`, superagent,
+and the feature's whole request layer — into the eager bundle every page load
+pays for, `/login` included. The dynamic import moves it into a chunk the
+loader fetches only when the route is actually visited. The route's
+`component` half is already lazy, so importing hooks like `useSuspenseSample`
+at the top of the file is fine.
+
+When a loader needs several modules, import them together so the fetches
+overlap:
+
+```ts
+const [{ otuQueryOptions }, { referenceQueryOptions }] = await Promise.all([
+  import("@otus/queries"),
+  import("@references/queries"),
+]);
 ```
 
 `ensureQueryData` is a no-op when the data is already cached, so the same

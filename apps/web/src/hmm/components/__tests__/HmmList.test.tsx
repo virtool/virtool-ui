@@ -1,6 +1,7 @@
 import { screen } from "@testing-library/react";
+import { mockApiGetHmms } from "@tests/api/hmm";
 import { createFakeAccount } from "@tests/fake/account";
-import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
+import { createFakeHmmSearchResults } from "@tests/fake/hmm";
 import { createFakeTask } from "@tests/fake/tasks";
 import { at, renderRoute } from "@tests/setup";
 import nock from "nock";

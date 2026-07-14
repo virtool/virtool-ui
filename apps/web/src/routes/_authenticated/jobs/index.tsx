@@ -1,29 +1,36 @@
+import { num, oneOfArray } from "@app/searchParams";
 import JobsList from "@jobs/components/JobList";
 import type { JobState } from "@jobs/types";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod/v4";
 
-const jobStateEnum = z.enum([
+const jobStates = [
 	"cancelled",
 	"failed",
 	"pending",
 	"running",
 	"succeeded",
-]);
+] as const satisfies ReadonlyArray<JobState>;
 
-const initialState = ["pending", "running"] as const;
+const initialState: JobState[] = ["pending", "running"];
 
-const jobsSearchSchema = z.object({
-	state: z
-		.array(jobStateEnum)
-		.or(jobStateEnum.transform((val) => [val]))
-		.default([...initialState])
-		.catch([...initialState]),
-	page: z.number().default(1).catch(1),
-});
+/** Search params for the jobs list. */
+type JobsSearch = {
+	state: JobState[];
+	page: number;
+};
+
+function validateJobsSearch(
+	input: Partial<JobsSearch> & SearchSchemaInput,
+): JobsSearch {
+	return {
+		state: oneOfArray(input.state, jobStates, initialState),
+		page: num(input.page, 1),
+	};
+}
 
 export const Route = createFileRoute("/_authenticated/jobs/")({
-	validateSearch: jobsSearchSchema,
+	validateSearch: validateJobsSearch,
 	component: JobsRoute,
 });
 
@@ -34,7 +41,7 @@ function JobsRoute() {
 	return (
 		<JobsList
 			page={search.page}
-			states={search.state as JobState[]}
+			states={search.state}
 			setSearch={(next) => navigate({ search: { ...search, ...next } })}
 		/>
 	);

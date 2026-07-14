@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import type { LucideIcon } from "lucide-react";
 import Tooltip from "./Tooltip";
 import type { IconColor } from "./types";

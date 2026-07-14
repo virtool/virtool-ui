@@ -80,7 +80,7 @@ type ServerHandler = (options: {
 }) => Promise<unknown>;
 
 function serverHandler(exceptions: ReadonlyArray<{ url: string }>) {
-	const middleware = createAuthenticationMiddleware(exceptions);
+	const middleware = createAuthenticationMiddleware(async () => exceptions);
 	return (middleware as unknown as { options: { server: ServerHandler } })
 		.options.server;
 }

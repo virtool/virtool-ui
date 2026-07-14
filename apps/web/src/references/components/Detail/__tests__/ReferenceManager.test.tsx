@@ -1,8 +1,6 @@
 import { screen } from "@testing-library/react";
-import {
-	createFakeReference,
-	mockApiGetReferenceDetail,
-} from "@tests/fake/references";
+import { mockApiGetReferenceDetail } from "@tests/api/references";
+import { createFakeReference } from "@tests/fake/references";
 import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";

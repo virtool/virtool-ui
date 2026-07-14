@@ -1,4 +1,4 @@
-import { useFetchAccount } from "@account/queries";
+import { useFetchAccount } from "@account/account";
 import AdministratorRoleSelect from "@administration/components/AdministratorRoleSelect";
 import { useCheckAdminRole } from "@administration/hooks";
 import { useGetAdministratorRoles } from "@administration/queries";

@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { DropdownMenu } from "radix-ui";
 import { type ComponentPropsWithoutRef, forwardRef } from "react";
 

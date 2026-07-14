@@ -1,8 +1,8 @@
 import type { ServerJob } from "@jobs/types";
 import { screen } from "@testing-library/react";
-import { mockApiGetJob } from "@tests/api/jobs";
 import { createFakeIndexMinimal } from "@tests/fake/indexes";
 import { createFakeReferenceNested } from "@tests/fake/references";
+import { mockGetJob } from "@tests/server-fn/jobs";
 import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, describe, expect, it } from "vitest";
@@ -29,7 +29,7 @@ describe("<JobDetail /> build_index links", () => {
 		const refId = "reference-1";
 		const indexId = "index-1";
 
-		const scope = mockApiGetJob(123, createBuildIndexJob(indexId));
+		const getJob = mockGetJob(123, createBuildIndexJob(indexId));
 		nock("http://localhost")
 			.get(`/api/indexes/${indexId}`)
 			.reply(
@@ -51,6 +51,6 @@ describe("<JobDetail /> build_index links", () => {
 			`/refs/${refId}/indexes/${indexId}`,
 		);
 
-		scope.done();
+		expect(getJob).toHaveBeenCalled();
 	});
 });

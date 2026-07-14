@@ -1,4 +1,5 @@
-import { cn, getWorkflowDisplayName } from "@app/utils";
+import { cn } from "@app/cn";
+import { getWorkflowDisplayName } from "@app/utils";
 import Dropdown from "@base/Dropdown";
 import DropdownMenuTrigger from "@base/DropdownMenuTrigger";
 import type { Label } from "@labels/types";

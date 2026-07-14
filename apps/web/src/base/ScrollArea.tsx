@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { ScrollArea as ScrollAreaPrimitive } from "radix-ui";
 import type { ReactNode } from "react";
 

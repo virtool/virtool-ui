@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiCreateIsolate } from "@tests/fake/otus";
+import { mockApiCreateIsolate } from "@tests/api/otus";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import type { ComponentProps } from "react";

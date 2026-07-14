@@ -1,9 +1,8 @@
 import { screen } from "@testing-library/react";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import {
-	createFakeReference,
-	mockApiGetReferenceDetail,
-} from "@tests/fake/references";
+import { mockApiGetReferenceDetail } from "@tests/api/references";
+import { createFakeAccount } from "@tests/fake/account";
+import { createFakeReference } from "@tests/fake/references";
+import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -20,7 +19,7 @@ describe("<OtuToolbar />", () => {
 	afterEach(() => nock.cleanAll());
 
 	it("should render Create button when [canCreate=true]", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+		mockGetAccount(createFakeAccount({ administrator_role: "full" }));
 
 		renderWithProviders(
 			<OtuToolbar
@@ -38,7 +37,7 @@ describe("<OtuToolbar />", () => {
 	});
 
 	it("should not render Create button when [canCreate=false]", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
+		mockGetAccount(createFakeAccount({ administrator_role: null }));
 
 		renderWithProviders(
 			<OtuToolbar

@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
-import { mockApiFindUsers } from "@tests/api/users";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeAccount } from "@tests/fake/account";
 import { createFakeUsers } from "@tests/fake/user";
+import { mockFindUsers, mockGetAccount } from "@tests/server-fn/users";
 import { at, renderWithRouter } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 import { ManageUsers } from "../ManageUsers";
@@ -10,11 +10,11 @@ describe("<ManageUsers />", () => {
 	it("should render correctly with 3 users", async () => {
 		const users = createFakeUsers(3);
 		at(users, 0).administrator_role = "full";
-		await mockApiFindUsers(users);
+		await mockFindUsers(users);
 		const account = createFakeAccount({
 			administrator_role: "full",
 		});
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 
 		await renderWithRouter(<ManageUsers />);
 
@@ -30,7 +30,7 @@ describe("<ManageUsers />", () => {
 		const account = createFakeAccount({
 			administrator_role: "full",
 		});
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 
 		await renderWithRouter(<ManageUsers />);
 
@@ -43,8 +43,8 @@ describe("<ManageUsers />", () => {
 	it("should render correctly if account has insufficient permissions", async () => {
 		const users = createFakeUsers(3);
 
-		mockApiFindUsers(users);
-		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
+		mockFindUsers(users);
+		mockGetAccount(createFakeAccount({ administrator_role: null }));
 
 		await renderWithRouter(<ManageUsers />);
 

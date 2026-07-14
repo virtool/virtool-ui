@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiCreateReference } from "@tests/fake/references";
+import { mockApiCreateReference } from "@tests/api/references";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import { describe, expect, it } from "vitest";

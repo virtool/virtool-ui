@@ -1,12 +1,10 @@
 import type { SubtractionMinimal } from "@subtraction/types";
 import { getSubtractionFastaName } from "@subtraction/utils";
 import { screen } from "@testing-library/react";
+import { mockApiGetSubtractionDetail } from "@tests/api/subtractions";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
-import {
-	createFakeSubtraction,
-	mockApiGetSubtractionDetail,
-} from "@tests/fake/subtractions";
+import { createFakeSubtraction } from "@tests/fake/subtractions";
 import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
