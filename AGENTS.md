@@ -253,6 +253,12 @@ Imports flow `functions → service → data` and never the reverse. The
 db handle is injected as the first argument to `data.ts` functions,
 not imported.
 
+Type that first argument `DbOrTx` (from `@server/db/pg`), not `Db`, for
+any function that might be called inside a `db.transaction(...)`.
+Drizzle's transaction handle is not assignable to `Db`, so a helper
+typed `Db` cannot be reused inside a transaction without being widened
+first.
+
 Legacy features that still call the Python API through their
 client-side `api.ts` are not subject to this layering.
 

@@ -1,8 +1,8 @@
 import { randomBytes } from "node:crypto";
 
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
-import type { Db } from "../db/pg";
+import type { DbOrTx } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import { type SessionRow, sessions } from "../db/schema/sessions";
 import { hashToken, newSessionId, newSessionToken } from "./tokens";
@@ -32,7 +32,7 @@ export type CreateAuthenticatedSessionResult = {
 };
 
 export async function createAuthenticatedSession(
-	db: Db,
+	db: DbOrTx,
 	{ userId, ip, remember }: CreateAuthenticatedSessionInput,
 ): Promise<CreateAuthenticatedSessionResult> {
 	const sessionId = newSessionId();
@@ -77,7 +77,7 @@ export type CreateResetSessionResult = {
 };
 
 export async function createResetSession(
-	db: Db,
+	db: DbOrTx,
 	{ userId, ip, remember }: CreateResetSessionInput,
 ): Promise<CreateResetSessionResult> {
 	const sessionId = newSessionId();
@@ -105,14 +105,38 @@ export async function createResetSession(
 }
 
 export async function invalidateSession(
-	db: Db,
+	db: DbOrTx,
 	sessionId: string,
 ): Promise<void> {
 	await db.delete(sessions).where(eq(sessions.sessionId, sessionId));
 }
 
+/**
+ * Delete a reset session, reporting whether this call is the one that consumed
+ * it. False means it was already spent (or never existed).
+ *
+ * A reset code is single-use, but nothing between reading it and writing the
+ * new password holds a lock — and the bcrypt hash in that gap is slow. Called
+ * inside the reset transaction, this is the point two concurrent resets for the
+ * same code serialize on: the second blocks on the row lock, then finds nothing
+ * to delete and rolls back rather than clobbering the session the first minted.
+ */
+export async function consumeResetSession(
+	db: DbOrTx,
+	sessionId: string,
+): Promise<boolean> {
+	const rows = await db
+		.delete(sessions)
+		.where(
+			and(eq(sessions.sessionId, sessionId), eq(sessions.sessionType, "reset")),
+		)
+		.returning({ sessionId: sessions.sessionId });
+
+	return rows.length > 0;
+}
+
 export async function invalidateUserSessions(
-	db: Db,
+	db: DbOrTx,
 	userId: number,
 ): Promise<void> {
 	await db.delete(sessions).where(eq(sessions.userId, userId));

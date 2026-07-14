@@ -1,14 +1,14 @@
 import os from "node:os";
+import path from "node:path";
 import { defineConfig } from "vitest/config";
 import viteConfigFn from "./vite.config";
 
+// `mode: "test"` drops Nitro and `command: "serve"` drops Sentry, so neither is
+// ever constructed here and the plugin list needs no further filtering.
 const viteConfig = viteConfigFn({ command: "serve", mode: "test" });
 
 export default defineConfig({
 	...viteConfig,
-	plugins: viteConfig.plugins
-		.flat(Infinity)
-		.filter((plugin) => !String(plugin?.name ?? "").startsWith("sentry")),
 	test: {
 		globals: true,
 		silent: false,
@@ -17,12 +17,25 @@ export default defineConfig({
 			{
 				extends: true,
 				test: {
+					// No globalSetup: the client transform strips server function bodies
+					// and the server-only imports behind them, so nothing here reaches
+					// Postgres. Component tests must not need Docker.
 					name: "web",
 					environment: "jsdom",
 					setupFiles: ["./src/tests/setup.tsx"],
-					globalSetup: ["./src/tests/globalSetup.ts"],
 					include: ["src/**/*.test.{ts,tsx}"],
 					exclude: ["src/server/**"],
+					// Pin the assumption above. These are the two modules that open
+					// Postgres at import; if one ever survives the client transform into
+					// the browser program, the guard throws instead of quietly making
+					// Docker a prerequisite again. Listed before the `@server` prefix
+					// alias so they win.
+					alias: [
+						{
+							find: /^@server\/(config|db\/pg)$/,
+							replacement: path.resolve("src/tests/postgresGuard.ts"),
+						},
+					],
 				},
 			},
 			{

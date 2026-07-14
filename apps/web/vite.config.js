@@ -7,7 +7,7 @@ import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 import pkg from "./package.json" with { type: "json" };
 
-export default defineConfig(({ command }) => ({
+export default defineConfig(({ command, mode }) => ({
 	build: {
 		sourcemap: true,
 		rolldownOptions: {
@@ -83,14 +83,17 @@ export default defineConfig(({ command }) => ({
 				autoCodeSplitting: true,
 			},
 		}),
-		nitro({
-			// `@sentry/profiling-node` ships native `.node` addons the bundler can't
-			// inline. Tracing it (and its native helper) keeps the packages external
-			// and copies them into the server output, so the build doesn't choke on
-			// the binaries and the runtime import resolves. The dist image ships only
-			// `.output`, so the trace is what makes the package available at runtime.
-			traceDeps: ["@sentry/profiling-node*", "@sentry/node-cpu-profiler*"],
-		}),
+		// Tests never ask Nitro to serve anything, and it holds file handles open
+		// that stall Vitest's shutdown for ten seconds after the last test passes.
+		mode !== "test" &&
+			nitro({
+				// `@sentry/profiling-node` ships native `.node` addons the bundler can't
+				// inline. Tracing it (and its native helper) keeps the packages external
+				// and copies them into the server output, so the build doesn't choke on
+				// the binaries and the runtime import resolves. The dist image ships only
+				// `.output`, so the trace is what makes the package available at runtime.
+				traceDeps: ["@sentry/profiling-node*", "@sentry/node-cpu-profiler*"],
+			}),
 		react({
 			include: "**/*.tsx",
 			babel: {

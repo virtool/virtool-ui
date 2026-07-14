@@ -101,6 +101,41 @@ layer would otherwise pull in:
 If a domain you need is still Mongo-primary, the answer is to wait for
 its Postgres migration, not to add a Mongo client back to this repo.
 
+## Transactions and the `DbOrTx` handle
+
+A sequence of writes where a partial result is a bug — a password change
+that must not land unless the session that goes with it lands too —
+belongs in a single `db.transaction(...)`. Return whatever the caller
+needs out of the callback and act on it *after* the commit; a side effect
+performed inside the callback (setting a cookie, emitting an event) still
+happens when the transaction later rolls back.
+
+Do the slow, non-database work before opening the transaction. `updateUser`
+and `resetPassword` both hash the new password first: bcrypt at cost 12
+costs hundreds of milliseconds, and an open transaction should not sit idle
+waiting for it.
+
+`db.transaction` hands the callback a Drizzle transaction handle, which is
+**not** assignable to `Db` (`Db` is the pooled `PostgresJsDatabase` and
+carries a `$client` the transaction lacks). Passing one to a function typed
+`Db` fails to compile with `TS2345`. So a helper that needs to work both
+standalone and inside a transaction takes `DbOrTx`:
+
+```ts
+import type { DbOrTx } from "../db/pg";
+
+export async function invalidateUserSessions(
+    db: DbOrTx,
+    userId: number,
+): Promise<void> {
+    await db.delete(sessions).where(eq(sessions.userId, userId));
+}
+```
+
+`DbOrTx` covers the shared query-builder surface, which is everything a
+`data.ts` function normally touches. Reach for `Db` only when the function
+genuinely needs something a transaction cannot give it.
+
 ### Stubbed-out cross-store reads
 
 A migrated domain occasionally exposes a field that depends on a
