@@ -253,9 +253,20 @@ export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 
 // jsdom does not implement EventSource; the SSE bridge constructs one when the
 // authenticated layout mounts, so any route-level test that renders it would
-// throw. A noop stand-in keeps the connection inert during tests.
+// throw. A noop stand-in keeps the connection inert during tests. The
+// readyState constants are part of the surface: SseConnection reads
+// `window.EventSource.CLOSED` to tell a rejected handshake from a dropped
+// transport.
 class FakeEventSource {
-	close() {}
+	static readonly CONNECTING = 0;
+	static readonly OPEN = 1;
+	static readonly CLOSED = 2;
+
+	readyState: number = FakeEventSource.CONNECTING;
+
+	close() {
+		this.readyState = FakeEventSource.CLOSED;
+	}
 	addEventListener() {}
 	removeEventListener() {}
 	dispatchEvent() {
