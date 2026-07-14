@@ -1,7 +1,7 @@
 import { formatPath } from "@app/hooks";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiListFiles } from "@tests/api/files";
+import { mockApiDeleteFile, mockApiListFiles } from "@tests/api/files";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeFile } from "@tests/fake/files";
 import { mockGetAccount } from "@tests/server-fn/users";
@@ -24,7 +24,6 @@ describe("<FileManager>", () => {
 				"application/gzip": [".fasta.gz", ".fa.gz", ".fastq.gz", ".fq.gz"],
 			},
 			fileType: "reads",
-			message: "",
 		};
 		path = formatPath("/samples/uploads", { page: 1 });
 	});
@@ -55,7 +54,7 @@ describe("<FileManager>", () => {
 		);
 
 		expect(
-			await screen.findByText("Drag file here to upload"),
+			await screen.findByText("Drag files here to upload"),
 		).toBeInTheDocument();
 		expect(screen.getByText("subtraction.fq.gz")).toBeInTheDocument();
 		expect(
@@ -94,7 +93,7 @@ describe("<FileManager>", () => {
 		).not.toBeInTheDocument();
 	});
 
-	it("should take custom message", async () => {
+	it("should show the hint under the upload prompt", async () => {
 		mockGetAccount(
 			createFakeAccount({
 				administrator_role: "full",
@@ -103,10 +102,92 @@ describe("<FileManager>", () => {
 		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
 		await renderWithRouter(
-			<FileManager {...props} message="Test Message" />,
+			<FileManager {...props} hint="Supports plain or gzipped FASTA" />,
 			path,
 		);
 
-		expect(await screen.findByText("Test Message")).toBeInTheDocument();
+		expect(
+			await screen.findByText("Supports plain or gzipped FASTA"),
+		).toBeInTheDocument();
+		expect(screen.getByText("Drag files here to upload")).toBeInTheDocument();
+	});
+
+	describe("selection", () => {
+		it("should delete every selected file", async () => {
+			const first = createFakeFile({ name: "one.fq.gz" });
+			const second = createFakeFile({ name: "two.fq.gz" });
+			const unselected = createFakeFile({ name: "three.fq.gz" });
+			const files = [first, second, unselected];
+
+			mockGetAccount(createFakeAccount({ administrator_role: "full" }));
+			mockApiListFiles(files, true);
+			mockApiListFiles(files, true);
+
+			const firstScope = mockApiDeleteFile(first.id);
+			const secondScope = mockApiDeleteFile(second.id);
+			const unselectedScope = mockApiDeleteFile(unselected.id);
+
+			await renderWithRouter(<FileManager {...props} />, path);
+
+			expect(await screen.findByText("3 files")).toBeInTheDocument();
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: "Select one.fq.gz" }),
+			);
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: "Select two.fq.gz" }),
+			);
+
+			expect(screen.getByText("2 selected")).toBeInTheDocument();
+
+			await userEvent.click(screen.getByRole("button", { name: "Delete" }));
+
+			await waitFor(() => {
+				expect(firstScope.isDone()).toBe(true);
+				expect(secondScope.isDone()).toBe(true);
+			});
+
+			expect(unselectedScope.isDone()).toBe(false);
+		});
+
+		it("should select and deselect every file on the page", async () => {
+			const files = [
+				createFakeFile({ name: "one.fq.gz" }),
+				createFakeFile({ name: "two.fq.gz" }),
+			];
+
+			mockGetAccount(createFakeAccount({ administrator_role: "full" }));
+			mockApiListFiles(files, true);
+
+			await renderWithRouter(<FileManager {...props} />, path);
+
+			const selectAll = await screen.findByRole("checkbox", {
+				name: "Select all files",
+			});
+
+			await userEvent.click(selectAll);
+			expect(screen.getByText("2 selected")).toBeInTheDocument();
+
+			await userEvent.click(selectAll);
+			expect(screen.getByText("2 files")).toBeInTheDocument();
+			expect(
+				screen.queryByRole("button", { name: "Delete" }),
+			).not.toBeInTheDocument();
+		});
+
+		it("should hide checkboxes when there is nothing to do with a selection", async () => {
+			mockGetAccount(createFakeAccount({ administrator_role: null }));
+			mockApiListFiles([createFakeFile({ name: "one.fq.gz" })], true);
+
+			await renderWithRouter(<FileManager {...props} />, path);
+
+			expect(await screen.findByText("one.fq.gz")).toBeInTheDocument();
+			expect(
+				screen.queryByRole("checkbox", { name: "Select all files" }),
+			).not.toBeInTheDocument();
+			expect(
+				screen.queryByRole("checkbox", { name: "Select one.fq.gz" }),
+			).not.toBeInTheDocument();
+		});
 	});
 });

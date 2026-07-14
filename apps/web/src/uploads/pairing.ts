@@ -21,12 +21,14 @@ const MATE_TOKEN = "#";
 /**
  * Mate-token patterns in priority order. Each captures a single `1`/`2` digit.
  * The prefixes (`_R`, `_`, `.`) contain no digits, so the captured digit's
- * position can be located within the match.
+ * position can be located within the match. `separator` is what the match is
+ * replaced with when the token is stripped — the dotted pattern consumes the
+ * dots on both sides and must leave one behind.
  */
 const MATE_PATTERNS = [
-	/_R([12])(?=[._]|$)/i,
-	/_([12])(?=[._]|$)/,
-	/\.([12])\./,
+	{ pattern: /_R([12])(?=[._]|$)/i, separator: "" },
+	{ pattern: /_([12])(?=[._]|$)/, separator: "" },
+	{ pattern: /\.([12])\./, separator: "." },
 ];
 
 /**
@@ -38,7 +40,7 @@ const MATE_PATTERNS = [
  * @param name - the filename to inspect
  */
 export function detectMate(name: string): Mate | null {
-	for (const pattern of MATE_PATTERNS) {
+	for (const { pattern } of MATE_PATTERNS) {
 		const match = pattern.exec(name);
 
 		if (match) {
@@ -58,6 +60,48 @@ export function detectMate(name: string): Mate | null {
 	}
 
 	return null;
+}
+
+/**
+ * Removes a mate token from a filename, leaving the name unchanged when no
+ * recognised token is present. Used to name a sample after the pair of reads it
+ * is created from rather than after one of its mates.
+ *
+ * @param name - the filename to strip
+ */
+export function stripMateToken(name: string): string {
+	for (const { pattern, separator } of MATE_PATTERNS) {
+		const match = pattern.exec(name);
+
+		if (match) {
+			return (
+				name.slice(0, match.index) +
+				separator +
+				name.slice(match.index + match[0].length)
+			);
+		}
+	}
+
+	return name;
+}
+
+/**
+ * The read files a row is made of, in [LEFT, RIGHT] order. A single row yields
+ * one file; a pair row yields its two mates.
+ *
+ * @param row - the row to read the files from
+ */
+export function getReadRowReads(row: ReadRow): Upload[] {
+	return row.kind === "pair" ? [row.left, row.right] : [row.file];
+}
+
+/**
+ * A stable key identifying a row, unique among the rows built from one list.
+ *
+ * @param row - the row to key
+ */
+export function getReadRowKey(row: ReadRow): string {
+	return row.kind === "pair" ? row.key : String(row.file.id);
 }
 
 /**
@@ -134,4 +178,21 @@ export function buildReadRows(files: Upload[]): ReadRow[] {
 	}
 
 	return rows;
+}
+
+/**
+ * The read files a sample created from ``upload`` will use: the file itself,
+ * plus its mate in [LEFT, RIGHT] order when one is detected among ``uploads``.
+ * Only files in ``uploads`` are considered, so a mate that isn't listed
+ * alongside it won't be found.
+ *
+ * @param upload - the read file the sample will be created from
+ * @param uploads - the read files listed alongside it, used to detect its mate
+ */
+export function getReadsForUpload(upload: Upload, uploads: Upload[]): Upload[] {
+	const row = buildReadRows(uploads).find((candidate) =>
+		getReadRowReads(candidate).some((read) => read.id === upload.id),
+	);
+
+	return row ? getReadRowReads(row) : [upload];
 }

@@ -1,15 +1,23 @@
+import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import ContainerNarrow from "@base/ContainerNarrow";
+import type { Label } from "@labels/types";
 import { FileManager } from "@uploads/components/FileManager";
+import CreateSampleFromFile from "./Create/CreateSampleFromFile";
 
 type SampleFileManagerProps = {
+	labels: Label[];
 	page: number;
 	setPage: (page: number) => void;
 };
 
 export default function SampleFileManager({
+	labels,
 	page,
 	setPage,
 }: SampleFileManagerProps) {
+	const { hasPermission: canCreate } =
+		useCheckAdminRoleOrPermission("create_sample");
+
 	return (
 		<ContainerNarrow>
 			<FileManager
@@ -19,17 +27,19 @@ export default function SampleFileManager({
 				}}
 				fileType="reads"
 				page={page}
-				message={
-					<div className="flex flex-col gap-1 items-center">
-						<span className="font-medium text-lg">
-							Drag files here to upload
-						</span>
-						<span className="text-gray-600">
-							Supports plain or gzipped FASTA and FASTQ
-						</span>
-					</div>
-				}
+				hint="Supports plain or gzipped FASTA and FASTQ"
 				regex={/\.f(ast)?q(\.gz)?$/}
+				renderItemAction={
+					canCreate
+						? (upload, uploads) => (
+								<CreateSampleFromFile
+									labels={labels}
+									upload={upload}
+									uploads={uploads}
+								/>
+							)
+						: undefined
+				}
 				setPage={setPage}
 			/>
 		</ContainerNarrow>

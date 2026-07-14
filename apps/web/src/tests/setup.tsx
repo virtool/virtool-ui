@@ -25,6 +25,7 @@ import { createFakeAccount } from "./fake/account";
 import { authServerFnMocks } from "./server-fn/auth";
 import { groupServerFnMocks } from "./server-fn/groups";
 import { jobServerFnMocks } from "./server-fn/jobs";
+import { labelServerFnMocks } from "./server-fn/labels";
 import {
 	mockGetPasswordPolicy,
 	settingsServerFnMocks,
@@ -52,6 +53,10 @@ vi.mock("@server/settings/functions", async () => {
 	const { settingsServerFnMocks } = await import("./server-fn/settings");
 	return settingsServerFnMocks;
 });
+vi.mock("@server/labels/functions", async () => {
+	const { labelServerFnMocks } = await import("./server-fn/labels");
+	return labelServerFnMocks;
+});
 
 beforeEach(() => {
 	for (const fn of Object.values(groupServerFnMocks)) {
@@ -61,6 +66,7 @@ beforeEach(() => {
 		...Object.values(userServerFnMocks),
 		...Object.values(jobServerFnMocks),
 		...Object.values(authServerFnMocks),
+		...Object.values(labelServerFnMocks),
 	]) {
 		fn.mockReset();
 		// Default to a pending promise so an un-stubbed query renders its loading

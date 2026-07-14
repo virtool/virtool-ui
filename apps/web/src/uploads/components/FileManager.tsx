@@ -7,18 +7,20 @@ import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
+import { useListSelection } from "@base/useListSelection";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { capitalize } from "es-toolkit";
 import { AlertCircle, FileUp } from "lucide-react";
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import type { Accept } from "react-dropzone";
-import { useListFiles } from "../queries";
-import type { UploadType } from "../types";
+import { useDeleteFiles, useListFiles } from "../queries";
+import type { Upload, UploadType } from "../types";
 import { upload } from "../uploader";
 import { UploadBar } from "./UploadBar";
 import UploadItem from "./UploadItem";
+import UploadListHeader from "./UploadListHeader";
 
 export type FileManagerProps = {
 	/* The MIME-types and extensions to accept. */
@@ -27,13 +29,17 @@ export type FileManagerProps = {
 	/* The type of file accepted. */
 	fileType: UploadType;
 
-	/* A message to display in the upload toolbar. */
-	message?: ReactNode;
+	/* A note shown under the upload prompt, describing the accepted file types. */
+	hint?: ReactNode;
 
 	page?: number;
 
 	/* A regular expression to validate file names. */
 	regex?: RegExp;
+
+	/* Renders an extra control on each file item, given the file and the other
+	   files listed with it. */
+	renderItemAction?: (upload: Upload, uploads: Upload[]) => ReactNode;
 
 	setPage?: (page: number) => void;
 };
@@ -41,9 +47,10 @@ export type FileManagerProps = {
 export function FileManager({
 	accept,
 	fileType,
-	message,
+	hint,
 	page = 1,
 	regex,
+	renderItemAction,
 	setPage = () => {},
 }: FileManagerProps) {
 	const {
@@ -56,6 +63,14 @@ export function FileManager({
 		isPending: isPendingFiles,
 		isError: isErrorFiles,
 	} = useListFiles(fileType, page, 25);
+
+	// The uploads themselves are held, not just their ids, so a selection made on
+	// one page survives paging away from it.
+	const selection = useListSelection<Upload>({
+		getKey: (item) => item.id,
+		resetKey: fileType,
+	});
+	const { mutate: deleteFiles } = useDeleteFiles();
 
 	if (isErrorAccount && !account) {
 		return <QueryError noun="account" />;
@@ -86,6 +101,11 @@ export function FileManager({
 		}
 	}
 
+	function handleDelete() {
+		deleteFiles({ ids: selection.selected.map((item) => item.id) });
+		selection.clear();
+	}
+
 	return (
 		<>
 			<ViewHeader title={title}>
@@ -99,7 +119,7 @@ export function FileManager({
 				<UploadBar
 					accept={accept}
 					onDrop={handleDrop}
-					message={message || "Drag file here to upload"}
+					hint={hint}
 					regex={regex}
 				/>
 			) : (
@@ -134,8 +154,33 @@ export function FileManager({
 					onPageChange={setPage}
 				>
 					<BoxGroup>
+						{canDelete && (
+							<UploadListHeader
+								canDelete={canDelete}
+								checked={selection.getVisibleState(files.items)}
+								found={files.found_count}
+								onDelete={handleDelete}
+								onSelectAll={() => selection.toggleVisible(files.items)}
+								selectedCount={selection.selected.length}
+							/>
+						)}
 						{files.items.map((item) => (
-							<UploadItem {...item} canDelete={canDelete} key={item.id} />
+							<UploadItem
+								{...item}
+								action={renderItemAction?.(item, files.items)}
+								canDelete={canDelete}
+								checked={selection.isSelected(item)}
+								key={item.id}
+								onSelect={
+									canDelete
+										? (event: MouseEvent<HTMLButtonElement>) =>
+												selection.select(item, {
+													shiftKey: event.shiftKey,
+													visibleItems: files.items,
+												})
+										: undefined
+								}
+							/>
 						))}
 					</BoxGroup>
 				</Pagination>

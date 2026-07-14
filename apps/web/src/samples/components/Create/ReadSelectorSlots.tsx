@@ -1,49 +1,8 @@
 import { cn } from "@app/cn";
 import Icon from "@base/Icon";
 import type { Upload } from "@uploads/types";
-import { ArrowLeftRight, TriangleAlert } from "lucide-react";
-
-type ReadSlotProps = {
-	label: string;
-	sub: string;
-	/** The selected file id for this slot, if any */
-	id?: number;
-	/** Loaded uploads used to resolve the file name */
-	items: Upload[];
-	/** Placeholder shown when the slot is empty */
-	placeholder: string;
-};
-
-function ReadSlot({ label, sub, id, items, placeholder }: ReadSlotProps) {
-	const file = id === undefined ? undefined : items.find((it) => it.id === id);
-	const missing = id !== undefined && file === undefined;
-
-	return (
-		<div
-			className={cn(
-				"flex-1 min-w-0 rounded-md border p-3",
-				missing ? "border-amber-400 bg-amber-50" : "border-gray-300",
-			)}
-		>
-			<div className="text-xs font-bold text-gray-500 tracking-wide">
-				{label}
-				<span className="ml-1 font-medium text-gray-500">{sub}</span>
-			</div>
-			{file && (
-				<div className="truncate font-mono font-medium mt-1">{file.name}</div>
-			)}
-			{missing && (
-				<div className="flex items-center gap-1.5 mt-1 text-amber-600 font-medium">
-					<Icon icon={TriangleAlert} size={16} />
-					This file is no longer available
-				</div>
-			)}
-			{id === undefined && (
-				<div className="mt-1 text-gray-500">{placeholder}</div>
-			)}
-		</div>
-	);
-}
+import { ArrowLeftRight } from "lucide-react";
+import ReadSlot from "./ReadSlot";
 
 type ReadSelectorSlotsProps = {
 	/** The current selection, in [LEFT, RIGHT] order */
@@ -68,14 +27,24 @@ export default function ReadSelectorSlots({
 	onSwap,
 	showSwap,
 }: ReadSelectorSlotsProps) {
+	function getSlot(id?: number) {
+		const file =
+			id === undefined ? undefined : items.find((it) => it.id === id);
+
+		return { file, missing: id !== undefined && file === undefined };
+	}
+
+	const left = getSlot(selected[0]);
+	const right = getSlot(selected[1]);
+
 	return (
-		<div className="flex items-center gap-2 mb-4">
+		<div className="flex items-stretch gap-2 mb-4">
 			<ReadSlot
+				file={left.file}
 				label="LEFT"
-				sub="R1"
-				id={selected[0]}
-				items={items}
+				missing={left.missing}
 				placeholder="No file selected"
+				sub="R1"
 			/>
 			{showSwap && (
 				<button
@@ -84,7 +53,7 @@ export default function ReadSelectorSlots({
 					disabled={selected.length < 2}
 					onClick={onSwap}
 					className={cn(
-						"shrink-0 rounded-md border border-gray-300 p-2 text-gray-600",
+						"shrink-0 self-center rounded-md border border-gray-300 p-2 text-gray-600",
 						"hover:bg-gray-100 disabled:opacity-40 disabled:hover:bg-transparent",
 						"focus:outline-none focus:ring-2 focus:ring-blue-600/50",
 					)}
@@ -93,11 +62,11 @@ export default function ReadSelectorSlots({
 				</button>
 			)}
 			<ReadSlot
+				file={right.file}
 				label="RIGHT"
-				sub="R2"
-				id={selected[1]}
-				items={items}
+				missing={right.missing}
 				placeholder="Optional — add a second file for paired reads"
+				sub="R2"
 			/>
 		</div>
 	);

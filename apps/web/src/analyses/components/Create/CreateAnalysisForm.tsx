@@ -4,10 +4,10 @@ import Button from "@base/Button";
 import { DialogFooter } from "@base/Dialog";
 import InputError from "@base/InputError";
 import QueryError from "@base/QueryError";
+import SubtractionSelector from "@subtraction/components/SubtractionSelector";
 import { Controller, useForm } from "react-hook-form";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import IndexSelector from "./IndexSelector";
-import SubtractionSelector from "./SubtractionSelector";
 import WorkflowSelector from "./WorkflowSelector";
 import type { workflow } from "./workflows";
 

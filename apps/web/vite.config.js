@@ -134,7 +134,6 @@ export default defineConfig(({ command, mode }) => ({
 			"es-toolkit/string",
 			"fuse.js",
 			"lucide-react",
-			"marked",
 			"numbro",
 			"radix-ui",
 			"react-dropzone",
