@@ -41,11 +41,6 @@ export type FileManagerProps = {
 	   files listed with it. */
 	renderItemAction?: (upload: Upload, uploads: Upload[]) => ReactNode;
 
-	/* Renders an extra action in the selection header, given the selected files.
-	   Providing it makes the files selectable even without permission to delete
-	   them. */
-	renderSelectionAction?: (selected: Upload[]) => ReactNode;
-
 	setPage?: (page: number) => void;
 };
 
@@ -56,7 +51,6 @@ export function FileManager({
 	page = 1,
 	regex,
 	renderItemAction,
-	renderSelectionAction,
 	setPage = () => {},
 }: FileManagerProps) {
 	const {
@@ -112,10 +106,6 @@ export function FileManager({
 		selection.clear();
 	}
 
-	// Selection only earns its place when there is something to do with the
-	// files once they are selected.
-	const canSelect = canDelete || Boolean(renderSelectionAction);
-
 	return (
 		<>
 			<ViewHeader title={title}>
@@ -164,9 +154,8 @@ export function FileManager({
 					onPageChange={setPage}
 				>
 					<BoxGroup>
-						{canSelect && (
+						{canDelete && (
 							<UploadListHeader
-								action={renderSelectionAction?.(selection.selected)}
 								canDelete={canDelete}
 								checked={selection.getVisibleState(files.items)}
 								found={files.found_count}
@@ -183,7 +172,7 @@ export function FileManager({
 								checked={selection.isSelected(item)}
 								key={item.id}
 								onSelect={
-									canSelect
+									canDelete
 										? (event: MouseEvent<HTMLButtonElement>) =>
 												selection.select(item, {
 													shiftKey: event.shiftKey,

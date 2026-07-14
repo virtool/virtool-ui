@@ -163,57 +163,6 @@ export function useCreateSample() {
 }
 
 /**
- * The result of creating one sample in a batch. A batch reports every sample's
- * outcome rather than failing as a whole, so the samples that were created
- * aren't lost when one of their siblings is rejected.
- */
-export type SampleCreationOutcome =
-	| { status: "created"; sample: Sample }
-	| { status: "failed"; message: string };
-
-/**
- * Initialize a mutator for creating several samples at once.
- *
- * Every sample is requested, even when an earlier one fails. The outcomes are
- * returned in the order the requests were given, so the caller can match each
- * one back to the row it came from.
- *
- * @returns A mutator for creating several samples
- */
-export function useCreateSamples() {
-	const queryClient = useQueryClient();
-
-	return useMutation<
-		SampleCreationOutcome[],
-		ErrorResponse,
-		CreateSampleRequest[]
-	>({
-		mutationFn: (requests) =>
-			Promise.all(
-				requests.map((request) =>
-					createSample(request).then(
-						(sample): SampleCreationOutcome => ({
-							status: "created",
-							sample,
-						}),
-						(error: ErrorResponse): SampleCreationOutcome => ({
-							status: "failed",
-							message:
-								error.response?.body.message ?? "Could not create sample",
-						}),
-					),
-				),
-			),
-		// Settled, not success: samples created before a sibling failed still
-		// reserve their read files, so the uploads lists have to be refreshed
-		// either way.
-		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: fileQueryKeys.lists() });
-		},
-	});
-}
-
-/**
  * Initialize a mutator for updating a sample
  *
  * @returns A mutator for updating a sample

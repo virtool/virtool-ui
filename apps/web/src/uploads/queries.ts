@@ -1,8 +1,6 @@
 import { apiClient } from "@app/api";
-import { getUploads } from "@server/uploads/functions";
 import {
 	keepPreviousData,
-	queryOptions,
 	useInfiniteQuery,
 	useMutation,
 	useQuery,
@@ -11,35 +9,6 @@ import {
 import { fileQueryKeys } from "@uploads/keys";
 import type { ErrorResponse } from "@/types/api";
 import type { FileResponse, UploadType } from "./types";
-
-/**
- * The uploads with the given ids, for a view that is handed ids rather than a
- * list — a URL naming its read files, say.
- *
- * Uploads that have been removed, or reserved by another sample, are absent
- * from the result rather than erroring: they are no longer selectable, and the
- * caller is expected to tell the user which of the ids it asked for went
- * missing.
- *
- * @param type - the type of upload the ids must name
- * @param ids - the ids to look up
- */
-export function uploadsQueryOptions(type: UploadType, ids: number[]) {
-	return queryOptions({
-		queryKey: fileQueryKeys.selection(type, ids),
-		queryFn: () => getUploads({ data: { ids, type } }),
-	});
-}
-
-/**
- * Fetch the uploads with the given ids.
- *
- * @param type - the type of upload the ids must name
- * @param ids - the ids to look up
- */
-export function useFetchUploads(type: UploadType, ids: number[]) {
-	return useQuery(uploadsQueryOptions(type, ids));
-}
 
 function findFiles(
 	type: UploadType,

@@ -34,11 +34,6 @@ async function setReadSelectorMode(
 	);
 }
 
-/** Opens the create-sample dialog via its trigger button. */
-async function openDialog(): Promise<void> {
-	await userEvent.click(screen.getByRole("button", { name: "Create" }));
-}
-
 describe("<CreateSample>", () => {
 	const firstLabel = createFakeLabel();
 	const labels = [firstLabel];
@@ -53,6 +48,12 @@ describe("<CreateSample>", () => {
 
 	afterEach(() => nock.cleanAll());
 
+	/** Renders the page and waits for its form to replace the loading state. */
+	async function renderPage() {
+		await renderWithRouter(<CreateSample labels={labels} />);
+		await screen.findByRole("button", { name: "Save" });
+	}
+
 	async function submitForm() {
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 	}
@@ -62,7 +63,6 @@ describe("<CreateSample>", () => {
 		const filesScope = mockApiListFiles([file]);
 
 		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
 		expect(await screen.findByLabelText("loading")).toBeInTheDocument();
 
 		filesScope.done();
@@ -70,7 +70,6 @@ describe("<CreateSample>", () => {
 
 	it("should show loader when there are no sample uploads to read", async () => {
 		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
 		expect(await screen.findByLabelText("loading")).toBeInTheDocument();
 	});
 
@@ -80,8 +79,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
+		await renderPage();
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 		expect(screen.queryByText("Required Field")).not.toBeInTheDocument();
@@ -117,8 +115,7 @@ describe("<CreateSample>", () => {
 			null,
 		);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
+		await renderPage();
 
 		// Wait for the data to load.
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
@@ -152,8 +149,7 @@ describe("<CreateSample>", () => {
 			null,
 		);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
+		await renderPage();
 
 		// Wait for the data to load.
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
@@ -203,8 +199,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
+		await renderPage();
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
@@ -234,8 +229,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
+		await renderPage();
 
 		const field = await screen.findByRole("textbox", { name: "Name" });
 		expect(field).toHaveValue("");
@@ -252,8 +246,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
+		await renderPage();
 
 		const field = await screen.findByRole("textbox", { name: "Name" });
 		expect(field).toHaveValue("");
@@ -276,8 +269,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
+		await renderPage();
 
 		const field = await screen.findByRole("textbox", { name: "Name" });
 		expect(field).toHaveValue("");
@@ -294,8 +286,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
+		await renderPage();
 
 		const field = await screen.findByRole("textbox", { name: "Name" });
 		expect(field).toHaveValue("");
@@ -312,8 +303,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
+		await renderPage();
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
@@ -332,8 +322,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
+		await renderPage();
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
@@ -361,8 +350,7 @@ describe("<CreateSample>", () => {
 		mockApiListFiles(files);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
+		await renderPage();
 
 		await userEvent.type(await screen.findByLabelText("Name"), "Sample B");
 
@@ -386,8 +374,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
 		mockApiListFiles([file]);
 		mockApiGetShortlistSubtractions([]);
-		await renderWithRouter(<CreateSample labels={labels} />);
-		await openDialog();
+		await renderPage();
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 

@@ -3,12 +3,8 @@ import Button from "@base/Button";
 import Checkbox from "@base/Checkbox";
 import Icon from "@base/Icon";
 import { Trash } from "lucide-react";
-import type { ReactNode } from "react";
 
 type UploadListHeaderProps = {
-	/** Extra actions applying to the selection, shown before Delete */
-	action?: ReactNode;
-
 	/** Whether the files can be deleted, which the Delete action requires */
 	canDelete: boolean;
 
@@ -33,7 +29,6 @@ type UploadListHeaderProps = {
  * then swaps in the actions that apply to the selection.
  */
 export default function UploadListHeader({
-	action,
 	canDelete,
 	checked,
 	found,
@@ -56,7 +51,6 @@ export default function UploadListHeader({
 			</span>
 			{selectedCount > 0 && (
 				<div className="ml-auto flex items-center gap-2">
-					{action}
 					{canDelete && (
 						<Button color="red" size="small" onClick={onDelete}>
 							<Icon icon={Trash} /> Delete

@@ -172,7 +172,7 @@ describe("<SamplesList />", () => {
 		await renderWithRouter(<SamplesList labels={labels} />, path);
 
 		expect(
-			await screen.findByRole("button", { name: "Create" }),
+			await screen.findByRole("link", { name: "Create" }),
 		).toBeInTheDocument();
 	});
 
@@ -181,7 +181,7 @@ describe("<SamplesList />", () => {
 		await renderWithRouter(<SamplesList labels={labels} />, path);
 
 		expect(
-			screen.queryByRole("button", { name: "Create" }),
+			screen.queryByRole("link", { name: "Create" }),
 		).not.toBeInTheDocument();
 	});
 
