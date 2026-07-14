@@ -1,7 +1,7 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import AnalysisValue from "@analyses/components/AnalysisValue";
 import type { FormattedPathoscopeHit } from "@analyses/types";
-import { toScientificNotation } from "@app/utils";
+import { toScientificNotation } from "@app/format";
 import AccordionContent from "@base/AccordionContent";
 import AccordionScrollingItem from "@base/AccordionScrollingItem";
 import AccordionTrigger from "@base/AccordionTrigger";

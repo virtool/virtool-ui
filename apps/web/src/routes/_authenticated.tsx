@@ -1,5 +1,4 @@
-import { accountQueryOptions, useFetchAccount } from "@account/queries";
-import { apiClient } from "@app/api";
+import { useFetchAccount } from "@account/account";
 import { CONTENT_SCROLL_ID } from "@app/scroll";
 import { armSessionEnd } from "@app/session";
 import * as Sse from "@app/sse/SseConnection";
@@ -34,6 +33,11 @@ function setupSse(queryClient: QueryClient) {
 export const Route = createFileRoute("/_authenticated")({
 	beforeLoad: async ({ context, location }) => {
 		const { queryClient } = context;
+
+		const [{ apiClient }, { accountQueryOptions }] = await Promise.all([
+			import("@app/api"),
+			import("@account/account"),
+		]);
 
 		const rootData = await queryClient.ensureQueryData<Root>({
 			queryKey: rootQueryKeys.all(),

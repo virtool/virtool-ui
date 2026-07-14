@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import Icon from "@base/Icon";
 import type { Upload } from "@uploads/types";
 import { ArrowLeftRight } from "lucide-react";

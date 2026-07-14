@@ -1,6 +1,6 @@
 import { hasSufficientAdminRole } from "@administration/utils";
 import Alert from "@base/Alert";
-import { useFetchAccount } from "../queries";
+import { useFetchAccount } from "../account";
 
 /**
  * Displays a banner with information for an admin user

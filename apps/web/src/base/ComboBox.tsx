@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { useCombobox } from "downshift";
 import { ChevronDown } from "lucide-react";
 import type { ReactElement } from "react";

@@ -1,12 +1,13 @@
 import AnalysesList from "@analyses/components/AnalysisList";
 import { screen } from "@testing-library/react";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import {
-	createFakeAnalysisMinimal,
-	mockApiGetAnalyses,
-} from "@tests/fake/analyses";
-import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
-import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
+import { mockApiGetAnalyses } from "@tests/api/analyses";
+import { mockApiGetHmms } from "@tests/api/hmm";
+import { mockApiGetSampleDetail } from "@tests/api/samples";
+import { createFakeAccount } from "@tests/fake/account";
+import { createFakeAnalysisMinimal } from "@tests/fake/analyses";
+import { createFakeHmmSearchResults } from "@tests/fake/hmm";
+import { createFakeSample } from "@tests/fake/samples";
+import { mockGetAccount } from "@tests/server-fn/users";
 import { at, MemoryRouter, renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -33,7 +34,7 @@ describe("<AnalysesToolbar />", () => {
 	}
 
 	it("should show analysis creation when user is full admin", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+		mockGetAccount(createFakeAccount({ administrator_role: "full" }));
 		mockApiGetSampleDetail(sample);
 		renderList();
 
@@ -43,7 +44,7 @@ describe("<AnalysesToolbar />", () => {
 	it("should show analysis creation when user is the owner of the sample", async () => {
 		const account = createFakeAccount({ administrator_role: null });
 		sample.user.id = account.id;
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		mockApiGetSampleDetail(sample);
 		renderList();
 
@@ -54,7 +55,7 @@ describe("<AnalysesToolbar />", () => {
 		const account = createFakeAccount({ administrator_role: null });
 		sample.group = at(account.groups, 0);
 		sample.group_write = true;
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		mockApiGetSampleDetail(sample);
 		renderList();
 
@@ -64,7 +65,7 @@ describe("<AnalysesToolbar />", () => {
 	it("should show analysis creation when all users editing a sample is permitted", async () => {
 		const account = createFakeAccount({ administrator_role: null });
 		sample.all_write = true;
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		mockApiGetSampleDetail(sample);
 		renderList();
 
@@ -74,7 +75,7 @@ describe("<AnalysesToolbar />", () => {
 	it("should not render analysis creation option when user has no permissions", async () => {
 		sample.all_write = false;
 		sample.group_write = false;
-		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
+		mockGetAccount(createFakeAccount({ administrator_role: null }));
 		mockApiGetSampleDetail(sample);
 		renderList();
 

@@ -1,10 +1,10 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
-	createFakeReference,
 	mockApiArchiveReference,
 	mockApiUnarchiveReference,
-} from "@tests/fake/references";
+} from "@tests/api/references";
+import { createFakeReference } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import { afterEach, describe, expect, it } from "vitest";

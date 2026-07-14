@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import type { ComponentPropsWithoutRef } from "react";
 
 type SidebarHeaderButtonProps = ComponentPropsWithoutRef<"button">;

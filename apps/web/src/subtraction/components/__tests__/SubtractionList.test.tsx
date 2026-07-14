@@ -1,10 +1,9 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import {
-	createFakeSubtractionMinimal,
-	mockApiGetSubtractions,
-} from "@tests/fake/subtractions";
+import { mockApiGetSubtractions } from "@tests/api/subtractions";
+import { createFakeAccount } from "@tests/fake/account";
+import { createFakeSubtractionMinimal } from "@tests/fake/subtractions";
+import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import { useState } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -73,7 +72,7 @@ describe("<SubtractionList />", () => {
 		const account = createFakeAccount({
 			administrator_role: "full",
 		});
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		await renderWithRouter(<SubtractionList />);
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
@@ -89,7 +88,7 @@ describe("<SubtractionList />", () => {
 	it("should not render create button when [canModify=false]", async () => {
 		const scope = mockApiGetSubtractions([subtractions]);
 		const account = createFakeAccount({ administrator_role: null });
-		mockApiGetAccount(account);
+		mockGetAccount(account);
 		await renderWithRouter(<SubtractionList />);
 		await waitFor(() =>
 			expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),

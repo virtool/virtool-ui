@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 
 export default function AnalysisValue({ color, label, value }) {
 	return (

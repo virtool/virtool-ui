@@ -1,6 +1,6 @@
+import { cn } from "@app/cn";
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
-import { cn } from "@/app/utils";
 
 const baseSampleLabelVariants = cva(
 	"inline-flex items-center border rounded-md [&_svg]:mr-1 [&_svg]:text-[var(--user-color)]",

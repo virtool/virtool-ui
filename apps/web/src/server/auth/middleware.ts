@@ -86,21 +86,47 @@ export const requireAuthenticatedRequest = createServerOnlyFn(
 	},
 );
 
+/** Resolves the server functions exempt from global authentication. */
+export type LoadAuthenticationExceptions = () => Promise<
+	ReadonlyArray<{ url: string }>
+>;
+
+// The exception list holds server-function references, and reaching them means
+// reaching their modules — which carry zod validators and the auth request
+// layer. `start.ts` is part of the browser program (routeTree.gen.ts imports
+// it), so importing the list eagerly would drag all of that into the eager
+// client bundle. createServerOnlyFn strips this body client-side, so the import
+// never appears in the browser graph at all.
+const loadAuthenticationExceptions = createServerOnlyFn(
+	async (): Promise<ReadonlyArray<{ url: string }>> => {
+		const { authenticationExceptions } = await import("./exceptions");
+		return authenticationExceptions;
+	},
+);
+
 /**
  * Build the global server-function middleware that enforces authentication on
- * every server function except those in `exceptions`. Pass server-function
- * references (e.g. `loginFn`); the URL path is derived from each. Resolved
- * sessions are exposed to downstream handlers as `context.session`.
+ * every server function except those in `./exceptions`. Resolved sessions are
+ * exposed to downstream handlers as `context.session`.
+ *
+ * `loadExceptions` exists so tests can supply their own list; production passes
+ * nothing and gets the real one.
  */
 // Server fn IDs are unique per fn and each fn binds to exactly one method, so
 // matching on pathname alone is sufficient to identify the call.
 export function createAuthenticationMiddleware(
-	exceptions: ReadonlyArray<{ url: string }>,
+	loadExceptions: LoadAuthenticationExceptions = loadAuthenticationExceptions,
 ) {
-	const exceptionPaths = new Set(
-		exceptions.map((fn) => new URL(fn.url, "http://x").pathname),
-	);
+	// Resolved on the first call and cached: the paths never change.
+	let exceptionPaths: Set<string> | null = null;
+
 	return createMiddleware({ type: "function" }).server(async ({ next }) => {
+		exceptionPaths ??= new Set(
+			(await loadExceptions()).map(
+				(fn) => new URL(fn.url, "http://x").pathname,
+			),
+		);
+
 		const pathname = new URL(getRequest().url).pathname;
 		const session: AuthenticatedSession | null = exceptionPaths.has(pathname)
 			? null

@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { X } from "lucide-react";
 import { Toast as ToastPrimitive } from "radix-ui";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";

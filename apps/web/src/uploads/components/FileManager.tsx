@@ -1,4 +1,4 @@
-import { useFetchAccount } from "@account/queries";
+import { useFetchAccount } from "@account/account";
 import { checkAdminRoleOrPermissionsFromAccount } from "@administration/utils";
 import Alert from "@base/Alert";
 import Box from "@base/Box";

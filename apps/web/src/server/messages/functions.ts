@@ -2,7 +2,7 @@ import { bannerColors } from "@banner/types";
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
-import { requireAdminRole, requireSession } from "../auth/middleware";
+import { adminRole, authenticated } from "../auth/policy";
 import {
 	clearActiveMessage as clearActiveMessageImpl,
 	createMessage as createMessageImpl,
@@ -43,42 +43,36 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	throw err;
 });
 
-export const findMessage = createServerFn({ method: "GET" }).handler(async () =>
-	findMessageImpl(),
-);
+export const findMessage = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
+	.handler(async () => findMessageImpl());
 
-export const findMessages = createServerFn({ method: "GET" }).handler(
-	async () => {
-		const session = await requireSession();
-		await requireAdminRole(session, "settings");
-		return findMessagesImpl();
-	},
-);
+export const findMessages = createServerFn({ method: "GET" })
+	.middleware([adminRole("settings")])
+	.handler(async () => findMessagesImpl());
 
 export const createMessage = createServerFn({ method: "POST" })
+	.middleware([adminRole("settings")])
 	.validator(createMessageSchema)
-	.handler(async ({ data }) => {
-		const session = await requireSession();
-		await requireAdminRole(session, "settings");
+	.handler(async ({ context, data }) => {
 		const message = await createMessageImpl(
 			data.message,
 			data.color,
-			session.userId,
+			context.session.userId,
 		);
 		setResponseStatus(201);
 		return message;
 	});
 
 export const updateMessage = createServerFn({ method: "POST" })
+	.middleware([adminRole("settings")])
 	.validator(updateMessageSchema)
-	.handler(async ({ data }) => {
-		const session = await requireSession();
-		await requireAdminRole(session, "settings");
+	.handler(async ({ context, data }) => {
 		try {
 			return await updateMessageImpl(
 				data.id,
 				{ message: data.message, color: data.color },
-				session.userId,
+				context.session.userId,
 			);
 		} catch (err) {
 			rethrowAsHttp(err);
@@ -86,10 +80,9 @@ export const updateMessage = createServerFn({ method: "POST" })
 	});
 
 export const deleteMessage = createServerFn({ method: "POST" })
+	.middleware([adminRole("settings")])
 	.validator(idSchema)
 	.handler(async ({ data }) => {
-		const session = await requireSession();
-		await requireAdminRole(session, "settings");
 		try {
 			await deleteMessageImpl(data.id);
 			setResponseStatus(204);
@@ -100,10 +93,9 @@ export const deleteMessage = createServerFn({ method: "POST" })
 	});
 
 export const setActiveMessage = createServerFn({ method: "POST" })
+	.middleware([adminRole("settings")])
 	.validator(idSchema)
 	.handler(async ({ data }) => {
-		const session = await requireSession();
-		await requireAdminRole(session, "settings");
 		try {
 			return await setActiveMessageImpl(data.id);
 		} catch (err) {
@@ -111,11 +103,9 @@ export const setActiveMessage = createServerFn({ method: "POST" })
 		}
 	});
 
-export const clearActiveMessage = createServerFn({ method: "POST" }).handler(
-	async () => {
-		const session = await requireSession();
-		await requireAdminRole(session, "settings");
+export const clearActiveMessage = createServerFn({ method: "POST" })
+	.middleware([adminRole("settings")])
+	.handler(async () => {
 		await clearActiveMessageImpl();
 		return null;
-	},
-);
+	});

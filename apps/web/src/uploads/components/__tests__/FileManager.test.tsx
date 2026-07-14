@@ -1,12 +1,10 @@
 import { formatPath } from "@app/hooks";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import {
-	createFakeFile,
-	mockApiDeleteFile,
-	mockApiListFiles,
-} from "@tests/fake/files";
+import { mockApiDeleteFile, mockApiListFiles } from "@tests/api/files";
+import { createFakeAccount } from "@tests/fake/account";
+import { createFakeFile } from "@tests/fake/files";
+import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import { upload } from "@uploads/uploader";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -32,7 +30,7 @@ describe("<FileManager>", () => {
 	});
 
 	it("should upload with validation based on passed regex", async () => {
-		mockApiGetAccount(
+		mockGetAccount(
 			createFakeAccount({
 				administrator_role: null,
 				permissions: {
@@ -83,7 +81,7 @@ describe("<FileManager>", () => {
 	});
 
 	it("should hide upload bar if user lacks permission", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
+		mockGetAccount(createFakeAccount({ administrator_role: null }));
 		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
 		await renderWithRouter(<FileManager {...props} />, path);
@@ -97,7 +95,7 @@ describe("<FileManager>", () => {
 	});
 
 	it("should take custom message", async () => {
-		mockApiGetAccount(
+		mockGetAccount(
 			createFakeAccount({
 				administrator_role: "full",
 			}),
@@ -119,7 +117,7 @@ describe("<FileManager>", () => {
 			const unselected = createFakeFile({ name: "three.fq.gz" });
 			const files = [first, second, unselected];
 
-			mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+			mockGetAccount(createFakeAccount({ administrator_role: "full" }));
 			mockApiListFiles(files, true);
 			mockApiListFiles(files, true);
 
@@ -156,7 +154,7 @@ describe("<FileManager>", () => {
 				createFakeFile({ name: "two.fq.gz" }),
 			];
 
-			mockApiGetAccount(createFakeAccount({ administrator_role: "full" }));
+			mockGetAccount(createFakeAccount({ administrator_role: "full" }));
 			mockApiListFiles(files, true);
 
 			await renderWithRouter(<FileManager {...props} />, path);
@@ -176,7 +174,7 @@ describe("<FileManager>", () => {
 		});
 
 		it("should hide checkboxes when there is nothing to do with a selection", async () => {
-			mockApiGetAccount(createFakeAccount({ administrator_role: null }));
+			mockGetAccount(createFakeAccount({ administrator_role: null }));
 			mockApiListFiles([createFakeFile({ name: "one.fq.gz" })], true);
 
 			await renderWithRouter(<FileManager {...props} />, path);

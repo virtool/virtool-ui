@@ -1,15 +1,11 @@
 import { accountQueryKeys } from "@account/keys";
-import { apiClient } from "@app/api";
-import type { Root } from "@app/types";
 import {
 	createFirstUserFn,
 	loginFn,
 	resetPasswordFn,
 } from "@server/auth/functions";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { rootQueryKeys } from "@wall/keys";
-
-import type { ErrorResponse } from "@/types/api";
 
 /** Result of a login attempt. `reset_code` is only set when `reset` is true. */
 export type LoginResult = {
@@ -22,18 +18,6 @@ export type ResetPasswordResult = {
 	login: false;
 	reset: false;
 };
-
-/**
- * Initializes a query for fetching the root document.
- *
- * @returns A query for fetching the root document
- */
-export function useRootQuery() {
-	return useQuery<Root, ErrorResponse>({
-		queryKey: rootQueryKeys.all(),
-		queryFn: () => apiClient.get("/").then((res) => res.body),
-	});
-}
 
 /**
  * Initializes a mutator for creating the first instance user.

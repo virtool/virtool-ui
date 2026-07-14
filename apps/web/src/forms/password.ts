@@ -1,4 +1,4 @@
-import { passwordPolicyQueryOptions } from "@administration/queries";
+import { passwordPolicyQueryOptions } from "@administration/passwordPolicy";
 import { formatMinimumPasswordLengthMessage } from "@server/auth/passwordPolicy";
 import { useQuery } from "@tanstack/react-query";
 

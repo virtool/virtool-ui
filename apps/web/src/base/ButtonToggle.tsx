@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { Toggle } from "radix-ui";
 import type { ReactNode, Ref } from "react";
 import { buttonVariants } from "./buttonVariants";

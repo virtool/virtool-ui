@@ -1,16 +1,24 @@
+import { num } from "@app/searchParams";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import { useFetchLabels } from "@labels/queries";
 import SampleFileManager from "@samples/components/SampleFileManager";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod/v4";
 
-const sampleFilesSearchSchema = z.object({
-	page: z.number().default(1).catch(1),
-});
+/** Search params for this route. */
+type SampleFilesSearch = {
+	page: number;
+};
+
+function validateSampleFilesSearch(
+	input: Partial<SampleFilesSearch> & SearchSchemaInput,
+): SampleFilesSearch {
+	return { page: num(input.page, 1) };
+}
 
 export const Route = createFileRoute("/_authenticated/samples/files")({
-	validateSearch: sampleFilesSearchSchema,
+	validateSearch: validateSampleFilesSearch,
 	component: SampleFilesRoute,
 });
 

@@ -1,5 +1,5 @@
+import { cn } from "@app/cn";
 import { useFuse } from "@app/fuse";
-import { cn } from "@app/utils";
 import Label from "@base/Label";
 import Link from "@base/Link";
 import MultiSelectComboBox from "@base/MultiSelectComboBox";

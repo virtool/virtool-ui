@@ -1,4 +1,4 @@
-import { toThousand } from "@app/utils";
+import { toThousand } from "@app/format";
 import Box from "@base/Box";
 import Label from "@base/Label";
 import Link from "@base/Link";

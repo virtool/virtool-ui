@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { range } from "es-toolkit/math";
 import { type ReactElement, type ReactNode, useEffect } from "react";
 import PaginationContent from "./PaginationContent";

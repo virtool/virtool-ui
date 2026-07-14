@@ -3,7 +3,7 @@ import Label from "@base/Label";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import { ShieldUser } from "lucide-react";
-import { useFetchAccount } from "../queries";
+import { useFetchAccount } from "../account";
 import AccountEmail from "./AccountEmail";
 import AccountGroups from "./AccountGroups";
 import AccountHandle from "./AccountHandle";

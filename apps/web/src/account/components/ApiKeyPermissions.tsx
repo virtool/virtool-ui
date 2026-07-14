@@ -1,4 +1,4 @@
-import { useFetchAccount } from "@account/queries";
+import { useFetchAccount } from "@account/account";
 import type { AdministratorRoleName } from "@administration/types";
 import {
 	AdministratorPermissions,

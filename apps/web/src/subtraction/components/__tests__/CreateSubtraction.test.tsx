@@ -1,8 +1,9 @@
 import { getSessionStorage, setSessionStorage } from "@app/utils";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
-import { mockApiCreateSubtraction } from "@tests/fake/subtractions";
+import { mockApiListFiles } from "@tests/api/files";
+import { mockApiCreateSubtraction } from "@tests/api/subtractions";
+import { createFakeFile } from "@tests/fake/files";
 import { renderWithRouter } from "@tests/setup";
 import { afterEach, describe, expect, it } from "vitest";
 import SubtractionCreate from "../SubtractionCreate";

@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { Switch as SwitchPrimitive } from "radix-ui";
 import type { ComponentProps } from "react";
 

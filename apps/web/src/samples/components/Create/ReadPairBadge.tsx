@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 
 type ReadPairBadgeProps = {
 	/** The number of read files the sample will be created from */

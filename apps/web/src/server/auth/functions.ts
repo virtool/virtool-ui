@@ -2,7 +2,6 @@ import * as Sentry from "@sentry/tanstackstart-react";
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
-
 import { db } from "../db/pg";
 import { realCookies } from "./cookies";
 import {
@@ -16,6 +15,7 @@ import {
 	resetPassword,
 } from "./core";
 import { PasswordTooShortError } from "./passwordPolicy";
+import { open } from "./policy";
 import { checkConfiguredPasswordLength } from "./service";
 
 // `password` is deliberately not length-checked here. Login authenticates an
@@ -53,6 +53,7 @@ const getClientIp = createServerOnlyFn((): string => {
 
 /** Login server function. Unauthenticated by necessity — this *creates* the session. */
 export const loginFn = createServerFn({ method: "POST" })
+	.middleware([open()])
 	.validator(loginSchema)
 	.handler(async ({ data }) => {
 		try {
@@ -85,6 +86,7 @@ export const loginFn = createServerFn({ method: "POST" })
  * session for the user it creates.
  */
 export const createFirstUserFn = createServerFn({ method: "POST" })
+	.middleware([open()])
 	.validator(createFirstUserSchema)
 	.handler(async ({ data }) => {
 		try {
@@ -110,12 +112,20 @@ export const createFirstUserFn = createServerFn({ method: "POST" })
 		}
 	});
 
-/** Logout server function. Requires an authenticated session. */
-export const logoutFn = createServerFn({ method: "POST" }).handler(async () => {
-	await logout(db, realCookies);
-	Sentry.setUser(null);
-	return null;
-});
+/**
+ * Logout server function. Unauthenticated by necessity, and idempotent — a
+ * caller whose session has already expired still needs its stale cookies
+ * cleared, and refusing them with a 401 would strand the browser holding
+ * credentials it cannot use. `logout` invalidates the session only if the
+ * cookie names one, then clears the cookies either way.
+ */
+export const logoutFn = createServerFn({ method: "POST" })
+	.middleware([open()])
+	.handler(async () => {
+		await logout(db, realCookies);
+		Sentry.setUser(null);
+		return null;
+	});
 
 /**
  * Reset-password server function. Unauthenticated by necessity — this is the
@@ -123,6 +133,7 @@ export const logoutFn = createServerFn({ method: "POST" }).handler(async () => {
  * carried by the `reset_code` returned from `loginFn`.
  */
 export const resetPasswordFn = createServerFn({ method: "POST" })
+	.middleware([open()])
 	.validator(resetPasswordSchema)
 	.handler(async ({ data }) => {
 		try {

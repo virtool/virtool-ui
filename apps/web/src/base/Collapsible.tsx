@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { ChevronDown } from "lucide-react";
 import { Collapsible as CollapsiblePrimitive } from "radix-ui";
 import type { ComponentProps } from "react";

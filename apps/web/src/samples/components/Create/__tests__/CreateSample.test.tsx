@@ -1,14 +1,14 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiListGroups } from "@tests/api/groups";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
+import { mockApiListFiles } from "@tests/api/files";
+import { mockApiCreateSample } from "@tests/api/samples";
+import { mockApiGetShortlistSubtractions } from "@tests/api/subtractions";
+import { createFakeAccount } from "@tests/fake/account";
+import { createFakeFile } from "@tests/fake/files";
 import { createFakeLabel } from "@tests/fake/labels";
-import { mockApiCreateSample } from "@tests/fake/samples";
-import {
-	createFakeShortlistSubtraction,
-	mockApiGetShortlistSubtractions,
-} from "@tests/fake/subtractions";
+import { createFakeShortlistSubtraction } from "@tests/fake/subtractions";
+import { mockListGroups } from "@tests/server-fn/groups";
+import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -42,8 +42,8 @@ describe("<CreateSample>", () => {
 	beforeEach(() => {
 		window.sessionStorage.clear();
 
-		mockApiGetAccount(createFakeAccount({ primary_group: null }));
-		mockApiListGroups([]);
+		mockGetAccount(createFakeAccount({ primary_group: null }));
+		mockListGroups([]);
 	});
 
 	afterEach(() => nock.cleanAll());
