@@ -2,7 +2,8 @@ import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireAdminRole, requireSession } from "../auth/middleware";
-import { passwordSchema } from "../auth/password";
+import { PasswordTooShortError } from "../auth/passwordPolicy";
+import { checkConfiguredPasswordLength } from "../auth/service";
 import { db } from "../db/pg";
 import {
 	createUser as createUserImpl,
@@ -40,9 +41,12 @@ const findUsersSchema = z
 	})
 	.optional();
 
+// Password length is enforced by checkConfiguredPasswordLength in the handlers
+// below, not here — see that function for why the validator is the wrong place
+// for it.
 const createUserSchema = z.object({
 	handle: z.string().trim().min(1),
-	password: passwordSchema,
+	password: z.string(),
 	forceReset: z.boolean().default(false),
 });
 
@@ -51,7 +55,7 @@ const updateUserSchema = z.object({
 	active: z.boolean().optional(),
 	force_reset: z.boolean().optional(),
 	handle: z.string().trim().min(1).optional(),
-	password: passwordSchema.optional(),
+	password: z.string().optional(),
 	groups: z.array(z.number().int().positive()).optional(),
 	primary_group: z.number().int().positive().nullable().optional(),
 });
@@ -81,6 +85,10 @@ const setAdministratorRoleSchema = z.object({
 // top-level helper would pin ./data and its postgres transitive dependency in
 // the client graph.
 const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
+	if (err instanceof PasswordTooShortError) {
+		setResponseStatus(400);
+		throw new Error(err.message);
+	}
 	if (err instanceof UserNotFoundError) {
 		setResponseStatus(404);
 		throw new Error("User not found.");
@@ -143,6 +151,8 @@ export const createUser = createServerFn({ method: "POST" })
 		checkReservedHandle(data.handle);
 
 		try {
+			await checkConfiguredPasswordLength(db, data.password);
+
 			const user = await createUserImpl(db, {
 				handle: data.handle,
 				password: data.password,
@@ -173,6 +183,9 @@ export const updateUser = createServerFn({ method: "POST" })
 			checkReservedHandle(values.handle);
 		}
 		try {
+			if (values.password !== undefined) {
+				await checkConfiguredPasswordLength(db, values.password);
+			}
 			return await updateUserImpl(db, userId, values);
 		} catch (err) {
 			throw rethrowAsHttp(err);

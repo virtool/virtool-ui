@@ -1,5 +1,6 @@
 import { apiClient } from "@app/api";
 import { createQueryKeys } from "@app/queryKeys";
+import { getPasswordPolicyFn } from "@server/settings/functions";
 import { listAdministratorRoles } from "@server/users/functions";
 import {
 	queryOptions,
@@ -34,6 +35,22 @@ export function settingsQueryOptions() {
 	return queryOptions<Settings>({
 		queryKey: settingsQueryKeys.all(),
 		queryFn: () => apiClient.get("/settings").then((response) => response.body),
+	});
+}
+
+/** Query keys for the instance password policy. */
+export const passwordPolicyQueryKeys = createQueryKeys("passwordPolicy");
+
+/**
+ * Query options for the instance password policy.
+ *
+ * Unlike the settings above, this is readable without a session — the
+ * first-user and forced-reset forms need it before one exists.
+ */
+export function passwordPolicyQueryOptions() {
+	return queryOptions({
+		queryKey: passwordPolicyQueryKeys.all(),
+		queryFn: () => getPasswordPolicyFn(),
 	});
 }
 
@@ -74,6 +91,11 @@ export function useUpdateSettings() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: settingsQueryKeys.all(),
+			});
+			// The minimum password length lives in these settings, so the policy the
+			// password forms validate against has just gone stale.
+			queryClient.invalidateQueries({
+				queryKey: passwordPolicyQueryKeys.all(),
 			});
 		},
 	});

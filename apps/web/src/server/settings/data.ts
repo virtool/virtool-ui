@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
 
+import { DEFAULT_MINIMUM_PASSWORD_LENGTH } from "../auth/passwordPolicy";
 import type { Db } from "../db/pg";
 import { takeFirst, takeFirstOrThrow } from "../db/rows";
 import {
@@ -35,7 +36,7 @@ export const DEFAULT_SETTINGS: Settings = {
 	defaultSourceTypes: ["isolate", "strain"],
 	enableApi: false,
 	enableSentry: true,
-	minimumPasswordLength: 8,
+	minimumPasswordLength: DEFAULT_MINIMUM_PASSWORD_LENGTH,
 	sampleAllRead: true,
 	sampleAllWrite: false,
 	sampleGroup: "none",

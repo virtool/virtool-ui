@@ -3,6 +3,7 @@ import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
+import { usePasswordRules } from "@forms/password";
 import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useResetPasswordMutation } from "../queries";
@@ -26,6 +27,7 @@ export default function ResetForm({ redirect, resetCode }: ResetFormProps) {
 	});
 	const resetPasswordMutation = useResetPasswordMutation();
 	const navigate = useNavigate();
+	const passwordRules = usePasswordRules();
 
 	function onSubmit({ password }) {
 		resetPasswordMutation.mutate(
@@ -52,14 +54,7 @@ export default function ResetForm({ redirect, resetCode }: ResetFormProps) {
 						id="password"
 						type="password"
 						autoComplete="new-password"
-						{...register("password", {
-							required: "Password does not meet minimum length requirement (8)",
-							minLength: {
-								value: 8,
-								message:
-									"Password does not meet minimum length requirement (8)",
-							},
-						})}
+						{...register("password", passwordRules)}
 					/>
 					{errors.password?.message && (
 						<InputError>{errors.password.message}</InputError>
