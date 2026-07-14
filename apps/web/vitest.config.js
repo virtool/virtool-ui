@@ -1,19 +1,14 @@
 import os from "node:os";
+import path from "node:path";
 import { defineConfig } from "vitest/config";
 import viteConfigFn from "./vite.config";
 
+// `mode: "test"` drops Nitro and `command: "serve"` drops Sentry, so neither is
+// ever constructed here and the plugin list needs no further filtering.
 const viteConfig = viteConfigFn({ command: "serve", mode: "test" });
 
 export default defineConfig({
 	...viteConfig,
-	// Nitro is the server bundler; tests never ask it to serve anything, and it
-	// holds file handles open that stall Vitest's shutdown for ten seconds. Sentry
-	// is dropped for the same reason it is kept out of dev: it should never load
-	// here.
-	plugins: viteConfig.plugins.flat(Infinity).filter((plugin) => {
-		const name = String(plugin?.name ?? "");
-		return !name.startsWith("sentry") && !name.startsWith("nitro");
-	}),
 	test: {
 		globals: true,
 		silent: false,
@@ -30,6 +25,17 @@ export default defineConfig({
 					setupFiles: ["./src/tests/setup.tsx"],
 					include: ["src/**/*.test.{ts,tsx}"],
 					exclude: ["src/server/**"],
+					// Pin the assumption above. These are the two modules that open
+					// Postgres at import; if one ever survives the client transform into
+					// the browser program, the guard throws instead of quietly making
+					// Docker a prerequisite again. Listed before the `@server` prefix
+					// alias so they win.
+					alias: [
+						{
+							find: /^@server\/(config|db\/pg)$/,
+							replacement: path.resolve("src/tests/postgresGuard.ts"),
+						},
+					],
 				},
 			},
 			{
