@@ -6,7 +6,6 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useUpdateHandle } from "../queries";
 
@@ -23,19 +22,15 @@ type HandleProps = {
  * A component to update the account's handle
  */
 export default function AccountHandle({ handle }: HandleProps) {
+	// `values` re-syncs the input when the handle prop changes after a successful
+	// update and refetch. Unlike a `reset()` effect, it deep-compares, so a
+	// re-render that leaves the handle untouched cannot wipe a validation error.
 	const {
 		formState: { errors },
 		handleSubmit,
 		register,
-		reset,
-	} = useForm<FormValues>({ defaultValues: { handle } });
+	} = useForm<FormValues>({ values: { handle } });
 	const mutation = useUpdateHandle();
-
-	// Keep the input in sync when the handle prop changes after a successful
-	// update and refetch.
-	useEffect(() => {
-		reset({ handle });
-	}, [handle, reset]);
 
 	function onSubmit(values: FormValues) {
 		mutation.mutate({ handle: values.handle });
