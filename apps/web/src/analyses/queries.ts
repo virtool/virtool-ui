@@ -78,12 +78,10 @@ export function analysisQueryOptions(analysisId: string) {
 }
 
 export function useGetAnalysis(analysisId: string) {
-	const queryResult = useQuery(analysisQueryOptions(analysisId));
-
-	return {
-		...queryResult,
-		data: formatData(queryResult.data) as Analysis,
-	};
+	return useQuery({
+		...analysisQueryOptions(analysisId),
+		select: formatData,
+	});
 }
 
 export type CreateAnalysisParams = {
