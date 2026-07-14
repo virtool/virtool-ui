@@ -1,10 +1,9 @@
-import { getSessionStorage, setSessionStorage } from "@app/utils";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { mockApiCreateSubtraction } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
-import { afterEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import SubtractionCreate from "../SubtractionCreate";
 
 async function openDialog() {
@@ -13,10 +12,6 @@ async function openDialog() {
 }
 
 describe("<SubtractionCreate />", () => {
-	afterEach(() => {
-		sessionStorage.clear();
-	});
-
 	it("should render when no uploads available", async () => {
 		mockApiListFiles([]);
 		await openDialog();
@@ -62,75 +57,5 @@ describe("<SubtractionCreate />", () => {
 		await userEvent.click(screen.getByText(/save/i));
 
 		await waitFor(() => createSubtractionScope.done());
-	});
-
-	it("should restore form values from session storage", async () => {
-		const file = createFakeFile({
-			name: "testSubtraction1",
-			type: "subtraction",
-		});
-		const name = "testSubtractionName";
-		const nickname = "testSubtractionNickname";
-
-		setSessionStorage("createSubtractionFormValues", {
-			name,
-			nickname,
-			uploadId: [file.id],
-		});
-
-		const createSubtractionScope = mockApiCreateSubtraction(
-			name,
-			nickname,
-			file.id,
-		);
-		mockApiListFiles([file]);
-
-		await openDialog();
-
-		expect(await screen.findByDisplayValue(name)).toBeInTheDocument();
-		expect(await screen.findByDisplayValue(nickname)).toBeInTheDocument();
-
-		await userEvent.click(screen.getByText(/save/i));
-
-		await waitFor(() => createSubtractionScope.done());
-	});
-
-	it("should persist values into session storage", async () => {
-		const file = createFakeFile({
-			name: "ath.fa.gz",
-			type: "subtraction",
-		});
-		const name = "Arabidopsis thaliana";
-		const nickname = "Thale cress";
-
-		mockApiListFiles([file]);
-		const createSubtractionScope = mockApiCreateSubtraction(
-			name,
-			nickname,
-			file.id,
-		);
-
-		await openDialog();
-
-		await userEvent.type(await screen.findByLabelText("Name"), name);
-		await userEvent.type(screen.getByLabelText("Nickname"), nickname);
-		await userEvent.click(screen.getByText("ath.fa.gz"));
-
-		expect(getSessionStorage("createSubtractionFormValues")).toEqual({
-			name,
-			nickname,
-			uploadId: [file.id],
-		});
-
-		await userEvent.click(screen.getByText(/save/i));
-		await waitFor(() => createSubtractionScope.done());
-
-		await waitFor(() =>
-			expect(getSessionStorage("createSubtractionFormValues")).toEqual({
-				name: "",
-				nickname: "",
-				uploadId: [],
-			}),
-		);
 	});
 });

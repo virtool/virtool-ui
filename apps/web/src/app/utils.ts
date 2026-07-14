@@ -121,38 +121,6 @@ export function resetClient() {
 }
 
 /**
- * Stores the passed object in local storage at key given
- */
-export function setSessionStorage(key: string, data: object) {
-	try {
-		window.sessionStorage.setItem(key, JSON.stringify(data));
-	} catch (error) {
-		console.warn(
-			`Failed to save data to sessionStorage for key "${key}":`,
-			error,
-		);
-	}
-}
-
-/**
- * Return the object stored in session storage at the given key
- */
-export function getSessionStorage(key: string): object | null {
-	const item = window.sessionStorage.getItem(key);
-
-	if (item === null) {
-		return null;
-	}
-
-	try {
-		const parsed = JSON.parse(item);
-		return typeof parsed === "object" ? parsed : null;
-	} catch {
-		return null;
-	}
-}
-
-/**
  * Return a string with the tailwind classnames merged
  *
  * @param args - the styles from the classnames being merged

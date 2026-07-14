@@ -3,10 +3,8 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
-import { RestoredAlert } from "@forms/components/RestoredAlert";
-import { usePersistentForm } from "@forms/hooks";
 import type { OtuSegment, OtuSequence } from "@otus/types";
-import { FormProvider } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import Accession from "./Accession";
 import SequenceField from "./SequenceField";
 import SequenceSegmentField from "./SequenceSegmentField";
@@ -24,8 +22,6 @@ type SequenceFormProps = {
 	activeSequence?: OtuSequence;
 
 	hasSchema: boolean;
-	/** Whether the form is of type edit or add */
-	noun: string;
 
 	/** A callback function to add/edit a genome sequence  */
 	onSubmit: (formValues: SequenceFormValues) => void;
@@ -46,7 +42,6 @@ type SequenceFormProps = {
 export default function SequenceForm({
 	activeSequence,
 	hasSchema,
-	noun,
 	onSubmit,
 	otuId,
 	refId,
@@ -56,12 +51,11 @@ export default function SequenceForm({
 		accession,
 		definition,
 		host,
-		id = "",
 		segment = null,
 		sequence = "",
 	} = activeSequence || {};
 
-	const methods = usePersistentForm<SequenceFormValues>({
+	const methods = useForm<SequenceFormValues>({
 		defaultValues: {
 			segment: segment || null,
 			accession: accession || "",
@@ -69,25 +63,17 @@ export default function SequenceForm({
 			host: host || "",
 			sequence: sequence || "",
 		},
-		formName: `${noun}Sequence${id}`,
 	});
 
 	const {
 		formState: { errors },
 		handleSubmit,
-		hasRestored,
 		register,
-		reset,
 	} = methods;
 
 	return (
 		<FormProvider {...methods}>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<RestoredAlert
-					hasRestored={hasRestored}
-					name="sequence"
-					resetForm={reset}
-				/>
 				<SequenceSegmentField
 					hasSchema={hasSchema}
 					otuId={otuId}

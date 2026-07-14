@@ -11,14 +11,13 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SaveButton from "@base/SaveButton";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import type { Label } from "@labels/types";
 import { useCreateSample } from "@samples/queries";
 import { useNavigate } from "@tanstack/react-router";
 import { Clock, WandSparkles } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useInfiniteFindFiles } from "@/uploads/queries";
 import type { Upload } from "@/uploads/types";
 import LibraryTypeSelector from "./LibraryTypeSelector";
@@ -79,8 +78,7 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 		reset,
 		setValue,
 		watch,
-	} = usePersistentForm<FormValues>({
-		formName: "createSample",
+	} = useForm<FormValues>({
 		defaultValues: {
 			name: "",
 			isolate: "",

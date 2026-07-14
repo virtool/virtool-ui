@@ -128,7 +128,6 @@ export default defineConfig(({ command, mode }) => ({
 			"es-toolkit/compat",
 			"es-toolkit/math",
 			"es-toolkit/object",
-			"es-toolkit/predicate",
 			"es-toolkit/string",
 			"fuse.js",
 			"lucide-react",

@@ -57,7 +57,6 @@ export default function CreateSequence({
 				<DialogTitle>Create Sequence</DialogTitle>
 				<SequenceForm
 					hasSchema={schema.length > 0}
-					noun="create"
 					onSubmit={onSubmit}
 					otuId={otuId}
 					refId={refId}
