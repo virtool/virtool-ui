@@ -1,55 +1,96 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { formatDistanceStrict } from "@/app/date";
 
 type RelativeTimeOptions = {
 	addSuffix?: boolean;
 };
 
+const TICK_INTERVAL = 8000;
+
+// One ticker drives every relative time on the page. Lists render an
+// `<Attribution />` per row, so an interval per instance would mean dozens of
+// timers firing on independent schedules, each re-rendering its own row.
+const listeners = new Set<() => void>();
+
+let intervalId: number | undefined;
+let now = Date.now();
+
+function subscribe(listener: () => void) {
+	listeners.add(listener);
+
+	// `now` only moves on a tick, so a component mounting into an already
+	// running ticker would otherwise read a snapshot up to TICK_INTERVAL old.
+	// React re-reads the snapshot after subscribing, so this is picked up.
+	now = Date.now();
+
+	if (intervalId === undefined) {
+		intervalId = window.setInterval(() => {
+			now = Date.now();
+
+			for (const notify of listeners) {
+				notify();
+			}
+		}, TICK_INTERVAL);
+	}
+
+	return () => {
+		listeners.delete(listener);
+
+		if (listeners.size === 0) {
+			window.clearInterval(intervalId);
+			intervalId = undefined;
+		}
+	};
+}
+
+function getNow() {
+	return now;
+}
+
 /**
  * Create a human-readable relative time.
  *
- * It is possible that the relative time could be in the future if the browser time lags behind the server time. If this
- * is the case the string will contain the substring 'in'. If this substring is present, return the alternative time
- * string 'just now'.
+ * The time may land in the future when the browser clock lags the server's, so
+ * it is clamped to `now` — `formatDistanceStrict` would otherwise render it as
+ * "in 5 seconds".
  *
  * @param time - the ISO formatted time
- * @param options.addSuffix - whether to add "ago" suffix (default: true)
+ * @param now - the instant to measure against
+ * @param options.addSuffix - whether to add the "ago" suffix (default: true)
  * @returns a human-readable relative time string
  */
 function createTimeString(
 	time: string | Date,
+	now: number,
 	{ addSuffix = true }: RelativeTimeOptions = {},
 ) {
-	const now = Date.now();
-	const serverDate = new Date(time);
-	const clientDate = new Date();
+	const target = new Date(time).getTime();
 
-	const currentTime = serverDate > clientDate ? clientDate : serverDate;
-
-	const timeString = formatDistanceStrict(currentTime, now, {
-		addSuffix,
-	});
+	const timeString = formatDistanceStrict(
+		new Date(Math.min(target, now)),
+		now,
+		{
+			addSuffix,
+		},
+	);
 
 	return timeString.startsWith("in ") ? "just now" : timeString;
 }
 
+/**
+ * Track the passed time relative to the current time, refreshing as time passes.
+ *
+ * The string is derived during render from a clock the component subscribes to,
+ * rather than read from `Date.now()` — a render that reads the clock is impure,
+ * and the React Compiler would pin its result to the last time `time` changed.
+ */
 export function useRelativeTime(
 	time: string | Date,
-	options: RelativeTimeOptions = {},
+	{ addSuffix = true }: RelativeTimeOptions = {},
 ) {
-	const [, setTick] = useState(0);
+	const now = useSyncExternalStore(subscribe, getNow, getNow);
 
-	useEffect(() => {
-		const interval = window.setInterval(() => {
-			setTick((t) => t + 1);
-		}, 8000);
-
-		return () => {
-			window.clearInterval(interval);
-		};
-	}, []);
-
-	return createTimeString(time, options);
+	return createTimeString(time, now, { addSuffix });
 }
 
 type RelativeTimeProps = {
