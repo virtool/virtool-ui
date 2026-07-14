@@ -2,6 +2,8 @@ import type { Account, AccountSettings, APIKeyMinimal } from "@account/types";
 import { faker } from "@faker-js/faker";
 import type { Permissions } from "@groups/types";
 import nock from "nock";
+import { expect } from "vitest";
+import { type MockScope, userServerFnMocks } from "../api/users";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 import { createFakeUser } from "./user";
@@ -45,13 +47,36 @@ export function createFakeApiKey(
 }
 
 /**
- * Mocks an API call to get the users account
+ * Sets up the `getAccount` server function to resolve with the given account.
+ *
+ * The account is served by a server function rather than the REST API, so this
+ * stubs the mocked `@server/users/functions` module instead of intercepting a
+ * request with nock.
  *
  * @param account - The account to fetch
- * @returns A nock scope for the mocked API call
  */
-export function mockApiGetAccount(account: Account) {
-	return nock("http://localhost").get("/api/account").reply(200, account);
+export function mockApiGetAccount(account: Account): MockScope {
+	userServerFnMocks.getAccount.mockResolvedValue(account);
+
+	return {
+		done() {
+			expect(userServerFnMocks.getAccount).toHaveBeenCalled();
+		},
+	};
+}
+
+/**
+ * Sets up `getAccount` to reject the way it does for an anonymous caller.
+ *
+ * The global authentication middleware rejects an unauthenticated call with
+ * `UnauthorizedError`, and the route guards on `/login` and `/_authenticated`
+ * read that rejection as "nobody is signed in".
+ */
+export function mockApiGetAccountUnauthorized(): void {
+	const error = new Error("Unauthorized");
+	error.name = "UnauthorizedError";
+
+	userServerFnMocks.getAccount.mockRejectedValue(error);
 }
 
 /**

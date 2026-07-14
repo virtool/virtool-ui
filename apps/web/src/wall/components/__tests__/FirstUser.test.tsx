@@ -2,7 +2,7 @@ import { accountQueryKeys } from "@account/keys";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiCreateFirstUser } from "@tests/api/auth";
-import { createFakeAccount } from "@tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, describe, expect, it } from "vitest";
@@ -32,7 +32,7 @@ describe("<FirstUser />", () => {
 		// the server function authenticates the account fetch, so the guard
 		// admits the user instead of bouncing back to /setup.
 		nock("http://localhost").get("/api/").reply(200, { first_user: false });
-		nock("http://localhost").get("/api/account").reply(200, account);
+		mockApiGetAccount(account);
 
 		const { router } = await renderSetup();
 

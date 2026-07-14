@@ -28,15 +28,19 @@ export async function seedUser(
 	{
 		active = true,
 		administratorRole = null,
+		email = "",
 		forceReset = false,
 		handle = "alice",
 		password = Buffer.from("not-a-real-hash"),
+		settings = {},
 	}: {
 		active?: boolean;
 		administratorRole?: AdministratorRoleName | null;
+		email?: string;
 		forceReset?: boolean;
 		handle?: string;
 		password?: Buffer;
+		settings?: Record<string, unknown>;
 	} = {},
 ): Promise<number> {
 	const [user] = await db
@@ -44,11 +48,12 @@ export async function seedUser(
 		.values({
 			active,
 			administratorRole,
+			email,
 			forceReset,
 			handle,
 			lastPasswordChange: new Date(),
 			password,
-			settings: {},
+			settings,
 		})
 		.returning({ id: users.id });
 

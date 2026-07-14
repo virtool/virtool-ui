@@ -1,4 +1,5 @@
-import { byteSize, cn } from "@app/utils";
+import { cn } from "@app/cn";
+import { byteSize } from "@app/format";
 import IconButton from "@base/IconButton";
 import Loader from "@base/Loader";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";

@@ -1,14 +1,25 @@
+import { num, str } from "@app/searchParams";
 import SubtractionList from "@subtraction/components/SubtractionList";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod/v4";
 
-const subtractionsSearchSchema = z.object({
-	find: z.string().default("").catch(""),
-	page: z.number().default(1).catch(1),
-});
+/** Search params for this route. */
+type SubtractionsSearch = {
+	find: string;
+	page: number;
+};
+
+function validateSubtractionsSearch(
+	input: Partial<SubtractionsSearch> & SearchSchemaInput,
+): SubtractionsSearch {
+	return {
+		find: str(input.find, ""),
+		page: num(input.page, 1),
+	};
+}
 
 export const Route = createFileRoute("/_authenticated/subtractions/")({
-	validateSearch: subtractionsSearchSchema,
+	validateSearch: validateSubtractionsSearch,
 	component: SubtractionsRoute,
 });
 

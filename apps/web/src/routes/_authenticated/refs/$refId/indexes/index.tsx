@@ -1,13 +1,21 @@
+import { num } from "@app/searchParams";
 import Indexes from "@indexes/components/Indexes";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod/v4";
 
-const indexesSearchSchema = z.object({
-	page: z.number().default(1).catch(1),
-});
+/** Search params for this route. */
+type IndexesSearch = {
+	page: number;
+};
+
+function validateIndexesSearch(
+	input: Partial<IndexesSearch> & SearchSchemaInput,
+): IndexesSearch {
+	return { page: num(input.page, 1) };
+}
 
 export const Route = createFileRoute("/_authenticated/refs/$refId/indexes/")({
-	validateSearch: indexesSearchSchema,
+	validateSearch: validateIndexesSearch,
 	component: IndexesRoute,
 });
 

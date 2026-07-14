@@ -10,6 +10,7 @@ import { expect, vi } from "vitest";
 export const userServerFnMocks = {
 	findUsers: vi.fn(),
 	listUsers: vi.fn(),
+	getAccount: vi.fn(),
 	getUser: vi.fn(),
 	createUser: vi.fn(),
 	updateUser: vi.fn(),

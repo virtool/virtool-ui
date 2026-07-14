@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import type { ElementType, ReactNode } from "react";
 import Icon, { type IconProps } from "./Icon";
 

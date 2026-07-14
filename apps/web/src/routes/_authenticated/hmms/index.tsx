@@ -1,14 +1,25 @@
+import { num, str } from "@app/searchParams";
 import HmmList from "@hmm/components/HmmList";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod/v4";
 
-const hmmSearchSchema = z.object({
-	find: z.string().default("").catch(""),
-	page: z.number().default(1).catch(1),
-});
+/** Search params for this route. */
+type HmmSearch = {
+	find: string;
+	page: number;
+};
+
+function validateHmmSearch(
+	input: Partial<HmmSearch> & SearchSchemaInput,
+): HmmSearch {
+	return {
+		find: str(input.find, ""),
+		page: num(input.page, 1),
+	};
+}
 
 export const Route = createFileRoute("/_authenticated/hmms/")({
-	validateSearch: hmmSearchSchema,
+	validateSearch: validateHmmSearch,
 	component: HmmRoute,
 });
 

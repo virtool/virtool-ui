@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { Download } from "lucide-react";
 import type { ReactNode } from "react";
 

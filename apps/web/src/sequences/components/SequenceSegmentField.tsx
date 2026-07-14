@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import InputGroup from "@base/InputGroup";

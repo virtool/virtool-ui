@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { type ReactNode, useContext, useEffect, useRef } from "react";
 import ScrollSyncContext from "./ScrollSyncContext";
 

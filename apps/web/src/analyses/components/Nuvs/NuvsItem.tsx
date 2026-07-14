@@ -1,6 +1,6 @@
 import NuvsValues from "@analyses/components/Nuvs/NuvsValues";
 import type { FormattedNuvsHit } from "@analyses/types";
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import Badge from "@base/Badge";
 import Box from "@base/Box";
 import numbro from "numbro";

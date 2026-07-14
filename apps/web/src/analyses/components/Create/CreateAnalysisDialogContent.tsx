@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { DialogContent } from "@base/Dialog";
 import type { ReactNode } from "react";
 

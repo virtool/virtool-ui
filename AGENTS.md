@@ -176,10 +176,62 @@ alias and are reached through the catch-all `@/*`, which maps to
 - **CVA** (`class-variance-authority`) for component variants
 - **Lucide React** for icons
 
-### TanStack Router search params
+### Nothing heavy in a route's critical exports
 
-Zod v4 schemas can be passed directly to `validateSearch` — `@tanstack/zod-adapter`
-is not needed. Use `.default()` and `.catch()` for defaults and fallbacks.
+`autoCodeSplitting` splits each route file in two. The **critical** half —
+`loader`, `beforeLoad`, `validateSearch`, `loaderDeps` — is imported
+*statically* by `routeTree.gen.ts`, so whatever it reaches lands in the eager
+bundle that **every** page load pays for, including `/login`. Only the
+`component` half is lazy.
+
+So, in a route's critical exports:
+
+- **Never statically import `queries.ts` or `@app/api`.** Pull the
+  `queryOptions` factory in from inside the loader body instead:
+  `const { sampleQueryOptions } = await import("@samples/queries");`. A static
+  import drags superagent and the feature's whole request layer into the eager
+  bundle. Importing them in the `component` half is fine — that half is lazy.
+- **Never use zod in `validateSearch`.** It is synchronous and cannot be
+  deferred, so a zod schema pins all ~108 KB of zod eagerly. Use the
+  dependency-free coercion helpers in `@app/searchParams` and type the function
+  as `(input: Partial<T> & SearchSchemaInput) => T` — the `SearchSchemaInput`
+  tag is what keeps `<Link search={{ page: 2 }}>` partial.
+
+`src/server/**` is reachable from the browser program via `start.ts`, so the
+same rule applies there: reach server-function modules through
+`createServerOnlyFn` (see `auth/middleware.ts`), never a top-level import.
+
+### What a route guard reaches must not import `@app/api`
+
+A `beforeLoad` that resolves an account, or a loader on `/login` or `/setup`,
+runs for unauthenticated visitors. Anything it reaches — even *dynamically* —
+is downloaded on the login wall.
+
+**Tree-shaking will not save you here: the chunk is the unit of loading, not
+the export.** `account/queries.ts` genuinely uses `apiClient` for its API-key
+and password hooks, so its chunk contains superagent; importing that chunk for
+one server-function-backed export still drags superagent in. Marking `@app/api`
+side-effect-free does nothing about this.
+
+So the queryOptions the guards need live in modules with no `@app/api` import
+at all:
+
+- `@account/account` — `accountQueryOptions` / `useFetchAccount`, backed by the
+  `getAccount` server function.
+- `@administration/passwordPolicy` — `passwordPolicyQueryOptions`, backed by
+  `getPasswordPolicyFn`.
+
+Both are server-function-backed and need no HTTP client. Don't fold them back
+into their feature's `queries.ts`, and don't add an `apiClient` call to either.
+Prefer a server function over a Python REST call for anything a guard reads.
+
+### Heavy dependencies get their own module
+
+A module's imports survive tree-shaking if the package does not declare
+`sideEffects: false` — so a grab-bag module leaks its heaviest dependency into
+every bundle that wants *any* of its exports. `cn()` (`@app/cn`) and the numbro
+formatters (`@app/format`) are split out of `@app/utils` for exactly this
+reason. Don't merge them back.
 
 ### Routing: in-app navigation uses `<Link>`
 

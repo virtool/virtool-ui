@@ -1,5 +1,6 @@
 import { accountQueryKeys } from "@account/keys";
 import { waitFor } from "@testing-library/react";
+import { mockApiGetAccountUnauthorized } from "@tests/fake/account";
 import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, describe, expect, it } from "vitest";
@@ -8,7 +9,7 @@ describe("<AuthenticatedLayout />", () => {
 	afterEach(() => nock.cleanAll());
 
 	it("redirects to /login when the account is not authenticated", async () => {
-		nock("http://localhost").get("/api/account").reply(401, {});
+		mockApiGetAccountUnauthorized();
 
 		const { router } = await renderRoute("/samples", {
 			seed: (queryClient) => {

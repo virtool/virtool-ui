@@ -1,5 +1,5 @@
+import { cn } from "@app/cn";
 import { useMatchPartialPath } from "@app/useMatchPartialPath";
-import { cn } from "@app/utils";
 import Icon from "@base/Icon";
 import Link from "@base/Link";
 import type { LucideIcon } from "lucide-react";

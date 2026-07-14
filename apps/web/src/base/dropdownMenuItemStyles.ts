@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 
 /** The palette shared by all selectable dropdown menu items. */
 export type DropdownMenuItemColor =

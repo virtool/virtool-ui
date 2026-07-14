@@ -1,15 +1,23 @@
 import AnalysesList from "@analyses/components/AnalysisList";
+import { num } from "@app/searchParams";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod/v4";
 
-const analysesListSearchSchema = z.object({
-	page: z.number().default(1).catch(1),
-});
+/** Search params for this route. */
+type AnalysesListSearch = {
+	page: number;
+};
+
+function validateAnalysesListSearch(
+	input: Partial<AnalysesListSearch> & SearchSchemaInput,
+): AnalysesListSearch {
+	return { page: num(input.page, 1) };
+}
 
 export const Route = createFileRoute(
 	"/_authenticated/samples/$sampleId/analyses/",
 )({
-	validateSearch: analysesListSearchSchema,
+	validateSearch: validateAnalysesListSearch,
 	component: AnalysesRoute,
 });
 

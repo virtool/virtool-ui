@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";

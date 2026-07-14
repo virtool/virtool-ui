@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import type { JobState } from "@jobs/types";
 import { Progress } from "radix-ui";
 

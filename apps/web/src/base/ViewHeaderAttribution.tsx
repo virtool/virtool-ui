@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import Attribution from "./Attribution";
 
 type ViewHeaderAttributionProps = {
