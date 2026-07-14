@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { Check } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
 import type { ReactNode } from "react";

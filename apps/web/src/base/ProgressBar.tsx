@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 
 const colorToClass: Record<string, string> = {
 	blue: "bg-blue-600",

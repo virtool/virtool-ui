@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
-import { mockApiCreateSample } from "@tests/fake/samples";
+import { mockApiCreateSample } from "@tests/api/samples";
 import { fileQueryKeys } from "@uploads/keys";
 import nock from "nock";
 import type { ReactNode } from "react";

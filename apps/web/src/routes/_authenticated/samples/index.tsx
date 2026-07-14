@@ -1,20 +1,34 @@
+import { num, numberArray, str, stringArray } from "@app/searchParams";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import { useFetchLabels } from "@labels/queries";
 import SamplesList from "@samples/components/SamplesList";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod/v4";
 
-const samplesSearchSchema = z.object({
-	term: z.string().default("").catch(""),
-	page: z.number().default(1).catch(1),
-	labels: z.array(z.number()).default([]).catch([]),
-	users: z.array(z.number()).default([]).catch([]),
-	workflows: z.array(z.string()).default([]).catch([]),
-});
+/** Search params for the samples list. */
+type SamplesSearch = {
+	term: string;
+	page: number;
+	labels: number[];
+	users: number[];
+	workflows: string[];
+};
+
+function validateSamplesSearch(
+	input: Partial<SamplesSearch> & SearchSchemaInput,
+): SamplesSearch {
+	return {
+		term: str(input.term, ""),
+		page: num(input.page, 1),
+		labels: numberArray(input.labels, []),
+		users: numberArray(input.users, []),
+		workflows: stringArray(input.workflows, []),
+	};
+}
 
 export const Route = createFileRoute("/_authenticated/samples/")({
-	validateSearch: samplesSearchSchema,
+	validateSearch: validateSamplesSearch,
 	component: SamplesRoute,
 });
 

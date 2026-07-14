@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { byteSize, createRandomString, formatIsolateName } from "../utils.js";
+import { byteSize } from "../format";
+import { createRandomString, formatIsolateName } from "../utils.js";
 
 describe("byteSize()", () => {
 	it("should convert 1 to 1.0B", () => {

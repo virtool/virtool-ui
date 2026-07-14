@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { capitalize } from "es-toolkit";
 import InitialIcon from "./InitialIcon";
 import RelativeTime from "./RelativeTime";

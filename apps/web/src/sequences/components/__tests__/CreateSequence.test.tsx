@@ -1,6 +1,7 @@
 import { cleanup, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeOtu, mockApiAddSequence } from "@tests/fake/otus";
+import { mockApiAddSequence } from "@tests/api/otus";
+import { createFakeOtu } from "@tests/fake/otus";
 import { createFakeReference } from "@tests/fake/references";
 import { at, renderWithProviders } from "@tests/setup";
 import nock from "nock";

@@ -1,4 +1,4 @@
-import { byteSize } from "@app/utils";
+import { byteSize } from "@app/format";
 import { renderWithProviders } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 import {

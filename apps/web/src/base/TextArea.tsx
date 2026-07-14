@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import type { ElementType, ReactNode, Ref } from "react";
 import Input from "./Input";
 

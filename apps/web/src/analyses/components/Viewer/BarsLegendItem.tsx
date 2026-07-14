@@ -1,4 +1,5 @@
-import { cn, toThousand } from "@app/utils";
+import { cn } from "@app/cn";
+import { toThousand } from "@app/format";
 import { type BarColor, bgColorClasses } from "./colors";
 
 type BarsLegendItemProps = {

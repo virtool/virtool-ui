@@ -1,22 +1,17 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiListUsers } from "@tests/api/users";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeHmmSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
-import {
-	createFakeIndexMinimal,
-	mockApiListIndexes,
-} from "@tests/fake/indexes";
+import { mockApiGetHmms } from "@tests/api/hmm";
+import { mockApiListIndexes } from "@tests/api/indexes";
+import { mockApiGetSamples } from "@tests/api/samples";
+import { mockApiGetShortlistSubtractions } from "@tests/api/subtractions";
+import { createFakeAccount } from "@tests/fake/account";
+import { createFakeHmmSearchResults } from "@tests/fake/hmm";
+import { createFakeIndexMinimal } from "@tests/fake/indexes";
 import { createFakeLabel } from "@tests/fake/labels";
-import {
-	createFakeSampleMinimal,
-	mockApiGetSamples,
-} from "@tests/fake/samples";
-import {
-	createFakeShortlistSubtraction,
-	mockApiGetShortlistSubtractions,
-} from "@tests/fake/subtractions";
+import { createFakeSampleMinimal } from "@tests/fake/samples";
+import { createFakeShortlistSubtraction } from "@tests/fake/subtractions";
 import { createFakeUserNested } from "@tests/fake/user";
+import { mockGetAccount, mockListUsers } from "@tests/server-fn/users";
 import { at, renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import { useState } from "react";
@@ -130,7 +125,7 @@ describe("<SamplesList />", () => {
 			{ ...createFakeUserNested(), handle: "amelia" },
 			{ ...createFakeUserNested(), handle: "bilbo" },
 		];
-		mockApiListUsers(users);
+		mockListUsers(users);
 		mockApiGetSamples(samples);
 		mockApiGetHmms(createFakeHmmSearchResults());
 		mockApiListIndexes([createFakeIndexMinimal()]);
@@ -164,7 +159,7 @@ describe("<SamplesList />", () => {
 	});
 
 	it("should render create button when [canModify=true]", async () => {
-		mockApiGetAccount(
+		mockGetAccount(
 			createFakeAccount({
 				administrator_role: "full",
 			}),
@@ -177,7 +172,7 @@ describe("<SamplesList />", () => {
 	});
 
 	it("should not render create button when [canModify=false]", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
+		mockGetAccount(createFakeAccount({ administrator_role: null }));
 		await renderWithRouter(<SamplesList labels={labels} />, path);
 
 		expect(
@@ -371,9 +366,7 @@ describe("<SamplesList />", () => {
 
 		it("should list the logged-in user first, tagged as You", async () => {
 			const self = at(users, 1);
-			mockApiGetAccount(
-				createFakeAccount({ id: self.id, handle: self.handle }),
-			);
+			mockGetAccount(createFakeAccount({ id: self.id, handle: self.handle }));
 			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -447,7 +440,7 @@ describe("<SamplesList />", () => {
 
 		it("should count the samples matching the filters, not every visible sample", async () => {
 			nock.cleanAll();
-			mockApiListUsers(users);
+			mockListUsers(users);
 			mockApiGetHmms(createFakeHmmSearchResults());
 			mockApiListIndexes([createFakeIndexMinimal()]);
 			mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);

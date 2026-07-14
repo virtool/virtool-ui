@@ -2,7 +2,6 @@ import {
 	sentryGlobalFunctionMiddleware,
 	sentryGlobalRequestMiddleware,
 } from "@sentry/tanstackstart-react";
-import { authenticationExceptions } from "@server/auth/exceptions";
 import { createAuthenticationMiddleware } from "@server/auth/middleware";
 import { errorLoggingMiddleware } from "@server/error-logging";
 import {
@@ -11,9 +10,7 @@ import {
 	createStart,
 } from "@tanstack/react-start";
 
-const authenticationMiddleware = createAuthenticationMiddleware(
-	authenticationExceptions,
-);
+const authenticationMiddleware = createAuthenticationMiddleware();
 
 const cspDirectives = [
 	"default-src 'self'",

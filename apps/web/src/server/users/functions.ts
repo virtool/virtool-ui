@@ -10,6 +10,7 @@ import {
 	createUser as createUserImpl,
 	findUsers as findUsersImpl,
 	GroupMembershipError,
+	getAccount as getAccountImpl,
 	getAdministratorRole as getAdministratorRoleImpl,
 	getUser as getUserImpl,
 	listAdministratorRoles as listAdministratorRolesImpl,
@@ -127,6 +128,16 @@ export const findUsers = createServerFn({ method: "GET" })
 			active: data?.active ?? true,
 		});
 	});
+
+// Not on the authentication exception list, so an anonymous call gets a 401.
+// The login wall and the authenticated route guard both rely on that: a
+// rejected call is how they learn there is no session.
+export const getAccount = createServerFn({ method: "GET" }).handler(
+	async () => {
+		const session = await requireSession();
+		return getAccountImpl(db, session.userId);
+	},
+);
 
 export const getUser = createServerFn({ method: "GET" })
 	.middleware([adminRole("users")])

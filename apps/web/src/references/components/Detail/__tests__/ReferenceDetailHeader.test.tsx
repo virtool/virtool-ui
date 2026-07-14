@@ -1,9 +1,8 @@
 import { screen } from "@testing-library/react";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import {
-	createFakeReference,
-	mockApiGetReferenceDetail,
-} from "@tests/fake/references";
+import { mockApiGetReferenceDetail } from "@tests/api/references";
+import { createFakeAccount } from "@tests/fake/account";
+import { createFakeReference } from "@tests/fake/references";
+import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -17,7 +16,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 	beforeEach(() => {
 		reference = createFakeReference();
 		mockApiGetReferenceDetail(reference);
-		mockApiGetAccount(
+		mockGetAccount(
 			createFakeAccount({
 				administrator_role: "full",
 			}),
@@ -65,7 +64,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 
 	it("should render when [isRemote=true]", async () => {
 		props.isRemote = true;
-		mockApiGetAccount(
+		mockGetAccount(
 			createFakeAccount({
 				administrator_role: "full",
 			}),
@@ -76,7 +75,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 	});
 
 	it("should render when [isRemote=false]", async () => {
-		mockApiGetAccount(
+		mockGetAccount(
 			createFakeAccount({
 				administrator_role: "full",
 			}),
@@ -87,7 +86,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 	});
 
 	it("should render when [both canModify=false, isRemote=false]", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
+		mockGetAccount(createFakeAccount({ administrator_role: null }));
 		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
 		expect(screen.queryByLabelText("lock")).toBeNull();
@@ -104,7 +103,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 	});
 
 	it("should not render the archive button when [canModify=false]", async () => {
-		mockApiGetAccount(createFakeAccount({ administrator_role: null }));
+		mockGetAccount(createFakeAccount({ administrator_role: null }));
 		await renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
 		expect(screen.queryByRole("button", { name: "archive" })).toBeNull();

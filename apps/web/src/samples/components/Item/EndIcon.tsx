@@ -1,8 +1,8 @@
+import { cn } from "@app/cn";
 import IconButton from "@base/IconButton";
 import ProgressCircle from "@base/ProgressCircle";
 import type { JobState } from "@jobs/types";
 import { ChartArea } from "lucide-react";
-import { cn } from "@/app/utils";
 
 type SampleItemEndIconProps = {
 	/** Accessible name for the quick analyze button */

@@ -1,5 +1,5 @@
 import type { ServerJob, ServerJobMinimal } from "@jobs/types";
-import { expect, vi } from "vitest";
+import { type Mock, vi } from "vitest";
 
 /**
  * Mock handles for the `@server/jobs/functions` server-fn module. Wired in
@@ -11,22 +11,11 @@ export const jobServerFnMocks = {
 	getJob: vi.fn(),
 };
 
-/** Asserts that the corresponding mock was called at least once. */
-export type MockScope = { done(): void };
-
-function makeScope(fn: ReturnType<typeof vi.fn>): MockScope {
-	return {
-		done() {
-			expect(fn).toHaveBeenCalled();
-		},
-	};
-}
-
 /** Sets up findJobs to resolve with a single page containing the given jobs. */
-export function mockApiGetJobs(
+export function mockFindJobs(
 	jobs: ServerJobMinimal[],
 	found_count?: number,
-): MockScope {
+): Mock {
 	jobServerFnMocks.findJobs.mockResolvedValue({
 		counts: {},
 		found_count: found_count ?? jobs.length,
@@ -36,18 +25,18 @@ export function mockApiGetJobs(
 		per_page: 25,
 		total_count: jobs.length,
 	});
-	return makeScope(jobServerFnMocks.findJobs);
+	return jobServerFnMocks.findJobs;
 }
 
 /** Sets up getJob to resolve with the given job when matched by id. */
-export function mockApiGetJob(jobId: number, job: ServerJob): MockScope {
+export function mockGetJob(jobId: number, job: ServerJob): Mock {
 	jobServerFnMocks.getJob.mockImplementation(
 		async ({ data }: { data: { jobId: number } }) => {
 			if (data.jobId === jobId) {
 				return job;
 			}
-			throw new Error(`unexpected jobId in mockApiGetJob: ${data.jobId}`);
+			throw new Error(`unexpected jobId in mockGetJob: ${data.jobId}`);
 		},
 	);
-	return makeScope(jobServerFnMocks.getJob);
+	return jobServerFnMocks.getJob;
 }

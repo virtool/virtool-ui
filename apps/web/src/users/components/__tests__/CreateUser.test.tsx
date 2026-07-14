@@ -1,7 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiCreateUser } from "@tests/api/users";
 import { createFakeUser } from "@tests/fake/user";
+import { mockCreateUser } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 import CreateUser from "../CreateUser";
@@ -10,7 +10,9 @@ describe("<CreateUser />", () => {
 	it("creates user once form is submitted", async () => {
 		const usernameInput = "Username";
 		const passwordInput = "Password";
-		const scope = mockApiCreateUser(createFakeUser({ handle: usernameInput }));
+		const createUser = mockCreateUser(
+			createFakeUser({ handle: usernameInput }),
+		);
 		await renderWithRouter(<CreateUser />);
 
 		await userEvent.click(screen.getByRole("button"));
@@ -25,7 +27,7 @@ describe("<CreateUser />", () => {
 
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-		await waitFor(() => scope.done());
+		await waitFor(() => expect(createUser).toHaveBeenCalled());
 	});
 
 	it("should render correct username error message", async () => {

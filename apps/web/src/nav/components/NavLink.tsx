@@ -1,5 +1,5 @@
+import { cn } from "@app/cn";
 import { useMatchPartialPath } from "@app/useMatchPartialPath";
-import { cn } from "@app/utils";
 import Link from "@base/Link";
 import type { ReactNode } from "react";
 

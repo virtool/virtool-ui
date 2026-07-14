@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import IconButton, { type IconButtonProps } from "./IconButton";
 
 export default function InputIconButton({
