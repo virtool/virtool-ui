@@ -11,6 +11,12 @@ export const db = drizzle(client, { schema });
 /** Drizzle database client typed against the full schema. */
 export type Db = typeof db;
 
+/** A Drizzle transaction handle, as passed to a `db.transaction` callback. */
+export type Transaction = Parameters<Parameters<Db["transaction"]>[0]>[0];
+
+/** Either the pooled database handle or an open transaction. */
+export type DbOrTx = Db | Transaction;
+
 /** The underlying postgres-js client used by Drizzle. */
 export type PgClient = typeof client;
 

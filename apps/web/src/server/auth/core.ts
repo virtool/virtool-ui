@@ -14,6 +14,7 @@ import {
 import type { CookieAdapter } from "./cookies";
 import { hashPassword, verifyPassword } from "./password";
 import {
+	consumeResetSession,
 	createAuthenticatedSession,
 	createResetSession,
 	invalidateSession,
@@ -218,6 +219,10 @@ export async function resetPassword(
 		throw new InvalidResetSessionError();
 	}
 
+	// Bound here rather than read off `row` below: the narrowing above does not
+	// survive into the transaction callback.
+	const userId = row.userId;
+
 	if (!constantTimeEqualHex(row.resetCode, input.resetCode)) {
 		await invalidateSession(db, sessionId);
 		throw new InvalidResetSessionError();
@@ -231,7 +236,7 @@ export async function resetPassword(
 	const [user] = await db
 		.select({ password: users.password })
 		.from(users)
-		.where(eq(users.id, row.userId))
+		.where(eq(users.id, userId))
 		.limit(1);
 
 	if (!user) {
@@ -243,29 +248,57 @@ export async function resetPassword(
 		throw new PasswordReuseError();
 	}
 
-	// Match Python's order in `virtool.account.data.AccountData.reset`:
-	//   delete_by_user → users.update → sessions.create_authenticated.
-	// Sequencing matters so a user mid-reset sees the same behaviour regardless
-	// of which backend serves them during the transition.
-	await invalidateUserSessions(db, row.userId);
-
+	// Hashing is CPU-bound and slow by design, so it happens before the
+	// transaction opens rather than holding one idle for the duration.
 	const newHash = await hashPassword(input.password);
 
-	await db
-		.update(users)
-		.set({
-			password: newHash,
-			forceReset: false,
-			lastPasswordChange: new Date(),
-			invalidateSessions: true,
-		})
-		.where(eq(users.id, row.userId));
-
 	const remember = row.resetRemember ?? false;
-	const { sessionId: newSessionId, token } = await createAuthenticatedSession(
-		db,
-		{ userId: row.userId, ip: input.ip, remember },
+
+	// The writes are one unit: a failure partway through must not leave the
+	// password changed with no session to show for it.
+	//
+	// Consuming the reset session first makes the code single-use under
+	// concurrency. Everything above — validation, the reuse check, the hash —
+	// takes no lock, so two submissions of the same code can both reach this
+	// point; only the one that deletes the row proceeds. Without it the loser
+	// would go on to invalidate the sessions of the winner, handing the browser
+	// cookies for a session that no longer exists.
+	//
+	// The remaining writes keep Python's order in
+	// `virtool.account.data.AccountData.reset`:
+	//   delete_by_user → users.update → sessions.create_authenticated.
+	// Sequencing matters so a user mid-reset sees the same behaviour regardless
+	// of which backend serves them during the transition. `delete_by_user` would
+	// have removed the reset session anyway, so consuming it above leaves the
+	// committed state identical.
+	const { sessionId: newSessionId, token } = await db.transaction(
+		async (tx) => {
+			if (!(await consumeResetSession(tx, sessionId))) {
+				throw new InvalidResetSessionError();
+			}
+
+			await invalidateUserSessions(tx, userId);
+
+			await tx
+				.update(users)
+				.set({
+					password: newHash,
+					forceReset: false,
+					lastPasswordChange: new Date(),
+					invalidateSessions: true,
+				})
+				.where(eq(users.id, userId));
+
+			return createAuthenticatedSession(tx, {
+				userId,
+				ip: input.ip,
+				remember,
+			});
+		},
 	);
+
+	// Only after the commit. A rolled-back reset must leave the browser holding
+	// no new session.
 	cookies.setSessionId(newSessionId);
 	cookies.setSessionToken(token);
 }
