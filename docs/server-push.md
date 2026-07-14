@@ -96,10 +96,18 @@ instead of relying on middleware.)
 ### Revoking a connected session
 
 The handshake is the only time a stream is authenticated, so a session
-deleted underneath a connected client — by a deactivation, a password
-change, a forced reset — would otherwise leave the stream up. A watch
+that stops verifying underneath a connected client would otherwise leave
+the stream up until the client happened to reconnect. A watch
 (`server/events/revocation.ts`) re-runs the gate every `KEEPALIVE_MS`
 and closes the stream once it fails.
+
+The watch is exactly as sharp as the gate it runs, and no sharper. It
+catches a session row that is gone (a logout elsewhere, a self-service
+reset, expiry) and a user who has been deactivated. It does **not** catch
+an admin-initiated password change or forced reset: those only set
+`users.invalidate_sessions`, which nothing on the TypeScript side reads,
+so they do not revoke a session here or anywhere else in this server yet.
+Closing that hole belongs in the auth gate, not here.
 
 **Closing the stream is the entire revocation signal.** There is no
 `session-revoked` frame. The client reconnects, the handshake answers

@@ -5,10 +5,15 @@ import { logger } from "../logger";
  * Watch the session behind an open SSE connection and call `onRevoked` once it
  * stops verifying.
  *
- * The stream is authenticated once, at the handshake. Without this the session
- * backing a connected client can be deleted — by a deactivation, a password
- * change, or a forced reset — and the stream would still live on until the
- * client happened to reconnect.
+ * The stream is authenticated once, at the handshake. Without this, a session
+ * that stops verifying underneath a connected client would leave the stream up
+ * until the client happened to reconnect.
+ *
+ * This is exactly as sharp as the gate it runs, and no sharper: it catches a
+ * deleted session row and a deactivated user, but not an admin-initiated
+ * password change or forced reset, which only set `users.invalidate_sessions` —
+ * a column nothing on this side reads. That hole is the auth gate's to close,
+ * not this watch's.
  *
  * Returns a function that stops the watch. It is safe to call more than once.
  */

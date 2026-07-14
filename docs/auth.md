@@ -146,6 +146,33 @@ A reset session is not "authenticated" as far as the middleware is
 concerned — any non-exception server function call from a client
 holding only a reset cookie returns 401.
 
+## Session invalidation
+
+`verifyAuthenticatedSession` (`server/auth/verify.ts`) rejects a session
+when the row is missing, the type is not `authenticated`, the token hash
+does not match, the row has expired, or **`users.active` is false**. That
+last one is why deactivation takes effect immediately: `active` is
+re-read on every request rather than trusted at login.
+
+**`users.invalidate_sessions` is written but never read.** It is set to
+`true` on an admin's change to a user's `active`, `password`, or
+`force_reset` (`server/users/data.ts:421-433`) and on a self-service
+reset (`core.ts:260`), mirroring Python, whose service invalidates the
+user's sessions on their next request. Nothing on the TypeScript side
+consumes it. The consequence is concrete: an admin changing a user's
+password or forcing a reset **does not revoke that user's existing
+sessions here** — the deactivation case is covered only because it also
+flips `active`. The self-service reset path is fine for a different
+reason: `core.ts:250` deletes the rows outright via
+`invalidateUserSessions`.
+
+Do not "fix" this by rejecting sessions whose user has
+`invalidate_sessions` set. The reset flow sets the flag `true` and *then*
+creates the new authenticated session (`core.ts:254-265`), and nothing
+clears it, so that gate would reject the fresh session on its first
+request and lock the user out permanently. The fix is to delete the
+session rows at the point of invalidation — that is VIR-2671's job.
+
 ## Session lifetimes
 
 Defined in `server/auth/session.ts:15-17`:
@@ -275,9 +302,13 @@ A logout is either user-initiated or forced. The user-initiated path is
 `useLogout` in `account/queries.ts:149`, which runs `logoutFn()` and
 then calls `resetClient()`.
 
-A forced logout is what happens when the session is revoked underneath a
-running tab — deactivation, a password change, a forced reset. Every
-route into it converges on `endSession` (`app/session.ts`), which clears
+A forced logout is what happens when the session stops verifying
+underneath a running tab — its row deleted, it expired, or its user was
+deactivated. (An admin-initiated password change or forced reset only
+sets `users.invalidate_sessions`, which nothing here reads yet, so it
+does not revoke a session — see **Session invalidation** below.) Every
+route into a forced logout converges on `endSession` (`app/session.ts`),
+which clears
 `sessionStorage` and loads `/login?reason=session-ended&redirect=…`. The
 full document load is what drops everything held in memory, and the
 `reason` puts a "Your session ended" message on the wall. Three things
