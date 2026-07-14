@@ -1,6 +1,6 @@
 /** Base classes shared by Input and InputSimple */
 export const inputBaseClasses =
-	"bg-white border rounded min-w-0 block outline-none py-2 px-2.5 relative transition-[color,box-shadow] w-full placeholder:text-gray-400 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50";
+	"bg-white border rounded min-w-0 block outline-none py-2 px-2.5 relative transition-[color,box-shadow] w-full placeholder:text-gray-500 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50";
 
 /**
  * Explicit height shared by single-line form controls (text inputs, the Select
