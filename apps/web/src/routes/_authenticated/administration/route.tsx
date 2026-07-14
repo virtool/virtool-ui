@@ -1,4 +1,3 @@
-import { accountQueryOptions } from "@account/queries";
 import AdministrationTabs from "@administration/components/AdministrationTabs";
 import { hasSufficientAdminRole } from "@administration/utils";
 import ContainerNarrow from "@base/ContainerNarrow";
@@ -10,6 +9,7 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 export const Route = createFileRoute("/_authenticated/administration")({
 	beforeLoad: async ({ context }) => {
 		const { queryClient } = context;
+		const { accountQueryOptions } = await import("@account/account");
 
 		const account = await queryClient.ensureQueryData(accountQueryOptions());
 

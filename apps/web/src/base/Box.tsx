@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import type { AriaRole, KeyboardEvent, ReactNode } from "react";
 
 type BoxProps = {

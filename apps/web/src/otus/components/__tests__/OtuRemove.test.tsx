@@ -1,6 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeOtu, mockApiRemoveOtu } from "@tests/fake/otus";
+import { mockApiRemoveOtu } from "@tests/api/otus";
+import { createFakeOtu } from "@tests/fake/otus";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";

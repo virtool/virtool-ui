@@ -1,5 +1,5 @@
 import { DEFAULT_MINIMUM_PASSWORD_LENGTH } from "@server/auth/passwordPolicy";
-import { vi } from "vitest";
+import { type Mock, vi } from "vitest";
 
 /**
  * Mock handles for the `@server/settings/functions` server-fn module. Wired in
@@ -11,10 +11,11 @@ export const settingsServerFnMocks = {
 };
 
 /** Set the minimum password length the password forms will validate against. */
-export function mockApiGetPasswordPolicy(
+export function mockGetPasswordPolicy(
 	minimumPasswordLength: number = DEFAULT_MINIMUM_PASSWORD_LENGTH,
-): void {
+): Mock {
 	settingsServerFnMocks.getPasswordPolicyFn.mockResolvedValue({
 		minimumPasswordLength,
 	});
+	return settingsServerFnMocks.getPasswordPolicyFn;
 }

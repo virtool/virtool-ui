@@ -1,4 +1,4 @@
-import { toScientificNotation } from "@app/utils.js";
+import { toScientificNotation } from "@app/format";
 import {
 	createSvg,
 	QUALITY_CHART_HEIGHT,

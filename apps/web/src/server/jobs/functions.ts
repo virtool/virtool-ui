@@ -1,6 +1,7 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { authenticated } from "../auth/policy";
 import { db } from "../db/pg";
 import {
 	findJobs as findJobsImpl,
@@ -34,10 +35,12 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 });
 
 export const findJobs = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
 	.validator(findJobsSchema)
 	.handler(async ({ data }) => findJobsImpl(db, data));
 
 export const getJob = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
 	.validator(jobIdSchema)
 	.handler(async ({ data }) => {
 		try {

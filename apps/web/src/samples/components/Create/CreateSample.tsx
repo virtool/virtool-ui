@@ -1,4 +1,4 @@
-import { useFetchAccount } from "@account/queries";
+import { useFetchAccount } from "@account/account";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import InputContainer from "@base/InputContainer";

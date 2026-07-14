@@ -1,10 +1,8 @@
 import { bannerQueryKeys } from "@banner/keys";
 import { screen } from "@testing-library/react";
+import { mockApiGetSettings } from "@tests/api/administrator";
 import { createFakeAccount } from "@tests/fake/account";
-import {
-	createFakeSettings,
-	mockApiGetSettings,
-} from "@tests/fake/administrator";
+import { createFakeSettings } from "@tests/fake/administrator";
 import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";

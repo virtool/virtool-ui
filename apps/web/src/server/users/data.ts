@@ -44,6 +44,25 @@ export type User = {
 	primary_group: UserGroupReference | null;
 };
 
+/** A signed-in user's client-side preferences. */
+export type AccountSettings = {
+	quick_analyze_workflow: "nuvs" | "pathoscope";
+	show_ids: boolean;
+	show_versions: boolean;
+	skip_quick_analyze_dialog: boolean;
+};
+
+/**
+ * The signed-in user's own view of themselves.
+ *
+ * A `User` plus the two fields only the account holder may read: their email
+ * and their client settings.
+ */
+export type Account = User & {
+	email: string;
+	settings: AccountSettings;
+};
+
 /** A user reduced to what a selector or filter needs to show. */
 export type UserOption = {
 	id: number;
@@ -349,6 +368,27 @@ export async function getUser(db: Db, userId: number): Promise<User> {
 	}
 
 	return takeFirstOrThrow(await assembleUsers(db, [row]));
+}
+
+/** Read the signed-in user's own account, including their email and settings. */
+export async function getAccount(db: Db, userId: number): Promise<Account> {
+	const [row] = await db
+		.select()
+		.from(usersTable)
+		.where(eq(usersTable.id, userId))
+		.limit(1);
+
+	if (!row) {
+		throw new UserNotFoundError();
+	}
+
+	const user = takeFirstOrThrow(await assembleUsers(db, [row]));
+
+	return {
+		...user,
+		email: row.email,
+		settings: row.settings as AccountSettings,
+	};
 }
 
 /** Read a user's administrator role without assembling the full user. */

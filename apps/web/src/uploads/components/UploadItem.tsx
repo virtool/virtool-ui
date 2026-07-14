@@ -1,4 +1,4 @@
-import { byteSize } from "@app/utils";
+import { byteSize } from "@app/format";
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";

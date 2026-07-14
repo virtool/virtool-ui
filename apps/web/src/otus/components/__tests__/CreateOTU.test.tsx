@@ -1,13 +1,11 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-	createFakeReference,
-	mockApiGetReferenceDetail,
-} from "@tests/fake/references";
+import { mockApiCreateOtu } from "@tests/api/otus";
+import { mockApiGetReferenceDetail } from "@tests/api/references";
+import { createFakeReference } from "@tests/fake/references";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { mockApiCreateOtu } from "../../../tests/fake/otus";
 import OtuCreate from "../OtuCreate";
 
 describe("<OtuCreate />", () => {

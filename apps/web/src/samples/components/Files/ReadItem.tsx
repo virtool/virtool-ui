@@ -1,4 +1,4 @@
-import { byteSize } from "@app/utils";
+import { byteSize } from "@app/format";
 import BoxGroupSection from "@base/BoxGroupSection";
 
 /**

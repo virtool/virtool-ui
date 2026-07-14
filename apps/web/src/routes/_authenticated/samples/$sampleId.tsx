@@ -10,7 +10,7 @@ import { JobNestedSchema } from "@jobs/types";
 import DeleteSample from "@samples/components/Detail/DeleteSample";
 import EditSample from "@samples/components/EditSample";
 import { useCheckCanEditSample } from "@samples/hooks";
-import { sampleQueryOptions, useSuspenseSample } from "@samples/queries";
+import { useSuspenseSample } from "@samples/queries";
 import {
 	createFileRoute,
 	notFound,
@@ -22,6 +22,8 @@ import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/samples/$sampleId")({
 	loader: async ({ context: { queryClient }, params: { sampleId } }) => {
+		const { sampleQueryOptions } = await import("@samples/queries");
+
 		try {
 			await queryClient.ensureQueryData(sampleQueryOptions(sampleId));
 		} catch (error) {

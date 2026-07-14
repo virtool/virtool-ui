@@ -58,6 +58,42 @@ pushed at a real database.
 each feature's persistence lands; don't retrofit them onto features
 that still call the Python API.
 
+### Testing a server function's handler
+
+A test **cannot** call a server function by importing it and invoking
+it. The Vite plugin splits every `createServerFn` in two: the module you
+import keeps only a client stub, and the handler body moves into a
+virtual `?tss-serverfn-split` sibling. Calling the import runs none of
+your code — it either throws `No Start context found in
+AsyncLocalStorage` or quietly resolves `undefined`. A test written the
+obvious way passes while asserting nothing, which for an authorization
+test is worse than having no test.
+
+Import the split module and call the handler through `callServerFn` from
+`@server/test/serverFn`:
+
+```ts
+const handlers = (await import(
+    "./functions.ts?tss-serverfn-split"
+)) as SplitServerFnModule;
+
+await expect(
+    callServerFn(handlers, "deleteGroup", { groupId }),
+).rejects.toBeInstanceOf(ForbiddenError);
+```
+
+This runs the real handler: its validator, its authorization guard, and
+its `data.ts` calls against the test database. `callServerFn`
+deliberately runs it *without* the global authentication middleware, so
+what a test pins is the handler's own guard — which is the thing that
+must not regress.
+
+Mock `@tanstack/react-start/server` to capture `getRequest` and
+`setResponseStatus`, then drive authentication by pointing `getRequest`
+at a `Request` carrying the session cookies from `seedUser` / `seedSession`
+(`@server/auth/test/fixtures`). `groups/functions.test.ts` is the worked
+example.
+
 ## Where to mock the network boundary
 
 The right boundary depends on whether the feature has migrated from
@@ -118,6 +154,60 @@ The shared module goes next to the tests it serves — not in a
 top-level `test/` directory — so it travels with the code under test.
 Cross-cutting fakes for the SPA are the exception; those already live
 in `apps/web/src/tests/fake/`.
+
+## Test doubles: fake, api, server-fn
+
+The SPA's shared test doubles are split by *what they do to the system
+under test*, because the three have different failure modes and a
+reader needs to know which one they are looking at:
+
+- **`src/tests/fake/`** — `createFake*` factories returning plain data.
+  They mock nothing and assert nothing.
+- **`src/tests/api/`** — nock interceptors standing in for Python REST
+  endpoints, named `mockApi<Thing>`. They return a nock scope, and
+  `scope.done()` asserts every interceptor was consumed — so an
+  unfired request fails the test.
+- **`src/tests/server-fn/`** — `vi.fn()` stubs over the TanStack Start
+  server functions. `setup.tsx` wires each module in globally with
+  `vi.mock("@server/<feature>/functions", ...)`, so a test only has to
+  set a return value.
+
+A helper belongs to exactly one of the three. Don't put a nock
+interceptor in `fake/` because the generator it uses lives there —
+import the generator from `api/` instead.
+
+### Naming
+
+A server-function mock is named `mock<ServerFnName>` after the function
+it stubs, with no `Api` in the name: `mockGetAccount`, `mockFindJobs`,
+`mockUpdateUser`. The name lying about the transport is what this split
+exists to prevent — `mockApiGetAccount` never touched HTTP.
+
+Each `server-fn/` file mirrors the server module it mocks, not the
+client feature, because one file maps to one `vi.mock` target. So the
+account mocks live in `server-fn/users.ts` — `getAccount` is exported
+from `@server/users/functions` — and there is no `server-fn/account.ts`.
+
+### Asserting a server function was called
+
+A server-function mock returns the underlying `vi.fn()`, so assert on
+it directly rather than through a nock-style scope object:
+
+```ts
+const getUser = mockGetUser(user.id, user);
+
+renderWithProviders(<UserDetail userId={user.id} />);
+
+await waitFor(() => expect(getUser).toHaveBeenCalled());
+```
+
+### When a domain migrates off the Python API
+
+Python is handing domains over to the TS server one at a time. When a
+feature's reads move from a REST endpoint to a server function, its
+helper moves from `api/` to `server-fn/` and is renamed after the new
+server function. The directory a mock lives in is therefore a live
+record of which backend currently serves that domain.
 
 Before creating a fixture, check whether one already exists. Look for
 a sibling `test/` directory next to the code under test, and grep for

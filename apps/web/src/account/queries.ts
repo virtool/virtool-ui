@@ -1,17 +1,12 @@
 import { accountQueryKeys } from "@account/keys";
-import type { Account, APIKeyMinimal } from "@account/types";
+import type { APIKeyMinimal } from "@account/types";
 import { apiClient } from "@app/api";
 import { resetClient } from "@app/utils";
 import type { Permissions } from "@groups/types";
 import * as Sentry from "@sentry/tanstackstart-react";
 import { logoutFn } from "@server/auth/functions";
 import { updateAccountHandle } from "@server/users/functions";
-import {
-	queryOptions,
-	useMutation,
-	useQuery,
-	useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { User } from "@users/types";
 import type { ErrorResponse } from "@/types/api";
 
@@ -19,28 +14,6 @@ import type { ErrorResponse } from "@/types/api";
 export type AccountUpdate = {
 	email?: string;
 };
-
-/**
- * Query options for fetching the logged-in user's account data.
- *
- * Shared by the account hook and the route loaders that gate authenticated
- * pages on a resolved account.
- */
-export function accountQueryOptions() {
-	return queryOptions<Account, ErrorResponse>({
-		queryKey: accountQueryKeys.all(),
-		queryFn: () => apiClient.get("/account").then((response) => response.body),
-	});
-}
-
-/**
- * Fetches account data for the logged-in user
- *
- * @returns UseQueryResult object containing the account data
- */
-export function useFetchAccount() {
-	return useQuery(accountQueryOptions());
-}
 
 /**
  * Initializes a mutator for updating a user

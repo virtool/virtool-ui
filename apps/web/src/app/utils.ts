@@ -1,10 +1,7 @@
 /**
  * General utility constants and functions.
  */
-import clsx, { type ClassValue } from "clsx";
 import { get, sampleSize, startCase } from "es-toolkit/compat";
-import numbro from "numbro";
-import { twMerge } from "tailwind-merge";
 import { capitalize } from "./common";
 
 export { formatRoundedDuration } from "./date";
@@ -14,25 +11,6 @@ export { formatRoundedDuration } from "./date";
  */
 const alphanumeric =
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-/**
- * Convert an integer in bytes to a nicely formatted string (eg. 10.2 GB).
- */
-export function byteSize(
-	bytes: number | null,
-	spaceSeparated: boolean = false,
-): string {
-	if (bytes) {
-		return numbro(bytes).format({
-			output: "byte",
-			base: "decimal",
-			mantissa: 1,
-			spaceSeparated: spaceSeparated ? spaceSeparated : false,
-		});
-	}
-
-	return "0.0B";
-}
 
 /**
  * Create a random string with the given length.
@@ -94,22 +72,6 @@ export function getWorkflowDisplayName(workflow: string): string {
 	return get(workflowDisplayNames, workflow, startCase(workflow));
 }
 
-export function toThousand(num: number): string {
-	return numbro(num).format({ thousandSeparated: true });
-}
-
-/**
- * Converts a ``number`` to a scientific notation string.
- */
-export function toScientificNotation(num: number): string {
-	if (num < 0.01 || num > 1000) {
-		const [coefficient, exponent] = num.toExponential().split("e");
-		return `${numbro(coefficient).format("0.00")}E${(exponent ?? "").replace("+", "")}`;
-	}
-
-	return numbro(num).format("0.000");
-}
-
 /**
  *  Clears session storage and reloads the page.
  *
@@ -118,14 +80,4 @@ export function toScientificNotation(num: number): string {
 export function resetClient() {
 	window.sessionStorage.clear();
 	window.location.reload();
-}
-
-/**
- * Return a string with the tailwind classnames merged
- *
- * @param args - the styles from the classnames being merged
- * @returns a combined class string
- */
-export function cn(...args: ClassValue[]): string {
-	return twMerge(clsx(args));
 }

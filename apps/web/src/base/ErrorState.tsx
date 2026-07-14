@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { CircleAlert } from "lucide-react";
 import type { ReactNode } from "react";
 import { Empty, EmptyContent, EmptyMedia, EmptyTitle } from "./Empty";

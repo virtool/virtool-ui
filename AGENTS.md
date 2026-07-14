@@ -152,7 +152,7 @@ module:
 - `src/server/` - TanStack Start server features (server functions,
   middleware, db, auth) — the new path for backend responsibility
   migrating into this repo
-- `src/tests/` - Test setup, fakes, and API mocks
+- `src/tests/` - Test setup, fakes, REST mocks, and server-function mocks
 - `src/types/` - Shared type definitions
 
 ### Path aliases
@@ -207,10 +207,62 @@ worked by accident under un-memoized render will now break:
 Opt a single function out with a `"use no memo"` directive — useful for
 bisecting a suspected compiler interaction, but a fix, not a resting place.
 
-### TanStack Router search params
+### Nothing heavy in a route's critical exports
 
-Zod v4 schemas can be passed directly to `validateSearch` — `@tanstack/zod-adapter`
-is not needed. Use `.default()` and `.catch()` for defaults and fallbacks.
+`autoCodeSplitting` splits each route file in two. The **critical** half —
+`loader`, `beforeLoad`, `validateSearch`, `loaderDeps` — is imported
+*statically* by `routeTree.gen.ts`, so whatever it reaches lands in the eager
+bundle that **every** page load pays for, including `/login`. Only the
+`component` half is lazy.
+
+So, in a route's critical exports:
+
+- **Never statically import `queries.ts` or `@app/api`.** Pull the
+  `queryOptions` factory in from inside the loader body instead:
+  `const { sampleQueryOptions } = await import("@samples/queries");`. A static
+  import drags superagent and the feature's whole request layer into the eager
+  bundle. Importing them in the `component` half is fine — that half is lazy.
+- **Never use zod in `validateSearch`.** It is synchronous and cannot be
+  deferred, so a zod schema pins all ~108 KB of zod eagerly. Use the
+  dependency-free coercion helpers in `@app/searchParams` and type the function
+  as `(input: Partial<T> & SearchSchemaInput) => T` — the `SearchSchemaInput`
+  tag is what keeps `<Link search={{ page: 2 }}>` partial.
+
+`src/server/**` is reachable from the browser program via `start.ts`, so the
+same rule applies there: reach server-function modules through
+`createServerOnlyFn` (see `auth/middleware.ts`), never a top-level import.
+
+### What a route guard reaches must not import `@app/api`
+
+A `beforeLoad` that resolves an account, or a loader on `/login` or `/setup`,
+runs for unauthenticated visitors. Anything it reaches — even *dynamically* —
+is downloaded on the login wall.
+
+**Tree-shaking will not save you here: the chunk is the unit of loading, not
+the export.** `account/queries.ts` genuinely uses `apiClient` for its API-key
+and password hooks, so its chunk contains superagent; importing that chunk for
+one server-function-backed export still drags superagent in. Marking `@app/api`
+side-effect-free does nothing about this.
+
+So the queryOptions the guards need live in modules with no `@app/api` import
+at all:
+
+- `@account/account` — `accountQueryOptions` / `useFetchAccount`, backed by the
+  `getAccount` server function.
+- `@administration/passwordPolicy` — `passwordPolicyQueryOptions`, backed by
+  `getPasswordPolicyFn`.
+
+Both are server-function-backed and need no HTTP client. Don't fold them back
+into their feature's `queries.ts`, and don't add an `apiClient` call to either.
+Prefer a server function over a Python REST call for anything a guard reads.
+
+### Heavy dependencies get their own module
+
+A module's imports survive tree-shaking if the package does not declare
+`sideEffects: false` — so a grab-bag module leaks its heaviest dependency into
+every bundle that wants *any* of its exports. `cn()` (`@app/cn`) and the numbro
+formatters (`@app/format`) are split out of `@app/utils` for exactly this
+reason. Don't merge them back.
 
 ### Routing: in-app navigation uses `<Link>`
 
@@ -327,15 +379,46 @@ type re-exported from the direct dependency — as `src/server/logger.ts`
 does with `Logger` from `@virtool/logger` rather than letting the type be
 inferred as pino's.
 
-### Authentication is enforced by global middleware
+### Every server function declares an authorization policy
 
-Every TanStack Start server function is authenticated by default.
-Public endpoints opt out by being passed as **server-function
-references** to the middleware's `exceptions` array, not by
-per-handler guards. The resolved session lands on `context.session`.
-Raw `Request` handlers in `createFileRoute` (e.g. SSE routes) call
-`requireAuthenticatedRequest(request)` instead, because they run
-outside the server-function async-local context.
+Every server function names who may call it, as middleware, from
+`@server/auth/policy`:
+
+```ts
+export const deleteGroup = createServerFn({ method: "POST" })
+	.middleware([adminRole("base")])
+	.validator(groupIdSchema)
+	.handler(async ({ context, data }) => { ... });
+```
+
+The four policies are `open()` (no session — login and friends),
+`authenticated()` (any signed-in user), `adminRole(role)`, and
+`permission(name)`. The policy resolves the session and puts it on
+`context.session`, typed non-nullable for everything but `open()`.
+Handlers read it from there — do not call `requireSession()` in a
+handler, that costs a second lookup.
+
+**This is not optional.** `server/__tests__/authorization.test.ts` calls
+every exported server function with no session and fails the build on
+any that does not refuse, so a function built without a policy breaks
+CI by name. It also pins `authenticationExceptions` in both directions:
+`open()` and that list must agree. Add a new `functions.ts` and register
+it in that test's `MODULES` — a missing module fails too.
+
+A policy states the *floor*. A rule that depends on the row — an
+administrator editing another administrator — still belongs in the
+handler, after the read (`users/functions.ts` is the example). Never put
+a role check in `data.ts`.
+
+Do not try to wrap `createServerFn` in a factory that takes the policy
+as an argument. The Vite plugin matches that call syntactically at the
+definition site; behind a factory it stops treating the function as a
+server function at all — no RPC endpoint, and the handler body ships to
+the browser. This was tried and reverted.
+
+Raw `Request` handlers in `createFileRoute` (e.g. SSE routes) run
+outside the server-function context and call
+`requireAuthenticatedRequest(request)` instead.
 
 See [docs/auth.md](docs/auth.md) for the middleware composition, the
 session model, cookies, lifetimes, and the login / reset / logout
@@ -572,12 +655,31 @@ and make commits easier to find later.
   expect, vi } from "vitest"`).
 - **Setup:** `apps/web/src/tests/setup.tsx` provides
   `renderWithProviders()`, `renderWithRouter()`, and `MemoryRouter`.
-- **Fixtures/fakes:** `apps/web/src/tests/fake/` has factory functions
-  for test data.
+- **Test doubles** split three ways by what they do, and a helper lives
+  in exactly one of them:
+  - `src/tests/fake/` — `createFake*` data generators. No mocking.
+  - `src/tests/api/` — nock interceptors for Python REST endpoints,
+    named `mockApi<Thing>`. Returns a nock scope; `scope.done()`
+    asserts the request fired.
+  - `src/tests/server-fn/` — `vi.fn()` stubs over the TanStack Start
+    server functions, named `mock<ServerFnName>` after the function
+    they stub. Returns the `vi.fn()` itself, so assert with
+    `expect(getUser).toHaveBeenCalled()`.
+
+  A domain moving from the Python API to a server function moves its
+  helper from `api/` to `server-fn/`. Files under `server-fn/` mirror
+  the mocked `@server/<feature>/functions` module, not the client
+  feature — `getAccount` is stubbed from `server-fn/users.ts`.
 - **Database tests:** `createTestDatabase()` from
   `@server/db/test/fixtures` gives a suite its own isolated Postgres
   database with the schema applied. Test files run in parallel, so
   never share one database between them.
+- **Server functions:** a test cannot call a server function by
+  importing it — the Vite plugin moves the handler body into a virtual
+  `?tss-serverfn-split` module, so invoking the import runs none of your
+  code and a naive test passes while asserting nothing. Import the split
+  module and call it through `callServerFn` from `@server/test/serverFn`
+  (`groups/functions.test.ts` is the worked example).
 - **Assertions:** Use explicit `expect()` assertions, not snapshots.
 - **User interaction:** Use `@testing-library/user-event` over
   `fireEvent`.

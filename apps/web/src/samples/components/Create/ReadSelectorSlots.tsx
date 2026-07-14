@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import Icon from "@base/Icon";
 import type { Upload } from "@uploads/types";
 import { ArrowLeftRight, TriangleAlert } from "lucide-react";
@@ -27,7 +27,7 @@ function ReadSlot({ label, sub, id, items, placeholder }: ReadSlotProps) {
 		>
 			<div className="text-xs font-bold text-gray-500 tracking-wide">
 				{label}
-				<span className="ml-1 font-medium text-gray-400">{sub}</span>
+				<span className="ml-1 font-medium text-gray-500">{sub}</span>
 			</div>
 			{file && (
 				<div className="truncate font-mono font-medium mt-1">{file.name}</div>
@@ -39,7 +39,7 @@ function ReadSlot({ label, sub, id, items, placeholder }: ReadSlotProps) {
 				</div>
 			)}
 			{id === undefined && (
-				<div className="mt-1 text-gray-400">{placeholder}</div>
+				<div className="mt-1 text-gray-500">{placeholder}</div>
 			)}
 		</div>
 	);

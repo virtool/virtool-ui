@@ -1,4 +1,5 @@
-import { byteSize, cn } from "@app/utils";
+import { cn } from "@app/cn";
+import { byteSize } from "@app/format";
 import Icon from "@base/Icon";
 import type { ReadRow } from "@uploads/pairing";
 import type { Upload } from "@uploads/types";

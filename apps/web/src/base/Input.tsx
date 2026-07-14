@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import { type ElementType, type ReactNode, type Ref, useContext } from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
 import InputContext from "./InputContext";

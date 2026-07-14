@@ -1,4 +1,4 @@
-import { cn } from "@app/utils";
+import { cn } from "@app/cn";
 import type { ReactElement } from "react";
 import { useUploaderStore } from "../uploader";
 import UploaderDialog from "./UploaderDialog";

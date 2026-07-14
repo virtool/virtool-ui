@@ -1,7 +1,8 @@
 import type { InfiniteData } from "@tanstack/react-query";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
+import { mockApiListFiles } from "@tests/api/files";
+import { createFakeFile } from "@tests/fake/files";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { useState } from "react";

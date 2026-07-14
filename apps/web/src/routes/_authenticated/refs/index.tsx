@@ -1,16 +1,29 @@
+import { bool, num, str, strOptional } from "@app/searchParams";
 import ReferenceList from "@references/components/ReferenceList";
+import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod/v4";
 
-const refsSearchSchema = z.object({
-	archived: z.boolean().default(false).catch(false),
-	find: z.string().default("").catch(""),
-	page: z.number().default(1).catch(1),
-	cloneReferenceId: z.string().optional().catch(undefined),
-});
+/** Search params for the references list. */
+type RefsSearch = {
+	archived: boolean;
+	find: string;
+	page: number;
+	cloneReferenceId?: string;
+};
+
+function validateRefsSearch(
+	input: Partial<RefsSearch> & SearchSchemaInput,
+): RefsSearch {
+	return {
+		archived: bool(input.archived, false),
+		find: str(input.find, ""),
+		page: num(input.page, 1),
+		cloneReferenceId: strOptional(input.cloneReferenceId),
+	};
+}
 
 export const Route = createFileRoute("/_authenticated/refs/")({
-	validateSearch: refsSearchSchema,
+	validateSearch: validateRefsSearch,
 	component: ReferencesRoute,
 });
 

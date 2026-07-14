@@ -21,35 +21,35 @@ import userEvent from "@testing-library/user-event";
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { beforeEach, vi } from "vitest";
 import { routeTree } from "@/routeTree.gen";
-import { authServerFnMocks } from "./api/auth";
-import { groupServerFnMocks } from "./api/groups";
-import { jobServerFnMocks } from "./api/jobs";
-import {
-	mockApiGetPasswordPolicy,
-	settingsServerFnMocks,
-} from "./api/settings";
-import { userServerFnMocks } from "./api/users";
 import { createFakeAccount } from "./fake/account";
+import { authServerFnMocks } from "./server-fn/auth";
+import { groupServerFnMocks } from "./server-fn/groups";
+import { jobServerFnMocks } from "./server-fn/jobs";
+import {
+	mockGetPasswordPolicy,
+	settingsServerFnMocks,
+} from "./server-fn/settings";
+import { userServerFnMocks } from "./server-fn/users";
 
 vi.mock("@server/groups/functions", () => groupServerFnMocks);
 // See the users mock below for why this resolves the mock via dynamic import.
 vi.mock("@server/auth/functions", async () => {
-	const { authServerFnMocks } = await import("./api/auth");
+	const { authServerFnMocks } = await import("./server-fn/auth");
 	return authServerFnMocks;
 });
 // Resolve the mock lazily via dynamic import. A direct reference to the
 // imported `userServerFnMocks` binding races route modules (pulled in by
 // `routeTree`) that import the mocked module before this binding initializes.
 vi.mock("@server/users/functions", async () => {
-	const { userServerFnMocks } = await import("./api/users");
+	const { userServerFnMocks } = await import("./server-fn/users");
 	return userServerFnMocks;
 });
 vi.mock("@server/jobs/functions", async () => {
-	const { jobServerFnMocks } = await import("./api/jobs");
+	const { jobServerFnMocks } = await import("./server-fn/jobs");
 	return jobServerFnMocks;
 });
 vi.mock("@server/settings/functions", async () => {
-	const { settingsServerFnMocks } = await import("./api/settings");
+	const { settingsServerFnMocks } = await import("./server-fn/settings");
 	return settingsServerFnMocks;
 });
 
@@ -72,7 +72,7 @@ beforeEach(() => {
 	// password form queries it, and leaving it pending would silently exercise
 	// the fallback minimum in tests that mean to assert the configured one.
 	settingsServerFnMocks.getPasswordPolicyFn.mockReset();
-	mockApiGetPasswordPolicy();
+	mockGetPasswordPolicy();
 });
 
 process.env.TZ = "UTC";

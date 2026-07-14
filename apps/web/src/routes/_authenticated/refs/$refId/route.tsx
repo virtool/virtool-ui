@@ -2,7 +2,7 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import ArchivedReferenceDetailHeader from "@references/components/Detail/ArchivedReferenceDetailHeader";
 import ReferenceDetailHeader from "@references/components/Detail/ReferenceDetailHeader";
 import ReferenceDetailTabs from "@references/components/Detail/ReferenceDetailTabs";
-import { referenceQueryOptions, useFetchReference } from "@references/queries";
+import { useFetchReference } from "@references/queries";
 import {
 	createFileRoute,
 	notFound,
@@ -12,6 +12,8 @@ import {
 
 export const Route = createFileRoute("/_authenticated/refs/$refId")({
 	loader: async ({ context: { queryClient }, params: { refId } }) => {
+		const { referenceQueryOptions } = await import("@references/queries");
+
 		try {
 			await queryClient.ensureQueryData(referenceQueryOptions(refId));
 		} catch (error) {
