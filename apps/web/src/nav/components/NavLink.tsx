@@ -1,26 +1,49 @@
 import { useMatchPartialPath } from "@app/useMatchPartialPath";
 import { cn } from "@app/utils";
 import Link from "@base/Link";
+import type { ReactNode } from "react";
+
+type NavLinkProps = {
+	children: ReactNode;
+	search?: Record<string, string>;
+	to: string;
+};
 
 const baseClassName = cn(
 	"flex",
+	"focus-visible:outline-none",
+	"focus-visible:ring-2",
+	"focus-visible:ring-offset-2",
+	"focus-visible:ring-offset-virtool",
+	"focus-visible:ring-white",
 	"font-medium",
-	"h-full",
-	"hover:text-primary-darkest",
+	"hover:bg-black/10",
 	"items-center",
 	"justify-center",
-	"px-5",
+	"px-3",
+	"py-1",
+	"rounded-md",
 	"text-lg",
 	"text-white",
+	"transition-colors",
 );
 
-const activeClassName = cn(baseClassName, "bg-teal-800", "hover:text-white");
+const activeClassName = cn(
+	baseClassName,
+	"bg-white",
+	"hover:bg-white",
+	"text-virtool-dark",
+);
 
-export function NavLink({ children, to }) {
+export function NavLink({ children, search, to }: NavLinkProps) {
 	const active = useMatchPartialPath(to);
 
 	return (
-		<Link to={to} className={active ? activeClassName : baseClassName}>
+		<Link
+			className={active ? activeClassName : baseClassName}
+			search={search}
+			to={to}
+		>
 			{children}
 		</Link>
 	);
