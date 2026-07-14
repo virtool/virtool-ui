@@ -1,10 +1,7 @@
-import { createQueryKeys } from "@app/queryKeys";
 import { getTask } from "@server/tasks/functions";
 import { useQuery } from "@tanstack/react-query";
+import { taskQueryKeys } from "@tasks/keys";
 import { type ServerTask, TaskSchema } from "./types";
-
-/** Query keys for tasks. */
-export const taskQueryKeys = createQueryKeys("tasks");
 
 /**
  * Fetch a task by its id

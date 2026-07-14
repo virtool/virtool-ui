@@ -1,4 +1,4 @@
-import { accountQueryKeys } from "@account/queries";
+import { accountQueryKeys } from "@account/keys";
 import { waitFor } from "@testing-library/react";
 import { renderRoute } from "@tests/setup";
 import nock from "nock";

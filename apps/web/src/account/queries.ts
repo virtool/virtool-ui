@@ -1,6 +1,6 @@
+import { accountQueryKeys } from "@account/keys";
 import type { Account, APIKeyMinimal } from "@account/types";
 import { apiClient } from "@app/api";
-import { createQueryKeys } from "@app/queryKeys";
 import { resetClient } from "@app/utils";
 import type { Permissions } from "@groups/types";
 import * as Sentry from "@sentry/tanstackstart-react";
@@ -18,20 +18,6 @@ import type { ErrorResponse } from "@/types/api";
 /** Fields that can be changed when updating the current account */
 export type AccountUpdate = {
 	email?: string;
-};
-
-const accountKeys = createQueryKeys("account");
-
-/**
- * Query keys for the logged-in user's account.
- *
- * The account is a singleton, so it is cached at `all()` itself. `apiKeys()`
- * is the sub-collection of the account's API keys, nested under `all()` so
- * that any account mutation refreshes it too.
- */
-export const accountQueryKeys = {
-	...accountKeys,
-	apiKeys: () => [...accountKeys.all(), "keys"] as const,
 };
 
 /**

@@ -1,4 +1,4 @@
-import { bannerQueryKeys } from "@banner/queries";
+import { bannerQueryKeys } from "@banner/keys";
 import { screen } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
 import {

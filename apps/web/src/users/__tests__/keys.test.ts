@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { userQueryKeys } from "../queries";
+import { userQueryKeys } from "../keys";
 
 function startsWith(key: readonly unknown[], prefix: readonly unknown[]) {
 	return prefix.every((segment, index) => key[index] === segment);

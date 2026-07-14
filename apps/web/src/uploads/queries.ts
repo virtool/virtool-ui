@@ -1,21 +1,13 @@
 import { apiClient } from "@app/api";
-import { createQueryKeys } from "@app/queryKeys";
 import {
 	keepPreviousData,
 	useInfiniteQuery,
 	useMutation,
 	useQuery,
 } from "@tanstack/react-query";
+import { fileQueryKeys } from "@uploads/keys";
 import type { ErrorResponse } from "@/types/api";
 import type { FileResponse, UploadType } from "./types";
-
-/**
- * Query keys for uploaded files.
- *
- * The upload type leads the filters, so every list of a given type sits under
- * a common prefix.
- */
-export const fileQueryKeys = createQueryKeys("uploads");
 
 function findFiles(
 	type: UploadType,

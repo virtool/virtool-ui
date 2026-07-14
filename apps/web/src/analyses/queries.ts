@@ -1,6 +1,6 @@
+import { analysesQueryKeys } from "@analyses/keys";
 import { apiClient } from "@app/api";
-import { createQueryKeys } from "@app/queryKeys";
-import { samplesQueryKeys } from "@samples/queries";
+import { samplesQueryKeys } from "@samples/keys";
 import {
 	keepPreviousData,
 	queryOptions,
@@ -11,9 +11,6 @@ import {
 import type { ErrorResponse } from "@/types/api";
 import type { Analysis, AnalysisSearchResult, GenericAnalysis } from "./types";
 import { formatData } from "./utils";
-
-/** Query keys for analyses. */
-export const analysesQueryKeys = createQueryKeys("analyses");
 
 /**
  * Fetch a page of analyses search results from the API

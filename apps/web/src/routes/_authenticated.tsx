@@ -18,7 +18,7 @@ import {
 	redirect,
 	useLocation,
 } from "@tanstack/react-router";
-import { rootQueryKeys } from "@wall/queries";
+import { rootQueryKeys } from "@wall/keys";
 import { lazy, Suspense, useEffect } from "react";
 
 const UploadOverlay = lazy(() => import("@uploads/components/UploadOverlay"));

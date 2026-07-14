@@ -1,6 +1,5 @@
-import { accountQueryKeys } from "@account/queries";
+import { accountQueryKeys } from "@account/keys";
 import { apiClient } from "@app/api";
-import { createQueryKeys } from "@app/queryKeys";
 import type { Root } from "@app/types";
 import {
 	createFirstUserFn,
@@ -8,6 +7,7 @@ import {
 	resetPasswordFn,
 } from "@server/auth/functions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { rootQueryKeys } from "@wall/keys";
 
 import type { ErrorResponse } from "@/types/api";
 
@@ -22,9 +22,6 @@ export type ResetPasswordResult = {
 	login: false;
 	reset: false;
 };
-
-/** Query keys for the root document. */
-export const rootQueryKeys = createQueryKeys("root");
 
 /**
  * Initializes a query for fetching the root document.

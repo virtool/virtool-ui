@@ -11,11 +11,8 @@ import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SectionHeader from "@base/SectionHeader";
 import { useUpdateSourceTypes } from "@references/hooks";
-import {
-	referenceQueryKeys,
-	useFetchReference,
-	useUpdateReference,
-} from "@references/queries";
+import { referenceQueryKeys } from "@references/keys";
+import { useFetchReference, useUpdateReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
 import { Undo2 } from "lucide-react";
 import SourceTypeList from "./SourceTypeList";

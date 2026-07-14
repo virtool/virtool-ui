@@ -209,6 +209,12 @@ construction. A feature that caches something outside those seven shapes
 spreads the result and derives the extra member from a base key, so it stays
 inside the hierarchy.
 
+Keys live in the feature's own `keys.ts`, which imports `@app/queryKeys` and
+nothing else, and `queries.ts` does **not** re-export them. Anything that only
+needs to invalidate a cache — the SSE handler, a route's `beforeLoad` — imports
+`@<feature>/keys` and so pays for none of the request layer (superagent, zod,
+the server-function stubs) that `queries.ts` pulls in.
+
 Loading and error states come in two tiers: primary route data uses
 `useSuspenseQuery` (loading via the route's `<Suspense>`, errors via the
 router's `defaultErrorComponent`, `@base/RouteError`), and secondary data

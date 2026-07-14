@@ -1,5 +1,5 @@
+import { roleQueryKeys, settingsQueryKeys } from "@administration/keys";
 import { apiClient } from "@app/api";
-import { createQueryKeys } from "@app/queryKeys";
 import { listAdministratorRoles } from "@server/users/functions";
 import {
 	queryOptions,
@@ -23,9 +23,6 @@ export type SettingsUpdate = {
 	sample_group_read?: boolean;
 	sample_group_write?: boolean;
 };
-
-/** Query keys for the server settings. */
-export const settingsQueryKeys = createQueryKeys("settings");
 
 /**
  * Query options for the API settings.
@@ -78,9 +75,6 @@ export function useUpdateSettings() {
 		},
 	});
 }
-
-/** Query keys for administrator roles. */
-export const roleQueryKeys = createQueryKeys("roles");
 
 /**
  * Query options for fetching the list of valid administrator roles.

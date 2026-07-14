@@ -1,17 +1,17 @@
-import { accountQueryKeys } from "@account/queries";
-import { roleQueryKeys } from "@administration/queries";
+import { accountQueryKeys } from "@account/keys";
+import { roleQueryKeys } from "@administration/keys";
 import type { QueryKeys } from "@app/queryKeys";
-import { bannerQueryKeys } from "@banner/queries";
-import { groupQueryKeys } from "@groups/queries";
-import { indexQueryKeys } from "@indexes/queries";
-import { jobQueryKeys } from "@jobs/queries";
-import { labelQueryKeys } from "@labels/queries";
-import { referenceQueryKeys } from "@references/queries";
-import { samplesQueryKeys } from "@samples/queries";
+import { bannerQueryKeys } from "@banner/keys";
+import { groupQueryKeys } from "@groups/keys";
+import { indexQueryKeys } from "@indexes/keys";
+import { jobQueryKeys } from "@jobs/keys";
+import { labelQueryKeys } from "@labels/keys";
+import { referenceQueryKeys } from "@references/keys";
+import { samplesQueryKeys } from "@samples/keys";
 import type { QueryClient } from "@tanstack/react-query";
-import { taskQueryKeys } from "@tasks/queries";
-import { fileQueryKeys } from "@uploads/queries";
-import { userQueryKeys } from "@users/queries";
+import { taskQueryKeys } from "@tasks/keys";
+import { fileQueryKeys } from "@uploads/keys";
+import { userQueryKeys } from "@users/keys";
 import type { SseDomain, SseMessage } from "./schema";
 
 /**
