@@ -80,7 +80,7 @@ jobs:
         name: Publish / Release
         runs-on: ubuntu-24.04
         timeout-minutes: 15
-        needs: [test, build]
+        needs: [build, check-biome, check-typescript, test]
         if: github.event_name == 'push'
         outputs:
             git-tag: ${{ steps.semantic.outputs.git-tag }}
