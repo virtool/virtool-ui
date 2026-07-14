@@ -20,16 +20,7 @@ export function SubtractionFileManager({
 			}}
 			fileType="subtraction"
 			page={page}
-			message={
-				<div className="flex flex-col gap-1 items-center">
-					<span className="font-medium text-base">
-						Drag files here to upload
-					</span>
-					<span className="text-gray-600 text-sm">
-						Supports plain or gzipped FASTA
-					</span>
-				</div>
-			}
+			hint="Supports plain or gzipped FASTA"
 			regex={/\.(?:fa|fasta)(?:\.gz|\.gzip)?$/}
 			setPage={setPage}
 		/>

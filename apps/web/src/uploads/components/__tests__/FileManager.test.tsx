@@ -24,7 +24,6 @@ describe("<FileManager>", () => {
 				"application/gzip": [".fasta.gz", ".fa.gz", ".fastq.gz", ".fq.gz"],
 			},
 			fileType: "reads",
-			message: "",
 		};
 		path = formatPath("/samples/uploads", { page: 1 });
 	});
@@ -55,7 +54,7 @@ describe("<FileManager>", () => {
 		);
 
 		expect(
-			await screen.findByText("Drag file here to upload"),
+			await screen.findByText("Drag files here to upload"),
 		).toBeInTheDocument();
 		expect(screen.getByText("subtraction.fq.gz")).toBeInTheDocument();
 		expect(
@@ -94,7 +93,7 @@ describe("<FileManager>", () => {
 		).not.toBeInTheDocument();
 	});
 
-	it("should take custom message", async () => {
+	it("should show the hint under the upload prompt", async () => {
 		mockGetAccount(
 			createFakeAccount({
 				administrator_role: "full",
@@ -103,11 +102,14 @@ describe("<FileManager>", () => {
 		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
 		await renderWithRouter(
-			<FileManager {...props} message="Test Message" />,
+			<FileManager {...props} hint="Supports plain or gzipped FASTA" />,
 			path,
 		);
 
-		expect(await screen.findByText("Test Message")).toBeInTheDocument();
+		expect(
+			await screen.findByText("Supports plain or gzipped FASTA"),
+		).toBeInTheDocument();
+		expect(screen.getByText("Drag files here to upload")).toBeInTheDocument();
 	});
 
 	describe("selection", () => {

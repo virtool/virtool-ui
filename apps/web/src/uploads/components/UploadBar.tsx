@@ -8,7 +8,10 @@ import { type Accept, type FileError, useDropzone } from "react-dropzone";
 type UploadBarProps = {
 	accept?: Accept;
 
-	/** The message to display in the upload bar */
+	/** A note shown under the prompt, describing the accepted file types */
+	hint?: ReactNode;
+
+	/** Replaces the drag-and-drop prompt, for showing upload status instead */
 	message?: ReactNode;
 
 	/** Whether multiple uploads can be uploaded */
@@ -29,14 +32,22 @@ type UploadBarProps = {
  */
 export function UploadBar({
 	accept,
-	message = "Drag file here to upload",
+	hint,
+	message,
 	multiple = true,
 	onBlur,
 	onDrop,
 	regex,
 }: UploadBarProps) {
 	function validator(file: File): FileError | null {
-		if (regex && !regex.test(file.name)) {
+		// The drag-and-drop spec only exposes file data on drop, so during a drag
+		// react-dropzone runs this against DataTransferItems, which carry no name.
+		// Matching the regex against that would reject every drag on sight.
+		if (!regex || typeof file.name !== "string") {
+			return null;
+		}
+
+		if (!regex.test(file.name)) {
 			return {
 				code: "file-invalid-type",
 				message: "Invalid file type",
@@ -67,17 +78,14 @@ export function UploadBar({
 		<div
 			className={cn(
 				{
-					"bg-zinc-100": isDragAccept && !isDragReject,
-					"bg-zinc-50": !isDragAccept && !isDragReject,
+					"bg-blue-100": isDragAccept && !isDragReject,
+					"bg-blue-50": !isDragAccept && !isDragReject,
 					"bg-red-100": isDragReject && !isDragAccept,
 				},
 				"border",
+				"border-dashed",
 				{
-					"border-solid": !isDragReject || !isDragAccept,
-					"border-dashed": isDragReject || isDragAccept,
-				},
-				{
-					"border-slate-400": !isDragReject,
+					"border-blue-300": !isDragReject,
 					"border-red-400": isDragReject,
 				},
 				"flex",
@@ -97,7 +105,15 @@ export function UploadBar({
 			/>
 			<div className="gap-2 grid grid-cols-11 place-items-stretch">
 				<div className="col-span-5 flex items-center justify-end">
-					{message}
+					<div className="flex flex-col gap-1 items-center">
+						<span className="font-medium text-lg">
+							{message ??
+								(multiple
+									? "Drag files here to upload"
+									: "Drag a file here to upload")}
+						</span>
+						{hint && <span className="text-gray-600 text-sm">{hint}</span>}
+					</div>
 				</div>
 				<div className="col-span-1 flex font-bold items-center justify-center text-gray-600">
 					OR

@@ -29,8 +29,8 @@ export type FileManagerProps = {
 	/* The type of file accepted. */
 	fileType: UploadType;
 
-	/* A message to display in the upload toolbar. */
-	message?: ReactNode;
+	/* A note shown under the upload prompt, describing the accepted file types. */
+	hint?: ReactNode;
 
 	page?: number;
 
@@ -47,7 +47,7 @@ export type FileManagerProps = {
 export function FileManager({
 	accept,
 	fileType,
-	message,
+	hint,
 	page = 1,
 	regex,
 	renderItemAction,
@@ -119,7 +119,7 @@ export function FileManager({
 				<UploadBar
 					accept={accept}
 					onDrop={handleDrop}
-					message={message || "Drag file here to upload"}
+					hint={hint}
 					regex={regex}
 				/>
 			) : (
