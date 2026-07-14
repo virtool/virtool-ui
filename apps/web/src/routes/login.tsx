@@ -1,4 +1,5 @@
 import { accountQueryOptions } from "@account/queries";
+import { passwordPolicyQueryOptions } from "@administration/queries";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import LoginWall from "@wall/components/LoginWall";
 import { z } from "zod/v4";
@@ -31,6 +32,16 @@ export const Route = createFileRoute("/login")({
 		}
 
 		throw redirect({ to: search.redirect ?? "/" });
+	},
+	// The forced-reset form this route can render sets a password before there is
+	// a session, so it needs the policy up front.
+	loader: async ({ context }) => {
+		try {
+			await context.queryClient.ensureQueryData(passwordPolicyQueryOptions());
+		} catch {
+			// A failed policy read must not take down the wall. The form falls back
+			// to the default minimum, and the server enforces the real one anyway.
+		}
 	},
 	component: LoginWall,
 });

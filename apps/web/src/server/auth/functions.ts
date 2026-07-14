@@ -15,7 +15,8 @@ import {
 	PasswordReuseError,
 	resetPassword,
 } from "./core";
-import { passwordSchema } from "./password";
+import { PasswordTooShortError } from "./passwordPolicy";
+import { checkConfiguredPasswordLength } from "./service";
 
 // `password` is deliberately not length-checked here. Login authenticates an
 // existing credential rather than setting a new one, and rejecting a short
@@ -26,14 +27,16 @@ const loginSchema = z.object({
 	remember: z.boolean().default(false),
 });
 
+// Length is enforced by checkConfiguredPasswordLength in the handlers below, not
+// here — see that function for why the validator is the wrong place for it.
 const resetPasswordSchema = z.object({
-	password: passwordSchema,
+	password: z.string(),
 	reset_code: z.string().min(1),
 });
 
 const createFirstUserSchema = z.object({
 	handle: z.string().trim().min(1),
-	password: passwordSchema,
+	password: z.string(),
 });
 
 // Wrapped in createServerOnlyFn so the compiler strips this body and its
@@ -85,6 +88,8 @@ export const createFirstUserFn = createServerFn({ method: "POST" })
 	.validator(createFirstUserSchema)
 	.handler(async ({ data }) => {
 		try {
+			await checkConfiguredPasswordLength(db, data.password);
+
 			const user = await createFirstUser(db, realCookies, {
 				handle: data.handle,
 				password: data.password,
@@ -93,6 +98,10 @@ export const createFirstUserFn = createServerFn({ method: "POST" })
 			setResponseStatus(201);
 			return user;
 		} catch (err) {
+			if (err instanceof PasswordTooShortError) {
+				setResponseStatus(400);
+				throw new Error(err.message);
+			}
 			if (err instanceof FirstUserExistsError) {
 				setResponseStatus(409);
 				throw new Error("Virtool already has a user.");
@@ -117,6 +126,8 @@ export const resetPasswordFn = createServerFn({ method: "POST" })
 	.validator(resetPasswordSchema)
 	.handler(async ({ data }) => {
 		try {
+			await checkConfiguredPasswordLength(db, data.password);
+
 			await resetPassword(db, realCookies, {
 				password: data.password,
 				resetCode: data.reset_code,
@@ -125,6 +136,10 @@ export const resetPasswordFn = createServerFn({ method: "POST" })
 			setResponseStatus(200);
 			return { login: false as const, reset: false as const };
 		} catch (err) {
+			if (err instanceof PasswordTooShortError) {
+				setResponseStatus(400);
+				throw new Error(err.message);
+			}
 			if (err instanceof InvalidResetSessionError) {
 				setResponseStatus(400);
 				throw new Error("Invalid session");

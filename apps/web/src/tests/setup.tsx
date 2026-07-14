@@ -24,6 +24,10 @@ import { routeTree } from "@/routeTree.gen";
 import { authServerFnMocks } from "./api/auth";
 import { groupServerFnMocks } from "./api/groups";
 import { jobServerFnMocks } from "./api/jobs";
+import {
+	mockApiGetPasswordPolicy,
+	settingsServerFnMocks,
+} from "./api/settings";
 import { userServerFnMocks } from "./api/users";
 import { createFakeAccount } from "./fake/account";
 
@@ -44,6 +48,10 @@ vi.mock("@server/jobs/functions", async () => {
 	const { jobServerFnMocks } = await import("./api/jobs");
 	return jobServerFnMocks;
 });
+vi.mock("@server/settings/functions", async () => {
+	const { settingsServerFnMocks } = await import("./api/settings");
+	return settingsServerFnMocks;
+});
 
 beforeEach(() => {
 	for (const fn of Object.values(groupServerFnMocks)) {
@@ -59,6 +67,12 @@ beforeEach(() => {
 		// state instead of resolving to `undefined`.
 		fn.mockReturnValue(new Promise(() => {}));
 	}
+
+	// Unlike the mocks above, the password policy defaults to resolving. Every
+	// password form queries it, and leaving it pending would silently exercise
+	// the fallback minimum in tests that mean to assert the configured one.
+	settingsServerFnMocks.getPasswordPolicyFn.mockReset();
+	mockApiGetPasswordPolicy();
 });
 
 process.env.TZ = "UTC";

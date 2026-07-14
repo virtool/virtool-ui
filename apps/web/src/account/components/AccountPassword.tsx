@@ -9,6 +9,7 @@ import InputLabel from "@base/InputLabel";
 import InputPassword from "@base/InputPassword";
 import RelativeTime from "@base/RelativeTime";
 import SaveButton from "@base/SaveButton";
+import { usePasswordRules } from "@forms/password";
 import { Check } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -39,6 +40,7 @@ export default function AccountPassword({
 		defaultValues: { oldPassword: "", newPassword: "" },
 	});
 	const mutation = useChangePassword();
+	const passwordRules = usePasswordRules();
 
 	useEffect(() => {
 		if (mutation.isSuccess) {
@@ -68,12 +70,11 @@ export default function AccountPassword({
 								id="oldPassword"
 								autoComplete="current-password"
 								{...register("oldPassword", {
+									// No length rule. This authenticates the password the user
+									// already has, and if the minimum were raised, checking it
+									// here would lock a user with a shorter existing password out
+									// of the very form that would replace it.
 									required: "Please provide your old password",
-									minLength: {
-										value: 8,
-										message:
-											"Password does not meet minimum length requirement (8)",
-									},
 								})}
 							/>
 							<InputError>
@@ -88,14 +89,7 @@ export default function AccountPassword({
 							<InputPassword
 								id="newPassword"
 								autoComplete="new-password"
-								{...register("newPassword", {
-									required: "Please provide a new password",
-									minLength: {
-										value: 8,
-										message:
-											"Password does not meet minimum length requirement (8)",
-									},
-								})}
+								{...register("newPassword", passwordRules)}
 							/>
 							<InputError>{errors.newPassword?.message}</InputError>
 						</InputContainer>

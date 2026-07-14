@@ -8,6 +8,7 @@ import InputGroup from "@base/InputGroup";
 import InputSimple from "@base/InputSimple";
 import RelativeTime from "@base/RelativeTime";
 import SaveButton from "@base/SaveButton";
+import { usePasswordRules } from "@forms/password";
 import { useUpdateUser } from "@users/queries";
 import { useForm } from "react-hook-form";
 
@@ -29,6 +30,7 @@ export default function Password({
 	lastPasswordChange,
 }: PasswordProps) {
 	const mutation = useUpdateUser();
+	const passwordRules = usePasswordRules();
 	const {
 		formState: { errors },
 		handleSubmit,
@@ -69,15 +71,7 @@ export default function Password({
 								id="password"
 								type="password"
 								autoComplete="new-password-for-other-user"
-								{...register("password", {
-									required:
-										"Password does not meet minimum length requirement (8)",
-									minLength: {
-										value: 8,
-										message:
-											"Password does not meet minimum length requirement (8)",
-									},
-								})}
+								{...register("password", passwordRules)}
 							/>
 							<InputError>{errors.password?.message}</InputError>
 						</InputContainer>
