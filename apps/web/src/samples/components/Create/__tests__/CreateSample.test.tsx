@@ -48,10 +48,13 @@ describe("<CreateSample>", () => {
 
 	afterEach(() => nock.cleanAll());
 
-	/** Renders the page and waits for its form to replace the loading state. */
+	/**
+	 * Renders the page and waits for its fields to replace the loading state.
+	 * Save sits in the header, so it is present while the page is still loading.
+	 */
 	async function renderPage() {
 		await renderWithRouter(<CreateSample labels={labels} />);
-		await screen.findByRole("button", { name: "Save" });
+		await screen.findByLabelText("Name");
 	}
 
 	async function submitForm() {
@@ -159,7 +162,7 @@ describe("<CreateSample>", () => {
 
 		// Reveal the hidden metadata fields.
 		await userEvent.click(
-			screen.getByRole("switch", { name: "Metadata Fields" }),
+			screen.getByRole("switch", { name: "Show Metadata Fields" }),
 		);
 		await userEvent.type(await screen.findByLabelText("Isolate"), "Clone AB");
 		await userEvent.type(screen.getByLabelText("Host"), "Apple");
@@ -208,7 +211,7 @@ describe("<CreateSample>", () => {
 		expect(screen.queryByLabelText("Host")).not.toBeInTheDocument();
 		expect(screen.queryByLabelText("Locale")).not.toBeInTheDocument();
 
-		const toggle = screen.getByRole("switch", { name: "Metadata Fields" });
+		const toggle = screen.getByRole("switch", { name: "Show Metadata Fields" });
 
 		// Visible after turning the switch on.
 		await userEvent.click(toggle);
