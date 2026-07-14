@@ -12,6 +12,7 @@ import {
 	sumBy,
 } from "es-toolkit/compat";
 import type {
+	Analysis,
 	AnalysisWorkflow,
 	FormattedPathoscopeAnalysis,
 	FormattedPathoscopeIsolate,
@@ -301,7 +302,7 @@ export function formatPathoscopeData(detail): FormattedPathoscopeAnalysis {
 	};
 }
 
-export function formatData(detail) {
+export function formatData(detail: Analysis): Analysis {
 	if (detail?.workflow === "pathoscope") {
 		return formatPathoscopeData(detail);
 	}

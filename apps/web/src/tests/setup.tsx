@@ -24,6 +24,10 @@ import { routeTree } from "@/routeTree.gen";
 import { authServerFnMocks } from "./api/auth";
 import { groupServerFnMocks } from "./api/groups";
 import { jobServerFnMocks } from "./api/jobs";
+import {
+	mockApiGetPasswordPolicy,
+	settingsServerFnMocks,
+} from "./api/settings";
 import { userServerFnMocks } from "./api/users";
 import { createFakeAccount } from "./fake/account";
 
@@ -44,6 +48,10 @@ vi.mock("@server/jobs/functions", async () => {
 	const { jobServerFnMocks } = await import("./api/jobs");
 	return jobServerFnMocks;
 });
+vi.mock("@server/settings/functions", async () => {
+	const { settingsServerFnMocks } = await import("./api/settings");
+	return settingsServerFnMocks;
+});
 
 beforeEach(() => {
 	for (const fn of Object.values(groupServerFnMocks)) {
@@ -59,6 +67,12 @@ beforeEach(() => {
 		// state instead of resolving to `undefined`.
 		fn.mockReturnValue(new Promise(() => {}));
 	}
+
+	// Unlike the mocks above, the password policy defaults to resolving. Every
+	// password form queries it, and leaving it pending would silently exercise
+	// the fallback minimum in tests that mean to assert the configured one.
+	settingsServerFnMocks.getPasswordPolicyFn.mockReset();
+	mockApiGetPasswordPolicy();
 });
 
 process.env.TZ = "UTC";
@@ -239,9 +253,20 @@ export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 
 // jsdom does not implement EventSource; the SSE bridge constructs one when the
 // authenticated layout mounts, so any route-level test that renders it would
-// throw. A noop stand-in keeps the connection inert during tests.
+// throw. A noop stand-in keeps the connection inert during tests. The
+// readyState constants are part of the surface: SseConnection reads
+// `window.EventSource.CLOSED` to tell a rejected handshake from a dropped
+// transport.
 class FakeEventSource {
-	close() {}
+	static readonly CONNECTING = 0;
+	static readonly OPEN = 1;
+	static readonly CLOSED = 2;
+
+	readyState: number = FakeEventSource.CONNECTING;
+
+	close() {
+		this.readyState = FakeEventSource.CLOSED;
+	}
 	addEventListener() {}
 	removeEventListener() {}
 	dispatchEvent() {

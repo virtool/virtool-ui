@@ -21,7 +21,7 @@ const listVariants = cva("flex", {
 	variants: {
 		variant: {
 			segmented:
-				"bg-gray-100 h-12 items-center justify-center p-1 rounded-lg text-lg text-muted-foreground",
+				"bg-gray-100 h-12 items-center justify-center p-1 rounded-lg text-gray-500 text-lg",
 			vertical:
 				"bg-white border border-gray-300 col-span-1 flex-col overflow-hidden rounded-sm self-start",
 		},
@@ -33,7 +33,7 @@ const triggerVariants = cva("cursor-pointer", {
 	variants: {
 		variant: {
 			segmented:
-				"data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:text-foreground disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring font-medium inline-flex items-center justify-center px-3 py-1 ring-offset-background rounded-md transition-all whitespace-nowrap",
+				"data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:text-gray-900 disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/50 font-medium hover:text-gray-700 inline-flex items-center justify-center px-3 py-1 rounded-md transition-all whitespace-nowrap",
 			vertical:
 				"data-[state=active]:font-medium data-[state=active]:shadow-[inset_3px_0_0_var(--color-virtool)] data-[state=active]:text-gray-900 focus-visible:ring-2 focus-visible:ring-blue-600/50 focus-visible:ring-inset focus:outline-none hover:bg-gray-50 hover:text-gray-700 px-6 py-3 text-gray-500 text-left transition-colors",
 		},
@@ -45,7 +45,7 @@ const contentVariants = cva("", {
 	variants: {
 		variant: {
 			segmented:
-				"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring mt-2 ring-offset-background",
+				"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/50 mt-2",
 			vertical: "col-span-3 focus:outline-none",
 		},
 	},

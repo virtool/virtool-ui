@@ -4,6 +4,7 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
+import { usePasswordRules } from "@forms/password";
 import { Controller, useForm } from "react-hook-form";
 
 type CreateUserFormProps = {
@@ -30,6 +31,7 @@ export function CreateUserForm({
 	error,
 	onSubmit,
 }: CreateUserFormProps) {
+	const passwordRules = usePasswordRules();
 	const {
 		formState: { errors },
 		register,
@@ -56,13 +58,7 @@ export function CreateUserForm({
 					id="password"
 					type="password"
 					autoComplete="off"
-					{...register("password", {
-						required: "Password does not meet minimum length requirement (8)",
-						minLength: {
-							value: 8,
-							message: "Password does not meet minimum length requirement (8)",
-						},
-					})}
+					{...register("password", passwordRules)}
 				/>
 				<InputError>{errors.password?.message || error}</InputError>
 			</InputGroup>

@@ -32,17 +32,19 @@ export default function Nav({ administrator_role, handle }: NavBarProps) {
 	}
 
 	return (
-		<nav className="bg-virtool flex justify-between text-white">
-			<div className="flex items-center">
-				<Logo className="pb-2.5 pl-10 pr-4" color="white" />
-				<NavLink to="/jobs?state=running">Jobs</NavLink>
+		<nav className="bg-virtool flex h-13 items-center justify-between text-white">
+			<div className="flex gap-3 items-center">
+				<Logo className="mt-0 pl-10 pr-4" color="white" height={28} />
+				<NavLink to="/jobs" search={{ state: "running" }}>
+					Jobs
+				</NavLink>
 				<NavLink to="/samples">Samples</NavLink>
 				<NavLink to="/refs">References</NavLink>
 				<NavLink to="/hmms">HMMs</NavLink>
 				<NavLink to="/subtractions">Subtractions</NavLink>
 			</div>
 
-			<div className="flex gap-2 pr-4">
+			<div className="flex gap-2 items-center pr-4">
 				<IconButton
 					onClick={() => setAboutOpen(true)}
 					IconComponent={Info}

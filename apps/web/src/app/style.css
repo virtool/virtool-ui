@@ -9,7 +9,8 @@
 @theme {
 	--font-sans:
 		"Inter Variable", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-	--color-virtool: #3c8786;
+	--color-virtool: #387e7d;
+	--color-virtool-dark: #2a5e5d;
 }
 
 html {

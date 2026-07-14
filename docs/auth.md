@@ -16,14 +16,18 @@ The pure layer is split by primitive rather than collapsed into one
 - `core.ts` — login / logout / password-reset domain logic
 - `session.ts` — session row CRUD
 - `tokens.ts` — session id and token generation, hashing
-- `password.ts` — bcrypt wrappers and `passwordSchema`, the shared rule
-  for a password being set
+- `password.ts` — bcrypt wrappers
+- `passwordPolicy.ts` — the minimum-length rule and its message. Pure,
+  and deliberately free of bcrypt, the db, and the TanStack shell, so
+  the browser can import it (see "Minimum password length" below)
 - `cookies.ts` — `CookieAdapter` type (framework-agnostic cookie I/O)
 - `verify.ts` — request verification (pure, given a cookie adapter and
   db handle)
 
 The wired layer is split too:
 
+- `service.ts` — `checkConfiguredPasswordLength`, which reads the
+  setting and applies the pure rule to it
 - `functions.ts` — TanStack Start server functions for login, logout,
   password reset
 - `middleware.ts` — TanStack Start middleware that delegates to
@@ -44,6 +48,7 @@ not per-handler. The exempt endpoints live in
 ```ts
 export const authenticationExceptions: ReadonlyArray<{ url: string }> = [
   createFirstUserFn,
+  getPasswordPolicyFn,
   loginFn,
   logoutFn,
   resetPasswordFn,
@@ -146,6 +151,33 @@ A reset session is not "authenticated" as far as the middleware is
 concerned — any non-exception server function call from a client
 holding only a reset cookie returns 401.
 
+## Session invalidation
+
+`verifyAuthenticatedSession` (`server/auth/verify.ts`) rejects a session
+when the row is missing, the type is not `authenticated`, the token hash
+does not match, the row has expired, or **`users.active` is false**. That
+last one is why deactivation takes effect immediately: `active` is
+re-read on every request rather than trusted at login.
+
+**`users.invalidate_sessions` is written but never read.** It is set to
+`true` on an admin's change to a user's `active`, `password`, or
+`force_reset` (`server/users/data.ts:421-433`) and on a self-service
+reset (`core.ts:260`), mirroring Python, whose service invalidates the
+user's sessions on their next request. Nothing on the TypeScript side
+consumes it. The consequence is concrete: an admin changing a user's
+password or forcing a reset **does not revoke that user's existing
+sessions here** — the deactivation case is covered only because it also
+flips `active`. The self-service reset path is fine for a different
+reason: `core.ts:250` deletes the rows outright via
+`invalidateUserSessions`.
+
+Do not "fix" this by rejecting sessions whose user has
+`invalidate_sessions` set. The reset flow sets the flag `true` and *then*
+creates the new authenticated session (`core.ts:254-265`), and nothing
+clears it, so that gate would reject the fresh session on its first
+request and lock the user out permanently. The fix is to delete the
+session rows at the point of invalidation — that is VIR-2671's job.
+
 ## Session lifetimes
 
 Defined in `server/auth/session.ts:15-17`:
@@ -233,32 +265,69 @@ On success the client navigates away from the wall. The reset has
 already rotated the cookies, so the user is authenticated; leaving them
 on the form would strand them there.
 
-## Password length
-
-`passwordSchema` (`server/auth/password.ts`) is the single rule for a
-password being **set**. It is applied by `resetPasswordSchema`,
-`createFirstUserSchema`, `createUserSchema`, and `updateUserSchema`.
-
-It is deliberately **not** applied to `loginSchema`. Login authenticates
-an existing credential rather than setting a new one, and a user whose
-stored password predates the rule must still be able to log in — the
-forced-reset flow that replaces it is only reachable through login.
-
-The minimum is hardcoded at 8. The `minimum_password_length` instance
-setting still lives in Mongo, which this server cannot read; VIR-2743
-switches to the configured value once VIR-2742 lands a settings model in
-Postgres.
-
-The TanStack Start compiler strips `.validator()` from the client build,
-so this schema never runs in the browser and produces no user-facing
-message on its own. It is a backstop. Forms carry their own
-`react-hook-form` `minLength` rule, and that is what the user sees.
-
 A reset session is invalidated by:
 
 - Successful reset (cookies rotate to the new authenticated session).
 - A `reset_code` mismatch on `resetPasswordFn`.
 - 10-minute expiry.
+
+## Minimum password length
+
+The minimum is the `minimum_password_length` instance setting, read from
+Postgres by `getSettings`. It is **not** a constant, and it is **not** a
+zod rule.
+
+`checkConfiguredPasswordLength(db, password)` (`server/auth/service.ts`)
+is the single enforcement point. Every path that **sets** a password
+calls it: `createFirstUserFn`, `resetPasswordFn`, `createUser`, and
+`updateUser`. It reads the setting, applies the pure
+`checkPasswordLength` from `passwordPolicy.ts`, and throws
+`PasswordTooShortError`; each handler maps that to a 400 carrying the
+error's message.
+
+It is deliberately **not** applied at login. Login authenticates an
+existing credential rather than setting a new one, and a user whose
+stored password is shorter than the current minimum must still be able to
+log in — the forced-reset flow that replaces it is only reachable through
+login. For the same reason the account form's *old password* field
+carries no length rule.
+
+### Why not a zod validator
+
+The obvious home is `.validator()`, and it is the wrong one. A validator
+runs before its handler with no db handle, so it cannot read the setting.
+It also fails badly: a zod rejection surfaces as a **500** whose message
+is a JSON dump of the issue list, which is not something a form can put
+in front of a user. The handlers throw a 400 with a real message instead,
+matching every other domain error here.
+
+### How the browser learns the minimum
+
+`getPasswordPolicyFn` (`server/settings/functions.ts`) returns
+`{ minimumPasswordLength }` and nothing else. It is **public** — listed
+in `authenticationExceptions` — because the first-user and forced-reset
+forms both set a password before any session exists. It returns the
+minimum alone rather than the settings row, which holds instance
+configuration no unauthenticated caller should read.
+
+Client-side, `usePasswordRules()` (`forms/password.ts`) turns it into the
+`react-hook-form` rules every password form spreads into `register`, so
+the message quotes the configured value.
+
+Until the policy resolves — and if it fails outright — the hook applies
+**no length rule at all**. Do not be tempted to fall back to the default
+of 8: the configured minimum can be *lower* than the default, so a guess
+would reject passwords the server accepts and strand the user on a form
+that will not submit. Omitting the rule defers to the server, which is
+the only authority on the setting and rejects a short password with a 400
+quoting it. That makes the server's message load-bearing, so every
+password form must render its mutation error.
+
+Every route that renders a password form prefetches the policy so this
+window is not hit in practice: `/login`, `/setup`, the account profile,
+and the two admin user routes. They use `prefetchQuery`, not
+`ensureQueryData` — a failed settings read must not take down the wall or
+the page.
 
 ## Logout
 
@@ -271,15 +340,42 @@ both cookies (`core.ts:104`). It's listed in the middleware's
 
 ### Client side
 
-The only client-side logout path today is user-initiated: `useLogout`
-in `account/queries.ts:149` runs `logoutFn()` and then calls
-`resetClient()`.
+A logout is either user-initiated or forced. The user-initiated path is
+`useLogout` in `account/queries.ts:149`, which runs `logoutFn()` and
+then calls `resetClient()`.
 
-There is no 401 interceptor on the SuperAgent client and no in-stream
-session-revocation signal on the SSE connection — a revoked session
-stays connected until the next server-function call fails auth. Auth
-state on initial load is checked by `routes/_authenticated.tsx`'s
-`beforeLoad`, which redirects to `/login` if `fetchAccount` throws.
+A forced logout is what happens when the session stops verifying
+underneath a running tab — its row deleted, it expired, or its user was
+deactivated. (An admin-initiated password change or forced reset only
+sets `users.invalidate_sessions`, which nothing here reads yet, so it
+does not revoke a session — see **Session invalidation** below.) Every
+route into a forced logout converges on `endSession` (`app/session.ts`),
+which clears
+`sessionStorage` and loads `/login?reason=session-ended&redirect=…`. The
+full document load is what drops everything held in memory, and the
+`reason` puts a "Your session ended" message on the wall. Three things
+can call it:
+
+- **`app/api.ts`** — a SuperAgent plugin that ends the session on any
+  401 from the Python API.
+- **`router.tsx`** — the query and mutation cache `onError`, matching
+  `UnauthorizedError` by name. Server-function errors cross the boundary
+  as plain `Error`s with only the name preserved, so there is no status
+  to match on.
+- **`app/sse/SseConnection.ts`** — on a 401 from the `/events`
+  handshake. The `EventSource` error event carries no status, so it
+  confirms with a `HEAD /events` before ending anything.
+
+`endSession` is inert until `armSessionEnd` runs, which
+`routes/_authenticated.tsx` does once an authenticated load has
+succeeded. This is load-bearing, not defensive: the login wall and the
+authenticated route guard both fetch the account and *expect* a 401 when
+nobody is logged in. Without the arming step a first-time visitor would
+be told their session ended, and the wall could reload itself in a loop.
+
+Auth state on initial load is still checked by
+`routes/_authenticated.tsx`'s `beforeLoad`, which redirects to `/login`
+if `fetchAccount` throws.
 
 ### `resetClient`
 

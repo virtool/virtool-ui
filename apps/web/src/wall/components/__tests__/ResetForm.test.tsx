@@ -1,5 +1,9 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import {
+	mockApiGetPasswordPolicy,
+	settingsServerFnMocks,
+} from "@tests/api/settings";
 import { renderWithProviders } from "@tests/setup";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -76,6 +80,64 @@ describe("<ResetForm />", () => {
 			),
 		).toBeInTheDocument();
 		expect(resetPasswordMock).not.toHaveBeenCalled();
+	});
+
+	it("rejects a password shorter than the configured minimum without submitting", async () => {
+		mockApiGetPasswordPolicy(12);
+
+		renderWithProviders(<ResetForm resetCode="test_reset_code" />);
+
+		// Eleven characters: long enough for the default minimum, so this only
+		// fails if the form is reading the configured one.
+		await userEvent.type(screen.getByLabelText("Password"), "elevenchars");
+		await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+
+		expect(
+			await screen.findByText(
+				"Password does not meet minimum length requirement (12)",
+			),
+		).toBeInTheDocument();
+		expect(resetPasswordMock).not.toHaveBeenCalled();
+	});
+
+	it("accepts a password shorter than the default when the configured minimum is lower", async () => {
+		mockApiGetPasswordPolicy(4);
+		resetPasswordMock.mockResolvedValue({ login: false, reset: false });
+
+		renderWithProviders(<ResetForm resetCode="test_reset_code" />);
+
+		await userEvent.type(screen.getByLabelText("Password"), "abcd");
+		await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+
+		await waitFor(() => expect(resetPasswordMock).toHaveBeenCalledTimes(1));
+	});
+
+	it("applies no length rule when the policy is unavailable", async () => {
+		// The configured minimum can be below the default, so guessing one here
+		// would reject a password the server accepts. Defer to the server instead.
+		settingsServerFnMocks.getPasswordPolicyFn.mockRejectedValue(
+			new Error("policy unavailable"),
+		);
+		resetPasswordMock.mockResolvedValue({ login: false, reset: false });
+
+		renderWithProviders(<ResetForm resetCode="test_reset_code" />);
+
+		await userEvent.type(screen.getByLabelText("Password"), "abcd");
+		await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+
+		await waitFor(() => expect(resetPasswordMock).toHaveBeenCalledTimes(1));
+	});
+
+	it("accepts a password that meets the configured minimum", async () => {
+		mockApiGetPasswordPolicy(12);
+		resetPasswordMock.mockResolvedValue({ login: false, reset: false });
+
+		renderWithProviders(<ResetForm resetCode="test_reset_code" />);
+
+		await userEvent.type(screen.getByLabelText("Password"), "twelvechars!");
+		await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+
+		await waitFor(() => expect(resetPasswordMock).toHaveBeenCalledTimes(1));
 	});
 
 	it("navigates to the redirect on a successful reset", async () => {
