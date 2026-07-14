@@ -16,10 +16,11 @@ describe("<IndexItemIcon />", () => {
 		expect(screen.queryByText("Active")).not.toBeInTheDocument();
 	});
 
-	it("renders the not-ready status for a not-ready index", () => {
+	it("renders the building status for a not-ready index", () => {
 		renderWithProviders(<IndexItemIcon id="foo" ready={false} />);
 
-		expect(screen.getByText("Not Ready")).toBeInTheDocument();
+		expect(screen.getByText("Building")).toBeInTheDocument();
+		expect(screen.getByRole("status", { name: "loading" })).toBeInTheDocument();
 		expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
 	});
 });

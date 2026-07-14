@@ -1,4 +1,5 @@
-import { CircleCheck, CircleDashed } from "lucide-react";
+import Loader from "@base/Loader";
+import { CircleCheck } from "lucide-react";
 
 type IndexItemIconProps = {
 	activeId?: string;
@@ -24,9 +25,9 @@ export function IndexItemIcon({ activeId, id, ready }: IndexItemIconProps) {
 			{ready ? (
 				<CircleCheck className="stroke-green-600" size={18} />
 			) : (
-				<CircleDashed className="stroke-gray-500" size={18} />
+				<Loader size="16px" />
 			)}
-			<span className="font-medium">{ready ? "Active" : "Not Ready"}</span>
+			<span className="font-medium">{ready ? "Active" : "Building"}</span>
 		</div>
 	);
 }
