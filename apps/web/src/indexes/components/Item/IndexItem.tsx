@@ -2,7 +2,6 @@ import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import type { IndexMinimal } from "@indexes/types";
-import { useFetchJob } from "@jobs/queries";
 import { IndexItemDescription } from "./IndexItemDescription";
 import { IndexItemIcon } from "./IndexItemIcon";
 
@@ -22,8 +21,6 @@ type IndexItemProps = {
  */
 
 export function IndexItem({ activeId, index, refId }: IndexItemProps) {
-	const { data: job } = useFetchJob(index.job?.id ?? Number.NaN, index.job);
-
 	return (
 		<BoxGroupSection>
 			<h3 className="grid grid-cols-3 mb-2 text-lg">
@@ -38,13 +35,7 @@ export function IndexItem({ activeId, index, refId }: IndexItemProps) {
 					changeCount={index.change_count}
 					modifiedCount={index.modified_otu_count}
 				/>
-				<IndexItemIcon
-					activeId={activeId}
-					id={index.id}
-					ready={index.ready}
-					progress={job?.progress}
-					state={job?.state}
-				/>
+				<IndexItemIcon activeId={activeId} id={index.id} ready={index.ready} />
 			</h3>
 			<Attribution time={index.created_at} user={index.user.handle} />
 		</BoxGroupSection>
