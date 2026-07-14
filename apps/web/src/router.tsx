@@ -59,7 +59,17 @@ export function getRouter() {
 		// from `useSuspenseQuery` during render, so a failed query surfaces a
 		// real error state instead of an indefinite loading placeholder.
 		defaultErrorComponent: RouteError,
-		defaultPendingMinMs: 0,
+		// `defaultPendingMinMs` is deliberately left at the router's default. Do
+		// not set it to 0: on a hard load, `hydrate()` only arms `_forcePending`
+		// when it is truthy, and that flag is what makes `loadMatches` commit the
+		// pending matches up front instead of after every loader has settled. With
+		// it at 0, a rendered match sits at `status: "pending"` while the loader
+		// that owns its (shared) `loadPromise` finishes and clears it — so
+		// `MatchInner` throws `undefined`, `CatchBoundary` tests the thrown value
+		// for truthiness and lets it through, and the whole app unmounts to a blank
+		// page. The window stays open for as long as the slowest loader in the
+		// chain runs, which is why only routes with a slow loader (a pathoscope
+		// analysis document) hit it. See TanStack/router#7753.
 		// Preload routes on hover/touch/focus. Loaders back onto React Query via
 		// `ensureQueryData`, so a 0 preload stale time hands freshness decisions
 		// entirely to React Query's own `staleTime`/`gcTime` instead of letting

@@ -14,6 +14,3 @@ allowBuilds:
   esbuild: true
   protobufjs: true
   ssh2: true
-
-overrides:
-  '@tanstack/router-core': '1.171.9'
