@@ -3,7 +3,6 @@ import type { FormattedNuvsHit } from "@analyses/types";
 import { cn } from "@app/cn";
 import Badge from "@base/Badge";
 import Box from "@base/Box";
-import numbro from "numbro";
 import "./NuvsItem.css";
 
 type NuVsItemProps = {
@@ -40,7 +39,7 @@ export default function NuvsItem({
 				<Badge>{sequence.length}</Badge>
 			</div>
 
-			<NuvsValues e={numbro(e).format()} orfCount={annotatedOrfCount} />
+			<NuvsValues e={String(e)} orfCount={annotatedOrfCount} />
 		</Box>
 	);
 }

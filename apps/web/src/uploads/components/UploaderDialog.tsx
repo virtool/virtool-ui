@@ -1,6 +1,6 @@
+import { byteSize } from "@app/format";
 import { formatRoundedDuration } from "@app/utils";
 import Badge from "@base/Badge";
-import numbro from "numbro";
 import type { ReactElement } from "react";
 import type { UploadInProgress } from "../types";
 import { UploaderItem } from "./UploaderItem";
@@ -33,12 +33,7 @@ export default function UploaderDialog({
 
 	const formattedRemaining = formatRoundedDuration(remaining);
 
-	const formattedSpeed = numbro(speed).format({
-		base: "decimal",
-		mantissa: 1,
-		output: "byte",
-		spaceSeparated: true,
-	});
+	const formattedSpeed = byteSize(speed, true);
 
 	return (
 		<div className="bg-white border border-slate-400 overflow-hidden rounded-md shadow-lg">
