@@ -21,7 +21,6 @@ import userEvent from "@testing-library/user-event";
 import nock from "nock";
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { beforeEach, vi } from "vitest";
-import { routeTree } from "@/routeTree.gen";
 import { createFakeAccount } from "./fake/account";
 import { authServerFnMocks } from "./server-fn/auth";
 import { groupServerFnMocks } from "./server-fn/groups";
@@ -244,6 +243,11 @@ type RenderRouteOptions = {
 };
 
 export async function renderRoute(path: string, opts?: RenderRouteOptions) {
+	// Imported lazily so the ~1,449-line route tree — and the route modules it
+	// pulls in — only loads for the handful of tests that render a real route,
+	// not every test file that imports this shared setup.
+	const { routeTree } = await import("@/routeTree.gen");
+
 	const history: string[] = [];
 	const queryClient = createTestQueryClient();
 
