@@ -76,6 +76,8 @@ jobs:
                   pnpm-version: ${{ env.PNPM_VERSION }}
             - name: Test
               run: pnpm test
+              env:
+                  VT_TEST_REACT_COMPILER: "1"
     release:
         name: Publish / Release
         runs-on: ubuntu-24.04
