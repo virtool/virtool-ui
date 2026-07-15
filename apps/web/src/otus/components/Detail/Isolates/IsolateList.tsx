@@ -86,6 +86,7 @@ export default function IsolateList() {
 			<SubviewHeader>
 				<Toolbar>
 					<InputSearch
+						aria-label="Search sequences"
 						placeholder="Name, accession, or definition"
 						value={term}
 						onChange={(e) => setTerm(e.target.value)}
