@@ -22,7 +22,7 @@
 				"hooks": [
 					{
 						"type": "command",
-						"command": "npx biome check --fix --unsafe . 2>/dev/null || true",
+						"command": "pnpm exec biome check --fix --unsafe apps/web/src packages 2>/dev/null || true",
 						"statusMessage": "Formatting with biome..."
 					}
 				]

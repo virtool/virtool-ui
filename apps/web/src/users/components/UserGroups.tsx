@@ -103,15 +103,21 @@ export default function UserGroups({
 		}
 
 		return (
-			<ComboBox
+			<ComboBox<GroupMinimal>
+				label="Add group"
+				hideLabel
 				items={availableGroups}
 				selectedItem={null}
+				onChange={(group) => {
+					addGroup(group.id);
+					setTerm("");
+				}}
 				term={term}
-				onFilter={setTerm}
-				onChange={(group) => addGroup((group as GroupMinimal).id)}
-				itemToString={(group) => (group ? (group as GroupMinimal).name : "")}
-				renderRow={(group) => (
-					<span className="capitalize">{(group as GroupMinimal).name}</span>
+				onTermChange={setTerm}
+				itemToKey={(group) => String(group.id)}
+				itemToString={(group) => group.name}
+				renderOption={(group) => (
+					<span className="capitalize">{group.name}</span>
 				)}
 				placeholder="Add group"
 			/>

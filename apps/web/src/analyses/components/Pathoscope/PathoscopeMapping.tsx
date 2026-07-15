@@ -2,8 +2,13 @@ import { toThousand } from "@app/format";
 import Box from "@base/Box";
 import Label from "@base/Label";
 import Link from "@base/Link";
-import numbro from "numbro";
 import { Bars } from "../Viewer/Bars";
+
+const percentFormatter = new Intl.NumberFormat("en-US", {
+	style: "percent",
+	minimumFractionDigits: 2,
+	maximumFractionDigits: 2,
+});
 
 export function AnalysisMappingReferenceTitle({ index, reference }) {
 	return (
@@ -58,7 +63,7 @@ export function AnalysisMapping({ totalReads, detail }) {
 	return (
 		<Box className="mb-8">
 			<h3 className="flex items-end justify-between text-2xl font-normal my-4 mb-2.5">
-				{numbro(sumPercent).format({ output: "percent", mantissa: 2 })} mapped
+				{percentFormatter.format(sumPercent)} mapped
 				<small className="text-gray-500 text-base font-semibold">
 					{toThousand(readCount)} of {toThousand(totalReads)} reads
 				</small>

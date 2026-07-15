@@ -1,6 +1,6 @@
 import { asc, count, eq, ilike } from "drizzle-orm";
 import type { PostgresError } from "postgres";
-import { db } from "../db/pg";
+import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import {
 	type GroupPermissions,
@@ -87,7 +87,10 @@ function toGroupMinimal(row: GroupRow): GroupMinimal {
 	};
 }
 
-async function fetchGroupUsers(groupId: number): Promise<GroupUserNested[]> {
+async function fetchGroupUsers(
+	db: Db,
+	groupId: number,
+): Promise<GroupUserNested[]> {
 	const rows = await db
 		.select({ id: usersTable.id, handle: usersTable.handle })
 		.from(usersTable)
@@ -98,7 +101,7 @@ async function fetchGroupUsers(groupId: number): Promise<GroupUserNested[]> {
 	return rows.map((row) => ({ id: row.id, handle: row.handle }));
 }
 
-export async function listGroups(): Promise<GroupMinimal[]> {
+export async function listGroups(db: Db): Promise<GroupMinimal[]> {
 	const rows = await db
 		.select()
 		.from(groupsTable)
@@ -108,6 +111,7 @@ export async function listGroups(): Promise<GroupMinimal[]> {
 }
 
 export async function findGroups(
+	db: Db,
 	term: string,
 	page: number,
 	perPage: number,
@@ -139,7 +143,7 @@ export async function findGroups(
 	};
 }
 
-export async function getGroup(groupId: number): Promise<Group> {
+export async function getGroup(db: Db, groupId: number): Promise<Group> {
 	const [row] = await db
 		.select()
 		.from(groupsTable)
@@ -149,7 +153,7 @@ export async function getGroup(groupId: number): Promise<Group> {
 		throw new GroupNotFoundError();
 	}
 
-	const users = await fetchGroupUsers(row.id);
+	const users = await fetchGroupUsers(db, row.id);
 
 	return {
 		...toGroupMinimal(row),
@@ -158,7 +162,7 @@ export async function getGroup(groupId: number): Promise<Group> {
 	};
 }
 
-export async function createGroup(name: string): Promise<Group> {
+export async function createGroup(db: Db, name: string): Promise<Group> {
 	try {
 		const row = takeFirstOrThrow(
 			await db
@@ -187,6 +191,7 @@ export async function createGroup(name: string): Promise<Group> {
 }
 
 export async function updateGroup(
+	db: Db,
 	groupId: number,
 	values: GroupUpdateValues,
 ): Promise<Group> {
@@ -208,7 +213,7 @@ export async function updateGroup(
 	}
 
 	if (Object.keys(patch).length === 0) {
-		return getGroup(groupId);
+		return getGroup(db, groupId);
 	}
 
 	try {
@@ -222,10 +227,10 @@ export async function updateGroup(
 
 	await emit("groups", groupId, "update");
 
-	return getGroup(groupId);
+	return getGroup(db, groupId);
 }
 
-export async function deleteGroup(groupId: number): Promise<void> {
+export async function deleteGroup(db: Db, groupId: number): Promise<void> {
 	const [row] = await db
 		.delete(groupsTable)
 		.where(eq(groupsTable.id, groupId))

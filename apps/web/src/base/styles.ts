@@ -4,8 +4,8 @@ export const inputBaseClasses =
 
 /**
  * Explicit height shared by single-line form controls (text inputs, the Select
- * and ComboBox triggers) so they line up. Multi-line controls (textarea) and
- * chip containers use `min-h-10` instead so they can grow.
+ * trigger, the ComboBox input) so they line up. Multi-line controls (textarea)
+ * and chip containers use `min-h-10` instead so they can grow.
  */
 export const inputHeightClass = "h-10";
 

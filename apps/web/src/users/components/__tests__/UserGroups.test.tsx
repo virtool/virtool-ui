@@ -70,7 +70,7 @@ describe("<UserGroups />", () => {
 			await screen.findByText("This user is a member of every group."),
 		).toBeInTheDocument();
 		expect(
-			screen.queryByRole("button", { name: /add group/i }),
+			screen.queryByRole("combobox", { name: "Add group" }),
 		).not.toBeInTheDocument();
 		expect(screen.getByRole("radio", { name: "foo" })).toBeInTheDocument();
 	});
@@ -107,7 +107,7 @@ describe("<UserGroups />", () => {
 		);
 
 		await userEvent.click(
-			await screen.findByRole("button", { name: /add group/i }),
+			await screen.findByRole("button", { name: "Toggle Add group menu" }),
 		);
 		await userEvent.click(screen.getByRole("option", { name: "bar" }));
 
@@ -116,6 +116,78 @@ describe("<UserGroups />", () => {
 				data: { userId, groups: [1, 2] },
 			}),
 		);
+	});
+
+	it("adds a group using only the keyboard", async () => {
+		mockListGroups(allGroups);
+		mockUpdateUser(userId, 200, {});
+
+		renderWithProviders(
+			<UserGroups
+				userId={userId}
+				memberGroups={[member]}
+				primaryGroup={member}
+			/>,
+		);
+
+		const combobox = await screen.findByRole("combobox", { name: "Add group" });
+
+		await userEvent.tab();
+		expect(combobox).toHaveFocus();
+
+		await userEvent.keyboard("{ArrowDown}{Enter}");
+
+		await waitFor(() =>
+			expect(userServerFnMocks.updateUser).toHaveBeenCalledWith({
+				data: { userId, groups: [1, 2] },
+			}),
+		);
+	});
+
+	it("keeps the remaining groups addable after a search-and-add", async () => {
+		const third = createFakeGroup({ id: 3, name: "baz" });
+		mockListGroups([member, other, third]);
+		mockUpdateUser(userId, 200, {});
+
+		const { rerender } = renderWithProviders(
+			<UserGroups
+				userId={userId}
+				memberGroups={[member]}
+				primaryGroup={member}
+			/>,
+		);
+
+		const combobox = await screen.findByRole("combobox", { name: "Add group" });
+
+		await userEvent.type(combobox, "bar");
+		await userEvent.click(await screen.findByRole("option", { name: "bar" }));
+
+		await waitFor(() =>
+			expect(userServerFnMocks.updateUser).toHaveBeenCalledWith({
+				data: { userId, groups: [1, 2] },
+			}),
+		);
+
+		// The updated user lands, making `bar` a member. A term left filtering to
+		// `bar` would empty the options and hide the combobox entirely.
+		rerender(
+			<UserGroups
+				userId={userId}
+				memberGroups={[member, other]}
+				primaryGroup={member}
+			/>,
+		);
+
+		expect(combobox).toHaveValue("");
+		expect(
+			screen.queryByText("This user is a member of every group."),
+		).not.toBeInTheDocument();
+
+		await userEvent.click(
+			screen.getByRole("button", { name: "Toggle Add group menu" }),
+		);
+
+		expect(screen.getByRole("option", { name: "baz" })).toBeInTheDocument();
 	});
 
 	it("selects 'No primary group' by default when there is no primary group", async () => {

@@ -1,4 +1,5 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
+import { toGcContent } from "@app/format";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
@@ -9,15 +10,12 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useFetchSubtraction } from "@subtraction/queries";
 import type { NucleotideComposition } from "@subtraction/types";
 import { getSubtractionFastaName } from "@subtraction/utils";
-import numbro from "numbro";
 import { SubtractionAttribution } from "../Attribution";
 import DeleteSubtraction from "./DeleteSubtraction";
 import EditSubtraction from "./EditSubtraction";
 
 function calculateGc(nucleotides: NucleotideComposition) {
-	return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format(
-		"0.000",
-	);
+	return toGcContent(1 - nucleotides.a - nucleotides.t - nucleotides.n);
 }
 
 /**

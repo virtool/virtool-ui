@@ -14,7 +14,9 @@ import Sequence from "./Sequence";
 import SequenceEdit from "./SequenceEdit";
 import {
 	SEQUENCE_ACCESSION_COLUMN,
-	SEQUENCE_TITLE_COLUMN,
+	SEQUENCE_CHEVRON_COLUMN,
+	SEQUENCE_DEFINITION_COLUMN,
+	SEQUENCE_SEGMENT_COLUMN,
 } from "./SequenceValues";
 
 /**
@@ -23,8 +25,10 @@ import {
 function SequenceListHeader() {
 	return (
 		<BoxGroupSection className="flex items-center bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
+			<span aria-hidden className={SEQUENCE_CHEVRON_COLUMN} />
 			<span className={SEQUENCE_ACCESSION_COLUMN}>Accession</span>
-			<span className={SEQUENCE_TITLE_COLUMN}>Definition / Segment</span>
+			<span className={SEQUENCE_SEGMENT_COLUMN}>Segment</span>
+			<span className={SEQUENCE_DEFINITION_COLUMN}>Definition</span>
 		</BoxGroupSection>
 	);
 }

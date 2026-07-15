@@ -6,7 +6,11 @@ import Button from "@base/Button";
 import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
 import { Redo2 } from "lucide-react";
-import numbro from "numbro";
+
+const identityFormatter = new Intl.NumberFormat("en-US", {
+	minimumFractionDigits: 2,
+	maximumFractionDigits: 2,
+});
 
 type BLASTResultsProps = {
 	/** A list of the blast hits */
@@ -31,7 +35,7 @@ export default function NuvsBlastResults({ hits, onBlast }: BLASTResultsProps) {
 			<td>{hit.name}</td>
 			<td>{hit.evalue}</td>
 			<td>{hit.score}</td>
-			<td>{numbro(hit.identity / hit.align_len).format("0.00")}</td>
+			<td>{identityFormatter.format(hit.identity / hit.align_len)}</td>
 		</tr>
 	));
 

@@ -1,8 +1,12 @@
-import type { AdministratorRoleName } from "@administration/types";
-import { hasSufficientAdminRole } from "@administration/utils";
 import * as Sentry from "@sentry/tanstackstart-react";
 import { createMiddleware, createServerOnlyFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
+import {
+	type AdministratorRoleName,
+	FORBIDDEN_ERROR_NAME,
+	hasSufficientAdminRole,
+	UNAUTHORIZED_ERROR_NAME,
+} from "@virtool/contracts";
 import { eq } from "drizzle-orm";
 
 import { db } from "../db/pg";
@@ -13,7 +17,7 @@ import { type AuthenticatedSession, verifyRequest } from "./verify";
 export class UnauthorizedError extends Error {
 	constructor() {
 		super("Unauthorized");
-		this.name = "UnauthorizedError";
+		this.name = UNAUTHORIZED_ERROR_NAME;
 	}
 }
 
@@ -21,7 +25,7 @@ export class UnauthorizedError extends Error {
 export class ForbiddenError extends Error {
 	constructor() {
 		super("Forbidden");
-		this.name = "ForbiddenError";
+		this.name = FORBIDDEN_ERROR_NAME;
 	}
 }
 

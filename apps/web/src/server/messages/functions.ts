@@ -1,8 +1,9 @@
-import { bannerColors } from "@banner/types";
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
+import { bannerColors } from "@virtool/contracts";
 import { z } from "zod";
 import { adminRole, authenticated } from "../auth/policy";
+import { db } from "../db/pg";
 import {
 	clearActiveMessage as clearActiveMessageImpl,
 	createMessage as createMessageImpl,
@@ -45,17 +46,18 @@ const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 
 export const findMessage = createServerFn({ method: "GET" })
 	.middleware([authenticated()])
-	.handler(async () => findMessageImpl());
+	.handler(async () => findMessageImpl(db));
 
 export const findMessages = createServerFn({ method: "GET" })
 	.middleware([adminRole("settings")])
-	.handler(async () => findMessagesImpl());
+	.handler(async () => findMessagesImpl(db));
 
 export const createMessage = createServerFn({ method: "POST" })
 	.middleware([adminRole("settings")])
 	.validator(createMessageSchema)
 	.handler(async ({ context, data }) => {
 		const message = await createMessageImpl(
+			db,
 			data.message,
 			data.color,
 			context.session.userId,
@@ -70,6 +72,7 @@ export const updateMessage = createServerFn({ method: "POST" })
 	.handler(async ({ context, data }) => {
 		try {
 			return await updateMessageImpl(
+				db,
 				data.id,
 				{ message: data.message, color: data.color },
 				context.session.userId,
@@ -84,7 +87,7 @@ export const deleteMessage = createServerFn({ method: "POST" })
 	.validator(idSchema)
 	.handler(async ({ data }) => {
 		try {
-			await deleteMessageImpl(data.id);
+			await deleteMessageImpl(db, data.id);
 			setResponseStatus(204);
 			return null;
 		} catch (err) {
@@ -97,7 +100,7 @@ export const setActiveMessage = createServerFn({ method: "POST" })
 	.validator(idSchema)
 	.handler(async ({ data }) => {
 		try {
-			return await setActiveMessageImpl(data.id);
+			return await setActiveMessageImpl(db, data.id);
 		} catch (err) {
 			rethrowAsHttp(err);
 		}
@@ -106,6 +109,6 @@ export const setActiveMessage = createServerFn({ method: "POST" })
 export const clearActiveMessage = createServerFn({ method: "POST" })
 	.middleware([adminRole("settings")])
 	.handler(async () => {
-		await clearActiveMessageImpl();
+		await clearActiveMessageImpl(db);
 		return null;
 	});

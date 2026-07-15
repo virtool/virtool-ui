@@ -32,7 +32,7 @@ export default function DropdownMenuContent({
 					"rounded-md",
 					"shadow-lg",
 					"text-sm",
-					"z-50",
+					"z-dropdown",
 					"data-[state=closed]:animate-dropdownMenuClose",
 					"data-[state=open]:animate-dropdownMenuOpen",
 					className,

@@ -10,6 +10,7 @@ dist-types
 *.tsbuildinfo
 .output
 .nitro
+.tanstack
 doc
 coverage
 /data

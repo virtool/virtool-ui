@@ -1,11 +1,11 @@
-import type { AdministratorRoleName } from "@administration/types";
-import {
-	AdministratorPermissions,
-	hasSufficientAdminRole,
-} from "@administration/utils";
-import type { Permission } from "@groups/types";
 import { createMiddleware, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
+import {
+	AdministratorPermissions,
+	type AdministratorRoleName,
+	hasSufficientAdminRole,
+	type Permission,
+} from "@virtool/contracts";
 import { eq } from "drizzle-orm";
 
 import { db } from "../db/pg";

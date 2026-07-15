@@ -276,9 +276,9 @@ Prefer a server function over a Python REST call for anything a guard reads.
 
 A module's imports survive tree-shaking if the package does not declare
 `sideEffects: false` — so a grab-bag module leaks its heaviest dependency into
-every bundle that wants *any* of its exports. `cn()` (`@app/cn`) and the numbro
-formatters (`@app/format`) are split out of `@app/utils` for exactly this
-reason. Don't merge them back.
+every bundle that wants *any* of its exports. `cn()` (`@app/cn`) is split out
+of `@app/utils` for exactly this reason — it keeps `tailwind-merge` out of every
+bundle that only wants a plain utility. Don't merge it back.
 
 ### Routing: in-app navigation uses `<Link>`
 
@@ -397,6 +397,15 @@ import of it breaks with `TS2307`. Annotate the export explicitly with a
 type re-exported from the direct dependency — as `src/server/logger.ts`
 does with `Logger` from `@virtool/logger` rather than letting the type be
 inferred as pino's.
+
+The arrow runs one way. `src/server/**` must **not** import from the
+browser feature tree — a Biome `noRestrictedImports` override blocks
+`@administration/*`, `@app/*`, `@banner/*`, and `@users/*` there, because
+a server file reaching into a DOM-typed module breaks the server project
+at a distance. Shapes and helpers both sides need live *down* in
+`@virtool/contracts` (roles, permissions, banner colors, the SSE schema);
+the server imports them from the package, and the client feature module
+re-exports them so its own call sites are undisturbed.
 
 ### Every server function declares an authorization policy
 
@@ -525,6 +534,10 @@ constraints, mappings, or decisions that apply to your work.
 - Place issues in **Todo** by default; use **Backlog** only when explicitly
   asked. If an issue seems like it should be Backlog, say so and ask.
 - Never assign issues to anyone.
+- **Never change an issue's status.** Status is managed automatically from
+  branch and PR activity. Move an issue by hand only when explicitly told to.
+  The Todo-by-default rule above governs issues you create, not ones already
+  in flight.
 - Label bugs as **Bug** in addition to any other labels.
 
 ## Code style
