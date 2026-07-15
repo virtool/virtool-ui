@@ -341,8 +341,11 @@ patterns.
 ### Base component color props
 
 Base components in `src/base/` that expose a `color` prop should accept the
-shared palette: `"blue" | "green" | "gray" | "orange" | "purple" | "red"`. Don't
-add one-off colors or trim the set per component — keep the surface uniform.
+shared `PaletteColor` type from `@base/types`
+(`"blue" | "green" | "gray" | "orange" | "purple" | "red"`). Don't redeclare the
+union locally, add one-off colors, or trim the set per component — keep the
+surface uniform. Icon-based components (`Icon`, `IconButton`, `Circle`) use
+`IconColor`, which is `PaletteColor | "black"`.
 
 If a component has multiple variants (e.g. `solid` / `soft`), `color` should
 work in every variant. A variant that silently ignores `color` is a footgun;

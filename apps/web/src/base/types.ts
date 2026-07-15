@@ -1,8 +1,11 @@
-export type IconColor =
-	| "black"
+/** The shared colour palette every base component's `color` prop accepts. */
+export type PaletteColor =
 	| "blue"
 	| "green"
 	| "gray"
-	| "red"
 	| "orange"
-	| "purple";
+	| "purple"
+	| "red";
+
+/** The palette plus `black`, for icon-based components. */
+export type IconColor = PaletteColor | "black";

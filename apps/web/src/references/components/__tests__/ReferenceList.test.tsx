@@ -16,7 +16,6 @@ import ReferenceList from "../ReferenceList";
 
 type ReferenceListSearch = {
 	archived?: boolean;
-	cloneReferenceId?: string;
 	find?: string;
 	page?: number;
 };
@@ -24,7 +23,6 @@ type ReferenceListSearch = {
 function ReferenceListHarness() {
 	const [search, setSearch] = useState<ReferenceListSearch>({
 		archived: false,
-		cloneReferenceId: undefined,
 		find: "",
 	});
 

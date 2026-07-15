@@ -1,4 +1,4 @@
-import { bool, num, str, strOptional } from "@app/searchParams";
+import { bool, num, str } from "@app/searchParams";
 import ReferenceList from "@references/components/ReferenceList";
 import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
@@ -8,7 +8,6 @@ type RefsSearch = {
 	archived: boolean;
 	find: string;
 	page: number;
-	cloneReferenceId?: string;
 };
 
 function validateRefsSearch(
@@ -18,7 +17,6 @@ function validateRefsSearch(
 		archived: bool(input.archived, false),
 		find: str(input.find, ""),
 		page: num(input.page, 1),
-		cloneReferenceId: strOptional(input.cloneReferenceId),
 	};
 }
 
@@ -34,7 +32,6 @@ function ReferencesRoute() {
 	return (
 		<ReferenceList
 			archived={search.archived}
-			cloneReferenceId={search.cloneReferenceId}
 			find={search.find}
 			page={search.page}
 			setSearch={(next, options) =>

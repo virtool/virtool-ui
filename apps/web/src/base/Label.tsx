@@ -1,10 +1,20 @@
 import { cn } from "@app/cn";
 import type { ReactNode } from "react";
+import type { PaletteColor } from "./types";
+
+const colorToClass: Record<PaletteColor, string> = {
+	blue: "bg-blue-600",
+	green: "bg-green-600",
+	gray: "bg-gray-500",
+	orange: "bg-orange-600",
+	purple: "bg-purple-600",
+	red: "bg-red-600",
+};
 
 type LabelProps = {
 	children?: ReactNode;
 	className?: string;
-	color?: string;
+	color?: PaletteColor;
 };
 
 /**
@@ -29,13 +39,7 @@ export default function Label({
 				"text-sm",
 				"whitespace-nowrap",
 				"last-of-type:m-0",
-				{
-					"bg-blue-600": color === "blue",
-					"bg-green-600": color === "green",
-					"bg-gray-500": color === "gray",
-					"bg-purple-600": color === "purple",
-					"bg-red-600": color === "red",
-				},
+				colorToClass[color],
 				className,
 			)}
 		>

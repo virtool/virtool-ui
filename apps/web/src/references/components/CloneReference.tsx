@@ -9,7 +9,6 @@ import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import { useCloneReference } from "@references/queries";
 import type { ReferenceMinimal } from "@references/types";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type FormValues = {
@@ -31,24 +30,19 @@ export default function CloneReference({
 	references,
 	unsetCloneReferenceId,
 }: CloneReferenceProps) {
-	const {
-		formState: { errors },
-		register,
-		handleSubmit,
-		setValue,
-	} = useForm<FormValues>();
-
-	const mutation = useCloneReference();
-
 	const reference = references.find(
 		(reference) => reference.id === cloneReferenceId,
 	);
 
-	useEffect(() => {
-		if (reference) {
-			setValue("name", `Clone of ${reference.name}`);
-		}
-	}, [reference, setValue]);
+	const {
+		formState: { errors },
+		register,
+		handleSubmit,
+	} = useForm<FormValues>({
+		values: { name: reference ? `Clone of ${reference.name}` : "" },
+	});
+
+	const mutation = useCloneReference();
 
 	function onSubmit({ name }: FormValues) {
 		if (!reference) {

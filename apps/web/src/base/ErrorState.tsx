@@ -2,10 +2,9 @@ import { cn } from "@app/cn";
 import { CircleAlert } from "lucide-react";
 import type { ReactNode } from "react";
 import { Empty, EmptyContent, EmptyMedia, EmptyTitle } from "./Empty";
+import type { PaletteColor } from "./types";
 
-type ErrorStateColor = "blue" | "green" | "gray" | "orange" | "purple" | "red";
-
-const iconColors: Record<ErrorStateColor, string> = {
+const iconColors: Record<PaletteColor, string> = {
 	blue: "text-blue-500",
 	green: "text-green-500",
 	gray: "text-gray-500",
@@ -17,7 +16,7 @@ const iconColors: Record<ErrorStateColor, string> = {
 type ErrorStateProps = {
 	children?: ReactNode;
 	className?: string;
-	color?: ErrorStateColor;
+	color?: PaletteColor;
 	icon?: ReactNode;
 	message?: string;
 };
