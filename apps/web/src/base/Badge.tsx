@@ -1,16 +1,15 @@
 import { cn } from "@app/cn";
 import type { ReactNode } from "react";
-
-type BadgeColor = "blue" | "green" | "gray" | "orange" | "purple" | "red";
+import type { PaletteColor } from "./types";
 
 type BadgeProps = {
 	children: ReactNode;
 	className?: string;
-	color?: BadgeColor;
+	color?: PaletteColor;
 	variant?: "solid" | "soft";
 };
 
-const solidColors: Record<BadgeColor, string> = {
+const solidColors: Record<PaletteColor, string> = {
 	blue: "bg-blue-600",
 	green: "bg-green-600",
 	gray: "bg-gray-500",
@@ -19,7 +18,7 @@ const solidColors: Record<BadgeColor, string> = {
 	red: "bg-red-600",
 };
 
-const softColors: Record<BadgeColor, string> = {
+const softColors: Record<PaletteColor, string> = {
 	blue: "bg-blue-50 text-blue-700 border-blue-200",
 	green: "bg-green-50 text-green-700 border-green-200",
 	gray: "bg-gray-100 text-gray-600 border-gray-200",
