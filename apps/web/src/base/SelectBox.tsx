@@ -62,7 +62,7 @@ export function SelectBoxItem({
 				"p-4",
 				"cursor-pointer",
 				"data-[state=on]:border-blue-600",
-				"data-[state=on]:shadow-[inset_0_1px_1px_rgba(0,0,0,0.075),0_0_8px_rgba(59,130,246,0.6)]",
+				"data-[state=on]:shadow-[inset_0_1px_1px_rgba(0,0,0,0.075),0_0_8px_color-mix(in_srgb,var(--color-blue-500)_60%,transparent)]",
 				"[&>div:first-child]:font-semibold",
 				"[&>div:first-child]:pb-1",
 				"[&>span]:text-gray-700",

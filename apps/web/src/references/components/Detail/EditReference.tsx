@@ -56,7 +56,7 @@ export default function EditReference({ detail }: EditReferenceProps) {
 	return (
 		<>
 			<IconButton
-				color="grayDark"
+				color="gray"
 				IconComponent={Pencil}
 				tip="modify"
 				onClick={() => setOpen(true)}

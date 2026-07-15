@@ -12,7 +12,12 @@ export default defineConfig({
 	test: {
 		globals: true,
 		silent: false,
-		maxWorkers: Math.max(1, Math.floor(os.cpus().length / 2)),
+		// Per-process worker count. Several worktrees testing at once each spawn
+		// this many workers and collectively oversubscribe the machine; set
+		// `VT_TEST_WORKERS` to dial it down when running them in parallel.
+		maxWorkers: process.env.VT_TEST_WORKERS
+			? Number(process.env.VT_TEST_WORKERS)
+			: Math.max(1, Math.floor(os.cpus().length / 2)),
 		projects: [
 			{
 				extends: true,

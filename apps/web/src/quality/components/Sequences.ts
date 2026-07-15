@@ -32,7 +32,7 @@ export function drawSequencesChart(element, data, baseWidth) {
 		.append("path")
 		.attr("d", lineDrawer(data))
 		.attr("class", "graph-line")
-		.attr("stroke", "#718096");
+		.attr("stroke", "var(--color-gray-500)");
 
 	// Append a labelled x-axis to the SVG.
 	svg

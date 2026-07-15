@@ -1,3 +1,4 @@
+import { DEFAULT_LABEL_COLOR } from "@labels/constants";
 import { asc, eq, ilike } from "drizzle-orm";
 import type { PostgresError } from "postgres";
 import type { Db } from "../db/pg";
@@ -38,7 +39,7 @@ function isUniqueViolation(error: unknown): boolean {
 
 function normalizeColor(color: string | null): string {
 	if (!color) {
-		return "#D1D5DB";
+		return DEFAULT_LABEL_COLOR;
 	}
 	return color.startsWith("#") ? color : `#${color}`;
 }

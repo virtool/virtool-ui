@@ -1,3 +1,4 @@
+import { DEFAULT_LABEL_COLOR } from "@labels/constants";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
@@ -45,7 +46,7 @@ describe("<CreateLabel>", () => {
 			expect(onSubmit).toHaveBeenCalledWith({
 				name: "Foo",
 				description: "This is a description",
-				color: "#D1D5DB",
+				color: DEFAULT_LABEL_COLOR,
 			}),
 		);
 	});

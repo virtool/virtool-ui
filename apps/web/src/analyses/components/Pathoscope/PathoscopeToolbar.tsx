@@ -35,6 +35,7 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 	return (
 		<Toolbar>
 			<InputSearch
+				aria-label="Search results"
 				value={find}
 				onChange={(e) => setSearch({ find: e.target.value })}
 			/>

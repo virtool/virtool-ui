@@ -24,7 +24,6 @@ export default function SelectBoxGroupSection({
 
 	return (
 		<BoxGroupSection
-			active={active}
 			aria-selected={active}
 			className={cn(
 				"cursor-pointer",

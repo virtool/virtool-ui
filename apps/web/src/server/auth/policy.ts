@@ -133,6 +133,11 @@ export function adminRole(role: AdministratorRoleName) {
 /**
  * Callable by a user granted `name` through group membership, or by an
  * administrator whose role covers it.
+ *
+ * One of the four canonical authorization policies; kept as public API even
+ * with no current caller so the set stays complete.
+ *
+ * @public
  */
 export function permission(name: Permission) {
 	return createMiddleware({ type: "function" }).server(
