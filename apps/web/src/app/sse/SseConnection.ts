@@ -28,7 +28,9 @@ export function init(queryClient: QueryClient): void {
 		if (parsed.success) {
 			handler(parsed.data);
 		} else {
-			Sentry.captureException(parsed.error);
+			Sentry.captureException(parsed.error, {
+				tags: { sse: "message-validation" },
+			});
 		}
 	};
 }
@@ -112,7 +114,7 @@ export function establishConnection(): void {
 				useServerVersionStore.getState().setVersion(version);
 			}
 		} catch (error) {
-			Sentry.captureException(error);
+			Sentry.captureException(error, { tags: { sse: "version-parse" } });
 		}
 	});
 
@@ -120,7 +122,7 @@ export function establishConnection(): void {
 		try {
 			handleMessage?.(JSON.parse(e.data));
 		} catch (error) {
-			Sentry.captureException(error);
+			Sentry.captureException(error, { tags: { sse: "message-parse" } });
 		}
 	};
 
