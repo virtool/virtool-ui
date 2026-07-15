@@ -1,18 +1,15 @@
 import { cn } from "@app/cn";
 import { DropdownMenu } from "radix-ui";
-import { type ComponentPropsWithoutRef, forwardRef } from "react";
+import type { ComponentPropsWithRef } from "react";
 
-const DropdownMenuSeparator = forwardRef<
-	HTMLDivElement,
-	ComponentPropsWithoutRef<typeof DropdownMenu.Separator>
->(function DropdownMenuSeparator({ className, ...props }, ref) {
+export default function DropdownMenuSeparator({
+	className,
+	...props
+}: ComponentPropsWithRef<typeof DropdownMenu.Separator>) {
 	return (
 		<DropdownMenu.Separator
-			ref={ref}
 			className={cn("-mx-1 bg-gray-200 h-px my-1", className)}
 			{...props}
 		/>
 	);
-});
-
-export default DropdownMenuSeparator;
+}

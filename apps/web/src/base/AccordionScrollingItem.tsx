@@ -1,4 +1,4 @@
-import { getContentScrollElement } from "@app/scroll";
+import { getContentScrollElement, getScrollBehavior } from "@app/scroll";
 import { Accordion as AccordionPrimitive } from "radix-ui";
 import { createRef, type ReactNode, useEffect } from "react";
 
@@ -19,7 +19,7 @@ function ComposedScrollingAccordionItem(props) {
 			const scrollerTop = scroller.getBoundingClientRect().top;
 			scroller.scrollTo({
 				top: itemTop - scrollerTop + scroller.scrollTop - 50,
-				behavior: "smooth",
+				behavior: getScrollBehavior(),
 			});
 		}
 	}, [props["data-state"], ref?.current]);

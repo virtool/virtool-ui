@@ -15,6 +15,9 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
+			"nursery": {
+				"useReactFunctionComponentDefinition": "error"
+			},
 			"style": {
 				"noRestrictedImports": {
 					"level": "error",
@@ -36,6 +39,7 @@
 				"useLiteralEnumMembers": "error"
 			},
 			"suspicious": {
+				"noConsole": "error",
 				"noImplicitAnyLet": "error",
 				"noExplicitAny": "error",
 				"noArrayIndexKey": "error",
@@ -67,17 +71,5 @@
 				"organizeImports": "on"
 			}
 		}
-	},
-	"overrides": [
-		{
-			"includes": ["apps/web/src/server/**"],
-			"linter": {
-				"rules": {
-					"suspicious": {
-						"noConsole": "error"
-					}
-				}
-			}
-		}
-	]
+	}
 }
