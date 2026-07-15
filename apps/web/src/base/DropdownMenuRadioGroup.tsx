@@ -1,11 +1,8 @@
 import { DropdownMenu } from "radix-ui";
-import { type ComponentPropsWithoutRef, forwardRef } from "react";
+import type { ComponentPropsWithRef } from "react";
 
-const DropdownMenuRadioGroup = forwardRef<
-	HTMLDivElement,
-	ComponentPropsWithoutRef<typeof DropdownMenu.RadioGroup>
->(function DropdownMenuRadioGroup(props, ref) {
-	return <DropdownMenu.RadioGroup ref={ref} {...props} />;
-});
-
-export default DropdownMenuRadioGroup;
+export default function DropdownMenuRadioGroup(
+	props: ComponentPropsWithRef<typeof DropdownMenu.RadioGroup>,
+) {
+	return <DropdownMenu.RadioGroup {...props} />;
+}

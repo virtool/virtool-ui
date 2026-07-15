@@ -11,19 +11,21 @@ const apiUrl = process.env.VT_UI_API_URL ?? "http://localhost:9950";
 
 const response = await fetch(apiUrl);
 if (!response.ok) {
-	console.error(`failed to reach api at ${apiUrl}: ${response.status}`);
+	process.stderr.write(
+		`failed to reach api at ${apiUrl}: ${response.status}\n`,
+	);
 	process.exit(1);
 }
 
 const body = await response.json();
 if (!gte(body.version, minApiVersion)) {
-	console.error(
-		`found incompatible API version ${body.version}. Require ${minApiVersion}.`,
+	process.stderr.write(
+		`found incompatible API version ${body.version}. Require ${minApiVersion}.\n`,
 	);
 	process.exit(1);
 }
 
-console.log(`found compatible api version ${body.version}`);
+process.stdout.write(`found compatible api version ${body.version}\n`);
 
 // Minimal semver "greater-than-or-equal" for `major.minor.patch` strings,
 // ignoring prerelease/build suffixes. Inlined to avoid pulling `semver` into

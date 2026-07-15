@@ -1,22 +1,20 @@
 import { cn } from "@app/cn";
 import { DropdownMenu } from "radix-ui";
-import { type ComponentPropsWithoutRef, forwardRef } from "react";
+import type { ComponentPropsWithRef } from "react";
 
 /**
  * The floating panel of a dropdown menu, portalled out of the trigger's
  * stacking context and aligned to the trigger's start edge.
  */
-const DropdownMenuContent = forwardRef<
-	HTMLDivElement,
-	ComponentPropsWithoutRef<typeof DropdownMenu.Content>
->(function DropdownMenuContent(
-	{ align = "start", className, sideOffset = 4, ...props },
-	ref,
-) {
+export default function DropdownMenuContent({
+	align = "start",
+	className,
+	sideOffset = 4,
+	...props
+}: ComponentPropsWithRef<typeof DropdownMenu.Content>) {
 	return (
 		<DropdownMenu.Portal>
 			<DropdownMenu.Content
-				ref={ref}
 				align={align}
 				sideOffset={sideOffset}
 				className={cn(
@@ -43,6 +41,4 @@ const DropdownMenuContent = forwardRef<
 			/>
 		</DropdownMenu.Portal>
 	);
-});
-
-export default DropdownMenuContent;
+}

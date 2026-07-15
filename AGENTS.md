@@ -521,9 +521,16 @@ constraints, mappings, or decisions that apply to your work.
 
 The basics:
 
-- **Functions:** Use function declarations, not arrow functions. This is a
-  convention, not a lint rule — Biome has no `func-style` equivalent, so
-  nothing catches a violation but review.
+- **Functions:** Use function declarations, not arrow functions. For React
+  components this is enforced by Biome's
+  `useReactFunctionComponentDefinition`. Everywhere else it stays a
+  convention — Biome has no general `func-style` equivalent, so nothing
+  catches a violation in a plain function but review.
+- **Refs:** Don't use `forwardRef`. React 19 makes `ref` an ordinary prop:
+  type a wrapper's props with `ComponentPropsWithRef` and let `ref` flow
+  through the `...props` spread. `forwardRef` also trips
+  `useReactFunctionComponentDefinition`, because the component ends up as a
+  function expression rather than a declaration.
 - **Imports:** Biome organises imports automatically.
 - **Conditionals:** Always use curly braces with `if`/`else`.
 - **Prefer `const`** over `let`.
@@ -564,8 +571,10 @@ The only exception is upstream-defined names (e.g. `SENTRY_AUTH_TOKEN`,
 
 ## Logging
 
-Server code logs through `@virtool/logger`, not `console.*` — Biome's
-`noConsole` enforces this under `apps/web/src/server/`.
+Server code logs through `@virtool/logger`, not `console.*`. Biome's
+`noConsole` bans `console.*` across the whole repo; on the client, report
+unexpected conditions to Sentry (`Sentry.captureException`) rather than the
+user's console, which no one can read.
 
 Import the `logger` singleton from `@server/logger` and call it directly:
 
