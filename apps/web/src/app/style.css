@@ -11,6 +11,18 @@
 		"Inter Variable", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 	--color-virtool: #387e7d;
 	--color-virtool-dark: #2a5e5d;
+
+	/* Z-index scale. Portalled and fixed overlays share the root stacking
+	   context, so their order is decided here by named layer rather than
+	   ad-hoc per-component values that relied on DOM insertion order. Page
+	   content sits at the default 0. Dropdowns sit above dialog content so
+	   selects and menus opened inside a dialog stay visible. */
+	--z-overlay: 30; /* dialog backdrop */
+	--z-nav: 40; /* app header/nav — above the backdrop, below dialogs */
+	--z-dialog: 50; /* dialog content */
+	--z-dropdown: 60; /* dropdown menus, selects, comboboxes */
+	--z-popover: 70; /* tooltips and popovers — above dialog content */
+	--z-toast: 80; /* toasts and upload progress — topmost */
 }
 
 html {
@@ -19,6 +31,30 @@ html {
 
 @utility scrollbar-gutter-stable {
 	scrollbar-gutter: stable;
+}
+
+@utility z-overlay {
+	z-index: var(--z-overlay);
+}
+
+@utility z-nav {
+	z-index: var(--z-nav);
+}
+
+@utility z-dialog {
+	z-index: var(--z-dialog);
+}
+
+@utility z-dropdown {
+	z-index: var(--z-dropdown);
+}
+
+@utility z-popover {
+	z-index: var(--z-popover);
+}
+
+@utility z-toast {
+	z-index: var(--z-toast);
 }
 
 /* Shared column tracks for the samples list. Applied to every row and to the

@@ -116,6 +116,36 @@ described above: a unit test fails to *import* because a transitive
 dependency dragged in TanStack Start or env config. If you see it,
 the import direction has been violated.
 
+### The client boundary: shared shapes go in `@virtool/contracts`
+
+`apps/web` type-checks as two projects: `tsconfig.server.json` (Node
+types, no DOM lib) for `src/server`, and `tsconfig.app.json` (DOM lib,
+no Node types) for the browser. Browser code reaches the server through
+the `@server/*` alias, which resolves to the server project's emitted
+declarations — a one-way arrow, client → `@server/*`.
+
+The server must not reach back the other way. A `src/server` file that
+imports a browser feature module (`@administration/*`, `@app/*`,
+`@banner/*`, `@users/*`) pulls a DOM-typed source graph into the Node
+project; the moment anyone adds something DOM-dependent to that module
+the server program breaks, at a distance, for reasons that won't be
+obvious to whoever did it. And an authorization decision living in a
+module the browser owns is exactly the kind of thing that gets
+"simplified" by someone with no idea the server depends on it. A Biome
+`noRestrictedImports` override scoped to `apps/web/src/server/**` blocks
+those four namespaces so the boundary can't be re-crossed.
+
+Anything both sides genuinely share — the administrator-role model and
+`hasSufficientAdminRole`, the legacy `Permission` union, the banner
+color list, the SSE domain/message schemas — lives *down* in the
+framework-agnostic `@virtool/contracts` package, which neither side's
+type project can break. The server imports these from the package
+directly; each client feature module re-exports its piece from the
+package, so browser call sites keep importing from `@administration/*`,
+`@banner/*`, and friends unchanged. `@labels/*` and `@groups/*` are not
+in the block list — `labels/data.ts` still reads `DEFAULT_LABEL_COLOR`
+from `@labels/constants`, the one remaining sanctioned sideways import.
+
 ### The labels shape (minimal)
 
 `labels/` is the smallest valid form:

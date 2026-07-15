@@ -2,6 +2,10 @@
  * Types related to administrative management of Virtool.
  */
 
+import type { AdministratorRoleName } from "@virtool/contracts";
+
+export type { AdministratorRoleName };
+
 /**
  * Full model of an administrator role
  */
@@ -10,16 +14,6 @@ export type AdministratorRole = {
 	id: AdministratorRoleName;
 	name: string;
 };
-
-/**
- * All administrator roles
- */
-export type AdministratorRoleName =
-	| "full"
-	| "settings"
-	| "spaces"
-	| "users"
-	| "base";
 
 /**
  * Instance-wide settings

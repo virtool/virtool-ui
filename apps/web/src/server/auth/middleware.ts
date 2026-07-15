@@ -1,9 +1,11 @@
-import type { AdministratorRoleName } from "@administration/types";
-import { hasSufficientAdminRole } from "@administration/utils";
 import { FORBIDDEN_ERROR_NAME, UNAUTHORIZED_ERROR_NAME } from "@app/authErrors";
 import * as Sentry from "@sentry/tanstackstart-react";
 import { createMiddleware, createServerOnlyFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
+import {
+	type AdministratorRoleName,
+	hasSufficientAdminRole,
+} from "@virtool/contracts";
 import { eq } from "drizzle-orm";
 
 import { db } from "../db/pg";

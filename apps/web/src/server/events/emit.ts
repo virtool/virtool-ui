@@ -1,4 +1,4 @@
-import type { SseDomain } from "@app/sse/schema";
+import type { SseDomain } from "@virtool/contracts";
 import { client } from "../db/pg";
 import { logger } from "../logger";
 import {

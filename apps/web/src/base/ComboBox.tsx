@@ -104,7 +104,7 @@ export default function ComboBox({
 			/>
 			<ul
 				className={cn(
-					"origin-top animate-comboBoxContentOpen top-full p-0 mt-0 absolute bg-white w-full max-h-80 overflow-y-auto overflow-x-hidden outline-0 transition-opacity duration-100 ease-in shadow-md border border-gray-300 rounded-md z-50",
+					"origin-top animate-comboBoxContentOpen top-full p-0 mt-0 absolute bg-white w-full max-h-80 overflow-y-auto overflow-x-hidden outline-0 transition-opacity duration-100 ease-in shadow-md border border-gray-300 rounded-md z-dropdown",
 					isOpen ? "block" : "hidden",
 				)}
 				{...getMenuProps()}
