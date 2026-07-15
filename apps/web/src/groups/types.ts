@@ -1,5 +1,8 @@
 import type { UserNested } from "@users/types";
+import type { Permission } from "@virtool/contracts";
 import type { SearchResult } from "@/types/api";
+
+export type { Permission };
 
 export type GroupMinimal = {
 	id: number;
@@ -22,16 +25,6 @@ export type Permissions = {
 	remove_job: boolean;
 	upload_file: boolean;
 };
-
-export type Permission =
-	| "cancel_job"
-	| "create_ref"
-	| "create_sample"
-	| "modify_hmm"
-	| "modify_subtraction"
-	| "remove_file"
-	| "remove_job"
-	| "upload_file";
 
 export type PermissionsUpdate = {
 	cancel_job?: boolean;

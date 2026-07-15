@@ -1,53 +1,6 @@
-import { z } from "zod/v4";
-
-/** Domains that may appear on the server-push SSE stream. */
-export const SseDomainSchema = z.enum([
-	"account",
-	"groups",
-	"indexes",
-	"jobs",
-	"labels",
-	"messages",
-	"references",
-	"roles",
-	"samples",
-	"tasks",
-	"uploads",
-	"users",
-]);
-
-/** Domain literal as a TypeScript union. */
-export type SseDomain = z.infer<typeof SseDomainSchema>;
-
-const OperationSchema = z.enum(["insert", "update", "delete"]);
-
-function frame<D extends SseDomain, I extends z.ZodTypeAny>(domain: D, id: I) {
-	return z
-		.object({
-			domain: z.literal(domain),
-			operation: OperationSchema,
-			id,
-		})
-		.strip();
-}
-
-const NumberId = z.number();
-const StringId = z.string();
-
-export const SseMessageSchema = z.discriminatedUnion("domain", [
-	frame("account", NumberId),
-	frame("groups", NumberId),
-	frame("indexes", StringId),
-	frame("jobs", NumberId),
-	frame("labels", NumberId),
-	frame("messages", NumberId),
-	frame("references", StringId),
-	frame("roles", StringId),
-	frame("samples", StringId),
-	frame("tasks", NumberId),
-	frame("uploads", NumberId),
-	frame("users", NumberId),
-]);
-
-/** A server-push frame, validated and discriminated by domain. */
-export type SseMessage = z.infer<typeof SseMessageSchema>;
+export {
+	type SseDomain,
+	SseDomainSchema,
+	type SseMessage,
+	SseMessageSchema,
+} from "@virtool/contracts";

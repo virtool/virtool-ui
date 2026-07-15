@@ -1,4 +1,3 @@
-import type { UserNested } from "@users/types";
 import { desc, eq } from "drizzle-orm";
 import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
@@ -6,6 +5,12 @@ import { instanceMessages, type MessageColor } from "../db/schema/messages";
 import { users } from "../db/schema/users";
 import { AppError } from "../errors";
 import { emit } from "../events/emit";
+
+/** The author reference attached to an instance message. */
+type MessageUser = {
+	id: number;
+	handle: string;
+};
 
 /** An administrative instance message displayed to all logged-in users. */
 export type Message = {
@@ -15,7 +20,7 @@ export type Message = {
 	message: string;
 	created_at: string;
 	updated_at: string;
-	user: UserNested;
+	user: MessageUser;
 };
 
 /** Thrown when a requested instance message does not exist. */
@@ -28,7 +33,7 @@ type MessageJoinRow = {
 	message: string | null;
 	createdAt: Date | null;
 	updatedAt: Date | null;
-	user: UserNested;
+	user: MessageUser;
 };
 
 const messageSelect = {

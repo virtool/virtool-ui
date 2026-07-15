@@ -1,4 +1,4 @@
-import type { SseDomain } from "@app/sse/schema";
+import type { SseDomain } from "@virtool/contracts";
 
 /** Postgres channel shared with the upstream Python service for resource-change events. */
 export const CLIENT_EVENTS_CHANNEL = "client_events";

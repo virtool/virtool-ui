@@ -1,6 +1,6 @@
-import { bannerColors } from "@banner/types";
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
+import { bannerColors } from "@virtool/contracts";
 import { z } from "zod";
 import { adminRole, authenticated } from "../auth/policy";
 import { db } from "../db/pg";
