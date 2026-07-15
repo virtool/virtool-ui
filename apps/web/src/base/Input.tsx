@@ -1,97 +1,34 @@
 import { cn } from "@app/cn";
-import { type ElementType, type ReactNode, type Ref, useContext } from "react";
-import type { UseFormRegisterReturn } from "react-hook-form";
-import InputContext from "./InputContext";
+import type { ComponentProps } from "react";
+import { useIsInvalid } from "./InputContext";
 import {
 	inputBaseClasses,
-	inputErrorClasses,
 	inputFocusClasses,
 	inputHeightClass,
+	inputInvalidClasses,
 } from "./styles";
 
-export type InputProps = {
-	"aria-label"?: string;
-	as?: ElementType;
-	autoFocus?: boolean;
-	children?: ReactNode;
-	className?: string;
-	disabled?: boolean;
+/** Props for the shared single-line text input. Accepts any native input attribute. */
+export type InputProps = ComponentProps<"input"> & {
+	/** Marks the input invalid, turning its border and focus ring red. Falls back to the error on a surrounding `InputGroup`. */
 	error?: string;
-	id?: string;
-	max?: number;
-	min?: number;
-	name?: string;
-	placeholder?: string;
-	readOnly?: boolean;
-	ref?: Ref<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>;
-	register?: UseFormRegisterReturn;
-	step?: number;
-	type?: string;
-	value?: string | number;
-	onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
-	onChange?: (event: React.ChangeEvent) => void;
-	onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
-	onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
-export default function Input({
-	"aria-label": ariaLabel,
-	as: Component = "input",
-	autoFocus = false,
-	children,
-	className = "",
-	disabled = false,
-	error: errorProp,
-	id,
-	max,
-	min,
-	name,
-	placeholder,
-	readOnly = false,
-	ref,
-	step,
-	type,
-	value,
-	onBlur,
-	onChange,
-	onFocus,
-	onKeyDown,
-}: InputProps) {
-	const errorContext = useContext(InputContext);
-	const error = errorProp || errorContext;
+export default function Input({ className, error, ...props }: InputProps) {
+	const invalid = useIsInvalid(error);
 
 	return (
-		<Component
-			aria-label={ariaLabel}
-			ref={ref}
-			autoFocus={autoFocus}
+		<input
+			aria-invalid={invalid || undefined}
 			className={cn(
 				inputBaseClasses,
-				Component !== "textarea" && inputHeightClass,
-				error ? inputErrorClasses : inputFocusClasses,
-				{
-					"read-only:bg-gray-100": Component !== "select",
-				},
+				inputHeightClass,
+				inputFocusClasses,
+				inputInvalidClasses,
+				"read-only:bg-gray-100",
 				className,
 			)}
-			disabled={disabled}
-			id={id}
-			max={max}
-			min={min}
-			name={name}
-			placeholder={placeholder}
-			readOnly={readOnly}
-			step={step}
-			type={type}
-			value={value}
-			onBlur={onBlur}
-			onChange={onChange}
-			onFocus={onFocus}
-			onKeyDown={onKeyDown}
-		>
-			{children}
-		</Component>
+			{...props}
+		/>
 	);
 }
-
-Input.displayName = "Input";

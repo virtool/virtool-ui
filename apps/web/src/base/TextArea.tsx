@@ -1,29 +1,37 @@
 import { cn } from "@app/cn";
-import type { ElementType, ReactNode, Ref } from "react";
-import Input from "./Input";
+import type { ComponentProps } from "react";
+import { useIsInvalid } from "./InputContext";
+import {
+	inputBaseClasses,
+	inputFocusClasses,
+	inputInvalidClasses,
+} from "./styles";
 
-type TextAreaProps = {
-	"aria-label"?: string;
-	as?: ElementType;
-	children?: ReactNode;
-	className?: string;
+/** Props for the shared multi-line text input. Accepts any native textarea attribute. */
+export type TextAreaProps = ComponentProps<"textarea"> & {
+	/** Marks the textarea invalid, turning its border and focus ring red. Falls back to the error on a surrounding `InputGroup`. */
 	error?: string;
-	id?: string;
-	name?: string;
-	readOnly?: boolean;
-	ref?: Ref<HTMLInputElement>;
-	value?: string | number;
-	onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
-	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function TextArea({ className, ref, ...props }: TextAreaProps) {
+export default function TextArea({
+	className,
+	error,
+	...props
+}: TextAreaProps) {
+	const invalid = useIsInvalid(error);
+
 	return (
-		<Input
-			as="textarea"
-			className={cn("h-56 resize-y overflow-y-scroll", className)}
+		<textarea
+			aria-invalid={invalid || undefined}
+			className={cn(
+				inputBaseClasses,
+				inputFocusClasses,
+				inputInvalidClasses,
+				"read-only:bg-gray-100",
+				"h-56 resize-y overflow-y-scroll",
+				className,
+			)}
 			{...props}
-			ref={ref}
 		/>
 	);
 }
