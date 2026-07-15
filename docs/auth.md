@@ -433,9 +433,14 @@ can call it:
 - **`app/api.ts`** — a SuperAgent plugin that ends the session on any
   401 from the Python API.
 - **`router.tsx`** — the query and mutation cache `onError`, matching
-  `UnauthorizedError` by name. Server-function errors cross the boundary
-  as plain `Error`s with only the name preserved, so there is no status
-  to match on.
+  `UnauthorizedError` by name. Server-function errors reach the client
+  with no status (`setResponseStatus` is not attached to the thrown
+  error), and TanStack Router's default `ShallowErrorPlugin` would strip
+  the `name` too, flattening every error to its `message`. The name only
+  survives because `authErrorSerializationAdapter` (`app/authErrors.ts`,
+  registered in `start.ts`) re-serializes the auth errors with their
+  `name` intact — without it, matching by name silently never fires and
+  a 401 is retried ~4× before the guard can act.
 - **`app/sse/SseConnection.ts`** — on a 401 from the `/events`
   handshake. The `EventSource` error event carries no status, so it
   confirms with a `HEAD /events` before ending anything.

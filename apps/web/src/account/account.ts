@@ -22,6 +22,12 @@ export function accountQueryOptions() {
 	return queryOptions<Account>({
 		queryKey: accountQueryKeys.all(),
 		queryFn: () => getAccount(),
+		// An anonymous call is expected to 401, and that rejection is the whole
+		// signal the route guards wait on. Retrying it just stalls the login wall
+		// for ~15s of backoff; a real session-ending 401 should also fail fast so
+		// `endSession` fires. Transient failures for a signed-in user still leave
+		// stale account data in place via the secondary-query error policy.
+		retry: false,
 	});
 }
 
