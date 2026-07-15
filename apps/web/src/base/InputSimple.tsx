@@ -1,5 +1,5 @@
 import { cn } from "@app/cn";
-import React from "react";
+import type { ComponentPropsWithRef } from "react";
 import {
 	inputBaseClasses,
 	inputFocusClasses,
@@ -7,30 +7,23 @@ import {
 	inputInvalidClasses,
 } from "./styles";
 
-export type InputSimpleProps = React.InputHTMLAttributes<HTMLInputElement> & {
+export type InputSimpleProps = ComponentPropsWithRef<"input"> & {
 	className?: string;
 	as?: string;
 };
 
-const InputSimple = React.forwardRef<HTMLInputElement, InputSimpleProps>(
-	({ className, ...props }, ref) => {
-		return (
-			<input
-				ref={ref}
-				className={cn(
-					inputBaseClasses,
-					inputHeightClass,
-					inputFocusClasses,
-					inputInvalidClasses,
-					"read-only:bg-gray-100",
-					className,
-				)}
-				{...props}
-			/>
-		);
-	},
-);
-
-InputSimple.displayName = "InputSimple";
-
-export default InputSimple;
+export default function InputSimple({ className, ...props }: InputSimpleProps) {
+	return (
+		<input
+			className={cn(
+				inputBaseClasses,
+				inputHeightClass,
+				inputFocusClasses,
+				inputInvalidClasses,
+				"read-only:bg-gray-100",
+				className,
+			)}
+			{...props}
+		/>
+	);
+}

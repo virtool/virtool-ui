@@ -1,14 +1,13 @@
 import { cn } from "@app/cn";
 import { DropdownMenu } from "radix-ui";
-import { type ComponentPropsWithoutRef, forwardRef } from "react";
+import type { ComponentPropsWithRef } from "react";
 
-const DropdownMenuLabel = forwardRef<
-	HTMLDivElement,
-	ComponentPropsWithoutRef<typeof DropdownMenu.Label>
->(function DropdownMenuLabel({ className, ...props }, ref) {
+export default function DropdownMenuLabel({
+	className,
+	...props
+}: ComponentPropsWithRef<typeof DropdownMenu.Label>) {
 	return (
 		<DropdownMenu.Label
-			ref={ref}
 			className={cn(
 				"font-medium px-2 py-1.5 text-gray-500 text-xs tracking-wide uppercase",
 				className,
@@ -16,6 +15,4 @@ const DropdownMenuLabel = forwardRef<
 			{...props}
 		/>
 	);
-});
-
-export default DropdownMenuLabel;
+}

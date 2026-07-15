@@ -1,27 +1,25 @@
 import { Circle } from "lucide-react";
 import { DropdownMenu } from "radix-ui";
-import { type ComponentPropsWithoutRef, forwardRef } from "react";
+import type { ComponentPropsWithRef } from "react";
 import {
 	type DropdownMenuItemColor,
 	getDropdownMenuItemClassName,
 } from "./dropdownMenuItemStyles";
 
-type DropdownMenuRadioItemProps = ComponentPropsWithoutRef<
+type DropdownMenuRadioItemProps = ComponentPropsWithRef<
 	typeof DropdownMenu.RadioItem
 > & {
 	color?: DropdownMenuItemColor;
 };
 
-const DropdownMenuRadioItem = forwardRef<
-	HTMLDivElement,
-	DropdownMenuRadioItemProps
->(function DropdownMenuRadioItem(
-	{ children, className, color = "gray", ...props },
-	ref,
-) {
+export default function DropdownMenuRadioItem({
+	children,
+	className,
+	color = "gray",
+	...props
+}: DropdownMenuRadioItemProps) {
 	return (
 		<DropdownMenu.RadioItem
-			ref={ref}
 			className={getDropdownMenuItemClassName(color, className)}
 			{...props}
 		>
@@ -33,6 +31,4 @@ const DropdownMenuRadioItem = forwardRef<
 			{children}
 		</DropdownMenu.RadioItem>
 	);
-});
-
-export default DropdownMenuRadioItem;
+}
