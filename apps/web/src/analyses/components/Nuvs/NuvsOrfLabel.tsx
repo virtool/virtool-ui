@@ -1,11 +1,15 @@
-import ExternalLink from "@base/ExternalLink";
+import { Link } from "@tanstack/react-router";
 
 export default function NuvsOrfLabel({ hmm }) {
 	if (hmm) {
 		return (
-			<ExternalLink className="capitalize" href={`/hmms/${hmm.hit}`}>
+			<Link
+				className="capitalize"
+				to="/hmms/$hmmId"
+				params={{ hmmId: hmm.hit }}
+			>
 				{hmm.names[0]}
-			</ExternalLink>
+			</Link>
 		);
 	}
 
