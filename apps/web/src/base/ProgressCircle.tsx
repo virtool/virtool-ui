@@ -4,15 +4,15 @@ import { Progress } from "radix-ui";
 
 export type sizes = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
 
-const colorToHex: Record<string, string> = {
-	blue: "#0B7FE5",
-	blueLightest: "#CDF1FD",
-	green: "#1DAD57",
-	greenLightest: "#D1FAD1",
-	grey: "#A0AEC0",
-	greyLight: "#CBD5E0",
-	red: "#E0282E",
-	redLightest: "#FDE1D3",
+const colorToVar: Record<string, string> = {
+	blue: "var(--color-blue-600)",
+	blueLightest: "var(--color-blue-100)",
+	green: "var(--color-green-600)",
+	greenLightest: "var(--color-green-100)",
+	grey: "var(--color-gray-400)",
+	greyLight: "var(--color-gray-300)",
+	red: "var(--color-red-600)",
+	redLightest: "var(--color-red-100)",
 };
 
 const progressCircleSizes: Record<sizes, number> = {
@@ -54,12 +54,12 @@ function getProgressColor(state: JobState): string {
 }
 
 function getTrackColor(color: string): string {
-	const fallback = colorToHex.greyLight ?? "#CBD5E0";
+	const fallback = colorToVar.greyLight ?? "var(--color-gray-300)";
 
 	if (color === "grey") {
 		return fallback;
 	}
-	return colorToHex[`${color}Lightest`] ?? fallback;
+	return colorToVar[`${color}Lightest`] ?? fallback;
 }
 
 type ProgressCircleProps = {
@@ -119,7 +119,7 @@ export default function ProgressCircle({
 						cx={center}
 						cy={center}
 						r={radius / 2.5}
-						fill={colorToHex.blue}
+						fill={colorToVar.blue}
 						className="animate-fade"
 						style={{
 							vectorEffect: "non-scaling-stroke",
@@ -132,7 +132,7 @@ export default function ProgressCircle({
 					<circle
 						{...baseCircleStyle}
 						className="transition-[stroke-dashoffset,stroke] duration-1000"
-						stroke={colorToHex[color]}
+						stroke={colorToVar[color]}
 						strokeDashoffset={calculateStrokeDashOffset(
 							circleSize,
 							progress / 100,

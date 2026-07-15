@@ -9,7 +9,7 @@ export default function InputIconButton({
 	return (
 		<IconButton
 			className={cn(
-				"absolute mx-[6px] flex items-center justify-center",
+				"absolute mx-1.5 flex items-center justify-center",
 				className,
 			)}
 			size={size}

@@ -20,7 +20,7 @@ export default function ScrollArea({ children, className }: ScrollAreaProps) {
 				"overflow-hidden",
 				"p-0",
 				"flex-none",
-				"mr-[15px]",
+				"mr-4",
 				"border",
 				"border-gray-300",
 				className,

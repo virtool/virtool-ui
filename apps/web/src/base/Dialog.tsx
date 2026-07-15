@@ -85,6 +85,8 @@ export function DialogContent({
 					"w-[600px]",
 					{ "w-[900px]": size === "lg" },
 					"max-w-[90vw]",
+					"max-h-[90vh]",
+					"overflow-y-auto",
 					className,
 				)}
 			>
