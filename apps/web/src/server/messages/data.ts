@@ -1,6 +1,6 @@
 import type { UserNested } from "@users/types";
 import { desc, eq } from "drizzle-orm";
-import { db } from "../db/pg";
+import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import { instanceMessages, type MessageColor } from "../db/schema/messages";
 import { users } from "../db/schema/users";
@@ -56,7 +56,7 @@ function toMessage(row: MessageJoinRow): Message {
 	};
 }
 
-export async function findMessage(): Promise<Message | null> {
+export async function findMessage(db: Db): Promise<Message | null> {
 	const [row] = await db
 		.select(messageSelect)
 		.from(instanceMessages)
@@ -67,7 +67,7 @@ export async function findMessage(): Promise<Message | null> {
 	return row ? toMessage(row) : null;
 }
 
-export async function findMessages(): Promise<Message[]> {
+export async function findMessages(db: Db): Promise<Message[]> {
 	const rows = await db
 		.select(messageSelect)
 		.from(instanceMessages)
@@ -77,7 +77,7 @@ export async function findMessages(): Promise<Message[]> {
 	return rows.map(toMessage);
 }
 
-async function getMessageById(id: number): Promise<Message> {
+async function getMessageById(db: Db, id: number): Promise<Message> {
 	const [row] = await db
 		.select(messageSelect)
 		.from(instanceMessages)
@@ -93,6 +93,7 @@ async function getMessageById(id: number): Promise<Message> {
 }
 
 export async function createMessage(
+	db: Db,
 	message: string,
 	color: MessageColor,
 	userId: number,
@@ -114,10 +115,11 @@ export async function createMessage(
 
 	await emit("messages", row.id, "create");
 
-	return getMessageById(row.id);
+	return getMessageById(db, row.id);
 }
 
 export async function updateMessage(
+	db: Db,
 	id: number,
 	values: { message?: string; color?: MessageColor },
 	userId: number,
@@ -145,10 +147,10 @@ export async function updateMessage(
 
 	await emit("messages", row.id, "update");
 
-	return getMessageById(row.id);
+	return getMessageById(db, row.id);
 }
 
-export async function deleteMessage(id: number): Promise<void> {
+export async function deleteMessage(db: Db, id: number): Promise<void> {
 	const [row] = await db
 		.delete(instanceMessages)
 		.where(eq(instanceMessages.id, id))
@@ -161,7 +163,7 @@ export async function deleteMessage(id: number): Promise<void> {
 	await emit("messages", row.id, "delete");
 }
 
-export async function setActiveMessage(id: number): Promise<Message> {
+export async function setActiveMessage(db: Db, id: number): Promise<Message> {
 	const row = await db.transaction(async (tx) => {
 		await tx
 			.update(instanceMessages)
@@ -183,10 +185,10 @@ export async function setActiveMessage(id: number): Promise<Message> {
 
 	await emit("messages", row.id, "update");
 
-	return getMessageById(row.id);
+	return getMessageById(db, row.id);
 }
 
-export async function clearActiveMessage(): Promise<void> {
+export async function clearActiveMessage(db: Db): Promise<void> {
 	const rows = await db
 		.update(instanceMessages)
 		.set({ active: false })
