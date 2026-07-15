@@ -11,9 +11,11 @@ describe("<IndexItemIcon />", () => {
 	});
 
 	it("hides the status for ready indexes that are not active", () => {
-		renderWithProviders(<IndexItemIcon activeId="foo" id="bar" ready />);
+		const { container } = renderWithProviders(
+			<IndexItemIcon activeId="foo" id="bar" ready />,
+		);
 
-		expect(screen.queryByText("Active")).not.toBeInTheDocument();
+		expect(container).toBeEmptyDOMElement();
 	});
 
 	it("renders the building status for a not-ready index", () => {
