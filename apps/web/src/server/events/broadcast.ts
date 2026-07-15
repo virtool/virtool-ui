@@ -1,4 +1,4 @@
-import type { SseMessage } from "@app/sse/schema";
+import type { SseMessage } from "@virtool/contracts";
 import type { ClientEvent } from "./channel";
 
 /**

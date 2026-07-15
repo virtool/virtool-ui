@@ -1,4 +1,4 @@
-import type { AdministratorRoleName } from "@administration/types";
+import type { AdministratorRoleName } from "@virtool/contracts";
 import {
 	and,
 	asc,

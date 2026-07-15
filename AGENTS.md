@@ -395,6 +395,15 @@ type re-exported from the direct dependency — as `src/server/logger.ts`
 does with `Logger` from `@virtool/logger` rather than letting the type be
 inferred as pino's.
 
+The arrow runs one way. `src/server/**` must **not** import from the
+browser feature tree — a Biome `noRestrictedImports` override blocks
+`@administration/*`, `@app/*`, `@banner/*`, and `@users/*` there, because
+a server file reaching into a DOM-typed module breaks the server project
+at a distance. Shapes and helpers both sides need live *down* in
+`@virtool/contracts` (roles, permissions, banner colors, the SSE schema);
+the server imports them from the package, and the client feature module
+re-exports them so its own call sites are undisturbed.
+
 ### Every server function declares an authorization policy
 
 Every server function names who may call it, as middleware, from
