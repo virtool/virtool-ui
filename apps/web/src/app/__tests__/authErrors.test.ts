@@ -1,8 +1,8 @@
+import { authErrorSerializationAdapter } from "@app/authErrors";
 import {
-	authErrorSerializationAdapter,
 	FORBIDDEN_ERROR_NAME,
 	UNAUTHORIZED_ERROR_NAME,
-} from "@app/authErrors";
+} from "@virtool/contracts";
 import { describe, expect, it } from "vitest";
 
 function namedError(name: string, message: string): Error {

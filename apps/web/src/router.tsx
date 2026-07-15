@@ -1,9 +1,12 @@
-import { FORBIDDEN_ERROR_NAME, UNAUTHORIZED_ERROR_NAME } from "@app/authErrors";
 import { readSentryDsn } from "@app/sentryDsn";
 import RouteError from "@base/RouteError";
 import * as Sentry from "@sentry/tanstackstart-react";
 import { MutationCache, QueryCache, QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
+import {
+	FORBIDDEN_ERROR_NAME,
+	UNAUTHORIZED_ERROR_NAME,
+} from "@virtool/contracts";
 import { getCommonOptions } from "@virtool/sentry/browser";
 import { CONTENT_SCROLL_ID } from "./app/scroll";
 import { scheduleReplay } from "./app/sentryReplay";

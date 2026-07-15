@@ -1,10 +1,11 @@
-import { FORBIDDEN_ERROR_NAME, UNAUTHORIZED_ERROR_NAME } from "@app/authErrors";
 import * as Sentry from "@sentry/tanstackstart-react";
 import { createMiddleware, createServerOnlyFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
 import {
 	type AdministratorRoleName,
+	FORBIDDEN_ERROR_NAME,
 	hasSufficientAdminRole,
+	UNAUTHORIZED_ERROR_NAME,
 } from "@virtool/contracts";
 import { eq } from "drizzle-orm";
 
