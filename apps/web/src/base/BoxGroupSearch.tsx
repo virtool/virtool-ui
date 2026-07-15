@@ -35,7 +35,7 @@ export default function BoxGroupSearch({
 					className="flex justify-center justify-items-center absolute"
 					IconComponent={X}
 					tip="Clear"
-					color="grayDark"
+					color="gray"
 					onClick={() => onChange("")}
 					aria-label="clear"
 				/>

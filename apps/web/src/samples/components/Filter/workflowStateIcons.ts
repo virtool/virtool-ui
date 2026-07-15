@@ -12,7 +12,7 @@ export const workflowStateIcons: Record<
 	WorkflowFilterState,
 	WorkflowStateIcon
 > = {
-	none: { className: "text-gray-400", icon: CircleDashed },
+	none: { className: "text-gray-500", icon: CircleDashed },
 	pending: { className: "text-gray-600", icon: ClockFading },
 	ready: { className: "text-green-600", icon: CircleCheck },
 };

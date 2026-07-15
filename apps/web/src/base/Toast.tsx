@@ -112,7 +112,7 @@ export function ToastClose({ className }: ToastCloseProps) {
 		<ToastPrimitive.Close
 			aria-label="Close"
 			className={cn(
-				"text-gray-400 hover:text-gray-600 cursor-pointer",
+				"text-gray-500 hover:text-gray-600 cursor-pointer",
 				className,
 			)}
 		>

@@ -47,7 +47,7 @@ export default function ArchivedReferenceDetailHeader({
 				</Badge>
 				{showIcons && (
 					<ViewHeaderIcons>
-						{isRemote && <Icon color="grey" icon={Lock} aria-label="lock" />}
+						{isRemote && <Icon color="gray" icon={Lock} aria-label="lock" />}
 						{!isRemote && canModify && <ArchiveReference detail={detail} />}
 					</ViewHeaderIcons>
 				)}
