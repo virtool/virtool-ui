@@ -8,3 +8,19 @@ export function getContentScrollElement(): HTMLElement | null {
 	}
 	return document.getElementById(CONTENT_SCROLL_ID);
 }
+
+/**
+ * The `scrollTo` behavior to use for programmatic scrolling, honoring the
+ * user's `prefers-reduced-motion` setting. CSS media queries cannot flatten
+ * scripted smooth scrolls, so callers must consult this instead of hardcoding
+ * `"smooth"`.
+ */
+export function getScrollBehavior(): ScrollBehavior {
+	if (
+		typeof window !== "undefined" &&
+		window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+	) {
+		return "auto";
+	}
+	return "smooth";
+}

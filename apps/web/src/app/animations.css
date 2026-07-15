@@ -167,3 +167,31 @@
 		transform: translateX(0);
 	}
 }
+
+/* Honor the OS "reduce motion" setting. Flatten every animation and
+   transition so motion-sensitive users aren't subjected to effects like the
+   infinite pulse on a running job's progress circle. Durations are near-zero
+   rather than zero so animationend/transitionend still fire.
+
+   Delays are zeroed too, so a delayed effect doesn't sit idle for its full
+   delay before completing near-instantly.
+
+   !important is required and correct here: this universal selector has zero
+   specificity, so without it the utility classes (animate-*, duration-*) and
+   inline animation styles it must flatten would win the cascade. */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		/* biome-ignore lint/complexity/noImportantStyles: override utility/inline animation styles */
+		animation-duration: 0.01ms !important;
+		/* biome-ignore lint/complexity/noImportantStyles: override utility/inline animation styles */
+		animation-iteration-count: 1 !important;
+		/* biome-ignore lint/complexity/noImportantStyles: override utility/inline animation styles */
+		animation-delay: 0s !important;
+		/* biome-ignore lint/complexity/noImportantStyles: override utility/inline transition styles */
+		transition-duration: 0.01ms !important;
+		/* biome-ignore lint/complexity/noImportantStyles: override utility/inline transition styles */
+		transition-delay: 0s !important;
+	}
+}
