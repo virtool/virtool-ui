@@ -25,7 +25,7 @@ export function DialogOverlay() {
 				"bg-gray-500/60",
 				"fixed",
 				"inset-0",
-				"z-40",
+				"z-overlay",
 			)}
 		/>
 	);
@@ -80,7 +80,7 @@ export function DialogContent({
 					"p-8",
 					"shadow-2xl",
 					"focus:outline-none",
-					"z-50",
+					"z-dialog",
 					"w-[600px]",
 					{ "w-[900px]": size === "lg" },
 					"max-w-[90vw]",

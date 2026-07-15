@@ -29,7 +29,7 @@ export default function Popover({
 						"shadow-lg",
 						"m-1.5",
 						"w-[320px]",
-						"z-10",
+						"z-popover",
 					)}
 					sideOffset={15}
 					align={align}

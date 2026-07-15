@@ -11,7 +11,7 @@ export default function SelectContent({ children }: SelectContentProps) {
 	return (
 		<SelectPrimitive.Portal>
 			<SelectPrimitive.Content
-				className="origin-top bg-white rounded-md border border-gray-300 shadow-md overflow-hidden z-50 max-h-96 min-w-32 data-[state=open]:animate-contentShow"
+				className="origin-top bg-white rounded-md border border-gray-300 shadow-md overflow-hidden z-dropdown max-h-96 min-w-32 data-[state=open]:animate-contentShow"
 				data-slot="select-content"
 			>
 				<SelectPrimitive.ScrollUpButton className="my-1 flex justify-center hover:bg-gray-50">

@@ -99,7 +99,7 @@ function AuthenticatedLayout() {
 			<UpdateToast />
 
 			<div className="flex flex-col h-screen">
-				<div className="shrink-0 z-50">
+				<div className="shrink-0 z-nav">
 					<Banner />
 					<Nav
 						administrator_role={data.administrator_role}
