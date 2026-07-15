@@ -29,18 +29,3 @@ export const inputInvalidClasses =
  */
 export const selectItemStateClasses =
 	"relative select-none outline-none cursor-default hover:bg-gray-100 data-[highlighted]:bg-gray-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50";
-
-import type { IconColor } from "./types";
-
-/** Icon text color mapping shared by Icon and IconButton */
-export const iconTextColor: Record<IconColor, string> = {
-	black: "text-black",
-	blue: "text-blue-500",
-	gray: "text-gray-400",
-	grayDark: "text-gray-500",
-	green: "text-green-500",
-	grey: "text-gray-400",
-	orange: "text-orange-500",
-	purple: "text-purple-500",
-	red: "text-red-500",
-};

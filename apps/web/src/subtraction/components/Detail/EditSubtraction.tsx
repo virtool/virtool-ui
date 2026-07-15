@@ -47,7 +47,7 @@ export default function EditSubtraction({ subtraction }: EditSubtractionProps) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<IconButton IconComponent={Pencil} color="grayDark" tip="modify" />
+				<IconButton IconComponent={Pencil} color="gray" tip="modify" />
 			</DialogTrigger>
 			<DialogContent>
 				<DialogTitle>Edit Subtraction</DialogTitle>
