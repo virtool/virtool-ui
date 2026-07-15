@@ -82,6 +82,7 @@ export default function AddReferenceUser({
 					<div className="flex-grow">
 						<InputSearch
 							name="search"
+							aria-label="Search users"
 							value={term}
 							onChange={(e) => setTerm(e.target.value)}
 						/>

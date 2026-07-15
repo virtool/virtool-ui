@@ -8,6 +8,7 @@
 		"check": "biome check --error-on-warnings apps/web/src packages",
 		"develop": "pnpm --filter @virtool/web develop",
 		"format": "biome check --write apps/web/src packages",
+		"knip": "knip",
 		"test": "pnpm -r test",
 		"typecheck": "pnpm -r typecheck"
 	},
@@ -16,6 +17,7 @@
 		"@semantic-release/exec": "6.0.3",
 		"@types/node": "^26.1.1",
 		"conventional-changelog-conventionalcommits": "7.0.2",
+		"knip": "^6.26.0",
 		"semantic-release": "23.0.7",
 		"typescript": "^7.0.2"
 	}

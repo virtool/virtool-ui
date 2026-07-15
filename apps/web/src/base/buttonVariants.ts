@@ -8,6 +8,7 @@ export const buttonVariants = cva(
 				gray: "bg-gray-200 text-black hover:text-black",
 				blue: "bg-blue-600 text-white hover:text-white",
 				green: "bg-green-600 text-white hover:text-white",
+				orange: "bg-orange-600 text-white hover:text-white",
 				red: "bg-red-600 text-white hover:text-white",
 				purple: "bg-purple-600 text-white hover:text-white",
 			},

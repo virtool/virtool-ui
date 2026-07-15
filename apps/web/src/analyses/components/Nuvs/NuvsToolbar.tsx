@@ -24,6 +24,7 @@ export default function NuvsToolbar({
 		<Toolbar>
 			<div className="flex-grow">
 				<InputSearch
+					aria-label="Search results"
 					value={find}
 					onChange={(e) => setSearch({ find: e.target.value })}
 					placeholder="Name or family"

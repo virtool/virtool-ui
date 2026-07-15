@@ -60,7 +60,7 @@ export default function ArchiveReference({ detail }: ArchiveReferenceProps) {
 	return (
 		<>
 			<IconButton
-				color="grayDark"
+				color="gray"
 				IconComponent={Icon}
 				tip={detail.archived ? "unarchive" : "archive"}
 				onClick={() => setOpen(true)}

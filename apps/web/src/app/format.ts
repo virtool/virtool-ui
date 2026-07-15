@@ -1,13 +1,40 @@
 /**
- * Number formatting.
+ * Number formatting built on the native `Intl.NumberFormat` API.
  *
- * Kept apart from `@app/utils` because numbro is ~38 KB and does not declare
- * `sideEffects: false`, so its import survives tree-shaking even when only
- * unrelated exports of the importing module are used. Co-locating these with
- * the general utilities put numbro into every bundle that wanted, say,
- * `resetClient`.
+ * Kept apart from `@app/utils` so these formatters — and the `Intl` formatter
+ * instances they cache at module scope — stay out of bundles that only want an
+ * unrelated general utility.
  */
-import numbro from "numbro";
+
+const BYTE_UNITS = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+const byteFormatter = new Intl.NumberFormat("en-US", {
+	minimumFractionDigits: 1,
+	maximumFractionDigits: 1,
+	useGrouping: false,
+});
+
+const thousandFormatter = new Intl.NumberFormat("en-US", {
+	maximumFractionDigits: 0,
+});
+
+const coefficientFormatter = new Intl.NumberFormat("en-US", {
+	minimumFractionDigits: 2,
+	maximumFractionDigits: 2,
+	useGrouping: false,
+});
+
+const decimalFormatter = new Intl.NumberFormat("en-US", {
+	minimumFractionDigits: 3,
+	maximumFractionDigits: 3,
+	useGrouping: false,
+});
+
+const gcContentFormatter = new Intl.NumberFormat("en-US", {
+	style: "percent",
+	minimumFractionDigits: 1,
+	maximumFractionDigits: 1,
+});
 
 /**
  * Convert an integer in bytes to a nicely formatted string (eg. 10.2 GB).
@@ -16,20 +43,29 @@ export function byteSize(
 	bytes: number | null,
 	spaceSeparated: boolean = false,
 ): string {
-	if (bytes) {
-		return numbro(bytes).format({
-			output: "byte",
-			base: "decimal",
-			mantissa: 1,
-			spaceSeparated: spaceSeparated ? spaceSeparated : false,
-		});
+	if (!bytes) {
+		return "0.0B";
 	}
 
-	return "0.0B";
+	const exponent = Math.min(
+		Math.floor(Math.log10(Math.abs(bytes)) / 3),
+		BYTE_UNITS.length - 1,
+	);
+	const value = bytes / 1000 ** exponent;
+	const separator = spaceSeparated ? " " : "";
+
+	return `${byteFormatter.format(value)}${separator}${BYTE_UNITS[exponent]}`;
 }
 
 export function toThousand(num: number): string {
-	return numbro(num).format({ thousandSeparated: true });
+	return thousandFormatter.format(num);
+}
+
+/**
+ * Format a GC content fraction (0–1) as a percentage (eg. 45.2%).
+ */
+export function toGcContent(fraction: number): string {
+	return gcContentFormatter.format(fraction);
 }
 
 /**
@@ -38,8 +74,8 @@ export function toThousand(num: number): string {
 export function toScientificNotation(num: number): string {
 	if (num < 0.01 || num > 1000) {
 		const [coefficient, exponent] = num.toExponential().split("e");
-		return `${numbro(coefficient).format("0.00")}E${(exponent ?? "").replace("+", "")}`;
+		return `${coefficientFormatter.format(Number(coefficient))}E${(exponent ?? "").replace("+", "")}`;
 	}
 
-	return numbro(num).format("0.000");
+	return decimalFormatter.format(num);
 }

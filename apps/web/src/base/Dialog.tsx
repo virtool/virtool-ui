@@ -10,7 +10,6 @@ function isPointWithinRect(x: number, y: number, rect: DOMRect): boolean {
 }
 
 export const Dialog = DialogPrimitive.Root;
-export const DialogClose = DialogPrimitive.Close;
 export const DialogPortal = DialogPrimitive.Portal;
 export const DialogTrigger = DialogPrimitive.Trigger;
 
@@ -85,6 +84,8 @@ export function DialogContent({
 					"w-[600px]",
 					{ "w-[900px]": size === "lg" },
 					"max-w-[90vw]",
+					"max-h-[90vh]",
+					"overflow-y-auto",
 					className,
 				)}
 			>
@@ -137,5 +138,3 @@ export function DialogFooter({ children, className }: DialogFooterProps) {
 		</div>
 	);
 }
-
-export default Dialog;

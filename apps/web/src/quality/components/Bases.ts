@@ -8,10 +8,10 @@ import { area, axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { min } from "es-toolkit/compat";
 
 const series = [
-	{ label: "Mean", color: "#E0282E" },
-	{ label: "Median", color: "#0B7FE5" },
-	{ label: "Quartile", color: "#1DAD57" },
-	{ label: "Decile", color: "#FFE030" },
+	{ label: "Mean", color: "var(--color-red-600)" },
+	{ label: "Median", color: "var(--color-blue-600)" },
+	{ label: "Quartile", color: "var(--color-green-600)" },
+	{ label: "Decile", color: "var(--color-yellow-400)" },
 ];
 
 function getArea(name: string, areaX, y, a, b) {

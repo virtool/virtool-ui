@@ -47,6 +47,7 @@ export default function OtuToolbar({
 		<Toolbar>
 			<div className="flex-grow">
 				<InputSearch
+					aria-label="Search OTUs"
 					placeholder="Name or abbreviation"
 					value={draft}
 					onChange={(e) => setDraft(e.target.value)}

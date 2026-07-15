@@ -261,7 +261,7 @@ export default function CreateSampleFromFile({
 				IconComponent={CirclePlus}
 				tip="create sample"
 			/>
-			<DialogContent size="lg" className="max-h-[90vh] overflow-y-auto">
+			<DialogContent size="lg">
 				<CreateSampleFromFileForm
 					labels={labels}
 					onClose={() => setOpen(false)}

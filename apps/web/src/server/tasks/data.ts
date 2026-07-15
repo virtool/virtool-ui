@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { db } from "../db/pg";
+import type { Db } from "../db/pg";
 import { tasks as tasksTable } from "../db/schema/tasks";
 import { AppError } from "../errors";
 
@@ -17,7 +17,7 @@ export type Task = {
 /** Thrown when a requested task does not exist. */
 export class TaskNotFoundError extends AppError {}
 
-export async function getTask(taskId: number): Promise<Task> {
+export async function getTask(db: Db, taskId: number): Promise<Task> {
 	const [row] = await db
 		.select({
 			complete: tasksTable.complete,

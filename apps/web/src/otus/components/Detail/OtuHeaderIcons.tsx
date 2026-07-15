@@ -38,7 +38,7 @@ export function OtuHeaderIcons({
 		<>
 			<IconButton
 				key="edit-icon"
-				color="grayDark"
+				color="gray"
 				IconComponent={Pencil}
 				tip="edit OTU"
 				onClick={() => setOpenEdit(true)}

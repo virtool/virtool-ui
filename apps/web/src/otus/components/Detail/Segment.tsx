@@ -48,7 +48,7 @@ export function SegmentItem({
 					<button
 						type="button"
 						aria-label="drag to reorder"
-						className="flex items-center justify-center p-2.5 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing outline-none"
+						className="flex items-center justify-center p-2.5 text-gray-500 hover:text-gray-600 cursor-grab active:cursor-grabbing outline-none"
 						{...dragHandleProps}
 					>
 						<GripVertical size="1.2em" />
@@ -70,7 +70,7 @@ export function SegmentItem({
 				<div className="flex">
 					<IconButton
 						IconComponent={Pencil}
-						color="grayDark"
+						color="gray"
 						tip="edit segment"
 						onClick={() => setEditSegmentName(segment.name)}
 					/>

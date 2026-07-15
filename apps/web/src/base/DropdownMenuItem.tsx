@@ -1,12 +1,10 @@
 import { DropdownMenu } from "radix-ui";
 import type { ComponentPropsWithRef } from "react";
-import {
-	type DropdownMenuItemColor,
-	getDropdownMenuItemClassName,
-} from "./dropdownMenuItemStyles";
+import { getDropdownMenuItemClassName } from "./dropdownMenuItemStyles";
+import type { PaletteColor } from "./types";
 
 type DropdownMenuItemProps = ComponentPropsWithRef<typeof DropdownMenu.Item> & {
-	color?: DropdownMenuItemColor;
+	color?: PaletteColor;
 };
 
 export default function DropdownMenuItem({

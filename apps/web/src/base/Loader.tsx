@@ -1,14 +1,7 @@
 import { cn } from "@app/cn";
+import type { PaletteColor } from "./types";
 
-export type LoaderColor =
-	| "blue"
-	| "green"
-	| "gray"
-	| "orange"
-	| "purple"
-	| "red";
-
-export const colorToClass: Record<LoaderColor, string> = {
+export const colorToClass: Record<PaletteColor, string> = {
 	blue: "border-t-blue-600 border-x-blue-600",
 	green: "border-t-green-600 border-x-green-600",
 	gray: "border-t-gray-500 border-x-gray-500",
@@ -19,7 +12,7 @@ export const colorToClass: Record<LoaderColor, string> = {
 
 type LoaderProps = {
 	className?: string;
-	color?: LoaderColor;
+	color?: PaletteColor;
 	size?: string;
 };
 

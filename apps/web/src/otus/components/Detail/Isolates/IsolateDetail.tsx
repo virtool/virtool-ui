@@ -81,7 +81,7 @@ export default function IsolateDetail() {
 						<>
 							<IconButton
 								IconComponent={Pencil}
-								color="grayDark"
+								color="gray"
 								tip="edit name"
 								onClick={() => setOpenEdit(true)}
 							/>

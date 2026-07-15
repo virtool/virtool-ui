@@ -1,4 +1,5 @@
 import { FORBIDDEN_ERROR_NAME, UNAUTHORIZED_ERROR_NAME } from "@app/authErrors";
+import { readSentryDsn } from "@app/sentryDsn";
 import RouteError from "@base/RouteError";
 import * as Sentry from "@sentry/tanstackstart-react";
 import { MutationCache, QueryCache, QueryClient } from "@tanstack/react-query";
@@ -93,14 +94,15 @@ export function getRouter() {
 	// has no server stub (unlike the replay/tracing integrations), so leaving the
 	// reference in the SSR build would warn about an undefined import.
 	if (!import.meta.env.SSR) {
-		// Name the keys rather than passing the env object whole. Vite serializes
-		// every `VT_`-prefixed variable present at build time into the bundle for
-		// a whole-object reference, which would ship server-only secrets like
-		// VT_STORAGE_S3_SECRET_ACCESS_KEY to the browser. A member access inlines
-		// only the key it names. Guarded by src/app/__tests__/clientEnv.test.ts.
+		// The DSN comes from a `<meta>` tag the server renders from its runtime
+		// env (see `@app/sentryDsn` and the root route's `head`), not from a
+		// build-time `import.meta.env.VT_SENTRY_DSN` inline that would freeze in
+		// whatever DSN (usually none) was present when the image was built.
+		// `MODE` is read from `import.meta.env.MODE`: it is the build mode and
+		// only drives sample rates.
 		const options = getCommonOptions({
 			MODE: import.meta.env.MODE,
-			VT_SENTRY_DSN: import.meta.env.VT_SENTRY_DSN,
+			VT_SENTRY_DSN: readSentryDsn(),
 		});
 		if (options.dsn) {
 			Sentry.init({

@@ -42,7 +42,7 @@ export default function SequenceButtons({
 				<>
 					<IconButton
 						IconComponent={Pencil}
-						color="grayDark"
+						color="gray"
 						tip="Edit"
 						onClick={onEdit}
 					/>

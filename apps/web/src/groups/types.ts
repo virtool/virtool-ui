@@ -44,12 +44,6 @@ export type PermissionsUpdate = {
 	upload_file?: boolean;
 };
 
-export type GroupUpdate = {
-	id: string | number;
-	name?: string;
-	permissions?: PermissionsUpdate;
-};
-
 /** Group search results from the API */
 export type GroupSearchResults = SearchResult & {
 	/** Gives information about each group */

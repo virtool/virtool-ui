@@ -259,6 +259,7 @@ export default function ReadSelector({
 					<div className="flex-grow">
 						<InputSearch
 							id="read-files-search"
+							aria-label="Search read files"
 							placeholder="Filename"
 							value={term}
 							onChange={(e) => setTerm(e.target.value)}

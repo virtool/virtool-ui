@@ -6,7 +6,7 @@ import userEvent from "@testing-library/user-event";
 import { mockApiBlastNuVs } from "@tests/api/analyses";
 import { createFakeFormattedNuVsAnalysis } from "@tests/fake/analyses";
 import { createFakeSample } from "@tests/fake/samples";
-import { at } from "@tests/setup";
+import { at, MemoryRouter } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -19,7 +19,7 @@ function renderWithAnalysisSearch(
 	return render(
 		<QueryClientProvider client={queryClient}>
 			<AnalysisSearchProvider search={search} setSearch={vi.fn()}>
-				{ui}
+				<MemoryRouter>{ui}</MemoryRouter>
 			</AnalysisSearchProvider>
 		</QueryClientProvider>,
 	);
@@ -81,7 +81,9 @@ describe("<NuvsViewer />", () => {
 				activeHit: String(firstHit.id),
 			});
 
-			await userEvent.click(screen.getByRole("button", { name: "Export" }));
+			await userEvent.click(
+				await screen.findByRole("button", { name: "Export" }),
+			);
 			expect(screen.getByText("Export Analysis")).toBeInTheDocument();
 			expect(
 				screen.getByRole("button", { name: "Download" }),

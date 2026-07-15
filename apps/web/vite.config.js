@@ -100,9 +100,16 @@ export default defineConfig(({ command, mode }) => ({
 		// `reactCompilerPreset` confines Babel to the client environment and to
 		// files whose source looks like a component or hook, so the server graph
 		// never reaches it.
-		babel({
-			presets: [reactCompilerPreset()],
-		}),
+		//
+		// The compiler is a production render optimization, so tests skip it by
+		// default — the Babel pass is pure per-transform overhead there, and it
+		// thrashes CPU when several worktrees test in parallel. CI opts back in
+		// with `VT_TEST_REACT_COMPILER=1` so the suite still catches the
+		// compiler-introduced footguns (spread form methods, clock-in-render).
+		(mode !== "test" || process.env.VT_TEST_REACT_COMPILER === "1") &&
+			babel({
+				presets: [reactCompilerPreset()],
+			}),
 		tailwindcss(),
 		// Build only: uploads source maps and adds route/middleware
 		// instrumentation. Kept out of dev/test so Sentry never loads there. Must

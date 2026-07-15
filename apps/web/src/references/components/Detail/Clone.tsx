@@ -1,6 +1,7 @@
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
+import { Link } from "@tanstack/react-router";
 
 type CloneProps = {
 	source: { id: string; name: string };
@@ -17,7 +18,9 @@ export function Clone({ source }: CloneProps) {
 				<strong>Source Reference</strong>
 				<span>
 					{" / "}
-					<a href={`/refs/${source.id}`}>{source.name}</a>
+					<Link to="/refs/$refId" params={{ refId: source.id }}>
+						{source.name}
+					</Link>
 				</span>
 			</BoxGroupSection>
 		</BoxGroup>
