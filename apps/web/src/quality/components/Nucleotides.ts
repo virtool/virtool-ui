@@ -8,10 +8,10 @@ import { axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { unzip } from "es-toolkit";
 
 const series = [
-	{ label: "Guanine", color: "#0B7FE5" },
-	{ label: "Adenine", color: "#E0282E" },
-	{ label: "Thymine", color: "#1DAD57" },
-	{ label: "Cytosine", color: "#718096" },
+	{ label: "Guanine", color: "var(--color-blue-600)" },
+	{ label: "Adenine", color: "var(--color-red-600)" },
+	{ label: "Thymine", color: "var(--color-green-600)" },
+	{ label: "Cytosine", color: "var(--color-gray-500)" },
 ];
 
 export function drawNucleotidesChart(
