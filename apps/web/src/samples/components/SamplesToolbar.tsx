@@ -1,6 +1,7 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
+import { buttonVariants } from "@base/buttonVariants";
 import InputSearch from "@base/InputSearch";
-import LinkButton from "@base/LinkButton";
+import Link from "@base/Link";
 import Toolbar from "@base/Toolbar";
 import type { ChangeEvent } from "react";
 
@@ -21,15 +22,19 @@ export default function SampleToolbar({ onChange, term }: SampleToolbarProps) {
 		<Toolbar>
 			<div className="flex-grow">
 				<InputSearch
+					aria-label="Search samples"
 					value={term || ""}
 					onChange={onChange}
 					placeholder="Sample name"
 				/>
 			</div>
 			{canCreate && (
-				<LinkButton color="blue" to="/samples/create">
+				<Link
+					className={buttonVariants({ color: "blue" })}
+					to="/samples/create"
+				>
 					Create
-				</LinkButton>
+				</Link>
 			)}
 		</Toolbar>
 	);

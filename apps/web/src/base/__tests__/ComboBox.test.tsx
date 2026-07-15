@@ -32,4 +32,10 @@ describe("<ComboBox />", () => {
 		expect(input).toHaveAttribute("aria-controls");
 		expect(input).toHaveAttribute("aria-expanded", "false");
 	});
+
+	it("gives the search input an accessible name", () => {
+		const { getByRole } = renderComboBox();
+
+		expect(getByRole("combobox", { name: "Search" })).toBeInTheDocument();
+	});
 });

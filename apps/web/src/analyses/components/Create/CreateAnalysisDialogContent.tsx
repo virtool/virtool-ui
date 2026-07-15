@@ -8,7 +8,7 @@ export default function CreateAnalysisDialogContent({
 	children: ReactNode;
 }) {
 	return (
-		<DialogContent className={cn("max-h-[90vh]", "overflow-auto", "w-[700px]")}>
+		<DialogContent className="w-[700px]">
 			<div className={cn("flex", "flex-col")}>{children}</div>
 		</DialogContent>
 	);

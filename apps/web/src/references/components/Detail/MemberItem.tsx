@@ -46,7 +46,7 @@ export default function MemberItem({
 				<span className="flex items-center gap-1 ml-auto">
 					<IconButton
 						IconComponent={Pencil}
-						color="grayDark"
+						color="gray"
 						tip="edit member"
 						onClick={() => onEdit(id)}
 					/>

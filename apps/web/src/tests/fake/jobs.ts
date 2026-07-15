@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
 import type {
-	JobMinimal,
 	JobNested,
 	JobState,
 	ServerJobMinimal,
@@ -29,39 +28,6 @@ export function createFakeServerJobMinimal(
 		]),
 		user: createFakeUserNested(),
 		workflow: "pathoscope",
-		...overrides,
-	};
-}
-
-/**
- * Creates a fake job minimal object in client shape (transformed).
- * Use this for components that expect the transformed JobMinimal type.
- */
-export function createFakeJobMinimal(
-	overrides?: Partial<JobMinimal>,
-): JobMinimal {
-	return {
-		createdAt: faker.date.past(),
-		id: faker.number.int(),
-		progress: faker.number.int({ min: 0, max: 100 }),
-		state: faker.helpers.arrayElement<JobState>([
-			"cancelled",
-			"failed",
-			"pending",
-			"running",
-			"succeeded",
-		]),
-		user: {
-			handle: faker.internet.username(),
-			id: faker.number.int(),
-		},
-		workflow: faker.helpers.arrayElement<Workflow>([
-			"build_index",
-			"create_sample",
-			"create_subtraction",
-			"nuvs",
-			"pathoscope",
-		]),
 		...overrides,
 	};
 }

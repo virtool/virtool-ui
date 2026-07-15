@@ -23,22 +23,6 @@ export function mockApiListFiles(files: Upload[], query?: boolean) {
 }
 
 /**
- * Creates a mocked API call for getting an unpaginated list of uploads.
- *
- * @param files - The uploads to be returned from the mocked API call
- * @param query - Whether to include query parameters in the request
- * @returns The nock scope for the mocked API call
- */
-export function mockApiUnpaginatedListFiles(files: Upload[], query?: boolean) {
-	return nock("http://localhost")
-		.get("/api/uploads")
-		.query(query || true)
-		.reply(200, {
-			documents: files,
-		});
-}
-
-/**
  * Creates a mocked API call for deleting a file.
  *
  * @param fileId - The id of the file that is expected to be deleted

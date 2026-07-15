@@ -18,6 +18,7 @@ import {
 	render as rtlRender,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import nock from "nock";
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { beforeEach, vi } from "vitest";
 import { routeTree } from "@/routeTree.gen";
@@ -83,7 +84,23 @@ beforeEach(() => {
 
 process.env.TZ = "UTC";
 
+// Fail loudly when a request escapes its nock mock instead of falling through to
+// the real network, where it would pass or hang silently. Every superagent call
+// in a component test must have a matching interceptor.
+nock.disableNetConnect();
+
 faker.seed(1);
+
+/**
+ * A `QueryClient` configured for tests: retries are off so an error-state test
+ * asserts the failure immediately instead of waiting through three retries with
+ * backoff.
+ */
+export function createTestQueryClient() {
+	return new QueryClient({
+		defaultOptions: { queries: { retry: false } },
+	});
+}
 
 /**
  * Return the element at `index`, throwing if the array has no such element.
@@ -100,7 +117,7 @@ export function at<T>(items: readonly T[], index: number): T {
 }
 
 export function wrapWithProviders(ui: ReactNode) {
-	const queryClient = new QueryClient();
+	const queryClient = createTestQueryClient();
 
 	return <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>;
 }
@@ -108,7 +125,7 @@ export function wrapWithProviders(ui: ReactNode) {
 export function renderWithProviders(ui: ReactNode) {
 	// The client is built once and reused, so `rerender` re-renders the same tree
 	// instead of handing React a new provider on every call.
-	const queryClient = new QueryClient();
+	const queryClient = createTestQueryClient();
 
 	function wrap(node: ReactNode) {
 		return (
@@ -228,9 +245,7 @@ type RenderRouteOptions = {
 
 export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 	const history: string[] = [];
-	const queryClient = new QueryClient({
-		defaultOptions: { queries: { retry: false } },
-	});
+	const queryClient = createTestQueryClient();
 
 	queryClient.setQueryData(rootQueryKeys.all(), { first_user: false });
 	queryClient.setQueryData(

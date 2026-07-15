@@ -207,7 +207,7 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 							onOpenChange={setShowMetadata}
 						>
 							<CollapsibleTrigger>Show Metadata Fields</CollapsibleTrigger>
-							<CollapsibleContent className="grid grid-cols-2 gap-x-[15px] pt-4">
+							<CollapsibleContent className="grid grid-cols-2 gap-x-4 pt-4">
 								<InputGroup>
 									<InputLabel htmlFor="locale">Locale</InputLabel>
 									<InputSimple id="locale" {...register("locale")} />

@@ -41,9 +41,7 @@ export function SelectedSamples({
 				})}
 			>
 				{samples.map(({ id, name }) => (
-					<BoxGroupSection key={id} disabled>
-						{name}
-					</BoxGroupSection>
+					<BoxGroupSection key={id}>{name}</BoxGroupSection>
 				))}
 			</div>
 		</div>

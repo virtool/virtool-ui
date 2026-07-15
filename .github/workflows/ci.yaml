@@ -48,6 +48,20 @@ jobs:
                   pnpm-version: ${{ env.PNPM_VERSION }}
             - name: Run Biome
               run: pnpm check
+    check-knip:
+        name: Knip
+        runs-on: ubuntu-24.04
+        timeout-minutes: 10
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+            - name: Setup
+              uses: ./.github/actions/setup
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  pnpm-version: ${{ env.PNPM_VERSION }}
+            - name: Run Knip
+              run: pnpm knip
     check-typescript:
         name: Typescript
         runs-on: ubuntu-24.04
@@ -76,11 +90,13 @@ jobs:
                   pnpm-version: ${{ env.PNPM_VERSION }}
             - name: Test
               run: pnpm test
+              env:
+                  VT_TEST_REACT_COMPILER: "1"
     release:
         name: Publish / Release
         runs-on: ubuntu-24.04
         timeout-minutes: 15
-        needs: [build, check-biome, check-typescript, test]
+        needs: [build, check-biome, check-knip, check-typescript, test]
         if: github.event_name == 'push'
         outputs:
             git-tag: ${{ steps.semantic.outputs.git-tag }}

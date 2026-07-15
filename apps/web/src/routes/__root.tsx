@@ -1,4 +1,5 @@
 import "@app/style.css";
+import { readSentryDsn, SENTRY_DSN_META_NAME } from "@app/sentryDsn";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
 import RouteError from "@base/RouteError";
@@ -18,32 +19,43 @@ type RouterContext = {
 };
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-	head: () => ({
-		meta: [
-			{ charSet: "utf-8" },
-			{ name: "viewport", content: "width=device-width, initial-scale=1" },
-			{ httpEquiv: "X-UA-Compatible", content: "IE=edge" },
-			{ title: "Virtool" },
-		],
-		links: [
-			{
-				rel: "shortcut icon",
-				href: "/images/favicon.ico",
-				type: "image/x-icon",
-			},
-			// Only the roman latin face is on the first-paint path. The italic and
-			// the other unicode-range slices load on demand. `crossOrigin` is
-			// required even same-origin: fonts fetch in CORS mode, and a preload
-			// without it is fetched twice.
-			{
-				rel: "preload",
-				href: interLatin,
-				as: "font",
-				type: "font/woff2",
-				crossOrigin: "anonymous",
-			},
-		],
-	}),
+	head: () => {
+		// The browser Sentry SDK reads its DSN from this tag (see
+		// `@app/sentryDsn`). Rendering it here — from the server's runtime
+		// `process.env` — is what carries the DSN to the client without baking it
+		// into the build. Omitted entirely when unset so dev and unconfigured
+		// deploys render nothing and the SDK stays off.
+		const sentryDsn = readSentryDsn();
+		return {
+			meta: [
+				{ charSet: "utf-8" },
+				{ name: "viewport", content: "width=device-width, initial-scale=1" },
+				{ httpEquiv: "X-UA-Compatible", content: "IE=edge" },
+				{ title: "Virtool" },
+				...(sentryDsn
+					? [{ name: SENTRY_DSN_META_NAME, content: sentryDsn }]
+					: []),
+			],
+			links: [
+				{
+					rel: "shortcut icon",
+					href: "/images/favicon.ico",
+					type: "image/x-icon",
+				},
+				// Only the roman latin face is on the first-paint path. The italic and
+				// the other unicode-range slices load on demand. `crossOrigin` is
+				// required even same-origin: fonts fetch in CORS mode, and a preload
+				// without it is fetched twice.
+				{
+					rel: "preload",
+					href: interLatin,
+					as: "font",
+					type: "font/woff2",
+					crossOrigin: "anonymous",
+				},
+			],
+		};
+	},
 	shellComponent: RootShell,
 	component: RootComponent,
 	pendingComponent: LoadingPlaceholder,

@@ -1,5 +1,6 @@
 import { cn } from "@app/cn";
 import type React from "react";
+import { iconVariants } from "./iconVariants";
 import type { IconColor } from "./types";
 
 export type CircleProps = {
@@ -34,16 +35,7 @@ export default function Circle({
 			className={cn(
 				"bg-inherit",
 				"inline-block",
-				{
-					"text-blue-500": color === "blue",
-					"text-black": color === "black",
-					"text-green-500": color === "green",
-					"text-gray-400": color === "gray" || color === "grey",
-					"text-gray-500": color === "grayDark",
-					"text-red-500": color === "red",
-					"text-orange-500": color === "orange",
-					"text-purple-500": color === "purple",
-				},
+				iconVariants({ color }),
 				className,
 			)}
 			{...props}

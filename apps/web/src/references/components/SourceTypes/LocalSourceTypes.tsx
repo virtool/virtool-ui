@@ -98,7 +98,7 @@ export function LocalSourceTypes() {
 							<label className="block mb-1" htmlFor="sourceType">
 								Add Source Type{" "}
 							</label>
-							<InputContainer className="flex mb-[5px]">
+							<InputContainer className="flex mb-1.5">
 								<span className="flex flex-auto mr-2.5 flex-col">
 									<InputSimple id="sourceType" {...register("sourceType")} />
 									<InputError>{error}</InputError>

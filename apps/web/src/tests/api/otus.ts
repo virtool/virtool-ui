@@ -1,43 +1,8 @@
 import { faker } from "@faker-js/faker";
 import type { UpdateOtuProps } from "@otus/queries";
-import type { Otu, OtuMinimal } from "@otus/types";
+import type { Otu } from "@otus/types";
 import nock from "nock";
 import { createFakeOtu, createFakeOtuSequence } from "../fake/otus";
-
-/**
- * Sets up a mocked API route for fetching a single complete otu
- *
- * @param otu - The complete otu
- * @returns The nock scope for the mocked API call
- */
-export function mockApiGetOtu(otu: Otu) {
-	return nock("http://localhost")
-		.get(`/api/otus/${otu.id}`)
-		.query(true)
-		.reply(200, otu);
-}
-
-/**
- * Sets up a mocked API route for fetching a list of OTUs
- *
- * @param otus - The OTU documents
- * @param refId - The id of the reference which the OTUs belong to
- * @returns The nock scope for the mocked API call
- */
-export function mockApiFindOtus(otus: OtuMinimal[], refId: string) {
-	return nock("http://localhost")
-		.get(`/api/refs/${refId}/otus`)
-		.query(true)
-		.reply(200, {
-			documents: otus,
-			modified_count: faker.number.int(),
-			found_count: faker.number.int(),
-			page: faker.number.int(),
-			page_count: faker.number.int(),
-			per_page: faker.number.int(),
-			total_count: faker.number.int(),
-		});
-}
 
 /**
  * Sets up a mocked API route for creating an OTU

@@ -2,12 +2,10 @@ import { cn } from "@app/cn";
 import type { ElementType, KeyboardEvent, ReactNode, Ref } from "react";
 
 type BoxGroupSectionProps = {
-	active?: boolean;
 	"aria-selected"?: boolean;
 	as?: ElementType;
 	children?: ReactNode;
 	className?: string;
-	disabled?: boolean;
 	onClick?: () => void;
 	onKeyDown?: (e: KeyboardEvent) => void;
 	ref?: Ref<HTMLDivElement>;

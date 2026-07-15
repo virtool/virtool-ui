@@ -1,5 +1,4 @@
-import type { Label } from "@labels/types";
-import { type Mock, vi } from "vitest";
+import { vi } from "vitest";
 
 /**
  * Mock handles for the `@server/labels/functions` server-fn module. Wired in
@@ -13,9 +12,3 @@ export const labelServerFnMocks = {
 	getLabel: vi.fn(),
 	updateLabel: vi.fn(),
 };
-
-/** Set the labels `findLabels` will resolve with. */
-export function mockFindLabels(labels: Label[]): Mock {
-	labelServerFnMocks.findLabels.mockResolvedValue(labels);
-	return labelServerFnMocks.findLabels;
-}

@@ -57,7 +57,7 @@ export function EditLabel({
 	return (
 		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogTrigger asChild>
-				<IconButton IconComponent={Pencil} color="grayDark" tip="edit label" />
+				<IconButton IconComponent={Pencil} color="gray" tip="edit label" />
 			</DialogTrigger>
 			<DialogContent>
 				<DialogTitle>Edit a label</DialogTitle>

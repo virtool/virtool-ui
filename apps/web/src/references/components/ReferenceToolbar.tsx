@@ -33,6 +33,7 @@ export default function ReferenceToolbar({
 		<Toolbar>
 			<div className="flex-grow">
 				<InputSearch
+					aria-label="Search references"
 					placeholder="Reference name"
 					value={draft}
 					onChange={(e) => setDraft(e.target.value)}
