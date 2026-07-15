@@ -1,3 +1,4 @@
+import { toGcContent } from "@app/format";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";
@@ -20,12 +21,6 @@ const routeApi = getRouteApi("/_authenticated/samples/$sampleId");
 
 const readCountFormatter = new Intl.NumberFormat("en-US", {
 	notation: "compact",
-	minimumFractionDigits: 1,
-	maximumFractionDigits: 1,
-});
-
-const gcFormatter = new Intl.NumberFormat("en-US", {
-	style: "percent",
 	minimumFractionDigits: 1,
 	maximumFractionDigits: 1,
 });
@@ -108,7 +103,7 @@ export default function SampleDetailGeneral({
 								</tr>
 								<tr>
 									<th>GC Content</th>
-									<td>{gcFormatter.format(quality.gc / 100)}</td>
+									<td>{toGcContent(quality.gc / 100)}</td>
 								</tr>
 								<tr>
 									<th>Paired</th>

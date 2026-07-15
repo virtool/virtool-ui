@@ -1,4 +1,5 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
+import { toGcContent } from "@app/format";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
@@ -13,13 +14,8 @@ import { SubtractionAttribution } from "../Attribution";
 import DeleteSubtraction from "./DeleteSubtraction";
 import EditSubtraction from "./EditSubtraction";
 
-const gcFormatter = new Intl.NumberFormat("en-US", {
-	minimumFractionDigits: 3,
-	maximumFractionDigits: 3,
-});
-
 function calculateGc(nucleotides: NucleotideComposition) {
-	return gcFormatter.format(1 - nucleotides.a - nucleotides.t - nucleotides.n);
+	return toGcContent(1 - nucleotides.a - nucleotides.t - nucleotides.n);
 }
 
 /**

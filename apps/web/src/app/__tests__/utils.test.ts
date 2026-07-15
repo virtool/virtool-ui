@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { byteSize, toScientificNotation, toThousand } from "../format";
+import {
+	byteSize,
+	toGcContent,
+	toScientificNotation,
+	toThousand,
+} from "../format";
 import { createRandomString, formatIsolateName } from "../utils.js";
 
 describe("byteSize()", () => {
@@ -67,6 +72,20 @@ describe("toScientificNotation()", () => {
 
 	it("should not group the integer part of mid-range values", () => {
 		expect(toScientificNotation(1000)).toEqual("1000.000");
+	});
+});
+
+describe("toGcContent()", () => {
+	it("should render a fraction as a one-decimal percentage", () => {
+		expect(toGcContent(0.452)).toEqual("45.2%");
+	});
+
+	it("should round to one decimal place", () => {
+		expect(toGcContent(0.4127)).toEqual("41.3%");
+	});
+
+	it("should handle a whole fraction", () => {
+		expect(toGcContent(1)).toEqual("100.0%");
 	});
 });
 

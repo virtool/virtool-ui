@@ -30,6 +30,12 @@ const decimalFormatter = new Intl.NumberFormat("en-US", {
 	useGrouping: false,
 });
 
+const gcContentFormatter = new Intl.NumberFormat("en-US", {
+	style: "percent",
+	minimumFractionDigits: 1,
+	maximumFractionDigits: 1,
+});
+
 /**
  * Convert an integer in bytes to a nicely formatted string (eg. 10.2 GB).
  */
@@ -53,6 +59,13 @@ export function byteSize(
 
 export function toThousand(num: number): string {
 	return thousandFormatter.format(num);
+}
+
+/**
+ * Format a GC content fraction (0–1) as a percentage (eg. 45.2%).
+ */
+export function toGcContent(fraction: number): string {
+	return gcContentFormatter.format(fraction);
 }
 
 /**
