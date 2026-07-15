@@ -195,6 +195,13 @@ cannot be configured on the `react()` plugin. It covers **both `.ts` and
 `.tsx`** (every feature's `queries.ts` included) and runs only on the client
 environment, so `src/server/` is never compiled.
 
+Tests skip the compiler by default — the Babel pass is per-transform overhead
+that thrashes CPU across parallel worktrees, and it earns nothing for
+behavioural tests. So local `pnpm test` runs **un-compiled**; CI sets
+`VT_TEST_REACT_COMPILER=1` to re-enable it, keeping the compiler-introduced
+footguns below under test. Set `VT_TEST_WORKERS=<n>` to cap Vitest's per-process
+worker count when several worktrees test at once.
+
 Because the compiler caches render output against its inputs, code that
 worked by accident under un-memoized render will now break:
 
