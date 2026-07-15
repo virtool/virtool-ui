@@ -6,8 +6,6 @@ import type { IconColor } from "./types";
 export type CircleProps = {
 	/** The color of the circle */
 	color?: IconColor;
-	/** The size of the circle in pixels */
-	size?: number;
 	/** Additional class names to apply to the circle */
 	className?: string;
 	/** Whether the circle should be full, empty, or half filled */
@@ -15,11 +13,11 @@ export type CircleProps = {
 } & React.SVGProps<SVGSVGElement>;
 
 /**
- * A simple circle component rendered as an SVG.
+ * A simple circle component rendered as an SVG. Size it with a `size-*`
+ * utility on `className`; it defaults to `size-3` (12px).
  */
 export default function Circle({
 	color = "black",
-	size = 13,
 	className,
 	fill = "full",
 	...props
@@ -27,14 +25,13 @@ export default function Circle({
 	return (
 		<svg
 			aria-hidden="true"
-			width={size}
-			height={size}
 			viewBox="0 0 10 10"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 			className={cn(
 				"bg-inherit",
 				"inline-block",
+				"size-3",
 				iconVariants({ color }),
 				className,
 			)}

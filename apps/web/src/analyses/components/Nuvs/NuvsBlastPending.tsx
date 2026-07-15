@@ -50,7 +50,7 @@ function RidTiming({ interval, lastCheckedAt }) {
 export default function NuvsBlastPending({ interval, lastCheckedAt, rid }) {
 	return (
 		<Box className="flex items-start [&>div:first-of-type]:mr-1">
-			<Loader size="16px" color="blue" />
+			<Loader className="size-4" color="blue" />
 			<div>
 				<div>
 					<span className="font-medium">BLAST in progress</span>

@@ -25,7 +25,7 @@ export function IndexItemIcon({ activeId, id, ready }: IndexItemIconProps) {
 			{ready ? (
 				<CircleCheck className="stroke-green-600" size={18} />
 			) : (
-				<Loader size="16px" />
+				<Loader className="size-4" />
 			)}
 			<span className="font-medium">{ready ? "Active" : "Building"}</span>
 		</div>

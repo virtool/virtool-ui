@@ -25,7 +25,7 @@ function hashColor(hash, newChar) {
 type InitialIconProps = {
 	className?: string;
 	handle: string;
-	size: string;
+	size: "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
 };
 
 export default function InitialIcon({

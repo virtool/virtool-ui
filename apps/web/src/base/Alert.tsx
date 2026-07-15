@@ -50,7 +50,7 @@ function Alert({
 					className,
 				)}
 			>
-				{icon ? <Icon icon={icon} size={20} /> : null}
+				{icon ? <Icon icon={icon} className="size-5" /> : null}
 				{children}
 			</div>
 		</div>

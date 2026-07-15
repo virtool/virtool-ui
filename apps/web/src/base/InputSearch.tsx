@@ -13,7 +13,7 @@ export default function InputSearch(props: InputSearchProps) {
 	return (
 		<InputContainer align="left" className="flex-grow">
 			<Input {...props} />
-			<InputIcon size={18} icon={Search} />
+			<InputIcon icon={Search} />
 		</InputContainer>
 	);
 }

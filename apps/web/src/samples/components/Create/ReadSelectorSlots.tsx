@@ -58,7 +58,7 @@ export default function ReadSelectorSlots({
 						"focus:outline-none focus:ring-2 focus:ring-blue-600/50",
 					)}
 				>
-					<Icon icon={ArrowLeftRight} size={18} />
+					<Icon icon={ArrowLeftRight} />
 				</button>
 			)}
 			<ReadSlot

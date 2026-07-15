@@ -67,7 +67,7 @@ function FileButton({ file, selected, onSelect }: FileButtonProps) {
 				isSelected && "bg-blue-50",
 			)}
 		>
-			<Icon icon={File} size={24} className="text-gray-400 shrink-0" />
+			<Icon icon={File} className="size-6 text-gray-400 shrink-0" />
 			<div className="min-w-0 flex-grow truncate font-mono font-medium">
 				{file.name}
 			</div>
@@ -149,7 +149,7 @@ export default function ReadSelectorRow({
 				pairSelected && "bg-blue-50",
 			)}
 		>
-			<Icon icon={Files} size={24} className="text-gray-400 shrink-0" />
+			<Icon icon={Files} className="size-6 text-gray-400 shrink-0" />
 			<div className="min-w-0 flex-grow space-y-1">
 				<PairLine file={left} hint="R1" selected={selected} />
 				<PairLine file={right} hint="R2" selected={selected} />

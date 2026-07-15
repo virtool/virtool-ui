@@ -48,9 +48,8 @@ export function CollapsibleTrigger({
 			{...props}
 		>
 			<Icon
-				className="transition-transform group-data-[state=open]:rotate-180"
+				className="transition-transform group-data-[state=open]:rotate-180 size-4"
 				icon={ChevronDown}
-				size={16}
 			/>
 			{children}
 		</CollapsiblePrimitive.Trigger>

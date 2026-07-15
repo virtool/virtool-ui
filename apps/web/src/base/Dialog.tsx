@@ -34,7 +34,7 @@ export function DialogOverlay() {
 type DialogContentProps = {
 	children: ReactNode;
 	className?: string;
-	size?: "sm" | "lg";
+	size?: "lg";
 };
 
 /**

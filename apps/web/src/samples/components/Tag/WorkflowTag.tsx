@@ -24,9 +24,9 @@ export default function WorkflowTag({
 		<BaseWorkflowTag>
 			<span className="w-3.5">
 				{workflowState === "pending" ? (
-					<Loader size="10px" color="gray" />
+					<Loader className="size-2.5" color="gray" />
 				) : (
-					<Icon icon={CheckCircle} size={14} />
+					<Icon icon={CheckCircle} className="size-3.5" />
 				)}
 			</span>
 			<span>{displayName}</span>

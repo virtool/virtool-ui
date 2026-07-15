@@ -53,7 +53,7 @@ export default function JobItem({
 				{state === "succeeded" ? (
 					<JobStateIcon state={state} />
 				) : (
-					<ProgressCircle size="md" state={state} progress={progress} />
+					<ProgressCircle state={state} progress={progress} />
 				)}
 			</div>
 		</BoxGroupSection>

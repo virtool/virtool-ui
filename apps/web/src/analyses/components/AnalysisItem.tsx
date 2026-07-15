@@ -74,7 +74,6 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 						<ProgressCircle
 							progress={job?.progress ?? 0}
 							state={job?.state ?? "pending"}
-							size="md"
 						/>
 					)}
 				</div>

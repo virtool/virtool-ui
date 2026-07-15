@@ -3,12 +3,12 @@ import { describe, expect, it } from "vitest";
 import Circle from "../Circle";
 
 describe("Circle", () => {
-	it("should render with correct size", () => {
-		const { container } = render(<Circle size={20} />);
-		const svg = container.querySelector("svg");
-		expect(svg).toBeInTheDocument();
-		expect(svg).toHaveAttribute("width", "20");
-		expect(svg).toHaveAttribute("height", "20");
+	it("defaults to size-3 and lets a size-* class override it", () => {
+		const { container, rerender } = render(<Circle />);
+		expect(container.querySelector("svg")).toHaveClass("size-3");
+
+		rerender(<Circle className="size-5" />);
+		expect(container.querySelector("svg")).toHaveClass("size-5");
 	});
 
 	it("should render with correct color class", () => {

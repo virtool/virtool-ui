@@ -48,7 +48,7 @@ export default function ReadSlot({
 			)}
 			{missing && (
 				<div className="flex items-center gap-1.5 mt-1 text-amber-600 font-medium">
-					<Icon icon={TriangleAlert} size={16} />
+					<Icon icon={TriangleAlert} className="size-4" />
 					This file is no longer available
 				</div>
 			)}
