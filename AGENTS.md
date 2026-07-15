@@ -663,7 +663,11 @@ and make commits easier to find later.
 - **Imports:** Use explicit vitest imports (`import { describe, it,
   expect, vi } from "vitest"`).
 - **Setup:** `apps/web/src/tests/setup.tsx` provides
-  `renderWithProviders()`, `renderWithRouter()`, and `MemoryRouter`.
+  `renderWithProviders()`, `renderWithRouter()`, and `MemoryRouter`. It
+  also calls `nock.disableNetConnect()` (an unmocked request fails
+  instead of hitting the network) and gives the test `QueryClient`
+  `retry: false` (a failed query surfaces its error immediately), so
+  error paths are testable and under-mocked tests fail loudly.
 - **Test doubles** split three ways by what they do, and a helper lives
   in exactly one of them:
   - `src/tests/fake/` — `createFake*` data generators. No mocking.
