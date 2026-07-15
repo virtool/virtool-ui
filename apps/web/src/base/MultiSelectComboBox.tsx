@@ -209,7 +209,7 @@ export default function MultiSelectComboBox<Item>({
 				<ul
 					className={cn(
 						"absolute",
-						"z-50",
+						"z-dropdown",
 						"w-full",
 						"mt-1",
 						"max-h-60",

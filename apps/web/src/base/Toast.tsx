@@ -18,7 +18,7 @@ export function ToastViewport({ className }: ToastViewportProps) {
 	return (
 		<ToastPrimitive.Viewport
 			className={cn(
-				"fixed bottom-0 right-0 z-50",
+				"fixed bottom-0 right-0 z-toast",
 				"flex flex-col gap-2",
 				"m-0 p-6 w-full sm:max-w-md",
 				"list-none outline-none",
