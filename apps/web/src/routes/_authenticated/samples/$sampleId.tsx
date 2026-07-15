@@ -60,7 +60,7 @@ function SampleDetailLayout() {
 						{canModify && location.pathname.endsWith("/general") && (
 							<>
 								<IconButton
-									color="grayDark"
+									color="gray"
 									IconComponent={Pencil}
 									tip="modify"
 									onClick={() => setEditOpen(true)}

@@ -6,6 +6,7 @@ import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
+import { DEFAULT_LABEL_COLOR } from "@labels/constants";
 import SampleLabel from "@samples/components/Label/SampleLabel";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -26,7 +27,7 @@ type LabelFormProps = {
  * A form for creating or updating a label
  */
 export function LabelForm({
-	color = "#D1D5DB",
+	color = DEFAULT_LABEL_COLOR,
 	description = "",
 	error = "",
 	name = "",
@@ -44,7 +45,7 @@ export function LabelForm({
 	return (
 		<form
 			onSubmit={handleSubmit((values) =>
-				onSubmit({ ...values, color: newColor || "#D1D5DB" }),
+				onSubmit({ ...values, color: newColor || DEFAULT_LABEL_COLOR }),
 			)}
 		>
 			<InputGroup>
@@ -75,7 +76,7 @@ export function LabelForm({
 			<p className="font-medium">Preview</p>
 			<Box className="p-2.5">
 				<SampleLabel
-					color={newColor || "#D1D5DB"}
+					color={newColor || DEFAULT_LABEL_COLOR}
 					name={watch("name") || "Preview"}
 				/>
 			</Box>

@@ -119,7 +119,7 @@ export default function SampleDetailGeneral({
 				)}
 			</ContainerNarrow>
 
-			<ContainerSide className="pl-[15px]">
+			<ContainerSide className="pl-4">
 				<Sidebar
 					labels={labels}
 					sampleId={data.id}

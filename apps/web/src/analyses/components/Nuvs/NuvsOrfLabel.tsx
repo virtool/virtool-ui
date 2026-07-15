@@ -1,11 +1,20 @@
-import ExternalLink from "@base/ExternalLink";
+import type { NuvsOrfHit } from "@analyses/types";
+import { Link } from "@tanstack/react-router";
 
-export default function NuvsOrfLabel({ hmm }) {
+type NuvsOrfLabelProps = {
+	hmm?: NuvsOrfHit;
+};
+
+export default function NuvsOrfLabel({ hmm }: NuvsOrfLabelProps) {
 	if (hmm) {
 		return (
-			<ExternalLink className="capitalize" href={`/hmms/${hmm.hit}`}>
+			<Link
+				className="capitalize"
+				to="/hmms/$hmmId"
+				params={{ hmmId: hmm.hit }}
+			>
 				{hmm.names[0]}
-			</ExternalLink>
+			</Link>
 		);
 	}
 

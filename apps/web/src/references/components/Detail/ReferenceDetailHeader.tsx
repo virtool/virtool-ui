@@ -44,7 +44,7 @@ export default function ReferenceDetailHeader({
 				{name}
 				{showIcons && (
 					<ViewHeaderIcons>
-						{isRemote && <Icon color="grey" icon={Lock} aria-label="lock" />}
+						{isRemote && <Icon color="gray" icon={Lock} aria-label="lock" />}
 						{!isRemote && canModify && (
 							<>
 								<EditReference detail={detail} />

@@ -22,6 +22,7 @@ export default function SampleToolbar({ onChange, term }: SampleToolbarProps) {
 		<Toolbar>
 			<div className="flex-grow">
 				<InputSearch
+					aria-label="Search samples"
 					value={term || ""}
 					onChange={onChange}
 					placeholder="Sample name"
