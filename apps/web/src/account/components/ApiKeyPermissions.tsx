@@ -53,7 +53,7 @@ export default function ApiKeyPermissions({
 				) && !account.permissions[permission.name];
 
 			return (
-				<BoxGroupSection key={permission.name} disabled={disabled}>
+				<BoxGroupSection key={permission.name}>
 					<Checkbox
 						checked={permission.allowed}
 						id={`ApiPermission-${permission.name}`}

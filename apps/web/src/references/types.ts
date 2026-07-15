@@ -29,18 +29,6 @@ export type ReferenceUser = UserNested &
 		created_at: string;
 	};
 
-export type ReferenceImportedFrom = {
-	id: string;
-	name: string;
-};
-
-export type ReferenceLatestBuild = {
-	createdAt: Date;
-	id: string;
-	user: UserNested;
-	version: number;
-};
-
 export type ReferenceRemotesFrom = {
 	errors: string[];
 	slug: string;

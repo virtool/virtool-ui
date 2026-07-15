@@ -120,5 +120,3 @@ export function ToastClose({ className }: ToastCloseProps) {
 		</ToastPrimitive.Close>
 	);
 }
-
-export default Toast;
