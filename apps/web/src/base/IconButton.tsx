@@ -28,7 +28,7 @@ export default function IconButton({
 	ariaLabel,
 	as = "button",
 	className,
-	color = "black",
+	color,
 	IconComponent,
 	onDark,
 	onClick,
