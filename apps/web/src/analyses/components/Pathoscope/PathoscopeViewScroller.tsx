@@ -1,4 +1,4 @@
-import { getContentScrollElement } from "@app/scroll";
+import { getContentScrollElement, getScrollBehavior } from "@app/scroll";
 import { ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -23,7 +23,10 @@ export function PathoscopeViewerScroller() {
 				aria-label="Scroll to top"
 				className="flex items-center justify-center fixed bottom-8 left-8 size-10 border border-gray-300 rounded-lg text-gray-500 cursor-pointer z-1 hover:bg-gray-100 hover:text-gray-600"
 				onClick={() =>
-					getContentScrollElement()?.scrollTo({ top: 0, behavior: "smooth" })
+					getContentScrollElement()?.scrollTo({
+						top: 0,
+						behavior: getScrollBehavior(),
+					})
 				}
 			>
 				<ArrowUp />
