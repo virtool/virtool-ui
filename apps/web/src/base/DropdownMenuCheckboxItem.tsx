@@ -1,15 +1,13 @@
 import { Check, Minus } from "lucide-react";
 import { DropdownMenu } from "radix-ui";
 import type { ComponentPropsWithRef } from "react";
-import {
-	type DropdownMenuItemColor,
-	getDropdownMenuItemClassName,
-} from "./dropdownMenuItemStyles";
+import { getDropdownMenuItemClassName } from "./dropdownMenuItemStyles";
+import type { PaletteColor } from "./types";
 
 type DropdownMenuCheckboxItemProps = ComponentPropsWithRef<
 	typeof DropdownMenu.CheckboxItem
 > & {
-	color?: DropdownMenuItemColor;
+	color?: PaletteColor;
 };
 
 export default function DropdownMenuCheckboxItem({

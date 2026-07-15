@@ -1,15 +1,7 @@
 import { cn } from "@app/cn";
+import type { PaletteColor } from "./types";
 
-/** The palette shared by all selectable dropdown menu items. */
-export type DropdownMenuItemColor =
-	| "blue"
-	| "green"
-	| "gray"
-	| "orange"
-	| "purple"
-	| "red";
-
-const itemColors: Record<DropdownMenuItemColor, string> = {
+const itemColors: Record<PaletteColor, string> = {
 	blue: "text-blue-600 focus:bg-blue-50 focus:text-blue-700",
 	green: "text-green-600 focus:bg-green-50 focus:text-green-700",
 	gray: "text-gray-900 focus:bg-gray-100 focus:text-gray-900",
@@ -23,7 +15,7 @@ const itemColors: Record<DropdownMenuItemColor, string> = {
  * pointer enter, so `focus:` covers both hover and arrow-key highlighting.
  */
 export function getDropdownMenuItemClassName(
-	color: DropdownMenuItemColor,
+	color: PaletteColor,
 	className?: string,
 ): string {
 	return cn(

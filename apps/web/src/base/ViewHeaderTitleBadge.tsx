@@ -1,11 +1,12 @@
 import { cn } from "@app/cn";
 import type { ReactNode } from "react";
 import Badge from "./Badge";
+import type { PaletteColor } from "./types";
 
 type ViewHeaderTitleBadge = {
 	children?: ReactNode;
 	className?: string;
-	color?: "blue" | "green" | "gray" | "orange" | "purple" | "red";
+	color?: PaletteColor;
 };
 
 /**

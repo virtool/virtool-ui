@@ -9,8 +9,8 @@ const colorToVar: Record<string, string> = {
 	blueLightest: "var(--color-blue-100)",
 	green: "var(--color-green-600)",
 	greenLightest: "var(--color-green-100)",
-	grey: "var(--color-gray-400)",
-	greyLight: "var(--color-gray-300)",
+	gray: "var(--color-gray-400)",
+	grayLight: "var(--color-gray-300)",
 	red: "var(--color-red-600)",
 	redLightest: "var(--color-red-100)",
 };
@@ -47,16 +47,16 @@ function getProgressColor(state: JobState): string {
 		case "running":
 			return "blue";
 		case "pending":
-			return "grey";
+			return "gray";
 		default:
 			return "red";
 	}
 }
 
 function getTrackColor(color: string): string {
-	const fallback = colorToVar.greyLight ?? "var(--color-gray-300)";
+	const fallback = colorToVar.grayLight ?? "var(--color-gray-300)";
 
-	if (color === "grey") {
+	if (color === "gray") {
 		return fallback;
 	}
 	return colorToVar[`${color}Lightest`] ?? fallback;

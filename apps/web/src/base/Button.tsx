@@ -1,13 +1,14 @@
 import { cn } from "@app/cn";
 import type { ElementType, ReactNode } from "react";
 import { buttonVariants } from "./buttonVariants";
+import type { PaletteColor } from "./types";
 
 export type ButtonProps = {
 	active?: boolean;
 	as?: ElementType;
 	children: ReactNode;
 	className?: string;
-	color?: "blue" | "green" | "gray" | "purple" | "red";
+	color?: PaletteColor;
 	disabled?: boolean;
 	onBlur?: () => void;
 	onClick?: () => void;
