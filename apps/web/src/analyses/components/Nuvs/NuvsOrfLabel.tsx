@@ -1,6 +1,11 @@
+import type { NuvsOrfHit } from "@analyses/types";
 import { Link } from "@tanstack/react-router";
 
-export default function NuvsOrfLabel({ hmm }) {
+type NuvsOrfLabelProps = {
+	hmm?: NuvsOrfHit;
+};
+
+export default function NuvsOrfLabel({ hmm }: NuvsOrfLabelProps) {
 	if (hmm) {
 		return (
 			<Link
