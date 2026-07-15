@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
 import type { IndexFile, IndexMinimal, IndexNested } from "@indexes/types";
-import { createFakeServerJobNested } from "./jobs";
 import { createFakeReferenceNested } from "./references";
 import { createFakeUserNested } from "./user";
 
@@ -23,7 +22,6 @@ export function createFakeIndexMinimal(
 		change_count: faker.number.int({ min: 2, max: 10 }),
 		created_at: faker.date.past().toISOString(),
 		has_files: faker.datatype.boolean(),
-		job: createFakeServerJobNested({ workflow: "build_index" }),
 		modified_otu_count: faker.number.int({ min: 2, max: 10 }),
 		reference: createFakeReferenceNested(),
 		user: createFakeUserNested(),
