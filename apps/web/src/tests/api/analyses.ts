@@ -1,4 +1,4 @@
-import type { Analysis, AnalysisMinimal } from "@analyses/types";
+import type { AnalysisMinimal } from "@analyses/types";
 import nock from "nock";
 
 /**
@@ -23,45 +23,6 @@ export function mockApiGetAnalyses(analyses: AnalysisMinimal[]) {
 			found_count: analyses.length,
 			documents: analyses,
 		});
-}
-
-type CreateAnalysisRequestBody = {
-	ml?: string;
-	ref_id: string;
-	subtractions?: string[];
-	workflow: string;
-};
-
-/**
- * Creates a mocked API call for getting an analysis
- *
- * @param sampleId - The unique identifier of the sample being analysed
- * @param requestBody - The request body for creating an analysis
- * @returns The nock scope for the mocked API call
- */
-export function mockApiCreateAnalysis(
-	sampleId: string,
-	requestBody: CreateAnalysisRequestBody,
-) {
-	return nock("http://localhost")
-		.post(
-			`/api/samples/${sampleId}/anal
-        yses`,
-			requestBody,
-		)
-		.reply(201);
-}
-
-/**
- * Creates a mocked API call for getting a single analysis
- *
- * @param analysis - The analysis document
- * @returns The nock scope for the mocked API call
- */
-export function mockApiGetAnalysis(analysis: Analysis) {
-	return nock("http://localhost")
-		.get(`/api/analyses/${analysis.id}`)
-		.reply(200, analysis);
 }
 
 /**

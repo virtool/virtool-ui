@@ -14,10 +14,7 @@ export function SourceTypeItem({
 	disabled = false,
 }: SourceTypeItemProps) {
 	return (
-		<BoxGroupSection
-			className="flex items-center capitalize"
-			disabled={disabled}
-		>
+		<BoxGroupSection className="flex items-center capitalize">
 			<span className="mr-1.5">{sourceType}</span>
 			{disabled ? null : (
 				<IconButton

@@ -96,16 +96,6 @@ export function otuHistoryQueryOptions(otuId: string) {
 }
 
 /**
- * Fetches the history of changes for a single OTU
- *
- * @param otuId - The id of the OTU to fetch
- * @returns A history list of changes for a single OTU
- */
-export function useFetchOtuHistory(otuId: string) {
-	return useQuery(otuHistoryQueryOptions(otuId));
-}
-
-/**
  * Fetch an OTU's history, suspending until it resolves.
  *
  * `data` is always defined, and a failed request throws to the nearest route

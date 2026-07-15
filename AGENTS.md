@@ -92,6 +92,7 @@ pnpm check                        # biome check (whole repo)
 | Typecheck | `pnpm typecheck` |
 | Lint + format | `pnpm check` |
 | Format only | `pnpm format` |
+| Dead-code scan | `pnpm knip` |
 | Test (single run, all packages) | `pnpm test` |
 | Test (watch, web app) | `pnpm --filter @virtool/web test:watch` |
 | Test (filtered) | `pnpm --filter @virtool/web exec vitest run src/path/to/file` |
@@ -112,7 +113,7 @@ currently configured in another repository.
   `git status` — even when it looks like unrelated drift from a
   regen — commit it alongside your other changes. Never leave it
   out of a commit.
-- Before committing: `pnpm check` and `pnpm typecheck`.
+- Before committing: `pnpm check`, `pnpm typecheck`, and `pnpm knip`.
 - After changing tests: run the specific test file with
   `pnpm --filter @virtool/web exec vitest run <path>`.
 - Full test suite only when asked or when changes are cross-cutting.
@@ -121,6 +122,14 @@ currently configured in another repository.
   `pnpm check` — so `pnpm check` must exit 0 before merging. The main branch is
   guaranteed to pass `pnpm check` cleanly, so any issues are caused by your
   changes — never dismiss them as pre-existing.
+- No dead code. CI's `check-knip` job runs `pnpm knip` (config in
+  `knip.json`), which fails on unused files, exports, types, and
+  dependencies — so `pnpm knip` must exit 0 before merging. If you add an
+  export with no caller yet, either wire it up or delete it; keep a
+  deliberately-uncalled public export (e.g. an auth policy) by tagging it
+  `@public`. Exports used only within their own file are fine —
+  `ignoreExportsUsedInFile` is on, so drop the `export` keyword rather than
+  the code.
 - Always assume tests pass on `main` — CI enforces it. Any test failures you
   see locally are caused by your changes, never pre-existing. Do **not** use
   `git stash` (or any other working-tree-modifying command) to "check what
