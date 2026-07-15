@@ -28,9 +28,11 @@ export async function verifyAuthenticatedSession(
 		return null;
 	}
 
-	// Deactivating a user does not delete their sessions, so `active` has to be
-	// checked on every request rather than trusted at login. The inner join only
-	// drops anonymous sessions, which carry no user_id and are rejected anyway.
+	// A TS-side deactivation deletes the user's sessions, but Python's does not,
+	// so `active` still has to be checked on every request rather than trusted at
+	// login — a session Python left behind must stop verifying the moment the user
+	// goes inactive. The inner join only drops anonymous sessions, which carry no
+	// user_id and are rejected anyway.
 	const [row] = await db
 		.select({
 			userId: sessions.userId,

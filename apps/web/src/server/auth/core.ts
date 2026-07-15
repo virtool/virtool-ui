@@ -285,7 +285,6 @@ export async function resetPassword(
 					password: newHash,
 					forceReset: false,
 					lastPasswordChange: new Date(),
-					invalidateSessions: true,
 				})
 				.where(eq(users.id, userId));
 

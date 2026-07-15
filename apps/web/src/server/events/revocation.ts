@@ -10,10 +10,8 @@ import { logger } from "../logger";
  * until the client happened to reconnect.
  *
  * This is exactly as sharp as the gate it runs, and no sharper: it catches a
- * deleted session row and a deactivated user, but not an admin-initiated
- * password change or forced reset, which only set `users.invalidate_sessions` —
- * a column nothing on this side reads. That hole is the auth gate's to close,
- * not this watch's.
+ * deleted session row — including one deleted by an admin-initiated
+ * deactivation, password change, or forced reset — and a deactivated user.
  *
  * Returns a function that stops the watch. It is safe to call more than once.
  */

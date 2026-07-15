@@ -51,6 +51,11 @@ export const users = pgTable(
 			.$defaultFn(() => false)
 			.notNull(),
 		handle: text("handle").notNull(),
+		// NOT NULL with no server_default on the Python side, so the `$defaultFn`
+		// is load-bearing: `createUser` never sets this column and would violate
+		// the constraint without it. Nothing on either side reads the value —
+		// sessions are revoked directly (`invalidateUserSessions`) rather than via
+		// this flag — so dropping the column is Python's Alembic change to make.
 		invalidateSessions: boolean("invalidate_sessions")
 			.$defaultFn(() => false)
 			.notNull(),

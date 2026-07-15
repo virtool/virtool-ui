@@ -176,7 +176,6 @@ describe("resetPassword", () => {
 		);
 		expect(after?.forceReset).toBe(true);
 		expect(after?.lastPasswordChange).toEqual(before?.lastPasswordChange);
-		expect(after?.invalidateSessions).toBe(before?.invalidateSessions);
 
 		// The session deletion rolled back with it.
 		const surviving = await db
