@@ -112,6 +112,26 @@ HTTP mock just to keep the test shape familiar.
 If a feature is half-migrated, mock at whichever boundary the code
 path under test actually crosses.
 
+### The harness fails loudly, so error paths are testable
+
+`setup.tsx` calls `nock.disableNetConnect()` once per test file: any
+superagent request without a matching interceptor errors instead of
+falling through to the real network, where it would pass or hang
+silently. A test that types into a search box or pages through a list
+fires one request per resulting refetch, and each needs its own
+interceptor (nock interceptors are single-use unless `.persist()`).
+
+The test `QueryClient` (`createTestQueryClient`, used by
+`wrapWithProviders`, `renderWithProviders`, and `renderRoute`) sets
+`retry: false`, so a failed query surfaces its error immediately rather
+than after three retries with backoff. This is what makes error-state
+assertions practical — mock a `500`, render, and assert the error UI
+without waiting out the retries.
+
+The two together mean a request the test forgot to mock now shows the
+error state right away instead of masking it behind retries — so
+under-mocked tests fail where they used to pass by accident.
+
 ## Don't snapshot response shapes
 
 Inferred zod / TS types already pin response shapes; a snapshot adds

@@ -37,7 +37,7 @@ type ComboBoxSearchProps = {
 function ComboBoxSearch({ getInputProps }: ComboBoxSearchProps) {
 	return (
 		<div className="mx-1 my-2.5">
-			<InputSearch {...getInputProps()} />
+			<InputSearch {...getInputProps()} aria-label="Search" />
 		</div>
 	);
 }

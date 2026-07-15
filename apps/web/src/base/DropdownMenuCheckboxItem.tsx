@@ -1,27 +1,26 @@
 import { Check, Minus } from "lucide-react";
 import { DropdownMenu } from "radix-ui";
-import { type ComponentPropsWithoutRef, forwardRef } from "react";
+import type { ComponentPropsWithRef } from "react";
 import {
 	type DropdownMenuItemColor,
 	getDropdownMenuItemClassName,
 } from "./dropdownMenuItemStyles";
 
-type DropdownMenuCheckboxItemProps = ComponentPropsWithoutRef<
+type DropdownMenuCheckboxItemProps = ComponentPropsWithRef<
 	typeof DropdownMenu.CheckboxItem
 > & {
 	color?: DropdownMenuItemColor;
 };
 
-const DropdownMenuCheckboxItem = forwardRef<
-	HTMLDivElement,
-	DropdownMenuCheckboxItemProps
->(function DropdownMenuCheckboxItem(
-	{ checked, children, className, color = "gray", ...props },
-	ref,
-) {
+export default function DropdownMenuCheckboxItem({
+	checked,
+	children,
+	className,
+	color = "gray",
+	...props
+}: DropdownMenuCheckboxItemProps) {
 	return (
 		<DropdownMenu.CheckboxItem
-			ref={ref}
 			checked={checked}
 			className={getDropdownMenuItemClassName(color, className)}
 			{...props}
@@ -38,6 +37,4 @@ const DropdownMenuCheckboxItem = forwardRef<
 			{children}
 		</DropdownMenu.CheckboxItem>
 	);
-});
-
-export default DropdownMenuCheckboxItem;
+}

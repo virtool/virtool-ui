@@ -15,7 +15,12 @@ export default function HmmToolbar({ term, onChange }: HmmToolbarProps) {
 	return (
 		<Toolbar>
 			<div className="flex-grow">
-				<InputSearch placeholder="Name" onChange={onChange} value={term} />
+				<InputSearch
+					aria-label="Search HMMs"
+					placeholder="Name"
+					onChange={onChange}
+					value={term}
+				/>
 			</div>
 		</Toolbar>
 	);

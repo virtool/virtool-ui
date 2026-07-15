@@ -81,6 +81,7 @@ export default function AddReferenceGroup({
 				<Toolbar>
 					<InputSearch
 						name="search"
+						aria-label="Search groups"
 						value={term}
 						onChange={(e) => setTerm(e.target.value)}
 					/>

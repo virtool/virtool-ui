@@ -63,7 +63,6 @@ export const JobMinimalSchema = z
 	}));
 
 export type ServerJobMinimal = z.input<typeof JobMinimalSchema>;
-export type JobMinimal = z.infer<typeof JobMinimalSchema>;
 
 const JobStepSchema = z
 	.object({
@@ -81,7 +80,6 @@ const JobStepSchema = z
 		description,
 		startedAt: started_at,
 	}));
-export type ServerJobStep = z.input<typeof JobStepSchema>;
 export type JobStep = z.infer<typeof JobStepSchema>;
 
 const JobClaimSchema = z
@@ -103,9 +101,6 @@ const JobClaimSchema = z
 			workflowVersion: workflow_version,
 		}),
 	);
-export type ServerJobClaim = z.input<typeof JobClaimSchema>;
-export type JobClaim = z.infer<typeof JobClaimSchema>;
-
 export const JobSchema = z
 	.object({
 		args: z.record(z.string(), z.unknown()),
@@ -137,7 +132,6 @@ export const JobSchema = z
 		state,
 	}));
 export type ServerJob = z.input<typeof JobSchema>;
-export type Job = z.infer<typeof JobSchema>;
 
 const JobCountsSchema = z
 	.record(z.string(), z.record(z.string(), z.number()))
@@ -183,6 +177,3 @@ export const JobSearchResultSchema = z
 			totalCount: total_count,
 		}),
 	);
-
-export type ServerJobSearchResult = z.input<typeof JobSearchResultSchema>;
-export type JobSearchResult = z.infer<typeof JobSearchResultSchema>;

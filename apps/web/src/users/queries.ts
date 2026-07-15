@@ -143,16 +143,6 @@ export function userQueryOptions(userId: number) {
 }
 
 /**
- * Fetches a single user
- *
- * @param userId - The id of the user to fetch
- * @returns A single user
- */
-export function useFetchUser(userId: number) {
-	return useQuery(userQueryOptions(userId));
-}
-
-/**
  * Fetches a single user, suspending until it resolves.
  *
  * `data` is always defined, and a failed request throws to the nearest route

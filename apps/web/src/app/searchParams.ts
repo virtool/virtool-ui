@@ -45,14 +45,6 @@ export function stringArray(value: unknown, fallback: string[]): string[] {
 		: fallback;
 }
 
-export function oneOf<T extends string>(
-	value: unknown,
-	allowed: ReadonlyArray<T>,
-	fallback: T,
-): T {
-	return allowed.includes(value as T) ? (value as T) : fallback;
-}
-
 export function oneOfOptional<T extends string>(
 	value: unknown,
 	allowed: ReadonlyArray<T>,

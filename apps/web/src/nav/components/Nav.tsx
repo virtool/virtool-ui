@@ -49,7 +49,7 @@ export default function Nav({ administrator_role, handle }: NavBarProps) {
 					onClick={() => setAboutOpen(true)}
 					IconComponent={Info}
 					tip="About"
-					className="text-white hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-virtool focus-visible:ring-white"
+					onDark
 				/>
 
 				<Dropdown>

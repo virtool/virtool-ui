@@ -17,7 +17,12 @@ export default function SubtractionToolbar({
 	return (
 		<Toolbar>
 			<div className="flex-grow">
-				<InputSearch value={term} onChange={handleChange} placeholder="Name" />
+				<InputSearch
+					aria-label="Search subtractions"
+					value={term}
+					onChange={handleChange}
+					placeholder="Name"
+				/>
 			</div>
 			{hasPermission && <SubtractionCreate />}
 		</Toolbar>

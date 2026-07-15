@@ -28,9 +28,11 @@ repeated context (a request id, a job id) across several call sites, but
 nothing in the server uses it today. Don't write code that assumes a
 per-request logger is threaded through for you.
 
-Biome's `noConsole` rule is enabled for `apps/web/src/server/` in
-`biome.json`, so reaching for `console.*` there fails `pnpm check`.
-Client code is unaffected.
+Biome's `noConsole` rule is enabled repo-wide in `biome.json`, so any
+`console.*` fails `pnpm check`. Server code logs through the package;
+client code reports unexpected conditions to Sentry
+(`Sentry.captureException`) instead of a console the user's browser hides
+from us.
 
 The default redaction paths are defined in
 `packages/logger/src/config.ts` (`DEFAULT_REDACT_PATHS`). Extra paths can
