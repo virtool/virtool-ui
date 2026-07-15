@@ -2,10 +2,9 @@ import { cn } from "@app/cn";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import Icon from "./Icon";
+import type { PaletteColor } from "./types";
 
-type AlertColor = "blue" | "green" | "gray" | "orange" | "purple" | "red";
-
-const alertColorStyles: Record<AlertColor, string> = {
+const alertColorStyles: Record<PaletteColor, string> = {
 	blue: "bg-blue-100 text-blue-700",
 	green: "bg-green-100 text-green-700",
 	gray: "bg-gray-100 text-gray-600",
@@ -20,7 +19,7 @@ type AlertProps = {
 	block?: boolean;
 	children: ReactNode;
 	className?: string;
-	color?: AlertColor;
+	color?: PaletteColor;
 	icon?: LucideIcon;
 	level?: boolean;
 	outerClassName?: string;

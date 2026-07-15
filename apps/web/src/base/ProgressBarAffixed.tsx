@@ -1,15 +1,19 @@
 import { cn } from "@app/cn";
+import type { PaletteColor } from "./types";
 
-const colorToClass: Record<string, string> = {
+const colorToClass: Record<PaletteColor, string> = {
 	blue: "bg-blue-600",
 	green: "bg-green-600",
+	gray: "bg-gray-500",
+	orange: "bg-orange-600",
+	purple: "bg-purple-600",
 	red: "bg-red-600",
 };
 
 type ProgressBarAffixedProps = {
 	bottom?: boolean;
 	className?: string;
-	color?: string;
+	color?: PaletteColor;
 	now: number;
 };
 
@@ -28,7 +32,7 @@ export default function ProgressBarAffixed({
 			)}
 		>
 			<div
-				className={cn("h-full", colorToClass[color] || "bg-blue-600")}
+				className={cn("h-full", colorToClass[color])}
 				style={{ width: `${now}%` }}
 			/>
 		</div>
