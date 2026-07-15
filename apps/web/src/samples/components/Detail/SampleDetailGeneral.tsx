@@ -12,12 +12,23 @@ import { getLibraryTypeDisplayName } from "@samples/utils";
  * The general view in sample details
  */
 import { getRouteApi } from "@tanstack/react-router";
-import numbro from "numbro";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";
 import SampleNotes from "./SampleNotes";
 import Sidebar from "./Sidebar";
 
 const routeApi = getRouteApi("/_authenticated/samples/$sampleId");
+
+const readCountFormatter = new Intl.NumberFormat("en-US", {
+	notation: "compact",
+	minimumFractionDigits: 1,
+	maximumFractionDigits: 1,
+});
+
+const gcFormatter = new Intl.NumberFormat("en-US", {
+	style: "percent",
+	minimumFractionDigits: 1,
+	maximumFractionDigits: 1,
+});
 
 type SampleDetailGeneralProps = {
 	labels: Label[];
@@ -85,7 +96,7 @@ export default function SampleDetailGeneral({
 								</tr>
 								<tr>
 									<th>Read Count</th>
-									<td>{numbro(quality.count).format("0.0 a")}</td>
+									<td>{readCountFormatter.format(quality.count)}</td>
 								</tr>
 								<tr>
 									<th>Library Type</th>
@@ -97,7 +108,7 @@ export default function SampleDetailGeneral({
 								</tr>
 								<tr>
 									<th>GC Content</th>
-									<td>{numbro(quality.gc / 100).format("0.0 %")}</td>
+									<td>{gcFormatter.format(quality.gc / 100)}</td>
 								</tr>
 								<tr>
 									<th>Paired</th>

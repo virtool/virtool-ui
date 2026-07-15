@@ -276,9 +276,9 @@ Prefer a server function over a Python REST call for anything a guard reads.
 
 A module's imports survive tree-shaking if the package does not declare
 `sideEffects: false` — so a grab-bag module leaks its heaviest dependency into
-every bundle that wants *any* of its exports. `cn()` (`@app/cn`) and the numbro
-formatters (`@app/format`) are split out of `@app/utils` for exactly this
-reason. Don't merge them back.
+every bundle that wants *any* of its exports. `cn()` (`@app/cn`) is split out
+of `@app/utils` for exactly this reason — it keeps `tailwind-merge` out of every
+bundle that only wants a plain utility. Don't merge it back.
 
 ### Routing: in-app navigation uses `<Link>`
 

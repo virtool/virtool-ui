@@ -9,15 +9,17 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useFetchSubtraction } from "@subtraction/queries";
 import type { NucleotideComposition } from "@subtraction/types";
 import { getSubtractionFastaName } from "@subtraction/utils";
-import numbro from "numbro";
 import { SubtractionAttribution } from "../Attribution";
 import DeleteSubtraction from "./DeleteSubtraction";
 import EditSubtraction from "./EditSubtraction";
 
+const gcFormatter = new Intl.NumberFormat("en-US", {
+	minimumFractionDigits: 3,
+	maximumFractionDigits: 3,
+});
+
 function calculateGc(nucleotides: NucleotideComposition) {
-	return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format(
-		"0.000",
-	);
+	return gcFormatter.format(1 - nucleotides.a - nucleotides.t - nucleotides.n);
 }
 
 /**
