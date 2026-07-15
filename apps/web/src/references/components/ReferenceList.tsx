@@ -18,13 +18,11 @@ import ReferenceToolbar from "./ReferenceToolbar";
 
 type ReferenceListProps = {
 	archived?: boolean;
-	cloneReferenceId?: string;
 	find?: string;
 	page?: number;
 	setSearch?: (
 		next: {
 			archived?: boolean;
-			cloneReferenceId?: string;
 			find?: string;
 			page?: number;
 		},
@@ -37,12 +35,12 @@ type ReferenceListProps = {
  */
 export default function ReferenceList({
 	archived = false,
-	cloneReferenceId,
 	find = "",
 	page = 1,
 	setSearch = () => {},
 }: ReferenceListProps) {
 	const [isCreateReferenceOpen, setIsCreateReferenceOpen] = useState(false);
+	const [cloneReferenceId, setCloneReferenceId] = useState<string>();
 
 	const { data, isPending, isError } = useFindReferences(
 		page,
@@ -109,9 +107,7 @@ export default function ReferenceList({
 							{items.map((item) => (
 								<ReferenceItem
 									key={item.id}
-									onClone={(cloneReferenceId) =>
-										setSearch({ cloneReferenceId })
-									}
+									onClone={setCloneReferenceId}
 									reference={item}
 								/>
 							))}
@@ -122,7 +118,7 @@ export default function ReferenceList({
 			<Clone
 				cloneReferenceId={cloneReferenceId}
 				references={items}
-				unsetCloneReferenceId={() => setSearch({ cloneReferenceId: undefined })}
+				unsetCloneReferenceId={() => setCloneReferenceId(undefined)}
 			/>
 		</>
 	);
