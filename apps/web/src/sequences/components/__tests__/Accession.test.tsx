@@ -61,7 +61,7 @@ describe("<Accession> auto fill", () => {
 		expect(screen.getByRole("textbox", { name: "Definition" })).toHaveValue(
 			"Abaca bunchy top virus DNA-R",
 		);
-		expect(screen.getByRole("textbox", { name: "Sequence 7" })).toHaveValue(
+		expect(screen.getByRole("textbox", { name: /^Sequence/ })).toHaveValue(
 			"ATGRYKM",
 		);
 	});
