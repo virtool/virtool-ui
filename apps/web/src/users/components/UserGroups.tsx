@@ -108,7 +108,10 @@ export default function UserGroups({
 				hideLabel
 				items={availableGroups}
 				selectedItem={null}
-				onChange={(group) => group && addGroup(group.id)}
+				onChange={(group) => {
+					addGroup(group.id);
+					setTerm("");
+				}}
 				term={term}
 				onTermChange={setTerm}
 				itemToKey={(group) => String(group.id)}

@@ -21,9 +21,10 @@ type ComboBoxProps<Item> = {
 	selectedItem: Item | null;
 
 	/** Called with the newly selected item */
-	onChange: (item: Item | null) => void;
+	onChange: (item: Item) => void;
 
-	/** The controlled search term */
+	/** The controlled search term. Selecting an option does not change it — set
+	 * it from `onChange` if the selection should appear in the input. */
 	term: string;
 
 	/** Called when the search term changes */
@@ -74,11 +75,20 @@ export default function ComboBox<Item>({
 		itemToString: (item) => (item ? itemToString(item) : ""),
 		inputValue: term,
 		selectedItem,
-		onInputValueChange({ inputValue }) {
-			onTermChange(inputValue ?? "");
-		},
-		onSelectedItemChange({ selectedItem: newItem }) {
-			onChange(newItem ?? null);
+		onStateChange({ inputValue: newInput, type, selectedItem: newItem }) {
+			switch (type) {
+				case useCombobox.stateChangeTypes.InputKeyDownEnter:
+				case useCombobox.stateChangeTypes.ItemClick:
+					if (newItem) {
+						onChange(newItem);
+					}
+					break;
+				case useCombobox.stateChangeTypes.InputChange:
+					onTermChange(newInput ?? "");
+					break;
+				default:
+					break;
+			}
 		},
 	});
 

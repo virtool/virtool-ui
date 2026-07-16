@@ -11,7 +11,10 @@ const groups: Group[] = [
 	{ id: 2, name: "Technicians" },
 ];
 
-function renderComboBox(onChange: (item: Group | null) => void = vi.fn()) {
+function renderComboBox(
+	onChange: (item: Group) => void = vi.fn(),
+	onTermChange: (term: string) => void = vi.fn(),
+) {
 	return renderWithProviders(
 		<ComboBox<Group>
 			label="Add group"
@@ -19,7 +22,7 @@ function renderComboBox(onChange: (item: Group | null) => void = vi.fn()) {
 			selectedItem={null}
 			onChange={onChange}
 			term=""
-			onTermChange={vi.fn()}
+			onTermChange={onTermChange}
 			itemToKey={(item) => String(item.id)}
 			itemToString={(item) => item.name}
 		/>,
@@ -107,6 +110,31 @@ describe("<ComboBox />", () => {
 		await userEvent.click(screen.getByRole("option", { name: "Managers" }));
 
 		expect(onChange).toHaveBeenCalledWith(groups[0]);
+	});
+
+	it("reports the term only as the user types it", async () => {
+		const onTermChange = vi.fn();
+		renderComboBox(vi.fn(), onTermChange);
+
+		// `term` is held at "" here, so each keystroke starts from empty.
+		await userEvent.type(
+			screen.getByRole("combobox", { name: "Add group" }),
+			"M",
+		);
+
+		expect(onTermChange).toHaveBeenCalledWith("M");
+	});
+
+	it("leaves the term alone when an option is selected", async () => {
+		const onTermChange = vi.fn();
+		renderComboBox(vi.fn(), onTermChange);
+
+		await userEvent.click(
+			screen.getByRole("button", { name: "Toggle Add group menu" }),
+		);
+		await userEvent.click(screen.getByRole("option", { name: "Managers" }));
+
+		expect(onTermChange).not.toHaveBeenCalled();
 	});
 
 	it("tells the user when nothing matches the term", async () => {
