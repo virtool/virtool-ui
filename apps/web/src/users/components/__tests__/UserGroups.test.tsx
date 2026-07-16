@@ -70,7 +70,7 @@ describe("<UserGroups />", () => {
 			await screen.findByText("This user is a member of every group."),
 		).toBeInTheDocument();
 		expect(
-			screen.queryByRole("button", { name: /add group/i }),
+			screen.queryByRole("combobox", { name: "Add group" }),
 		).not.toBeInTheDocument();
 		expect(screen.getByRole("radio", { name: "foo" })).toBeInTheDocument();
 	});
@@ -107,9 +107,35 @@ describe("<UserGroups />", () => {
 		);
 
 		await userEvent.click(
-			await screen.findByRole("button", { name: /add group/i }),
+			await screen.findByRole("button", { name: "Toggle Add group menu" }),
 		);
 		await userEvent.click(screen.getByRole("option", { name: "bar" }));
+
+		await waitFor(() =>
+			expect(userServerFnMocks.updateUser).toHaveBeenCalledWith({
+				data: { userId, groups: [1, 2] },
+			}),
+		);
+	});
+
+	it("adds a group using only the keyboard", async () => {
+		mockListGroups(allGroups);
+		mockUpdateUser(userId, 200, {});
+
+		renderWithProviders(
+			<UserGroups
+				userId={userId}
+				memberGroups={[member]}
+				primaryGroup={member}
+			/>,
+		);
+
+		const combobox = await screen.findByRole("combobox", { name: "Add group" });
+
+		await userEvent.tab();
+		expect(combobox).toHaveFocus();
+
+		await userEvent.keyboard("{ArrowDown}{Enter}");
 
 		await waitFor(() =>
 			expect(userServerFnMocks.updateUser).toHaveBeenCalledWith({
