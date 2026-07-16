@@ -137,6 +137,37 @@ describe("<ComboBox />", () => {
 		expect(onTermChange).not.toHaveBeenCalled();
 	});
 
+	// Downshift's blur reducer commits the highlighted option as a selection, so
+	// browsing the options and tabbing on used to fire onChange. Selection is
+	// deliberately limited to Enter and clicks.
+	it("does not select the highlighted option when focus moves on", async () => {
+		const onChange = vi.fn();
+		renderWithProviders(
+			<>
+				<ComboBox<Group>
+					label="Add group"
+					items={groups}
+					selectedItem={null}
+					onChange={onChange}
+					term=""
+					onTermChange={vi.fn()}
+					itemToKey={(item) => String(item.id)}
+					itemToString={(item) => item.name}
+				/>
+				<button type="button">Next field</button>
+			</>,
+		);
+
+		await userEvent.tab();
+		expect(screen.getByRole("combobox", { name: "Add group" })).toHaveFocus();
+
+		await userEvent.keyboard("{ArrowDown}");
+		await userEvent.tab();
+
+		expect(screen.getByRole("button", { name: "Next field" })).toHaveFocus();
+		expect(onChange).not.toHaveBeenCalled();
+	});
+
 	it("tells the user when nothing matches the term", async () => {
 		renderWithProviders(
 			<ComboBox<Group>
