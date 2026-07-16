@@ -8,7 +8,7 @@ type ToolbarProps = {
 
 export default function Toolbar({ children, className }: ToolbarProps) {
 	return (
-		<div className={cn(className, "flex gap-2 items-stretch mb-3")}>
+		<div className={cn("flex gap-2 items-stretch mb-3", className)}>
 			{children}
 		</div>
 	);

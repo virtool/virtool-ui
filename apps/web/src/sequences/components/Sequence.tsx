@@ -1,11 +1,19 @@
 import { cn } from "@app/cn";
+import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { Collapsible, CollapsibleContent } from "@base/Collapsible";
+import Icon from "@base/Icon";
+import Table from "@base/Table";
+import { ChevronDown } from "lucide-react";
 import { Collapsible as CollapsiblePrimitive } from "radix-ui";
 import { useState } from "react";
 import SequenceButtons from "./SequenceButtons";
-import SequenceTable from "./SequenceTable";
-import { SequenceAccessionValue, SequenceTitleValue } from "./SequenceValues";
+import {
+	SEQUENCE_CHEVRON_COLUMN,
+	SequenceAccessionValue,
+	SequenceDefinitionValue,
+	SequenceSegmentValue,
+} from "./SequenceValues";
 
 type GenomeSequenceProps = {
 	accession: string;
@@ -38,6 +46,7 @@ export default function Sequence({
 			<Collapsible open={open} onOpenChange={setOpen}>
 				<CollapsiblePrimitive.Trigger
 					className={cn(
+						"group",
 						"flex items-start w-full text-left",
 						"bg-transparent border-none text-inherit",
 						"px-6 py-3",
@@ -48,26 +57,51 @@ export default function Sequence({
 						"focus-visible:ring-blue-600/50",
 					)}
 				>
+					<Icon
+						className={cn(
+							SEQUENCE_CHEVRON_COLUMN,
+							"mt-1",
+							"text-gray-600",
+							"transition-transform",
+							"group-data-[state=open]:rotate-180",
+						)}
+						icon={ChevronDown}
+						size={16}
+					/>
 					<SequenceAccessionValue accession={accession} />
-					<SequenceTitleValue value={segment || definition} />
+					<SequenceSegmentValue segment={segment} />
+					<SequenceDefinitionValue definition={definition} />
 				</CollapsiblePrimitive.Trigger>
 				<CollapsibleContent className="px-6 pb-3">
-					<div className="flex flex-wrap items-start">
-						<SequenceButtons
-							id={id}
-							onCollapse={() => setOpen(false)}
-							onEdit={onEdit}
-							onRemove={onRemove}
-						/>
-						<div className="basis-full">
-							<SequenceTable
-								definition={definition}
-								host={host}
-								segment={segment}
-								sequence={sequence}
-							/>
-						</div>
-					</div>
+					<SequenceButtons id={id} onEdit={onEdit} onRemove={onRemove} />
+					<Table
+						className={cn(
+							"mt-2.5",
+							"table-fixed",
+							"[&_th:first-child]:pl-0",
+							"[&_td:last-child]:pr-0",
+						)}
+					>
+						<tbody>
+							<tr>
+								<th>Host</th>
+								<td>{host}</td>
+							</tr>
+							<tr>
+								<th>
+									Sequence <Badge>{sequence.length}</Badge>
+								</th>
+								<td className="font-mono !p-0">
+									<textarea
+										className="w-full p-2"
+										rows={5}
+										value={sequence}
+										readOnly
+									/>
+								</td>
+							</tr>
+						</tbody>
+					</Table>
 				</CollapsibleContent>
 			</Collapsible>
 		</BoxGroupSection>

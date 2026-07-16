@@ -1,5 +1,5 @@
-import CloseButton from "@base/CloseButton";
 import IconButton from "@base/IconButton";
+import Toolbar from "@base/Toolbar";
 import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
@@ -11,17 +11,15 @@ import { Pencil, Trash } from "lucide-react";
 
 type SequenceButtonsProps = {
 	id: string;
-	onCollapse: () => void;
 	onEdit: () => void;
 	onRemove: () => void;
 };
 
 /**
- * Displays icons for the sequence item to close, edit, or remove
+ * A toolbar of actions for a sequence: edit, remove, and FASTA download
  */
 export default function SequenceButtons({
 	id,
-	onCollapse,
 	onEdit,
 	onRemove,
 }: SequenceButtonsProps) {
@@ -37,25 +35,28 @@ export default function SequenceButtons({
 	const href = `/api/otus/${otu.id}/isolates/${isolateId}/sequences/${id}.fa`;
 
 	return (
-		<span className="flex items-center ml-auto gap-1 pl-5 -mr-2.5">
+		<Toolbar className="items-center justify-end rounded-md border border-gray-200 bg-gray-50 px-2 py-1">
 			{canModify && !archived && (
 				<>
 					<IconButton
 						IconComponent={Pencil}
 						color="gray"
+						size={14}
 						tip="Edit"
 						onClick={onEdit}
 					/>
 					<IconButton
 						IconComponent={Trash}
 						color="red"
+						size={14}
 						tip="Remove"
 						onClick={onRemove}
 					/>
 				</>
 			)}
-			<DownloadLink href={href}>FASTA</DownloadLink>
-			<CloseButton onClick={onCollapse} />
-		</span>
+			<DownloadLink className="bg-white" href={href} size="sm">
+				FASTA
+			</DownloadLink>
+		</Toolbar>
 	);
 }

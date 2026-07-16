@@ -4,14 +4,10 @@ import { renderWithProviders } from "@tests/setup";
 import { describe, expect, it, vi } from "vitest";
 import Sequence from "../Sequence";
 
-// The expanded controls and detail table depend on OTU/reference/router
-// context that is out of scope for this component's own interaction logic.
+// The expanded controls depend on OTU/reference/router context that is out of
+// scope for this component's own interaction logic.
 vi.mock("../SequenceButtons", () => ({
 	default: () => <div>Sequence controls</div>,
-}));
-
-vi.mock("../SequenceTable", () => ({
-	default: () => <div>Sequence details</div>,
 }));
 
 describe("<Sequence />", () => {
@@ -33,7 +29,7 @@ describe("<Sequence />", () => {
 
 		expect(row).toHaveAttribute("aria-expanded", "false");
 		expect(screen.queryByText("Sequence controls")).not.toBeInTheDocument();
-		expect(screen.queryByText("Sequence details")).not.toBeInTheDocument();
+		expect(screen.queryByText("Test host")).not.toBeInTheDocument();
 	});
 
 	it("expands with the Enter key so its controls become reachable", async () => {
@@ -47,7 +43,7 @@ describe("<Sequence />", () => {
 
 		expect(row).toHaveAttribute("aria-expanded", "true");
 		expect(screen.getByText("Sequence controls")).toBeInTheDocument();
-		expect(screen.getByText("Sequence details")).toBeInTheDocument();
+		expect(screen.getByText("Test host")).toBeInTheDocument();
 	});
 
 	it("expands with the Space key", async () => {
@@ -64,6 +60,6 @@ describe("<Sequence />", () => {
 
 		await userEvent.click(screen.getByRole("button", { name: /NC_010314/ }));
 
-		expect(screen.getByText("Sequence details")).toBeInTheDocument();
+		expect(screen.getByText("Test host")).toBeInTheDocument();
 	});
 });
