@@ -51,7 +51,7 @@ export function UploaderItem({
 			</span>
 		);
 	} else if (progress === 100) {
-		end = <Loader className="size-3.5" />;
+		end = <Loader className="size-4" />;
 	} else {
 		end = byteSize(size, true);
 	}

@@ -188,7 +188,7 @@ export default function MultiSelectComboBox<Item>({
 									removeSelectedItem(item);
 								}}
 							>
-								<Icon icon={X} className="size-3.5" />
+								<Icon icon={X} className="size-4" />
 							</button>
 						</span>
 					))}

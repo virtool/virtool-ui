@@ -21,7 +21,7 @@ export default function Loader({ className, color = "gray" }: LoaderProps) {
 			role="status"
 			aria-label="loading"
 			className={cn(
-				"animate-rotate inline-block rounded-full border-2 border-b-transparent size-5.5",
+				"animate-rotate inline-block rounded-full border-2 border-b-transparent size-6",
 				colorToClass[color],
 				className,
 			)}

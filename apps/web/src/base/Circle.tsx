@@ -14,7 +14,7 @@ export type CircleProps = {
 
 /**
  * A simple circle component rendered as an SVG. Size it with a `size-*`
- * utility on `className`; it defaults to `size-3` (12px).
+ * utility on `className`; it defaults to `size-3`.
  */
 export default function Circle({
 	color = "black",

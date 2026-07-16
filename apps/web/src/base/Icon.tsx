@@ -23,7 +23,7 @@ export default function Icon({
 				"text-inherit",
 				"inline-block",
 				"align-middle",
-				"size-4.5",
+				"size-5",
 				iconVariants({ color }),
 				className,
 			)}

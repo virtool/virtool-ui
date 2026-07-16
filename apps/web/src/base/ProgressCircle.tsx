@@ -13,7 +13,7 @@ const colorToVar: Record<string, string> = {
 	redLightest: "var(--color-red-100)",
 };
 
-/** Diameter of the progress circle in pixels. */
+/** Diameter of the progress circle in viewBox user units. */
 const circleSize = 20;
 
 function calculateStrokeWidth(size: number): number {
@@ -81,8 +81,8 @@ export default function ProgressCircle({
 	return (
 		<Progress.Root value={progress} asChild>
 			<svg
-				className="-rotate-90"
-				style={{ width: circleSize, height: circleSize }}
+				className="-rotate-90 size-6"
+				viewBox={`0 0 ${circleSize} ${circleSize}`}
 			>
 				<title>Progress: {progress}%</title>
 				<circle
