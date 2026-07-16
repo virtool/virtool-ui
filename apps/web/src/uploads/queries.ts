@@ -43,7 +43,7 @@ export function useInfiniteFindFiles(
 	term?: string,
 ) {
 	return useInfiniteQuery<FileResponse>({
-		queryKey: fileQueryKeys.infiniteList([type, per_page]),
+		queryKey: fileQueryKeys.infiniteList([type, per_page, term]),
 		queryFn: ({ pageParam }) =>
 			findFiles(type, pageParam as number, per_page, term),
 		initialPageParam: 1,
