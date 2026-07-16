@@ -3,17 +3,22 @@ import RouteError from "@base/RouteError";
 import * as Sentry from "@sentry/tanstackstart-react";
 import { MutationCache, QueryCache, QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
+import {
+	FORBIDDEN_ERROR_NAME,
+	UNAUTHORIZED_ERROR_NAME,
+} from "@virtool/contracts";
 import { getCommonOptions } from "@virtool/sentry/browser";
 import { CONTENT_SCROLL_ID } from "./app/scroll";
 import { scheduleReplay } from "./app/sentryReplay";
 import { endSession } from "./app/session";
 import { routeTree } from "./routeTree.gen";
 
-// Server-function errors cross the boundary as plain `Error`s with only their
-// name preserved, so a 401 has to be matched by name. Superagent calls are
+// Server-function errors reach the client with their `name` preserved only
+// because `authErrorSerializationAdapter` (start.ts) carries it past Router's
+// ShallowErrorPlugin, so a 401 is matched by name here. Superagent calls are
 // covered by the interceptor in `app/api.ts` instead.
 function handleAuthenticationError(error: Error): void {
-	if (error.name === "UnauthorizedError") {
+	if (error.name === UNAUTHORIZED_ERROR_NAME) {
 		endSession();
 	}
 }
@@ -33,15 +38,17 @@ export function getRouter() {
 					if (status !== undefined && [401, 403, 404].includes(status)) {
 						return false;
 					}
-					// TanStack Start server-function errors cross the boundary as plain
-					// `Error`s with only `name`/`message` preserved — the status set via
-					// `setResponseStatus` is not attached. Match the auth errors by name
-					// so a 401/403 (e.g. after logout) rejects immediately instead of
-					// retrying ~4× while the screen sits blank before the route can
-					// bounce to /login.
+					// TanStack Start server-function errors cross the boundary with only
+					// `message` preserved by default; the status set via
+					// `setResponseStatus` is not attached, and Router's ShallowErrorPlugin
+					// drops `name`. `authErrorSerializationAdapter` (registered in
+					// start.ts) keeps the auth errors' `name`, so matching by name here
+					// makes a 401/403 (e.g. after logout, or an unauthenticated first
+					// visit) reject immediately instead of retrying ~4× while the screen
+					// sits blank before the route can bounce to /login.
 					if (
-						error.name === "UnauthorizedError" ||
-						error.name === "ForbiddenError"
+						error.name === UNAUTHORIZED_ERROR_NAME ||
+						error.name === FORBIDDEN_ERROR_NAME
 					) {
 						return false;
 					}

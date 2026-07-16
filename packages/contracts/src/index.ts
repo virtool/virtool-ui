@@ -1,6 +1,7 @@
 export * from "./administrators";
 export * from "./analyses";
 export * from "./artifacts";
+export * from "./auth";
 export * from "./banners";
 export * from "./hmms";
 export * from "./indexes";
