@@ -160,6 +160,38 @@ application's own doing.
   `detail(id)`, `insert` and `delete` invalidate `lists()`. Factories
   that lack a method fall back to `all()`. Unknown domains are
   ignored.
+- `jobs/refresh.ts` is the one exception to that mapping. See below.
+
+## Job updates are batched, not invalidated
+
+Jobs are the only domain that emits an update frame per running job per
+progress wave, and every job on screen holds its own `detail(id)` query
+(see the nested-job sites below). Invalidating each frame's detail
+therefore cost one `getJob` request per running job per tick — 25 rows,
+25 requests.
+
+So `jobs`/`update` frames do not go through `selectQueryKey`. They go to
+a queue built by `createJobRefreshQueue` (`jobs/refresh.ts`), one per
+`QueryClient`, which:
+
+1. Buffers job ids for 500 ms, deduplicating them.
+2. Invalidates `jobQueryKeys.lists()` once per window. Progress moves a
+   job between states, so a jobs list's counts, ordering, and filters
+   drift no matter how many details are refreshed. This is a no-op on
+   pages that cache no jobs list.
+3. Drops ids nothing has cached under `detail(id)`, then reads the rest
+   through the `getJobs` server function — one request per window,
+   chunked at the 100-id cap `getJobs` validates. This is what keeps the
+   jobs list page, whose rows render from the list query, from fetching
+   a detail per row.
+4. Writes each result straight into its `detail(id)` cache. `getJobs`
+   returns the full `Job`, the same shape `getJob` returns, so
+   `detail(id)` stays one canonical shape and `JobDetail` — which
+   renders `args` and `steps` — reads the same entry as a sample row
+   rendering only `progress`.
+
+A failed batch falls back to invalidating each id's detail, taking the
+fan-out it was avoiding rather than leaving every progress bar frozen.
 
 ## Follow-ups
 
@@ -172,16 +204,17 @@ application's own doing.
   indexed session lookup per connected client per tick. If either
   becomes a problem, publish revocations onto `client_events` and let
   the route close the matching streams on the event instead.
-- **Dedicated nested-job fetch (Approach B).** Job-nested sites
+- **Nested-job over-fetch (Approach B).** Job-nested sites
   (`sample.job`, `index.job`, `analysis.job`, `subtraction.job`) keep
   their live `progress`/`state` fresh by mounting `useFetchJob(id)`
-  seeded with the nested object, so a `jobs` update frame invalidates
-  `jobQueryKeys.detail(id)` and refetches. That refetch hits
-  `/jobs/:id`, which returns the full `Job` (args, claim, steps) —
-  far more than the nested view needs. Add a lightweight server
-  function (or `?view=nested` param) that returns just the
-  `JobNested` shape, and point `useFetchJob`'s seeded callers at it to
-  drop the over-fetch.
+  seeded with the nested object, so a `jobs` update frame refreshes
+  `jobQueryKeys.detail(id)`. The round-trip fan-out that used to cost is
+  gone — see "Job updates are batched" above — but the payload is
+  unchanged: `getJobs` returns the full `Job` (args, claim, steps) for
+  every row, where a nested view renders two fields. Trimming it means
+  a second cache shape for `detail(id)`, which `JobDetail` also reads,
+  so it needs its own key rather than a narrower read. Not worth it
+  until a batch's size, rather than its count, shows up in metrics.
 - **`hmm` has no push domain.** Task-nested sites
   (`references/components/ReferenceItem.tsx`,
   `references/components/Detail/Remote.tsx`,

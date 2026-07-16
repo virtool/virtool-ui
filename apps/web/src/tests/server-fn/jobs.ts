@@ -9,6 +9,7 @@ import { type Mock, vi } from "vitest";
 export const jobServerFnMocks = {
 	findJobs: vi.fn(),
 	getJob: vi.fn(),
+	getJobs: vi.fn(),
 };
 
 /** Sets up findJobs to resolve with a single page containing the given jobs. */
@@ -26,6 +27,20 @@ export function mockFindJobs(
 		total_count: jobs.length,
 	});
 	return jobServerFnMocks.findJobs;
+}
+
+/**
+ * Sets up getJobs to resolve with whichever of the given jobs were asked for.
+ *
+ * Mirrors the real batch read: ids that match nothing are simply absent from
+ * the result rather than an error.
+ */
+export function mockGetJobs(jobs: ServerJob[]): Mock {
+	jobServerFnMocks.getJobs.mockImplementation(
+		async ({ data }: { data: { jobIds: number[] } }) =>
+			jobs.filter((job) => data.jobIds.includes(job.id)),
+	);
+	return jobServerFnMocks.getJobs;
 }
 
 /** Sets up getJob to resolve with the given job when matched by id. */

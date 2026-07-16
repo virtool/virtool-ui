@@ -5,6 +5,7 @@ import { bannerQueryKeys } from "@banner/keys";
 import { groupQueryKeys } from "@groups/keys";
 import { indexQueryKeys } from "@indexes/keys";
 import { jobQueryKeys } from "@jobs/keys";
+import { createJobRefreshQueue } from "@jobs/refresh";
 import { labelQueryKeys } from "@labels/keys";
 import { referenceQueryKeys } from "@references/keys";
 import { samplesQueryKeys } from "@samples/keys";
@@ -64,11 +65,23 @@ function selectQueryKey(
 }
 
 export function reactQueryHandler(queryClient: QueryClient) {
+	const queueJobRefresh = createJobRefreshQueue(queryClient);
+
 	return (message: SseMessage) => {
 		const domain = domains[message.domain];
 		if (!domain) {
 			return;
 		}
+
+		// Jobs are the one domain where an update frame arrives per running job
+		// per progress wave, and every on-screen job holds its own detail query.
+		// Invalidating each one fans out to a request per row, so these frames go
+		// through a queue that batches the reads instead.
+		if (message.domain === "jobs" && message.operation === "update") {
+			queueJobRefresh(message.id);
+			return;
+		}
+
 		queryClient.invalidateQueries({
 			queryKey: selectQueryKey(domain, message.operation, message.id),
 		});

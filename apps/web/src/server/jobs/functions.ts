@@ -6,6 +6,7 @@ import { db } from "../db/pg";
 import {
 	findJobs as findJobsImpl,
 	getJob as getJobImpl,
+	getJobs as getJobsImpl,
 	JOB_STATES,
 	JobNotFoundError,
 } from "./data";
@@ -20,6 +21,13 @@ const findJobsSchema = z.object({
 
 const jobIdSchema = z.object({
 	jobId: z.number().int().positive(),
+});
+
+// Capped at the same 100 as a `findJobs` page: the batch exists to collapse one
+// refetch per on-screen job into one request, and no view shows more than a
+// page of them at once.
+const jobIdsSchema = z.object({
+	jobIds: z.array(z.number().int().positive()).min(1).max(100),
 });
 
 // Wrapped in createServerOnlyFn so the compiler can strip this body — and the
@@ -38,6 +46,11 @@ export const findJobs = createServerFn({ method: "GET" })
 	.middleware([authenticated()])
 	.validator(findJobsSchema)
 	.handler(async ({ data }) => findJobsImpl(db, data));
+
+export const getJobs = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
+	.validator(jobIdsSchema)
+	.handler(async ({ data }) => getJobsImpl(db, data.jobIds));
 
 export const getJob = createServerFn({ method: "GET" })
 	.middleware([authenticated()])

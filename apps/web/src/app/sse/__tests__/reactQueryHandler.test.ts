@@ -48,10 +48,6 @@ describe("reactQueryHandler", () => {
 				queryKey: indexQueryKeys.lists(),
 			},
 			{
-				message: { domain: "jobs", operation: "update", id: 42 },
-				queryKey: jobQueryKeys.detail(42),
-			},
-			{
 				message: { domain: "jobs", operation: "insert", id: 42 },
 				queryKey: jobQueryKeys.lists(),
 			},
@@ -226,6 +222,24 @@ describe("reactQueryHandler", () => {
 		).toBe(true);
 		expect(
 			queryClient.getQueryState(userQueryKeys.detail(8))?.isInvalidated,
+		).toBe(false);
+	});
+
+	// Every on-screen job holds its own detail query, so invalidating the frame's
+	// detail is a request per running job per progress wave. These frames go to
+	// the batching queue instead — see `jobs/__tests__/refresh.test.ts`.
+	it("batches job updates rather than invalidating a detail per frame", () => {
+		queryClient.setQueryData(jobQueryKeys.detail(42), { id: 42 });
+
+		reactQueryHandler(queryClient)({
+			domain: "jobs",
+			operation: "update",
+			id: 42,
+		});
+
+		expect(invalidate).not.toHaveBeenCalled();
+		expect(
+			queryClient.getQueryState(jobQueryKeys.detail(42))?.isInvalidated,
 		).toBe(false);
 	});
 

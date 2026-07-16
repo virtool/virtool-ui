@@ -172,36 +172,11 @@ export async function findJobs(
 	};
 }
 
-export async function getJob(db: Db, jobId: number): Promise<Job> {
-	const [row] = await db
-		.select({
-			id: jobs.id,
-			claim: jobs.claim,
-			claimed_at: jobs.claimed_at,
-			created_at: jobs.created_at,
-			finished_at: jobs.finished_at,
-			state: jobs.state,
-			steps: jobs.steps,
-			workflow: jobs.workflow,
-			userId: users.id,
-			handle: users.handle,
-			sample_id: jobSamples.sample_id,
-			index_id: jobIndexes.index_id,
-			subtraction_id: subtractions.id,
-			analysis_id: analyses.legacy_id,
-		})
-		.from(jobs)
-		.innerJoin(users, eq(jobs.user_id, users.id))
-		.leftJoin(jobSamples, eq(jobs.id, jobSamples.job_id))
-		.leftJoin(jobIndexes, eq(jobs.id, jobIndexes.job_id))
-		.leftJoin(subtractions, eq(jobs.id, subtractions.job_id))
-		.leftJoin(analyses, eq(jobs.id, analyses.job_id))
-		.where(eq(jobs.id, jobId));
+type JobRowWithResources = Awaited<
+	ReturnType<typeof selectJobsWithResources>
+>[number];
 
-	if (!row) {
-		throw new JobNotFoundError();
-	}
-
+function toJob(row: JobRowWithResources): Job {
 	// `args` is reconstructed from the related resources — the legacy Mongo
 	// `args` field is not stored as a column. Samples and indexes come from the
 	// `job_*` junction tables; the subtraction and analysis are found on the
@@ -233,4 +208,69 @@ export async function getJob(db: Db, jobId: number): Promise<Job> {
 		user: { id: row.userId, handle: row.handle },
 		workflow: row.workflow,
 	};
+}
+
+function selectJobsWithResources(db: Db) {
+	return db
+		.select({
+			id: jobs.id,
+			claim: jobs.claim,
+			claimed_at: jobs.claimed_at,
+			created_at: jobs.created_at,
+			finished_at: jobs.finished_at,
+			state: jobs.state,
+			steps: jobs.steps,
+			workflow: jobs.workflow,
+			userId: users.id,
+			handle: users.handle,
+			sample_id: jobSamples.sample_id,
+			index_id: jobIndexes.index_id,
+			subtraction_id: subtractions.id,
+			analysis_id: analyses.legacy_id,
+		})
+		.from(jobs)
+		.innerJoin(users, eq(jobs.user_id, users.id))
+		.leftJoin(jobSamples, eq(jobs.id, jobSamples.job_id))
+		.leftJoin(jobIndexes, eq(jobs.id, jobIndexes.job_id))
+		.leftJoin(subtractions, eq(jobs.id, subtractions.job_id))
+		.leftJoin(analyses, eq(jobs.id, analyses.job_id));
+}
+
+/**
+ * Read several jobs by id in one query.
+ *
+ * Ids that match no job are simply absent from the result — a batch is a
+ * best-effort read, so one deleted job does not fail the rest. Order is not
+ * guaranteed; callers key off `id`.
+ */
+export async function getJobs(db: Db, jobIds: number[]): Promise<Job[]> {
+	if (jobIds.length === 0) {
+		return [];
+	}
+
+	const rows = await selectJobsWithResources(db).where(
+		inArray(jobs.id, jobIds),
+	);
+
+	// The resource joins are left joins on tables that hold at most one row per
+	// job, but nothing in this read-only mirror constrains that, so collapse to
+	// the first row per id rather than emitting a job twice.
+	const byId = new Map<number, JobRowWithResources>();
+	for (const row of rows) {
+		if (!byId.has(row.id)) {
+			byId.set(row.id, row);
+		}
+	}
+
+	return [...byId.values()].map(toJob);
+}
+
+export async function getJob(db: Db, jobId: number): Promise<Job> {
+	const [job] = await getJobs(db, [jobId]);
+
+	if (!job) {
+		throw new JobNotFoundError();
+	}
+
+	return job;
 }
