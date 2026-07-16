@@ -33,7 +33,6 @@ export function SubtractionItem({
 			{!ready && job && (
 				<span className="flex items-center justify-end gap-1 font-medium">
 					<ProgressCircle
-						size="md"
 						progress={fetchedJob?.progress ?? job.progress}
 						state={fetchedJob?.state ?? job.state}
 					/>

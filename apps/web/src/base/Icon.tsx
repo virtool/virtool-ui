@@ -7,14 +7,12 @@ export type IconProps = {
 	color?: IconColor;
 	icon: LucideIcon;
 	className?: string;
-	size?: number;
 };
 
 export default function Icon({
 	color,
 	icon: LucideIcon,
 	className,
-	size = 18,
 	...props
 }: IconProps) {
 	return (
@@ -25,10 +23,10 @@ export default function Icon({
 				"text-inherit",
 				"inline-block",
 				"align-middle",
+				"size-5",
 				iconVariants({ color }),
 				className,
 			)}
-			size={size}
 			{...props}
 		/>
 	);

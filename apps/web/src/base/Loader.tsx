@@ -13,24 +13,18 @@ export const colorToClass: Record<PaletteColor, string> = {
 type LoaderProps = {
 	className?: string;
 	color?: PaletteColor;
-	size?: string;
 };
 
-export default function Loader({
-	className,
-	color = "gray",
-	size = "22px",
-}: LoaderProps) {
+export default function Loader({ className, color = "gray" }: LoaderProps) {
 	return (
 		<div
 			role="status"
 			aria-label="loading"
 			className={cn(
-				"animate-rotate inline-block rounded-full border-2 border-b-transparent",
+				"animate-rotate inline-block rounded-full border-2 border-b-transparent size-6",
 				colorToClass[color],
 				className,
 			)}
-			style={{ width: size, height: size }}
 		/>
 	);
 }

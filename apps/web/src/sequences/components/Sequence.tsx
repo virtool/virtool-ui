@@ -57,17 +57,18 @@ export default function Sequence({
 						"focus-visible:ring-blue-600/50",
 					)}
 				>
-					<Icon
-						className={cn(
-							SEQUENCE_CHEVRON_COLUMN,
-							"mt-1",
-							"text-gray-600",
-							"transition-transform",
-							"group-data-[state=open]:rotate-180",
-						)}
-						icon={ChevronDown}
-						size={16}
-					/>
+					<span className={SEQUENCE_CHEVRON_COLUMN}>
+						<Icon
+							className={cn(
+								"size-4",
+								"mt-1",
+								"text-gray-600",
+								"transition-transform",
+								"group-data-[state=open]:rotate-180",
+							)}
+							icon={ChevronDown}
+						/>
+					</span>
 					<SequenceAccessionValue accession={accession} />
 					<SequenceSegmentValue segment={segment} />
 					<SequenceDefinitionValue definition={definition} />

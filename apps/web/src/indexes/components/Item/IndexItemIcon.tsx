@@ -1,3 +1,4 @@
+import Icon from "@base/Icon";
 import Loader from "@base/Loader";
 import { CircleCheck } from "lucide-react";
 
@@ -23,9 +24,9 @@ export function IndexItemIcon({ activeId, id, ready }: IndexItemIconProps) {
 	return (
 		<div className="flex items-center justify-end gap-1.5">
 			{ready ? (
-				<CircleCheck className="stroke-green-600" size={18} />
+				<Icon icon={CircleCheck} color="green" />
 			) : (
-				<Loader size="16px" />
+				<Loader className="size-5" />
 			)}
 			<span className="font-medium">{ready ? "Active" : "Building"}</span>
 		</div>

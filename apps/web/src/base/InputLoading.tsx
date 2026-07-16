@@ -4,7 +4,7 @@ import Loader from "./Loader";
 export default function InputLoading() {
 	return (
 		<InputIcon>
-			<Loader size="14px" />
+			<Loader className="size-4" />
 		</InputIcon>
 	);
 }

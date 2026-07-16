@@ -2,8 +2,6 @@ import { cn } from "@app/cn";
 import type { JobState } from "@jobs/types";
 import { Progress } from "radix-ui";
 
-export type sizes = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
-
 const colorToVar: Record<string, string> = {
 	blue: "var(--color-blue-600)",
 	blueLightest: "var(--color-blue-100)",
@@ -15,14 +13,8 @@ const colorToVar: Record<string, string> = {
 	redLightest: "var(--color-red-100)",
 };
 
-const progressCircleSizes: Record<sizes, number> = {
-	xs: 12,
-	sm: 16,
-	md: 20,
-	lg: 28,
-	xl: 44,
-	xxl: 60,
-};
+/** Diameter of the progress circle in viewBox user units. */
+const circleSize = 20;
 
 function calculateStrokeWidth(size: number): number {
 	return size / 5;
@@ -65,15 +57,12 @@ function getTrackColor(color: string): string {
 type ProgressCircleProps = {
 	progress: number;
 	state?: JobState;
-	size?: sizes;
 };
 
 export default function ProgressCircle({
 	progress,
-	size = "md",
 	state = "pending",
 }: ProgressCircleProps) {
-	const circleSize = progressCircleSizes[size];
 	const color = getProgressColor(state);
 	const radius = calculateRadius(circleSize);
 	const strokeWidth = calculateStrokeWidth(circleSize);
@@ -92,8 +81,8 @@ export default function ProgressCircle({
 	return (
 		<Progress.Root value={progress} asChild>
 			<svg
-				className="-rotate-90"
-				style={{ width: circleSize, height: circleSize }}
+				className="-rotate-90 size-6"
+				viewBox={`0 0 ${circleSize} ${circleSize}`}
 			>
 				<title>Progress: {progress}%</title>
 				<circle
