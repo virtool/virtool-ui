@@ -534,6 +534,10 @@ constraints, mappings, or decisions that apply to your work.
 - Place issues in **Todo** by default; use **Backlog** only when explicitly
   asked. If an issue seems like it should be Backlog, say so and ask.
 - Never assign issues to anyone.
+- **Never change an issue's status.** Status is managed automatically from
+  branch and PR activity. Move an issue by hand only when explicitly told to.
+  The Todo-by-default rule above governs issues you create, not ones already
+  in flight.
 - Label bugs as **Bug** in addition to any other labels.
 
 ## Code style
