@@ -41,6 +41,7 @@ export function createJobRefreshQueue(
 ): (jobId: number) => void {
 	const pending = new Set<number>();
 	let windowOpen = false;
+	let draining = false;
 
 	async function refreshBatch(jobIds: number[]): Promise<void> {
 		try {
@@ -61,23 +62,25 @@ export function createJobRefreshQueue(
 		}
 	}
 
-	async function flush(): Promise<void> {
-		windowOpen = false;
-
-		const ids = [...pending];
-		pending.clear();
-
+	async function refresh(ids: number[]): Promise<void> {
 		// Counts, ordering, and state filters drift as jobs progress, and no
-		// amount of detail refetching fixes them. One invalidation per window
+		// amount of detail refetching fixes them. One invalidation per wave
 		// covers every mounted jobs list, and is a no-op on the pages — samples,
 		// analyses, subtractions — that cache no jobs list at all.
 		queryClient.invalidateQueries({ queryKey: jobQueryKeys.lists() });
 
-		// A frame for a job nothing has cached has nothing to update. This is what
-		// keeps the jobs list page, whose rows render from the list query, from
-		// fetching a detail per row.
+		// Only a mounted detail has anyone to show the result to. Cached-but-
+		// unmounted details would otherwise keep getting read for the whole
+		// gcTime after navigating off a job-heavy page — `invalidateQueries`
+		// defaults to `refetchType: "active"` and never refetched those, so
+		// reading them here would be a fan-out the old path did not have. It is
+		// also what keeps the jobs list page, whose rows render from the list
+		// query and mount no details, from reading one job per row.
+		const cache = queryClient.getQueryCache();
 		const watched = ids.filter(
-			(id) => queryClient.getQueryData(jobQueryKeys.detail(id)) !== undefined,
+			(id) =>
+				cache.find({ queryKey: jobQueryKeys.detail(id), type: "active" }) !==
+				undefined,
 		);
 
 		if (watched.length === 0) {
@@ -87,19 +90,45 @@ export function createJobRefreshQueue(
 		await Promise.all(chunk(watched, BATCH_SIZE).map(refreshBatch));
 	}
 
+	/**
+	 * Run waves one at a time until the buffer is empty.
+	 *
+	 * Batches must not overlap. Two in flight at once can resolve out of order,
+	 * and the loser's `setQueryData` would write a stale snapshot over a newer
+	 * one — dragging a progress bar backwards, or reviving a job that has already
+	 * finished. Serializing also means a slow server widens the window on its
+	 * own: everything that arrives during a batch coalesces into the next one.
+	 */
+	async function drain(): Promise<void> {
+		draining = true;
+
+		try {
+			while (pending.size > 0) {
+				const ids = [...pending];
+				pending.clear();
+
+				await refresh(ids);
+			}
+		} finally {
+			draining = false;
+		}
+	}
+
 	return function queueJobRefresh(jobId: number): void {
 		pending.add(jobId);
 
-		// The window is never cancelled, only allowed to elapse, so the timer
-		// handle is not worth keeping — whether one is pending is the whole state.
-		if (windowOpen) {
+		// A drain in flight takes these ids on its next pass, and an open window
+		// will take them when it elapses. The window is never cancelled, only
+		// allowed to elapse, so its timer handle is not worth keeping.
+		if (windowOpen || draining) {
 			return;
 		}
 
 		windowOpen = true;
 
 		setTimeout(() => {
-			void flush();
+			windowOpen = false;
+			void drain();
 		}, FLUSH_MS);
 	};
 }

@@ -1,9 +1,17 @@
 import { jobQueryKeys } from "@jobs/keys";
 import { createJobRefreshQueue } from "@jobs/refresh";
 import type { ServerJob } from "@jobs/types";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryObserver } from "@tanstack/react-query";
 import { jobServerFnMocks, mockGetJobs } from "@tests/server-fn/jobs";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	type Mock,
+	vi,
+} from "vitest";
 
 const FLUSH_MS = 500;
 
@@ -26,22 +34,46 @@ function createJob(id: number, overrides?: Partial<ServerJob>): ServerJob {
 
 describe("createJobRefreshQueue", () => {
 	let queryClient: QueryClient;
+	let unsubscribes: (() => void)[];
+	let refetches: Map<number, Mock>;
 
 	beforeEach(() => {
 		vi.useFakeTimers();
 		queryClient = new QueryClient();
+		unsubscribes = [];
+		refetches = new Map();
 	});
 
 	afterEach(() => {
+		for (const unsubscribe of unsubscribes) {
+			unsubscribe();
+		}
 		vi.useRealTimers();
 	});
 
+	/**
+	 * Stand in for a rendered row's `useFetchJob`: seed the detail cache and hold
+	 * an active observer on it, pinned fresh the way a seeded call is. The queue
+	 * reads only jobs something is actually watching, so `setQueryData` alone
+	 * does not make a job on-screen.
+	 */
 	function watch(...ids: number[]): void {
 		for (const id of ids) {
 			queryClient.setQueryData(
 				jobQueryKeys.detail(id),
 				createJob(id, { progress: 0 }),
 			);
+
+			const queryFn = vi.fn(async () => createJob(id));
+			refetches.set(id, queryFn);
+
+			const observer = new QueryObserver(queryClient, {
+				queryKey: jobQueryKeys.detail(id),
+				queryFn,
+				staleTime: Number.POSITIVE_INFINITY,
+			});
+
+			unsubscribes.push(observer.subscribe(() => {}));
 		}
 	}
 
@@ -86,8 +118,23 @@ describe("createJobRefreshQueue", () => {
 	// The jobs list page renders its rows from the list query and mounts no
 	// detail queries, so this is what stops a frame per row becoming a read per
 	// row there.
-	it("does not read a job nothing has cached", async () => {
+	it("does not read a job nothing is watching", async () => {
 		mockGetJobs([createJob(1)]);
+
+		const queue = createJobRefreshQueue(queryClient);
+		queue(1);
+
+		await vi.advanceTimersByTimeAsync(FLUSH_MS);
+
+		expect(jobServerFnMocks.getJobs).not.toHaveBeenCalled();
+	});
+
+	// React Query holds a detail's data for the whole gcTime after its row
+	// unmounts. Reading those would be a fan-out per wave that the invalidation
+	// this replaced never had, since it only ever refetched active queries.
+	it("does not read a job whose detail is cached but unmounted", async () => {
+		mockGetJobs([createJob(1)]);
+		queryClient.setQueryData(jobQueryKeys.detail(1), createJob(1));
 
 		const queue = createJobRefreshQueue(queryClient);
 		queue(1);
@@ -129,7 +176,7 @@ describe("createJobRefreshQueue", () => {
 		).toEqual([100, 50]);
 	});
 
-	it("falls back to per-job invalidation when the batch fails", async () => {
+	it("falls back to refetching each job when the batch fails", async () => {
 		jobServerFnMocks.getJobs.mockRejectedValue(new Error("boom"));
 		watch(1, 2);
 
@@ -140,10 +187,44 @@ describe("createJobRefreshQueue", () => {
 		await vi.advanceTimersByTimeAsync(FLUSH_MS);
 
 		for (const id of [1, 2]) {
-			expect(
-				queryClient.getQueryState(jobQueryKeys.detail(id))?.isInvalidated,
-			).toBe(true);
+			expect(refetches.get(id)).toHaveBeenCalled();
 		}
+	});
+
+	// Two batches in flight at once can resolve out of order, and the loser
+	// would write a stale snapshot over a newer one — dragging a progress bar
+	// backwards, or reviving a finished job.
+	it("holds a later wave until the batch in flight resolves", async () => {
+		watch(1);
+
+		let resolveFirst: (jobs: ServerJob[]) => void = () => undefined;
+		jobServerFnMocks.getJobs
+			.mockImplementationOnce(
+				() =>
+					new Promise<ServerJob[]>((resolve) => {
+						resolveFirst = resolve;
+					}),
+			)
+			.mockResolvedValueOnce([createJob(1, { progress: 90 })]);
+
+		const queue = createJobRefreshQueue(queryClient);
+
+		queue(1);
+		await vi.advanceTimersByTimeAsync(FLUSH_MS);
+		expect(jobServerFnMocks.getJobs).toHaveBeenCalledTimes(1);
+
+		queue(1);
+		await vi.advanceTimersByTimeAsync(FLUSH_MS * 3);
+
+		expect(jobServerFnMocks.getJobs).toHaveBeenCalledTimes(1);
+
+		resolveFirst([createJob(1, { progress: 10 })]);
+		await vi.advanceTimersByTimeAsync(0);
+
+		expect(jobServerFnMocks.getJobs).toHaveBeenCalledTimes(2);
+		expect(queryClient.getQueryData(jobQueryKeys.detail(1))).toMatchObject({
+			progress: 90,
+		});
 	});
 
 	it("opens a new window for frames arriving after a flush", async () => {

@@ -175,15 +175,15 @@ a queue built by `createJobRefreshQueue` (`jobs/refresh.ts`), one per
 `QueryClient`, which:
 
 1. Buffers job ids for 500 ms, deduplicating them.
-2. Invalidates `jobQueryKeys.lists()` once per window. Progress moves a
+2. Invalidates `jobQueryKeys.lists()` once per wave. Progress moves a
    job between states, so a jobs list's counts, ordering, and filters
    drift no matter how many details are refreshed. This is a no-op on
    pages that cache no jobs list.
-3. Drops ids nothing has cached under `detail(id)`, then reads the rest
-   through the `getJobs` server function — one request per window,
-   chunked at the 100-id cap `getJobs` validates. This is what keeps the
-   jobs list page, whose rows render from the list query, from fetching
-   a detail per row.
+3. Drops ids whose `detail(id)` has no **active** observer, then reads
+   the rest through the `getJobs` server function — one request per
+   wave, chunked at the 100-id cap `getJobs` validates. This is what
+   keeps the jobs list page, whose rows render from the list query, from
+   fetching a detail per row.
 4. Writes each result straight into its `detail(id)` cache. `getJobs`
    returns the full `Job`, the same shape `getJob` returns, so
    `detail(id)` stays one canonical shape and `JobDetail` — which
@@ -192,6 +192,26 @@ a queue built by `createJobRefreshQueue` (`jobs/refresh.ts`), one per
 
 A failed batch falls back to invalidating each id's detail, taking the
 fan-out it was avoiding rather than leaving every progress bar frozen.
+
+Two properties of that queue are load-bearing, and both are easy to
+undo by accident:
+
+- **Active observers, not cached data.** Filtering on
+  `getQueryData(...) !== undefined` looks equivalent and is not.
+  React Query keeps a detail's data for the whole `gcTime` after its row
+  unmounts, and `invalidateQueries` defaults to `refetchType: "active"`
+  — so the invalidation this replaced never refetched those. Reading
+  them here would mean a batch per wave for minutes after navigating off
+  a job-heavy page: a fan-out the old path did not have.
+- **Batches never overlap.** `drain()` runs waves one at a time. Two
+  reads in flight at once can resolve out of order, and the loser's
+  `setQueryData` writes a stale snapshot over a newer one — dragging a
+  progress bar backwards, or reviving a job that has already finished.
+  Per-frame `invalidateQueries` had no such hazard, because React Query
+  resolves races within a query key itself; batching moves that
+  responsibility here. Serializing also lets a slow server widen the
+  window on its own, since everything arriving during a batch coalesces
+  into the next.
 
 ## Follow-ups
 
