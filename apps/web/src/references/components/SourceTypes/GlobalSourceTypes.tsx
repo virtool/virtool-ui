@@ -1,4 +1,3 @@
-import { settingsQueryKeys } from "@administration/keys";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
@@ -9,15 +8,18 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SectionHeader from "@base/SectionHeader";
 import Toolbar from "@base/Toolbar";
-import { useUpdateSourceTypes } from "@references/hooks";
+import { useUpdateDefaultSourceTypes } from "@references/queries";
 import { Undo2 } from "lucide-react";
 import SourceTypeList from "./SourceTypeList";
+import useSourceTypeEditor from "./useSourceTypeEditor";
 
 type GlobalSourceTypesProps = {
 	sourceTypes: string[];
 };
 
 export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
+	const { mutate } = useUpdateDefaultSourceTypes();
+
 	const {
 		error,
 		lastRemoved,
@@ -25,12 +27,7 @@ export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
 		handleSubmit,
 		handleUndo,
 		register,
-	} = useUpdateSourceTypes(
-		"default_source_types",
-		"/settings",
-		settingsQueryKeys.all(),
-		sourceTypes,
-	);
+	} = useSourceTypeEditor(sourceTypes, mutate);
 
 	return (
 		<section>

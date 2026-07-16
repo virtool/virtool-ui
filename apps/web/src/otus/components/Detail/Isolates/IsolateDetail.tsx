@@ -1,7 +1,8 @@
 import { formatIsolateName } from "@app/utils";
 import Alert from "@base/Alert";
 import IconButton from "@base/IconButton";
-import { useCurrentOtuContext, useSetIsolateAsDefault } from "@otus/queries";
+import { useCurrentOtuContext } from "@otus/components/CurrentOtuContext";
+import { useSetIsolateAsDefault } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import {
 	useCheckReferenceRight,

@@ -1,6 +1,4 @@
 import { apiClient } from "@app/api";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import QueryError from "@base/QueryError";
 import {
 	keepPreviousData,
 	queryOptions,
@@ -9,12 +7,10 @@ import {
 	useQueryClient,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import { createContext, type ReactNode, useContext } from "react";
 import type { ErrorResponse } from "@/types/api";
-import { useFetchReference } from "../references/queries";
-import type { Reference } from "../references/types";
 import { otuQueryKeys } from "./keys";
 import type {
+	Genbank,
 	Otu,
 	OtuHistory,
 	OtuIsolate,
@@ -24,13 +20,19 @@ import type {
 } from "./types";
 
 /**
- * Get the Genbank data for a sequence
+ * Initializes a mutator for looking up a sequence in Genbank by accession
  *
- * @param accession - The unique accession identifying the sequence in genbank
- * @returns A Promise resolving to the genbank sequence data
+ * This is a read, but it is driven by a button press rather than by what is on
+ * screen, so it is a mutation: nothing should fetch it on render, and the
+ * result is not worth caching.
+ *
+ * @returns A mutator that takes the accession identifying the sequence
  */
-export function getGenbank(accession: string) {
-	return apiClient.get(`/genbank/${accession}`).then((res) => res.body);
+export function useGetGenbank() {
+	return useMutation<Genbank, ErrorResponse, string>({
+		mutationFn: (accession) =>
+			apiClient.get(`/genbank/${accession}`).then((res) => res.body),
+	});
 }
 
 /**
@@ -411,70 +413,4 @@ export function useRemoveSequence(otuId: string) {
 			});
 		},
 	});
-}
-
-type CurrentOtuContextValue = {
-	otu: Otu;
-	reference: Reference;
-};
-
-const CurrentOtuContext = createContext<CurrentOtuContextValue | null>(null);
-
-/**
- * Initializes a hook to access the current OTU context within a component
- *
- * @returns The current OTU context
- */
-export function useCurrentOtuContext() {
-	const context = useContext(CurrentOtuContext);
-
-	if (!context) {
-		throw new Error(
-			"useCurrentOtuContext must be used within a CurrentOtuContextProvider",
-		);
-	}
-
-	return context;
-}
-
-type CurrentOtuContextProviderProps = {
-	children: ReactNode;
-	otuId: string;
-	refId: string;
-};
-
-/**
- * Provides the current OTU context to children components
- *
- * @returns Element wrapping children components with the current OTU context
- */
-export function CurrentOtuContextProvider({
-	children,
-	otuId,
-	refId,
-}: CurrentOtuContextProviderProps) {
-	const {
-		data: otu,
-		isPending: isPendingOtu,
-		isError: isErrorOtu,
-	} = useFetchOtu(otuId);
-	const {
-		data: reference,
-		isPending: isPendingReference,
-		isError: isErrorReference,
-	} = useFetchReference(refId);
-
-	if ((isErrorOtu || isErrorReference) && (!otu || !reference)) {
-		return <QueryError noun="OTU" />;
-	}
-
-	if (isPendingOtu || isPendingReference) {
-		return <LoadingPlaceholder />;
-	}
-
-	return (
-		<CurrentOtuContext.Provider value={{ otu, reference }}>
-			{children}
-		</CurrentOtuContext.Provider>
-	);
 }

@@ -3,6 +3,14 @@ import type { ReferenceNested } from "@references/types";
 import type { UserNested } from "@users/types";
 import type { SearchResult } from "@/types/api";
 
+/** A sequence record looked up in Genbank by accession. */
+export type Genbank = {
+	accession: string;
+	definition: string;
+	host: string;
+	sequence: string;
+};
+
 export const Molecule = {
 	ds_dna: "dsDNA",
 	ds_rna: "dsRNA",

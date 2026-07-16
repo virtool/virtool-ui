@@ -5,9 +5,8 @@ import InputIconButton from "@base/InputIconButton";
 import InputLabel from "@base/InputLabel";
 import InputLoading from "@base/InputLoading";
 import InputSimple from "@base/InputSimple";
-import { getGenbank } from "@otus/queries";
+import { useGetGenbank } from "@otus/queries";
 import { WandSparkles } from "lucide-react";
-import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 type FormValues = {
@@ -21,8 +20,7 @@ type FormValues = {
  * Displays the accession field of a form for a sequence
  */
 export default function Accession() {
-	const [pending, setPending] = useState(false);
-	const [notFound, setNotFound] = useState(false);
+	const { error, isPending, mutate, reset } = useGetGenbank();
 
 	const {
 		formState: { errors },
@@ -31,26 +29,17 @@ export default function Accession() {
 		setValue,
 	} = useFormContext<FormValues>();
 
+	const notFound = error?.response?.status === 404;
+
 	function handleAutoFill() {
-		setPending(true);
-
-		getGenbank(getValues("accession")).then(
-			(resp) => {
-				setValue("accession", resp.accession);
-				setValue("definition", resp.definition);
-				setValue("host", resp.host);
-				setValue("sequence", resp.sequence);
-
-				setPending(false);
-				setNotFound(false);
+		mutate(getValues("accession"), {
+			onSuccess: (genbank) => {
+				setValue("accession", genbank.accession);
+				setValue("definition", genbank.definition);
+				setValue("host", genbank.host);
+				setValue("sequence", genbank.sequence);
 			},
-			(err) => {
-				setPending(false);
-				setNotFound(err.status === 404);
-
-				return err;
-			},
-		);
+		});
 	}
 
 	return (
@@ -61,10 +50,14 @@ export default function Accession() {
 					id="accession"
 					{...register("accession", {
 						required: "Required Field",
-						onChange: () => setNotFound(false),
+						onChange: () => {
+							if (error) {
+								reset();
+							}
+						},
 					})}
 				/>
-				{pending ? (
+				{isPending ? (
 					<InputLoading />
 				) : (
 					<InputIconButton

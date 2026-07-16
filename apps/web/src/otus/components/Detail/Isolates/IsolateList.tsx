@@ -7,7 +7,7 @@ import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import InputSearch from "@base/InputSearch";
 import SubviewHeader from "@base/SubviewHeader";
 import Toolbar from "@base/Toolbar";
-import { useCurrentOtuContext } from "@otus/queries";
+import { useCurrentOtuContext } from "@otus/components/CurrentOtuContext";
 import type { OtuIsolate } from "@otus/types";
 import {
 	useCheckReferenceRight,
