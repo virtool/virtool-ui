@@ -1,8 +1,21 @@
 import { faker } from "@faker-js/faker";
 import type { UpdateOtuProps } from "@otus/queries";
-import type { Otu } from "@otus/types";
+import type { Genbank, Otu } from "@otus/types";
 import nock from "nock";
 import { createFakeOtu, createFakeOtuSequence } from "../fake/otus";
+
+/**
+ * Sets up a mocked API route for looking up a sequence in Genbank
+ *
+ * @param accession - The accession to look up
+ * @param genbank - The record to return, or `null` to reply 404
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiGetGenbank(accession: string, genbank: Genbank | null) {
+	const scope = nock("http://localhost").get(`/api/genbank/${accession}`);
+
+	return genbank === null ? scope.reply(404) : scope.reply(200, genbank);
+}
 
 /**
  * Sets up a mocked API route for creating an OTU
