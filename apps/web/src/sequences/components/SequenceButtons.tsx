@@ -1,5 +1,4 @@
 import IconButton from "@base/IconButton";
-import Toolbar from "@base/Toolbar";
 import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
@@ -16,7 +15,7 @@ type SequenceButtonsProps = {
 };
 
 /**
- * A toolbar of actions for a sequence: edit, remove, and FASTA download
+ * A strip of actions for a sequence: edit, remove, and FASTA download
  */
 export default function SequenceButtons({
 	id,
@@ -35,7 +34,7 @@ export default function SequenceButtons({
 	const href = `/api/otus/${otu.id}/isolates/${isolateId}/sequences/${id}.fa`;
 
 	return (
-		<Toolbar className="items-center justify-end rounded-md border border-gray-200 bg-gray-50 px-2 py-1">
+		<div className="flex items-center justify-end gap-1.5 px-2 py-1">
 			{canModify && !archived && (
 				<>
 					<IconButton
@@ -54,9 +53,9 @@ export default function SequenceButtons({
 					/>
 				</>
 			)}
-			<DownloadLink className="bg-white" href={href} size="sm">
+			<DownloadLink href={href} size="sm">
 				FASTA
 			</DownloadLink>
-		</Toolbar>
+		</div>
 	);
 }

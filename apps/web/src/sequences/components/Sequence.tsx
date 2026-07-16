@@ -3,7 +3,7 @@ import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { Collapsible, CollapsibleContent } from "@base/Collapsible";
 import Icon from "@base/Icon";
-import Table from "@base/Table";
+import ScrollArea from "@base/ScrollArea";
 import { ChevronDown } from "lucide-react";
 import { Collapsible as CollapsiblePrimitive } from "radix-ui";
 import { useState } from "react";
@@ -73,35 +73,19 @@ export default function Sequence({
 					<SequenceDefinitionValue definition={definition} />
 				</CollapsiblePrimitive.Trigger>
 				<CollapsibleContent className="px-6 pb-3">
-					<SequenceButtons id={id} onEdit={onEdit} onRemove={onRemove} />
-					<Table
-						className={cn(
-							"mt-2.5",
-							"table-fixed",
-							"[&_th:first-child]:pl-0",
-							"[&_td:last-child]:pr-0",
-						)}
-					>
-						<tbody>
-							<tr>
-								<th>Host</th>
-								<td>{host}</td>
-							</tr>
-							<tr>
-								<th>
-									Sequence <Badge>{sequence.length}</Badge>
-								</th>
-								<td className="font-mono !p-0">
-									<textarea
-										className="w-full p-2"
-										rows={5}
-										value={sequence}
-										readOnly
-									/>
-								</td>
-							</tr>
-						</tbody>
-					</Table>
+					<div className="mt-2.5 overflow-hidden rounded-md border border-gray-200 bg-white">
+						<SequenceButtons id={id} onEdit={onEdit} onRemove={onRemove} />
+						<div className="flex gap-3 border-b border-gray-200 px-3 py-2">
+							<span className="w-20 shrink-0 font-semibold">Host</span>
+							<span className="min-w-0 truncate">{host}</span>
+						</div>
+						<div className="flex items-center gap-2 px-3 pt-2 font-semibold">
+							Sequence <Badge>{sequence.length}</Badge>
+						</div>
+						<ScrollArea className="mr-0 h-52 w-full rounded-none border-none">
+							<p className="break-all p-3 font-mono">{sequence}</p>
+						</ScrollArea>
+					</div>
 				</CollapsibleContent>
 			</Collapsible>
 		</BoxGroupSection>
