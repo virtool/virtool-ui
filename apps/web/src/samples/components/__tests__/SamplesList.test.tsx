@@ -11,6 +11,7 @@ import { createFakeLabel } from "@tests/fake/labels";
 import { createFakeSampleMinimal } from "@tests/fake/samples";
 import { createFakeShortlistSubtraction } from "@tests/fake/subtractions";
 import { createFakeUserNested } from "@tests/fake/user";
+import { mockFindLabels } from "@tests/server-fn/labels";
 import { mockGetAccount, mockListUsers } from "@tests/server-fn/users";
 import { at, renderWithRouter } from "@tests/setup";
 import nock from "nock";
@@ -29,10 +30,8 @@ type SamplesListSearch = {
 /** Mirrors the route, which maps the ``labels`` search param onto ``filterLabels``. */
 function SamplesListHarness({
 	initialSearch = { term: "" },
-	labels,
 }: {
 	initialSearch?: SamplesListSearch;
-	labels: ReturnType<typeof createFakeLabel>[];
 }) {
 	const [search, setSearch] = useState<SamplesListSearch>(initialSearch);
 
@@ -43,7 +42,6 @@ function SamplesListHarness({
 	return (
 		<SamplesList
 			filterLabels={search.labels}
-			labels={labels}
 			page={search.page}
 			setSearch={handleSetSearch}
 			term={search.term}
@@ -126,6 +124,7 @@ describe("<SamplesList />", () => {
 			{ ...createFakeUserNested(), handle: "bilbo" },
 		];
 		mockListUsers(users);
+		mockFindLabels(labels);
 		mockApiGetSamples(samples);
 		mockApiGetHmms(createFakeHmmSearchResults());
 		mockApiListIndexes([createFakeIndexMinimal()]);
@@ -137,7 +136,7 @@ describe("<SamplesList />", () => {
 	afterEach(() => nock.cleanAll());
 
 	it("should render correctly", async () => {
-		await renderWithRouter(<SamplesList labels={labels} />, path);
+		await renderWithRouter(<SamplesList />, path);
 		expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 		expect(screen.getByText(at(samples, 0).name)).toBeInTheDocument();
@@ -148,7 +147,7 @@ describe("<SamplesList />", () => {
 		mockApiGetSamples(samples);
 		mockApiGetSamples(samples);
 		mockApiGetSamples(samples);
-		await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+		await renderWithRouter(<SamplesListHarness />, path);
 		expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 		const inputElement = screen.getByPlaceholderText("Sample name");
@@ -164,7 +163,7 @@ describe("<SamplesList />", () => {
 				administrator_role: "full",
 			}),
 		);
-		await renderWithRouter(<SamplesList labels={labels} />, path);
+		await renderWithRouter(<SamplesList />, path);
 
 		expect(
 			await screen.findByRole("link", { name: "Create" }),
@@ -173,7 +172,7 @@ describe("<SamplesList />", () => {
 
 	it("should not render create button when [canModify=false]", async () => {
 		mockGetAccount(createFakeAccount({ administrator_role: null }));
-		await renderWithRouter(<SamplesList labels={labels} />, path);
+		await renderWithRouter(<SamplesList />, path);
 
 		expect(
 			screen.queryByRole("link", { name: "Create" }),
@@ -183,7 +182,7 @@ describe("<SamplesList />", () => {
 	describe("label filtering", () => {
 		it("should show a chip for a label selected in the dropdown", async () => {
 			mockApiGetSamples(samples);
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			const label = at(labels, 0);
@@ -205,7 +204,7 @@ describe("<SamplesList />", () => {
 		it("should remove every chip when the dropdown is cleared", async () => {
 			mockApiGetSamples(samples);
 			mockApiGetSamples(samples);
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			const label = at(labels, 0);
@@ -234,7 +233,7 @@ describe("<SamplesList />", () => {
 			mockApiGetSamples(samples);
 			mockApiGetSamples(samples);
 			mockApiGetSamples(samples);
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.type(screen.getByPlaceholderText("Sample name"), "Foo");
@@ -249,7 +248,7 @@ describe("<SamplesList />", () => {
 	describe("workflow filtering", () => {
 		it("should show a chip for a workflow state selected in the dropdown", async () => {
 			mockApiGetSamples(samples);
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(screen.getByRole("button", { name: "Workflows" }));
@@ -271,7 +270,7 @@ describe("<SamplesList />", () => {
 		it("should keep the menu open and check both states toggled for one workflow", async () => {
 			mockApiGetSamples(samples);
 			mockApiGetSamples(samples);
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(screen.getByRole("button", { name: "Workflows" }));
@@ -296,7 +295,7 @@ describe("<SamplesList />", () => {
 		it("should remove every workflow chip when the dropdown is cleared", async () => {
 			mockApiGetSamples(samples);
 			mockApiGetSamples(samples);
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			const removeChipName = "Remove Pathoscope Not analyzed filter";
@@ -322,7 +321,7 @@ describe("<SamplesList />", () => {
 	describe("user filtering", () => {
 		it("should show a chip for a user selected in the dropdown", async () => {
 			mockApiGetSamples(samples);
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(screen.getByRole("button", { name: "Users" }));
@@ -341,7 +340,7 @@ describe("<SamplesList />", () => {
 		it("should show a chip for each of several users selected at once", async () => {
 			mockApiGetSamples(samples);
 			mockApiGetSamples(samples);
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(screen.getByRole("button", { name: "Users" }));
@@ -370,7 +369,7 @@ describe("<SamplesList />", () => {
 		it("should list the logged-in user first, tagged as You", async () => {
 			const self = at(users, 1);
 			mockGetAccount(createFakeAccount({ id: self.id, handle: self.handle }));
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(screen.getByRole("button", { name: "Users" }));
@@ -383,7 +382,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should narrow the user list as the search input is typed in", async () => {
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(screen.getByRole("button", { name: "Users" }));
@@ -403,7 +402,7 @@ describe("<SamplesList />", () => {
 		it("should remove every chip when the dropdown is cleared", async () => {
 			mockApiGetSamples(samples);
 			mockApiGetSamples(samples);
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			const removeChipName = `Remove ${at(users, 0).handle} user filter`;
@@ -428,7 +427,7 @@ describe("<SamplesList />", () => {
 
 	describe("select all", () => {
 		it("should show the sample count until something is selected", async () => {
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			expect(screen.getByText("2 samples")).toBeInTheDocument();
@@ -449,7 +448,7 @@ describe("<SamplesList />", () => {
 			mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
 			mockApiGetSamples(samples, { found_count: 2, total_count: 17 });
 
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			expect(screen.getByText("2 samples")).toBeInTheDocument();
@@ -457,7 +456,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should select every sample on the page", async () => {
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(
@@ -472,7 +471,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should complete the selection when only some samples are selected", async () => {
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(
@@ -490,7 +489,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should clear the selection when every sample is already selected", async () => {
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			const selectAll = screen.getByRole("checkbox", {
@@ -508,7 +507,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should show a mixed state when only some samples are selected", async () => {
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			const selectAll = screen.getByRole("checkbox", {
@@ -530,7 +529,7 @@ describe("<SamplesList />", () => {
 		it("should leave samples selected on other pages alone", async () => {
 			const [first, second] = mockApiGetSamplePages();
 
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(
@@ -555,7 +554,7 @@ describe("<SamplesList />", () => {
 
 		it("should clear the selection when a filter changes", async () => {
 			mockApiGetSamples(samples);
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(
@@ -594,7 +593,7 @@ describe("<SamplesList />", () => {
 
 		async function renderRange(names: string[]) {
 			const documents = mockApiGetSampleRange(names);
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 			return documents;
 		}
@@ -674,7 +673,7 @@ describe("<SamplesList />", () => {
 			const shiftSelect = withShift(user);
 			const [first, second] = mockApiGetSamplePages();
 
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await user.click(checkboxFor(first.name));
@@ -689,7 +688,7 @@ describe("<SamplesList />", () => {
 
 	describe("quick analyze", () => {
 		it("should scope to the clicked sample, ignoring the selection", async () => {
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			const selectedSample = at(samples, 0);
@@ -713,7 +712,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should title a single clicked sample without a count", async () => {
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(
@@ -731,7 +730,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should count a single-sample selection from the header", async () => {
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(
@@ -746,7 +745,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should include every selected sample when triggered from the header", async () => {
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(
@@ -767,7 +766,7 @@ describe("<SamplesList />", () => {
 		it("should include samples selected on an earlier page", async () => {
 			const [first, second] = mockApiGetSamplePages();
 
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			await userEvent.click(
@@ -791,7 +790,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should not show the quick analyze button until samples are selected", async () => {
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			expect(
@@ -808,7 +807,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should leave the existing selection intact after a row is analyzed", async () => {
-			await renderWithRouter(<SamplesList labels={labels} />, path);
+			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
 			const selectedSample = at(samples, 0);
@@ -851,7 +850,7 @@ describe("<SamplesList />", () => {
 		afterEach(() => nock.cleanAll());
 
 		it("should say no samples exist when no filters are active", async () => {
-			await renderWithRouter(<SamplesListHarness labels={labels} />, path);
+			await renderWithRouter(<SamplesListHarness />, path);
 
 			expect(await screen.findByText("No samples")).toBeInTheDocument();
 			expect(
@@ -869,7 +868,7 @@ describe("<SamplesList />", () => {
 			["a user", { users: [1] }],
 		])("should say no samples match when %s is active", async (_, search) => {
 			await renderWithRouter(
-				<SamplesListHarness initialSearch={search} labels={labels} />,
+				<SamplesListHarness initialSearch={search} />,
 				path,
 			);
 
@@ -886,7 +885,6 @@ describe("<SamplesList />", () => {
 			await renderWithRouter(
 				<SamplesListHarness
 					initialSearch={{ labels: [at(labels, 0).id], term: "ferret" }}
-					labels={labels}
 				/>,
 				path,
 			);
