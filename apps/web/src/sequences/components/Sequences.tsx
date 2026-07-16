@@ -2,7 +2,7 @@ import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
-import { useCurrentOtuContext } from "@otus/queries";
+import { useCurrentOtuContext } from "@otus/components/CurrentOtuContext";
 import type { OtuIsolate, OtuSequence } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
 import { useReferenceIsArchived } from "@references/hooks";

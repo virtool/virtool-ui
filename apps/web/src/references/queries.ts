@@ -1,3 +1,5 @@
+import { settingsQueryKeys } from "@administration/keys";
+import type { Settings } from "@administration/types";
 import { apiClient } from "@app/api";
 import { referenceQueryKeys } from "@references/keys";
 import {
@@ -249,6 +251,49 @@ export function useUpdateReference(refId: string, onSuccess?: () => void) {
 	});
 
 	return { mutation };
+}
+
+/**
+ * Initializes a mutator for replacing a reference's allowed source types
+ *
+ * @param refId - The id of the reference to update
+ * @returns A mutator that takes the complete new list of source types
+ */
+export function useUpdateReferenceSourceTypes(refId: string) {
+	const queryClient = useQueryClient();
+
+	return useMutation<Reference, ErrorResponse, string[]>({
+		mutationFn: (sourceTypes) =>
+			apiClient
+				.patch(`/refs/${refId}`)
+				.send({ source_types: sourceTypes })
+				.then((res) => res.body),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: referenceQueryKeys.detail(refId),
+			});
+		},
+	});
+}
+
+/**
+ * Initializes a mutator for replacing the source types new references start with
+ *
+ * @returns A mutator that takes the complete new list of default source types
+ */
+export function useUpdateDefaultSourceTypes() {
+	const queryClient = useQueryClient();
+
+	return useMutation<Settings, ErrorResponse, string[]>({
+		mutationFn: (sourceTypes) =>
+			apiClient
+				.patch("/settings")
+				.send({ default_source_types: sourceTypes })
+				.then((res) => res.body),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: settingsQueryKeys.all() });
+		},
+	});
 }
 
 /**

@@ -10,12 +10,15 @@ import InputError from "@base/InputError";
 import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SectionHeader from "@base/SectionHeader";
-import { useUpdateSourceTypes } from "@references/hooks";
-import { referenceQueryKeys } from "@references/keys";
-import { useFetchReference, useUpdateReference } from "@references/queries";
+import {
+	useFetchReference,
+	useUpdateReference,
+	useUpdateReferenceSourceTypes,
+} from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
 import { Undo2 } from "lucide-react";
 import SourceTypeList from "./SourceTypeList";
+import useSourceTypeEditor from "./useSourceTypeEditor";
 
 const routeApi = getRouteApi("/_authenticated/refs/$refId");
 
@@ -29,6 +32,8 @@ export function LocalSourceTypes() {
 	const sourceTypes = data?.source_types ?? [];
 	const restrictSourceTypes = data?.restrict_source_types ?? false;
 
+	const { mutate } = useUpdateReferenceSourceTypes(refId);
+
 	const {
 		error,
 		lastRemoved,
@@ -36,12 +41,7 @@ export function LocalSourceTypes() {
 		handleSubmit,
 		handleUndo,
 		register,
-	} = useUpdateSourceTypes(
-		"source_types",
-		`/refs/${refId}`,
-		referenceQueryKeys.detail(refId),
-		sourceTypes,
-	);
+	} = useSourceTypeEditor(sourceTypes, mutate);
 
 	if (isPending) {
 		return <LoadingPlaceholder />;

@@ -1,4 +1,7 @@
-import { CurrentOtuContextProvider, useCurrentOtuContext } from "@otus/queries";
+import {
+	CurrentOtuContextProvider,
+	useCurrentOtuContext,
+} from "@otus/components/CurrentOtuContext";
 import { getRouteApi, Outlet } from "@tanstack/react-router";
 import OtuIssues from "../OtuIssues";
 
