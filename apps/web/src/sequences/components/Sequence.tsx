@@ -59,6 +59,7 @@ export default function Sequence({
 				>
 					<Icon
 						className={cn(
+							"size-4",
 							SEQUENCE_CHEVRON_COLUMN,
 							"mt-1",
 							"text-gray-600",
@@ -66,7 +67,6 @@ export default function Sequence({
 							"group-data-[state=open]:rotate-180",
 						)}
 						icon={ChevronDown}
-						size={16}
 					/>
 					<SequenceAccessionValue accession={accession} />
 					<SequenceSegmentValue segment={segment} />

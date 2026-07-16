@@ -7,8 +7,11 @@ describe("Circle", () => {
 		const { container, rerender } = render(<Circle />);
 		expect(container.querySelector("svg")).toHaveClass("size-3");
 
-		rerender(<Circle className="size-5" />);
-		expect(container.querySelector("svg")).toHaveClass("size-5");
+		rerender(<Circle className="size-5 text-red-500" />);
+		expect(container.querySelector("svg")).toHaveClass(
+			"size-5",
+			"text-red-500",
+		);
 	});
 
 	it("should render with correct color class", () => {
