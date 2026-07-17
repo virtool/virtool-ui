@@ -3,7 +3,7 @@ import type {
 	FetchNextPageOptions,
 	InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
-import type { ReactElement } from "react";
+import type { ComponentPropsWithRef, ReactElement, UIEvent } from "react";
 import LoadingPlaceholder from "./LoadingPlaceholder";
 
 function getScrollRatio(scrollListElement: HTMLElement): number {
@@ -13,13 +13,7 @@ function getScrollRatio(scrollListElement: HTMLElement): number {
 	);
 }
 
-type CompactScrollListProps = {
-	/** The id of the element that labels the list */
-	"aria-labelledby"?: string;
-
-	/** The class name of the scroll list */
-	className?: string;
-
+type CompactScrollListProps = ComponentPropsWithRef<"div"> & {
 	/** A function which initiates fetching the next page */
 	fetchNextPage: (
 		options?: FetchNextPageOptions,
@@ -40,18 +34,25 @@ type CompactScrollListProps = {
 
 /**
  * An infinitely scrolling list of items.
+ *
+ * The container carries no ARIA role of its own — it is a plain scroll region.
+ * Callers that are genuine listboxes pass listbox props (`role`, `tabIndex`,
+ * `aria-activedescendant`, `onKeyDown`) through, e.g. via `useListboxNavigation`.
  */
 export default function CompactScrollList({
-	"aria-labelledby": ariaLabelledby,
 	className,
 	fetchNextPage,
 	isFetchingNextPage,
 	isPending,
 	items,
 	renderRow,
+	onScroll,
+	...props
 }: CompactScrollListProps) {
-	function onScroll(e) {
-		const scrollListElement = e.target;
+	function handleScroll(e: UIEvent<HTMLDivElement>) {
+		onScroll?.(e);
+
+		const scrollListElement = e.target as HTMLElement;
 		if (getScrollRatio(scrollListElement) > 0.8 && !isFetchingNextPage) {
 			void fetchNextPage();
 		}
@@ -61,7 +62,6 @@ export default function CompactScrollList({
 
 	return (
 		<div
-			aria-labelledby={ariaLabelledby}
 			className={cn(
 				"mb-2",
 				"relative",
@@ -71,8 +71,8 @@ export default function CompactScrollList({
 				"rounded-md",
 				className,
 			)}
-			onScroll={onScroll}
-			role="listbox"
+			onScroll={handleScroll}
+			{...props}
 		>
 			{entries}
 			{isPending && <LoadingPlaceholder className="mt-5" />}

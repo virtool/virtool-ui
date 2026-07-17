@@ -1,43 +1,47 @@
 import { cn } from "@app/cn";
-import type { KeyboardEvent, ReactNode } from "react";
+import type { ReactNode } from "react";
 import BoxGroupSection from "./BoxGroupSection";
 
 type SelectBoxGroupSectionProps = {
+	/** Whether the option is selected */
 	active?: boolean;
 	children: ReactNode;
 	className?: string;
+	/** Whether the option is the keyboard cursor's active descendant */
+	highlighted?: boolean;
+	/** The option's DOM id, referenced by the listbox's `aria-activedescendant` */
+	id?: string;
 	onClick?: () => void;
 };
 
+/**
+ * A single option in a listbox.
+ *
+ * The parent listbox owns keyboard focus and moves an `aria-activedescendant`
+ * cursor, so options are not individually focusable — `highlighted` renders the
+ * cursor and `active` reflects selection.
+ */
 export default function SelectBoxGroupSection({
 	active,
 	children,
 	className,
+	highlighted,
+	id,
 	onClick,
 }: SelectBoxGroupSectionProps) {
-	function onKeyDown(e: KeyboardEvent) {
-		if (e.key === "Enter" || e.key === " ") {
-			e.preventDefault();
-			onClick?.();
-		}
-	}
-
 	return (
 		<BoxGroupSection
 			aria-selected={active}
 			className={cn(
 				"cursor-pointer",
 				"w-full",
-				"focus:ring-2",
-				"focus:ring-inset",
-				"focus:ring-blue-600/50",
-				"focus:outline-none",
+				active && "bg-blue-50",
+				highlighted && "ring-2 ring-inset ring-blue-600/50",
 				className,
 			)}
+			id={id}
 			onClick={onClick}
-			onKeyDown={onKeyDown}
 			role="option"
-			tabIndex={0}
 		>
 			{children}
 		</BoxGroupSection>

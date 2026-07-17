@@ -6,6 +6,7 @@ type BoxGroupSectionProps = {
 	as?: ElementType;
 	children?: ReactNode;
 	className?: string;
+	id?: string;
 	onClick?: () => void;
 	onKeyDown?: (e: KeyboardEvent) => void;
 	ref?: Ref<HTMLDivElement>;
