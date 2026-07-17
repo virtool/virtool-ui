@@ -15,8 +15,7 @@ import QueryError from "@base/QueryError";
 import { useListSelection } from "@base/useListSelection";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
-import { useListIndexes } from "@indexes/queries";
-import type { Label } from "@labels/types";
+import { useFetchLabels } from "@labels/queries";
 import { useListSamples } from "@samples/queries";
 import type { Sample, SampleMinimal } from "@samples/types";
 import { xor } from "es-toolkit/array";
@@ -53,7 +52,6 @@ function getFilterKey(
 }
 
 type SamplesListProps = {
-	labels: Label[];
 	filterLabels?: number[];
 	page?: number;
 	setSearch?: (next: {
@@ -69,10 +67,9 @@ type SamplesListProps = {
 };
 
 /**
- * A list of samples with filtering. Caller passes labels in.
+ * A list of samples with filtering.
  */
 export default function SamplesList({
-	labels,
 	filterLabels = [],
 	page: urlPage = 1,
 	setSearch = () => {},
@@ -92,8 +89,13 @@ export default function SamplesList({
 		filterWorkflows,
 		filterUsers,
 	);
-	const { isPending: isPendingIndexes, isError: isErrorIndexes } =
-		useListIndexes({ ready: true });
+	// Labels are fetched here rather than passed in so the request goes out in
+	// the same render as the samples request, instead of gating it.
+	const {
+		data: labels,
+		isPending: isPendingLabels,
+		isError: isErrorLabels,
+	} = useFetchLabels();
 
 	// The samples themselves are held, not just their ids: the selection outlives
 	// the page they were checked on, and the bulk actions need their labels. It
@@ -121,11 +123,11 @@ export default function SamplesList({
 		setOpenQuickAnalyze(true);
 	}
 
-	if ((isErrorSamples || isErrorIndexes) && !samples) {
+	if ((isErrorSamples && !samples) || (isErrorLabels && !labels)) {
 		return <QueryError noun="samples" />;
 	}
 
-	if (isPendingSamples || isPendingIndexes) {
+	if (isPendingSamples || isPendingLabels) {
 		return <LoadingPlaceholder />;
 	}
 
