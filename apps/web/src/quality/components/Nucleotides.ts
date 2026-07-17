@@ -1,3 +1,4 @@
+import { pluralize } from "@app/format";
 import {
 	appendLegend,
 	createSvg,
@@ -19,7 +20,7 @@ export function drawNucleotidesChart(
 	data: Array<[number, number, number, number]>,
 	baseWidth: number,
 ) {
-	const label = `Nucleotide composition across ${data.length} read positions, showing the percentage of guanine, adenine, thymine, and cytosine.`;
+	const label = `Nucleotide composition across ${pluralize(data.length, "read position")}, showing the percentage of guanine, adenine, thymine, and cytosine.`;
 
 	const svg = createSvg(element, baseWidth, label);
 

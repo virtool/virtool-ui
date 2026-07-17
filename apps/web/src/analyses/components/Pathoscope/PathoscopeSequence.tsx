@@ -1,3 +1,5 @@
+import { pluralize } from "@app/format";
+import { labelSvg } from "@samples/charting";
 import { area, axisBottom, axisLeft, format, scaleLinear, select } from "d3";
 import { useEffect, useRef } from "react";
 import "./area.css";
@@ -44,11 +46,9 @@ function draw({
 	const svgRoot = select(element)
 		.append("svg")
 		.attr("width", width + margin)
-		.attr("height", height + margin)
-		.attr("role", "img")
-		.attr("aria-label", label);
+		.attr("height", height + margin);
 
-	svgRoot.append("title").text(label);
+	labelSvg(svgRoot, label);
 
 	const svg = svgRoot.append("g").attr("transform", `translate(${margin},5)`);
 
@@ -110,7 +110,7 @@ export default function PathoscopeSequence({
 			draw({
 				element: chartEl.current,
 				data,
-				label: `Read depth coverage across the ${accession} sequence, ${length} nucleotides long.`,
+				label: `Read depth coverage across the ${accession} sequence, ${pluralize(length, "nucleotide")} long.`,
 				length,
 				yMax,
 				xMin: chartEl.current.offsetWidth,

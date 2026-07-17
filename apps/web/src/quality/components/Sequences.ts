@@ -1,4 +1,4 @@
-import { toScientificNotation } from "@app/format";
+import { pluralize, toScientificNotation } from "@app/format";
 import {
 	createSvg,
 	QUALITY_CHART_HEIGHT,
@@ -8,7 +8,7 @@ import { axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { max } from "es-toolkit/compat";
 
 export function drawSequencesChart(element, data, baseWidth) {
-	const label = `Number of reads at each of ${data.length} quality scores.`;
+	const label = `Number of reads at each of ${pluralize(data.length, "quality score")}.`;
 
 	const svg = createSvg(element, baseWidth, label);
 

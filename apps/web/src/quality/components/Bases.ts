@@ -1,3 +1,4 @@
+import { pluralize } from "@app/format";
 import {
 	appendLegend,
 	createSvg,
@@ -45,7 +46,7 @@ function lineDrawer(data, key, x, y) {
 }
 
 export function drawBasesChart(element: HTMLElement, data, baseWidth: number) {
-	const label = `Base quality distribution across ${data.length} read positions, showing mean and median quality with interquartile and interdecile ranges.`;
+	const label = `Base quality distribution across ${pluralize(data.length, "read position")}, showing mean and median quality with interquartile and interdecile ranges.`;
 
 	const svg = createSvg(element, baseWidth, label);
 

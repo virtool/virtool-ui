@@ -1,4 +1,5 @@
 import Badge from "@base/Badge";
+import { labelSvg } from "@samples/charting";
 import { scaleLinear, select } from "d3";
 import { useEffect, useRef } from "react";
 import "./NuvsOrf.css";
@@ -19,11 +20,9 @@ function draw(element, maxLength, pos, strand) {
 	const svg = select(element)
 		.append("svg")
 		.attr("width", width + 30)
-		.attr("height", HEIGHT)
-		.attr("role", "img")
-		.attr("aria-label", label);
+		.attr("height", HEIGHT);
 
-	svg.append("title").text(label);
+	labelSvg(svg, label);
 
 	// Create a mother group that will hold all chart elements.
 	const group = svg.append("g").attr("transform", "translate(15,0)");
