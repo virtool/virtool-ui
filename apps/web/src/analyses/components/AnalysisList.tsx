@@ -18,7 +18,7 @@ import AnalysisHMMAlert from "./HMMAlert";
 type AnalysesListProps = {
 	onPageChange: (page: number) => void;
 	page: number;
-	sampleId: string;
+	sampleId: number;
 };
 
 /**

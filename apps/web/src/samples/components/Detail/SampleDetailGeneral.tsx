@@ -32,7 +32,7 @@ type SampleDetailGeneralProps = {
 export default function SampleDetailGeneral({
 	labels,
 }: SampleDetailGeneralProps) {
-	const { sampleId } = routeApi.useParams();
+	const sampleId = Number(routeApi.useParams().sampleId);
 	const { data } = useSuspenseSample(sampleId);
 	const { data: job } = useFetchJob(data.job?.id ?? Number.NaN, data.job);
 

@@ -9,5 +9,5 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
 	const { sampleId } = Route.useParams();
-	return <SampleRights sampleId={sampleId} />;
+	return <SampleRights sampleId={Number(sampleId)} />;
 }

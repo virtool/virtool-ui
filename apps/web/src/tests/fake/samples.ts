@@ -14,7 +14,7 @@ export function createFakeSampleMinimal(
 	overrides?: Partial<SampleMinimal>,
 ): SampleMinimal {
 	const defaultSampleMinimal: SampleMinimal = {
-		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		id: faker.number.int(),
 		name: `${faker.word.noun({ strategy: "any-length" })} ${faker.number.int()}`,
 		created_at: faker.date.past().toISOString(),
 		host: faker.word.noun({ strategy: "any-length" }),
@@ -45,7 +45,7 @@ export function createFakeSampleRead(overrides?: Partial<Read>): Read {
 		id: faker.number.int(),
 		name: faker.word.noun({ strategy: "any-length" }),
 		name_on_disk: faker.word.noun({ strategy: "any-length" }),
-		sample: faker.word.noun({ strategy: "any-length" }),
+		sample: faker.number.int(),
 		size: faker.number.int(),
 		uploaded_at: faker.date.past().toISOString(),
 	};

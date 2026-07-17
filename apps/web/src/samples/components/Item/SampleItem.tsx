@@ -49,7 +49,7 @@ export default function SampleItem({
 			<Link
 				className="text-lg font-medium overflow-hidden text-ellipsis whitespace-nowrap"
 				to="/samples/$sampleId"
-				params={{ sampleId: sample.id }}
+				params={{ sampleId: String(sample.id) }}
 			>
 				{sample.name}
 			</Link>

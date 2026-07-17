@@ -46,13 +46,13 @@ describe("emit", () => {
 	});
 
 	it("accepts string resource ids", async () => {
-		await emit("samples", "abc123", "update");
+		await emit("references", "ref123", "update");
 
 		expect(notify).toHaveBeenCalledWith(
 			"client_events",
 			JSON.stringify({
-				domain: "samples",
-				resource_id: "abc123",
+				domain: "references",
+				resource_id: "ref123",
 				operation: "update",
 			}),
 		);

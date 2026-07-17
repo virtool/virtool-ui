@@ -11,7 +11,6 @@ export type ResourceId<D extends SseDomain> = D extends
 	| "indexes"
 	| "references"
 	| "roles"
-	| "samples"
 	? string
 	: number;
 

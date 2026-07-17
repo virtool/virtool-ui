@@ -6,7 +6,7 @@ import { AlertTriangle } from "lucide-react";
 
 type SampleFileSizeWarningProps = {
 	reads: Read[];
-	sampleId: string;
+	sampleId: number;
 };
 
 /**
@@ -23,7 +23,10 @@ export default function SampleFileSizeWarning({
 		const showLink = !location.endsWith("/uploads");
 
 		const link = showLink ? (
-			<Link to="/samples/$sampleId/files" params={{ sampleId }}>
+			<Link
+				to="/samples/$sampleId/files"
+				params={{ sampleId: String(sampleId) }}
+			>
 				Check the file sizes
 			</Link>
 		) : (

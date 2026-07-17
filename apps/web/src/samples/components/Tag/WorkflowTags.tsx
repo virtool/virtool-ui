@@ -5,7 +5,7 @@ import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import WorkflowTag from "./WorkflowTag";
 
 type WorkflowTagsProps = {
-	id: string;
+	id: number;
 	workflows: SampleWorkflows;
 };
 
