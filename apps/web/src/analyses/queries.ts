@@ -103,13 +103,20 @@ export function useCreateAnalysis() {
 				.then((res) => res.body),
 
 		onSuccess: (_data, { sampleId }) => {
-			// Only this sample's analyses list gained a row, and only this sample's
-			// workflow state changed — leave every other sample's caches alone.
+			// Only this sample's analyses list gained a row, so leave every other
+			// sample's analyses alone.
 			queryClient.invalidateQueries({
 				queryKey: [...analysesQueryKeys.lists(), sampleId],
 			});
+			// The sample's workflow state changed. Refresh its detail, and the
+			// sample lists too: the samples-list row renders `sample.workflows`
+			// from its own list entry, so a Quick Analyze started from that list
+			// would otherwise keep showing stale workflow tags until a remount.
 			queryClient.invalidateQueries({
 				queryKey: samplesQueryKeys.detail(sampleId),
+			});
+			queryClient.invalidateQueries({
+				queryKey: samplesQueryKeys.lists(),
 			});
 		},
 	});

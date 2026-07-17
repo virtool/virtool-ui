@@ -10,7 +10,7 @@ import { useCreateAnalysis } from "../queries";
 describe("useCreateAnalysis()", () => {
 	afterEach(() => nock.cleanAll());
 
-	it("narrows invalidation to the analysed sample, not every sample", async () => {
+	it("narrows the analyses invalidation to the analysed sample", async () => {
 		const queryClient = new QueryClient();
 		const invalidateQueries = vi.spyOn(queryClient, "invalidateQueries");
 
@@ -40,10 +40,15 @@ describe("useCreateAnalysis()", () => {
 		expect(invalidateQueries).toHaveBeenCalledWith({
 			queryKey: [...analysesQueryKeys.lists(), "sample-1"],
 		});
+		expect(invalidateQueries).not.toHaveBeenCalledWith({
+			queryKey: analysesQueryKeys.lists(),
+		});
+		// The sample's workflow tags render from both its detail and its list
+		// entry, so both are refreshed.
 		expect(invalidateQueries).toHaveBeenCalledWith({
 			queryKey: samplesQueryKeys.detail("sample-1"),
 		});
-		expect(invalidateQueries).not.toHaveBeenCalledWith({
+		expect(invalidateQueries).toHaveBeenCalledWith({
 			queryKey: samplesQueryKeys.lists(),
 		});
 
