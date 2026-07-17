@@ -43,13 +43,14 @@ describe("useCreateAnalysis()", () => {
 		expect(invalidateQueries).not.toHaveBeenCalledWith({
 			queryKey: analysesQueryKeys.lists(),
 		});
-		// The sample's workflow tags render from both its detail and its list
-		// entry, so both are refreshed.
-		expect(invalidateQueries).toHaveBeenCalledWith({
-			queryKey: samplesQueryKeys.detail("sample-1"),
-		});
+		// The samples-list row renders the sample's workflow tags from its own
+		// list entry, so the lists are refreshed. The detail cache is left to the
+		// SSE frame, so creating an analysis does not refetch it.
 		expect(invalidateQueries).toHaveBeenCalledWith({
 			queryKey: samplesQueryKeys.lists(),
+		});
+		expect(invalidateQueries).not.toHaveBeenCalledWith({
+			queryKey: samplesQueryKeys.detail("sample-1"),
 		});
 
 		scope.done();

@@ -108,13 +108,11 @@ export function useCreateAnalysis() {
 			queryClient.invalidateQueries({
 				queryKey: [...analysesQueryKeys.lists(), sampleId],
 			});
-			// The sample's workflow state changed. Refresh its detail, and the
-			// sample lists too: the samples-list row renders `sample.workflows`
-			// from its own list entry, so a Quick Analyze started from that list
-			// would otherwise keep showing stale workflow tags until a remount.
-			queryClient.invalidateQueries({
-				queryKey: samplesQueryKeys.detail(sampleId),
-			});
+			// The sample's workflow state changed, and the samples-list row renders
+			// `sample.workflows` from its own list entry — so a Quick Analyze
+			// started from that list would otherwise keep showing stale workflow
+			// tags until a remount. The sample's detail cache is refreshed by the
+			// SSE `samples/update` frame, not here.
 			queryClient.invalidateQueries({
 				queryKey: samplesQueryKeys.lists(),
 			});
