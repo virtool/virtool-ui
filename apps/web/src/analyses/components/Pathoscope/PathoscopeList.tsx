@@ -1,7 +1,7 @@
 import { useSortAndFilterPathoscopeHits } from "@analyses/hooks";
+import type { FormattedPathoscopeAnalysis } from "@analyses/types";
 import Accordion from "@base/Accordion";
-import type { FormattedPathoscopeAnalysis } from "@/analyses/types";
-import type { Sample } from "@/samples/types";
+import type { Sample } from "@samples/types";
 import { PathoscopeItem } from "./PathoscopeItem";
 
 type PathoscopeListProps = {

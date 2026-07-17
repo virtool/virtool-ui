@@ -142,7 +142,10 @@ application's own doing.
 
 - `server/events/channel.ts` — channel name + payload type. Pure.
 - `server/events/emit.ts` — publishes a `ClientEvent` via `NOTIFY`.
-- `server/events/listen.ts` — `LISTEN`-backed async iterable.
+- `server/events/listen.ts` — `LISTEN`-backed async iterable. Its
+  per-connection buffer is capped (`MAX_QUEUE`); a consumer that falls
+  that far behind has its stream dropped rather than buffered without
+  bound, and the client reconnects and refetches to re-sync.
 - `server/events/broadcast.ts` — pure `ClientEvent → SseMessage` shape
   conversion.
 - `routes/events.ts` — TanStack Start `createFileRoute` that owns the

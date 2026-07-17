@@ -1,12 +1,17 @@
 import { hasSufficientAdminRole } from "@administration/utils";
 import Alert from "@base/Alert";
+import QueryError from "@base/QueryError";
 import { useFetchAccount } from "../account";
 
 /**
  * Displays a banner with information for an admin user
  */
 export default function ApiKeyAdministratorInfo() {
-	const { data, isPending } = useFetchAccount();
+	const { data, isError, isPending } = useFetchAccount();
+
+	if (isError && !data) {
+		return <QueryError noun="account" />;
+	}
 
 	if (
 		!isPending &&

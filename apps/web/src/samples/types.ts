@@ -9,9 +9,9 @@
 import type { GroupMinimal } from "@groups/types";
 import type { ServerJobNested } from "@jobs/types";
 import type { LabelNested } from "@labels/types";
+import type { SubtractionNested } from "@subtraction/types";
 import type { UserNested } from "@users/types";
-import type { SubtractionNested } from "../subtraction/types";
-import type { SearchResult } from "../types/api";
+import type { SearchResult } from "@/types/api";
 
 /* All workflow states */
 export type WorkflowState = "complete" | "pending" | "none" | "incompatible";

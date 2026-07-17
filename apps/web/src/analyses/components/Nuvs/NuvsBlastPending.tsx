@@ -1,11 +1,11 @@
+import { addSeconds, formatDistanceStrict } from "@app/date";
+import { useNow } from "@app/hooks";
 import Box from "@base/Box";
 import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";
 import Loader from "@base/Loader";
 import RelativeTime from "@base/RelativeTime";
 import { ExternalLink as ExternalLinkIcon } from "lucide-react";
-import { addSeconds, formatDistanceStrict } from "@/app/date";
-import { useNow } from "@/app/hooks";
 
 const ridRoot =
 	"https://blast.ncbi.nlm.nih.gov/Blast.cgi?\

@@ -8,10 +8,9 @@ import IconButton from "@base/IconButton";
 import InputContainer from "@base/InputContainer";
 import InputError from "@base/InputError";
 import InputSimple from "@base/InputSimple";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SectionHeader from "@base/SectionHeader";
 import {
-	useFetchReference,
+	useSuspenseReference,
 	useUpdateReference,
 	useUpdateReferenceSourceTypes,
 } from "@references/queries";
@@ -25,12 +24,12 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId");
 export function LocalSourceTypes() {
 	const { refId } = routeApi.useParams();
 
-	const { data, isPending } = useFetchReference(refId);
+	const { data } = useSuspenseReference(refId);
 
 	const { mutation: updateReferenceMutation } = useUpdateReference(refId);
 
-	const sourceTypes = data?.source_types ?? [];
-	const restrictSourceTypes = data?.restrict_source_types ?? false;
+	const sourceTypes = data.source_types ?? [];
+	const restrictSourceTypes = data.restrict_source_types ?? false;
 
 	const { mutate } = useUpdateReferenceSourceTypes(refId);
 
@@ -42,10 +41,6 @@ export function LocalSourceTypes() {
 		handleUndo,
 		register,
 	} = useSourceTypeEditor(sourceTypes, mutate);
-
-	if (isPending) {
-		return <LoadingPlaceholder />;
-	}
 
 	function handleToggle() {
 		updateReferenceMutation.mutate({

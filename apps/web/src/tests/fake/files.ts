@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import type { Upload } from "@/uploads/types";
+import type { Upload } from "@uploads/types";
 import { createFakeUserNested } from "./user";
 
 /**

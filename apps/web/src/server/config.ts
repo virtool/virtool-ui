@@ -18,14 +18,19 @@ export type StorageConfig =
 			endpoint?: string;
 	  };
 
+/** postgres-js pool size when `VT_POSTGRES_POOL_MAX` is unset. */
+const DEFAULT_POSTGRES_POOL_MAX = 10;
+
 /** Server-side configuration parsed from process.env. */
 export type ServerConfig = {
 	postgresUrl: string;
+	postgresPoolMax: number;
 	storage: StorageConfig;
 };
 
 const ServerEnv = z.object({
 	VT_POSTGRES_URL: z.string().url(),
+	VT_POSTGRES_POOL_MAX: z.coerce.number().int().positive().optional(),
 	VT_STORAGE_BACKEND: z.enum(["s3", "azure"]),
 	VT_STORAGE_S3_BUCKET: z.string().optional(),
 	VT_STORAGE_S3_REGION: z.string().optional(),
@@ -42,6 +47,7 @@ type StorageEnv = z.infer<typeof ServerEnv>;
 
 const ServerEnvSchema = ServerEnv.transform((raw, ctx) => ({
 	postgresUrl: raw.VT_POSTGRES_URL,
+	postgresPoolMax: raw.VT_POSTGRES_POOL_MAX ?? DEFAULT_POSTGRES_POOL_MAX,
 	storage: buildStorage(raw, ctx),
 }));
 

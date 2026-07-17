@@ -1,5 +1,5 @@
+import { formatDistanceStrict } from "@app/date";
 import { useSyncExternalStore } from "react";
-import { formatDistanceStrict } from "@/app/date";
 
 type RelativeTimeOptions = {
 	addSuffix?: boolean;

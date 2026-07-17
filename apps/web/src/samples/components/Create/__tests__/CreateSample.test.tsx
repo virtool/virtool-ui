@@ -71,9 +71,13 @@ describe("<CreateSample>", () => {
 		filesScope.done();
 	});
 
-	it("should show loader when there are no sample uploads to read", async () => {
+	it("should show an error when the read files fail to load", async () => {
+		nock("http://localhost").get("/api/uploads").query(true).reply(500);
+
 		await renderWithRouter(<CreateSample labels={labels} />);
-		expect(await screen.findByLabelText("loading")).toBeInTheDocument();
+		expect(
+			await screen.findByText("Couldn't load the sample form."),
+		).toBeInTheDocument();
 	});
 
 	it("should fail and show errors on empty submission", async () => {
