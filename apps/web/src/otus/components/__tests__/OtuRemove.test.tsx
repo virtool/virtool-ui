@@ -27,9 +27,9 @@ describe("<OtuRemove />", () => {
 			/>,
 		);
 
-		expect(screen.getByText("Remove OTU")).toBeInTheDocument();
+		expect(screen.getByText("Delete OTU")).toBeInTheDocument();
 		expect(
-			screen.getByText(/Are you sure you want to remove/),
+			screen.getByText(/Are you sure you want to delete/),
 		).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument();
 	});
@@ -44,8 +44,8 @@ describe("<OtuRemove />", () => {
 			/>,
 		);
 
-		expect(screen.queryByText("Remove OTU")).toBeNull();
-		expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
+		expect(screen.queryByText("Delete OTU")).toBeNull();
+		expect(screen.queryByText(/Are you sure you want to delete/)).toBeNull();
 		expect(screen.queryByRole("button", { name: "Confirm" })).toBeNull();
 	});
 

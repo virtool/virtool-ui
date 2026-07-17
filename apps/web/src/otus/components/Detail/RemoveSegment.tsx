@@ -1,4 +1,4 @@
-import RemoveDialog from "@base/RemoveDialog";
+import DeleteDialog from "@base/DeleteDialog";
 import { useUpdateOtu } from "@otus/queries";
 import type { OtuSegment } from "@otus/types";
 
@@ -26,28 +26,26 @@ export default function RemoveSegment({
 }: RemoveSegmentProps) {
 	const mutation = useUpdateOtu(otuId);
 
-	function handleSubmit() {
+	function handleConfirm() {
 		if (!segmentName) {
 			return;
 		}
-		mutation.mutate(
-			{
-				otuId,
-				name,
-				abbreviation,
-				schema: schema.filter((s) => s.name !== segmentName),
-			},
-			{ onSuccess: () => setOpen(false) },
-		);
+
+		return mutation.mutateAsync({
+			otuId,
+			name,
+			abbreviation,
+			schema: schema.filter((s) => s.name !== segmentName),
+		});
 	}
 
 	return (
-		<RemoveDialog
+		<DeleteDialog
 			name={segmentName ?? ""}
 			noun="Segment"
-			onConfirm={handleSubmit}
-			onHide={() => setOpen(false)}
-			show={open}
+			onConfirm={handleConfirm}
+			onOpenChange={setOpen}
+			open={open}
 		/>
 	);
 }

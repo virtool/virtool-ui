@@ -31,9 +31,9 @@ describe("<RemoveSegment />", () => {
 			/>,
 		);
 
-		expect(screen.getByText("Remove Segment")).toBeInTheDocument();
+		expect(screen.getByText("Delete Segment")).toBeInTheDocument();
 		expect(
-			screen.getByText(/Are you sure you want to remove/),
+			screen.getByText(/Are you sure you want to delete/),
 		).toBeInTheDocument();
 		expect(screen.getByText(segmentName)).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument();
@@ -51,8 +51,8 @@ describe("<RemoveSegment />", () => {
 			/>,
 		);
 
-		expect(screen.queryByText("Remove Segment")).toBeNull();
-		expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
+		expect(screen.queryByText("Delete Segment")).toBeNull();
+		expect(screen.queryByText(/Are you sure you want to delete/)).toBeNull();
 		expect(screen.queryByRole("button", { name: "Confirm" })).toBeNull();
 	});
 
