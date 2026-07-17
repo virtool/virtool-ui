@@ -1,21 +1,22 @@
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
-import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { Scissors } from "lucide-react";
-import { useFindSubtractions } from "../queries";
+import { useSuspenseSubtractions } from "../queries";
 import { SubtractionItem } from "./SubtractionItem";
 import SubtractionToolbar from "./SubtractionToolbar";
 
 type SubtractionListProps = {
 	find?: string;
 	page?: number;
-	setSearch?: (next: { find?: string; page?: number }) => void;
+	setSearch?: (
+		next: { find?: string; page?: number },
+		options?: { replace?: boolean },
+	) => void;
 };
 
 /**
@@ -26,19 +27,7 @@ export default function SubtractionList({
 	page = 1,
 	setSearch = () => {},
 }: SubtractionListProps) {
-	const { data, isPending, isError } = useFindSubtractions(page, 25, find);
-
-	if (isError && !data) {
-		return <QueryError noun="subtractions" />;
-	}
-
-	if (isPending) {
-		return <LoadingPlaceholder />;
-	}
-
-	function handleChange(e) {
-		setSearch({ find: e.target.value });
-	}
+	const { data } = useSuspenseSubtractions(page, 25, find);
 
 	const { items, total_count, page: storedPage, page_count } = data;
 
@@ -51,7 +40,10 @@ export default function SubtractionList({
 				</ViewHeaderTitle>
 			</ViewHeader>
 
-			<SubtractionToolbar term={find} handleChange={handleChange} />
+			<SubtractionToolbar
+				term={find}
+				setTerm={(find) => setSearch({ find, page: 1 }, { replace: true })}
+			/>
 
 			{!items.length ? (
 				<Box key="subtractions">

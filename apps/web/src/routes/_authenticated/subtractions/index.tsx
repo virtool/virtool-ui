@@ -20,6 +20,11 @@ function validateSubtractionsSearch(
 
 export const Route = createFileRoute("/_authenticated/subtractions/")({
 	validateSearch: validateSubtractionsSearch,
+	loaderDeps: ({ search: { find, page } }) => ({ find, page }),
+	loader: async ({ context: { queryClient }, deps: { find, page } }) => {
+		const { subtractionsQueryOptions } = await import("@subtraction/queries");
+		await queryClient.ensureQueryData(subtractionsQueryOptions(page, 25, find));
+	},
 	component: SubtractionsRoute,
 });
 
@@ -31,7 +36,12 @@ function SubtractionsRoute() {
 		<SubtractionList
 			find={search.find}
 			page={search.page}
-			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+			setSearch={(next, options) =>
+				navigate({
+					search: { ...search, ...next },
+					replace: options?.replace,
+				})
+			}
 		/>
 	);
 }

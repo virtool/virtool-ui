@@ -1,6 +1,5 @@
 import { apiClient } from "@app/api";
 import {
-	keepPreviousData,
 	queryOptions,
 	useMutation,
 	useQuery,
@@ -36,21 +35,20 @@ export function useGetGenbank() {
 }
 
 /**
- * Fetches a page of OTU search results from the API
+ * Query options for a page of OTU search results.
  *
  * @param refId - The reference id to fetch the OTUs of
  * @param page - The page to fetch
- * @param per_page - The number of hmms to fetch per page
- * @param term - The search term to filter indexes by
- * @returns A page of OTU search results
+ * @param per_page - The number of OTUs to fetch per page
+ * @param term - The search term to filter the OTUs by
  */
-export function useListOtus(
+export function otusQueryOptions(
 	refId: string,
 	page: number,
 	per_page: number,
 	term: string,
 ) {
-	return useQuery<OtuSearchResult>({
+	return queryOptions<OtuSearchResult, ErrorResponse>({
 		queryKey: otuQueryKeys.list([page, per_page, term]),
 		queryFn: () =>
 			apiClient
@@ -60,8 +58,25 @@ export function useListOtus(
 					const { documents, ...rest } = res.body;
 					return { ...rest, items: documents };
 				}),
-		placeholderData: keepPreviousData,
 	});
+}
+
+/**
+ * Fetch a page of OTU search results, suspending until it resolves.
+ *
+ * `data` is always defined, and a failed request throws to the nearest route
+ * error boundary instead of resolving to `undefined`. Use this from components
+ * rendered under the OTU list route, whose loader prefetches the page —
+ * loading and errors are handled by the route's Suspense and `errorComponent`
+ * rather than inline.
+ */
+export function useSuspenseOtus(
+	refId: string,
+	page: number,
+	per_page: number,
+	term: string,
+) {
+	return useSuspenseQuery(otusQueryOptions(refId, page, per_page, term));
 }
 
 export function otuQueryOptions(otuId: string) {

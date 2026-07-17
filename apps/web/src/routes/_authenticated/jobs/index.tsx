@@ -31,6 +31,11 @@ function validateJobsSearch(
 
 export const Route = createFileRoute("/_authenticated/jobs/")({
 	validateSearch: validateJobsSearch,
+	loaderDeps: ({ search: { page, state } }) => ({ page, state }),
+	loader: async ({ context: { queryClient }, deps: { page, state } }) => {
+		const { jobsQueryOptions } = await import("@jobs/queries");
+		await queryClient.ensureQueryData(jobsQueryOptions(page, 25, state));
+	},
 	component: JobsRoute,
 });
 
