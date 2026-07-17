@@ -16,7 +16,11 @@ describe("<JobsList />", () => {
 
 		await renderRoute("/jobs");
 
-		expect(await screen.findByText("Create Sample")).toBeInTheDocument();
+		const job = await screen.findByText("Create Sample");
+		expect(job).toBeInTheDocument();
+
+		// The job is a list item within a semantic list.
+		expect(job.closest("li")).not.toBeNull();
 
 		expect(findJobs).toHaveBeenCalled();
 	});

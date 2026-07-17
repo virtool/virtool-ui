@@ -81,10 +81,11 @@ export default function ReferenceList({
 						pageCount={page_count}
 						onPageChange={(page) => setSearch({ page })}
 					>
-						<BoxGroup>
+						<BoxGroup as="ul">
 							{items.map((item) => (
 								<ReferenceItem
 									key={item.id}
+									as="li"
 									onClone={setCloneReferenceId}
 									reference={item}
 								/>

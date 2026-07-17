@@ -69,9 +69,9 @@ export default function OtuList({ term, page, setSearch }: OtuListProps) {
 					pageCount={page_count}
 					onPageChange={(page) => setSearch({ page })}
 				>
-					<BoxGroup>
+					<BoxGroup as="ul">
 						{items.map((item) => (
-							<OtuItem key={item.id} {...item} refId={refId} />
+							<OtuItem key={item.id} as="li" {...item} refId={refId} />
 						))}
 					</BoxGroup>
 				</Pagination>

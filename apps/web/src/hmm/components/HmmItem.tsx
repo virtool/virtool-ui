@@ -1,9 +1,13 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import Label from "@base/Label";
 import Link from "@base/Link";
+import type { ElementType } from "react";
 import type { HMMMinimal } from "../types";
 
 type HmmItemProps = {
+	/** The element or component to render as the root (e.g. `"li"` in a list) */
+	as?: ElementType;
+
 	/** Minimal hmm data */
 	hmm: HMMMinimal;
 };
@@ -11,7 +15,7 @@ type HmmItemProps = {
 /**
  * A condensed hmm item for use in a list of hmms
  */
-export default function HmmItem({ hmm }: HmmItemProps) {
+export default function HmmItem({ as, hmm }: HmmItemProps) {
 	const filteredFamilies = Object.keys(hmm.families).filter(
 		(family) => family !== "None",
 	);
@@ -21,7 +25,7 @@ export default function HmmItem({ hmm }: HmmItemProps) {
 		.map((family) => <Label key={family}>{family}</Label>);
 
 	return (
-		<BoxGroupSection className="flex text-lg">
+		<BoxGroupSection as={as} className="flex text-lg">
 			<strong className="shrink-0 grow-0 basis-12 font-bold">
 				{hmm.cluster}
 			</strong>

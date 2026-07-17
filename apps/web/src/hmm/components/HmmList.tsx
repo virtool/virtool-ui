@@ -61,9 +61,9 @@ export default function HmmList({ term, page, setSearch }: HmmListProps) {
 							pageCount={page_count}
 							onPageChange={(page) => setSearch({ page })}
 						>
-							<BoxGroup>
+							<BoxGroup as="ul">
 								{items.map((item) => (
-									<HmmItem key={item.id} hmm={item} />
+									<HmmItem key={item.id} as="li" hmm={item} />
 								))}
 							</BoxGroup>
 						</Pagination>

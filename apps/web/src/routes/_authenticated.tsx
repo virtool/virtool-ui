@@ -5,6 +5,7 @@ import * as Sse from "@app/sse/SseConnection";
 import type { Root } from "@app/types";
 import Banner from "@banner/components/Banner";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import SkipLink from "@base/SkipLink";
 import Nav from "@nav/components/Nav";
 import Sidebar from "@nav/components/Sidebar";
 import UpdateToast from "@nav/components/UpdateToast";
@@ -96,6 +97,8 @@ function AuthenticatedLayout() {
 			<title>Virtool</title>
 			<meta charSet="utf-8" />
 
+			<SkipLink />
+
 			<UpdateToast />
 
 			<div className="flex flex-col h-screen">
@@ -111,10 +114,10 @@ function AuthenticatedLayout() {
 					id={CONTENT_SCROLL_ID}
 					className="flex flex-1 min-h-0 overflow-y-auto scrollbar-gutter-stable"
 				>
-					<aside className="sticky top-0 self-start pt-18">
+					<div className="sticky top-0 self-start pt-18">
 						<Sidebar administratorRole={data.administrator_role} />
-					</aside>
-					<main className="flex-1 min-w-0 p-18">
+					</div>
+					<main id="main-content" tabIndex={-1} className="flex-1 min-w-0 p-18">
 						<Suspense fallback={<LoadingPlaceholder />}>
 							<Outlet />
 						</Suspense>

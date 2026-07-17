@@ -1,7 +1,8 @@
 import { cn } from "@app/cn";
-import type { AriaRole, KeyboardEvent, ReactNode } from "react";
+import type { AriaRole, ElementType, KeyboardEvent, ReactNode } from "react";
 
 type BoxProps = {
+	as?: ElementType;
 	children: ReactNode;
 	className?: string;
 	id?: string;
@@ -11,7 +12,13 @@ type BoxProps = {
 	onClick?: () => void;
 };
 
-function Box({ children, className = "", onClick, ...rest }: BoxProps) {
+function Box({
+	as: Component = "div",
+	children,
+	className = "",
+	onClick,
+	...rest
+}: BoxProps) {
 	const interactiveProps = onClick
 		? {
 				onClick,
@@ -27,7 +34,7 @@ function Box({ children, className = "", onClick, ...rest }: BoxProps) {
 		: {};
 
 	return (
-		<div
+		<Component
 			className={cn(
 				{ "hover:bg-gray-100": onClick },
 				"border-1",
@@ -44,7 +51,7 @@ function Box({ children, className = "", onClick, ...rest }: BoxProps) {
 			{...interactiveProps}
 		>
 			{children}
-		</div>
+		</Component>
 	);
 }
 

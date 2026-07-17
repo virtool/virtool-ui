@@ -11,7 +11,6 @@ import { useFetchSample } from "@samples/queries";
 import { Microscope } from "lucide-react";
 import { useState } from "react";
 import { useListAnalyses } from "../queries";
-import type { AnalysisMinimal } from "../types";
 import AnalysisItem from "./AnalysisItem";
 import CreateAnalysis from "./Create/CreateAnalysis";
 import AnalysisHMMAlert from "./HMMAlert";
@@ -21,13 +20,6 @@ type AnalysesListProps = {
 	page: number;
 	sampleId: string;
 };
-
-function renderRow() {
-	function AnalysisRow(item: AnalysisMinimal) {
-		return <AnalysisItem key={item.id} analysis={item} />;
-	}
-	return AnalysisRow;
-}
 
 /**
  * A list of analyses with filtering options
@@ -94,12 +86,17 @@ export default function AnalysesList({
 			{analyses.found_count ? (
 				<Pagination
 					items={analyses.items}
-					renderRow={renderRow()}
 					storedPage={analyses.page}
 					currentPage={page}
 					pageCount={analyses.page_count}
 					onPageChange={onPageChange}
-				/>
+				>
+					<ul className="list-none">
+						{analyses.items.map((item) => (
+							<AnalysisItem key={item.id} as="li" analysis={item} />
+						))}
+					</ul>
+				</Pagination>
 			) : (
 				<Box>
 					<Empty className="h-72">

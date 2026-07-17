@@ -8,9 +8,11 @@ import ProgressCircle from "@base/ProgressCircle";
 import type { ReferenceMinimal } from "@references/types";
 import { useFetchTask } from "@tasks/queries";
 import { Copy } from "lucide-react";
-import type { ReactNode } from "react";
+import type { ElementType, ReactNode } from "react";
 
 type ReferenceItemProps = {
+	/** The element or component to render as the root (e.g. `"li"` in a list) */
+	as?: ElementType;
 	onClone: (id: string) => void;
 	reference: ReferenceMinimal;
 };
@@ -18,7 +20,7 @@ type ReferenceItemProps = {
 /**
  * A condensed reference item for use in a list of references
  */
-export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
+export function ReferenceItem({ as, onClone, reference }: ReferenceItemProps) {
 	const { archived, created_at, id, name, task, user } = reference;
 
 	const { data: liveTask } = useFetchTask(task?.id ?? Number.NaN, task);
@@ -54,7 +56,7 @@ export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 	}
 
 	return (
-		<BoxGroupSection className="grid grid-cols-3 items-center gap-x-4">
+		<BoxGroupSection as={as} className="grid grid-cols-3 items-center gap-x-4">
 			<Link
 				className="font-medium text-lg"
 				to="/refs/$refId"

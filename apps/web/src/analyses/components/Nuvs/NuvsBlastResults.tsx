@@ -49,13 +49,14 @@ export default function NuvsBlastResults({ hits, onBlast }: BLASTResultsProps) {
 				</Button>
 			</BoxGroupHeader>
 			<BoxGroupTable>
+				<caption className="sr-only">BLAST hits</caption>
 				<thead>
 					<tr>
-						<th>Accession</th>
-						<th>Name</th>
-						<th>E-value</th>
-						<th>Score</th>
-						<th>Identity</th>
+						<th scope="col">Accession</th>
+						<th scope="col">Name</th>
+						<th scope="col">E-value</th>
+						<th scope="col">Score</th>
+						<th scope="col">Identity</th>
 					</tr>
 				</thead>
 				<tbody>{components}</tbody>

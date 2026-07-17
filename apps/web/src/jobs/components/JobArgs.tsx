@@ -19,7 +19,7 @@ type JobArgsRowProps = {
 function JobArgsRow({ children, title, className }: JobArgsRowProps) {
 	return (
 		<tr className={className}>
-			<th>{title}</th>
+			<th scope="row">{title}</th>
 			<td>{children}</td>
 		</tr>
 	);
@@ -182,6 +182,7 @@ export default function JobArgs({ workflow, args }) {
 				<p>Run arguments that make this job unique.</p>
 			</BoxGroupHeader>
 			<BoxGroupTable>
+				<caption className="sr-only">Job arguments</caption>
 				<tbody>
 					<JobArgsRows workflow={workflow} args={args} />
 				</tbody>

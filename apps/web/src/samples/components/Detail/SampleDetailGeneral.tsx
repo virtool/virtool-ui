@@ -60,17 +60,18 @@ export default function SampleDetailGeneral({
 						<p>User-defined information about the sample.</p>
 					</BoxGroupHeader>
 					<BoxGroupTable>
+						<caption className="sr-only">Sample metadata</caption>
 						<tbody>
 							<tr>
-								<th>Host</th>
+								<th scope="row">Host</th>
 								<td>{data.host}</td>
 							</tr>
 							<tr>
-								<th>Isolate</th>
+								<th scope="row">Isolate</th>
 								<td>{data.isolate}</td>
 							</tr>
 							<tr>
-								<th>Locale</th>
+								<th scope="row">Locale</th>
 								<td>{data.locale}</td>
 							</tr>
 						</tbody>
@@ -84,29 +85,30 @@ export default function SampleDetailGeneral({
 							<p>Information about the sequencing reads in this sample.</p>
 						</BoxGroupHeader>
 						<BoxGroupTable>
+							<caption className="sr-only">Sample library</caption>
 							<tbody>
 								<tr>
-									<th>Encoding</th>
+									<th scope="row">Encoding</th>
 									<td>{quality.encoding}</td>
 								</tr>
 								<tr>
-									<th>Read Count</th>
+									<th scope="row">Read Count</th>
 									<td>{readCountFormatter.format(quality.count)}</td>
 								</tr>
 								<tr>
-									<th>Library Type</th>
+									<th scope="row">Library Type</th>
 									<td>{getLibraryTypeDisplayName(data.library_type)}</td>
 								</tr>
 								<tr>
-									<th>Length Range</th>
+									<th scope="row">Length Range</th>
 									<td>{quality.length.join(" - ")}</td>
 								</tr>
 								<tr>
-									<th>GC Content</th>
+									<th scope="row">GC Content</th>
 									<td>{toGcContent(quality.gc / 100)}</td>
 								</tr>
 								<tr>
-									<th>Paired</th>
+									<th scope="row">Paired</th>
 									<td>{data.paired ? "Yes" : "No"}</td>
 								</tr>
 							</tbody>
