@@ -122,6 +122,13 @@ export default defineConfig(({ command, mode }) => ({
 			}),
 	],
 	optimizeDeps: {
+		// The `tanstackStart` plugin points the client scanner at `client.tsx` and
+		// `router.tsx`, so a cold-start scan reaches every used dependency in one
+		// pass ("the scanner found every used dependency"). That is the condition
+		// under which releasing the first optimize early is safe — with it,
+		// nothing is discovered late to trigger a reoptimize and a full page
+		// reload. It stops being safe if the scan is starved again, e.g. by
+		// warming test files (see the `warmup` note below).
 		holdUntilCrawlEnd: false,
 		include: [
 			"@hookform/resolvers/zod",
@@ -141,7 +148,6 @@ export default defineConfig(({ command, mode }) => ({
 			"es-toolkit/string",
 			"fuse.js",
 			"lucide-react",
-			"numbro",
 			"radix-ui",
 			"react-dropzone",
 			"react-hook-form",
@@ -156,12 +162,19 @@ export default defineConfig(({ command, mode }) => ({
 	server: {
 		allowedHosts: ["virtool.local"],
 		warmup: {
+			// Pre-transform the app shell so the first navigation is warm. The `!`
+			// patterns keep the globs off `__tests__` files — those import
+			// `@tests/setup` (nock, vitest, faker) and testing-library, and warming
+			// them registers those test-only packages as client optimize deps,
+			// forcing a reoptimize and a full page reload on cold start.
 			clientFiles: [
 				"./src/routes/__root.tsx",
 				"./src/routes/_authenticated.tsx",
 				"./src/app/**/*.{ts,tsx}",
 				"./src/base/**/*.{ts,tsx}",
 				"./src/nav/**/*.{ts,tsx}",
+				"!./src/**/__tests__/**",
+				"!./src/**/*.test.{ts,tsx}",
 			],
 		},
 	},
