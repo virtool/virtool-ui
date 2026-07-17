@@ -25,7 +25,7 @@ function AnalysesRoute() {
 		<AnalysesList
 			onPageChange={(page) => navigate({ search: { page } })}
 			page={page}
-			sampleId={sampleId}
+			sampleId={Number(sampleId)}
 		/>
 	);
 }

@@ -6,7 +6,7 @@ import SampleLabels from "../Sidebar/SampleLabels";
 
 type SidebarProps = {
 	labels: Label[];
-	sampleId: string;
+	sampleId: number;
 	sampleLabels: Array<LabelNested>;
 	defaultSubtractions: Array<SubtractionNested>;
 };

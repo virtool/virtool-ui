@@ -22,7 +22,7 @@ import { formatData } from "./utils";
  * @returns A page of analyses search results
  */
 export function useListAnalyses(
-	sampleId: string,
+	sampleId: number,
 	page: number,
 	per_page: number,
 	term?: string,
@@ -83,7 +83,7 @@ export function useGetAnalysis(analysisId: string) {
 
 export type CreateAnalysisParams = {
 	refId?: string;
-	sampleId: string;
+	sampleId: number;
 	subtractionIds?: string[];
 	workflow: string;
 };

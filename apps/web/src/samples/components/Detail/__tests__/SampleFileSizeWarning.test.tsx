@@ -10,7 +10,7 @@ describe("<SampleFileSizeWarning />", () => {
 
 	beforeEach(() => {
 		props = {
-			sampleId: "test",
+			sampleId: 1,
 			reads: [],
 		};
 	});

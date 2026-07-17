@@ -11,7 +11,7 @@ import SampleLabelsSelector from "../SampleLabelsSelector";
  * Mocks the sample-update endpoint and captures the request body so tests can
  * assert which labels were sent for each selected sample.
  */
-function mockApiUpdateSampleLabels(sampleId: string) {
+function mockApiUpdateSampleLabels(sampleId: number) {
 	const captured: { body?: { labels: number[] } } = {};
 
 	nock("http://localhost")
@@ -93,7 +93,7 @@ describe("<SampleLabelsSelector>", () => {
 			props.selectedSamples = [
 				createFakeSampleMinimal({
 					name: "Foo Sample",
-					id: "foo_sample",
+					id: 1,
 					labels: [
 						{ color: "#C4B5FD", description: "", id: 1, name: "test" },
 						{ color: "#FCA5A5", description: "", id: 2, name: "label" },
@@ -101,7 +101,7 @@ describe("<SampleLabelsSelector>", () => {
 				}),
 				createFakeSampleMinimal({
 					name: "Bar Sample",
-					id: "bar_sample",
+					id: 2,
 					labels: [{ color: "#C4B5FD", description: "", id: 1, name: "test" }],
 				}),
 			];
@@ -137,8 +137,8 @@ describe("<SampleLabelsSelector>", () => {
 		});
 
 		it("removes a fully-applied label from every sample", async () => {
-			const foo = mockApiUpdateSampleLabels("foo_sample");
-			const bar = mockApiUpdateSampleLabels("bar_sample");
+			const foo = mockApiUpdateSampleLabels(1);
+			const bar = mockApiUpdateSampleLabels(2);
 
 			await openSelectorAndClick("test");
 
@@ -149,8 +149,8 @@ describe("<SampleLabelsSelector>", () => {
 		});
 
 		it("adds a partially-applied label to every sample", async () => {
-			const foo = mockApiUpdateSampleLabels("foo_sample");
-			const bar = mockApiUpdateSampleLabels("bar_sample");
+			const foo = mockApiUpdateSampleLabels(1);
+			const bar = mockApiUpdateSampleLabels(2);
 
 			await openSelectorAndClick("label");
 
@@ -161,8 +161,8 @@ describe("<SampleLabelsSelector>", () => {
 		});
 
 		it("adds an unapplied label to every sample", async () => {
-			const foo = mockApiUpdateSampleLabels("foo_sample");
-			const bar = mockApiUpdateSampleLabels("bar_sample");
+			const foo = mockApiUpdateSampleLabels(1);
+			const bar = mockApiUpdateSampleLabels(2);
 
 			await openSelectorAndClick("bar");
 

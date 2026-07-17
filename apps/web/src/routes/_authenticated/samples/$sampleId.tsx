@@ -25,7 +25,7 @@ export const Route = createFileRoute("/_authenticated/samples/$sampleId")({
 		const { sampleQueryOptions } = await import("@samples/queries");
 
 		try {
-			await queryClient.ensureQueryData(sampleQueryOptions(sampleId));
+			await queryClient.ensureQueryData(sampleQueryOptions(Number(sampleId)));
 		} catch (error) {
 			if (
 				error != null &&
@@ -43,9 +43,10 @@ export const Route = createFileRoute("/_authenticated/samples/$sampleId")({
 
 function SampleDetailLayout() {
 	const { sampleId } = Route.useParams();
+	const numericSampleId = Number(sampleId);
 	const location = useLocation();
-	const { data } = useSuspenseSample(sampleId);
-	const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
+	const { data } = useSuspenseSample(numericSampleId);
+	const { hasPermission: canModify } = useCheckCanEditSample(numericSampleId);
 	const [editOpen, setEditOpen] = useState(false);
 
 	const { created_at, name, user } = data;
@@ -66,7 +67,7 @@ function SampleDetailLayout() {
 									onClick={() => setEditOpen(true)}
 								/>
 								<DeleteSample
-									id={sampleId}
+									id={numericSampleId}
 									name={data.name}
 									ready={data.ready}
 									job={job}

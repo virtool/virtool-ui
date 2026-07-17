@@ -7,7 +7,7 @@ import { Trash } from "lucide-react";
 
 type DeleteSampleProps = {
 	/** The id of the sample being deleted */
-	id: string;
+	id: number;
 
 	/** The sample's job if it exists */
 	job?: JobNested;

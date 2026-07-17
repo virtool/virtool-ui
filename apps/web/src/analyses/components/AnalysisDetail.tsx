@@ -30,7 +30,7 @@ export default function AnalysisDetail() {
 		data: sample,
 		isPending: isPendingSample,
 		isError: isSampleError,
-	} = useFetchSample(sampleId);
+	} = useFetchSample(Number(sampleId));
 
 	if ((isError && !analysis) || (isSampleError && !sample)) {
 		return <QueryError noun="analysis" />;
