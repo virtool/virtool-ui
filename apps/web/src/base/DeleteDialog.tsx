@@ -115,11 +115,11 @@ export default function DeleteDialog({
 					<AlertDialogPrimitive.Title className="font-medium pb-4 text-2xl">
 						{`Delete ${noun}`}
 					</AlertDialogPrimitive.Title>
-					<AlertDialogPrimitive.Description asChild>
+					<AlertDialogPrimitive.Description>
 						{message ?? (
-							<span>
+							<>
 								Are you sure you want to delete <strong>{name}</strong>?
-							</span>
+							</>
 						)}
 					</AlertDialogPrimitive.Description>
 					{error && (
