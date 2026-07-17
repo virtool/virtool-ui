@@ -1,5 +1,11 @@
 import type { RefObject } from "react";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+	useSyncExternalStore,
+} from "react";
 
 function subscribeToTime(callback: () => void) {
 	const interval = setInterval(callback, 1000);
@@ -40,10 +46,13 @@ export function useDebounce<T>(
 	}
 
 	// Held in a ref so a parent re-render that only changes the callback's
-	// identity doesn't restart the delay out from under the typist.
+	// identity doesn't restart the delay out from under the typist. Synced in a
+	// layout effect, not a passive one, so a pending timer that fires in the
+	// commit-to-effect gap can't invoke a stale setter and navigate with an
+	// out-of-date search object.
 	const onChangeRef = useRef(onChange);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		onChangeRef.current = onChange;
 	});
 
