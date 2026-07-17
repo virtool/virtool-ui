@@ -36,6 +36,15 @@ describe("parseServerConfig", () => {
 		expect(parseServerConfig(minimalS3).postgresPoolMax).toBe(10);
 	});
 
+	it("treats a blank postgres pool max as unset", () => {
+		const config = parseServerConfig({
+			...minimalS3,
+			VT_POSTGRES_POOL_MAX: "",
+		} as NodeJS.ProcessEnv);
+
+		expect(config.postgresPoolMax).toBe(10);
+	});
+
 	it("reads the postgres pool max from the environment", () => {
 		const config = parseServerConfig({
 			...minimalS3,

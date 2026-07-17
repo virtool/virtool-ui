@@ -155,7 +155,11 @@ application's own doing.
 ## Client side
 
 - `app/sse/SseConnection.ts` opens the `EventSource`, manages
-  reconnect, and pipes parsed messages into `reactQueryHandler`.
+  reconnect, and pipes parsed messages into `reactQueryHandler`. On a
+  *reconnect* (not the first connect) it invalidates all queries, since
+  frames NOTIFYed while the stream was down — including a server-side
+  queue-overflow drop — never arrived; the initial connect skips this
+  because the route loaders just populated the cache.
 - `app/sse/schema.ts` defines `SseMessageSchema`, which validates the
   wire frame and strips unknown fields.
 - `app/sse/reactQueryHandler.ts` maps `message.domain` to a query-key

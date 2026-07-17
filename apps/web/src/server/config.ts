@@ -30,7 +30,13 @@ export type ServerConfig = {
 
 const ServerEnv = z.object({
 	VT_POSTGRES_URL: z.string().url(),
-	VT_POSTGRES_POOL_MAX: z.coerce.number().int().positive().optional(),
+	// Deployment tooling routinely injects an empty string for a value it has
+	// nothing to put in; treat that as unset so the default applies rather than
+	// coercing "" to 0 and failing the `.positive()` check at startup.
+	VT_POSTGRES_POOL_MAX: z.preprocess(
+		(value) => (value === "" ? undefined : value),
+		z.coerce.number().int().positive().optional(),
+	),
 	VT_STORAGE_BACKEND: z.enum(["s3", "azure"]),
 	VT_STORAGE_S3_BUCKET: z.string().optional(),
 	VT_STORAGE_S3_REGION: z.string().optional(),
