@@ -44,7 +44,7 @@ export function mockApiCreateAnalysis(analysis: AnalysisMinimal) {
  * @param sequenceIndex - The index of the sequence the blast is initiating for
  * @returns The nock scope for the mocked API call
  */
-export function mockApiBlastNuVs(analysisId: string, sequenceIndex: string) {
+export function mockApiBlastNuVs(analysisId: number, sequenceIndex: string) {
 	return nock("http://localhost")
 		.put(`/api/analyses/${analysisId}/${sequenceIndex}/blast`)
 		.reply(200);

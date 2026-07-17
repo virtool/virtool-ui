@@ -1,5 +1,6 @@
 import { accountQueryKeys } from "@account/keys";
 import { roleQueryKeys } from "@administration/keys";
+import { analysesQueryKeys } from "@analyses/keys";
 import type { QueryKeys } from "@app/queryKeys";
 import { bannerQueryKeys } from "@banner/keys";
 import { groupQueryKeys } from "@groups/keys";
@@ -47,6 +48,7 @@ type CachedShapes = {
 
 const domains: Record<SseDomain, CachedShapes> = {
 	account: { keys: accountQueryKeys, details: false, lists: false },
+	analyses: { keys: analysesQueryKeys, details: true, lists: true },
 	groups: { keys: groupQueryKeys, details: true, lists: true },
 	indexes: { keys: indexQueryKeys, details: true, lists: true },
 	jobs: { keys: jobQueryKeys, details: true, lists: true },

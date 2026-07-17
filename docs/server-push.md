@@ -48,11 +48,15 @@ The SSE handler emits one `data:` frame per event:
 ```
 
 - `domain` — one of the literals in `SseDomainSchema` (`account`,
-  `groups`, `indexes`, `jobs`, `labels`, `messages`, `models`,
-  `references`, `roles`, `samples`, `tasks`, `uploads`, `users`).
-  Frames with
-  any other `domain` fail `safeParse` on the client and are dropped
-  with a warning — by design, so contract drift is loud.
+  `analyses`, `groups`, `indexes`, `jobs`, `labels`, `messages`,
+  `references`, `roles`, `samples`, `tasks`, `uploads`, `users`). Python
+  and Node
+  share the one channel and Python emits frames for domains this client
+  doesn't handle yet, so a frame for an unrecognised `domain` is dropped
+  **silently** — expected forward-compatible traffic, not an error. A
+  frame for a domain the client *does* handle that still fails
+  `safeParse` (see `id` below) is real contract drift and is reported to
+  Sentry.
 - `operation` — `"insert"`, `"update"`, or `"delete"`. `create` events
   map to `insert`; the other two pass through.
 - `id` — per-domain primary key type. Domains not yet migrated off
@@ -161,7 +165,10 @@ application's own doing.
   queue-overflow drop — never arrived; the initial connect skips this
   because the route loaders just populated the cache.
 - `app/sse/schema.ts` defines `SseMessageSchema`, which validates the
-  wire frame and strips unknown fields.
+  wire frame and strips unknown fields. `SseConnection` runs it on every
+  frame: a frame for an unrecognised `domain` is dropped silently, while
+  a frame for a known domain that fails validation is reported to Sentry
+  (`sse: message-validation`).
 - `app/sse/reactQueryHandler.ts` maps `message.domain` to a query-key
   factory and invalidates the narrowest key the domain actually caches
   under. `update` prefers `detail(id)`, falling to `lists()` for a

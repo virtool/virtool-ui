@@ -16,7 +16,7 @@ export type AnalysisMinimal = {
 	created_at: string;
 
 	/** The unique identifier for the analysis */
-	id: string;
+	id: number;
 
 	/** The reference index used in the analysis */
 	index: IndexNested;

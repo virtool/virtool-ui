@@ -3,6 +3,7 @@ import { z } from "zod";
 /** Domains that may appear on the server-push SSE stream. */
 export const SseDomainSchema = z.enum([
 	"account",
+	"analyses",
 	"groups",
 	"indexes",
 	"jobs",
@@ -36,6 +37,7 @@ const StringId = z.string();
 
 export const SseMessageSchema = z.discriminatedUnion("domain", [
 	frame("account", NumberId),
+	frame("analyses", NumberId),
 	frame("groups", NumberId),
 	frame("indexes", StringId),
 	frame("jobs", NumberId),

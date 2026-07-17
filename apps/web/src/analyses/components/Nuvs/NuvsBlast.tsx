@@ -9,7 +9,7 @@ import NuvsBlastError from "./NuvsBlastError";
 import NuvsBlastPending from "./NuvsBlastPending";
 
 type NuVsBLASTProps = {
-	analysisId: string;
+	analysisId: number;
 	/** Complete information for a Nuvs hit */
 	hit: FormattedNuvsHit;
 };

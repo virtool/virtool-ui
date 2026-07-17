@@ -3,7 +3,7 @@ import { endSession } from "@app/session";
 import * as Sentry from "@sentry/tanstackstart-react";
 import type { QueryClient } from "@tanstack/react-query";
 import { reactQueryHandler } from "./reactQueryHandler";
-import { SseMessageSchema } from "./schema";
+import { SseDomainSchema, SseMessageSchema } from "./schema";
 
 type ConnectionStatus =
 	| "initializing"
@@ -30,11 +30,23 @@ export function init(queryClient: QueryClient): void {
 		const parsed = SseMessageSchema.safeParse(data);
 		if (parsed.success) {
 			handler(parsed.data);
-		} else {
-			Sentry.captureException(parsed.error, {
-				tags: { sse: "message-validation" },
-			});
+			return;
 		}
+
+		// Python and Node share one Postgres channel, and Python emits frames for
+		// domains this client doesn't handle yet (otus, subtraction, and the
+		// rest). Those are expected forward-compatible traffic, not drift, so
+		// drop them silently. Only a frame for a domain we *do* handle that still
+		// fails to validate — a wrong id type, a bad operation — is worth
+		// reporting.
+		const domain = (data as { domain?: unknown } | null)?.domain;
+		if (!SseDomainSchema.safeParse(domain).success) {
+			return;
+		}
+
+		Sentry.captureException(parsed.error, {
+			tags: { sse: "message-validation" },
+		});
 	};
 }
 

@@ -29,7 +29,7 @@ type CreateAnalysisFormValues = {
 
 /** A dismissible confirmation shown after analyses are created with "Create more" on. */
 type CreatedAnalysis = {
-	id: string;
+	id: number;
 	count: number;
 	workflow: string;
 };
@@ -132,7 +132,7 @@ export default function CreateAnalysisForm({
 
 		reset(defaultValues);
 		setCreatedAnalysis({
-			id: created[0]?.id ?? "",
+			id: created[0]?.id ?? 0,
 			count: created.length,
 			workflow:
 				compatibleWorkflows.find((option) => option.id === workflow)?.name ??

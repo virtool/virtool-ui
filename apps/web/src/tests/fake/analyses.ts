@@ -19,7 +19,7 @@ export function createFakeAnalysisMinimal(
 	overrides?: Partial<AnalysisMinimal>,
 ): AnalysisMinimal {
 	return {
-		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		id: faker.number.int(),
 		created_at: faker.date.past().toISOString(),
 		index: createFakeIndexNested(),
 		job: createFakeServerJobNested(),

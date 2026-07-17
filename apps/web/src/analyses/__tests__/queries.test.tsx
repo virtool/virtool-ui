@@ -16,7 +16,7 @@ describe("useCreateAnalysis()", () => {
 
 		const scope = nock("http://localhost")
 			.post("/api/samples/sample-1/analyses")
-			.reply(201, { id: "analysis-1" });
+			.reply(201, { id: 1 });
 
 		function wrapper({ children }: { children: ReactNode }) {
 			return (

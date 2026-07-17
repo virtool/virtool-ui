@@ -8,6 +8,18 @@ vi.mock("@app/session", () => ({
 	endSession,
 }));
 
+const handler = vi.fn();
+
+vi.mock("../reactQueryHandler", () => ({
+	reactQueryHandler: () => handler,
+}));
+
+const captureException = vi.fn();
+
+vi.mock("@sentry/tanstackstart-react", () => ({
+	captureException,
+}));
+
 /**
  * The two ways a connection dies, as the platform reports them. The browser
  * hands the application a bare `error` event either way — `readyState` is the
@@ -52,6 +64,11 @@ class FakeEventSource {
 		this.readyState = FakeEventSource.CONNECTING;
 		this.onerror?.();
 	}
+
+	/** The server pushed a `data:` frame, as the browser delivers it. */
+	message(frame: unknown) {
+		this.onmessage?.({ data: JSON.stringify(frame) } as MessageEvent);
+	}
 }
 
 const fetchMock = vi.fn();
@@ -80,6 +97,8 @@ describe("SseConnection", () => {
 		vi.useFakeTimers();
 		FakeEventSource.instances = [];
 		endSession.mockClear();
+		handler.mockClear();
+		captureException.mockClear();
 		invalidateQueries.mockClear();
 		fetchMock.mockReset();
 		vi.stubGlobal("EventSource", FakeEventSource);
@@ -178,5 +197,48 @@ describe("SseConnection", () => {
 		await vi.advanceTimersByTimeAsync(1000);
 
 		expect(FakeEventSource.instances).toHaveLength(2);
+	});
+
+	it("dispatches a valid frame to the query handler", async () => {
+		await establish();
+
+		openConnection().message({ domain: "labels", operation: "update", id: 4 });
+
+		expect(handler).toHaveBeenCalledWith({
+			domain: "labels",
+			operation: "update",
+			id: 4,
+		});
+		expect(captureException).not.toHaveBeenCalled();
+	});
+
+	it("drops frames for domains it does not handle without reporting them", async () => {
+		await establish();
+
+		// Python emits domains the TS client has no query keys for yet; a frame for
+		// one of them must be ignored, not treated as a validation error worth a
+		// Sentry report.
+		openConnection().message({
+			domain: "subtraction",
+			operation: "update",
+			id: 4,
+		});
+
+		expect(handler).not.toHaveBeenCalled();
+		expect(captureException).not.toHaveBeenCalled();
+	});
+
+	it("reports a malformed frame for a domain it does handle", async () => {
+		await establish();
+
+		// `labels` is a number-id domain, so a string id is real contract drift.
+		openConnection().message({
+			domain: "labels",
+			operation: "update",
+			id: "not-a-number",
+		});
+
+		expect(handler).not.toHaveBeenCalled();
+		expect(captureException).toHaveBeenCalledTimes(1);
 	});
 });
