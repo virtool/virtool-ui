@@ -76,23 +76,25 @@ describe("<SubtractionFileSelector>", () => {
 		renderWithProviders(<Harness files={files} />);
 
 		const listbox = screen.getByRole("listbox", { name: "Files" });
-		const options = screen.getAllByRole("option");
+		const alpha = screen.getByRole("option", { name: /alpha\.fa\.gz/ });
+		const beta = screen.getByRole("option", { name: /beta\.fa\.gz/ });
+		const gamma = screen.getByRole("option", { name: /gamma\.fa\.gz/ });
 		listbox.focus();
 
 		await userEvent.keyboard("{ArrowDown}");
-		expect(listbox).toHaveAttribute("aria-activedescendant", options[0].id);
+		expect(listbox).toHaveAttribute("aria-activedescendant", alpha.id);
 
 		await userEvent.keyboard("{ArrowDown}");
-		expect(listbox).toHaveAttribute("aria-activedescendant", options[1].id);
+		expect(listbox).toHaveAttribute("aria-activedescendant", beta.id);
 
 		await userEvent.keyboard("{End}");
-		expect(listbox).toHaveAttribute("aria-activedescendant", options[2].id);
+		expect(listbox).toHaveAttribute("aria-activedescendant", gamma.id);
 
 		await userEvent.keyboard("{ArrowUp}");
-		expect(listbox).toHaveAttribute("aria-activedescendant", options[1].id);
+		expect(listbox).toHaveAttribute("aria-activedescendant", beta.id);
 
 		await userEvent.keyboard("{Home}");
-		expect(listbox).toHaveAttribute("aria-activedescendant", options[0].id);
+		expect(listbox).toHaveAttribute("aria-activedescendant", alpha.id);
 	});
 
 	it("selects the active option with Enter", async () => {
@@ -109,9 +111,12 @@ describe("<SubtractionFileSelector>", () => {
 
 		await userEvent.keyboard("{ArrowDown}{ArrowDown}{Enter}");
 
-		const options = screen.getAllByRole("option");
-		expect(options[1]).toHaveAttribute("aria-selected", "true");
-		expect(options[0]).toHaveAttribute("aria-selected", "false");
+		expect(
+			screen.getByRole("option", { name: /beta\.fa\.gz/ }),
+		).toHaveAttribute("aria-selected", "true");
+		expect(
+			screen.getByRole("option", { name: /alpha\.fa\.gz/ }),
+		).toHaveAttribute("aria-selected", "false");
 	});
 
 	it("selects an option on click", async () => {
