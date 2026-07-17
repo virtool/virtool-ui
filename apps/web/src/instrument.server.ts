@@ -18,4 +18,20 @@ if (options.dsn) {
 		...options,
 		integrations: [nodeProfilingIntegration()],
 	});
+
+	// Import the logger lazily and only after `Sentry.init`. `@server/logger`
+	// transitively pulls in the Sentry SDK graph (via `sentryLog.ts`), so a
+	// top-level import would front-load it before Sentry's Node
+	// auto-instrumentation has a chance to install its import hooks.
+	const { logger } = await import("@server/logger");
+	logger.info(
+		{ environment: options.environment, foundSentryDsn: true },
+		"sentry initialised",
+	);
+} else {
+	const { logger } = await import("@server/logger");
+	logger.info(
+		{ environment: options.environment, foundSentryDsn: false },
+		"sentry disabled",
+	);
 }

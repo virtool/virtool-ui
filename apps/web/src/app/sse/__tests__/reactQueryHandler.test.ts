@@ -76,16 +76,26 @@ describe("reactQueryHandler", () => {
 				queryKey: userQueryKeys.lists(),
 			},
 
-			// Labels, banners, and uploads cache lists but no details, so an
-			// update falls back to the whole domain.
+			// Labels and uploads cache lists but no details, so an update narrows
+			// to the whole list rather than the whole domain.
 			{
 				message: { domain: "labels", operation: "update", id: 7 },
-				queryKey: labelQueryKeys.all(),
+				queryKey: labelQueryKeys.lists(),
 			},
 			{
 				message: { domain: "labels", operation: "insert", id: 7 },
 				queryKey: labelQueryKeys.lists(),
 			},
+			{
+				message: { domain: "uploads", operation: "update", id: 5 },
+				queryKey: fileQueryKeys.lists(),
+			},
+			{
+				message: { domain: "uploads", operation: "insert", id: 5 },
+				queryKey: fileQueryKeys.lists(),
+			},
+			// Banners cache the active banner at active(), outside lists(), so an
+			// update still has to fall back to the whole domain to reach it.
 			{
 				message: { domain: "messages", operation: "update", id: 1 },
 				queryKey: bannerQueryKeys.all(),
@@ -93,14 +103,6 @@ describe("reactQueryHandler", () => {
 			{
 				message: { domain: "messages", operation: "delete", id: 1 },
 				queryKey: bannerQueryKeys.lists(),
-			},
-			{
-				message: { domain: "uploads", operation: "update", id: 5 },
-				queryKey: fileQueryKeys.all(),
-			},
-			{
-				message: { domain: "uploads", operation: "insert", id: 5 },
-				queryKey: fileQueryKeys.lists(),
 			},
 
 			// Tasks cache details but no list, so an insert falls back.

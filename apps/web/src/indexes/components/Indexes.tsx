@@ -1,12 +1,5 @@
-import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
-import {
-	Empty,
-	EmptyContent,
-	EmptyDescription,
-	EmptyMedia,
-	EmptyTitle,
-} from "@base/Empty";
+import ListEmpty from "@base/ListEmpty";
 import Pagination from "@base/Pagination";
 import Toolbar from "@base/Toolbar";
 import {
@@ -69,24 +62,17 @@ export default function Indexes({ page, setSearch }: IndexesProps) {
 					</BoxGroup>
 				</Pagination>
 			) : (
-				<Box>
-					<Empty className="h-72">
-						<EmptyMedia className="text-gray-400">
-							<Inbox size={40} strokeWidth={1.5} />
-						</EmptyMedia>
-						<EmptyTitle>No indexes found</EmptyTitle>
-						<EmptyDescription>
-							{change_count > 0
-								? "This reference has unbuilt changes."
-								: "This reference has no indexes yet."}
-						</EmptyDescription>
-						{canBuildIndex && (
-							<EmptyContent>
-								<RebuildIndex refId={refId} />
-							</EmptyContent>
-						)}
-					</Empty>
-				</Box>
+				<ListEmpty
+					icon={Inbox}
+					title="No indexes found"
+					description={
+						change_count > 0
+							? "This reference has unbuilt changes."
+							: "This reference has no indexes yet."
+					}
+				>
+					{canBuildIndex && <RebuildIndex refId={refId} />}
+				</ListEmpty>
 			)}
 		</>
 	);

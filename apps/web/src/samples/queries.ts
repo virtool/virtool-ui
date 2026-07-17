@@ -155,9 +155,11 @@ export function useCreateSample() {
 		mutationFn: createSample,
 		onSuccess: () => {
 			// The created sample reserves its read files, so the server stops
-			// returning them. Refetch the uploads lists to drop them from the
-			// selector.
-			queryClient.invalidateQueries({ queryKey: fileQueryKeys.lists() });
+			// returning them. Only the reads selector shows them — an infinite
+			// list — so refetch just that, not every upload type and page.
+			queryClient.invalidateQueries({
+				queryKey: [...fileQueryKeys.infiniteLists(), "reads"],
+			});
 		},
 	});
 }

@@ -59,6 +59,7 @@ export default function QuickAnalyze({
 
 				<CreateAnalysisForm
 					compatibleWorkflows={compatibleWorkflows}
+					onClose={() => setOpen(false)}
 					sampleCount={sampleIds.length}
 					sampleIds={sampleIds}
 				/>
