@@ -35,6 +35,7 @@ export default function CreateAnalysis({
 				<HMMAlert installed={Boolean(hmms.status.task?.complete)} />
 				<CreateAnalysisForm
 					compatibleWorkflows={compatibleWorkflows}
+					onClose={() => setOpen(false)}
 					sampleCount={1}
 					sampleIds={[sampleId]}
 				/>

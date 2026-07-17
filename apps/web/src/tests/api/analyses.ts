@@ -26,6 +26,18 @@ export function mockApiGetAnalyses(analyses: AnalysisMinimal[]) {
 }
 
 /**
+ * Creates a mocked API call for creating an analysis on a sample
+ *
+ * @param analysis - The analysis returned by the request
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiCreateAnalysis(analysis: AnalysisMinimal) {
+	return nock("http://localhost")
+		.post(`/api/samples/${analysis.sample.id}/analyses`)
+		.reply(201, analysis);
+}
+
+/**
  * Creates a mocked API call for initiating a blast for a Nuvs sequence
  *
  * @param analysisId - The id of the analysis associated with the sequence
