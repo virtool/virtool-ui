@@ -14,9 +14,9 @@ import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import SaveButton from "@base/SaveButton";
+import { useInfiniteFindFiles } from "@uploads/queries";
 import { useId, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useInfiniteFindFiles } from "@/uploads/queries";
 import { useCreateSubtraction } from "../queries";
 import { SubtractionFileSelector } from "./SubtractionFileSelector";
 

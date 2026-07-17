@@ -1,3 +1,4 @@
+import type { Group } from "@groups/types";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount } from "@tests/fake/account";
@@ -17,7 +18,6 @@ import UserDetail from "@users/components/UserDetail";
 import type { User } from "@users/types";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { Group } from "@/groups/types";
 
 describe("<UserDetail />", () => {
 	let groups: Group[];

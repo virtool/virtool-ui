@@ -1,14 +1,14 @@
 import { getWorkflowDisplayName } from "@app/utils";
+import Alert from "@base/Alert";
 import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
+import RelativeTime, { useRelativeTime } from "@base/RelativeTime";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useFetchIndex } from "@indexes/queries";
 import { getRouteApi } from "@tanstack/react-router";
-import Alert from "@/base/Alert";
-import RelativeTime, { useRelativeTime } from "@/base/RelativeTime";
 import { useFetchJob } from "../queries";
 import type { JobState } from "../types";
 import JobArgs from "./JobArgs";

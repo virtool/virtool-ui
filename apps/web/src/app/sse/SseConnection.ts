@@ -16,12 +16,15 @@ let connection: EventSource | null = null;
 let connectionStatus: ConnectionStatus = "initializing";
 let interval = 500;
 let handleMessage: ((data: unknown) => void) | null = null;
+let client: QueryClient | null = null;
+let hasConnected = false;
 
 export function init(queryClient: QueryClient): void {
 	if (handleMessage) {
 		return;
 	}
 
+	client = queryClient;
 	const handler = reactQueryHandler(queryClient);
 	handleMessage = (data) => {
 		const parsed = SseMessageSchema.safeParse(data);
@@ -105,6 +108,16 @@ export function establishConnection(): void {
 	connection.onopen = () => {
 		interval = 500;
 		connectionStatus = "connected";
+
+		// A reconnect means the stream was down for a while, and any invalidation
+		// frames NOTIFYed during the gap — including a server-side queue overflow
+		// that dropped its backlog — never arrived. Refetch active queries so the
+		// client re-syncs. The first connect needs none of this: the route loaders
+		// have just populated the cache.
+		if (hasConnected) {
+			client?.invalidateQueries();
+		}
+		hasConnected = true;
 	};
 
 	connection.addEventListener("version", (event) => {

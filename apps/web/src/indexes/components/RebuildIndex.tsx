@@ -8,6 +8,7 @@ import {
 	DialogTrigger,
 } from "@base/Dialog";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import { useState } from "react";
 import { useCreateIndex, useFetchUnbuiltChanges } from "../queries";
 import RebuildHistory from "./History";
@@ -22,7 +23,7 @@ type RebuildIndexProps = {
  */
 export default function RebuildIndex({ refId }: RebuildIndexProps) {
 	const [open, setOpen] = useState(false);
-	const { data, isPending } = useFetchUnbuiltChanges(refId);
+	const { data, isError, isPending } = useFetchUnbuiltChanges(refId);
 	const mutation = useCreateIndex();
 
 	function handleSubmit(e) {
@@ -44,7 +45,9 @@ export default function RebuildIndex({ refId }: RebuildIndexProps) {
 			</DialogTrigger>
 			<DialogContent>
 				<DialogTitle>Rebuild Index</DialogTitle>
-				{isPending ? (
+				{isError && !data ? (
+					<QueryError noun="unbuilt changes" />
+				) : isPending ? (
 					<LoadingPlaceholder />
 				) : (
 					<form onSubmit={handleSubmit}>

@@ -1,9 +1,9 @@
+import type { Label } from "@labels/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import { useState } from "react";
 import { describe, expect, it } from "vitest";
-import type { Label } from "@/labels/types";
 import LabelSelector from "../LabelSelector";
 
 const labels: Label[] = [

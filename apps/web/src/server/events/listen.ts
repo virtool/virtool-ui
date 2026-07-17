@@ -2,6 +2,14 @@ import { client } from "../db/pg";
 import { logger } from "../logger";
 import { CLIENT_EVENTS_CHANNEL, type ClientEvent } from "./channel";
 
+/**
+ * Cap on events buffered for a consumer that has fallen behind. On overflow the
+ * stream is dropped rather than buffered without bound: the client reconnects
+ * and refetches, which re-syncs it far more cheaply than draining a giant
+ * backlog of stale invalidations would.
+ */
+const MAX_QUEUE = 1000;
+
 /** Stream of client events plus a cleanup hook to unlisten and close. */
 export type ClientEventStream = {
 	events: AsyncIterable<ClientEvent>;
@@ -23,9 +31,21 @@ export function listenForClientEvents(): ClientEventStream {
 			const r = resolveNext;
 			resolveNext = null;
 			r({ value: event, done: false });
-		} else {
-			queue.push(event);
+			return;
 		}
+
+		if (queue.length >= MAX_QUEUE) {
+			logger.warn(
+				{ max: MAX_QUEUE },
+				"sse client event queue overflowed; dropping connection",
+			);
+			closed = true;
+			queue.length = 0;
+			finish();
+			return;
+		}
+
+		queue.push(event);
 	}
 
 	function finish() {

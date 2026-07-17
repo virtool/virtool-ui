@@ -28,11 +28,11 @@ import type {
 	InfiniteData,
 	InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
+import { useValidateFiles } from "@uploads/hooks";
 import { buildReadRows, detectMate, type ReadRow } from "@uploads/pairing";
+import type { FileResponse, Upload } from "@uploads/types";
 import { ChevronDown, Files, TriangleAlert, Undo } from "lucide-react";
 import { useCallback, useState } from "react";
-import { useValidateFiles } from "@/uploads/hooks";
-import type { FileResponse, Upload } from "@/uploads/types";
 import ReadPairBadge from "./ReadPairBadge";
 import ReadSelectorRow from "./ReadSelectorRow";
 import ReadSelectorSlots from "./ReadSelectorSlots";

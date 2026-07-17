@@ -1,6 +1,6 @@
+import type { ServerJobNested } from "@jobs/types";
 import type { SampleNested } from "@samples/types";
 import type { UserNested } from "@users/types";
-import type { ServerJobNested } from "@/jobs/types";
 import type { SearchResult } from "@/types/api";
 
 /** The measurements of individual nucleotides (percentage) */

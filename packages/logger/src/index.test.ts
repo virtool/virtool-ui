@@ -76,6 +76,34 @@ describe("createLogger", () => {
 		);
 	});
 
+	it("redacts session-credential fields nested one level deep", () => {
+		const sink = makeSink();
+		const log = createLogger({
+			name: "web",
+			level: "info",
+			destination: sink.stream,
+		});
+
+		log.info(
+			{
+				sessionToken: "st",
+				row: {
+					session_token: "s_t",
+					tokenHash: "th",
+					resetCode: "rc",
+				},
+			},
+			"session",
+		);
+
+		const [record] = sink.records();
+		expect(record.sessionToken).toBe("[redacted]");
+		const row = record.row as Record<string, string>;
+		expect(row.session_token).toBe("[redacted]");
+		expect(row.tokenHash).toBe("[redacted]");
+		expect(row.resetCode).toBe("[redacted]");
+	});
+
 	it("merges caller-supplied redact paths with the defaults", () => {
 		const sink = makeSink();
 		const log = createLogger({

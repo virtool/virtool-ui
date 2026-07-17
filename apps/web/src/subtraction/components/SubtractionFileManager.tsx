@@ -1,4 +1,4 @@
-import { FileManager } from "@/uploads/components/FileManager";
+import { FileManager } from "@uploads/components/FileManager";
 
 type SubtractionFileManagerProps = {
 	page?: number;

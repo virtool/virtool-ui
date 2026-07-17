@@ -4,9 +4,11 @@
 
 Server code should log through the package, not `console.*`. It wraps pino
 with sane defaults: JSON output, redaction of `password` / `token` /
-`secret` / `authorization` / `cookie` (and the `req.headers.*` /
-`headers.*` variants), level resolved from `VT_LOG_LEVEL` (falling back to
-`info` in production, `debug` elsewhere).
+`secret` / `authorization` / `cookie`, the session-credential field names
+this codebase uses (`sessionToken` / `session_token` / `tokenHash` /
+`resetCode`), and the `req.headers.*` / `headers.*` variants — each also
+matched one level deep via `*.`. Level is resolved from `VT_LOG_LEVEL`
+(falling back to `info` in production, `debug` elsewhere).
 
 The web app constructs one logger at bootstrap with a service `name`
 (`apps/web/src/server/logger.ts` exports it as `web`). Import that
@@ -68,9 +70,10 @@ Wiring:
 
 Redaction still applies. pino runs `DEFAULT_REDACT_PATHS` redaction before
 writing to any destination, so the records the Sentry stream receives
-already have `password` / `token` / `secret` / `authorization` / `cookie`
-(and the `req.headers.*` / `headers.*` variants) replaced with
-`[redacted]`.
+already have `password` / `token` / `secret` / `authorization` / `cookie`,
+the session-credential fields (`sessionToken` / `session_token` /
+`tokenHash` / `resetCode`), and the `req.headers.*` / `headers.*` variants
+replaced with `[redacted]`.
 
 Dev does not forward. The Tilt dev container runs Vite with no DSN, so the
 logger stays stdout-only and the Sentry SDK is never loaded.

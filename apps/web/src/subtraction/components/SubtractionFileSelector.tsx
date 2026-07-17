@@ -14,9 +14,9 @@ import type {
 	FetchNextPageOptions,
 	InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
+import { useValidateFiles } from "@uploads/hooks";
+import type { FileResponse, Upload } from "@uploads/types";
 import { Files } from "lucide-react";
-import { useValidateFiles } from "@/uploads/hooks";
-import type { FileResponse, Upload } from "@/uploads/types";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 type SubtractionFileSelectorProps = {

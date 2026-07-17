@@ -1,4 +1,6 @@
+import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
+import Button from "@base/Button";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
@@ -28,8 +30,6 @@ import {
 import { getRouteApi } from "@tanstack/react-router";
 import { Component } from "lucide-react";
 import { useState } from "react";
-import Box from "@/base/Box";
-import Button from "@/base/Button";
 import RemoveSegment from "./RemoveSegment";
 import Segment, { SegmentItem } from "./Segment";
 import SegmentCreate from "./SegmentCreate";

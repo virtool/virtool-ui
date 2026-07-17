@@ -13,6 +13,7 @@ import InputIconButton from "@base/InputIconButton";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import SaveButton from "@base/SaveButton";
 import Switch from "@base/Switch";
 import {
@@ -75,10 +76,19 @@ type CreateSampleProps = {
 export default function CreateSample({ labels }: CreateSampleProps) {
 	const navigate = useNavigate();
 
-	const { data: groups, isPending: isPendingGroups } = useListGroups();
-	const { data: account, isPending: isPendingAccount } = useFetchAccount();
+	const {
+		data: groups,
+		isError: isErrorGroups,
+		isPending: isPendingGroups,
+	} = useListGroups();
+	const {
+		data: account,
+		isError: isErrorAccount,
+		isPending: isPendingAccount,
+	} = useFetchAccount();
 	const {
 		data: readsResponse,
+		isError: isErrorReads,
 		isPending: isPendingReads,
 		isFetchingNextPage,
 		fetchNextPage,
@@ -105,6 +115,10 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 	}, [account, setValue]);
 
 	const reads = readsResponse?.pages.flatMap((page) => page.items) ?? [];
+	const isError =
+		(isErrorGroups && !groups) ||
+		(isErrorAccount && !account) ||
+		(isErrorReads && !readsResponse);
 	const isLoading =
 		isPendingReads ||
 		isPendingGroups ||
@@ -164,7 +178,9 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 					</InputError>
 				</ViewHeader>
 
-				{isLoading ? (
+				{isError ? (
+					<QueryError noun="the sample form" />
+				) : isLoading ? (
 					<LoadingPlaceholder className="mt-9" />
 				) : (
 					<>

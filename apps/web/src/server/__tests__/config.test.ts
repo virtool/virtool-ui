@@ -32,6 +32,37 @@ describe("parseServerConfig", () => {
 		).toThrow(/VT_STORAGE_BACKEND/);
 	});
 
+	it("defaults the postgres pool max when unset", () => {
+		expect(parseServerConfig(minimalS3).postgresPoolMax).toBe(10);
+	});
+
+	it("treats a blank postgres pool max as unset", () => {
+		const config = parseServerConfig({
+			...minimalS3,
+			VT_POSTGRES_POOL_MAX: "",
+		} as NodeJS.ProcessEnv);
+
+		expect(config.postgresPoolMax).toBe(10);
+	});
+
+	it("reads the postgres pool max from the environment", () => {
+		const config = parseServerConfig({
+			...minimalS3,
+			VT_POSTGRES_POOL_MAX: "25",
+		} as NodeJS.ProcessEnv);
+
+		expect(config.postgresPoolMax).toBe(25);
+	});
+
+	it("rejects a non-positive postgres pool max", () => {
+		expect(() =>
+			parseServerConfig({
+				...minimalS3,
+				VT_POSTGRES_POOL_MAX: "0",
+			} as NodeJS.ProcessEnv),
+		).toThrow(/VT_POSTGRES_POOL_MAX/);
+	});
+
 	it("rejects the removed local backend", () => {
 		expect(() =>
 			parseServerConfig({
