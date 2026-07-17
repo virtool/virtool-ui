@@ -37,9 +37,9 @@ describe("<RemoveSequence />", () => {
 			/>,
 		);
 
-		expect(screen.getByText("Remove Sequence")).toBeInTheDocument();
+		expect(screen.getByText("Delete Sequence")).toBeInTheDocument();
 		expect(
-			screen.getByText(/Are you sure you want to remove the sequence/),
+			screen.getByText(/Are you sure you want to delete the sequence/),
 		).toBeInTheDocument();
 		expect(screen.getByText(sequence.accession)).toBeInTheDocument();
 		expect(screen.getByText(isolateName)).toBeInTheDocument();
@@ -57,7 +57,7 @@ describe("<RemoveSequence />", () => {
 			/>,
 		);
 
-		expect(screen.queryByText("Remove Sequence")).toBeNull();
+		expect(screen.queryByText("Delete Sequence")).toBeNull();
 		expect(screen.queryByRole("button", { name: "Confirm" })).toBeNull();
 	});
 

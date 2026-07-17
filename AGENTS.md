@@ -243,6 +243,11 @@ So, in a route's critical exports:
   dependency-free coercion helpers in `@app/searchParams` and type the function
   as `(input: Partial<T> & SearchSchemaInput) => T` — the `SearchSchemaInput`
   tag is what keeps `<Link search={{ page: 2 }}>` partial.
+- **Paginated list routes share `@app/pagination`.** Spread `paginated(input)`
+  into the returned object and intersect the route's search type with
+  `Paginated` (`type FooSearch = Paginated & { term: string }`) rather than
+  re-declaring `page: num(input.page, 1)`. Loaders pass `DEFAULT_PER_PAGE` from
+  the same module, not a literal `25`.
 
 `src/server/**` is reachable from the browser program via `start.ts`, so the
 same rule applies there: reach server-function modules through

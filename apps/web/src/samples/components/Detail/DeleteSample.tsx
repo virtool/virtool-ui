@@ -1,17 +1,9 @@
-import Button from "@base/Button";
-import {
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogTitle,
-	DialogTrigger,
-} from "@base/Dialog";
+import DeleteDialog from "@base/DeleteDialog";
 import IconButton from "@base/IconButton";
 import type { JobNested } from "@jobs/types";
 import { useRemoveSample } from "@samples/queries";
 import { checkCanDeleteSample } from "@samples/utils";
 import { Trash } from "lucide-react";
-import { useState } from "react";
 
 type DeleteSampleProps = {
 	/** The id of the sample being deleted */
@@ -36,41 +28,18 @@ export default function DeleteSample({
 	name,
 	ready,
 }: DeleteSampleProps) {
-	const [open, setOpen] = useState(false);
 	const mutation = useRemoveSample();
 
 	if (!checkCanDeleteSample(ready, job)) {
 		return null;
 	}
 
-	function handleConfirm() {
-		mutation.mutate(
-			{ sampleId: id },
-			{
-				onSuccess: () => {
-					setOpen(false);
-				},
-			},
-		);
-	}
-
 	return (
-		<Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-			<DialogTrigger asChild>
-				<IconButton color="red" IconComponent={Trash} tip="delete" />
-			</DialogTrigger>
-			<DialogContent>
-				<DialogTitle>Delete Sample</DialogTitle>
-				<span>
-					Are you sure you want to delete <strong>{name}</strong>?
-				</span>
-
-				<DialogFooter>
-					<Button color="red" onClick={handleConfirm}>
-						Confirm
-					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+		<DeleteDialog
+			name={name}
+			noun="Sample"
+			onConfirm={() => mutation.mutateAsync({ sampleId: id })}
+			trigger={<IconButton color="red" IconComponent={Trash} tip="delete" />}
+		/>
 	);
 }

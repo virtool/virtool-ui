@@ -35,6 +35,12 @@ class FakeEventSource {
 		this.readyState = FakeEventSource.CLOSED;
 	}
 
+	/** The server accepted the stream. */
+	open() {
+		this.readyState = FakeEventSource.OPEN;
+		this.onopen?.();
+	}
+
 	/** The server answered with something fatal. The browser will not retry. */
 	reject() {
 		this.readyState = FakeEventSource.CLOSED;
@@ -49,11 +55,12 @@ class FakeEventSource {
 }
 
 const fetchMock = vi.fn();
+const invalidateQueries = vi.fn();
 
 async function establish() {
 	vi.resetModules();
 	const sse = await import("../SseConnection");
-	sse.init({ invalidateQueries: vi.fn() } as unknown as QueryClient);
+	sse.init({ invalidateQueries } as unknown as QueryClient);
 	sse.establishConnection();
 
 	return sse;
@@ -73,6 +80,7 @@ describe("SseConnection", () => {
 		vi.useFakeTimers();
 		FakeEventSource.instances = [];
 		endSession.mockClear();
+		invalidateQueries.mockClear();
 		fetchMock.mockReset();
 		vi.stubGlobal("EventSource", FakeEventSource);
 		vi.stubGlobal("fetch", fetchMock);
@@ -95,6 +103,23 @@ describe("SseConnection", () => {
 		// Nothing about a dropped transport suggests the session is gone, so it is
 		// not worth asking.
 		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it("refetches active queries on reconnect but not on the first connect", async () => {
+		await establish();
+
+		openConnection().open();
+		expect(invalidateQueries).not.toHaveBeenCalled();
+
+		openConnection().drop();
+		await vi.advanceTimersByTimeAsync(1000);
+
+		const second = FakeEventSource.instances[1];
+		if (!second) {
+			throw new Error("no reconnect was opened");
+		}
+		second.open();
+		expect(invalidateQueries).toHaveBeenCalledTimes(1);
 	});
 
 	it("abandons the stream and ends the session when the handshake is unauthorized", async () => {

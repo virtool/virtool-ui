@@ -1,6 +1,6 @@
 import type { AdministratorRoleName } from "@administration/types";
-import type { GroupMinimal, Permissions } from "../groups/types";
-import type { SearchResult } from "../types/api";
+import type { GroupMinimal, Permissions } from "@groups/types";
+import type { SearchResult } from "@/types/api";
 
 /** Business to consumer provided user details */
 type UserB2c = {

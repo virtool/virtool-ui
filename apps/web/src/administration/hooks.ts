@@ -8,6 +8,7 @@ import {
 
 export type PermissionQueryResult = {
 	hasPermission: boolean | null;
+	isError: boolean;
 	isPending: boolean;
 };
 
@@ -20,21 +21,25 @@ export type PermissionQueryResult = {
 export function useCheckAdminRole(
 	requiredRole: AdministratorRoleName,
 ): PermissionQueryResult {
-	const { data: account, isPending } = useFetchAccount();
+	const { data: account, isError, isPending } = useFetchAccount();
 	return {
 		hasPermission: account
 			? hasSufficientAdminRole(requiredRole, account.administrator_role)
 			: null,
+		isError,
 		isPending,
 	};
 }
 
-export function useCheckAdminRoleOrPermission(permission: Permission) {
-	const { data: account, isPending } = useFetchAccount();
+export function useCheckAdminRoleOrPermission(
+	permission: Permission,
+): PermissionQueryResult {
+	const { data: account, isError, isPending } = useFetchAccount();
 	return {
 		hasPermission: account
 			? checkAdminRoleOrPermissionsFromAccount(account, permission)
 			: null,
+		isError,
 		isPending,
 	};
 }

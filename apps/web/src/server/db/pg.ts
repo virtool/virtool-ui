@@ -4,7 +4,9 @@ import { config } from "../config";
 import { logger } from "../logger";
 import * as schema from "./schema";
 
-export const client = postgres(config.postgresUrl);
+export const client = postgres(config.postgresUrl, {
+	max: config.postgresPoolMax,
+});
 
 export const db = drizzle(client, { schema });
 

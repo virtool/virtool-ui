@@ -1,4 +1,4 @@
-import RemoveDialog from "@base/RemoveDialog";
+import DeleteDialog from "@base/DeleteDialog";
 import { useRemoveIsolate } from "@otus/queries";
 
 type RemoveIsolateProps = {
@@ -26,24 +26,13 @@ export default function RemoveIsolate({
 }: RemoveIsolateProps) {
 	const mutation = useRemoveIsolate();
 
-	function handleConfirm() {
-		mutation.mutate(
-			{ otuId, isolateId: id },
-			{
-				onSuccess: () => {
-					onHide();
-				},
-			},
-		);
-	}
-
 	return (
-		<RemoveDialog
+		<DeleteDialog
 			name={name}
 			noun="Isolate"
-			onConfirm={handleConfirm}
-			onHide={onHide}
-			show={show}
+			onConfirm={() => mutation.mutateAsync({ otuId, isolateId: id })}
+			onOpenChange={onHide}
+			open={show}
 		/>
 	);
 }

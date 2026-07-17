@@ -1,17 +1,12 @@
-import { num } from "@app/searchParams";
+import { DEFAULT_PER_PAGE, type Paginated, paginated } from "@app/pagination";
 import Indexes from "@indexes/components/Indexes";
 import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 
-/** Search params for this route. */
-type IndexesSearch = {
-	page: number;
-};
-
 function validateIndexesSearch(
-	input: Partial<IndexesSearch> & SearchSchemaInput,
-): IndexesSearch {
-	return { page: num(input.page, 1) };
+	input: Partial<Paginated> & SearchSchemaInput,
+): Paginated {
+	return paginated(input);
 }
 
 export const Route = createFileRoute("/_authenticated/refs/$refId/indexes/")({
@@ -23,7 +18,9 @@ export const Route = createFileRoute("/_authenticated/refs/$refId/indexes/")({
 		deps: { page },
 	}) => {
 		const { indexesQueryOptions } = await import("@indexes/queries");
-		await queryClient.ensureQueryData(indexesQueryOptions(page, 25, refId));
+		await queryClient.ensureQueryData(
+			indexesQueryOptions(page, DEFAULT_PER_PAGE, refId),
+		);
 	},
 	component: IndexesRoute,
 });

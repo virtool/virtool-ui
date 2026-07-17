@@ -1,5 +1,5 @@
+import type { Upload } from "@uploads/types";
 import nock from "nock";
-import type { Upload } from "@/uploads/types";
 
 /**
  * Creates a mocked API call for getting a paginated list of uploads.

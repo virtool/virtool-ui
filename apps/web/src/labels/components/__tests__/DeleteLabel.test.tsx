@@ -12,10 +12,10 @@ describe("<DeleteLabel>", () => {
 		await userEvent.click(screen.getByRole("button", { name: "delete label" }));
 
 		expect(
-			screen.getByText(/are you sure you want to delete the label/i),
+			screen.getByText(/are you sure you want to delete/i),
 		).toBeInTheDocument();
 
-		await userEvent.click(screen.getByRole("button", { name: "Delete" }));
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
 		await waitFor(() => expect(onConfirm).toHaveBeenCalledOnce());
 		await waitFor(() =>
@@ -28,11 +28,11 @@ describe("<DeleteLabel>", () => {
 		renderWithProviders(<DeleteLabel name="Foo" onConfirm={onConfirm} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "delete label" }));
-		await userEvent.click(screen.getByRole("button", { name: "Delete" }));
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
 		await waitFor(() => expect(onConfirm).toHaveBeenCalledOnce());
 		expect(
-			screen.getByText(/are you sure you want to delete the label/i),
+			screen.getByText(/are you sure you want to delete/i),
 		).toBeInTheDocument();
 	});
 });

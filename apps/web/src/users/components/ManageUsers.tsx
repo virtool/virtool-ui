@@ -1,6 +1,7 @@
 import { useCheckAdminRole } from "@administration/hooks";
 import Alert from "@base/Alert";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import SearchToolbar from "@base/SearchToolbar";
 import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
@@ -27,7 +28,11 @@ export function ManageUsers({
 	status = "active",
 	term = "",
 }: ManageUsersProps) {
-	const { hasPermission, isPending } = useCheckAdminRole("users");
+	const { hasPermission, isError, isPending } = useCheckAdminRole("users");
+
+	if (isError && hasPermission === null) {
+		return <QueryError noun="users" />;
+	}
 
 	if (isPending) {
 		return <LoadingPlaceholder />;

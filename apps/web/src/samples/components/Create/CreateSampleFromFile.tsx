@@ -17,6 +17,7 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import QueryError from "@base/QueryError";
 import SaveButton from "@base/SaveButton";
 import { useListGroups } from "@groups/queries";
 import type { Label } from "@labels/types";
@@ -91,8 +92,16 @@ function CreateSampleFromFileForm({
 	onClose,
 	reads,
 }: CreateSampleFromFileFormProps) {
-	const { data: groups, isPending: isPendingGroups } = useListGroups();
-	const { data: account, isPending: isPendingAccount } = useFetchAccount();
+	const {
+		data: groups,
+		isError: isErrorGroups,
+		isPending: isPendingGroups,
+	} = useListGroups();
+	const {
+		data: account,
+		isError: isErrorAccount,
+		isPending: isPendingAccount,
+	} = useFetchAccount();
 
 	const {
 		control,
@@ -139,7 +148,9 @@ function CreateSampleFromFileForm({
 				{mutation.isError && mutation.error.response?.body.message}
 			</InputError>
 
-			{isPendingGroups || isPendingAccount || !groups ? (
+			{(isErrorGroups && !groups) || (isErrorAccount && !account) ? (
+				<QueryError noun="the sample form" />
+			) : isPendingGroups || isPendingAccount || !groups ? (
 				<LoadingPlaceholder className="mt-9" />
 			) : (
 				<form onSubmit={handleSubmit(onSubmit)}>

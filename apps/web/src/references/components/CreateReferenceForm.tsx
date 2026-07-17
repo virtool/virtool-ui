@@ -7,9 +7,9 @@ import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import SaveButton from "@base/SaveButton";
 import TextArea from "@base/TextArea";
 import { useNavigate } from "@tanstack/react-router";
+import { UploadBar } from "@uploads/components/UploadBar";
 import { useId } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { UploadBar } from "@/uploads/components/UploadBar";
 import {
 	useCreateReference,
 	useImportReference,

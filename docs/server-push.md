@@ -142,7 +142,10 @@ application's own doing.
 
 - `server/events/channel.ts` — channel name + payload type. Pure.
 - `server/events/emit.ts` — publishes a `ClientEvent` via `NOTIFY`.
-- `server/events/listen.ts` — `LISTEN`-backed async iterable.
+- `server/events/listen.ts` — `LISTEN`-backed async iterable. Its
+  per-connection buffer is capped (`MAX_QUEUE`); a consumer that falls
+  that far behind has its stream dropped rather than buffered without
+  bound, and the client reconnects and refetches to re-sync.
 - `server/events/broadcast.ts` — pure `ClientEvent → SseMessage` shape
   conversion.
 - `routes/events.ts` — TanStack Start `createFileRoute` that owns the
@@ -152,7 +155,11 @@ application's own doing.
 ## Client side
 
 - `app/sse/SseConnection.ts` opens the `EventSource`, manages
-  reconnect, and pipes parsed messages into `reactQueryHandler`.
+  reconnect, and pipes parsed messages into `reactQueryHandler`. On a
+  *reconnect* (not the first connect) it invalidates all queries, since
+  frames NOTIFYed while the stream was down — including a server-side
+  queue-overflow drop — never arrived; the initial connect skips this
+  because the route loaders just populated the cache.
 - `app/sse/schema.ts` defines `SseMessageSchema`, which validates the
   wire frame and strips unknown fields.
 - `app/sse/reactQueryHandler.ts` maps `message.domain` to a query-key

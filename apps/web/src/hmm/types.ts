@@ -1,7 +1,7 @@
 import type { ServerTask } from "@tasks/types";
 import type { UserNested } from "@users/types";
 
-import type { SearchResult } from "../types/api";
+import type { SearchResult } from "@/types/api";
 
 /** Minimal HMM used for resource listings */
 export type HMMMinimal = {

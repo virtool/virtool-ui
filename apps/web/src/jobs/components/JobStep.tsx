@@ -1,8 +1,8 @@
+import { formatDate, formatTime } from "@app/date";
+import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Markdown from "@base/Markdown";
 import { Calendar, Clock } from "lucide-react";
-import { formatDate, formatTime } from "@/app/date";
-import Badge from "@/base/Badge";
 import type { JobState, JobStep } from "../types";
 import JobStateIcon from "./JobStateIcon";
 

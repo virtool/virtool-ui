@@ -1,21 +1,16 @@
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SectionHeader from "@base/SectionHeader";
-import { useFetchReference } from "@references/queries";
+import { useSuspenseReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
 
 const routeApi = getRouteApi("/_authenticated/refs/$refId");
 
 export function ArchivedSourceTypes() {
 	const { refId } = routeApi.useParams();
-	const { data, isPending } = useFetchReference(refId);
+	const { data } = useSuspenseReference(refId);
 
-	if (isPending) {
-		return <LoadingPlaceholder />;
-	}
-
-	const sourceTypes = data?.source_types ?? [];
+	const sourceTypes = data.source_types ?? [];
 
 	return (
 		<section>
