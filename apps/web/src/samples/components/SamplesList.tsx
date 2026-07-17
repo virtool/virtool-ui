@@ -240,7 +240,6 @@ export default function SamplesList({
 					</ListEmpty>
 				) : (
 					<Pagination
-						items={items}
 						storedPage={page}
 						currentPage={urlPage}
 						pageCount={page_count}

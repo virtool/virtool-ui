@@ -42,7 +42,6 @@ export default function Indexes({ page, setSearch }: IndexesProps) {
 			)}
 			{items.length ? (
 				<Pagination
-					items={items}
 					storedPage={storedPage}
 					currentPage={page}
 					pageCount={page_count}

@@ -56,7 +56,6 @@ export default function JobsList({
 						/>
 					) : (
 						<Pagination
-							items={items}
 							storedPage={storedPage}
 							currentPage={page}
 							pageCount={pageCount}

@@ -52,7 +52,6 @@ export default function SubtractionList({
 				/>
 			) : (
 				<Pagination
-					items={items}
 					storedPage={storedPage}
 					currentPage={page}
 					pageCount={page_count}

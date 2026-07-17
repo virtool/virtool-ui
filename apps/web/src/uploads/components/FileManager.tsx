@@ -147,7 +147,6 @@ export function FileManager({
 				</Box>
 			) : (
 				<Pagination
-					items={files.items}
 					storedPage={files.page}
 					currentPage={page}
 					pageCount={files.page_count}
