@@ -16,14 +16,14 @@ import ReferenceList from "../ReferenceList";
 
 type ReferenceListSearch = {
 	archived?: boolean;
-	find?: string;
+	term?: string;
 	page?: number;
 };
 
 function ReferenceListHarness() {
 	const [search, setSearch] = useState<ReferenceListSearch>({
 		archived: false,
-		find: "",
+		term: "",
 	});
 
 	function handleSetSearch(next: ReferenceListSearch) {

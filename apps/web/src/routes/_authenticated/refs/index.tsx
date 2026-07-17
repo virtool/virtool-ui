@@ -6,7 +6,7 @@ import { createFileRoute } from "@tanstack/react-router";
 /** Search params for the references list. */
 type RefsSearch = {
 	archived: boolean;
-	find: string;
+	term: string;
 	page: number;
 };
 
@@ -15,25 +15,25 @@ function validateRefsSearch(
 ): RefsSearch {
 	return {
 		archived: bool(input.archived, false),
-		find: str(input.find, ""),
+		term: str(input.term, ""),
 		page: num(input.page, 1),
 	};
 }
 
 export const Route = createFileRoute("/_authenticated/refs/")({
 	validateSearch: validateRefsSearch,
-	loaderDeps: ({ search: { archived, find, page } }) => ({
+	loaderDeps: ({ search: { archived, term, page } }) => ({
 		archived,
-		find,
+		term,
 		page,
 	}),
 	loader: async ({
 		context: { queryClient },
-		deps: { archived, find, page },
+		deps: { archived, term, page },
 	}) => {
 		const { referencesQueryOptions } = await import("@references/queries");
 		await queryClient.ensureQueryData(
-			referencesQueryOptions(page, 25, find, archived),
+			referencesQueryOptions(page, 25, term, archived),
 		);
 	},
 	component: ReferencesRoute,
@@ -46,7 +46,7 @@ function ReferencesRoute() {
 	return (
 		<ReferenceList
 			archived={search.archived}
-			find={search.find}
+			term={search.term}
 			page={search.page}
 			setSearch={(next, options) =>
 				navigate({

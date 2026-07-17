@@ -6,10 +6,10 @@ import ToggleGroupItem from "@base/ToggleGroupItem";
 
 type ReferenceToolbarProps = {
 	archived: boolean;
-	find: string;
+	term: string;
 	onCreate: () => void;
 	setArchived: (archived: boolean) => void;
-	setFind: (find: string) => void;
+	setTerm: (term: string) => void;
 };
 
 /**
@@ -17,10 +17,10 @@ type ReferenceToolbarProps = {
  */
 export default function ReferenceToolbar({
 	archived,
-	find,
+	term,
 	onCreate,
 	setArchived,
-	setFind,
+	setTerm,
 }: ReferenceToolbarProps) {
 	const { hasPermission: canCreate } =
 		useCheckAdminRoleOrPermission("create_ref");
@@ -28,9 +28,9 @@ export default function ReferenceToolbar({
 	return (
 		<SearchToolbar
 			aria-label="Search references"
-			onChange={setFind}
+			onChange={setTerm}
 			placeholder="Reference name"
-			value={find}
+			value={term}
 		>
 			<ToggleGroup
 				value={archived ? "archived" : "active"}

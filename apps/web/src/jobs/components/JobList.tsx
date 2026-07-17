@@ -1,7 +1,6 @@
-import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
-import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
+import ListEmpty from "@base/ListEmpty";
 import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
@@ -46,23 +45,15 @@ export default function JobsList({
 			<div className="flex gap-4">
 				<ContainerNarrow>
 					{isEmpty ? (
-						<Box>
-							<Empty className="h-72">
-								<EmptyMedia className="text-gray-400">
-									{isFiltered ? (
-										<SearchX size={40} strokeWidth={1.5} />
-									) : (
-										<Cog size={40} strokeWidth={1.5} />
-									)}
-								</EmptyMedia>
-								<EmptyTitle>No jobs found</EmptyTitle>
-								<EmptyDescription>
-									{isFiltered
-										? "No jobs match your filters."
-										: "No jobs have been run yet."}
-								</EmptyDescription>
-							</Empty>
-						</Box>
+						<ListEmpty
+							icon={isFiltered ? SearchX : Cog}
+							title="No jobs found"
+							description={
+								isFiltered
+									? "No jobs match your filters."
+									: "No jobs have been run yet."
+							}
+						/>
 					) : (
 						<Pagination
 							items={items}

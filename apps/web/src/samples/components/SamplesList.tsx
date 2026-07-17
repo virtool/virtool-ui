@@ -1,14 +1,7 @@
 import QuickAnalyze from "@analyses/components/Create/QuickAnalyze";
-import Box from "@base/Box";
 import Button from "@base/Button";
 import ContainerNarrow from "@base/ContainerNarrow";
-import {
-	Empty,
-	EmptyContent,
-	EmptyDescription,
-	EmptyMedia,
-	EmptyTitle,
-} from "@base/Empty";
+import ListEmpty from "@base/ListEmpty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
 import QueryError from "@base/QueryError";
@@ -230,32 +223,21 @@ export default function SamplesList({
 					term={term}
 				/>
 				{!items.length ? (
-					<Box key="noSample">
-						<Empty className="h-72">
-							<EmptyMedia className="text-gray-400">
-								{isFiltered ? (
-									<SearchX size={40} strokeWidth={1.5} />
-								) : (
-									<FlaskConical size={40} strokeWidth={1.5} />
-								)}
-							</EmptyMedia>
-							<EmptyTitle>
-								{isFiltered ? "No matching samples" : "No samples"}
-							</EmptyTitle>
-							<EmptyDescription>
-								{isFiltered
-									? "No samples match the current filters."
-									: "No samples have been created yet."}
-							</EmptyDescription>
-							{isFiltered && (
-								<EmptyContent>
-									<Button onClick={clearFilters} size="small">
-										Clear filters
-									</Button>
-								</EmptyContent>
-							)}
-						</Empty>
-					</Box>
+					<ListEmpty
+						icon={isFiltered ? SearchX : FlaskConical}
+						title={isFiltered ? "No matching samples" : "No samples"}
+						description={
+							isFiltered
+								? "No samples match the current filters."
+								: "No samples have been created yet."
+						}
+					>
+						{isFiltered && (
+							<Button onClick={clearFilters} size="small">
+								Clear filters
+							</Button>
+						)}
+					</ListEmpty>
 				) : (
 					<Pagination
 						items={items}
