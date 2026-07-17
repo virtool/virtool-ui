@@ -49,7 +49,7 @@ export function otusQueryOptions(
 	term: string,
 ) {
 	return queryOptions<OtuSearchResult, ErrorResponse>({
-		queryKey: otuQueryKeys.list([page, per_page, term]),
+		queryKey: otuQueryKeys.list([refId, page, per_page, term]),
 		queryFn: () =>
 			apiClient
 				.get(`/refs/${refId}/otus`)
