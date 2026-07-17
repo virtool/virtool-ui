@@ -114,8 +114,8 @@ importers:
         specifier: ^1.49.0
         version: 1.49.0
       fuse.js:
-        specifier: ^7.4.2
-        version: 7.4.2
+        specifier: ^7.5.0
+        version: 7.5.0
       lucide-react:
         specifier: ^1.24.0
         version: 1.24.0(react@19.2.7)
@@ -4573,8 +4573,8 @@ packages:
     resolution: {integrity: sha512-939eZS4gJ3htTHAldmyyuzlrD58P03fHG49v2JfFXbV6OhvZKRC9j2yAtdHw/zrp2zXHuv05zMIy40F0ge7spA==}
     engines: {node: '>=18'}
 
-  fuse.js@7.4.2:
-    resolution: {integrity: sha512-LVbzjD4WA6UP5B1UnP8wuaXJiLnqMdM/E4fiJXTJ5haJ5b/MBNsK29h2fm6swEoQaVQjvYFWKLE2RanyZIoRVQ==}
+  fuse.js@7.5.0:
+    resolution: {integrity: sha512-sQtrEfA+ez/3G0cCZecF70oqpCRttCexYUG4mUrtWL49ULUzUyxokt5kyqwtKzj1270RaKih+hcP3qLcumccow==}
     engines: {node: '>=10'}
 
   gensync@1.0.0-beta.2:
@@ -11172,7 +11172,7 @@ snapshots:
 
   function-timeout@1.0.2: {}
 
-  fuse.js@7.4.2: {}
+  fuse.js@7.5.0: {}
 
   gensync@1.0.0-beta.2: {}
 
