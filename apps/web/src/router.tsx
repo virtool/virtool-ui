@@ -72,6 +72,9 @@ export function getRouter() {
 		if (options.dsn) {
 			Sentry.init({
 				...options,
+				// Route envelopes through a same-origin tunnel so ad-blockers and
+				// strict CSP can't drop them — see `routes/monitoring.ts`.
+				tunnel: "/monitoring",
 				integrations: [
 					Sentry.tanstackRouterBrowserTracingIntegration(router),
 					Sentry.browserProfilingIntegration(),

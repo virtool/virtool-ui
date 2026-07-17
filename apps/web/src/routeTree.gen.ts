@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SetupRouteImport } from './routes/setup'
+import { Route as MonitoringRouteImport } from './routes/monitoring'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
@@ -72,6 +73,11 @@ import { Route as AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRouteImport } 
 const SetupRoute = SetupRouteImport.update({
   id: '/setup',
   path: '/setup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MonitoringRoute = MonitoringRouteImport.update({
+  id: '/monitoring',
+  path: '/monitoring',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -409,6 +415,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/events': typeof EventsRoute
   '/login': typeof LoginRoute
+  '/monitoring': typeof MonitoringRoute
   '/setup': typeof SetupRoute
   '/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
   '/refs': typeof AuthenticatedRefsRouteRouteWithChildren
@@ -468,6 +475,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/events': typeof EventsRoute
   '/login': typeof LoginRoute
+  '/monitoring': typeof MonitoringRoute
   '/setup': typeof SetupRoute
   '/health/live': typeof HealthLiveRoute
   '/health/ready': typeof HealthReadyRoute
@@ -518,6 +526,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/events': typeof EventsRoute
   '/login': typeof LoginRoute
+  '/monitoring': typeof MonitoringRoute
   '/setup': typeof SetupRoute
   '/_authenticated/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
   '/_authenticated/refs': typeof AuthenticatedRefsRouteRouteWithChildren
@@ -581,6 +590,7 @@ export interface FileRouteTypes {
     | '/'
     | '/events'
     | '/login'
+    | '/monitoring'
     | '/setup'
     | '/administration'
     | '/refs'
@@ -640,6 +650,7 @@ export interface FileRouteTypes {
   to:
     | '/events'
     | '/login'
+    | '/monitoring'
     | '/setup'
     | '/health/live'
     | '/health/ready'
@@ -689,6 +700,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/events'
     | '/login'
+    | '/monitoring'
     | '/setup'
     | '/_authenticated/administration'
     | '/_authenticated/refs'
@@ -751,6 +763,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   EventsRoute: typeof EventsRoute
   LoginRoute: typeof LoginRoute
+  MonitoringRoute: typeof MonitoringRoute
   SetupRoute: typeof SetupRoute
   HealthLiveRoute: typeof HealthLiveRoute
   HealthReadyRoute: typeof HealthReadyRoute
@@ -763,6 +776,13 @@ declare module '@tanstack/react-router' {
       path: '/setup'
       fullPath: '/setup'
       preLoaderRoute: typeof SetupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/monitoring': {
+      id: '/monitoring'
+      path: '/monitoring'
+      fullPath: '/monitoring'
+      preLoaderRoute: typeof MonitoringRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -1452,6 +1472,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   EventsRoute: EventsRoute,
   LoginRoute: LoginRoute,
+  MonitoringRoute: MonitoringRoute,
   SetupRoute: SetupRoute,
   HealthLiveRoute: HealthLiveRoute,
   HealthReadyRoute: HealthReadyRoute,
@@ -1459,13 +1480,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
