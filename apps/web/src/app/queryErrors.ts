@@ -7,6 +7,8 @@ import {
 /** A failed query's error, carrying an HTTP status when superagent raised it. */
 export type QueryError = Error & { response?: { status?: number } };
 
+const NON_RETRYABLE_STATUSES = new Set([401, 403, 404]);
+
 /**
  * End the session when a query fails because the session is gone.
  *
@@ -32,7 +34,7 @@ export function shouldRetryQuery(
 ): boolean {
 	// Superagent (legacy Python API) errors carry the HTTP status here.
 	const status = error.response?.status;
-	if (status !== undefined && [401, 403, 404].includes(status)) {
+	if (status !== undefined && NON_RETRYABLE_STATUSES.has(status)) {
 		return false;
 	}
 	// TanStack Start server-function errors cross the boundary with only
