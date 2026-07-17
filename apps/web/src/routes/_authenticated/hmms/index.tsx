@@ -1,20 +1,20 @@
-import { num, str } from "@app/searchParams";
+import { DEFAULT_PER_PAGE, type Paginated, paginated } from "@app/pagination";
+import { str } from "@app/searchParams";
 import HmmList from "@hmm/components/HmmList";
 import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 
 /** Search params for this route. */
-type HmmSearch = {
+type HmmSearch = Paginated & {
 	term: string;
-	page: number;
 };
 
 function validateHmmSearch(
 	input: Partial<HmmSearch> & SearchSchemaInput,
 ): HmmSearch {
 	return {
+		...paginated(input),
 		term: str(input.term, ""),
-		page: num(input.page, 1),
 	};
 }
 
@@ -23,7 +23,9 @@ export const Route = createFileRoute("/_authenticated/hmms/")({
 	loaderDeps: ({ search: { term, page } }) => ({ term, page }),
 	loader: async ({ context: { queryClient }, deps: { term, page } }) => {
 		const { hmmsQueryOptions } = await import("@hmm/queries");
-		await queryClient.ensureQueryData(hmmsQueryOptions(page, 25, term));
+		await queryClient.ensureQueryData(
+			hmmsQueryOptions(page, DEFAULT_PER_PAGE, term),
+		);
 	},
 	component: HmmRoute,
 });

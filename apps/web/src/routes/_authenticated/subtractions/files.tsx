@@ -1,17 +1,12 @@
-import { num } from "@app/searchParams";
+import { type Paginated, paginated } from "@app/pagination";
 import { SubtractionFileManager } from "@subtraction/components/SubtractionFileManager";
 import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 
-/** Search params for this route. */
-type SubtractionFilesSearch = {
-	page: number;
-};
-
 function validateSubtractionFilesSearch(
-	input: Partial<SubtractionFilesSearch> & SearchSchemaInput,
-): SubtractionFilesSearch {
-	return { page: num(input.page, 1) };
+	input: Partial<Paginated> & SearchSchemaInput,
+): Paginated {
+	return paginated(input);
 }
 
 export const Route = createFileRoute("/_authenticated/subtractions/files")({

@@ -1,17 +1,12 @@
 import AnalysesList from "@analyses/components/AnalysisList";
-import { num } from "@app/searchParams";
+import { type Paginated, paginated } from "@app/pagination";
 import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 
-/** Search params for this route. */
-type AnalysesListSearch = {
-	page: number;
-};
-
 function validateAnalysesListSearch(
-	input: Partial<AnalysesListSearch> & SearchSchemaInput,
-): AnalysesListSearch {
-	return { page: num(input.page, 1) };
+	input: Partial<Paginated> & SearchSchemaInput,
+): Paginated {
+	return paginated(input);
 }
 
 export const Route = createFileRoute(
