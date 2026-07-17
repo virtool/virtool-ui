@@ -1,19 +1,23 @@
 import Alert from "./Alert";
 import Button from "./Button";
 
-type RemoveBannerProps = {
+type DeleteAlertProps = {
 	buttonText: string;
 	message: string;
 	onClick: () => void;
 	outerClassName?: string;
 };
 
-export default function RemoveBanner({
+/**
+ * An inline alert bar prompting a destructive action, paired with a button that
+ * performs it.
+ */
+export default function DeleteAlert({
 	buttonText,
 	message,
 	onClick,
 	outerClassName,
-}: RemoveBannerProps) {
+}: DeleteAlertProps) {
 	return (
 		<Alert
 			className="items-center justify-between"

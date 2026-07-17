@@ -22,29 +22,29 @@ describe("<RemoveIsolate />", () => {
 	it("should render with [show=true]", () => {
 		renderWithProviders(<RemoveIsolate {...props} />);
 
-		expect(screen.getByText("Remove Isolate")).toBeInTheDocument();
+		expect(screen.getByText("Delete Isolate")).toBeInTheDocument();
 		expect(
-			screen.getByText(/Are you sure you want to remove/),
+			screen.getByText(/Are you sure you want to delete/),
 		).toBeInTheDocument();
 		expect(screen.getByText(/Foo?/)).toBeInTheDocument();
-		expect(screen.getByRole("button")).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument();
 	});
 
 	it("should render with [show=false]", () => {
 		props.show = false;
 		renderWithProviders(<RemoveIsolate {...props} />);
 
-		expect(screen.queryByText("Remove Isolate")).toBeNull();
-		expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
+		expect(screen.queryByText("Delete Isolate")).toBeNull();
+		expect(screen.queryByText(/Are you sure you want to delete/)).toBeNull();
 		expect(screen.queryByText(/Foo?/)).toBeNull();
-		expect(screen.queryByRole("button")).toBeNull();
+		expect(screen.queryByRole("button", { name: "Confirm" })).toBeNull();
 	});
 
-	it("should handle submit when onConfirm() on <RemoveDialog /> is called", async () => {
+	it("should handle submit when the confirm button is clicked", async () => {
 		const scope = mockApiRemoveIsolate(props.otuId, props.id);
 		renderWithProviders(<RemoveIsolate {...props} />);
 
-		await userEvent.click(screen.getByRole("button"));
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 		await waitFor(() => expect(props.onHide).toHaveBeenCalled());
 
 		scope.done();

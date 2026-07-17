@@ -1,11 +1,4 @@
-import Button from "@base/Button";
-import {
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogTitle,
-	DialogTrigger,
-} from "@base/Dialog";
+import DeleteDialog from "@base/DeleteDialog";
 import IconButton from "@base/IconButton";
 import { useRemoveSubtraction } from "@subtraction/queries";
 import type { Subtraction } from "@subtraction/types";
@@ -26,34 +19,17 @@ export default function DeleteSubtraction({
 	const mutation = useRemoveSubtraction();
 	const navigate = useNavigate();
 
-	function handleConfirm() {
-		mutation.mutate(
-			{ subtractionId: subtraction.id },
-			{
-				onSuccess: () => {
-					navigate({ to: "/subtractions" });
-				},
-			},
-		);
+	async function handleConfirm() {
+		await mutation.mutateAsync({ subtractionId: subtraction.id });
+		navigate({ to: "/subtractions" });
 	}
 
 	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<IconButton IconComponent={Trash} color="red" tip="delete" />
-			</DialogTrigger>
-			<DialogContent>
-				<DialogTitle>Delete Subtraction</DialogTitle>
-				<span>
-					Are you sure you want to delete <strong>{subtraction.name}</strong>?
-				</span>
-
-				<DialogFooter>
-					<Button color="red" onClick={handleConfirm}>
-						Confirm
-					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+		<DeleteDialog
+			name={subtraction.name}
+			noun="Subtraction"
+			onConfirm={handleConfirm}
+			trigger={<IconButton IconComponent={Trash} color="red" tip="delete" />}
+		/>
 	);
 }

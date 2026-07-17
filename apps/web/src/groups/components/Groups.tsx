@@ -1,8 +1,8 @@
 import Button from "@base/Button";
+import DeleteAlert from "@base/DeleteAlert";
 import InputHeader from "@base/InputHeader";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
-import RemoveBanner from "@base/RemoveBanner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@base/Tabs";
 import { sortBy } from "es-toolkit/compat";
 import { useState } from "react";
@@ -101,7 +101,7 @@ export default function Groups() {
 						/>
 						<GroupPermissions selectedGroup={selectedGroup} />
 						<GroupMembers members={selectedGroup.users} />
-						<RemoveBanner
+						<DeleteAlert
 							outerClassName="!mb-0"
 							message="Permanently delete this group."
 							buttonText="Delete"
