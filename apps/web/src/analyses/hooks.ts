@@ -8,6 +8,7 @@ import type { SubtractionOption } from "@subtraction/types";
 import { groupBy, maxBy, sortBy } from "es-toolkit";
 import type {
 	FormattedNuvsAnalysis,
+	FormattedNuvsHit,
 	FormattedPathoscopeAnalysis,
 } from "./types";
 
@@ -70,16 +71,20 @@ export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 	return sortedHits;
 }
 
-export function useGetActiveHit(matches) {
+export function useActiveHit(matches: FormattedNuvsHit[]) {
 	const {
 		search: { activeHit },
 	} = useAnalysisSearch();
 
 	if (activeHit) {
-		return matches.find((match) => match.id === Number(activeHit)) || null;
+		return (
+			matches.find((match) => match.id === Number(activeHit)) ??
+			matches[0] ??
+			null
+		);
 	}
 
-	return null;
+	return matches[0] ?? null;
 }
 
 type UseCompatibleIndexesResult = {

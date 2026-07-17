@@ -39,7 +39,7 @@ export default function NuvsItem({
 				<Badge>{sequence.length}</Badge>
 			</div>
 
-			<NuvsValues e={String(e)} orfCount={annotatedOrfCount} />
+			<NuvsValues e={e} orfCount={annotatedOrfCount} />
 		</Box>
 	);
 }
