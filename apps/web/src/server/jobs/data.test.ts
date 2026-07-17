@@ -2,6 +2,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 import { seedUser } from "../auth/test/fixtures";
 import type { Db } from "../db/pg";
+import { analyses } from "../db/schema/analyses";
 import { jobs } from "../db/schema/jobs";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
@@ -96,6 +97,25 @@ describe("getJob", () => {
 
 	it("throws JobNotFoundError when the job is absent", async () => {
 		await expect(getJob(db, 404_404)).rejects.toThrow(JobNotFoundError);
+	});
+
+	// A job that ran an analysis exposes the analysis's integer id as its
+	// `analysis_id` arg, so the client links to `/analyses/<id>`. The id is
+	// stringified because `args` is a string map.
+	it("exposes a linked analysis's integer id as a string arg", async () => {
+		const jobId = await seedJob("succeeded", { started: 0, of: 1 });
+
+		const [analysis] = await db
+			.insert(analyses)
+			.values({ job_id: jobId })
+			.returning({ id: analyses.id });
+		if (!analysis) {
+			throw new Error("failed to seed analysis");
+		}
+
+		const job = await getJob(db, jobId);
+
+		expect(job.args.analysis_id).toBe(String(analysis.id));
 	});
 });
 

@@ -36,19 +36,28 @@ type CachedShapes = {
 	lists: boolean;
 
 	/**
-	 * Whether the domain caches a record outside `lists()` and `details()`, so
-	 * an update must fall back to `all()` rather than `lists()`.
+	 * Whether an `update` must invalidate `all()` rather than the narrower
+	 * `detail(id)`/`lists()` key.
 	 *
-	 * Banners are the only such domain: the active banner every user sees sits
-	 * at `active()`, under `all()` but not `lists()`, and a non-admin caches
-	 * nothing else. Narrowing its update to `lists()` would never reach them.
+	 * Two domains need this. Banners cache the active banner at `active()`,
+	 * under `all()` but not `lists()`, and a non-admin caches nothing else, so
+	 * narrowing to `lists()` would never reach it. Analyses cache both a detail
+	 * and a per-sample list keyed by `list([sampleId, …])`; an update — an
+	 * analysis flipping to `ready` — changes the list row, but the frame carries
+	 * only the analysis id, not the `sampleId` the list is keyed by, so it
+	 * cannot target one list and refreshes `all()`.
 	 */
 	updateNeedsAll?: boolean;
 };
 
 const domains: Record<SseDomain, CachedShapes> = {
 	account: { keys: accountQueryKeys, details: false, lists: false },
-	analyses: { keys: analysesQueryKeys, details: true, lists: true },
+	analyses: {
+		keys: analysesQueryKeys,
+		details: true,
+		lists: true,
+		updateNeedsAll: true,
+	},
 	groups: { keys: groupQueryKeys, details: true, lists: true },
 	indexes: { keys: indexQueryKeys, details: true, lists: true },
 	jobs: { keys: jobQueryKeys, details: true, lists: true },
@@ -73,10 +82,13 @@ function selectQueryKey(
 	id: SseMessage["id"],
 ): readonly unknown[] {
 	if (operation === "update") {
+		if (domain.updateNeedsAll) {
+			return domain.keys.all();
+		}
 		if (domain.details) {
 			return domain.keys.detail(id);
 		}
-		if (domain.lists && !domain.updateNeedsAll) {
+		if (domain.lists) {
 			return domain.keys.lists();
 		}
 		return domain.keys.all();

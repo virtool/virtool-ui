@@ -174,9 +174,12 @@ application's own doing.
   under. `update` prefers `detail(id)`, falling to `lists()` for a
   list-only domain and to `all()` only when neither is cached; `insert`
   and `delete` invalidate `lists()`, or `all()` when the domain caches no
-  list. Banners are the one carve-out: their active banner sits at
-  `active()`, outside `lists()`, so an `update` there stays on `all()`
-  (`updateNeedsAll`). Unknown domains are ignored.
+  list. Two domains carve out of that with `updateNeedsAll`, so their
+  `update` invalidates `all()`: banners, whose active banner sits at
+  `active()` outside `lists()`; and analyses, whose `update` (a run
+  flipping to `ready`) changes a per-sample list row the frame can't
+  target, since it carries only the analysis id and not the `sampleId`
+  the list is keyed by. Unknown domains are ignored.
 - `jobs/refresh.ts` is the one exception to that mapping. See below.
 
 ## Job updates are batched, not invalidated
