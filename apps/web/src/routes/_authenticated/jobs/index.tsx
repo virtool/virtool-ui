@@ -1,4 +1,5 @@
-import { num, oneOfArray } from "@app/searchParams";
+import { DEFAULT_PER_PAGE, type Paginated, paginated } from "@app/pagination";
+import { oneOfArray } from "@app/searchParams";
 import JobsList from "@jobs/components/JobList";
 import type { JobState } from "@jobs/types";
 import type { SearchSchemaInput } from "@tanstack/react-router";
@@ -15,17 +16,16 @@ const jobStates = [
 const initialState: JobState[] = ["pending", "running"];
 
 /** Search params for the jobs list. */
-type JobsSearch = {
+type JobsSearch = Paginated & {
 	state: JobState[];
-	page: number;
 };
 
 function validateJobsSearch(
 	input: Partial<JobsSearch> & SearchSchemaInput,
 ): JobsSearch {
 	return {
+		...paginated(input),
 		state: oneOfArray(input.state, jobStates, initialState),
-		page: num(input.page, 1),
 	};
 }
 
@@ -34,7 +34,9 @@ export const Route = createFileRoute("/_authenticated/jobs/")({
 	loaderDeps: ({ search: { page, state } }) => ({ page, state }),
 	loader: async ({ context: { queryClient }, deps: { page, state } }) => {
 		const { jobsQueryOptions } = await import("@jobs/queries");
-		await queryClient.ensureQueryData(jobsQueryOptions(page, 25, state));
+		await queryClient.ensureQueryData(
+			jobsQueryOptions(page, DEFAULT_PER_PAGE, state),
+		);
 	},
 	component: JobsRoute,
 });

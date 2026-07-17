@@ -1,20 +1,20 @@
-import { num, str } from "@app/searchParams";
+import { DEFAULT_PER_PAGE, type Paginated, paginated } from "@app/pagination";
+import { str } from "@app/searchParams";
 import SubtractionList from "@subtraction/components/SubtractionList";
 import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 
 /** Search params for this route. */
-type SubtractionsSearch = {
+type SubtractionsSearch = Paginated & {
 	term: string;
-	page: number;
 };
 
 function validateSubtractionsSearch(
 	input: Partial<SubtractionsSearch> & SearchSchemaInput,
 ): SubtractionsSearch {
 	return {
+		...paginated(input),
 		term: str(input.term, ""),
-		page: num(input.page, 1),
 	};
 }
 
@@ -23,7 +23,9 @@ export const Route = createFileRoute("/_authenticated/subtractions/")({
 	loaderDeps: ({ search: { term, page } }) => ({ term, page }),
 	loader: async ({ context: { queryClient }, deps: { term, page } }) => {
 		const { subtractionsQueryOptions } = await import("@subtraction/queries");
-		await queryClient.ensureQueryData(subtractionsQueryOptions(page, 25, term));
+		await queryClient.ensureQueryData(
+			subtractionsQueryOptions(page, DEFAULT_PER_PAGE, term),
+		);
 	},
 	component: SubtractionsRoute,
 });

@@ -1,4 +1,4 @@
-import { num } from "@app/searchParams";
+import { type Paginated, paginated } from "@app/pagination";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import { useFetchLabels } from "@labels/queries";
@@ -6,15 +6,10 @@ import SampleFileManager from "@samples/components/SampleFileManager";
 import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 
-/** Search params for this route. */
-type SampleFilesSearch = {
-	page: number;
-};
-
 function validateSampleFilesSearch(
-	input: Partial<SampleFilesSearch> & SearchSchemaInput,
-): SampleFilesSearch {
-	return { page: num(input.page, 1) };
+	input: Partial<Paginated> & SearchSchemaInput,
+): Paginated {
+	return paginated(input);
 }
 
 export const Route = createFileRoute("/_authenticated/samples/files")({

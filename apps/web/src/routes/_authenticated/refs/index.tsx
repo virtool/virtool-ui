@@ -1,22 +1,22 @@
-import { bool, num, str } from "@app/searchParams";
+import { DEFAULT_PER_PAGE, type Paginated, paginated } from "@app/pagination";
+import { bool, str } from "@app/searchParams";
 import ReferenceList from "@references/components/ReferenceList";
 import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
 
 /** Search params for the references list. */
-type RefsSearch = {
+type RefsSearch = Paginated & {
 	archived: boolean;
 	term: string;
-	page: number;
 };
 
 function validateRefsSearch(
 	input: Partial<RefsSearch> & SearchSchemaInput,
 ): RefsSearch {
 	return {
+		...paginated(input),
 		archived: bool(input.archived, false),
 		term: str(input.term, ""),
-		page: num(input.page, 1),
 	};
 }
 
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/_authenticated/refs/")({
 	}) => {
 		const { referencesQueryOptions } = await import("@references/queries");
 		await queryClient.ensureQueryData(
-			referencesQueryOptions(page, 25, term, archived),
+			referencesQueryOptions(page, DEFAULT_PER_PAGE, term, archived),
 		);
 	},
 	component: ReferencesRoute,
