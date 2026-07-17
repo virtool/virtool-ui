@@ -19,17 +19,23 @@ export function useNow() {
  * is authoritative: it replaces the draft and abandons any pending commit. That
  * resync happens during render rather than in an effect so a stale draft can
  * never reach the timer and undo the change that just arrived.
+ *
+ * The guard tracks the last `value` we synced from, not the value we last
+ * committed. Advancing a committed baseline locally would run ahead of an async
+ * `onChange` (URL navigation) whose echo lands a render later: the guard would
+ * read the still-stale `value`, treat it as an outside change, and blank the
+ * draft until the echo caught up.
  */
-export function useDebouncedDraft<T>(
+export function useDebounce<T>(
 	value: T,
 	onChange: (next: T) => void,
 	delayMs = 250,
 ): [T, (next: T) => void] {
 	const [draft, setDraft] = useState(value);
-	const [committed, setCommitted] = useState(value);
+	const [prevValue, setPrevValue] = useState(value);
 
-	if (value !== committed) {
-		setCommitted(value);
+	if (value !== prevValue) {
+		setPrevValue(value);
 		setDraft(value);
 	}
 
@@ -42,17 +48,16 @@ export function useDebouncedDraft<T>(
 	});
 
 	useEffect(() => {
-		if (draft === committed) {
+		if (draft === value) {
 			return;
 		}
 
 		const id = setTimeout(() => {
-			setCommitted(draft);
 			onChangeRef.current(draft);
 		}, delayMs);
 
 		return () => clearTimeout(id);
-	}, [committed, delayMs, draft]);
+	}, [delayMs, draft, value]);
 
 	return [draft, setDraft];
 }

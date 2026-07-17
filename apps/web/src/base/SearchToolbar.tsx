@@ -1,4 +1,4 @@
-import { useDebouncedDraft } from "@app/hooks";
+import { useDebounce } from "@app/hooks";
 import type { ReactNode } from "react";
 import InputSearch from "./InputSearch";
 import Toolbar from "./Toolbar";
@@ -33,7 +33,7 @@ export default function SearchToolbar({
 	placeholder,
 	value,
 }: SearchToolbarProps) {
-	const [draft, setDraft] = useDebouncedDraft(value, onChange);
+	const [draft, setDraft] = useDebounce(value, onChange);
 
 	return (
 		<Toolbar className={className}>
