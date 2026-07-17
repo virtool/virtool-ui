@@ -46,11 +46,14 @@ export function CreateUserForm({
 				<InputSimple
 					id="handle"
 					autoComplete="off"
+					aria-required
+					aria-invalid={Boolean(errors.handle) || undefined}
+					aria-describedby={errors.handle ? "handle-error" : undefined}
 					{...register("handle", {
 						required: "Please specify a username",
 					})}
 				/>
-				<InputError>{errors.handle?.message}</InputError>
+				<InputError id="handle-error">{errors.handle?.message}</InputError>
 			</InputGroup>
 			<InputGroup>
 				<InputLabel htmlFor="password">Password</InputLabel>
@@ -58,9 +61,16 @@ export function CreateUserForm({
 					id="password"
 					type="password"
 					autoComplete="off"
+					aria-required
+					aria-invalid={Boolean(errors.password) || Boolean(error) || undefined}
+					aria-describedby={
+						errors.password || error ? "password-error" : undefined
+					}
 					{...register("password", passwordRules)}
 				/>
-				<InputError>{errors.password?.message || error}</InputError>
+				<InputError id="password-error">
+					{errors.password?.message || error}
+				</InputError>
 			</InputGroup>
 
 			<div className="flex justify-between items-center mb-2.5">

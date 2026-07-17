@@ -92,11 +92,18 @@ export default function SequenceForm({
 					<InputLabel htmlFor="definition">Definition</InputLabel>
 					<InputSimple
 						id="definition"
+						aria-required
+						aria-invalid={Boolean(errors.definition) || undefined}
+						aria-describedby={
+							errors.definition ? "definition-error" : undefined
+						}
 						{...register("definition", {
 							required: "Required Field",
 						})}
 					/>
-					<InputError>{errors.definition?.message}</InputError>
+					<InputError id="definition-error">
+						{errors.definition?.message}
+					</InputError>
 				</InputGroup>
 
 				<SequenceField />

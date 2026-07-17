@@ -95,8 +95,13 @@ export function LocalSourceTypes() {
 							</label>
 							<InputContainer className="flex mb-1.5">
 								<span className="flex flex-auto mr-2.5 flex-col">
-									<InputSimple id="sourceType" {...register("sourceType")} />
-									<InputError>{error}</InputError>
+									<InputSimple
+										id="sourceType"
+										aria-invalid={Boolean(error) || undefined}
+										aria-describedby={error ? "sourceType-error" : undefined}
+										{...register("sourceType")}
+									/>
+									<InputError id="sourceType-error">{error}</InputError>
 								</span>
 								<div
 									className="ml-auto mr-1"

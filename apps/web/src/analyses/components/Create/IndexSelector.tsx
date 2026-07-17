@@ -54,6 +54,8 @@ type IndexSelectorProps = {
 	onChange: (value: string) => void;
 	/** Whether the field is in an invalid state (e.g. required but empty) */
 	invalid?: boolean;
+	/** `id` of the error message describing this field, when invalid. */
+	describedById?: string;
 };
 
 /**
@@ -64,6 +66,7 @@ export default function IndexSelector({
 	selected,
 	onChange,
 	invalid,
+	describedById,
 }: IndexSelectorProps) {
 	const sortedIndexes = sortBy(indexes, [(index) => index.reference.name]);
 
@@ -82,7 +85,8 @@ export default function IndexSelector({
 			{indexes.length ? (
 				<Select value={selected} onValueChange={onChange}>
 					<SelectButton
-						aria-invalid={invalid}
+						aria-invalid={invalid || undefined}
+						aria-describedby={describedById}
 						className={cn("flex", "w-full")}
 						placeholder="Select a reference"
 						icon={ChevronDown}

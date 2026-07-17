@@ -47,14 +47,17 @@ export default function CreateGroup({
 				<DialogTitle>Create Group</DialogTitle>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<InputGroup>
-						<InputLabel>Name</InputLabel>
+						<InputLabel htmlFor="name">Name</InputLabel>
 						<InputSimple
 							id="name"
+							aria-required
+							aria-invalid={Boolean(errors.name) || undefined}
+							aria-describedby={errors.name ? "name-error" : undefined}
 							{...register("name", {
 								required: "Provide a name for the group",
 							})}
 						/>
-						<InputError>{errors.name?.message}</InputError>
+						<InputError id="name-error">{errors.name?.message}</InputError>
 					</InputGroup>
 					<DialogFooter>
 						<SaveButton />

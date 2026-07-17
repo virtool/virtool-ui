@@ -123,12 +123,14 @@ export default function ApiKeyCreate() {
 							<InputLabel htmlFor="name">Name</InputLabel>
 							<InputSimple
 								id="name"
-								aria-invalid={errors.name ? "true" : "false"}
+								aria-required
+								aria-invalid={Boolean(errors.name) || undefined}
+								aria-describedby={errors.name ? "name-error" : undefined}
 								{...register("name", {
 									required: "Provide a name for the key",
 								})}
 							/>
-							<InputError>{errors.name?.message}</InputError>
+							<InputError id="name-error">{errors.name?.message}</InputError>
 						</InputGroup>
 
 						<InputLabel id={permissionsLabelId}>Permissions</InputLabel>

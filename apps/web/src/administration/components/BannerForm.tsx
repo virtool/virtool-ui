@@ -48,10 +48,16 @@ export default function BannerForm({
 				<InputLabel htmlFor="message">Message</InputLabel>
 				<InputSimple
 					id="message"
-					aria-invalid={errors.message ? "true" : "false"}
+					aria-required
+					aria-invalid={Boolean(errors.message) || Boolean(error) || undefined}
+					aria-describedby={
+						errors.message || error ? "message-error" : undefined
+					}
 					{...register("message", { required: "Message is required." })}
 				/>
-				<InputError>{errors.message?.message || error}</InputError>
+				<InputError id="message-error">
+					{errors.message?.message || error}
+				</InputError>
 			</InputGroup>
 			<InputGroup>
 				<InputLabel id="color-label">Color</InputLabel>

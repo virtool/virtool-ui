@@ -145,9 +145,12 @@ export function CreateReferenceForm({
 				<InputLabel htmlFor={nameId}>Name</InputLabel>
 				<InputSimple
 					id={nameId}
+					aria-required
+					aria-invalid={Boolean(errors.name) || undefined}
+					aria-describedby={errors.name ? `${nameId}-error` : undefined}
 					{...register("name", { required: "Required Field" })}
 				/>
-				<InputError>{errors.name?.message}</InputError>
+				<InputError id={`${nameId}-error`}>{errors.name?.message}</InputError>
 			</InputGroup>
 
 			{mode === "empty" && (

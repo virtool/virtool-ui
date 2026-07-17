@@ -90,11 +90,14 @@ export default function SubtractionCreate() {
 							<InputLabel htmlFor="name">Name</InputLabel>
 							<InputSimple
 								id="name"
+								aria-required
+								aria-invalid={Boolean(errors.name) || undefined}
+								aria-describedby={errors.name ? "name-error" : undefined}
 								{...register("name", {
 									required: "A name is required",
 								})}
 							/>
-							<InputError>{errors.name?.message}</InputError>
+							<InputError id="name-error">{errors.name?.message}</InputError>
 						</InputGroup>
 
 						<InputGroup>

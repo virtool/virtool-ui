@@ -44,6 +44,8 @@ export default function AccountEmail({ email }: EmailProps) {
 						<InputLabel htmlFor="email">Email Address</InputLabel>
 						<InputSimple
 							id="email"
+							aria-invalid={Boolean(errors.email) || undefined}
+							aria-describedby={errors.email ? "email-error" : undefined}
 							{...register("email", {
 								pattern: {
 									value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
@@ -51,7 +53,7 @@ export default function AccountEmail({ email }: EmailProps) {
 								},
 							})}
 						/>
-						<InputError>{errors.email?.message}</InputError>
+						<InputError id="email-error">{errors.email?.message}</InputError>
 					</InputGroup>
 					<footer className="flex items-center justify-end mb-4">
 						<SaveButton altText="Change" />

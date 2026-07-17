@@ -52,16 +52,18 @@ export function LabelForm({
 				<InputLabel htmlFor="name">Name</InputLabel>
 				<InputSimple
 					id="name"
-					aria-invalid={errors.name ? "true" : "false"}
+					aria-required
+					aria-invalid={Boolean(errors.name) || Boolean(error) || undefined}
+					aria-describedby={errors.name || error ? "name-error" : undefined}
 					{...register("name", { required: "Name is required." })}
 				/>
-				<InputError>{errors.name?.message || error}</InputError>
+				<InputError id="name-error">{errors.name?.message || error}</InputError>
 			</InputGroup>
 			<InputGroup>
 				<InputLabel htmlFor="description">Description</InputLabel>
 				<InputSimple
 					id="description"
-					aria-invalid={errors.description ? "true" : "false"}
+					aria-invalid={Boolean(errors.description) || undefined}
 					{...register("description")}
 				/>
 			</InputGroup>

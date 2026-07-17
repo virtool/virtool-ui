@@ -58,7 +58,23 @@ describe("Groups", () => {
 		expect(screen.getByRole("dialog")).toBeInTheDocument();
 		expect(screen.getByText("Name")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
-		expect(screen.getByRole("textbox", { name: "" })).toBeInTheDocument();
+		expect(screen.getByRole("textbox", { name: "Name" })).toBeInTheDocument();
+	});
+
+	it("should announce a validation error and tie it to the input on failed submit", async () => {
+		mockListGroups([]);
+		await renderWithRouter(<Groups />);
+
+		await userEvent.click(await screen.findByText("Create"));
+		const input = screen.getByRole("textbox", { name: "Name" });
+		expect(input).not.toBeInvalid();
+
+		await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
+		const alert = await screen.findByRole("alert");
+		expect(alert).toHaveTextContent("Provide a name for the group");
+		expect(input).toBeInvalid();
+		expect(input).toHaveAccessibleDescription("Provide a name for the group");
 	});
 
 	it("should render correctly when active group has a group member", async () => {

@@ -260,6 +260,7 @@ export default function ReadSelector({
 						<InputSearch
 							id="read-files-search"
 							aria-label="Search read files"
+							aria-describedby={error ? "read-files-error" : undefined}
 							placeholder="Filename"
 							value={term}
 							onChange={(e) => setTerm(e.target.value)}
@@ -300,7 +301,9 @@ export default function ReadSelector({
 							renderRow={renderRow}
 						/>
 
-						<InputError className="mb-2.5">{error}</InputError>
+						<InputError id="read-files-error" className="mb-2.5">
+							{error}
+						</InputError>
 					</>
 				)}
 			</Box>
