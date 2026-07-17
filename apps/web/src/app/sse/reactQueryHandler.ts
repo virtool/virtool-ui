@@ -33,6 +33,16 @@ type CachedShapes = {
 
 	/** Whether collections are cached under `lists()`. */
 	lists: boolean;
+
+	/**
+	 * Whether the domain caches a record outside `lists()` and `details()`, so
+	 * an update must fall back to `all()` rather than `lists()`.
+	 *
+	 * Banners are the only such domain: the active banner every user sees sits
+	 * at `active()`, under `all()` but not `lists()`, and a non-admin caches
+	 * nothing else. Narrowing its update to `lists()` would never reach them.
+	 */
+	updateNeedsAll?: boolean;
 };
 
 const domains: Record<SseDomain, CachedShapes> = {
@@ -41,7 +51,12 @@ const domains: Record<SseDomain, CachedShapes> = {
 	indexes: { keys: indexQueryKeys, details: true, lists: true },
 	jobs: { keys: jobQueryKeys, details: true, lists: true },
 	labels: { keys: labelQueryKeys, details: false, lists: true },
-	messages: { keys: bannerQueryKeys, details: false, lists: true },
+	messages: {
+		keys: bannerQueryKeys,
+		details: false,
+		lists: true,
+		updateNeedsAll: true,
+	},
 	references: { keys: referenceQueryKeys, details: true, lists: true },
 	roles: { keys: roleQueryKeys, details: false, lists: false },
 	samples: { keys: samplesQueryKeys, details: true, lists: true },
@@ -55,8 +70,14 @@ function selectQueryKey(
 	operation: SseMessage["operation"],
 	id: SseMessage["id"],
 ): readonly unknown[] {
-	if (operation === "update" && domain.details) {
-		return domain.keys.detail(id);
+	if (operation === "update") {
+		if (domain.details) {
+			return domain.keys.detail(id);
+		}
+		if (domain.lists && !domain.updateNeedsAll) {
+			return domain.keys.lists();
+		}
+		return domain.keys.all();
 	}
 	if ((operation === "insert" || operation === "delete") && domain.lists) {
 		return domain.keys.lists();

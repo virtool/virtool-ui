@@ -10,7 +10,7 @@ import { useCreateSample } from "../queries";
 describe("useCreateSample()", () => {
 	afterEach(() => nock.cleanAll());
 
-	it("invalidates the uploads lists on success so reserved files leave the selector", async () => {
+	it("invalidates the reads selector on success so reserved files leave it", async () => {
 		const queryClient = new QueryClient();
 		const invalidateQueries = vi.spyOn(queryClient, "invalidateQueries");
 
@@ -51,7 +51,7 @@ describe("useCreateSample()", () => {
 		await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
 		expect(invalidateQueries).toHaveBeenCalledWith({
-			queryKey: fileQueryKeys.lists(),
+			queryKey: [...fileQueryKeys.infiniteLists(), "reads"],
 		});
 
 		scope.done();

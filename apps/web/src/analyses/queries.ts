@@ -102,12 +102,14 @@ export function useCreateAnalysis() {
 				})
 				.then((res) => res.body),
 
-		onSuccess: () => {
+		onSuccess: (_data, { sampleId }) => {
+			// Only this sample's analyses list gained a row, and only this sample's
+			// workflow state changed — leave every other sample's caches alone.
 			queryClient.invalidateQueries({
-				queryKey: analysesQueryKeys.lists(),
+				queryKey: [...analysesQueryKeys.lists(), sampleId],
 			});
 			queryClient.invalidateQueries({
-				queryKey: samplesQueryKeys.lists(),
+				queryKey: samplesQueryKeys.detail(sampleId),
 			});
 		},
 	});
