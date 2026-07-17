@@ -24,8 +24,14 @@ if (options.dsn) {
 	// top-level import would front-load it before Sentry's Node
 	// auto-instrumentation has a chance to install its import hooks.
 	const { logger } = await import("@server/logger");
-	logger.info({ environment: options.environment }, "sentry initialised");
+	logger.info(
+		{ environment: options.environment, foundSentryDsn: true },
+		"sentry initialised",
+	);
 } else {
 	const { logger } = await import("@server/logger");
-	logger.info("sentry disabled (no VT_SENTRY_DSN)");
+	logger.info(
+		{ environment: options.environment, foundSentryDsn: false },
+		"sentry disabled",
+	);
 }
