@@ -1,3 +1,4 @@
+import Badge from "@base/Badge";
 import Icon from "@base/Icon";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
@@ -22,8 +23,8 @@ type ReferenceDetailHeaderProps = {
 };
 
 /**
- * Displays header for an active reference with options to edit and archive.
- * Archived references use {@link ArchivedReferenceDetailHeader} instead.
+ * Header for a reference detail view. Archived references show an archived
+ * badge and only the unarchive action; active references also expose editing.
  */
 export default function ReferenceDetailHeader({
 	createdAt,
@@ -36,18 +37,30 @@ export default function ReferenceDetailHeader({
 	const { pathname: location } = useLocation();
 	const { hasPermission: canModify } = useCheckReferenceRight(refId, "modify");
 
+	const { archived } = detail;
 	const showIcons = location.endsWith("/manage");
 
 	return (
 		<ViewHeader title={name}>
-			<ViewHeaderTitle>
+			<ViewHeaderTitle
+				className={
+					archived
+						? "text-2xl font-semibold text-gray-700 leading-tight"
+						: undefined
+				}
+			>
 				{name}
+				{archived && (
+					<Badge className="ml-3" color="gray" variant="soft">
+						Archived
+					</Badge>
+				)}
 				{showIcons && (
 					<ViewHeaderIcons>
 						{isRemote && <Icon color="gray" icon={Lock} aria-label="lock" />}
 						{!isRemote && canModify && (
 							<>
-								<EditReference detail={detail} />
+								{!archived && <EditReference detail={detail} />}
 								<ArchiveReference detail={detail} />
 							</>
 						)}
