@@ -1,5 +1,4 @@
 import ContainerNarrow from "@base/ContainerNarrow";
-import ArchivedReferenceDetailHeader from "@references/components/Detail/ArchivedReferenceDetailHeader";
 import ReferenceDetailHeader from "@references/components/Detail/ReferenceDetailHeader";
 import ReferenceDetailTabs from "@references/components/Detail/ReferenceDetailTabs";
 import { useFetchReference } from "@references/queries";
@@ -41,25 +40,14 @@ function ReferenceDetailLayout() {
 		<>
 			{!isOtuDetail && (
 				<>
-					{data.archived ? (
-						<ArchivedReferenceDetailHeader
-							createdAt={data.created_at}
-							detail={data}
-							isRemote={Boolean(data.remotes_from)}
-							name={data.name}
-							userHandle={data.user.handle}
-							refId={refId}
-						/>
-					) : (
-						<ReferenceDetailHeader
-							createdAt={data.created_at}
-							detail={data}
-							isRemote={Boolean(data.remotes_from)}
-							name={data.name}
-							userHandle={data.user.handle}
-							refId={refId}
-						/>
-					)}
+					<ReferenceDetailHeader
+						createdAt={data.created_at}
+						detail={data}
+						isRemote={Boolean(data.remotes_from)}
+						name={data.name}
+						userHandle={data.user.handle}
+						refId={refId}
+					/>
 					<ReferenceDetailTabs id={refId} otuCount={data.otu_count} />
 				</>
 			)}

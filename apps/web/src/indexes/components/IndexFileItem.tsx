@@ -1,17 +1,13 @@
 import { byteSize } from "@app/format";
 import BoxGroupSection from "@base/BoxGroupSection";
 
-export type SubtractionFileItemProps = {
+export type IndexFileItemProps = {
 	downloadUrl: string;
 	name: string;
 	size: number;
 };
 
-export function SubtractionFileItem({
-	downloadUrl,
-	name,
-	size,
-}: SubtractionFileItemProps) {
+export function IndexFileItem({ downloadUrl, name, size }: IndexFileItemProps) {
 	return (
 		<BoxGroupSection className="flex items-center">
 			<a className="mr-auto font-medium" href={`/api${downloadUrl}`}>

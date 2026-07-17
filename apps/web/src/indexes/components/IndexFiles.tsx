@@ -1,8 +1,8 @@
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
-import { SubtractionFileItem } from "@subtraction/components/Detail/SubtractionFileItem";
 import type { IndexFile } from "../types";
+import { IndexFileItem } from "./IndexFileItem";
 
 type IndexFilesProps = {
 	files: IndexFile[];
@@ -22,7 +22,7 @@ export default function IndexFiles({ files }: IndexFilesProps) {
 				Data files available to workflows using this index.
 			</BoxGroupHeader>
 			{files.map((file: IndexFile) => (
-				<SubtractionFileItem
+				<IndexFileItem
 					key={file.id}
 					downloadUrl={file.download_url}
 					name={file.name}

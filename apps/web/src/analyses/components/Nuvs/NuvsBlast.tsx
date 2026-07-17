@@ -3,7 +3,6 @@ import { useBlastNuvs } from "@analyses/queries";
 import type { FormattedNuvsHit } from "@analyses/types";
 import Alert from "@base/Alert";
 import Box from "@base/Box";
-import BoxTitle from "@base/BoxTitle";
 import Button from "@base/Button";
 import { Info } from "lucide-react";
 import NuvsBlastError from "./NuvsBlastError";
@@ -40,7 +39,7 @@ export default function NuvsBlast({ analysisId, hit }: NuVsBLASTProps) {
 
 			return (
 				<Box>
-					<BoxTitle>NCBI BLAST</BoxTitle>
+					<h1 className="font-medium mt-1 mb-4">NCBI BLAST</h1>
 					<p>No BLAST hits found.</p>
 				</Box>
 			);
