@@ -5,7 +5,6 @@ import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
-import ViewHeaderSubtitle from "@base/ViewHeaderSubtitle";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { Tags } from "lucide-react";
 import {
@@ -40,9 +39,9 @@ export function Labels() {
 			<ViewHeader className="flex items-center justify-between" title="Labels">
 				<div>
 					<ViewHeaderTitle>Labels</ViewHeaderTitle>
-					<ViewHeaderSubtitle>
+					<p className="text-gray-600 text-base font-medium mt-1">
 						Use labels to organize samples.
-					</ViewHeaderSubtitle>
+					</p>
 				</div>
 
 				<CreateLabel

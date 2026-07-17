@@ -1,13 +1,10 @@
 import { byteSize } from "@app/format";
 import { renderWithProviders } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
-import {
-	SubtractionFileItem,
-	type SubtractionFileItemProps,
-} from "../SubtractionFileItem";
+import { IndexFileItem, type IndexFileItemProps } from "../IndexFileItem";
 
-describe("<SubtractionFile />", () => {
-	let props: SubtractionFileItemProps;
+describe("<IndexFileItem />", () => {
+	let props: IndexFileItemProps;
 
 	beforeEach(() => {
 		props = {
@@ -18,9 +15,7 @@ describe("<SubtractionFile />", () => {
 	});
 
 	it("should render", () => {
-		const { getByText } = renderWithProviders(
-			<SubtractionFileItem {...props} />,
-		);
+		const { getByText } = renderWithProviders(<IndexFileItem {...props} />);
 
 		expect(getByText(props.name)).toBeInTheDocument();
 		expect(getByText(byteSize(props.size))).toBeInTheDocument();
