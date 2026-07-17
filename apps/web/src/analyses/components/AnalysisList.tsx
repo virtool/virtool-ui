@@ -93,7 +93,7 @@ export default function AnalysesList({
 				>
 					<ul className="list-none">
 						{analyses.items.map((item) => (
-							<AnalysisItem key={item.id} as="li" analysis={item} />
+							<AnalysisItem key={item.id} analysis={item} />
 						))}
 					</ul>
 				</Pagination>

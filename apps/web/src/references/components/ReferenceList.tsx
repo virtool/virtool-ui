@@ -85,7 +85,6 @@ export default function ReferenceList({
 							{items.map((item) => (
 								<ReferenceItem
 									key={item.id}
-									as="li"
 									onClone={setCloneReferenceId}
 									reference={item}
 								/>

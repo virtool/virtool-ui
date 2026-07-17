@@ -43,7 +43,7 @@ export default function UsersList({
 		>
 			<BoxGroup as="ul">
 				{items.map((item: User) => (
-					<UserItem key={item.id} as="li" {...item} />
+					<UserItem key={item.id} {...item} />
 				))}
 			</BoxGroup>
 		</Pagination>

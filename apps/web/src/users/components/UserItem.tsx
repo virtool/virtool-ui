@@ -5,11 +5,9 @@ import InitialIcon from "@base/InitialIcon";
 import Label from "@base/Label";
 import Link from "@base/Link";
 import type { GroupMinimal } from "@groups/types";
-import type { ElementType, ReactElement } from "react";
+import type { ReactElement } from "react";
 
 type UserItemProps = {
-	/** The element or component to render as the root (e.g. `"li"` in a list) */
-	as?: ElementType;
 	administrator_role: AdministratorRoleName | null;
 	handle: string;
 	id: number;
@@ -21,7 +19,6 @@ type UserItemProps = {
  * A condensed user item for use in a list of users
  */
 export function UserItem({
-	as,
 	administrator_role,
 	handle,
 	id,
@@ -32,7 +29,7 @@ export function UserItem({
 	);
 
 	return (
-		<BoxGroupSection as={as} className="grid grid-cols-4 items-center">
+		<BoxGroupSection as="li" className="grid grid-cols-4 items-center">
 			<div className="col-span-2 flex items-center gap-3">
 				<InitialIcon size="lg" handle={handle} />
 				{canEdit ? (

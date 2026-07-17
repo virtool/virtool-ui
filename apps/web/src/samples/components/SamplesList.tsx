@@ -179,7 +179,6 @@ export default function SamplesList({
 		return (
 			<SampleItem
 				key={item.id}
-				as="li"
 				sample={item}
 				checked={selection.isSelected(item)}
 				handleSelect={handleSelect}
