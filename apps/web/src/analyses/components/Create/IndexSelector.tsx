@@ -85,7 +85,7 @@ export default function IndexSelector({
 			{indexes.length ? (
 				<Select value={selected} onValueChange={onChange}>
 					<SelectButton
-						aria-invalid={invalid}
+						aria-invalid={invalid || undefined}
 						aria-describedby={describedById}
 						className={cn("flex", "w-full")}
 						placeholder="Select a reference"

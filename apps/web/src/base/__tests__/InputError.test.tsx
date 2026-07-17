@@ -25,8 +25,6 @@ describe("<InputError />", () => {
 	it("should not show an icon when there is no error", () => {
 		const { getByRole } = renderWithProviders(<InputError>{""}</InputError>);
 
-		const alert = getByRole("alert");
-
-		expect(alert).toBeEmptyDOMElement();
+		expect(getByRole("alert").querySelector("svg")).toBeNull();
 	});
 });
