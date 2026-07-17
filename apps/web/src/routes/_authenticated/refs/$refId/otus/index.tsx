@@ -5,7 +5,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 /** Search params for this route. */
 type OtuListSearch = {
-	find: string;
+	term: string;
 	page: number;
 };
 
@@ -13,21 +13,21 @@ function validateOtuListSearch(
 	input: Partial<OtuListSearch> & SearchSchemaInput,
 ): OtuListSearch {
 	return {
-		find: str(input.find, ""),
+		term: str(input.term, ""),
 		page: num(input.page, 1),
 	};
 }
 
 export const Route = createFileRoute("/_authenticated/refs/$refId/otus/")({
 	validateSearch: validateOtuListSearch,
-	loaderDeps: ({ search: { find, page } }) => ({ find, page }),
+	loaderDeps: ({ search: { term, page } }) => ({ term, page }),
 	loader: async ({
 		context: { queryClient },
 		params: { refId },
-		deps: { find, page },
+		deps: { term, page },
 	}) => {
 		const { otusQueryOptions } = await import("@otus/queries");
-		await queryClient.ensureQueryData(otusQueryOptions(refId, page, 25, find));
+		await queryClient.ensureQueryData(otusQueryOptions(refId, page, 25, term));
 	},
 	component: OtusRoute,
 });
@@ -38,7 +38,7 @@ function OtusRoute() {
 
 	return (
 		<OtuList
-			find={search.find}
+			term={search.term}
 			page={search.page}
 			setSearch={(next, options) =>
 				navigate({

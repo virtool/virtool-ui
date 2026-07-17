@@ -47,7 +47,7 @@ describe("<SubtractionList />", () => {
 
 		await waitFor(() =>
 			expect(router.state.location.search).toMatchObject({
-				find: "Foo",
+				term: "Foo",
 			}),
 		);
 	});

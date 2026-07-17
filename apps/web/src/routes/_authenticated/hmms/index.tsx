@@ -5,7 +5,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 /** Search params for this route. */
 type HmmSearch = {
-	find: string;
+	term: string;
 	page: number;
 };
 
@@ -13,17 +13,17 @@ function validateHmmSearch(
 	input: Partial<HmmSearch> & SearchSchemaInput,
 ): HmmSearch {
 	return {
-		find: str(input.find, ""),
+		term: str(input.term, ""),
 		page: num(input.page, 1),
 	};
 }
 
 export const Route = createFileRoute("/_authenticated/hmms/")({
 	validateSearch: validateHmmSearch,
-	loaderDeps: ({ search: { find, page } }) => ({ find, page }),
-	loader: async ({ context: { queryClient }, deps: { find, page } }) => {
+	loaderDeps: ({ search: { term, page } }) => ({ term, page }),
+	loader: async ({ context: { queryClient }, deps: { term, page } }) => {
 		const { hmmsQueryOptions } = await import("@hmm/queries");
-		await queryClient.ensureQueryData(hmmsQueryOptions(page, 25, find));
+		await queryClient.ensureQueryData(hmmsQueryOptions(page, 25, term));
 	},
 	component: HmmRoute,
 });
@@ -34,7 +34,7 @@ function HmmRoute() {
 
 	return (
 		<HmmList
-			find={search.find}
+			term={search.term}
 			page={search.page}
 			setSearch={(next, options) =>
 				navigate({

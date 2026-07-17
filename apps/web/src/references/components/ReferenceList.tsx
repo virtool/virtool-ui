@@ -1,7 +1,6 @@
-import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
-import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
+import ListEmpty from "@base/ListEmpty";
 import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
@@ -16,12 +15,12 @@ import ReferenceToolbar from "./ReferenceToolbar";
 
 type ReferenceListProps = {
 	archived?: boolean;
-	find?: string;
+	term?: string;
 	page?: number;
 	setSearch?: (
 		next: {
 			archived?: boolean;
-			find?: string;
+			term?: string;
 			page?: number;
 		},
 		options?: { replace?: boolean },
@@ -33,14 +32,14 @@ type ReferenceListProps = {
  */
 export default function ReferenceList({
 	archived = false,
-	find = "",
+	term = "",
 	page = 1,
 	setSearch = () => {},
 }: ReferenceListProps) {
 	const [isCreateReferenceOpen, setIsCreateReferenceOpen] = useState(false);
 	const [cloneReferenceId, setCloneReferenceId] = useState<string>();
 
-	const { data } = useSuspenseReferences(page, 25, find, archived);
+	const { data } = useSuspenseReferences(page, 25, term, archived);
 
 	const { items, page: storedPage, page_count, total_count } = data;
 
@@ -55,31 +54,25 @@ export default function ReferenceList({
 				</ViewHeader>
 				<ReferenceToolbar
 					archived={archived}
-					find={find}
+					term={term}
 					onCreate={() => setIsCreateReferenceOpen(true)}
 					setArchived={(archived) => setSearch({ archived, page: 1 })}
-					setFind={(find) => setSearch({ find, page: 1 }, { replace: true })}
+					setTerm={(term) => setSearch({ term, page: 1 }, { replace: true })}
 				/>
 				<CreateReference
 					open={isCreateReferenceOpen}
 					onOpenChange={setIsCreateReferenceOpen}
 				/>
 				{!items.length ? (
-					<Box>
-						<Empty className="h-72">
-							<EmptyMedia className="text-gray-400">
-								<Library size={40} strokeWidth={1.5} />
-							</EmptyMedia>
-							<EmptyTitle>
-								No {archived ? "archived references" : "references"} found
-							</EmptyTitle>
-							<EmptyDescription>
-								{archived
-									? "No references have been archived yet."
-									: "No references have been created yet."}
-							</EmptyDescription>
-						</Empty>
-					</Box>
+					<ListEmpty
+						icon={Library}
+						title={`No ${archived ? "archived references" : "references"} found`}
+						description={
+							archived
+								? "No references have been archived yet."
+								: "No references have been created yet."
+						}
+					/>
 				) : (
 					<Pagination
 						items={items}

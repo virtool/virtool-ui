@@ -1,6 +1,5 @@
-import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
-import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
+import ListEmpty from "@base/ListEmpty";
 import Pagination from "@base/Pagination";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
@@ -11,10 +10,10 @@ import { SubtractionItem } from "./SubtractionItem";
 import SubtractionToolbar from "./SubtractionToolbar";
 
 type SubtractionListProps = {
-	find?: string;
+	term?: string;
 	page?: number;
 	setSearch?: (
-		next: { find?: string; page?: number },
+		next: { term?: string; page?: number },
 		options?: { replace?: boolean },
 	) => void;
 };
@@ -23,11 +22,11 @@ type SubtractionListProps = {
  * A list of subtractions.
  */
 export default function SubtractionList({
-	find = "",
+	term = "",
 	page = 1,
 	setSearch = () => {},
 }: SubtractionListProps) {
-	const { data } = useSuspenseSubtractions(page, 25, find);
+	const { data } = useSuspenseSubtractions(page, 25, term);
 
 	const { items, total_count, page: storedPage, page_count } = data;
 
@@ -41,22 +40,16 @@ export default function SubtractionList({
 			</ViewHeader>
 
 			<SubtractionToolbar
-				term={find}
-				onChange={(find) => setSearch({ find, page: 1 }, { replace: true })}
+				term={term}
+				onChange={(term) => setSearch({ term, page: 1 }, { replace: true })}
 			/>
 
 			{!items.length ? (
-				<Box key="subtractions">
-					<Empty className="h-72">
-						<EmptyMedia className="text-gray-400">
-							<Scissors size={40} strokeWidth={1.5} />
-						</EmptyMedia>
-						<EmptyTitle>No subtractions found</EmptyTitle>
-						<EmptyDescription>
-							No subtractions have been created yet.
-						</EmptyDescription>
-					</Empty>
-				</Box>
+				<ListEmpty
+					icon={Scissors}
+					title="No subtractions found"
+					description="No subtractions have been created yet."
+				/>
 			) : (
 				<Pagination
 					items={items}

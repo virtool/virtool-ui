@@ -1,6 +1,5 @@
-import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
-import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
+import ListEmpty from "@base/ListEmpty";
 import Pagination from "@base/Pagination";
 import SearchToolbar from "@base/SearchToolbar";
 import ViewHeader from "@base/ViewHeader";
@@ -12,10 +11,10 @@ import { HmmInstall } from "./HmmInstall";
 import HmmItem from "./HmmItem";
 
 type HmmListProps = {
-	find: string;
+	term: string;
 	page: number;
 	setSearch: (
-		next: { find?: string; page?: number },
+		next: { term?: string; page?: number },
 		options?: { replace?: boolean },
 	) => void;
 };
@@ -23,8 +22,8 @@ type HmmListProps = {
 /**
  * A list of HMMs with filtering options
  */
-export default function HmmList({ find, page, setSearch }: HmmListProps) {
-	const { data } = useSuspenseHmms(page, 25, find);
+export default function HmmList({ term, page, setSearch }: HmmListProps) {
+	const { data } = useSuspenseHmms(page, 25, term);
 
 	const {
 		items,
@@ -50,9 +49,9 @@ export default function HmmList({ find, page, setSearch }: HmmListProps) {
 				<>
 					<SearchToolbar
 						aria-label="Search HMMs"
-						onChange={(find) => setSearch({ find, page: 1 }, { replace: true })}
+						onChange={(term) => setSearch({ term, page: 1 }, { replace: true })}
 						placeholder="Name"
-						value={find}
+						value={term}
 					/>
 					{items.length ? (
 						<Pagination
@@ -69,21 +68,13 @@ export default function HmmList({ find, page, setSearch }: HmmListProps) {
 							</BoxGroup>
 						</Pagination>
 					) : (
-						<Box>
-							<Empty className="h-72">
-								<EmptyMedia className="text-gray-400">
-									{find ? (
-										<SearchX size={40} strokeWidth={1.5} />
-									) : (
-										<Boxes size={40} strokeWidth={1.5} />
-									)}
-								</EmptyMedia>
-								<EmptyTitle>No HMMs found</EmptyTitle>
-								<EmptyDescription>
-									{find ? "No HMMs match your search." : "No HMMs to show."}
-								</EmptyDescription>
-							</Empty>
-						</Box>
+						<ListEmpty
+							icon={term ? SearchX : Boxes}
+							title="No HMMs found"
+							description={
+								term ? "No HMMs match your search." : "No HMMs to show."
+							}
+						/>
 					)}
 				</>
 			) : (
