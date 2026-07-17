@@ -63,7 +63,7 @@ export default function HmmList({ term, page, setSearch }: HmmListProps) {
 						>
 							<BoxGroup as="ul">
 								{items.map((item) => (
-									<HmmItem key={item.id} as="li" hmm={item} />
+									<HmmItem key={item.id} hmm={item} />
 								))}
 							</BoxGroup>
 						</Pagination>

@@ -6,15 +6,12 @@ import IconButton from "@base/IconButton";
 import RelativeTime from "@base/RelativeTime";
 import type { UserNested } from "@users/types";
 import { Trash } from "lucide-react";
-import type { ElementType, MouseEvent, ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import { useDeleteFile } from "../queries";
 
 export type UploadItemProps = {
 	/** An extra control shown beside the remove button. */
 	action?: ReactNode;
-
-	/** The element or component to render as the root (e.g. `"li"` in a list) */
-	as?: ElementType;
 	canDelete: boolean;
 	/** Whether the file is selected. */
 	checked?: boolean;
@@ -29,7 +26,6 @@ export type UploadItemProps = {
 
 export default function UploadItem({
 	action,
-	as,
 	canDelete,
 	checked = false,
 	id,
@@ -42,7 +38,7 @@ export default function UploadItem({
 	const { mutate: handleRemove } = useDeleteFile();
 
 	return (
-		<BoxGroupSection as={as}>
+		<BoxGroupSection as="li">
 			<div className="flex items-center gap-4">
 				{onSelect && (
 					<Checkbox

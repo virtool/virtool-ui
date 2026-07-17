@@ -168,7 +168,6 @@ export function FileManager({
 							{files.items.map((item) => (
 								<UploadItem
 									{...item}
-									as="li"
 									action={renderItemAction?.(item, files.items)}
 									canDelete={canDelete}
 									checked={selection.isSelected(item)}

@@ -60,7 +60,7 @@ export default function SubtractionList({
 				>
 					<BoxGroup as="ul">
 						{items.map((item) => (
-							<SubtractionItem key={item.id} as="li" {...item} />
+							<SubtractionItem key={item.id} {...item} />
 						))}
 					</BoxGroup>
 				</Pagination>

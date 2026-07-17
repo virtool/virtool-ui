@@ -52,7 +52,6 @@ export default function Indexes({ page, setSearch }: IndexesProps) {
 						{items.map((item) => (
 							<IndexItem
 								key={item.id}
-								as="li"
 								index={item}
 								refId={refId}
 								activeId={

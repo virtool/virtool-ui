@@ -2,13 +2,10 @@ import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import type { IndexMinimal } from "@indexes/types";
-import type { ElementType } from "react";
 import { IndexItemDescription } from "./IndexItemDescription";
 import { IndexItemIcon } from "./IndexItemIcon";
 
 type IndexItemProps = {
-	/** The element or component to render as the root (e.g. `"li"` in a list) */
-	as?: ElementType;
 	activeId?: string;
 	index: IndexMinimal;
 	refId: string;
@@ -23,9 +20,9 @@ type IndexItemProps = {
  * @return The index item
  */
 
-export function IndexItem({ as, activeId, index, refId }: IndexItemProps) {
+export function IndexItem({ activeId, index, refId }: IndexItemProps) {
 	return (
-		<BoxGroupSection as={as}>
+		<BoxGroupSection as="li">
 			<h3 className="grid grid-cols-3 mb-2 text-lg">
 				<Link
 					className="font-medium"
