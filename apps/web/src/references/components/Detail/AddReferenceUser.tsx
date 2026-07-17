@@ -1,3 +1,4 @@
+import { cn } from "@app/cn";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import CompactScrollList from "@base/CompactScrollList";
@@ -6,7 +7,6 @@ import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import InitialIcon from "@base/InitialIcon";
 import QueryError from "@base/QueryError";
 import SearchToolbar from "@base/SearchToolbar";
-import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import { useAddReferenceMember } from "@references/queries";
 import type { ReferenceUser } from "@references/types";
 import { useInfiniteFindUsers } from "@users/queries";
@@ -62,14 +62,21 @@ export default function AddReferenceUser({
 
 	function renderRow(item) {
 		return (
-			<SelectBoxGroupSection
+			<button
 				key={item.id}
-				className="flex items-center [&_.InitialIcon]:mr-1"
+				type="button"
+				className={cn(
+					"flex w-full cursor-pointer items-center gap-1 px-6 py-3 text-left",
+					"border-b border-gray-300 last:border-b-0",
+					"hover:bg-gray-50",
+					"focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600/50",
+					"[&_.InitialIcon]:mr-1",
+				)}
 				onClick={() => mutation.mutate({ id: item.id })}
 			>
 				<InitialIcon size="md" handle={item.handle} />
 				{item.handle}
-			</SelectBoxGroupSection>
+			</button>
 		);
 	}
 

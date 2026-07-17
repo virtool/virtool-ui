@@ -1,3 +1,4 @@
+import { cn } from "@app/cn";
 import Box from "@base/Box";
 import CompactScrollList from "@base/CompactScrollList";
 import {
@@ -9,6 +10,7 @@ import {
 } from "@base/Empty";
 import InputError from "@base/InputError";
 import Link from "@base/Link";
+import useListboxNavigation from "@base/useListboxNavigation";
 import type { InfiniteData } from "@tanstack/react-query";
 import type {
 	FetchNextPageOptions,
@@ -68,12 +70,22 @@ export function SubtractionFileSelector({
 
 	const items = files.pages.flatMap((page) => page.items);
 
+	const { listboxProps, activeOptionId, getOptionId } = useListboxNavigation(
+		items,
+		(item) => item.id,
+		(item) => onClick([item.id]),
+	);
+
 	function renderRow(item: Upload) {
+		const optionId = getOptionId(item.id);
+
 		return (
 			<SubtractionFileItem
 				key={item.id}
 				{...item}
 				active={selected?.includes(item.id)}
+				highlighted={activeOptionId === optionId}
+				optionId={optionId}
 				onClick={onClick}
 				error={error}
 			/>
@@ -98,8 +110,15 @@ export function SubtractionFileSelector({
 	) : (
 		<>
 			<CompactScrollList
+				{...listboxProps}
 				aria-labelledby={ariaLabelledby}
-				className="max-h-96"
+				className={cn(
+					"max-h-96",
+					"outline-none",
+					"focus-visible:ring-2",
+					"focus-visible:ring-inset",
+					"focus-visible:ring-blue-500/30",
+				)}
 				fetchNextPage={fetchNextPage}
 				isFetchingNextPage={isFetchingNextPage}
 				isPending={isPending}

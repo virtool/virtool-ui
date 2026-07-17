@@ -7,8 +7,12 @@ type SubtractionFileItemProps = {
 	active: boolean;
 	/** Error message to be displayed */
 	error: string;
+	/** Whether the option is the listbox's active descendant */
+	highlighted: boolean;
 	/** The unique identifier */
 	id: number;
+	/** The option's DOM id, referenced by the listbox's `aria-activedescendant` */
+	optionId: string;
 	/** The name of the file */
 	name: string;
 	/** A callback function to handle file selection */
@@ -24,7 +28,9 @@ type SubtractionFileItemProps = {
  */
 export function SubtractionFileItem({
 	active,
+	highlighted,
 	id,
+	optionId,
 	name,
 	onClick,
 	uploaded_at,
@@ -34,6 +40,8 @@ export function SubtractionFileItem({
 		<SelectBoxGroupSection
 			active={active}
 			className="flex justify-between"
+			highlighted={highlighted}
+			id={optionId}
 			onClick={() => onClick([id])}
 		>
 			<strong>{name}</strong>
