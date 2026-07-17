@@ -11,11 +11,19 @@ function draw(element, maxLength, pos, strand) {
 
 	const width = element.offsetWidth - 30;
 
+	const start = Math.min(pos[0], pos[1]);
+	const end = Math.max(pos[0], pos[1]);
+	const label = `Open reading frame from position ${start} to ${end} on the ${strand === 1 ? "forward" : "reverse"} strand.`;
+
 	// Construct the SVG canvas.
 	const svg = select(element)
 		.append("svg")
 		.attr("width", width + 30)
-		.attr("height", HEIGHT);
+		.attr("height", HEIGHT)
+		.attr("role", "img")
+		.attr("aria-label", label);
+
+	svg.append("title").text(label);
 
 	// Create a mother group that will hold all chart elements.
 	const group = svg.append("g").attr("transform", "translate(15,0)");

@@ -10,11 +10,17 @@ function draw(element: HTMLElement, maxLength: number, sequenceLength: number) {
 		.range([0, width - 30])
 		.domain([0, maxLength]);
 
+	const label = `Sequence ruler: a ${sequenceLength} nucleotide sequence on a scale up to ${maxLength} nucleotides.`;
+
 	// Construct the SVG canvas.
 	const svg = select(element)
 		.append("svg")
 		.attr("width", width)
-		.attr("height", 30);
+		.attr("height", 30)
+		.attr("role", "img")
+		.attr("aria-label", label);
+
+	svg.append("title").text(label);
 
 	// Create a group that will hold all chart elements.
 	const group = svg.append("g").attr("transform", "translate(15,3)");

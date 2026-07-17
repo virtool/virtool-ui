@@ -19,7 +19,9 @@ export function drawNucleotidesChart(
 	data: Array<[number, number, number, number]>,
 	baseWidth: number,
 ) {
-	const svg = createSvg(element, baseWidth);
+	const label = `Nucleotide composition across ${data.length} read positions, showing the percentage of guanine, adenine, thymine, and cytosine.`;
+
+	const svg = createSvg(element, baseWidth, label);
 
 	const width =
 		baseWidth - QUALITY_CHART_MARGIN.left - QUALITY_CHART_MARGIN.right;
