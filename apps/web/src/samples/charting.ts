@@ -34,10 +34,22 @@ export function appendLegend(
 	});
 }
 
-export function createSvg(element: HTMLElement, width: number) {
+/**
+ * Give a d3-built `<svg>` a text alternative: `role="img"` plus an `aria-label`
+ * and a matching `<title>`. The role makes the SVG an atomic graphic, hiding
+ * its visual axis and legend text from the accessibility tree so the label is
+ * the whole alternative; the `<title>` is the equivalent for pointer hover and
+ * older assistive technology.
+ */
+export function labelSvg(svg, label: string) {
+	svg.attr("role", "img").attr("aria-label", label);
+	svg.append("title").text(label);
+}
+
+export function createSvg(element: HTMLElement, width: number, label: string) {
 	select(element).selectAll("*").remove();
 
-	return select(element)
+	const svg = select(element)
 		.append("svg")
 		.attr(
 			"width",
@@ -48,7 +60,11 @@ export function createSvg(element: HTMLElement, width: number) {
 			QUALITY_CHART_HEIGHT +
 				QUALITY_CHART_MARGIN.top +
 				QUALITY_CHART_MARGIN.bottom,
-		)
+		);
+
+	labelSvg(svg, label);
+
+	return svg
 		.append("g")
 		.attr(
 			"transform",

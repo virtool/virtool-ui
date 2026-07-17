@@ -69,6 +69,19 @@ export function toGcContent(fraction: number): string {
 }
 
 /**
+ * Prefix a noun with a count, appending "s" unless the count is exactly one
+ * (eg. `1 read position`, `3 read positions`). Pass `plural` for irregular
+ * nouns.
+ */
+export function pluralize(
+	count: number,
+	singular: string,
+	plural: string = `${singular}s`,
+): string {
+	return `${count} ${count === 1 ? singular : plural}`;
+}
+
+/**
  * Converts a ``number`` to a scientific notation string.
  */
 export function toScientificNotation(num: number): string {
