@@ -55,7 +55,6 @@ export default function HmmList({ term, page, setSearch }: HmmListProps) {
 					/>
 					{items.length ? (
 						<Pagination
-							items={items}
 							storedPage={storedPage}
 							currentPage={page}
 							pageCount={page_count}

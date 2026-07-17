@@ -23,7 +23,6 @@ function getPageRange(
 
 type PaginationProps = {
 	children?: ReactNode;
-	items: object[];
 	storedPage: number;
 	currentPage: number;
 	pageCount: number;
