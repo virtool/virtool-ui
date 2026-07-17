@@ -1,5 +1,5 @@
 type NuVsValuesProps = {
-	e: string;
+	e: number;
 	orfCount: number;
 };
 
