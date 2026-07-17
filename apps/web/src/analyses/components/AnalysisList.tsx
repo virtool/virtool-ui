@@ -85,7 +85,6 @@ export default function AnalysesList({
 			</div>
 			{analyses.found_count ? (
 				<Pagination
-					items={analyses.items}
 					storedPage={analyses.page}
 					currentPage={page}
 					pageCount={analyses.page_count}

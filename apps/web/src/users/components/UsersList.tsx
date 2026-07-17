@@ -35,7 +35,6 @@ export default function UsersList({
 
 	return items.length ? (
 		<Pagination
-			items={items}
 			storedPage={page}
 			currentPage={urlPage}
 			pageCount={page_count}

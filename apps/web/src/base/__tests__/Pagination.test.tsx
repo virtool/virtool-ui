@@ -5,7 +5,6 @@ import Pagination from "../Pagination";
 
 type PaginationTestProps = {
 	currentPage: number;
-	items: object[];
 	pageCount: number;
 	storedPage: number;
 };
@@ -17,7 +16,6 @@ describe("<Pagination />", () => {
 		props = {
 			pageCount: 6,
 			currentPage: 1,
-			items: [],
 			storedPage: 1,
 		};
 	});

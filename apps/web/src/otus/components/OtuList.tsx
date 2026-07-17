@@ -63,7 +63,6 @@ export default function OtuList({ term, page, setSearch }: OtuListProps) {
 
 			{items.length ? (
 				<Pagination
-					items={items}
 					storedPage={storedPage}
 					currentPage={page}
 					pageCount={page_count}
