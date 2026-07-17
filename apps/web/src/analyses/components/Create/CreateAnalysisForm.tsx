@@ -4,7 +4,17 @@ import Button from "@base/Button";
 import { DialogFooter } from "@base/Dialog";
 import InputError from "@base/InputError";
 import QueryError from "@base/QueryError";
+import Switch from "@base/Switch";
+import {
+	Toast,
+	ToastClose,
+	ToastDescription,
+	ToastProvider,
+	ToastTitle,
+	ToastViewport,
+} from "@base/Toast";
 import SubtractionSelector from "@subtraction/components/SubtractionSelector";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import IndexSelector from "./IndexSelector";
@@ -17,9 +27,19 @@ type CreateAnalysisFormValues = {
 	workflow: string;
 };
 
+/** A dismissible confirmation shown after analyses are created with "Create more" on. */
+type CreatedAnalysis = {
+	id: string;
+	count: number;
+	workflow: string;
+};
+
 type CreateAnalysisFormProps = {
 	/** The workflows compatible with the selected sample(s) */
 	compatibleWorkflows: workflow[];
+
+	/** Closes the enclosing dialog. */
+	onClose: () => void;
 
 	/** The number of samples selected */
 	sampleCount: number;
@@ -35,6 +55,7 @@ type CreateAnalysisFormProps = {
  */
 export default function CreateAnalysisForm({
 	compatibleWorkflows,
+	onClose,
 	sampleCount,
 	sampleIds,
 }: CreateAnalysisFormProps) {
@@ -53,17 +74,23 @@ export default function CreateAnalysisForm({
 
 	const createAnalysis = useCreateAnalysis();
 
+	const defaultValues = {
+		indexId: "",
+		subtractionIds: defaultSubtractions.map((subtraction) => subtraction.id),
+		workflow: compatibleWorkflows[0]?.id,
+	};
+
 	const {
 		control,
 		handleSubmit,
 		formState: { errors },
+		reset,
 		watch,
-	} = useForm<CreateAnalysisFormValues>({
-		defaultValues: {
-			subtractionIds: defaultSubtractions.map((subtraction) => subtraction.id),
-			workflow: compatibleWorkflows[0]?.id,
-		},
-	});
+	} = useForm<CreateAnalysisFormValues>({ defaultValues });
+
+	const [createMore, setCreateMore] = useState(false);
+	const [createdAnalysis, setCreatedAnalysis] =
+		useState<CreatedAnalysis | null>(null);
 
 	if (isErrorIndexes || isErrorSubtractions) {
 		return <QueryError noun="analysis options" />;
@@ -73,7 +100,7 @@ export default function CreateAnalysisForm({
 		return null;
 	}
 
-	function onSubmit(values: CreateAnalysisFormValues) {
+	async function onSubmit(values: CreateAnalysisFormValues) {
 		const { indexId, subtractionIds, workflow } = values;
 
 		const index = indexes.find((index) => index.id === indexId);
@@ -82,14 +109,35 @@ export default function CreateAnalysisForm({
 		}
 		const refId = index.reference.id;
 
-		for (const sampleId of sampleIds) {
-			createAnalysis.mutate({
-				refId,
-				sampleId,
-				subtractionIds,
-				workflow,
-			});
+		let created: Awaited<ReturnType<typeof createAnalysis.mutateAsync>>[];
+		try {
+			created = await Promise.all(
+				sampleIds.map((sampleId) =>
+					createAnalysis.mutateAsync({
+						refId,
+						sampleId,
+						subtractionIds,
+						workflow,
+					}),
+				),
+			);
+		} catch {
+			return;
 		}
+
+		if (!createMore) {
+			onClose();
+			return;
+		}
+
+		reset(defaultValues);
+		setCreatedAnalysis({
+			id: created[0]?.id ?? "",
+			count: created.length,
+			workflow:
+				compatibleWorkflows.find((option) => option.id === workflow)?.name ??
+				workflow,
+		});
 	}
 
 	return (
@@ -139,14 +187,55 @@ export default function CreateAnalysisForm({
 			</InputError>
 
 			<DialogFooter className="items-center justify-between">
-				<CreateAnalysisSummary
-					sampleCount={sampleCount}
-					indexCount={watch("indexId") ? 1 : 0}
-				/>
-				<Button type="submit" color="blue">
-					Create
-				</Button>
+				<div className="flex items-center gap-2">
+					<Switch
+						id="create-more"
+						checked={createMore}
+						onCheckedChange={setCreateMore}
+					/>
+					<label
+						className="cursor-pointer text-gray-700 text-sm"
+						htmlFor="create-more"
+					>
+						Create more
+					</label>
+				</div>
+
+				<div className="flex items-center gap-4">
+					<CreateAnalysisSummary
+						sampleCount={sampleCount}
+						indexCount={watch("indexId") ? 1 : 0}
+					/>
+					<Button type="submit" color="blue">
+						Create
+					</Button>
+				</div>
 			</DialogFooter>
+
+			<ToastProvider>
+				{createdAnalysis && (
+					<Toast
+						key={createdAnalysis.id}
+						onOpenChange={(open) => {
+							if (!open) {
+								setCreatedAnalysis(null);
+							}
+						}}
+						open
+					>
+						<div>
+							<ToastTitle>
+								{createdAnalysis.count === 1
+									? "Analysis created"
+									: `${createdAnalysis.count} analyses created`}
+							</ToastTitle>
+							<ToastDescription>{createdAnalysis.workflow}</ToastDescription>
+						</div>
+						<ToastClose />
+					</Toast>
+				)}
+				<ToastViewport />
+			</ToastProvider>
 		</form>
 	);
 }
