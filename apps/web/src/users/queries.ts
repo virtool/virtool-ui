@@ -80,28 +80,26 @@ export function usersQueryOptions(
 			findUsers({
 				data: { page, per_page, term, administrator, active },
 			}),
-		placeholderData: keepPreviousData,
 	});
 }
 
 /**
- * Fetch a page of user search results.
+ * Fetch a page of user search results, suspending until it resolves.
  *
- * @param page - The page to fetch
- * @param per_page - The number of users to fetch per page
- * @param term - The search term to filter users by
- * @param administrator - Filter the users by administrator status
- * @param active - Filter the users by whether they are active
- * @returns A page of user search results
+ * `data` is always defined, and a failed request throws to the nearest route
+ * error boundary instead of resolving to `undefined`. Use this from components
+ * rendered under the user administration route, whose loader prefetches the
+ * page — loading and errors are handled by the route's Suspense and
+ * `errorComponent` rather than inline.
  */
-export function useFindUsers(
+export function useSuspenseUsers(
 	page: number,
 	per_page: number,
 	term: string,
 	administrator?: boolean,
 	active?: boolean,
 ) {
-	return useQuery(
+	return useSuspenseQuery(
 		usersQueryOptions(page, per_page, term, administrator, active),
 	);
 }

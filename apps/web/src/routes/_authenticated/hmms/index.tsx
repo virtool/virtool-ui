@@ -20,6 +20,11 @@ function validateHmmSearch(
 
 export const Route = createFileRoute("/_authenticated/hmms/")({
 	validateSearch: validateHmmSearch,
+	loaderDeps: ({ search: { find, page } }) => ({ find, page }),
+	loader: async ({ context: { queryClient }, deps: { find, page } }) => {
+		const { hmmsQueryOptions } = await import("@hmm/queries");
+		await queryClient.ensureQueryData(hmmsQueryOptions(page, 25, find));
+	},
 	component: HmmRoute,
 });
 
@@ -31,7 +36,12 @@ function HmmRoute() {
 		<HmmList
 			find={search.find}
 			page={search.page}
-			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+			setSearch={(next, options) =>
+				navigate({
+					search: { ...search, ...next },
+					replace: options?.replace,
+				})
+			}
 		/>
 	);
 }

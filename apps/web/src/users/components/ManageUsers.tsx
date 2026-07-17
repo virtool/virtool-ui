@@ -5,14 +5,17 @@ import SearchToolbar from "@base/SearchToolbar";
 import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
 import { CircleAlert } from "lucide-react";
-import { useState } from "react";
 import CreateUser from "./CreateUser";
 import UsersList from "./UsersList";
 
 type ManageUsersProps = {
 	page?: number;
-	setSearch?: (next: { page?: number; status?: string }) => void;
+	setSearch?: (
+		next: { page?: number; status?: string; term?: string },
+		options?: { replace?: boolean },
+	) => void;
 	status?: string;
+	term?: string;
 };
 
 /**
@@ -22,8 +25,8 @@ export function ManageUsers({
 	page = 1,
 	setSearch = () => {},
 	status = "active",
+	term = "",
 }: ManageUsersProps) {
-	const [term, setTerm] = useState("");
 	const { hasPermission, isPending } = useCheckAdminRole("users");
 
 	if (isPending) {
@@ -35,7 +38,7 @@ export function ManageUsers({
 			<>
 				<SearchToolbar
 					aria-label="Search users"
-					onChange={setTerm}
+					onChange={(term) => setSearch({ term, page: 1 }, { replace: true })}
 					placeholder="Username"
 					value={term}
 				>

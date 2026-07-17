@@ -1,10 +1,8 @@
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
-import QueryError from "@base/QueryError";
-import { useFindUsers } from "@users/queries";
+import { useSuspenseUsers } from "@users/queries";
 import { Users } from "lucide-react";
 import type { User } from "../types";
 import { UserItem } from "./UserItem";
@@ -26,21 +24,13 @@ export default function UsersList({
 	status,
 	term,
 }: UsersListProps) {
-	const { data, isPending, isError } = useFindUsers(
+	const { data } = useSuspenseUsers(
 		urlPage,
 		25,
 		term,
 		undefined,
 		status === "active",
 	);
-
-	if (isError && !data) {
-		return <QueryError noun="users" />;
-	}
-
-	if (isPending) {
-		return <LoadingPlaceholder />;
-	}
 
 	const { items, page, page_count } = data;
 

@@ -16,6 +16,15 @@ function validateIndexesSearch(
 
 export const Route = createFileRoute("/_authenticated/refs/$refId/indexes/")({
 	validateSearch: validateIndexesSearch,
+	loaderDeps: ({ search: { page } }) => ({ page }),
+	loader: async ({
+		context: { queryClient },
+		params: { refId },
+		deps: { page },
+	}) => {
+		const { indexesQueryOptions } = await import("@indexes/queries");
+		await queryClient.ensureQueryData(indexesQueryOptions(page, 25, refId));
+	},
 	component: IndexesRoute,
 });
 

@@ -7,6 +7,7 @@ import { ManageUsers } from "@users/components/ManageUsers";
 type UsersSearch = {
 	status: string;
 	page: number;
+	term: string;
 };
 
 function validateUsersSearch(
@@ -15,13 +16,17 @@ function validateUsersSearch(
 	return {
 		status: str(input.status, "active"),
 		page: num(input.page, 1),
+		term: str(input.term, ""),
 	};
 }
 
 export const Route = createFileRoute("/_authenticated/administration/users/")({
 	validateSearch: validateUsersSearch,
-	loaderDeps: ({ search: { page, status } }) => ({ page, status }),
-	loader: async ({ context: { queryClient }, deps: { page, status } }) => {
+	loaderDeps: ({ search: { page, status, term } }) => ({ page, status, term }),
+	loader: async ({
+		context: { queryClient },
+		deps: { page, status, term },
+	}) => {
 		const [{ usersQueryOptions }, { passwordPolicyQueryOptions }] =
 			await Promise.all([
 				import("@users/queries"),
@@ -30,7 +35,7 @@ export const Route = createFileRoute("/_authenticated/administration/users/")({
 
 		return Promise.all([
 			queryClient.ensureQueryData(
-				usersQueryOptions(page, 25, "", undefined, status === "active"),
+				usersQueryOptions(page, 25, term, undefined, status === "active"),
 			),
 			// For the create-user form. Prefetched, not ensured: a failure here must
 			// not take down the page.
@@ -47,8 +52,14 @@ function UsersRoute() {
 	return (
 		<ManageUsers
 			page={search.page}
-			setSearch={(next) => navigate({ search: { ...search, ...next } })}
+			setSearch={(next, options) =>
+				navigate({
+					search: { ...search, ...next },
+					replace: options?.replace,
+				})
+			}
 			status={search.status}
+			term={search.term}
 		/>
 	);
 }

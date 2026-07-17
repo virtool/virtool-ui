@@ -22,6 +22,20 @@ function validateRefsSearch(
 
 export const Route = createFileRoute("/_authenticated/refs/")({
 	validateSearch: validateRefsSearch,
+	loaderDeps: ({ search: { archived, find, page } }) => ({
+		archived,
+		find,
+		page,
+	}),
+	loader: async ({
+		context: { queryClient },
+		deps: { archived, find, page },
+	}) => {
+		const { referencesQueryOptions } = await import("@references/queries");
+		await queryClient.ensureQueryData(
+			referencesQueryOptions(page, 25, find, archived),
+		);
+	},
 	component: ReferencesRoute,
 });
 

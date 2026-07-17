@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeUsers } from "@tests/fake/user";
 import { mockFindUsers, mockGetAccount } from "@tests/server-fn/users";
-import { at, renderWithRouter } from "@tests/setup";
+import { at, renderRoute, renderWithRouter } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 import { ManageUsers } from "../ManageUsers";
 
@@ -10,13 +10,10 @@ describe("<ManageUsers />", () => {
 	it("should render correctly with 3 users", async () => {
 		const users = createFakeUsers(3);
 		at(users, 0).administrator_role = "full";
-		await mockFindUsers(users);
-		const account = createFakeAccount({
-			administrator_role: "full",
-		});
-		mockGetAccount(account);
+		mockFindUsers(users);
+		const account = createFakeAccount({ administrator_role: "full" });
 
-		await renderWithRouter(<ManageUsers />);
+		await renderRoute("/administration/users", { account });
 
 		expect(await screen.findByLabelText("Search users")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Create" })).toBeInTheDocument();
@@ -26,20 +23,9 @@ describe("<ManageUsers />", () => {
 		});
 	});
 
-	it("should render correctly when items = null", async () => {
-		const account = createFakeAccount({
-			administrator_role: "full",
-		});
-		mockGetAccount(account);
-
-		await renderWithRouter(<ManageUsers />);
-
-		expect(await screen.findByLabelText("Search users")).toBeInTheDocument();
-		expect(screen.getByRole("button")).toBeInTheDocument();
-		expect(screen.getByLabelText("loading")).toBeInTheDocument();
-		expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
-	});
-
+	// Rendered directly rather than through the route: `/administration`'s
+	// `beforeLoad` redirects an account without the role away before this branch
+	// could render. It holds no list query, so nothing suspends.
 	it("should render correctly if account has insufficient permissions", async () => {
 		const users = createFakeUsers(3);
 
@@ -58,7 +44,7 @@ describe("<ManageUsers />", () => {
 		expect(
 			screen.queryByRole("button", { name: "Create" }),
 		).not.toBeInTheDocument();
-		expect(screen.queryByLabelText("search")).not.toBeInTheDocument();
+		expect(screen.queryByLabelText("Search users")).not.toBeInTheDocument();
 		expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
 	});
 });

@@ -2,15 +2,13 @@ import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
-import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { Library } from "lucide-react";
 import { useState } from "react";
-import { useFindReferences } from "../queries";
+import { useSuspenseReferences } from "../queries";
 import Clone from "./CloneReference";
 import { CreateReference } from "./CreateReference";
 import { ReferenceItem } from "./ReferenceItem";
@@ -42,20 +40,7 @@ export default function ReferenceList({
 	const [isCreateReferenceOpen, setIsCreateReferenceOpen] = useState(false);
 	const [cloneReferenceId, setCloneReferenceId] = useState<string>();
 
-	const { data, isPending, isError } = useFindReferences(
-		page,
-		25,
-		find,
-		archived,
-	);
-
-	if (isError && !data) {
-		return <QueryError noun="references" />;
-	}
-
-	if (isPending) {
-		return <LoadingPlaceholder />;
-	}
+	const { data } = useSuspenseReferences(page, 25, find, archived);
 
 	const { items, page: storedPage, page_count, total_count } = data;
 

@@ -1,10 +1,11 @@
 import { apiClient } from "@app/api";
 import { subtractionQueryKeys } from "@subtraction/keys";
 import {
-	keepPreviousData,
+	queryOptions,
 	useMutation,
 	useQuery,
 	useQueryClient,
+	useSuspenseQuery,
 } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
 import type {
@@ -40,19 +41,18 @@ export function useCreateSubtraction() {
 }
 
 /**
- * Fetch a page of subtraction search results from the API
+ * Query options for a page of subtraction search results.
  *
  * @param page - The page to fetch
- * @param per_page - The number of hmms to fetch per page
- * @param term - The search term to filter the hmms by
- * @returns A page of subtraction search results
+ * @param per_page - The number of subtractions to fetch per page
+ * @param term - The search term to filter the subtractions by
  */
-export function useFindSubtractions(
+export function subtractionsQueryOptions(
 	page: number,
 	per_page: number,
 	term: string,
 ) {
-	return useQuery<SubtractionSearchResult>({
+	return queryOptions<SubtractionSearchResult, ErrorResponse>({
 		queryKey: subtractionQueryKeys.list([page, per_page, term]),
 		queryFn: () =>
 			apiClient
@@ -62,8 +62,24 @@ export function useFindSubtractions(
 					const { documents, ...rest } = response.body;
 					return { ...rest, items: documents };
 				}),
-		placeholderData: keepPreviousData,
 	});
+}
+
+/**
+ * Fetch a page of subtraction search results, suspending until it resolves.
+ *
+ * `data` is always defined, and a failed request throws to the nearest route
+ * error boundary instead of resolving to `undefined`. Use this from components
+ * rendered under the subtraction list route, whose loader prefetches the page —
+ * loading and errors are handled by the route's Suspense and `errorComponent`
+ * rather than inline.
+ */
+export function useSuspenseSubtractions(
+	page: number,
+	per_page: number,
+	term: string,
+) {
+	return useSuspenseQuery(subtractionsQueryOptions(page, per_page, term));
 }
 
 /**
