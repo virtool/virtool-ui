@@ -22,10 +22,19 @@ import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/samples/$sampleId")({
 	loader: async ({ context: { queryClient }, params: { sampleId } }) => {
+		// Sample ids are integers. A nonnumeric param — e.g. a stale link from a
+		// pre-migration job that recorded a legacy string sample id — can no
+		// longer resolve, so treat it as not-found rather than requesting
+		// `/api/samples/NaN`.
+		const numericSampleId = Number(sampleId);
+		if (!Number.isInteger(numericSampleId)) {
+			throw notFound();
+		}
+
 		const { sampleQueryOptions } = await import("@samples/queries");
 
 		try {
-			await queryClient.ensureQueryData(sampleQueryOptions(Number(sampleId)));
+			await queryClient.ensureQueryData(sampleQueryOptions(numericSampleId));
 		} catch (error) {
 			if (
 				error != null &&
