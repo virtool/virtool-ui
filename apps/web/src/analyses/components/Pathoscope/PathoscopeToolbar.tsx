@@ -5,8 +5,7 @@ import DropdownButton from "@base/DropdownButton";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuDownload from "@base/DropdownMenuDownload";
 import Icon from "@base/Icon";
-import InputSearch from "@base/InputSearch";
-import Toolbar from "@base/Toolbar";
+import SearchToolbar from "@base/SearchToolbar";
 import Tooltip from "@base/Tooltip";
 import {
 	ArrowDownWideNarrow,
@@ -33,12 +32,11 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 	const sortDesc = search.sortDesc ?? true;
 
 	return (
-		<Toolbar>
-			<InputSearch
-				aria-label="Search results"
-				value={find}
-				onChange={(e) => setSearch({ find: e.target.value })}
-			/>
+		<SearchToolbar
+			aria-label="Search results"
+			onChange={(find) => setSearch({ find })}
+			value={find}
+		>
 			<AnalysisViewerSort
 				workflow="pathoscope"
 				sortKey={sortKey}
@@ -93,6 +91,6 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 					</DropdownMenuDownload>
 				</DropdownMenuContent>
 			</Dropdown>
-		</Toolbar>
+		</SearchToolbar>
 	);
 }

@@ -4,10 +4,9 @@ import CompactScrollList from "@base/CompactScrollList";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import InitialIcon from "@base/InitialIcon";
-import InputSearch from "@base/InputSearch";
 import QueryError from "@base/QueryError";
+import SearchToolbar from "@base/SearchToolbar";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
-import Toolbar from "@base/Toolbar";
 import { useInfiniteFindGroups } from "@groups/queries";
 import { useAddReferenceMember } from "@references/queries";
 import type { ReferenceGroup } from "@references/types";
@@ -78,14 +77,12 @@ export default function AddReferenceGroup({
 		<Dialog open={show} onOpenChange={onOpenChange}>
 			<DialogContent>
 				<DialogTitle>Add Group</DialogTitle>
-				<Toolbar>
-					<InputSearch
-						name="search"
-						aria-label="Search groups"
-						value={term}
-						onChange={(e) => setTerm(e.target.value)}
-					/>
-				</Toolbar>
+				<SearchToolbar
+					aria-label="Search groups"
+					onChange={setTerm}
+					placeholder="Group name"
+					value={term}
+				/>
 				{filteredItems.length ? (
 					<CompactScrollList
 						className="border border-gray-300 rounded overflow-y-auto h-80"

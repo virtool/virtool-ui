@@ -11,47 +11,48 @@ export function useNow() {
 }
 
 /**
- * Returns `value` delayed until it has been stable for `delayMs`.
- */
-export function useDebouncedValue<T>(value: T, delayMs = 250): T {
-	const [debounced, setDebounced] = useState(value);
-
-	useEffect(() => {
-		const id = setTimeout(() => setDebounced(value), delayMs);
-		return () => clearTimeout(id);
-	}, [value, delayMs]);
-
-	return debounced;
-}
-
-/**
  * Two-way binding for an input whose committed value lives in the parent (URL,
  * store, etc.). Returns a local `draft` for the input and a setter; commits
- * `draft` to `onChange` after it's been stable for `delayMs`, and resyncs
- * `draft` when `value` changes externally (e.g. back/forward navigation).
+ * `draft` to `onChange` after it's been stable for `delayMs`.
+ *
+ * A change to `value` from outside — back/forward navigation, a cleared filter —
+ * is authoritative: it replaces the draft and abandons any pending commit. That
+ * resync happens during render rather than in an effect so a stale draft can
+ * never reach the timer and undo the change that just arrived.
  */
 export function useDebouncedDraft<T>(
 	value: T,
 	onChange: (next: T) => void,
-	delayMs?: number,
+	delayMs = 250,
 ): [T, (next: T) => void] {
 	const [draft, setDraft] = useState(value);
-	const debouncedDraft = useDebouncedValue(draft, delayMs);
-	const lastSentRef = useRef(value);
+	const [committed, setCommitted] = useState(value);
+
+	if (value !== committed) {
+		setCommitted(value);
+		setDraft(value);
+	}
+
+	// Held in a ref so a parent re-render that only changes the callback's
+	// identity doesn't restart the delay out from under the typist.
+	const onChangeRef = useRef(onChange);
 
 	useEffect(() => {
-		if (debouncedDraft !== value) {
-			lastSentRef.current = debouncedDraft;
-			onChange(debouncedDraft);
-		}
-	}, [debouncedDraft, onChange, value]);
+		onChangeRef.current = onChange;
+	});
 
 	useEffect(() => {
-		if (value !== lastSentRef.current) {
-			lastSentRef.current = value;
-			setDraft(value);
+		if (draft === committed) {
+			return;
 		}
-	}, [value]);
+
+		const id = setTimeout(() => {
+			setCommitted(draft);
+			onChangeRef.current(draft);
+		}, delayMs);
+
+		return () => clearTimeout(id);
+	}, [committed, delayMs, draft]);
 
 	return [draft, setDraft];
 }

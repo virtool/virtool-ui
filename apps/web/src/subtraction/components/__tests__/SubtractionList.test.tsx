@@ -5,8 +5,9 @@ import { createFakeAccount } from "@tests/fake/account";
 import { createFakeSubtractionMinimal } from "@tests/fake/subtractions";
 import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
+import nock from "nock";
 import { useState } from "react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import SubtractionList from "../SubtractionList";
 
 type SubtractionListSearch = {
@@ -31,6 +32,10 @@ describe("<SubtractionList />", () => {
 		subtractions = createFakeSubtractionMinimal();
 	});
 
+	// Without this, an interceptor a test doesn't consume is left to satisfy the
+	// next test's request, and that test's own scope never fires.
+	afterEach(() => nock.cleanAll());
+
 	it("renders correctly", async () => {
 		const scope = mockApiGetSubtractions([subtractions]);
 		await renderWithRouter(<SubtractionList />);
@@ -47,9 +52,9 @@ describe("<SubtractionList />", () => {
 	});
 
 	it("should call handleChange when search input changes in toolbar", async () => {
+		// The initial empty-term render, the debounced commit of "Foo", and the
+		// refetch when clearing returns the term to empty.
 		const scope = mockApiGetSubtractions([subtractions]);
-		mockApiGetSubtractions([subtractions]);
-		mockApiGetSubtractions([subtractions]);
 		mockApiGetSubtractions([subtractions]);
 		mockApiGetSubtractions([subtractions]);
 		await renderWithRouter(<SubtractionListHarness />);
@@ -101,12 +106,8 @@ describe("<SubtractionList />", () => {
 	});
 
 	it("should handle toolbar updates correctly", async () => {
+		// The initial empty-term render plus the debounced commit of "Foobar".
 		const scope = mockApiGetSubtractions([subtractions]);
-		mockApiGetSubtractions([subtractions]);
-		mockApiGetSubtractions([subtractions]);
-		mockApiGetSubtractions([subtractions]);
-		mockApiGetSubtractions([subtractions]);
-		mockApiGetSubtractions([subtractions]);
 		mockApiGetSubtractions([subtractions]);
 		await renderWithRouter(<SubtractionListHarness />);
 		await waitFor(() =>

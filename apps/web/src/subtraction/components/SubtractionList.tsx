@@ -36,10 +36,6 @@ export default function SubtractionList({
 		return <LoadingPlaceholder />;
 	}
 
-	function handleChange(e) {
-		setSearch({ find: e.target.value });
-	}
-
 	const { items, total_count, page: storedPage, page_count } = data;
 
 	return (
@@ -51,7 +47,10 @@ export default function SubtractionList({
 				</ViewHeaderTitle>
 			</ViewHeader>
 
-			<SubtractionToolbar term={find} handleChange={handleChange} />
+			<SubtractionToolbar
+				onChange={(find) => setSearch({ find })}
+				term={find}
+			/>
 
 			{!items.length ? (
 				<Box key="subtractions">

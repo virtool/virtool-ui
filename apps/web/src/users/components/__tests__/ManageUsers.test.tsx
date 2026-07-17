@@ -18,7 +18,7 @@ describe("<ManageUsers />", () => {
 
 		await renderWithRouter(<ManageUsers />);
 
-		expect(await screen.findByLabelText("search")).toBeInTheDocument();
+		expect(await screen.findByLabelText("Search users")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Create" })).toBeInTheDocument();
 		expect(await screen.findByText(/Administrator/)).toBeInTheDocument();
 		users.forEach((user) => {
@@ -34,7 +34,7 @@ describe("<ManageUsers />", () => {
 
 		await renderWithRouter(<ManageUsers />);
 
-		expect(await screen.findByLabelText("search")).toBeInTheDocument();
+		expect(await screen.findByLabelText("Search users")).toBeInTheDocument();
 		expect(screen.getByRole("button")).toBeInTheDocument();
 		expect(screen.getByLabelText("loading")).toBeInTheDocument();
 		expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
