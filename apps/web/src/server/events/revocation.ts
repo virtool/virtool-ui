@@ -24,6 +24,7 @@ export function watchForRevocation(
 		check,
 		intervalMs,
 	);
+	let checking = false;
 
 	function stop(): void {
 		if (timer) {
@@ -33,9 +34,18 @@ export function watchForRevocation(
 	}
 
 	function check(): void {
+		// A check outlives its interval when the database is slow, so ticks would
+		// otherwise pile up and each report the same revocation. Run at most one at
+		// a time, and ignore a result that lands after the watch has stopped.
+		if (checking || timer === null) {
+			return;
+		}
+
+		checking = true;
+
 		void requireAuthenticatedRequest(request)
 			.then((gate) => {
-				if (gate instanceof Response) {
+				if (timer !== null && gate instanceof Response) {
 					stop();
 					onRevoked();
 				}
@@ -44,6 +54,9 @@ export function watchForRevocation(
 				// A lookup that failed is not proof of a session that is gone. Leave
 				// the stream up and try again on the next tick.
 				logger.warn({ err }, "sse session revocation check failed");
+			})
+			.finally(() => {
+				checking = false;
 			});
 	}
 

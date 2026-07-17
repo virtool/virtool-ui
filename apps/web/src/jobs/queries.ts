@@ -1,6 +1,10 @@
 import { jobQueryKeys } from "@jobs/keys";
 import { findJobs, getJob } from "@server/jobs/functions";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import {
+	queryOptions,
+	useQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
 import {
 	JobSchema,
 	JobSearchResultSchema,
@@ -10,24 +14,39 @@ import {
 } from "./types";
 
 /**
- * Fetch a page of job search results from the API
+ * Query options for a page of job search results.
  *
  * @param page - The page to fetch
  * @param per_page - The number of jobs to fetch per page
  * @param states - The states to filter jobs by
- * @returns A page of job search results
  */
-export function useFindJobs(
+export function jobsQueryOptions(
 	page: number,
 	per_page: number,
 	states: JobState[],
 ) {
-	return useQuery({
+	return queryOptions({
 		queryKey: jobQueryKeys.list([page, per_page, ...states]),
 		queryFn: () => findJobs({ data: { page, perPage: per_page, states } }),
-		placeholderData: keepPreviousData,
 		select: JobSearchResultSchema.parse,
 	});
+}
+
+/**
+ * Fetch a page of job search results, suspending until it resolves.
+ *
+ * `data` is always defined, and a failed request throws to the nearest route
+ * error boundary instead of resolving to `undefined`. Use this from components
+ * rendered under the job list route, whose loader prefetches the page —
+ * loading and errors are handled by the route's Suspense and `errorComponent`
+ * rather than inline.
+ */
+export function useSuspenseJobs(
+	page: number,
+	per_page: number,
+	states: JobState[],
+) {
+	return useSuspenseQuery(jobsQueryOptions(page, per_page, states));
 }
 
 /**

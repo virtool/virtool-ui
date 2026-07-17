@@ -9,16 +9,14 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from "@base/Empty";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
-import QueryError from "@base/QueryError";
 import RebuildAlert from "@indexes/components/RebuildAlert";
-import { useListOtus } from "@otus/queries";
+import { useSuspenseOtus } from "@otus/queries";
 import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
 } from "@references/hooks";
-import { useFetchReference } from "@references/queries";
+import { useSuspenseReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
 import { Inbox, SearchX } from "lucide-react";
 import { useState } from "react";
@@ -43,29 +41,13 @@ type OtuListProps = {
 export default function OtuList({ find, page, setSearch }: OtuListProps) {
 	const { refId } = routeApi.useParams();
 	const [openCreate, setOpenCreate] = useState(false);
-	const {
-		data: reference,
-		isPending: isPendingReference,
-		isError: isErrorReference,
-	} = useFetchReference(refId);
-	const {
-		data: otus,
-		isPending: isPendingOtus,
-		isError: isErrorOtus,
-	} = useListOtus(refId, page, 25, find);
+	const { data: reference } = useSuspenseReference(refId);
+	const { data: otus } = useSuspenseOtus(refId, page, 25, find);
 	const { hasPermission: canModifyOtu } = useCheckReferenceRight(
 		refId,
 		"modify_otu",
 	);
 	const archived = useReferenceIsArchived(refId);
-
-	if ((isErrorReference || isErrorOtus) && (!reference || !otus)) {
-		return <QueryError noun="OTUs" />;
-	}
-
-	if (isPendingOtus || isPendingReference) {
-		return <LoadingPlaceholder />;
-	}
 
 	const { items, page: storedPage, page_count } = otus;
 

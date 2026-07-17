@@ -1,6 +1,12 @@
 import { apiClient } from "@app/api";
 import { indexQueryKeys } from "@indexes/keys";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+	queryOptions,
+	useMutation,
+	useQuery,
+	useQueryClient,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
 import type {
 	Index,
@@ -10,21 +16,20 @@ import type {
 } from "./types";
 
 /**
- * Gets a paginated list of indexes.
+ * Query options for a paginated list of indexes.
  *
  * @param page - The page to fetch
- * @param per_page - The number of hmms to fetch per page
+ * @param per_page - The number of indexes to fetch per page
  * @param refId - The reference id to fetch the indexes of
  * @param term - The search term to filter indexes by
- * @returns The paginated list of indexes
  */
-export function useFindIndexes(
+export function indexesQueryOptions(
 	page: number,
 	per_page: number,
 	refId: string,
 	term?: string,
 ) {
-	return useQuery<IndexSearchResult>({
+	return queryOptions<IndexSearchResult, ErrorResponse>({
 		queryKey: indexQueryKeys.list([page, per_page, refId, term]),
 		queryFn: () =>
 			apiClient
@@ -35,6 +40,45 @@ export function useFindIndexes(
 					return { ...rest, items: documents };
 				}),
 	});
+}
+
+/**
+ * Gets a paginated list of indexes.
+ *
+ * For secondary data — the unbuilt-changes alert beside a list. Primary list
+ * data uses {@link useSuspenseIndexes}.
+ *
+ * @param page - The page to fetch
+ * @param per_page - The number of indexes to fetch per page
+ * @param refId - The reference id to fetch the indexes of
+ * @param term - The search term to filter indexes by
+ * @returns The paginated list of indexes
+ */
+export function useFindIndexes(
+	page: number,
+	per_page: number,
+	refId: string,
+	term?: string,
+) {
+	return useQuery(indexesQueryOptions(page, per_page, refId, term));
+}
+
+/**
+ * Fetch a paginated list of indexes, suspending until it resolves.
+ *
+ * `data` is always defined, and a failed request throws to the nearest route
+ * error boundary instead of resolving to `undefined`. Use this from components
+ * rendered under the index list route, whose loader prefetches the page —
+ * loading and errors are handled by the route's Suspense and `errorComponent`
+ * rather than inline.
+ */
+export function useSuspenseIndexes(
+	page: number,
+	per_page: number,
+	refId: string,
+	term?: string,
+) {
+	return useSuspenseQuery(indexesQueryOptions(page, per_page, refId, term));
 }
 
 type ListIndexesOptions = {

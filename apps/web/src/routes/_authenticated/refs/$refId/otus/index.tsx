@@ -20,6 +20,15 @@ function validateOtuListSearch(
 
 export const Route = createFileRoute("/_authenticated/refs/$refId/otus/")({
 	validateSearch: validateOtuListSearch,
+	loaderDeps: ({ search: { find, page } }) => ({ find, page }),
+	loader: async ({
+		context: { queryClient },
+		params: { refId },
+		deps: { find, page },
+	}) => {
+		const { otusQueryOptions } = await import("@otus/queries");
+		await queryClient.ensureQueryData(otusQueryOptions(refId, page, 25, find));
+	},
 	component: OtusRoute,
 });
 

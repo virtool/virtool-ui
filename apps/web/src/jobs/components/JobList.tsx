@@ -2,13 +2,11 @@ import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
-import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { Cog, SearchX } from "lucide-react";
-import { useFindJobs } from "../queries";
+import { useSuspenseJobs } from "../queries";
 import type { JobState } from "../types";
 import { JobFilters } from "./Filters/JobFilters";
 import JobItem from "./JobItem";
@@ -26,15 +24,7 @@ export default function JobsList({
 	setSearch = () => {},
 	states = initialState,
 }: JobsListProps) {
-	const { data, isPending, isError } = useFindJobs(page, 25, states);
-
-	if (isError && !data) {
-		return <QueryError noun="jobs" />;
-	}
-
-	if (isPending) {
-		return <LoadingPlaceholder />;
-	}
+	const { data } = useSuspenseJobs(page, 25, states);
 
 	const {
 		items,

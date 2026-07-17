@@ -1,14 +1,12 @@
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
-import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { Boxes, SearchX } from "lucide-react";
-import { useListHmms } from "../queries";
+import { useSuspenseHmms } from "../queries";
 import { HmmInstall } from "./HmmInstall";
 import HmmItem from "./HmmItem";
 import HmmToolbar from "./HmmToolbar";
@@ -16,22 +14,17 @@ import HmmToolbar from "./HmmToolbar";
 type HmmListProps = {
 	find: string;
 	page: number;
-	setSearch: (next: { find?: string; page?: number }) => void;
+	setSearch: (
+		next: { find?: string; page?: number },
+		options?: { replace?: boolean },
+	) => void;
 };
 
 /**
  * A list of HMMs with filtering options
  */
 export default function HmmList({ find, page, setSearch }: HmmListProps) {
-	const { data, isPending, isError } = useListHmms(page, 25, find);
-
-	if (isError && !data) {
-		return <QueryError noun="HMMs" />;
-	}
-
-	if (isPending) {
-		return <LoadingPlaceholder />;
-	}
+	const { data } = useSuspenseHmms(page, 25, find);
 
 	const {
 		items,
@@ -57,7 +50,7 @@ export default function HmmList({ find, page, setSearch }: HmmListProps) {
 				<>
 					<HmmToolbar
 						term={find}
-						onChange={(e) => setSearch({ find: e.target.value })}
+						setTerm={(find) => setSearch({ find, page: 1 }, { replace: true })}
 					/>
 					{items.length ? (
 						<Pagination
@@ -92,7 +85,7 @@ export default function HmmList({ find, page, setSearch }: HmmListProps) {
 					)}
 				</>
 			) : (
-				<HmmInstall />
+				<HmmInstall status={status} />
 			)}
 		</div>
 	);

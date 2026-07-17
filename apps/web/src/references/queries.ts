@@ -3,7 +3,6 @@ import type { Settings } from "@administration/types";
 import { apiClient } from "@app/api";
 import { referenceQueryKeys } from "@references/keys";
 import {
-	keepPreviousData,
 	queryOptions,
 	useMutation,
 	useQuery,
@@ -87,21 +86,20 @@ function removeReferenceGroup(
 }
 
 /**
- * Gets a paginated list of references
+ * Query options for a paginated list of references.
  *
  * @param page - The page to fetch
  * @param per_page - The number of references to fetch per page
  * @param term - The search term to filter references by
  * @param archived - Lifecycle filter; `true` for archived only, `false` for active only
- * @returns The paginated list of references
  */
-export function useFindReferences(
+export function referencesQueryOptions(
 	page: number,
 	per_page: number,
 	term: string,
 	archived?: boolean,
 ) {
-	return useQuery<ReferenceSearchResult>({
+	return queryOptions<ReferenceSearchResult, ErrorResponse>({
 		queryKey: referenceQueryKeys.list([page, per_page, term, archived]),
 		queryFn: () =>
 			apiClient
@@ -111,8 +109,27 @@ export function useFindReferences(
 					const { documents, ...rest } = response.body;
 					return { ...rest, items: documents };
 				}),
-		placeholderData: keepPreviousData,
 	});
+}
+
+/**
+ * Fetch a paginated list of references, suspending until it resolves.
+ *
+ * `data` is always defined, and a failed request throws to the nearest route
+ * error boundary instead of resolving to `undefined`. Use this from components
+ * rendered under the reference list route, whose loader prefetches the page —
+ * loading and errors are handled by the route's Suspense and `errorComponent`
+ * rather than inline.
+ */
+export function useSuspenseReferences(
+	page: number,
+	per_page: number,
+	term: string,
+	archived?: boolean,
+) {
+	return useSuspenseQuery(
+		referencesQueryOptions(page, per_page, term, archived),
+	);
 }
 
 /**

@@ -7,9 +7,7 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from "@base/Empty";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import Pagination from "@base/Pagination";
-import QueryError from "@base/QueryError";
 import Toolbar from "@base/Toolbar";
 import {
 	useCheckReferenceRight,
@@ -17,7 +15,7 @@ import {
 } from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
 import { Inbox } from "lucide-react";
-import { useFindIndexes } from "../queries";
+import { useSuspenseIndexes } from "../queries";
 import { IndexItem } from "./Item/IndexItem";
 import RebuildIndex from "./RebuildIndex";
 
@@ -33,17 +31,9 @@ type IndexesProps = {
  */
 export default function Indexes({ page, setSearch }: IndexesProps) {
 	const { refId } = routeApi.useParams();
-	const { data, isPending, isError } = useFindIndexes(page, 25, refId);
+	const { data } = useSuspenseIndexes(page, 25, refId);
 	const { hasPermission: canBuild } = useCheckReferenceRight(refId, "build");
 	const archived = useReferenceIsArchived(refId);
-
-	if (isError && !data) {
-		return <QueryError noun="indexes" />;
-	}
-
-	if (isPending) {
-		return <LoadingPlaceholder />;
-	}
 
 	const { items, change_count, page: storedPage, page_count } = data;
 
