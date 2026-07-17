@@ -17,6 +17,8 @@ type SelectButtonProps = {
 	"aria-label"?: string;
 	/** Marks the trigger invalid, turning its border and focus ring red */
 	"aria-invalid"?: AriaAttributes["aria-invalid"];
+	/** `id` of the element describing the trigger, e.g. an error message. */
+	"aria-describedby"?: string;
 };
 
 export default function SelectButton({
@@ -26,11 +28,13 @@ export default function SelectButton({
 	id,
 	"aria-label": ariaLabel,
 	"aria-invalid": ariaInvalid,
+	"aria-describedby": ariaDescribedby,
 }: SelectButtonProps) {
 	return (
 		<SelectPrimitive.Trigger
 			aria-invalid={ariaInvalid}
 			aria-label={ariaLabel}
+			aria-describedby={ariaDescribedby}
 			className={cn(
 				"flex justify-between items-center px-2.5 bg-white border rounded font-medium capitalize [&_svg]:ml-1",
 				inputHeightClass,

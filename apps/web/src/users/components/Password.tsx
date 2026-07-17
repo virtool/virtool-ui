@@ -71,9 +71,18 @@ export default function Password({
 								id="password"
 								type="password"
 								autoComplete="new-password-for-other-user"
+								aria-required
+								aria-invalid={
+									Boolean(errors.password) || mutation.isError || undefined
+								}
+								aria-describedby={
+									errors.password || mutation.isError
+										? "password-error"
+										: undefined
+								}
 								{...register("password", passwordRules)}
 							/>
-							<InputError>
+							<InputError id="password-error">
 								{errors.password?.message ||
 									(mutation.isError && mutation.error.message)}
 							</InputError>

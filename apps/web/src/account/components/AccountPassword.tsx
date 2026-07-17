@@ -69,6 +69,15 @@ export default function AccountPassword({
 							<InputPassword
 								id="oldPassword"
 								autoComplete="current-password"
+								aria-required
+								aria-invalid={
+									Boolean(errors.oldPassword) || mutation.isError || undefined
+								}
+								aria-describedby={
+									errors.oldPassword || mutation.isError
+										? "oldPassword-error"
+										: undefined
+								}
 								{...register("oldPassword", {
 									// No length rule. This authenticates the password the user
 									// already has, and if the minimum were raised, checking it
@@ -77,7 +86,7 @@ export default function AccountPassword({
 									required: "Please provide your old password",
 								})}
 							/>
-							<InputError>
+							<InputError id="oldPassword-error">
 								{errors.oldPassword?.message ||
 									(mutation.isError && mutation.error.response.body?.message)}
 							</InputError>
@@ -89,9 +98,16 @@ export default function AccountPassword({
 							<InputPassword
 								id="newPassword"
 								autoComplete="new-password"
+								aria-required
+								aria-invalid={Boolean(errors.newPassword) || undefined}
+								aria-describedby={
+									errors.newPassword ? "newPassword-error" : undefined
+								}
 								{...register("newPassword", passwordRules)}
 							/>
-							<InputError>{errors.newPassword?.message}</InputError>
+							<InputError id="newPassword-error">
+								{errors.newPassword?.message}
+							</InputError>
 						</InputContainer>
 					</InputGroup>
 					{mutation.isSuccess && (

@@ -54,10 +54,15 @@ export default function ResetForm({ redirect, resetCode }: ResetFormProps) {
 						id="password"
 						type="password"
 						autoComplete="new-password"
+						aria-required
+						aria-invalid={Boolean(errors.password) || undefined}
+						aria-describedby={errors.password ? "password-error" : undefined}
 						{...register("password", passwordRules)}
 					/>
 					{errors.password?.message && (
-						<InputError>{errors.password.message}</InputError>
+						<InputError id="password-error">
+							{errors.password.message}
+						</InputError>
 					)}
 					{isError && (
 						<InputError>

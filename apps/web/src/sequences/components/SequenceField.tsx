@@ -23,6 +23,9 @@ export default function SequenceField() {
 			<TextArea
 				className="font-mono uppercase"
 				id="sequence"
+				aria-required
+				aria-invalid={Boolean(errors.sequence) || undefined}
+				aria-describedby={errors.sequence ? "sequence-error" : undefined}
 				{...register("sequence", {
 					required: "Required Field",
 					pattern: {
@@ -31,7 +34,7 @@ export default function SequenceField() {
 					},
 				})}
 			/>
-			<InputError>{errors.sequence?.message}</InputError>
+			<InputError id="sequence-error">{errors.sequence?.message}</InputError>
 		</InputGroup>
 	);
 }

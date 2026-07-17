@@ -177,12 +177,13 @@ export default function CreateAnalysisForm({
 						selected={value}
 						onChange={onChange}
 						invalid={Boolean(errors.indexId)}
+						describedById={errors.indexId ? "indexId-error" : undefined}
 					/>
 				)}
 				rules={{ required: true }}
 			/>
 
-			<InputError className="mb-0">
+			<InputError id="indexId-error" className="mb-0">
 				{errors.indexId && "A reference must be selected"}
 			</InputError>
 

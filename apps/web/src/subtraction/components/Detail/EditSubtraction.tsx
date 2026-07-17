@@ -56,11 +56,14 @@ export default function EditSubtraction({ subtraction }: EditSubtractionProps) {
 						<InputLabel htmlFor="name">Name</InputLabel>
 						<InputSimple
 							id="name"
+							aria-required
+							aria-invalid={Boolean(errors.name) || undefined}
+							aria-describedby={errors.name ? "name-error" : undefined}
 							{...register("name", {
 								required: "A name must be provided",
 							})}
 						/>
-						<InputError>{errors.name?.message}</InputError>
+						<InputError id="name-error">{errors.name?.message}</InputError>
 					</InputGroup>
 					<InputGroup>
 						<InputLabel htmlFor="nickname">Nickname</InputLabel>

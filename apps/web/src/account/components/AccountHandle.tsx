@@ -48,11 +48,18 @@ export default function AccountHandle({ handle }: HandleProps) {
 						<InputSimple
 							id="handle"
 							autoComplete="off"
+							aria-required
+							aria-invalid={
+								Boolean(errors.handle) || mutation.isError || undefined
+							}
+							aria-describedby={
+								errors.handle || mutation.isError ? "handle-error" : undefined
+							}
 							{...register("handle", {
 								required: "Please specify a username",
 							})}
 						/>
-						<InputError>
+						<InputError id="handle-error">
 							{errors.handle?.message ||
 								(mutation.isError ? mutation.error.message : "")}
 						</InputError>

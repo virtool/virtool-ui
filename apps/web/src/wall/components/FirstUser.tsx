@@ -50,8 +50,18 @@ export default function FirstUser() {
 						aria-label="username"
 						id="username"
 						autoComplete="username"
-						{...register("username", { required: true })}
+						aria-required
+						aria-invalid={Boolean(errors.username) || undefined}
+						aria-describedby={errors.username ? "username-error" : undefined}
+						{...register("username", {
+							required: "Please provide a username",
+						})}
 					/>
+					{errors.username?.message && (
+						<InputError id="username-error">
+							{errors.username.message}
+						</InputError>
+					)}
 				</InputGroup>
 				<InputGroup>
 					<InputLabel htmlFor="password">Password</InputLabel>
@@ -60,10 +70,15 @@ export default function FirstUser() {
 						id="password"
 						type="password"
 						autoComplete="new-password"
+						aria-required
+						aria-invalid={Boolean(errors.password) || undefined}
+						aria-describedby={errors.password ? "password-error" : undefined}
 						{...register("password", passwordRules)}
 					/>
 					{errors.password?.message && (
-						<InputError>{errors.password.message}</InputError>
+						<InputError id="password-error">
+							{errors.password.message}
+						</InputError>
 					)}
 				</InputGroup>
 

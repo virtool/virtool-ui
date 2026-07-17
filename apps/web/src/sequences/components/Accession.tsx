@@ -48,6 +48,11 @@ export default function Accession() {
 			<InputContainer align="right">
 				<InputSimple
 					id="accession"
+					aria-required
+					aria-invalid={notFound || Boolean(errors.accession) || undefined}
+					aria-describedby={
+						notFound || errors.accession ? "accession-error" : undefined
+					}
 					{...register("accession", {
 						required: "Required Field",
 						onChange: () => {
@@ -67,7 +72,7 @@ export default function Accession() {
 					/>
 				)}
 			</InputContainer>
-			<InputError>
+			<InputError id="accession-error">
 				{notFound ? "Accession not found" : errors.accession?.message}
 			</InputError>
 		</InputGroup>

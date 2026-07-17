@@ -69,6 +69,9 @@ export default function SegmentForm({
 					<InputLabel htmlFor="name">Name</InputLabel>
 					<InputSimple
 						id="name"
+						aria-required
+						aria-invalid={Boolean(errors.segmentName) || undefined}
+						aria-describedby={errors.segmentName ? "name-error" : undefined}
 						{...register("segmentName", {
 							required: "Name required",
 							validate: (value) =>
@@ -78,7 +81,7 @@ export default function SegmentForm({
 								"Segment names must be unique. This name is currently in use.",
 						})}
 					/>
-					<InputError>{errors.segmentName?.message}</InputError>
+					<InputError id="name-error">{errors.segmentName?.message}</InputError>
 				</InputGroup>
 
 				<InputGroup>

@@ -62,13 +62,18 @@ export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
 						<InputLabel htmlFor="SourceType">Add Source Type</InputLabel>
 						<Toolbar>
 							<div className="flex-grow">
-								<InputSimple id="SourceType" {...register("sourceType")} />
+								<InputSimple
+									id="SourceType"
+									aria-invalid={Boolean(error) || undefined}
+									aria-describedby={error ? "SourceType-error" : undefined}
+									{...register("sourceType")}
+								/>
 							</div>
 							<Button color="green" type="submit">
 								Add
 							</Button>
 						</Toolbar>
-						<InputError>{error}</InputError>
+						<InputError id="SourceType-error">{error}</InputError>
 					</form>
 				</BoxGroupSection>
 			</BoxGroup>

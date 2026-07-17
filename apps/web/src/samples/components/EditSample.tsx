@@ -63,8 +63,14 @@ export default function EditSample({
 				>
 					<InputGroup>
 						<InputLabel htmlFor="name">Name</InputLabel>
-						<InputSimple id="name" {...register("name")} />
-						<InputError>
+						<InputSimple
+							id="name"
+							aria-required
+							aria-invalid={mutation.isError || undefined}
+							aria-describedby={mutation.isError ? "name-error" : undefined}
+							{...register("name")}
+						/>
+						<InputError id="name-error">
 							{mutation.isError &&
 								(mutation.error.response.body.message || "Required Field")}
 						</InputError>

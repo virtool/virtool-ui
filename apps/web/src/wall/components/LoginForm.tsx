@@ -4,6 +4,7 @@ import InputGroup from "@base/InputGroup";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import { useNavigate } from "@tanstack/react-router";
+import { CircleAlert } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useLoginMutation } from "../queries";
 import { WallTitle } from "./WallTitle";
@@ -48,6 +49,9 @@ export default function LoginForm({ redirect, setResetCode }: LoginFormProps) {
 					<InputSimple
 						id="handle"
 						autoComplete="username"
+						aria-required
+						aria-invalid={isError || undefined}
+						aria-describedby={isError ? "login-error" : undefined}
 						{...register("handle", { required: true })}
 						autoFocus
 					/>
@@ -58,6 +62,9 @@ export default function LoginForm({ redirect, setResetCode }: LoginFormProps) {
 						id="password"
 						type="password"
 						autoComplete="current-password"
+						aria-required
+						aria-invalid={isError || undefined}
+						aria-describedby={isError ? "login-error" : undefined}
 						{...register("password", { required: true })}
 					/>
 				</InputGroup>
@@ -75,7 +82,12 @@ export default function LoginForm({ redirect, setResetCode }: LoginFormProps) {
 						)}
 					/>
 					{isError && (
-						<div className="flex text-red-500">
+						<div
+							id="login-error"
+							role="alert"
+							className="flex items-center gap-1 text-red-600 font-medium"
+						>
+							<CircleAlert aria-hidden className="shrink-0" size={14} />
 							{error?.message || "An error occurred during login"}
 						</div>
 					)}

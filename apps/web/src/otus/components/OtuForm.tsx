@@ -44,9 +44,14 @@ export default function OtuForm({
 					<InputLabel htmlFor="name">Name</InputLabel>
 					<InputSimple
 						id="name"
+						aria-required
+						aria-invalid={Boolean(errors.name) || Boolean(error) || undefined}
+						aria-describedby={errors.name || error ? "name-error" : undefined}
 						{...register("name", { required: "Name required" })}
 					/>
-					<InputError>{errors.name?.message || error}</InputError>
+					<InputError id="name-error">
+						{errors.name?.message || error}
+					</InputError>
 				</InputGroup>
 
 				<InputGroup>
