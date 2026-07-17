@@ -8,19 +8,22 @@ import ProgressCircle from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
 import { useFetchJob } from "@jobs/queries";
 import { Equal, EqualNot } from "lucide-react";
+import type { ElementType } from "react";
 import { useRemoveAnalysis } from "../queries";
 import type { AnalysisMinimal } from "../types";
 import { checkSupportedWorkflow } from "../utils";
 import { AnalysisItemRightIcon } from "./AnalysisItemRightIcon";
 
 type AnalysisItemProps = {
+	/** The element or component to render as the root (e.g. `"li"` in a list) */
+	as?: ElementType;
 	analysis: AnalysisMinimal;
 };
 
 /**
  * Condensed analysis item for use in a list of analyses
  */
-export default function AnalysisItem({ analysis }: AnalysisItemProps) {
+export default function AnalysisItem({ as, analysis }: AnalysisItemProps) {
 	const {
 		id,
 		workflow,
@@ -56,7 +59,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 	);
 
 	return (
-		<Box className="text-gray-600 mb-2.5">
+		<Box as={as} className="text-gray-600 mb-2.5">
 			<div className="grid grid-cols-5 items-center text-base font-medium [&_a]:font-medium">
 				<div className="col-span-2">{title}</div>
 				<Attribution

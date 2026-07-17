@@ -37,13 +37,14 @@ export default function ReferenceManager() {
 					<h2>General</h2>
 				</BoxGroupHeader>
 				<BoxGroupTable className="[&_th]:w-45 [&_tr:not(:first-of-type)_td]:capitalize">
+					<caption className="sr-only">Reference general information</caption>
 					<tbody>
 						<tr>
-							<th>Description</th>
+							<th scope="row">Description</th>
 							<td>{description}</td>
 						</tr>
 						<tr>
-							<th>Organism</th>
+							<th scope="row">Organism</th>
 							<td>{organism}</td>
 						</tr>
 					</tbody>

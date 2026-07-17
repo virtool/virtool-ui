@@ -62,9 +62,9 @@ export default function JobsList({
 							pageCount={pageCount}
 							onPageChange={(page) => setSearch({ page })}
 						>
-							<BoxGroup>
+							<BoxGroup as="ul">
 								{items.map((item) => (
-									<JobItem key={item.id} {...item} />
+									<JobItem key={item.id} as="li" {...item} />
 								))}
 							</BoxGroup>
 						</Pagination>

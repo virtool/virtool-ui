@@ -1,8 +1,9 @@
 import { cn } from "@app/cn";
-import type { AriaRole, ReactNode } from "react";
+import type { AriaRole, ElementType, ReactNode } from "react";
 import Box from "./Box";
 
 type BoxGroupProps = {
+	as?: ElementType;
 	children: ReactNode;
 	className?: string;
 	id?: string;

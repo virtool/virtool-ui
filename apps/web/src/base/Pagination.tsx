@@ -1,6 +1,6 @@
 import { cn } from "@app/cn";
 import { range } from "es-toolkit/math";
-import { type ReactElement, type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect } from "react";
 import PaginationContent from "./PaginationContent";
 import PaginationLink from "./PaginationLink";
 import PaginationNext from "./PaginationNext";
@@ -23,10 +23,7 @@ function getPageRange(
 
 type PaginationProps = {
 	children?: ReactNode;
-	/** Rendered above the rows, inside the element `rowsClassName` styles */
-	header?: ReactNode;
 	items: object[];
-	renderRow?: (item: object) => ReactElement;
 	storedPage: number;
 	currentPage: number;
 	pageCount: number;
@@ -38,11 +35,8 @@ type PaginationProps = {
 export default function Pagination({
 	children,
 	currentPage,
-	header,
-	items,
 	onPageChange = () => {},
 	pageCount,
-	renderRow,
 	rowsClassName,
 	storedPage,
 }: PaginationProps) {
@@ -51,8 +45,6 @@ export default function Pagination({
 			onPageChange(pageCount);
 		}
 	}, [currentPage, onPageChange, pageCount]);
-
-	const entries = renderRow && items.map((item) => renderRow(item));
 
 	const pageButtons = getPageRange(pageCount, storedPage).map((pageNumber) => (
 		<PaginationLink
@@ -68,11 +60,7 @@ export default function Pagination({
 
 	return (
 		<div>
-			<div className={cn("pb-1.5", rowsClassName)}>
-				{header}
-				{entries}
-				{children}
-			</div>
+			<div className={cn("pb-1.5", rowsClassName)}>{children}</div>
 			{pageCount > 1 && (
 				<PaginationRoot>
 					<PaginationContent>

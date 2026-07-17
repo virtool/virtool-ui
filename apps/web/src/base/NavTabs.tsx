@@ -12,6 +12,7 @@ type NavTabsProps = {
 export default function NavTabs({ children, className }: NavTabsProps) {
 	return (
 		<nav
+			aria-label="Tabs"
 			className={cn(
 				"border-b",
 				"border-gray-300",

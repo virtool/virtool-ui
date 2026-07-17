@@ -41,9 +41,9 @@ export default function UsersList({
 			pageCount={page_count}
 			onPageChange={setPage}
 		>
-			<BoxGroup>
+			<BoxGroup as="ul">
 				{items.map((item: User) => (
-					<UserItem key={item.id} {...item} />
+					<UserItem key={item.id} as="li" {...item} />
 				))}
 			</BoxGroup>
 		</Pagination>

@@ -40,10 +40,11 @@ export default function NuvsExportPreview({ mode }: NuVsExportPreviewProps) {
 
 			<h3>Header Fields</h3>
 			<Table>
+				<caption className="sr-only">Export header fields</caption>
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Example</th>
+						<th scope="col">Name</th>
+						<th scope="col">Example</th>
 					</tr>
 				</thead>
 				<tbody>

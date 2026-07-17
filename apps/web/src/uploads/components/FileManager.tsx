@@ -164,24 +164,27 @@ export function FileManager({
 								selectedCount={selection.selected.length}
 							/>
 						)}
-						{files.items.map((item) => (
-							<UploadItem
-								{...item}
-								action={renderItemAction?.(item, files.items)}
-								canDelete={canDelete}
-								checked={selection.isSelected(item)}
-								key={item.id}
-								onSelect={
-									canDelete
-										? (event: MouseEvent<HTMLButtonElement>) =>
-												selection.select(item, {
-													shiftKey: event.shiftKey,
-													visibleItems: files.items,
-												})
-										: undefined
-								}
-							/>
-						))}
+						<ul className="list-none">
+							{files.items.map((item) => (
+								<UploadItem
+									{...item}
+									as="li"
+									action={renderItemAction?.(item, files.items)}
+									canDelete={canDelete}
+									checked={selection.isSelected(item)}
+									key={item.id}
+									onSelect={
+										canDelete
+											? (event: MouseEvent<HTMLButtonElement>) =>
+													selection.select(item, {
+														shiftKey: event.shiftKey,
+														visibleItems: files.items,
+													})
+											: undefined
+									}
+								/>
+							))}
+						</ul>
 					</BoxGroup>
 				</Pagination>
 			)}

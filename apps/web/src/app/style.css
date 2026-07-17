@@ -19,6 +19,7 @@
 	   selects and menus opened inside a dialog stay visible. */
 	--z-overlay: 30; /* dialog backdrop */
 	--z-nav: 40; /* app header/nav — above the backdrop, below dialogs */
+	--z-skip-link: 45; /* focus-only skip link — above the app header, below dialogs */
 	--z-dialog: 50; /* dialog content */
 	--z-dropdown: 60; /* dropdown menus, selects, comboboxes */
 	--z-popover: 70; /* tooltips and popovers — above dialog content */
@@ -39,6 +40,10 @@ html {
 
 @utility z-nav {
 	z-index: var(--z-nav);
+}
+
+@utility z-skip-link {
+	z-index: var(--z-skip-link);
 }
 
 @utility z-dialog {

@@ -23,8 +23,17 @@ describe("<ReferenceManager />", () => {
 		await renderRoute(path);
 
 		expect(await screen.findByText("General")).toBeInTheDocument();
-		expect(screen.getByText("Description")).toBeInTheDocument();
-		expect(screen.getByText("Organism")).toBeInTheDocument();
+
+		// The general table is captioned and its row labels are row headers.
+		expect(
+			screen.getByRole("table", { name: "Reference general information" }),
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole("rowheader", { name: "Description" }),
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole("rowheader", { name: "Organism" }),
+		).toBeInTheDocument();
 		expect(screen.getByText("Latest Index Build")).toBeInTheDocument();
 		expect(screen.getByText("No index builds found")).toBeInTheDocument();
 		expect(screen.getByText("Contributors")).toBeInTheDocument();

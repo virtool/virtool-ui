@@ -48,10 +48,11 @@ export default function Indexes({ page, setSearch }: IndexesProps) {
 					pageCount={page_count}
 					onPageChange={(page) => setSearch({ page })}
 				>
-					<BoxGroup>
+					<BoxGroup as="ul">
 						{items.map((item) => (
 							<IndexItem
 								key={item.id}
+								as="li"
 								index={item}
 								refId={refId}
 								activeId={

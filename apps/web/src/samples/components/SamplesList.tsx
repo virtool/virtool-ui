@@ -179,6 +179,7 @@ export default function SamplesList({
 		return (
 			<SampleItem
 				key={item.id}
+				as="li"
 				sample={item}
 				checked={selection.isSelected(item)}
 				handleSelect={handleSelect}
@@ -243,27 +244,28 @@ export default function SamplesList({
 						items={items}
 						storedPage={page}
 						currentPage={urlPage}
-						header={
-							<SampleListHeader
-								checked={selection.getVisibleState(items)}
-								found={found_count}
-								labels={labels}
-								onLabelsUpdated={handleLabelsUpdated}
-								onSelectAll={() => selection.toggleVisible(items)}
-								onQuickAnalyze={() =>
-									openQuickAnalyzeFor({
-										fromSelection: true,
-										samples: selectedSamples,
-									})
-								}
-								selectedSamples={selectedSamples}
-							/>
-						}
-						renderRow={renderRow}
 						pageCount={page_count}
 						onPageChange={(page) => setSearch({ page })}
 						rowsClassName="pb-0 rounded-sm border-1 border-gray-300 overflow-hidden [&>*:not(:first-child)]:border-t-1 [&>*:not(:first-child)]:border-gray-300"
-					/>
+					>
+						<SampleListHeader
+							checked={selection.getVisibleState(items)}
+							found={found_count}
+							labels={labels}
+							onLabelsUpdated={handleLabelsUpdated}
+							onSelectAll={() => selection.toggleVisible(items)}
+							onQuickAnalyze={() =>
+								openQuickAnalyzeFor({
+									fromSelection: true,
+									samples: selectedSamples,
+								})
+							}
+							selectedSamples={selectedSamples}
+						/>
+						<ul className="list-none [&>li:not(:first-child)]:border-t-1 [&>li:not(:first-child)]:border-gray-300">
+							{items.map(renderRow)}
+						</ul>
+					</Pagination>
 				)}
 			</ContainerNarrow>
 		</>

@@ -58,9 +58,9 @@ export default function SubtractionList({
 					pageCount={page_count}
 					onPageChange={(page) => setSearch({ page })}
 				>
-					<BoxGroup>
+					<BoxGroup as="ul">
 						{items.map((item) => (
-							<SubtractionItem key={item.id} {...item} />
+							<SubtractionItem key={item.id} as="li" {...item} />
 						))}
 					</BoxGroup>
 				</Pagination>
