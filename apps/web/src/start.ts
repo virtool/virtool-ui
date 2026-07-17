@@ -21,7 +21,9 @@ const cspDirectives = [
 	"frame-ancestors 'none'",
 	"font-src 'self'",
 	"img-src 'self' data:",
-	"connect-src 'self' *.sentry.io",
+	// No third-party Sentry host is allow-listed: browser envelopes are tunnelled
+	// through the same-origin `/monitoring` route (see `routes/monitoring.ts`).
+	"connect-src 'self'",
 	"style-src 'self' 'unsafe-inline'",
 	// Without this, `script-src` is the fallback and its nonce cannot be carried
 	// by a blob URL, so every blob-backed worker is blocked. Vite's HMR client
