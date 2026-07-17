@@ -42,13 +42,12 @@ export default function Indexes({ page, setSearch }: IndexesProps) {
 			)}
 			{items.length ? (
 				<Pagination
-					items={items}
 					storedPage={storedPage}
 					currentPage={page}
 					pageCount={page_count}
 					onPageChange={(page) => setSearch({ page })}
 				>
-					<BoxGroup>
+					<BoxGroup as="ul">
 						{items.map((item) => (
 							<IndexItem
 								key={item.id}

@@ -21,6 +21,7 @@ export default function OtuItem({
 }: OtuItemProps) {
 	return (
 		<BoxGroupSection
+			as="li"
 			className="grid items-center"
 			style={{ gridTemplateColumns: "5fr 2fr 1fr" }}
 		>

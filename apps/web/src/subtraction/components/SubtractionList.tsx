@@ -52,13 +52,12 @@ export default function SubtractionList({
 				/>
 			) : (
 				<Pagination
-					items={items}
 					storedPage={storedPage}
 					currentPage={page}
 					pageCount={page_count}
 					onPageChange={(page) => setSearch({ page })}
 				>
-					<BoxGroup>
+					<BoxGroup as="ul">
 						{items.map((item) => (
 							<SubtractionItem key={item.id} {...item} />
 						))}

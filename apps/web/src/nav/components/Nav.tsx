@@ -32,7 +32,10 @@ export default function Nav({ administrator_role, handle }: NavBarProps) {
 	}
 
 	return (
-		<nav className="bg-virtool flex h-13 items-center justify-between text-white">
+		<nav
+			aria-label="Primary"
+			className="bg-virtool flex h-13 items-center justify-between text-white"
+		>
 			<div className="flex gap-3 items-center">
 				<Logo className="mt-0 pl-10 pr-4" color="white" height={28} />
 				<NavLink to="/jobs" search={{ state: "running" }}>

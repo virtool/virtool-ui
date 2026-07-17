@@ -10,5 +10,7 @@ export default function SubviewHeaderTitle({
 	children,
 	className,
 }: SubviewHeaderTitleProps) {
-	return <div className={cn("text-2xl font-bold", className)}>{children}</div>;
+	return (
+		<h2 className={cn("text-2xl font-bold m-0", className)}>{children}</h2>
+	);
 }

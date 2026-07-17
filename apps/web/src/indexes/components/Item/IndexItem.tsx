@@ -22,7 +22,7 @@ type IndexItemProps = {
 
 export function IndexItem({ activeId, index, refId }: IndexItemProps) {
 	return (
-		<BoxGroupSection>
+		<BoxGroupSection as="li">
 			<h3 className="grid grid-cols-3 mb-2 text-lg">
 				<Link
 					className="font-medium"

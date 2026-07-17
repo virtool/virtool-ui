@@ -93,5 +93,13 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
 		);
 	}
 
-	return <div className="flex w-28 flex-col items-center">{links}</div>;
+	if (!links) {
+		return <div className="w-28" />;
+	}
+
+	return (
+		<nav aria-label="Section" className="flex w-28 flex-col items-center">
+			{links}
+		</nav>
+	);
 }

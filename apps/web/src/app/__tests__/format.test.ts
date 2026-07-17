@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
 	byteSize,
+	pluralize,
 	toGcContent,
 	toScientificNotation,
 	toThousand,
@@ -71,6 +72,21 @@ describe("toScientificNotation()", () => {
 
 	it("should not group the integer part of mid-range values", () => {
 		expect(toScientificNotation(1000)).toEqual("1000.000");
+	});
+});
+
+describe("pluralize()", () => {
+	it("should keep the singular noun when the count is one", () => {
+		expect(pluralize(1, "read position")).toEqual("1 read position");
+	});
+
+	it("should append 's' when the count is not one", () => {
+		expect(pluralize(3, "read position")).toEqual("3 read positions");
+		expect(pluralize(0, "nucleotide")).toEqual("0 nucleotides");
+	});
+
+	it("should use an explicit plural for irregular nouns", () => {
+		expect(pluralize(2, "index", "indices")).toEqual("2 indices");
 	});
 });
 

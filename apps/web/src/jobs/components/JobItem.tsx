@@ -6,8 +6,12 @@ import ProgressCircle from "@base/ProgressCircle";
 import JobStateIcon from "@jobs/components/JobStateIcon";
 import type { JobState, Workflow } from "@jobs/types";
 import type { UserNested } from "@users/types";
+import type { ElementType } from "react";
 
 export type JobItemProps = {
+	/** The element or component to render as the root (e.g. `"li"` in a list) */
+	as?: ElementType;
+
 	/** The job id */
 	id: number;
 
@@ -31,6 +35,7 @@ export type JobItemProps = {
  * A condensed job item for use in a list of jobs
  */
 export default function JobItem({
+	as,
 	id,
 	createdAt,
 	progress,
@@ -39,7 +44,7 @@ export default function JobItem({
 	workflow,
 }: JobItemProps) {
 	return (
-		<BoxGroupSection className="grid grid-cols-3 text-lg">
+		<BoxGroupSection as={as} className="grid grid-cols-3 text-lg">
 			<Link
 				className="col-span-1 font-medium"
 				to="/jobs/$jobId"

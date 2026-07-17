@@ -39,7 +39,7 @@ export default function NuvsBlast({ analysisId, hit }: NuVsBLASTProps) {
 
 			return (
 				<Box>
-					<h1 className="font-medium mt-1 mb-4">NCBI BLAST</h1>
+					<h4 className="font-medium mt-1 mb-4">NCBI BLAST</h4>
 					<p>No BLAST hits found.</p>
 				</Box>
 			);

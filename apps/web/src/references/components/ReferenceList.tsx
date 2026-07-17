@@ -75,13 +75,12 @@ export default function ReferenceList({
 					/>
 				) : (
 					<Pagination
-						items={items}
 						storedPage={storedPage}
 						currentPage={page}
 						pageCount={page_count}
 						onPageChange={(page) => setSearch({ page })}
 					>
-						<BoxGroup>
+						<BoxGroup as="ul">
 							{items.map((item) => (
 								<ReferenceItem
 									key={item.id}

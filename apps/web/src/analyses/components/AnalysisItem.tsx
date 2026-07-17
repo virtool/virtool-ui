@@ -56,7 +56,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 	);
 
 	return (
-		<Box className="text-gray-600 mb-2.5">
+		<Box as="li" className="text-gray-600 mb-2.5">
 			<div className="grid grid-cols-5 items-center text-base font-medium [&_a]:font-medium">
 				<div className="col-span-2">{title}</div>
 				<Attribution

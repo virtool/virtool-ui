@@ -29,7 +29,7 @@ export function UserItem({
 	);
 
 	return (
-		<BoxGroupSection className="grid grid-cols-4 items-center">
+		<BoxGroupSection as="li" className="grid grid-cols-4 items-center">
 			<div className="col-span-2 flex items-center gap-3">
 				<InitialIcon size="lg" handle={handle} />
 				{canEdit ? (

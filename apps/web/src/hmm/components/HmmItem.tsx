@@ -21,7 +21,7 @@ export default function HmmItem({ hmm }: HmmItemProps) {
 		.map((family) => <Label key={family}>{family}</Label>);
 
 	return (
-		<BoxGroupSection className="flex text-lg">
+		<BoxGroupSection as="li" className="flex text-lg">
 			<strong className="shrink-0 grow-0 basis-12 font-bold">
 				{hmm.cluster}
 			</strong>

@@ -38,7 +38,7 @@ export default function UploadItem({
 	const { mutate: handleRemove } = useDeleteFile();
 
 	return (
-		<BoxGroupSection>
+		<BoxGroupSection as="li">
 			<div className="flex items-center gap-4">
 				{onSelect && (
 					<Checkbox

@@ -19,7 +19,7 @@ export function SubtractionItem({
 	const { data: fetchedJob } = useFetchJob(job?.id ?? Number.NaN, job);
 
 	return (
-		<BoxGroupSection className="grid grid-cols-5 items-center">
+		<BoxGroupSection as="li" className="grid grid-cols-5 items-center">
 			<Link
 				className="col-span-2 text-lg font-medium"
 				to="/subtractions/$subtractionId"
