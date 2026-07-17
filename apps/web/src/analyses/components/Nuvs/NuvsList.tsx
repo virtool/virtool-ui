@@ -2,7 +2,7 @@ import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import NuvsDetail from "@analyses/components/Nuvs/NuvsDetail";
 import NuvsItem from "@analyses/components/Nuvs/NuvsItem";
 import { useKeyNavigation } from "@analyses/components/Viewer/hooks";
-import { useSortAndFilterNuVsHits } from "@analyses/hooks";
+import { useActiveHit, useSortAndFilterNuVsHits } from "@analyses/hooks";
 import type { FormattedNuvsAnalysis } from "@analyses/types";
 import Key from "@base/Key";
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -20,8 +20,8 @@ export default function NuvsList({ detail }: NuVsListProps) {
 	const sortedHits = useSortAndFilterNuVsHits(detail);
 	const { search, setSearch } = useAnalysisSearch();
 
-	const firstHitId = sortedHits[0]?.id ? String(sortedHits[0].id) : undefined;
-	const activeHit = search.activeHit ?? firstHitId;
+	const hit = useActiveHit(sortedHits);
+	const activeHit = hit ? String(hit.id) : undefined;
 
 	let nextId: string | undefined;
 	let nextIndex: number | undefined;

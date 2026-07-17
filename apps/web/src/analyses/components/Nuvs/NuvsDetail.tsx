@@ -1,4 +1,4 @@
-import { useGetActiveHit } from "@analyses/hooks";
+import { useActiveHit } from "@analyses/hooks";
 import type { FormattedNuvsHit, NuvsOrf as NuvsOrfType } from "@analyses/types";
 import { calculateAnnotatedOrfCount } from "@analyses/utils";
 import Badge from "@base/Badge";
@@ -45,7 +45,7 @@ export default function NuvsDetail({
 	matches,
 	maxSequenceLength,
 }: NuVsDetailProps) {
-	const hit = useGetActiveHit(matches);
+	const hit = useActiveHit(matches);
 
 	if (!hit) {
 		return <NuvsDetailContainer>No Hits</NuvsDetailContainer>;

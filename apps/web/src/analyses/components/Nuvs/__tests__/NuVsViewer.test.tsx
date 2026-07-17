@@ -46,6 +46,18 @@ describe("<NuvsViewer />", () => {
 	afterEach(() => nock.cleanAll());
 
 	describe("<NuVsDetail />", () => {
+		it("should default to the first hit when no active hit is set", async () => {
+			renderWithAnalysisSearch(<NuvsViewer {...props} />);
+
+			expect(
+				await screen.findByText(
+					"This sequence has no BLAST information attached to it.",
+				),
+			).toBeInTheDocument();
+			expect(screen.getByText("Families")).toBeInTheDocument();
+			expect(screen.queryByText("No Hits")).not.toBeInTheDocument();
+		});
+
 		it("should render correctly", async () => {
 			renderWithAnalysisSearch(<NuvsViewer {...props} />, {
 				activeHit: String(firstHit.id),
