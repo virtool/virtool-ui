@@ -1,36 +1,26 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
-import { useDebouncedDraft } from "@app/hooks";
-import InputSearch from "@base/InputSearch";
-import Toolbar from "@base/Toolbar";
+import SearchToolbar from "@base/SearchToolbar";
 import SubtractionCreate from "./SubtractionCreate";
 
 type SubtractionToolbarProps = {
-	/** Current search term used for filtering */
+	onChange: (term: string) => void;
 	term: string;
-
-	/** Update the search term in the url */
-	setTerm: (term: string) => void;
 };
 
 export default function SubtractionToolbar({
-	setTerm,
+	onChange,
 	term,
 }: SubtractionToolbarProps) {
 	const { hasPermission } = useCheckAdminRoleOrPermission("modify_subtraction");
 
-	const [draft, setDraft] = useDebouncedDraft(term, setTerm);
-
 	return (
-		<Toolbar>
-			<div className="flex-grow">
-				<InputSearch
-					aria-label="Search subtractions"
-					value={draft}
-					onChange={(e) => setDraft(e.target.value)}
-					placeholder="Name"
-				/>
-			</div>
+		<SearchToolbar
+			aria-label="Search subtractions"
+			onChange={onChange}
+			placeholder="Name"
+			value={term}
+		>
 			{hasPermission && <SubtractionCreate />}
-		</Toolbar>
+		</SearchToolbar>
 	);
 }

@@ -1,5 +1,11 @@
 import type { RefObject } from "react";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+	useSyncExternalStore,
+} from "react";
 
 function subscribeToTime(callback: () => void) {
 	const interval = setInterval(callback, 1000);
@@ -11,47 +17,56 @@ export function useNow() {
 }
 
 /**
- * Returns `value` delayed until it has been stable for `delayMs`.
- */
-export function useDebouncedValue<T>(value: T, delayMs = 250): T {
-	const [debounced, setDebounced] = useState(value);
-
-	useEffect(() => {
-		const id = setTimeout(() => setDebounced(value), delayMs);
-		return () => clearTimeout(id);
-	}, [value, delayMs]);
-
-	return debounced;
-}
-
-/**
  * Two-way binding for an input whose committed value lives in the parent (URL,
  * store, etc.). Returns a local `draft` for the input and a setter; commits
- * `draft` to `onChange` after it's been stable for `delayMs`, and resyncs
- * `draft` when `value` changes externally (e.g. back/forward navigation).
+ * `draft` to `onChange` after it's been stable for `delayMs`.
+ *
+ * A change to `value` from outside — back/forward navigation, a cleared filter —
+ * is authoritative: it replaces the draft and abandons any pending commit. That
+ * resync happens during render rather than in an effect so a stale draft can
+ * never reach the timer and undo the change that just arrived.
+ *
+ * The guard tracks the last `value` we synced from, not the value we last
+ * committed. Advancing a committed baseline locally would run ahead of an async
+ * `onChange` (URL navigation) whose echo lands a render later: the guard would
+ * read the still-stale `value`, treat it as an outside change, and blank the
+ * draft until the echo caught up.
  */
-export function useDebouncedDraft<T>(
+export function useDebounce<T>(
 	value: T,
 	onChange: (next: T) => void,
-	delayMs?: number,
+	delayMs = 250,
 ): [T, (next: T) => void] {
 	const [draft, setDraft] = useState(value);
-	const debouncedDraft = useDebouncedValue(draft, delayMs);
-	const lastSentRef = useRef(value);
+	const [prevValue, setPrevValue] = useState(value);
+
+	if (value !== prevValue) {
+		setPrevValue(value);
+		setDraft(value);
+	}
+
+	// Held in a ref so a parent re-render that only changes the callback's
+	// identity doesn't restart the delay out from under the typist. Synced in a
+	// layout effect, not a passive one, so a pending timer that fires in the
+	// commit-to-effect gap can't invoke a stale setter and navigate with an
+	// out-of-date search object.
+	const onChangeRef = useRef(onChange);
+
+	useLayoutEffect(() => {
+		onChangeRef.current = onChange;
+	});
 
 	useEffect(() => {
-		if (debouncedDraft !== value) {
-			lastSentRef.current = debouncedDraft;
-			onChange(debouncedDraft);
+		if (draft === value) {
+			return;
 		}
-	}, [debouncedDraft, onChange, value]);
 
-	useEffect(() => {
-		if (value !== lastSentRef.current) {
-			lastSentRef.current = value;
-			setDraft(value);
-		}
-	}, [value]);
+		const id = setTimeout(() => {
+			onChangeRef.current(draft);
+		}, delayMs);
+
+		return () => clearTimeout(id);
+	}, [delayMs, draft, value]);
 
 	return [draft, setDraft];
 }

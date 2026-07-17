@@ -208,10 +208,7 @@ export default function SamplesList({
 				<ViewHeader title="Samples">
 					<ViewHeaderTitle>Samples</ViewHeaderTitle>
 				</ViewHeader>
-				<SampleToolbar
-					term={term}
-					onChange={(e) => setSearch({ term: e.target.value })}
-				/>
+				<SampleToolbar term={term} onChange={(term) => setSearch({ term })} />
 				<FilterBar
 					labels={labels}
 					onClearLabels={() => setSearch({ labels: [] })}

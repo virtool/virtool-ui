@@ -1,11 +1,9 @@
 import { useCheckAdminRole } from "@administration/hooks";
-import { useDebouncedDraft } from "@app/hooks";
 import Alert from "@base/Alert";
-import InputSearch from "@base/InputSearch";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import SearchToolbar from "@base/SearchToolbar";
 import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
-import Toolbar from "@base/Toolbar";
 import { CircleAlert } from "lucide-react";
 import CreateUser from "./CreateUser";
 import UsersList from "./UsersList";
@@ -30,9 +28,6 @@ export function ManageUsers({
 	term = "",
 }: ManageUsersProps) {
 	const { hasPermission, isPending } = useCheckAdminRole("users");
-	const [draft, setDraft] = useDebouncedDraft(term, (term) =>
-		setSearch({ term, page: 1 }, { replace: true }),
-	);
 
 	if (isPending) {
 		return <LoadingPlaceholder />;
@@ -41,15 +36,12 @@ export function ManageUsers({
 	if (hasPermission) {
 		return (
 			<>
-				<Toolbar>
-					<div className="flex-grow">
-						<InputSearch
-							name="search"
-							aria-label="search"
-							value={draft}
-							onChange={(e) => setDraft(e.target.value)}
-						/>
-					</div>
+				<SearchToolbar
+					aria-label="Search users"
+					onChange={(term) => setSearch({ term, page: 1 }, { replace: true })}
+					placeholder="Username"
+					value={term}
+				>
 					<ToggleGroup
 						value={status}
 						onValueChange={(status) => setSearch({ status })}
@@ -58,7 +50,7 @@ export function ManageUsers({
 						<ToggleGroupItem value="deactivated">Deactivated</ToggleGroupItem>
 					</ToggleGroup>
 					<CreateUser />
-				</Toolbar>
+				</SearchToolbar>
 
 				<UsersList
 					page={page}

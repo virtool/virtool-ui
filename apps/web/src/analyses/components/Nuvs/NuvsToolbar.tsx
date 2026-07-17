@@ -1,7 +1,6 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import ButtonToggle from "@base/ButtonToggle";
-import InputSearch from "@base/InputSearch";
-import Toolbar from "@base/Toolbar";
+import SearchToolbar from "@base/SearchToolbar";
 import Tooltip from "@base/Tooltip";
 import { AnalysisViewerSort } from "../Viewer/Sort";
 import NuvsExport, { type NuvsExportProps } from "./NuvsExport";
@@ -21,15 +20,12 @@ export default function NuvsToolbar({
 	const sortKey = search.sort ?? "length";
 
 	return (
-		<Toolbar>
-			<div className="flex-grow">
-				<InputSearch
-					aria-label="Search results"
-					value={find}
-					onChange={(e) => setSearch({ find: e.target.value })}
-					placeholder="Name or family"
-				/>
-			</div>
+		<SearchToolbar
+			aria-label="Search results"
+			onChange={(find) => setSearch({ find })}
+			placeholder="Name or family"
+			value={find}
+		>
 			<AnalysisViewerSort
 				workflow="nuvs"
 				sortKey={sortKey}
@@ -56,6 +52,6 @@ export default function NuvsToolbar({
 				results={results}
 				sampleName={sampleName}
 			/>
-		</Toolbar>
+		</SearchToolbar>
 	);
 }

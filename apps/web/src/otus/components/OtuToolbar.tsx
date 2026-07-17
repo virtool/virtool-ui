@@ -1,7 +1,5 @@
-import { useDebouncedDraft } from "@app/hooks";
 import Button from "@base/Button";
-import InputSearch from "@base/InputSearch";
-import Toolbar from "@base/Toolbar";
+import SearchToolbar from "@base/SearchToolbar";
 import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
@@ -41,24 +39,18 @@ export default function OtuToolbar({
 	);
 	const archived = useReferenceIsArchived(refId);
 
-	const [draft, setDraft] = useDebouncedDraft(term, setTerm);
-
 	return (
-		<Toolbar>
-			<div className="flex-grow">
-				<InputSearch
-					aria-label="Search OTUs"
-					placeholder="Name or abbreviation"
-					value={draft}
-					onChange={(e) => setDraft(e.target.value)}
-				/>
-			</div>
-
+		<SearchToolbar
+			aria-label="Search OTUs"
+			onChange={setTerm}
+			placeholder="Name or abbreviation"
+			value={term}
+		>
 			{canCreate && !remotesFrom && !archived && (
 				<Button onClick={onCreate} color="blue">
 					Create
 				</Button>
 			)}
-		</Toolbar>
+		</SearchToolbar>
 	);
 }

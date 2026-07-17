@@ -4,10 +4,9 @@ import CompactScrollList from "@base/CompactScrollList";
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import InitialIcon from "@base/InitialIcon";
-import InputSearch from "@base/InputSearch";
 import QueryError from "@base/QueryError";
+import SearchToolbar from "@base/SearchToolbar";
 import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
-import Toolbar from "@base/Toolbar";
 import { useAddReferenceMember } from "@references/queries";
 import type { ReferenceUser } from "@references/types";
 import { useInfiniteFindUsers } from "@users/queries";
@@ -78,16 +77,12 @@ export default function AddReferenceUser({
 		<Dialog open={show} onOpenChange={onOpenChange}>
 			<DialogContent>
 				<DialogTitle>Add User</DialogTitle>
-				<Toolbar>
-					<div className="flex-grow">
-						<InputSearch
-							name="search"
-							aria-label="Search users"
-							value={term}
-							onChange={(e) => setTerm(e.target.value)}
-						/>
-					</div>
-				</Toolbar>
+				<SearchToolbar
+					aria-label="Search users"
+					onChange={setTerm}
+					placeholder="Username"
+					value={term}
+				/>
 				{filteredItems.length ? (
 					<CompactScrollList
 						className="border border-gray-300 rounded overflow-y-auto h-80"

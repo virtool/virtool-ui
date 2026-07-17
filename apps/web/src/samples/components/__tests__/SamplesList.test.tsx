@@ -228,9 +228,8 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should show a chip for the search term", async () => {
-			// One interceptor per samples fetch: the initial empty-term render plus a
-			// refetch for each of the three keystrokes in "Foo".
-			mockApiGetSamples(samples);
+			// One interceptor per samples fetch: the initial empty-term render plus
+			// the single refetch the debounced toolbar commits for "Foo".
 			mockApiGetSamples(samples);
 			mockApiGetSamples(samples);
 			await renderWithRouter(<SamplesListHarness />, path);

@@ -42,7 +42,7 @@ export default function SubtractionList({
 
 			<SubtractionToolbar
 				term={find}
-				setTerm={(find) => setSearch({ find, page: 1 }, { replace: true })}
+				onChange={(find) => setSearch({ find, page: 1 }, { replace: true })}
 			/>
 
 			{!items.length ? (

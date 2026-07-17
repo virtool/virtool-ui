@@ -1,10 +1,8 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
-import { useDebouncedDraft } from "@app/hooks";
 import Button from "@base/Button";
-import InputSearch from "@base/InputSearch";
+import SearchToolbar from "@base/SearchToolbar";
 import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
-import Toolbar from "@base/Toolbar";
 
 type ReferenceToolbarProps = {
 	archived: boolean;
@@ -27,18 +25,13 @@ export default function ReferenceToolbar({
 	const { hasPermission: canCreate } =
 		useCheckAdminRoleOrPermission("create_ref");
 
-	const [draft, setDraft] = useDebouncedDraft(find, setFind);
-
 	return (
-		<Toolbar>
-			<div className="flex-grow">
-				<InputSearch
-					aria-label="Search references"
-					placeholder="Reference name"
-					value={draft}
-					onChange={(e) => setDraft(e.target.value)}
-				/>
-			</div>
+		<SearchToolbar
+			aria-label="Search references"
+			onChange={setFind}
+			placeholder="Reference name"
+			value={find}
+		>
 			<ToggleGroup
 				value={archived ? "archived" : "active"}
 				onValueChange={(value) => setArchived(value === "archived")}
@@ -51,6 +44,6 @@ export default function ReferenceToolbar({
 					Create
 				</Button>
 			)}
-		</Toolbar>
+		</SearchToolbar>
 	);
 }

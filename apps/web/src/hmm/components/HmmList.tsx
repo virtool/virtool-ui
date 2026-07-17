@@ -2,6 +2,7 @@ import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import Pagination from "@base/Pagination";
+import SearchToolbar from "@base/SearchToolbar";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
@@ -9,7 +10,6 @@ import { Boxes, SearchX } from "lucide-react";
 import { useSuspenseHmms } from "../queries";
 import { HmmInstall } from "./HmmInstall";
 import HmmItem from "./HmmItem";
-import HmmToolbar from "./HmmToolbar";
 
 type HmmListProps = {
 	find: string;
@@ -48,9 +48,11 @@ export default function HmmList({ find, page, setSearch }: HmmListProps) {
 
 			{total_count ? (
 				<>
-					<HmmToolbar
-						term={find}
-						setTerm={(find) => setSearch({ find, page: 1 }, { replace: true })}
+					<SearchToolbar
+						aria-label="Search HMMs"
+						onChange={(find) => setSearch({ find, page: 1 }, { replace: true })}
+						placeholder="Name"
+						value={find}
 					/>
 					{items.length ? (
 						<Pagination
