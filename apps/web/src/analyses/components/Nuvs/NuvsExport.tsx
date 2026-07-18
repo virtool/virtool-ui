@@ -66,7 +66,7 @@ function exportOrfData(hits: FormattedNuvsHit[], sampleName: string) {
 }
 
 function downloadData(
-	analysisId: string,
+	analysisId: number,
 	content: string[],
 	sampleName: string,
 	suffix: string,
@@ -78,7 +78,7 @@ function downloadData(
 }
 
 export type NuvsExportProps = {
-	analysisId: string;
+	analysisId: number;
 	/** All results for a Nuvs analysis */
 	results: FormattedNuvsResults;
 	sampleName: string;

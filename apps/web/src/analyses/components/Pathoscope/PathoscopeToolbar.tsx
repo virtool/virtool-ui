@@ -18,7 +18,7 @@ import { AnalysisViewerSort } from "../Viewer/Sort";
 
 type PathoscopeToolbarProps = {
 	/** The unique identifier the analysis being viewed */
-	analysisId: string;
+	analysisId: number;
 };
 
 /** A selection of filters and toggles for pathoscope data presentation */

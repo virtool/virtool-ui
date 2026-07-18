@@ -24,18 +24,18 @@ const workflows = [
 	},
 	{
 		workflow: "pathoscope",
-		args: { sample_id: "smp1", analysis_id: "anl1" },
+		args: { sample_id: "smp1", analysis_id: "9254" },
 		links: [
 			{ name: "smp1", href: "/samples/smp1" },
-			{ name: "anl1", href: "/samples/smp1/analyses/anl1" },
+			{ name: "9254", href: "/samples/smp1/analyses/9254" },
 		],
 	},
 	{
 		workflow: "nuvs",
-		args: { sample_id: "smp1", analysis_id: "anl1" },
+		args: { sample_id: "smp1", analysis_id: "9254" },
 		links: [
 			{ name: "smp1", href: "/samples/smp1" },
-			{ name: "anl1", href: "/samples/smp1/analyses/anl1" },
+			{ name: "9254", href: "/samples/smp1/analyses/9254" },
 		],
 	},
 ];

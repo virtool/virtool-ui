@@ -41,7 +41,9 @@ export const Route = createFileRoute(
 		const { analysisQueryOptions } = await import("@analyses/queries");
 
 		try {
-			await queryClient.ensureQueryData(analysisQueryOptions(analysisId));
+			await queryClient.ensureQueryData(
+				analysisQueryOptions(Number(analysisId)),
+			);
 		} catch (error) {
 			if (
 				error != null &&

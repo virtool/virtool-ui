@@ -192,7 +192,7 @@ function toJob(row: JobRowWithResources): Job {
 		args.subtraction_id = String(row.subtraction_id);
 	}
 	if (row.analysis_id != null) {
-		args.analysis_id = row.analysis_id;
+		args.analysis_id = String(row.analysis_id);
 	}
 
 	return {
@@ -226,7 +226,7 @@ function selectJobsWithResources(db: Db) {
 			sample_id: jobSamples.sample_id,
 			index_id: jobIndexes.index_id,
 			subtraction_id: subtractions.id,
-			analysis_id: analyses.legacy_id,
+			analysis_id: analyses.id,
 		})
 		.from(jobs)
 		.innerJoin(users, eq(jobs.user_id, users.id))

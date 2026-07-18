@@ -28,7 +28,7 @@ function NuvsDetailContainer({ children }) {
 }
 
 type NuVsDetailProps = {
-	analysisId: string;
+	analysisId: number;
 	filterORFs: boolean;
 	/** A list of sorted and filtered Nuvs hits */
 

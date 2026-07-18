@@ -25,7 +25,11 @@ const routeApi = getRouteApi(
 /** Base component viewing all supported analysis */
 export default function AnalysisDetail() {
 	const { analysisId, sampleId } = routeApi.useParams();
-	const { data: analysis, isPending, isError } = useGetAnalysis(analysisId);
+	const {
+		data: analysis,
+		isPending,
+		isError,
+	} = useGetAnalysis(Number(analysisId));
 	const {
 		data: sample,
 		isPending: isPendingSample,

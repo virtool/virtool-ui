@@ -13,7 +13,7 @@ describe("<NuvsExport />", () => {
 		const analysis = createFakeFormattedNuVsAnalysis();
 
 		props = {
-			analysisId: "test_analysis",
+			analysisId: 42,
 			results: analysis.results,
 			sampleName: "Test Sample",
 		};
@@ -63,7 +63,7 @@ describe("<NuvsExport />", () => {
 
 		await waitFor(() => expect(clickSpy).toHaveBeenCalledTimes(1));
 		const anchor = clickSpy.mock.instances[0] as HTMLAnchorElement;
-		expect(anchor.download).toBe("nuvs.Test_Sample.test_analysis.contigs.fa");
+		expect(anchor.download).toBe("nuvs.Test_Sample.42.contigs.fa");
 		expect(decodeURIComponent(anchor.href)).toContain(">sequence_");
 	});
 
@@ -75,7 +75,7 @@ describe("<NuvsExport />", () => {
 
 		await waitFor(() => expect(clickSpy).toHaveBeenCalledTimes(1));
 		const anchor = clickSpy.mock.instances[0] as HTMLAnchorElement;
-		expect(anchor.download).toBe("nuvs.Test_Sample.test_analysis.orfs.fa");
+		expect(anchor.download).toBe("nuvs.Test_Sample.42.orfs.fa");
 		expect(decodeURIComponent(anchor.href)).toContain(">orf_");
 	});
 });

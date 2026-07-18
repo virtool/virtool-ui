@@ -1,5 +1,6 @@
 import { accountQueryKeys } from "@account/keys";
 import { roleQueryKeys } from "@administration/keys";
+import { analysesQueryKeys } from "@analyses/keys";
 import { bannerQueryKeys } from "@banner/keys";
 import { groupQueryKeys } from "@groups/keys";
 import { indexQueryKeys } from "@indexes/keys";
@@ -94,6 +95,17 @@ describe("reactQueryHandler", () => {
 				message: { domain: "uploads", operation: "insert", id: 5 },
 				queryKey: fileQueryKeys.lists(),
 			},
+			// Analyses cache a detail and a per-sample list, and an update changes
+			// the list row (ready), but the frame has no sampleId to target the
+			// list — so an update refreshes the whole domain.
+			{
+				message: { domain: "analyses", operation: "update", id: 5 },
+				queryKey: analysesQueryKeys.all(),
+			},
+			{
+				message: { domain: "analyses", operation: "insert", id: 5 },
+				queryKey: analysesQueryKeys.lists(),
+			},
 			// Banners cache the active banner at active(), outside lists(), so an
 			// update still has to fall back to the whole domain to reach it.
 			{
@@ -163,6 +175,12 @@ describe("reactQueryHandler", () => {
 				{
 					message: { domain: "labels", operation: "update", id: 7 },
 					queryKey: labelQueryKeys.lists(),
+				},
+				// An analysis flipping to ready must refresh the sample's analyses
+				// list row, which renders `ready`, not just the analysis detail.
+				{
+					message: { domain: "analyses", operation: "update", id: 5 },
+					queryKey: analysesQueryKeys.list(["smp1", 1, 25]),
 				},
 				{
 					message: { domain: "messages", operation: "update", id: 1 },

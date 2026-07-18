@@ -48,11 +48,15 @@ The SSE handler emits one `data:` frame per event:
 ```
 
 - `domain` — one of the literals in `SseDomainSchema` (`account`,
-  `groups`, `indexes`, `jobs`, `labels`, `messages`, `models`,
-  `references`, `roles`, `samples`, `tasks`, `uploads`, `users`).
-  Frames with
-  any other `domain` fail `safeParse` on the client and are dropped
-  with a warning — by design, so contract drift is loud.
+  `analyses`, `groups`, `indexes`, `jobs`, `labels`, `messages`,
+  `references`, `roles`, `samples`, `tasks`, `uploads`, `users`). Python
+  and Node
+  share the one channel and Python emits frames for domains this client
+  doesn't handle yet, so a frame for an unrecognised `domain` is dropped
+  **silently** — expected forward-compatible traffic, not an error. A
+  frame for a domain the client *does* handle that still fails
+  `safeParse` (see `id` below) is real contract drift and is reported to
+  Sentry.
 - `operation` — `"insert"`, `"update"`, or `"delete"`. `create` events
   map to `insert`; the other two pass through.
 - `id` — per-domain primary key type. Domains not yet migrated off
@@ -161,15 +165,21 @@ application's own doing.
   queue-overflow drop — never arrived; the initial connect skips this
   because the route loaders just populated the cache.
 - `app/sse/schema.ts` defines `SseMessageSchema`, which validates the
-  wire frame and strips unknown fields.
+  wire frame and strips unknown fields. `SseConnection` runs it on every
+  frame: a frame for an unrecognised `domain` is dropped silently, while
+  a frame for a known domain that fails validation is reported to Sentry
+  (`sse: message-validation`).
 - `app/sse/reactQueryHandler.ts` maps `message.domain` to a query-key
   factory and invalidates the narrowest key the domain actually caches
   under. `update` prefers `detail(id)`, falling to `lists()` for a
   list-only domain and to `all()` only when neither is cached; `insert`
   and `delete` invalidate `lists()`, or `all()` when the domain caches no
-  list. Banners are the one carve-out: their active banner sits at
-  `active()`, outside `lists()`, so an `update` there stays on `all()`
-  (`updateNeedsAll`). Unknown domains are ignored.
+  list. Two domains carve out of that with `updateNeedsAll`, so their
+  `update` invalidates `all()`: banners, whose active banner sits at
+  `active()` outside `lists()`; and analyses, whose `update` (a run
+  flipping to `ready`) changes a per-sample list row the frame can't
+  target, since it carries only the analysis id and not the `sampleId`
+  the list is keyed by. Unknown domains are ignored.
 - `jobs/refresh.ts` is the one exception to that mapping. See below.
 
 ## Job updates are batched, not invalidated

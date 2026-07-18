@@ -47,10 +47,10 @@ export function useListAnalyses(
  * @param analysisId - The id of the analysis to remove
  * @returns A mutator for removing an analysis
  */
-export function useRemoveAnalysis(analysisId: string) {
+export function useRemoveAnalysis(analysisId: number) {
 	const queryClient = useQueryClient();
 
-	const mutation = useMutation<null, unknown, { analysisId: string }>({
+	const mutation = useMutation<null, unknown, { analysisId: number }>({
 		mutationFn: ({ analysisId }) =>
 			apiClient.delete(`/analyses/${analysisId}`).then((res) => res.body),
 
@@ -64,7 +64,7 @@ export function useRemoveAnalysis(analysisId: string) {
 	return () => mutation.mutate({ analysisId });
 }
 
-export function analysisQueryOptions(analysisId: string) {
+export function analysisQueryOptions(analysisId: number) {
 	return queryOptions<Analysis, ErrorResponse>({
 		queryKey: analysesQueryKeys.detail(analysisId),
 		queryFn: async () => {
@@ -74,7 +74,7 @@ export function analysisQueryOptions(analysisId: string) {
 	});
 }
 
-export function useGetAnalysis(analysisId: string) {
+export function useGetAnalysis(analysisId: number) {
 	return useQuery({
 		...analysisQueryOptions(analysisId),
 		select: formatData,
@@ -126,7 +126,7 @@ export function useCreateAnalysis() {
  * @param analysisId - The id of the analysis the sequence belongs to
  * @returns A mutator for installing the blast information
  */
-export function useBlastNuvs(analysisId: string) {
+export function useBlastNuvs(analysisId: number) {
 	const queryClient = useQueryClient();
 
 	return useMutation<null, unknown, { sequenceIndex: number }>({
