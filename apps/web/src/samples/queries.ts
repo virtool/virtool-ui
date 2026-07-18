@@ -33,7 +33,7 @@ export type SampleLabel = LabelNested & {
  *
  * Shared by the single-sample update hook and the bulk label-update hook.
  */
-function updateSample(sampleId: string, update: SampleUpdate): Promise<Sample> {
+function updateSample(sampleId: number, update: SampleUpdate): Promise<Sample> {
 	return apiClient
 		.patch(`/samples/${sampleId}`)
 		.send(update)
@@ -86,7 +86,7 @@ export function useListSamples(
 	});
 }
 
-export function sampleQueryOptions(sampleId: string) {
+export function sampleQueryOptions(sampleId: number) {
 	return queryOptions<Sample, ErrorResponse>({
 		queryKey: samplesQueryKeys.detail(sampleId),
 		queryFn: () =>
@@ -94,8 +94,11 @@ export function sampleQueryOptions(sampleId: string) {
 	});
 }
 
-export function useFetchSample(sampleId: string) {
-	return useQuery(sampleQueryOptions(sampleId));
+export function useFetchSample(sampleId: number) {
+	return useQuery({
+		...sampleQueryOptions(sampleId),
+		enabled: Number.isInteger(sampleId),
+	});
 }
 
 /**
@@ -107,7 +110,7 @@ export function useFetchSample(sampleId: string) {
  * `$sampleId` detail layout and its children) — loading and errors are handled
  * by the route's Suspense and `errorComponent` rather than inline.
  */
-export function useSuspenseSample(sampleId: string) {
+export function useSuspenseSample(sampleId: number) {
 	return useSuspenseQuery(sampleQueryOptions(sampleId));
 }
 
@@ -169,7 +172,7 @@ export function useCreateSample() {
  *
  * @returns A mutator for updating a sample
  */
-export function useUpdateSample(sampleId: string) {
+export function useUpdateSample(sampleId: number) {
 	const queryClient = useQueryClient();
 
 	return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>({
@@ -188,7 +191,7 @@ export function useUpdateSample(sampleId: string) {
  * @returns A mutator for removing a sample
  */
 export function useRemoveSample() {
-	return useMutation<null, unknown, { sampleId: string }>({
+	return useMutation<null, unknown, { sampleId: number }>({
 		mutationFn: ({ sampleId }) =>
 			apiClient
 				.delete(`/samples/${sampleId}`)
@@ -201,7 +204,7 @@ export function useRemoveSample() {
  *
  * @returns A mutator for updating a samples rights
  */
-export function useUpdateSampleRights(sampleId: string) {
+export function useUpdateSampleRights(sampleId: number) {
 	return useMutation<
 		SampleRightsUpdateReturn,
 		unknown,

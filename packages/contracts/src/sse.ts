@@ -43,7 +43,7 @@ export const SseMessageSchema = z.discriminatedUnion("domain", [
 	frame("messages", NumberId),
 	frame("references", StringId),
 	frame("roles", StringId),
-	frame("samples", StringId),
+	frame("samples", NumberId),
 	frame("tasks", NumberId),
 	frame("uploads", NumberId),
 	frame("users", NumberId),

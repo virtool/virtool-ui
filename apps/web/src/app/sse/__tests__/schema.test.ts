@@ -18,7 +18,7 @@ describe("SseMessageSchema", () => {
 
 	it("accepts a frame for a string-id domain", () => {
 		const result = SseMessageSchema.safeParse({
-			domain: "samples",
+			domain: "indexes",
 			operation: "insert",
 			id: "abc123",
 		});
@@ -27,9 +27,7 @@ describe("SseMessageSchema", () => {
 
 	it("accepts a frame for every domain in the enum", () => {
 		for (const domain of SseDomainSchema.options) {
-			const stringId = ["indexes", "references", "roles", "samples"].includes(
-				domain,
-			);
+			const stringId = ["indexes", "references", "roles"].includes(domain);
 			const result = SseMessageSchema.safeParse({
 				domain,
 				operation: "update",
@@ -56,7 +54,7 @@ describe("SseMessageSchema", () => {
 
 	it("rejects a number id for a string-id domain", () => {
 		const result = SseMessageSchema.safeParse({
-			domain: "samples",
+			domain: "indexes",
 			operation: "update",
 			id: 7,
 		});
@@ -76,7 +74,7 @@ describe("SseMessageSchema", () => {
 		const result = SseMessageSchema.safeParse({
 			domain: "samples",
 			operation: "patch",
-			id: "1",
+			id: 1,
 		});
 		expect(result.success).toBe(false);
 	});

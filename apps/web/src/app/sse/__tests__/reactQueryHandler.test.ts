@@ -60,11 +60,11 @@ describe("reactQueryHandler", () => {
 				queryKey: referenceQueryKeys.lists(),
 			},
 			{
-				message: { domain: "samples", operation: "update", id: "abc" },
-				queryKey: samplesQueryKeys.detail("abc"),
+				message: { domain: "samples", operation: "update", id: 4184 },
+				queryKey: samplesQueryKeys.detail(4184),
 			},
 			{
-				message: { domain: "samples", operation: "insert", id: "abc" },
+				message: { domain: "samples", operation: "insert", id: 4184 },
 				queryKey: samplesQueryKeys.lists(),
 			},
 			{

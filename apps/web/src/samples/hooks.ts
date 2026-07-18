@@ -8,7 +8,7 @@ import { useFetchSample } from "./queries";
  * @param sampleId - The unique identifier of the sample to check permissions for
  * @returns whether the current user has permission to edit the sample
  */
-export function useCheckCanEditSample(sampleId: string) {
+export function useCheckCanEditSample(sampleId: number) {
 	const {
 		data: account,
 		isPending: isPendingAccount,

@@ -22,10 +22,19 @@ import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/samples/$sampleId")({
 	loader: async ({ context: { queryClient }, params: { sampleId } }) => {
+		// Sample ids are integers. A nonnumeric param — e.g. a stale link from a
+		// pre-migration job that recorded a legacy string sample id — can no
+		// longer resolve, so treat it as not-found rather than requesting
+		// `/api/samples/NaN`.
+		const numericSampleId = Number(sampleId);
+		if (!Number.isInteger(numericSampleId)) {
+			throw notFound();
+		}
+
 		const { sampleQueryOptions } = await import("@samples/queries");
 
 		try {
-			await queryClient.ensureQueryData(sampleQueryOptions(sampleId));
+			await queryClient.ensureQueryData(sampleQueryOptions(numericSampleId));
 		} catch (error) {
 			if (
 				error != null &&
@@ -43,9 +52,10 @@ export const Route = createFileRoute("/_authenticated/samples/$sampleId")({
 
 function SampleDetailLayout() {
 	const { sampleId } = Route.useParams();
+	const numericSampleId = Number(sampleId);
 	const location = useLocation();
-	const { data } = useSuspenseSample(sampleId);
-	const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
+	const { data } = useSuspenseSample(numericSampleId);
+	const { hasPermission: canModify } = useCheckCanEditSample(numericSampleId);
 	const [editOpen, setEditOpen] = useState(false);
 
 	const { created_at, name, user } = data;
@@ -66,7 +76,7 @@ function SampleDetailLayout() {
 									onClick={() => setEditOpen(true)}
 								/>
 								<DeleteSample
-									id={sampleId}
+									id={numericSampleId}
 									name={data.name}
 									ready={data.ready}
 									job={job}

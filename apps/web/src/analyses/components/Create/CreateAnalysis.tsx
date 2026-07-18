@@ -14,7 +14,7 @@ type CreateAnalysisProps = {
 	setOpen: (open: boolean) => void;
 
 	/** The id of the sample being used */
-	sampleId: string;
+	sampleId: number;
 };
 
 /**
