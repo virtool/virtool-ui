@@ -27,7 +27,7 @@ import { ChevronDown } from "lucide-react";
 const noGroup = "none";
 
 type SampleRightsProps = {
-	sampleId: string;
+	sampleId: number;
 };
 
 /**

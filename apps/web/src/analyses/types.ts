@@ -7,7 +7,7 @@ import type { SearchResult } from "@/types/api";
 
 /** The sample associated with the analysis */
 export type AnalysisSample = {
-	id: string;
+	id: number;
 };
 
 /** Minimal Analysis used for resource listings */

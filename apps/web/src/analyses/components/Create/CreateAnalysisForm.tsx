@@ -45,7 +45,7 @@ type CreateAnalysisFormProps = {
 	sampleCount: number;
 
 	/** The ids of the samples being analyzed */
-	sampleIds: string[];
+	sampleIds: number[];
 };
 
 /**

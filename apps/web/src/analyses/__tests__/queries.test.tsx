@@ -15,7 +15,7 @@ describe("useCreateAnalysis()", () => {
 		const invalidateQueries = vi.spyOn(queryClient, "invalidateQueries");
 
 		const scope = nock("http://localhost")
-			.post("/api/samples/sample-1/analyses")
+			.post("/api/samples/1/analyses")
 			.reply(201, { id: 1 });
 
 		function wrapper({ children }: { children: ReactNode }) {
@@ -29,7 +29,7 @@ describe("useCreateAnalysis()", () => {
 		const { result } = renderHook(() => useCreateAnalysis(), { wrapper });
 
 		result.current.mutate({
-			sampleId: "sample-1",
+			sampleId: 1,
 			workflow: "pathoscope_bowtie",
 			refId: "ref-1",
 			subtractionIds: [],
@@ -38,7 +38,7 @@ describe("useCreateAnalysis()", () => {
 		await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
 		expect(invalidateQueries).toHaveBeenCalledWith({
-			queryKey: [...analysesQueryKeys.lists(), "sample-1"],
+			queryKey: [...analysesQueryKeys.lists(), 1],
 		});
 		expect(invalidateQueries).not.toHaveBeenCalledWith({
 			queryKey: analysesQueryKeys.lists(),
@@ -50,7 +50,7 @@ describe("useCreateAnalysis()", () => {
 			queryKey: samplesQueryKeys.lists(),
 		});
 		expect(invalidateQueries).not.toHaveBeenCalledWith({
-			queryKey: samplesQueryKeys.detail("sample-1"),
+			queryKey: samplesQueryKeys.detail(1),
 		});
 
 		scope.done();

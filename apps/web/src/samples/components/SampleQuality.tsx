@@ -10,7 +10,7 @@ const routeApi = getRouteApi("/_authenticated/samples/$sampleId");
  */
 export default function SampleQuality() {
 	const { sampleId } = routeApi.useParams();
-	const { data } = useSuspenseSample(sampleId);
+	const { data } = useSuspenseSample(Number(sampleId));
 
 	return (
 		<div className="flex flex-col">

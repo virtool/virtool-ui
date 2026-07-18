@@ -60,8 +60,8 @@ The SSE handler emits one `data:` frame per event:
 - `operation` — `"insert"`, `"update"`, or `"delete"`. `create` events
   map to `insert`; the other two pass through.
 - `id` — per-domain primary key type. Domains not yet migrated off
-  Mongo on the Python side (`indexes`, `references`, `roles`,
-  `samples`) use string ids; the others use number ids. A frame whose
+  Mongo on the Python side (`indexes`, `references`, `roles`) use
+  string ids; the others use number ids. A frame whose
   `id` type doesn't match its `domain` is rejected at the parse
   boundary.
 

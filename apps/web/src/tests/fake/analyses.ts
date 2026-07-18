@@ -26,7 +26,7 @@ export function createFakeAnalysisMinimal(
 		ready: true,
 		reference: createFakeReferenceNested(),
 		sample: {
-			id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+			id: faker.number.int(),
 		},
 		subtractions: [createFakeSubtractionNested()],
 		updated_at: faker.date.past().toISOString(),

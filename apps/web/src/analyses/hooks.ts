@@ -127,7 +127,7 @@ type UseSubtractionOptionsResult = {
  * @param sampleIds
  */
 export function useSubtractionOptions(
-	sampleIds: string[],
+	sampleIds: number[],
 ): UseSubtractionOptionsResult {
 	const {
 		data: subtractionShortlist,
@@ -135,7 +135,7 @@ export function useSubtractionOptions(
 		isError: isErrorSubtractionShortlist,
 	} = useFetchSubtractionsShortlist(true);
 
-	const sampleId = sampleIds[0] ?? "";
+	const sampleId = sampleIds[0] ?? Number.NaN;
 
 	const {
 		data: sample,

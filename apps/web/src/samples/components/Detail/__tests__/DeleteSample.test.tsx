@@ -12,7 +12,7 @@ describe("<DeleteSample />", () => {
 
 	beforeEach(() => {
 		props = {
-			id: "foo",
+			id: 1,
 			name: "test",
 			ready: true,
 		};

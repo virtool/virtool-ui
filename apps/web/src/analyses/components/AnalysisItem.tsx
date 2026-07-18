@@ -37,7 +37,10 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 	const title = checkSupportedWorkflow(workflow) ? (
 		<Link
 			to="/samples/$sampleId/analyses/$analysisId"
-			params={{ sampleId: analysis.sample.id, analysisId: String(id) }}
+			params={{
+				sampleId: String(analysis.sample.id),
+				analysisId: String(id),
+			}}
 		>
 			{getWorkflowDisplayName(workflow)}
 		</Link>

@@ -37,7 +37,7 @@ export type SampleArtifact = {
 
 /* A Sample ID */
 export type SampleID = {
-	id: string;
+	id: number;
 };
 
 /* A Sample with essential information */
@@ -87,7 +87,7 @@ export type Read = {
 	id: number;
 	name: string;
 	name_on_disk: string;
-	sample: string;
+	sample: number;
 	size: number;
 	upload?: File;
 	uploaded_at: string;
