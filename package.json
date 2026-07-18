@@ -18,7 +18,7 @@
 		"@types/node": "^26.1.1",
 		"conventional-changelog-conventionalcommits": "7.0.2",
 		"knip": "^6.26.0",
-		"semantic-release": "23.0.7",
+		"semantic-release": "25.0.7",
 		"typescript": "^7.0.2"
 	}
 }
