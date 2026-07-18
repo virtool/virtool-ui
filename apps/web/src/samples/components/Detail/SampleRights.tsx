@@ -91,7 +91,7 @@ export default function SampleRights({ sampleId }: SampleRightsProps) {
 		);
 	}
 
-	function handleChangeRights(value: string, scope) {
+	function handleChangeRights(value: string, scope: "all" | "group") {
 		mutation.mutate(
 			{
 				update: {

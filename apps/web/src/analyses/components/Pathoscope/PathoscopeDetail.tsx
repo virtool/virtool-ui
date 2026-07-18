@@ -36,7 +36,7 @@ export default function PathoscopeDetail({
 				coverage={isolate.coverage}
 				depth={isolate.depth}
 				maxDepth={hit.maxDepth}
-				maxGenomeLength={maxGenomeLength}
+				maxGenomeLength={maxGenomeLength ?? 0}
 				name={isolate.name}
 				pi={isolate.pi}
 				reads={Math.round(isolate.pi * mappedCount)}

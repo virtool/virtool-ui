@@ -29,7 +29,7 @@ export default function ApiKeyEdit({ id, permissions }: ApiKeyEditProps) {
 		defaultValues: { permissions },
 	});
 
-	function onSubmit({ permissions }) {
+	function onSubmit({ permissions }: FormValues) {
 		updateMutation.mutate({ keyId: id, permissions });
 	}
 

@@ -39,7 +39,15 @@ function draw(element: HTMLElement, maxLength: number, sequenceLength: number) {
 		.call(axisTop(x));
 }
 
-export default function NuvsSequence({ maxSequenceLength, sequence }) {
+type NuvsSequenceProps = {
+	maxSequenceLength: number;
+	sequence: string;
+};
+
+export default function NuvsSequence({
+	maxSequenceLength,
+	sequence,
+}: NuvsSequenceProps) {
 	const chartEl = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {

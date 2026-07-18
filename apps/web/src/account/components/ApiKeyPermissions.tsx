@@ -1,5 +1,4 @@
 import { useFetchAccount } from "@account/account";
-import type { AdministratorRoleName } from "@administration/types";
 import {
 	AdministratorPermissions,
 	hasSufficientAdminRole,
@@ -9,7 +8,7 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import Checkbox from "@base/Checkbox";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
-import type { Permissions } from "@groups/types";
+import type { Permission, Permissions } from "@groups/types";
 import { sortBy } from "es-toolkit";
 
 type APIPermissionsProps = {
@@ -39,16 +38,15 @@ export default function ApiKeyPermissions({
 		return <LoadingPlaceholder />;
 	}
 
-	const permissions = Object.entries(keyPermissions).map(([key, value]) => ({
-		name: key,
-		allowed: value,
-	}));
+	const permissions = (
+		Object.entries(keyPermissions) as [Permission, boolean][]
+	).map(([name, allowed]) => ({ name, allowed }));
 
 	const rowComponents = sortBy(permissions, [(p) => p.name]).map(
 		(permission) => {
 			const disabled =
 				!hasSufficientAdminRole(
-					AdministratorPermissions[permission.name] as AdministratorRoleName,
+					AdministratorPermissions[permission.name],
 					account.administrator_role,
 				) && !account.permissions[permission.name];
 

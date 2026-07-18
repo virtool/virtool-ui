@@ -36,7 +36,7 @@ export default function CreateUser() {
 		);
 	}
 
-	function onOpenChange(open) {
+	function onOpenChange(open: boolean) {
 		mutation.reset();
 		setOpen(open);
 	}

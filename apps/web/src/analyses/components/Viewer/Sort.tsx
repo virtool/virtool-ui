@@ -11,7 +11,7 @@ const sortKeys: Record<AnalysisWorkflow, string[]> = {
 	nuvs: ["length", "e", "orfs"],
 };
 
-const sortTitles = {
+const sortTitles: Record<string, string> = {
 	coverage: "Coverage",
 	depth: "Depth",
 	e: "E-Value",

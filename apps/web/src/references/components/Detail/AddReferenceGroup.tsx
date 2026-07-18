@@ -8,6 +8,7 @@ import InitialIcon from "@base/InitialIcon";
 import QueryError from "@base/QueryError";
 import SearchToolbar from "@base/SearchToolbar";
 import { useInfiniteFindGroups } from "@groups/queries";
+import type { GroupMinimal } from "@groups/types";
 import { useAddReferenceMember } from "@references/queries";
 import type { ReferenceGroup } from "@references/types";
 import { Users } from "lucide-react";
@@ -60,10 +61,12 @@ export default function AddReferenceGroup({
 	const items = data.pages.flatMap((page) => page.items);
 	const filteredItems = items.filter((item) => !groupIds.includes(item.id));
 
-	function renderRow(item) {
+	// CompactScrollList types its rows as `unknown`; the items are groups.
+	function renderRow(item: unknown) {
+		const group = item as GroupMinimal;
 		return (
 			<button
-				key={item.id}
+				key={group.id}
 				type="button"
 				className={cn(
 					"flex w-full cursor-pointer items-center gap-1 px-6 py-3 text-left",
@@ -72,10 +75,10 @@ export default function AddReferenceGroup({
 					"focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600/50",
 					"[&_.InitialIcon]:mr-1",
 				)}
-				onClick={() => mutation.mutate({ id: item.id })}
+				onClick={() => mutation.mutate({ id: group.id })}
 			>
-				<InitialIcon size="md" handle={item.name} />
-				{item.name}
+				<InitialIcon size="md" handle={group.name} />
+				{group.name}
 			</button>
 		);
 	}

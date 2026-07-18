@@ -14,12 +14,14 @@ import {
 import type {
 	Analysis,
 	AnalysisWorkflow,
+	FormattedNuvsAnalysis,
 	FormattedPathoscopeAnalysis,
 	FormattedPathoscopeIsolate,
+	FormattedPathoscopeSequence,
 	NuvsOrf,
 } from "./types";
 
-export function calculateAnnotatedOrfCount(orfs) {
+export function calculateAnnotatedOrfCount(orfs: NuvsOrf[]) {
 	return orfs.filter((orf) => orf.hits.length).length;
 }
 
@@ -33,7 +35,7 @@ function calculateSequenceMinimumE(orfs: NuvsOrf[]) {
 	}
 }
 
-export function extractFamilies(orfs) {
+export function extractFamilies(orfs: NuvsOrf[]) {
 	const families = uniq(
 		flatMap(orfs, (orf) =>
 			flatMap(orf.hits, (hit) => Object.keys(hit.families)),
@@ -42,7 +44,7 @@ export function extractFamilies(orfs) {
 	return reject(families, (f) => f === "None");
 }
 
-export function extractNames(orfs) {
+export function extractNames(orfs: NuvsOrf[]) {
 	return uniq(flatMap(orfs, (orf) => flatMap(orf.hits, (hit) => hit.names)));
 }
 
@@ -76,7 +78,7 @@ export function fillAlign({ align, length }: FillAlignParams) {
 	});
 }
 
-export function formatNuvsData(detail) {
+export function formatNuvsData(detail: FormattedNuvsAnalysis) {
 	if (detail.results === null) {
 		return detail;
 	}
@@ -192,7 +194,10 @@ export function downsampleDepths(depths: number[], width: number): number[] {
 	return buckets;
 }
 
-export function formatSequence(sequence, readCount) {
+export function formatSequence(
+	sequence: FormattedPathoscopeSequence,
+	readCount: number,
+) {
 	return {
 		...sequence,
 		filled: fillAlign(sequence),
@@ -200,7 +205,9 @@ export function formatSequence(sequence, readCount) {
 	};
 }
 
-export function formatPathoscopeData(detail): FormattedPathoscopeAnalysis {
+export function formatPathoscopeData(
+	detail: FormattedPathoscopeAnalysis,
+): FormattedPathoscopeAnalysis {
 	if (detail.results === null || detail.results.hits.length === 0) {
 		return detail;
 	}
@@ -217,7 +224,14 @@ export function formatPathoscopeData(detail): FormattedPathoscopeAnalysis {
 		workflow,
 	} = detail;
 
-	const readCount = results.read_count;
+	// The API delivers the raw analysis with snake_case totals; the formatter
+	// re-exposes them as camelCase on the returned results.
+	const rawResults = results as unknown as {
+		read_count: number;
+		subtracted_count: number;
+	};
+
+	const readCount = rawResults.read_count;
 
 	const hits = results.hits.map((otu) => {
 		// Go through each isolate associated with the OTU, adding properties for weight, read count,
@@ -294,7 +308,7 @@ export function formatPathoscopeData(detail): FormattedPathoscopeAnalysis {
 		results: {
 			hits,
 			readCount,
-			subtractedCount: detail.results.subtracted_count,
+			subtractedCount: rawResults.subtracted_count,
 		},
 		subtractions,
 		user,
@@ -304,18 +318,18 @@ export function formatPathoscopeData(detail): FormattedPathoscopeAnalysis {
 
 export function formatData(detail: Analysis): Analysis {
 	if (detail?.workflow === "pathoscope") {
-		return formatPathoscopeData(detail);
+		return formatPathoscopeData(detail as FormattedPathoscopeAnalysis);
 	}
 
 	if (detail?.workflow === "nuvs") {
-		return formatNuvsData(detail);
+		return formatNuvsData(detail as FormattedNuvsAnalysis) as Analysis;
 	}
 
 	return detail;
 }
 
-const supportedWorkflows: AnalysisWorkflow[] = ["pathoscope", "nuvs"];
+const supportedWorkflows: string[] = ["pathoscope", "nuvs"];
 
-export function checkSupportedWorkflow(workflow) {
+export function checkSupportedWorkflow(workflow: AnalysisWorkflow) {
 	return supportedWorkflows.includes(workflow);
 }

@@ -22,6 +22,11 @@ export type EditSubtractionProps = {
 	subtraction: Subtraction;
 };
 
+type EditSubtractionFormValues = {
+	name: string;
+	nickname: string;
+};
+
 /**
  * Dialog for editing an existing subtraction
  */
@@ -33,14 +38,14 @@ export default function EditSubtraction({ subtraction }: EditSubtractionProps) {
 		formState: { errors },
 		register,
 		handleSubmit,
-	} = useForm({
+	} = useForm<EditSubtractionFormValues>({
 		defaultValues: {
 			name: subtraction.name,
 			nickname: subtraction.nickname,
 		},
 	});
 
-	function onSubmit({ name, nickname }) {
+	function onSubmit({ name, nickname }: EditSubtractionFormValues) {
 		mutation.mutate({ name, nickname }, { onSuccess: () => setOpen(false) });
 	}
 

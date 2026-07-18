@@ -5,7 +5,7 @@ import SegmentForm from "./SegmentForm";
 
 type FormValues = {
 	segmentName: string;
-	molecule: Molecule;
+	molecule: Molecule | "";
 	required: boolean;
 };
 
@@ -38,7 +38,10 @@ export default function SegmentCreate({
 				otuId,
 				name,
 				abbreviation,
-				schema: [...schema, { name: segmentName, molecule, required }],
+				schema: [
+					...schema,
+					{ name: segmentName, molecule: molecule || null, required },
+				],
 			},
 			{
 				onSuccess: () => {

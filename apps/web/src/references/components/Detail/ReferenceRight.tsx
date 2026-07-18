@@ -1,6 +1,6 @@
 import Checkbox from "@base/Checkbox";
 
-const descriptions = {
+const descriptions: Record<string, string> = {
 	build: "Can build new indexes for the reference.",
 	modify: "Can modify reference properties and settings.",
 	modify_otu: "Can modify OTU records in the reference.",

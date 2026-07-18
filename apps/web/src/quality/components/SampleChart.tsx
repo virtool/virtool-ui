@@ -1,16 +1,12 @@
 import "d3-transition";
 import { useEffect, useRef } from "react";
 
-type QualityChartProps = {
+type QualityChartProps<T> = {
 	/** A callback function to create the sample quality chart */
-	createChart: (
-		current: HTMLDivElement,
-		data: number[] | Array<[number, number, number, number]>,
-		width: number,
-	) => void;
+	createChart: (current: HTMLDivElement, data: T, width: number) => void;
 
 	/** The data to be used in the chart */
-	data: number[];
+	data: T;
 
 	/** The width of the chart */
 	width: number;
@@ -19,8 +15,12 @@ type QualityChartProps = {
 /**
  * Creates and displays charts for sample quality
  */
-export function SampleChart({ createChart, data, width }: QualityChartProps) {
-	const ref = useRef(null);
+export function SampleChart<T>({
+	createChart,
+	data,
+	width,
+}: QualityChartProps<T>) {
+	const ref = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		if (ref.current) {

@@ -34,8 +34,8 @@ export default function SampleLabels({
 					)}
 					items={labels}
 					selectedIds={sampleLabels}
-					onUpdate={(labelId: number) => {
-						onUpdate(xor(sampleLabels, [labelId]));
+					onUpdate={(labelId: string | number) => {
+						onUpdate(xor(sampleLabels, [Number(labelId)]));
 					}}
 					selectionType="labels"
 					manageLink={"/samples/labels"}

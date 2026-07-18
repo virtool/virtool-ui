@@ -65,7 +65,7 @@ export function parseWorkflowFilters(values: string[]): WorkflowFilter[] {
 	});
 }
 
-const libraryTypes = {
+const libraryTypes: Record<string, string> = {
 	normal: "Normal",
 	srna: "sRNA",
 	amplicon: "Amplicon",

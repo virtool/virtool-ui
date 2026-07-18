@@ -1,3 +1,4 @@
+import type { QueryError } from "@app/queryErrors";
 import Badge from "@base/Badge";
 import Link from "@base/Link";
 import NavTab from "@base/NavTab";
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 					queryClient.ensureQueryData(otuQueryOptions(otuId)),
 				]);
 			} catch (error) {
-				if (error?.response?.status === 404) {
+				if ((error as QueryError).response?.status === 404) {
 					throw notFound();
 				}
 				throw error;

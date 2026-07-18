@@ -9,7 +9,7 @@ import {
 } from "@base/Dialog";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
-import { useState } from "react";
+import { type FormEvent, useState } from "react";
 import { useCreateIndex, useFetchUnbuiltChanges } from "../queries";
 import RebuildHistory from "./History";
 import RebuildIndexError from "./RebuildIndexError";
@@ -26,7 +26,7 @@ export default function RebuildIndex({ refId }: RebuildIndexProps) {
 	const { data, isError, isPending } = useFetchUnbuiltChanges(refId);
 	const mutation = useCreateIndex();
 
-	function handleSubmit(e) {
+	function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		mutation.mutate(
 			{ refId },

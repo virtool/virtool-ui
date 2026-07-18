@@ -18,7 +18,7 @@ const fontSize = {
 	xxl: "30px",
 };
 
-function hashColor(hash, newChar) {
+function hashColor(hash: number, newChar: string) {
 	return (hash << 5) - newChar.charCodeAt(0);
 }
 

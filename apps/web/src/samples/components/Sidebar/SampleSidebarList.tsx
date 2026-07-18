@@ -15,7 +15,7 @@ export default function SampleSidebarList({ items }: SampleSidebarListProps) {
 		<SampleLabel
 			className="bg-white inline m-0 mr-1 mb-1"
 			key={item.id}
-			color={item.color}
+			color={"color" in item ? item.color : undefined}
 			name={item.name}
 		/>
 	));

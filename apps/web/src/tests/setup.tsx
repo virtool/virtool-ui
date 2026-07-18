@@ -336,7 +336,13 @@ function attachResizeObserver() {
 attachResizeObserver();
 
 // Globals are defined here to limit import redundancies.
-global.fireEvent = fireEvent;
-global.userEvent = userEvent;
-global.renderWithProviders = renderWithProviders;
-global.wrapWithProviders = wrapWithProviders;
+const testGlobals = globalThis as typeof globalThis & {
+	fireEvent: typeof fireEvent;
+	userEvent: typeof userEvent;
+	renderWithProviders: typeof renderWithProviders;
+	wrapWithProviders: typeof wrapWithProviders;
+};
+testGlobals.fireEvent = fireEvent;
+testGlobals.userEvent = userEvent;
+testGlobals.renderWithProviders = renderWithProviders;
+testGlobals.wrapWithProviders = wrapWithProviders;

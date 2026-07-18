@@ -29,7 +29,7 @@ function findFiles(
 		.then((res) => res.body);
 }
 
-export function useListFiles(type: UploadType, page, per_page: number) {
+export function useListFiles(type: UploadType, page: number, per_page: number) {
 	return useQuery<FileResponse, ErrorResponse>({
 		queryKey: fileQueryKeys.list([type, page, per_page]),
 		queryFn: () => findFiles(type, page, per_page),

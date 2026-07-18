@@ -1,4 +1,8 @@
-import type { FormattedNuvsHit, FormattedNuvsResults } from "@analyses/types";
+import type {
+	FormattedNuvsHit,
+	FormattedNuvsResults,
+	NuvsOrfHit,
+} from "@analyses/types";
 import { followDynamicDownload } from "@app/utils";
 import Button from "@base/Button";
 import {
@@ -11,15 +15,15 @@ import {
 import Icon from "@base/Icon";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@base/Tabs";
 import { Download } from "lucide-react";
-import { useState } from "react";
+import { type FormEvent, useState } from "react";
 import NuvsExportPreview from "./NuvsExportPreview";
 
-function getBestHit(items) {
-	return items.reduce(
+function getBestHit(items: NuvsOrfHit[]) {
+	return items.reduce<{ name: string | null; e: number }>(
 		(best, hit) => {
 			if (hit.full_e < best.e) {
 				best.e = hit.full_e;
-				best.name = hit.names[0];
+				best.name = hit.names[0] ?? null;
 			}
 
 			return best;
@@ -95,7 +99,7 @@ export default function NuvsExport({
 	const [mode, setMode] = useState("contigs");
 	const [open, setOpen] = useState(false);
 
-	function onSubmit(e) {
+	function onSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 
 		if (mode === "contigs") {

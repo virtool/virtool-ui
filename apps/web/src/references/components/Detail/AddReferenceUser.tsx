@@ -10,6 +10,7 @@ import SearchToolbar from "@base/SearchToolbar";
 import { useAddReferenceMember } from "@references/queries";
 import type { ReferenceUser } from "@references/types";
 import { useInfiniteFindUsers } from "@users/queries";
+import type { User } from "@users/types";
 import { Users } from "lucide-react";
 import { useState } from "react";
 
@@ -60,10 +61,12 @@ export default function AddReferenceUser({
 	const items = data.pages.flatMap((page) => page.documents);
 	const filteredItems = items.filter((item) => !userIds.includes(item.id));
 
-	function renderRow(item) {
+	// CompactScrollList types its rows as `unknown`; the items are users.
+	function renderRow(item: unknown) {
+		const user = item as User;
 		return (
 			<button
-				key={item.id}
+				key={user.id}
 				type="button"
 				className={cn(
 					"flex w-full cursor-pointer items-center gap-1 px-6 py-3 text-left",
@@ -72,10 +75,10 @@ export default function AddReferenceUser({
 					"focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600/50",
 					"[&_.InitialIcon]:mr-1",
 				)}
-				onClick={() => mutation.mutate({ id: item.id })}
+				onClick={() => mutation.mutate({ id: user.id })}
 			>
-				<InitialIcon size="md" handle={item.handle} />
-				{item.handle}
+				<InitialIcon size="md" handle={user.handle} />
+				{user.handle}
 			</button>
 		);
 	}

@@ -16,13 +16,19 @@ type LoginFormProps = {
 	setResetCode: (resetCode: string) => void;
 };
 
+type FormValues = {
+	handle: string;
+	password: string;
+	remember: boolean;
+};
+
 /** Handles the user login process. */
 export default function LoginForm({ redirect, setResetCode }: LoginFormProps) {
-	const { control, handleSubmit, register } = useForm();
+	const { control, handleSubmit, register } = useForm<FormValues>();
 	const loginMutation = useLoginMutation();
 	const navigate = useNavigate();
 
-	function onSubmit({ handle, password, remember }) {
+	function onSubmit({ handle, password, remember }: FormValues) {
 		loginMutation.mutate(
 			{ handle, password, remember },
 			{

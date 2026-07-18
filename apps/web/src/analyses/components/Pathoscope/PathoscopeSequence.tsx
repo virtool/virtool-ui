@@ -6,7 +6,7 @@ import "./area.css";
 
 type DrawParams = {
 	element: HTMLElement;
-	data: number[];
+	data: [number, number][];
 	label: string;
 	length: number;
 	yMax: number;
@@ -53,7 +53,7 @@ function draw({
 	const svg = svgRoot.append("g").attr("transform", `translate(${margin},5)`);
 
 	if (data) {
-		const areaDrawer = area<number>()
+		const areaDrawer = area<[number, number]>()
 			.x((d) => x(d[0]))
 			.y0((d) => y(d[1]))
 			.y1(height);
@@ -85,7 +85,7 @@ function draw({
 
 type CoverageChartProps = {
 	accession: string;
-	data: number[];
+	data: [number, number][];
 	definition: string;
 	id: string;
 	length: number;

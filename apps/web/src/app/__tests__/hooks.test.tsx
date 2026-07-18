@@ -6,7 +6,7 @@ describe("useDebounce()", () => {
 	it("should commit the draft once it has been stable for the delay", async () => {
 		const onChange = vi.fn();
 
-		const { result } = renderHook(() => useDebounce("", onChange, 10));
+		const { result } = renderHook(() => useDebounce<string>("", onChange, 10));
 
 		act(() => result.current[1]("Foo"));
 		expect(result.current[0]).toBe("Foo");

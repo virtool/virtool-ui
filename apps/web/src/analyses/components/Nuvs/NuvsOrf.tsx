@@ -1,3 +1,4 @@
+import type { NuvsOrf as NuvsOrfType } from "@analyses/types";
 import Badge from "@base/Badge";
 import { labelSvg } from "@samples/charting";
 import { scaleLinear, select } from "d3";
@@ -7,13 +8,20 @@ import NuvsOrfLabel from "./NuvsOrfLabel";
 
 const HEIGHT = 8;
 
-function draw(element, maxLength, pos, strand) {
+function draw(
+	element: HTMLElement,
+	maxLength: number,
+	pos: number[],
+	strand: number,
+) {
 	element.innerHTML = "";
 
 	const width = element.offsetWidth - 30;
 
-	const start = Math.min(pos[0], pos[1]);
-	const end = Math.max(pos[0], pos[1]);
+	const [first = 0, second = 0] = pos;
+
+	const start = Math.min(first, second);
+	const end = Math.max(first, second);
 	const label = `Open reading frame from position ${start} to ${end} on the ${strand === 1 ? "forward" : "reverse"} strand.`;
 
 	// Construct the SVG canvas.
@@ -30,8 +38,8 @@ function draw(element, maxLength, pos, strand) {
 	// Set up a y-axis that will appear at the top of the chart.
 	const x = scaleLinear().range([0, width]).domain([0, maxLength]);
 
-	const x0 = x(Math.abs(pos[strand === 1 ? 0 : 1]));
-	const x1 = x(Math.abs(pos[strand === 1 ? 1 : 0]));
+	const x0 = x(Math.abs(strand === 1 ? first : second));
+	const x1 = x(Math.abs(strand === 1 ? second : first));
 	const x2 = x1 + (strand === 1 ? -5 : 5);
 
 	const yBase = HEIGHT - 4;
@@ -47,13 +55,23 @@ function draw(element, maxLength, pos, strand) {
 	group.append("path").attr("d", d).attr("stroke-width", 1);
 }
 
-export default function NuvsOrf({ hits, maxSequenceLength, pos, strand }) {
-	const chartEl = useRef(null);
+type NuvsOrfProps = Pick<NuvsOrfType, "hits" | "pos" | "strand"> & {
+	maxSequenceLength: number;
+};
 
-	useEffect(
-		() => draw(chartEl.current, maxSequenceLength, pos, strand),
-		[strand, pos, maxSequenceLength],
-	);
+export default function NuvsOrf({
+	hits,
+	maxSequenceLength,
+	pos,
+	strand,
+}: NuvsOrfProps) {
+	const chartEl = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (chartEl.current) {
+			draw(chartEl.current, maxSequenceLength, pos, strand);
+		}
+	}, [strand, pos, maxSequenceLength]);
 
 	const hmm = hits[0];
 
@@ -62,7 +80,7 @@ export default function NuvsOrf({ hits, maxSequenceLength, pos, strand }) {
 			<div className="flex font-medium items-center gap-4 nuvs-orf py-3">
 				<NuvsOrfLabel hmm={hmm} />
 				<span className="flex gap-2">
-					<Badge>{pos[1] - pos[0]}</Badge>
+					<Badge>{(pos[1] ?? 0) - (pos[0] ?? 0)}</Badge>
 					<span className="text-emerald-700">{hmm ? hmm.full_e : null}</span>
 				</span>
 			</div>

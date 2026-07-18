@@ -1,8 +1,12 @@
+import type { FormattedPathoscopeAnalysis } from "@analyses/types";
 import { toThousand } from "@app/format";
 import Box from "@base/Box";
 import Label from "@base/Label";
 import Link from "@base/Link";
-import { Bars } from "../Viewer/Bars";
+import type { IndexNested } from "@indexes/types";
+import type { ReferenceNested } from "@references/types";
+import type { SubtractionNested } from "@subtraction/types";
+import { Bars, type BarsItem } from "../Viewer/Bars";
 
 const percentFormatter = new Intl.NumberFormat("en-US", {
 	style: "percent",
@@ -10,7 +14,15 @@ const percentFormatter = new Intl.NumberFormat("en-US", {
 	maximumFractionDigits: 2,
 });
 
-export function AnalysisMappingReferenceTitle({ index, reference }) {
+type AnalysisMappingReferenceTitleProps = {
+	index: IndexNested;
+	reference: ReferenceNested;
+};
+
+export function AnalysisMappingReferenceTitle({
+	index,
+	reference,
+}: AnalysisMappingReferenceTitleProps) {
 	return (
 		<div className="flex items-center [&_a]:mr-1">
 			<Link to="/refs/$refId" params={{ refId: reference.id }}>
@@ -21,7 +33,13 @@ export function AnalysisMappingReferenceTitle({ index, reference }) {
 	);
 }
 
-export function AnalysisMappingSubtractionTitle({ subtractions }) {
+type AnalysisMappingSubtractionTitleProps = {
+	subtractions: SubtractionNested[];
+};
+
+export function AnalysisMappingSubtractionTitle({
+	subtractions,
+}: AnalysisMappingSubtractionTitleProps) {
 	return subtractions.map((subtraction, index) => (
 		<span key={subtraction.id}>
 			<Link
@@ -35,14 +53,19 @@ export function AnalysisMappingSubtractionTitle({ subtractions }) {
 	));
 }
 
-export function AnalysisMapping({ totalReads, detail }) {
+type AnalysisMappingProps = {
+	totalReads: number;
+	detail: FormattedPathoscopeAnalysis;
+};
+
+export function AnalysisMapping({ totalReads, detail }: AnalysisMappingProps) {
 	const { index, reference, subtractions, results } = detail;
 	const { readCount, subtractedCount } = results;
 
 	const totalMapped = readCount + subtractedCount;
 	const sumPercent = readCount / totalReads;
 
-	const legend = [
+	const legend: BarsItem[] = [
 		{
 			color: "blue",
 			count: readCount,

@@ -1,4 +1,8 @@
-import type { FormattedPathoscopeIsolate } from "@analyses/types";
+import type {
+	FormattedPathoscopeAnalysis,
+	FormattedPathoscopeIsolate,
+	FormattedPathoscopeSequence,
+} from "@analyses/types";
 import { at } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 import {
@@ -53,7 +57,10 @@ describe("formatSequence()", () => {
 			length: 11,
 			pi: 0.4,
 		};
-		const result = formatSequence(sequence, 3000);
+		const result = formatSequence(
+			sequence as unknown as FormattedPathoscopeSequence,
+			3000,
+		);
 		expect(result).toEqual({
 			align,
 			filled: [0, 0, 0, 0, 0, 3, 3, 3, 5, 5, 5],
@@ -73,7 +80,9 @@ describe("formatPathoscopeData()", () => {
 				hits: [],
 			},
 		};
-		const result = formatPathoscopeData(detail);
+		const result = formatPathoscopeData(
+			detail as unknown as FormattedPathoscopeAnalysis,
+		);
 		expect(result).toEqual(detail);
 	});
 });

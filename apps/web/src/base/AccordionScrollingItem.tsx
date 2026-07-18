@@ -1,9 +1,20 @@
 import { getContentScrollElement, getScrollBehavior } from "@app/scroll";
 import { Accordion as AccordionPrimitive } from "radix-ui";
-import { createRef, type ReactNode, useEffect } from "react";
+import {
+	type ComponentPropsWithRef,
+	createRef,
+	type ReactNode,
+	useEffect,
+} from "react";
+
+type ComposedScrollingAccordionItemProps = ComponentPropsWithRef<"div"> & {
+	"data-state"?: "open" | "closed";
+};
 
 /** Composed radix accordion item for handling scroll logic  */
-function ComposedScrollingAccordionItem(props) {
+function ComposedScrollingAccordionItem(
+	props: ComposedScrollingAccordionItemProps,
+) {
 	const ref = createRef<HTMLDivElement>();
 	useEffect(() => {
 		if (props["data-state"] === "open" && ref?.current) {
