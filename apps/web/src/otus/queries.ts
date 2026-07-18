@@ -339,7 +339,7 @@ export function useCreateSequence(otuId: string) {
 			definition: string;
 			host: string;
 			sequence: string;
-			segment?: string;
+			segment?: string | null;
 		}
 	>({
 		mutationFn: ({
@@ -381,7 +381,7 @@ export function useEditSequence(otuId: string) {
 			definition: string;
 			host: string;
 			sequence: string;
-			segment?: string;
+			segment?: string | null;
 		}
 	>({
 		mutationFn: ({

@@ -29,7 +29,7 @@ export default function ResetForm({ redirect, resetCode }: ResetFormProps) {
 	const navigate = useNavigate();
 	const passwordRules = usePasswordRules();
 
-	function onSubmit({ password }) {
+	function onSubmit({ password }: { password: string }) {
 		resetPasswordMutation.mutate(
 			{ password, resetCode },
 			// The reset already authenticated us: it rotated the session cookies

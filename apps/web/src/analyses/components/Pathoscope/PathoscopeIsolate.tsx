@@ -1,7 +1,19 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
+import type { FormattedPathoscopeSequence } from "@analyses/types";
 import { toScientificNotation } from "@app/format";
 import ScrollSync from "@base/ScrollSync";
 import PathoscopeSequence from "./PathoscopeSequence";
+
+type PathoscopeIsolateProps = {
+	coverage: number;
+	depth: number;
+	maxDepth: number;
+	maxGenomeLength: number;
+	name: string;
+	pi: number;
+	reads: number;
+	sequences: FormattedPathoscopeSequence[];
+};
 
 export default function PathoscopeIsolate({
 	coverage,
@@ -12,7 +24,7 @@ export default function PathoscopeIsolate({
 	pi,
 	reads,
 	sequences,
-}) {
+}: PathoscopeIsolateProps) {
 	const { search } = useAnalysisSearch();
 	const showReads = search.reads ?? false;
 
@@ -53,7 +65,7 @@ export default function PathoscopeIsolate({
 					</span>
 					<span className="text-red-700">{depth.toFixed(0)}</span>
 					<span className="text-blue-700">
-						{toScientificNotation(parseFloat(coverage))}
+						{toScientificNotation(coverage)}
 					</span>
 				</div>
 			</div>

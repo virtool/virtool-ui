@@ -11,7 +11,7 @@ const ridRoot =
 	"https://blast.ncbi.nlm.nih.gov/Blast.cgi?\
     CMD=Web&PAGE_TYPE=BlastFormatting&OLD_BLAST=false&GET_RID_INFO=on&RID=";
 
-function RidLink({ rid }) {
+function RidLink({ rid }: { rid: string }) {
 	if (rid) {
 		return (
 			<span>
@@ -29,7 +29,12 @@ function RidLink({ rid }) {
 	return null;
 }
 
-function RidTiming({ interval, lastCheckedAt }) {
+type RidTimingProps = {
+	interval: number;
+	lastCheckedAt: string;
+};
+
+function RidTiming({ interval, lastCheckedAt }: RidTimingProps) {
 	const now = useNow();
 
 	if (lastCheckedAt) {
@@ -47,7 +52,17 @@ function RidTiming({ interval, lastCheckedAt }) {
 	return null;
 }
 
-export default function NuvsBlastPending({ interval, lastCheckedAt, rid }) {
+type NuvsBlastPendingProps = {
+	interval: number;
+	lastCheckedAt: string;
+	rid: string;
+};
+
+export default function NuvsBlastPending({
+	interval,
+	lastCheckedAt,
+	rid,
+}: NuvsBlastPendingProps) {
 	return (
 		<Box className="flex items-start [&>div:first-of-type]:mr-1">
 			<Loader className="size-5" color="blue" />

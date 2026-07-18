@@ -2,6 +2,11 @@ import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useUpdateOtu } from "@otus/queries";
 import OtuForm from "./OtuForm";
 
+type FormValues = {
+	name: string;
+	abbreviation: string;
+};
+
 type OtuEditProps = {
 	abbreviation: string;
 	name: string;
@@ -22,7 +27,7 @@ export default function OtuEdit({
 }: OtuEditProps) {
 	const mutation = useUpdateOtu(otuId);
 
-	function handleSubmit({ name, abbreviation }) {
+	function handleSubmit({ name, abbreviation }: FormValues) {
 		mutation.mutate(
 			{ otuId, name, abbreviation },
 			{

@@ -44,7 +44,13 @@ describe("<Editsample />", () => {
 
 		const inputBox = screen.getByLabelText(inputLabel);
 		expect(inputBox).toBeInTheDocument();
-		expect(inputBox).toHaveValue(sample[inputLabel.toLowerCase()]);
+		const field = inputLabel.toLowerCase() as
+			| "name"
+			| "isolate"
+			| "host"
+			| "locale"
+			| "notes";
+		expect(inputBox).toHaveValue(sample[field]);
 
 		await userEvent.clear(inputBox);
 		expect(inputBox).toHaveValue("");

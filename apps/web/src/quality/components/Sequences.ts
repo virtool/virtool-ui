@@ -7,7 +7,11 @@ import {
 import { axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { max } from "es-toolkit/compat";
 
-export function drawSequencesChart(element, data, baseWidth) {
+export function drawSequencesChart(
+	element: HTMLElement,
+	data: number[],
+	baseWidth: number,
+) {
 	const label = `Number of reads at each of ${pluralize(data.length, "quality score")}.`;
 
 	const svg = createSvg(element, baseWidth, label);
@@ -23,7 +27,9 @@ export function drawSequencesChart(element, data, baseWidth) {
 	const x = scaleLinear().range([0, width]).domain([0, data.length]);
 
 	const xAxis = axisBottom(x);
-	const yAxis = axisLeft(y).tickFormat(toScientificNotation);
+	const yAxis = axisLeft(y).tickFormat((value) =>
+		toScientificNotation(Number(value)),
+	);
 
 	const lineDrawer = line<number>()
 		.x((_d, i) => x(i))

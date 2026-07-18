@@ -5,7 +5,7 @@ import SegmentForm from "./SegmentForm";
 
 type FormValues = {
 	segmentName: string;
-	molecule: Molecule;
+	molecule: Molecule | "";
 	required: boolean;
 };
 
@@ -37,7 +37,7 @@ export default function SegmentEdit({
 	function handleSubmit({ segmentName, molecule, required }: FormValues) {
 		const newArray = schema.map((item) => {
 			return item.name === editSegmentName
-				? { name: segmentName, molecule, required }
+				? { name: segmentName, molecule: molecule || null, required }
 				: item;
 		});
 

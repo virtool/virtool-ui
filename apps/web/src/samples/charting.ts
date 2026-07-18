@@ -1,4 +1,4 @@
-import { select } from "d3";
+import { type Selection, select } from "d3";
 
 export const QUALITY_CHART_HEIGHT = 300;
 
@@ -10,27 +10,26 @@ export const QUALITY_CHART_MARGIN = {
 };
 
 export function appendLegend(
-	svg,
+	svg: Selection<SVGGElement, unknown, null, undefined>,
 	width: number,
-	series,
+	series: { color: string; label: string }[],
 	legendCircleRadius: number,
 ) {
-	Object.keys(series).forEach((key) => {
-		const index = Number(key);
+	series.forEach((serie, index) => {
 		svg
 			.append("circle")
 			.attr("cy", index * 25)
 			.attr("r", legendCircleRadius)
 			.attr("class", "legendOrdinal")
 			.attr("transform", `translate(${width - 60}, 5)`)
-			.attr("fill", series[index].color);
+			.attr("fill", serie.color);
 		svg
 			.append("text")
 			.attr("y", index * 25 + 6)
 			.attr("x", 17)
 			.attr("class", "legendOrdinal")
 			.attr("transform", `translate(${width - 60}, 5)`)
-			.text(series[index].label);
+			.text(serie.label);
 	});
 }
 
@@ -41,7 +40,10 @@ export function appendLegend(
  * the whole alternative; the `<title>` is the equivalent for pointer hover and
  * older assistive technology.
  */
-export function labelSvg(svg, label: string) {
+export function labelSvg(
+	svg: Selection<SVGSVGElement, unknown, null, undefined>,
+	label: string,
+) {
 	svg.attr("role", "img").attr("aria-label", label);
 	svg.append("title").text(label);
 }

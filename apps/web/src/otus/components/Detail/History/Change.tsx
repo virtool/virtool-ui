@@ -1,8 +1,8 @@
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
-import Icon from "@base/Icon";
+import Icon, { type IconProps } from "@base/Icon";
 import Label from "@base/Label";
-import type { OtuNested } from "@otus/types";
+import type { HistoryMethod, OtuNested } from "@otus/types";
 import type { UserNested } from "@users/types";
 import {
 	AlertTriangle,
@@ -18,7 +18,7 @@ import {
 	Trash,
 } from "lucide-react";
 
-const methodIconProps = {
+const methodIconProps: Record<HistoryMethod, IconProps> = {
 	add_isolate: {
 		icon: FlaskConical,
 		color: "blue",
@@ -78,7 +78,7 @@ const methodIconProps = {
 };
 
 function getMethodIcon(methodName: string) {
-	const props = methodIconProps[methodName] ?? {
+	const props = methodIconProps[methodName as keyof typeof methodIconProps] ?? {
 		icon: AlertTriangle,
 		color: "red",
 	};

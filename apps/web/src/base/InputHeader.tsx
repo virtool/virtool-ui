@@ -27,8 +27,8 @@ export default function InputHeader({
 		defaultValues: { [id]: value },
 	});
 
-	function onFormSubmit(data) {
-		onSubmit(data[id]);
+	function onFormSubmit(data: Record<string, string>) {
+		onSubmit(data[id] ?? "");
 
 		if (
 			inputElement.current &&

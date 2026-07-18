@@ -2,6 +2,11 @@ import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useCreateIsolate } from "@otus/queries";
 import IsolateForm from "./IsolateForm";
 
+type FormValues = {
+	sourceName: string;
+	sourceType: string;
+};
+
 type AddIsolateProps = {
 	allowedSourceTypes: string[];
 	/** A callback function to hide the dialog */
@@ -25,7 +30,7 @@ export default function AddIsolate({
 }: AddIsolateProps) {
 	const mutation = useCreateIsolate(otuId);
 
-	function handleSubmit({ sourceName, sourceType }) {
+	function handleSubmit({ sourceName, sourceType }: FormValues) {
 		mutation.mutate(
 			{ otuId, sourceType: sourceType || "unknown", sourceName },
 			{

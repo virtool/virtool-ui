@@ -3,7 +3,11 @@ import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
 import { Pencil, Trash } from "lucide-react";
 
-function MemberItemIcon({ handle }) {
+type MemberItemIconProps = {
+	handle: string;
+};
+
+function MemberItemIcon({ handle }: MemberItemIconProps) {
 	return (
 		<div className="flex items-center pr-2">
 			<InitialIcon handle={handle} size="lg" />

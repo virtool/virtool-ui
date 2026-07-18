@@ -1,6 +1,17 @@
 import { cn } from "@app/cn";
+import type { ReactNode } from "react";
 
-export default function AnalysisValue({ color, label, value }) {
+type AnalysisValueProps = {
+	color: "blue" | "green" | "red";
+	label: ReactNode;
+	value: ReactNode;
+};
+
+export default function AnalysisValue({
+	color,
+	label,
+	value,
+}: AnalysisValueProps) {
 	return (
 		<div className="flex flex-col w-22">
 			<span

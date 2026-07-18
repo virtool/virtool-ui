@@ -1,11 +1,20 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { referenceQueryKeys } from "@references/keys";
 import { useUpdateReferenceMember } from "@references/queries";
-import type { ReferenceGroup, ReferenceUser } from "@references/types";
+import type {
+	ReferenceGroup,
+	ReferenceRights,
+	ReferenceUser,
+} from "@references/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { ReferenceRight } from "./ReferenceRight";
 
-const rights = ["modify_otu", "build", "modify", "remove"];
+const rights: (keyof ReferenceRights)[] = [
+	"modify_otu",
+	"build",
+	"modify",
+	"remove",
+];
 
 type EditReferenceMemberProps = {
 	editId?: string;
@@ -55,7 +64,7 @@ export default function EditReferenceMember({
 		<ReferenceRight
 			key={right}
 			right={right}
-			enabled={member?.[right]}
+			enabled={member?.[right] ?? false}
 			onToggle={handleChange}
 		/>
 	));

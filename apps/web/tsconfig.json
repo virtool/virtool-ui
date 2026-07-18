@@ -41,8 +41,7 @@
 		"outDir": "./build/",
 		"rootDir": "./src",
 		"skipLibCheck": true,
-		"strict": false,
-		"strictNullChecks": true,
+		"strict": true,
 		"target": "ESNext",
 		"typeRoots": ["node_modules/@types", "./src/types"]
 	},

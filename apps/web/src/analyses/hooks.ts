@@ -10,6 +10,7 @@ import type {
 	FormattedNuvsAnalysis,
 	FormattedNuvsHit,
 	FormattedPathoscopeAnalysis,
+	FormattedPathoscopeHit,
 } from "./types";
 
 /** Sort and filter a list of pathoscope hits  */
@@ -36,7 +37,9 @@ export function useSortAndFilterPathoscopeHits(
 		);
 	}
 
-	const sortedHits = sortBy(hits, [(hit) => hit[sort as string]]);
+	const sortedHits = sortBy(hits, [
+		(hit) => hit[sort as keyof FormattedPathoscopeHit],
+	]);
 
 	if (sortDesc) {
 		sortedHits.reverse();
@@ -66,7 +69,7 @@ export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 	const sortedHits =
 		sort === "orfs"
 			? sortBy(hits, [(hit) => hit.annotatedOrfCount]).reverse()
-			: sortBy(hits, [(hit) => hit[sort as string]]);
+			: sortBy(hits, [(hit) => hit[sort as keyof FormattedNuvsHit]]);
 
 	return sortedHits;
 }

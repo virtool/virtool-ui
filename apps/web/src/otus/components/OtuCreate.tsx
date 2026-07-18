@@ -2,6 +2,11 @@ import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { useCreateOtu } from "../queries";
 import OtuForm from "./OtuForm";
 
+type FormValues = {
+	name: string;
+	abbreviation: string;
+};
+
 type CreateOtuProps = {
 	open: boolean;
 	refId: string;
@@ -14,7 +19,7 @@ type CreateOtuProps = {
 export default function OtuCreate({ open, refId, setOpen }: CreateOtuProps) {
 	const mutation = useCreateOtu(refId);
 
-	function handleSubmit({ name, abbreviation }) {
+	function handleSubmit({ name, abbreviation }: FormValues) {
 		mutation.mutate(
 			{ name, abbreviation },
 			{

@@ -3,7 +3,15 @@ import Button from "@base/Button";
 import Icon from "@base/Icon";
 import { Redo2 } from "lucide-react";
 
-export default function NuvsBlastError({ error, onBlast }) {
+type NuvsBlastErrorProps = {
+	error: string;
+	onBlast: () => void;
+};
+
+export default function NuvsBlastError({
+	error,
+	onBlast,
+}: NuvsBlastErrorProps) {
 	return (
 		<Box className="flex items-center justify-between">
 			<span>

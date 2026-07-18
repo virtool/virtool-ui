@@ -1,11 +1,12 @@
 import { cn } from "@app/cn";
 import { toThousand } from "@app/format";
+import type { ReactNode } from "react";
 import { type BarColor, bgColorClasses } from "./colors";
 
 type BarsLegendItemProps = {
 	color: BarColor;
 	count: number;
-	title: string;
+	title: ReactNode;
 };
 
 export function BarsLegendItem({ color, count, title }: BarsLegendItemProps) {

@@ -181,6 +181,9 @@ export type FormattedPathoscopeSequence = {
 	/** A description of the sequence */
 	definition: string;
 
+	/** the per-position mapped read depths, derived from the alignment */
+	filled: number[];
+
 	length: number;
 
 	/** The proportion of reads from the entire sample that match this hit */

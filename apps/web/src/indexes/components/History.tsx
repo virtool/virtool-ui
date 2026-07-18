@@ -4,14 +4,22 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { sortBy } from "es-toolkit";
 import type { ReactNode } from "react";
+import type { UnbuiltChangesSearchResults } from "../types";
 
-type HistoryItem = {
-	id: string;
-	description: string;
-	otu: { name: string };
+type RebuildHistoryEllipsisProps = {
+	unbuilt: UnbuiltChangesSearchResults;
 };
 
-function RebuildHistoryEllipsis({ unbuilt }) {
+type RebuildHistoryItemProps = {
+	description: string;
+	otuName: string;
+};
+
+type RebuildHistoryProps = {
+	unbuilt: UnbuiltChangesSearchResults | null;
+};
+
+function RebuildHistoryEllipsis({ unbuilt }: RebuildHistoryEllipsisProps) {
 	if (unbuilt.page_count > 1) {
 		return (
 			<BoxGroupSection className="text-right" key="last-item">
@@ -21,7 +29,7 @@ function RebuildHistoryEllipsis({ unbuilt }) {
 	}
 }
 
-function RebuildHistoryItem({ description, otuName }) {
+function RebuildHistoryItem({ description, otuName }: RebuildHistoryItemProps) {
 	return (
 		<BoxGroupSection className="grid grid-cols-2">
 			<strong>{otuName}</strong>
@@ -31,13 +39,13 @@ function RebuildHistoryItem({ description, otuName }) {
 	);
 }
 
-export default function RebuildHistory({ unbuilt }) {
+export default function RebuildHistory({ unbuilt }: RebuildHistoryProps) {
 	let content: ReactNode;
 
 	if (unbuilt === null) {
 		content = <LoadingPlaceholder className="mt-5" />;
 	} else {
-		const historyComponents = sortBy((unbuilt.items ?? []) as HistoryItem[], [
+		const historyComponents = sortBy(unbuilt.items ?? [], [
 			(change) => change.otu.name,
 		]).map((change) => (
 			<RebuildHistoryItem

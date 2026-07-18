@@ -8,7 +8,11 @@ import { xor } from "es-toolkit/array";
 import SampleSidebarList from "./SampleSidebarList";
 import SampleSidebarSelector from "./SampleSidebarSelector";
 
-function SubtractionInner({ name }) {
+type SubtractionInnerProps = {
+	name: string;
+};
+
+function SubtractionInner({ name }: SubtractionInnerProps) {
 	return name;
 }
 
@@ -49,8 +53,8 @@ export default function DefaultSubtractions({
 					render={({ name }) => <SubtractionInner name={name} />}
 					items={subtractionOptions}
 					selectedIds={defaultSubtractions}
-					onUpdate={(subtractionId: string) => {
-						onUpdate(xor(defaultSubtractions, [subtractionId]));
+					onUpdate={(subtractionId: string | number) => {
+						onUpdate(xor(defaultSubtractions, [String(subtractionId)]));
 					}}
 					selectionType="default subtractions"
 					manageLink={"/subtractions"}

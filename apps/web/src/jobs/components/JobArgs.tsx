@@ -173,8 +173,13 @@ function JobArgsRows({ workflow, args }: JobArgsRowsProps) {
 	}
 }
 
+type JobArgsProps = {
+	workflow: string;
+	args: Record<string, unknown>;
+};
+
 /** A table of arguments used to run a job. */
-export default function JobArgs({ workflow, args }) {
+export default function JobArgs({ workflow, args }: JobArgsProps) {
 	return (
 		<BoxGroup>
 			<BoxGroupHeader>
@@ -184,7 +189,9 @@ export default function JobArgs({ workflow, args }) {
 			<BoxGroupTable>
 				<caption className="sr-only">Job arguments</caption>
 				<tbody>
-					<JobArgsRows workflow={workflow} args={args} />
+					{/* The API returns args as an untyped record; JobArgsRows narrows
+					    them per workflow. */}
+					<JobArgsRows {...({ workflow, args } as JobArgsRowsProps)} />
 				</tbody>
 			</BoxGroupTable>
 		</BoxGroup>

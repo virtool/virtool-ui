@@ -17,7 +17,7 @@ const series = [
 
 export function drawNucleotidesChart(
 	element: HTMLElement,
-	data: Array<[number, number, number, number]>,
+	data: number[][],
 	baseWidth: number,
 ) {
 	const label = `Nucleotide composition across ${pluralize(data.length, "read position")}, showing the percentage of guanine, adenine, thymine, and cytosine.`;

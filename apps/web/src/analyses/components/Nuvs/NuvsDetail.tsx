@@ -3,12 +3,13 @@ import type { FormattedNuvsHit, NuvsOrf as NuvsOrfType } from "@analyses/types";
 import { calculateAnnotatedOrfCount } from "@analyses/utils";
 import Badge from "@base/Badge";
 import { sortBy } from "es-toolkit";
+import type { ReactNode } from "react";
 import NuvsBlast from "./NuvsBlast";
 import NuvsOrf from "./NuvsOrf";
 import NuvsSequence from "./NuvsSequence";
 import NuvsValues from "./NuvsValues";
 
-function NuvsFamilies({ families }) {
+function NuvsFamilies({ families }: { families: string[] }) {
 	return (
 		<div className="flex border border-gray-300 rounded mt-2.5 mb-1 overflow-hidden">
 			<div className="py-1 px-2.5 bg-gray-100 border-r border-gray-300">
@@ -21,7 +22,7 @@ function NuvsFamilies({ families }) {
 	);
 }
 
-function NuvsDetailContainer({ children }) {
+function NuvsDetailContainer({ children }: { children: ReactNode }) {
 	return (
 		<div className="flex flex-col flex-grow items-stretch">{children}</div>
 	);

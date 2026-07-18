@@ -9,9 +9,10 @@ import { renderWithRouter } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 import { SubtractionFileManager } from "../SubtractionFileManager";
 
-function createFiles(fileNames) {
+function createFiles(fileNames: string[]) {
 	return fileNames.map(
-		(fileName) => new File(["test"], fileName, { type: "application/gzip" }),
+		(fileName: string) =>
+			new File(["test"], fileName, { type: "application/gzip" }),
 	);
 }
 

@@ -5,7 +5,13 @@ import { drawNucleotidesChart } from "./Nucleotides";
 import { SampleChart } from "./SampleChart";
 import { drawSequencesChart } from "./Sequences";
 
-export function Quality({ bases, composition, sequences }) {
+type QualityProps = {
+	bases: number[][];
+	composition: number[][];
+	sequences: number[];
+};
+
+export function Quality({ bases, composition, sequences }: QualityProps) {
 	const [ref, { width }] = useElementSize();
 
 	return (

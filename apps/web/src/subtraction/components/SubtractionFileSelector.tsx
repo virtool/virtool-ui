@@ -76,14 +76,16 @@ export function SubtractionFileSelector({
 		(item) => onClick([item.id]),
 	);
 
-	function renderRow(item: Upload) {
-		const optionId = getOptionId(item.id);
+	// CompactScrollList types its rows as `unknown`; the items are uploads.
+	function renderRow(item: unknown) {
+		const upload = item as Upload;
+		const optionId = getOptionId(upload.id);
 
 		return (
 			<SubtractionFileItem
-				key={item.id}
-				{...item}
-				active={selected?.includes(item.id)}
+				key={upload.id}
+				{...upload}
+				active={selected?.includes(upload.id)}
 				highlighted={activeOptionId === optionId}
 				optionId={optionId}
 				onClick={onClick}

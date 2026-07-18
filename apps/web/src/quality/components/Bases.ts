@@ -5,7 +5,14 @@ import {
 	QUALITY_CHART_HEIGHT,
 	QUALITY_CHART_MARGIN,
 } from "@samples/charting.js";
-import { area, axisBottom, axisLeft, line, scaleLinear } from "d3";
+import {
+	area,
+	axisBottom,
+	axisLeft,
+	line,
+	type ScaleLinear,
+	scaleLinear,
+} from "d3";
 import { min } from "es-toolkit/compat";
 
 const series = [
@@ -15,37 +22,52 @@ const series = [
 	{ label: "Decile", color: "var(--color-yellow-400)" },
 ];
 
-function getArea(name: string, areaX, y, a, b) {
+function getArea(
+	name: string,
+	areaX: (d: number[], i: number) => number,
+	y: ScaleLinear<number, number>,
+	a: number,
+	b: number,
+) {
 	return {
 		name,
-		func: area()
+		func: area<number[]>()
 			.x(areaX)
-			.y0((d) => y(d[a]))
-			.y1((d) => y(d[b])),
+			.y0((d) => y(d[a] ?? 0))
+			.y1((d) => y(d[b] ?? 0)),
 	};
 }
 
-function getMinQuality(data): number | undefined {
+function getMinQuality(data: number[][]): number | undefined {
 	return min(data.map((document) => min(Object.values(document))));
 }
 
 /**
  * Generates the lines representing mean and median base quality.
  */
-function lineDrawer(data, key, x, y) {
+function lineDrawer(
+	data: number[][],
+	key: "mean" | "median",
+	x: ScaleLinear<number, number>,
+	y: ScaleLinear<number, number>,
+) {
 	const column = {
 		mean: 0,
 		median: 1,
 	}[key];
 
-	const generator = line()
+	const generator = line<number[]>()
 		.x((_, i) => x(i))
-		.y((d) => y(d[column]));
+		.y((d) => y(d[column] ?? 0));
 
 	return generator(data);
 }
 
-export function drawBasesChart(element: HTMLElement, data, baseWidth: number) {
+export function drawBasesChart(
+	element: HTMLElement,
+	data: number[][],
+	baseWidth: number,
+) {
 	const label = `Base quality distribution across ${pluralize(data.length, "read position")}, showing mean and median quality with interquartile and interdecile ranges.`;
 
 	const svg = createSvg(element, baseWidth, label);
@@ -60,7 +82,7 @@ export function drawBasesChart(element: HTMLElement, data, baseWidth: number) {
 
 	const x = scaleLinear().range([0, width]).domain([0, data.length]);
 
-	function areaX(_d, i) {
+	function areaX(_d: number[], i: number) {
 		return x(i);
 	}
 

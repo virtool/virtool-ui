@@ -4,6 +4,14 @@ import type { OtuSegment, OtuSequence } from "@otus/types";
 import { compact } from "es-toolkit";
 import SequenceForm from "./SequenceForm";
 
+type FormValues = {
+	accession: string;
+	definition: string;
+	host: string;
+	segment: string | null;
+	sequence: string;
+};
+
 type CreateSequenceProps = {
 	isolateId: string;
 	open?: boolean;
@@ -33,7 +41,13 @@ export default function CreateSequence({
 			!compact(sequences.map((seq) => seq.segment)).includes(segment.name),
 	);
 
-	function onSubmit({ accession, definition, host, sequence, segment }) {
+	function onSubmit({
+		accession,
+		definition,
+		host,
+		sequence,
+		segment,
+	}: FormValues) {
 		mutation.mutate(
 			{
 				accession,

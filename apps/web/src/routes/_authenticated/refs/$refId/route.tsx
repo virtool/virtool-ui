@@ -1,3 +1,4 @@
+import type { QueryError } from "@app/queryErrors";
 import ContainerNarrow from "@base/ContainerNarrow";
 import ReferenceDetailHeader from "@references/components/Detail/ReferenceDetailHeader";
 import ReferenceDetailTabs from "@references/components/Detail/ReferenceDetailTabs";
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/refs/$refId")({
 		try {
 			await queryClient.ensureQueryData(referenceQueryOptions(refId));
 		} catch (error) {
-			if (error?.response?.status === 404) {
+			if ((error as QueryError).response?.status === 404) {
 				throw notFound();
 			}
 			throw error;
