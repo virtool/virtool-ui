@@ -3,7 +3,9 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { seedUser } from "../auth/test/fixtures";
 import type { Db } from "../db/pg";
 import { analyses } from "../db/schema/analyses";
+import { indexes } from "../db/schema/indexes";
 import { jobs } from "../db/schema/jobs";
+import { legacySamples } from "../db/schema/samples";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
 import { getJob, getJobs, JobNotFoundError } from "./data";
@@ -116,6 +118,44 @@ describe("getJob", () => {
 		const job = await getJob(db, jobId);
 
 		expect(job.args.analysis_id).toBe(String(analysis.id));
+	});
+
+	// A create_sample job's sample is resolved through the reverse
+	// `legacy_samples.job_id` foreign key — there is no `job_samples` link table
+	// — and its integer id is exposed as the `sample_id` arg.
+	it("exposes a linked sample's id as a string arg", async () => {
+		const jobId = await seedJob("succeeded", { started: 0, of: 1 });
+
+		const [sample] = await db
+			.insert(legacySamples)
+			.values({ job_id: jobId })
+			.returning({ id: legacySamples.id });
+		if (!sample) {
+			throw new Error("failed to seed sample");
+		}
+
+		const job = await getJob(db, jobId);
+
+		expect(job.args.sample_id).toBe(String(sample.id));
+	});
+
+	// A build_index job's index is resolved through the reverse `indexes.job_id`
+	// foreign key — there is no `job_indexes` link table — and its integer id is
+	// exposed as the `index_id` arg.
+	it("exposes a linked index's id as a string arg", async () => {
+		const jobId = await seedJob("succeeded", { started: 0, of: 1 });
+
+		const [index] = await db
+			.insert(indexes)
+			.values({ job_id: jobId })
+			.returning({ id: indexes.id });
+		if (!index) {
+			throw new Error("failed to seed index");
+		}
+
+		const job = await getJob(db, jobId);
+
+		expect(job.args.index_id).toBe(String(index.id));
 	});
 });
 

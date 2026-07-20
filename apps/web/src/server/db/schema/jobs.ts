@@ -1,13 +1,13 @@
-// Read-only mirror of the `jobs` table and its resource junction tables,
-// managed by the upstream Python service via Alembic. Do not generate or push
-// migrations from this side. Keep the columns in sync with
-// `../../../../../../virtool/virtool/jobs/pg.py`.
+// Read-only mirror of the `jobs` table, managed by the upstream Python service
+// via Alembic. Do not generate or push migrations from this side. Keep the
+// columns in sync with `../../../../../../virtool/virtool/jobs/pg.py`.
 //
-// The legacy Mongo `args` field is not a column. A job's sample and index
-// resources live in the `job_samples` / `job_indexes` junction tables, while
-// its subtraction and analysis resources are found on the owning rows
-// (`subtractions.job_id`, `analyses.job_id`). All are recombined into `args`
-// when a job is read.
+// The legacy Mongo `args` field is not a column. A job's resources are all
+// found on the owning rows via a reverse `job_id` foreign key —
+// `legacy_samples.job_id`, `indexes.job_id`, `subtractions.job_id`, and
+// `analyses.job_id` — and recombined into `args` when a job is read. There are
+// no `job_samples` / `job_indexes` junction tables: the sample and index are
+// resolved through those reverse foreign keys, not link rows.
 
 import {
 	boolean,
@@ -54,13 +54,3 @@ export const jobs = pgTable("jobs", {
 
 /** A row from the `jobs` table. */
 export type JobRow = typeof jobs.$inferSelect;
-
-export const jobSamples = pgTable("job_samples", {
-	job_id: integer("job_id").primaryKey(),
-	sample_id: text("sample_id").notNull(),
-});
-
-export const jobIndexes = pgTable("job_indexes", {
-	job_id: integer("job_id").primaryKey(),
-	index_id: text("index_id").notNull(),
-});

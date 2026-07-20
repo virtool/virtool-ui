@@ -5,9 +5,11 @@
 // the `export *` list as it lands.
 export * from "./analyses";
 export * from "./groups";
+export * from "./indexes";
 export * from "./jobs";
 export * from "./labels";
 export * from "./messages";
+export * from "./samples";
 export * from "./sessions";
 export * from "./settings";
 export * from "./subtractions";
