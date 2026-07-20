@@ -4,12 +4,23 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { verifyPassword } from "../auth/password";
 import { seedSession, seedUser } from "../auth/test/fixtures";
 import type { Db } from "../db/pg";
+import { groups, userGroups } from "../db/schema/groups";
 import { sessions } from "../db/schema/sessions";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
+import { addToGroup, seedGroup } from "../groups/test/fixtures";
 import {
+	createUser,
+	findUsers,
 	GroupMembershipError,
 	getAccount,
+	getAdministratorRole,
+	getUser,
+	getUserCount,
+	listAdministratorRoles,
+	listUsers,
+	setAdministratorRole,
+	UserConflictError,
 	UserNotFoundError,
 	updateUser,
 } from "./data";
@@ -28,6 +39,7 @@ afterAll(async () => {
 
 beforeEach(async () => {
 	await db.delete(users);
+	await db.delete(groups);
 });
 
 const settings = {
@@ -172,5 +184,271 @@ describe("updateUser", () => {
 
 		expect(await countSessions(userId)).toBe(1);
 		expect((await readUser(userId))?.active).toBe(true);
+	});
+
+	it("replaces group membership, keeping the primary flag on a group that stays", async () => {
+		const userId = await seedUser(db);
+		const keep = await seedGroup(db, { name: "keep" });
+		const drop = await seedGroup(db, { name: "drop" });
+		const add = await seedGroup(db, { name: "add" });
+		await updateUser(db, userId, { groups: [keep, drop], primary_group: keep });
+
+		await updateUser(db, userId, { groups: [keep, add] });
+
+		const memberships = await db
+			.select()
+			.from(userGroups)
+			.where(eq(userGroups.userId, userId));
+		expect(memberships.map((row) => row.groupId).sort()).toEqual(
+			[keep, add].sort(),
+		);
+		// The primary survives because its group is still a member.
+		const primary = memberships.find((row) => row.primary);
+		expect(primary?.groupId).toBe(keep);
+	});
+
+	it("promotes a group the user belongs to and demotes the previous primary", async () => {
+		const userId = await seedUser(db);
+		const first = await seedGroup(db, { name: "first" });
+		const second = await seedGroup(db, { name: "second" });
+		await addToGroup(db, userId, first);
+		await addToGroup(db, userId, second);
+
+		await updateUser(db, userId, { primary_group: first });
+		await updateUser(db, userId, { primary_group: second });
+
+		const memberships = await db
+			.select()
+			.from(userGroups)
+			.where(eq(userGroups.userId, userId));
+		expect(
+			memberships.filter((row) => row.primary).map((row) => row.groupId),
+		).toEqual([second]);
+	});
+
+	it("clears the primary group", async () => {
+		const userId = await seedUser(db);
+		const groupId = await seedGroup(db);
+		await addToGroup(db, userId, groupId);
+		await updateUser(db, userId, { primary_group: groupId });
+
+		await updateUser(db, userId, { primary_group: null });
+
+		const memberships = await db
+			.select()
+			.from(userGroups)
+			.where(eq(userGroups.userId, userId));
+		expect(memberships.every((row) => !row.primary)).toBe(true);
+	});
+
+	it("rejects a primary group the user does not belong to", async () => {
+		const userId = await seedUser(db);
+		const groupId = await seedGroup(db);
+
+		await expect(
+			updateUser(db, userId, { primary_group: groupId }),
+		).rejects.toBeInstanceOf(GroupMembershipError);
+	});
+
+	it("throws when the user does not exist", async () => {
+		await expect(
+			updateUser(db, 404, { handle: "ghost" }),
+		).rejects.toBeInstanceOf(UserNotFoundError);
+	});
+});
+
+describe("getUserCount", () => {
+	it("counts every user row", async () => {
+		expect(await getUserCount(db)).toBe(0);
+		await seedUser(db, { handle: "alice" });
+		await seedUser(db, { handle: "bob" });
+		expect(await getUserCount(db)).toBe(2);
+	});
+});
+
+describe("listUsers", () => {
+	it("returns only active users, handle-ascending and case-insensitively", async () => {
+		await seedUser(db, { handle: "Charlie" });
+		await seedUser(db, { handle: "alice" });
+		await seedUser(db, { handle: "bob", active: false });
+
+		const result = await listUsers(db);
+
+		expect(result.map((user) => user.handle)).toEqual(["alice", "Charlie"]);
+	});
+});
+
+describe("findUsers", () => {
+	it("filters by handle substring", async () => {
+		await seedUser(db, { handle: "alice" });
+		await seedUser(db, { handle: "malice" });
+		await seedUser(db, { handle: "bob" });
+
+		const result = await findUsers(db, { term: "lice" });
+
+		expect(result.items.map((user) => user.handle)).toEqual([
+			"alice",
+			"malice",
+		]);
+		expect(result.found_count).toBe(2);
+		expect(result.total_count).toBe(3);
+	});
+
+	it("filters to administrators and to non-administrators", async () => {
+		await seedUser(db, { handle: "admin", administratorRole: "full" });
+		await seedUser(db, { handle: "regular" });
+
+		const admins = await findUsers(db, { administrator: true });
+		const regulars = await findUsers(db, { administrator: false });
+
+		expect(admins.items.map((user) => user.handle)).toEqual(["admin"]);
+		expect(regulars.items.map((user) => user.handle)).toEqual(["regular"]);
+	});
+
+	it("excludes inactive users by default and includes them on request", async () => {
+		await seedUser(db, { handle: "alice" });
+		await seedUser(db, { handle: "bob", active: false });
+
+		const active = await findUsers(db, {});
+		const inactive = await findUsers(db, { active: false });
+
+		expect(active.items.map((user) => user.handle)).toEqual(["alice"]);
+		expect(inactive.items.map((user) => user.handle)).toEqual(["bob"]);
+	});
+
+	it("paginates and reports the page count", async () => {
+		for (const handle of ["a", "b", "c"]) {
+			await seedUser(db, { handle });
+		}
+
+		const page1 = await findUsers(db, { page: 1, perPage: 2 });
+		const page2 = await findUsers(db, { page: 2, perPage: 2 });
+
+		expect(page1.items.map((user) => user.handle)).toEqual(["a", "b"]);
+		expect(page2.items.map((user) => user.handle)).toEqual(["c"]);
+		expect(page1.page_count).toBe(2);
+	});
+});
+
+describe("getUser", () => {
+	it("merges permissions across the user's groups and names the primary", async () => {
+		const userId = await seedUser(db, { handle: "alice" });
+		const refs = await seedGroup(db, {
+			name: "refs",
+			permissions: { create_ref: true },
+		});
+		const samples = await seedGroup(db, {
+			name: "samples",
+			permissions: { create_sample: true },
+		});
+		await addToGroup(db, userId, refs);
+		await addToGroup(db, userId, samples);
+		await updateUser(db, userId, { primary_group: samples });
+
+		const user = await getUser(db, userId);
+
+		expect(user.permissions).toMatchObject({
+			create_ref: true,
+			create_sample: true,
+			upload_file: false,
+		});
+		expect(user.groups.map((group) => group.name)).toEqual(["refs", "samples"]);
+		expect(user.primary_group).toMatchObject({ id: samples, name: "samples" });
+	});
+
+	it("throws when the user does not exist", async () => {
+		await expect(getUser(db, 404)).rejects.toBeInstanceOf(UserNotFoundError);
+	});
+});
+
+describe("createUser", () => {
+	it("creates a user with the default settings and no administrator role", async () => {
+		const user = await createUser(db, {
+			handle: "alice",
+			password: "a-real-password",
+			forceReset: true,
+		});
+
+		expect(user).toMatchObject({
+			handle: "alice",
+			administrator_role: null,
+			active: true,
+			force_reset: true,
+			groups: [],
+			primary_group: null,
+		});
+
+		const [row] = await db.select().from(users).where(eq(users.id, user.id));
+		expect(row?.settings).toEqual({
+			skip_quick_analyze_dialog: true,
+			show_ids: true,
+			show_versions: true,
+			quick_analyze_workflow: "pathoscope",
+		});
+		// The password is hashed, not stored verbatim.
+		expect(
+			await verifyPassword("a-real-password", row?.password as Buffer),
+		).toBe(true);
+	});
+
+	it("rejects a duplicate handle", async () => {
+		await createUser(db, {
+			handle: "alice",
+			password: "a-real-password",
+			forceReset: false,
+		});
+
+		await expect(
+			createUser(db, {
+				handle: "alice",
+				password: "another-password",
+				forceReset: false,
+			}),
+		).rejects.toBeInstanceOf(UserConflictError);
+	});
+});
+
+describe("setAdministratorRole", () => {
+	it("assigns and clears the administrator role", async () => {
+		const userId = await seedUser(db);
+
+		const promoted = await setAdministratorRole(db, userId, "full");
+		expect(promoted.administrator_role).toBe("full");
+
+		const demoted = await setAdministratorRole(db, userId, null);
+		expect(demoted.administrator_role).toBeNull();
+	});
+
+	it("throws when the user does not exist", async () => {
+		await expect(setAdministratorRole(db, 404, "full")).rejects.toBeInstanceOf(
+			UserNotFoundError,
+		);
+	});
+});
+
+describe("getAdministratorRole", () => {
+	it("returns the role, or null when there is none", async () => {
+		const admin = await seedUser(db, {
+			handle: "admin",
+			administratorRole: "settings",
+		});
+		const regular = await seedUser(db, { handle: "regular" });
+
+		expect(await getAdministratorRole(db, admin)).toBe("settings");
+		expect(await getAdministratorRole(db, regular)).toBeNull();
+	});
+});
+
+describe("listAdministratorRoles", () => {
+	it("lists every assignable administrator role", async () => {
+		const roles = listAdministratorRoles();
+
+		expect(roles.map((role) => role.id)).toEqual([
+			"full",
+			"settings",
+			"spaces",
+			"users",
+			"base",
+		]);
 	});
 });

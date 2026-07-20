@@ -15,7 +15,12 @@ import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
 import type { CookieAdapter } from "./cookies";
 import {
+	createFirstUser,
+	FirstUserExistsError,
+	InvalidCredentialsError,
 	InvalidResetSessionError,
+	login,
+	logout,
 	PasswordReuseError,
 	resetPassword,
 } from "./core";
@@ -284,5 +289,192 @@ describe("resetPassword", () => {
 				ip: "127.0.0.1",
 			}),
 		).rejects.toThrow(InvalidResetSessionError);
+	});
+});
+
+describe("createFirstUser", () => {
+	it("creates a full-administrator user and signs them in", async () => {
+		const cookies = fakeCookies();
+
+		const user = await createFirstUser(db, cookies, {
+			handle: "root",
+			password: "a-real-password",
+			ip: "127.0.0.1",
+		});
+
+		expect(user.handle).toBe("root");
+		expect(user.administrator_role).toBe("full");
+
+		// The caller lands in the app: an authenticated session and both cookies.
+		const rows = await db
+			.select()
+			.from(sessions)
+			.where(eq(sessions.userId, user.id));
+		expect(rows).toHaveLength(1);
+		expect(rows[0]?.sessionType).toBe("authenticated");
+		expect(cookies.sessionId).toBe(rows[0]?.sessionId);
+		expect(cookies.token).toBeDefined();
+	});
+
+	it("refuses once any user exists", async () => {
+		await seedUser(db, { handle: "existing" });
+		const cookies = fakeCookies();
+
+		await expect(
+			createFirstUser(db, cookies, {
+				handle: "root",
+				password: "a-real-password",
+				ip: "127.0.0.1",
+			}),
+		).rejects.toBeInstanceOf(FirstUserExistsError);
+		expect(cookies.token).toBeUndefined();
+	});
+});
+
+describe("login", () => {
+	it("authenticates a valid credential and sets both cookies", async () => {
+		const userId = await seedUser(db, {
+			handle: "alice",
+			password: await hashPassword(OLD_PASSWORD),
+		});
+		const cookies = fakeCookies();
+
+		const result = await login(db, cookies, {
+			handle: "alice",
+			password: OLD_PASSWORD,
+			remember: false,
+			ip: "127.0.0.1",
+		});
+
+		expect(result).toEqual({ status: "authenticated" });
+		const rows = await db
+			.select()
+			.from(sessions)
+			.where(eq(sessions.userId, userId));
+		expect(rows).toHaveLength(1);
+		expect(rows[0]?.sessionType).toBe("authenticated");
+		expect(cookies.sessionId).toBe(rows[0]?.sessionId);
+		expect(cookies.token).toBeDefined();
+	});
+
+	it("matches the handle case-insensitively", async () => {
+		await seedUser(db, {
+			handle: "alice",
+			password: await hashPassword(OLD_PASSWORD),
+		});
+		const cookies = fakeCookies();
+
+		const result = await login(db, cookies, {
+			handle: "ALICE",
+			password: OLD_PASSWORD,
+			remember: false,
+			ip: "127.0.0.1",
+		});
+
+		expect(result).toEqual({ status: "authenticated" });
+	});
+
+	it("rejects a wrong password without creating a session", async () => {
+		const userId = await seedUser(db, {
+			handle: "alice",
+			password: await hashPassword(OLD_PASSWORD),
+		});
+		const cookies = fakeCookies();
+
+		await expect(
+			login(db, cookies, {
+				handle: "alice",
+				password: "wrong-password",
+				remember: false,
+				ip: "127.0.0.1",
+			}),
+		).rejects.toBeInstanceOf(InvalidCredentialsError);
+
+		expect(
+			await db.select().from(sessions).where(eq(sessions.userId, userId)),
+		).toHaveLength(0);
+		expect(cookies.sessionId).toBeUndefined();
+	});
+
+	it("rejects an unknown handle", async () => {
+		const cookies = fakeCookies();
+
+		await expect(
+			login(db, cookies, {
+				handle: "nobody",
+				password: OLD_PASSWORD,
+				remember: false,
+				ip: "127.0.0.1",
+			}),
+		).rejects.toBeInstanceOf(InvalidCredentialsError);
+	});
+
+	it("rejects an inactive user", async () => {
+		await seedUser(db, {
+			handle: "alice",
+			active: false,
+			password: await hashPassword(OLD_PASSWORD),
+		});
+		const cookies = fakeCookies();
+
+		await expect(
+			login(db, cookies, {
+				handle: "alice",
+				password: OLD_PASSWORD,
+				remember: false,
+				ip: "127.0.0.1",
+			}),
+		).rejects.toBeInstanceOf(InvalidCredentialsError);
+	});
+
+	it("defers a force-reset user to /reset instead of authenticating", async () => {
+		const userId = await seedUser(db, {
+			handle: "alice",
+			forceReset: true,
+			password: await hashPassword(OLD_PASSWORD),
+		});
+		const cookies = fakeCookies();
+
+		const result = await login(db, cookies, {
+			handle: "alice",
+			password: OLD_PASSWORD,
+			remember: false,
+			ip: "127.0.0.1",
+		});
+
+		expect(result.status).toBe("reset_required");
+		// A reset session is set, but no token cookie — the reset is not yet a login.
+		const rows = await db
+			.select()
+			.from(sessions)
+			.where(eq(sessions.userId, userId));
+		expect(rows).toHaveLength(1);
+		expect(rows[0]?.sessionType).toBe("reset");
+		expect(cookies.sessionId).toBe(rows[0]?.sessionId);
+		expect(cookies.token).toBeUndefined();
+	});
+});
+
+describe("logout", () => {
+	it("invalidates the session and clears the cookies", async () => {
+		const userId = await seedUser(db);
+		const { sessionId } = await seedSession(db, userId);
+		const cookies = fakeCookies(sessionId);
+
+		await logout(db, cookies);
+
+		expect(
+			await db.select().from(sessions).where(eq(sessions.sessionId, sessionId)),
+		).toHaveLength(0);
+		expect(cookies.sessionId).toBeUndefined();
+		expect(cookies.token).toBeUndefined();
+	});
+
+	it("still clears the cookies when there is no session", async () => {
+		const cookies = fakeCookies();
+
+		await logout(db, cookies);
+
+		expect(cookies.sessionId).toBeUndefined();
 	});
 });
