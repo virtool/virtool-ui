@@ -6,7 +6,7 @@ import type { SearchResult } from "@/types/api";
 /** Minimal HMM used for resource listings */
 export type HMMMinimal = {
 	/** The unique identifier */
-	id: string;
+	id: number;
 	cluster: number;
 	count: number;
 	families: { [key: string]: number };

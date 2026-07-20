@@ -271,7 +271,7 @@ export type NuvsOrfHit = {
 	full_bias: number;
 	full_e: number;
 	full_score: number;
-	hit: string;
+	hit: number;
 	names: string[];
 };
 

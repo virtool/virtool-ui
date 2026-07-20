@@ -20,7 +20,7 @@ const routeApi = getRouteApi("/_authenticated/hmms/$hmmId");
  */
 export default function HmmDetail() {
 	const { hmmId } = routeApi.useParams();
-	const { data, isPending, isError } = useFetchHmm(hmmId);
+	const { data, isPending, isError } = useFetchHmm(Number(hmmId));
 
 	if (isError) {
 		return <NotFound />;

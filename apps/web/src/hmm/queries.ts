@@ -69,7 +69,7 @@ export function useSuspenseHmms(page: number, per_page: number, term?: string) {
  * @param hmmId - The id of the hmm to fetch
  * @returns A single HMM
  */
-export function useFetchHmm(hmmId: string) {
+export function useFetchHmm(hmmId: number) {
 	return useQuery<Hmm, ErrorResponse>({
 		queryKey: hmmQueryKeys.detail(hmmId),
 		queryFn: () => apiClient.get(`/hmms/${hmmId}`).then((res) => res.body),
