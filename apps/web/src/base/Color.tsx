@@ -1,80 +1,108 @@
 import { cn } from "@app/cn";
 import Input from "./Input";
 
-const colors: string[] = [
+type PresetColor = {
+	// The color in hex format, without a leading "#"
+	hex: string;
+	// The accessible name announced for the swatch
+	name: string;
+};
+
+const presetColors: PresetColor[] = [
 	// Grey
-	"D1D5DB",
-	"6B7280",
-	"374151",
+	{ hex: "D1D5DB", name: "Light grey" },
+	{ hex: "6B7280", name: "Grey" },
+	{ hex: "374151", name: "Dark grey" },
 
 	// Red
-	"FCA5A5",
-	"EF4444",
-	"B91C1C",
+	{ hex: "FCA5A5", name: "Light red" },
+	{ hex: "EF4444", name: "Red" },
+	{ hex: "B91C1C", name: "Dark red" },
 
 	// Yellow
-	"FCD34D",
-	"F59E0B",
-	"B45309",
+	{ hex: "FCD34D", name: "Light yellow" },
+	{ hex: "F59E0B", name: "Yellow" },
+	{ hex: "B45309", name: "Dark yellow" },
 
 	// Green
-	"6EE7B7",
-	"10B981",
-	"047857",
+	{ hex: "6EE7B7", name: "Light green" },
+	{ hex: "10B981", name: "Green" },
+	{ hex: "047857", name: "Dark green" },
 
 	// Blue
-	"93C5FD",
-	"3B82F6",
-	"1D4ED8",
+	{ hex: "93C5FD", name: "Light blue" },
+	{ hex: "3B82F6", name: "Blue" },
+	{ hex: "1D4ED8", name: "Dark blue" },
 
 	// Indigo
-	"A5B4FC",
-	"6366F1",
-	"4338CA",
+	{ hex: "A5B4FC", name: "Light indigo" },
+	{ hex: "6366F1", name: "Indigo" },
+	{ hex: "4338CA", name: "Dark indigo" },
 
 	// Purple
-	"C4B5FD",
-	"8B5CF6",
-	"5B21B6",
+	{ hex: "C4B5FD", name: "Light purple" },
+	{ hex: "8B5CF6", name: "Purple" },
+	{ hex: "5B21B6", name: "Dark purple" },
 
 	// Pink
-	"FBCFE8",
-	"F472B6",
-	"EC4899",
+	{ hex: "FBCFE8", name: "Light pink" },
+	{ hex: "F472B6", name: "Pink" },
+	{ hex: "EC4899", name: "Dark pink" },
 ];
 
-type ColorSquareProps = {
-	// The color in hex format
+type ColorSwatchProps = {
+	// The color in hex format, with a leading "#"
 	color: string;
-	// The callback to be called when the color is clicked
-	onClick: (color: string) => void;
+	// The name of the radio group this swatch belongs to
+	group: string;
+	// The accessible name announced for the swatch
+	name: string;
+	// Whether this swatch matches the current value
+	checked: boolean;
+	// The callback to be called when the swatch is selected
+	onChange: (color: string) => void;
 };
 
 /**
- * A color square that updates the color input when clicked
+ * A radio swatch that selects its color when chosen
  */
-function ColorSquare({ color, onClick }: ColorSquareProps) {
+function ColorSwatch({
+	color,
+	group,
+	name,
+	checked,
+	onChange,
+}: ColorSwatchProps) {
 	return (
-		<button
-			type="button"
-			title={color}
-			onClick={() => onClick(color)}
+		<label
 			className={cn(
 				"flex-1",
 				"h-full",
+				"cursor-pointer",
 				"transition-transform",
 				"hover:-translate-y-0.5",
-				"focus:outline-none",
-				"focus:ring-2",
-				"focus:ring-white",
-				"focus:ring-offset-2",
-				"focus:ring-offset-gray-300",
-				"focus:z-10",
+				"focus-within:ring-2",
+				"focus-within:ring-white",
+				"focus-within:ring-offset-2",
+				"focus-within:ring-offset-gray-300",
+				"focus-within:z-10",
 				"first:rounded-l-sm",
 				"last:rounded-r-sm",
+				checked &&
+					"ring-2 ring-gray-900 ring-offset-2 ring-offset-gray-300 z-10",
 			)}
 			style={{ backgroundColor: color }}
-		/>
+		>
+			<input
+				type="radio"
+				name={group}
+				value={color}
+				checked={checked}
+				onChange={() => onChange(color)}
+				aria-label={name}
+				className="sr-only"
+			/>
+		</label>
 	);
 }
 
@@ -88,7 +116,7 @@ type ColorProps = {
 };
 
 /**
- * A color text input with a color picker below it
+ * A color text input with an accessible swatch picker below it
  */
 export default function Color({ id, value, onChange }: ColorProps) {
 	return (
@@ -100,11 +128,25 @@ export default function Color({ id, value, onChange }: ColorProps) {
 					onChange(e.target.value)
 				}
 			/>
-			<div className={cn("flex", "h-9", "mt-2.5")}>
-				{colors.map((color) => (
-					<ColorSquare key={color} color={`#${color}`} onClick={onChange} />
-				))}
-			</div>
+			<fieldset
+				aria-label="Preset colors"
+				className={cn("flex", "h-9", "mt-2.5", "border-0", "p-0")}
+			>
+				{presetColors.map(({ hex, name }) => {
+					const color = `#${hex}`;
+
+					return (
+						<ColorSwatch
+							key={hex}
+							color={color}
+							group={`${id}-swatch`}
+							name={name}
+							checked={value.toLowerCase() === color.toLowerCase()}
+							onChange={onChange}
+						/>
+					);
+				})}
+			</fieldset>
 		</div>
 	);
 }

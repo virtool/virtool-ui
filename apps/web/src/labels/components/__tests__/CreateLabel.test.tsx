@@ -17,7 +17,7 @@ describe("<CreateLabel>", () => {
 
 		await userEvent.type(descriptionInput, "This is a description");
 		await userEvent.type(nameInput, "Foo");
-		await userEvent.click(screen.getByRole("button", { name: "#6B7280" }));
+		await userEvent.click(screen.getByRole("radio", { name: "Grey" }));
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
 		await waitFor(() =>
