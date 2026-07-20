@@ -1,15 +1,7 @@
 import axe, { type Result, type RunOptions } from "axe-core";
 
-// `color-contrast` needs a layout engine to compute rendered colours, and jsdom
-// has none — the rule either throws or reports noise. It is checked in a real
-// browser instead (VIR-2693 / VIR-2746), so disable it here.
-const defaultOptions: RunOptions = {
-	rules: {
-		"color-contrast": { enabled: false },
-	},
-};
-
-function formatViolations(violations: Result[]): string {
+/** Render axe violations into a readable, indented block for the failure message. */
+export function formatViolations(violations: Result[]): string {
 	return violations
 		.map((violation) => {
 			const nodes = violation.nodes
@@ -32,13 +24,22 @@ function formatViolations(violations: Result[]): string {
  * Opt-in per test rather than run automatically inside `renderWithProviders`,
  * so adding the harness does not fail every existing test at once and each
  * barrier can be fixed incrementally. Pass the element returned by a render
- * helper — usually `container` — or any subtree to scope the check.
+ * helper — usually `baseElement` — or any subtree to scope the check.
+ *
+ * `color-contrast` needs a layout engine to compute rendered colours, and
+ * jsdom has none — the rule either throws or reports noise, so it is checked
+ * in a real browser instead (VIR-2693 / VIR-2746). It stays disabled unless a
+ * caller re-enables it explicitly through `options.rules`; other options merge
+ * over the defaults.
  */
 export async function expectNoViolations(
 	container: Element,
-	options: RunOptions = defaultOptions,
+	options: RunOptions = {},
 ): Promise<void> {
-	const { violations } = await axe.run(container, options);
+	const { violations } = await axe.run(container, {
+		...options,
+		rules: { "color-contrast": { enabled: false }, ...options.rules },
+	});
 
 	if (violations.length > 0) {
 		throw new Error(

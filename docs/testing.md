@@ -160,15 +160,22 @@ list) is fine.
 
 ## Accessibility
 
-`expectNoViolations(container)` from `apps/web/src/tests/axe.ts` runs
+`expectNoViolations(element)` from `apps/web/src/tests/axe.ts` runs
 axe-core over a rendered subtree and fails the test if it finds any
 violation, reporting the rule, the offending node, and axe's fix
 summary. Render as usual, then assert:
 
 ```ts
-const { container } = renderWithProviders(<CreateSample />);
-await expectNoViolations(container);
+const { baseElement } = renderWithProviders(<CreateSample />);
+await expectNoViolations(baseElement);
 ```
+
+Scan `baseElement` (the render's `document.body`) for a full-component
+check, not `container`. Radix-portalled UI — dialogs, selects,
+dropdowns, popovers, tooltips — renders outside `container` under
+`document.body`, so a `container`-scoped scan silently skips the open
+overlay and can pass while its content has violations. Reserve
+`container` for a deliberately scoped subtree check.
 
 It is **opt-in per test**, not baked into `renderWithProviders`. Wiring
 it into every render would fail the whole suite on the first barrier and
@@ -180,8 +187,9 @@ source-level check.
 
 The `color-contrast` rule is disabled: jsdom has no layout engine to
 compute rendered colours, so contrast is checked in a real browser
-instead (VIR-2746). Pass a second `RunOptions` argument to override the
-default rule set for a single call.
+instead (VIR-2746). Pass a second `RunOptions` argument to add or
+override rules for a single call; it merges over the defaults, so
+`color-contrast` stays off unless you re-enable it explicitly.
 
 ## Shared test fixtures
 
