@@ -1,5 +1,6 @@
 import os from "node:os";
 import path from "node:path";
+import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vitest/config";
 import viteConfigFn from "./vite.config";
 
@@ -29,7 +30,11 @@ export default defineConfig({
 					environment: "jsdom",
 					setupFiles: ["./src/tests/setup.tsx"],
 					include: ["src/**/*.test.{ts,tsx}"],
-					exclude: ["src/server/**"],
+					// `*.a11y.test.tsx` files run in the browser `a11y` project below,
+					// under a real layout engine. The glob here would otherwise also
+					// match them and run them a second time under jsdom, where the
+					// colour-contrast checks they exist for cannot run.
+					exclude: ["src/server/**", "src/**/*.a11y.test.{ts,tsx}"],
 					// Pin the assumption above. These are the two modules that open
 					// Postgres at import; if one ever survives the client transform into
 					// the browser program, the guard throws instead of quietly making
@@ -69,6 +74,33 @@ export default defineConfig({
 					// Garage has to lay out a cluster before it serves any S3 traffic.
 					testTimeout: 30_000,
 					hookTimeout: 120_000,
+				},
+			},
+			{
+				extends: true,
+				test: {
+					// axe-core's `color-contrast` rule — and every check that depends on
+					// computed layout or visibility — needs a real layout engine, which
+					// jsdom does not have. This project runs the opt-in `*.a11y.test.tsx`
+					// files in headless Chromium through Playwright so those rules can
+					// actually run (VIR-2693 / VIR-2746).
+					name: "a11y",
+					// `setup.tsx` pulls in nock, which is Node-only and throws in the
+					// browser, so the browser project gets its own lean setup that only
+					// loads the app stylesheet — without it, Tailwind classes resolve to
+					// no colour and contrast checks are meaningless.
+					setupFiles: ["./src/tests/setupA11y.ts"],
+					include: ["src/**/*.a11y.test.{ts,tsx}"],
+					browser: {
+						enabled: true,
+						provider: playwright(),
+						headless: true,
+						instances: [{ browser: "chromium" }],
+						// A failing axe assertion already reports the rule, the offending
+						// node, and the exact contrast ratio; a screenshot adds nothing and
+						// writes a PNG into the source tree on every failure.
+						screenshotFailures: false,
+					},
 				},
 			},
 		],
