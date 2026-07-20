@@ -87,7 +87,7 @@ export function createFakeFormattedNuVsHit(overrides?: FakeFormattedNuVsHit) {
 						full_bias: faker.number.float(),
 						full_e: faker.number.float(),
 						full_score: faker.number.float(),
-						hit: faker.word.noun({ strategy: "any-length" }),
+						hit: faker.number.int(),
 						names: [faker.word.noun({ strategy: "any-length" })],
 					},
 				],

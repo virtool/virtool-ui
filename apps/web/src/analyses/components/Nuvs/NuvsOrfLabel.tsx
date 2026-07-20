@@ -11,7 +11,7 @@ export default function NuvsOrfLabel({ hmm }: NuvsOrfLabelProps) {
 			<Link
 				className="capitalize"
 				to="/hmms/$hmmId"
-				params={{ hmmId: hmm.hit }}
+				params={{ hmmId: String(hmm.hit) }}
 			>
 				{hmm.names[0]}
 			</Link>

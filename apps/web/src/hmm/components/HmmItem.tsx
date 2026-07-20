@@ -28,7 +28,7 @@ export default function HmmItem({ hmm }: HmmItemProps) {
 			<Link
 				className="flex-1 shrink-0"
 				to="/hmms/$hmmId"
-				params={{ hmmId: hmm.id }}
+				params={{ hmmId: String(hmm.id) }}
 			>
 				{hmm.names[0]}
 			</Link>
