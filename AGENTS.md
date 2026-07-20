@@ -742,7 +742,12 @@ and make commits easier to find later.
   `fireEvent`.
 - **Queries:** Prefer accessible queries (`getByRole`,
   `getByLabelText`) over `getByTestId`; don't disambiguate by index.
+- **Accessibility:** `expectNoViolations(container)` from
+  `src/tests/axe.ts` runs axe-core over a rendered subtree. Opt-in per
+  test, not auto-run in `renderWithProviders`; the `color-contrast` rule
+  is disabled under jsdom.
 
 See [docs/testing.md](docs/testing.md) for the unit / integration
 layer split, where to mock depending on migration state, snapshot
-guidance, and the shared-fixtures rule.
+guidance, the axe-core accessibility helper, and the shared-fixtures
+rule.
