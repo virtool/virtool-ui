@@ -244,14 +244,6 @@ triggered it — there is no window where the old password still
 authenticates. The self-service reset path does the same
 (`invalidateUserSessions` in `core.ts` before minting the new session).
 
-`users.invalidate_sessions` is a NOT NULL column with no server default
-that Python still writes but nothing on either side reads; the TypeScript
-mirror keeps a `$defaultFn(() => false)` only so `createUser` inserts
-satisfy the constraint. Dropping the column is Python's Alembic change to
-make. Do not resurrect it as a gate: rejecting sessions whose user has
-the flag set would lock users out, because the reset flow would set it
-and then mint a fresh session that the gate immediately rejects.
-
 ## Session lifetimes
 
 Defined in `server/auth/session.ts:15-17`:

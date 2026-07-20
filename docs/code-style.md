@@ -122,8 +122,9 @@ invariant, a quirk being preserved for compatibility, an edge case
 the body handles silently.
 
 ```ts
-// Honour the invalidate_sessions flag the Python side sets but never reads.
-if (user.invalidateSessions) { … }
+// created_at is set once on insert and never mutated: the sliding-refresh
+// lifetime is reconstructed as `expiresAt - createdAt`.
+await db.update(sessions).set({ expiresAt }).where(eq(sessions.id, id));
 ```
 
 **Constants** get a comment when the value choice or its coupling is

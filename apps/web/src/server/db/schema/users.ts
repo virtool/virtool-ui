@@ -1,7 +1,7 @@
 // Read-only mirror of the `users` table managed by the upstream Python service
 // via Alembic. Do not generate or push migrations from this side. Keep the
 // columns we touch (`id`, `handle`, `password`, `active`, `force_reset`,
-// `last_password_change`, `invalidate_sessions`) in sync with
+// `last_password_change`) in sync with
 // `../../../../../../virtool/virtool/users/pg.py`.
 
 import { type SQL, sql } from "drizzle-orm";
@@ -51,14 +51,6 @@ export const users = pgTable(
 			.$defaultFn(() => false)
 			.notNull(),
 		handle: text("handle").notNull(),
-		// NOT NULL with no server_default on the Python side, so the `$defaultFn`
-		// is load-bearing: `createUser` never sets this column and would violate
-		// the constraint without it. Nothing on either side reads the value —
-		// sessions are revoked directly (`invalidateUserSessions`) rather than via
-		// this flag — so dropping the column is Python's Alembic change to make.
-		invalidateSessions: boolean("invalidate_sessions")
-			.$defaultFn(() => false)
-			.notNull(),
 		lastPasswordChange: timestamp("last_password_change").notNull(),
 		legacyId: text("legacy_id").unique(),
 		password: bytea("password").notNull(),
