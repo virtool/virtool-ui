@@ -158,6 +158,31 @@ one. Add an accessible name instead. Indexing into a list of
 intrinsically ordered, equivalent items (rows in a table, cards in a
 list) is fine.
 
+## Accessibility
+
+`expectNoViolations(container)` from `apps/web/src/tests/axe.ts` runs
+axe-core over a rendered subtree and fails the test if it finds any
+violation, reporting the rule, the offending node, and axe's fix
+summary. Render as usual, then assert:
+
+```ts
+const { container } = renderWithProviders(<CreateSample />);
+await expectNoViolations(container);
+```
+
+It is **opt-in per test**, not baked into `renderWithProviders`. Wiring
+it into every render would fail the whole suite on the first barrier and
+force an all-or-nothing fix; instead each test adopts it as its
+component is made accessible. Prefer it over Biome's static JSX lint for
+anything rendered at runtime — component-wrapped elements, d3 SVG,
+label/input splits, and ARIA props that a component drops all slip past a
+source-level check.
+
+The `color-contrast` rule is disabled: jsdom has no layout engine to
+compute rendered colours, so contrast is checked in a real browser
+instead (VIR-2746). Pass a second `RunOptions` argument to override the
+default rule set for a single call.
+
 ## Shared test fixtures
 
 When two or more test files share the same bootstrap, seed data, or
