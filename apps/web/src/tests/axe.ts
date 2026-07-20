@@ -27,10 +27,10 @@ export function formatViolations(violations: Result[]): string {
  * helper — usually `baseElement` — or any subtree to scope the check.
  *
  * `color-contrast` needs a layout engine to compute rendered colours, and
- * jsdom has none — the rule either throws or reports noise, so it is checked
- * in a real browser instead (VIR-2693 / VIR-2746). It stays disabled unless a
- * caller re-enables it explicitly through `options.rules`; other options merge
- * over the defaults.
+ * jsdom has none — the rule either throws or reports noise, so it is disabled
+ * by default here. The browser `a11y` project (`*.a11y.test.tsx`) re-enables it
+ * through `options.rules` to check contrast for real; other options merge over
+ * the defaults.
  */
 export async function expectNoViolations(
 	container: Element,

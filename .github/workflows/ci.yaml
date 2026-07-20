@@ -86,6 +86,8 @@ jobs:
               with:
                   node-version: ${{ env.NODE_VERSION }}
                   pnpm-version: ${{ env.PNPM_VERSION }}
+            - name: Install Playwright Chromium
+              run: pnpm --filter @virtool/web exec playwright install --with-deps chromium
             - name: Test
               run: pnpm test
               env:

@@ -699,8 +699,10 @@ and make commits easier to find later.
   Node in production, and under jsdom its typed arrays come from a
   different realm, so bytes compare unequal to identical bytes.
   `storage` runs the storage backends against real Garage and Azurite
-  containers. `pnpm test` runs all three; use `--project <name>` to
-  narrow.
+  containers. `a11y` runs `*.a11y.test.tsx` under headless Chromium
+  (Playwright) so axe's layout-dependent rules — `color-contrast` above
+  all — can actually run; it needs `playwright install chromium`. `pnpm
+  test` runs all four; use `--project <name>` to narrow.
 - **Test location:** `__tests__/` directories alongside source files
   (web), or sibling `*.test.ts` files (packages).
 - **Test files:** `ComponentName.test.tsx` or `functionName.test.ts`.
@@ -744,8 +746,10 @@ and make commits easier to find later.
   `getByLabelText`) over `getByTestId`; don't disambiguate by index.
 - **Accessibility:** `expectNoViolations(container)` from
   `src/tests/axe.ts` runs axe-core over a rendered subtree. Opt-in per
-  test, not auto-run in `renderWithProviders`; the `color-contrast` rule
-  is disabled under jsdom.
+  test, not auto-run in `renderWithProviders`; `color-contrast` is off by
+  default (jsdom has no layout engine). Re-enable it in a `*.a11y.test.tsx`
+  file — those run in the browser `a11y` project — via
+  `expectNoViolations(el, { rules: { "color-contrast": { enabled: true } } })`.
 
 See [docs/testing.md](docs/testing.md) for the unit / integration
 layer split, where to mock depending on migration state, snapshot
