@@ -701,7 +701,7 @@ and make commits easier to find later.
   `storage` runs the storage backends against real Garage and Azurite
   containers. `a11y` runs `*.a11y.test.tsx` under headless Chromium
   (Playwright) so axe's layout-dependent rules — `color-contrast` above
-  all — can actually run; needs `playwright install chromium`. `pnpm
+  all — can actually run; it needs `playwright install chromium`. `pnpm
   test` runs all four; use `--project <name>` to narrow.
 - **Test location:** `__tests__/` directories alongside source files
   (web), or sibling `*.test.ts` files (packages).
