@@ -15,7 +15,13 @@ COPY apps/web ./apps/web
 FROM base AS dev
 
 FROM base AS build
-RUN pnpm --filter @virtool/web build
+# The Sentry Vite plugin uploads source maps only when SENTRY_AUTH_TOKEN is set
+# at build time. Mount it as a BuildKit secret so it is available for this RUN
+# only and never persists in an image layer. Absent (e.g. local builds, forked
+# PRs) the upload gracefully no-ops and the build still succeeds.
+RUN --mount=type=secret,id=sentry_auth_token \
+    SENTRY_AUTH_TOKEN="$(cat /run/secrets/sentry_auth_token 2>/dev/null || true)" \
+    pnpm --filter @virtool/web build
 
 FROM node:24-alpine AS dist
 WORKDIR /ui

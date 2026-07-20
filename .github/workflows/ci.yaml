@@ -32,8 +32,8 @@ jobs:
               uses: docker/build-push-action@v7
               with:
                   target: dist
-              env:
-                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+                  secrets: |
+                      sentry_auth_token=${{ secrets.SENTRY_AUTH_TOKEN }}
     check-biome:
         name: Biome
         runs-on: ubuntu-24.04
