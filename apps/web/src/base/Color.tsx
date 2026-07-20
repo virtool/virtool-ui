@@ -81,15 +81,14 @@ function ColorSwatch({
 				"cursor-pointer",
 				"transition-transform",
 				"hover:-translate-y-0.5",
+				"ring-offset-2",
+				"ring-offset-gray-300",
 				"focus-within:ring-2",
 				"focus-within:ring-white",
-				"focus-within:ring-offset-2",
-				"focus-within:ring-offset-gray-300",
 				"focus-within:z-10",
 				"first:rounded-l-sm",
 				"last:rounded-r-sm",
-				checked &&
-					"ring-2 ring-gray-900 ring-offset-2 ring-offset-gray-300 z-10",
+				checked && "ring-2 ring-gray-900 z-10",
 			)}
 			style={{ backgroundColor: color }}
 		>
