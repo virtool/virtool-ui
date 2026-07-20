@@ -13,7 +13,7 @@ export function createFakeHmmMinimal() {
 			None: faker.number.int(),
 			Papillomaviridae: faker.number.int(),
 		},
-		id: faker.number.int(),
+		id: faker.number.int({ min: 1 }),
 		names: [faker.person.lastName()],
 	};
 }
