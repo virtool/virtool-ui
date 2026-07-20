@@ -185,11 +185,41 @@ anything rendered at runtime — component-wrapped elements, d3 SVG,
 label/input splits, and ARIA props that a component drops all slip past a
 source-level check.
 
-The `color-contrast` rule is disabled: jsdom has no layout engine to
-compute rendered colours, so contrast is checked in a real browser
-instead (VIR-2746). Pass a second `RunOptions` argument to add or
-override rules for a single call; it merges over the defaults, so
-`color-contrast` stays off unless you re-enable it explicitly.
+The `color-contrast` rule is disabled by default: jsdom has no layout
+engine to compute rendered colours. Pass a second `RunOptions` argument
+to add or override rules for a single call; it merges over the defaults,
+so `color-contrast` stays off unless you re-enable it explicitly.
+
+### Colour contrast: the browser `a11y` project
+
+`color-contrast` — and any axe rule that depends on computed layout or
+visibility — only produces meaningful results with a real layout engine,
+so it runs in a fourth Vitest project, `a11y`, under headless Chromium
+via Playwright. `pnpm test` runs it alongside `web`, `server`, and
+`storage`; narrow to it with `pnpm --filter @virtool/web exec vitest run
+--project a11y`. It needs the Chromium binary — `pnpm --filter
+@virtool/web exec playwright install chromium` once locally (CI installs
+it before the test step).
+
+Browser a11y tests are named `*.a11y.test.tsx` (the `web` jsdom project
+excludes that glob so they don't run twice) and re-enable the rule
+per call:
+
+```ts
+const withContrast = { rules: { "color-contrast": { enabled: true } } };
+
+const { baseElement } = render(<InputError>Name is required.</InputError>);
+await expectNoViolations(baseElement, withContrast);
+```
+
+They run in `src/tests/setupA11y.ts`, not the jsdom `setup.tsx` — that
+setup imports nock, which is Node-only and throws in the browser. The
+browser setup only loads `@app/style.css`, because axe computes contrast
+from *rendered* colours: without the real Tailwind theme, classes resolve
+to no colour and every check passes vacuously. For the same reason these
+tests render lean, provider-free subtrees with real theme classes rather
+than routes; note that axe checks real text nodes, not `::placeholder`
+pseudo-elements, so guard muted/error text with actual content.
 
 ## Shared test fixtures
 
