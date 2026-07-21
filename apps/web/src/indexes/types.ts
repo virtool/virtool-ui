@@ -24,7 +24,7 @@ export type IndexNested = z.infer<typeof indexNestedSchema>;
 
 /** Minimal index data for list views */
 export const indexMinimalSchema = indexNestedSchema.extend({
-	change_count: z.number(),
+	change_count: z.number().nullable(),
 	created_at: z.string(),
 	has_files: z.boolean(),
 	modified_otu_count: z.number(),

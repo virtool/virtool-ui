@@ -1,5 +1,5 @@
 type IndexItemDescriptionProps = {
-	changeCount: number;
+	changeCount: number | null;
 	modifiedCount: number;
 };
 
