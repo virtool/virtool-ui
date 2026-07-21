@@ -48,10 +48,10 @@ export default function IsolateList() {
 	);
 
 	const { hasPermission: canModify } = useCheckReferenceRight(
-		reference.id,
+		String(reference.id),
 		"modify_otu",
 	);
-	const archived = useReferenceIsArchived(reference.id);
+	const archived = useReferenceIsArchived(String(reference.id));
 	const canModifyIsolates = canModify && !archived;
 
 	const [results, term, setTerm] = useFuse<OtuIsolate>(

@@ -31,7 +31,7 @@ describe("useCreateAnalysis()", () => {
 		result.current.mutate({
 			sampleId: 1,
 			workflow: "pathoscope_bowtie",
-			refId: "ref-1",
+			refId: 1,
 			subtractionIds: [],
 		});
 

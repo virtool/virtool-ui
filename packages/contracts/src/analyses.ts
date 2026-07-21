@@ -2,7 +2,7 @@ import { z } from "zod";
 
 /** Analysis metadata returned by `GET /analyses/{id}`. Provisional shape. */
 export const Analysis = z.object({
-	id: z.string(),
+	id: z.int(),
 });
 
 export type Analysis = z.infer<typeof Analysis>;

@@ -27,7 +27,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 			isRemote: false,
 			name: reference.name,
 			userHandle: reference.user.handle,
-			refId: reference.id,
+			refId: String(reference.id),
 		};
 		path = `/refs/${reference.id}/manage`;
 	});
@@ -120,7 +120,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 				isRemote: false,
 				name: reference.name,
 				userHandle: reference.user.handle,
-				refId: reference.id,
+				refId: String(reference.id),
 			};
 			path = `/refs/${reference.id}/manage`;
 		});

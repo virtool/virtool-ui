@@ -4,7 +4,7 @@ import { z } from "zod";
 import type { SearchResult } from "@/types/api";
 
 const referenceNestedSchema = z.object({
-	id: z.string(),
+	id: z.int(),
 	data_type: z.string(),
 	name: z.string(),
 });
@@ -26,7 +26,6 @@ export type IndexNested = z.infer<typeof indexNestedSchema>;
 export const indexMinimalSchema = indexNestedSchema.extend({
 	change_count: z.number().nullable(),
 	created_at: z.string(),
-	has_files: z.boolean(),
 	modified_otu_count: z.number(),
 	reference: referenceNestedSchema,
 	user: userNestedSchema,

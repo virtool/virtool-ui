@@ -2,7 +2,7 @@ import type { UserNested } from "@users/types";
 import type { SearchResult, Task } from "@/types/api";
 
 export type ReferenceClonedFrom = {
-	id: string;
+	id: number;
 	name: string;
 };
 
@@ -52,7 +52,7 @@ export type ReferenceRelease = {
 /** Basic reference data for nested representation */
 export type ReferenceNested = {
 	/** The unique identifier */
-	id: string;
+	id: number;
 
 	/** The build style dictating workflow compatibility */
 	data_type: string;

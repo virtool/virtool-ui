@@ -25,10 +25,10 @@ export default function SequenceButtons({
 	const { otu, reference } = useCurrentOtuContext();
 
 	const { hasPermission: canModify } = useCheckReferenceRight(
-		reference.id,
+		String(reference.id),
 		"modify_otu",
 	);
-	const archived = useReferenceIsArchived(reference.id);
+	const archived = useReferenceIsArchived(String(reference.id));
 	const isolateId = useGetActiveIsolateId(otu);
 
 	const href = `/api/otus/${otu.id}/isolates/${isolateId}/sequences/${id}.fa`;

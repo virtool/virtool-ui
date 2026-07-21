@@ -31,7 +31,7 @@ export default function CloneReference({
 	unsetCloneReferenceId,
 }: CloneReferenceProps) {
 	const reference = references.find(
-		(reference) => reference.id === cloneReferenceId,
+		(reference) => String(reference.id) === cloneReferenceId,
 	);
 
 	const {

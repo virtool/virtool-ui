@@ -89,14 +89,17 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 					<Equal size={18} />
 					<SlashList className="m-0">
 						<li>
-							<Link to="/refs/$refId" params={{ refId: reference.id }}>
+							<Link to="/refs/$refId" params={{ refId: String(reference.id) }}>
 								{reference.name}
 							</Link>
 						</li>
 						<li>
 							<Link
 								to="/refs/$refId/indexes/$indexId"
-								params={{ refId: reference.id, indexId: String(index.id) }}
+								params={{
+									refId: String(reference.id),
+									indexId: String(index.id),
+								}}
 							>
 								Index {index.version}
 							</Link>
