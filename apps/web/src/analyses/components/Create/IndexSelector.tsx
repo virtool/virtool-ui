@@ -14,7 +14,7 @@ import { Select as SelectPrimitive } from "radix-ui";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
 type IndexSelectorItemProps = {
-	id: string;
+	id: number;
 	name: string;
 	version: number | string;
 };
@@ -35,7 +35,10 @@ function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps) {
 			)}
 			data-slot="select-item"
 			key={id}
-			value={id}
+			// A Radix Select only matches string values, but index ids are
+			// integers, so the value is stringified here and read back as a
+			// string in the form.
+			value={String(id)}
 		>
 			<SelectItemIndicator />
 			<SelectPrimitive.ItemText className="whitespace-nowrap">

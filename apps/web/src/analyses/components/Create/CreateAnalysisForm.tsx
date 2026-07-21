@@ -103,7 +103,7 @@ export default function CreateAnalysisForm({
 	async function onSubmit(values: CreateAnalysisFormValues) {
 		const { indexId, subtractionIds, workflow } = values;
 
-		const index = indexes.find((index) => index.id === indexId);
+		const index = indexes.find((index) => String(index.id) === indexId);
 		if (!index) {
 			return;
 		}

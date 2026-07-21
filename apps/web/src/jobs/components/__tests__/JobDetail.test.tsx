@@ -1,6 +1,6 @@
 import type { ServerJob } from "@jobs/types";
 import { screen } from "@testing-library/react";
-import { createFakeIndexMinimal } from "@tests/fake/indexes";
+import { createFakeIndex } from "@tests/fake/indexes";
 import { createFakeReferenceNested } from "@tests/fake/references";
 import { mockGetJob } from "@tests/server-fn/jobs";
 import { renderRoute } from "@tests/setup";
@@ -34,8 +34,7 @@ describe("<JobDetail /> build_index links", () => {
 			.get(`/api/indexes/${indexId}`)
 			.reply(
 				200,
-				createFakeIndexMinimal({
-					id: indexId,
+				createFakeIndex({
 					reference: createFakeReferenceNested({ id: refId }),
 				}),
 			);

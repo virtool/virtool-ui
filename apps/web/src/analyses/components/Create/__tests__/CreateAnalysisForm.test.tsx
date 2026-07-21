@@ -12,10 +12,11 @@ import { describe, expect, it, vi } from "vitest";
 import CreateAnalysisForm from "../CreateAnalysisForm";
 import { getCompatibleWorkflows } from "../workflows";
 
-async function renderForm() {
+async function renderForm(indexId?: number) {
 	const onClose = vi.fn();
 	const sample = createFakeSample({ subtractions: [] });
 	const index = createFakeIndexMinimal({
+		...(indexId === undefined ? {} : { id: indexId }),
 		ready: true,
 		reference: { id: "ref-1", name: "Plant Viruses", data_type: "genome" },
 	});
@@ -56,6 +57,29 @@ describe("<CreateAnalysisForm>", () => {
 		);
 
 		await selectReference();
+		await userEvent.click(screen.getByRole("button", { name: "Create" }));
+
+		await waitFor(() => expect(onClose).toHaveBeenCalled());
+		scope.done();
+	});
+
+	it("registers the selection when the server sends an integer index id", async () => {
+		// The API returns the index id as an integer, but a Radix Select only
+		// matches string values, so an unconverted numeric id silently fails to
+		// register the pick and the form submits nothing.
+		const { onClose, sample } = await renderForm(42);
+
+		const scope = mockApiCreateAnalysis(
+			createFakeAnalysisMinimal({ sample: { id: sample.id } }),
+		);
+
+		await selectReference();
+
+		const trigger = screen
+			.getAllByRole("combobox")
+			.find((element) => element.tagName === "BUTTON");
+		expect(trigger).toHaveTextContent("Plant Viruses");
+
 		await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
 		await waitFor(() => expect(onClose).toHaveBeenCalled());
