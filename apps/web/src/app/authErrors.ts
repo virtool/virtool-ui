@@ -21,7 +21,7 @@ type SerializedAuthError = {
  * TanStack Router's built-in `ShallowErrorPlugin` matches every `Error` and
  * serializes only its `message`, so a server function's `UnauthorizedError`
  * reaches the client as a plain `Error` named `"Error"`. That erases the one
- * field the query retry guard and `handleAuthenticationError` use to recognize
+ * field the query retry guard and `handleQueryError` use to recognize
  * a 401/403 — without it, an auth failure is retried ~4× with backoff before
  * the guard can bounce to the login wall. Registered adapters run before the
  * default plugins, so this one re-serializes the auth errors with their `name`

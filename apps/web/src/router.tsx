@@ -1,4 +1,4 @@
-import { handleAuthenticationError, shouldRetryQuery } from "@app/queryErrors";
+import { handleQueryError, shouldRetryQuery } from "@app/queryErrors";
 import { readSentryDsn } from "@app/sentryDsn";
 import RouteError from "@base/RouteError";
 import * as Sentry from "@sentry/tanstackstart-react";
@@ -11,8 +11,8 @@ import { routeTree } from "./routeTree.gen";
 
 export function getRouter() {
 	const queryClient = new QueryClient({
-		queryCache: new QueryCache({ onError: handleAuthenticationError }),
-		mutationCache: new MutationCache({ onError: handleAuthenticationError }),
+		queryCache: new QueryCache({ onError: handleQueryError }),
+		mutationCache: new MutationCache({ onError: handleQueryError }),
 		defaultOptions: {
 			queries: {
 				retry: shouldRetryQuery,
