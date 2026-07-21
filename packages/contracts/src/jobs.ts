@@ -3,7 +3,7 @@ import { WorkflowName } from "./workflowName";
 
 /** Job row returned by the lifecycle endpoints. Provisional shape. */
 export const Job = z.object({
-	id: z.string(),
+	id: z.int(),
 	workflow: WorkflowName,
 	analysisId: z.string(),
 	sampleId: z.string(),
