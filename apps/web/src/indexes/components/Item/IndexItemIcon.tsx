@@ -3,8 +3,8 @@ import Loader from "@base/Loader";
 import { CircleCheck } from "lucide-react";
 
 type IndexItemIconProps = {
-	activeId?: string;
-	id: string;
+	activeId?: number;
+	id: number;
 	ready: boolean;
 };
 

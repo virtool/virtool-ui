@@ -5,21 +5,21 @@ import { IndexItemIcon } from "../IndexItemIcon";
 
 describe("<IndexItemIcon />", () => {
 	it("renders the active status for the current ready index", () => {
-		renderWithProviders(<IndexItemIcon activeId="foo" id="foo" ready />);
+		renderWithProviders(<IndexItemIcon activeId={1} id={1} ready />);
 
 		expect(screen.getByText("Active")).toBeInTheDocument();
 	});
 
 	it("hides the status for ready indexes that are not active", () => {
 		const { container } = renderWithProviders(
-			<IndexItemIcon activeId="foo" id="bar" ready />,
+			<IndexItemIcon activeId={1} id={2} ready />,
 		);
 
 		expect(container).toBeEmptyDOMElement();
 	});
 
 	it("renders the building status for a not-ready index", () => {
-		renderWithProviders(<IndexItemIcon id="foo" ready={false} />);
+		renderWithProviders(<IndexItemIcon id={1} ready={false} />);
 
 		expect(screen.getByText("Building")).toBeInTheDocument();
 		expect(screen.getByRole("status", { name: "loading" })).toBeInTheDocument();

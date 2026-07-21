@@ -96,7 +96,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 						<li>
 							<Link
 								to="/refs/$refId/indexes/$indexId"
-								params={{ refId: reference.id, indexId: index.id }}
+								params={{ refId: reference.id, indexId: String(index.id) }}
 							>
 								Index {index.version}
 							</Link>

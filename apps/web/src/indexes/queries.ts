@@ -7,12 +7,15 @@ import {
 	useQueryClient,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
+import { z } from "zod";
 import type { ErrorResponse } from "@/types/api";
-import type {
-	Index,
-	IndexMinimal,
-	IndexSearchResult,
-	UnbuiltChangesSearchResults,
+import {
+	type Index,
+	type IndexMinimal,
+	type IndexSearchResult,
+	indexMinimalSchema,
+	indexSchema,
+	type UnbuiltChangesSearchResults,
 } from "./types";
 
 /**
@@ -37,7 +40,10 @@ export function indexesQueryOptions(
 				.query({ find: term, page, per_page })
 				.then((res) => {
 					const { documents, ...rest } = res.body;
-					return { ...rest, items: documents };
+					return {
+						...rest,
+						items: z.array(indexMinimalSchema).parse(documents),
+					};
 				}),
 	});
 }
@@ -104,7 +110,7 @@ export function useListIndexes({ ready, archived }: ListIndexesOptions) {
 			apiClient
 				.get("/indexes")
 				.query(params)
-				.then((res) => res.body),
+				.then((res) => z.array(indexMinimalSchema).parse(res.body)),
 	});
 }
 
@@ -118,7 +124,10 @@ export function useListIndexes({ ready, archived }: ListIndexesOptions) {
 export function useFetchIndex(indexId: string, enabled = true) {
 	return useQuery<Index, ErrorResponse>({
 		queryKey: indexQueryKeys.detail(indexId),
-		queryFn: () => apiClient.get(`/indexes/${indexId}`).then((res) => res.body),
+		queryFn: () =>
+			apiClient
+				.get(`/indexes/${indexId}`)
+				.then((res) => indexSchema.parse(res.body)),
 		enabled: enabled && Boolean(indexId),
 	});
 }

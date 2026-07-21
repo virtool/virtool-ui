@@ -6,7 +6,7 @@ import { IndexItemDescription } from "./IndexItemDescription";
 import { IndexItemIcon } from "./IndexItemIcon";
 
 type IndexItemProps = {
-	activeId?: string;
+	activeId?: number;
 	index: IndexMinimal;
 	refId: string;
 };
@@ -27,7 +27,7 @@ export function IndexItem({ activeId, index, refId }: IndexItemProps) {
 				<Link
 					className="font-medium"
 					to="/refs/$refId/indexes/$indexId"
-					params={{ refId, indexId: index.id }}
+					params={{ refId, indexId: String(index.id) }}
 				>
 					Version {index.version}
 				</Link>

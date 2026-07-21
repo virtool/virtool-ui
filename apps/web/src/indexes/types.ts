@@ -1,84 +1,81 @@
 import type { HistoryNested, OtuNested } from "@otus/types";
 import type { ReferenceNested } from "@references/types";
-import type { UserNested } from "@users/types";
+import { z } from "zod";
 import type { SearchResult } from "@/types/api";
 
-/** Basic data for nested representations */
-export type IndexNested = {
-	/** The unique identifier */
-	id: string;
+const referenceNestedSchema = z.object({
+	id: z.string(),
+	data_type: z.string(),
+	name: z.string(),
+});
 
-	/** The build iteration */
-	version: number | string;
-};
+const userNestedSchema = z.object({
+	id: z.int(),
+	handle: z.string(),
+});
+
+const indexNestedSchema = z.object({
+	id: z.int(),
+	version: z.union([z.number(), z.string()]),
+});
+
+/** Basic data for nested representations */
+export type IndexNested = z.infer<typeof indexNestedSchema>;
 
 /** Minimal index data for list views */
-export type IndexMinimal = IndexNested & {
-	/** Total changes included in building the new index */
-	change_count: number;
+export const indexMinimalSchema = indexNestedSchema.extend({
+	change_count: z.number().nullable(),
+	created_at: z.string(),
+	has_files: z.boolean(),
+	modified_otu_count: z.number(),
+	reference: referenceNestedSchema,
+	user: userNestedSchema,
+	ready: z.boolean(),
+});
 
-	/** The iso formatted date of creation */
-	created_at: string;
+/** Minimal index data for list views */
+export type IndexMinimal = z.infer<typeof indexMinimalSchema>;
 
-	/** Whether there are downloadable uploads */
-	has_files: boolean;
+const indexContributorSchema = userNestedSchema.extend({
+	count: z.number(),
+});
 
-	/** A count of individual OTUs changed */
-	modified_otu_count: number;
+/** Index editor information */
+export type IndexContributor = z.infer<typeof indexContributorSchema>;
 
-	/** The reference the index is based on */
-	reference: ReferenceNested;
+const indexOTUSchema = z.object({
+	change_count: z.number(),
+	id: z.string(),
+	name: z.string(),
+});
 
-	/** Who initiated index creation */
-	user: UserNested;
+/** Index relevant minimal OTU data */
+export type IndexOTU = z.infer<typeof indexOTUSchema>;
 
-	/** Whether it is ready to view and be used */
-	ready: boolean;
-};
+const indexFileSchema = z.object({
+	download_url: z.string(),
+	id: z.int(),
+	index: z.int(),
+	name: z.string(),
+	size: z.number().optional(),
+	type: z.string(),
+});
 
-/**  Index editor information*/
-export type IndexContributor = UserNested & {
-	/** Total index changes made by the user */
-	count: number;
-};
-
-/** Index relevant minimal OTU data*/
-export type IndexOTU = {
-	/** The quantity of changes made to this otu since last index build */
-	change_count: number;
-	/** The unique identifier */
-	id: string;
-	/** The display name */
-	name: string;
-};
-
-export type IndexFile = {
-	/** The complete file location on API */
-	download_url: string;
-	/** The unique identifier */
-	id: number;
-	/** The unique identifier of the associated index */
-	index: string;
-	/** The display name */
-	name: string;
-	/** The file size in bytes */
-	size?: number;
-	/** The associated workflow */
-	type: string;
-};
+/** A downloadable file produced by an index build */
+export type IndexFile = z.infer<typeof indexFileSchema>;
 
 /** Reference index for use in workflows */
-export type Index = IndexMinimal & {
-	/** Users who contributed to the index*/
-	contributors: IndexContributor[];
-	/** Downloadable index uploads*/
-	files: IndexFile[];
-	/** The last index the OTU was included in */
-	manifest: object;
-	/** OTUs incorporated in the index*/
-	otus: IndexOTU[];
-};
+export const indexSchema = indexMinimalSchema.extend({
+	contributors: z.array(indexContributorSchema),
+	files: z.array(indexFileSchema),
+	manifest: z.record(z.string(), z.unknown()),
+	otus: z.array(indexOTUSchema),
+});
 
+/** Reference index for use in workflows */
+export type Index = z.infer<typeof indexSchema>;
+
+/** An unbuilt change awaiting the next index build */
 export type UnbuiltChanges = HistoryNested & {
 	index: IndexNested;
 	otu: OtuNested;
@@ -92,9 +89,9 @@ export type UnbuiltChangesSearchResults = SearchResult & {
 
 /** Index search results */
 export type IndexSearchResult = SearchResult & {
-	/** Indexes relevant to the query*/
-	items: Index[];
-	/** The number of individual OTUs changes since the last index build */
+	/** Indexes relevant to the query */
+	items: IndexMinimal[];
+	/** The number of individual OTUs changed since the last index build */
 	modified_otu_count: number;
 	/** The number of total OTUs in the reference */
 	total_otu_count: number;
