@@ -1,5 +1,5 @@
 import {
-	handleAuthenticationError,
+	handleQueryError,
 	type QueryError,
 	shouldRetryQuery,
 } from "@app/queryErrors";
@@ -15,6 +15,19 @@ vi.mock("@app/session", () => ({
 	armSessionEnd: vi.fn(),
 	endSession,
 }));
+
+const { captureException } = vi.hoisted(() => ({ captureException: vi.fn() }));
+
+vi.mock("@sentry/tanstackstart-react", () => ({ captureException }));
+
+// A rejected `.parse()` reaches these functions as a `ZodError`, recognized by
+// its `name` so the guard need not import zod. A plain Error with the name set
+// is exactly that shape.
+function validationError(): Error {
+	const error = new Error("index.id: expected string, received number");
+	error.name = "ZodError";
+	return error;
+}
 
 // The auth errors arrive rebuilt by `authErrorSerializationAdapter`, which
 // carries `name` but nothing else — so a plain Error with the name set is
@@ -63,15 +76,20 @@ describe("shouldRetryQuery", () => {
 		expect(shouldRetryQuery(3, error)).toBe(true);
 		expect(shouldRetryQuery(4, error)).toBe(false);
 	});
+
+	it("gives up immediately on a validation failure that cannot recover", () => {
+		expect(shouldRetryQuery(0, validationError())).toBe(false);
+	});
 });
 
-describe("handleAuthenticationError", () => {
+describe("handleQueryError", () => {
 	afterEach(() => {
 		endSession.mockClear();
+		captureException.mockClear();
 	});
 
 	it("ends the session when a server function rejects the session", () => {
-		handleAuthenticationError(
+		handleQueryError(
 			serializedAuthError(UNAUTHORIZED_ERROR_NAME, "Unauthorized"),
 		);
 
@@ -79,16 +97,35 @@ describe("handleAuthenticationError", () => {
 	});
 
 	it("leaves the session alone when the user merely lacks the role", () => {
-		handleAuthenticationError(
-			serializedAuthError(FORBIDDEN_ERROR_NAME, "Forbidden"),
-		);
+		handleQueryError(serializedAuthError(FORBIDDEN_ERROR_NAME, "Forbidden"));
 
 		expect(endSession).not.toHaveBeenCalled();
 	});
 
 	it("leaves the session alone when a query fails for any other reason", () => {
-		handleAuthenticationError(new Error("network down"));
+		handleQueryError(new Error("network down"));
 
 		expect(endSession).not.toHaveBeenCalled();
+	});
+
+	it("reports a drifted contract to Sentry so it fails loudly", () => {
+		const consoleError = vi
+			.spyOn(console, "error")
+			.mockImplementation(() => {});
+		const error = validationError();
+
+		handleQueryError(error);
+
+		expect(captureException).toHaveBeenCalledWith(error, {
+			tags: { contract: "drift" },
+		});
+
+		consoleError.mockRestore();
+	});
+
+	it("does not report an ordinary failure as contract drift", () => {
+		handleQueryError(new Error("network down"));
+
+		expect(captureException).not.toHaveBeenCalled();
 	});
 });

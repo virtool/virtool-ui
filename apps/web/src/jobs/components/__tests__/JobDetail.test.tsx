@@ -7,7 +7,7 @@ import { renderRoute } from "@tests/setup";
 import nock from "nock";
 import { afterEach, describe, expect, it } from "vitest";
 
-function createBuildIndexJob(indexId: string): ServerJob {
+function createBuildIndexJob(indexId: number): ServerJob {
 	return {
 		args: { index_id: indexId },
 		id: 123,
@@ -27,7 +27,7 @@ describe("<JobDetail /> build_index links", () => {
 
 	it("derives the reference id from the index so both links resolve", async () => {
 		const refId = "reference-1";
-		const indexId = "index-1";
+		const indexId = 41;
 
 		const getJob = mockGetJob(123, createBuildIndexJob(indexId));
 		nock("http://localhost")
@@ -44,7 +44,7 @@ describe("<JobDetail /> build_index links", () => {
 		const referenceLink = await screen.findByRole("link", { name: refId });
 		expect(referenceLink).toHaveAttribute("href", `/refs/${refId}`);
 
-		const indexLink = screen.getByRole("link", { name: indexId });
+		const indexLink = screen.getByRole("link", { name: String(indexId) });
 		expect(indexLink).toHaveAttribute(
 			"href",
 			`/refs/${refId}/indexes/${indexId}`,

@@ -22,7 +22,7 @@ export function LatestBuild({ id, latestBuild }: LatestBuildProps) {
 					<strong>
 						<Link
 							to="/refs/$refId/indexes/$indexId"
-							params={{ refId: id, indexId: latestBuild.id }}
+							params={{ refId: id, indexId: String(latestBuild.id) }}
 						>
 							Index {latestBuild.version}
 						</Link>

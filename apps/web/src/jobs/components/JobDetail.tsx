@@ -59,11 +59,11 @@ export default function JobDetail() {
 	// fetches under the same loading gate.
 	const indexId =
 		data?.workflow === "build_index"
-			? (data.args.index_id as string)
+			? (data.args.index_id as number)
 			: undefined;
 	const { data: index, isPending: isIndexPending } = useFetchIndex(
-		indexId ?? "",
-		Boolean(indexId),
+		indexId === undefined ? "" : String(indexId),
+		indexId !== undefined,
 	);
 
 	if (!Number.isInteger(numericJobId)) {
@@ -77,7 +77,7 @@ export default function JobDetail() {
 		throw error;
 	}
 
-	if (isPending || (indexId && isIndexPending)) {
+	if (isPending || (indexId !== undefined && isIndexPending)) {
 		return <LoadingPlaceholder />;
 	}
 

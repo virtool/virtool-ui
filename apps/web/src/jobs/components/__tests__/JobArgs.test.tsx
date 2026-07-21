@@ -6,9 +6,9 @@ import JobArgs from "../JobArgs";
 const workflows = [
 	{
 		workflow: "build_index",
-		args: { index_id: "idx1", ref_id: "ref1" },
+		args: { index_id: 41, ref_id: "ref1" },
 		links: [
-			{ name: "idx1", href: "/refs/ref1/indexes/idx1" },
+			{ name: "41", href: "/refs/ref1/indexes/41" },
 			{ name: "ref1", href: "/refs/ref1" },
 		],
 	},

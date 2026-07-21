@@ -77,7 +77,7 @@ export type ReferenceInstalled = {
 
 export type ReferenceBuild = {
 	created_at: string;
-	id: string;
+	id: number;
 	user: UserNested;
 	version: number;
 	has_json: boolean;

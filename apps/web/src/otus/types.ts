@@ -57,7 +57,8 @@ export type HistoryNested = {
 };
 
 export type OtuHistory = HistoryNested & {
-	index: IndexNested;
+	/** The index the change was built into, or `null` while it is unbuilt */
+	index: IndexNested | null;
 	otu: OtuNested;
 	reference: ReferenceNested;
 };
