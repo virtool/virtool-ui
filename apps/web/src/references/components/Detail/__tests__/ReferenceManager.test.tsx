@@ -11,7 +11,7 @@ describe("<ReferenceManager />", () => {
 
 	beforeEach(() => {
 		reference = createFakeReference({
-			cloned_from: { id: "source-ref", name: "Source Reference Name" },
+			cloned_from: { id: 62, name: "Source Reference Name" },
 		});
 		path = `/refs/${reference.id}/manage`;
 		mockApiGetReferenceDetail(reference);

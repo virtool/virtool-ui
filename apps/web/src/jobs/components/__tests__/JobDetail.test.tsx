@@ -26,7 +26,7 @@ describe("<JobDetail /> build_index links", () => {
 	afterEach(() => nock.cleanAll());
 
 	it("derives the reference id from the index so both links resolve", async () => {
-		const refId = "reference-1";
+		const refId = 55;
 		const indexId = 41;
 
 		const getJob = mockGetJob(123, createBuildIndexJob(indexId));
@@ -41,7 +41,9 @@ describe("<JobDetail /> build_index links", () => {
 
 		await renderRoute("/jobs/123");
 
-		const referenceLink = await screen.findByRole("link", { name: refId });
+		const referenceLink = await screen.findByRole("link", {
+			name: String(refId),
+		});
 		expect(referenceLink).toHaveAttribute("href", `/refs/${refId}`);
 
 		const indexLink = screen.getByRole("link", { name: String(indexId) });

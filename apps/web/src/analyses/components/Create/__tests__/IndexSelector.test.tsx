@@ -35,7 +35,7 @@ describe("<IndexSelector>", () => {
 
 	it("renders a selectable reference when indexes are available", async () => {
 		const index = createFakeIndexMinimal({
-			reference: { id: "ref-1", name: "Plant Viruses", data_type: "genome" },
+			reference: { id: 1, name: "Plant Viruses", data_type: "genome" },
 			version: 3,
 		});
 

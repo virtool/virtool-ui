@@ -82,7 +82,7 @@ export function useGetAnalysis(analysisId: number) {
 }
 
 export type CreateAnalysisParams = {
-	refId?: string;
+	refId?: number;
 	sampleId: number;
 	subtractionIds?: string[];
 	workflow: string;

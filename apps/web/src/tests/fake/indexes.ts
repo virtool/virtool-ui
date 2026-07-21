@@ -26,7 +26,6 @@ export function createFakeIndexMinimal(
 		...createFakeIndexNested(),
 		change_count: faker.number.int({ min: 2, max: 10 }),
 		created_at: faker.date.past().toISOString(),
-		has_files: faker.datatype.boolean(),
 		modified_otu_count: faker.number.int({ min: 2, max: 10 }),
 		reference: createFakeReferenceNested(),
 		user: createFakeUserNested(),

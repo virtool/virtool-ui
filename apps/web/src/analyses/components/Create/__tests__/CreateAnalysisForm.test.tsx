@@ -18,7 +18,7 @@ async function renderForm(indexId?: number) {
 	const index = createFakeIndexMinimal({
 		...(indexId === undefined ? {} : { id: indexId }),
 		ready: true,
-		reference: { id: "ref-1", name: "Plant Viruses", data_type: "genome" },
+		reference: { id: 1, name: "Plant Viruses", data_type: "genome" },
 	});
 
 	mockApiListIndexes([index]);

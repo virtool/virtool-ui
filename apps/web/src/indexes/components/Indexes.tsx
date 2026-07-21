@@ -53,9 +53,7 @@ export default function Indexes({ page, setSearch }: IndexesProps) {
 								key={item.id}
 								index={item}
 								refId={refId}
-								activeId={
-									items.find((index) => index.ready && index.has_files)?.id
-								}
+								activeId={items.find((index) => index.ready)?.id}
 							/>
 						))}
 					</BoxGroup>

@@ -35,7 +35,7 @@ export default function EditReference({ detail }: EditReferenceProps) {
 			organism: detail.organism,
 		},
 	});
-	const { mutation } = useUpdateReference(detail.id);
+	const { mutation } = useUpdateReference(String(detail.id));
 
 	function handleEdit({ name, description, organism }: FormValues) {
 		mutation.mutate(

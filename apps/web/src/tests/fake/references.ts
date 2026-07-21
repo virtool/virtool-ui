@@ -13,7 +13,7 @@ export function createFakeReferenceNested(
 	overrides?: Partial<ReferenceNested>,
 ): ReferenceNested {
 	return {
-		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		id: faker.number.int(),
 		data_type: "genome",
 		name: faker.word.noun({ strategy: "any-length" }),
 		...overrides,
@@ -30,7 +30,7 @@ export function createFakeReferenceMinimal(
 		...createFakeReferenceNested(overrides),
 		archived: false,
 		cloned_from: {
-			id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+			id: faker.number.int(),
 			name: faker.word.noun({ strategy: "any-length" }),
 		},
 		created_at: faker.date.past().toISOString(),

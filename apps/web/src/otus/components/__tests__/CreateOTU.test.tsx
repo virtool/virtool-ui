@@ -20,7 +20,7 @@ describe("<OtuCreate />", () => {
 
 	it("should render", () => {
 		renderWithProviders(
-			<OtuCreate open refId={reference.id} setOpen={vi.fn()} />,
+			<OtuCreate open refId={String(reference.id)} setOpen={vi.fn()} />,
 		);
 
 		expect(screen.getByText("Create OTU")).toBeInTheDocument();
@@ -31,7 +31,7 @@ describe("<OtuCreate />", () => {
 
 	it("should render error once submitted with no name", async () => {
 		renderWithProviders(
-			<OtuCreate open refId={reference.id} setOpen={vi.fn()} />,
+			<OtuCreate open refId={String(reference.id)} setOpen={vi.fn()} />,
 		);
 
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -39,9 +39,9 @@ describe("<OtuCreate />", () => {
 	});
 
 	it("should create OTU without abbreviation", async () => {
-		const scope = mockApiCreateOtu(reference.id, "TestName", "");
+		const scope = mockApiCreateOtu(String(reference.id), "TestName", "");
 		renderWithProviders(
-			<OtuCreate open refId={reference.id} setOpen={vi.fn()} />,
+			<OtuCreate open refId={String(reference.id)} setOpen={vi.fn()} />,
 		);
 
 		await userEvent.type(screen.getByLabelText("Name"), "TestName");
@@ -52,12 +52,12 @@ describe("<OtuCreate />", () => {
 
 	it("should create OTU with abbreviation", async () => {
 		const scope = mockApiCreateOtu(
-			reference.id,
+			String(reference.id),
 			"TestName",
 			"TestAbbreviation",
 		);
 		renderWithProviders(
-			<OtuCreate open refId={reference.id} setOpen={vi.fn()} />,
+			<OtuCreate open refId={String(reference.id)} setOpen={vi.fn()} />,
 		);
 
 		await userEvent.type(screen.getByLabelText("Name"), "TestName");

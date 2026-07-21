@@ -22,7 +22,7 @@ describe("<ArchiveReference />", () => {
 	it("should archive an active reference and close the dialog on success", async () => {
 		const detail = createFakeReference({ archived: false });
 		const archived = { ...detail, archived: true };
-		const scope = mockApiArchiveReference(detail.id, archived);
+		const scope = mockApiArchiveReference(String(detail.id), archived);
 
 		await renderWithRouter(<ArchiveReference detail={detail} />);
 
@@ -41,7 +41,7 @@ describe("<ArchiveReference />", () => {
 	it("should unarchive an archived reference", async () => {
 		const detail = createFakeReference({ archived: true });
 		const unarchived = { ...detail, archived: false };
-		const scope = mockApiUnarchiveReference(detail.id, unarchived);
+		const scope = mockApiUnarchiveReference(String(detail.id), unarchived);
 
 		await renderWithRouter(<ArchiveReference detail={detail} />);
 
@@ -96,7 +96,7 @@ describe("<ArchiveReference />", () => {
 
 	it("should surface a generic message when the server returns no message", async () => {
 		const detail = createFakeReference({ archived: false });
-		const scope = mockApiArchiveReference(detail.id, detail, 500);
+		const scope = mockApiArchiveReference(String(detail.id), detail, 500);
 
 		await renderWithRouter(<ArchiveReference detail={detail} />);
 
@@ -112,7 +112,7 @@ describe("<ArchiveReference />", () => {
 
 	it("should close without mutating when the Cancel button is clicked", async () => {
 		const detail = createFakeReference({ archived: false });
-		const scope = mockApiArchiveReference(detail.id, detail);
+		const scope = mockApiArchiveReference(String(detail.id), detail);
 
 		await renderWithRouter(<ArchiveReference detail={detail} />);
 

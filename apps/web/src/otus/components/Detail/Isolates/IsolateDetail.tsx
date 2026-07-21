@@ -31,10 +31,10 @@ export default function IsolateDetail() {
 	const [openCreateSequence, setOpenCreateSequence] = useState(false);
 	const mutation = useSetIsolateAsDefault();
 	const { hasPermission: canModify } = useCheckReferenceRight(
-		reference.id,
+		String(reference.id),
 		"modify_otu",
 	);
-	const archived = useReferenceIsArchived(reference.id);
+	const archived = useReferenceIsArchived(String(reference.id));
 	const canModifyIsolates = canModify && !archived;
 
 	const activeIsolate = otu.isolates.find(
@@ -114,7 +114,7 @@ export default function IsolateDetail() {
 					</DownloadLink>
 					<CreateSequenceButton
 						onCreate={() => setOpenCreateSequence(true)}
-						refId={reference.id}
+						refId={String(reference.id)}
 					/>
 				</div>
 			</div>

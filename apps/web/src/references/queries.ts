@@ -141,7 +141,7 @@ export function useCloneReference() {
 	return useMutation<
 		ReferenceMinimal,
 		unknown,
-		{ name: string; description: string; refId: string }
+		{ name: string; description: string; refId: number }
 	>({
 		mutationFn: ({ name, description, refId }) =>
 			apiClient

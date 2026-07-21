@@ -24,8 +24,8 @@ type ArchiveReferenceProps = {
  */
 export default function ArchiveReference({ detail }: ArchiveReferenceProps) {
 	const [open, setOpen] = useState(false);
-	const archiveMutation = useArchiveReference(detail.id);
-	const unarchiveMutation = useUnarchiveReference(detail.id);
+	const archiveMutation = useArchiveReference(String(detail.id));
+	const unarchiveMutation = useUnarchiveReference(String(detail.id));
 
 	const mutation = detail.archived ? unarchiveMutation : archiveMutation;
 	const verb = detail.archived ? "Unarchive" : "Archive";

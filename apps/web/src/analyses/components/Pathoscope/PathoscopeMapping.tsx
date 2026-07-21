@@ -25,7 +25,7 @@ export function AnalysisMappingReferenceTitle({
 }: AnalysisMappingReferenceTitleProps) {
 	return (
 		<div className="flex items-center [&_a]:mr-1">
-			<Link to="/refs/$refId" params={{ refId: reference.id }}>
+			<Link to="/refs/$refId" params={{ refId: String(reference.id) }}>
 				{reference.name}
 			</Link>
 			<Label>{index.version}</Label>

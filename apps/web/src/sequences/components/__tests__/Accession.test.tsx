@@ -19,7 +19,7 @@ describe("<Accession> auto fill", () => {
 				isolateId={isolate.id}
 				open
 				otuId={otu.id}
-				refId={reference.id}
+				refId={String(reference.id)}
 				schema={otu.schema}
 				sequences={isolate.sequences}
 				setOpen={vi.fn()}

@@ -48,7 +48,7 @@ export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 				IconComponent={Copy}
 				tip="clone"
 				color="blue"
-				onClick={() => onClone(id)}
+				onClick={() => onClone(String(id))}
 			/>
 		);
 	}
@@ -58,7 +58,7 @@ export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 			<Link
 				className="font-medium text-lg"
 				to="/refs/$refId"
-				params={{ refId: id }}
+				params={{ refId: String(id) }}
 			>
 				{name}
 			</Link>

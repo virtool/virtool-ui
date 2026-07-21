@@ -53,7 +53,7 @@ export default function Sequences({
 	setOpenCreate,
 }: IsolateSequencesProps) {
 	const { otu, reference } = useCurrentOtuContext();
-	const archived = useReferenceIsArchived(reference.id);
+	const archived = useReferenceIsArchived(String(reference.id));
 	const [sequenceToEdit, setSequenceToEdit] = useState<
 		OtuSequence | undefined
 	>();
@@ -109,7 +109,7 @@ export default function Sequences({
 				isolateId={activeIsolate.id}
 				open={openCreate && !archived}
 				otuId={otuId}
-				refId={reference.id}
+				refId={String(reference.id)}
 				schema={otu.schema}
 				sequences={sequences}
 				setOpen={setOpenCreate}
@@ -120,7 +120,7 @@ export default function Sequences({
 				isolateId={activeIsolate.id}
 				open={Boolean(sequenceToEdit) && !archived}
 				otuId={otuId}
-				refId={reference.id}
+				refId={String(reference.id)}
 				schema={otu.schema}
 				sequences={sequences}
 				setOpen={(open) => {
