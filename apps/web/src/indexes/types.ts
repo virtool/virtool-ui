@@ -77,7 +77,7 @@ export type Index = z.infer<typeof indexSchema>;
 
 /** An unbuilt change awaiting the next index build */
 export type UnbuiltChanges = HistoryNested & {
-	index: IndexNested;
+	index: IndexNested | null;
 	otu: OtuNested;
 	reference: ReferenceNested;
 };

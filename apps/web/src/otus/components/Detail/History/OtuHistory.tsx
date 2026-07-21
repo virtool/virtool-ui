@@ -13,7 +13,7 @@ export default function OtuHistory() {
 	const { data } = useSuspenseOtuHistory(otuId);
 
 	const changes = groupBy(data, (change) =>
-		change.index.version === "unbuilt" ? "unbuilt" : "built",
+		change.index === null ? "unbuilt" : "built",
 	);
 
 	return (
