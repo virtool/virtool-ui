@@ -113,7 +113,7 @@ export function useCreateAPIKey() {
 		mutationFn: ({ name, permissions }) =>
 			createApiKey({ data: { name, permissions } }),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.apiKeys() });
 		},
 	});
 }
@@ -134,7 +134,7 @@ export function useUpdateApiKey() {
 		mutationFn: ({ keyId, permissions }) =>
 			updateApiKey({ data: { keyId, permissions } }),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.apiKeys() });
 		},
 	});
 }
@@ -150,7 +150,7 @@ export function useRemoveAPIKey() {
 	return useMutation<null, Error, { keyId: number }>({
 		mutationFn: ({ keyId }) => deleteApiKey({ data: { keyId } }),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.apiKeys() });
 		},
 	});
 }

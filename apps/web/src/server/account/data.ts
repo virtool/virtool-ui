@@ -1,11 +1,10 @@
 import { createHash, randomBytes } from "node:crypto";
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, sql } from "drizzle-orm";
 import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import { type ApiKeyRow, apiKeys as apiKeysTable } from "../db/schema/apiKeys";
 import type { GroupPermissions } from "../db/schema/groups";
 import { AppError } from "../errors";
-import { getUser } from "../users/data";
 
 /** An account API key as returned to the API-key management UI. */
 export type ApiKey = {
@@ -38,27 +37,17 @@ function basePermissions(): GroupPermissions {
 }
 
 /**
- * Clamp `permissions` so no value exceeds the matching one in `limit`. Mirrors
- * `limit_permissions` in the Python service: a key can never report a
- * permission its owner no longer holds.
+ * Build the API-key representation from a stored row. Permissions are expanded
+ * against `basePermissions()` so keys written by the legacy Python path — which
+ * stored only the provided keys — still report every permission as an explicit
+ * boolean, and the edit UI can offer the full checklist.
  */
-function limitPermissions(
-	permissions: GroupPermissions,
-	limit: GroupPermissions,
-): GroupPermissions {
-	const result = basePermissions();
-	for (const key of Object.keys(result) as (keyof GroupPermissions)[]) {
-		result[key] = permissions[key] && limit[key];
-	}
-	return result;
-}
-
-function toApiKey(row: ApiKeyRow, permissions: GroupPermissions): ApiKey {
+function toApiKey(row: ApiKeyRow): ApiKey {
 	return {
 		id: row.id,
 		created_at: row.createdAt.toISOString(),
 		name: row.name,
-		permissions,
+		permissions: { ...basePermissions(), ...row.permissions },
 	};
 }
 
@@ -67,16 +56,7 @@ function generateKey(): { raw: string; hashed: string } {
 	return { raw, hashed: createHash("sha256").update(raw).digest("hex") };
 }
 
-/**
- * List the account's API keys with their stored permissions.
- *
- * The list is deliberately not clamped, mirroring the Python service: only the
- * single-key read (and the representation returned from create/update) clamps
- * to the owner's current permissions. Stored permissions are expanded against
- * `basePermissions()` so keys written by the legacy Python path — which stored
- * only the provided keys — still report every permission as an explicit
- * boolean, and the edit UI can offer the full checklist.
- */
+/** List the account's API keys with their stored permissions. */
 export async function findApiKeys(db: Db, userId: number): Promise<ApiKey[]> {
 	const rows = await db
 		.select()
@@ -84,37 +64,7 @@ export async function findApiKeys(db: Db, userId: number): Promise<ApiKey[]> {
 		.where(eq(apiKeysTable.userId, userId))
 		.orderBy(asc(apiKeysTable.id));
 
-	return rows.map((row) =>
-		toApiKey(row, { ...basePermissions(), ...row.permissions }),
-	);
-}
-
-/**
- * Read a single API key, clamping its permissions to the owner's current
- * permissions unless the owner is an administrator.
- */
-export async function getApiKey(
-	db: Db,
-	userId: number,
-	keyId: number,
-): Promise<ApiKey> {
-	const user = await getUser(db, userId);
-
-	const [row] = await db
-		.select()
-		.from(apiKeysTable)
-		.where(and(eq(apiKeysTable.id, keyId), eq(apiKeysTable.userId, userId)))
-		.limit(1);
-
-	if (!row) {
-		throw new ApiKeyNotFoundError();
-	}
-
-	const permissions = user.administrator_role
-		? row.permissions
-		: limitPermissions(row.permissions, user.permissions);
-
-	return toApiKey(row, permissions);
+	return rows.map(toApiKey);
 }
 
 export async function createApiKey(
@@ -137,7 +87,7 @@ export async function createApiKey(
 			.returning(),
 	);
 
-	return { key: raw, apiKey: await getApiKey(db, userId, row.id) };
+	return { key: raw, apiKey: toApiKey(row) };
 }
 
 export async function updateApiKey(
@@ -146,22 +96,21 @@ export async function updateApiKey(
 	keyId: number,
 	permissions: Partial<GroupPermissions>,
 ): Promise<ApiKey> {
-	const [existing] = await db
-		.select({ permissions: apiKeysTable.permissions })
-		.from(apiKeysTable)
+	// Merge the partial into the stored jsonb in a single statement; Postgres
+	// does the merge server-side, so no prior read of the existing value.
+	const [row] = await db
+		.update(apiKeysTable)
+		.set({
+			permissions: sql`${apiKeysTable.permissions} || ${JSON.stringify(permissions)}::jsonb`,
+		})
 		.where(and(eq(apiKeysTable.id, keyId), eq(apiKeysTable.userId, userId)))
-		.limit(1);
+		.returning();
 
-	if (!existing) {
+	if (!row) {
 		throw new ApiKeyNotFoundError();
 	}
 
-	await db
-		.update(apiKeysTable)
-		.set({ permissions: { ...existing.permissions, ...permissions } })
-		.where(and(eq(apiKeysTable.id, keyId), eq(apiKeysTable.userId, userId)));
-
-	return getApiKey(db, userId, keyId);
+	return toApiKey(row);
 }
 
 export async function deleteApiKey(

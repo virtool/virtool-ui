@@ -13,7 +13,6 @@ import {
 	createApiKey,
 	deleteApiKey,
 	findApiKeys,
-	getApiKey,
 	updateApiKey,
 } from "./data";
 
@@ -66,23 +65,10 @@ describe("createApiKey", () => {
 		// The raw secret is never persisted — only its hash.
 		expect(row?.hashed).not.toBe(key);
 	});
-
-	it("clamps the returned permissions to a non-admin owner's permissions", async () => {
-		const userId = await seedLimitedUser();
-
-		const { apiKey } = await createApiKey(db, userId, {
-			name: "Robot",
-			permissions: perms({ create_ref: true, create_sample: true }),
-		});
-
-		// create_ref is dropped — the owner does not hold it — but create_sample
-		// survives.
-		expect(apiKey.permissions).toEqual(perms({ create_sample: true }));
-	});
 });
 
 describe("findApiKeys", () => {
-	it("lists the owner's keys with their stored, unclamped permissions", async () => {
+	it("lists the owner's keys with their stored permissions", async () => {
 		const userId = await seedLimitedUser();
 		await createApiKey(db, userId, {
 			name: "Robot",
@@ -92,7 +78,8 @@ describe("findApiKeys", () => {
 		const keys = await findApiKeys(db, userId);
 
 		expect(keys).toHaveLength(1);
-		// Unlike the single-key read, the list is not clamped.
+		// Permissions are reported as stored — never clamped to what the owner
+		// currently holds, so create_ref survives even though this owner lacks it.
 		expect(keys[0]?.permissions).toEqual(
 			perms({ create_ref: true, create_sample: true }),
 		);
@@ -123,45 +110,6 @@ describe("findApiKeys", () => {
 	});
 });
 
-describe("getApiKey", () => {
-	it("clamps a non-admin owner's permissions", async () => {
-		const userId = await seedLimitedUser();
-		const { apiKey } = await createApiKey(db, userId, {
-			name: "Robot",
-			permissions: perms({ create_ref: true, create_sample: true }),
-		});
-
-		const read = await getApiKey(db, userId, apiKey.id);
-
-		expect(read.permissions).toEqual(perms({ create_sample: true }));
-	});
-
-	it("does not clamp an administrator owner's permissions", async () => {
-		const userId = await seedUser(db, { administratorRole: "full" });
-		const { apiKey } = await createApiKey(db, userId, {
-			name: "Robot",
-			permissions: perms({ create_ref: true }),
-		});
-
-		const read = await getApiKey(db, userId, apiKey.id);
-
-		expect(read.permissions).toEqual(perms({ create_ref: true }));
-	});
-
-	it("throws when the key belongs to another user", async () => {
-		const owner = await seedUser(db, { handle: "owner" });
-		const other = await seedUser(db, { handle: "other" });
-		const { apiKey } = await createApiKey(db, owner, {
-			name: "Robot",
-			permissions: perms(),
-		});
-
-		await expect(getApiKey(db, other, apiKey.id)).rejects.toBeInstanceOf(
-			ApiKeyNotFoundError,
-		);
-	});
-});
-
 describe("updateApiKey", () => {
 	it("merges the update into the stored permissions", async () => {
 		const userId = await seedUser(db, { administratorRole: "full" });
@@ -185,6 +133,23 @@ describe("updateApiKey", () => {
 		await expect(
 			updateApiKey(db, userId, 404, { create_ref: true }),
 		).rejects.toBeInstanceOf(ApiKeyNotFoundError);
+	});
+
+	it("throws when the key belongs to another user", async () => {
+		const owner = await seedUser(db, { handle: "owner" });
+		const other = await seedUser(db, { handle: "other" });
+		const { apiKey } = await createApiKey(db, owner, {
+			name: "Robot",
+			permissions: perms({ create_ref: true }),
+		});
+
+		await expect(
+			updateApiKey(db, other, apiKey.id, { create_sample: true }),
+		).rejects.toBeInstanceOf(ApiKeyNotFoundError);
+
+		// The owner's key is untouched by the rejected cross-user update.
+		const [row] = await findApiKeys(db, owner);
+		expect(row?.permissions).toEqual(perms({ create_ref: true }));
 	});
 });
 
