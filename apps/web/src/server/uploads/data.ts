@@ -5,6 +5,7 @@ import { type UploadRow, uploads as uploadsTable } from "../db/schema/uploads";
 import { users as usersTable } from "../db/schema/users";
 import { AppError } from "../errors";
 import { emit } from "../events/emit";
+import { logger } from "../logger";
 import type { StorageBackend } from "../storage";
 import { uploadFileKey } from "../storage";
 
@@ -212,7 +213,14 @@ export async function deleteUpload(
 		.set({ removed: true, removedAt: new Date() })
 		.where(eq(uploadsTable.id, uploadId));
 
-	await storage.delete(uploadFileKey(row.nameOnDisk ?? ""));
+	// `name_on_disk` is nullable at the database level. A row that somehow lacks
+	// one has no bytes we can locate, so skip the storage delete rather than
+	// deleting the empty `files/` key, which could point at an unintended object.
+	if (row.nameOnDisk) {
+		await storage.delete(uploadFileKey(row.nameOnDisk));
+	} else {
+		logger.warn({ uploadId }, "removed upload has no name_on_disk to delete");
+	}
 
 	await emit("uploads", uploadId, "delete");
 }
