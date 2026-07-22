@@ -1,9 +1,15 @@
 import { accountQueryKeys } from "@account/keys";
-import type { APIKeyMinimal } from "@account/types";
+import type { ApiKey } from "@account/types";
 import { apiClient } from "@app/api";
 import { resetClient } from "@app/utils";
 import type { Permissions } from "@groups/types";
 import * as Sentry from "@sentry/tanstackstart-react";
+import {
+	createApiKey,
+	deleteApiKey,
+	findApiKeys,
+	updateApiKey,
+} from "@server/account/functions";
 import { logoutFn } from "@server/auth/functions";
 import { updateAccountHandle } from "@server/users/functions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -84,10 +90,10 @@ export function useChangePassword() {
  *
  * @returns A list of API keys for the current user
  */
-export function useFetchAPIKeys() {
-	return useQuery<APIKeyMinimal[]>({
+export function useFetchApiKeys() {
+	return useQuery<ApiKey[]>({
 		queryKey: accountQueryKeys.apiKeys(),
-		queryFn: () => apiClient.get("/account/keys").then((res) => res.body),
+		queryFn: () => findApiKeys(),
 	});
 }
 
@@ -96,21 +102,18 @@ export function useFetchAPIKeys() {
  *
  * @returns A mutator for creating a new API key
  */
-export function useCreateAPIKey() {
+export function useCreateApiKey() {
 	const queryClient = useQueryClient();
 
 	return useMutation<
-		APIKeyMinimal,
-		ErrorResponse,
+		Awaited<ReturnType<typeof createApiKey>>,
+		Error,
 		{ name: string; permissions: Permissions }
 	>({
 		mutationFn: ({ name, permissions }) =>
-			apiClient
-				.post("/account/keys")
-				.send({ name, permissions })
-				.then((res) => res.body),
+			createApiKey({ data: { name, permissions } }),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.apiKeys() });
 		},
 	});
 }
@@ -124,17 +127,14 @@ export function useUpdateApiKey() {
 	const queryClient = useQueryClient();
 
 	return useMutation<
-		APIKeyMinimal,
-		ErrorResponse,
-		{ keyId: string; permissions: Permissions }
+		Awaited<ReturnType<typeof updateApiKey>>,
+		Error,
+		{ keyId: number; permissions: Permissions }
 	>({
 		mutationFn: ({ keyId, permissions }) =>
-			apiClient
-				.patch(`/account/keys/${keyId}`)
-				.send({ permissions })
-				.then((res) => res.body),
+			updateApiKey({ data: { keyId, permissions } }),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.apiKeys() });
 		},
 	});
 }
@@ -144,14 +144,13 @@ export function useUpdateApiKey() {
  *
  * @returns A mutator for removing an API key
  */
-export function useRemoveAPIKey() {
+export function useRemoveApiKey() {
 	const queryClient = useQueryClient();
 
-	return useMutation<null, ErrorResponse, { keyId: string }>({
-		mutationFn: ({ keyId }) =>
-			apiClient.delete(`/account/keys/${keyId}`).then((res) => res.body),
+	return useMutation<null, Error, { keyId: number }>({
+		mutationFn: ({ keyId }) => deleteApiKey({ data: { keyId } }),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: accountQueryKeys.all() });
+			queryClient.invalidateQueries({ queryKey: accountQueryKeys.apiKeys() });
 		},
 	});
 }

@@ -1,0 +1,84 @@
+import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
+import { setResponseStatus } from "@tanstack/react-start/server";
+import { permissionsSchema } from "@virtool/contracts";
+import { z } from "zod";
+import { authenticated } from "../auth/policy";
+import { db } from "../db/pg";
+import {
+	ApiKeyNotFoundError,
+	createApiKey as createApiKeyImpl,
+	deleteApiKey as deleteApiKeyImpl,
+	findApiKeys as findApiKeysImpl,
+	updateApiKey as updateApiKeyImpl,
+} from "./data";
+
+const createApiKeySchema = z.object({
+	name: z.string().trim().min(1),
+	permissions: permissionsSchema.partial().default({}),
+});
+
+const updateApiKeySchema = z.object({
+	keyId: z.number().int().positive(),
+	permissions: permissionsSchema.partial().default({}),
+});
+
+const keyIdSchema = z.object({
+	keyId: z.number().int().positive(),
+});
+
+// Wrapped in createServerOnlyFn so the compiler can strip this body — and the
+// ApiKeyNotFoundError import it references — from the client bundle. A plain
+// top-level helper would pin ./data and its postgres transitive dependency in
+// the client graph.
+const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
+	if (err instanceof ApiKeyNotFoundError) {
+		setResponseStatus(404);
+		throw new Error("API key not found.");
+	}
+	throw err;
+});
+
+export const findApiKeys = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
+	.handler(async ({ context }) => findApiKeysImpl(db, context.session.userId));
+
+export const createApiKey = createServerFn({ method: "POST" })
+	.middleware([authenticated()])
+	.validator(createApiKeySchema)
+	.handler(async ({ context, data }) => {
+		const { key, apiKey } = await createApiKeyImpl(db, context.session.userId, {
+			name: data.name,
+			permissions: data.permissions,
+		});
+		setResponseStatus(201);
+		return { ...apiKey, key };
+	});
+
+export const updateApiKey = createServerFn({ method: "POST" })
+	.middleware([authenticated()])
+	.validator(updateApiKeySchema)
+	.handler(async ({ context, data }) => {
+		try {
+			return await updateApiKeyImpl(
+				db,
+				context.session.userId,
+				data.keyId,
+				data.permissions,
+			);
+		} catch (err) {
+			return rethrowAsHttp(err);
+		}
+	});
+
+export const deleteApiKey = createServerFn({ method: "POST" })
+	.middleware([authenticated()])
+	.validator(keyIdSchema)
+	.handler(async ({ context, data }) => {
+		try {
+			await deleteApiKeyImpl(db, context.session.userId, data.keyId);
+			setResponseStatus(204);
+			return null;
+		} catch (err) {
+			return rethrowAsHttp(err);
+		}
+	});
