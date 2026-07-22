@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UploadsRouteImport } from './routes/uploads'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as MonitoringRouteImport } from './routes/monitoring'
 import { Route as LoginRouteImport } from './routes/login'
@@ -70,6 +71,11 @@ import { Route as AuthenticatedRefsRefIdOtusOtuIdIsolatesRouteRouteImport } from
 import { Route as AuthenticatedRefsRefIdOtusOtuIdIsolatesIndexRouteImport } from './routes/_authenticated/refs/$refId/otus/$otuId/isolates/index'
 import { Route as AuthenticatedRefsRefIdOtusOtuIdIsolatesIsolateIdRouteImport } from './routes/_authenticated/refs/$refId/otus/$otuId/isolates/$isolateId'
 
+const UploadsRoute = UploadsRouteImport.update({
+  id: '/uploads',
+  path: '/uploads',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SetupRoute = SetupRouteImport.update({
   id: '/setup',
   path: '/setup',
@@ -417,6 +423,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/monitoring': typeof MonitoringRoute
   '/setup': typeof SetupRoute
+  '/uploads': typeof UploadsRoute
   '/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
   '/refs': typeof AuthenticatedRefsRouteRouteWithChildren
   '/account': typeof AuthenticatedAccountRouteWithChildren
@@ -477,6 +484,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/monitoring': typeof MonitoringRoute
   '/setup': typeof SetupRoute
+  '/uploads': typeof UploadsRoute
   '/health/live': typeof HealthLiveRoute
   '/health/ready': typeof HealthReadyRoute
   '/': typeof AuthenticatedIndexRoute
@@ -528,6 +536,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/monitoring': typeof MonitoringRoute
   '/setup': typeof SetupRoute
+  '/uploads': typeof UploadsRoute
   '/_authenticated/administration': typeof AuthenticatedAdministrationRouteRouteWithChildren
   '/_authenticated/refs': typeof AuthenticatedRefsRouteRouteWithChildren
   '/_authenticated/account': typeof AuthenticatedAccountRouteWithChildren
@@ -592,6 +601,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/monitoring'
     | '/setup'
+    | '/uploads'
     | '/administration'
     | '/refs'
     | '/account'
@@ -652,6 +662,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/monitoring'
     | '/setup'
+    | '/uploads'
     | '/health/live'
     | '/health/ready'
     | '/'
@@ -702,6 +713,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/monitoring'
     | '/setup'
+    | '/uploads'
     | '/_authenticated/administration'
     | '/_authenticated/refs'
     | '/_authenticated/account'
@@ -765,12 +777,20 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MonitoringRoute: typeof MonitoringRoute
   SetupRoute: typeof SetupRoute
+  UploadsRoute: typeof UploadsRoute
   HealthLiveRoute: typeof HealthLiveRoute
   HealthReadyRoute: typeof HealthReadyRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/uploads': {
+      id: '/uploads'
+      path: '/uploads'
+      fullPath: '/uploads'
+      preLoaderRoute: typeof UploadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/setup': {
       id: '/setup'
       path: '/setup'
@@ -1474,6 +1494,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MonitoringRoute: MonitoringRoute,
   SetupRoute: SetupRoute,
+  UploadsRoute: UploadsRoute,
   HealthLiveRoute: HealthLiveRoute,
   HealthReadyRoute: HealthReadyRoute,
 }

@@ -1,8 +1,8 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiListFiles } from "@tests/api/files";
 import { mockApiCreateSubtraction } from "@tests/api/subtractions";
 import { createFakeFile } from "@tests/fake/files";
+import { mockFindUploads } from "@tests/server-fn/uploads";
 import { renderWithRouter } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 import SubtractionCreate from "../SubtractionCreate";
@@ -14,7 +14,7 @@ async function openDialog() {
 
 describe("<SubtractionCreate />", () => {
 	it("should render when no uploads available", async () => {
-		mockApiListFiles([]);
+		mockFindUploads([]);
 		await openDialog();
 
 		expect(await screen.findByText(/no files found/i)).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe("<SubtractionCreate />", () => {
 			name: "subtraction.fq.gz",
 			type: "subtraction",
 		});
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		await openDialog();
 
 		expect(await screen.findByText(file.name)).toBeInTheDocument();
@@ -43,7 +43,7 @@ describe("<SubtractionCreate />", () => {
 		const name = "testSubtractionname";
 		const nickname = "testSubtractionNickname";
 
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		const createSubtractionScope = mockApiCreateSubtraction(
 			name,
 			nickname,

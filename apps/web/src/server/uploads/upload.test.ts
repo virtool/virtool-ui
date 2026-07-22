@@ -1,0 +1,142 @@
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
+
+import type { Db } from "../db/pg";
+import { sessions } from "../db/schema/sessions";
+import { uploads as uploadsTable } from "../db/schema/uploads";
+import { users } from "../db/schema/users";
+import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
+import { MemoryStorage } from "../storage/memory";
+
+vi.mock("@tanstack/react-start/server", () => ({
+	deleteCookie: vi.fn(),
+	getCookie: vi.fn(),
+	getRequest: vi.fn(),
+	setCookie: vi.fn(),
+	setResponseStatus: vi.fn(),
+}));
+
+vi.mock("@sentry/tanstackstart-react", () => ({
+	captureException: vi.fn(),
+	setUser: vi.fn(),
+}));
+
+let db: Db;
+vi.mock("../db/pg", () => ({
+	client: {},
+	get db() {
+		return db;
+	},
+}));
+
+vi.mock("../events/emit", () => ({ emit: vi.fn() }));
+
+const storage = new MemoryStorage();
+vi.mock("../storage", () => ({
+	storage,
+	uploadFileKey: (nameOnDisk: string) => `files/${nameOnDisk}`,
+}));
+
+const { handleUpload } = await import("./upload");
+const { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } = await import(
+	"../auth/cookies"
+);
+const { seedSession, seedUser } = await import("../auth/test/fixtures");
+
+let database: TestDatabase;
+
+beforeAll(async () => {
+	database = await createTestDatabase();
+	db = database.db;
+}, 60_000);
+
+afterAll(async () => {
+	await database.drop();
+});
+
+beforeEach(async () => {
+	vi.clearAllMocks();
+	await db.delete(uploadsTable);
+	await db.delete(sessions);
+	await db.delete(users);
+});
+
+/** Build a `POST /uploads` request authenticated as the given user. */
+async function request(
+	userId: number | null,
+	query: string,
+	body: string | null = "hello",
+): Promise<Request> {
+	const headers: Record<string, string> = {};
+	if (userId !== null) {
+		const { sessionId, token } = await seedSession(db, userId);
+		headers.cookie = `${SESSION_ID_COOKIE}=${sessionId}; ${SESSION_TOKEN_COOKIE}=${token}`;
+	}
+	return new Request(`https://virtool.test/uploads${query}`, {
+		method: "POST",
+		body,
+		headers,
+	});
+}
+
+describe("handleUpload", () => {
+	it("streams the body to storage and returns the created upload", async () => {
+		const userId = await seedUser(db, { administratorRole: "full" });
+
+		const response = await handleUpload(
+			await request(userId, "?name=external.fa.gz&type=reference"),
+		);
+
+		expect(response.status).toBe(201);
+		const body = (await response.json()) as { name: string; size: number };
+		expect(body).toMatchObject({ name: "external.fa.gz", size: 5 });
+		expect(await db.select().from(uploadsTable)).toHaveLength(1);
+	});
+
+	it("rejects an anonymous caller with a 401", async () => {
+		const response = await handleUpload(
+			await request(null, "?name=x&type=reference"),
+		);
+
+		expect(response.status).toBe(401);
+		expect(await db.select().from(uploadsTable)).toHaveLength(0);
+	});
+
+	it("rejects a user without the upload_file permission with a 403", async () => {
+		const userId = await seedUser(db, { administratorRole: null });
+
+		const response = await handleUpload(
+			await request(userId, "?name=x&type=reference"),
+		);
+
+		expect(response.status).toBe(403);
+		expect(await db.select().from(uploadsTable)).toHaveLength(0);
+	});
+
+	it("rejects an invalid type with a 422", async () => {
+		const userId = await seedUser(db, { administratorRole: "full" });
+
+		const response = await handleUpload(
+			await request(userId, "?name=x&type=bogus"),
+		);
+
+		expect(response.status).toBe(422);
+	});
+
+	it("rejects a request with no body with a 400", async () => {
+		const userId = await seedUser(db, { administratorRole: "full" });
+
+		const response = await handleUpload(
+			await request(userId, "?name=x&type=reference", null),
+		);
+
+		expect(response.status).toBe(400);
+	});
+});

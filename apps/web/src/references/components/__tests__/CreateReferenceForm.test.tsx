@@ -1,10 +1,24 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiCreateReference } from "@tests/api/references";
 import { renderWithRouter } from "@tests/setup";
+import type { Upload } from "@uploads/types";
+import { postUpload } from "@uploads/uploader";
 import nock from "nock";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { CreateReferenceForm } from "../CreateReferenceForm";
+
+// The reference upload posts through `postUpload` (an XHR wrapper), not the
+// generated server-function client, so stub it directly rather than mocking the
+// network. Its resolved value drives the imported upload's id and name.
+vi.mock("@uploads/uploader", async (importOriginal) => ({
+	...(await importOriginal<typeof import("@uploads/uploader")>()),
+	postUpload: vi.fn(),
+}));
+
+function mockUpload(upload: Partial<Upload>): void {
+	vi.mocked(postUpload).mockResolvedValue(upload as Upload);
+}
 
 describe("<CreateReferenceForm />", () => {
 	describe("mode='empty'", () => {
@@ -45,16 +59,9 @@ describe("<CreateReferenceForm />", () => {
 
 	describe("mode='import'", () => {
 		it("should upload file and import reference", async () => {
-			const scope = nock("http://localhost");
+			mockUpload({ id: 12, name: "external.json.gz" });
 
-			scope
-				.post("/api/uploads?name=external.json.gz&type=reference")
-				.reply(200, {
-					id: 12,
-					name: "external.json.gz",
-				});
-
-			scope
+			const scope = nock("http://localhost")
 				.post("/api/refs", {
 					name: "External",
 					description: "External reference",
@@ -76,6 +83,8 @@ describe("<CreateReferenceForm />", () => {
 					type: "application/gzip",
 				}),
 			);
+			await waitFor(() => expect(postUpload).toHaveBeenCalledTimes(1));
+
 			await userEvent.type(
 				screen.getByRole("textbox", { name: "Name" }),
 				"External",
@@ -86,14 +95,12 @@ describe("<CreateReferenceForm />", () => {
 			);
 			await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
-			expect(scope.isDone()).toBeTruthy();
+			await waitFor(() => expect(scope.isDone()).toBeTruthy());
 		});
 
 		it("should surface an error when submitted before the upload finishes", async () => {
-			nock("http://localhost")
-				.post("/api/uploads?name=external.json.gz&type=reference")
-				.delay(100)
-				.reply(200, { id: 12, name: "external.json.gz" });
+			// A never-settling upload leaves the imported id unset.
+			vi.mocked(postUpload).mockReturnValue(new Promise(() => {}));
 
 			await renderWithRouter(
 				<CreateReferenceForm mode="import" onSuccess={() => {}} />,

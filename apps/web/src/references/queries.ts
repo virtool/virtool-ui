@@ -9,6 +9,7 @@ import {
 	useQueryClient,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
+import { postUpload } from "@uploads/uploader";
 import { useState } from "react";
 import type { ErrorResponse } from "@/types/api";
 import type {
@@ -185,22 +186,13 @@ export function useUploadReference() {
 	const [progress, setProgress] = useState(0);
 
 	const uploadMutation = useMutation({
-		mutationFn: (file: File) => {
-			const formData = new FormData();
-			formData.append("file", file);
-
-			return apiClient
-				.post("/uploads")
-				.query({ name: file.name, type: "reference" })
-				.send(formData)
-				.on("progress", (event) => {
-					setProgress(event.percent);
-				})
-				.then((response) => {
-					setFileName(response.body.name);
-					setUploadId(response.body.id);
-				});
-		},
+		mutationFn: (file: File) =>
+			postUpload(file, file.name, "reference", ({ percent }) => {
+				setProgress(percent);
+			}).then((upload) => {
+				setFileName(upload.name);
+				setUploadId(upload.id);
+			}),
 		onMutate: () => {
 			setFileName("");
 			setUploadId(null);

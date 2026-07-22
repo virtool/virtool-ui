@@ -1,9 +1,9 @@
 import { formatPath } from "@app/hooks";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiDeleteFile, mockApiListFiles } from "@tests/api/files";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeFile } from "@tests/fake/files";
+import { mockFindUploads, uploadServerFnMocks } from "@tests/server-fn/uploads";
 import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import { upload } from "@uploads/uploader";
@@ -44,7 +44,7 @@ describe("<FileManager>", () => {
 				},
 			}),
 		);
-		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
+		mockFindUploads([createFakeFile({ name: "subtraction.fq.gz" })]);
 
 		vi.mock("@uploads/uploader");
 
@@ -81,7 +81,7 @@ describe("<FileManager>", () => {
 
 	it("should hide upload bar if user lacks permission", async () => {
 		mockGetAccount(createFakeAccount({ administrator_role: null }));
-		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
+		mockFindUploads([createFakeFile({ name: "subtraction.fq.gz" })]);
 
 		await renderWithRouter(<FileManager {...props} />, path);
 
@@ -99,7 +99,7 @@ describe("<FileManager>", () => {
 				administrator_role: "full",
 			}),
 		);
-		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
+		mockFindUploads([createFakeFile({ name: "subtraction.fq.gz" })]);
 
 		await renderWithRouter(
 			<FileManager {...props} hint="Supports plain or gzipped FASTA" />,
@@ -120,12 +120,8 @@ describe("<FileManager>", () => {
 			const files = [first, second, unselected];
 
 			mockGetAccount(createFakeAccount({ administrator_role: "full" }));
-			mockApiListFiles(files, true);
-			mockApiListFiles(files, true);
-
-			const firstScope = mockApiDeleteFile(first.id);
-			const secondScope = mockApiDeleteFile(second.id);
-			const unselectedScope = mockApiDeleteFile(unselected.id);
+			mockFindUploads(files);
+			uploadServerFnMocks.deleteUpload.mockResolvedValue(null);
 
 			await renderWithRouter(<FileManager {...props} />, path);
 
@@ -143,11 +139,17 @@ describe("<FileManager>", () => {
 			await userEvent.click(screen.getByRole("button", { name: "Delete" }));
 
 			await waitFor(() => {
-				expect(firstScope.isDone()).toBe(true);
-				expect(secondScope.isDone()).toBe(true);
+				expect(uploadServerFnMocks.deleteUpload).toHaveBeenCalledWith({
+					data: { id: first.id },
+				});
+				expect(uploadServerFnMocks.deleteUpload).toHaveBeenCalledWith({
+					data: { id: second.id },
+				});
 			});
 
-			expect(unselectedScope.isDone()).toBe(false);
+			expect(uploadServerFnMocks.deleteUpload).not.toHaveBeenCalledWith({
+				data: { id: unselected.id },
+			});
 		});
 
 		it("should select and deselect every file on the page", async () => {
@@ -157,7 +159,7 @@ describe("<FileManager>", () => {
 			];
 
 			mockGetAccount(createFakeAccount({ administrator_role: "full" }));
-			mockApiListFiles(files, true);
+			mockFindUploads(files);
 
 			await renderWithRouter(<FileManager {...props} />, path);
 
@@ -177,7 +179,7 @@ describe("<FileManager>", () => {
 
 		it("should hide checkboxes when there is nothing to do with a selection", async () => {
 			mockGetAccount(createFakeAccount({ administrator_role: null }));
-			mockApiListFiles([createFakeFile({ name: "one.fq.gz" })], true);
+			mockFindUploads([createFakeFile({ name: "one.fq.gz" })]);
 
 			await renderWithRouter(<FileManager {...props} />, path);
 

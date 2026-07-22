@@ -1,0 +1,29 @@
+import type { Upload } from "@uploads/types";
+import { type Mock, vi } from "vitest";
+
+/**
+ * Mock handles for the `@server/uploads/functions` server-fn module. Wired in
+ * globally from `tests/setup.tsx` so any test rendering a view that lists or
+ * deletes uploads can stub them without per-file `vi.mock` boilerplate.
+ *
+ * Uploading itself is not a server function — it posts to the `/uploads` route
+ * through an `XMLHttpRequest` wrapper in `@uploads/uploader` — so tests that
+ * exercise uploading mock `@uploads/uploader` directly.
+ */
+export const uploadServerFnMocks = {
+	deleteUpload: vi.fn(),
+	findUploads: vi.fn(),
+};
+
+/** Sets up findUploads to resolve with a single page of the given uploads. */
+export function mockFindUploads(files: Upload[]): Mock {
+	uploadServerFnMocks.findUploads.mockResolvedValue({
+		items: files,
+		found_count: files.length,
+		total_count: files.length,
+		page: 1,
+		page_count: 1,
+		per_page: 25,
+	});
+	return uploadServerFnMocks.findUploads;
+}

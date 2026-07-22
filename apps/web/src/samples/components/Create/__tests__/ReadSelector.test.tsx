@@ -1,8 +1,8 @@
 import type { InfiniteData } from "@tanstack/react-query";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiListFiles } from "@tests/api/files";
 import { createFakeFile } from "@tests/fake/files";
+import { mockFindUploads } from "@tests/server-fn/uploads";
 import { renderWithProviders } from "@tests/setup";
 import type { FileResponse, Upload } from "@uploads/types";
 import nock from "nock";
@@ -69,7 +69,7 @@ describe("<ReadSelector>", () => {
 	afterEach(() => nock.cleanAll());
 
 	it("defaults to Auto-pair mode", () => {
-		mockApiListFiles([]);
+		mockFindUploads([]);
 		renderWithProviders(<Harness files={[createFakeFile()]} />);
 
 		expect(
@@ -83,7 +83,7 @@ describe("<ReadSelector>", () => {
 			const secondFile = createFakeFile({ name: "beta.fastq.gz" });
 			const files = [firstFile, secondFile];
 
-			mockApiListFiles(files);
+			mockFindUploads(files);
 
 			renderWithProviders(<Harness files={files} />);
 
@@ -106,7 +106,7 @@ describe("<ReadSelector>", () => {
 		it("selects a detected pair with one click, assigning LEFT and RIGHT", async () => {
 			const r1 = createFakeFile({ name: "sample_R1.fastq.gz" });
 			const r2 = createFakeFile({ name: "sample_R2.fastq.gz" });
-			mockApiListFiles([r1, r2]);
+			mockFindUploads([r1, r2]);
 
 			renderWithProviders(<Harness files={[r1, r2]} />);
 
@@ -121,7 +121,7 @@ describe("<ReadSelector>", () => {
 
 		it("clears the selection when the selected row is clicked again", async () => {
 			const file = createFakeFile({ name: "alpha.fastq.gz" });
-			mockApiListFiles([file]);
+			mockFindUploads([file]);
 
 			renderWithProviders(<Harness files={[file]} />);
 
@@ -138,7 +138,7 @@ describe("<ReadSelector>", () => {
 				createFakeFile({ name: "alpha.fastq.gz" }),
 				createFakeFile({ name: "beta.fastq.gz" }),
 			];
-			mockApiListFiles(files);
+			mockFindUploads(files);
 
 			renderWithProviders(<Harness files={files} />);
 
@@ -155,7 +155,7 @@ describe("<ReadSelector>", () => {
 			const thirdFile = createFakeFile({ name: "gamma.fastq.gz" });
 			const files = [firstFile, secondFile, thirdFile];
 
-			mockApiListFiles(files);
+			mockFindUploads(files);
 
 			renderWithProviders(<Harness files={files} />);
 			await setMode("Manual");
@@ -185,7 +185,7 @@ describe("<ReadSelector>", () => {
 		it("does not collapse detected pairs into a single row", async () => {
 			const r1 = createFakeFile({ name: "sample_R1.fastq.gz" });
 			const r2 = createFakeFile({ name: "sample_R2.fastq.gz" });
-			mockApiListFiles([r1, r2]);
+			mockFindUploads([r1, r2]);
 
 			renderWithProviders(<Harness files={[r1, r2]} />);
 			await setMode("Manual");
@@ -199,7 +199,7 @@ describe("<ReadSelector>", () => {
 			const secondFile = createFakeFile({ name: "beta.fastq.gz" });
 			const files = [firstFile, secondFile];
 
-			mockApiListFiles(files);
+			mockFindUploads(files);
 
 			renderWithProviders(<Harness files={files} />);
 			await setMode("Manual");
@@ -227,7 +227,7 @@ describe("<ReadSelector>", () => {
 		it("warns, without blocking, when a file sits in the wrong slot by name", async () => {
 			// An R2 file selected first lands in the LEFT slot — a mismatch.
 			const r2 = createFakeFile({ name: "sample_R2.fastq.gz" });
-			mockApiListFiles([r2]);
+			mockFindUploads([r2]);
 
 			renderWithProviders(<Harness files={[r2]} />);
 			await setMode("Manual");
@@ -248,7 +248,7 @@ describe("<ReadSelector>", () => {
 		it("keeps the selection unchanged across a mode switch", async () => {
 			const r1 = createFakeFile({ name: "sample_R1.fastq.gz" });
 			const r2 = createFakeFile({ name: "sample_R2.fastq.gz" });
-			mockApiListFiles([r1, r2]);
+			mockFindUploads([r1, r2]);
 
 			renderWithProviders(<Harness files={[r1, r2]} />);
 
@@ -270,7 +270,7 @@ describe("<ReadSelector>", () => {
 			const secondFile = createFakeFile({ name: "beta.fastq.gz" });
 			const files = [firstFile, secondFile];
 
-			mockApiListFiles(files);
+			mockFindUploads(files);
 
 			renderWithProviders(<Harness files={files} />);
 			await setMode("Manual");
@@ -303,7 +303,7 @@ describe("<ReadSelector>", () => {
 		const secondFile = createFakeFile({ name: "beta.fastq.gz" });
 		const files = [firstFile, secondFile];
 
-		mockApiListFiles(files);
+		mockFindUploads(files);
 
 		renderWithProviders(<Harness files={files} />);
 		await setMode("Manual");
@@ -321,7 +321,7 @@ describe("<ReadSelector>", () => {
 	it("notifies the user when a selected file is no longer available", async () => {
 		const available = [createFakeFile()];
 		// The validation query no longer returns the previously selected id.
-		mockApiListFiles(available);
+		mockFindUploads(available);
 
 		renderWithProviders(
 			<Harness files={available} initialSelected={[999999]} />,
