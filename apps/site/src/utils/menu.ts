@@ -1,5 +1,3 @@
-import { forEach, pick, map } from "lodash-es";
-
 export function getMenuSectionsFromCollection(
   collection: any[],
   sections?: string[]
@@ -27,12 +25,14 @@ export function getMenuSectionsFromCollection(
   }, {});
 
   if (sections) {
-    menu = pick(menu, sections);
+    menu = Object.fromEntries(
+      sections.filter((key) => key in menu).map((key) => [key, menu[key]])
+    );
   }
 
-  const flattened = map(menu, (section) => section);
+  const flattened = Object.values(menu);
 
-  forEach(flattened, (section) => {
+  flattened.forEach((section) => {
     section.items.sort((a, b) => a.order - b.order);
   });
 

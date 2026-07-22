@@ -1,5 +1,4 @@
 ---
-import { map } from "lodash-es";
 import Item from "./Item.astro";
 
 type Sections = {
@@ -24,7 +23,7 @@ const { sections, baseUrl }: { sections: Sections; baseUrl: string } =
           {section.title}
         </h5>
         <ul class="border-l border-solid border-stone-300 ml-2 pl-2">
-          {map(section.items, (item) => (
+          {section.items.map((item) => (
             <Item title={item.title} baseUrl={baseUrl} slug={item.slug} />
           ))}
         </ul>

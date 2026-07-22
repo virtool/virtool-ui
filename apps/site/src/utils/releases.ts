@@ -1,4 +1,3 @@
-import { map, pick } from "lodash-es";
 import { Cache } from "./cache";
 
 const RELEASE_KEYS = [
@@ -17,7 +16,12 @@ export function filterReleases(releases: Array<object>): Array<object> {
 }
 
 export function formatRelease(release) {
-  const formatted = pick(release, RELEASE_KEYS);
+  const formatted = Object.fromEntries(
+    RELEASE_KEYS.filter((key) => key in release).map((key) => [
+      key,
+      release[key],
+    ]),
+  );
 
   try {
     const asset = release["assets"][0];
@@ -88,7 +92,7 @@ export async function getRepoReleases(repo: string): Promise<Array<object>> {
 
   const releases = filterReleases(await fetchRepoReleases(repo));
 
-  const data = map(releases, formatRelease).filter(
+  const data = releases.map(formatRelease).filter(
     (release) => !release.asset_error,
   );
 
