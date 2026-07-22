@@ -74,10 +74,58 @@ jobs:
                   pnpm-version: ${{ env.PNPM_VERSION }}
             - name: tsc
               run: pnpm typecheck
-    test:
-        name: Test
+    test-packages:
+        name: Test / Packages
+        runs-on: ubuntu-24.04
+        timeout-minutes: 10
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+            - name: Setup
+              uses: ./.github/actions/setup
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  pnpm-version: ${{ env.PNPM_VERSION }}
+            - name: Test
+              run: pnpm --filter @virtool/bio --filter @virtool/logger --filter @virtool/site test
+    test-web:
+        name: Test / Web
+        runs-on: ubuntu-24.04
+        timeout-minutes: 10
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+            - name: Setup
+              uses: ./.github/actions/setup
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  pnpm-version: ${{ env.PNPM_VERSION }}
+            - name: Test
+              run: VT_TEST_WORKERS=$(nproc) pnpm --filter @virtool/web exec vitest run --project web
+              env:
+                  TZ: UTC
+                  VT_TEST_REACT_COMPILER: "1"
+    test-server:
+        name: Test / Server
         runs-on: ubuntu-24.04
         timeout-minutes: 15
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+            - name: Setup
+              uses: ./.github/actions/setup
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  pnpm-version: ${{ env.PNPM_VERSION }}
+            - name: Test
+              run: VT_TEST_WORKERS=$(nproc) pnpm --filter @virtool/web exec vitest run --project server --project storage
+              env:
+                  TZ: UTC
+                  VT_TEST_REACT_COMPILER: "1"
+    test-a11y:
+        name: Test / Accessibility
+        runs-on: ubuntu-24.04
+        timeout-minutes: 10
         steps:
             - name: Checkout
               uses: actions/checkout@v7
@@ -89,9 +137,9 @@ jobs:
             - name: Install Playwright Chromium
               run: pnpm --filter @virtool/web exec playwright install --with-deps chromium
             - name: Test
-              run: pnpm test
+              run: VT_TEST_WORKERS=$(nproc) pnpm --filter @virtool/web exec vitest run --project a11y
               env:
-                  VT_TEST_REACT_COMPILER: "1"
+                  TZ: UTC
     build-site:
         name: Build Site
         runs-on: ubuntu-24.04
@@ -112,7 +160,18 @@ jobs:
         name: Publish / Release
         runs-on: ubuntu-24.04
         timeout-minutes: 15
-        needs: [build, build-site, check-biome, check-knip, check-typescript, test]
+        needs:
+            [
+                build,
+                build-site,
+                check-biome,
+                check-knip,
+                check-typescript,
+                test-packages,
+                test-web,
+                test-server,
+                test-a11y,
+            ]
         if: github.event_name == 'push'
         outputs:
             git-tag: ${{ steps.semantic.outputs.git-tag }}
