@@ -33,6 +33,15 @@ export async function installUpdate(
 	}
 
 	const update = await db.transaction(async (tx) => {
+		// Re-check under a row lock. The guard above is a fast path that avoids
+		// the manifest fetch, but on its own it races: two concurrent installs
+		// could both pass it and each append a pending update. `fetchAndUpdateRelease`
+		// has already upserted the status row, so `FOR UPDATE` has a row to lock
+		// and serialises the second transaction behind the first.
+		if (await isInstallInProgress(tx, { lock: true })) {
+			throw new HmmInstallConflictError("Install already in progress");
+		}
+
 		const taskId = await createTask(tx, HMM_INSTALL_TASK_TYPE, {
 			user_id: userId,
 			release,

@@ -221,12 +221,22 @@ export async function getHmm(db: Db, hmmId: number): Promise<Hmm> {
 	};
 }
 
-/** True when there is an update that has not finished installing. */
-export async function isInstallInProgress(db: Db): Promise<boolean> {
-	const [row] = await db
+/**
+ * True when there is an update that has not finished installing.
+ *
+ * Pass `{ lock: true }` inside a transaction to take a `FOR UPDATE` row lock, so
+ * a concurrent install serialises behind this read instead of racing the guard.
+ */
+export async function isInstallInProgress(
+	db: DbOrTx,
+	options: { lock?: boolean } = {},
+): Promise<boolean> {
+	const query = db
 		.select({ updates: legacyHmmStatus.updates })
 		.from(legacyHmmStatus)
 		.where(eq(legacyHmmStatus.id, HMM_STATUS_ID));
+
+	const [row] = await (options.lock ? query.for("update") : query);
 
 	return Boolean(row?.updates?.some((update) => !update.ready));
 }
