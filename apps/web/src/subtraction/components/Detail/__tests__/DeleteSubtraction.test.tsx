@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiRemoveSubtraction } from "@tests/api/subtractions";
 import { createFakeSubtraction } from "@tests/fake/subtractions";
+import { mockDeleteSubtraction } from "@tests/server-fn/subtractions";
 import { renderWithRouter } from "@tests/setup";
 import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -31,12 +31,14 @@ describe("<DeleteSubtraction />", () => {
 	});
 
 	it("should delete subtraction when confirm button is clicked", async () => {
-		const scope = mockApiRemoveSubtraction(subtraction.id);
+		const deleteSubtraction = mockDeleteSubtraction();
 		await renderWithRouter(<DeleteSubtraction {...props} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "delete" }));
 		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
-		scope.done();
+		expect(deleteSubtraction).toHaveBeenCalledWith({
+			data: { subtractionId: subtraction.id },
+		});
 	});
 });

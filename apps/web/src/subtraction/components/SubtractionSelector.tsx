@@ -17,13 +17,13 @@ type SubtractionSelectorProps = {
 	hideLabel?: boolean;
 
 	/** The ids of the currently selected subtractions */
-	selected: string[];
+	selected: number[];
 
 	/** All subtractions available for selection */
 	subtractions: SubtractionOption[];
 
 	/** Called with the next selection when a subtraction is added or removed */
-	onChange: (selected: string[]) => void;
+	onChange: (selected: number[]) => void;
 
 	/** The combobox's accessible name, which must be unique on the page */
 	label?: string;
@@ -65,7 +65,7 @@ export default function SubtractionSelector({
 				onChange={handleChange}
 				term={term}
 				onTermChange={setTerm}
-				itemToKey={(subtraction) => subtraction.id}
+				itemToKey={(subtraction) => String(subtraction.id)}
 				itemToString={(subtraction) => subtraction.name}
 				placeholder="Select subtractions"
 				renderOption={(subtraction) => (

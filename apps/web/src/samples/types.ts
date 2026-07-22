@@ -126,7 +126,7 @@ export type CreateSampleRequest = {
 	libraryType: string;
 	locale: string;
 	name: string;
-	subtractions: string[];
+	subtractions: number[];
 };
 
 /** Fields that can be changed when updating a sample */
@@ -136,7 +136,7 @@ export type SampleUpdate = {
 	locale?: string;
 	name?: string;
 	notes?: string;
-	subtractions?: string[];
+	subtractions?: number[];
 };
 
 /** Data returned from API on sample rights update */

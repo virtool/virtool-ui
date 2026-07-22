@@ -31,6 +31,7 @@ import {
 	mockGetPasswordPolicy,
 	settingsServerFnMocks,
 } from "./server-fn/settings";
+import { subtractionServerFnMocks } from "./server-fn/subtractions";
 import { uploadServerFnMocks } from "./server-fn/uploads";
 import { userServerFnMocks } from "./server-fn/users";
 
@@ -67,6 +68,10 @@ vi.mock("@server/uploads/functions", async () => {
 	const { uploadServerFnMocks } = await import("./server-fn/uploads");
 	return uploadServerFnMocks;
 });
+vi.mock("@server/subtraction/functions", async () => {
+	const { subtractionServerFnMocks } = await import("./server-fn/subtractions");
+	return subtractionServerFnMocks;
+});
 
 beforeEach(() => {
 	for (const fn of Object.values(groupServerFnMocks)) {
@@ -80,11 +85,22 @@ beforeEach(() => {
 		...Object.values(labelServerFnMocks),
 		uploadServerFnMocks.findUploads,
 		uploadServerFnMocks.deleteUpload,
+		subtractionServerFnMocks.findSubtractions,
+		subtractionServerFnMocks.getSubtraction,
+		subtractionServerFnMocks.listSubtractionsShortlist,
 	]) {
 		fn.mockReset();
 		// Default to a pending promise so an un-stubbed query renders its loading
 		// state instead of resolving to `undefined`.
 		fn.mockReturnValue(new Promise(() => {}));
+	}
+
+	for (const fn of [
+		subtractionServerFnMocks.createSubtraction,
+		subtractionServerFnMocks.updateSubtraction,
+		subtractionServerFnMocks.deleteSubtraction,
+	]) {
+		fn.mockReset();
 	}
 
 	// Unlike the mocks above, the password policy defaults to resolving. Every

@@ -10,6 +10,5 @@ const subtractionKeys = createQueryKeys("subtractions");
  */
 export const subtractionQueryKeys = {
 	...subtractionKeys,
-	shortlist: (ready?: boolean) =>
-		[...subtractionKeys.lists(), "short", ready] as const,
+	shortlist: () => [...subtractionKeys.lists(), "short"] as const,
 };

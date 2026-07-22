@@ -136,7 +136,7 @@ export function useSubtractionOptions(
 		data: subtractionShortlist,
 		isPending: isPendingSubtractionShortlist,
 		isError: isErrorSubtractionShortlist,
-	} = useFetchSubtractionsShortlist(true);
+	} = useFetchSubtractionsShortlist();
 
 	const sampleId = sampleIds[0] ?? Number.NaN;
 

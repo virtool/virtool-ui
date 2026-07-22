@@ -44,7 +44,7 @@ export function AnalysisMappingSubtractionTitle({
 		<span key={subtraction.id}>
 			<Link
 				to="/subtractions/$subtractionId"
-				params={{ subtractionId: subtraction.id }}
+				params={{ subtractionId: String(subtraction.id) }}
 			>
 				{subtraction.name}
 			</Link>

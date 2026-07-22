@@ -3,10 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { mockApiCreateAnalysis } from "@tests/api/analyses";
 import { mockApiListIndexes } from "@tests/api/indexes";
 import { mockApiGetSampleDetail } from "@tests/api/samples";
-import { mockApiGetShortlistSubtractions } from "@tests/api/subtractions";
 import { createFakeAnalysisMinimal } from "@tests/fake/analyses";
 import { createFakeIndexMinimal } from "@tests/fake/indexes";
 import { createFakeSample } from "@tests/fake/samples";
+import { mockListSubtractionsShortlist } from "@tests/server-fn/subtractions";
 import { renderWithRouter } from "@tests/setup";
 import { describe, expect, it, vi } from "vitest";
 import CreateAnalysisForm from "../CreateAnalysisForm";
@@ -22,7 +22,7 @@ async function renderForm(indexId?: number) {
 	});
 
 	mockApiListIndexes([index]);
-	mockApiGetShortlistSubtractions([]);
+	mockListSubtractionsShortlist([]);
 	mockApiGetSampleDetail(sample);
 
 	await renderWithRouter(

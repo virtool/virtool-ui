@@ -1,7 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiEditSubtraction } from "@tests/api/subtractions";
 import { createFakeSubtraction } from "@tests/fake/subtractions";
+import { mockUpdateSubtraction } from "@tests/server-fn/subtractions";
 import { renderWithProviders } from "@tests/setup";
 import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -55,7 +55,7 @@ describe("<EditSubtraction />", () => {
 	});
 
 	it("should update subtraction and close dialog when form is submitted", async () => {
-		const scope = mockApiEditSubtraction(subtraction, "newName", "newNickname");
+		const updateSubtraction = mockUpdateSubtraction(subtraction);
 		renderWithProviders(<EditSubtraction {...props} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "modify" }));
@@ -71,7 +71,13 @@ describe("<EditSubtraction />", () => {
 		await userEvent.click(screen.getByText("Save"));
 
 		await waitFor(() => expect(screen.queryByLabelText("Name")).toBeNull());
-		scope.done();
+		expect(updateSubtraction).toHaveBeenCalledWith({
+			data: {
+				subtractionId: subtraction.id,
+				name: "newName",
+				nickname: "newNickname",
+			},
+		});
 	});
 
 	it("should close dialog on escape", async () => {

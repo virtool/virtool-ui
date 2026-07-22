@@ -112,7 +112,7 @@ export type CreateSampleFormValues = {
 	libraryType: string;
 	locale?: string;
 	name: string;
-	subtractionIds: string[];
+	subtractionIds: number[];
 };
 
 /**

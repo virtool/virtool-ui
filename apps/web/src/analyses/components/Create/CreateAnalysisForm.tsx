@@ -23,7 +23,7 @@ import type { workflow } from "./workflows";
 
 type CreateAnalysisFormValues = {
 	indexId: string;
-	subtractionIds: string[];
+	subtractionIds: number[];
 	workflow: string;
 };
 

@@ -7,13 +7,13 @@ import { describe, expect, it } from "vitest";
 import SubtractionSelector from "../SubtractionSelector";
 
 const subtractions: SubtractionOption[] = [
-	{ id: "arabidopsis", name: "Arabidopsis", ready: true, isDefault: true },
-	{ id: "human", name: "Human", ready: true },
-	{ id: "mouse", name: "Mouse", ready: true },
-	{ id: "rice", name: "Rice", ready: true },
+	{ id: 1, name: "Arabidopsis", ready: true, isDefault: true },
+	{ id: 2, name: "Human", ready: true },
+	{ id: 3, name: "Mouse", ready: true },
+	{ id: 4, name: "Rice", ready: true },
 ];
 
-function Harness({ initialSelected = [] }: { initialSelected?: string[] }) {
+function Harness({ initialSelected = [] }: { initialSelected?: number[] }) {
 	const [selected, setSelected] = useState(initialSelected);
 
 	return (
@@ -68,7 +68,7 @@ describe("<SubtractionSelector>", () => {
 	});
 
 	it("renders pre-selected subtractions as chips and hides them from the menu", async () => {
-		renderWithProviders(<Harness initialSelected={["human"]} />);
+		renderWithProviders(<Harness initialSelected={[2]} />);
 
 		expect(
 			screen.getByRole("button", { name: "Remove Human" }),
@@ -79,7 +79,7 @@ describe("<SubtractionSelector>", () => {
 	});
 
 	it("removes a subtraction when its chip close button is clicked", async () => {
-		renderWithProviders(<Harness initialSelected={["mouse"]} />);
+		renderWithProviders(<Harness initialSelected={[3]} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "Remove Mouse" }));
 
@@ -90,7 +90,7 @@ describe("<SubtractionSelector>", () => {
 	});
 
 	it("removes the last chip when Backspace is pressed in the empty input", async () => {
-		renderWithProviders(<Harness initialSelected={["human", "mouse"]} />);
+		renderWithProviders(<Harness initialSelected={[2, 3]} />);
 
 		const input = screen.getByRole("combobox", { name: "Subtractions" });
 		input.focus();

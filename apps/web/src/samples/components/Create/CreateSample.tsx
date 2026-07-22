@@ -51,7 +51,7 @@ type FormValues = {
 	readFiles: number[];
 	group: string;
 	labels: number[];
-	subtractionIds: string[];
+	subtractionIds: number[];
 };
 
 const emptyValues: FormValues = {

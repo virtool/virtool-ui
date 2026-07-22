@@ -18,10 +18,10 @@ function SubtractionInner({ name }: SubtractionInnerProps) {
 
 type DefaultSubtractionsProps = {
 	/** List of subtraction ids associated with the sample. */
-	defaultSubtractions: string[];
+	defaultSubtractions: number[];
 
 	/** Callback to handle subtraction selection. */
-	onUpdate: (subtractions: string[]) => void;
+	onUpdate: (subtractions: number[]) => void;
 };
 
 /**
@@ -54,7 +54,7 @@ export default function DefaultSubtractions({
 					items={subtractionOptions}
 					selectedIds={defaultSubtractions}
 					onUpdate={(subtractionId: string | number) => {
-						onUpdate(xor(defaultSubtractions, [String(subtractionId)]));
+						onUpdate(xor(defaultSubtractions, [Number(subtractionId)]));
 					}}
 					selectionType="default subtractions"
 					manageLink={"/subtractions"}

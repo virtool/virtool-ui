@@ -18,7 +18,7 @@ export function createFakeSubtractionFile(): SubtractionFile {
 		id: faker.number.int(),
 		name: `${faker.word.noun({ strategy: "any-length" })}s.fa`,
 		size: faker.number.int({ min: 20000 }),
-		subtraction: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		subtraction: faker.number.int(),
 		type: "fasta",
 	};
 }
@@ -30,7 +30,7 @@ export function createFakeSubtractionNested(
 	overrides?: Partial<SubtractionNested>,
 ): SubtractionNested {
 	const defaultSubtractionNested = {
-		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		id: faker.number.int(),
 		name: faker.word.noun({ strategy: "any-length" }),
 	};
 
