@@ -87,7 +87,7 @@ jobs:
                   node-version: ${{ env.NODE_VERSION }}
                   pnpm-version: ${{ env.PNPM_VERSION }}
             - name: Test
-              run: pnpm --filter @virtool/bio --filter @virtool/logger test
+              run: pnpm --filter @virtool/bio --filter @virtool/logger --filter @virtool/site test
     test-web:
         name: Test / Web
         runs-on: ubuntu-24.04

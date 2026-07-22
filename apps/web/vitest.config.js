@@ -28,6 +28,12 @@ export default defineConfig({
 					// Postgres. Component tests must not need Docker.
 					name: "web",
 					environment: "jsdom",
+					// A full-route `renderRoute` test (router load + the whole route
+					// tree + the React Compiler Babel pass) is the heaviest thing the
+					// suite does. When CI runs a worker per core, the shared CPU pushes
+					// these past the 5s default and they time out — masquerading as a
+					// flake. Give them headroom while still failing a genuine hang fast.
+					testTimeout: 15_000,
 					setupFiles: ["./src/tests/setup.tsx"],
 					include: ["src/**/*.test.{ts,tsx}"],
 					// `*.a11y.test.tsx` files run in the browser `a11y` project below,
