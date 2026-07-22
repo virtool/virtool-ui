@@ -50,40 +50,50 @@ for a column that genuinely has a `server_default` in Python.
 
 Every domain's records live in Postgres; MongoDB is gone. So what gates
 a TS server feature is no longer "has this migrated to Postgres" — it's
-whether this repo has written the Drizzle schema mirror and the server
-functions for it. Three states:
+how much of it this repo has mirrored into Drizzle and wired up. Three
+states:
 
-- **Built** — a Drizzle mirror in `apps/web/src/server/db/schema/` and
-  server functions in `apps/web/src/server/<feature>/functions.ts`.
-  Ready to use.
-- **Schema-only** — a Drizzle mirror exists, but no `functions.ts` yet.
-  The tables are typed; the feature still needs its `data.ts` /
-  `functions.ts`.
+- **Built** — a Drizzle mirror in `apps/web/src/server/db/schema/` plus
+  a `data.ts` / `functions.ts` in `apps/web/src/server/<feature>/`. The
+  domain is served from this repo; ready to use.
+- **Partial mirror** — a read-only Drizzle mirror of only the few
+  columns the **jobs** feature needs to reconstruct a job's `args`. The
+  domain itself is not served yet; building it out means mirroring the
+  rest of its tables and columns first.
 - **Not started** — Postgres owns the data, but this repo has no Drizzle
-  mirror yet. Write the schema mirror first (against the tables Python
+  mirror at all. Write the mirror first (against the tables Python
   defines), then the feature.
 
-| Domain       | Postgres table(s)                                    | TS status   |
-| ------------ | ---------------------------------------------------- | ----------- |
-| Users        | `users`, `user_groups`                               | Built       |
-| Groups       | `groups`                                             | Built       |
-| Sessions     | `sessions`                                           | Built       |
-| Messages     | `instance_messages`                                  | Built       |
-| Tasks        | `tasks`                                              | Built       |
-| Labels       | `labels`                                             | Built       |
-| Jobs         | `jobs`, `job_analyses`, `job_indexes`                | Built       |
-| Settings     | `settings`                                           | Built       |
-| Analyses     | `analyses`, `analysis_*`, `nuvs_blast`               | Schema-only |
-| Indexes      | `indexes`, `index_files`                             | Schema-only |
-| Samples      | `legacy_samples`, `sample_*`                         | Schema-only |
-| Subtractions | `subtractions`, `subtraction_files`                  | Schema-only |
-| Uploads      | `uploads`                                            | Not started |
-| OTUs         | `legacy_otus`                                        | Not started |
-| Sequences    | `legacy_sequences`                                   | Not started |
-| References   | `legacy_references`, `legacy_reference_*`            | Not started |
-| HMMs         | `hmms`, `legacy_hmm_status`                          | Not started |
-| History      | `legacy_history`, `legacy_history_diff`, `revisions` | Not started |
-| API keys     | `api_keys`                                           | Not started |
+| Domain       | Postgres table(s)                                    | TS status      |
+| ------------ | ---------------------------------------------------- | -------------- |
+| Users        | `users`, `user_groups`                               | Built          |
+| Groups       | `groups`                                             | Built          |
+| Sessions     | `sessions`                                           | Built          |
+| Messages     | `instance_messages`                                  | Built          |
+| Tasks        | `tasks`                                              | Built          |
+| Labels       | `labels`                                             | Built          |
+| Jobs         | `jobs`                                               | Built          |
+| Settings     | `settings`                                           | Built          |
+| Analyses     | `analyses`                                           | Partial mirror |
+| Indexes      | `indexes`                                            | Partial mirror |
+| Samples      | `legacy_samples`                                     | Partial mirror |
+| Subtractions | `subtractions`                                       | Partial mirror |
+| Uploads      | `uploads`                                            | Not started    |
+| OTUs         | `legacy_otus`                                        | Not started    |
+| Sequences    | `legacy_sequences`                                   | Not started    |
+| References   | `legacy_references`, `legacy_reference_*`            | Not started    |
+| HMMs         | `hmms`, `legacy_hmm_status`                          | Not started    |
+| History      | `legacy_history`, `legacy_history_diff`, `revisions` | Not started    |
+| API keys     | `api_keys`                                           | Not started    |
+
+The Postgres table(s) column lists the single mirrored table for the
+**partial mirror** rows and the principal Python-defined table(s) for
+the rest; it is not the domain's full table set. The **partial mirror**
+rows exist only for jobs: `jobs` has no `args` column, so a job's
+resources are recomposed at read time from reverse `job_id` foreign keys
+on `analyses`, `indexes`, `legacy_samples`, and `subtractions` (there
+are no `job_*` junction tables), and each of those mirrors declares just
+the columns that recomposition needs.
 
 A `legacy_` table prefix marks a table that carries the Mongo-era row
 shape and a `legacy_id` column from the import — it is a normal Postgres
@@ -93,10 +103,10 @@ joining across those tables.
 ## Building a feature against a Postgres domain
 
 With every domain in Postgres, building a TS server feature for a
-schema-only or not-started domain is ordinary Drizzle work: mirror the
-tables Python defines into `apps/web/src/server/db/schema/`, then write
-the feature's `data.ts` / `functions.ts`. Two things carry over from the
-migration:
+partial-mirror or not-started domain is ordinary Drizzle work: mirror
+the tables (and, for a partial mirror, the remaining columns) Python
+defines into `apps/web/src/server/db/schema/`, then write the feature's
+`data.ts` / `functions.ts`. Two things carry over from the migration:
 
 - **Legacy-shaped tables.** Domains imported from Mongo (`legacy_otus`,
   `legacy_references`, `legacy_samples`, `legacy_sequences`,
