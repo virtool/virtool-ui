@@ -98,6 +98,22 @@ describe("findApiKeys", () => {
 		);
 	});
 
+	it("expands sparse legacy permissions to the full checklist", async () => {
+		const userId = await seedUser(db, { administratorRole: "full" });
+		// The legacy Python path stored only the provided permission keys.
+		await db.insert(apiKeys).values({
+			hashed: "legacy",
+			name: "Legacy",
+			createdAt: new Date(),
+			userId,
+			permissions: { create_ref: true } as GroupPermissions,
+		});
+
+		const keys = await findApiKeys(db, userId);
+
+		expect(keys[0]?.permissions).toEqual(perms({ create_ref: true }));
+	});
+
 	it("does not return another user's keys", async () => {
 		const owner = await seedUser(db, { handle: "owner" });
 		const other = await seedUser(db, { handle: "other" });

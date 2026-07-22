@@ -72,7 +72,10 @@ function generateKey(): { raw: string; hashed: string } {
  *
  * The list is deliberately not clamped, mirroring the Python service: only the
  * single-key read (and the representation returned from create/update) clamps
- * to the owner's current permissions.
+ * to the owner's current permissions. Stored permissions are expanded against
+ * `basePermissions()` so keys written by the legacy Python path — which stored
+ * only the provided keys — still report every permission as an explicit
+ * boolean, and the edit UI can offer the full checklist.
  */
 export async function findApiKeys(db: Db, userId: number): Promise<ApiKey[]> {
 	const rows = await db
@@ -81,7 +84,9 @@ export async function findApiKeys(db: Db, userId: number): Promise<ApiKey[]> {
 		.where(eq(apiKeysTable.userId, userId))
 		.orderBy(asc(apiKeysTable.id));
 
-	return rows.map((row) => toApiKey(row, row.permissions));
+	return rows.map((row) =>
+		toApiKey(row, { ...basePermissions(), ...row.permissions }),
+	);
 }
 
 /**
