@@ -1,8 +1,8 @@
 import type { UserNested } from "@users/types";
-import type { Permission } from "@virtool/contracts";
+import type { Permission, Permissions } from "@virtool/contracts";
 import type { SearchResult } from "@/types/api";
 
-export type { Permission };
+export type { Permission, Permissions };
 
 export type GroupMinimal = {
 	id: number;
@@ -15,27 +15,8 @@ export type Group = GroupMinimal & {
 	users: UserNested[];
 };
 
-export type Permissions = {
-	cancel_job: boolean;
-	create_ref: boolean;
-	create_sample: boolean;
-	modify_hmm: boolean;
-	modify_subtraction: boolean;
-	remove_file: boolean;
-	remove_job: boolean;
-	upload_file: boolean;
-};
-
-export type PermissionsUpdate = {
-	cancel_job?: boolean;
-	create_ref?: boolean;
-	create_sample?: boolean;
-	modify_hmm?: boolean;
-	modify_subtraction?: boolean;
-	remove_file?: boolean;
-	remove_job?: boolean;
-	upload_file?: boolean;
-};
+/** Partial permission flags accepted when updating a group or key. */
+export type PermissionsUpdate = Partial<Permissions>;
 
 /** Group search results from the API */
 export type GroupSearchResults = SearchResult & {

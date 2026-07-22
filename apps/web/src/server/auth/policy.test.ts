@@ -1,3 +1,4 @@
+import type { Permissions } from "@virtool/contracts";
 import {
 	afterAll,
 	beforeAll,
@@ -7,9 +8,8 @@ import {
 	it,
 	vi,
 } from "vitest";
-
 import type { Db } from "../db/pg";
-import { type GroupPermissions, groups, userGroups } from "../db/schema/groups";
+import { groups, userGroups } from "../db/schema/groups";
 import { sessions } from "../db/schema/sessions";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
@@ -57,7 +57,7 @@ beforeEach(async () => {
 
 function seedGroup(
 	name: string,
-	permissions: Partial<GroupPermissions>,
+	permissions: Partial<Permissions>,
 ): Promise<number> {
 	return seedGroupImpl(db, { name, permissions });
 }

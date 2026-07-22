@@ -7,6 +7,7 @@ export * from "./hmms";
 export * from "./indexes";
 export * from "./jobs";
 export * from "./permissions";
+export * from "./permissionsSchema";
 export * from "./samples";
 export * from "./sse";
 export * from "./subtractions";

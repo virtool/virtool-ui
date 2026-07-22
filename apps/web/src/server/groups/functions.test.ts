@@ -1,3 +1,4 @@
+import type { Permissions } from "@virtool/contracts";
 import { eq } from "drizzle-orm";
 import {
 	afterAll,
@@ -8,10 +9,9 @@ import {
 	it,
 	vi,
 } from "vitest";
-
 import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
-import { type GroupPermissions, groups } from "../db/schema/groups";
+import { groups } from "../db/schema/groups";
 import { sessions } from "../db/schema/sessions";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
@@ -172,7 +172,7 @@ describe("updateGroup", () => {
 		const group = (await call("updateGroup", {
 			groupId,
 			permissions: { create_ref: true },
-		})) as { permissions: GroupPermissions };
+		})) as { permissions: Permissions };
 
 		expect(group.permissions).toEqual({ ...NO_PERMISSIONS, create_ref: true });
 	});

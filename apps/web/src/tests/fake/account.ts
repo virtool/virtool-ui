@@ -1,6 +1,5 @@
-import type { Account, AccountSettings, APIKeyMinimal } from "@account/types";
+import type { Account, AccountSettings, ApiKey } from "@account/types";
 import { faker } from "@faker-js/faker";
-import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 import { createFakeUser } from "./user";
 
@@ -26,13 +25,10 @@ export function createFakeAccount(overrides?: Partial<Account>): Account {
  *
  * @param overrides - optional properties for creating a fake API key with specific values
  */
-export function createFakeApiKey(
-	overrides?: Partial<APIKeyMinimal>,
-): APIKeyMinimal {
+export function createFakeApiKey(overrides?: Partial<ApiKey>): ApiKey {
 	return {
-		created_at: faker.date.past().toISOString(),
-		groups: [createFakeGroupMinimal()],
-		id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+		createdAt: faker.date.past(),
+		id: faker.number.int({ min: 1, max: 100000 }),
 		name: faker.word.noun({ strategy: "any-length" }),
 		permissions: createFakePermissions({
 			cancel_job: true,

@@ -1,25 +1,13 @@
+import { emptyPermissions, type Permissions } from "@virtool/contracts";
 import type { Db } from "../../db/pg";
 import { takeFirstOrThrow } from "../../db/rows";
-import {
-	type GroupPermissions,
-	groups,
-	userGroups,
-} from "../../db/schema/groups";
+import { groups, userGroups } from "../../db/schema/groups";
 
 /**
  * A group granting nothing. Spread it to build a group that grants one thing,
  * and assert against it to prove a group still grants nothing.
  */
-export const NO_PERMISSIONS: GroupPermissions = {
-	cancel_job: false,
-	create_ref: false,
-	create_sample: false,
-	modify_hmm: false,
-	modify_subtraction: false,
-	remove_file: false,
-	remove_job: false,
-	upload_file: false,
-};
+export const NO_PERMISSIONS: Permissions = emptyPermissions();
 
 /**
  * Insert a group granting no permissions unless told otherwise, and return its
@@ -32,7 +20,7 @@ export async function seedGroup(
 	{
 		name = "technicians",
 		permissions = {},
-	}: { name?: string; permissions?: Partial<GroupPermissions> } = {},
+	}: { name?: string; permissions?: Partial<Permissions> } = {},
 ): Promise<number> {
 	const row = takeFirstOrThrow(
 		await db
