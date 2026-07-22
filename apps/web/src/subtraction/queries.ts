@@ -126,11 +126,11 @@ export function useUpdateSubtraction(subtractionId: number) {
 }
 
 /**
- * Initializes a mutator for removing a subtraction
+ * Initializes a mutator for deleting a subtraction
  *
- * @returns A mutator for removing a subtraction
+ * @returns A mutator for deleting a subtraction
  */
-export function useRemoveSubtraction() {
+export function useDeleteSubtraction() {
 	return useMutation<null, ErrorResponse, { subtractionId: number }>({
 		mutationFn: ({ subtractionId }) =>
 			deleteSubtraction({

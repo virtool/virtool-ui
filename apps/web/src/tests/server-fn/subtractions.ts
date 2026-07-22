@@ -74,7 +74,7 @@ export function mockUpdateSubtraction(subtraction: Subtraction): Mock {
 }
 
 /** Sets up deleteSubtraction to resolve. */
-export function mockRemoveSubtraction(): Mock {
+export function mockDeleteSubtraction(): Mock {
 	subtractionServerFnMocks.deleteSubtraction.mockResolvedValue(null);
 	return subtractionServerFnMocks.deleteSubtraction;
 }
