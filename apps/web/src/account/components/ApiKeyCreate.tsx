@@ -19,7 +19,7 @@ import { emptyPermissions } from "@virtool/contracts";
 import { useId, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useCreateApiKey } from "../queries";
-import CreateApiKeyInfo from "./ApiKeyAdministratorInfo";
+import ApiKeyAdministratorInfo from "./ApiKeyAdministratorInfo";
 import ApiKeyPermissions from "./ApiKeyPermissions";
 
 type FormValues = {
@@ -110,7 +110,7 @@ export default function ApiKeyCreate() {
 					</div>
 				) : (
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<CreateApiKeyInfo />
+						<ApiKeyAdministratorInfo />
 						<InputGroup>
 							<InputLabel htmlFor="name">Name</InputLabel>
 							<InputSimple
