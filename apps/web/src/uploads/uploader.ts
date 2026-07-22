@@ -79,10 +79,30 @@ export type UploadProgress = {
 };
 
 /**
+ * Read a human-readable error message from a failed upload response.
+ *
+ * The route returns a JSON `{ message }` body for its 4xx/5xx responses, so
+ * surface that when it parses; otherwise fall back to the status code (e.g. the
+ * plain-text `Forbidden` a 403 returns).
+ */
+function readErrorMessage(xhr: XMLHttpRequest): string {
+	try {
+		const body = JSON.parse(xhr.responseText) as { message?: unknown };
+		if (typeof body.message === "string") {
+			return body.message;
+		}
+	} catch {
+		// Non-JSON body; fall through to the status-code message.
+	}
+
+	return `Upload failed with status ${xhr.status}.`;
+}
+
+/**
  * Post a file to the `POST /uploads` route, reporting upload progress.
  *
  * The file is posted with `XMLHttpRequest` rather than `fetch`, because `fetch`
- * cannot report upload progress and reads files run to many gigabytes. The
+ * cannot report upload progress and read files can run to many gigabytes. The
  * browser streams the raw `File` body from disk (never buffering it in JS), and
  * the route reads it as a stream too, so nothing large sits in memory on either
  * side. `name` and `type` travel in the query string, as they do to Python.
@@ -112,7 +132,7 @@ export function postUpload(
 			if (xhr.status >= 200 && xhr.status < 300) {
 				resolve(JSON.parse(xhr.responseText) as Upload);
 			} else {
-				reject(new Error(`Upload failed with status ${xhr.status}.`));
+				reject(new Error(readErrorMessage(xhr)));
 			}
 		});
 		xhr.addEventListener("error", () => reject(new Error("Upload failed.")));
