@@ -1,11 +1,10 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiGetSubtractions } from "@tests/api/subtractions";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeSubtractionMinimal } from "@tests/fake/subtractions";
+import { mockFindSubtractions } from "@tests/server-fn/subtractions";
 import { renderRoute } from "@tests/setup";
-import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<SubtractionList />", () => {
 	let subtractions: ReturnType<typeof createFakeSubtractionMinimal>;
@@ -14,10 +13,8 @@ describe("<SubtractionList />", () => {
 		subtractions = createFakeSubtractionMinimal();
 	});
 
-	afterEach(() => nock.cleanAll());
-
 	it("renders correctly", async () => {
-		const scope = mockApiGetSubtractions([subtractions]);
+		const findSubtractions = mockFindSubtractions([subtractions]);
 
 		await renderRoute("/subtractions");
 
@@ -27,13 +24,11 @@ describe("<SubtractionList />", () => {
 		expect(screen.getByText("1")).toBeInTheDocument();
 		expect(screen.getByText(subtractions.name)).toBeInTheDocument();
 
-		scope.done();
+		expect(findSubtractions).toHaveBeenCalled();
 	});
 
 	it("should put the search term in the url once typing settles", async () => {
-		mockApiGetSubtractions([subtractions]);
-		// The debounced term commits as one navigation, whose loader refetches.
-		mockApiGetSubtractions([subtractions]);
+		mockFindSubtractions([subtractions]);
 
 		const { router } = await renderRoute("/subtractions");
 
@@ -53,7 +48,7 @@ describe("<SubtractionList />", () => {
 	});
 
 	it("should render create button when [canModify=true]", async () => {
-		const scope = mockApiGetSubtractions([subtractions]);
+		const findSubtractions = mockFindSubtractions([subtractions]);
 		const account = createFakeAccount({ administrator_role: "full" });
 
 		await renderRoute("/subtractions", { account });
@@ -62,11 +57,11 @@ describe("<SubtractionList />", () => {
 			await screen.findByRole("button", { name: "Create" }),
 		).toBeInTheDocument();
 
-		scope.done();
+		expect(findSubtractions).toHaveBeenCalled();
 	});
 
 	it("should not render create button when [canModify=false]", async () => {
-		const scope = mockApiGetSubtractions([subtractions]);
+		const findSubtractions = mockFindSubtractions([subtractions]);
 		const account = createFakeAccount({ administrator_role: null });
 
 		await renderRoute("/subtractions", { account });
@@ -74,6 +69,6 @@ describe("<SubtractionList />", () => {
 		expect(await screen.findByText(subtractions.name)).toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: "Create" })).toBeNull();
 
-		scope.done();
+		expect(findSubtractions).toHaveBeenCalled();
 	});
 });

@@ -73,7 +73,7 @@ type FormValues = {
 	libraryType: string;
 	group: string;
 	labels: number[];
-	subtractionIds: string[];
+	subtractionIds: number[];
 };
 
 type CreateSampleFromFileFormProps = {

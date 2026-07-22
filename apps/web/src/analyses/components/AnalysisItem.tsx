@@ -114,7 +114,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 						<Icon icon={EqualNot} />
 						<Link
 							to="/subtractions/$subtractionId"
-							params={{ subtractionId: subtraction.id }}
+							params={{ subtractionId: String(subtraction.id) }}
 						>
 							{subtraction.name}
 						</Link>

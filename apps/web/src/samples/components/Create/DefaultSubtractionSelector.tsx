@@ -5,10 +5,10 @@ import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 
 type DefaultSubtractionSelectorProps = {
 	/** The ids of the subtractions to use as defaults for the sample */
-	selected: string[];
+	selected: number[];
 
 	/** Called with the next selection when a subtraction is added or removed */
-	onChange: (selected: string[]) => void;
+	onChange: (selected: number[]) => void;
 };
 
 /**

@@ -28,7 +28,7 @@ export type SubtractionFile = {
 	size: number;
 
 	/** The subtraction ID */
-	subtraction: string;
+	subtraction: number;
 
 	type: string;
 };
@@ -36,7 +36,7 @@ export type SubtractionFile = {
 /** A Subtraction with essential information  */
 export type SubtractionNested = {
 	/** The unique identifier for the subtraction */
-	id: string;
+	id: number;
 
 	/** The name of the subtraction */
 	name: string;

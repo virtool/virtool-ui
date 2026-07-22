@@ -14,7 +14,7 @@ describe("<SubtractionItem />", () => {
 		createdAt.setFullYear(new Date().getFullYear() - 1);
 
 		props = {
-			id: "foo",
+			id: 1,
 			created_at: createdAt.toISOString(),
 			file: {
 				id: 23,

@@ -1,13 +1,12 @@
 import type { SubtractionMinimal } from "@subtraction/types";
 import { getSubtractionFastaName } from "@subtraction/utils";
 import { screen } from "@testing-library/react";
-import { mockApiGetSubtractionDetail } from "@tests/api/subtractions";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
 import { createFakeSubtraction } from "@tests/fake/subtractions";
+import { mockGetSubtraction } from "@tests/server-fn/subtractions";
 import { renderRoute } from "@tests/setup";
-import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 function formatSubtractionPath(subtraction: SubtractionMinimal) {
 	return `/subtractions/${subtraction.id}`;
@@ -18,14 +17,21 @@ describe("<SubtractionDetail />", () => {
 	let path: string;
 
 	beforeEach(() => {
-		subtraction = createFakeSubtraction();
+		// Pin count and linked_samples so neither the sequence-count nor the
+		// linked-samples cell can render the same number as the other.
+		subtraction = createFakeSubtraction({
+			count: 100,
+			linked_samples: [
+				{ id: 1, name: "sample-a" },
+				{ id: 2, name: "sample-b" },
+				{ id: 3, name: "sample-c" },
+			],
+		});
 		path = formatSubtractionPath(subtraction);
 	});
 
-	afterEach(() => nock.cleanAll());
-
 	it("should render", async () => {
-		const scope = mockApiGetSubtractionDetail(subtraction);
+		const getSubtraction = mockGetSubtraction(subtraction);
 		await renderRoute(path);
 
 		expect(await screen.findByText(subtraction.name)).toBeInTheDocument();
@@ -42,7 +48,7 @@ describe("<SubtractionDetail />", () => {
 		);
 		expect(download).toHaveAttribute("download", fastaName);
 
-		scope.done();
+		expect(getSubtraction).toHaveBeenCalled();
 	});
 
 	it("should render loading when [detail=null]", async () => {
@@ -54,27 +60,27 @@ describe("<SubtractionDetail />", () => {
 
 	it("should render pending message when subtraction is not ready", async () => {
 		const unreadySubtraction = createFakeSubtraction({ ready: false });
-		const scope = mockApiGetSubtractionDetail(unreadySubtraction);
+		const getSubtraction = mockGetSubtraction(unreadySubtraction);
 		await renderRoute(formatSubtractionPath(unreadySubtraction));
 
 		expect(
 			await screen.findByText("Subtraction is still being imported"),
 		).toBeInTheDocument();
 
-		scope.done();
+		expect(getSubtraction).toHaveBeenCalled();
 	});
 
 	it("should not render icons when [canModify=true]", async () => {
 		const permissions = createFakePermissions({ modify_subtraction: true });
 		const account = createFakeAccount({ permissions });
-		const scope = mockApiGetSubtractionDetail(subtraction);
+		const getSubtraction = mockGetSubtraction(subtraction);
 		await renderRoute(path, { account });
 
 		expect(await screen.findByText(subtraction.name)).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "modify" })).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "delete" })).toBeInTheDocument();
 
-		scope.done();
+		expect(getSubtraction).toHaveBeenCalled();
 	});
 
 	it("should not render icons when [canModify=false]", async () => {
@@ -82,13 +88,13 @@ describe("<SubtractionDetail />", () => {
 			modify_subtraction: false,
 		});
 		const account = createFakeAccount({ permissions });
-		const scope = mockApiGetSubtractionDetail(subtraction);
+		const getSubtraction = mockGetSubtraction(subtraction);
 		await renderRoute(path, { account });
 
 		expect(await screen.findByText(subtraction.name)).toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: "modify" })).toBeNull();
 		expect(screen.queryByRole("button", { name: "delete" })).toBeNull();
 
-		scope.done();
+		expect(getSubtraction).toHaveBeenCalled();
 	});
 });

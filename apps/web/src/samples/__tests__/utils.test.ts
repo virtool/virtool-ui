@@ -50,7 +50,7 @@ describe("getCreateSampleRequest", () => {
 		labels: [1, 2],
 		libraryType: "srna",
 		name: "Sample A",
-		subtractionIds: ["sub_1"],
+		subtractionIds: [1],
 	};
 
 	it("maps the form values and read files onto the request", () => {
@@ -65,7 +65,7 @@ describe("getCreateSampleRequest", () => {
 			libraryType: "srna",
 			locale: "",
 			name: "Sample A",
-			subtractions: ["sub_1"],
+			subtractions: [1],
 		});
 	});
 

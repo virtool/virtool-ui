@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { mockApiGetHmms } from "@tests/api/hmm";
 import { mockApiListIndexes } from "@tests/api/indexes";
 import { mockApiGetSamples } from "@tests/api/samples";
-import { mockApiGetShortlistSubtractions } from "@tests/api/subtractions";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeHmmSearchResults } from "@tests/fake/hmm";
 import { createFakeIndexMinimal } from "@tests/fake/indexes";
@@ -12,6 +11,7 @@ import { createFakeSampleMinimal } from "@tests/fake/samples";
 import { createFakeShortlistSubtraction } from "@tests/fake/subtractions";
 import { createFakeUserNested } from "@tests/fake/user";
 import { mockFindLabels } from "@tests/server-fn/labels";
+import { mockListSubtractionsShortlist } from "@tests/server-fn/subtractions";
 import { mockGetAccount, mockListUsers } from "@tests/server-fn/users";
 import { at, renderWithRouter } from "@tests/setup";
 import nock from "nock";
@@ -84,7 +84,7 @@ function mockApiGetSamplePages() {
 
 	mockApiGetHmms(createFakeHmmSearchResults());
 	mockApiListIndexes([createFakeIndexMinimal()]);
-	mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
+	mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);
 
 	return documents;
 }
@@ -102,7 +102,7 @@ function mockApiGetSampleRange(names: string[]) {
 
 	mockApiGetHmms(createFakeHmmSearchResults());
 	mockApiListIndexes([createFakeIndexMinimal()]);
-	mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
+	mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);
 	mockApiGetSamples(documents);
 
 	return documents;
@@ -128,7 +128,7 @@ describe("<SamplesList />", () => {
 		mockApiGetSamples(samples);
 		mockApiGetHmms(createFakeHmmSearchResults());
 		mockApiListIndexes([createFakeIndexMinimal()]);
-		mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
+		mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);
 	});
 
 	// The paged sample mocks are persistent, so they have to be torn down rather
@@ -444,7 +444,7 @@ describe("<SamplesList />", () => {
 			mockListUsers(users);
 			mockApiGetHmms(createFakeHmmSearchResults());
 			mockApiListIndexes([createFakeIndexMinimal()]);
-			mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
+			mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);
 			mockApiGetSamples(samples, { found_count: 2, total_count: 17 });
 
 			await renderWithRouter(<SamplesList />, path);
@@ -843,7 +843,7 @@ describe("<SamplesList />", () => {
 			mockApiGetSamples([]).persist();
 			mockApiGetHmms(createFakeHmmSearchResults());
 			mockApiListIndexes([createFakeIndexMinimal()]);
-			mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
+			mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);
 		});
 
 		afterEach(() => nock.cleanAll());

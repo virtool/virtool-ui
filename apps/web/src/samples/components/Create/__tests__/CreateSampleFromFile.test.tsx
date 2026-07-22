@@ -1,12 +1,12 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiCreateSample } from "@tests/api/samples";
-import { mockApiGetShortlistSubtractions } from "@tests/api/subtractions";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeFile } from "@tests/fake/files";
 import { createFakeLabel } from "@tests/fake/labels";
 import { createFakeShortlistSubtraction } from "@tests/fake/subtractions";
 import { mockListGroups } from "@tests/server-fn/groups";
+import { mockListSubtractionsShortlist } from "@tests/server-fn/subtractions";
 import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import type { Upload } from "@uploads/types";
@@ -22,7 +22,7 @@ describe("<CreateSampleFromFile>", () => {
 	beforeEach(() => {
 		mockGetAccount(createFakeAccount({ primary_group: null }));
 		mockListGroups([]);
-		mockApiGetShortlistSubtractions([subtractionShortlist]);
+		mockListSubtractionsShortlist([subtractionShortlist]);
 	});
 
 	afterEach(() => nock.cleanAll());

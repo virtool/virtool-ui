@@ -1,12 +1,12 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiCreateSample } from "@tests/api/samples";
-import { mockApiGetShortlistSubtractions } from "@tests/api/subtractions";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeFile } from "@tests/fake/files";
 import { createFakeLabel } from "@tests/fake/labels";
 import { createFakeShortlistSubtraction } from "@tests/fake/subtractions";
 import { mockListGroups } from "@tests/server-fn/groups";
+import { mockListSubtractionsShortlist } from "@tests/server-fn/subtractions";
 import { mockFindUploads, uploadServerFnMocks } from "@tests/server-fn/uploads";
 import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
@@ -81,7 +81,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile();
 
 		mockFindUploads([file]);
-		mockApiGetShortlistSubtractions([]);
+		mockListSubtractionsShortlist([]);
 
 		await renderPage();
 
@@ -105,7 +105,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile();
 
 		mockFindUploads([file]);
-		mockApiGetShortlistSubtractions([]);
+		mockListSubtractionsShortlist([]);
 
 		const scope = mockApiCreateSample(
 			"Sample A",
@@ -139,7 +139,7 @@ describe("<CreateSample>", () => {
 		const files = [firstFile, secondFile];
 
 		mockFindUploads(files);
-		mockApiGetShortlistSubtractions([subtractionShortlist]);
+		mockListSubtractionsShortlist([subtractionShortlist]);
 
 		const scope = mockApiCreateSample(
 			"Sample T",
@@ -201,7 +201,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile();
 
 		mockFindUploads([file]);
-		mockApiGetShortlistSubtractions([]);
+		mockListSubtractionsShortlist([]);
 
 		await renderPage();
 
@@ -231,7 +231,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile({ name: "14T81.fq.gz" });
 
 		mockFindUploads([file]);
-		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+		mockListSubtractionsShortlist([{ name: "foo", ready: true, id: 1 }]);
 
 		await renderPage();
 
@@ -248,7 +248,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile({ name: "sample_one.fastq.gz" });
 
 		mockFindUploads([file]);
-		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+		mockListSubtractionsShortlist([{ name: "foo", ready: true, id: 1 }]);
 
 		await renderPage();
 
@@ -271,7 +271,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile({ name: fileName });
 
 		mockFindUploads([file]);
-		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+		mockListSubtractionsShortlist([{ name: "foo", ready: true, id: 1 }]);
 
 		await renderPage();
 
@@ -288,7 +288,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile({ name: "sample_one.fqst" });
 
 		mockFindUploads([file]);
-		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+		mockListSubtractionsShortlist([{ name: "foo", ready: true, id: 1 }]);
 
 		await renderPage();
 
@@ -305,7 +305,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
 
 		mockFindUploads([file]);
-		mockApiGetShortlistSubtractions([]);
+		mockListSubtractionsShortlist([]);
 
 		await renderPage();
 
@@ -322,7 +322,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
 
 		mockFindUploads([file]);
-		mockApiGetShortlistSubtractions([]);
+		mockListSubtractionsShortlist([]);
 
 		await renderPage();
 
@@ -347,7 +347,7 @@ describe("<CreateSample>", () => {
 		const file = createFakeFile();
 
 		mockFindUploads([file]);
-		mockApiGetShortlistSubtractions([]);
+		mockListSubtractionsShortlist([]);
 
 		const scope = mockApiCreateSample(
 			"Sample A",
@@ -382,7 +382,7 @@ describe("<CreateSample>", () => {
 		const files = [firstFile, secondFile];
 
 		mockFindUploads(files);
-		mockApiGetShortlistSubtractions([]);
+		mockListSubtractionsShortlist([]);
 
 		await renderPage();
 
@@ -410,7 +410,7 @@ describe("<CreateSample>", () => {
 		const files = [firstFile, secondFile];
 
 		mockFindUploads(files);
-		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+		mockListSubtractionsShortlist([{ name: "foo", ready: true, id: 1 }]);
 
 		await renderPage();
 
@@ -435,7 +435,7 @@ describe("<CreateSample>", () => {
 	it("should render correct read orientations with 1 file selected", async () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
 		mockFindUploads([file]);
-		mockApiGetShortlistSubtractions([]);
+		mockListSubtractionsShortlist([]);
 		await renderPage();
 
 		expect(await screen.findByText("Create Sample")).toBeInTheDocument();

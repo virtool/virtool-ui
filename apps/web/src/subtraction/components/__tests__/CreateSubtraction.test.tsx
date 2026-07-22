@@ -1,7 +1,8 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiCreateSubtraction } from "@tests/api/subtractions";
 import { createFakeFile } from "@tests/fake/files";
+import { createFakeSubtraction } from "@tests/fake/subtractions";
+import { mockCreateSubtraction } from "@tests/server-fn/subtractions";
 import { mockFindUploads } from "@tests/server-fn/uploads";
 import { renderWithRouter } from "@tests/setup";
 import { describe, expect, it } from "vitest";
@@ -44,11 +45,7 @@ describe("<SubtractionCreate />", () => {
 		const nickname = "testSubtractionNickname";
 
 		mockFindUploads([file]);
-		const createSubtractionScope = mockApiCreateSubtraction(
-			name,
-			nickname,
-			file.id,
-		);
+		const createSubtraction = mockCreateSubtraction(createFakeSubtraction());
 
 		await openDialog();
 
@@ -57,6 +54,10 @@ describe("<SubtractionCreate />", () => {
 		await userEvent.click(screen.getByText(/testsubtraction1/i));
 		await userEvent.click(screen.getByText(/save/i));
 
-		await waitFor(() => createSubtractionScope.done());
+		await waitFor(() =>
+			expect(createSubtraction).toHaveBeenCalledWith({
+				data: { name, nickname, uploadId: file.id },
+			}),
+		);
 	});
 });

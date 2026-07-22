@@ -126,7 +126,7 @@ export function mockApiCreateSample(
 	library_type: LibraryType,
 	files: number[],
 	labels: number[],
-	subtractions: string[],
+	subtractions: number[],
 	group: string | null,
 ) {
 	const sample = createFakeSample({

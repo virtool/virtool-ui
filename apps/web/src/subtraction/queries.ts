@@ -1,4 +1,11 @@
-import { apiClient } from "@app/api";
+import {
+	createSubtraction,
+	deleteSubtraction,
+	findSubtractions,
+	getSubtraction,
+	listSubtractionsShortlist,
+	updateSubtraction,
+} from "@server/subtraction/functions";
 import { subtractionQueryKeys } from "@subtraction/keys";
 import {
 	queryOptions,
@@ -24,14 +31,13 @@ export function useCreateSubtraction() {
 
 	return useMutation<
 		Subtraction,
-		unknown,
+		ErrorResponse,
 		{ name: string; nickname: string; uploadId: number }
 	>({
 		mutationFn: ({ name, nickname, uploadId }) =>
-			apiClient
-				.post("/subtractions")
-				.send({ name, nickname, upload_id: uploadId })
-				.then((response) => response.body),
+			createSubtraction({
+				data: { name, nickname, uploadId },
+			}) as Promise<Subtraction>,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: subtractionQueryKeys.lists(),
@@ -55,13 +61,9 @@ export function subtractionsQueryOptions(
 	return queryOptions<SubtractionSearchResult, ErrorResponse>({
 		queryKey: subtractionQueryKeys.list([page, per_page, term]),
 		queryFn: () =>
-			apiClient
-				.get("/subtractions")
-				.query({ page, per_page, find: term })
-				.then((response) => {
-					const { documents, ...rest } = response.body;
-					return { ...rest, items: documents };
-				}),
+			findSubtractions({
+				data: { page, per_page, term },
+			}) as Promise<SubtractionSearchResult>,
 	});
 }
 
@@ -88,13 +90,13 @@ export function useSuspenseSubtractions(
  * @param subtractionId - The id of the subtraction to fetch
  * @returns A single subtraction
  */
-export function useFetchSubtraction(subtractionId: string) {
+export function useFetchSubtraction(subtractionId: string | number) {
 	return useQuery<Subtraction, ErrorResponse>({
 		queryKey: subtractionQueryKeys.detail(subtractionId),
 		queryFn: () =>
-			apiClient
-				.get(`/subtractions/${subtractionId}`)
-				.then((response) => response.body),
+			getSubtraction({
+				data: { subtractionId: Number(subtractionId) },
+			}) as Promise<Subtraction>,
 	});
 }
 
@@ -104,14 +106,17 @@ export function useFetchSubtraction(subtractionId: string) {
  * @param subtractionId - The id of the subtraction to update
  * @returns A mutator for updating a subtraction
  */
-export function useUpdateSubtraction(subtractionId: string) {
+export function useUpdateSubtraction(subtractionId: string | number) {
 	const queryClient = useQueryClient();
-	return useMutation<Subtraction, unknown, { name: string; nickname: string }>({
+	return useMutation<
+		Subtraction,
+		ErrorResponse,
+		{ name: string; nickname: string }
+	>({
 		mutationFn: ({ name, nickname }) =>
-			apiClient
-				.patch(`/subtractions/${subtractionId}`)
-				.send({ name, nickname })
-				.then((response) => response.body),
+			updateSubtraction({
+				data: { subtractionId: Number(subtractionId), name, nickname },
+			}) as Promise<Subtraction>,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: subtractionQueryKeys.detail(subtractionId),
@@ -126,11 +131,11 @@ export function useUpdateSubtraction(subtractionId: string) {
  * @returns A mutator for removing a subtraction
  */
 export function useRemoveSubtraction() {
-	return useMutation<Response, unknown, { subtractionId: string }>({
+	return useMutation<null, ErrorResponse, { subtractionId: string | number }>({
 		mutationFn: ({ subtractionId }) =>
-			apiClient
-				.delete(`/subtractions/${subtractionId}`)
-				.then((response) => response.body),
+			deleteSubtraction({
+				data: { subtractionId: Number(subtractionId) },
+			}) as Promise<null>,
 	});
 }
 
@@ -144,9 +149,8 @@ export function useFetchSubtractionsShortlist(ready?: boolean) {
 	return useQuery<SubtractionOption[]>({
 		queryKey: subtractionQueryKeys.shortlist(ready),
 		queryFn: () =>
-			apiClient
-				.get("/subtractions")
-				.query({ short: true, ready })
-				.then((response) => response.body),
+			listSubtractionsShortlist({
+				data: { ready: ready ?? false },
+			}) as Promise<SubtractionOption[]>,
 	});
 }

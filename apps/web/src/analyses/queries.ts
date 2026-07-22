@@ -84,7 +84,7 @@ export function useGetAnalysis(analysisId: number) {
 export type CreateAnalysisParams = {
 	refId?: number;
 	sampleId: number;
-	subtractionIds?: string[];
+	subtractionIds?: number[];
 	workflow: string;
 };
 

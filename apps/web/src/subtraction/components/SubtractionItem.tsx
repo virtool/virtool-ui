@@ -23,7 +23,7 @@ export function SubtractionItem({
 			<Link
 				className="col-span-2 text-lg font-medium"
 				to="/subtractions/$subtractionId"
-				params={{ subtractionId: id }}
+				params={{ subtractionId: String(id) }}
 			>
 				{name}
 			</Link>
