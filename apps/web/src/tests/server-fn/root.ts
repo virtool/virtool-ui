@@ -11,10 +11,10 @@ export const rootServerFnMocks = {
 
 /**
  * Sets up getRoot to resolve with the given root document. `version` defaults to
- * the build version so callers that only care about `first_user` can omit it.
+ * the build version so callers that only care about `firstUser` can omit it.
  */
 export function mockGetRoot(root: {
-	first_user: boolean;
+	firstUser: boolean;
 	version?: string;
 }): Mock {
 	rootServerFnMocks.getRoot.mockResolvedValue({

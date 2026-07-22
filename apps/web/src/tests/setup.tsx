@@ -292,7 +292,7 @@ export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 	const history: string[] = [];
 	const queryClient = createTestQueryClient();
 
-	queryClient.setQueryData(rootQueryKeys.all(), { first_user: false });
+	queryClient.setQueryData(rootQueryKeys.all(), { firstUser: false });
 	queryClient.setQueryData(
 		accountQueryKeys.all(),
 		opts?.account ?? createFakeAccount(),

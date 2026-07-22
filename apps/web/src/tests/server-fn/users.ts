@@ -25,11 +25,11 @@ export const userServerFnMocks = {
 export function mockFindUsers(users: User[]): Mock {
 	userServerFnMocks.findUsers.mockResolvedValue({
 		items: users,
-		found_count: users.length,
+		foundCount: users.length,
 		page: 1,
-		page_count: 1,
-		per_page: 25,
-		total_count: users.length,
+		pageCount: 1,
+		perPage: 25,
+		totalCount: users.length,
 	});
 	return userServerFnMocks.findUsers;
 }
@@ -38,11 +38,11 @@ export function mockFindUsers(users: User[]): Mock {
 export function mockSearchUsers(users: User[]): Mock {
 	userServerFnMocks.searchUsers.mockResolvedValue({
 		items: users,
-		found_count: users.length,
+		foundCount: users.length,
 		page: 1,
-		page_count: 1,
-		per_page: 25,
-		total_count: users.length,
+		pageCount: 1,
+		perPage: 25,
+		totalCount: users.length,
 	});
 	return userServerFnMocks.searchUsers;
 }

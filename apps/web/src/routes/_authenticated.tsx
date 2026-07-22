@@ -40,7 +40,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 		const rootData = await queryClient.ensureQueryData(rootQueryOptions());
 
-		if (rootData.first_user) {
+		if (rootData.firstUser) {
 			throw redirect({ to: "/setup" });
 		}
 

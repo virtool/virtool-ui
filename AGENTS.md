@@ -279,7 +279,7 @@ at all:
 - `@administration/passwordPolicy` — `passwordPolicyQueryOptions`, backed by
   `getPasswordPolicyFn`.
 - `@nav/queries` — `rootQueryOptions` / `useRootQuery`, backed by the `getRoot`
-  server function. The guard reads `first_user` from it before a session
+  server function. The guard reads `firstUser` from it before a session
   exists; the whole module is `@app/api`-free.
 
 All three are server-function-backed and need no HTTP client. Don't fold them

@@ -14,7 +14,7 @@ describe("<FirstUser />", () => {
 			seed: (queryClient) => {
 				// A fresh instance: the root reports the setup is needed and no
 				// account has been fetched yet.
-				queryClient.setQueryData(["root"], { first_user: true });
+				queryClient.setQueryData(["root"], { firstUser: true });
 				queryClient.removeQueries({ queryKey: accountQueryKeys.all() });
 			},
 		});
@@ -30,7 +30,7 @@ describe("<FirstUser />", () => {
 		// After setup the root reports no first user, and the session created by
 		// the server function authenticates the account fetch, so the guard
 		// admits the user instead of bouncing back to /setup.
-		mockGetRoot({ first_user: false });
+		mockGetRoot({ firstUser: false });
 		mockGetAccount(account);
 
 		const { router } = await renderSetup();

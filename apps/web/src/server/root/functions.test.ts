@@ -61,23 +61,23 @@ beforeEach(() => {
 });
 
 describe("getRoot", () => {
-	it("reports first_user when the instance has no users", async () => {
+	it("reports firstUser when the instance has no users", async () => {
 		const root = (await callServerFn(handlers, "getRoot", undefined)) as {
-			first_user: boolean;
+			firstUser: boolean;
 			version: string;
 		};
 
-		expect(root.first_user).toBe(true);
+		expect(root.firstUser).toBe(true);
 		expect(root.version).toBe(__APP_VERSION__);
 	});
 
-	it("reports no first_user once a user exists", async () => {
+	it("reports no firstUser once a user exists", async () => {
 		await seedUser(db);
 
 		const root = (await callServerFn(handlers, "getRoot", undefined)) as {
-			first_user: boolean;
+			firstUser: boolean;
 		};
 
-		expect(root.first_user).toBe(false);
+		expect(root.firstUser).toBe(false);
 	});
 });

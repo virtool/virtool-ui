@@ -38,7 +38,7 @@ const findUsersSchema = z
 	.object({
 		term: z.string().default(""),
 		page: z.number().int().positive().default(1),
-		per_page: z.number().int().positive().max(100).default(25),
+		perPage: z.number().int().positive().max(100).default(25),
 		administrator: z.boolean().optional(),
 		active: z.boolean().default(true),
 	})
@@ -48,7 +48,7 @@ const searchUsersSchema = z
 	.object({
 		term: z.string().default(""),
 		page: z.number().int().positive().default(1),
-		per_page: z.number().int().positive().max(100).default(25),
+		perPage: z.number().int().positive().max(100).default(25),
 	})
 	.optional();
 
@@ -132,7 +132,7 @@ export const findUsers = createServerFn({ method: "GET" })
 		return findUsersImpl(db, {
 			term: data?.term ?? "",
 			page: data?.page ?? 1,
-			perPage: data?.per_page ?? 25,
+			perPage: data?.perPage ?? 25,
 			administrator: data?.administrator,
 			active: data?.active ?? true,
 		});
@@ -150,7 +150,7 @@ export const searchUsers = createServerFn({ method: "GET" })
 		findUsersImpl(db, {
 			term: data?.term ?? "",
 			page: data?.page ?? 1,
-			perPage: data?.per_page ?? 25,
+			perPage: data?.perPage ?? 25,
 		}),
 	);
 

@@ -6,7 +6,7 @@ import AboutDialog from "../AboutDialog";
 
 describe("<AboutDialog />", () => {
 	it("shows the server and web app versions", async () => {
-		mockGetRoot({ first_user: false, version: "5.4.3" });
+		mockGetRoot({ firstUser: false, version: "5.4.3" });
 
 		renderWithProviders(<AboutDialog open setOpen={() => undefined} />);
 

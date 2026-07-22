@@ -282,7 +282,7 @@ client can hold it in JS for the duration of the reset flow.
 ## First-user setup
 
 A fresh instance has no users; the root document reports
-`first_user: true` and the `_authenticated` guard redirects to
+`firstUser: true` and the `_authenticated` guard redirects to
 `/setup`. `createFirstUserFn` (`server/auth/functions.ts`) is the
 public server function that bootstraps the instance. It is unauthenticated
 by necessity — it runs before any user or session exists — and delegates
