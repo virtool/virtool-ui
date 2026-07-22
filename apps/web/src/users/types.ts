@@ -1,21 +1,6 @@
 import type { AdministratorRoleName } from "@administration/types";
 import type { GroupMinimal, Permissions } from "@groups/types";
 
-/** Business to consumer provided user details */
-type UserB2c = {
-	/** The display name */
-	display_name?: string;
-
-	/** The family name */
-	family_name?: string;
-
-	/** The given name */
-	given_name?: string;
-
-	/** The object ID */
-	oid: string;
-};
-
 /** A user with the essential information */
 export type UserNested = {
 	/** The unique identifier */
@@ -32,21 +17,6 @@ export type User = UserNested & {
 
 	/** Indicates if user is active */
 	active: boolean;
-
-	/** Their B2C specific information */
-	b2c?: UserB2c;
-
-	/** Their display name */
-	b2c_display_name?: string;
-
-	/** Their family name */
-	b2c_family_name?: string;
-
-	/** Their given name */
-	b2c_given_name?: string;
-
-	/** Their B2C object ID */
-	b2c_oid?: string;
 
 	/** Whether the user will be forced to reset their password on next login */
 	force_reset: boolean;
