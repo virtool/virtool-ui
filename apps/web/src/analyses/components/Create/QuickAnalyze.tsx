@@ -2,7 +2,7 @@ import { Dialog, DialogTitle } from "@base/Dialog";
 import QueryError from "@base/QueryError";
 import { useListHmms } from "@hmm/queries";
 import type { SampleMinimal } from "@samples/types";
-import HMMAlert from "../HMMAlert";
+import HmmAlert from "../HmmAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
 import CreateAnalysisForm from "./CreateAnalysisForm";
 import { SelectedSamples } from "./SelectedSamples";
@@ -53,7 +53,7 @@ export default function QuickAnalyze({
 		<Dialog open={open} onOpenChange={setOpen}>
 			<CreateAnalysisDialogContent>
 				<DialogTitle>Quick Analyze</DialogTitle>
-				<HMMAlert installed={Boolean(hmms.status.task?.complete)} />
+				<HmmAlert installed={Boolean(hmms.status.task?.complete)} />
 
 				<SelectedSamples fromSelection={fromSelection} samples={samples} />
 

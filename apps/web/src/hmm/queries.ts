@@ -1,5 +1,5 @@
-import { apiClient } from "@app/api";
 import { hmmQueryKeys } from "@hmm/keys";
+import { findHmms, getHmm, installHmm } from "@server/hmm/functions";
 import {
 	queryOptions,
 	useMutation,
@@ -8,7 +8,7 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import type { ErrorResponse } from "@/types/api";
-import type { HMMInstalled, Hmm, HmmSearchResults } from "./types";
+import type { HmmSearchResults } from "./types";
 
 /**
  * Query options for a page of HMM search results.
@@ -25,13 +25,9 @@ export function hmmsQueryOptions(
 	return queryOptions<HmmSearchResults, ErrorResponse>({
 		queryKey: hmmQueryKeys.list([page, per_page, term]),
 		queryFn: () =>
-			apiClient
-				.get("/hmms")
-				.query({ page, per_page, find: term })
-				.then((res) => {
-					const { documents, ...rest } = res.body;
-					return { ...rest, items: documents };
-				}),
+			findHmms({ data: { page, perPage: per_page, term: term ?? "" } }).then(
+				({ documents, ...rest }) => ({ ...rest, items: documents }),
+			),
 	});
 }
 
@@ -70,15 +66,9 @@ export function useSuspenseHmms(page: number, per_page: number, term?: string) {
  * @returns A single HMM
  */
 export function useFetchHmm(hmmId: number) {
-	return useQuery<Hmm, ErrorResponse>({
+	return useQuery({
 		queryKey: hmmQueryKeys.detail(hmmId),
-		queryFn: () => apiClient.get(`/hmms/${hmmId}`).then((res) => res.body),
-		retry: (failureCount, error) => {
-			if (error.response?.status === 404) {
-				return false;
-			}
-			return failureCount <= 3;
-		},
+		queryFn: () => getHmm({ data: { hmmId } }),
 	});
 }
 
@@ -90,9 +80,8 @@ export function useFetchHmm(hmmId: number) {
 export function useInstallHmm() {
 	const queryClient = useQueryClient();
 
-	return useMutation<HMMInstalled, ErrorResponse>({
-		mutationFn: () =>
-			apiClient.post("/hmms/status/updates").then((res) => res.body),
+	return useMutation({
+		mutationFn: () => installHmm(),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: hmmQueryKeys.lists() });
 		},
