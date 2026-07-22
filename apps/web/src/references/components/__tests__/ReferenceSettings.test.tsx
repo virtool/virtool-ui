@@ -8,7 +8,7 @@ import ReferenceSettings from "../ReferenceSettings";
 
 test("GlobalSourceTypes", async () => {
 	const { updateSettings } = mockSettingsStore(
-		createFakeSettings({ default_source_types: ["Clone", "Genotype"] }),
+		createFakeSettings({ defaultSourceTypes: ["Clone", "Genotype"] }),
 	);
 
 	renderWithProviders(<ReferenceSettings />);
@@ -26,7 +26,7 @@ test("GlobalSourceTypes", async () => {
 	);
 
 	expect(updateSettings).toHaveBeenCalledWith({
-		data: { default_source_types: ["Genotype"] },
+		data: { defaultSourceTypes: ["Genotype"] },
 	});
 
 	await waitFor(() => {
@@ -42,7 +42,7 @@ test("GlobalSourceTypes", async () => {
 	await userEvent.click(screen.getByRole("button", { name: "undo" }));
 
 	expect(updateSettings).toHaveBeenCalledWith({
-		data: { default_source_types: ["Genotype", "Clone"] },
+		data: { defaultSourceTypes: ["Genotype", "Clone"] },
 	});
 
 	await waitFor(() => {
@@ -62,7 +62,7 @@ test("GlobalSourceTypes", async () => {
 	await userEvent.click(screen.getByRole("button", { name: "Add" }));
 
 	expect(updateSettings).toHaveBeenCalledWith({
-		data: { default_source_types: ["Genotype", "Clone", "strain"] },
+		data: { defaultSourceTypes: ["Genotype", "Clone", "strain"] },
 	});
 
 	await waitFor(() => {

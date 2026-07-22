@@ -103,7 +103,7 @@ describe("getSettings", () => {
 		await expect(call("getSettings")).rejects.toBeInstanceOf(ForbiddenError);
 	});
 
-	it("returns the settings in snake_case for a settings administrator", async () => {
+	it("returns the settings for a settings administrator", async () => {
 		await signIn("settings");
 		await seedSettings(db, {
 			defaultSourceTypes: ["genotype"],
@@ -113,10 +113,10 @@ describe("getSettings", () => {
 		});
 
 		await expect(call("getSettings")).resolves.toMatchObject({
-			default_source_types: ["genotype"],
-			enable_api: true,
-			minimum_password_length: 12,
-			sample_group: "force_choice",
+			defaultSourceTypes: ["genotype"],
+			enableApi: true,
+			minimumPasswordLength: 12,
+			sampleGroup: "force_choice",
 		});
 	});
 });
@@ -124,29 +124,29 @@ describe("getSettings", () => {
 describe("updateSettings", () => {
 	it("refuses an unauthenticated caller", async () => {
 		await expect(
-			call("updateSettings", { enable_api: true }),
+			call("updateSettings", { enableApi: true }),
 		).rejects.toBeInstanceOf(UnauthorizedError);
 	});
 
 	it("refuses a caller without the settings role", async () => {
 		await signIn("base");
 		await expect(
-			call("updateSettings", { enable_api: true }),
+			call("updateSettings", { enableApi: true }),
 		).rejects.toBeInstanceOf(ForbiddenError);
 	});
 
-	it("applies the patch and returns snake_case settings", async () => {
+	it("applies the patch and returns the updated settings", async () => {
 		await signIn("settings");
 		await seedSettings(db, { enableApi: false });
 
 		await expect(
 			call("updateSettings", {
-				enable_api: true,
-				default_source_types: ["strain"],
+				enableApi: true,
+				defaultSourceTypes: ["strain"],
 			}),
 		).resolves.toMatchObject({
-			enable_api: true,
-			default_source_types: ["strain"],
+			enableApi: true,
+			defaultSourceTypes: ["strain"],
 		});
 
 		const [row] = await db.select().from(settings);
@@ -159,7 +159,7 @@ describe("updateSettings", () => {
 	it("rejects an invalid sample group", async () => {
 		await signIn("settings");
 		await expect(
-			call("updateSettings", { sample_group: "everyone" }),
+			call("updateSettings", { sampleGroup: "everyone" }),
 		).rejects.toThrow();
 	});
 

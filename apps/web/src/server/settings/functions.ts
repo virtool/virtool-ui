@@ -6,7 +6,7 @@ import { db } from "../db/pg";
 import { type SampleGroup, sampleGroups } from "../db/schema/settings";
 import {
 	getSettings as getSettingsImpl,
-	type Settings as SettingsRecord,
+	type Settings,
 	updateSettings as updateSettingsImpl,
 } from "./data";
 
@@ -31,28 +31,15 @@ export const getPasswordPolicyFn = createServerFn({ method: "GET" })
 		return { minimumPasswordLength };
 	});
 
-/** Instance-wide settings, in the snake_case shape the client consumes. */
-type Settings = {
-	default_source_types: string[];
-	enable_api: boolean;
-	enable_sentry: boolean;
-	minimum_password_length: number;
-	sample_all_read: boolean;
-	sample_all_write: boolean;
-	sample_group: string;
-	sample_group_read: boolean;
-	sample_group_write: boolean;
-};
-
 const updateSettingsSchema = z
 	.object({
-		default_source_types: z.array(z.string()).optional(),
-		enable_api: z.boolean().optional(),
-		enable_sentry: z.boolean().optional(),
-		minimum_password_length: z.number().int().min(1).optional(),
-		sample_all_read: z.boolean().optional(),
-		sample_all_write: z.boolean().optional(),
-		sample_group: z
+		defaultSourceTypes: z.array(z.string()).optional(),
+		enableApi: z.boolean().optional(),
+		enableSentry: z.boolean().optional(),
+		minimumPasswordLength: z.number().int().min(1).optional(),
+		sampleAllRead: z.boolean().optional(),
+		sampleAllWrite: z.boolean().optional(),
+		sampleGroup: z
 			.string()
 			.refine(
 				(value): value is SampleGroup =>
@@ -60,73 +47,18 @@ const updateSettingsSchema = z
 				{ message: "Invalid sample group." },
 			)
 			.optional(),
-		sample_group_read: z.boolean().optional(),
-		sample_group_write: z.boolean().optional(),
+		sampleGroupRead: z.boolean().optional(),
+		sampleGroupWrite: z.boolean().optional(),
 	})
 	.refine((data) => Object.keys(data).length > 0, {
 		message: "At least one setting must be provided.",
 	});
 
-function toWireSettings(settings: SettingsRecord): Settings {
-	return {
-		default_source_types: settings.defaultSourceTypes,
-		enable_api: settings.enableApi,
-		enable_sentry: settings.enableSentry,
-		minimum_password_length: settings.minimumPasswordLength,
-		sample_all_read: settings.sampleAllRead,
-		sample_all_write: settings.sampleAllWrite,
-		sample_group: settings.sampleGroup,
-		sample_group_read: settings.sampleGroupRead,
-		sample_group_write: settings.sampleGroupWrite,
-	};
-}
-
-function toSettingsRecord(
-	data: z.infer<typeof updateSettingsSchema>,
-): Partial<SettingsRecord> {
-	const values: Partial<SettingsRecord> = {};
-
-	if (data.default_source_types !== undefined) {
-		values.defaultSourceTypes = data.default_source_types;
-	}
-	if (data.enable_api !== undefined) {
-		values.enableApi = data.enable_api;
-	}
-	if (data.enable_sentry !== undefined) {
-		values.enableSentry = data.enable_sentry;
-	}
-	if (data.minimum_password_length !== undefined) {
-		values.minimumPasswordLength = data.minimum_password_length;
-	}
-	if (data.sample_all_read !== undefined) {
-		values.sampleAllRead = data.sample_all_read;
-	}
-	if (data.sample_all_write !== undefined) {
-		values.sampleAllWrite = data.sample_all_write;
-	}
-	if (data.sample_group !== undefined) {
-		values.sampleGroup = data.sample_group;
-	}
-	if (data.sample_group_read !== undefined) {
-		values.sampleGroupRead = data.sample_group_read;
-	}
-	if (data.sample_group_write !== undefined) {
-		values.sampleGroupWrite = data.sample_group_write;
-	}
-
-	return values;
-}
-
 export const getSettings = createServerFn({ method: "GET" })
 	.middleware([adminRole("settings")])
-	.handler(
-		async (): Promise<Settings> => toWireSettings(await getSettingsImpl(db)),
-	);
+	.handler(async (): Promise<Settings> => getSettingsImpl(db));
 
 export const updateSettings = createServerFn({ method: "POST" })
 	.middleware([adminRole("settings")])
 	.validator(updateSettingsSchema)
-	.handler(
-		async ({ data }): Promise<Settings> =>
-			toWireSettings(await updateSettingsImpl(db, toSettingsRecord(data))),
-	);
+	.handler(async ({ data }): Promise<Settings> => updateSettingsImpl(db, data));

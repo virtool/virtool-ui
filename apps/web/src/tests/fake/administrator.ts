@@ -37,15 +37,15 @@ export const administratorRoles: AdministratorRole[] = [
  */
 export function createFakeSettings(overrides?: Partial<Settings>): Settings {
 	const defaultSettings = {
-		default_source_types: [faker.word.noun({ strategy: "any-length" })],
-		enable_api: faker.datatype.boolean(),
-		enable_sentry: faker.datatype.boolean(),
-		minimum_password_length: 8,
-		sample_all_read: faker.datatype.boolean(),
-		sample_all_write: faker.datatype.boolean(),
-		sample_group: "none",
-		sample_group_read: faker.datatype.boolean(),
-		sample_group_write: faker.datatype.boolean(),
+		defaultSourceTypes: [faker.word.noun({ strategy: "any-length" })],
+		enableApi: faker.datatype.boolean(),
+		enableSentry: faker.datatype.boolean(),
+		minimumPasswordLength: 8,
+		sampleAllRead: faker.datatype.boolean(),
+		sampleAllWrite: faker.datatype.boolean(),
+		sampleGroup: "none",
+		sampleGroupRead: faker.datatype.boolean(),
+		sampleGroupWrite: faker.datatype.boolean(),
 	};
 
 	return { ...defaultSettings, ...overrides };

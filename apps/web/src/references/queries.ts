@@ -296,7 +296,7 @@ export function useUpdateDefaultSourceTypes() {
 
 	return useMutation<Settings, ErrorResponse, string[]>({
 		mutationFn: (sourceTypes) =>
-			updateSettings({ data: { default_source_types: sourceTypes } }),
+			updateSettings({ data: { defaultSourceTypes: sourceTypes } }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: settingsQueryKeys.all() });
 		},

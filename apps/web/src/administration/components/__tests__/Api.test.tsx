@@ -22,7 +22,7 @@ describe("<Api />", () => {
 	});
 
 	it("should render when [onToggle=true]", async () => {
-		const settings = createFakeSettings({ enable_api: true });
+		const settings = createFakeSettings({ enableApi: true });
 		const updateSettings = mockUpdateSettings(settings);
 		renderWithProviders(<Api settings={settings} />);
 
@@ -33,12 +33,12 @@ describe("<Api />", () => {
 		expect(screen.getByRole("checkbox")).toBeChecked();
 
 		expect(updateSettings).toHaveBeenCalledWith({
-			data: { enable_api: false },
+			data: { enableApi: false },
 		});
 	});
 
 	it("should render when [onToggle=false]", async () => {
-		const settings = createFakeSettings({ enable_api: false });
+		const settings = createFakeSettings({ enableApi: false });
 		const updateSettings = mockUpdateSettings(settings);
 		renderWithProviders(<Api settings={settings} />);
 
@@ -52,7 +52,7 @@ describe("<Api />", () => {
 		);
 
 		expect(updateSettings).toHaveBeenCalledWith({
-			data: { enable_api: true },
+			data: { enableApi: true },
 		});
 	});
 });

@@ -13,10 +13,10 @@ describe("<SampleSettings />", () => {
 		// write, making the click a no-op and the expected update never fire.
 		mockGetSettings(
 			createFakeSettings({
-				sample_all_read: false,
-				sample_all_write: false,
-				sample_group_read: false,
-				sample_group_write: false,
+				sampleAllRead: false,
+				sampleAllWrite: false,
+				sampleGroupRead: false,
+				sampleGroupWrite: false,
 			}),
 		);
 	});
@@ -43,7 +43,7 @@ describe("<SampleSettings />", () => {
 	});
 
 	it("should update settings when force choice is selected", async () => {
-		const settings = createFakeSettings({ sample_group: "force_choice" });
+		const settings = createFakeSettings({ sampleGroup: "force_choice" });
 		const updateSettings = mockUpdateSettings(settings);
 		renderWithProviders(<SampleSettings />);
 
@@ -53,13 +53,13 @@ describe("<SampleSettings />", () => {
 		await userEvent.click(screen.getByRole("radio", { name: /Force choice/ }));
 
 		expect(updateSettings).toHaveBeenCalledWith({
-			data: { sample_group: "force_choice" },
+			data: { sampleGroup: "force_choice" },
 		});
 	});
 
 	it("should update settings when users primary group is selected", async () => {
 		const settings = createFakeSettings({
-			sample_group: "users_primary_group",
+			sampleGroup: "users_primary_group",
 		});
 		const updateSettings = mockUpdateSettings(settings);
 		renderWithProviders(<SampleSettings />);
@@ -72,14 +72,14 @@ describe("<SampleSettings />", () => {
 		);
 
 		expect(updateSettings).toHaveBeenCalledWith({
-			data: { sample_group: "users_primary_group" },
+			data: { sampleGroup: "users_primary_group" },
 		});
 	});
 
 	it("should update settings when group rights change", async () => {
 		const settings = createFakeSettings({
-			sample_group_read: true,
-			sample_group_write: true,
+			sampleGroupRead: true,
+			sampleGroupWrite: true,
 		});
 		const updateSettings = mockUpdateSettings(settings);
 		renderWithProviders(<SampleSettings />);
@@ -91,14 +91,14 @@ describe("<SampleSettings />", () => {
 		await userEvent.click(screen.getByRole("option", { name: "Read & write" }));
 
 		expect(updateSettings).toHaveBeenCalledWith({
-			data: { sample_group_read: true, sample_group_write: true },
+			data: { sampleGroupRead: true, sampleGroupWrite: true },
 		});
 	});
 
 	it("should update settings when all users rights change", async () => {
 		const settings = createFakeSettings({
-			sample_all_read: true,
-			sample_all_write: true,
+			sampleAllRead: true,
+			sampleAllWrite: true,
 		});
 		const updateSettings = mockUpdateSettings(settings);
 		renderWithProviders(<SampleSettings />);
@@ -110,7 +110,7 @@ describe("<SampleSettings />", () => {
 		await userEvent.click(screen.getByRole("option", { name: "Read & write" }));
 
 		expect(updateSettings).toHaveBeenCalledWith({
-			data: { sample_all_read: true, sample_all_write: true },
+			data: { sampleAllRead: true, sampleAllWrite: true },
 		});
 	});
 });
