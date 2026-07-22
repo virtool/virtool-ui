@@ -264,25 +264,22 @@ export async function findSubtractions(
 	};
 }
 
+// Every non-deleted subtraction, reduced to the fields the selectors need. Each
+// item carries its `ready` flag, so a consumer that wants only ready
+// subtractions (analysis creation) filters client-side rather than the server
+// serving a separate ready-only list.
 export async function listSubtractionsShortlist(
 	db: Db,
-	ready: boolean,
 ): Promise<SubtractionShortlistItem[]> {
-	const rows = await db
+	return db
 		.select({
 			id: subtractions.id,
 			name: subtractions.name,
 			ready: subtractions.ready,
 		})
 		.from(subtractions)
-		.where(
-			ready
-				? and(eq(subtractions.deleted, false), eq(subtractions.ready, true))
-				: eq(subtractions.deleted, false),
-		)
+		.where(eq(subtractions.deleted, false))
 		.orderBy(asc(subtractions.name), asc(subtractions.id));
-
-	return rows;
 }
 
 async function getSubtractionFiles(

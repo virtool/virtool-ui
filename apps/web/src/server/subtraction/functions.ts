@@ -21,10 +21,6 @@ const findSubtractionsSchema = z.object({
 	term: z.string().default(""),
 });
 
-const shortlistSchema = z
-	.object({ ready: z.boolean().default(false) })
-	.optional();
-
 const subtractionIdSchema = z.object({
 	subtractionId: z.number().int().positive(),
 });
@@ -70,10 +66,7 @@ export const findSubtractions = createServerFn({ method: "GET" })
 
 export const listSubtractionsShortlist = createServerFn({ method: "GET" })
 	.middleware([authenticated()])
-	.validator(shortlistSchema)
-	.handler(async ({ data }) =>
-		listSubtractionsShortlistImpl(db, data?.ready ?? false),
-	);
+	.handler(async () => listSubtractionsShortlistImpl(db));
 
 export const getSubtraction = createServerFn({ method: "GET" })
 	.middleware([authenticated()])

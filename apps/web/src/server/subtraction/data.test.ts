@@ -195,25 +195,17 @@ describe("findSubtractions", () => {
 });
 
 describe("listSubtractionsShortlist", () => {
-	it("returns id, name and ready ordered by name", async () => {
+	it("returns every non-deleted subtraction with its ready flag, ordered by name", async () => {
 		await seedSubtraction({ name: "Zebra", ready: true });
 		await seedSubtraction({ name: "Ant", ready: false });
+		await seedSubtraction({ name: "Gone", deleted: true });
 
-		const result = await listSubtractionsShortlist(db, false);
+		const result = await listSubtractionsShortlist(db);
 
 		expect(result).toEqual([
 			{ id: expect.any(Number), name: "Ant", ready: false },
 			{ id: expect.any(Number), name: "Zebra", ready: true },
 		]);
-	});
-
-	it("filters to ready subtractions when asked", async () => {
-		await seedSubtraction({ name: "Ready", ready: true });
-		await seedSubtraction({ name: "Pending", ready: false });
-
-		const result = await listSubtractionsShortlist(db, true);
-
-		expect(result.map((item) => item.name)).toEqual(["Ready"]);
 	});
 });
 

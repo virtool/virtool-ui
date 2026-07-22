@@ -140,17 +140,16 @@ export function useRemoveSubtraction() {
 }
 
 /**
- * Fetches a list of subtractions with reduced information
+ * Fetches the reduced list of every subtraction for selectors.
  *
- * @param ready - Indicates whether to show all the ready subtractions
+ * Each item carries its `ready` flag; a caller that wants only ready
+ * subtractions filters client-side, so every consumer shares one cache entry.
+ *
  * @returns A list of subtractions
  */
-export function useFetchSubtractionsShortlist(ready?: boolean) {
+export function useFetchSubtractionsShortlist() {
 	return useQuery<SubtractionOption[]>({
-		queryKey: subtractionQueryKeys.shortlist(ready),
-		queryFn: () =>
-			listSubtractionsShortlist({
-				data: { ready: ready ?? false },
-			}) as Promise<SubtractionOption[]>,
+		queryKey: subtractionQueryKeys.shortlist(),
+		queryFn: () => listSubtractionsShortlist() as Promise<SubtractionOption[]>,
 	});
 }
