@@ -1,7 +1,7 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
-import { adminRole, authenticated } from "../auth/policy";
+import { authenticated, permission } from "../auth/policy";
 import { db } from "../db/pg";
 import {
 	findHmms as findHmmsImpl,
@@ -59,7 +59,7 @@ export const getHmm = createServerFn({ method: "GET" })
 	});
 
 export const installHmm = createServerFn({ method: "POST" })
-	.middleware([adminRole("base")])
+	.middleware([permission("modify_hmm")])
 	.handler(async ({ context }) => {
 		try {
 			const installed = await installUpdate(db, context.session.userId);

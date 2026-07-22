@@ -11,6 +11,7 @@ import {
 } from "vitest";
 
 import type { Db } from "../db/pg";
+import { groups, userGroups } from "../db/schema/groups";
 import {
 	HMM_STATUS_ID,
 	type HmmUpdate,
@@ -54,6 +55,7 @@ const { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } = await import(
 	"../auth/cookies"
 );
 const { seedSession, seedUser } = await import("../auth/test/fixtures");
+const { addToGroup, seedGroup } = await import("../groups/test/fixtures");
 
 let database: TestDatabase;
 
@@ -68,8 +70,10 @@ afterAll(async () => {
 
 beforeEach(async () => {
 	vi.clearAllMocks();
+	await db.delete(userGroups);
 	await db.delete(sessions);
 	await db.delete(users);
+	await db.delete(groups);
 	await db.delete(legacyHmmStatus);
 	await db.delete(hmms);
 	await db.delete(tasks);
@@ -82,9 +86,8 @@ afterEach(() => {
 	vi.restoreAllMocks();
 });
 
-/** Authenticate the next call as a user with the given administrator role. */
-async function signIn(role: "full" | "base" | null): Promise<number> {
-	const userId = await seedUser(db, { administratorRole: role });
+/** Authenticate the next call as the given already-seeded user. */
+async function authenticateAs(userId: number): Promise<void> {
 	const { sessionId, token } = await seedSession(db, userId);
 
 	getRequest.mockReturnValue(
@@ -94,7 +97,12 @@ async function signIn(role: "full" | "base" | null): Promise<number> {
 			},
 		}),
 	);
+}
 
+/** Authenticate the next call as a user with the given administrator role. */
+async function signIn(role: "full" | "base" | null): Promise<number> {
+	const userId = await seedUser(db, { administratorRole: role });
+	await authenticateAs(userId);
 	return userId;
 }
 
@@ -165,6 +173,26 @@ describe("installHmm", () => {
 		expect(status?.task_id).toBe(task?.id);
 		expect(status?.updates).toHaveLength(1);
 		expect(status?.updates[0]?.ready).toBe(false);
+	});
+
+	it("allows a modify_hmm group member without an admin role", async () => {
+		const userId = await seedUser(db, { administratorRole: null });
+		const groupId = await seedGroup(db, {
+			name: "hmm-managers",
+			permissions: { modify_hmm: true },
+		});
+		await addToGroup(db, userId, groupId);
+		await authenticateAs(userId);
+
+		await seedStatus();
+		mockManifest([RELEASE]);
+
+		const installed = (await call("installHmm")) as {
+			user: { id: number };
+		};
+
+		expect(installed).toMatchObject({ user: { id: userId } });
+		expect(setResponseStatus).toHaveBeenCalledWith(201);
 	});
 
 	it("refuses when an install is already in progress", async () => {
