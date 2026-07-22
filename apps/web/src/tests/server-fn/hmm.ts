@@ -1,4 +1,4 @@
-import type { Hmm, ServerHmmSearchResults } from "@hmm/types";
+import type { Hmm, HmmSearchResult } from "@hmm/types";
 import { type Mock, vi } from "vitest";
 
 /**
@@ -13,7 +13,7 @@ export const hmmServerFnMocks = {
 };
 
 /** Sets up findHmms to resolve with the given search results. */
-export function mockFindHmms(searchResults: ServerHmmSearchResults): Mock {
+export function mockFindHmms(searchResults: HmmSearchResult): Mock {
 	hmmServerFnMocks.findHmms.mockResolvedValue(searchResults);
 	return hmmServerFnMocks.findHmms;
 }

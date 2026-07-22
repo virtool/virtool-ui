@@ -1,11 +1,11 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import Label from "@base/Label";
 import Link from "@base/Link";
-import type { HMMMinimal } from "../types";
+import type { HmmMinimal } from "../types";
 
 type HmmItemProps = {
 	/** Minimal hmm data */
-	hmm: HMMMinimal;
+	hmm: HmmMinimal;
 };
 
 /**

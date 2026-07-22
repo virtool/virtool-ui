@@ -1,46 +1,16 @@
-import type { ServerTask } from "@tasks/types";
+import type { HmmMinimal, HmmSearchResult } from "@server/hmm/data";
 
-import type { SearchResult } from "@/types/api";
+/**
+ * The HMM wire shapes are defined once in the server data layer and read
+ * straight off the server functions; they are re-exported here so components
+ * can import them from the feature barrel.
+ */
+export type { Hmm, HmmMinimal, HmmSearchResult } from "@server/hmm/data";
 
-/** Minimal HMM used for resource listings */
-export type HMMMinimal = {
-	/** The unique identifier */
-	id: number;
-	cluster: number;
-	count: number;
-	families: { [key: string]: number };
-	/** Names associated with the HMM */
-	names: string[];
-};
-
-export type HMMSequenceEntry = {
-	accession: string;
-	gi: string;
-	name: string;
-	organism: string;
-};
-
-export type Hmm = HMMMinimal & {
-	entries: Array<HMMSequenceEntry>;
-	genera: { [key: string]: number };
-	length: number;
-	mean_entropy: number;
-	total_entropy: number;
-};
-
-/** HMM search results from the API */
-export type HmmSearchResults = SearchResult & {
-	/** Gives information about each HMM */
-	items: HMMMinimal[];
-	/** The status of the HMMs */
-	status: {
-		errors: string[];
-		installed: { ready: boolean } | null;
-		task: ServerTask | null;
-	};
-};
-
-/** Wire-shape HMM search results returned by the backend before the UI transform */
-export type ServerHmmSearchResults = Omit<HmmSearchResults, "items"> & {
-	documents: HMMMinimal[];
+/**
+ * HMM search results after the UI transform that renames the server's
+ * `documents` to `items`.
+ */
+export type HmmSearchResults = Omit<HmmSearchResult, "documents"> & {
+	items: HmmMinimal[];
 };

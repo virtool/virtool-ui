@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import type { ServerHmmSearchResults } from "@hmm/types";
+import type { HmmSearchResult } from "@hmm/types";
 import { createFakeTask } from "@tests/fake/tasks";
 
 /**
@@ -53,8 +53,8 @@ export function createFakeHmm() {
  * @param overrides - optional properties for creating a fake Hmm search result with specific values
  */
 export function createFakeHmmSearchResults(
-	overrides?: Partial<ServerHmmSearchResults>,
-): ServerHmmSearchResults {
+	overrides?: Partial<HmmSearchResult>,
+): HmmSearchResult {
 	return {
 		documents: Array.from({ length: 5 }, createFakeHmmMinimal),
 		status: {

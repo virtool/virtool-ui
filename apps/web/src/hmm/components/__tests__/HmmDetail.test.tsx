@@ -68,7 +68,7 @@ describe("<HmmDetail />", () => {
 		});
 	});
 
-	describe("HMMTaxonomy", () => {
+	describe("HmmTaxonomy", () => {
 		it("should render Families correctly", async () => {
 			mockGetHmm(hmmDetail);
 			await renderRoute(path);
