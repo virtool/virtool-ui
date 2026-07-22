@@ -1,4 +1,4 @@
-import type { APIKeyMinimal } from "@account/types";
+import type { ApiKey } from "@account/types";
 import type { Permissions } from "@groups/types";
 import { type Mock, vi } from "vitest";
 import { createFakeApiKey } from "../fake/account";
@@ -16,7 +16,7 @@ export const accountServerFnMocks = {
 };
 
 /** Sets up findApiKeys to resolve with the given API keys. */
-export function mockFindApiKeys(apiKeys: APIKeyMinimal[]): Mock {
+export function mockFindApiKeys(apiKeys: ApiKey[]): Mock {
 	accountServerFnMocks.findApiKeys.mockResolvedValue(apiKeys);
 	return accountServerFnMocks.findApiKeys;
 }
@@ -28,7 +28,7 @@ export function mockFindApiKeys(apiKeys: APIKeyMinimal[]): Mock {
 export function mockCreateApiKey(
 	key: string,
 	permissions: Permissions,
-	overrides?: Partial<APIKeyMinimal>,
+	overrides?: Partial<ApiKey>,
 ): Mock {
 	accountServerFnMocks.createApiKey.mockResolvedValue({
 		...createFakeApiKey({ permissions, ...overrides }),

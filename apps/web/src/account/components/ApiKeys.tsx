@@ -7,8 +7,8 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import { KeyRound } from "lucide-react";
 import { useFetchAPIKeys } from "../queries";
-import ApiKey from "./ApiKey";
 import ApiKeyCreate from "./ApiKeyCreate";
+import ApiKeyItem from "./ApiKeyItem";
 
 /**
  * A component to manage and display API keys
@@ -24,7 +24,9 @@ export default function ApiKeys() {
 		return <LoadingPlaceholder className="mt-36" />;
 	}
 
-	const keyComponents = data.map((key) => <ApiKey key={key.id} apiKey={key} />);
+	const keyComponents = data.map((key) => (
+		<ApiKeyItem key={key.id} apiKey={key} />
+	));
 
 	return (
 		<div>

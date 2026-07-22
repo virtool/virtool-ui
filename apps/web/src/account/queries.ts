@@ -1,5 +1,5 @@
 import { accountQueryKeys } from "@account/keys";
-import type { APIKeyMinimal } from "@account/types";
+import type { ApiKey } from "@account/types";
 import { apiClient } from "@app/api";
 import { resetClient } from "@app/utils";
 import type { Permissions } from "@groups/types";
@@ -91,7 +91,7 @@ export function useChangePassword() {
  * @returns A list of API keys for the current user
  */
 export function useFetchAPIKeys() {
-	return useQuery<APIKeyMinimal[]>({
+	return useQuery<ApiKey[]>({
 		queryKey: accountQueryKeys.apiKeys(),
 		queryFn: () => findApiKeys(),
 	});

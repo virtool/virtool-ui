@@ -9,7 +9,7 @@ import { AppError } from "../errors";
 /** An account API key as returned to the API-key management UI. */
 export type ApiKey = {
 	id: number;
-	created_at: string;
+	createdAt: string;
 	name: string;
 	permissions: Permissions;
 };
@@ -32,7 +32,7 @@ export class ApiKeyNotFoundError extends AppError {}
 function toApiKey(row: ApiKeyRow): ApiKey {
 	return {
 		id: row.id,
-		created_at: row.createdAt.toISOString(),
+		createdAt: row.createdAt.toISOString(),
 		name: row.name,
 		permissions: { ...emptyPermissions(), ...row.permissions },
 	};

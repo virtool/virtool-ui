@@ -1,15 +1,8 @@
-import type { Permissions } from "@groups/types";
 import type { User } from "@users/types";
 
-export type QuickAnalyzeWorkflow = "nuvs" | "pathoscope";
+export type { ApiKey } from "@server/account/data";
 
-export type APIKeyMinimal = {
-	created_at: string;
-	id: number;
-	key?: string;
-	name: string;
-	permissions: Permissions;
-};
+export type QuickAnalyzeWorkflow = "nuvs" | "pathoscope";
 
 export type AccountSettings = {
 	quick_analyze_workflow: QuickAnalyzeWorkflow;
