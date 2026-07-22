@@ -375,6 +375,14 @@ first.
 Legacy features that still call the Python API through their
 client-side `api.ts` are not subject to this layering.
 
+A handler maps an expected outcome to an HTTP status with
+`setResponseStatus`, then throws `ClientError` (`@server/errors`) — never
+a plain `Error` — for any deliberate 4xx (a bad login, a missing record,
+a name conflict). The Sentry `beforeSend` filter drops `ClientError`
+(and the auth middleware's 401/403) as routine control flow; a plain
+`Error` is reported as a false incident. A bare `throw` stays reserved
+for the genuinely unexpected.
+
 See [docs/architecture.md](docs/architecture.md) for the import-direction
 invariant in full, the labels (minimal) and auth (carve-out) shapes,
 the pure-policy-vs-framework-shell principle, and when to introduce

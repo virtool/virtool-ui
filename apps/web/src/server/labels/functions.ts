@@ -3,6 +3,7 @@ import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { authenticated } from "../auth/policy";
 import { db } from "../db/pg";
+import { ClientError } from "../errors";
 import {
 	createLabel as createLabelImpl,
 	deleteLabel as deleteLabelImpl,
@@ -47,11 +48,11 @@ const findLabelsSchema = z.object({ term: z.string().default("") }).optional();
 const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	if (err instanceof LabelNotFoundError) {
 		setResponseStatus(404);
-		throw new Error("Label not found.");
+		throw new ClientError("Label not found.");
 	}
 	if (err instanceof LabelConflictError) {
 		setResponseStatus(409);
-		throw new Error("Label name already exists.");
+		throw new ClientError("Label name already exists.");
 	}
 	throw err;
 });

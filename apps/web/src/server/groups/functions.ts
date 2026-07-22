@@ -4,6 +4,7 @@ import { permissionsSchema } from "@virtool/contracts";
 import { z } from "zod";
 import { adminRole, authenticated } from "../auth/policy";
 import { db } from "../db/pg";
+import { ClientError } from "../errors";
 import {
 	createGroup as createGroupImpl,
 	deleteGroup as deleteGroupImpl,
@@ -44,11 +45,11 @@ const updateGroupSchema = z.object({
 const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	if (err instanceof GroupNotFoundError) {
 		setResponseStatus(404);
-		throw new Error("Group not found.");
+		throw new ClientError("Group not found.");
 	}
 	if (err instanceof GroupConflictError) {
 		setResponseStatus(409);
-		throw new Error("Group name already exists.");
+		throw new ClientError("Group name already exists.");
 	}
 	throw err;
 });

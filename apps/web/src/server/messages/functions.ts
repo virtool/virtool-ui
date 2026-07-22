@@ -4,6 +4,7 @@ import { bannerColors } from "@virtool/contracts";
 import { z } from "zod";
 import { adminRole, authenticated } from "../auth/policy";
 import { db } from "../db/pg";
+import { ClientError } from "../errors";
 import {
 	clearActiveMessage as clearActiveMessageImpl,
 	createMessage as createMessageImpl,
@@ -39,7 +40,7 @@ const updateMessageSchema = z
 const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	if (err instanceof MessageNotFoundError) {
 		setResponseStatus(404);
-		throw new Error("Message not found.");
+		throw new ClientError("Message not found.");
 	}
 	throw err;
 });

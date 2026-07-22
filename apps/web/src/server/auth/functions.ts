@@ -3,6 +3,7 @@ import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { getRequest, setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { db } from "../db/pg";
+import { ClientError } from "../errors";
 import { realCookies } from "./cookies";
 import {
 	createFirstUser,
@@ -74,7 +75,7 @@ export const loginFn = createServerFn({ method: "POST" })
 		} catch (err) {
 			if (err instanceof InvalidCredentialsError) {
 				setResponseStatus(400);
-				throw new Error("Invalid handle or password.");
+				throw new ClientError("Invalid handle or password.");
 			}
 			throw err;
 		}
@@ -102,11 +103,11 @@ export const createFirstUserFn = createServerFn({ method: "POST" })
 		} catch (err) {
 			if (err instanceof PasswordTooShortError) {
 				setResponseStatus(400);
-				throw new Error(err.message);
+				throw new ClientError(err.message);
 			}
 			if (err instanceof FirstUserExistsError) {
 				setResponseStatus(409);
-				throw new Error("Virtool already has a user.");
+				throw new ClientError("Virtool already has a user.");
 			}
 			throw err;
 		}
@@ -149,15 +150,15 @@ export const resetPasswordFn = createServerFn({ method: "POST" })
 		} catch (err) {
 			if (err instanceof PasswordTooShortError) {
 				setResponseStatus(400);
-				throw new Error(err.message);
+				throw new ClientError(err.message);
 			}
 			if (err instanceof InvalidResetSessionError) {
 				setResponseStatus(400);
-				throw new Error("Invalid session");
+				throw new ClientError("Invalid session");
 			}
 			if (err instanceof PasswordReuseError) {
 				setResponseStatus(400);
-				throw new Error("Cannot reuse current password");
+				throw new ClientError("Cannot reuse current password");
 			}
 			throw err;
 		}

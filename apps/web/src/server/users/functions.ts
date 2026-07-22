@@ -6,6 +6,7 @@ import { PasswordTooShortError } from "../auth/passwordPolicy";
 import { adminRole, authenticated } from "../auth/policy";
 import { checkConfiguredPasswordLength } from "../auth/service";
 import { db } from "../db/pg";
+import { ClientError } from "../errors";
 import {
 	createUser as createUserImpl,
 	findUsers as findUsersImpl,
@@ -73,7 +74,7 @@ const accountHandleSchema = z.object({
 function checkReservedHandle(handle: string): void {
 	if (handle.trim().toLowerCase() === "virtool") {
 		setResponseStatus(400);
-		throw new Error("Reserved user name: virtool");
+		throw new ClientError("Reserved user name: virtool");
 	}
 }
 
@@ -89,19 +90,19 @@ const setAdministratorRoleSchema = z.object({
 const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	if (err instanceof PasswordTooShortError) {
 		setResponseStatus(400);
-		throw new Error(err.message);
+		throw new ClientError(err.message);
 	}
 	if (err instanceof UserNotFoundError) {
 		setResponseStatus(404);
-		throw new Error("User not found.");
+		throw new ClientError("User not found.");
 	}
 	if (err instanceof UserConflictError) {
 		setResponseStatus(409);
-		throw new Error("User already exists.");
+		throw new ClientError("User already exists.");
 	}
 	if (err instanceof GroupMembershipError) {
 		setResponseStatus(400);
-		throw new Error("User is not a member of group.");
+		throw new ClientError("User is not a member of group.");
 	}
 	throw err;
 });
@@ -217,7 +218,7 @@ export const setAdministratorRole = createServerFn({ method: "POST" })
 	.handler(async ({ context, data }) => {
 		if (context.session.userId === data.userId) {
 			setResponseStatus(400);
-			throw new Error("Cannot change own role");
+			throw new ClientError("Cannot change own role");
 		}
 
 		try {

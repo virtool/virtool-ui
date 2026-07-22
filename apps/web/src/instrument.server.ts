@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/tanstackstart-react";
-import { dropExpectedAuthErrors } from "@server/sentryFilters";
+import { dropExpectedClientErrors } from "@server/sentryFilters";
 import { getCommonOptions } from "@virtool/sentry";
 
 // Server-side Sentry initialisation. Imported for its side effect at the top of
@@ -18,7 +18,7 @@ if (options.dsn) {
 	Sentry.init({
 		...options,
 		integrations: [nodeProfilingIntegration()],
-		beforeSend: dropExpectedAuthErrors,
+		beforeSend: dropExpectedClientErrors,
 	});
 
 	// Import the logger lazily and only after `Sentry.init`. `@server/logger`
