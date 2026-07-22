@@ -456,7 +456,7 @@ outside the server-function context and call
 File uploads are a raw route (`routes/uploads.ts` → `@server/uploads/upload`),
 **not** a server function. `uploads/uploader.ts`'s `postUpload` posts the raw
 `File` to `POST /uploads` with `XMLHttpRequest`, because only XHR reports upload
-progress — `fetch` cannot — and reads files run to many gigabytes. The handler
+progress — `fetch` cannot — and read files can run to many gigabytes. The handler
 reads `name`/`type` from the query string and streams `request.body` to storage
 (never `request.formData()`, which buffers the whole file in the Node heap), and
 returns a plain-JSON `Response` the XHR can `JSON.parse`. Because no policy
