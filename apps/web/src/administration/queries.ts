@@ -3,7 +3,7 @@ import {
 	roleQueryKeys,
 	settingsQueryKeys,
 } from "@administration/keys";
-import { apiClient } from "@app/api";
+import { getSettings, updateSettings } from "@server/settings/functions";
 import { listAdministratorRoles } from "@server/users/functions";
 import {
 	queryOptions,
@@ -34,7 +34,7 @@ export type SettingsUpdate = {
 export function settingsQueryOptions() {
 	return queryOptions<Settings>({
 		queryKey: settingsQueryKeys.all(),
-		queryFn: () => apiClient.get("/settings").then((response) => response.body),
+		queryFn: () => getSettings(),
 	});
 }
 
@@ -67,11 +67,7 @@ export function useUpdateSettings() {
 	const queryClient = useQueryClient();
 
 	return useMutation<Settings, ErrorResponse, SettingsUpdate>({
-		mutationFn: (update) =>
-			apiClient
-				.patch("/settings")
-				.send(update)
-				.then((response) => response.body),
+		mutationFn: (update) => updateSettings({ data: update }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: settingsQueryKeys.all(),

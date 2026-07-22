@@ -3,7 +3,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { Db } from "../db/pg";
 import { settings } from "../db/schema/settings";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
-import { DEFAULT_SETTINGS, getSettings } from "./data";
+import { DEFAULT_SETTINGS, getSettings, updateSettings } from "./data";
 import { seedSettings } from "./test/fixtures";
 
 let database: TestDatabase;
@@ -81,6 +81,57 @@ describe("getSettings", () => {
 
 		await expect(getSettings(db)).resolves.toMatchObject({
 			minimumPasswordLength: 20,
+		});
+	});
+});
+
+describe("updateSettings", () => {
+	it("applies the given values and returns the full settings", async () => {
+		await seedSettings(db, { enableApi: false, minimumPasswordLength: 8 });
+
+		await expect(
+			updateSettings(db, { enableApi: true, minimumPasswordLength: 12 }),
+		).resolves.toEqual({
+			...DEFAULT_SETTINGS,
+			enableApi: true,
+			minimumPasswordLength: 12,
+		});
+
+		await expect(getSettings(db)).resolves.toMatchObject({
+			enableApi: true,
+			minimumPasswordLength: 12,
+		});
+	});
+
+	it("leaves unspecified values untouched", async () => {
+		await seedSettings(db, {
+			defaultSourceTypes: ["genotype"],
+			sampleGroup: "force_choice",
+		});
+
+		await updateSettings(db, { enableApi: true });
+
+		await expect(getSettings(db)).resolves.toMatchObject({
+			defaultSourceTypes: ["genotype"],
+			sampleGroup: "force_choice",
+			enableApi: true,
+		});
+	});
+
+	it("seeds the defaults when the row is absent", async () => {
+		await expect(updateSettings(db, { enableApi: true })).resolves.toEqual({
+			...DEFAULT_SETTINGS,
+			enableApi: true,
+		});
+
+		await expect(countRows()).resolves.toHaveLength(1);
+	});
+
+	it("returns the stored settings when given no values", async () => {
+		await seedSettings(db, { minimumPasswordLength: 15 });
+
+		await expect(updateSettings(db, {})).resolves.toMatchObject({
+			minimumPasswordLength: 15,
 		});
 	});
 });

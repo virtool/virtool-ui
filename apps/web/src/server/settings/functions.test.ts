@@ -1,0 +1,170 @@
+import type { AdministratorRoleName } from "@virtool/contracts";
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
+import type { Db } from "../db/pg";
+import { sessions } from "../db/schema/sessions";
+import { settings } from "../db/schema/settings";
+import { users } from "../db/schema/users";
+import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
+import { callServerFn, type SplitServerFnModule } from "../test/serverFn";
+
+const getRequest = vi.fn();
+const setResponseStatus = vi.fn();
+
+vi.mock("@tanstack/react-start/server", () => ({
+	deleteCookie: vi.fn(),
+	getCookie: vi.fn(),
+	getRequest,
+	setCookie: vi.fn(),
+	setResponseStatus,
+}));
+
+vi.mock("@sentry/tanstackstart-react", () => ({
+	captureException: vi.fn(),
+	setUser: vi.fn(),
+}));
+
+let db: Db;
+vi.mock("../db/pg", () => ({
+	client: {},
+	get db() {
+		return db;
+	},
+}));
+
+const handlers = (await import(
+	"./functions.ts?tss-serverfn-split"
+)) as SplitServerFnModule;
+const { ForbiddenError, UnauthorizedError } = await import(
+	"../auth/middleware"
+);
+const { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } = await import(
+	"../auth/cookies"
+);
+const { seedSession, seedUser } = await import("../auth/test/fixtures");
+const { seedSettings } = await import("./test/fixtures");
+
+let database: TestDatabase;
+
+beforeAll(async () => {
+	database = await createTestDatabase();
+	db = database.db;
+}, 60_000);
+
+afterAll(async () => {
+	await database.drop();
+});
+
+beforeEach(async () => {
+	vi.clearAllMocks();
+	await db.delete(sessions);
+	await db.delete(settings);
+	await db.delete(users);
+	getRequest.mockReturnValue(
+		new Request("https://virtool.test/_serverFn/test"),
+	);
+});
+
+async function signIn(
+	administratorRole: AdministratorRoleName | null,
+): Promise<number> {
+	const userId = await seedUser(db, { administratorRole });
+	const { sessionId, token } = await seedSession(db, userId);
+
+	getRequest.mockReturnValue(
+		new Request("https://virtool.test/_serverFn/test", {
+			headers: {
+				cookie: `${SESSION_ID_COOKIE}=${sessionId}; ${SESSION_TOKEN_COOKIE}=${token}`,
+			},
+		}),
+	);
+
+	return userId;
+}
+
+function call(name: string, data?: unknown) {
+	return callServerFn(handlers, name, data);
+}
+
+describe("getSettings", () => {
+	it("refuses an unauthenticated caller", async () => {
+		await expect(call("getSettings")).rejects.toBeInstanceOf(UnauthorizedError);
+	});
+
+	it("refuses a caller without the settings role", async () => {
+		await signIn("base");
+		await expect(call("getSettings")).rejects.toBeInstanceOf(ForbiddenError);
+	});
+
+	it("returns the settings in snake_case for a settings administrator", async () => {
+		await signIn("settings");
+		await seedSettings(db, {
+			defaultSourceTypes: ["genotype"],
+			enableApi: true,
+			minimumPasswordLength: 12,
+			sampleGroup: "force_choice",
+		});
+
+		await expect(call("getSettings")).resolves.toMatchObject({
+			default_source_types: ["genotype"],
+			enable_api: true,
+			minimum_password_length: 12,
+			sample_group: "force_choice",
+		});
+	});
+});
+
+describe("updateSettings", () => {
+	it("refuses an unauthenticated caller", async () => {
+		await expect(
+			call("updateSettings", { enable_api: true }),
+		).rejects.toBeInstanceOf(UnauthorizedError);
+	});
+
+	it("refuses a caller without the settings role", async () => {
+		await signIn("base");
+		await expect(
+			call("updateSettings", { enable_api: true }),
+		).rejects.toBeInstanceOf(ForbiddenError);
+	});
+
+	it("applies the patch and returns snake_case settings", async () => {
+		await signIn("settings");
+		await seedSettings(db, { enableApi: false });
+
+		await expect(
+			call("updateSettings", {
+				enable_api: true,
+				default_source_types: ["strain"],
+			}),
+		).resolves.toMatchObject({
+			enable_api: true,
+			default_source_types: ["strain"],
+		});
+
+		const [row] = await db.select().from(settings);
+		expect(row).toMatchObject({
+			enableApi: true,
+			defaultSourceTypes: ["strain"],
+		});
+	});
+
+	it("rejects an invalid sample group", async () => {
+		await signIn("settings");
+		await expect(
+			call("updateSettings", { sample_group: "everyone" }),
+		).rejects.toThrow();
+	});
+
+	it("rejects an empty patch", async () => {
+		await signIn("settings");
+		await expect(call("updateSettings", {})).rejects.toThrow();
+	});
+});

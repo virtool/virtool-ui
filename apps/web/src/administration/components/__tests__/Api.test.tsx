@@ -1,7 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiUpdateSettings } from "@tests/api/administrator";
 import { createFakeSettings } from "@tests/fake/administrator";
+import { mockUpdateSettings } from "@tests/server-fn/settings";
 import { renderWithProviders } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 import Api from "../Api";
@@ -23,7 +23,7 @@ describe("<Api />", () => {
 
 	it("should render when [onToggle=true]", async () => {
 		const settings = createFakeSettings({ enable_api: true });
-		const scope = mockApiUpdateSettings(settings);
+		const updateSettings = mockUpdateSettings(settings);
 		renderWithProviders(<Api settings={settings} />);
 
 		await waitFor(() =>
@@ -32,12 +32,14 @@ describe("<Api />", () => {
 		await userEvent.click(screen.getByRole("checkbox"));
 		expect(screen.getByRole("checkbox")).toBeChecked();
 
-		scope.done();
+		expect(updateSettings).toHaveBeenCalledWith({
+			data: { enable_api: false },
+		});
 	});
 
 	it("should render when [onToggle=false]", async () => {
 		const settings = createFakeSettings({ enable_api: false });
-		const scope = mockApiUpdateSettings(settings);
+		const updateSettings = mockUpdateSettings(settings);
 		renderWithProviders(<Api settings={settings} />);
 
 		await waitFor(() =>
@@ -49,6 +51,8 @@ describe("<Api />", () => {
 			"unchecked",
 		);
 
-		scope.done();
+		expect(updateSettings).toHaveBeenCalledWith({
+			data: { enable_api: true },
+		});
 	});
 });

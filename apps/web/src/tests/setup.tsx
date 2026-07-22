@@ -88,6 +88,7 @@ beforeEach(() => {
 		subtractionServerFnMocks.findSubtractions,
 		subtractionServerFnMocks.getSubtraction,
 		subtractionServerFnMocks.listSubtractionsShortlist,
+		settingsServerFnMocks.getSettings,
 	]) {
 		fn.mockReset();
 		// Default to a pending promise so an un-stubbed query renders its loading
@@ -99,6 +100,7 @@ beforeEach(() => {
 		subtractionServerFnMocks.createSubtraction,
 		subtractionServerFnMocks.updateSubtraction,
 		subtractionServerFnMocks.deleteSubtraction,
+		settingsServerFnMocks.updateSettings,
 	]) {
 		fn.mockReset();
 	}

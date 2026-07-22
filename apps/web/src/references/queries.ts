@@ -2,6 +2,7 @@ import { settingsQueryKeys } from "@administration/keys";
 import type { Settings } from "@administration/types";
 import { apiClient } from "@app/api";
 import { referenceQueryKeys } from "@references/keys";
+import { updateSettings } from "@server/settings/functions";
 import {
 	queryOptions,
 	useMutation,
@@ -295,10 +296,7 @@ export function useUpdateDefaultSourceTypes() {
 
 	return useMutation<Settings, ErrorResponse, string[]>({
 		mutationFn: (sourceTypes) =>
-			apiClient
-				.patch("/settings")
-				.send({ default_source_types: sourceTypes })
-				.then((res) => res.body),
+			updateSettings({ data: { default_source_types: sourceTypes } }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: settingsQueryKeys.all() });
 		},
