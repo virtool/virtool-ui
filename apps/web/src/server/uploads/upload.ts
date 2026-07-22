@@ -69,6 +69,8 @@ export async function handleUpload(request: Request): Promise<Response> {
 		return jsonResponse({ message: "A file body is required." }, 400);
 	}
 
+	logger.info({ name, type, userId: session.userId }, "handling file upload");
+
 	try {
 		const upload = await createUpload(db, storage, {
 			name,
