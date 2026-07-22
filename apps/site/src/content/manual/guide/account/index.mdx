@@ -1,0 +1,67 @@
+---
+title: "Account"
+description: "Manage your user account."
+---
+
+## Overview
+
+You can view your account details by navigating to **Username | Account** in the main
+navigation bar.
+
+![Account Dropdown](./nav.png?url)
+
+You will land on this page, where you can make changes to your account. Here, you can see
+your username and user groups to which you belong.
+
+![Account General](./general.png?url)
+
+This user is an administrator and a member of the **Laboratory** group.
+
+## Change Email
+
+You can set or change you email address. Email addresses are currently unused, but will be
+used in the future for NCBI API requests, downloading Gravatars, and sending out email
+notifications.
+
+![Email](./email.png?url)
+
+## Change Password
+
+You can change your password under the **General** tab. By default, new passwords must be
+a minimum of 8 characters. This setting could be changed by your administrator.
+
+![Change Password](./password.png?url)
+
+## API Keys
+
+Virtool exposes a complete [JSON API](/docs/developer/api/account/). Access to the API is
+managed using [API keys](/docs/developer/api/authentication/).
+
+API keys are account-specific and are generated under the **API** tab in the **Account**
+view.
+
+![API Key List](./empty.png?url)
+
+### Create an API Key
+
+1. Click the <DummyButton icon="key">Create</DummyButton> button to open the creation
+   dialog
+
+   Give the API key a name and select permissions you want the key to have.
+
+   Permissions that are not granted to your account will be disabled and greyed out. If permissions are removed from your account after the key is created, they will also be removed from the key.
+
+   ![Create API Key](./filled.png?url)
+
+2. Click the <DummyButton icon="save">Save</DummyButton> button to create the key
+
+   The key will be shown only once. Make sure you keep it somewhere safe.
+
+   ![Newly Created API Key](./new.png?url)
+
+   The key will be added to your API key list and can be removed or edited later. You
+   **cannot** view the key value after creation.
+
+   ![New Key in List](./list.png?url)
+
+3. Use the key to access the API with the help of the [API documentation](/docs/developer/api)

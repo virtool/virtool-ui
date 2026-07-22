@@ -1,0 +1,143 @@
+---
+import Feature from "@components/Feature.astro";
+import FeatureBlurb from "@components/FeatureBlurb.astro";
+import FeatureImage from "@components/FeatureImage.astro";
+import Wave from "@components/Wave.astro";
+import Layout from "@layouts/Layout.astro";
+
+import hmmsImage from "@assets/images/hmms.png";
+import nuvsImage from "@assets/images/nuvs.png";
+import otusImage from "@assets/images/otus.png";
+import papersImage from "@assets/images/papers.png";
+import pathoscopeImage from "@assets/images/pathoscope.png";
+import qualityImage from "@assets/images/quality.png";
+import referencesImage from "@assets/images/references.png";
+import samplesImage from "@assets/images/sample_manager.png";
+import subtractionsImage from "@assets/images/subtractions.png";
+---
+
+<Layout title="Virtool">
+  <header class="prose max-w-3xl py-10">
+    <h1 class="text-5xl">
+      Viral infection diagnostics using high-throughput sequencing
+    </h1>
+    <p class="text-stone-600 text-xl">
+      Powerful and tested web-based bioinformatics tools for analyzing and
+      managing your data—from samples to reference genomes.
+    </p>
+    <div class="flex items-center gap-2 pt-5">
+      <a
+        class="bg-emerald-500 text-white px-4 py-3 font-medium rounded-lg no-underline shadow-md hover:bg-emerald-600"
+        href="/docs/start/installation"
+      >
+        Install
+      </a>
+      <a
+        class="px-4 py-3 font-medium rounded-lg no-underline hover:bg-slate-200"
+        href="/docs"
+      >
+        Read Docs
+      </a>
+    </div>
+    <div>
+      <p class="bg-amber-100 p-3 shadow-md mt-10 mr-8 rounded-md">
+        Boyes, I., Hoffmann, R., and Rott, M. (2020). Virtool: Viral infection
+        diagnostics using next-generation sequencing [Online]. Available online
+        at: http://www.virtool.ca
+      </p>
+    </div>
+  </header>
+  <section>
+    <Wave />
+    <Feature>
+      <FeatureImage
+        src={pathoscopeImage}
+        alt="Example of a Pathoscope result hit."
+      />
+      <FeatureBlurb
+        header="Detect Known Pathogens"
+        description="Use our fast detection workflow and simple result visualization."
+      />
+    </Feature>
+    <Feature>
+      <FeatureImage
+        src={nuvsImage}
+        alt="Example of a NuVs result hit."
+      />
+      <FeatureBlurb
+        header="Detect Novel Pathogens"
+        description="Use our workflow that combines assembly and profile hidden Markov models to predict novel viral sequences."
+      />
+    </Feature>
+    <Feature>
+      <FeatureImage
+        src={samplesImage}
+        alt="The sample management view from Virtool."
+      />
+      <FeatureBlurb
+        header="Manage Sample Data"
+        description="Intuitively manage samples and their analyses."
+      />
+    </Feature>
+    <Feature>
+      <FeatureImage
+        src={qualityImage}
+        alt="The quality view for a Virtool sample."
+      />
+      <FeatureBlurb
+        header="QC"
+        description="Automatically run and view FastQC-based quality control (QC) on sample data."
+      />
+    </Feature>
+    <Feature>
+      <FeatureImage
+        src={referencesImage}
+        alt="The reference list view."
+      />
+      <FeatureBlurb
+        header="Sequence References"
+        description="Construct collections of sequences organized into organization taxonomic units (OTU)."
+      />
+    </Feature>
+    <Feature>
+      <FeatureImage
+        src={otusImage}
+        alt="The OTU list view for a Virtool reference."
+      />
+      <FeatureBlurb
+        header="OTU Records"
+        description="Organize pathogens into organization taxonmic units (OTU), the fundamental building block of references."
+      />
+    </Feature>
+    <Feature>
+      <FeatureImage
+        src={hmmsImage}
+        alt="The details of a Virtool HMM resource."
+      />
+      <FeatureBlurb
+        header="Hidden Markov Models"
+        description="Explore the profile hidden Markov models used to predict novel viral sequences."
+      />
+    </Feature>
+    <Feature>
+      <FeatureImage
+      src={subtractionsImage}
+        alt="The subtractions list view."
+      />
+      <FeatureBlurb
+        header="Subtraction Genomes"
+        description="Manage genomes for eliminating non-pathogen reads from analysis workflows."
+      />
+    </Feature>
+    <Feature>
+      <FeatureImage
+        src={papersImage}
+        alt="A collage of citations of bioinformatics tools Virtool makes use of."
+      />
+      <FeatureBlurb
+        header="Open Source"
+        description="Virtool is open source and makes heavy use of open source software and published bioinformatics tools."
+      />
+    </Feature>
+  </section>
+</Layout>

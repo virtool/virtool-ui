@@ -1,0 +1,34 @@
+---
+function generateRandomY(previous) {
+  let min = Math.ceil(previous) - 8;
+  let max = Math.floor(previous) + 8;
+
+  if (min < 0) {
+    min = 0;
+  }
+
+  if (max > 200) {
+    max = 200;
+  }
+
+  return Math.floor(Math.random() * (200 - min) + min);
+}
+
+let points = [];
+
+let x = 0;
+let y = 200;
+
+while (x < 650) {
+  points.push([x, y]);
+
+  y = generateRandomY(y);
+  x += 2;
+}
+
+const coordinates = points.map(([x, y]) => `${x},${y}`).join("L");
+---
+
+<svg height="200" width="1300">
+  <path fill="#0099ff" fill-opacity="1" d={`M${coordinates}L200,1301Z`}></path>
+</svg>

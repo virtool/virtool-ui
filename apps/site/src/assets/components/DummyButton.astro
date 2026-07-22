@@ -1,0 +1,16 @@
+---
+const { color = "blue", icon = "" } = Astro.props;
+
+const backgroundColorClass = {
+  blue: "bg-blue-500",
+  grey: "bg-slate-500",
+  red: "bg-red-500",
+}[color];
+---
+
+<span
+  class={`inline-flex gap-1.5 h-7 items-center px-2 rounded text-white font-medium ${backgroundColorClass}`}
+>
+  {icon && <i class={`fas fa-${icon} text-sm`} />}
+  <slot />
+</span>

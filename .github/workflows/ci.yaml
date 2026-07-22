@@ -92,11 +92,27 @@ jobs:
               run: pnpm test
               env:
                   VT_TEST_REACT_COMPILER: "1"
+    build-site:
+        name: Build Site
+        runs-on: ubuntu-24.04
+        timeout-minutes: 10
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+            - name: Setup
+              uses: ./.github/actions/setup
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  pnpm-version: ${{ env.PNPM_VERSION }}
+            - name: Build site
+              run: pnpm --filter @virtool/site build
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     release:
         name: Publish / Release
         runs-on: ubuntu-24.04
         timeout-minutes: 15
-        needs: [build, check-biome, check-knip, check-typescript, test]
+        needs: [build, build-site, check-biome, check-knip, check-typescript, test]
         if: github.event_name == 'push'
         outputs:
             git-tag: ${{ steps.semantic.outputs.git-tag }}

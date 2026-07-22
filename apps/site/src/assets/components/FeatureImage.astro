@@ -1,0 +1,13 @@
+---
+import { Image } from "astro:assets";
+
+const { alt, src } = Astro.props;
+---
+
+<div class="flex-1">
+  <Image
+    class="shadow-lg border-2 border-solid border-slate-100 rounded-sm"
+    src={src}
+    alt={alt}
+  />
+</div>

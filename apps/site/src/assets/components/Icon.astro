@@ -1,0 +1,41 @@
+---
+const iconMap = {
+  key: "fa-key",
+  save: "fa-save",
+  "arrow-alt-circle-up": "fa-arrow-alt-circle-up",
+  download: "fa-download",
+  "check-circle": "fa-check-circle",
+  "times-circle": "fa-times-circle",
+  "plus-square": "fa-plus-square",
+  play: "fa-play",
+  trash: "fa-trash",
+  filter: "fa-filter",
+  cloud: "fa-cloud",
+  history: "fa-history",
+  check: "fa-check",
+  wrench: "fa-wrench",
+  ban: "fa-ban",
+  clone: "fa-clone",
+  "pencil-alt": "fa-pencil-alt",
+  edit: "fa-edit",
+  "user-plus": "fa-user-plus",
+  users: "fa-users",
+  plug: "fa-plug",
+  redo: "fa-redo",
+};
+
+const colorMap = {
+  black: "",
+  blue: "text-blue-600",
+  green: "text-green-600",
+  orange: "text-orange-400",
+  red: "text-red-600",
+};
+
+const { color, name } = Astro.props;
+
+const colorClass = colorMap[color];
+const iconClass = iconMap[name];
+---
+
+<i class={`fas ${iconClass} ${colorClass}`}></i>

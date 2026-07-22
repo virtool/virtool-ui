@@ -1,0 +1,98 @@
+---
+title: "Subtractions"
+description: "Create and view subtractions."
+---
+
+## Overview
+
+Subtractions are whole genome references used for eliminating reads from analyses that are
+likely to have originated from the host genome or non-pathogenic organisms associated with
+the host such as insects or fungi.
+
+A list of subtractions made can be found on the Subtraction Overview page.
+![Subtraction Overview](./subtraction_overview.png?url)
+
+## Create a Subtraction
+
+1. Find a FASTA file containing the sequences you would like to subtract.
+
+   For example, you can download the [_Arabidopsis thaliana_ genome](ftp://ftp.ensemblgenomes.org/pub/plants/release-37/fasta/arabidopsis_thaliana/dna/).
+   Make sure mitochondrial and chloroplast sequences are included.
+
+2. Go to the **Subtraction** view via the main navigation bar. You should see the
+   following:
+
+   ![Main subtraction view](./empty.png?url)
+
+3. Click on the **Files** link in the left sidebar to go to the subtraction file manager.
+
+   Upload the previously obtained FASTA file.
+
+   ![Subtraction file manager](./upload_manager.png?url)
+
+4. Click <DummyButton icon="plus-square" /> in the **Subtractions** view
+
+   You will see the subtraction creation dialog.
+
+   ![Create Subtraction](./create.png?url)
+
+5. Enter a unique name and an optional nickname, select the FASTA file, and click <DummyButton icon="play">Start</DummyButton>
+   to start the job.
+
+   ![Filled create subtraction dialog box](./create_filled.png?url)
+
+6. Wait for the subtraction to be <Icon name="check" color="green" /> **Ready** before you
+   try to use it.
+
+   While the subtraction is being created it will have an **Importing** label.
+   ![Importing](./importing.png?url)
+
+   Wait for the job to complete before trying to use the new subtraction. You can view its
+   progress by going to the **Jobs** view.
+   ![Jobs View](./job.png?url)
+
+   The subtraction will have the **Ready** label when it is ready to use.
+   ![Subtraction Ready](./ready.png?url)
+
+## View a Subtraction
+
+1. View detailed information about the subtraction by clicking on it.
+
+   As you use the subtraction in samples, they will be added to the **Linked Samples** list.
+   ![Subtraction Details](./detail.png?url)
+
+## Edit a Subtraction
+
+1. Click on **Subtractions** in the main navigation bar and click on the subtraction you
+   would like to edit.
+
+   ![Overview of Subtraction](./edit1.png?url)
+
+2. Click on the <Icon name="pencil-alt" color="orange" /> icon to open the
+   **Edit Subtraction** dialog.
+   ![Edit a Subtraction](./edit.png?url)
+
+3. Update the field and click <DummySaveButton /> to save the changes.
+
+   ![Edit Subtraction](./edit_filled.png?url)
+
+4. See your edits reflected in the subtraction detail view.
+
+   ![Edits Shown on Subtractions Detail Page](./text_filled.png?url)
+
+## Delete a Subtraction
+
+1. Navigate to the detailed view for the subtraction you wish to delete.
+
+2. To delete the subtraction click on the <Icon name="trash" color="red" /> icon on the
+   subtraction details page.
+
+   ![Delete Subtraction](./red_trash_can.png?url)
+
+3. Click <DummyButton color="red" icon="check">Confirm</DummyButton> in the confirmation
+   dialog to delete the subtraction.
+
+   ![Confirm Deletion of Subtraction](./confirm.png?url)
+
+   After confirming the deletion of a subtraction, it will no longer be shown on the
+   subtraction overview page.

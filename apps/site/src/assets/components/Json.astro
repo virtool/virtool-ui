@@ -1,0 +1,10 @@
+---
+import { Prism } from '@astrojs/prism';
+
+const { code } = Astro.props;
+
+---
+
+<div>
+  <Prism class="max-h-96 overflow-y-auto" lang="json" code={JSON.stringify(code, null, 2)} />
+</div>
