@@ -1,24 +1,23 @@
 # Database
 
 The TypeScript server is **Postgres-first**: it reads and writes
-Postgres only, via Drizzle. Virtool's data is still being migrated out
-of Mongo, but that migration is entirely Python's concern — there is
-no Mongoose / Mongo-driver layer in this repo. A domain becomes
-available to the TS server when Python migrates it to Postgres, not
-before.
+Postgres only, via Drizzle. Postgres is now Virtool's sole data store —
+Python removed MongoDB entirely, so every domain's records live in
+Postgres and there is no Mongoose / Mongo-driver layer in this repo. A
+domain not yet reachable from the TS server is missing only its Drizzle
+mirror and server functions, not its data.
 
-This document is the migration-era map: who owns what today, who owns
-schema changes, and the Postgres conventions a TS server feature has
-to respect.
+This document is the map: who owns schema changes, which domains the TS
+server can already reach, and the Postgres conventions a TS server
+feature has to respect.
 
 ## Python owns schema and migrations
 
 The Python repo (`../virtool`) is the only process that applies schema
-changes — Alembic migrations against Postgres, and any remaining Mongo
-collection changes through its own migration framework. TS server
-features under `apps/web/src/server/<feature>/` read and write through
-Drizzle against the Postgres schema Python defines; they don't ship
-their own migrations.
+changes — Alembic migrations against Postgres. TS server features under
+`apps/web/src/server/<feature>/` read and write through Drizzle against
+the Postgres schema Python defines; they don't ship their own
+migrations.
 
 When a migrating endpoint needs a schema change:
 
@@ -47,59 +46,69 @@ injects the value client-side at insert time (the true analog of
 SQLAlchemy's `default=`) and stays out of the DDL. Reserve `.default()`
 for a column that genuinely has a `server_default` in Python.
 
-## Domain ownership today
+## What the TS server can reach today
 
-Snapshot of where each resource's primary record lives. "Primary"
-means the source of truth — the side that gets written first and that
-the other side (if any) mirrors or annotates. A TS server feature can
-only be built for a domain whose primary record is in Postgres; the
-Mongo-primary rows are reachable only from Python.
+Every domain's records live in Postgres; MongoDB is gone. So what gates
+a TS server feature is no longer "has this migrated to Postgres" — it's
+whether this repo has written the Drizzle schema mirror and the server
+functions for it. Three states:
 
-| Domain        | Mongo            | Postgres          | Notes                                     |
-| ------------- | ---------------- | ----------------- | ----------------------------------------- |
-| Users         | `legacy_id`      | **Primary**       | Fully migrated                            |
-| Groups        | `legacy_id`      | **Primary**       | Fully migrated                            |
-| Sessions      | —                | **Primary**       | Postgres-only                             |
-| Messages      | —                | **Primary**       | Postgres-only                             |
-| Tasks         | —                | **Primary**       | Postgres-only                             |
-| ML Models     | —                | **Primary**       | Postgres-only                             |
-| Labels        | metadata         | **Primary**       | Dual; PG authoritative                    |
-| Uploads       | metadata         | **Primary**       | Dual; PG authoritative                    |
-| Indexes       | metadata         | **Primary**       | Dual; PG authoritative                    |
-| Samples       | **Primary**      | some fields       | Not yet available to TS                   |
-| Analyses      | **Primary**      | some fields       | Not yet available to TS                   |
-| OTUs          | **Primary**      | —                 | Mongo-only; not available to TS           |
-| Sequences     | **Primary**      | —                 | Mongo-only; not available to TS           |
-| References    | **Primary**      | —                 | Mongo-only; not available to TS           |
-| HMMs          | **Primary**      | —                 | Mongo-only; not available to TS           |
-| History       | **Primary**      | diffs             | Mixed; not yet available to TS            |
-| Jobs          | —                | **Primary**       | Fully migrated                            |
-| Settings      | —                | **Primary**       | Postgres-only; singleton row              |
-| API keys      | **Primary**      | —                 | Mongo-only; not available to TS           |
+- **Built** — a Drizzle mirror in `apps/web/src/server/db/schema/` and
+  server functions in `apps/web/src/server/<feature>/functions.ts`.
+  Ready to use.
+- **Schema-only** — a Drizzle mirror exists, but no `functions.ts` yet.
+  The tables are typed; the feature still needs its `data.ts` /
+  `functions.ts`.
+- **Not started** — Postgres owns the data, but this repo has no Drizzle
+  mirror yet. Write the schema mirror first (against the tables Python
+  defines), then the feature.
 
-Use this to gauge migration readiness per feature: a Postgres-primary
-domain can land as a normal `data.ts` (see `labels/`). A Mongo-primary
-domain is **blocked** on Python migrating it to Postgres — don't try
-to reach back into Mongo to ship it early.
+| Domain       | Postgres table(s)                                    | TS status   |
+| ------------ | ---------------------------------------------------- | ----------- |
+| Users        | `users`, `user_groups`                               | Built       |
+| Groups       | `groups`                                             | Built       |
+| Sessions     | `sessions`                                           | Built       |
+| Messages     | `instance_messages`                                  | Built       |
+| Tasks        | `tasks`                                              | Built       |
+| Labels       | `labels`                                             | Built       |
+| Jobs         | `jobs`, `job_analyses`, `job_indexes`                | Built       |
+| Settings     | `settings`                                           | Built       |
+| Analyses     | `analyses`, `analysis_*`, `nuvs_blast`               | Schema-only |
+| Indexes      | `indexes`, `index_files`                             | Schema-only |
+| Samples      | `legacy_samples`, `sample_*`                         | Schema-only |
+| Subtractions | `subtractions`, `subtraction_files`                  | Schema-only |
+| Uploads      | `uploads`                                            | Not started |
+| OTUs         | `legacy_otus`                                        | Not started |
+| Sequences    | `legacy_sequences`                                   | Not started |
+| References   | `legacy_references`, `legacy_reference_*`            | Not started |
+| HMMs         | `hmms`, `legacy_hmm_status`                          | Not started |
+| History      | `legacy_history`, `legacy_history_diff`, `revisions` | Not started |
+| API keys     | `api_keys`                                           | Not started |
 
-## Postgres-first: wait for the migration, don't reach into Mongo
+A `legacy_` table prefix marks a table that carries the Mongo-era row
+shape and a `legacy_id` column from the import — it is a normal Postgres
+table, not a Mongo remnant. Expect legacy-id resolution (see below) when
+joining across those tables.
 
-The standing policy is that Python migrates a collection to Postgres
-*before* the corresponding TS server functions are written. This keeps
-the TS server single-store and avoids the work that a dual-store TS
-layer would otherwise pull in:
+## Building a feature against a Postgres domain
 
-- **No Mongo aggregation ports.** Samples, Analyses, OTUs, and
-  References list endpoints lean on Mongo `$facet` aggregation in
-  Python. Don't port those pipelines into TS — they'd only be
-  rewritten again once the collection lands in Postgres.
-- **No dual-store writes.** Python coordinates the rare write that
-  touches both stores (`both_transactions` in `virtool/data/topg.py`).
-  The TS side never opens a Mongo session; every `data.ts` works
-  against a single Postgres transaction (`db.transaction(...)`).
+With every domain in Postgres, building a TS server feature for a
+schema-only or not-started domain is ordinary Drizzle work: mirror the
+tables Python defines into `apps/web/src/server/db/schema/`, then write
+the feature's `data.ts` / `functions.ts`. Two things carry over from the
+migration:
 
-If a domain you need is still Mongo-primary, the answer is to wait for
-its Postgres migration, not to add a Mongo client back to this repo.
+- **Legacy-shaped tables.** Domains imported from Mongo (`legacy_otus`,
+  `legacy_references`, `legacy_samples`, `legacy_sequences`,
+  `legacy_history`, …) keep the Mongo-era shape and a `legacy_id`
+  column. Joins across them may need legacy-id resolution (below),
+  because the backfills that replace legacy string handles with integer
+  ids are not complete.
+- **Aggregation lives in Python today.** The Python list endpoints for
+  samples, analyses, OTUs, and references build their responses with SQL
+  aggregation on the server. A TS port re-expresses that in Drizzle
+  against the same tables — there is no Mongo pipeline to translate any
+  more, but there is real query logic to reproduce.
 
 ## Transactions and the `DbOrTx` handle
 
@@ -136,14 +145,16 @@ export async function invalidateUserSessions(
 `data.ts` function normally touches. Reach for `Db` only when the function
 genuinely needs something a transaction cannot give it.
 
-### Stubbed-out cross-store reads
+### Stubbed-out cross-domain reads
 
-A migrated domain occasionally exposes a field that depends on a
-still-Mongo domain — e.g. a label's sample count, which needs the
-samples collection. Stub these to a neutral value (`0`, empty) until
-the dependency lands in Postgres, keeping the field in the response
+A feature occasionally exposes a field that depends on a domain whose TS
+layer hasn't been built yet — e.g. a label's sample count, which needs a
+join against the sample tables. Stub these to a neutral value (`0`,
+empty) until you wire the join up, keeping the field in the response
 shape so the client contract is stable. `labels/data.ts` does this:
-every label reports `count: 0` until samples migrate.
+every label reports `count: 0` because the sample-label join isn't wired
+into the TS server yet — the data is in Postgres (`legacy_sample_labels`),
+it just isn't read here.
 
 ## Legacy id resolution
 

@@ -466,15 +466,14 @@ column defaults with Drizzle `.$defaultFn()`, never `.default()` —
 the real columns have no `server_default`, so `.default()` inserts
 `null`.
 
-Virtool's data is still being migrated out of Mongo by Python.
-Domains that have not yet landed in Postgres (OTUs, sequences,
-references, samples, and the rest) are simply not available from the
-TS server yet — there is no Mongoose / Mongo-driver layer here. Wait
-for Python to migrate a domain to Postgres before building its TS
-server functions, rather than reaching back into Mongo.
+Postgres is now Virtool's sole data store — Python removed MongoDB
+entirely, so every domain's records live in Postgres and there is no
+Mongoose / Mongo-driver layer here. A domain not yet reachable from the
+TS server is missing only its Drizzle mirror and server functions, not
+its data — build those against the tables Python already defines.
 
-See [docs/database.md](docs/database.md) for the per-domain
-ownership table, the `legacy_id` resolution rules, and the
+See [docs/database.md](docs/database.md) for which domains the TS
+server can reach today, the `legacy_id` resolution rules, and the
 column-default convention.
 
 ### Files live in object storage, shared with Python

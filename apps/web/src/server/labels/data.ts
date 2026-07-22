@@ -48,8 +48,8 @@ function toLabel(row: LabelRow): Label {
 	return {
 		id: row.id,
 		color: normalizeColor(row.color),
-		// Stubbed to 0 until samples are migrated to Postgres; the per-label
-		// sample count cannot be computed without the samples store.
+		// Stubbed to 0 until the sample-label join is wired into the TS
+		// server; the count would come from legacy_sample_labels.
 		count: 0,
 		description: row.description ?? "",
 		name: row.name ?? "",
