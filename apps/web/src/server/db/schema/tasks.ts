@@ -14,7 +14,11 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const tasks = pgTable("tasks", {
-	id: integer("id").primaryKey(),
+	// The upstream column is an autoincrementing integer primary key. Declared as
+	// an identity so the test database (whose DDL is generated from this schema)
+	// fills `id` on insert the way the real sequence-backed column does; Drizzle
+	// never pushes this DDL to the real database, which Python owns.
+	id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
 	acquired_at: timestamp("acquired_at"),
 	complete: boolean("complete").$defaultFn(() => false),
 	context: jsonb("context"),

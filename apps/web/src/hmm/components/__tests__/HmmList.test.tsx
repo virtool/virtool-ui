@@ -1,11 +1,10 @@
 import { screen } from "@testing-library/react";
-import { mockApiGetHmms } from "@tests/api/hmm";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeHmmSearchResults } from "@tests/fake/hmm";
 import { createFakeTask } from "@tests/fake/tasks";
+import { mockFindHmms } from "@tests/server-fn/hmm";
 import { at, renderRoute } from "@tests/setup";
-import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<HmmList />", () => {
 	let fakeHMMData: ReturnType<typeof createFakeHmmSearchResults>;
@@ -16,10 +15,8 @@ describe("<HmmList />", () => {
 		path = "/hmms";
 	});
 
-	afterEach(() => nock.cleanAll());
-
 	it("should render correctly", async () => {
-		const scope = mockApiGetHmms(fakeHMMData);
+		mockFindHmms(fakeHMMData);
 		await renderRoute(path);
 
 		expect(await screen.findByPlaceholderText("Name")).toBeInTheDocument();
@@ -29,18 +26,14 @@ describe("<HmmList />", () => {
 
 		expect(screen.getByText(document.cluster)).toBeInTheDocument();
 		expect(screen.getByText(name)).toBeInTheDocument();
-
-		scope.done();
 	});
 
 	it("should render correctly when no items exist", async () => {
 		const fakeHMMData = createFakeHmmSearchResults({ documents: [] });
-		const scope = mockApiGetHmms(fakeHMMData);
+		mockFindHmms(fakeHMMData);
 		await renderRoute(path);
 
 		expect(await screen.findByText("No HMMs found")).toBeInTheDocument();
-
-		scope.done();
 	});
 
 	describe("<HmmInstall />", () => {
@@ -49,8 +42,7 @@ describe("<HmmList />", () => {
 				documents: [],
 				total_count: 0,
 			});
-			mockApiGetHmms(fakeHMMData);
-			mockApiGetHmms(fakeHMMData);
+			mockFindHmms(fakeHMMData);
 			const account = createFakeAccount({
 				administrator_role: "full",
 			});
@@ -73,8 +65,7 @@ describe("<HmmList />", () => {
 				documents: [],
 				total_count: 0,
 			});
-			mockApiGetHmms(fakeHMMData);
-			mockApiGetHmms(fakeHMMData);
+			mockFindHmms(fakeHMMData);
 			const account = createFakeAccount({ administrator_role: null });
 			await renderRoute(path, { account });
 
@@ -102,8 +93,7 @@ describe("<HmmList />", () => {
 					}),
 				},
 			});
-			mockApiGetHmms(fakeHMMData);
-			mockApiGetHmms(fakeHMMData);
+			mockFindHmms(fakeHMMData);
 			const account = createFakeAccount({
 				administrator_role: "full",
 			});

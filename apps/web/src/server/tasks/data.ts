@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
-import type { Db } from "../db/pg";
+import type { Db, DbOrTx } from "../db/pg";
+import { takeFirstOrThrow } from "../db/rows";
 import { tasks as tasksTable } from "../db/schema/tasks";
 import { AppError } from "../errors";
 
@@ -16,6 +17,42 @@ export type Task = {
 
 /** Thrown when a requested task does not exist. */
 export class TaskNotFoundError extends AppError {}
+
+/**
+ * A task type the TS server can spawn. The runner supports every Python task
+ * name, but this union only lists the ones we create from here — for now, the
+ * HMM install.
+ */
+export type TaskType = "install_hmms";
+
+/**
+ * Insert a pending task of `type` and return its id.
+ *
+ * The row is all the Python task runner needs to pick the work up: it polls
+ * Postgres for a task with `acquired_at IS NULL`, `complete = false`,
+ * `progress = 0`, and a matching `type`, so no further signal is sent from here.
+ * `step` mirrors the Python `create`, which seeds it with the task name.
+ */
+export async function createTask(
+	db: DbOrTx,
+	type: TaskType,
+	context: Record<string, unknown> = {},
+): Promise<number> {
+	const rows = await db
+		.insert(tasksTable)
+		.values({
+			complete: false,
+			context,
+			count: 0,
+			created_at: new Date(),
+			progress: 0,
+			step: type,
+			type,
+		})
+		.returning({ id: tasksTable.id });
+
+	return takeFirstOrThrow(rows).id;
+}
 
 export async function getTask(db: Db, taskId: number): Promise<Task> {
 	const [row] = await db

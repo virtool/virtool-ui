@@ -1,6 +1,5 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiGetHmms } from "@tests/api/hmm";
 import { mockApiListIndexes } from "@tests/api/indexes";
 import { mockApiGetSamples } from "@tests/api/samples";
 import { mockApiGetShortlistSubtractions } from "@tests/api/subtractions";
@@ -11,6 +10,7 @@ import { createFakeLabel } from "@tests/fake/labels";
 import { createFakeSampleMinimal } from "@tests/fake/samples";
 import { createFakeShortlistSubtraction } from "@tests/fake/subtractions";
 import { createFakeUserNested } from "@tests/fake/user";
+import { mockFindHmms } from "@tests/server-fn/hmm";
 import { mockFindLabels } from "@tests/server-fn/labels";
 import { mockGetAccount, mockListUsers } from "@tests/server-fn/users";
 import { at, renderWithRouter } from "@tests/setup";
@@ -82,7 +82,7 @@ function mockApiGetSamplePages() {
 			});
 	});
 
-	mockApiGetHmms(createFakeHmmSearchResults());
+	mockFindHmms(createFakeHmmSearchResults());
 	mockApiListIndexes([createFakeIndexMinimal()]);
 	mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
 
@@ -100,7 +100,7 @@ function mockApiGetSampleRange(names: string[]) {
 
 	const documents = names.map((name) => createFakeSampleMinimal({ name }));
 
-	mockApiGetHmms(createFakeHmmSearchResults());
+	mockFindHmms(createFakeHmmSearchResults());
 	mockApiListIndexes([createFakeIndexMinimal()]);
 	mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
 	mockApiGetSamples(documents);
@@ -126,7 +126,7 @@ describe("<SamplesList />", () => {
 		mockListUsers(users);
 		mockFindLabels(labels);
 		mockApiGetSamples(samples);
-		mockApiGetHmms(createFakeHmmSearchResults());
+		mockFindHmms(createFakeHmmSearchResults());
 		mockApiListIndexes([createFakeIndexMinimal()]);
 		mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
 	});
@@ -442,7 +442,7 @@ describe("<SamplesList />", () => {
 		it("should count the samples matching the filters, not every visible sample", async () => {
 			nock.cleanAll();
 			mockListUsers(users);
-			mockApiGetHmms(createFakeHmmSearchResults());
+			mockFindHmms(createFakeHmmSearchResults());
 			mockApiListIndexes([createFakeIndexMinimal()]);
 			mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
 			mockApiGetSamples(samples, { found_count: 2, total_count: 17 });
@@ -841,7 +841,7 @@ describe("<SamplesList />", () => {
 			// answer the request before any empty one added here.
 			nock.cleanAll();
 			mockApiGetSamples([]).persist();
-			mockApiGetHmms(createFakeHmmSearchResults());
+			mockFindHmms(createFakeHmmSearchResults());
 			mockApiListIndexes([createFakeIndexMinimal()]);
 			mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
 		});

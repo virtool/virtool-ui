@@ -74,6 +74,7 @@ states:
 | Labels       | `labels`                                             | Built          |
 | Jobs         | `jobs`                                               | Built          |
 | Settings     | `settings`                                           | Built          |
+| HMMs         | `hmms`, `legacy_hmm_status`                          | Built          |
 | Analyses     | `analyses`                                           | Partial mirror |
 | Indexes      | `indexes`                                            | Partial mirror |
 | Samples      | `legacy_samples`                                     | Partial mirror |
@@ -82,7 +83,6 @@ states:
 | OTUs         | `legacy_otus`                                        | Not started    |
 | Sequences    | `legacy_sequences`                                   | Not started    |
 | References   | `legacy_references`, `legacy_reference_*`            | Not started    |
-| HMMs         | `hmms`, `legacy_hmm_status`                          | Not started    |
 | History      | `legacy_history`, `legacy_history_diff`, `revisions` | Not started    |
 | API keys     | `api_keys`                                           | Not started    |
 

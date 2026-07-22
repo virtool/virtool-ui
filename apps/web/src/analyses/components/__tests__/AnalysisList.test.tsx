@@ -1,12 +1,12 @@
 import AnalysesList from "@analyses/components/AnalysisList";
 import { screen } from "@testing-library/react";
 import { mockApiGetAnalyses } from "@tests/api/analyses";
-import { mockApiGetHmms } from "@tests/api/hmm";
 import { mockApiGetSampleDetail } from "@tests/api/samples";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeAnalysisMinimal } from "@tests/fake/analyses";
 import { createFakeHmmSearchResults } from "@tests/fake/hmm";
 import { createFakeSample } from "@tests/fake/samples";
+import { mockFindHmms } from "@tests/server-fn/hmm";
 import { mockGetAccount } from "@tests/server-fn/users";
 import { at, MemoryRouter, renderWithProviders } from "@tests/setup";
 import nock from "nock";
@@ -20,7 +20,7 @@ describe("<AnalysesToolbar />", () => {
 		mockApiGetAnalyses([
 			createFakeAnalysisMinimal({ sample: { id: sample.id } }),
 		]);
-		mockApiGetHmms(createFakeHmmSearchResults());
+		mockFindHmms(createFakeHmmSearchResults());
 	});
 
 	afterEach(() => nock.cleanAll());

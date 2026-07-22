@@ -1,5 +1,4 @@
 import type { ServerTask } from "@tasks/types";
-import type { UserNested } from "@users/types";
 
 import type { SearchResult } from "@/types/api";
 
@@ -27,20 +26,6 @@ export type Hmm = HMMMinimal & {
 	length: number;
 	mean_entropy: number;
 	total_entropy: number;
-};
-
-export type HMMInstalled = {
-	body: string;
-	created_at: string;
-	filename: string;
-	html_url: string;
-	id: number;
-	name: string;
-	newer: boolean;
-	published: string;
-	ready: boolean;
-	size: number;
-	user: UserNested;
 };
 
 /** HMM search results from the API */

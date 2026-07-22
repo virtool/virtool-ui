@@ -1,9 +1,8 @@
 import { screen } from "@testing-library/react";
-import { mockApiGetHmmDetail } from "@tests/api/hmm";
 import { createFakeHmm } from "@tests/fake/hmm";
+import { mockGetHmm, mockGetHmmError } from "@tests/server-fn/hmm";
 import { at, renderRoute } from "@tests/setup";
-import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<HmmDetail />", () => {
 	const hmmDetail = createFakeHmm();
@@ -13,17 +12,13 @@ describe("<HmmDetail />", () => {
 		path = `/hmms/${hmmDetail.id}`;
 	});
 
-	afterEach(() => nock.cleanAll());
-
 	describe("<HmmDetail />", () => {
 		it("should render correctly when query has an error", async () => {
-			const scope = mockApiGetHmmDetail(hmmDetail, 404);
+			mockGetHmmError(404);
 			await renderRoute(path);
 
 			expect(await screen.findByText("404")).toBeInTheDocument();
 			expect(screen.getByText("Not found")).toBeInTheDocument();
-
-			scope.done();
 		});
 
 		it("should render loading when props.detail = null", async () => {
@@ -34,7 +29,7 @@ describe("<HmmDetail />", () => {
 		});
 
 		it("should render details correctly", async () => {
-			const scope = mockApiGetHmmDetail(hmmDetail);
+			mockGetHmm(hmmDetail);
 			await renderRoute(path);
 
 			expect(await screen.findByText("Cluster")).toBeInTheDocument();
@@ -47,12 +42,10 @@ describe("<HmmDetail />", () => {
 
 			expect(screen.getByText("Mean Entropy")).toBeInTheDocument();
 			expect(screen.getByText(hmmDetail.mean_entropy)).toBeInTheDocument();
-
-			scope.done();
 		});
 
 		it("should render Cluster table correctly", async () => {
-			const scope = mockApiGetHmmDetail(hmmDetail);
+			mockGetHmm(hmmDetail);
 			await renderRoute(path);
 
 			expect(await screen.findByText("Cluster Members")).toBeInTheDocument();
@@ -72,14 +65,12 @@ describe("<HmmDetail />", () => {
 			expect(screen.getByText("Organism")).toBeInTheDocument();
 			expect(screen.queryByText(firstEntry.organism)).toBeInTheDocument();
 			expect(screen.queryByText(secondEntry.organism)).toBeInTheDocument();
-
-			scope.done();
 		});
 	});
 
 	describe("HMMTaxonomy", () => {
 		it("should render Families correctly", async () => {
-			const scope = mockApiGetHmmDetail(hmmDetail);
+			mockGetHmm(hmmDetail);
 			await renderRoute(path);
 
 			expect(await screen.findByText("Families")).toBeInTheDocument();
@@ -90,12 +81,10 @@ describe("<HmmDetail />", () => {
 			).toBeInTheDocument();
 			expect(screen.getByText("None")).toBeInTheDocument();
 			expect(screen.getByText(hmmDetail.families.None)).toBeInTheDocument();
-
-			scope.done();
 		});
 
 		it("should render Genera correctly", async () => {
-			const scope = mockApiGetHmmDetail(hmmDetail);
+			mockGetHmm(hmmDetail);
 			await renderRoute(path);
 
 			expect(await screen.findByText("Genera")).toBeInTheDocument();
@@ -106,8 +95,6 @@ describe("<HmmDetail />", () => {
 			).toBeInTheDocument();
 			expect(screen.getByText("Curtovirus")).toBeInTheDocument();
 			expect(screen.getByText(hmmDetail.genera.Curtovirus)).toBeInTheDocument();
-
-			scope.done();
 		});
 	});
 });
