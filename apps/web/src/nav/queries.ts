@@ -1,24 +1,32 @@
-import { apiClient } from "@app/api";
-import type { Root } from "@app/types";
-import { useQuery } from "@tanstack/react-query";
+import { getRoot } from "@server/root/functions";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import { rootQueryKeys } from "@wall/keys";
 
-import type { ErrorResponse } from "@/types/api";
+/**
+ * Query options for the instance root document.
+ *
+ * Backed by the `getRoot` server function, so this module imports no
+ * `@app/api`. The `_authenticated` guard reads it before any session exists to
+ * decide first-user setup, and the whole module must stay HTTP-client-free to
+ * keep superagent off the login wall.
+ */
+export function rootQueryOptions() {
+	return queryOptions({
+		queryKey: rootQueryKeys.all(),
+		queryFn: () => getRoot(),
+	});
+}
 
 /**
  * Initializes a query for fetching the root document.
  *
  * Lives here rather than in `@wall/queries` because the wall never reads the
- * root document — the About dialog does. Keeping it there made `LoginWall`,
- * which imports that module for its login and reset mutations, drag `@app/api`
- * and superagent onto the unauthenticated `/login` first paint for a hook
- * `/login` never calls.
+ * root document — the About dialog does. `LoginWall` imports `@wall/queries`
+ * for its login and reset mutations, so keeping the root query out of that
+ * module avoids loading it on the unauthenticated `/login` first paint.
  *
  * @returns A query for fetching the root document
  */
 export function useRootQuery() {
-	return useQuery<Root, ErrorResponse>({
-		queryKey: rootQueryKeys.all(),
-		queryFn: () => apiClient.get("/").then((res) => res.body),
-	});
+	return useQuery(rootQueryOptions());
 }

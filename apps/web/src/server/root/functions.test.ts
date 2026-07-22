@@ -1,0 +1,83 @@
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
+import type { Db } from "../db/pg";
+import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
+import { callServerFn, type SplitServerFnModule } from "../test/serverFn";
+
+const getRequest = vi.fn();
+
+vi.mock("@tanstack/react-start/server", () => ({
+	deleteCookie: vi.fn(),
+	getCookie: vi.fn(),
+	getRequest,
+	setCookie: vi.fn(),
+	setResponseStatus: vi.fn(),
+}));
+
+vi.mock("@sentry/tanstackstart-react", () => ({
+	captureException: vi.fn(),
+	setUser: vi.fn(),
+}));
+
+let db: Db;
+vi.mock("../db/pg", () => ({
+	client: {},
+	get db() {
+		return db;
+	},
+}));
+
+vi.mock("../events/emit", () => ({ emit: vi.fn() }));
+
+const handlers = (await import(
+	"./functions.ts?tss-serverfn-split"
+)) as SplitServerFnModule;
+const { seedUser } = await import("../auth/test/fixtures");
+
+let database: TestDatabase;
+
+beforeAll(async () => {
+	database = await createTestDatabase();
+	db = database.db;
+}, 60_000);
+
+afterAll(async () => {
+	await database.drop();
+});
+
+beforeEach(() => {
+	vi.clearAllMocks();
+	// No cookies: the root document is reachable without a session.
+	getRequest.mockReturnValue(
+		new Request("https://virtool.test/_serverFn/test"),
+	);
+});
+
+describe("getRoot", () => {
+	it("reports first_user when the instance has no users", async () => {
+		const root = (await callServerFn(handlers, "getRoot", undefined)) as {
+			first_user: boolean;
+			version: string;
+		};
+
+		expect(root.first_user).toBe(true);
+		expect(root.version).toBe(__APP_VERSION__);
+	});
+
+	it("reports no first_user once a user exists", async () => {
+		await seedUser(db);
+
+		const root = (await callServerFn(handlers, "getRoot", undefined)) as {
+			first_user: boolean;
+		};
+
+		expect(root.first_user).toBe(false);
+	});
+});

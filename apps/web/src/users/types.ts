@@ -1,6 +1,5 @@
 import type { AdministratorRoleName } from "@administration/types";
 import type { GroupMinimal, Permissions } from "@groups/types";
-import type { SearchResult } from "@/types/api";
 
 /** Business to consumer provided user details */
 type UserB2c = {
@@ -63,10 +62,4 @@ export type User = UserNested & {
 
 	/** Their primary group */
 	primary_group: GroupMinimal | null;
-};
-
-/** User search results from the API */
-export type UserResponse = SearchResult & {
-	/** The page of users */
-	documents: Array<User>;
 };

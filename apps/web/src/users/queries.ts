@@ -1,10 +1,10 @@
 import type { AdministratorRoleName } from "@administration/types";
-import { apiClient } from "@app/api";
 import {
 	createUser,
 	findUsers,
 	getUser,
 	listUsers,
+	searchUsers,
 	setAdministratorRole,
 	updateUser,
 } from "@server/users/functions";
@@ -18,7 +18,7 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { userQueryKeys } from "@users/keys";
-import type { UserNested, UserResponse } from "./types";
+import type { UserNested } from "./types";
 
 /**
  * Fetch every active user, for populating selectors and filters
@@ -40,13 +40,10 @@ export function useListUsers() {
  * @returns An UseInfiniteQueryResult object containing the user search results
  */
 export function useInfiniteFindUsers(per_page: number, term: string) {
-	return useInfiniteQuery<UserResponse>({
+	return useInfiniteQuery({
 		queryKey: userQueryKeys.infiniteList([per_page, term]),
 		queryFn: ({ pageParam }) =>
-			apiClient
-				.get("/users")
-				.query({ page: pageParam as number, per_page, term })
-				.then((res) => res.body),
+			searchUsers({ data: { page: pageParam as number, per_page, term } }),
 		initialPageParam: 1,
 		getNextPageParam: (lastPage) => {
 			if (lastPage.page >= lastPage.page_count) {

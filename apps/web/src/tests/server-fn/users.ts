@@ -10,6 +10,7 @@ import { expect, type Mock, vi } from "vitest";
  */
 export const userServerFnMocks = {
 	findUsers: vi.fn(),
+	searchUsers: vi.fn(),
 	listUsers: vi.fn(),
 	getAccount: vi.fn(),
 	getUser: vi.fn(),
@@ -31,6 +32,19 @@ export function mockFindUsers(users: User[]): Mock {
 		total_count: users.length,
 	});
 	return userServerFnMocks.findUsers;
+}
+
+/** Sets up searchUsers to resolve with a single page containing the given users. */
+export function mockSearchUsers(users: User[]): Mock {
+	userServerFnMocks.searchUsers.mockResolvedValue({
+		items: users,
+		found_count: users.length,
+		page: 1,
+		page_count: 1,
+		per_page: 25,
+		total_count: users.length,
+	});
+	return userServerFnMocks.searchUsers;
 }
 
 /** Sets up listUsers to resolve with the given users, reduced to id and handle. */

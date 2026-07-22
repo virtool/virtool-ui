@@ -28,6 +28,7 @@ import { groupServerFnMocks } from "./server-fn/groups";
 import { hmmServerFnMocks } from "./server-fn/hmm";
 import { jobServerFnMocks } from "./server-fn/jobs";
 import { labelServerFnMocks } from "./server-fn/labels";
+import { rootServerFnMocks } from "./server-fn/root";
 import {
 	mockGetPasswordPolicy,
 	settingsServerFnMocks,
@@ -52,6 +53,10 @@ vi.mock("@server/auth/functions", async () => {
 vi.mock("@server/users/functions", async () => {
 	const { userServerFnMocks } = await import("./server-fn/users");
 	return userServerFnMocks;
+});
+vi.mock("@server/root/functions", async () => {
+	const { rootServerFnMocks } = await import("./server-fn/root");
+	return rootServerFnMocks;
 });
 vi.mock("@server/hmm/functions", async () => {
 	const { hmmServerFnMocks } = await import("./server-fn/hmm");
@@ -89,6 +94,7 @@ beforeEach(() => {
 		...Object.values(hmmServerFnMocks),
 		...Object.values(authServerFnMocks),
 		...Object.values(labelServerFnMocks),
+		...Object.values(rootServerFnMocks),
 		uploadServerFnMocks.findUploads,
 		uploadServerFnMocks.deleteUpload,
 		subtractionServerFnMocks.findSubtractions,
