@@ -1,4 +1,9 @@
-import type { AdministratorRoleName } from "@virtool/contracts";
+import {
+	type AdministratorRoleName,
+	emptyPermissions,
+	PERMISSION_NAMES,
+	type Permissions,
+} from "@virtool/contracts";
 import {
 	and,
 	asc,
@@ -17,7 +22,6 @@ import { invalidateUserSessions } from "../auth/session";
 import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import {
-	type GroupPermissions,
 	groups as groupsTable,
 	userGroups as userGroupsTable,
 } from "../db/schema/groups";
@@ -41,7 +45,7 @@ export type User = {
 	force_reset: boolean;
 	groups: UserGroupReference[];
 	last_password_change: string;
-	permissions: GroupPermissions;
+	permissions: Permissions;
 	primary_group: UserGroupReference | null;
 };
 
@@ -164,34 +168,10 @@ const ADMINISTRATOR_ROLES: AdministratorRole[] = [
 	},
 ];
 
-const PERMISSION_KEYS: ReadonlyArray<keyof GroupPermissions> = [
-	"cancel_job",
-	"create_ref",
-	"create_sample",
-	"modify_hmm",
-	"modify_subtraction",
-	"remove_file",
-	"remove_job",
-	"upload_file",
-];
-
-function generateBasePermissions(): GroupPermissions {
-	return {
-		cancel_job: false,
-		create_ref: false,
-		create_sample: false,
-		modify_hmm: false,
-		modify_subtraction: false,
-		remove_file: false,
-		remove_job: false,
-		upload_file: false,
-	};
-}
-
 /** Merge the permissions granted by membership in a list of groups. */
-function mergePermissions(memberships: GroupPermissions[]): GroupPermissions {
-	const merged = generateBasePermissions();
-	for (const key of PERMISSION_KEYS) {
+function mergePermissions(memberships: Permissions[]): Permissions {
+	const merged = emptyPermissions();
+	for (const key of PERMISSION_NAMES) {
 		for (const permissions of memberships) {
 			if (permissions[key]) {
 				merged[key] = true;
@@ -221,7 +201,7 @@ type GroupMembershipRow = {
 	id: number;
 	legacyId: string | null;
 	name: string;
-	permissions: GroupPermissions;
+	permissions: Permissions;
 };
 
 async function fetchGroupMemberships(

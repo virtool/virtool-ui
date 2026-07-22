@@ -11,7 +11,7 @@ import QueryError from "@base/QueryError";
 import type { Permission, Permissions } from "@groups/types";
 import { sortBy } from "es-toolkit";
 
-type APIPermissionsProps = {
+type ApiPermissionsProps = {
 	"aria-labelledby"?: string;
 	className?: string;
 	keyPermissions: Permissions;
@@ -27,7 +27,7 @@ export default function ApiKeyPermissions({
 	className,
 	keyPermissions,
 	onChange,
-}: APIPermissionsProps) {
+}: ApiPermissionsProps) {
 	const { data: account, isPending, isError } = useFetchAccount();
 
 	if (isError && !account) {

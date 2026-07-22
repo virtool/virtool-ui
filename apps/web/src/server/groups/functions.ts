@@ -1,5 +1,6 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
+import { permissionsSchema } from "@virtool/contracts";
 import { z } from "zod";
 import { adminRole, authenticated } from "../auth/policy";
 import { db } from "../db/pg";
@@ -30,23 +31,10 @@ const createGroupSchema = z.object({
 	name: z.string().min(1),
 });
 
-const permissionsPatchSchema = z
-	.object({
-		cancel_job: z.boolean(),
-		create_ref: z.boolean(),
-		create_sample: z.boolean(),
-		modify_hmm: z.boolean(),
-		modify_subtraction: z.boolean(),
-		remove_file: z.boolean(),
-		remove_job: z.boolean(),
-		upload_file: z.boolean(),
-	})
-	.partial();
-
 const updateGroupSchema = z.object({
 	groupId: z.number().int().positive(),
 	name: z.string().min(1).optional(),
-	permissions: permissionsPatchSchema.optional(),
+	permissions: permissionsSchema.partial().optional(),
 });
 
 // Wrapped in createServerOnlyFn so the compiler can strip this body — and the

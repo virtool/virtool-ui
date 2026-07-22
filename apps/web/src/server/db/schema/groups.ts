@@ -4,6 +4,7 @@
 // `../../../../../../virtool/virtool/groups/pg.py` and
 // `../../../../../../virtool/virtool/users/pg.py`.
 
+import type { Permissions } from "@virtool/contracts";
 import {
 	boolean,
 	integer,
@@ -14,23 +15,11 @@ import {
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
-/** Permission flags stored on every group row. */
-export type GroupPermissions = {
-	cancel_job: boolean;
-	create_ref: boolean;
-	create_sample: boolean;
-	modify_hmm: boolean;
-	modify_subtraction: boolean;
-	remove_file: boolean;
-	remove_job: boolean;
-	upload_file: boolean;
-};
-
 export const groups = pgTable("groups", {
 	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
 	legacyId: text("legacy_id").unique(),
 	name: text("name").unique().notNull(),
-	permissions: jsonb("permissions").$type<GroupPermissions>().notNull(),
+	permissions: jsonb("permissions").$type<Permissions>().notNull(),
 });
 
 /** A row from the `groups` table. */

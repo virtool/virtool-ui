@@ -15,10 +15,11 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import type { Permissions } from "@groups/types";
+import { emptyPermissions } from "@virtool/contracts";
 import { useId, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useCreateAPIKey } from "../queries";
-import CreateAPIKeyInfo from "./ApiKeyAdministratorInfo";
+import { useCreateApiKey } from "../queries";
+import ApiKeyAdministratorInfo from "./ApiKeyAdministratorInfo";
 import ApiKeyPermissions from "./ApiKeyPermissions";
 
 type FormValues = {
@@ -32,7 +33,7 @@ type FormValues = {
 export default function ApiKeyCreate() {
 	const [copied, setCopied] = useState(false);
 	const [newKey, setNewKey] = useState("");
-	const mutation = useCreateAPIKey();
+	const mutation = useCreateApiKey();
 	const permissionsLabelId = useId();
 
 	const {
@@ -44,16 +45,7 @@ export default function ApiKeyCreate() {
 	} = useForm<FormValues>({
 		defaultValues: {
 			name: "",
-			permissions: {
-				cancel_job: false,
-				create_ref: false,
-				create_sample: false,
-				modify_hmm: false,
-				modify_subtraction: false,
-				remove_file: false,
-				remove_job: false,
-				upload_file: false,
-			},
+			permissions: emptyPermissions(),
 		},
 	});
 
@@ -118,7 +110,7 @@ export default function ApiKeyCreate() {
 					</div>
 				) : (
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<CreateAPIKeyInfo />
+						<ApiKeyAdministratorInfo />
 						<InputGroup>
 							<InputLabel htmlFor="name">Name</InputLabel>
 							<InputSimple

@@ -2,6 +2,7 @@
 	"$schema": "https://unpkg.com/knip@6/schema.json",
 	"ignoreExportsUsedInFile": true,
 	"ignoreDependencies": ["conventional-changelog-conventionalcommits"],
+	"ignoreWorkspaces": ["apps/site"],
 	"workspaces": {
 		"apps/web": {
 			"entry": [

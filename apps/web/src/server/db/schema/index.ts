@@ -4,6 +4,7 @@
 // here. Each feature owns a sibling file (e.g. `labels.ts`) and is added to
 // the `export *` list as it lands.
 export * from "./analyses";
+export * from "./apiKeys";
 export * from "./groups";
 export * from "./hmms";
 export * from "./indexes";

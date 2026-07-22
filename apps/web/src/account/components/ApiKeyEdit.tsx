@@ -19,7 +19,7 @@ type FormValues = {
 };
 
 type ApiKeyEditProps = {
-	id: string;
+	id: number;
 	permissions: Permissions;
 };
 

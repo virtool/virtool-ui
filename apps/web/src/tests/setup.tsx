@@ -22,6 +22,7 @@ import nock from "nock";
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { beforeEach, vi } from "vitest";
 import { createFakeAccount } from "./fake/account";
+import { accountServerFnMocks } from "./server-fn/account";
 import { authServerFnMocks } from "./server-fn/auth";
 import { groupServerFnMocks } from "./server-fn/groups";
 import { hmmServerFnMocks } from "./server-fn/hmm";
@@ -35,6 +36,10 @@ import { uploadServerFnMocks } from "./server-fn/uploads";
 import { userServerFnMocks } from "./server-fn/users";
 
 vi.mock("@server/groups/functions", () => groupServerFnMocks);
+vi.mock("@server/account/functions", async () => {
+	const { accountServerFnMocks } = await import("./server-fn/account");
+	return accountServerFnMocks;
+});
 // See the users mock below for why this resolves the mock via dynamic import.
 vi.mock("@server/auth/functions", async () => {
 	const { authServerFnMocks } = await import("./server-fn/auth");
@@ -74,6 +79,7 @@ beforeEach(() => {
 	}
 	for (const fn of [
 		...Object.values(userServerFnMocks),
+		...Object.values(accountServerFnMocks),
 		...Object.values(jobServerFnMocks),
 		...Object.values(hmmServerFnMocks),
 		...Object.values(authServerFnMocks),
