@@ -113,16 +113,11 @@ describe("<ApiKeys />", () => {
 
 		mockGetAccount(
 			createFakeAccount({
-				permissions: {
+				permissions: createFakePermissions({
 					cancel_job: true,
 					create_ref: true,
-					create_sample: false,
-					modify_hmm: false,
-					modify_subtraction: false,
-					remove_file: false,
-					remove_job: false,
 					upload_file: true,
-				},
+				}),
 			}),
 		);
 		mockFindApiKeys([key]);

@@ -2,8 +2,8 @@
 // service via Alembic. Do not generate or push migrations from this side. Keep
 // the columns in sync with `../../../../../../virtool/virtool/account/sql.py`.
 
+import type { Permissions } from "@virtool/contracts";
 import { integer, jsonb, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import type { GroupPermissions } from "./groups";
 import { users } from "./users";
 
 export const apiKeys = pgTable("api_keys", {
@@ -14,7 +14,7 @@ export const apiKeys = pgTable("api_keys", {
 	userId: integer("user_id")
 		.notNull()
 		.references(() => users.id, { onDelete: "cascade" }),
-	permissions: jsonb("permissions").$type<GroupPermissions>().notNull(),
+	permissions: jsonb("permissions").$type<Permissions>().notNull(),
 });
 
 /** A row from the `api_keys` table. */

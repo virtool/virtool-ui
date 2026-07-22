@@ -1,5 +1,6 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
+import { permissionsSchema } from "@virtool/contracts";
 import { z } from "zod";
 import { authenticated } from "../auth/policy";
 import { db } from "../db/pg";
@@ -10,17 +11,6 @@ import {
 	findApiKeys as findApiKeysImpl,
 	updateApiKey as updateApiKeyImpl,
 } from "./data";
-
-const permissionsSchema = z.object({
-	cancel_job: z.boolean(),
-	create_ref: z.boolean(),
-	create_sample: z.boolean(),
-	modify_hmm: z.boolean(),
-	modify_subtraction: z.boolean(),
-	remove_file: z.boolean(),
-	remove_job: z.boolean(),
-	upload_file: z.boolean(),
-});
 
 const createApiKeySchema = z.object({
 	name: z.string().trim().min(1),

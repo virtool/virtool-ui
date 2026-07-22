@@ -15,6 +15,7 @@ import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import type { Permissions } from "@groups/types";
+import { emptyPermissions } from "@virtool/contracts";
 import { useId, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useCreateAPIKey } from "../queries";
@@ -44,16 +45,7 @@ export default function ApiKeyCreate() {
 	} = useForm<FormValues>({
 		defaultValues: {
 			name: "",
-			permissions: {
-				cancel_job: false,
-				create_ref: false,
-				create_sample: false,
-				modify_hmm: false,
-				modify_subtraction: false,
-				remove_file: false,
-				remove_job: false,
-				upload_file: false,
-			},
+			permissions: emptyPermissions(),
 		},
 	});
 

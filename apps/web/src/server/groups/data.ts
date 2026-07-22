@@ -1,9 +1,9 @@
+import { emptyPermissions, type Permissions } from "@virtool/contracts";
 import { asc, count, eq, ilike } from "drizzle-orm";
 import type { PostgresError } from "postgres";
 import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import {
-	type GroupPermissions,
 	type GroupRow,
 	groups as groupsTable,
 	userGroups as userGroupsTable,
@@ -27,7 +27,7 @@ export type GroupMinimal = {
 
 /** A full group record including permissions and member users. */
 export type Group = GroupMinimal & {
-	permissions: GroupPermissions;
+	permissions: Permissions;
 	users: GroupUserNested[];
 };
 
@@ -44,7 +44,7 @@ export type GroupSearchResults = {
 /** Partial values accepted when updating a group. */
 export type GroupUpdateValues = {
 	name?: string;
-	permissions?: Partial<GroupPermissions>;
+	permissions?: Partial<Permissions>;
 };
 
 /** Thrown when a requested group does not exist. */
@@ -64,19 +64,6 @@ function isUniqueViolation(error: unknown): boolean {
 			typeof cause === "object" &&
 			(cause as Partial<PostgresError>).code === "23505")
 	);
-}
-
-function generateBasePermissions(): GroupPermissions {
-	return {
-		cancel_job: false,
-		create_ref: false,
-		create_sample: false,
-		modify_hmm: false,
-		modify_subtraction: false,
-		remove_file: false,
-		remove_job: false,
-		upload_file: false,
-	};
 }
 
 function toGroupMinimal(row: GroupRow): GroupMinimal {
@@ -170,7 +157,7 @@ export async function createGroup(db: Db, name: string): Promise<Group> {
 				.values({
 					name,
 					legacyId: null,
-					permissions: generateBasePermissions(),
+					permissions: emptyPermissions(),
 				})
 				.returning(),
 		);

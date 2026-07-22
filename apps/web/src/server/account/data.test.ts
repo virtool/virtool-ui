@@ -1,9 +1,8 @@
+import type { Permissions } from "@virtool/contracts";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-
 import { seedUser } from "../auth/test/fixtures";
 import type { Db } from "../db/pg";
 import { apiKeys } from "../db/schema/apiKeys";
-import type { GroupPermissions } from "../db/schema/groups";
 import { groups, userGroups } from "../db/schema/groups";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
@@ -35,7 +34,7 @@ beforeEach(async () => {
 	await db.delete(groups);
 });
 
-function perms(overrides: Partial<GroupPermissions> = {}): GroupPermissions {
+function perms(overrides: Partial<Permissions> = {}): Permissions {
 	return { ...NO_PERMISSIONS, ...overrides };
 }
 
@@ -93,7 +92,7 @@ describe("findApiKeys", () => {
 			name: "Legacy",
 			createdAt: new Date(),
 			userId,
-			permissions: { create_ref: true } as GroupPermissions,
+			permissions: { create_ref: true } as Permissions,
 		});
 
 		const keys = await findApiKeys(db, userId);

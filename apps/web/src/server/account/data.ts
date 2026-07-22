@@ -1,9 +1,9 @@
 import { createHash, randomBytes } from "node:crypto";
+import { emptyPermissions, type Permissions } from "@virtool/contracts";
 import { and, asc, eq, sql } from "drizzle-orm";
 import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import { type ApiKeyRow, apiKeys as apiKeysTable } from "../db/schema/apiKeys";
-import type { GroupPermissions } from "../db/schema/groups";
 import { AppError } from "../errors";
 
 /** An account API key as returned to the API-key management UI. */
@@ -11,7 +11,7 @@ export type ApiKey = {
 	id: number;
 	created_at: string;
 	name: string;
-	permissions: GroupPermissions;
+	permissions: Permissions;
 };
 
 /** An API key paired with its raw secret, returned only once at creation. */
@@ -23,31 +23,18 @@ export type CreatedApiKey = {
 /** Thrown when a requested API key does not exist on the user's account. */
 export class ApiKeyNotFoundError extends AppError {}
 
-function basePermissions(): GroupPermissions {
-	return {
-		cancel_job: false,
-		create_ref: false,
-		create_sample: false,
-		modify_hmm: false,
-		modify_subtraction: false,
-		remove_file: false,
-		remove_job: false,
-		upload_file: false,
-	};
-}
-
 /**
  * Build the API-key representation from a stored row. Permissions are expanded
- * against `basePermissions()` so keys written by the legacy Python path — which
- * stored only the provided keys — still report every permission as an explicit
- * boolean, and the edit UI can offer the full checklist.
+ * against `emptyPermissions()` so keys written by the legacy Python path —
+ * which stored only the provided keys — still report every permission as an
+ * explicit boolean, and the edit UI can offer the full checklist.
  */
 function toApiKey(row: ApiKeyRow): ApiKey {
 	return {
 		id: row.id,
 		created_at: row.createdAt.toISOString(),
 		name: row.name,
-		permissions: { ...basePermissions(), ...row.permissions },
+		permissions: { ...emptyPermissions(), ...row.permissions },
 	};
 }
 
@@ -70,7 +57,7 @@ export async function findApiKeys(db: Db, userId: number): Promise<ApiKey[]> {
 export async function createApiKey(
 	db: Db,
 	userId: number,
-	values: { name: string; permissions: Partial<GroupPermissions> },
+	values: { name: string; permissions: Partial<Permissions> },
 ): Promise<CreatedApiKey> {
 	const { raw, hashed } = generateKey();
 
@@ -82,7 +69,7 @@ export async function createApiKey(
 				name: values.name,
 				createdAt: new Date(),
 				userId,
-				permissions: { ...basePermissions(), ...values.permissions },
+				permissions: { ...emptyPermissions(), ...values.permissions },
 			})
 			.returning(),
 	);
@@ -94,7 +81,7 @@ export async function updateApiKey(
 	db: Db,
 	userId: number,
 	keyId: number,
-	permissions: Partial<GroupPermissions>,
+	permissions: Partial<Permissions>,
 ): Promise<ApiKey> {
 	// Merge the partial into the stored jsonb in a single statement; Postgres
 	// does the merge server-side, so no prior read of the existing value.
