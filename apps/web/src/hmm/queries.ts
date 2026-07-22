@@ -69,12 +69,6 @@ export function useFetchHmm(hmmId: number) {
 	return useQuery({
 		queryKey: hmmQueryKeys.detail(hmmId),
 		queryFn: () => getHmm({ data: { hmmId } }),
-		retry: (failureCount, error) => {
-			if ((error as { status?: number }).status === 404) {
-				return false;
-			}
-			return failureCount <= 3;
-		},
 	});
 }
 
