@@ -2,7 +2,7 @@ import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
 import { Trash } from "lucide-react";
-import { useRemoveAPIKey } from "../queries";
+import { useRemoveApiKey } from "../queries";
 import type { ApiKey } from "../types";
 import ApiKeyEdit from "./ApiKeyEdit";
 
@@ -19,7 +19,7 @@ export default function ApiKeyItem({ apiKey }: ApiKeyItemProps) {
 		0,
 	);
 
-	const removeMutation = useRemoveAPIKey();
+	const removeMutation = useRemoveApiKey();
 
 	return (
 		<BoxGroupSection>

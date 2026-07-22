@@ -6,7 +6,7 @@ import ExternalLink from "@base/ExternalLink";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import { KeyRound } from "lucide-react";
-import { useFetchAPIKeys } from "../queries";
+import { useFetchApiKeys } from "../queries";
 import ApiKeyCreate from "./ApiKeyCreate";
 import ApiKeyItem from "./ApiKeyItem";
 
@@ -14,7 +14,7 @@ import ApiKeyItem from "./ApiKeyItem";
  * A component to manage and display API keys
  */
 export default function ApiKeys() {
-	const { data, isPending, isError } = useFetchAPIKeys();
+	const { data, isPending, isError } = useFetchApiKeys();
 
 	if (isError && !data) {
 		return <QueryError noun="API keys" />;

@@ -90,7 +90,7 @@ export function useChangePassword() {
  *
  * @returns A list of API keys for the current user
  */
-export function useFetchAPIKeys() {
+export function useFetchApiKeys() {
 	return useQuery<ApiKey[]>({
 		queryKey: accountQueryKeys.apiKeys(),
 		queryFn: () => findApiKeys(),
@@ -102,7 +102,7 @@ export function useFetchAPIKeys() {
  *
  * @returns A mutator for creating a new API key
  */
-export function useCreateAPIKey() {
+export function useCreateApiKey() {
 	const queryClient = useQueryClient();
 
 	return useMutation<
@@ -144,7 +144,7 @@ export function useUpdateApiKey() {
  *
  * @returns A mutator for removing an API key
  */
-export function useRemoveAPIKey() {
+export function useRemoveApiKey() {
 	const queryClient = useQueryClient();
 
 	return useMutation<null, Error, { keyId: number }>({
