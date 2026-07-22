@@ -1,8 +1,8 @@
 import type { InfiniteData } from "@tanstack/react-query";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiListFiles } from "@tests/api/files";
 import { createFakeFile } from "@tests/fake/files";
+import { mockFindUploads } from "@tests/server-fn/uploads";
 import { renderWithProviders } from "@tests/setup";
 import type { FileResponse, Upload } from "@uploads/types";
 import nock from "nock";
@@ -55,7 +55,7 @@ describe("<SubtractionFileSelector>", () => {
 			createFakeFile({ name: "alpha.fa.gz" }),
 			createFakeFile({ name: "beta.fa.gz" }),
 		];
-		mockApiListFiles(files);
+		mockFindUploads(files);
 
 		renderWithProviders(<Harness files={files} />);
 
@@ -71,7 +71,7 @@ describe("<SubtractionFileSelector>", () => {
 			createFakeFile({ name: "beta.fa.gz" }),
 			createFakeFile({ name: "gamma.fa.gz" }),
 		];
-		mockApiListFiles(files);
+		mockFindUploads(files);
 
 		renderWithProviders(<Harness files={files} />);
 
@@ -102,7 +102,7 @@ describe("<SubtractionFileSelector>", () => {
 			createFakeFile({ name: "alpha.fa.gz" }),
 			createFakeFile({ name: "beta.fa.gz" }),
 		];
-		mockApiListFiles(files);
+		mockFindUploads(files);
 
 		renderWithProviders(<Harness files={files} />);
 
@@ -121,7 +121,7 @@ describe("<SubtractionFileSelector>", () => {
 
 	it("selects an option on click", async () => {
 		const files = [createFakeFile({ name: "alpha.fa.gz" })];
-		mockApiListFiles(files);
+		mockFindUploads(files);
 
 		renderWithProviders(<Harness files={files} />);
 

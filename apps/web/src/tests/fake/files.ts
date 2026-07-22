@@ -14,7 +14,7 @@ export function createFakeFile(overrides?: Partial<Upload>): Upload {
 		name,
 		ready: true,
 		removed: false,
-		removed_at: undefined,
+		removed_at: null,
 		reserved: false,
 		size: faker.number.int(),
 		type: "reads",

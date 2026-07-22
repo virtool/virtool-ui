@@ -13,12 +13,12 @@ export type Upload = {
 	name: string;
 	ready: boolean;
 	removed: boolean;
-	removed_at?: string;
+	removed_at: string | null;
 	reserved: boolean;
 	size: number;
 	type: string;
 	uploaded_at: string;
-	user: UserNested;
+	user: UserNested | null;
 };
 
 export type UploadInProgress = {

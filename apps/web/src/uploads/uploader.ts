@@ -1,11 +1,10 @@
 /**
  * Initiate and track uploads using Zustand.
  */
-import { apiClient } from "@app/api";
 import { createRandomString } from "@app/utils";
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
-import type { UploadInProgress, UploadType } from "./types";
+import type { Upload, UploadInProgress, UploadType } from "./types";
 
 type UploaderState = {
 	/** The ID of the interval that tracks the upload progress. */
@@ -72,8 +71,59 @@ export const useUploaderStore = create<UploaderState>()(
 	})),
 );
 
+/** Progress of an in-flight upload, reported as bytes and a whole percentage. */
+export type UploadProgress = {
+	loaded: number;
+	total: number;
+	percent: number;
+};
+
 /**
- * Upload a file to Virtool server.
+ * Post a file to the `POST /uploads` route, reporting upload progress.
+ *
+ * The file is posted with `XMLHttpRequest` rather than `fetch`, because `fetch`
+ * cannot report upload progress and reads files run to many gigabytes. The
+ * browser streams the raw `File` body from disk (never buffering it in JS), and
+ * the route reads it as a stream too, so nothing large sits in memory on either
+ * side. `name` and `type` travel in the query string, as they do to Python.
+ */
+export function postUpload(
+	file: File,
+	name: string,
+	fileType: UploadType,
+	onProgress?: (progress: UploadProgress) => void,
+): Promise<Upload> {
+	return new Promise((resolve, reject) => {
+		const xhr = new XMLHttpRequest();
+		const query = `?name=${encodeURIComponent(name)}&type=${fileType}`;
+		xhr.open("POST", `/uploads${query}`);
+
+		xhr.upload.addEventListener("progress", (event) => {
+			if (event.lengthComputable && onProgress) {
+				onProgress({
+					loaded: event.loaded,
+					total: event.total,
+					percent: Math.round((event.loaded / event.total) * 100),
+				});
+			}
+		});
+
+		xhr.addEventListener("load", () => {
+			if (xhr.status >= 200 && xhr.status < 300) {
+				resolve(JSON.parse(xhr.responseText) as Upload);
+			} else {
+				reject(new Error(`Upload failed with status ${xhr.status}.`));
+			}
+		});
+		xhr.addEventListener("error", () => reject(new Error("Upload failed.")));
+		xhr.addEventListener("abort", () => reject(new Error("Upload aborted.")));
+
+		xhr.send(file);
+	});
+}
+
+/**
+ * Upload a file to the Virtool server.
  *
  * This function ties in with the Zustand store `useUploaderStore` to track the progress of the upload.
  */
@@ -91,24 +141,9 @@ export function upload(file: File, fileType: UploadType) {
 		size,
 	});
 
-	function onProgress(e: ProgressEvent) {
-		if (e.lengthComputable) {
-			const progress = Math.round((e.loaded / e.total) * 100);
-			useUploaderStore.getState().setProgress(localId, e.loaded, progress);
-		}
-	}
-
-	apiClient
-		.post("/uploads")
-		.query({ name: file.name, type: fileType })
-		// @ts-expect-error A browser File is a valid multipart value at runtime, but
-		// superagent's `.attach` types are Node-flavored (Blob/Buffer/ReadStream) and its
-		// deps (form-data, undici-types) pull @types/node globals into the browser program
-		// via `/// <reference types="node" />`, so the DOM File is rejected. The browser/server
-		// tsconfig split does not remove this; it goes away when superagent is dropped in favour
-		// of server functions. Remove this directive then.
-		.attach("file", file)
-		.on("progress", onProgress)
+	postUpload(file, name, fileType, ({ loaded, percent }) => {
+		useUploaderStore.getState().setProgress(localId, loaded, percent);
+	})
 		.then(() => useUploaderStore.getState().removeUpload(localId))
 		.catch(() => useUploaderStore.getState().setFailure(localId));
 }

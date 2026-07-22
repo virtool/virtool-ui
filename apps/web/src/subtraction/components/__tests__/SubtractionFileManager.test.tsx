@@ -1,9 +1,9 @@
 import { formatPath } from "@app/hooks";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiListFiles } from "@tests/api/files";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeFile } from "@tests/fake/files";
+import { mockFindUploads } from "@tests/server-fn/uploads";
 import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import { describe, expect, it } from "vitest";
@@ -25,7 +25,7 @@ describe("<SubtractionFileManager />", () => {
 				administrator_role: "full",
 			}),
 		);
-		mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })]);
+		mockFindUploads([createFakeFile({ name: "subtraction.fq.gz" })]);
 
 		await renderWithRouter(<SubtractionFileManager />, path);
 

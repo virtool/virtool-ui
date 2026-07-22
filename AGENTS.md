@@ -453,6 +453,18 @@ Raw `Request` handlers in `createFileRoute` (e.g. SSE routes) run
 outside the server-function context and call
 `requireAuthenticatedRequest(request)` instead.
 
+File uploads are a raw route (`routes/uploads.ts` → `@server/uploads/upload`),
+**not** a server function. `uploads/uploader.ts`'s `postUpload` posts the raw
+`File` to `POST /uploads` with `XMLHttpRequest`, because only XHR reports upload
+progress — `fetch` cannot — and reads files run to many gigabytes. The handler
+reads `name`/`type` from the query string and streams `request.body` to storage
+(never `request.formData()`, which buffers the whole file in the Node heap), and
+returns a plain-JSON `Response` the XHR can `JSON.parse`. Because no policy
+middleware runs on a route, the handler enforces the floor itself:
+`requireAuthenticatedRequest` then a `hasPermission(session, "upload_file")`
+check. Don't fold it back into a server function — the RPC client uses `fetch`
+and would lose progress.
+
 See [docs/auth.md](docs/auth.md) for the middleware composition, the
 session model, cookies, lifetimes, and the login / reset / logout
 flows.

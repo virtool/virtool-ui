@@ -1,8 +1,7 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiDeleteFile } from "@tests/api/files";
+import { uploadServerFnMocks } from "@tests/server-fn/uploads";
 import { renderWithProviders } from "@tests/setup";
-import nock from "nock";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import UploadItem, { type UploadItemProps } from "../UploadItem.js";
 
@@ -44,11 +43,15 @@ describe("<UploadItem />", () => {
 	});
 
 	it("should have [props.onRemove] called when trash icon clicked", async () => {
+		uploadServerFnMocks.deleteUpload.mockResolvedValue(null);
 		renderWithProviders(<UploadItem {...props} />);
 
-		const mockDeleteFileScope = mockApiDeleteFile(props.id);
 		await userEvent.click(screen.getByRole("button", { name: "remove" }));
-		mockDeleteFileScope.done();
-		nock.cleanAll();
+
+		await waitFor(() => {
+			expect(uploadServerFnMocks.deleteUpload).toHaveBeenCalledWith({
+				data: { id: props.id },
+			});
+		});
 	});
 });

@@ -1,6 +1,5 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiListFiles } from "@tests/api/files";
 import { mockApiCreateSample } from "@tests/api/samples";
 import { mockApiGetShortlistSubtractions } from "@tests/api/subtractions";
 import { createFakeAccount } from "@tests/fake/account";
@@ -8,6 +7,7 @@ import { createFakeFile } from "@tests/fake/files";
 import { createFakeLabel } from "@tests/fake/labels";
 import { createFakeShortlistSubtraction } from "@tests/fake/subtractions";
 import { mockListGroups } from "@tests/server-fn/groups";
+import { mockFindUploads, uploadServerFnMocks } from "@tests/server-fn/uploads";
 import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
@@ -61,18 +61,15 @@ describe("<CreateSample>", () => {
 		await userEvent.click(screen.getByRole("button", { name: "Save" }));
 	}
 
-	it("should show loader when there are no subtractions", async () => {
-		const file = createFakeFile();
-		const filesScope = mockApiListFiles([file]);
-
+	it("should show loader while the reads list is loading", async () => {
+		// findUploads is left pending (the setup default), so the reads list never
+		// resolves and the loading placeholder stays put.
 		await renderWithRouter(<CreateSample labels={labels} />);
 		expect(await screen.findByLabelText("loading")).toBeInTheDocument();
-
-		filesScope.done();
 	});
 
 	it("should show an error when the read files fail to load", async () => {
-		nock("http://localhost").get("/api/uploads").query(true).reply(500);
+		uploadServerFnMocks.findUploads.mockRejectedValue(new Error("failed"));
 
 		await renderWithRouter(<CreateSample labels={labels} />);
 		expect(
@@ -83,7 +80,7 @@ describe("<CreateSample>", () => {
 	it("should fail and show errors on empty submission", async () => {
 		const file = createFakeFile();
 
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		mockApiGetShortlistSubtractions([]);
 
 		await renderPage();
@@ -107,7 +104,7 @@ describe("<CreateSample>", () => {
 	it("should submit when minimum fields are completed", async () => {
 		const file = createFakeFile();
 
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		mockApiGetShortlistSubtractions([]);
 
 		const scope = mockApiCreateSample(
@@ -141,7 +138,7 @@ describe("<CreateSample>", () => {
 		const secondFile = createFakeFile();
 		const files = [firstFile, secondFile];
 
-		mockApiListFiles(files);
+		mockFindUploads(files);
 		mockApiGetShortlistSubtractions([subtractionShortlist]);
 
 		const scope = mockApiCreateSample(
@@ -203,7 +200,7 @@ describe("<CreateSample>", () => {
 	it("should show and hide the metadata fields", async () => {
 		const file = createFakeFile();
 
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		mockApiGetShortlistSubtractions([]);
 
 		await renderPage();
@@ -233,7 +230,7 @@ describe("<CreateSample>", () => {
 	it("should be able to autofill the sample name", async () => {
 		const file = createFakeFile({ name: "14T81.fq.gz" });
 
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
 		await renderPage();
@@ -250,7 +247,7 @@ describe("<CreateSample>", () => {
 	it("should autofill the sample name from a fastq.gz filename", async () => {
 		const file = createFakeFile({ name: "sample_one.fastq.gz" });
 
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
 		await renderPage();
@@ -273,7 +270,7 @@ describe("<CreateSample>", () => {
 	])("should autofill the sample name from %s", async (fileName, expected) => {
 		const file = createFakeFile({ name: fileName });
 
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
 		await renderPage();
@@ -290,7 +287,7 @@ describe("<CreateSample>", () => {
 	it("should not autofill the sample name when the extension is invalid", async () => {
 		const file = createFakeFile({ name: "sample_one.fqst" });
 
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
 		await renderPage();
@@ -307,7 +304,7 @@ describe("<CreateSample>", () => {
 	it("should clear selections when reset button is clicked", async () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
 
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		mockApiGetShortlistSubtractions([]);
 
 		await renderPage();
@@ -324,7 +321,7 @@ describe("<CreateSample>", () => {
 	it("should clear the form when the form reset button is clicked", async () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
 
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		mockApiGetShortlistSubtractions([]);
 
 		await renderPage();
@@ -349,7 +346,7 @@ describe("<CreateSample>", () => {
 	it("should stay on the cleared form after creating when 'Create more' is on", async () => {
 		const file = createFakeFile();
 
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		mockApiGetShortlistSubtractions([]);
 
 		const scope = mockApiCreateSample(
@@ -384,7 +381,7 @@ describe("<CreateSample>", () => {
 		const secondFile = createFakeFile({ name: "beta.fastq.gz" });
 		const files = [firstFile, secondFile];
 
-		mockApiListFiles(files);
+		mockFindUploads(files);
 		mockApiGetShortlistSubtractions([]);
 
 		await renderPage();
@@ -412,7 +409,7 @@ describe("<CreateSample>", () => {
 		const secondFile = createFakeFile({ name: "beta.fastq.gz" });
 		const files = [firstFile, secondFile];
 
-		mockApiListFiles(files);
+		mockFindUploads(files);
 		mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
 		await renderPage();
@@ -437,7 +434,7 @@ describe("<CreateSample>", () => {
 
 	it("should render correct read orientations with 1 file selected", async () => {
 		const file = createFakeFile({ name: "large.fastq.gz" });
-		mockApiListFiles([file]);
+		mockFindUploads([file]);
 		mockApiGetShortlistSubtractions([]);
 		await renderPage();
 

@@ -1,4 +1,4 @@
-import { apiClient } from "@app/api";
+import { deleteUpload, findUploads } from "@server/uploads/functions";
 import {
 	keepPreviousData,
 	useInfiniteQuery,
@@ -7,45 +7,23 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import { fileQueryKeys } from "@uploads/keys";
-import type { ErrorResponse } from "@/types/api";
 import type { FileResponse, UploadType } from "./types";
 
-function findFiles(
-	type: UploadType,
-	page: number,
-	per_page: number,
-	term?: string,
-): Promise<FileResponse> {
-	return apiClient
-		.get("/uploads")
-		.query({
-			upload_type: type,
-			page,
-			per_page,
-			ready: true,
-			paginate: true,
-			find: term,
-		})
-		.then((res) => res.body);
-}
-
 export function useListFiles(type: UploadType, page: number, per_page: number) {
-	return useQuery<FileResponse, ErrorResponse>({
+	return useQuery<FileResponse>({
 		queryKey: fileQueryKeys.list([type, page, per_page]),
-		queryFn: () => findFiles(type, page, per_page),
+		queryFn: () => findUploads({ data: { upload_type: type, page, per_page } }),
 		placeholderData: keepPreviousData,
 	});
 }
 
-export function useInfiniteFindFiles(
-	type: UploadType,
-	per_page: number,
-	term?: string,
-) {
+export function useInfiniteFindFiles(type: UploadType, per_page: number) {
 	return useInfiniteQuery<FileResponse>({
-		queryKey: fileQueryKeys.infiniteList([type, per_page, term]),
+		queryKey: fileQueryKeys.infiniteList([type, per_page]),
 		queryFn: ({ pageParam }) =>
-			findFiles(type, pageParam as number, per_page, term),
+			findUploads({
+				data: { upload_type: type, page: pageParam as number, per_page },
+			}),
 		initialPageParam: 1,
 		getNextPageParam: (lastPage) => {
 			if (lastPage.page >= lastPage.page_count) {
@@ -63,8 +41,7 @@ export function useInfiniteFindFiles(
  */
 export function useDeleteFile() {
 	return useMutation<null, unknown, { id: number }>({
-		mutationFn: ({ id }) =>
-			apiClient.delete(`/uploads/${id}`).then((res) => res.body),
+		mutationFn: ({ id }) => deleteUpload({ data: { id } }),
 	});
 }
 
@@ -76,13 +53,13 @@ export function useDeleteFile() {
 export function useDeleteFiles() {
 	const queryClient = useQueryClient();
 
-	return useMutation<void, ErrorResponse, { ids: number[] }>({
+	return useMutation<void, unknown, { ids: number[] }>({
 		mutationFn: async ({ ids }) => {
 			// Every request has to finish before the mutation settles. Rejecting on
 			// the first failure would let the list refetch while the rest are still
 			// in flight, so files that did get deleted would linger in the list.
 			const results = await Promise.allSettled(
-				ids.map((id) => apiClient.delete(`/uploads/${id}`)),
+				ids.map((id) => deleteUpload({ data: { id } })),
 			);
 
 			const failure = results.find((result) => result.status === "rejected");

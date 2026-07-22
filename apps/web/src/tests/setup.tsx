@@ -30,6 +30,7 @@ import {
 	mockGetPasswordPolicy,
 	settingsServerFnMocks,
 } from "./server-fn/settings";
+import { uploadServerFnMocks } from "./server-fn/uploads";
 import { userServerFnMocks } from "./server-fn/users";
 
 vi.mock("@server/groups/functions", () => groupServerFnMocks);
@@ -57,6 +58,10 @@ vi.mock("@server/labels/functions", async () => {
 	const { labelServerFnMocks } = await import("./server-fn/labels");
 	return labelServerFnMocks;
 });
+vi.mock("@server/uploads/functions", async () => {
+	const { uploadServerFnMocks } = await import("./server-fn/uploads");
+	return uploadServerFnMocks;
+});
 
 beforeEach(() => {
 	for (const fn of Object.values(groupServerFnMocks)) {
@@ -67,6 +72,8 @@ beforeEach(() => {
 		...Object.values(jobServerFnMocks),
 		...Object.values(authServerFnMocks),
 		...Object.values(labelServerFnMocks),
+		uploadServerFnMocks.findUploads,
+		uploadServerFnMocks.deleteUpload,
 	]) {
 		fn.mockReset();
 		// Default to a pending promise so an un-stubbed query renders its loading
