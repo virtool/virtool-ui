@@ -27,7 +27,7 @@ export function createFakeAccount(overrides?: Partial<Account>): Account {
  */
 export function createFakeApiKey(overrides?: Partial<ApiKey>): ApiKey {
 	return {
-		createdAt: faker.date.past().toISOString(),
+		createdAt: faker.date.past(),
 		id: faker.number.int({ min: 1, max: 100000 }),
 		name: faker.word.noun({ strategy: "any-length" }),
 		permissions: createFakePermissions({
