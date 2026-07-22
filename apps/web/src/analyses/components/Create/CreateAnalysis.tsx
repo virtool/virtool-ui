@@ -1,6 +1,6 @@
 import { Dialog, DialogTitle } from "@base/Dialog";
 import type { HmmSearchResults } from "@hmm/types";
-import HMMAlert from "../HMMAlert";
+import HmmAlert from "../HmmAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
 import CreateAnalysisForm from "./CreateAnalysisForm";
 import { getCompatibleWorkflows } from "./workflows";
@@ -32,7 +32,7 @@ export default function CreateAnalysis({
 		<Dialog open={open} onOpenChange={setOpen}>
 			<CreateAnalysisDialogContent>
 				<DialogTitle>Analyze</DialogTitle>
-				<HMMAlert installed={Boolean(hmms.status.task?.complete)} />
+				<HmmAlert installed={Boolean(hmms.status.task?.complete)} />
 				<CreateAnalysisForm
 					compatibleWorkflows={compatibleWorkflows}
 					onClose={() => setOpen(false)}

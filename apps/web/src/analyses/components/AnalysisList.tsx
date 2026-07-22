@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useListAnalyses } from "../queries";
 import AnalysisItem from "./AnalysisItem";
 import CreateAnalysis from "./Create/CreateAnalysis";
-import AnalysisHMMAlert from "./HMMAlert";
+import AnalysisHmmAlert from "./HmmAlert";
 
 type AnalysesListProps = {
 	onPageChange: (page: number) => void;
@@ -67,7 +67,7 @@ export default function AnalysesList({
 
 	return (
 		<ContainerNarrow>
-			<AnalysisHMMAlert
+			<AnalysisHmmAlert
 				installed={Boolean(
 					hmms.status.installed?.ready ?? hmms.status.task?.complete,
 				)}

@@ -25,6 +25,7 @@ import { createFakeAccount } from "./fake/account";
 import { accountServerFnMocks } from "./server-fn/account";
 import { authServerFnMocks } from "./server-fn/auth";
 import { groupServerFnMocks } from "./server-fn/groups";
+import { hmmServerFnMocks } from "./server-fn/hmm";
 import { jobServerFnMocks } from "./server-fn/jobs";
 import { labelServerFnMocks } from "./server-fn/labels";
 import {
@@ -51,6 +52,10 @@ vi.mock("@server/auth/functions", async () => {
 vi.mock("@server/users/functions", async () => {
 	const { userServerFnMocks } = await import("./server-fn/users");
 	return userServerFnMocks;
+});
+vi.mock("@server/hmm/functions", async () => {
+	const { hmmServerFnMocks } = await import("./server-fn/hmm");
+	return hmmServerFnMocks;
 });
 vi.mock("@server/jobs/functions", async () => {
 	const { jobServerFnMocks } = await import("./server-fn/jobs");
@@ -81,6 +86,7 @@ beforeEach(() => {
 		...Object.values(userServerFnMocks),
 		...Object.values(accountServerFnMocks),
 		...Object.values(jobServerFnMocks),
+		...Object.values(hmmServerFnMocks),
 		...Object.values(authServerFnMocks),
 		...Object.values(labelServerFnMocks),
 		uploadServerFnMocks.findUploads,

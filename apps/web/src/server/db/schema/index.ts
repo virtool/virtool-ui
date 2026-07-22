@@ -6,6 +6,7 @@
 export * from "./analyses";
 export * from "./apiKeys";
 export * from "./groups";
+export * from "./hmms";
 export * from "./indexes";
 export * from "./jobs";
 export * from "./labels";
