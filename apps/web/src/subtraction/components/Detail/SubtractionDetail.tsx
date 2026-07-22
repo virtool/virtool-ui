@@ -28,7 +28,9 @@ const routeApi = getRouteApi("/_authenticated/subtractions/$subtractionId");
 export default function SubtractionDetail() {
 	const { subtractionId } = routeApi.useParams();
 
-	const { data, isPending, isError } = useFetchSubtraction(subtractionId);
+	const { data, isPending, isError } = useFetchSubtraction(
+		Number(subtractionId),
+	);
 	const { hasPermission: canModify } =
 		useCheckAdminRoleOrPermission("modify_subtraction");
 

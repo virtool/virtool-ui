@@ -90,12 +90,12 @@ export function useSuspenseSubtractions(
  * @param subtractionId - The id of the subtraction to fetch
  * @returns A single subtraction
  */
-export function useFetchSubtraction(subtractionId: string | number) {
+export function useFetchSubtraction(subtractionId: number) {
 	return useQuery<Subtraction, ErrorResponse>({
 		queryKey: subtractionQueryKeys.detail(subtractionId),
 		queryFn: () =>
 			getSubtraction({
-				data: { subtractionId: Number(subtractionId) },
+				data: { subtractionId },
 			}) as Promise<Subtraction>,
 	});
 }
@@ -106,7 +106,7 @@ export function useFetchSubtraction(subtractionId: string | number) {
  * @param subtractionId - The id of the subtraction to update
  * @returns A mutator for updating a subtraction
  */
-export function useUpdateSubtraction(subtractionId: string | number) {
+export function useUpdateSubtraction(subtractionId: number) {
 	const queryClient = useQueryClient();
 	return useMutation<
 		Subtraction,
@@ -115,7 +115,7 @@ export function useUpdateSubtraction(subtractionId: string | number) {
 	>({
 		mutationFn: ({ name, nickname }) =>
 			updateSubtraction({
-				data: { subtractionId: Number(subtractionId), name, nickname },
+				data: { subtractionId, name, nickname },
 			}) as Promise<Subtraction>,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
@@ -131,10 +131,10 @@ export function useUpdateSubtraction(subtractionId: string | number) {
  * @returns A mutator for removing a subtraction
  */
 export function useRemoveSubtraction() {
-	return useMutation<null, ErrorResponse, { subtractionId: string | number }>({
+	return useMutation<null, ErrorResponse, { subtractionId: number }>({
 		mutationFn: ({ subtractionId }) =>
 			deleteSubtraction({
-				data: { subtractionId: Number(subtractionId) },
+				data: { subtractionId },
 			}) as Promise<null>,
 	});
 }
