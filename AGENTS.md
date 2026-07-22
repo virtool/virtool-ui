@@ -11,6 +11,12 @@ This is a **pnpm monorepo**:
 
 - `apps/web/` — the Vite SPA (formerly the top-level repo). All UI code lives
   here.
+- `apps/site/` — `@virtool/site`, the product website at
+  [virtool.ca](https://www.virtool.ca) (Astro + Tailwind, deployed to
+  Cloudflare Workers). Kept out of the repo-wide `pnpm check`/`pnpm knip`
+  gates — Astro is not linted by biome and is opaque to knip — so its own
+  Vite build (a `build-site` CI job) and Vitest suite are its gate. Deploy is
+  manual: `pnpm --filter @virtool/site deploy`.
 - `packages/` — shared, framework-agnostic libraries published as workspace
   packages:
   - `@virtool/logger` — pino wrapper, server-side log defaults and

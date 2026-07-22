@@ -59,7 +59,7 @@ describe("<Nav />", () => {
 		const docLink = screen.getByRole("link", { name: "virtool.ca/docs" });
 		expect(docLink).toHaveAttribute(
 			"href",
-			"https://virtool.ca/docs/manual/start/installation/",
+			"https://virtool.ca/docs/start/installation",
 		);
 	});
 });

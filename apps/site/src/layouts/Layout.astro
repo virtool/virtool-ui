@@ -1,0 +1,43 @@
+---
+import Logo from "@components/Logo.astro";
+import NavLink from "@components/NavLink.astro";
+import "../styles/global.css";
+
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link href="/fontawesome-5.15.4/css/all.css" rel="stylesheet" />
+    <link href="/prism.css" rel="stylesheet" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+  <body style="overflow-y: scroll; background-color: #f7fafc">
+    <nav class="py-3 fixed top-0 left-0 right-0 z-20 bg-zinc-200">
+      <div class="lg:container mx-auto flex items-center lg z-10">
+        <a
+          class="inline-flex font-medium items-center no-underline text-stone-600 hover:text-stone-900 fill-stone-600 hover:fill-stone-900 text-xl mr-7"
+          href="/"
+        >
+          <Logo />
+          Virtool
+        </a>
+
+        <NavLink href="/docs">Docs</NavLink>
+      </div>
+    </nav>
+    <main class="lg:container mt-24 pb-20 mx-auto">
+      <slot />
+    </main>
+  </body>
+</html>

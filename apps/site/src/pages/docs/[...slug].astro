@@ -1,0 +1,57 @@
+---
+import Aside from "@components/Aside.astro";
+import DummyButton from "@components/DummyButton.astro";
+import DummyLink from "@components/DummyLink.astro";
+import DummySaveButton from "@components/DummySaveButton.astro";
+import Icon from "@components/Icon.astro";
+import Key from "@components/Key.astro";
+import MdxImage from "@components/MdxImage.astro";
+import Note from "@components/Note.astro";
+import Menu from "@components/menu/Menu.astro";
+import Layout from "@layouts/Layout.astro";
+import { getMenuSectionsFromCollection } from "@utils/menu";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const manualEntries = await getCollection("manual");
+
+  return manualEntries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const sections = getMenuSectionsFromCollection(
+  await getCollection("manual"),
+  ["start", "tutorials", "guide", "science"]
+);
+
+const { entry } = Astro.props;
+const { Content, components } = await render(entry);
+---
+
+<Layout title={entry.data.title}>
+  <div class="flex gap-16">
+    <div class="col-span-2 self-start sticky top-24">
+        <Menu sections={sections} baseUrl="/docs" />
+    </div>
+    <div class="col-span-10 prose max-w-4xl">
+      <h1>{entry.data.title}</h1>
+      <div class="prose max-w-4xl">
+        <Content
+          components={{
+            ...components,
+            Aside: Aside,
+            DummyButton: DummyButton,
+            DummyLink: DummyLink,
+            DummySaveButton: DummySaveButton,
+            Icon: Icon,
+            Key: Key,
+            Note: Note,
+            img: MdxImage,
+          }}
+        />
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,53 @@
+---
+import Aside from "@components/Aside.astro";
+import DummyButton from "@components/DummyButton.astro";
+import DummyLink from "@components/DummyLink.astro";
+import DummySaveButton from "@components/DummySaveButton.astro";
+import Icon from "@components/Icon.astro";
+import Key from "@components/Key.astro";
+import MdxImage from "@components/MdxImage.astro";
+import Note from "@components/Note.astro";
+import Menu from "@components/menu/Menu.astro";
+import Layout from "@layouts/Layout.astro";
+import { getMenuSectionsFromCollection } from "@utils/menu";
+import { getCollection, render } from "astro:content";
+
+const manualEntries = await getCollection("manual");
+
+const startEntries = manualEntries.filter(({ id }) => id.startsWith("start"));
+startEntries.sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+
+const entry = startEntries[0];
+const { Content, components } = await render(entry);
+
+const sections = getMenuSectionsFromCollection(
+  manualEntries,
+  ["start", "tutorials", "guide", "science"]
+);
+---
+
+<Layout title={entry.data.title}>
+  <div class="flex gap-16">
+    <div class="col-span-2 self-start sticky top-24">
+        <Menu sections={sections} baseUrl="/docs" />
+    </div>
+    <div class="col-span-10 prose max-w-4xl">
+      <h1>{entry.data.title}</h1>
+      <div class="prose max-w-4xl">
+        <Content
+          components={{
+            ...components,
+            Aside: Aside,
+            DummyButton: DummyButton,
+            DummyLink: DummyLink,
+            DummySaveButton: DummySaveButton,
+            Icon: Icon,
+            Key: Key,
+            Note: Note,
+            img: MdxImage,
+          }}
+        />
+      </div>
+    </div>
+  </div>
+</Layout>
