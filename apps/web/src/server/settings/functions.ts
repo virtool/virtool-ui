@@ -3,7 +3,7 @@ import { z } from "zod";
 import { adminRole, open } from "../auth/policy";
 
 import { db } from "../db/pg";
-import type { SampleGroup } from "../db/schema/settings";
+import { type SampleGroup, sampleGroups } from "../db/schema/settings";
 import {
 	getSettings as getSettingsImpl,
 	type Settings as SettingsRecord,
@@ -43,12 +43,6 @@ type Settings = {
 	sample_group_read: boolean;
 	sample_group_write: boolean;
 };
-
-const sampleGroups: readonly SampleGroup[] = [
-	"none",
-	"force_choice",
-	"users_primary_group",
-];
 
 const updateSettingsSchema = z
 	.object({

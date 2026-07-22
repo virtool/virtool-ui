@@ -19,8 +19,15 @@ import {
 	text,
 } from "drizzle-orm/pg-core";
 
+/** The group-access policies a newly created sample can be assigned. */
+export const sampleGroups = [
+	"none",
+	"force_choice",
+	"users_primary_group",
+] as const;
+
 /** The group-access policy applied to a newly created sample. */
-export type SampleGroup = "none" | "force_choice" | "users_primary_group";
+export type SampleGroup = (typeof sampleGroups)[number];
 
 export const settings = pgTable(
 	"settings",
