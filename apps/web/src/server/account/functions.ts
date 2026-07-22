@@ -4,6 +4,7 @@ import { permissionsSchema } from "@virtool/contracts";
 import { z } from "zod";
 import { authenticated } from "../auth/policy";
 import { db } from "../db/pg";
+import { ClientError } from "../errors";
 import {
 	ApiKeyNotFoundError,
 	createApiKey as createApiKeyImpl,
@@ -33,7 +34,7 @@ const keyIdSchema = z.object({
 const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	if (err instanceof ApiKeyNotFoundError) {
 		setResponseStatus(404);
-		throw new Error("API key not found.");
+		throw new ClientError("API key not found.");
 	}
 	throw err;
 });

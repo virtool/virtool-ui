@@ -68,7 +68,14 @@ import-direction invariant stays enforceable.
 - `functions.ts` — TanStack Start server function shell. Wraps
   `createServerFn` / `createServerOnlyFn`, validates input with zod,
   delegates to `data` / `service`, and maps `AppError` subclasses to
-  HTTP responses via `setResponseStatus`. Should contain no business
+  HTTP responses — `setResponseStatus(4xx)` paired with a `ClientError`
+  (`@server/errors`) carrying the message the client renders. Throw
+  `ClientError`, never a plain `Error`, for a deliberate 4xx: the Sentry
+  `beforeSend` filter (`dropExpectedClientErrors`) drops it — along with
+  the auth middleware's 401/403 `UnauthorizedError` / `ForbiddenError` —
+  as routine control flow, so a plain `Error` surfaces as a false
+  incident. Reserve a bare `throw`/`throw err` for the genuinely
+  unexpected, which _should_ reach Sentry. Should contain no business
   logic — if a handler grows a multi-step orchestration with rollbacks
   or branching, that is the signal to extract a `service.ts`.
 
@@ -153,8 +160,8 @@ from `@labels/constants`, the one remaining sanctioned sideways import.
 - `data.ts` — defines `Label`, `LabelValues`, `LabelNotFoundError`,
   `LabelConflictError`, and CRUD functions over the `labels` table.
 - `functions.ts` — wraps each CRUD function in a TanStack Start server
-  function, validates with zod, rethrows `LabelNotFoundError` as 404 and
-  `LabelConflictError` as 409.
+  function, validates with zod, rethrows `LabelNotFoundError` as a 404
+  `ClientError` and `LabelConflictError` as a 409 `ClientError`.
 
 No `service.ts` — the data layer is enough.
 

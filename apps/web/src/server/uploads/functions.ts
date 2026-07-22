@@ -3,6 +3,7 @@ import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { authenticated, permission } from "../auth/policy";
 import { db } from "../db/pg";
+import { ClientError } from "../errors";
 import { storage } from "../storage";
 import {
 	deleteUpload as deleteUploadImpl,
@@ -36,11 +37,11 @@ const uploadIdSchema = z.object({
 const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	if (err instanceof UploadNotFoundError) {
 		setResponseStatus(404);
-		throw new Error("Upload not found.");
+		throw new ClientError("Upload not found.");
 	}
 	if (err instanceof UploadReservedError) {
 		setResponseStatus(409);
-		throw new Error("Upload is reserved and in use.");
+		throw new ClientError("Upload is reserved and in use.");
 	}
 	throw err;
 });

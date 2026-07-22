@@ -3,6 +3,7 @@ import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { authenticated } from "../auth/policy";
 import { db } from "../db/pg";
+import { ClientError } from "../errors";
 import {
 	findJobs as findJobsImpl,
 	getJob as getJobImpl,
@@ -37,7 +38,7 @@ const jobIdsSchema = z.object({
 const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	if (err instanceof JobNotFoundError) {
 		setResponseStatus(404);
-		throw new Error("Job not found.");
+		throw new ClientError("Job not found.");
 	}
 	throw err;
 });

@@ -3,6 +3,7 @@ import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { authenticated } from "../auth/policy";
 import { db } from "../db/pg";
+import { ClientError } from "../errors";
 import { getTask as getTaskImpl, TaskNotFoundError } from "./data";
 
 const taskIdSchema = z.object({
@@ -16,7 +17,7 @@ const taskIdSchema = z.object({
 const rethrowAsHttp = createServerOnlyFn((err: unknown): never => {
 	if (err instanceof TaskNotFoundError) {
 		setResponseStatus(404);
-		throw new Error("Task not found.");
+		throw new ClientError("Task not found.");
 	}
 	throw err;
 });
