@@ -1,18 +1,15 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiCreateApiKey, mockApiGetApiKeys } from "@tests/api/account";
 import { createFakeAccount, createFakeApiKey } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
+import { mockCreateApiKey, mockFindApiKeys } from "@tests/server-fn/account";
 import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
-import nock from "nock";
-import { afterEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import ApiKeys from "../ApiKeys";
 
 describe("<ApiKeys />", () => {
 	const basePath = "/account/api";
-
-	afterEach(() => nock.cleanAll());
 
 	it("should render correctly when keys === null", async () => {
 		await renderWithRouter(<ApiKeys />, basePath);
@@ -31,12 +28,9 @@ describe("<ApiKeys />", () => {
 				administrator_role: "full",
 			}),
 		);
-		mockApiGetApiKeys([]);
+		mockFindApiKeys([]);
 
-		const scope = mockApiCreateApiKey(
-			"test",
-			createFakePermissions({ remove_job: true }),
-		);
+		mockCreateApiKey("testKey", createFakePermissions({ remove_job: true }));
 
 		await renderWithRouter(<ApiKeys />, "/account/api");
 
@@ -66,14 +60,16 @@ describe("<ApiKeys />", () => {
 		await user.click(checkbox);
 		expect(checkbox).toBeChecked();
 
-		await user.click(screen.getByRole("button", { name: "Save" }));
-
-		mockApiGetApiKeys([
+		// The list refetches when the create mutation invalidates the account
+		// cache, so the new key must be resolvable before the save is submitted.
+		mockFindApiKeys([
 			createFakeApiKey({
 				name: "Key A",
 				permissions: createFakePermissions({ remove_job: true }),
 			}),
 		]);
+
+		await user.click(screen.getByRole("button", { name: "Save" }));
 
 		// Test that the secret key is displayed in the dialog after creation.
 		expect(await screen.findByText("Here is your key.")).toBeInTheDocument();
@@ -86,8 +82,6 @@ describe("<ApiKeys />", () => {
 		expect(screen.getByText("Key A")).toBeInTheDocument();
 		expect(screen.getByText(/Created/)).toBeInTheDocument();
 		expect(screen.getByText("1 permission")).toBeInTheDocument();
-
-		scope.done();
 	});
 
 	it("should show administrator notice when appropriate", async () => {
@@ -96,7 +90,7 @@ describe("<ApiKeys />", () => {
 				administrator_role: "full",
 			}),
 		);
-		mockApiGetApiKeys([]);
+		mockFindApiKeys([]);
 
 		await renderWithRouter(<ApiKeys />, basePath);
 
@@ -131,7 +125,7 @@ describe("<ApiKeys />", () => {
 				},
 			}),
 		);
-		mockApiGetApiKeys([key]);
+		mockFindApiKeys([key]);
 
 		await renderWithRouter(<ApiKeys />, "/account/api");
 

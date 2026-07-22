@@ -74,6 +74,7 @@ states:
 | Labels       | `labels`                                             | Built          |
 | Jobs         | `jobs`                                               | Built          |
 | Settings     | `settings`                                           | Built          |
+| API keys     | `api_keys`                                           | Built          |
 | Analyses     | `analyses`                                           | Partial mirror |
 | Indexes      | `indexes`                                            | Partial mirror |
 | Samples      | `legacy_samples`                                     | Partial mirror |
@@ -84,7 +85,6 @@ states:
 | References   | `legacy_references`, `legacy_reference_*`            | Not started    |
 | HMMs         | `hmms`, `legacy_hmm_status`                          | Not started    |
 | History      | `legacy_history`, `legacy_history_diff`, `revisions` | Not started    |
-| API keys     | `api_keys`                                           | Not started    |
 
 The Postgres table(s) column lists the single mirrored table for the
 **partial mirror** rows and the principal Python-defined table(s) for

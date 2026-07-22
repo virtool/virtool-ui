@@ -1,12 +1,11 @@
-import type { GroupMinimal, Permissions } from "@groups/types";
+import type { Permissions } from "@groups/types";
 import type { User } from "@users/types";
 
 export type QuickAnalyzeWorkflow = "nuvs" | "pathoscope";
 
 export type APIKeyMinimal = {
 	created_at: string;
-	groups: Array<GroupMinimal>;
-	id: string;
+	id: number;
 	key?: string;
 	name: string;
 	permissions: Permissions;
