@@ -193,13 +193,17 @@ export async function createUpload(
 /**
  * Reserve the given uploads so they cannot be used for another sample.
  *
- * Every upload is validated before any is reserved: if one is missing a
- * {@link UploadNotFoundError} is thrown, and if one is already reserved a
- * {@link UploadReservedError} is thrown — in both cases none is reserved. The
- * final update is conditional on `reserved = false` and its row count checked,
- * so a request that loses a race to reserve one of these uploads fails rather
- * than double-reserving. Takes `DbOrTx` to run inside the caller's transaction;
- * the caller commits.
+ * Only a visible reads upload is a valid sample input, so every id must resolve
+ * to a `reads` upload that is `ready` and not `removed`; any id that does not —
+ * a `reference`/`subtraction` upload, an unfinished one, or a removed one — is
+ * rejected with {@link UploadNotFoundError}, exactly as a missing id is. This
+ * runs before any reservation, so a bad batch reserves none.
+ *
+ * If one is already reserved a {@link UploadReservedError} is thrown. The final
+ * update is conditional on `reserved = false` and its row count checked, so a
+ * request that loses a race to reserve one of these uploads fails rather than
+ * double-reserving. Takes `DbOrTx` to run inside the caller's transaction; the
+ * caller commits.
  */
 export async function reserveUploads(
 	db: DbOrTx,
@@ -214,7 +218,14 @@ export async function reserveUploads(
 	const existing = await db
 		.select({ id: uploadsTable.id, reserved: uploadsTable.reserved })
 		.from(uploadsTable)
-		.where(inArray(uploadsTable.id, ids));
+		.where(
+			and(
+				inArray(uploadsTable.id, ids),
+				eq(uploadsTable.type, "reads"),
+				eq(uploadsTable.ready, true),
+				eq(uploadsTable.removed, false),
+			),
+		);
 
 	if (existing.length !== ids.length) {
 		throw new UploadNotFoundError();
