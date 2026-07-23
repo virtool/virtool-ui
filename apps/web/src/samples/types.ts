@@ -14,6 +14,7 @@ export type {
 	Read,
 	Sample,
 	SampleArtifact,
+	SampleJobNested,
 	SampleMinimal,
 	SampleRightsUpdate,
 	SampleSearchResult,

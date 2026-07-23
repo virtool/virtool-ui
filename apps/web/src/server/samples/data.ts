@@ -1,5 +1,6 @@
 import type {
 	GroupMinimal,
+	JobState,
 	LabelNested,
 	LibraryType,
 	Quality,
@@ -7,8 +8,6 @@ import type {
 	Sample,
 	SampleArtifact,
 	SampleJobNested,
-	SampleJobState,
-	SampleJobWorkflow,
 	SampleMinimal,
 	SampleRightsUpdate,
 	SampleSearchResult,
@@ -279,14 +278,15 @@ async function getSampleJobs(
 		jobs.map((job) => [
 			job.id,
 			{
-				created_at: job.created_at.toISOString(),
+				createdAt: job.created_at.toISOString(),
 				id: job.id,
 				progress: job.progress,
 				// The mirror stores states and workflows as free text; the columns
-				// only ever hold the enumerated values.
-				state: job.state as SampleJobState,
+				// only ever hold the enumerated values, and a sample's job is always
+				// the `create_sample` job that built it.
+				state: job.state as JobState,
 				user: job.user,
-				workflow: job.workflow as SampleJobWorkflow,
+				workflow: job.workflow as "create_sample",
 			},
 		]),
 	);
@@ -327,7 +327,7 @@ async function getArtifacts(
 		id: row.id,
 		name: row.name,
 		size: row.size ?? 0,
-		download_url: `/samples/${sampleId}/artifacts/${row.name_on_disk ?? ""}`,
+		downloadUrl: `/samples/${sampleId}/artifacts/${row.name_on_disk ?? ""}`,
 	}));
 }
 
@@ -354,10 +354,10 @@ async function getReads(
 		.orderBy(asc(sampleReads.id));
 
 	return rows.map(({ read, upload, uploadUser }) => ({
-		download_url: `/samples/${sampleId}/reads/${read.name}`,
+		downloadUrl: `/samples/${sampleId}/reads/${read.name}`,
 		id: read.id,
 		name: read.name,
-		name_on_disk: read.name_on_disk,
+		nameOnDisk: read.name_on_disk,
 		sample: sampleId,
 		size: read.size ?? 0,
 		upload:
@@ -367,10 +367,10 @@ async function getReads(
 						id: upload.id,
 						name: upload.name ?? "",
 						size: upload.size,
-						uploaded_at: upload.uploadedAt?.toISOString() ?? null,
+						uploadedAt: upload.uploadedAt?.toISOString() ?? null,
 						user: uploadUser?.id != null ? uploadUser : null,
 					},
-		uploaded_at: read.uploaded_at?.toISOString() ?? "",
+		uploadedAt: read.uploaded_at?.toISOString() ?? "",
 	}));
 }
 
@@ -395,13 +395,13 @@ function mapMinimal(
 	usersById: Map<number, UserNested>,
 ): SampleMinimal {
 	return {
-		created_at: row.created_at.toISOString(),
+		createdAt: row.created_at.toISOString(),
 		host: row.host,
 		id: row.id,
 		isolate: row.isolate,
 		job,
 		labels: sampleLabels,
-		library_type: row.library_type as LibraryType,
+		libraryType: row.library_type as LibraryType,
 		name: row.name,
 		notes: row.notes,
 		nuvs: tags.nuvs,
@@ -660,11 +660,11 @@ export async function findSamples(
 	);
 
 	return {
-		found_count: foundCount,
-		total_count: totalCount,
+		foundCount,
+		totalCount,
 		page: options.page,
-		per_page: options.perPage,
-		page_count: foundCount ? Math.ceil(foundCount / options.perPage) : 0,
+		perPage: options.perPage,
+		pageCount: foundCount ? Math.ceil(foundCount / options.perPage) : 0,
 		items: rows.map((row) =>
 			mapMinimal(
 				row,
@@ -724,15 +724,15 @@ export async function getSample(db: Db, sampleId: number): Promise<Sample> {
 
 	return {
 		...minimal,
-		all_read: row.all_read,
-		all_write: row.all_write,
+		allRead: row.all_read,
+		allWrite: row.all_write,
 		artifacts,
 		format: row.format,
 		group,
-		group_read: row.group_read,
-		group_write: row.group_write,
+		groupRead: row.group_read,
+		groupWrite: row.group_write,
 		hold: row.hold,
-		is_legacy: row.is_legacy,
+		isLegacy: row.is_legacy,
 		locale: row.locale,
 		paired: reads.length === 2,
 		quality: (row.quality as Quality | null) ?? null,
@@ -1105,17 +1105,17 @@ export async function updateSampleRights(
 		>
 	> = {};
 
-	if (data.all_read !== undefined) {
-		scalars.all_read = data.all_read;
+	if (data.allRead !== undefined) {
+		scalars.all_read = data.allRead;
 	}
-	if (data.all_write !== undefined) {
-		scalars.all_write = data.all_write;
+	if (data.allWrite !== undefined) {
+		scalars.all_write = data.allWrite;
 	}
-	if (data.group_read !== undefined) {
-		scalars.group_read = data.group_read;
+	if (data.groupRead !== undefined) {
+		scalars.group_read = data.groupRead;
 	}
-	if (data.group_write !== undefined) {
-		scalars.group_write = data.group_write;
+	if (data.groupWrite !== undefined) {
+		scalars.group_write = data.groupWrite;
 	}
 
 	if ("group" in data) {

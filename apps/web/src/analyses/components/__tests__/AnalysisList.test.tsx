@@ -54,7 +54,7 @@ describe("<AnalysesToolbar />", () => {
 	it("should show analysis creation when user is in the correct group and write is enabled", async () => {
 		const account = createFakeAccount({ administrator_role: null });
 		sample.group = at(account.groups, 0);
-		sample.group_write = true;
+		sample.groupWrite = true;
 		mockGetAccount(account);
 		mockGetSampleDetail(sample);
 		renderList();
@@ -64,7 +64,7 @@ describe("<AnalysesToolbar />", () => {
 
 	it("should show analysis creation when all users editing a sample is permitted", async () => {
 		const account = createFakeAccount({ administrator_role: null });
-		sample.all_write = true;
+		sample.allWrite = true;
 		mockGetAccount(account);
 		mockGetSampleDetail(sample);
 		renderList();
@@ -73,8 +73,8 @@ describe("<AnalysesToolbar />", () => {
 	});
 
 	it("should not render analysis creation option when user has no permissions", async () => {
-		sample.all_write = false;
-		sample.group_write = false;
+		sample.allWrite = false;
+		sample.groupWrite = false;
 		mockGetAccount(createFakeAccount({ administrator_role: null }));
 		mockGetSampleDetail(sample);
 		renderList();

@@ -19,10 +19,10 @@ describe("<SampleRights />", () => {
 
 	beforeEach(() => {
 		sample = createFakeSample({
-			all_read: false,
-			all_write: false,
-			group_read: false,
-			group_write: false,
+			allRead: false,
+			allWrite: false,
+			groupRead: false,
+			groupWrite: false,
 		});
 		group = createFakeGroup();
 		mockGetSampleDetail(sample);
@@ -73,7 +73,7 @@ describe("<SampleRights />", () => {
 
 		await waitFor(() =>
 			expect(updateSampleRights).toHaveBeenCalledWith({
-				data: expect.objectContaining({ group_read: true, group_write: true }),
+				data: expect.objectContaining({ groupRead: true, groupWrite: true }),
 			}),
 		);
 	});
@@ -89,7 +89,7 @@ describe("<SampleRights />", () => {
 
 		await waitFor(() =>
 			expect(updateSampleRights).toHaveBeenCalledWith({
-				data: expect.objectContaining({ all_read: true, all_write: true }),
+				data: expect.objectContaining({ allRead: true, allWrite: true }),
 			}),
 		);
 	});

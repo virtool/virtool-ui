@@ -76,7 +76,7 @@ export function useListSamples(
 			findSamplesFn({
 				data: {
 					page,
-					per_page,
+					perPage: per_page,
 					term: term ?? "",
 					labels: labels ?? [],
 					workflows: workflows ?? [],
@@ -136,7 +136,7 @@ function createSample({
 			isolate,
 			host,
 			locale,
-			library_type: libraryType as LibraryType,
+			libraryType: libraryType as LibraryType,
 			subtractions,
 			files,
 			labels,
