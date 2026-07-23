@@ -5,8 +5,15 @@ import {
 	UNAUTHORIZED_ERROR_NAME,
 } from "@virtool/contracts";
 
-/** A failed query's error, carrying an HTTP status when superagent raised it. */
-export type QueryError = Error & { response?: { status?: number } };
+/**
+ * A failed query's error. Superagent puts the HTTP status on `response.status`;
+ * a server function's `ClientError` arrives with it on `status`, carried across
+ * the boundary by `serverErrorSerializationAdapter`.
+ */
+export type QueryError = Error & {
+	response?: { status?: number };
+	status?: number;
+};
 
 const NON_RETRYABLE_STATUSES = new Set([401, 403, 404]);
 
@@ -46,7 +53,7 @@ function reportContractDrift(error: Error): void {
  * is gone, and reports a drifted contract so it fails loudly.
  */
 // Server-function errors reach the client with their `name` preserved only
-// because `authErrorSerializationAdapter` (start.ts) carries it past Router's
+// because `serverErrorSerializationAdapter` (start.ts) carries it past Router's
 // ShallowErrorPlugin, so a 401 is matched by name here. Superagent calls are
 // covered by the interceptor in `app/api.ts` instead.
 //
@@ -67,15 +74,16 @@ export function shouldRetryQuery(
 	failureCount: number,
 	error: QueryError,
 ): boolean {
-	// Superagent (legacy Python API) errors carry the HTTP status here.
-	const status = error.response?.status;
+	// Superagent (legacy Python API) errors carry the HTTP status on `response`;
+	// a server function's `ClientError` carries it on `status`.
+	const status = error.response?.status ?? error.status;
 	if (status !== undefined && NON_RETRYABLE_STATUSES.has(status)) {
 		return false;
 	}
 	// TanStack Start server-function errors cross the boundary with only
 	// `message` preserved by default; the status set via `setResponseStatus` is
 	// not attached, and Router's ShallowErrorPlugin drops `name`.
-	// `authErrorSerializationAdapter` (registered in start.ts) keeps the auth
+	// `serverErrorSerializationAdapter` (registered in start.ts) keeps the auth
 	// errors' `name`, so matching by name here makes a 401/403 (e.g. after
 	// logout, or an unauthenticated first visit) reject immediately instead of
 	// retrying ~4× while the screen sits blank before the route can bounce to

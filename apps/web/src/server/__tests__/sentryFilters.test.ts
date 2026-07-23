@@ -1,11 +1,12 @@
 import type { ErrorEvent, EventHint } from "@sentry/tanstackstart-react";
 import {
+	CLIENT_ERROR_NAME,
 	FORBIDDEN_ERROR_NAME,
 	UNAUTHORIZED_ERROR_NAME,
 } from "@virtool/contracts";
 import { describe, expect, it } from "vitest";
 
-import { CLIENT_ERROR_NAME, ClientError } from "../errors";
+import { ClientError } from "../errors";
 import { dropExpectedClientErrors } from "../sentryFilters";
 
 function namedError(name: string, message: string): Error {

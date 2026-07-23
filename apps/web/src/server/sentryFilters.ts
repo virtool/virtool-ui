@@ -1,9 +1,9 @@
 import type { ErrorEvent, EventHint } from "@sentry/tanstackstart-react";
 import {
+	CLIENT_ERROR_NAME,
 	FORBIDDEN_ERROR_NAME,
 	UNAUTHORIZED_ERROR_NAME,
 } from "@virtool/contracts";
-import { CLIENT_ERROR_NAME } from "./errors";
 
 const EXPECTED_CLIENT_ERROR_NAMES = new Set<string>([
 	UNAUTHORIZED_ERROR_NAME,

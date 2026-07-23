@@ -3,6 +3,7 @@ export * from "./analyses";
 export * from "./artifacts";
 export * from "./auth";
 export * from "./banners";
+export * from "./errors";
 export * from "./hmms";
 export * from "./indexes";
 export * from "./jobs";
