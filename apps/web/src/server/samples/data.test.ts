@@ -37,6 +37,7 @@ import {
 	SampleLabelsNotFoundError,
 	SampleNameConflictError,
 	SampleNotFoundError,
+	SampleOwnerlessError,
 	sampleReadableFilter,
 	updateSample,
 	updateSampleRights,
@@ -436,6 +437,13 @@ describe("getSample", () => {
 	it("throws when the sample does not exist", async () => {
 		await expect(getSample(db, 123456)).rejects.toBeInstanceOf(
 			SampleNotFoundError,
+		);
+	});
+
+	it("throws when the sample has no owner", async () => {
+		const sampleId = await seedSample({ user_id: null });
+		await expect(getSample(db, sampleId)).rejects.toBeInstanceOf(
+			SampleOwnerlessError,
 		);
 	});
 });
