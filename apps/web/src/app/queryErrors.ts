@@ -18,6 +18,27 @@ export type QueryError = Error & {
 const NON_RETRYABLE_STATUSES = new Set([401, 403, 404]);
 
 /**
+ * The HTTP status behind a failed query, whichever transport raised it.
+ *
+ * The two carry it differently and there is no unifying them at the source: a
+ * server function's `ClientError` arrives as a plain `Error` with `status` as an
+ * own property (put there by `serverErrorSerializationAdapter`), while
+ * superagent attaches its whole `response`. Callers should not have to know
+ * which transport a feature is on — that changes as domains move off the Python
+ * API, and the superagent branch here goes away with the last of them.
+ *
+ * Returns `undefined` for an error that carries no status at all — a network
+ * failure, a thrown `ZodError`, a bug.
+ */
+export function getErrorStatus(error: unknown): number | undefined {
+	if (error === null || typeof error !== "object") {
+		return undefined;
+	}
+	const { status, response } = error as QueryError;
+	return status ?? response?.status;
+}
+
+/**
  * Whether an error is a zod validation failure — the API returned a payload a
  * response schema rejected, i.e. the client/server contract has drifted.
  *
@@ -74,9 +95,7 @@ export function shouldRetryQuery(
 	failureCount: number,
 	error: QueryError,
 ): boolean {
-	// Superagent (legacy Python API) errors carry the HTTP status on `response`;
-	// a server function's `ClientError` carries it on `status`.
-	const status = error.response?.status ?? error.status;
+	const status = getErrorStatus(error);
 	if (status !== undefined && NON_RETRYABLE_STATUSES.has(status)) {
 		return false;
 	}

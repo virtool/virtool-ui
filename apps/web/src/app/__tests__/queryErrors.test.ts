@@ -1,4 +1,5 @@
 import {
+	getErrorStatus,
 	handleQueryError,
 	type QueryError,
 	shouldRetryQuery,
@@ -54,6 +55,25 @@ function clientError(status: number): QueryError {
 	error.name = CLIENT_ERROR_NAME;
 	return error;
 }
+
+describe("getErrorStatus", () => {
+	it("reads the status a server function's ClientError carries", () => {
+		expect(getErrorStatus(clientError(404))).toBe(404);
+	});
+
+	it("reads the status superagent puts on the response", () => {
+		expect(getErrorStatus(superagentError(404))).toBe(404);
+	});
+
+	it.each([
+		["an error carrying no status", new Error("network down")],
+		["a non-object", "boom"],
+		["null", null],
+		["undefined", undefined],
+	])("returns undefined for %s", (_label, error) => {
+		expect(getErrorStatus(error)).toBeUndefined();
+	});
+});
 
 describe("shouldRetryQuery", () => {
 	it.each([

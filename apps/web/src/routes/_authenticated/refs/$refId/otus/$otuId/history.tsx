@@ -1,4 +1,4 @@
-import type { QueryError } from "@app/queryErrors";
+import { getErrorStatus } from "@app/queryErrors";
 import OtuHistory from "@otus/components/Detail/History/OtuHistory";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
@@ -11,7 +11,7 @@ export const Route = createFileRoute(
 		try {
 			await queryClient.ensureQueryData(otuHistoryQueryOptions(otuId));
 		} catch (error) {
-			if ((error as QueryError).response?.status === 404) {
+			if (getErrorStatus(error) === 404) {
 				throw notFound();
 			}
 			throw error;

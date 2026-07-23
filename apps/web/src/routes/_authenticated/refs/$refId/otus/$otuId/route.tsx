@@ -1,4 +1,4 @@
-import type { QueryError } from "@app/queryErrors";
+import { getErrorStatus } from "@app/queryErrors";
 import Badge from "@base/Badge";
 import Link from "@base/Link";
 import NavTab from "@base/NavTab";
@@ -28,13 +28,10 @@ export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 					queryClient.ensureQueryData(otuQueryOptions(otuId)),
 				]);
 			} catch (error) {
-				// The reference comes from a server function (its 404 rides on the
-				// error's `status`); the OTU still comes from the Python API (its 404
-				// is on `response.status`).
-				const status =
-					(error as { status?: number }).status ??
-					(error as QueryError).response?.status;
-				if (status === 404) {
+				// Either request can be the one that 404s, and they are on different
+				// transports — the reference on a server function, the OTU still on the
+				// Python API. `getErrorStatus` covers both.
+				if (getErrorStatus(error) === 404) {
 					throw notFound();
 				}
 				throw error;
