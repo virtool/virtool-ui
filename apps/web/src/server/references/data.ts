@@ -1,3 +1,16 @@
+import type {
+	Reference,
+	ReferenceBuild,
+	ReferenceContributor,
+	ReferenceGroup,
+	ReferenceImportedFrom,
+	ReferenceMinimal,
+	ReferenceRight,
+	ReferenceRights,
+	ReferenceSearchResult,
+	ReferenceUser,
+	Task,
+} from "@virtool/contracts";
 import {
 	and,
 	asc,
@@ -26,95 +39,7 @@ import { uploads } from "../db/schema/uploads";
 import { users } from "../db/schema/users";
 import { AppError } from "../errors";
 import { getSettings } from "../settings/data";
-import { createTask, type Task, type TaskType } from "../tasks/data";
-
-/** A user reduced to the fields shown alongside a resource. */
-export type UserNested = { id: number; handle: string };
-
-/** The three per-reference rights a member (user or group) can be granted. */
-export type ReferenceRights = {
-	build: boolean;
-	modify: boolean;
-	modifyOtu: boolean;
-};
-
-/** The name of a single reference right. */
-export type ReferenceRight = keyof ReferenceRights;
-
-/** A user granted rights on a reference. */
-export type ReferenceUser = ReferenceRights & {
-	id: number;
-	handle: string;
-	createdAt: Date;
-};
-
-/** A group granted rights on a reference. */
-export type ReferenceGroup = ReferenceRights & {
-	id: number;
-	name: string;
-	createdAt: Date;
-};
-
-/** The reference a clone was created from, reduced to id and name. */
-export type ClonedFrom = { id: number; name: string };
-
-/** A contributor to a reference's history, with their change count. */
-export type ReferenceContributor = UserNested & { count: number };
-
-/** The most recent ready build (index) of a reference. */
-export type ReferenceBuild = {
-	id: number;
-	version: number;
-	createdAt: Date;
-	user: UserNested;
-};
-
-/** The upload a reference was imported from, with its uploader. */
-export type ImportedFrom = {
-	id: number;
-	name: string;
-	createdAt: Date | null;
-	size: number | null;
-	user: UserNested | null;
-};
-
-/** A reference as it appears in a search-result list. */
-export type ReferenceMinimal = {
-	id: number;
-	dataType: string;
-	name: string;
-	archived: boolean;
-	clonedFrom: ClonedFrom | null;
-	createdAt: Date;
-	importedFrom: ImportedFrom | null;
-	latestBuild: ReferenceBuild | null;
-	organism: string;
-	otuCount: number;
-	task: Task | null;
-	user: UserNested | null;
-};
-
-/** A full reference, as returned by the detail endpoint. */
-export type Reference = ReferenceMinimal & {
-	contributors: ReferenceContributor[];
-	description: string;
-	groups: ReferenceGroup[];
-	restrictSourceTypes: boolean;
-	sourceTypes: string[];
-	users: ReferenceUser[];
-};
-
-// A page of references with camelCase pagination metadata — structurally the
-// client's `SearchResultV2 & { items }`, which the client feature owns. The
-// server can't import the client type, so it mirrors the shape here.
-type ReferenceSearchResult = {
-	foundCount: number;
-	totalCount: number;
-	page: number;
-	pageCount: number;
-	perPage: number;
-	items: ReferenceMinimal[];
-};
+import { createTask, type TaskType } from "../tasks/data";
 
 /** Filters and pagination accepted by {@link findReferences}. */
 export type FindReferencesOptions = {
@@ -240,7 +165,7 @@ function mapMinimal(
 					type: row.taskType ?? "",
 				};
 
-	const importedFrom: ImportedFrom | null =
+	const importedFrom: ReferenceImportedFrom | null =
 		row.uploadId == null
 			? null
 			: {

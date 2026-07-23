@@ -1,14 +1,8 @@
 import type { AdministratorRoleName } from "@administration/types";
 import type { GroupMinimal, Permissions } from "@groups/types";
+import type { UserNested } from "@virtool/contracts";
 
-/** A user with the essential information */
-export type UserNested = {
-	/** The unique identifier */
-	id: number;
-
-	/** The user's handle or username */
-	handle: string;
-};
+export type { UserNested } from "@virtool/contracts";
 
 /** A Virtool user */
 export type User = UserNested & {

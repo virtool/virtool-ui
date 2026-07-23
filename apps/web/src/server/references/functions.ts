@@ -1,5 +1,6 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
+import type { ReferenceRight } from "@virtool/contracts";
 import { z } from "zod";
 import { ForbiddenError } from "../auth/middleware";
 import { authenticated, permission } from "../auth/policy";
@@ -18,7 +19,6 @@ import {
 	ReferenceMemberConflictError,
 	ReferenceMemberNotFoundError,
 	ReferenceNotFoundError,
-	type ReferenceRight,
 	removeReferenceGroup as removeReferenceGroupImpl,
 	removeReferenceUser as removeReferenceUserImpl,
 	resolveReferenceActor,

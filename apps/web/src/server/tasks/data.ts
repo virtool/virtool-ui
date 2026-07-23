@@ -1,19 +1,9 @@
+import type { Task } from "@virtool/contracts";
 import { eq } from "drizzle-orm";
 import type { Db, DbOrTx } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import { tasks as tasksTable } from "../db/schema/tasks";
 import { AppError } from "../errors";
-
-/** A background task's live progress and metadata. */
-export type Task = {
-	complete: boolean;
-	created_at: Date;
-	error: string | null;
-	id: number;
-	progress: number;
-	step: string;
-	type: string;
-};
 
 /** Thrown when a requested task does not exist. */
 export class TaskNotFoundError extends AppError {}
