@@ -32,7 +32,7 @@ export default function IsolateDetail() {
 	const mutation = useSetIsolateAsDefault();
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		String(reference.id),
-		"modify_otu",
+		"modifyOtu",
 	);
 	const archived = useReferenceIsArchived(String(reference.id));
 	const canModifyIsolates = canModify && !archived;
@@ -59,8 +59,8 @@ export default function IsolateDetail() {
 				isolateId={activeIsolate.id}
 				sourceType={activeIsolate.source_type}
 				sourceName={activeIsolate.source_name}
-				allowedSourceTypes={reference.source_types}
-				restrictSourceTypes={reference.restrict_source_types}
+				allowedSourceTypes={reference.sourceTypes}
+				restrictSourceTypes={reference.restrictSourceTypes}
 				show={openEdit}
 				onHide={() => setOpenEdit(false)}
 			/>

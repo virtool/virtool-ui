@@ -24,8 +24,8 @@ type ArchiveReferenceProps = {
  */
 export default function ArchiveReference({ detail }: ArchiveReferenceProps) {
 	const [open, setOpen] = useState(false);
-	const archiveMutation = useArchiveReference(String(detail.id));
-	const unarchiveMutation = useUnarchiveReference(String(detail.id));
+	const archiveMutation = useArchiveReference(detail.id);
+	const unarchiveMutation = useUnarchiveReference(detail.id);
 
 	const mutation = detail.archived ? unarchiveMutation : archiveMutation;
 	const verb = detail.archived ? "Unarchive" : "Archive";
@@ -45,14 +45,9 @@ export default function ArchiveReference({ detail }: ArchiveReferenceProps) {
 
 	let errorMessage: string | null = null;
 	if (mutation.error) {
-		const serverMessage = mutation.error.response?.body?.message;
-		if (serverMessage) {
-			errorMessage = serverMessage;
-		} else if (mutation.error.response?.status === 409) {
-			errorMessage = "The official reference cannot be archived.";
-		} else {
-			errorMessage = `Failed to ${verb.toLowerCase()} reference. Please try again.`;
-		}
+		errorMessage =
+			mutation.error.message ||
+			`Failed to ${verb.toLowerCase()} reference. Please try again.`;
 	}
 
 	const Icon = detail.archived ? ArchiveRestore : Archive;

@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiCreateOtu } from "@tests/api/otus";
-import { mockApiGetReferenceDetail } from "@tests/api/references";
 import { createFakeReference } from "@tests/fake/references";
+import { mockGetReference } from "@tests/server-fn/references";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -13,7 +13,7 @@ describe("<OtuCreate />", () => {
 
 	beforeEach(() => {
 		reference = createFakeReference();
-		mockApiGetReferenceDetail(reference);
+		mockGetReference(reference);
 	});
 
 	afterEach(() => nock.cleanAll());

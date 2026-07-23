@@ -29,11 +29,11 @@ describe("<ReferenceRight />", () => {
 		);
 	});
 
-	it("should render when right is modify_otu", () => {
-		props.right = "modify_otu";
+	it("should render when right is modifyOtu", () => {
+		props.right = "modifyOtu";
 		renderWithProviders(<ReferenceRight {...props} />);
 
-		expect(screen.getByText("modify_otu")).toBeInTheDocument();
+		expect(screen.getByText("modifyOtu")).toBeInTheDocument();
 	});
 
 	it("should render when right is not enabled", () => {

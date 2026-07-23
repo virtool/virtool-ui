@@ -18,7 +18,7 @@ export default function CreateSequenceButton({
 }: CreateSequenceButtonProps) {
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		refId,
-		"modify_otu",
+		"modifyOtu",
 	);
 	const archived = useReferenceIsArchived(refId);
 

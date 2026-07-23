@@ -77,11 +77,11 @@ export default function CloneReference({
 							{reference && (
 								<Box className="flex items-center">
 									<strong>{reference.name}</strong>
-									<Badge className="ml-1.5">{reference.otu_count} OTUs</Badge>
+									<Badge className="ml-1.5">{reference.otuCount} OTUs</Badge>
 									<Attribution
 										className="ml-auto"
-										time={reference.created_at}
-										user={reference.user.handle}
+										time={reference.createdAt}
+										user={reference.user?.handle}
 									/>
 								</Box>
 							)}

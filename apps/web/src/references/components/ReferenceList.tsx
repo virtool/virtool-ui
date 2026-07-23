@@ -41,15 +41,14 @@ export default function ReferenceList({
 
 	const { data } = useSuspenseReferences(page, 25, term, archived);
 
-	const { items, page: storedPage, page_count, total_count } = data;
+	const { items, page: storedPage, pageCount, totalCount } = data;
 
 	return (
 		<>
 			<ContainerNarrow>
 				<ViewHeader title="References">
 					<ViewHeaderTitle>
-						References{" "}
-						<ViewHeaderTitleBadge>{total_count}</ViewHeaderTitleBadge>
+						References <ViewHeaderTitleBadge>{totalCount}</ViewHeaderTitleBadge>
 					</ViewHeaderTitle>
 				</ViewHeader>
 				<ReferenceToolbar
@@ -77,7 +76,7 @@ export default function ReferenceList({
 					<Pagination
 						storedPage={storedPage}
 						currentPage={page}
-						pageCount={page_count}
+						pageCount={pageCount}
 						onPageChange={(page) => setSearch({ page })}
 					>
 						<BoxGroup as="ul">

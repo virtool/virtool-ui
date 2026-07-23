@@ -23,7 +23,7 @@ export class TaskNotFoundError extends AppError {}
  * name, but this union only lists the ones we create from here — for now, the
  * HMM install.
  */
-export type TaskType = "install_hmms";
+export type TaskType = "clone_reference" | "import_reference" | "install_hmms";
 
 /**
  * Insert a pending task of `type` and return its id.

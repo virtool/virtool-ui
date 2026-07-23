@@ -18,7 +18,7 @@ type AddReferenceUserProps = {
 	users: ReferenceUser[];
 	/** A callback to hide the dialog */
 	onHide: () => void;
-	refId: string;
+	refId: number;
 	/** Indicates whether the dialog for adding a reference group is visible */
 	show: boolean;
 };

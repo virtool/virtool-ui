@@ -1,11 +1,10 @@
 import { screen } from "@testing-library/react";
-import { mockApiGetReferenceDetail } from "@tests/api/references";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeReference } from "@tests/fake/references";
+import { mockGetReference } from "@tests/server-fn/references";
 import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithProviders } from "@tests/setup";
-import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import OtuToolbar from "../OtuToolbar";
 
 describe("<OtuToolbar />", () => {
@@ -13,10 +12,8 @@ describe("<OtuToolbar />", () => {
 
 	beforeEach(() => {
 		reference = createFakeReference();
-		mockApiGetReferenceDetail(reference);
+		mockGetReference(reference);
 	});
-
-	afterEach(() => nock.cleanAll());
 
 	it("should render Create button when [canCreate=true]", async () => {
 		mockGetAccount(createFakeAccount({ administrator_role: "full" }));
@@ -27,7 +24,6 @@ describe("<OtuToolbar />", () => {
 				setTerm={vi.fn()}
 				onCreate={vi.fn()}
 				refId={String(reference.id)}
-				remotesFrom={null}
 			/>,
 		);
 
@@ -45,7 +41,6 @@ describe("<OtuToolbar />", () => {
 				setTerm={vi.fn()}
 				onCreate={vi.fn()}
 				refId={String(reference.id)}
-				remotesFrom={null}
 			/>,
 		);
 

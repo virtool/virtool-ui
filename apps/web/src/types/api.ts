@@ -26,12 +26,25 @@ export type SearchResult = {
 	total_count: number;
 };
 
-export type Task = {
-	complete: boolean;
-	created_at: Date;
-	error: string | null;
-	id: number;
-	progress: number;
-	step: string;
-	type: string;
+/**
+ * The camelCase paginated search-result envelope. The forward-looking
+ * replacement for {@link SearchResult}: server-function-backed domains return
+ * this shape, and once every domain is served from TypeScript it becomes the
+ * single envelope and the snake_case `SearchResult` is retired.
+ */
+export type SearchResultV2 = {
+	/** The number of items found */
+	foundCount: number;
+
+	/** The current page number */
+	page: number;
+
+	/** The total number of pages */
+	pageCount: number;
+
+	/** The number of items per page */
+	perPage: number;
+
+	/** The total number of items */
+	totalCount: number;
 };

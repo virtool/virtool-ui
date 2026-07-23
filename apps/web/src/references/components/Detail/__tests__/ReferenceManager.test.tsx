@@ -1,9 +1,8 @@
 import { screen } from "@testing-library/react";
-import { mockApiGetReferenceDetail } from "@tests/api/references";
 import { createFakeReference } from "@tests/fake/references";
+import { mockGetReference } from "@tests/server-fn/references";
 import { renderRoute } from "@tests/setup";
-import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<ReferenceManager />", () => {
 	let reference: ReturnType<typeof createFakeReference>;
@@ -11,13 +10,11 @@ describe("<ReferenceManager />", () => {
 
 	beforeEach(() => {
 		reference = createFakeReference({
-			cloned_from: { id: 62, name: "Source Reference Name" },
+			clonedFrom: { id: 62, name: "Source Reference Name" },
 		});
 		path = `/refs/${reference.id}/manage`;
-		mockApiGetReferenceDetail(reference);
+		mockGetReference(reference);
 	});
-
-	afterEach(() => nock.cleanAll());
 
 	it("should render properly", async () => {
 		await renderRoute(path);

@@ -22,8 +22,18 @@ export const CLIENT_ERROR_NAME = "ClientError";
  * is reported as an incident.
  */
 export class ClientError extends Error {
-	constructor(message: string) {
+	/**
+	 * The HTTP status the handler set alongside this error. Carried as an own
+	 * property so it survives serialization to the client, where server-function
+	 * errors arrive as plain `Error`s with no access to the HTTP response.
+	 */
+	declare readonly status?: number;
+
+	constructor(message: string, status?: number) {
 		super(message);
 		this.name = CLIENT_ERROR_NAME;
+		if (status !== undefined) {
+			this.status = status;
+		}
 	}
 }

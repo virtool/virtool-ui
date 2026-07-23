@@ -26,7 +26,7 @@ export default function SequenceButtons({
 
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		String(reference.id),
-		"modify_otu",
+		"modifyOtu",
 	);
 	const archived = useReferenceIsArchived(String(reference.id));
 	const isolateId = useGetActiveIsolateId(otu);

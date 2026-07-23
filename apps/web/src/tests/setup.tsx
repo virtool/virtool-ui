@@ -28,6 +28,7 @@ import { groupServerFnMocks } from "./server-fn/groups";
 import { hmmServerFnMocks } from "./server-fn/hmm";
 import { jobServerFnMocks } from "./server-fn/jobs";
 import { labelServerFnMocks } from "./server-fn/labels";
+import { referenceServerFnMocks } from "./server-fn/references";
 import {
 	mockGetPasswordPolicy,
 	settingsServerFnMocks,
@@ -78,6 +79,11 @@ vi.mock("@server/subtraction/functions", async () => {
 	return subtractionServerFnMocks;
 });
 
+vi.mock("@server/references/functions", async () => {
+	const { referenceServerFnMocks } = await import("./server-fn/references");
+	return referenceServerFnMocks;
+});
+
 beforeEach(() => {
 	for (const fn of Object.values(groupServerFnMocks)) {
 		fn.mockReset();
@@ -94,6 +100,8 @@ beforeEach(() => {
 		subtractionServerFnMocks.findSubtractions,
 		subtractionServerFnMocks.getSubtraction,
 		subtractionServerFnMocks.listSubtractionsShortlist,
+		referenceServerFnMocks.findReferences,
+		referenceServerFnMocks.getReference,
 	]) {
 		fn.mockReset();
 		// Default to a pending promise so an un-stubbed query renders its loading
@@ -105,6 +113,16 @@ beforeEach(() => {
 		subtractionServerFnMocks.createSubtraction,
 		subtractionServerFnMocks.updateSubtraction,
 		subtractionServerFnMocks.deleteSubtraction,
+		referenceServerFnMocks.createReference,
+		referenceServerFnMocks.updateReference,
+		referenceServerFnMocks.archiveReference,
+		referenceServerFnMocks.unarchiveReference,
+		referenceServerFnMocks.addReferenceUser,
+		referenceServerFnMocks.addReferenceGroup,
+		referenceServerFnMocks.updateReferenceUser,
+		referenceServerFnMocks.updateReferenceGroup,
+		referenceServerFnMocks.removeReferenceUser,
+		referenceServerFnMocks.removeReferenceGroup,
 	]) {
 		fn.mockReset();
 	}

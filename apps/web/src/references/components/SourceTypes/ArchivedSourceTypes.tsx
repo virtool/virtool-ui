@@ -8,9 +8,9 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId");
 
 export function ArchivedSourceTypes() {
 	const { refId } = routeApi.useParams();
-	const { data } = useSuspenseReference(refId);
+	const { data } = useSuspenseReference(Number(refId));
 
-	const sourceTypes = data.source_types ?? [];
+	const sourceTypes = data.sourceTypes ?? [];
 
 	return (
 		<section>

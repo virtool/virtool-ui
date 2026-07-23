@@ -23,15 +23,16 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId");
 
 export function LocalSourceTypes() {
 	const { refId } = routeApi.useParams();
+	const referenceId = Number(refId);
 
-	const { data } = useSuspenseReference(refId);
+	const { data } = useSuspenseReference(referenceId);
 
-	const { mutation: updateReferenceMutation } = useUpdateReference(refId);
+	const { mutation: updateReferenceMutation } = useUpdateReference(referenceId);
 
-	const sourceTypes = data.source_types ?? [];
-	const restrictSourceTypes = data.restrict_source_types ?? false;
+	const sourceTypes = data.sourceTypes ?? [];
+	const restrictSourceTypes = data.restrictSourceTypes ?? false;
 
-	const { mutate } = useUpdateReferenceSourceTypes(refId);
+	const { mutate } = useUpdateReferenceSourceTypes(referenceId);
 
 	const {
 		error,
@@ -44,7 +45,7 @@ export function LocalSourceTypes() {
 
 	function handleToggle() {
 		updateReferenceMutation.mutate({
-			restrict_source_types: !restrictSourceTypes,
+			restrictSourceTypes: !restrictSourceTypes,
 		});
 	}
 

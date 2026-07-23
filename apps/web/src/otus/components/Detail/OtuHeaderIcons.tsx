@@ -27,7 +27,7 @@ export function OtuHeaderIcons({
 	const [openRemove, setOpenRemove] = useState(false);
 	const { hasPermission: canModify } = useCheckReferenceRight(
 		refId,
-		"modify_otu",
+		"modifyOtu",
 	);
 
 	if (!canModify) {

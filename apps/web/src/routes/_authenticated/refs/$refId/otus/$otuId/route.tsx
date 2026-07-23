@@ -24,11 +24,17 @@ export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 
 			try {
 				await Promise.all([
-					queryClient.ensureQueryData(referenceQueryOptions(refId)),
+					queryClient.ensureQueryData(referenceQueryOptions(Number(refId))),
 					queryClient.ensureQueryData(otuQueryOptions(otuId)),
 				]);
 			} catch (error) {
-				if ((error as QueryError).response?.status === 404) {
+				// The reference comes from a server function (its 404 rides on the
+				// error's `status`); the OTU still comes from the Python API (its 404
+				// is on `response.status`).
+				const status =
+					(error as { status?: number }).status ??
+					(error as QueryError).response?.status;
+				if (status === 404) {
 					throw notFound();
 				}
 				throw error;
@@ -42,7 +48,7 @@ function OtuDetailLayout() {
 	const { refId, otuId } = Route.useParams();
 	const navigate = Route.useNavigate();
 	const { data: otu } = useFetchOtu(otuId);
-	const { data: reference } = useFetchReference(refId);
+	const { data: reference } = useFetchReference(Number(refId));
 	const archived = useReferenceIsArchived(refId);
 
 	if (!otu || !reference) {

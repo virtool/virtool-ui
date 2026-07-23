@@ -5,7 +5,6 @@ import RelativeTime from "@base/RelativeTime";
 import SubviewHeader from "@base/SubviewHeader";
 import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
 import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
-import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { useFetchReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
 import { useFetchIndex } from "../queries";
@@ -29,7 +28,7 @@ export default function IndexDetail() {
 		data: reference,
 		isPending: isPendingReference,
 		isError: isErrorReference,
-	} = useFetchReference(refId);
+	} = useFetchReference(Number(refId));
 
 	if ((isError && !index) || (isErrorReference && !reference)) {
 		return <NotFound />;
@@ -38,7 +37,7 @@ export default function IndexDetail() {
 		return <LoadingPlaceholder />;
 	}
 
-	const { contributors, created_at, files, id, otus, user, version } = index;
+	const { contributors, created_at, files, otus, user, version } = index;
 
 	return (
 		<>
@@ -48,14 +47,6 @@ export default function IndexDetail() {
 					<SubviewHeaderAttribution>
 						{user.handle} built <RelativeTime time={created_at} />
 					</SubviewHeaderAttribution>
-					{reference.latest_build?.has_json && (
-						<DownloadLink
-							className="ml-auto"
-							href={`/api/indexes/${id}/files/reference.json.gz`}
-						>
-							Download
-						</DownloadLink>
-					)}
 				</div>
 			</SubviewHeader>
 

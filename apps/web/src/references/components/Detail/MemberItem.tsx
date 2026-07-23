@@ -20,16 +20,16 @@ export type MemberItemProps = {
 	canModify: boolean;
 
 	/** The unique identifier for the member */
-	id: number | string;
+	id: number;
 
 	/** The handle (user) or name of the member user or group */
 	handleOrName: string;
 
 	/** Callback to initiate editing the member */
-	onEdit: (id: number | string) => void;
+	onEdit: (id: number) => void;
 
 	/** Callback to initiate removing the member */
-	onRemove: (id: number | string) => void;
+	onRemove: (id: number) => void;
 };
 
 /**

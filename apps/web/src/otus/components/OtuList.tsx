@@ -9,7 +9,6 @@ import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
 } from "@references/hooks";
-import { useSuspenseReference } from "@references/queries";
 import { getRouteApi } from "@tanstack/react-router";
 import { Inbox, SearchX } from "lucide-react";
 import { useState } from "react";
@@ -34,17 +33,16 @@ type OtuListProps = {
 export default function OtuList({ term, page, setSearch }: OtuListProps) {
 	const { refId } = routeApi.useParams();
 	const [openCreate, setOpenCreate] = useState(false);
-	const { data: reference } = useSuspenseReference(refId);
 	const { data: otus } = useSuspenseOtus(refId, page, 25, term);
 	const { hasPermission: canModifyOtu } = useCheckReferenceRight(
 		refId,
-		"modify_otu",
+		"modifyOtu",
 	);
 	const archived = useReferenceIsArchived(refId);
 
 	const { items, page: storedPage, page_count } = otus;
 
-	const canCreate = canModifyOtu && !reference.remotes_from && !archived;
+	const canCreate = canModifyOtu && !archived;
 	const isUnfilteredEmpty = !items.length && !term;
 
 	return (
@@ -56,7 +54,6 @@ export default function OtuList({ term, page, setSearch }: OtuListProps) {
 					setTerm={(term) => setSearch({ term, page: 1 }, { replace: true })}
 					onCreate={() => setOpenCreate(true)}
 					refId={refId}
-					remotesFrom={reference.remotes_from}
 				/>
 			)}
 			<OtuCreate open={openCreate} setOpen={setOpenCreate} refId={refId} />
