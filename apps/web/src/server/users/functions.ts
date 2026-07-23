@@ -38,9 +38,17 @@ const findUsersSchema = z
 	.object({
 		term: z.string().default(""),
 		page: z.number().int().positive().default(1),
-		per_page: z.number().int().positive().max(100).default(25),
+		perPage: z.number().int().positive().max(100).default(25),
 		administrator: z.boolean().optional(),
 		active: z.boolean().default(true),
+	})
+	.optional();
+
+const searchUsersSchema = z
+	.object({
+		term: z.string().default(""),
+		page: z.number().int().positive().default(1),
+		perPage: z.number().int().positive().max(100).default(25),
 	})
 	.optional();
 
@@ -124,11 +132,27 @@ export const findUsers = createServerFn({ method: "GET" })
 		return findUsersImpl(db, {
 			term: data?.term ?? "",
 			page: data?.page ?? 1,
-			perPage: data?.per_page ?? 25,
+			perPage: data?.perPage ?? 25,
 			administrator: data?.administrator,
 			active: data?.active ?? true,
 		});
 	});
+
+// A paginated user search any signed-in user may run, mirroring Python's
+// `GET /users` (authenticated, no administrator filter). Backs the reference
+// member picker, where a non-admin who holds `modify` on a reference searches
+// users to add. `findUsers` above is the stricter administrator-only variant
+// used by the user administration views.
+export const searchUsers = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
+	.validator(searchUsersSchema)
+	.handler(async ({ data }) =>
+		findUsersImpl(db, {
+			term: data?.term ?? "",
+			page: data?.page ?? 1,
+			perPage: data?.perPage ?? 25,
+		}),
+	);
 
 // Not on the authentication exception list, so an anonymous call gets a 401.
 // The login wall and the authenticated route guard both rely on that: a

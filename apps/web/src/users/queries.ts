@@ -1,10 +1,10 @@
 import type { AdministratorRoleName } from "@administration/types";
-import { apiClient } from "@app/api";
 import {
 	createUser,
 	findUsers,
 	getUser,
 	listUsers,
+	searchUsers,
 	setAdministratorRole,
 	updateUser,
 } from "@server/users/functions";
@@ -18,7 +18,7 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { userQueryKeys } from "@users/keys";
-import type { UserNested, UserResponse } from "./types";
+import type { UserNested } from "./types";
 
 /**
  * Fetch every active user, for populating selectors and filters
@@ -35,21 +35,18 @@ export function useListUsers() {
 /**
  * Setup query for fetching user search results for infinite scrolling view
  *
- * @param per_page - The number of users to fetch per page
+ * @param perPage - The number of users to fetch per page
  * @param term - The search term to filter users by
  * @returns An UseInfiniteQueryResult object containing the user search results
  */
-export function useInfiniteFindUsers(per_page: number, term: string) {
-	return useInfiniteQuery<UserResponse>({
-		queryKey: userQueryKeys.infiniteList([per_page, term]),
+export function useInfiniteFindUsers(perPage: number, term: string) {
+	return useInfiniteQuery({
+		queryKey: userQueryKeys.infiniteList([perPage, term]),
 		queryFn: ({ pageParam }) =>
-			apiClient
-				.get("/users")
-				.query({ page: pageParam as number, per_page, term })
-				.then((res) => res.body),
+			searchUsers({ data: { page: pageParam as number, perPage, term } }),
 		initialPageParam: 1,
 		getNextPageParam: (lastPage) => {
-			if (lastPage.page >= lastPage.page_count) {
+			if (lastPage.page >= lastPage.pageCount) {
 				return undefined;
 			}
 			return (lastPage.page || 1) + 1;
@@ -62,23 +59,23 @@ export function useInfiniteFindUsers(per_page: number, term: string) {
  * Query options for a page of user search results.
  *
  * @param page - The page to fetch
- * @param per_page - The number of users to fetch per page
+ * @param perPage - The number of users to fetch per page
  * @param term - The search term to filter users by
  * @param administrator - Filter the users by administrator status
  * @param active - Filter the users by whether they are active
  */
 export function usersQueryOptions(
 	page: number,
-	per_page: number,
+	perPage: number,
 	term: string,
 	administrator?: boolean,
 	active?: boolean,
 ) {
 	return queryOptions({
-		queryKey: userQueryKeys.list([page, per_page, term, administrator, active]),
+		queryKey: userQueryKeys.list([page, perPage, term, administrator, active]),
 		queryFn: () =>
 			findUsers({
-				data: { page, per_page, term, administrator, active },
+				data: { page, perPage, term, administrator, active },
 			}),
 	});
 }
@@ -94,13 +91,13 @@ export function usersQueryOptions(
  */
 export function useSuspenseUsers(
 	page: number,
-	per_page: number,
+	perPage: number,
 	term: string,
 	administrator?: boolean,
 	active?: boolean,
 ) {
 	return useSuspenseQuery(
-		usersQueryOptions(page, per_page, term, administrator, active),
+		usersQueryOptions(page, perPage, term, administrator, active),
 	);
 }
 

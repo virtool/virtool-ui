@@ -58,7 +58,7 @@ export default function AddReferenceUser({
 	}
 
 	const userIds = users.map((u) => u.id);
-	const items = data.pages.flatMap((page) => page.documents);
+	const items = data.pages.flatMap((page) => page.items);
 	const filteredItems = items.filter((item) => !userIds.includes(item.id));
 
 	// CompactScrollList types its rows as `unknown`; the items are users.

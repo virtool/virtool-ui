@@ -2,7 +2,6 @@ import { useFetchAccount } from "@account/account";
 import { CONTENT_SCROLL_ID } from "@app/scroll";
 import { armSessionEnd } from "@app/session";
 import * as Sse from "@app/sse/SseConnection";
-import type { Root } from "@app/types";
 import Banner from "@banner/components/Banner";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import SkipLink from "@base/SkipLink";
@@ -19,7 +18,6 @@ import {
 	redirect,
 	useLocation,
 } from "@tanstack/react-router";
-import { rootQueryKeys } from "@wall/keys";
 import { lazy, Suspense, useEffect } from "react";
 
 const UploadOverlay = lazy(() => import("@uploads/components/UploadOverlay"));
@@ -35,17 +33,14 @@ export const Route = createFileRoute("/_authenticated")({
 	beforeLoad: async ({ context, location }) => {
 		const { queryClient } = context;
 
-		const [{ apiClient }, { accountQueryOptions }] = await Promise.all([
-			import("@app/api"),
+		const [{ rootQueryOptions }, { accountQueryOptions }] = await Promise.all([
+			import("@nav/queries"),
 			import("@account/account"),
 		]);
 
-		const rootData = await queryClient.ensureQueryData<Root>({
-			queryKey: rootQueryKeys.all(),
-			queryFn: () => apiClient.get("/").then((res) => res.body),
-		});
+		const rootData = await queryClient.ensureQueryData(rootQueryOptions());
 
-		if (rootData.first_user) {
+		if (rootData.firstUser) {
 			throw redirect({ to: "/setup" });
 		}
 

@@ -77,11 +77,11 @@ export type UserOption = {
 /** A page of user search results. */
 export type UserSearchResults = {
 	items: User[];
-	found_count: number;
-	total_count: number;
+	foundCount: number;
+	totalCount: number;
 	page: number;
-	page_count: number;
-	per_page: number;
+	pageCount: number;
+	perPage: number;
 };
 
 /** Filters accepted when searching users. */
@@ -329,11 +329,11 @@ export async function findUsers(
 
 	return {
 		items: await assembleUsers(db, rows),
-		found_count: foundCount,
-		total_count: totalRow?.value ?? 0,
+		foundCount,
+		totalCount: totalRow?.value ?? 0,
 		page,
-		page_count: perPage > 0 ? Math.ceil(foundCount / perPage) : 0,
-		per_page: perPage,
+		pageCount: perPage > 0 ? Math.ceil(foundCount / perPage) : 0,
+		perPage,
 	};
 }
 

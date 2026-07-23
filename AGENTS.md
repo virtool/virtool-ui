@@ -278,10 +278,14 @@ at all:
   `getAccount` server function.
 - `@administration/passwordPolicy` — `passwordPolicyQueryOptions`, backed by
   `getPasswordPolicyFn`.
+- `@nav/queries` — `rootQueryOptions` / `useRootQuery`, backed by the `getRoot`
+  server function. The guard reads `firstUser` from it before a session
+  exists; the whole module is `@app/api`-free.
 
-Both are server-function-backed and need no HTTP client. Don't fold them back
-into their feature's `queries.ts`, and don't add an `apiClient` call to either.
-Prefer a server function over a Python REST call for anything a guard reads.
+All three are server-function-backed and need no HTTP client. Don't fold them
+back into a feature's `queries.ts` that also imports `@app/api`, and don't add
+an `apiClient` call to any of them. Prefer a server function over a Python REST
+call for anything a guard reads.
 
 ### Heavy dependencies get their own module
 

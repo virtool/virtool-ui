@@ -54,6 +54,7 @@ const { createFirstUserFn, loginFn, logoutFn, resetPasswordFn } = await import(
 	"./functions"
 );
 const { getPasswordPolicyFn } = await import("../settings/functions");
+const { getRoot } = await import("../root/functions");
 const { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } = await import("./cookies");
 const { seedSession, seedUser } = await import("./test/fixtures");
 
@@ -99,12 +100,13 @@ describe("authenticationExceptions", () => {
 	// The list is the whole security boundary: anything on it is publicly
 	// callable. A fn added here by mistake is a silent hole, so pin the contents
 	// rather than just the middleware's handling of them.
-	it("exempts exactly the five unauthenticated endpoints", () => {
-		expect(authenticationExceptions).toHaveLength(5);
+	it("exempts exactly the six unauthenticated endpoints", () => {
+		expect(authenticationExceptions).toHaveLength(6);
 		expect(authenticationExceptions.map((fn) => fn.url).sort()).toEqual(
 			[
 				createFirstUserFn,
 				getPasswordPolicyFn,
+				getRoot,
 				loginFn,
 				logoutFn,
 				resetPasswordFn,
@@ -119,6 +121,7 @@ describe("createAuthenticationMiddleware", () => {
 	it.each([
 		["createFirstUserFn", () => createFirstUserFn],
 		["getPasswordPolicyFn", () => getPasswordPolicyFn],
+		["getRoot", () => getRoot],
 		["loginFn", () => loginFn],
 		["logoutFn", () => logoutFn],
 		["resetPasswordFn", () => resetPasswordFn],

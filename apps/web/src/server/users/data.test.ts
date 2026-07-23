@@ -290,8 +290,8 @@ describe("findUsers", () => {
 			"alice",
 			"malice",
 		]);
-		expect(result.found_count).toBe(2);
-		expect(result.total_count).toBe(3);
+		expect(result.foundCount).toBe(2);
+		expect(result.totalCount).toBe(3);
 	});
 
 	it("filters to administrators and to non-administrators", async () => {
@@ -326,7 +326,7 @@ describe("findUsers", () => {
 
 		expect(page1.items.map((user) => user.handle)).toEqual(["a", "b"]);
 		expect(page2.items.map((user) => user.handle)).toEqual(["c"]);
-		expect(page1.page_count).toBe(2);
+		expect(page1.pageCount).toBe(2);
 	});
 });
 
