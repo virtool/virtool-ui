@@ -15,6 +15,7 @@ import {
 	addReferenceGroup as addReferenceGroupImpl,
 	addReferenceUser as addReferenceUserImpl,
 	checkReferenceRight,
+	checkReferenceVisibility,
 	createReference as createReferenceImpl,
 	findReferences as findReferencesImpl,
 	getReference as getReferenceImpl,
@@ -146,8 +147,15 @@ export const findReferences = createServerFn({ method: "GET" })
 export const getReference = createServerFn({ method: "GET" })
 	.middleware([authenticated()])
 	.validator(referenceIdSchema)
-	.handler(async ({ data }) => {
+	.handler(async ({ context, data }) => {
 		try {
+			// Detail read enforces the same visibility rule as the list: a
+			// non-member, non-administrator caller cannot tell a hidden reference
+			// from a missing one — both surface as a 404.
+			const actor = await resolveReferenceActor(db, context.session.userId);
+			if (!(await checkReferenceVisibility(db, data.referenceId, actor))) {
+				throw new ReferenceNotFoundError();
+			}
 			return await getReferenceImpl(db, data.referenceId);
 		} catch (err) {
 			return rethrowAsHttp(err);

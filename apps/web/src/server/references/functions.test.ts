@@ -215,6 +215,65 @@ describe("getReference", () => {
 		expect(reference.users[0]?.id).toBe(ownerId);
 		expect(reference.users[0]?.modifyOtu).toBe(true);
 	});
+
+	it("hides a reference the caller cannot see behind a 404", async () => {
+		const ownerId = await seedUser(db, {
+			administratorRole: null,
+			handle: "bob",
+		});
+		await signIn(null);
+		const referenceId = await seedReference(ownerId);
+
+		await expect(call("getReference", { referenceId })).rejects.toThrow(
+			"Reference not found.",
+		);
+		expect(setResponseStatus).toHaveBeenCalledWith(404);
+	});
+
+	it("returns the detail for a full administrator who is not a member", async () => {
+		const ownerId = await seedUser(db, {
+			administratorRole: null,
+			handle: "bob",
+		});
+		await signIn("full");
+		const referenceId = await seedReference(ownerId);
+
+		const reference = (await call("getReference", { referenceId })) as {
+			id: number;
+		};
+
+		expect(reference.id).toBe(referenceId);
+	});
+
+	it("returns the detail for a member reached through a group, regardless of rights", async () => {
+		const ownerId = await seedUser(db, {
+			administratorRole: null,
+			handle: "bob",
+		});
+		const userId = await signIn(null);
+		const referenceId = await seedReference(ownerId);
+		const group = takeFirstOrThrow(
+			await db
+				.insert(groups)
+				.values({ name: "Team", permissions: {} as never })
+				.returning({ id: groups.id }),
+		);
+		await db.insert(userGroups).values({ userId, groupId: group.id });
+		// Every rights flag is false: visibility is broader than any single right.
+		await db.insert(legacyReferenceGroups).values({
+			reference_id: referenceId,
+			group_id: group.id,
+			build: false,
+			modify: false,
+			modify_otu: false,
+		});
+
+		const reference = (await call("getReference", { referenceId })) as {
+			id: number;
+		};
+
+		expect(reference.id).toBe(referenceId);
+	});
 });
 
 describe("createReference", () => {

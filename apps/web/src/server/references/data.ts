@@ -420,6 +420,39 @@ export async function checkReferenceRight(
 	return false;
 }
 
+/**
+ * Whether `actor` may see a reference at all — the single-row form of
+ * {@link referenceVisibilityFilter}, so detail read enforces the same rule the
+ * list does. A full administrator sees every reference; otherwise ownership, any
+ * user membership row, or any group membership row grants visibility, regardless
+ * of the rights flags on that row.
+ *
+ * Returns `false` for both a missing reference and one the actor cannot see, so
+ * the caller can collapse the two into an indistinguishable 404.
+ */
+export async function checkReferenceVisibility(
+	db: Db,
+	referenceId: number,
+	actor: ReferenceActor,
+): Promise<boolean> {
+	if (actor.isAdmin) {
+		return true;
+	}
+
+	const [row] = await db
+		.select({ id: legacyReferences.id })
+		.from(legacyReferences)
+		.where(
+			and(
+				eq(legacyReferences.id, referenceId),
+				referenceVisibilityFilter(db, actor),
+			),
+		)
+		.limit(1);
+
+	return Boolean(row);
+}
+
 // The rows a non-administrator may see: references they own, plus references
 // they can reach through a user or group membership row.
 function referenceVisibilityFilter(
