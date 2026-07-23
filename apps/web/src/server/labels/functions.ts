@@ -4,6 +4,7 @@ import { z } from "zod";
 import { authenticated } from "../auth/policy";
 import { db } from "../db/pg";
 import { ClientError } from "../errors";
+import { rowIdSchema } from "../validation";
 import {
 	createLabel as createLabelImpl,
 	deleteLabel as deleteLabelImpl,
@@ -36,7 +37,7 @@ const labelValuesSchema = z.object({
 });
 
 const labelIdSchema = z.object({
-	labelId: z.number().int().positive(),
+	labelId: rowIdSchema,
 });
 
 const findLabelsSchema = z.object({ term: z.string().default("") }).optional();

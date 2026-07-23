@@ -6,6 +6,7 @@ import { ForbiddenError } from "../auth/middleware";
 import { authenticated, permission } from "../auth/policy";
 import { db } from "../db/pg";
 import { ClientError } from "../errors";
+import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 import {
 	addReferenceGroup as addReferenceGroupImpl,
 	addReferenceUser as addReferenceUserImpl,
@@ -29,12 +30,12 @@ import {
 } from "./data";
 
 const referenceIdSchema = z.object({
-	referenceId: z.number().int().positive(),
+	referenceId: rowIdSchema,
 });
 
 const findReferencesSchema = z.object({
-	page: z.number().int().positive().default(1),
-	per_page: z.number().int().positive().max(100).default(25),
+	page: pageSchema,
+	per_page: perPageSchema,
 	term: z.string().default(""),
 	archived: z.boolean().optional(),
 });
@@ -50,8 +51,8 @@ const createReferenceSchema = z
 		name: z.string().trim().default(""),
 		description: z.string().trim().default(""),
 		organism: z.string().trim().default(""),
-		cloneFrom: z.number().int().positive().optional(),
-		importFrom: z.number().int().positive().optional(),
+		cloneFrom: rowIdSchema.optional(),
+		importFrom: rowIdSchema.optional(),
 	})
 	.refine(
 		(data) => !(data.cloneFrom !== undefined && data.importFrom !== undefined),
@@ -60,8 +61,7 @@ const createReferenceSchema = z
 		},
 	);
 
-const updateReferenceSchema = z.object({
-	referenceId: z.number().int().positive(),
+const updateReferenceSchema = referenceIdSchema.extend({
 	name: z.string().trim().min(1).optional(),
 	description: z.string().optional(),
 	organism: z.string().optional(),
@@ -70,11 +70,11 @@ const updateReferenceSchema = z.object({
 });
 
 const referenceUserSchema = referenceIdSchema.extend({
-	userId: z.number().int().positive(),
+	userId: rowIdSchema,
 });
 
 const referenceGroupSchema = referenceIdSchema.extend({
-	groupId: z.number().int().positive(),
+	groupId: rowIdSchema,
 });
 
 const addReferenceUserSchema = referenceUserSchema.merge(rightsSchema);

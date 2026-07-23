@@ -386,6 +386,13 @@ first.
 Legacy features that still call the Python API through their
 client-side `api.ts` are not subject to this layering.
 
+A `functions.ts` validator builds on the shared primitives in
+`@server/validation` — `rowIdSchema` for any row id, `pageSchema` and
+`perPageSchema` for a paginated list — rather than re-spelling
+`z.number().int().positive()`. A schema that adds fields to an id it
+already has a schema for extends that schema
+(`referenceIdSchema.extend({ ... })`) instead of re-declaring the field.
+
 A handler maps an expected outcome to an HTTP status with
 `setResponseStatus`, then throws `ClientError` (`@server/errors`) — never
 a plain `Error` — for any deliberate 4xx (a bad login, a missing record,

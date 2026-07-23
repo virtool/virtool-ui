@@ -5,6 +5,7 @@ import { z } from "zod";
 import { adminRole, authenticated } from "../auth/policy";
 import { db } from "../db/pg";
 import { ClientError } from "../errors";
+import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 import {
 	createGroup as createGroupImpl,
 	deleteGroup as deleteGroupImpl,
@@ -17,14 +18,14 @@ import {
 } from "./data";
 
 const groupIdSchema = z.object({
-	groupId: z.number().int().positive(),
+	groupId: rowIdSchema,
 });
 
 const findGroupsSchema = z
 	.object({
 		term: z.string().default(""),
-		page: z.number().int().positive().default(1),
-		per_page: z.number().int().positive().max(100).default(25),
+		page: pageSchema,
+		per_page: perPageSchema,
 	})
 	.optional();
 
@@ -32,8 +33,7 @@ const createGroupSchema = z.object({
 	name: z.string().min(1),
 });
 
-const updateGroupSchema = z.object({
-	groupId: z.number().int().positive(),
+const updateGroupSchema = groupIdSchema.extend({
 	name: z.string().min(1).optional(),
 	permissions: permissionsSchema.partial().optional(),
 });

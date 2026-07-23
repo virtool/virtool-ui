@@ -4,6 +4,7 @@ import { z } from "zod";
 import { authenticated, permission } from "../auth/policy";
 import { db } from "../db/pg";
 import { storage } from "../storage";
+import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 import {
 	createSubtraction as createSubtractionImpl,
 	deleteSubtraction as deleteSubtractionImpl,
@@ -16,23 +17,22 @@ import {
 } from "./data";
 
 const findSubtractionsSchema = z.object({
-	page: z.number().int().positive().default(1),
-	per_page: z.number().int().positive().max(100).default(25),
+	page: pageSchema,
+	per_page: perPageSchema,
 	term: z.string().default(""),
 });
 
 const subtractionIdSchema = z.object({
-	subtractionId: z.number().int().positive(),
+	subtractionId: rowIdSchema,
 });
 
 const createSubtractionSchema = z.object({
 	name: z.string().trim().min(1),
 	nickname: z.string().trim().default(""),
-	uploadId: z.number().int().positive(),
+	uploadId: rowIdSchema,
 });
 
-const updateSubtractionSchema = z.object({
-	subtractionId: z.number().int().positive(),
+const updateSubtractionSchema = subtractionIdSchema.extend({
 	name: z.string().trim().min(1).optional(),
 	nickname: z.string().trim().optional(),
 });

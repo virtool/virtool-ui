@@ -4,10 +4,11 @@ import { z } from "zod";
 import { authenticated } from "../auth/policy";
 import { db } from "../db/pg";
 import { ClientError } from "../errors";
+import { rowIdSchema } from "../validation";
 import { getTask as getTaskImpl, TaskNotFoundError } from "./data";
 
 const taskIdSchema = z.object({
-	taskId: z.number().int().positive(),
+	taskId: rowIdSchema,
 });
 
 // Wrapped in createServerOnlyFn so the compiler can strip this body — and the

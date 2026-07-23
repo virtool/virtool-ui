@@ -7,6 +7,7 @@ import { adminRole, authenticated } from "../auth/policy";
 import { checkConfiguredPasswordLength } from "../auth/service";
 import { db } from "../db/pg";
 import { ClientError } from "../errors";
+import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 import {
 	createUser as createUserImpl,
 	findUsers as findUsersImpl,
@@ -31,14 +32,14 @@ const administratorRoleSchema = z.enum([
 ]);
 
 const userIdSchema = z.object({
-	userId: z.number().int().positive(),
+	userId: rowIdSchema,
 });
 
 const findUsersSchema = z
 	.object({
 		term: z.string().default(""),
-		page: z.number().int().positive().default(1),
-		perPage: z.number().int().positive().max(100).default(25),
+		page: pageSchema,
+		perPage: perPageSchema,
 		administrator: z.boolean().optional(),
 		active: z.boolean().default(true),
 	})
@@ -47,8 +48,8 @@ const findUsersSchema = z
 const searchUsersSchema = z
 	.object({
 		term: z.string().default(""),
-		page: z.number().int().positive().default(1),
-		perPage: z.number().int().positive().max(100).default(25),
+		page: pageSchema,
+		perPage: perPageSchema,
 	})
 	.optional();
 
@@ -61,14 +62,13 @@ const createUserSchema = z.object({
 	forceReset: z.boolean().default(false),
 });
 
-const updateUserSchema = z.object({
-	userId: z.number().int().positive(),
+const updateUserSchema = userIdSchema.extend({
 	active: z.boolean().optional(),
 	force_reset: z.boolean().optional(),
 	handle: z.string().trim().min(1).optional(),
 	password: z.string().optional(),
-	groups: z.array(z.number().int().positive()).optional(),
-	primary_group: z.number().int().positive().nullable().optional(),
+	groups: z.array(rowIdSchema).optional(),
+	primary_group: rowIdSchema.nullable().optional(),
 });
 
 const accountHandleSchema = z.object({
@@ -86,8 +86,7 @@ function checkReservedHandle(handle: string): void {
 	}
 }
 
-const setAdministratorRoleSchema = z.object({
-	userId: z.number().int().positive(),
+const setAdministratorRoleSchema = userIdSchema.extend({
 	role: administratorRoleSchema.nullable(),
 });
 
