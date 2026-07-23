@@ -32,13 +32,14 @@ type OtuListProps = {
  */
 export default function OtuList({ term, page, setSearch }: OtuListProps) {
 	const { refId } = routeApi.useParams();
+	const referenceId = Number(refId);
 	const [openCreate, setOpenCreate] = useState(false);
 	const { data: otus } = useSuspenseOtus(refId, page, 25, term);
 	const { hasPermission: canModifyOtu } = useCheckReferenceRight(
-		refId,
+		referenceId,
 		"modifyOtu",
 	);
-	const archived = useReferenceIsArchived(refId);
+	const archived = useReferenceIsArchived(referenceId);
 
 	const { items, page: storedPage, page_count } = otus;
 
@@ -53,7 +54,7 @@ export default function OtuList({ term, page, setSearch }: OtuListProps) {
 					term={term}
 					setTerm={(term) => setSearch({ term, page: 1 }, { replace: true })}
 					onCreate={() => setOpenCreate(true)}
-					refId={refId}
+					referenceId={referenceId}
 				/>
 			)}
 			<OtuCreate open={openCreate} setOpen={setOpenCreate} refId={refId} />

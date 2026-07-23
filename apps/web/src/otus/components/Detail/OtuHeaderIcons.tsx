@@ -8,7 +8,7 @@ import OtuRemove from "../OtuRemove";
 type OtuHeaderIconsProps = {
 	id: string;
 	name: string;
-	refId: string;
+	referenceId: number;
 	abbreviation: string;
 	onRemoved: () => void;
 };
@@ -19,14 +19,14 @@ type OtuHeaderIconsProps = {
 export function OtuHeaderIcons({
 	id,
 	name,
-	refId,
+	referenceId,
 	abbreviation,
 	onRemoved,
 }: OtuHeaderIconsProps) {
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openRemove, setOpenRemove] = useState(false);
 	const { hasPermission: canModify } = useCheckReferenceRight(
-		refId,
+		referenceId,
 		"modifyOtu",
 	);
 

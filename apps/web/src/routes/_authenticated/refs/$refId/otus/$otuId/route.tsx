@@ -43,10 +43,11 @@ export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 
 function OtuDetailLayout() {
 	const { refId, otuId } = Route.useParams();
+	const referenceId = Number(refId);
 	const navigate = Route.useNavigate();
 	const { data: otu } = useFetchOtu(otuId);
-	const { data: reference } = useFetchReference(Number(refId));
-	const archived = useReferenceIsArchived(refId);
+	const { data: reference } = useFetchReference(referenceId);
+	const archived = useReferenceIsArchived(referenceId);
 
 	if (!otu || !reference) {
 		return null;
@@ -72,7 +73,7 @@ function OtuDetailLayout() {
 						{!archived && (
 							<OtuHeaderIcons
 								id={id}
-								refId={refId}
+								referenceId={referenceId}
 								name={name}
 								abbreviation={abbreviation}
 								onRemoved={() => navigate({ to: `/refs/${refId}/otus` })}

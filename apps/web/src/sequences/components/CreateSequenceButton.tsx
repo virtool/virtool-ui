@@ -6,7 +6,7 @@ import {
 
 type CreateSequenceButtonProps = {
 	onCreate: () => void;
-	refId: string;
+	referenceId: number;
 };
 
 /**
@@ -14,13 +14,13 @@ type CreateSequenceButtonProps = {
  */
 export default function CreateSequenceButton({
 	onCreate,
-	refId,
+	referenceId,
 }: CreateSequenceButtonProps) {
 	const { hasPermission: canModify } = useCheckReferenceRight(
-		refId,
+		referenceId,
 		"modifyOtu",
 	);
-	const archived = useReferenceIsArchived(refId);
+	const archived = useReferenceIsArchived(referenceId);
 
 	if (canModify && !archived) {
 		return (

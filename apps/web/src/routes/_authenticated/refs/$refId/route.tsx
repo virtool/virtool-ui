@@ -46,7 +46,6 @@ function ReferenceDetailLayout() {
 						detail={data}
 						name={data.name}
 						userHandle={data.user?.handle ?? ""}
-						refId={refId}
 					/>
 					<ReferenceDetailTabs id={refId} otuCount={data.otuCount} />
 				</>

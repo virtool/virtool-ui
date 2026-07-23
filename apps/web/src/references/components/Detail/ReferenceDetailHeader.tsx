@@ -14,7 +14,6 @@ type ReferenceDetailHeaderProps = {
 	/** The reference details */
 	detail: Reference;
 	name: string;
-	refId: string;
 	userHandle: string;
 };
 
@@ -26,11 +25,13 @@ export default function ReferenceDetailHeader({
 	createdAt,
 	detail,
 	name,
-	refId,
 	userHandle,
 }: ReferenceDetailHeaderProps) {
 	const { pathname: location } = useLocation();
-	const { hasPermission: canModify } = useCheckReferenceRight(refId, "modify");
+	const { hasPermission: canModify } = useCheckReferenceRight(
+		detail.id,
+		"modify",
+	);
 
 	const { archived } = detail;
 	const showIcons = location.endsWith("/manage");

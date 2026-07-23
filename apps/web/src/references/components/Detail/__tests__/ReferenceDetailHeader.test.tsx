@@ -26,7 +26,6 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 			detail: reference,
 			name: reference.name,
 			userHandle: reference.user?.handle ?? "",
-			refId: String(reference.id),
 		};
 		path = `/refs/${reference.id}/manage`;
 	});
@@ -81,7 +80,6 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 				detail: reference,
 				name: reference.name,
 				userHandle: reference.user?.handle ?? "",
-				refId: String(reference.id),
 			};
 			path = `/refs/${reference.id}/manage`;
 		});

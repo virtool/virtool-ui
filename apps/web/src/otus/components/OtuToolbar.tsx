@@ -16,7 +16,7 @@ type OtuToolbarProps = {
 	onCreate: () => void;
 
 	/** ID of the OTU's parent reference */
-	refId: string;
+	referenceId: number;
 };
 
 /**
@@ -26,13 +26,13 @@ export default function OtuToolbar({
 	term,
 	setTerm,
 	onCreate,
-	refId,
+	referenceId,
 }: OtuToolbarProps) {
 	const { hasPermission: canCreate } = useCheckReferenceRight(
-		refId,
+		referenceId,
 		"modifyOtu",
 	);
-	const archived = useReferenceIsArchived(refId);
+	const archived = useReferenceIsArchived(referenceId);
 
 	return (
 		<SearchToolbar

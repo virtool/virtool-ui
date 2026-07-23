@@ -23,7 +23,7 @@ describe("<OtuToolbar />", () => {
 				term=""
 				setTerm={vi.fn()}
 				onCreate={vi.fn()}
-				refId={String(reference.id)}
+				referenceId={reference.id}
 			/>,
 		);
 
@@ -40,7 +40,7 @@ describe("<OtuToolbar />", () => {
 				term=""
 				setTerm={vi.fn()}
 				onCreate={vi.fn()}
-				refId={String(reference.id)}
+				referenceId={reference.id}
 			/>,
 		);
 

@@ -53,7 +53,7 @@ export default function Sequences({
 	setOpenCreate,
 }: IsolateSequencesProps) {
 	const { otu, reference } = useCurrentOtuContext();
-	const archived = useReferenceIsArchived(String(reference.id));
+	const archived = useReferenceIsArchived(reference.id);
 	const [sequenceToEdit, setSequenceToEdit] = useState<
 		OtuSequence | undefined
 	>();

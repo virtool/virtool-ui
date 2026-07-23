@@ -24,9 +24,13 @@ type IndexesProps = {
  */
 export default function Indexes({ page, setSearch }: IndexesProps) {
 	const { refId } = routeApi.useParams();
+	const referenceId = Number(refId);
 	const { data } = useSuspenseIndexes(page, 25, refId);
-	const { hasPermission: canBuild } = useCheckReferenceRight(refId, "build");
-	const archived = useReferenceIsArchived(refId);
+	const { hasPermission: canBuild } = useCheckReferenceRight(
+		referenceId,
+		"build",
+	);
+	const archived = useReferenceIsArchived(referenceId);
 
 	const { items, change_count, page: storedPage, page_count } = data;
 

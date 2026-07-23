@@ -5,8 +5,8 @@ import { useFetchReference } from "./queries";
 /**
  * Returns whether the reference is archived. `false` while the reference query is loading.
  */
-export function useReferenceIsArchived(referenceId: string | number) {
-	const { data: reference } = useFetchReference(Number(referenceId));
+export function useReferenceIsArchived(referenceId: number) {
+	const { data: reference } = useFetchReference(referenceId);
 	return reference?.archived ?? false;
 }
 
@@ -18,13 +18,12 @@ export function useReferenceIsArchived(referenceId: string | number) {
  * @returns Whether the right is possessed by the account
  */
 export function useCheckReferenceRight(
-	referenceId: string | number,
+	referenceId: number,
 	right: ReferenceRight,
 ) {
 	const { data: account, isPending: isPendingAccount } = useFetchAccount();
-	const { data: reference, isPending: isPendingReference } = useFetchReference(
-		Number(referenceId),
-	);
+	const { data: reference, isPending: isPendingReference } =
+		useFetchReference(referenceId);
 
 	if (isPendingAccount || isPendingReference) {
 		return { hasPermission: false, isPending: true };
