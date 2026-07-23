@@ -1,5 +1,4 @@
 import type {
-	GroupMinimal,
 	JobState,
 	LabelNested,
 	LibraryType,
@@ -248,24 +247,6 @@ async function getLabelsBySample(
 	return bySample;
 }
 
-async function getUsersByIds(
-	db: DbOrTx,
-	userIds: number[],
-): Promise<Map<number, UserNested>> {
-	const ids = [...new Set(userIds)];
-
-	if (ids.length === 0) {
-		return new Map();
-	}
-
-	const rows = await db
-		.select({ id: users.id, handle: users.handle })
-		.from(users)
-		.where(inArray(users.id, ids));
-
-	return new Map(rows.map((row) => [row.id, row]));
-}
-
 // The sample's creation job, reduced to the embedded shape. Reuses the jobs
 // data layer so a sample's job never disagrees with the jobs endpoints.
 async function getSampleJobs(
@@ -374,25 +355,12 @@ async function getReads(
 	}));
 }
 
-async function getGroup(
-	db: DbOrTx,
-	groupId: number,
-): Promise<GroupMinimal | null> {
-	const [row] = await db
-		.select({ id: groups.id, name: groups.name, legacy_id: groups.legacyId })
-		.from(groups)
-		.where(eq(groups.id, groupId))
-		.limit(1);
-
-	return row ?? null;
-}
-
 function mapMinimal(
 	row: LegacySampleRow,
 	sampleLabels: LabelNested[],
 	tags: WorkflowTags,
 	job: SampleJobNested | undefined,
-	usersById: Map<number, UserNested>,
+	user: UserNested,
 ): SampleMinimal {
 	return {
 		createdAt: row.created_at.toISOString(),
@@ -407,12 +375,22 @@ function mapMinimal(
 		nuvs: tags.nuvs,
 		pathoscope: tags.pathoscope,
 		ready: row.ready,
-		user:
-			row.user_id != null
-				? (usersById.get(row.user_id) ?? { id: row.user_id, handle: "" })
-				: { id: 0, handle: "" },
+		user,
 		workflows: tags.workflows,
 	};
+}
+
+// The sample's owner, resolved from the joined `users` row. `user_id` is nullable
+// in the schema; an ownerless sample maps to the sentinel owner.
+function resolveOwner(
+	userId: number | null,
+	handle: string | null,
+): UserNested {
+	if (userId == null) {
+		return { id: 0, handle: "" };
+	}
+
+	return { id: userId, handle: handle ?? "" };
 }
 
 /** Resolve a user id to the identity used for per-sample authorization. */
@@ -628,9 +606,12 @@ export async function findSamples(
 		// count visible to the caller. Match it exactly.
 		db.select({ value: count() }).from(legacySamples),
 		db.select({ value: count() }).from(legacySamples).where(where),
+		// The owner joins onto the sample row; the collection relationships fan
+		// out below, batched by the page's sample ids.
 		db
-			.select()
+			.select({ sample: legacySamples, ownerHandle: users.handle })
 			.from(legacySamples)
+			.leftJoin(users, eq(users.id, legacySamples.user_id))
 			.where(where)
 			.orderBy(desc(legacySamples.created_at), asc(legacySamples.id))
 			.offset((options.page - 1) * options.perPage)
@@ -640,24 +621,20 @@ export async function findSamples(
 	const totalCount = totalRows[0]?.value ?? 0;
 	const foundCount = foundRows[0]?.value ?? 0;
 
-	const sampleIds = rows.map((row) => row.id);
+	const sampleIds = rows.map(({ sample }) => sample.id);
 	const jobIds = [
 		...new Set(
-			rows.map((row) => row.job_id).filter((id): id is number => id != null),
+			rows
+				.map(({ sample }) => sample.job_id)
+				.filter((id): id is number => id != null),
 		),
 	];
-	const userIds = rows
-		.map((row) => row.user_id)
-		.filter((id): id is number => id != null);
 
-	const [labelsBySample, tagsBySample, jobsById, usersById] = await Promise.all(
-		[
-			getLabelsBySample(db, sampleIds),
-			getWorkflowTagsBySample(db, sampleIds),
-			getSampleJobs(db, jobIds),
-			getUsersByIds(db, userIds),
-		],
-	);
+	const [labelsBySample, tagsBySample, jobsById] = await Promise.all([
+		getLabelsBySample(db, sampleIds),
+		getWorkflowTagsBySample(db, sampleIds),
+		getSampleJobs(db, jobIds),
+	]);
 
 	return {
 		foundCount,
@@ -665,24 +642,33 @@ export async function findSamples(
 		page: options.page,
 		perPage: options.perPage,
 		pageCount: foundCount ? Math.ceil(foundCount / options.perPage) : 0,
-		items: rows.map((row) =>
+		items: rows.map(({ sample, ownerHandle }) =>
 			mapMinimal(
-				row,
-				labelsBySample.get(row.id) ?? [],
-				tagsBySample.get(row.id) ?? EMPTY_TAGS,
-				row.job_id != null
-					? (jobsById.get(row.job_id) ?? undefined)
+				sample,
+				labelsBySample.get(sample.id) ?? [],
+				tagsBySample.get(sample.id) ?? EMPTY_TAGS,
+				sample.job_id != null
+					? (jobsById.get(sample.job_id) ?? undefined)
 					: undefined,
-				usersById,
+				resolveOwner(sample.user_id, ownerHandle),
 			),
 		),
 	};
 }
 
 export async function getSample(db: Db, sampleId: number): Promise<Sample> {
+	// The owner and group are one-to-one, so they join onto the sample row; the
+	// collection relationships (labels, subtractions, reads, artifacts, analyses)
+	// are separate result sets that fan out below.
 	const [row] = await db
-		.select()
+		.select({
+			sample: legacySamples,
+			ownerHandle: users.handle,
+			group: { id: groups.id, name: groups.name, legacy_id: groups.legacyId },
+		})
 		.from(legacySamples)
+		.leftJoin(users, eq(users.id, legacySamples.user_id))
+		.leftJoin(groups, eq(groups.id, legacySamples.group_id))
 		.where(eq(legacySamples.id, sampleId))
 		.limit(1);
 
@@ -690,52 +676,50 @@ export async function getSample(db: Db, sampleId: number): Promise<Sample> {
 		throw new SampleNotFoundError();
 	}
 
-	const jobIds = row.job_id != null ? [row.job_id] : [];
-	const userIds = row.user_id != null ? [row.user_id] : [];
-	const storageId = sampleStorageId(sampleId, row.legacy_id);
+	const { sample, ownerHandle, group: groupRow } = row;
+	const jobIds = sample.job_id != null ? [sample.job_id] : [];
+	const storageId = sampleStorageId(sampleId, sample.legacy_id);
 
 	const [
 		labelsBySample,
 		tagsBySample,
 		jobsById,
-		usersById,
 		sampleSubtractions,
 		artifacts,
 		reads,
-		group,
 	] = await Promise.all([
 		getLabelsBySample(db, [sampleId]),
 		getWorkflowTagsBySample(db, [sampleId]),
 		getSampleJobs(db, jobIds),
-		getUsersByIds(db, userIds),
 		getSubtractionsBySample(db, sampleId),
 		getArtifacts(db, sampleId, storageId),
 		getReads(db, sampleId, storageId),
-		row.group_id != null ? getGroup(db, row.group_id) : Promise.resolve(null),
 	]);
 
 	const minimal = mapMinimal(
-		row,
+		sample,
 		labelsBySample.get(sampleId) ?? [],
 		tagsBySample.get(sampleId) ?? EMPTY_TAGS,
-		row.job_id != null ? (jobsById.get(row.job_id) ?? undefined) : undefined,
-		usersById,
+		sample.job_id != null
+			? (jobsById.get(sample.job_id) ?? undefined)
+			: undefined,
+		resolveOwner(sample.user_id, ownerHandle),
 	);
 
 	return {
 		...minimal,
-		allRead: row.all_read,
-		allWrite: row.all_write,
+		allRead: sample.all_read,
+		allWrite: sample.all_write,
 		artifacts,
-		format: row.format,
-		group,
-		groupRead: row.group_read,
-		groupWrite: row.group_write,
-		hold: row.hold,
-		isLegacy: row.is_legacy,
-		locale: row.locale,
+		format: sample.format,
+		group: groupRow,
+		groupRead: sample.group_read,
+		groupWrite: sample.group_write,
+		hold: sample.hold,
+		isLegacy: sample.is_legacy,
+		locale: sample.locale,
 		paired: reads.length === 2,
-		quality: (row.quality as Quality | null) ?? null,
+		quality: (sample.quality as Quality | null) ?? null,
 		reads,
 		subtractions: sampleSubtractions,
 	};
