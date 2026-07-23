@@ -71,8 +71,7 @@ export default function EditSample({
 							{...register("name")}
 						/>
 						<InputError id="name-error">
-							{mutation.isError &&
-								(mutation.error.response.body.message || "Required Field")}
+							{mutation.isError && (mutation.error.message || "Required Field")}
 						</InputError>
 					</InputGroup>
 					<InputGroup>

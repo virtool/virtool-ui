@@ -174,7 +174,7 @@ export default function CreateSample({ labels }: CreateSampleProps) {
 				<ViewHeader title="Create Sample">
 					<ViewHeaderTitle>Create Sample</ViewHeaderTitle>
 					<InputError className="text-left">
-						{mutation.isError && mutation.error.response?.body.message}
+						{mutation.isError && mutation.error.message}
 					</InputError>
 				</ViewHeader>
 
