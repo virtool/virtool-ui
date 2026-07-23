@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { GroupMinimal } from "./groups";
 import type { JobNested } from "./jobs";
 import type { LabelNested } from "./labels";
@@ -128,3 +129,38 @@ export type SampleRightsUpdate = {
 	groupRead?: boolean;
 	groupWrite?: boolean;
 };
+
+/**
+ * Fields accepted when creating a sample. A name is required; the rest default
+ * to empty. `group` is a group id, a legacy string, or null (`""` and `"none"`
+ * mean "no group"); `files` is one or two reads uploads.
+ */
+export const SampleCreateRequest = z.object({
+	name: z.string().trim().min(1),
+	host: z.string().trim().default(""),
+	isolate: z.string().trim().default(""),
+	locale: z.string().trim().default(""),
+	notes: z.string().default(""),
+	libraryType: z
+		.enum(["amplicon", "srna", "other", "normal"])
+		.default("normal"),
+	group: z.union([z.number().int(), z.string(), z.null()]).default(null),
+	subtractions: z.array(z.number().int().positive()).default([]),
+	labels: z.array(z.number().int().positive()).default([]),
+	files: z.array(z.number().int().positive()).min(1).max(2),
+});
+
+export type SampleCreateRequest = z.infer<typeof SampleCreateRequest>;
+
+/** Fields accepted when updating a sample. Only those present are changed. */
+export const SampleUpdateRequest = z.object({
+	name: z.string().trim().min(1).optional(),
+	host: z.string().trim().optional(),
+	isolate: z.string().trim().optional(),
+	locale: z.string().trim().optional(),
+	notes: z.string().trim().optional(),
+	labels: z.array(z.number().int().positive()).optional(),
+	subtractions: z.array(z.number().int().positive()).optional(),
+});
+
+export type SampleUpdateRequest = z.infer<typeof SampleUpdateRequest>;

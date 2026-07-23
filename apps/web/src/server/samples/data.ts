@@ -6,10 +6,12 @@ import type {
 	Read,
 	Sample,
 	SampleArtifact,
+	SampleCreateRequest,
 	SampleJobNested,
 	SampleMinimal,
 	SampleRightsUpdate,
 	SampleSearchResult,
+	SampleUpdateRequest,
 	SampleWorkflows,
 	SubtractionNested,
 	UserNested,
@@ -79,31 +81,18 @@ export type FindSamplesOptions = {
 	workflows: string[];
 };
 
-/** The fields a sample is created from, plus the creating user. */
-export type CreateSampleValues = {
-	name: string;
-	host: string;
-	isolate: string;
-	locale: string;
-	notes: string;
-	libraryType: string;
+/**
+ * The fields a sample is created from, plus the creating user. The handler
+ * coerces the request's `group` (id, legacy string, or null) to an id or null
+ * before it reaches here.
+ */
+export type CreateSampleValues = Omit<SampleCreateRequest, "group"> & {
 	group: number | null;
-	subtractions: number[];
-	labels: number[];
-	files: number[];
 	userId: number;
 };
 
 /** The fields that can be changed when updating a sample. */
-export type UpdateSampleValues = {
-	name?: string;
-	host?: string;
-	isolate?: string;
-	locale?: string;
-	notes?: string;
-	labels?: number[];
-	subtractions?: number[];
-};
+export type UpdateSampleValues = SampleUpdateRequest;
 
 /** Thrown when a requested sample does not exist. */
 export class SampleNotFoundError extends AppError {}
