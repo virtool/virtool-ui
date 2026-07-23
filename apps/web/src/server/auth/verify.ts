@@ -1,16 +1,23 @@
 import { timingSafeEqual } from "node:crypto";
 
-import { eq } from "drizzle-orm";
+import { emptyPermissions, type Permissions } from "@virtool/contracts";
+import { and, eq, sql } from "drizzle-orm";
 
 import type { Db } from "../db/pg";
+import { apiKeys } from "../db/schema/apiKeys";
 import { sessions } from "../db/schema/sessions";
 import { users } from "../db/schema/users";
 import { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } from "./cookies";
 import { hashToken } from "./tokens";
 
-/** Authenticated identity resolved from a session cookie pair. */
+/** Authenticated identity resolved from a session cookie pair or an API key. */
 export type AuthenticatedSession = {
 	userId: number;
+	/**
+	 * Set only when the caller authenticated with an API key. The key's
+	 * permissions cap the user's own, so `hasPermission` must intersect the two.
+	 */
+	keyPermissions?: Permissions;
 };
 
 /**
@@ -96,6 +103,87 @@ export function parseCookieHeader(
 		out[key] = decodeURIComponent(value);
 	}
 	return out;
+}
+
+/** The login and password carried by an HTTP Basic `Authorization` header. */
+export type BasicCredentials = {
+	handle: string;
+	key: string;
+};
+
+/**
+ * Parse an HTTP Basic `Authorization` header into its login and password.
+ * Returns `null` for anything malformed — a non-Basic scheme, undecodable
+ * base64, a missing separator, or an empty login — which callers treat as a
+ * failed authentication rather than falling back to cookies.
+ */
+export function parseBasicAuthHeader(header: string): BasicCredentials | null {
+	const [scheme, encoded] = header.split(" ");
+
+	if (scheme?.toLowerCase() !== "basic" || !encoded) {
+		return null;
+	}
+
+	const decoded = Buffer.from(encoded, "base64").toString("utf8");
+	const idx = decoded.indexOf(":");
+
+	if (idx < 1) {
+		return null;
+	}
+
+	return { handle: decoded.slice(0, idx), key: decoded.slice(idx + 1) };
+}
+
+/**
+ * Resolve an identity from a user handle and a raw API key. Returns `null` for
+ * any failure — unknown handle, deactivated user, or a key that is not that
+ * user's — so callers answer a single 401 without saying which check failed.
+ *
+ * Handles are matched case-insensitively, as they are at login and in Python's
+ * `get_by_handle`. Only the key's SHA-256 is stored, so the lookup hashes the
+ * supplied secret and matches on that; the digest is indexed and unique, and
+ * scoping it to the user keeps one account's key from authenticating another's
+ * handle.
+ */
+export async function verifyApiKey(
+	db: Db,
+	handle: string,
+	key: string,
+): Promise<AuthenticatedSession | null> {
+	// Job keys use this same header format against the separate jobs API. Python
+	// refuses them here rather than resolving `job-{id}` as a user handle, and a
+	// handle that reaches Postgres either way must not authenticate differently
+	// depending on which backend served it.
+	if (!handle || handle.startsWith("job")) {
+		return null;
+	}
+
+	const [row] = await db
+		.select({
+			userId: users.id,
+			active: users.active,
+			permissions: apiKeys.permissions,
+		})
+		.from(users)
+		.innerJoin(apiKeys, eq(apiKeys.userId, users.id))
+		.where(
+			and(
+				sql`lower(${users.handle}) = ${handle.toLowerCase()}`,
+				eq(apiKeys.hashed, hashToken(key)),
+			),
+		)
+		.limit(1);
+
+	if (!row?.active) {
+		return null;
+	}
+
+	// Keys written by the legacy Python path stored only the permissions that
+	// were granted, so expand against the full set before it becomes a cap.
+	return {
+		userId: row.userId,
+		keyPermissions: { ...emptyPermissions(), ...row.permissions },
+	};
 }
 
 /** Resolve an authenticated session directly from a `Request`. */

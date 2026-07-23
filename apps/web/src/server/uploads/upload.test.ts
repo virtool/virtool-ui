@@ -9,6 +9,7 @@ import {
 } from "vitest";
 
 import type { Db } from "../db/pg";
+import { apiKeys } from "../db/schema/apiKeys";
 import { sessions } from "../db/schema/sessions";
 import { uploads as uploadsTable } from "../db/schema/uploads";
 import { users } from "../db/schema/users";
@@ -48,7 +49,9 @@ const { handleUpload } = await import("./upload");
 const { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } = await import(
 	"../auth/cookies"
 );
-const { seedSession, seedUser } = await import("../auth/test/fixtures");
+const { basicAuthHeader, seedApiKey, seedSession, seedUser } = await import(
+	"../auth/test/fixtures"
+);
 
 let database: TestDatabase;
 
@@ -64,6 +67,7 @@ afterAll(async () => {
 beforeEach(async () => {
 	vi.clearAllMocks();
 	await db.delete(uploadsTable);
+	await db.delete(apiKeys);
 	await db.delete(sessions);
 	await db.delete(users);
 });
@@ -138,5 +142,86 @@ describe("handleUpload", () => {
 		);
 
 		expect(response.status).toBe(400);
+	});
+});
+
+describe("handleUpload with an api key", () => {
+	/** Build a `POST /uploads` request authenticated with an Authorization header. */
+	function keyRequest(authorization: string): Request {
+		return new Request(
+			"https://virtool.test/uploads?name=external.fa.gz&type=reference",
+			{ method: "POST", body: "hello", headers: { authorization } },
+		);
+	}
+
+	it("accepts a key granted upload_file", async () => {
+		const userId = await seedUser(db, { administratorRole: "full" });
+		const key = await seedApiKey(db, userId, { upload_file: true });
+
+		const response = await handleUpload(
+			keyRequest(basicAuthHeader("alice", key)),
+		);
+
+		expect(response.status).toBe(201);
+		const [row] = await db.select().from(uploadsTable);
+		expect(row?.userId).toBe(userId);
+	});
+
+	it("rejects a key without upload_file with a 403", async () => {
+		const userId = await seedUser(db, { administratorRole: "full" });
+		const key = await seedApiKey(db, userId, { create_sample: true });
+
+		const response = await handleUpload(
+			keyRequest(basicAuthHeader("alice", key)),
+		);
+
+		expect(response.status).toBe(403);
+		expect(await db.select().from(uploadsTable)).toHaveLength(0);
+	});
+
+	// The key permits it, but the user themself does not, so neither does the
+	// intersection.
+	it("rejects a key whose owner lacks upload_file with a 403", async () => {
+		const userId = await seedUser(db);
+		const key = await seedApiKey(db, userId, { upload_file: true });
+
+		const response = await handleUpload(
+			keyRequest(basicAuthHeader("alice", key)),
+		);
+
+		expect(response.status).toBe(403);
+	});
+
+	it("rejects an unknown key with a 401", async () => {
+		await seedUser(db, { administratorRole: "full" });
+
+		const response = await handleUpload(
+			keyRequest(basicAuthHeader("alice", "not-a-key")),
+		);
+
+		expect(response.status).toBe(401);
+	});
+
+	it("rejects a key belonging to a deactivated user with a 401", async () => {
+		const userId = await seedUser(db, {
+			active: false,
+			administratorRole: "full",
+		});
+		const key = await seedApiKey(db, userId, { upload_file: true });
+
+		const response = await handleUpload(
+			keyRequest(basicAuthHeader("alice", key)),
+		);
+
+		expect(response.status).toBe(401);
+	});
+
+	it("rejects a malformed authorization header with a 401", async () => {
+		const userId = await seedUser(db, { administratorRole: "full" });
+		await seedApiKey(db, userId, { upload_file: true });
+
+		const response = await handleUpload(keyRequest("Bearer nonsense"));
+
+		expect(response.status).toBe(401);
 	});
 });

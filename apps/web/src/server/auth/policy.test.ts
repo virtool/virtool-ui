@@ -1,4 +1,4 @@
-import type { Permissions } from "@virtool/contracts";
+import { emptyPermissions, type Permissions } from "@virtool/contracts";
 import {
 	afterAll,
 	beforeAll,
@@ -126,5 +126,68 @@ describe("hasPermission", () => {
 
 	it("denies a session whose user no longer exists", async () => {
 		expect(await hasPermission({ userId: 404 }, "create_sample")).toBe(false);
+	});
+
+	describe("with an api key", () => {
+		function keyPermissions(overrides: Partial<Permissions>): Permissions {
+			return { ...emptyPermissions(), ...overrides };
+		}
+
+		it("grants a permission both the user and the key hold", async () => {
+			const userId = await seedUser(db);
+			const groupId = await seedGroup("uploaders", { upload_file: true });
+			await addToGroup(userId, groupId);
+
+			expect(
+				await hasPermission(
+					{ userId, keyPermissions: keyPermissions({ upload_file: true }) },
+					"upload_file",
+				),
+			).toBe(true);
+		});
+
+		it("denies a permission the user holds but the key does not", async () => {
+			const userId = await seedUser(db);
+			const groupId = await seedGroup("uploaders", { upload_file: true });
+			await addToGroup(userId, groupId);
+
+			expect(
+				await hasPermission(
+					{ userId, keyPermissions: keyPermissions({ create_sample: true }) },
+					"upload_file",
+				),
+			).toBe(false);
+		});
+
+		it("denies a permission the key holds but the user does not", async () => {
+			const userId = await seedUser(db);
+
+			expect(
+				await hasPermission(
+					{ userId, keyPermissions: keyPermissions({ upload_file: true }) },
+					"upload_file",
+				),
+			).toBe(false);
+		});
+
+		// Python's PermissionRoutePolicy lets any administrator role through
+		// regardless of the key. We cap them, because the account UI offers an
+		// administrator a checkbox per permission and promises it means something.
+		it("caps a full administrator to the key's permissions", async () => {
+			const userId = await seedUser(db, { administratorRole: "full" });
+
+			expect(
+				await hasPermission(
+					{ userId, keyPermissions: keyPermissions({ create_sample: true }) },
+					"upload_file",
+				),
+			).toBe(false);
+			expect(
+				await hasPermission(
+					{ userId, keyPermissions: keyPermissions({ upload_file: true }) },
+					"upload_file",
+				),
+			).toBe(true);
+		});
 	});
 });

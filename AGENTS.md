@@ -483,6 +483,13 @@ middleware runs on a route, the handler enforces the floor itself:
 check. Don't fold it back into a server function — the RPC client uses `fetch`
 and would lose progress.
 
+Raw routes are also the only endpoints reachable with an **API key**.
+`requireAuthenticatedRequest` accepts either the session cookie pair or an HTTP
+Basic `Authorization` header carrying `handle:key`; server functions stay
+cookie-only. A key-authenticated session carries the key's permissions, and
+`hasPermission` intersects them with the user's own — the key caps
+administrators too.
+
 See [docs/auth.md](docs/auth.md) for the middleware composition, the
 session model, cookies, lifetimes, and the login / reset / logout
 flows.

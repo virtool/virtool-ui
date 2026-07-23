@@ -1,6 +1,7 @@
-import { createHash, randomBytes } from "node:crypto";
+import { randomBytes } from "node:crypto";
 import { emptyPermissions, type Permissions } from "@virtool/contracts";
 import { and, asc, eq, sql } from "drizzle-orm";
+import { hashToken } from "../auth/tokens";
 import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import { type ApiKeyRow, apiKeys as apiKeysTable } from "../db/schema/apiKeys";
@@ -40,7 +41,7 @@ function toApiKey(row: ApiKeyRow): ApiKey {
 
 function generateKey(): { raw: string; hashed: string } {
 	const raw = randomBytes(32).toString("hex");
-	return { raw, hashed: createHash("sha256").update(raw).digest("hex") };
+	return { raw, hashed: hashToken(raw) };
 }
 
 /** List the account's API keys with their stored permissions. */

@@ -1,6 +1,13 @@
-import type { AdministratorRoleName } from "@virtool/contracts";
+import { randomBytes } from "node:crypto";
+
+import {
+	type AdministratorRoleName,
+	emptyPermissions,
+	type Permissions,
+} from "@virtool/contracts";
 
 import type { Db } from "../../db/pg";
+import { apiKeys } from "../../db/schema/apiKeys";
 import { sessions } from "../../db/schema/sessions";
 import { users } from "../../db/schema/users";
 import { hashToken, newSessionId, newSessionToken } from "../tokens";
@@ -96,4 +103,35 @@ export async function seedSession(
 	});
 
 	return { sessionId, token, userId };
+}
+
+/**
+ * Insert an API key for `userId` and return the raw secret. Only its hash is
+ * stored, so the plaintext is the only way a caller can authenticate with it
+ * afterwards.
+ *
+ * `permissions` is merged over an all-`false` set, so a test names only the
+ * permissions the key grants.
+ */
+export async function seedApiKey(
+	db: Db,
+	userId: number,
+	permissions: Partial<Permissions> = {},
+): Promise<string> {
+	const key = randomBytes(32).toString("hex");
+
+	await db.insert(apiKeys).values({
+		createdAt: new Date(),
+		hashed: hashToken(key),
+		name: "test",
+		permissions: { ...emptyPermissions(), ...permissions },
+		userId,
+	});
+
+	return key;
+}
+
+/** Encode `handle` and `key` as an HTTP Basic `Authorization` header value. */
+export function basicAuthHeader(handle: string, key: string): string {
+	return `Basic ${Buffer.from(`${handle}:${key}`, "utf8").toString("base64")}`;
 }

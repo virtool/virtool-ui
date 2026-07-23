@@ -21,8 +21,8 @@ The pure layer is split by primitive rather than collapsed into one
   and deliberately free of bcrypt, the db, and the TanStack shell, so
   the browser can import it (see "Minimum password length" below)
 - `cookies.ts` — `CookieAdapter` type (framework-agnostic cookie I/O)
-- `verify.ts` — request verification (pure, given a cookie adapter and
-  db handle)
+- `verify.ts` — request verification, by session cookie pair or API key
+  (pure, given a cookie adapter and db handle)
 
 The wired layer is split too:
 
@@ -96,9 +96,11 @@ helpers:
   been resolved.
 - **`requireAuthenticatedRequest(request)`** — for raw `Request`
   handlers in `createFileRoute` (e.g. SSE / streaming routes like
-  `routes/events.ts`). These run outside the server-function
-  async-local context, so the middleware can't reach them. Returns a
-  401 `Response` on failure for the caller to `return` directly.
+  `routes/events.ts`, and `POST /uploads`). These run outside the
+  server-function async-local context, so the middleware can't reach
+  them. Accepts a session cookie pair *or* an API key (see "API key
+  authentication" below). Returns a 401 `Response` on failure for the
+  caller to `return` directly.
 - **`requireAdminRole(session, role)`** — throws `ForbiddenError` and
   sets a 403 when the session user does not hold at least `role`. Roles
   are ranked `full` (strongest) through `base` (weakest), so `"base"`
@@ -118,6 +120,55 @@ server function, and forgetting is silent — the fn would just be
 publicly callable. Default-on with an explicit opt-out flips the
 failure mode: forgetting to list a fn in `exceptions` produces a 401
 the moment you test it, not a security hole.
+
+## API key authentication
+
+A script has no browser and no session cookie. It authenticates with
+an HTTP Basic header carrying a user handle and a raw API key:
+
+```
+Authorization: Basic base64(handle:key)
+```
+
+`verify.ts` exports the two pieces: `parseBasicAuthHeader(header)`,
+which returns `null` for a non-Basic scheme, a missing `:`, or an empty
+handle; and `verifyApiKey(db, handle, key)`, which resolves the caller
+in one query — `users` joined to `api_keys`, matching the handle
+case-insensitively (as login and Python's `get_by_handle` both do) and
+the key by its SHA-256, which is all that is stored. Every failure
+returns `null`: unknown handle, deactivated user, a key that belongs
+to someone else. The caller answers one 401 without saying which check
+failed.
+
+A login starting with `job` is refused outright. Job keys use the same
+header format against the separate jobs API, and Python refuses them
+here rather than resolving `job-{id}` as a user handle.
+
+`requireAuthenticatedRequest` picks the path off the request: an
+`Authorization` header commits it to the key, cookies are read only
+when there is no header. A malformed header is therefore a 401, not a
+silent fall back to whatever cookies the client happened to attach —
+Python's `authentication_middleware` branches the same way.
+
+**Only raw routes accept a key.** Server functions stay cookie-only:
+they are the app's own RPC transport, not a public API, and the
+generated client always sends cookies. The raw routes — `POST
+/uploads` and `/events` — are what a script can actually reach.
+
+### The key's permissions are a cap
+
+A session resolved from a key carries `keyPermissions`, and
+`hasPermission` intersects it with the user's own permissions: a
+permission has to be granted by *both* the user (through a group or an
+administrator role) and the key.
+
+The cap applies to administrators. Python's `PermissionRoutePolicy`
+lets any administrator role through regardless of the key
+(`client.administrator_role or client.permissions[...]`); we do not,
+because the account UI tells the user the opposite. It offers an
+administrator a checkbox per permission and promises the key "will
+revert to your new limited set of permissions" if their role shrinks.
+A key that ignored its own checkboxes would make that a lie.
 
 ## Authorization: every server function declares a policy
 

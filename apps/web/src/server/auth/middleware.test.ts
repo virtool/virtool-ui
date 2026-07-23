@@ -1,3 +1,4 @@
+import { emptyPermissions } from "@virtool/contracts";
 import {
 	afterAll,
 	beforeAll,
@@ -9,6 +10,7 @@ import {
 } from "vitest";
 
 import type { Db } from "../db/pg";
+import { apiKeys } from "../db/schema/apiKeys";
 import { sessions } from "../db/schema/sessions";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
@@ -56,7 +58,9 @@ const { createFirstUserFn, loginFn, logoutFn, resetPasswordFn } = await import(
 const { getPasswordPolicyFn } = await import("../settings/functions");
 const { getRoot } = await import("../root/functions");
 const { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } = await import("./cookies");
-const { seedSession, seedUser } = await import("./test/fixtures");
+const { basicAuthHeader, seedApiKey, seedSession, seedUser } = await import(
+	"./test/fixtures"
+);
 
 let database: TestDatabase;
 
@@ -71,6 +75,7 @@ afterAll(async () => {
 
 beforeEach(async () => {
 	vi.clearAllMocks();
+	await db.delete(apiKeys);
 	await db.delete(sessions);
 	await db.delete(users);
 });
@@ -93,6 +98,12 @@ function cookieHeader(sessionId: string, token: string): string {
 function requestFor(url: string, cookie?: string) {
 	return new Request(new URL(url, "https://virtool.test"), {
 		headers: cookie ? { cookie } : undefined,
+	});
+}
+
+function authorizedRequestFor(url: string, authorization: string) {
+	return new Request(new URL(url, "https://virtool.test"), {
+		headers: { authorization },
 	});
 }
 
@@ -256,6 +267,48 @@ describe("requireAuthenticatedRequest", () => {
 
 		expect(result).toBeInstanceOf(Response);
 		expect((result as Response).status).toBe(401);
+	});
+
+	it("resolves an api key from the authorization header", async () => {
+		const userId = await seedUser(db);
+		const key = await seedApiKey(db, userId, { upload_file: true });
+
+		expect(
+			await requireAuthenticatedRequest(
+				authorizedRequestFor("/uploads", basicAuthHeader("alice", key)),
+			),
+		).toEqual({
+			userId,
+			keyPermissions: { ...emptyPermissions(), upload_file: true },
+		});
+	});
+
+	it("returns a 401 for an api key that does not resolve", async () => {
+		await seedUser(db);
+
+		const result = await requireAuthenticatedRequest(
+			authorizedRequestFor("/uploads", basicAuthHeader("alice", "wrong")),
+		);
+
+		expect((result as Response).status).toBe(401);
+	});
+
+	// Otherwise a script sending a broken header would silently fall through to
+	// whatever cookies its client happened to have attached.
+	it("does not fall back to cookies when the authorization header is malformed", async () => {
+		const userId = await seedUser(db);
+		const { sessionId, token } = await seedSession(db, userId);
+
+		const request = new Request("https://virtool.test/uploads", {
+			headers: {
+				authorization: "Bearer nonsense",
+				cookie: cookieHeader(sessionId, token),
+			},
+		});
+
+		expect(
+			((await requireAuthenticatedRequest(request)) as Response).status,
+		).toBe(401);
 	});
 });
 
