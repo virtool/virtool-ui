@@ -30,6 +30,7 @@ import { jobServerFnMocks } from "./server-fn/jobs";
 import { labelServerFnMocks } from "./server-fn/labels";
 import { referenceServerFnMocks } from "./server-fn/references";
 import { rootServerFnMocks } from "./server-fn/root";
+import { sampleServerFnMocks } from "./server-fn/samples";
 import {
 	mockGetPasswordPolicy,
 	settingsServerFnMocks,
@@ -89,6 +90,11 @@ vi.mock("@server/references/functions", async () => {
 	return referenceServerFnMocks;
 });
 
+vi.mock("@server/samples/functions", async () => {
+	const { sampleServerFnMocks } = await import("./server-fn/samples");
+	return sampleServerFnMocks;
+});
+
 beforeEach(() => {
 	for (const fn of Object.values(groupServerFnMocks)) {
 		fn.mockReset();
@@ -108,6 +114,8 @@ beforeEach(() => {
 		subtractionServerFnMocks.listSubtractionsShortlist,
 		referenceServerFnMocks.findReferences,
 		referenceServerFnMocks.getReference,
+		sampleServerFnMocks.findSamples,
+		sampleServerFnMocks.getSample,
 		settingsServerFnMocks.getSettings,
 	]) {
 		fn.mockReset();
@@ -130,6 +138,10 @@ beforeEach(() => {
 		referenceServerFnMocks.updateReferenceGroup,
 		referenceServerFnMocks.removeReferenceUser,
 		referenceServerFnMocks.removeReferenceGroup,
+		sampleServerFnMocks.createSample,
+		sampleServerFnMocks.updateSample,
+		sampleServerFnMocks.deleteSample,
+		sampleServerFnMocks.updateSampleRights,
 		settingsServerFnMocks.updateSettings,
 	]) {
 		fn.mockReset();

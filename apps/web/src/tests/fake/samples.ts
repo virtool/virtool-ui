@@ -19,7 +19,9 @@ export function createFakeSampleMinimal(
 		created_at: faker.date.past().toISOString(),
 		host: faker.word.noun({ strategy: "any-length" }),
 		isolate: faker.word.noun({ strategy: "any-length" }),
-		job: createFakeServerJobNested({ workflow: "create_sample" }),
+		job: createFakeServerJobNested({
+			workflow: "create_sample",
+		}) as SampleMinimal["job"],
 		labels: [createFakeLabelNested()],
 		library_type: "normal",
 		notes: faker.lorem.lines(5),
