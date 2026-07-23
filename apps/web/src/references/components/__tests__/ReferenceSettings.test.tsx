@@ -1,32 +1,15 @@
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeSettings } from "@tests/fake/administrator";
+import { mockSettingsStore } from "@tests/server-fn/settings";
 import { renderWithProviders } from "@tests/setup";
-import nock from "nock";
 import { expect, test } from "vitest";
 import ReferenceSettings from "../ReferenceSettings";
 
-const settings = {
-	default_source_types: ["Clone", "Genotype"],
-	enable_api: true,
-	enable_sentry: true,
-	minimum_password_length: 9,
-	sample_all_read: true,
-	sample_all_write: true,
-	sample_group: null,
-	sample_group_read: true,
-	sample_group_write: true,
-};
-
-function createNockScope() {
-	const scope = nock("http://localhost");
-
-	scope.get("/api/settings").reply(200, settings);
-
-	return scope;
-}
-
 test("GlobalSourceTypes", async () => {
-	const scope = createNockScope();
+	const { updateSettings } = mockSettingsStore(
+		createFakeSettings({ defaultSourceTypes: ["Clone", "Genotype"] }),
+	);
 
 	renderWithProviders(<ReferenceSettings />);
 
@@ -35,23 +18,16 @@ test("GlobalSourceTypes", async () => {
 	expect(screen.getByText("Genotype")).toBeInTheDocument();
 
 	// Delete 'Clone'.
-	scope
-		.patch("/api/settings", { default_source_types: ["Genotype"] })
-		.reply(200, {
-			...settings,
-			default_source_types: ["Genotype"],
-		});
-
-	scope
-		.get("/api/settings")
-		.reply(200, { ...settings, default_source_types: ["Genotype"] });
-
 	const cloneRow = (await screen.findByText("Clone")).closest(
 		"div",
 	) as HTMLElement;
 	await userEvent.click(
 		within(cloneRow).getByRole("button", { name: "remove" }),
 	);
+
+	expect(updateSettings).toHaveBeenCalledWith({
+		data: { defaultSourceTypes: ["Genotype"] },
+	});
 
 	await waitFor(() => {
 		expect(
@@ -63,14 +39,11 @@ test("GlobalSourceTypes", async () => {
 	});
 
 	// Undo deletion.
-	scope
-		.patch("/api/settings", { default_source_types: ["Genotype", "Clone"] })
-		.reply(200, () => {
-			return { ...settings, default_source_types: ["Genotype", "Clone"] };
-		});
-	scope.get("/api/settings").reply(200, settings);
-
 	await userEvent.click(screen.getByRole("button", { name: "undo" }));
+
+	expect(updateSettings).toHaveBeenCalledWith({
+		data: { defaultSourceTypes: ["Genotype", "Clone"] },
+	});
 
 	await waitFor(() => {
 		expect(
@@ -86,27 +59,13 @@ test("GlobalSourceTypes", async () => {
 
 	expect(screen.getByRole("textbox")).toHaveValue("Strain");
 
-	scope
-		.patch("/api/settings", {
-			default_source_types: ["Clone", "Genotype", "strain"],
-		})
-		.reply(200, () => {
-			return {
-				...settings,
-				default_source_types: ["Clone", "Genotype", "Strain"],
-			};
-		});
-
-	scope.get("/api/settings").reply(200, () => {
-		return {
-			...settings,
-			default_source_types: ["Clone", "Genotype", "Strain"],
-		};
-	});
-
 	await userEvent.click(screen.getByRole("button", { name: "Add" }));
 
+	expect(updateSettings).toHaveBeenCalledWith({
+		data: { defaultSourceTypes: ["Genotype", "Clone", "strain"] },
+	});
+
 	await waitFor(() => {
-		expect(screen.queryByText("Strain")).toBeInTheDocument();
+		expect(screen.queryByText("strain")).toBeInTheDocument();
 	});
 });

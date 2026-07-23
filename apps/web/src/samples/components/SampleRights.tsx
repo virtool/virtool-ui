@@ -20,16 +20,15 @@ export default function SampleRights({ settings }: SampleRightsProps) {
 	const mutation = useUpdateSettings();
 
 	const {
-		sample_group,
-		sample_group_read,
-		sample_group_write,
-		sample_all_read,
-		sample_all_write,
+		sampleGroup,
+		sampleGroupRead,
+		sampleGroupWrite,
+		sampleAllRead,
+		sampleAllWrite,
 	} = settings;
 
-	const group =
-		(sample_group_read ? "r" : "") + (sample_group_write ? "w" : "");
-	const all = (sample_all_read ? "r" : "") + (sample_all_write ? "w" : "");
+	const group = (sampleGroupRead ? "r" : "") + (sampleGroupWrite ? "w" : "");
+	const all = (sampleAllRead ? "r" : "") + (sampleAllWrite ? "w" : "");
 
 	return (
 		<BoxGroup>
@@ -44,8 +43,8 @@ export default function SampleRights({ settings }: SampleRightsProps) {
 				<SelectBox
 					className="grid-cols-3"
 					label="Sample Group"
-					onValueChange={(value) => mutation.mutate({ sample_group: value })}
-					value={sample_group}
+					onValueChange={(value) => mutation.mutate({ sampleGroup: value })}
+					value={sampleGroup}
 				>
 					<SelectBoxItem value="none">
 						<strong>None</strong>
@@ -74,8 +73,8 @@ export default function SampleRights({ settings }: SampleRightsProps) {
 						value={group}
 						onChange={(value) =>
 							mutation.mutate({
-								sample_group_read: value.includes("r"),
-								sample_group_write: value.includes("w"),
+								sampleGroupRead: value.includes("r"),
+								sampleGroupWrite: value.includes("w"),
 							})
 						}
 					/>
@@ -88,8 +87,8 @@ export default function SampleRights({ settings }: SampleRightsProps) {
 						value={all}
 						onChange={(value) =>
 							mutation.mutate({
-								sample_all_read: value.includes("r"),
-								sample_all_write: value.includes("w"),
+								sampleAllRead: value.includes("r"),
+								sampleAllWrite: value.includes("w"),
 							})
 						}
 					/>

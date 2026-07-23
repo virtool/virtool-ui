@@ -1,20 +1,17 @@
 import { bannerQueryKeys } from "@banner/keys";
 import { screen } from "@testing-library/react";
-import { mockApiGetSettings } from "@tests/api/administrator";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeSettings } from "@tests/fake/administrator";
+import { mockGetSettings } from "@tests/server-fn/settings";
 import { renderRoute } from "@tests/setup";
-import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<Settings />", () => {
 	const path = "/administration/settings";
 
 	beforeEach(() => {
-		mockApiGetSettings(createFakeSettings());
+		mockGetSettings(createFakeSettings());
 	});
-
-	afterEach(() => nock.cleanAll());
 
 	it("should render", async () => {
 		const account = createFakeAccount({ administrator_role: "full" });

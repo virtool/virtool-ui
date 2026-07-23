@@ -31,13 +31,13 @@ export default function UsersList({
 		status === "active",
 	);
 
-	const { items, page, page_count } = data;
+	const { items, page, pageCount } = data;
 
 	return items.length ? (
 		<Pagination
 			storedPage={page}
 			currentPage={urlPage}
-			pageCount={page_count}
+			pageCount={pageCount}
 			onPageChange={setPage}
 		>
 			<BoxGroup as="ul">

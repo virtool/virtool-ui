@@ -19,13 +19,13 @@ export type AdministratorRole = {
  * Instance-wide settings
  */
 export type Settings = {
-	default_source_types: string[];
-	enable_api: boolean;
-	enable_sentry: boolean;
-	minimum_password_length: number;
-	sample_all_read: boolean;
-	sample_all_write: boolean;
-	sample_group: string;
-	sample_group_read: boolean;
-	sample_group_write: boolean;
+	defaultSourceTypes: string[];
+	enableApi: boolean;
+	enableSentry: boolean;
+	minimumPasswordLength: number;
+	sampleAllRead: boolean;
+	sampleAllWrite: boolean;
+	sampleGroup: string;
+	sampleGroupRead: boolean;
+	sampleGroupWrite: boolean;
 };

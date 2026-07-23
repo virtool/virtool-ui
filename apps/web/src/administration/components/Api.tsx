@@ -12,7 +12,7 @@ type ApiProps = {
 /**
  * A component managing JSON API settings, allowing users to toggle external API access
  */
-export default function Api({ settings: { enable_api } }: ApiProps) {
+export default function Api({ settings: { enableApi } }: ApiProps) {
 	const mutation = useUpdateSettings();
 
 	return (
@@ -28,9 +28,9 @@ export default function Api({ settings: { enable_api } }: ApiProps) {
 				</p>
 			</SectionHeader>
 			<SettingsCheckbox
-				enabled={enable_api}
+				enabled={enableApi}
 				id="EnableApi"
-				onToggle={() => mutation.mutate({ enable_api: !enable_api })}
+				onToggle={() => mutation.mutate({ enableApi: !enableApi })}
 			>
 				<h2>Enable API</h2>
 				<small>Allow non-Virtool clients to access the JSON API.</small>

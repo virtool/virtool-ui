@@ -107,6 +107,13 @@ const MODULES = [
 		)) as SplitServerFnModule,
 	},
 	{
+		path: "../root/functions.ts",
+		fns: await import("../root/functions"),
+		handlers: (await import(
+			"../root/functions.ts?tss-serverfn-split"
+		)) as SplitServerFnModule,
+	},
+	{
 		path: "../settings/functions.ts",
 		fns: await import("../settings/functions"),
 		handlers: (await import(
@@ -224,6 +231,7 @@ describe("the open endpoints are reachable without a session", () => {
 		expect(open.map((endpoint) => endpoint.name).sort()).toEqual([
 			"createFirstUserFn",
 			"getPasswordPolicyFn",
+			"getRoot",
 			"loginFn",
 			"logoutFn",
 			"resetPasswordFn",

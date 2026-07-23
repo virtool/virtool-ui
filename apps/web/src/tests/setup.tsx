@@ -29,6 +29,7 @@ import { hmmServerFnMocks } from "./server-fn/hmm";
 import { jobServerFnMocks } from "./server-fn/jobs";
 import { labelServerFnMocks } from "./server-fn/labels";
 import { referenceServerFnMocks } from "./server-fn/references";
+import { rootServerFnMocks } from "./server-fn/root";
 import {
 	mockGetPasswordPolicy,
 	settingsServerFnMocks,
@@ -53,6 +54,10 @@ vi.mock("@server/auth/functions", async () => {
 vi.mock("@server/users/functions", async () => {
 	const { userServerFnMocks } = await import("./server-fn/users");
 	return userServerFnMocks;
+});
+vi.mock("@server/root/functions", async () => {
+	const { rootServerFnMocks } = await import("./server-fn/root");
+	return rootServerFnMocks;
 });
 vi.mock("@server/hmm/functions", async () => {
 	const { hmmServerFnMocks } = await import("./server-fn/hmm");
@@ -95,6 +100,7 @@ beforeEach(() => {
 		...Object.values(hmmServerFnMocks),
 		...Object.values(authServerFnMocks),
 		...Object.values(labelServerFnMocks),
+		...Object.values(rootServerFnMocks),
 		uploadServerFnMocks.findUploads,
 		uploadServerFnMocks.deleteUpload,
 		subtractionServerFnMocks.findSubtractions,
@@ -102,6 +108,7 @@ beforeEach(() => {
 		subtractionServerFnMocks.listSubtractionsShortlist,
 		referenceServerFnMocks.findReferences,
 		referenceServerFnMocks.getReference,
+		settingsServerFnMocks.getSettings,
 	]) {
 		fn.mockReset();
 		// Default to a pending promise so an un-stubbed query renders its loading
@@ -123,6 +130,7 @@ beforeEach(() => {
 		referenceServerFnMocks.updateReferenceGroup,
 		referenceServerFnMocks.removeReferenceUser,
 		referenceServerFnMocks.removeReferenceGroup,
+		settingsServerFnMocks.updateSettings,
 	]) {
 		fn.mockReset();
 	}
@@ -304,7 +312,7 @@ export async function renderRoute(path: string, opts?: RenderRouteOptions) {
 	const history: string[] = [];
 	const queryClient = createTestQueryClient();
 
-	queryClient.setQueryData(rootQueryKeys.all(), { first_user: false });
+	queryClient.setQueryData(rootQueryKeys.all(), { firstUser: false });
 	queryClient.setQueryData(
 		accountQueryKeys.all(),
 		opts?.account ?? createFakeAccount(),
