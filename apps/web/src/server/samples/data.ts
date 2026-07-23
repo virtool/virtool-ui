@@ -126,6 +126,13 @@ export class SampleGroupRequiredError extends AppError {}
 /** Thrown when the same upload is supplied more than once to create a sample. */
 export class SampleFileDuplicateError extends AppError {}
 
+/**
+ * Thrown when a sample has no owner. `user_id` is nullable in the schema, but a
+ * sample without a creating user is a data-integrity violation, not a routine
+ * outcome — reading one surfaces it rather than degrading to a blank owner.
+ */
+export class SampleOwnerlessError extends AppError {}
+
 const WORKFLOW_NAMES = ["nuvs", "pathoscope"] as const;
 const WORKFLOW_CONDITIONS = ["none", "pending", "ready"] as const;
 
@@ -677,6 +684,11 @@ export async function getSample(db: Db, sampleId: number): Promise<Sample> {
 	}
 
 	const { sample, ownerHandle, group: groupRow } = row;
+
+	if (sample.user_id == null) {
+		throw new SampleOwnerlessError();
+	}
+
 	const jobIds = sample.job_id != null ? [sample.job_id] : [];
 	const storageId = sampleStorageId(sampleId, sample.legacy_id);
 
@@ -726,8 +738,9 @@ export async function getSample(db: Db, sampleId: number): Promise<Sample> {
 }
 
 /**
- * The owner user id of a sample, or `null` when the sample does not exist or has
- * no owner. The rights-mutation gate treats both as "not found".
+ * The owner user id of a sample, or `null` when the sample does not exist — the
+ * rights-mutation gate treats that as "not found". A sample that exists but has
+ * no owner is an invalid state and throws {@link SampleOwnerlessError}.
  */
 export async function getSampleOwnerId(
 	db: Db,
@@ -739,7 +752,15 @@ export async function getSampleOwnerId(
 		.where(eq(legacySamples.id, sampleId))
 		.limit(1);
 
-	return row ? row.userId : null;
+	if (!row) {
+		return null;
+	}
+
+	if (row.userId == null) {
+		throw new SampleOwnerlessError();
+	}
+
+	return row.userId;
 }
 
 /**
