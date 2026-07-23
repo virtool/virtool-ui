@@ -407,6 +407,30 @@ describe("getSample", () => {
 		expect(sample.user.id).toBe(ownerId);
 	});
 
+	it("loads reads and artifacts keyed by the legacy storage id", async () => {
+		const sampleId = await seedSample({ legacy_id: "abc123" });
+
+		// A legacy row is keyed only by the text `sample` storage id, with
+		// `sample_id` left null.
+		await db.insert(sampleReads).values({
+			sample: "abc123",
+			sample_id: null,
+			name: "reads_1.fq.gz",
+			name_on_disk: "reads_1.fq.gz",
+		});
+		await db.insert(sampleArtifacts).values({
+			sample: "abc123",
+			sample_id: null,
+			name: "fastqc.txt",
+			type: "fastqc",
+		});
+
+		const sample = await getSample(db, sampleId);
+
+		expect(sample.reads.map((r) => r.name)).toEqual(["reads_1.fq.gz"]);
+		expect(sample.artifacts.map((a) => a.name)).toEqual(["fastqc.txt"]);
+	});
+
 	it("throws when the sample does not exist", async () => {
 		await expect(getSample(db, 123456)).rejects.toBeInstanceOf(
 			SampleNotFoundError,

@@ -310,11 +310,17 @@ async function getSubtractionsBySample(
 async function getArtifacts(
 	db: DbOrTx,
 	sampleId: number,
+	storageId: string,
 ): Promise<SampleArtifact[]> {
 	const rows = await db
 		.select()
 		.from(sampleArtifacts)
-		.where(eq(sampleArtifacts.sample_id, sampleId))
+		.where(
+			or(
+				eq(sampleArtifacts.sample_id, sampleId),
+				eq(sampleArtifacts.sample, storageId),
+			),
+		)
 		.orderBy(asc(sampleArtifacts.id));
 
 	return rows.map((row) => ({
@@ -325,7 +331,11 @@ async function getArtifacts(
 	}));
 }
 
-async function getReads(db: DbOrTx, sampleId: number): Promise<Read[]> {
+async function getReads(
+	db: DbOrTx,
+	sampleId: number,
+	storageId: string,
+): Promise<Read[]> {
 	const rows = await db
 		.select({
 			read: sampleReads,
@@ -335,7 +345,12 @@ async function getReads(db: DbOrTx, sampleId: number): Promise<Read[]> {
 		.from(sampleReads)
 		.leftJoin(uploads, eq(uploads.id, sampleReads.upload))
 		.leftJoin(users, eq(users.id, uploads.userId))
-		.where(eq(sampleReads.sample_id, sampleId))
+		.where(
+			or(
+				eq(sampleReads.sample_id, sampleId),
+				eq(sampleReads.sample, storageId),
+			),
+		)
 		.orderBy(asc(sampleReads.id));
 
 	return rows.map(({ read, upload, uploadUser }) => ({
@@ -677,6 +692,7 @@ export async function getSample(db: Db, sampleId: number): Promise<Sample> {
 
 	const jobIds = row.job_id != null ? [row.job_id] : [];
 	const userIds = row.user_id != null ? [row.user_id] : [];
+	const storageId = sampleStorageId(sampleId, row.legacy_id);
 
 	const [
 		labelsBySample,
@@ -693,8 +709,8 @@ export async function getSample(db: Db, sampleId: number): Promise<Sample> {
 		getSampleJobs(db, jobIds),
 		getUsersByIds(db, userIds),
 		getSubtractionsBySample(db, sampleId),
-		getArtifacts(db, sampleId),
-		getReads(db, sampleId),
+		getArtifacts(db, sampleId, storageId),
+		getReads(db, sampleId, storageId),
 		row.group_id != null ? getGroup(db, row.group_id) : Promise.resolve(null),
 	]);
 
