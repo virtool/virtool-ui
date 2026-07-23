@@ -28,7 +28,7 @@ export function LatestBuild({ id, latestBuild }: LatestBuildProps) {
 						</Link>
 					</strong>
 					<span>
-						&nbsp;/ Created <RelativeTime time={latestBuild.created_at} /> by{" "}
+						&nbsp;/ Created <RelativeTime time={latestBuild.createdAt} /> by{" "}
 						{latestBuild.user.handle}
 					</span>
 				</div>

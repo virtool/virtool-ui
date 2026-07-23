@@ -1,5 +1,4 @@
 import Badge from "@base/Badge";
-import Icon from "@base/Icon";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
@@ -7,18 +6,14 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useCheckReferenceRight } from "@references/hooks";
 import type { Reference } from "@references/types";
 import { useLocation } from "@tanstack/react-router";
-import { Lock } from "lucide-react";
 import ArchiveReference from "./ArchiveReference";
 import EditReference from "./EditReference";
 
 type ReferenceDetailHeaderProps = {
-	createdAt: string;
+	createdAt: Date;
 	/** The reference details */
 	detail: Reference;
-	/** Whether the reference is installed remotely */
-	isRemote: boolean;
 	name: string;
-	refId: string;
 	userHandle: string;
 };
 
@@ -29,13 +24,14 @@ type ReferenceDetailHeaderProps = {
 export default function ReferenceDetailHeader({
 	createdAt,
 	detail,
-	isRemote,
 	name,
-	refId,
 	userHandle,
 }: ReferenceDetailHeaderProps) {
 	const { pathname: location } = useLocation();
-	const { hasPermission: canModify } = useCheckReferenceRight(refId, "modify");
+	const { hasPermission: canModify } = useCheckReferenceRight(
+		detail.id,
+		"modify",
+	);
 
 	const { archived } = detail;
 	const showIcons = location.endsWith("/manage");
@@ -55,15 +51,10 @@ export default function ReferenceDetailHeader({
 						Archived
 					</Badge>
 				)}
-				{showIcons && (
+				{showIcons && canModify && (
 					<ViewHeaderIcons>
-						{isRemote && <Icon color="gray" icon={Lock} aria-label="lock" />}
-						{!isRemote && canModify && (
-							<>
-								{!archived && <EditReference detail={detail} />}
-								<ArchiveReference detail={detail} />
-							</>
-						)}
+						{!archived && <EditReference detail={detail} />}
+						<ArchiveReference detail={detail} />
 					</ViewHeaderIcons>
 				)}
 			</ViewHeaderTitle>

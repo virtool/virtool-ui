@@ -17,7 +17,11 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId");
 
 export default function ReferenceManager() {
 	const { refId } = routeApi.useParams();
-	const { data: reference, isPending, isError } = useFetchReference(refId);
+	const {
+		data: reference,
+		isPending,
+		isError,
+	} = useFetchReference(Number(refId));
 
 	if (isError && !reference) {
 		return <QueryError noun="reference" />;
@@ -27,7 +31,7 @@ export default function ReferenceManager() {
 		return <LoadingPlaceholder />;
 	}
 
-	const { cloned_from, contributors, description, latest_build, organism } =
+	const { clonedFrom, contributors, description, latestBuild, organism } =
 		reference;
 
 	return (
@@ -51,13 +55,13 @@ export default function ReferenceManager() {
 				</BoxGroupTable>
 			</BoxGroup>
 
-			{cloned_from && <Clone source={cloned_from} />}
+			{clonedFrom && <Clone source={clonedFrom} />}
 
 			<BoxGroup>
 				<BoxGroupHeader>
 					<h2>Latest Index Build</h2>
 				</BoxGroupHeader>
-				<LatestBuild id={refId} latestBuild={latest_build} />
+				<LatestBuild id={refId} latestBuild={latestBuild} />
 			</BoxGroup>
 
 			<Contributors contributors={contributors} />

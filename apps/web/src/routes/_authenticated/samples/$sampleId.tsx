@@ -1,3 +1,4 @@
+import { getErrorStatus } from "@app/queryErrors";
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import NavTab from "@base/NavTab";
@@ -36,12 +37,7 @@ export const Route = createFileRoute("/_authenticated/samples/$sampleId")({
 		try {
 			await queryClient.ensureQueryData(sampleQueryOptions(numericSampleId));
 		} catch (error) {
-			if (
-				error != null &&
-				typeof error === "object" &&
-				"response" in error &&
-				(error as { response: { status: number } }).response.status === 404
-			) {
+			if (getErrorStatus(error) === 404) {
 				throw notFound();
 			}
 			throw error;

@@ -1,7 +1,20 @@
 import { settingsQueryKeys } from "@administration/keys";
 import type { Settings } from "@administration/types";
-import { apiClient } from "@app/api";
 import { referenceQueryKeys } from "@references/keys";
+import {
+	addReferenceGroup,
+	addReferenceUser,
+	archiveReference,
+	createReference,
+	findReferences,
+	getReference,
+	removeReferenceGroup,
+	removeReferenceUser,
+	unarchiveReference,
+	updateReference,
+	updateReferenceGroup,
+	updateReferenceUser,
+} from "@server/references/functions";
 import { updateSettings } from "@server/settings/functions";
 import {
 	queryOptions,
@@ -16,76 +29,14 @@ import type { ErrorResponse } from "@/types/api";
 import type {
 	Reference,
 	ReferenceGroup,
-	ReferenceMinimal,
+	ReferenceRights,
 	ReferenceSearchResult,
+	ReferenceUpdateRequest,
 	ReferenceUser,
 } from "./types";
 
-/**
- * Adds a member (user or group) to a reference.
- *
- * Shared by the add/edit/remove member hooks, which all branch on whether the
- * member is a user or a group.
- */
-function addReferenceUser(
-	refId: string,
-	userId: string | number,
-): Promise<ReferenceUser> {
-	return apiClient
-		.post(`/refs/${refId}/users`)
-		.send({ user_id: userId })
-		.then((response) => response.body);
-}
-
-function addReferenceGroup(
-	refId: string,
-	groupId: string | number,
-): Promise<ReferenceGroup> {
-	return apiClient
-		.post(`/refs/${refId}/groups`)
-		.send({ group_id: groupId })
-		.then((response) => response.body);
-}
-
-function editReferenceUser(
-	refId: string,
-	userId: string | number,
-	update: { [key: string]: boolean },
-) {
-	return apiClient
-		.patch(`/refs/${refId}/users/${userId}`)
-		.send(update)
-		.then((res) => res.body);
-}
-
-function editReferenceGroup(
-	refId: string,
-	groupId: string | number,
-	update: { [key: string]: boolean },
-) {
-	return apiClient
-		.patch(`/refs/${refId}/groups/${groupId}`)
-		.send(update)
-		.then((res) => res.body);
-}
-
-function removeReferenceUser(
-	refId: string,
-	userId: string | number,
-): Promise<Response> {
-	return apiClient
-		.delete(`/refs/${refId}/users/${userId}`)
-		.then((response) => response.body);
-}
-
-function removeReferenceGroup(
-	refId: string,
-	groupId: string | number,
-): Promise<Response> {
-	return apiClient
-		.delete(`/refs/${refId}/groups/${groupId}`)
-		.then((response) => response.body);
-}
+/** A reference member is either a user or a group. */
+export type ReferenceMemberNoun = "user" | "group";
 
 /**
  * Query options for a paginated list of references.
@@ -101,16 +52,12 @@ export function referencesQueryOptions(
 	term: string,
 	archived?: boolean,
 ) {
-	return queryOptions<ReferenceSearchResult, ErrorResponse>({
+	return queryOptions<ReferenceSearchResult, Error>({
 		queryKey: referenceQueryKeys.list([page, per_page, term, archived]),
 		queryFn: () =>
-			apiClient
-				.get("/refs")
-				.query({ find: term, page, per_page, archived })
-				.then((response) => {
-					const { documents, ...rest } = response.body;
-					return { ...rest, items: documents };
-				}),
+			findReferences({
+				data: { page, per_page, term, archived },
+			}) as Promise<ReferenceSearchResult>,
 	});
 }
 
@@ -141,15 +88,14 @@ export function useSuspenseReferences(
  */
 export function useCloneReference() {
 	return useMutation<
-		ReferenceMinimal,
-		unknown,
+		Reference,
+		Error,
 		{ name: string; description: string; refId: number }
 	>({
 		mutationFn: ({ name, description, refId }) =>
-			apiClient
-				.post("/refs")
-				.send({ name, description, clone_from: refId })
-				.then((res) => res.body),
+			createReference({
+				data: { name, description, cloneFrom: refId },
+			}) as Promise<Reference>,
 	});
 }
 
@@ -160,19 +106,14 @@ export function useCloneReference() {
  */
 export function useImportReference() {
 	return useMutation<
-		unknown,
-		unknown,
-		{
-			name: string;
-			description: string;
-			importFrom: number;
-		}
+		Reference,
+		Error,
+		{ name: string; description: string; importFrom: number }
 	>({
 		mutationFn: ({ name, description, importFrom }) =>
-			apiClient
-				.post("/refs")
-				.send({ name, description, import_from: importFrom })
-				.then((res) => res.body),
+			createReference({
+				data: { name, description, importFrom },
+			}) as Promise<Reference>,
 	});
 }
 
@@ -212,18 +153,13 @@ export function useUploadReference() {
 export function useCreateReference() {
 	return useMutation<
 		Reference,
-		unknown,
-		{
-			name: string;
-			description: string;
-			organism: string;
-		}
+		Error,
+		{ name: string; description: string; organism: string }
 	>({
 		mutationFn: ({ name, description, organism }) =>
-			apiClient
-				.post("/refs")
-				.send({ name, description, data_type: "genome", organism })
-				.then((response) => response.body),
+			createReference({
+				data: { name, description, organism },
+			}) as Promise<Reference>,
 	});
 }
 
@@ -232,25 +168,14 @@ export function useCreateReference() {
  *
  * @returns A mutator for updating a reference
  */
-export function useUpdateReference(refId: string, onSuccess?: () => void) {
+export function useUpdateReference(refId: number, onSuccess?: () => void) {
 	const queryClient = useQueryClient();
 
-	const mutation = useMutation<
-		Reference,
-		ErrorResponse,
-		{
-			name?: string;
-			description?: string;
-			organism?: string;
-			restrict_source_types?: boolean;
-		}
-	>({
-		mutationFn: (data) => {
-			return apiClient
-				.patch(`/refs/${refId}`)
-				.send(data)
-				.then((res) => res.body);
-		},
+	const mutation = useMutation<Reference, Error, ReferenceUpdateRequest>({
+		mutationFn: (data) =>
+			updateReference({
+				data: { referenceId: refId, ...data },
+			}) as Promise<Reference>,
 		onSuccess: () => {
 			queryClient
 				.invalidateQueries({
@@ -269,15 +194,14 @@ export function useUpdateReference(refId: string, onSuccess?: () => void) {
  * @param refId - The id of the reference to update
  * @returns A mutator that takes the complete new list of source types
  */
-export function useUpdateReferenceSourceTypes(refId: string) {
+export function useUpdateReferenceSourceTypes(refId: number) {
 	const queryClient = useQueryClient();
 
-	return useMutation<Reference, ErrorResponse, string[]>({
+	return useMutation<Reference, Error, string[]>({
 		mutationFn: (sourceTypes) =>
-			apiClient
-				.patch(`/refs/${refId}`)
-				.send({ source_types: sourceTypes })
-				.then((res) => res.body),
+			updateReference({
+				data: { referenceId: refId, sourceTypes },
+			}) as Promise<Reference>,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: referenceQueryKeys.detail(refId),
@@ -310,18 +234,21 @@ export function useUpdateDefaultSourceTypes() {
  * @param noun - Whether the member is a user or a group
  * @returns A mutator for adding members to a reference
  */
-export function useAddReferenceMember(refId: string, noun: string) {
+export function useAddReferenceMember(
+	refId: number,
+	noun: ReferenceMemberNoun,
+) {
 	const queryClient = useQueryClient();
 
-	return useMutation<
-		ReferenceUser | ReferenceGroup,
-		unknown,
-		{ id: string | number }
-	>({
+	return useMutation<ReferenceUser | ReferenceGroup, Error, { id: number }>({
 		mutationFn: ({ id }) =>
 			noun === "user"
-				? addReferenceUser(refId, id)
-				: addReferenceGroup(refId, id),
+				? (addReferenceUser({
+						data: { referenceId: refId, userId: id },
+					}) as Promise<ReferenceUser>)
+				: (addReferenceGroup({
+						data: { referenceId: refId, groupId: id },
+					}) as Promise<ReferenceGroup>),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: referenceQueryKeys.detail(refId),
@@ -336,20 +263,20 @@ export function useAddReferenceMember(refId: string, noun: string) {
  * @param noun - Whether the member is a user or a group
  * @returns A mutator for updating a reference members modifying rights
  */
-export function useUpdateReferenceMember(noun: string) {
+export function useUpdateReferenceMember(noun: ReferenceMemberNoun) {
 	return useMutation<
 		ReferenceUser | ReferenceGroup,
-		unknown,
-		{
-			refId: string;
-			id: string | number;
-			update: { [key: string]: boolean };
-		}
+		Error,
+		{ refId: number; id: number; update: Partial<ReferenceRights> }
 	>({
 		mutationFn: ({ refId, id, update }) =>
 			noun === "user"
-				? editReferenceUser(refId, id, update)
-				: editReferenceGroup(refId, id, update),
+				? (updateReferenceUser({
+						data: { referenceId: refId, userId: id, ...update },
+					}) as Promise<ReferenceUser>)
+				: (updateReferenceGroup({
+						data: { referenceId: refId, groupId: id, ...update },
+					}) as Promise<ReferenceGroup>),
 	});
 }
 
@@ -360,14 +287,21 @@ export function useUpdateReferenceMember(noun: string) {
  * @param noun - Whether the member is a user or a group
  * @returns A mutator for removing members from a reference
  */
-export function useRemoveReferenceUser(refId: string, noun: string) {
+export function useRemoveReferenceUser(
+	refId: number,
+	noun: ReferenceMemberNoun,
+) {
 	const queryClient = useQueryClient();
 
-	return useMutation<Response, unknown, { id: string | number }>({
+	return useMutation<null, Error, { id: number }>({
 		mutationFn: ({ id }) =>
 			noun === "user"
-				? removeReferenceUser(refId, id)
-				: removeReferenceGroup(refId, id),
+				? (removeReferenceUser({
+						data: { referenceId: refId, userId: id },
+					}) as Promise<null>)
+				: (removeReferenceGroup({
+						data: { referenceId: refId, groupId: id },
+					}) as Promise<null>),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: referenceQueryKeys.detail(refId),
@@ -376,11 +310,11 @@ export function useRemoveReferenceUser(refId: string, noun: string) {
 	});
 }
 
-export function referenceQueryOptions(refId: string) {
-	return queryOptions<Reference, ErrorResponse>({
+export function referenceQueryOptions(refId: number) {
+	return queryOptions<Reference, Error>({
 		queryKey: referenceQueryKeys.detail(refId),
 		queryFn: () =>
-			apiClient.get(`/refs/${refId}`).then((response) => response.body),
+			getReference({ data: { referenceId: refId } }) as Promise<Reference>,
 	});
 }
 
@@ -390,7 +324,7 @@ export function referenceQueryOptions(refId: string) {
  * @param refId - The id of the reference to get
  * @returns Query results containing the reference
  */
-export function useFetchReference(refId: string) {
+export function useFetchReference(refId: number) {
 	return useQuery(referenceQueryOptions(refId));
 }
 
@@ -403,7 +337,7 @@ export function useFetchReference(refId: string) {
  * reference — loading and errors are handled by the route's Suspense and
  * `errorComponent` rather than inline.
  */
-export function useSuspenseReference(refId: string) {
+export function useSuspenseReference(refId: number) {
 	return useSuspenseQuery(referenceQueryOptions(refId));
 }
 
@@ -413,14 +347,14 @@ export function useSuspenseReference(refId: string) {
  * @param refId - The id of the reference to archive
  * @returns A mutator for archiving the reference
  */
-export function useArchiveReference(refId: string) {
+export function useArchiveReference(refId: number) {
 	const queryClient = useQueryClient();
 
-	return useMutation<Reference, ErrorResponse, void>({
+	return useMutation<Reference, Error, void>({
 		mutationFn: () =>
-			apiClient
-				.post(`/refs/${refId}/archive`)
-				.then((response) => response.body),
+			archiveReference({
+				data: { referenceId: refId },
+			}) as Promise<Reference>,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: referenceQueryKeys.detail(refId),
@@ -438,14 +372,14 @@ export function useArchiveReference(refId: string) {
  * @param refId - The id of the reference to unarchive
  * @returns A mutator for unarchiving the reference
  */
-export function useUnarchiveReference(refId: string) {
+export function useUnarchiveReference(refId: number) {
 	const queryClient = useQueryClient();
 
-	return useMutation<Reference, ErrorResponse, void>({
+	return useMutation<Reference, Error, void>({
 		mutationFn: () =>
-			apiClient
-				.post(`/refs/${refId}/unarchive`)
-				.then((response) => response.body),
+			unarchiveReference({
+				data: { referenceId: refId },
+			}) as Promise<Reference>,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: referenceQueryKeys.detail(refId),

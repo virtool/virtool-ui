@@ -19,9 +19,12 @@ type ReferenceItemProps = {
  * A condensed reference item for use in a list of references
  */
 export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
-	const { archived, created_at, id, name, task, user } = reference;
+	const { archived, createdAt, id, name, task, user } = reference;
 
-	const { data: liveTask } = useFetchTask(task?.id ?? Number.NaN, task);
+	const { data: liveTask } = useFetchTask(
+		task?.id ?? Number.NaN,
+		task ?? undefined,
+	);
 	const activeTask = liveTask ?? task;
 
 	const { hasPermission: canCreate } =
@@ -62,7 +65,7 @@ export function ReferenceItem({ onClone, reference }: ReferenceItemProps) {
 			>
 				{name}
 			</Link>
-			<Attribution time={created_at} user={user.handle} />
+			<Attribution time={createdAt} user={user?.handle} />
 			<div className="flex h-10 items-center justify-end">{end}</div>
 		</BoxGroupSection>
 	);

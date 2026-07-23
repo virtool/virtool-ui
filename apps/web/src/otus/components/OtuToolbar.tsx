@@ -4,7 +4,6 @@ import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
 } from "@references/hooks";
-import type { ReferenceRemotesFrom } from "@references/types";
 
 type OtuToolbarProps = {
 	/** Current search term used for filtering */
@@ -17,10 +16,7 @@ type OtuToolbarProps = {
 	onCreate: () => void;
 
 	/** ID of the OTU's parent reference */
-	refId: string;
-
-	/** Whether the reference is installed from a remote. */
-	remotesFrom: ReferenceRemotesFrom | null;
+	referenceId: number;
 };
 
 /**
@@ -30,14 +26,13 @@ export default function OtuToolbar({
 	term,
 	setTerm,
 	onCreate,
-	refId,
-	remotesFrom,
+	referenceId,
 }: OtuToolbarProps) {
 	const { hasPermission: canCreate } = useCheckReferenceRight(
-		refId,
-		"modify_otu",
+		referenceId,
+		"modifyOtu",
 	);
-	const archived = useReferenceIsArchived(refId);
+	const archived = useReferenceIsArchived(referenceId);
 
 	return (
 		<SearchToolbar
@@ -46,7 +41,7 @@ export default function OtuToolbar({
 			placeholder="Name or abbreviation"
 			value={term}
 		>
-			{canCreate && !remotesFrom && !archived && (
+			{canCreate && !archived && (
 				<Button onClick={onCreate} color="blue">
 					Create
 				</Button>

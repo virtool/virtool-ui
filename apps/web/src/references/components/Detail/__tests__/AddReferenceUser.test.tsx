@@ -12,12 +12,7 @@ describe("<AddReferenceUser />", () => {
 		mockSearchUsers([alice, bob]);
 
 		renderWithProviders(
-			<AddReferenceUser
-				users={[]}
-				onHide={() => undefined}
-				refId="ref-1"
-				show
-			/>,
+			<AddReferenceUser users={[]} onHide={() => undefined} refId={1} show />,
 		);
 
 		expect(await screen.findByText("alice")).toBeInTheDocument();
@@ -37,13 +32,12 @@ describe("<AddReferenceUser />", () => {
 						handle: alice.handle,
 						build: false,
 						modify: false,
-						modify_otu: false,
-						remove: false,
-						created_at: "",
+						modifyOtu: false,
+						createdAt: new Date(),
 					},
 				]}
 				onHide={() => undefined}
-				refId="ref-1"
+				refId={1}
 				show
 			/>,
 		);

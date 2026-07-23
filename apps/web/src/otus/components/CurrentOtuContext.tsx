@@ -55,7 +55,7 @@ export function CurrentOtuContextProvider({
 		data: reference,
 		isPending: isPendingReference,
 		isError: isErrorReference,
-	} = useFetchReference(refId);
+	} = useFetchReference(Number(refId));
 
 	if ((isErrorOtu || isErrorReference) && (!otu || !reference)) {
 		return <QueryError noun="OTU" />;

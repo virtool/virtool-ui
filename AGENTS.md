@@ -22,7 +22,8 @@ This is a **pnpm monorepo**:
   - `@virtool/logger` — pino wrapper, server-side log defaults and
     `child({...})` pattern
   - `@virtool/bio` — sequence utilities (complement, translation, etc.)
-  - `@virtool/contracts` — zod-validated cross-process data shapes
+  - `@virtool/contracts` — cross-process data shapes, zod-validated where a
+    boundary parses them
   - `@virtool/sentry` — shared Sentry option helpers (node + browser entry
     points)
 
@@ -385,6 +386,13 @@ first.
 Legacy features that still call the Python API through their
 client-side `api.ts` are not subject to this layering.
 
+A `functions.ts` validator builds on the shared primitives in
+`@server/validation` — `rowIdSchema` for any row id, `pageSchema` and
+`perPageSchema` for a paginated list — rather than re-spelling
+`z.number().int().positive()`. A schema that adds fields to an id it
+already has a schema for extends that schema
+(`referenceIdSchema.extend({ ... })`) instead of re-declaring the field.
+
 A handler maps an expected outcome to an HTTP status with
 `setResponseStatus`, then throws `ClientError` (`@server/errors`) — never
 a plain `Error` — for any deliberate 4xx (a bad login, a missing record,
@@ -426,9 +434,21 @@ browser feature tree — a Biome `noRestrictedImports` override blocks
 `@administration/*`, `@app/*`, `@banner/*`, and `@users/*` there, because
 a server file reaching into a DOM-typed module breaks the server project
 at a distance. Shapes and helpers both sides need live *down* in
-`@virtool/contracts` (roles, permissions, banner colors, the SSE schema);
+`@virtool/contracts` (roles, permissions, banner colors, the SSE schema,
+the reference wire shapes, `UserNested`, `Task`, `SearchResultV2`);
 the server imports them from the package, and the client feature module
 re-exports them so its own call sites are undisturbed.
+
+**A domain's wire shapes belong in `@virtool/contracts`, not in
+`data.ts`.** What a server function returns is read by both sides, so
+`data.ts` imports those types from the package and the client feature's
+`types.ts` re-exports them (`references/types.ts` is the worked example).
+A client `types.ts` must never `import type ... from "@server/*"` — that
+points the client at the server's emitted declarations for a shape the
+server does not own, and drags a data-layer module into the browser's
+type graph to get it. `data.ts` still owns what only it uses: its
+`*Values` and `*Options` argument types, its `AppError` subclasses, and
+its row mappers.
 
 ### Every server function declares an authorization policy
 

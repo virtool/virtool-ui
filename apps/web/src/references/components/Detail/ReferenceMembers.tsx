@@ -4,7 +4,10 @@ import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import { useCheckReferenceRight } from "@references/hooks";
-import { useRemoveReferenceUser } from "@references/queries";
+import {
+	type ReferenceMemberNoun,
+	useRemoveReferenceUser,
+} from "@references/queries";
 import type { ReferenceGroup, ReferenceUser } from "@references/types";
 import { Users } from "lucide-react";
 import AddReferenceGroup from "./AddReferenceGroup";
@@ -13,16 +16,16 @@ import EditReferenceMember from "./EditMember";
 import MemberItem from "./MemberItem";
 
 type ReferenceMembersProps = {
-	editId?: string;
+	editId?: number;
 	/** The list of users or groups associated with the reference */
 	members: ReferenceGroup[] | ReferenceUser[];
 
 	/** Whether the member is a user or a group */
-	noun: string;
+	noun: ReferenceMemberNoun;
 
 	openAdd?: boolean;
-	refId: string;
-	setEditId?: (id?: string) => void;
+	refId: number;
+	setEditId?: (id?: number) => void;
 	setOpenAdd?: (open: boolean) => void;
 };
 
@@ -78,7 +81,7 @@ export default function ReferenceMembers({
 								canModify={canModify}
 								handleOrName={handleOrName}
 								id={member.id}
-								onEdit={(id) => setEditId(String(id))}
+								onEdit={(id) => setEditId(id)}
 								onRemove={(id) => mutation.mutate({ id })}
 							/>
 						);

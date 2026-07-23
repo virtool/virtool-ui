@@ -1,18 +1,19 @@
 import Checkbox from "@base/Checkbox";
+import type { ReferenceRights } from "@references/types";
 
-const descriptions: Record<string, string> = {
+const descriptions: Record<keyof ReferenceRights, string> = {
 	build: "Can build new indexes for the reference.",
 	modify: "Can modify reference properties and settings.",
-	modify_otu: "Can modify OTU records in the reference.",
+	modifyOtu: "Can modify OTU records in the reference.",
 };
 
 type MemberRightProps = {
 	/** The name of the right */
-	right: string;
+	right: keyof ReferenceRights;
 	/** Indicates whether the right is currently enabled */
 	enabled: boolean;
 	/** A callback function to toggle the enabled state of the right */
-	onToggle: (right: string, enabled: boolean) => void;
+	onToggle: (right: keyof ReferenceRights, enabled: boolean) => void;
 };
 
 /**

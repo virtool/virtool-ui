@@ -1,4 +1,4 @@
-import { authErrorSerializationAdapter } from "@app/authErrors";
+import { serverErrorSerializationAdapter } from "@app/serverErrors";
 import {
 	sentryGlobalFunctionMiddleware,
 	sentryGlobalRequestMiddleware,
@@ -125,8 +125,9 @@ export const startInstance = createStart(() => ({
 	defaultSsr: false,
 	// Runs before TanStack Router's ShallowErrorPlugin, which would otherwise
 	// flatten every server-function Error to its message alone. Keeps the auth
-	// errors' `name` intact so the query retry guard can recognize a 401/403.
-	serializationAdapters: [authErrorSerializationAdapter],
+	// errors' `name` intact so the query retry guard can recognize a 401/403,
+	// and a ClientError's `status` so a route loader can map a 404 to notFound.
+	serializationAdapters: [serverErrorSerializationAdapter],
 	requestMiddleware: [
 		sentryGlobalRequestMiddleware,
 		csrfMiddleware,

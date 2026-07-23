@@ -1,13 +1,13 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-	mockApiArchiveReference,
-	mockApiUnarchiveReference,
-} from "@tests/api/references";
 import { createFakeReference } from "@tests/fake/references";
+import {
+	mockArchiveReference,
+	mockUnarchiveReference,
+	referenceServerFnMocks,
+} from "@tests/server-fn/references";
 import { renderWithRouter } from "@tests/setup";
-import nock from "nock";
-import { afterEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import ArchiveReference from "../ArchiveReference";
 
 function getDialogTitle(verb: "Archive" | "Unarchive", name: string) {
@@ -17,12 +17,9 @@ function getDialogTitle(verb: "Archive" | "Unarchive", name: string) {
 }
 
 describe("<ArchiveReference />", () => {
-	afterEach(() => nock.cleanAll());
-
 	it("should archive an active reference and close the dialog on success", async () => {
 		const detail = createFakeReference({ archived: false });
-		const archived = { ...detail, archived: true };
-		const scope = mockApiArchiveReference(String(detail.id), archived);
+		mockArchiveReference({ ...detail, archived: true });
 
 		await renderWithRouter(<ArchiveReference detail={detail} />);
 
@@ -35,13 +32,14 @@ describe("<ArchiveReference />", () => {
 			expect(getDialogTitle("Archive", detail.name)).toBeNull();
 		});
 
-		scope.done();
+		expect(referenceServerFnMocks.archiveReference).toHaveBeenCalledWith({
+			data: { referenceId: detail.id },
+		});
 	});
 
 	it("should unarchive an archived reference", async () => {
 		const detail = createFakeReference({ archived: true });
-		const unarchived = { ...detail, archived: false };
-		const scope = mockApiUnarchiveReference(String(detail.id), unarchived);
+		mockUnarchiveReference({ ...detail, archived: false });
 
 		await renderWithRouter(<ArchiveReference detail={detail} />);
 
@@ -54,49 +52,29 @@ describe("<ArchiveReference />", () => {
 			expect(getDialogTitle("Unarchive", detail.name)).toBeNull();
 		});
 
-		scope.done();
+		expect(referenceServerFnMocks.unarchiveReference).toHaveBeenCalledWith({
+			data: { referenceId: detail.id },
+		});
 	});
 
-	it("should surface a server-provided error message when one is returned", async () => {
+	it("should surface the server error message when the mutation fails", async () => {
 		const detail = createFakeReference({ archived: false });
-		const scope = nock("http://localhost")
-			.post(`/api/refs/${detail.id}/archive`)
-			.reply(409, { message: "The official reference cannot be archived." });
+		referenceServerFnMocks.archiveReference.mockRejectedValue(
+			new Error("Reference not found."),
+		);
 
 		await renderWithRouter(<ArchiveReference detail={detail} />);
 
 		await userEvent.click(screen.getByRole("button", { name: "archive" }));
 		await userEvent.click(screen.getByRole("button", { name: "Archive" }));
 
-		expect(
-			await screen.findByText("The official reference cannot be archived."),
-		).toBeInTheDocument();
+		expect(await screen.findByText("Reference not found.")).toBeInTheDocument();
 		expect(getDialogTitle("Archive", detail.name)).toBeInTheDocument();
-
-		scope.done();
 	});
 
-	it("should fall back to the official-reference message on 409 with no body", async () => {
+	it("should fall back to a generic message when the error has none", async () => {
 		const detail = createFakeReference({ archived: false });
-		const scope = nock("http://localhost")
-			.post(`/api/refs/${detail.id}/archive`)
-			.reply(409);
-
-		await renderWithRouter(<ArchiveReference detail={detail} />);
-
-		await userEvent.click(screen.getByRole("button", { name: "archive" }));
-		await userEvent.click(screen.getByRole("button", { name: "Archive" }));
-
-		expect(
-			await screen.findByText("The official reference cannot be archived."),
-		).toBeInTheDocument();
-
-		scope.done();
-	});
-
-	it("should surface a generic message when the server returns no message", async () => {
-		const detail = createFakeReference({ archived: false });
-		const scope = mockApiArchiveReference(String(detail.id), detail, 500);
+		referenceServerFnMocks.archiveReference.mockRejectedValue(new Error(""));
 
 		await renderWithRouter(<ArchiveReference detail={detail} />);
 
@@ -106,13 +84,11 @@ describe("<ArchiveReference />", () => {
 		expect(
 			await screen.findByText(/Failed to archive reference/i),
 		).toBeInTheDocument();
-
-		scope.done();
 	});
 
 	it("should close without mutating when the Cancel button is clicked", async () => {
 		const detail = createFakeReference({ archived: false });
-		const scope = mockApiArchiveReference(String(detail.id), detail);
+		mockArchiveReference(detail);
 
 		await renderWithRouter(<ArchiveReference detail={detail} />);
 
@@ -122,6 +98,6 @@ describe("<ArchiveReference />", () => {
 		await waitFor(() => {
 			expect(getDialogTitle("Archive", detail.name)).toBeNull();
 		});
-		expect(scope.isDone()).toBe(false);
+		expect(referenceServerFnMocks.archiveReference).not.toHaveBeenCalled();
 	});
 });

@@ -100,6 +100,13 @@ const MODULES = [
 		)) as SplitServerFnModule,
 	},
 	{
+		path: "../references/functions.ts",
+		fns: await import("../references/functions"),
+		handlers: (await import(
+			"../references/functions.ts?tss-serverfn-split"
+		)) as SplitServerFnModule,
+	},
+	{
 		path: "../root/functions.ts",
 		fns: await import("../root/functions"),
 		handlers: (await import(

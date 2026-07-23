@@ -80,22 +80,26 @@ states:
 | Indexes      | `indexes`                                            | Partial mirror |
 | Samples      | `legacy_samples`                                     | Partial mirror |
 | Subtractions | `subtractions`, `subtraction_files`                  | Built          |
+| References   | `legacy_references`, `legacy_reference_*`            | Built          |
 | Uploads      | `uploads`                                            | Not started    |
-| OTUs         | `legacy_otus`                                        | Not started    |
+| OTUs         | `legacy_otus`                                        | Partial mirror |
 | Sequences    | `legacy_sequences`                                   | Not started    |
-| References   | `legacy_references`, `legacy_reference_*`            | Not started    |
-| History      | `legacy_history`, `legacy_history_diff`, `revisions` | Not started    |
+| History      | `legacy_history`, `legacy_history_diff`, `revisions` | Partial mirror |
 
 The Postgres table(s) column lists the single mirrored table for the
 **partial mirror** rows and the principal Python-defined table(s) for
 the rest; it is not the domain's full table set. The **partial mirror**
-rows exist for jobs: `jobs` has no `args` column, so a job's resources
-are recomposed at read time from reverse `job_id` foreign keys on
-`analyses`, `indexes`, and `legacy_samples` (there are no `job_*`
-junction tables), and each of those mirrors declares just the columns
-that recomposition needs. The `subtractions` mirror is now full — the
-subtraction domain is served from this repo — but jobs still reaches it
-through the same reverse `job_id` foreign key.
+rows exist to feed other served domains, not themselves. `jobs` has no
+`args` column, so a job's resources are recomposed at read time from
+reverse `job_id` foreign keys on `analyses`, `indexes`, and
+`legacy_samples` (there are no `job_*` junction tables). The references
+read path adds three more: `legacy_otus` (an OTU count and the clone
+manifest), `legacy_history` (contributors and the unbuilt-change count),
+and the extra `indexes` columns that resolve a reference's latest build.
+Each partial mirror declares just the columns its consumer needs. The
+`subtractions` mirror is now full — the subtraction domain is served
+from this repo — but jobs still reaches it through the same reverse
+`job_id` foreign key.
 
 A `legacy_` table prefix marks a table that carries the Mongo-era row
 shape and a `legacy_id` column from the import — it is a normal Postgres

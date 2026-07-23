@@ -5,6 +5,7 @@ import { z } from "zod";
 import { adminRole, authenticated } from "../auth/policy";
 import { db } from "../db/pg";
 import { ClientError } from "../errors";
+import { rowIdSchema } from "../validation";
 import {
 	clearActiveMessage as clearActiveMessageImpl,
 	createMessage as createMessageImpl,
@@ -18,16 +19,15 @@ import {
 
 const colorSchema = z.enum(bannerColors);
 
-const idSchema = z.object({ id: z.number().int().positive() });
+const idSchema = z.object({ id: rowIdSchema });
 
 const createMessageSchema = z.object({
 	message: z.string().min(1, "Message cannot be empty."),
 	color: colorSchema,
 });
 
-const updateMessageSchema = z
-	.object({
-		id: z.number().int().positive(),
+const updateMessageSchema = idSchema
+	.extend({
 		message: z.string().min(1, "Message cannot be empty.").optional(),
 		color: colorSchema.optional(),
 	})

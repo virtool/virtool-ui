@@ -149,7 +149,40 @@ framework-agnostic `@virtool/contracts` package, which neither side's
 type project can break. The server imports these from the package
 directly; each client feature module re-exports its piece from the
 package, so browser call sites keep importing from `@administration/*`,
-`@banner/*`, and friends unchanged. `@labels/*` and `@groups/*` are not
+`@banner/*`, and friends unchanged.
+
+A domain's **wire shapes** are shared in exactly this sense, and belong
+in the package for the same reason. What a server function returns is
+written by `data.ts` and rendered by components, so neither owns it:
+`@virtool/contracts` does. `references.ts` there defines `Reference`,
+`ReferenceMinimal`, the rights and membership shapes, and the
+`ReferenceSearchResult` page; `server/references/data.ts` imports them
+to annotate its returns, and `src/references/types.ts` re-exports them
+so components import from `@references/types` as before.
+
+The failure mode this replaces is a client `types.ts` that does
+`import type { Reference } from "@server/references/data"`. It
+type-checks — the arrow client → `@server/*` is legal — but it makes the
+browser's view of a shape depend on a *data-layer* module's emitted
+declarations, so the shape is only nameable if that module's whole
+inferred surface stays portable, and a `data.ts` refactor becomes a
+client type break. The `.d.ts` remap also has to succeed for the client
+to see a plain object type. Both problems disappear when the type has a
+home neither side reaches through the other.
+
+Two shapes generalised out of that move and now live in the package
+alongside the reference contracts: `UserNested` (`{ id, handle }`, the
+user reduced to what is shown beside another resource) and `Task` (the
+background-task progress record embedded in resources a task acts on),
+plus `SearchResultV2`, the camelCase pagination envelope every
+server-function-backed list returns. `src/server/references/data.ts`
+used to carry a private copy of that envelope with a comment explaining
+that the server could not import the client's; that copy is gone.
+
+What stays in `data.ts` is what only `data.ts` uses: the `*Values` and
+`*Options` argument types its functions accept, its `AppError`
+subclasses, and its row-to-shape mappers. A type the client never sees
+does not belong in a shared package. `@labels/*` and `@groups/*` are not
 in the block list — `labels/data.ts` still reads `DEFAULT_LABEL_COLOR`
 from `@labels/constants`, the one remaining sanctioned sideways import.
 

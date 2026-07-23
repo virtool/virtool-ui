@@ -3,6 +3,7 @@ import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { authenticated, permission } from "../auth/policy";
 import { db } from "../db/pg";
+import { rowIdSchema } from "../validation";
 import {
 	findHmms as findHmmsImpl,
 	getHmm as getHmmImpl,
@@ -19,7 +20,7 @@ const findHmmsSchema = z.object({
 });
 
 const hmmIdSchema = z.object({
-	hmmId: z.number().int().positive(),
+	hmmId: rowIdSchema,
 });
 
 // Wrapped in createServerOnlyFn so the compiler can strip this body — and the

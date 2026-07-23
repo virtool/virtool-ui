@@ -1,28 +1,24 @@
 import { useFetchAccount } from "@account/account";
+import type { ReferenceRight } from "@references/types";
 import { useFetchReference } from "./queries";
 
 /**
  * Returns whether the reference is archived. `false` while the reference query is loading.
  */
-export function useReferenceIsArchived(referenceId: string) {
+export function useReferenceIsArchived(referenceId: number) {
 	const { data: reference } = useFetchReference(referenceId);
 	return reference?.archived ?? false;
 }
 
 /**
- * All reference rights
- */
-export type ReferenceRight = "build" | "modify" | "modify_otu";
-
-/**
  * Check if the logged in account has the passed `right` on the reference detail is loaded for.
  *
  * @param referenceId - The id of the reference to check
- * @param right - The right to check for (eg. modify_otu)
+ * @param right - The right to check for (eg. modifyOtu)
  * @returns Whether the right is possessed by the account
  */
 export function useCheckReferenceRight(
-	referenceId: string,
+	referenceId: number,
 	right: ReferenceRight,
 ) {
 	const { data: account, isPending: isPendingAccount } = useFetchAccount();

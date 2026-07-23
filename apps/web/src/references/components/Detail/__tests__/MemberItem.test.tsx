@@ -11,7 +11,7 @@ describe("<MemberItem />", () => {
 		props = {
 			canModify: false,
 			handleOrName: "bob",
-			id: "bob",
+			id: 7,
 			onEdit: vi.fn(),
 			onRemove: vi.fn(),
 		};

@@ -14,17 +14,17 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId");
 
 export default function ReferenceSettings() {
 	const { refId } = routeApi.useParams();
-	const { data } = useSuspenseReference(refId);
+	const referenceId = Number(refId);
+	const { data } = useSuspenseReference(referenceId);
 
-	const [editUserId, setEditUserId] = useState<string>();
-	const [editGroupId, setEditGroupId] = useState<string>();
+	const [editUserId, setEditUserId] = useState<number>();
+	const [editGroupId, setEditGroupId] = useState<number>();
 	const [openAddUser, setOpenAddUser] = useState(false);
 	const [openAddGroup, setOpenAddGroup] = useState(false);
 
 	return (
 		<>
-			{Boolean(data.remotes_from) ||
-				(data.archived ? <ArchivedSourceTypes /> : <LocalSourceTypes />)}
+			{data.archived ? <ArchivedSourceTypes /> : <LocalSourceTypes />}
 			<SectionHeader>
 				<h2>Access</h2>
 				<p>Manage who can access this reference.</p>
@@ -34,7 +34,7 @@ export default function ReferenceSettings() {
 				noun="user"
 				members={sortBy(data.users, ["id"])}
 				openAdd={openAddUser}
-				refId={refId}
+				refId={referenceId}
 				setEditId={setEditUserId}
 				setOpenAdd={setOpenAddUser}
 			/>
@@ -43,7 +43,7 @@ export default function ReferenceSettings() {
 				noun="group"
 				members={sortBy(data.groups, ["id"])}
 				openAdd={openAddGroup}
-				refId={refId}
+				refId={referenceId}
 				setEditId={setEditGroupId}
 				setOpenAdd={setOpenAddGroup}
 			/>

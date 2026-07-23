@@ -1,6 +1,9 @@
 import { Dialog, DialogContent, DialogTitle } from "@base/Dialog";
 import { referenceQueryKeys } from "@references/keys";
-import { useUpdateReferenceMember } from "@references/queries";
+import {
+	type ReferenceMemberNoun,
+	useUpdateReferenceMember,
+} from "@references/queries";
 import type {
 	ReferenceGroup,
 	ReferenceRights,
@@ -9,18 +12,13 @@ import type {
 import { useQueryClient } from "@tanstack/react-query";
 import { ReferenceRight } from "./ReferenceRight";
 
-const rights: (keyof ReferenceRights)[] = [
-	"modify_otu",
-	"build",
-	"modify",
-	"remove",
-];
+const rights: (keyof ReferenceRights)[] = ["modifyOtu", "build", "modify"];
 
 type EditReferenceMemberProps = {
-	editId?: string;
+	editId?: number;
 	member?: ReferenceGroup | ReferenceUser;
-	noun: string;
-	refId: string;
+	noun: ReferenceMemberNoun;
+	refId: number;
 	unsetEditId?: () => void;
 };
 
@@ -37,7 +35,7 @@ export default function EditReferenceMember({
 	const mutation = useUpdateReferenceMember(noun);
 	const queryClient = useQueryClient();
 
-	function handleChange(key: string, enabled: boolean) {
+	function handleChange(key: keyof ReferenceRights, enabled: boolean) {
 		if (!editId) {
 			return;
 		}
@@ -46,9 +44,7 @@ export default function EditReferenceMember({
 			{
 				refId,
 				id: editId,
-				update: {
-					[key]: enabled,
-				},
+				update: { [key]: enabled } as Partial<ReferenceRights>,
 			},
 			{
 				onSuccess: () => {

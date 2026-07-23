@@ -7,7 +7,8 @@ import type {
 import { createFakeUserNested } from "./user";
 
 /**
- * Create a fake reference nested
+ * Create a fake nested reference as it is embedded in OTUs, indexes, and
+ * analyses — these still come from the Python API and keep snake_case.
  */
 export function createFakeReferenceNested(
 	overrides?: Partial<ReferenceNested>,
@@ -26,37 +27,33 @@ export function createFakeReferenceNested(
 export function createFakeReferenceMinimal(
 	overrides?: Partial<ReferenceMinimal>,
 ): ReferenceMinimal {
-	const defaultReferenceMinimal = {
-		...createFakeReferenceNested(overrides),
+	const base: ReferenceMinimal = {
+		id: faker.number.int(),
+		dataType: "genome",
+		name: faker.word.noun({ strategy: "any-length" }),
 		archived: false,
-		cloned_from: {
+		clonedFrom: {
 			id: faker.number.int(),
 			name: faker.word.noun({ strategy: "any-length" }),
 		},
-		created_at: faker.date.past().toISOString(),
-		imported_from: null,
-		installed: null,
-		internal_control: faker.word.noun({ strategy: "any-length" }),
-		latest_build: null,
+		createdAt: faker.date.past(),
+		importedFrom: null,
+		latestBuild: null,
 		organism: faker.word.noun({ strategy: "any-length" }),
-		otu_count: faker.number.int(),
-		release: null,
-		remotes_from: null,
+		otuCount: faker.number.int(),
 		task: {
 			complete: true,
 			created_at: faker.date.past(),
 			error: null,
 			id: faker.number.int(),
 			progress: 100,
-			step: "done",
+			step: "clone_reference",
 			type: "clone_reference",
 		},
-		unbuilt_change_count: faker.number.int(),
-		updating: false,
 		user: createFakeUserNested(),
 	};
 
-	return { ...defaultReferenceMinimal, ...overrides };
+	return { ...base, ...overrides };
 }
 
 /**
@@ -65,24 +62,23 @@ export function createFakeReferenceMinimal(
 export function createFakeReference(overrides?: Partial<Reference>): Reference {
 	const { description, ...props } = overrides || {};
 
-	const defaultReference = {
+	const base: Reference = {
 		...createFakeReferenceMinimal(props),
 		contributors: [],
-		description: description || "",
+		description: description ?? "",
 		groups: [],
-		restrict_source_types: false,
-		source_types: ["isolate", "strain"],
+		restrictSourceTypes: false,
+		sourceTypes: ["isolate", "strain"],
 		users: [
 			{
 				...createFakeUserNested(),
 				build: true,
-				created_at: faker.date.past().toISOString(),
+				createdAt: faker.date.past(),
 				modify: true,
-				modify_otu: true,
-				remove: true,
+				modifyOtu: true,
 			},
 		],
 	};
 
-	return { ...defaultReference, ...props };
+	return { ...base, ...props };
 }

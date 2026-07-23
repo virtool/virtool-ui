@@ -40,7 +40,7 @@ export default function IsolateList() {
 	const { refId, otuId } = routeApi.useParams();
 	const { otu, reference } = useCurrentOtuContext();
 	const { isolates } = otu;
-	const { restrict_source_types, source_types } = reference;
+	const { restrictSourceTypes, sourceTypes } = reference;
 
 	const [openAdd, setOpenAdd] = useState(false);
 	const [isolateToRemove, setIsolateToRemove] = useState<OtuIsolate | null>(
@@ -48,10 +48,10 @@ export default function IsolateList() {
 	);
 
 	const { hasPermission: canModify } = useCheckReferenceRight(
-		String(reference.id),
-		"modify_otu",
+		reference.id,
+		"modifyOtu",
 	);
-	const archived = useReferenceIsArchived(String(reference.id));
+	const archived = useReferenceIsArchived(reference.id);
 	const canModifyIsolates = canModify && !archived;
 
 	const [results, term, setTerm] = useFuse<OtuIsolate>(
@@ -152,9 +152,9 @@ export default function IsolateList() {
 			)}
 
 			<AddIsolate
-				allowedSourceTypes={source_types}
+				allowedSourceTypes={sourceTypes}
 				otuId={otu.id}
-				restrictSourceTypes={restrict_source_types}
+				restrictSourceTypes={restrictSourceTypes}
 				show={openAdd}
 				onHide={() => setOpenAdd(false)}
 			/>

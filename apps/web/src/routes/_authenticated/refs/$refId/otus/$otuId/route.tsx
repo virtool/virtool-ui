@@ -1,4 +1,4 @@
-import type { QueryError } from "@app/queryErrors";
+import { getErrorStatus } from "@app/queryErrors";
 import Badge from "@base/Badge";
 import Link from "@base/Link";
 import NavTab from "@base/NavTab";
@@ -24,11 +24,14 @@ export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 
 			try {
 				await Promise.all([
-					queryClient.ensureQueryData(referenceQueryOptions(refId)),
+					queryClient.ensureQueryData(referenceQueryOptions(Number(refId))),
 					queryClient.ensureQueryData(otuQueryOptions(otuId)),
 				]);
 			} catch (error) {
-				if ((error as QueryError).response?.status === 404) {
+				// Either request can be the one that 404s, and they are on different
+				// transports — the reference on a server function, the OTU still on the
+				// Python API. `getErrorStatus` covers both.
+				if (getErrorStatus(error) === 404) {
 					throw notFound();
 				}
 				throw error;
@@ -40,10 +43,11 @@ export const Route = createFileRoute("/_authenticated/refs/$refId/otus/$otuId")(
 
 function OtuDetailLayout() {
 	const { refId, otuId } = Route.useParams();
+	const referenceId = Number(refId);
 	const navigate = Route.useNavigate();
 	const { data: otu } = useFetchOtu(otuId);
-	const { data: reference } = useFetchReference(refId);
-	const archived = useReferenceIsArchived(refId);
+	const { data: reference } = useFetchReference(referenceId);
+	const archived = useReferenceIsArchived(referenceId);
 
 	if (!otu || !reference) {
 		return null;
@@ -69,7 +73,7 @@ function OtuDetailLayout() {
 						{!archived && (
 							<OtuHeaderIcons
 								id={id}
-								refId={refId}
+								referenceId={referenceId}
 								name={name}
 								abbreviation={abbreviation}
 								onRemoved={() => navigate({ to: `/refs/${refId}/otus` })}

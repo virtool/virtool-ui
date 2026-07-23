@@ -42,9 +42,10 @@ const routeApi = getRouteApi("/_authenticated/refs/$refId/otus/$otuId");
  */
 export default function Segments() {
 	const { refId, otuId } = routeApi.useParams();
+	const referenceId = Number(refId);
 	const { hasPermission: canModify, isPending: isPendingPermission } =
-		useCheckReferenceRight(refId, "modify_otu");
-	const archived = useReferenceIsArchived(refId);
+		useCheckReferenceRight(referenceId, "modifyOtu");
+	const archived = useReferenceIsArchived(referenceId);
 
 	const { data, isPending, isError } = useFetchOtu(otuId);
 	const mutation = useUpdateOtu(otuId);

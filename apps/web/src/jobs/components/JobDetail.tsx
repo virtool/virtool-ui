@@ -1,3 +1,4 @@
+import { getErrorStatus } from "@app/queryErrors";
 import { getWorkflowDisplayName } from "@app/utils";
 import Alert from "@base/Alert";
 import ContainerNarrow from "@base/ContainerNarrow";
@@ -71,7 +72,7 @@ export default function JobDetail() {
 	}
 
 	if (error) {
-		if ("status" in error && error.status === 404) {
+		if (getErrorStatus(error) === 404) {
 			return <NotFound />;
 		}
 		throw error;

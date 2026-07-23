@@ -1,9 +1,11 @@
 import {
+	getErrorStatus,
 	handleQueryError,
 	type QueryError,
 	shouldRetryQuery,
 } from "@app/queryErrors";
 import {
+	CLIENT_ERROR_NAME,
 	FORBIDDEN_ERROR_NAME,
 	UNAUTHORIZED_ERROR_NAME,
 } from "@virtool/contracts";
@@ -29,9 +31,9 @@ function validationError(): Error {
 	return error;
 }
 
-// The auth errors arrive rebuilt by `authErrorSerializationAdapter`, which
-// carries `name` but nothing else — so a plain Error with the name set is
-// exactly what these functions see in production.
+// The auth errors arrive rebuilt by `serverErrorSerializationAdapter`, which
+// carries `name` but nothing else for them — so a plain Error with the name set
+// is exactly what these functions see in production.
 function serializedAuthError(name: string, message: string): Error {
 	const error = new Error(message);
 	error.name = name;
@@ -44,6 +46,35 @@ function superagentError(status: number): QueryError {
 	});
 }
 
+// A ClientError as it arrives rebuilt by `serverErrorSerializationAdapter`: the
+// status is an own property, not on a superagent-style `response`.
+function clientError(status: number): QueryError {
+	const error = Object.assign(new Error(`Request failed: ${status}`), {
+		status,
+	});
+	error.name = CLIENT_ERROR_NAME;
+	return error;
+}
+
+describe("getErrorStatus", () => {
+	it("reads the status a server function's ClientError carries", () => {
+		expect(getErrorStatus(clientError(404))).toBe(404);
+	});
+
+	it("reads the status superagent puts on the response", () => {
+		expect(getErrorStatus(superagentError(404))).toBe(404);
+	});
+
+	it.each([
+		["an error carrying no status", new Error("network down")],
+		["a non-object", "boom"],
+		["null", null],
+		["undefined", undefined],
+	])("returns undefined for %s", (_label, error) => {
+		expect(getErrorStatus(error)).toBeUndefined();
+	});
+});
+
 describe("shouldRetryQuery", () => {
 	it.each([
 		401, 403, 404,
@@ -53,6 +84,12 @@ describe("shouldRetryQuery", () => {
 
 	it("retries a Python API failure that may yet succeed", () => {
 		expect(shouldRetryQuery(0, superagentError(500))).toBe(true);
+	});
+
+	it.each([
+		401, 403, 404,
+	])("gives up immediately on a %i from a server function", (status) => {
+		expect(shouldRetryQuery(0, clientError(status))).toBe(false);
 	});
 
 	it.each([

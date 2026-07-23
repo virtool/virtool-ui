@@ -4,6 +4,7 @@ import { z } from "zod";
 import { authenticated } from "../auth/policy";
 import { db } from "../db/pg";
 import { ClientError } from "../errors";
+import { rowIdSchema } from "../validation";
 import {
 	findJobs as findJobsImpl,
 	getJob as getJobImpl,
@@ -21,14 +22,14 @@ const findJobsSchema = z.object({
 });
 
 const jobIdSchema = z.object({
-	jobId: z.number().int().positive(),
+	jobId: rowIdSchema,
 });
 
 // Capped at the same 100 as a `findJobs` page: the batch exists to collapse one
 // refetch per on-screen job into one request, and no view shows more than a
 // page of them at once.
 const jobIdsSchema = z.object({
-	jobIds: z.array(z.number().int().positive()).min(1).max(100),
+	jobIds: z.array(rowIdSchema).min(1).max(100),
 });
 
 // Wrapped in createServerOnlyFn so the compiler can strip this body — and the

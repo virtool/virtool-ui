@@ -1,4 +1,4 @@
-import type { QueryError } from "@app/queryErrors";
+import { getErrorStatus } from "@app/queryErrors";
 import ContainerNarrow from "@base/ContainerNarrow";
 import ReferenceDetailHeader from "@references/components/Detail/ReferenceDetailHeader";
 import ReferenceDetailTabs from "@references/components/Detail/ReferenceDetailTabs";
@@ -15,9 +15,9 @@ export const Route = createFileRoute("/_authenticated/refs/$refId")({
 		const { referenceQueryOptions } = await import("@references/queries");
 
 		try {
-			await queryClient.ensureQueryData(referenceQueryOptions(refId));
+			await queryClient.ensureQueryData(referenceQueryOptions(Number(refId)));
 		} catch (error) {
-			if ((error as QueryError).response?.status === 404) {
+			if (getErrorStatus(error) === 404) {
 				throw notFound();
 			}
 			throw error;
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/_authenticated/refs/$refId")({
 
 function ReferenceDetailLayout() {
 	const { refId } = Route.useParams();
-	const { data } = useFetchReference(refId);
+	const { data } = useFetchReference(Number(refId));
 	const isOtuDetail = useMatches().some(
 		(match) => match.routeId === "/_authenticated/refs/$refId/otus/$otuId",
 	);
@@ -42,14 +42,12 @@ function ReferenceDetailLayout() {
 			{!isOtuDetail && (
 				<>
 					<ReferenceDetailHeader
-						createdAt={data.created_at}
+						createdAt={data.createdAt}
 						detail={data}
-						isRemote={Boolean(data.remotes_from)}
 						name={data.name}
-						userHandle={data.user.handle}
-						refId={refId}
+						userHandle={data.user?.handle ?? ""}
 					/>
-					<ReferenceDetailTabs id={refId} otuCount={data.otu_count} />
+					<ReferenceDetailTabs id={refId} otuCount={data.otuCount} />
 				</>
 			)}
 

@@ -1,3 +1,5 @@
+import { CLIENT_ERROR_NAME } from "@virtool/contracts";
+
 /** Base class for domain errors raised by the server data layer. */
 export class AppError extends Error {
 	constructor(message?: string) {
@@ -5,13 +7,6 @@ export class AppError extends Error {
 		this.name = new.target.name;
 	}
 }
-
-/**
- * The `.name` every `ClientError` carries. A string literal rather than the
- * class name so it survives server minification — the same reason the auth
- * error names are literals — because the Sentry filter matches on it.
- */
-export const CLIENT_ERROR_NAME = "ClientError";
 
 /**
  * An expected, client-facing failure a server-function handler surfaces as a
@@ -22,8 +17,20 @@ export const CLIENT_ERROR_NAME = "ClientError";
  * is reported as an incident.
  */
 export class ClientError extends Error {
-	constructor(message: string) {
+	/**
+	 * The HTTP status the handler set alongside this error, for the client, where
+	 * server-function errors arrive as plain `Error`s with no access to the HTTP
+	 * response. Carried across the boundary by
+	 * `serverErrorSerializationAdapter` (`app/serverErrors.ts`) — Router's
+	 * default `ShallowErrorPlugin` would keep only the message.
+	 */
+	declare readonly status?: number;
+
+	constructor(message: string, status?: number) {
 		super(message);
 		this.name = CLIENT_ERROR_NAME;
+		if (status !== undefined) {
+			this.status = status;
+		}
 	}
 }

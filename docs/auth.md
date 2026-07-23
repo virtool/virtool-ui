@@ -429,10 +429,12 @@ can call it:
   with no status (`setResponseStatus` is not attached to the thrown
   error), and TanStack Router's default `ShallowErrorPlugin` would strip
   the `name` too, flattening every error to its `message`. The name only
-  survives because `authErrorSerializationAdapter` (`app/authErrors.ts`,
-  registered in `start.ts`) re-serializes the auth errors with their
-  `name` intact — without it, matching by name silently never fires and
-  a 401 is retried ~4× before the guard can act.
+  survives because `serverErrorSerializationAdapter`
+  (`app/serverErrors.ts`, registered in `start.ts`) re-serializes our own
+  errors with their `name` intact — without it, matching by name silently
+  never fires and a 401 is retried ~4× before the guard can act. The same
+  adapter carries a `ClientError`'s `status`, which is what a route
+  loader reads to turn a server function's 404 into `notFound()`.
 - **`app/sse/SseConnection.ts`** — on a 401 from the `/events`
   handshake. The `EventSource` error event carries no status, so it
   confirms with a `HEAD /events` before ending anything.

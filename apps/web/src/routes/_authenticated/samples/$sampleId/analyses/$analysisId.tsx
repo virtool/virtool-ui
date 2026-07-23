@@ -1,5 +1,6 @@
 import AnalysisDetail from "@analyses/components/AnalysisDetail";
 import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
+import { getErrorStatus } from "@app/queryErrors";
 import { boolOptional, strOptional } from "@app/searchParams";
 import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute, notFound } from "@tanstack/react-router";
@@ -45,12 +46,7 @@ export const Route = createFileRoute(
 				analysisQueryOptions(Number(analysisId)),
 			);
 		} catch (error) {
-			if (
-				error != null &&
-				typeof error === "object" &&
-				"response" in error &&
-				(error as { response: { status: number } }).response.status === 404
-			) {
+			if (getErrorStatus(error) === 404) {
 				throw notFound();
 			}
 			throw error;

@@ -5,10 +5,38 @@ import {
 	UNAUTHORIZED_ERROR_NAME,
 } from "@virtool/contracts";
 
-/** A failed query's error, carrying an HTTP status when superagent raised it. */
-export type QueryError = Error & { response?: { status?: number } };
+/**
+ * A failed query's error. Superagent puts the HTTP status on `response.status`;
+ * a server function's `ClientError` arrives with it on `status`, carried across
+ * the boundary by `serverErrorSerializationAdapter`.
+ */
+export type QueryError = Error & {
+	response?: { status?: number };
+	status?: number;
+};
 
 const NON_RETRYABLE_STATUSES = new Set([401, 403, 404]);
+
+/**
+ * The HTTP status behind a failed query, whichever transport raised it.
+ *
+ * The two carry it differently and there is no unifying them at the source: a
+ * server function's `ClientError` arrives as a plain `Error` with `status` as an
+ * own property (put there by `serverErrorSerializationAdapter`), while
+ * superagent attaches its whole `response`. Callers should not have to know
+ * which transport a feature is on — that changes as domains move off the Python
+ * API, and the superagent branch here goes away with the last of them.
+ *
+ * Returns `undefined` for an error that carries no status at all — a network
+ * failure, a thrown `ZodError`, a bug.
+ */
+export function getErrorStatus(error: unknown): number | undefined {
+	if (error === null || typeof error !== "object") {
+		return undefined;
+	}
+	const { status, response } = error as QueryError;
+	return status ?? response?.status;
+}
 
 /**
  * Whether an error is a zod validation failure — the API returned a payload a
@@ -46,7 +74,7 @@ function reportContractDrift(error: Error): void {
  * is gone, and reports a drifted contract so it fails loudly.
  */
 // Server-function errors reach the client with their `name` preserved only
-// because `authErrorSerializationAdapter` (start.ts) carries it past Router's
+// because `serverErrorSerializationAdapter` (start.ts) carries it past Router's
 // ShallowErrorPlugin, so a 401 is matched by name here. Superagent calls are
 // covered by the interceptor in `app/api.ts` instead.
 //
@@ -67,15 +95,14 @@ export function shouldRetryQuery(
 	failureCount: number,
 	error: QueryError,
 ): boolean {
-	// Superagent (legacy Python API) errors carry the HTTP status here.
-	const status = error.response?.status;
+	const status = getErrorStatus(error);
 	if (status !== undefined && NON_RETRYABLE_STATUSES.has(status)) {
 		return false;
 	}
 	// TanStack Start server-function errors cross the boundary with only
 	// `message` preserved by default; the status set via `setResponseStatus` is
 	// not attached, and Router's ShallowErrorPlugin drops `name`.
-	// `authErrorSerializationAdapter` (registered in start.ts) keeps the auth
+	// `serverErrorSerializationAdapter` (registered in start.ts) keeps the auth
 	// errors' `name`, so matching by name here makes a 401/403 (e.g. after
 	// logout, or an unauthenticated first visit) reject immediately instead of
 	// retrying ~4× while the screen sits blank before the route can bounce to

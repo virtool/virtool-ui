@@ -5,6 +5,7 @@ import { z } from "zod";
 import { authenticated } from "../auth/policy";
 import { db } from "../db/pg";
 import { ClientError } from "../errors";
+import { rowIdSchema } from "../validation";
 import {
 	ApiKeyNotFoundError,
 	createApiKey as createApiKeyImpl,
@@ -18,13 +19,12 @@ const createApiKeySchema = z.object({
 	permissions: permissionsSchema.partial().default({}),
 });
 
-const updateApiKeySchema = z.object({
-	keyId: z.number().int().positive(),
-	permissions: permissionsSchema.partial().default({}),
+const keyIdSchema = z.object({
+	keyId: rowIdSchema,
 });
 
-const keyIdSchema = z.object({
-	keyId: z.number().int().positive(),
+const updateApiKeySchema = keyIdSchema.extend({
+	permissions: permissionsSchema.partial().default({}),
 });
 
 // Wrapped in createServerOnlyFn so the compiler can strip this body — and the

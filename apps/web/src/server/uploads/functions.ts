@@ -5,6 +5,7 @@ import { authenticated, permission } from "../auth/policy";
 import { db } from "../db/pg";
 import { ClientError } from "../errors";
 import { storage } from "../storage";
+import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 import {
 	deleteUpload as deleteUploadImpl,
 	findUploads as findUploadsImpl,
@@ -20,14 +21,14 @@ import {
 const findUploadsSchema = z
 	.object({
 		upload_type: z.enum(UPLOAD_TYPES).optional(),
-		page: z.number().int().positive().default(1),
-		per_page: z.number().int().positive().max(100).default(25),
-		user: z.number().int().positive().optional(),
+		page: pageSchema,
+		per_page: perPageSchema,
+		user: rowIdSchema.optional(),
 	})
 	.optional();
 
 const uploadIdSchema = z.object({
-	id: z.number().int().positive(),
+	id: rowIdSchema,
 });
 
 // Wrapped in createServerOnlyFn so the compiler can strip this body — and the
