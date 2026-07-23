@@ -242,8 +242,8 @@ describe("findSamples", () => {
 		const actor = await resolveSampleActor(db, ownerId);
 		const result = await findSamples(db, options, actor);
 
-		expect(result.total_count).toBe(2);
-		expect(result.found_count).toBe(1);
+		expect(result.totalCount).toBe(2);
+		expect(result.foundCount).toBe(1);
 	});
 
 	it("filters by a case-insensitive name substring", async () => {
@@ -696,11 +696,11 @@ describe("updateSampleRights", () => {
 	it("sets the rights flags", async () => {
 		const sampleId = await seedSample({ name: "Rights" });
 		const sample = await updateSampleRights(db, sampleId, {
-			all_read: true,
-			group_write: true,
+			allRead: true,
+			groupWrite: true,
 		});
-		expect(sample.all_read).toBe(true);
-		expect(sample.group_write).toBe(true);
+		expect(sample.allRead).toBe(true);
+		expect(sample.groupWrite).toBe(true);
 	});
 
 	it("resolves and assigns a group by id", async () => {
@@ -726,7 +726,7 @@ describe("updateSampleRights", () => {
 
 	it("throws when the sample does not exist", async () => {
 		await expect(
-			updateSampleRights(db, 123456, { all_read: true }),
+			updateSampleRights(db, 123456, { allRead: true }),
 		).rejects.toBeInstanceOf(SampleNotFoundError);
 	});
 });

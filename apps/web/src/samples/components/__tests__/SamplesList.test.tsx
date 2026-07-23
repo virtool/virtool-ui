@@ -430,7 +430,7 @@ describe("<SamplesList />", () => {
 			mockFindHmms(createFakeHmmSearchResults());
 			mockApiListIndexes([createFakeIndexMinimal()]);
 			mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);
-			mockGetSamples(samples, { found_count: 2, total_count: 17 });
+			mockGetSamples(samples, { foundCount: 2, totalCount: 17 });
 
 			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();

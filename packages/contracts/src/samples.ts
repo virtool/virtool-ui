@@ -1,5 +1,7 @@
 import type { GroupMinimal } from "./groups";
+import type { JobNested } from "./jobs";
 import type { LabelNested } from "./labels";
+import type { SearchResultV2 } from "./search";
 import type { SubtractionNested } from "./subtractions";
 import type { UserNested } from "./users";
 
@@ -18,35 +20,15 @@ export type SampleWorkflows = {
 	pathoscope: WorkflowState;
 };
 
-/** A lifecycle state a sample's creation job can be in. */
-export type SampleJobState =
-	| "cancelled"
-	| "failed"
-	| "pending"
-	| "running"
-	| "succeeded";
-
-/** A workflow a sample's creation job can run. */
-export type SampleJobWorkflow =
-	| "build_index"
-	| "create_sample"
-	| "create_subtraction"
-	| "nuvs"
-	| "pathoscope";
-
-/** The creation job embedded in a sample. */
-export type SampleJobNested = {
-	created_at: string;
-	id: number;
-	progress: number;
-	state: SampleJobState;
-	user: UserNested;
-	workflow: SampleJobWorkflow;
-};
+/**
+ * The creation job embedded in a sample. A job nested in a sample is always the
+ * `create_sample` job that built it.
+ */
+export type SampleJobNested = JobNested & { workflow: "create_sample" };
 
 /** An artifact produced while creating a sample. */
 export type SampleArtifact = {
-	download_url: string;
+	downloadUrl: string;
 	id: number;
 	name: string;
 	size: number;
@@ -57,20 +39,20 @@ export type SampleReadUpload = {
 	id: number;
 	name: string;
 	size: number | null;
-	uploaded_at: string | null;
+	uploadedAt: string | null;
 	user: UserNested | null;
 };
 
 /** A reads file that makes up a sample. */
 export type Read = {
-	download_url: string;
+	downloadUrl: string;
 	id: number;
 	name: string;
-	name_on_disk: string;
+	nameOnDisk: string;
 	sample: number;
 	size: number;
 	upload?: SampleReadUpload | null;
-	uploaded_at: string;
+	uploadedAt: string;
 };
 
 /** The FastQC quality charts associated with a sample. */
@@ -99,13 +81,13 @@ export type Quality = {
 
 /** A sample reduced to the fields shown in resource listings. */
 export type SampleMinimal = {
-	created_at: string;
+	createdAt: string;
 	host: string;
 	id: number;
 	isolate: string;
 	job?: SampleJobNested;
 	labels: LabelNested[];
-	library_type: LibraryType;
+	libraryType: LibraryType;
 	name: string;
 	notes: string;
 	nuvs: boolean | string;
@@ -117,15 +99,15 @@ export type SampleMinimal = {
 
 /** A complete sample, as returned by the detail endpoint. */
 export type Sample = SampleMinimal & {
-	all_read: boolean;
-	all_write: boolean;
+	allRead: boolean;
+	allWrite: boolean;
 	artifacts: SampleArtifact[];
 	format: string;
 	group: GroupMinimal | null;
-	group_read: boolean;
-	group_write: boolean;
+	groupRead: boolean;
+	groupWrite: boolean;
 	hold: boolean;
-	is_legacy: boolean;
+	isLegacy: boolean;
 	locale: string;
 	paired: boolean;
 	quality: Quality | null;
@@ -134,20 +116,15 @@ export type Sample = SampleMinimal & {
 };
 
 /** A page of samples with pagination metadata. */
-export type SampleSearchResult = {
-	found_count: number;
+export type SampleSearchResult = SearchResultV2 & {
 	items: SampleMinimal[];
-	page: number;
-	page_count: number;
-	per_page: number;
-	total_count: number;
 };
 
 /** The rights fields that can be changed on a sample. */
 export type SampleRightsUpdate = {
-	all_read?: boolean;
-	all_write?: boolean;
+	allRead?: boolean;
+	allWrite?: boolean;
 	group?: number | string | null;
-	group_read?: boolean;
-	group_write?: boolean;
+	groupRead?: boolean;
+	groupWrite?: boolean;
 };

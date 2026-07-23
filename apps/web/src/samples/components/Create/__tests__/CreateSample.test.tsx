@@ -124,7 +124,7 @@ describe("<CreateSample>", () => {
 			expect(createSample).toHaveBeenCalledWith({
 				data: expect.objectContaining({
 					name: "Sample A",
-					library_type: "normal",
+					libraryType: "normal",
 					files: [file.id],
 					labels: [],
 					subtractions: [],
@@ -192,7 +192,7 @@ describe("<CreateSample>", () => {
 					isolate: "Clone AB",
 					host: "Apple",
 					locale: "Earth",
-					library_type: "normal",
+					libraryType: "normal",
 					files: [firstFile.id, secondFile.id],
 					labels: [firstLabel.id],
 					subtractions: [subtractionShortlist.id],

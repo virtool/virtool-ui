@@ -21,19 +21,19 @@ export const sampleServerFnMocks = {
  *
  * @param samples - the samples on the page
  * @param counts - overrides for the counts, which otherwise both match the
- *   number of samples. `total_count` is every sample the user may see and
- *   `found_count` is only those matching the filters.
+ *   number of samples. `totalCount` is every sample the user may see and
+ *   `foundCount` is only those matching the filters.
  */
 export function mockGetSamples(
 	samples: SampleMinimal[],
-	counts: { found_count?: number; total_count?: number } = {},
+	counts: { foundCount?: number; totalCount?: number } = {},
 ): Mock {
 	sampleServerFnMocks.findSamples.mockResolvedValue({
 		page: 1,
-		page_count: 1,
-		per_page: 5,
-		total_count: counts.total_count ?? samples.length,
-		found_count: counts.found_count ?? samples.length,
+		pageCount: 1,
+		perPage: 5,
+		totalCount: counts.totalCount ?? samples.length,
+		foundCount: counts.foundCount ?? samples.length,
 		items: samples,
 	});
 	return sampleServerFnMocks.findSamples;
@@ -52,10 +52,10 @@ export function mockGetSamplePages(pages: SampleMinimal[][]): Mock {
 			const page = data?.page ?? 1;
 			return {
 				page,
-				page_count: pages.length,
-				per_page: 1,
-				total_count: pages.length,
-				found_count: pages.length,
+				pageCount: pages.length,
+				perPage: 1,
+				totalCount: pages.length,
+				foundCount: pages.length,
 				items: pages[page - 1] ?? [],
 			};
 		},

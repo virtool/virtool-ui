@@ -34,7 +34,7 @@ const sampleIdSchema = z.object({
 
 const findSamplesSchema = z.object({
 	page: pageSchema,
-	per_page: perPageSchema,
+	perPage: perPageSchema,
 	term: z.string().default(""),
 	labels: z.array(rowIdSchema).default([]),
 	workflows: z.array(z.string()).default([]),
@@ -53,7 +53,7 @@ const createSampleSchema = z.object({
 	isolate: z.string().trim().default(""),
 	locale: z.string().trim().default(""),
 	notes: z.string().default(""),
-	library_type: libraryTypeSchema.default("normal"),
+	libraryType: libraryTypeSchema.default("normal"),
 	group: groupSchema.default(null),
 	subtractions: z.array(rowIdSchema).default([]),
 	labels: z.array(rowIdSchema).default([]),
@@ -71,11 +71,11 @@ const updateSampleSchema = sampleIdSchema.extend({
 });
 
 const updateRightsSchema = sampleIdSchema.extend({
-	all_read: z.boolean().optional(),
-	all_write: z.boolean().optional(),
+	allRead: z.boolean().optional(),
+	allWrite: z.boolean().optional(),
 	group: groupSchema.optional(),
-	group_read: z.boolean().optional(),
-	group_write: z.boolean().optional(),
+	groupRead: z.boolean().optional(),
+	groupWrite: z.boolean().optional(),
 });
 
 // Job states from which a sample may be deleted: the terminal states, where the
@@ -152,7 +152,7 @@ export const findSamples = createServerFn({ method: "GET" })
 			db,
 			{
 				page: data.page,
-				perPage: data.per_page,
+				perPage: data.perPage,
 				term: data.term,
 				labels: data.labels,
 				users: data.users,
@@ -185,7 +185,7 @@ export const createSample = createServerFn({ method: "POST" })
 				isolate: data.isolate,
 				locale: data.locale,
 				notes: data.notes,
-				libraryType: data.library_type,
+				libraryType: data.libraryType,
 				group: coerceGroup(data.group),
 				subtractions: data.subtractions,
 				labels: data.labels,

@@ -147,7 +147,7 @@ describe("updateSampleRights", () => {
 		await signIn("full");
 
 		await expect(
-			call("updateSampleRights", { sampleId: 123456, all_read: true }),
+			call("updateSampleRights", { sampleId: 123456, allRead: true }),
 		).rejects.toThrow();
 		expect(setResponseStatus).toHaveBeenCalledWith(404);
 	});
@@ -159,7 +159,7 @@ describe("updateSampleRights", () => {
 		await signIn(null);
 
 		await expect(
-			call("updateSampleRights", { sampleId, all_read: true }),
+			call("updateSampleRights", { sampleId, allRead: true }),
 		).rejects.toBeInstanceOf(ForbiddenError);
 		expect(setResponseStatus).toHaveBeenCalledWith(403);
 	});
@@ -170,9 +170,9 @@ describe("updateSampleRights", () => {
 
 		const sample = (await call("updateSampleRights", {
 			sampleId,
-			all_read: true,
-		})) as { all_read: boolean };
-		expect(sample.all_read).toBe(true);
+			allRead: true,
+		})) as { allRead: boolean };
+		expect(sample.allRead).toBe(true);
 	});
 
 	it("allows a full administrator who is not the owner", async () => {
@@ -183,9 +183,9 @@ describe("updateSampleRights", () => {
 
 		const sample = (await call("updateSampleRights", {
 			sampleId,
-			all_write: true,
-		})) as { all_write: boolean };
-		expect(sample.all_write).toBe(true);
+			allWrite: true,
+		})) as { allWrite: boolean };
+		expect(sample.allWrite).toBe(true);
 	});
 });
 
