@@ -1,8 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
-import { open } from "../auth/policy";
+import { z } from "zod";
+import { adminRole, open } from "../auth/policy";
 
 import { db } from "../db/pg";
-import { getSettings } from "./data";
+import { type SampleGroup, sampleGroups } from "../db/schema/settings";
+import {
+	getSettings as getSettingsImpl,
+	type Settings,
+	updateSettings as updateSettingsImpl,
+} from "./data";
 
 /** The password rules a client needs to validate a new password before submitting it. */
 export type PasswordPolicy = {
@@ -21,6 +27,38 @@ export type PasswordPolicy = {
 export const getPasswordPolicyFn = createServerFn({ method: "GET" })
 	.middleware([open()])
 	.handler(async (): Promise<PasswordPolicy> => {
-		const { minimumPasswordLength } = await getSettings(db);
+		const { minimumPasswordLength } = await getSettingsImpl(db);
 		return { minimumPasswordLength };
 	});
+
+const updateSettingsSchema = z
+	.object({
+		defaultSourceTypes: z.array(z.string()).optional(),
+		enableApi: z.boolean().optional(),
+		enableSentry: z.boolean().optional(),
+		minimumPasswordLength: z.number().int().min(1).optional(),
+		sampleAllRead: z.boolean().optional(),
+		sampleAllWrite: z.boolean().optional(),
+		sampleGroup: z
+			.string()
+			.refine(
+				(value): value is SampleGroup =>
+					(sampleGroups as readonly string[]).includes(value),
+				{ message: "Invalid sample group." },
+			)
+			.optional(),
+		sampleGroupRead: z.boolean().optional(),
+		sampleGroupWrite: z.boolean().optional(),
+	})
+	.refine((data) => Object.keys(data).length > 0, {
+		message: "At least one setting must be provided.",
+	});
+
+export const getSettings = createServerFn({ method: "GET" })
+	.middleware([adminRole("settings")])
+	.handler(async (): Promise<Settings> => getSettingsImpl(db));
+
+export const updateSettings = createServerFn({ method: "POST" })
+	.middleware([adminRole("settings")])
+	.validator(updateSettingsSchema)
+	.handler(async ({ data }): Promise<Settings> => updateSettingsImpl(db, data));

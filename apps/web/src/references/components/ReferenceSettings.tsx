@@ -12,7 +12,7 @@ export default function ReferenceSettings() {
 			<ViewHeader title="Reference Settings">
 				<ViewHeaderTitle>Settings</ViewHeaderTitle>
 			</ViewHeader>
-			<GlobalSourceTypes sourceTypes={data.default_source_types} />
+			<GlobalSourceTypes sourceTypes={data.defaultSourceTypes} />
 		</ContainerNarrow>
 	);
 }

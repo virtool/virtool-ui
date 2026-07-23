@@ -96,3 +96,31 @@ export async function getSettings(db: Db): Promise<Settings> {
 	// The insert was a no-op, so a concurrent caller seeded the row first.
 	return toSettings(takeFirstOrThrow(await selectSettings(db)));
 }
+
+/**
+ * Update the instance settings, returning the full row after the change.
+ *
+ * Seeds the defaults first when the row is absent, mirroring `getSettings`, so a
+ * patch against a database that has never seen a Python boot still writes onto a
+ * complete row rather than failing.
+ */
+export async function updateSettings(
+	db: Db,
+	values: Partial<Settings>,
+): Promise<Settings> {
+	const current = await getSettings(db);
+
+	if (Object.keys(values).length === 0) {
+		return current;
+	}
+
+	return toSettings(
+		takeFirstOrThrow(
+			await db
+				.update(settingsTable)
+				.set(values)
+				.where(eq(settingsTable.id, SETTINGS_ID))
+				.returning(),
+		),
+	);
+}

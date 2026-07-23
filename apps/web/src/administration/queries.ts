@@ -3,7 +3,7 @@ import {
 	roleQueryKeys,
 	settingsQueryKeys,
 } from "@administration/keys";
-import { apiClient } from "@app/api";
+import { getSettings, updateSettings } from "@server/settings/functions";
 import { listAdministratorRoles } from "@server/users/functions";
 import {
 	queryOptions,
@@ -17,15 +17,15 @@ import type { Settings } from "./types";
 
 /** Fields that can be changed when updating the server settings */
 export type SettingsUpdate = {
-	default_source_types?: string[];
-	enable_api?: boolean;
-	enable_sentry?: boolean;
-	minimum_password_length?: number;
-	sample_all_read?: boolean;
-	sample_all_write?: boolean;
-	sample_group?: string;
-	sample_group_read?: boolean;
-	sample_group_write?: boolean;
+	defaultSourceTypes?: string[];
+	enableApi?: boolean;
+	enableSentry?: boolean;
+	minimumPasswordLength?: number;
+	sampleAllRead?: boolean;
+	sampleAllWrite?: boolean;
+	sampleGroup?: string;
+	sampleGroupRead?: boolean;
+	sampleGroupWrite?: boolean;
 };
 
 /**
@@ -34,7 +34,7 @@ export type SettingsUpdate = {
 export function settingsQueryOptions() {
 	return queryOptions<Settings>({
 		queryKey: settingsQueryKeys.all(),
-		queryFn: () => apiClient.get("/settings").then((response) => response.body),
+		queryFn: () => getSettings(),
 	});
 }
 
@@ -67,11 +67,7 @@ export function useUpdateSettings() {
 	const queryClient = useQueryClient();
 
 	return useMutation<Settings, ErrorResponse, SettingsUpdate>({
-		mutationFn: (update) =>
-			apiClient
-				.patch("/settings")
-				.send(update)
-				.then((response) => response.body),
+		mutationFn: (update) => updateSettings({ data: update }),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: settingsQueryKeys.all(),
