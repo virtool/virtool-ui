@@ -1,5 +1,6 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
+import { SampleCreateRequest, SampleUpdateRequest } from "@virtool/contracts";
 import { z } from "zod";
 import { ForbiddenError } from "../auth/middleware";
 import { authenticated, permission } from "../auth/policy";
@@ -41,34 +42,11 @@ const findSamplesSchema = z.object({
 	users: z.array(rowIdSchema).default([]),
 });
 
-const libraryTypeSchema = z.enum(["amplicon", "srna", "other", "normal"]);
-
 // The group id (or legacy string), or null when none applies. `""` and `"none"`
 // mean "no group", matching the Python request validator.
 const groupSchema = z.union([z.number().int(), z.string(), z.null()]);
 
-const createSampleSchema = z.object({
-	name: z.string().trim().min(1),
-	host: z.string().trim().default(""),
-	isolate: z.string().trim().default(""),
-	locale: z.string().trim().default(""),
-	notes: z.string().default(""),
-	libraryType: libraryTypeSchema.default("normal"),
-	group: groupSchema.default(null),
-	subtractions: z.array(rowIdSchema).default([]),
-	labels: z.array(rowIdSchema).default([]),
-	files: z.array(rowIdSchema).min(1).max(2),
-});
-
-const updateSampleSchema = sampleIdSchema.extend({
-	name: z.string().trim().min(1).optional(),
-	host: z.string().trim().optional(),
-	isolate: z.string().trim().optional(),
-	locale: z.string().trim().optional(),
-	notes: z.string().trim().optional(),
-	labels: z.array(rowIdSchema).optional(),
-	subtractions: z.array(rowIdSchema).optional(),
-});
+const updateSampleSchema = sampleIdSchema.extend(SampleUpdateRequest.shape);
 
 const updateRightsSchema = sampleIdSchema.extend({
 	allRead: z.boolean().optional(),
@@ -176,7 +154,7 @@ export const getSample = createServerFn({ method: "GET" })
 
 export const createSample = createServerFn({ method: "POST" })
 	.middleware([permission("create_sample")])
-	.validator(createSampleSchema)
+	.validator(SampleCreateRequest)
 	.handler(async ({ context, data }) => {
 		try {
 			const sample = await createSampleImpl(db, {
