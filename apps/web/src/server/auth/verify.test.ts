@@ -192,12 +192,31 @@ describe("parseBasicAuthHeader", () => {
 		});
 	});
 
+	// RFC 7235 allows more than one space between the scheme and the credentials.
+	it.each([
+		["extra spaces between the scheme and credentials", "   "],
+		["a tab", "\t"],
+	])("accepts %s", (_label, separator) => {
+		expect(
+			parseBasicAuthHeader(encode("alice:secret").replace(" ", separator)),
+		).toEqual({ handle: "alice", key: "secret" });
+	});
+
+	it("accepts a header padded with surrounding whitespace", () => {
+		expect(parseBasicAuthHeader(`  ${encode("alice:secret")}  `)).toEqual({
+			handle: "alice",
+			key: "secret",
+		});
+	});
+
 	it.each([
 		["a bearer token", "Bearer abcdef"],
 		["no encoded credentials", "Basic"],
+		["trailing junk", `${encode("alice:secret")} extra`],
 		["no colon", encode("alice")],
 		["an empty handle", encode(":secret")],
 		["an empty string", ""],
+		["only whitespace", "   "],
 	])("rejects %s", (_label, header) => {
 		expect(parseBasicAuthHeader(header)).toBeNull();
 	});
@@ -270,6 +289,16 @@ describe("verifyApiKey", () => {
 		const key = await seedApiKey(db, userId);
 
 		expect(await verifyApiKey(db, "jobs", key)).toBeNull();
+	});
+
+	// The handle lookup is case-insensitive, so a guard that was not would let
+	// `JOBS` through to the row that `jobs` is refused.
+	it("rejects a job-prefixed login whatever its case", async () => {
+		const userId = await seedUser(db, { handle: "jobs" });
+		const key = await seedApiKey(db, userId);
+
+		expect(await verifyApiKey(db, "JOBS", key)).toBeNull();
+		expect(await verifyApiKey(db, "JoBs", key)).toBeNull();
 	});
 });
 

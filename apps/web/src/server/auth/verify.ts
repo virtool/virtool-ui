@@ -118,7 +118,17 @@ export type BasicCredentials = {
  * failed authentication rather than falling back to cookies.
  */
 export function parseBasicAuthHeader(header: string): BasicCredentials | null {
-	const [scheme, encoded] = header.split(" ");
+	// RFC 7235 allows one *or more* spaces between the scheme and the
+	// credentials, so split on runs of whitespace rather than a single space.
+	// Requiring exactly two parts still rejects a header with trailing junk —
+	// base64 contains no whitespace, so a third part means the header is broken.
+	const parts = header.trim().split(/\s+/);
+
+	if (parts.length !== 2) {
+		return null;
+	}
+
+	const [scheme, encoded] = parts;
 
 	if (scheme?.toLowerCase() !== "basic" || !encoded) {
 		return null;
@@ -150,11 +160,16 @@ export async function verifyApiKey(
 	handle: string,
 	key: string,
 ): Promise<AuthenticatedSession | null> {
+	// The lookup below matches the handle case-insensitively, so the prefix check
+	// has to as well — otherwise `JOB-1` would slip past a guard that `job-1`
+	// trips and then resolve to the very same row.
+	const normalized = handle.toLowerCase();
+
 	// Job keys use this same header format against the separate jobs API. Python
 	// refuses them here rather than resolving `job-{id}` as a user handle, and a
 	// handle that reaches Postgres either way must not authenticate differently
 	// depending on which backend served it.
-	if (!handle || handle.startsWith("job")) {
+	if (!normalized || normalized.startsWith("job")) {
 		return null;
 	}
 
@@ -168,7 +183,7 @@ export async function verifyApiKey(
 		.innerJoin(apiKeys, eq(apiKeys.userId, users.id))
 		.where(
 			and(
-				sql`lower(${users.handle}) = ${handle.toLowerCase()}`,
+				sql`lower(${users.handle}) = ${normalized}`,
 				eq(apiKeys.hashed, hashToken(key)),
 			),
 		)
