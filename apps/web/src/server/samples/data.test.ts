@@ -21,6 +21,7 @@ import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
 import { addToGroup, seedGroup } from "../groups/test/fixtures";
 import { MemoryStorage } from "../storage";
+import { UploadNotFoundError } from "../uploads/data";
 import {
 	type CreateSampleValues,
 	checkSampleRight,
@@ -117,6 +118,7 @@ async function seedUpload(reserved = false): Promise<number> {
 				name: "reads.fq.gz",
 				nameOnDisk: `disk-${Math.random()}`,
 				type: "reads",
+				ready: true,
 				reserved,
 				userId: ownerId,
 			})
@@ -529,6 +531,53 @@ describe("createSample", () => {
 		await expect(
 			createSample(db, values({ files: [file], labels: [987654] })),
 		).rejects.toBeInstanceOf(SampleLabelsNotFoundError);
+	});
+
+	it("rejects a file that is not a visible reads upload", async () => {
+		const reference = takeFirstOrThrow(
+			await db
+				.insert(uploads)
+				.values({
+					createdAt: new Date(),
+					name: "ref.fa.gz",
+					nameOnDisk: `disk-ref-${Math.random()}`,
+					type: "reference",
+					ready: true,
+					userId: ownerId,
+				})
+				.returning({ id: uploads.id }),
+		).id;
+
+		await expect(
+			createSample(db, values({ files: [reference] })),
+		).rejects.toBeInstanceOf(UploadNotFoundError);
+
+		// The reference upload is left untouched by the failed reservation.
+		const [row] = await db
+			.select({ reserved: uploads.reserved })
+			.from(uploads)
+			.where(eq(uploads.id, reference));
+		expect(row?.reserved).toBe(false);
+	});
+
+	it("rejects an unfinished reads upload", async () => {
+		const pending = takeFirstOrThrow(
+			await db
+				.insert(uploads)
+				.values({
+					createdAt: new Date(),
+					name: "reads.fq.gz",
+					nameOnDisk: `disk-pending-${Math.random()}`,
+					type: "reads",
+					ready: false,
+					userId: ownerId,
+				})
+				.returning({ id: uploads.id }),
+		).id;
+
+		await expect(
+			createSample(db, values({ files: [pending] })),
+		).rejects.toBeInstanceOf(UploadNotFoundError);
 	});
 });
 
