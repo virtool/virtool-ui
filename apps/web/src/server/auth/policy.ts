@@ -45,9 +45,22 @@ const forbid = createServerOnlyFn((): never => {
  *
  * Mirrors `checkAdminRoleOrPermissionsFromAccount` on the client: the two must
  * agree, or the UI offers an action the server then refuses.
+ *
+ * A session authenticated with an API key carries that key's permissions, and
+ * they cap the answer: the effective set is the intersection of what the user
+ * may do and what the key was granted. The cap applies to administrators too.
+ * Python's `PermissionRoutePolicy` lets any administrator role through
+ * regardless of the key, but the account UI tells the user the opposite — it
+ * offers an administrator a checkbox per permission and promises the key
+ * reverts to a smaller set if their role shrinks — so a key that ignored its own
+ * checkboxes would be a lie.
  */
 export const hasPermission = createServerOnlyFn(
 	async (session: AuthenticatedSession, name: Permission): Promise<boolean> => {
+		if (session.keyPermissions && !session.keyPermissions[name]) {
+			return false;
+		}
+
 		const [row] = await db
 			.select({ administratorRole: users.administratorRole })
 			.from(users)

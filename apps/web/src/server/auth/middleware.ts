@@ -11,7 +11,12 @@ import { eq } from "drizzle-orm";
 
 import { db } from "../db/pg";
 import { users } from "../db/schema/users";
-import { type AuthenticatedSession, verifyRequest } from "./verify";
+import {
+	type AuthenticatedSession,
+	parseBasicAuthHeader,
+	verifyApiKey,
+	verifyRequest,
+} from "./verify";
 
 /** Thrown by the auth middleware when a request has no valid session. */
 export class UnauthorizedError extends Error {
@@ -76,13 +81,34 @@ export const requireSession = createServerOnlyFn(
 );
 
 /**
- * Resolve the session for a raw `Request` (used by `createFileRoute` handlers
- * outside the server-function async-local context). Returns a 401 `Response`
- * on failure so the caller can `return` it directly.
+ * Resolve the identity behind a raw `Request` (used by `createFileRoute`
+ * handlers outside the server-function async-local context). Returns a 401
+ * `Response` on failure so the caller can `return` it directly.
+ *
+ * Either credential works: an HTTP Basic `Authorization` header carrying a user
+ * handle and API key, or the session cookie pair. Raw routes are the only
+ * endpoints a script can reach without the generated RPC client, so they are
+ * where key authentication has to live; server functions stay cookie-only.
+ *
+ * An `Authorization` header commits the request to the key path — a malformed
+ * one is a 401 rather than a silent fall back to whatever cookies happen to be
+ * attached. Python's `authentication_middleware` branches the same way.
  */
 export const requireAuthenticatedRequest = createServerOnlyFn(
 	async (request: Request): Promise<AuthenticatedSession | Response> => {
-		const session = await verifyRequest(db, request);
+		const header = request.headers.get("authorization");
+
+		let session: AuthenticatedSession | null;
+
+		if (header) {
+			const credentials = parseBasicAuthHeader(header);
+			session = credentials
+				? await verifyApiKey(db, credentials.handle, credentials.key)
+				: null;
+		} else {
+			session = await verifyRequest(db, request);
+		}
+
 		if (!session) {
 			return new Response("Unauthorized", { status: 401 });
 		}

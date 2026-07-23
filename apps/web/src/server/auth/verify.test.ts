@@ -1,14 +1,18 @@
+import { emptyPermissions, type Permissions } from "@virtool/contracts";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 import type { Db } from "../db/pg";
+import { apiKeys } from "../db/schema/apiKeys";
 import { sessions } from "../db/schema/sessions";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
 import { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } from "./cookies";
-import { seedSession, seedUser } from "./test/fixtures";
+import { seedApiKey, seedSession, seedUser } from "./test/fixtures";
 import { newSessionToken } from "./tokens";
 import {
+	parseBasicAuthHeader,
 	parseCookieHeader,
+	verifyApiKey,
 	verifyAuthenticatedSession,
 	verifyRequest,
 } from "./verify";
@@ -26,6 +30,7 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
+	await db.delete(apiKeys);
 	await db.delete(sessions);
 	await db.delete(users);
 });
@@ -158,6 +163,142 @@ describe("parseCookieHeader", () => {
 
 	it("keeps a cookie with an empty value", () => {
 		expect(parseCookieHeader("session_id=")).toEqual({ session_id: "" });
+	});
+});
+
+describe("parseBasicAuthHeader", () => {
+	function encode(value: string): string {
+		return `Basic ${Buffer.from(value, "utf8").toString("base64")}`;
+	}
+
+	it("parses a handle and key", () => {
+		expect(parseBasicAuthHeader(encode("alice:secret"))).toEqual({
+			handle: "alice",
+			key: "secret",
+		});
+	});
+
+	it("accepts the scheme in any case", () => {
+		expect(
+			parseBasicAuthHeader(encode("alice:secret").replace("Basic", "bAsIc")),
+		).toEqual({ handle: "alice", key: "secret" });
+	});
+
+	// A key is hex today, but nothing stops a colon appearing in one later.
+	it("splits on the first colon only", () => {
+		expect(parseBasicAuthHeader(encode("alice:a:b"))).toEqual({
+			handle: "alice",
+			key: "a:b",
+		});
+	});
+
+	// RFC 7235 allows more than one space between the scheme and the credentials.
+	it.each([
+		["extra spaces between the scheme and credentials", "   "],
+		["a tab", "\t"],
+	])("accepts %s", (_label, separator) => {
+		expect(
+			parseBasicAuthHeader(encode("alice:secret").replace(" ", separator)),
+		).toEqual({ handle: "alice", key: "secret" });
+	});
+
+	it("accepts a header padded with surrounding whitespace", () => {
+		expect(parseBasicAuthHeader(`  ${encode("alice:secret")}  `)).toEqual({
+			handle: "alice",
+			key: "secret",
+		});
+	});
+
+	it.each([
+		["a bearer token", "Bearer abcdef"],
+		["no encoded credentials", "Basic"],
+		["trailing junk", `${encode("alice:secret")} extra`],
+		["no colon", encode("alice")],
+		["an empty handle", encode(":secret")],
+		["an empty string", ""],
+		["only whitespace", "   "],
+	])("rejects %s", (_label, header) => {
+		expect(parseBasicAuthHeader(header)).toBeNull();
+	});
+});
+
+describe("verifyApiKey", () => {
+	it("resolves the key owner and the key's permissions", async () => {
+		const userId = await seedUser(db);
+		const key = await seedApiKey(db, userId, { upload_file: true });
+
+		expect(await verifyApiKey(db, "alice", key)).toEqual({
+			userId,
+			keyPermissions: { ...emptyPermissions(), upload_file: true },
+		});
+	});
+
+	it("matches the handle case-insensitively", async () => {
+		const userId = await seedUser(db, { handle: "Alice" });
+		const key = await seedApiKey(db, userId);
+
+		expect(await verifyApiKey(db, "aLiCe", key)).toMatchObject({ userId });
+	});
+
+	it("expands a partially stored permission set", async () => {
+		const userId = await seedUser(db);
+		const key = await seedApiKey(db, userId);
+		await db.update(apiKeys).set({
+			// Keys written by the legacy Python path stored only granted names.
+			permissions: { upload_file: true } as unknown as Permissions,
+		});
+
+		expect(await verifyApiKey(db, "alice", key)).toEqual({
+			userId,
+			keyPermissions: { ...emptyPermissions(), upload_file: true },
+		});
+	});
+
+	it("rejects an unknown handle", async () => {
+		const userId = await seedUser(db);
+		const key = await seedApiKey(db, userId);
+
+		expect(await verifyApiKey(db, "nobody", key)).toBeNull();
+	});
+
+	it("rejects a deactivated user", async () => {
+		const userId = await seedUser(db, { active: false });
+		const key = await seedApiKey(db, userId);
+
+		expect(await verifyApiKey(db, "alice", key)).toBeNull();
+	});
+
+	it("rejects a key that is not the named user's", async () => {
+		const other = await seedUser(db, { handle: "bob" });
+		await seedUser(db, { handle: "alice" });
+		const key = await seedApiKey(db, other);
+
+		expect(await verifyApiKey(db, "alice", key)).toBeNull();
+	});
+
+	it("rejects an unknown key", async () => {
+		await seedUser(db);
+
+		expect(await verifyApiKey(db, "alice", "not-a-key")).toBeNull();
+	});
+
+	// Job keys authenticate against a separate service, and Python refuses them
+	// here rather than resolving `job-{id}` as a user handle.
+	it("rejects a job-prefixed login without touching the database", async () => {
+		const userId = await seedUser(db, { handle: "jobs" });
+		const key = await seedApiKey(db, userId);
+
+		expect(await verifyApiKey(db, "jobs", key)).toBeNull();
+	});
+
+	// The handle lookup is case-insensitive, so a guard that was not would let
+	// `JOBS` through to the row that `jobs` is refused.
+	it("rejects a job-prefixed login whatever its case", async () => {
+		const userId = await seedUser(db, { handle: "jobs" });
+		const key = await seedApiKey(db, userId);
+
+		expect(await verifyApiKey(db, "JOBS", key)).toBeNull();
+		expect(await verifyApiKey(db, "JoBs", key)).toBeNull();
 	});
 });
 
