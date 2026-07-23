@@ -1,6 +1,13 @@
-import { apiClient } from "@app/api";
 import type { LabelNested } from "@labels/types";
 import { samplesQueryKeys } from "@samples/keys";
+import {
+	createSample as createSampleFn,
+	deleteSample as deleteSampleFn,
+	findSamples as findSamplesFn,
+	getSample as getSampleFn,
+	updateSample as updateSampleFn,
+	updateSampleRights as updateSampleRightsFn,
+} from "@server/samples/functions";
 import {
 	keepPreviousData,
 	queryOptions,
@@ -11,13 +18,12 @@ import {
 } from "@tanstack/react-query";
 import { fileQueryKeys } from "@uploads/keys";
 import { union } from "es-toolkit";
-import type { ErrorResponse } from "@/types/api";
 import type {
 	CreateSampleRequest,
+	LibraryType,
 	Sample,
 	SampleMinimal,
 	SampleRightsUpdate,
-	SampleRightsUpdateReturn,
 	SampleSearchResult,
 	SampleUpdate,
 } from "./types";
@@ -34,10 +40,9 @@ export type SampleLabel = LabelNested & {
  * Shared by the single-sample update hook and the bulk label-update hook.
  */
 function updateSample(sampleId: number, update: SampleUpdate): Promise<Sample> {
-	return apiClient
-		.patch(`/samples/${sampleId}`)
-		.send(update)
-		.then((response) => response.body);
+	return updateSampleFn({
+		data: { sampleId, ...update },
+	}) as Promise<Sample>;
 }
 
 /**
@@ -58,7 +63,7 @@ export function useListSamples(
 	workflows?: string[],
 	users?: number[],
 ) {
-	return useQuery<SampleSearchResult, ErrorResponse>({
+	return useQuery<SampleSearchResult, Error>({
 		queryKey: samplesQueryKeys.list([
 			page,
 			per_page,
@@ -68,29 +73,24 @@ export function useListSamples(
 			users,
 		]),
 		queryFn: () =>
-			apiClient
-				.get("/samples")
-				.query({
+			findSamplesFn({
+				data: {
 					page,
-					per_page,
-					find: term,
-					label: labels,
-					workflows,
-					user: users,
-				})
-				.then((res) => {
-					const { documents, ...rest } = res.body;
-					return { ...rest, items: documents };
-				}),
+					perPage: per_page,
+					term: term ?? "",
+					labels: labels ?? [],
+					workflows: workflows ?? [],
+					users: users ?? [],
+				},
+			}) as Promise<SampleSearchResult>,
 		placeholderData: keepPreviousData,
 	});
 }
 
 export function sampleQueryOptions(sampleId: number) {
-	return queryOptions<Sample, ErrorResponse>({
+	return queryOptions<Sample, Error>({
 		queryKey: samplesQueryKeys.detail(sampleId),
-		queryFn: () =>
-			apiClient.get(`/samples/${sampleId}`).then((res) => res.body),
+		queryFn: () => getSampleFn({ data: { sampleId } }) as Promise<Sample>,
 	});
 }
 
@@ -130,20 +130,19 @@ function createSample({
 	labels,
 	group,
 }: CreateSampleRequest): Promise<Sample> {
-	return apiClient
-		.post("/samples")
-		.send({
+	return createSampleFn({
+		data: {
 			name,
 			isolate,
 			host,
 			locale,
+			libraryType: libraryType as LibraryType,
 			subtractions,
 			files,
-			library_type: libraryType,
 			labels,
 			group,
-		})
-		.then((res) => res.body);
+		},
+	}) as Promise<Sample>;
 }
 
 /**
@@ -154,7 +153,7 @@ function createSample({
 export function useCreateSample() {
 	const queryClient = useQueryClient();
 
-	return useMutation<Sample, ErrorResponse, CreateSampleRequest>({
+	return useMutation<Sample, Error, CreateSampleRequest>({
 		mutationFn: createSample,
 		onSuccess: () => {
 			// The created sample reserves its read files, so the server stops
@@ -175,7 +174,7 @@ export function useCreateSample() {
 export function useUpdateSample(sampleId: number) {
 	const queryClient = useQueryClient();
 
-	return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>({
+	return useMutation<Sample, Error, { update: SampleUpdate }>({
 		mutationFn: ({ update }) => updateSample(sampleId, update),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
@@ -191,11 +190,9 @@ export function useUpdateSample(sampleId: number) {
  * @returns A mutator for removing a sample
  */
 export function useRemoveSample() {
-	return useMutation<null, unknown, { sampleId: number }>({
+	return useMutation<null, Error, { sampleId: number }>({
 		mutationFn: ({ sampleId }) =>
-			apiClient
-				.delete(`/samples/${sampleId}`)
-				.then((response) => response.body),
+			deleteSampleFn({ data: { sampleId } }) as Promise<null>,
 	});
 }
 
@@ -205,16 +202,11 @@ export function useRemoveSample() {
  * @returns A mutator for updating a samples rights
  */
 export function useUpdateSampleRights(sampleId: number) {
-	return useMutation<
-		SampleRightsUpdateReturn,
-		unknown,
-		{ update: SampleRightsUpdate }
-	>({
+	return useMutation<Sample, Error, { update: SampleRightsUpdate }>({
 		mutationFn: ({ update }) =>
-			apiClient
-				.patch(`/samples/${sampleId}/rights`)
-				.send(update)
-				.then((response) => response.body),
+			updateSampleRightsFn({
+				data: { sampleId, ...update },
+			}) as Promise<Sample>,
 	});
 }
 
@@ -235,7 +227,7 @@ export function useUpdateLabel(
 ) {
 	const queryClient = useQueryClient();
 
-	return useMutation<Sample[], ErrorResponse, number>({
+	return useMutation<Sample[], Error, number>({
 		mutationFn: (labelId) => {
 			const clicked = selectedLabels.find((label) => label.id === labelId);
 			const allLabeled = clicked?.allLabeled === true;
