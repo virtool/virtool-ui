@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { SearchResultV2 } from "./search";
 import type { Task } from "./tasks";
 import type { UserNested } from "./users";
@@ -79,3 +80,30 @@ export type Reference = ReferenceMinimal & {
 export type ReferenceSearchResult = SearchResultV2 & {
 	items: ReferenceMinimal[];
 };
+
+/**
+ * Fields accepted when creating a reference. An empty name, description, or
+ * organism is allowed; a clone fills the name in from its source. At most one
+ * of `cloneFrom` and `importFrom` may be set — the server function enforces
+ * that on top of this shape.
+ */
+export const ReferenceCreateRequest = z.object({
+	name: z.string().trim().default(""),
+	description: z.string().trim().default(""),
+	organism: z.string().trim().default(""),
+	cloneFrom: z.number().int().positive().optional(),
+	importFrom: z.number().int().positive().optional(),
+});
+
+export type ReferenceCreateRequest = z.infer<typeof ReferenceCreateRequest>;
+
+/** Fields accepted when updating a reference. Only those present are changed. */
+export const ReferenceUpdateRequest = z.object({
+	name: z.string().trim().min(1).optional(),
+	description: z.string().optional(),
+	organism: z.string().optional(),
+	restrictSourceTypes: z.boolean().optional(),
+	sourceTypes: z.array(z.string()).optional(),
+});
+
+export type ReferenceUpdateRequest = z.infer<typeof ReferenceUpdateRequest>;

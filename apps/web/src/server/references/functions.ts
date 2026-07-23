@@ -1,6 +1,10 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
-import type { ReferenceRight } from "@virtool/contracts";
+import {
+	ReferenceCreateRequest,
+	type ReferenceRight,
+	ReferenceUpdateRequest,
+} from "@virtool/contracts";
 import { z } from "zod";
 import { ForbiddenError } from "../auth/middleware";
 import { authenticated, permission } from "../auth/policy";
@@ -46,28 +50,16 @@ const rightsSchema = z.object({
 	modifyOtu: z.boolean().optional(),
 });
 
-const createReferenceSchema = z
-	.object({
-		name: z.string().trim().default(""),
-		description: z.string().trim().default(""),
-		organism: z.string().trim().default(""),
-		cloneFrom: rowIdSchema.optional(),
-		importFrom: rowIdSchema.optional(),
-	})
-	.refine(
-		(data) => !(data.cloneFrom !== undefined && data.importFrom !== undefined),
-		{
-			message: "Only one of cloneFrom or importFrom may be set.",
-		},
-	);
+const createReferenceSchema = ReferenceCreateRequest.refine(
+	(data) => !(data.cloneFrom !== undefined && data.importFrom !== undefined),
+	{
+		message: "Only one of cloneFrom or importFrom may be set.",
+	},
+);
 
-const updateReferenceSchema = referenceIdSchema.extend({
-	name: z.string().trim().min(1).optional(),
-	description: z.string().optional(),
-	organism: z.string().optional(),
-	restrictSourceTypes: z.boolean().optional(),
-	sourceTypes: z.array(z.string()).optional(),
-});
+const updateReferenceSchema = referenceIdSchema.extend(
+	ReferenceUpdateRequest.shape,
+);
 
 const referenceUserSchema = referenceIdSchema.extend({
 	userId: rowIdSchema,

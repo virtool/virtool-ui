@@ -31,6 +31,7 @@ import type {
 	ReferenceGroup,
 	ReferenceRights,
 	ReferenceSearchResult,
+	ReferenceUpdateRequest,
 	ReferenceUser,
 } from "./types";
 
@@ -170,16 +171,7 @@ export function useCreateReference() {
 export function useUpdateReference(refId: number, onSuccess?: () => void) {
 	const queryClient = useQueryClient();
 
-	const mutation = useMutation<
-		Reference,
-		Error,
-		{
-			name?: string;
-			description?: string;
-			organism?: string;
-			restrictSourceTypes?: boolean;
-		}
-	>({
+	const mutation = useMutation<Reference, Error, ReferenceUpdateRequest>({
 		mutationFn: (data) =>
 			updateReference({
 				data: { referenceId: refId, ...data },

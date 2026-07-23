@@ -12,6 +12,7 @@ export type {
 	ReferenceRight,
 	ReferenceRights,
 	ReferenceSearchResult,
+	ReferenceUpdateRequest,
 	ReferenceUser,
 } from "@virtool/contracts";
 

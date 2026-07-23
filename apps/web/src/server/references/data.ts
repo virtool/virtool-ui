@@ -2,12 +2,14 @@ import type {
 	Reference,
 	ReferenceBuild,
 	ReferenceContributor,
+	ReferenceCreateRequest,
 	ReferenceGroup,
 	ReferenceImportedFrom,
 	ReferenceMinimal,
 	ReferenceRight,
 	ReferenceRights,
 	ReferenceSearchResult,
+	ReferenceUpdateRequest,
 	ReferenceUser,
 	Task,
 } from "@virtool/contracts";
@@ -49,23 +51,9 @@ export type FindReferencesOptions = {
 	archived?: boolean;
 };
 
-/** Fields accepted when creating a reference. */
-export type CreateReferenceValues = {
-	name: string;
-	description: string;
-	organism: string;
-	cloneFrom?: number;
-	importFrom?: number;
+/** The fields a reference is created from, plus the creating user. */
+export type CreateReferenceValues = ReferenceCreateRequest & {
 	userId: number;
-};
-
-/** Fields allowed when updating a reference. */
-export type UpdateReferenceValues = {
-	name?: string;
-	description?: string;
-	organism?: string;
-	restrictSourceTypes?: boolean;
-	sourceTypes?: string[];
 };
 
 /** The caller resolved to the identity used for per-reference authorization. */
@@ -694,7 +682,7 @@ export async function createReference(
 export async function updateReference(
 	db: Db,
 	referenceId: number,
-	values: UpdateReferenceValues,
+	values: ReferenceUpdateRequest,
 ): Promise<Reference> {
 	const reference = await getReferenceRow(db, referenceId);
 
