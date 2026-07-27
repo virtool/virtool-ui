@@ -1,7 +1,7 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiEditSample } from "@tests/api/samples";
 import { createFakeSample } from "@tests/fake/samples";
+import { mockUpdateSample } from "@tests/server-fn/samples";
 import { renderWithRouter } from "@tests/setup";
 import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -33,41 +33,37 @@ describe("<Editsample />", () => {
 		expect(screen.queryByText("Save")).toBeNull();
 	});
 
-	it.each([
-		"Name",
-		"Isolate",
-		"Host",
-		"Locale",
-		"Notes",
-	])("should render changed data for", async (inputLabel) => {
-		await renderWithRouter(<EditSample {...props} />);
+	it.each(["Name", "Isolate", "Host", "Locale", "Notes"])(
+		"should render changed data for",
+		async (inputLabel) => {
+			await renderWithRouter(<EditSample {...props} />);
 
-		const inputBox = screen.getByLabelText(inputLabel);
-		expect(inputBox).toBeInTheDocument();
-		const field = inputLabel.toLowerCase() as
-			| "name"
-			| "isolate"
-			| "host"
-			| "locale"
-			| "notes";
-		expect(inputBox).toHaveValue(sample[field]);
+			const inputBox = screen.getByLabelText(inputLabel);
+			expect(inputBox).toBeInTheDocument();
+			const field = inputLabel.toLowerCase() as
+				| "name"
+				| "isolate"
+				| "host"
+				| "locale"
+				| "notes";
+			expect(inputBox).toHaveValue(sample[field]);
 
-		await userEvent.clear(inputBox);
-		expect(inputBox).toHaveValue("");
+			await userEvent.clear(inputBox);
+			expect(inputBox).toHaveValue("");
 
-		await userEvent.type(inputBox, "test");
-		expect(inputBox).toHaveValue("test");
-	});
+			await userEvent.type(inputBox, "test");
+			expect(inputBox).toHaveValue("test");
+		},
+	);
 
 	it("should update sample when form is submitted", async () => {
-		const scope = mockApiEditSample(
-			sample,
-			"newName",
-			"newIsolate",
-			"newHost",
-			"newLocale",
-			"newNotes",
-		);
+		const updateSample = mockUpdateSample(sample, {
+			name: "newName",
+			isolate: "newIsolate",
+			host: "newHost",
+			locale: "newLocale",
+			notes: "newNotes",
+		});
 		await renderWithRouter(<EditSample {...props} />);
 
 		const nameInput = screen.getByLabelText("Name");
@@ -91,6 +87,6 @@ describe("<Editsample />", () => {
 		await userEvent.type(notesInput, "newNotes");
 
 		await userEvent.click(screen.getByText("Save"));
-		scope.done();
+		await waitFor(() => expect(updateSample).toHaveBeenCalled());
 	});
 });

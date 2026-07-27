@@ -56,7 +56,7 @@ const { createFirstUserFn, loginFn, logoutFn, resetPasswordFn } = await import(
 	"./functions"
 );
 const { getPasswordPolicyFn } = await import("../settings/functions");
-const { getRoot } = await import("../root/functions");
+const { getRootFn } = await import("../root/functions");
 const { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } = await import("./cookies");
 const { basicAuthHeader, seedApiKey, seedSession, seedUser } = await import(
 	"./test/fixtures"
@@ -117,7 +117,7 @@ describe("authenticationExceptions", () => {
 			[
 				createFirstUserFn,
 				getPasswordPolicyFn,
-				getRoot,
+				getRootFn,
 				loginFn,
 				logoutFn,
 				resetPasswordFn,
@@ -132,7 +132,7 @@ describe("createAuthenticationMiddleware", () => {
 	it.each([
 		["createFirstUserFn", () => createFirstUserFn],
 		["getPasswordPolicyFn", () => getPasswordPolicyFn],
-		["getRoot", () => getRoot],
+		["getRootFn", () => getRootFn],
 		["loginFn", () => loginFn],
 		["logoutFn", () => logoutFn],
 		["resetPasswordFn", () => resetPasswordFn],
@@ -328,19 +328,16 @@ describe("requireAdminRole", () => {
 		).rejects.toBeInstanceOf(ForbiddenError);
 	});
 
-	it.each([
-		"full",
-		"settings",
-		"spaces",
-		"users",
-		"base",
-	] as const)("allows a full administrator to satisfy a %s requirement", async (requiredRole) => {
-		const userId = await seedUser(db, { administratorRole: "full" });
+	it.each(["full", "settings", "spaces", "users", "base"] as const)(
+		"allows a full administrator to satisfy a %s requirement",
+		async (requiredRole) => {
+			const userId = await seedUser(db, { administratorRole: "full" });
 
-		await expect(
-			requireAdminRole({ userId }, requiredRole),
-		).resolves.toBeUndefined();
-	});
+			await expect(
+				requireAdminRole({ userId }, requiredRole),
+			).resolves.toBeUndefined();
+		},
+	);
 
 	// `full` is the strongest role and `base` the weakest, so a role satisfies a
 	// requirement it outranks. Easy to invert; pin both directions.
