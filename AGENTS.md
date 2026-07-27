@@ -635,7 +635,8 @@ The basics:
 - **JSDoc:** Every exported `type` gets a one-line `/** ... */`.
 - **Naming:** `is`/`has`/`get` for pure reads; `check`/`validate`/
   `assert` for may-throw. Don't suffix exports with their layer
-  (`Fn`, `Core`, `Handler`, `Impl`).
+  (`Fn`, `Core`, `Handler`, `Impl`) — when two same-named functions
+  meet in one file, alias the import instead (`login as loginImpl`).
 - **Comments:** Default to none. Document *why* when non-obvious, not
   *what*.
 - **Concurrency:** Independent awaits go in `Promise.all` — don't pay
