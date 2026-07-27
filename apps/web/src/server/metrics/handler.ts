@@ -1,0 +1,78 @@
+import { timingSafeEqual } from "node:crypto";
+import { config } from "../config";
+import { applicationName, client } from "../db/pg";
+import { logger } from "../logger";
+import { readConnectionCounts } from "./data";
+import {
+	metricsContentType,
+	renderMetrics,
+	setPostgresConnections,
+} from "./registry";
+
+const BEARER_PREFIX = "Bearer ";
+
+/**
+ * Compare the presented bearer token to the configured one without leaking
+ * where they first differ.
+ *
+ * `timingSafeEqual` throws on a length mismatch, so that case is screened
+ * first. The screen reveals the configured token's length, which is not worth
+ * defending: an attacker learns nothing that narrows the search meaningfully.
+ */
+function isAuthorized(request: Request, token: string): boolean {
+	const header = request.headers.get("authorization");
+
+	if (!header?.startsWith(BEARER_PREFIX)) {
+		return false;
+	}
+
+	const presented = Buffer.from(header.slice(BEARER_PREFIX.length));
+	const expected = Buffer.from(token);
+
+	if (presented.length !== expected.length) {
+		return false;
+	}
+
+	return timingSafeEqual(presented, expected);
+}
+
+/**
+ * Serve the Prometheus scrape endpoint backing `GET /metrics`.
+ *
+ * A raw route rather than a server function, because Prometheus scrapes over
+ * plain HTTP and cannot speak the generated RPC client. That also means no
+ * policy middleware runs, so the authorization floor is enforced here — as it
+ * is in `handleUpload` — against `VT_METRICS_TOKEN`.
+ *
+ * The server listens on a single port, so this endpoint shares a socket with
+ * the app itself and would otherwise be reachable by anyone who guesses the
+ * path. With no token configured it reports 404 rather than serving openly, so
+ * an existing deployment does not start exposing internals on upgrade.
+ */
+export async function handleMetrics(request: Request): Promise<Response> {
+	const token = config.metricsToken;
+
+	if (!token) {
+		return new Response("Not Found", { status: 404 });
+	}
+
+	if (!isAuthorized(request, token)) {
+		return new Response("Unauthorized", {
+			status: 401,
+			headers: { "www-authenticate": "Bearer" },
+		});
+	}
+
+	// A Postgres outage is exactly when the rest of these metrics matter most,
+	// so a failed read drops the pool gauges rather than the whole scrape. The
+	// series go stale at their last value; `up` and the process metrics carry on.
+	try {
+		setPostgresConnections(await readConnectionCounts(client, applicationName));
+	} catch (err) {
+		logger.warn({ err }, "could not read postgres connection counts");
+	}
+
+	return new Response(await renderMetrics(), {
+		headers: { "content-type": metricsContentType },
+	});
+}

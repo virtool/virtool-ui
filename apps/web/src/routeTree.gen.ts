@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as UploadsRouteImport } from './routes/uploads'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as MonitoringRouteImport } from './routes/monitoring'
+import { Route as MetricsRouteImport } from './routes/metrics'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
@@ -84,6 +85,11 @@ const SetupRoute = SetupRouteImport.update({
 const MonitoringRoute = MonitoringRouteImport.update({
   id: '/monitoring',
   path: '/monitoring',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetricsRoute = MetricsRouteImport.update({
+  id: '/metrics',
+  path: '/metrics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -421,6 +427,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/events': typeof EventsRoute
   '/login': typeof LoginRoute
+  '/metrics': typeof MetricsRoute
   '/monitoring': typeof MonitoringRoute
   '/setup': typeof SetupRoute
   '/uploads': typeof UploadsRoute
@@ -482,6 +489,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/events': typeof EventsRoute
   '/login': typeof LoginRoute
+  '/metrics': typeof MetricsRoute
   '/monitoring': typeof MonitoringRoute
   '/setup': typeof SetupRoute
   '/uploads': typeof UploadsRoute
@@ -534,6 +542,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/events': typeof EventsRoute
   '/login': typeof LoginRoute
+  '/metrics': typeof MetricsRoute
   '/monitoring': typeof MonitoringRoute
   '/setup': typeof SetupRoute
   '/uploads': typeof UploadsRoute
@@ -599,6 +608,7 @@ export interface FileRouteTypes {
     | '/'
     | '/events'
     | '/login'
+    | '/metrics'
     | '/monitoring'
     | '/setup'
     | '/uploads'
@@ -660,6 +670,7 @@ export interface FileRouteTypes {
   to:
     | '/events'
     | '/login'
+    | '/metrics'
     | '/monitoring'
     | '/setup'
     | '/uploads'
@@ -711,6 +722,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/events'
     | '/login'
+    | '/metrics'
     | '/monitoring'
     | '/setup'
     | '/uploads'
@@ -775,6 +787,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   EventsRoute: typeof EventsRoute
   LoginRoute: typeof LoginRoute
+  MetricsRoute: typeof MetricsRoute
   MonitoringRoute: typeof MonitoringRoute
   SetupRoute: typeof SetupRoute
   UploadsRoute: typeof UploadsRoute
@@ -803,6 +816,13 @@ declare module '@tanstack/react-router' {
       path: '/monitoring'
       fullPath: '/monitoring'
       preLoaderRoute: typeof MonitoringRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/metrics': {
+      id: '/metrics'
+      path: '/metrics'
+      fullPath: '/metrics'
+      preLoaderRoute: typeof MetricsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -1492,6 +1512,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   EventsRoute: EventsRoute,
   LoginRoute: LoginRoute,
+  MetricsRoute: MetricsRoute,
   MonitoringRoute: MonitoringRoute,
   SetupRoute: SetupRoute,
   UploadsRoute: UploadsRoute,
