@@ -11,7 +11,18 @@ import { STORAGE_CHUNK_SIZE } from "./types";
 
 type AzureConfig = Extract<StorageConfig, { kind: "azure" }>;
 
-const UPLOAD_CONCURRENCY = 4;
+// `uploadStream` below holds `STORAGE_CHUNK_SIZE * UPLOAD_CONCURRENCY` of block
+// buffers for the whole of each transfer — a fixed cost per in-flight upload,
+// independent of file size. At 4 MiB x 4 that was 16 MiB apiece, which is what
+// pushed the server into GC pressure under a handful of simultaneous uploads
+// back when it shared a pod, and a resource budget, with the UI.
+//
+// Two rather than one: a single in-flight block serialises the upload against
+// the round trip to Azure. Two keeps the pipe full while halving the footprint
+// to 8 MiB. The chunk size stays at 4 MiB — Azure throughput favours larger
+// blocks, and the 50,000-block ceiling still allows a 200 GB blob, well past
+// the ingress's 10G body limit.
+const UPLOAD_CONCURRENCY = 2;
 
 function isNotFound(error: unknown): boolean {
 	const { statusCode, code } = error as { statusCode?: number; code?: string };
