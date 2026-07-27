@@ -112,6 +112,38 @@ describe("formatAnalysisToCsv", () => {
 		expect(csv).toContain('"Unnamed Isolate"');
 	});
 
+	it("lower-cases a source type past its first character", async () => {
+		await seedOtu([{ id: "iso_a", source_type: "ISOLATE", source_name: "A" }]);
+
+		const csv = await formatAnalysisToCsv(db, "pathoscope", results());
+
+		// Python composes the name with `str.capitalize`, which lower-cases the
+		// remainder, so a shouted source type must not survive as written.
+		expect(csv).toContain('"Isolate A"');
+	});
+
+	it("reports zero depth for a hit with an empty alignment", async () => {
+		await seedOtu(NAMED_ISOLATE);
+
+		const csv = await formatAnalysisToCsv(db, "pathoscope", {
+			...results(),
+			hits: [
+				{
+					id: "seq_a0",
+					otu: { id: "otu_one", version: 2 },
+					align: [],
+					coverage: 0.25,
+					final: { best: 12, pi: 0.5, reads: 30 },
+				},
+			],
+		});
+
+		// The median of nothing is not a number; a download must still carry a
+		// figure rather than the string `NaN`.
+		expect(csv).toContain(",0,");
+		expect(csv).not.toContain("NaN");
+	});
+
 	it("writes only the header when nothing was hit", async () => {
 		await seedOtu(NAMED_ISOLATE);
 

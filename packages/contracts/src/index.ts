@@ -10,6 +10,7 @@ export * from "./indexes";
 export * from "./jobs";
 export * from "./json";
 export * from "./labels";
+export * from "./otus";
 export * from "./permissions";
 export * from "./permissionsSchema";
 export * from "./references";

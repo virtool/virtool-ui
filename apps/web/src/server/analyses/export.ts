@@ -2,9 +2,11 @@
 // `format_analysis_to_csv` and `format_analysis_to_excel` in
 // `../../../../../virtool/virtool/analyses/format.py`.
 
-import type { JsonObject, JsonValue } from "@virtool/contracts";
+import { formatIsolateName, type JsonObject } from "@virtool/contracts";
+import { median } from "es-toolkit";
 import type { DbOrTx } from "../db/pg";
 import { formatAnalysis } from "./format";
+import { asArray, asNumber, asRecord, asText } from "./json";
 
 const HEADERS = [
 	"OTU",
@@ -19,76 +21,26 @@ const HEADERS = [
 /** A single spreadsheet row: the OTU and isolate names, then numeric metrics. */
 type Row = [string, string, string, number, number, number, number];
 
-function asRecord(value: JsonValue | undefined): JsonObject | null {
-	if (typeof value !== "object" || value === null || Array.isArray(value)) {
-		return null;
-	}
-
-	return value;
-}
-
-function asArray(value: JsonValue | undefined): JsonValue[] {
-	return Array.isArray(value) ? value : [];
-}
-
-function asNumber(value: JsonValue | undefined): number {
-	return typeof value === "number" ? value : 0;
-}
-
-function asText(value: JsonValue | undefined): string {
-	return typeof value === "string" ? value : "";
-}
-
-/**
- * The median of `values`, matching Python's `statistics.median`: the middle
- * value, or the mean of the two middle values for an even count. It is not
- * rounded — the client's own `median` helper is a different function.
- */
-function median(values: number[]): number {
-	if (values.length === 0) {
-		return 0;
-	}
-
-	const sorted = [...values].sort((a, b) => a - b);
-	const middle = Math.floor(sorted.length / 2);
-
-	if (sorted.length % 2 === 1) {
-		return sorted[middle] ?? 0;
-	}
-
-	return ((sorted[middle - 1] ?? 0) + (sorted[middle] ?? 0)) / 2;
-}
-
 // Median depth per hit sequence, taken from the raw alignment before formatting
-// replaces it with simplified coordinates.
-function calculateMedianDepths(hits: JsonValue[]): Map<string, number> {
+// replaces it with simplified coordinates. Python reaches `statistics.median`
+// here, which raises on an empty alignment; an absent one reads as zero depth
+// rather than failing the whole download.
+function calculateMedianDepths(hits: unknown[]): Map<string, number> {
 	const depths = new Map<string, number>();
 
 	for (const entry of hits) {
 		const hit = asRecord(entry);
 
 		if (hit) {
-			depths.set(
-				asText(hit.id),
-				median(asArray(hit.align).filter((v) => typeof v === "number")),
+			const align = asArray(hit.align).filter(
+				(value): value is number => typeof value === "number",
 			);
+
+			depths.set(asText(hit.id), align.length > 0 ? median(align) : 0);
 		}
 	}
 
 	return depths;
-}
-
-// Python's `format_isolate_name`, which differs from the client helper of the
-// same name: either field being empty yields the unnamed sentinel.
-function formatIsolateName(isolate: JsonObject): string {
-	const sourceType = asText(isolate.source_type);
-	const sourceName = asText(isolate.source_name);
-
-	if (!sourceType || !sourceName) {
-		return "Unnamed Isolate";
-	}
-
-	return `${sourceType.charAt(0).toUpperCase()}${sourceType.slice(1)} ${sourceName}`;
 }
 
 async function composeRows(
@@ -97,9 +49,7 @@ async function composeRows(
 	results: JsonObject,
 ): Promise<Row[]> {
 	const depths = calculateMedianDepths(asArray(results.hits));
-	// The formatter rebuilds plain objects out of JSONB values, so its output is
-	// JSON by construction.
-	const formatted = (await formatAnalysis(db, workflow, results)) as JsonObject;
+	const formatted = await formatAnalysis(db, workflow, results);
 
 	const rows: Row[] = [];
 

@@ -16,6 +16,7 @@ import {
 	otuSpecifierKey,
 	patchOtusToVersions,
 } from "../history/data";
+import { asArray, asNumber, asRecord, asString } from "./json";
 import { type Coordinate, transformCoverageToCoordinates } from "./simplify";
 
 /** Thrown when an analysis's stored results cannot be shaped for presentation. */
@@ -37,26 +38,6 @@ export type FormattedSequence = {
 	pi: number;
 	reads: number;
 };
-
-function asRecord(value: unknown): Record<string, unknown> | null {
-	if (typeof value !== "object" || value === null || Array.isArray(value)) {
-		return null;
-	}
-
-	return value as Record<string, unknown>;
-}
-
-function asArray(value: unknown): unknown[] {
-	return Array.isArray(value) ? value : [];
-}
-
-function asNumber(value: unknown, fallback: number): number {
-	return typeof value === "number" ? value : fallback;
-}
-
-function asString(value: unknown): string {
-	return typeof value === "string" ? value : String(value);
-}
 
 // The hits a single detected OTU accounts for, keyed by the sequence they hit.
 function indexHitsBySequence(
