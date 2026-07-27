@@ -162,6 +162,43 @@ describe("formatAnalysis for nuvs", () => {
 		expect(orfs?.[1]?.hits[0]?.names).toEqual(["Legacy"]);
 	});
 
+	it("resolves a legacy Mongo string id made only of digits", async () => {
+		// A Mongo id is alphanumeric, so it can come out all digits and be
+		// indistinguishable from a modern integer id.
+		await seedHmm({
+			cluster: 9,
+			families: {},
+			legacyId: "80412357",
+			names: ["All digits"],
+		});
+
+		const results = await formatAnalysis(db, "nuvs", nuvsResults("80412357"));
+
+		expect(firstOrfHit(results)).toMatchObject({
+			hit: "80412357",
+			cluster: 9,
+			names: ["All digits"],
+		});
+	});
+
+	it("prefers the modern id when a legacy id has the same digits", async () => {
+		const modernId = await seedHmm({
+			cluster: 3,
+			families: {},
+			names: ["Modern"],
+		});
+		await seedHmm({
+			cluster: 7,
+			families: {},
+			legacyId: String(modernId),
+			names: ["Legacy"],
+		});
+
+		const results = await formatAnalysis(db, "nuvs", nuvsResults(modernId));
+
+		expect(firstOrfHit(results)).toMatchObject({ names: ["Modern"] });
+	});
+
 	it("throws when a hit names an annotation that no longer exists", async () => {
 		await expect(
 			formatAnalysis(db, "nuvs", nuvsResults(123456)),

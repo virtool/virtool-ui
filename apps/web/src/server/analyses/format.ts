@@ -260,25 +260,25 @@ async function formatNuvs(
 	}
 
 	// An annotation written before the Postgres migration is referenced by its
-	// Mongo string id, one written since by its integer id, so both are matched.
+	// Mongo string id, one written since by its integer id. A Mongo id is
+	// alphanumeric, so it can be all digits, and nothing about the string itself
+	// distinguishes that from a modern id. Every stored id is therefore matched
+	// against `legacy_id`, and those that also fit a Postgres integer against
+	// `id` as well.
 	const modernIds: number[] = [];
-	const legacyIds: string[] = [];
 
 	for (const id of hitIds) {
-		if (/^\d+$/.test(id)) {
-			modernIds.push(Number(id));
-		} else {
-			legacyIds.push(id);
+		const parsed = Number(id);
+
+		if (/^\d+$/.test(id) && Number.isSafeInteger(parsed)) {
+			modernIds.push(parsed);
 		}
 	}
 
-	const filters = [];
+	const filters = [inArray(hmms.legacy_id, [...hitIds])];
 
 	if (modernIds.length > 0) {
 		filters.push(inArray(hmms.id, modernIds));
-	}
-	if (legacyIds.length > 0) {
-		filters.push(inArray(hmms.legacy_id, legacyIds));
 	}
 
 	const rows = await db
@@ -294,18 +294,20 @@ async function formatNuvs(
 
 	const annotations = new Map<string, Record<string, unknown>>();
 
+	function annotationOf(row: (typeof rows)[number]) {
+		return { cluster: row.cluster, families: row.families, names: row.names };
+	}
+
+	// Legacy ids are keyed first so that an all-digit one cannot shadow the
+	// annotation a modern id of the same digits names.
 	for (const row of rows) {
-		const annotation = {
-			cluster: row.cluster,
-			families: row.families,
-			names: row.names,
-		};
-
-		annotations.set(String(row.id), annotation);
-
 		if (row.legacy_id !== null) {
-			annotations.set(row.legacy_id, annotation);
+			annotations.set(row.legacy_id, annotationOf(row));
 		}
+	}
+
+	for (const row of rows) {
+		annotations.set(String(row.id), annotationOf(row));
 	}
 
 	return {
