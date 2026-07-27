@@ -8,25 +8,25 @@ import InputSearch from "@base/InputSearch";
 import SubviewHeader from "@base/SubviewHeader";
 import Toolbar from "@base/Toolbar";
 import { useCurrentOtuContext } from "@otus/components/CurrentOtuContext";
-import type { OtuIsolate } from "@otus/types";
 import {
 	useCheckReferenceRight,
 	useReferenceIsArchived,
 } from "@references/hooks";
 import { getRouteApi } from "@tanstack/react-router";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import type { OtuIsolate } from "@virtool/contracts";
 import { TestTubes } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
 import AddIsolate from "./AddIsolate";
+import DeleteIsolate from "./DeleteIsolate";
 import IsolateItem from "./IsolateItem";
-import RemoveIsolate from "./RemoveIsolate";
 
 const routeApi = getRouteApi(
 	"/_authenticated/refs/$refId/otus/$otuId/isolates/",
 );
 
 const ISOLATE_SEARCH_KEYS = [
-	"source_name",
+	"sourceName",
 	"sequences.accession",
 	"sequences.definition",
 ];
@@ -43,7 +43,7 @@ export default function IsolateList() {
 	const { restrictSourceTypes, sourceTypes } = reference;
 
 	const [openAdd, setOpenAdd] = useState(false);
-	const [isolateToRemove, setIsolateToRemove] = useState<OtuIsolate | null>(
+	const [isolateToDelete, setIsolateToDelete] = useState<OtuIsolate | null>(
 		null,
 	);
 
@@ -130,8 +130,8 @@ export default function IsolateList() {
 											isolate={isolate}
 											refId={refId}
 											otuId={otuId}
-											canRemove={canModifyIsolates}
-											onRemove={setIsolateToRemove}
+											canDelete={canModifyIsolates}
+											onDelete={setIsolateToDelete}
 										/>
 									</div>
 								);
@@ -159,12 +159,12 @@ export default function IsolateList() {
 				onHide={() => setOpenAdd(false)}
 			/>
 
-			<RemoveIsolate
-				id={isolateToRemove?.id ?? ""}
-				name={isolateToRemove ? formatIsolateName(isolateToRemove) : ""}
-				onHide={() => setIsolateToRemove(null)}
+			<DeleteIsolate
+				id={isolateToDelete?.id ?? ""}
+				name={isolateToDelete ? formatIsolateName(isolateToDelete) : ""}
+				onHide={() => setIsolateToDelete(null)}
 				otuId={otuId}
-				show={Boolean(isolateToRemove)}
+				show={Boolean(isolateToDelete)}
 			/>
 		</>
 	);

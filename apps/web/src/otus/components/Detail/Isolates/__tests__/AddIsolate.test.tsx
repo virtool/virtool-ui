@@ -1,8 +1,7 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiCreateIsolate } from "@tests/api/otus";
+import { mockAddIsolate } from "@tests/server-fn/otus";
 import { renderWithProviders } from "@tests/setup";
-import nock from "nock";
 import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AddIsolate from "../AddIsolate";
@@ -63,7 +62,7 @@ describe("<AddIsolate />", () => {
 		])(
 			"should handle submit when source type changes to %p",
 			async (sourceType, sourceName) => {
-				const scope = mockApiCreateIsolate(props.otuId, sourceName, sourceType);
+				const addIsolate = mockAddIsolate({ sourceName, sourceType });
 				renderWithProviders(<AddIsolate {...props} />);
 
 				await userEvent.click(screen.getByLabelText("Source Type"));
@@ -81,13 +80,26 @@ describe("<AddIsolate />", () => {
 				}
 
 				await userEvent.click(screen.getByRole("button", { name: "Save" }));
-				scope.done();
+
+				await waitFor(() =>
+					expect(addIsolate).toHaveBeenCalledWith({
+						data: {
+							otuId: props.otuId,
+							default: false,
+							sourceName,
+							sourceType,
+						},
+					}),
+				);
 			},
 		);
 
 		it("should handle submit with unrestricted source types", async () => {
 			props.restrictSourceTypes = false;
-			const scope = mockApiCreateIsolate(props.otuId, "testName", "Test type");
+			const addIsolate = mockAddIsolate({
+				sourceName: "testName",
+				sourceType: "Test type",
+			});
 			renderWithProviders(<AddIsolate {...props} />);
 
 			await userEvent.type(
@@ -103,8 +115,17 @@ describe("<AddIsolate />", () => {
 			);
 
 			await userEvent.click(screen.getByRole("button"));
-			scope.done();
-			nock.cleanAll();
+
+			await waitFor(() =>
+				expect(addIsolate).toHaveBeenCalledWith({
+					data: {
+						otuId: props.otuId,
+						default: false,
+						sourceName: "testName",
+						sourceType: "Test type",
+					},
+				}),
+			);
 		});
 	});
 });
