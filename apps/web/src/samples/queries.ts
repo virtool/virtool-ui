@@ -1,12 +1,12 @@
 import type { LabelNested } from "@labels/types";
 import { samplesQueryKeys } from "@samples/keys";
 import {
-	createSample,
-	deleteSample,
-	findSamples,
-	getSample,
-	updateSample,
-	updateSampleRights,
+	createSampleFn,
+	deleteSampleFn,
+	findSamplesFn,
+	getSampleFn,
+	updateSampleFn,
+	updateSampleRightsFn,
 } from "@server/samples/functions";
 import {
 	keepPreviousData,
@@ -61,7 +61,7 @@ export function useListSamples(
 			users,
 		]),
 		queryFn: () =>
-			findSamples({
+			findSamplesFn({
 				data: {
 					page,
 					perPage: per_page,
@@ -78,7 +78,7 @@ export function useListSamples(
 export function sampleQueryOptions(sampleId: number) {
 	return queryOptions<Sample, Error>({
 		queryKey: samplesQueryKeys.detail(sampleId),
-		queryFn: () => getSample({ data: { sampleId } }) as Promise<Sample>,
+		queryFn: () => getSampleFn({ data: { sampleId } }) as Promise<Sample>,
 	});
 }
 
@@ -122,7 +122,7 @@ export function useCreateSample() {
 			labels,
 			group,
 		}) =>
-			createSample({
+			createSampleFn({
 				data: {
 					name,
 					isolate,
@@ -156,7 +156,7 @@ export function useUpdateSample(sampleId: number) {
 
 	return useMutation<Sample, Error, { update: SampleUpdate }>({
 		mutationFn: ({ update }) =>
-			updateSample({
+			updateSampleFn({
 				data: { sampleId, ...update },
 			}) as Promise<Sample>,
 		onSuccess: () => {
@@ -175,7 +175,7 @@ export function useUpdateSample(sampleId: number) {
 export function useRemoveSample() {
 	return useMutation<null, Error, { sampleId: number }>({
 		mutationFn: ({ sampleId }) =>
-			deleteSample({ data: { sampleId } }) as Promise<null>,
+			deleteSampleFn({ data: { sampleId } }) as Promise<null>,
 	});
 }
 
@@ -187,7 +187,7 @@ export function useRemoveSample() {
 export function useUpdateSampleRights(sampleId: number) {
 	return useMutation<Sample, Error, { update: SampleRightsUpdate }>({
 		mutationFn: ({ update }) =>
-			updateSampleRights({
+			updateSampleRightsFn({
 				data: { sampleId, ...update },
 			}) as Promise<Sample>,
 	});
@@ -219,7 +219,7 @@ export function useUpdateLabel(
 				selectedSamples.map((sample) => {
 					const labelIds = sample.labels.map((label) => label.id);
 
-					return updateSample({
+					return updateSampleFn({
 						data: {
 							sampleId: sample.id,
 							labels: allLabeled

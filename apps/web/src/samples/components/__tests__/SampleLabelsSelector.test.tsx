@@ -9,7 +9,7 @@ import SampleLabelsSelector from "../SampleLabelsSelector";
 
 /** The labels sent to `updateSample` for the given sample, if it was called. */
 function labelsSentFor(sampleId: number): number[] | undefined {
-	const call = sampleServerFnMocks.updateSample.mock.calls.find(
+	const call = sampleServerFnMocks.updateSampleFn.mock.calls.find(
 		([arg]) => arg?.data?.sampleId === sampleId,
 	);
 	return call?.[0]?.data?.labels;
@@ -79,7 +79,7 @@ describe("<SampleLabelsSelector>", () => {
 		beforeEach(() => {
 			// The bulk toggle patches each sample through the updateSample server
 			// function; let it resolve so the mutation settles.
-			sampleServerFnMocks.updateSample.mockResolvedValue({});
+			sampleServerFnMocks.updateSampleFn.mockResolvedValue({});
 
 			// "test" (id 1) is on both samples, "label" (id 2) is on one only, so
 			// the selection has labels in mixed states.

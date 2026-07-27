@@ -8,12 +8,12 @@ import { createFakeSample } from "../fake/samples";
  * sample server functions without per-file `vi.mock` boilerplate.
  */
 export const sampleServerFnMocks = {
-	findSamples: vi.fn(),
-	getSample: vi.fn(),
-	createSample: vi.fn(),
-	updateSample: vi.fn(),
-	deleteSample: vi.fn(),
-	updateSampleRights: vi.fn(),
+	findSamplesFn: vi.fn(),
+	getSampleFn: vi.fn(),
+	createSampleFn: vi.fn(),
+	updateSampleFn: vi.fn(),
+	deleteSampleFn: vi.fn(),
+	updateSampleRightsFn: vi.fn(),
 };
 
 /**
@@ -28,7 +28,7 @@ export function mockFindSamples(
 	samples: SampleMinimal[],
 	counts: { foundCount?: number; totalCount?: number } = {},
 ): Mock {
-	sampleServerFnMocks.findSamples.mockResolvedValue({
+	sampleServerFnMocks.findSamplesFn.mockResolvedValue({
 		page: 1,
 		pageCount: 1,
 		perPage: 5,
@@ -36,7 +36,7 @@ export function mockFindSamples(
 		foundCount: counts.foundCount ?? samples.length,
 		items: samples,
 	});
-	return sampleServerFnMocks.findSamples;
+	return sampleServerFnMocks.findSamplesFn;
 }
 
 /**
@@ -47,7 +47,7 @@ export function mockFindSamples(
  * @param pages - the samples on each page, in page order
  */
 export function mockFindSamplePages(pages: SampleMinimal[][]): Mock {
-	sampleServerFnMocks.findSamples.mockImplementation(
+	sampleServerFnMocks.findSamplesFn.mockImplementation(
 		async ({ data }: { data?: { page?: number } }) => {
 			const page = data?.page ?? 1;
 			return {
@@ -60,21 +60,21 @@ export function mockFindSamplePages(pages: SampleMinimal[][]): Mock {
 			};
 		},
 	);
-	return sampleServerFnMocks.findSamples;
+	return sampleServerFnMocks.findSamplesFn;
 }
 
 /** Sets up getSample to resolve with the given sample. */
 export function mockGetSample(sample: Sample): Mock {
-	sampleServerFnMocks.getSample.mockResolvedValue(sample);
-	return sampleServerFnMocks.getSample;
+	sampleServerFnMocks.getSampleFn.mockResolvedValue(sample);
+	return sampleServerFnMocks.getSampleFn;
 }
 
 /** Sets up createSample to resolve with the given (or a fake) sample. */
 export function mockCreateSample(sample?: Sample): Mock {
-	sampleServerFnMocks.createSample.mockResolvedValue(
+	sampleServerFnMocks.createSampleFn.mockResolvedValue(
 		sample ?? createFakeSample(),
 	);
-	return sampleServerFnMocks.createSample;
+	return sampleServerFnMocks.createSampleFn;
 }
 
 /** Sets up updateSample to resolve with the given sample, patched with the fields. */
@@ -82,14 +82,17 @@ export function mockUpdateSample(
 	sample: Sample,
 	update: Partial<Sample> = {},
 ): Mock {
-	sampleServerFnMocks.updateSample.mockResolvedValue({ ...sample, ...update });
-	return sampleServerFnMocks.updateSample;
+	sampleServerFnMocks.updateSampleFn.mockResolvedValue({
+		...sample,
+		...update,
+	});
+	return sampleServerFnMocks.updateSampleFn;
 }
 
 /** Sets up deleteSample to resolve. */
 export function mockDeleteSample(): Mock {
-	sampleServerFnMocks.deleteSample.mockResolvedValue(null);
-	return sampleServerFnMocks.deleteSample;
+	sampleServerFnMocks.deleteSampleFn.mockResolvedValue(null);
+	return sampleServerFnMocks.deleteSampleFn;
 }
 
 /** Sets up updateSampleRights to resolve with the given sample, patched with the fields. */
@@ -97,9 +100,9 @@ export function mockUpdateSampleRights(
 	sample: Sample,
 	update: Partial<Sample> = {},
 ): Mock {
-	sampleServerFnMocks.updateSampleRights.mockResolvedValue({
+	sampleServerFnMocks.updateSampleRightsFn.mockResolvedValue({
 		...sample,
 		...update,
 	});
-	return sampleServerFnMocks.updateSampleRights;
+	return sampleServerFnMocks.updateSampleRightsFn;
 }

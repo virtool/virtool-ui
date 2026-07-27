@@ -119,7 +119,7 @@ describe("getSample", () => {
 
 		await signIn(null);
 
-		await expect(call("getSample", { sampleId })).rejects.toBeInstanceOf(
+		await expect(call("getSampleFn", { sampleId })).rejects.toBeInstanceOf(
 			ForbiddenError,
 		);
 		expect(setResponseStatus).toHaveBeenCalledWith(403);
@@ -128,7 +128,7 @@ describe("getSample", () => {
 	it("returns 404, not 403, for a sample that does not exist", async () => {
 		await signIn(null);
 
-		await expect(call("getSample", { sampleId: 123456 })).rejects.toThrow();
+		await expect(call("getSampleFn", { sampleId: 123456 })).rejects.toThrow();
 		expect(setResponseStatus).toHaveBeenCalledWith(404);
 		expect(setResponseStatus).not.toHaveBeenCalledWith(403);
 	});
@@ -137,7 +137,7 @@ describe("getSample", () => {
 		const userId = await signIn(null);
 		const sampleId = await seedSampleRow({ user_id: userId });
 
-		const sample = (await call("getSample", { sampleId })) as { id: number };
+		const sample = (await call("getSampleFn", { sampleId })) as { id: number };
 		expect(sample.id).toBe(sampleId);
 	});
 });
@@ -147,7 +147,7 @@ describe("updateSampleRights", () => {
 		await signIn("full");
 
 		await expect(
-			call("updateSampleRights", { sampleId: 123456, allRead: true }),
+			call("updateSampleRightsFn", { sampleId: 123456, allRead: true }),
 		).rejects.toThrow();
 		expect(setResponseStatus).toHaveBeenCalledWith(404);
 	});
@@ -159,7 +159,7 @@ describe("updateSampleRights", () => {
 		await signIn(null);
 
 		await expect(
-			call("updateSampleRights", { sampleId, allRead: true }),
+			call("updateSampleRightsFn", { sampleId, allRead: true }),
 		).rejects.toBeInstanceOf(ForbiddenError);
 		expect(setResponseStatus).toHaveBeenCalledWith(403);
 	});
@@ -168,7 +168,7 @@ describe("updateSampleRights", () => {
 		const userId = await signIn(null);
 		const sampleId = await seedSampleRow({ user_id: userId });
 
-		const sample = (await call("updateSampleRights", {
+		const sample = (await call("updateSampleRightsFn", {
 			sampleId,
 			allRead: true,
 		})) as { allRead: boolean };
@@ -181,7 +181,7 @@ describe("updateSampleRights", () => {
 
 		await signIn("full");
 
-		const sample = (await call("updateSampleRights", {
+		const sample = (await call("updateSampleRightsFn", {
 			sampleId,
 			allWrite: true,
 		})) as { allWrite: boolean };
@@ -196,7 +196,7 @@ describe("deleteSample", () => {
 
 		await signIn(null);
 
-		await expect(call("deleteSample", { sampleId })).rejects.toBeInstanceOf(
+		await expect(call("deleteSampleFn", { sampleId })).rejects.toBeInstanceOf(
 			ForbiddenError,
 		);
 		expect(setResponseStatus).toHaveBeenCalledWith(403);
@@ -224,7 +224,7 @@ describe("deleteSample", () => {
 			job_id: jobId,
 		});
 
-		await expect(call("deleteSample", { sampleId })).rejects.toThrow();
+		await expect(call("deleteSampleFn", { sampleId })).rejects.toThrow();
 		expect(setResponseStatus).toHaveBeenCalledWith(400);
 
 		// The sample must survive the rejected delete.

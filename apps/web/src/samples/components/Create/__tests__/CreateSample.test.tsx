@@ -69,7 +69,7 @@ describe("<CreateSample>", () => {
 	});
 
 	it("should show an error when the read files fail to load", async () => {
-		uploadServerFnMocks.findUploads.mockRejectedValue(new Error("failed"));
+		uploadServerFnMocks.findUploadsFn.mockRejectedValue(new Error("failed"));
 
 		await renderWithRouter(<CreateSample labels={labels} />);
 		expect(

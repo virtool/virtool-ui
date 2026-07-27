@@ -120,7 +120,7 @@ function coerceGroup(group: string | number | null | undefined): number | null {
 	return typeof group === "number" ? group : Number(group);
 }
 
-export const findSamples = createServerFn({ method: "GET" })
+export const findSamplesFn = createServerFn({ method: "GET" })
 	.middleware([authenticated()])
 	.validator(findSamplesSchema)
 	.handler(async ({ context, data }) => {
@@ -140,7 +140,7 @@ export const findSamples = createServerFn({ method: "GET" })
 		);
 	});
 
-export const getSample = createServerFn({ method: "GET" })
+export const getSampleFn = createServerFn({ method: "GET" })
 	.middleware([authenticated()])
 	.validator(sampleIdSchema)
 	.handler(async ({ context, data }) => {
@@ -152,7 +152,7 @@ export const getSample = createServerFn({ method: "GET" })
 		}
 	});
 
-export const createSample = createServerFn({ method: "POST" })
+export const createSampleFn = createServerFn({ method: "POST" })
 	.middleware([permission("create_sample")])
 	.validator(SampleCreateRequest)
 	.handler(async ({ context, data }) => {
@@ -177,7 +177,7 @@ export const createSample = createServerFn({ method: "POST" })
 		}
 	});
 
-export const updateSample = createServerFn({ method: "POST" })
+export const updateSampleFn = createServerFn({ method: "POST" })
 	.middleware([authenticated()])
 	.validator(updateSampleSchema)
 	.handler(async ({ context, data }) => {
@@ -190,7 +190,7 @@ export const updateSample = createServerFn({ method: "POST" })
 		}
 	});
 
-export const deleteSample = createServerFn({ method: "POST" })
+export const deleteSampleFn = createServerFn({ method: "POST" })
 	.middleware([authenticated()])
 	.validator(sampleIdSchema)
 	.handler(async ({ context, data }) => {
@@ -225,7 +225,7 @@ export const deleteSample = createServerFn({ method: "POST" })
 		}
 	});
 
-export const updateSampleRights = createServerFn({ method: "POST" })
+export const updateSampleRightsFn = createServerFn({ method: "POST" })
 	.middleware([authenticated()])
 	.validator(updateRightsSchema)
 	.handler(async ({ context, data }) => {

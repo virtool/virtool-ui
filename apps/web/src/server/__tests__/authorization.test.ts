@@ -238,7 +238,7 @@ describe("the open endpoints are reachable without a session", () => {
 		expect(open.map((endpoint) => endpoint.name).sort()).toEqual([
 			"createFirstUserFn",
 			"getPasswordPolicyFn",
-			"getRoot",
+			"getRootFn",
 			"loginFn",
 			"logoutFn",
 			"resetPasswordFn",
