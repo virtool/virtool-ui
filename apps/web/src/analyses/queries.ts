@@ -39,7 +39,7 @@ export function useListAnalyses(
 		queryFn: () =>
 			findAnalysesFn({
 				data: { sampleId, page, perPage: per_page },
-			}) as Promise<AnalysisSearchResult>,
+			}),
 		placeholderData: keepPreviousData,
 	});
 }
@@ -54,8 +54,7 @@ export function useRemoveAnalysis(analysisId: number) {
 	const queryClient = useQueryClient();
 
 	const mutation = useMutation<null, Error, { analysisId: number }>({
-		mutationFn: ({ analysisId }) =>
-			deleteAnalysisFn({ data: { analysisId } }) as Promise<null>,
+		mutationFn: ({ analysisId }) => deleteAnalysisFn({ data: { analysisId } }),
 
 		onSuccess: () => {
 			queryClient.invalidateQueries({
@@ -70,7 +69,7 @@ export function useRemoveAnalysis(analysisId: number) {
 export function analysisQueryOptions(analysisId: number) {
 	return queryOptions<Analysis, Error>({
 		queryKey: analysesQueryKeys.detail(analysisId),
-		queryFn: () => getAnalysisFn({ data: { analysisId } }) as Promise<Analysis>,
+		queryFn: () => getAnalysisFn({ data: { analysisId } }),
 	});
 }
 
@@ -129,8 +128,8 @@ export function useCreateAnalysis() {
 export function useBlastNuvs(analysisId: number) {
 	const queryClient = useQueryClient();
 
-	return useMutation<unknown, Error, { sequenceIndex: number }>({
-		mutationFn: ({ sequenceIndex }) =>
+	return useMutation({
+		mutationFn: ({ sequenceIndex }: { sequenceIndex: number }) =>
 			blastNuvsFn({ data: { analysisId, sequenceIndex } }),
 
 		onSuccess: () => {
