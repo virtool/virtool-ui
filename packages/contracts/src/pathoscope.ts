@@ -1,14 +1,20 @@
-// The shape a workflow's `results` blob takes once the server has formatted it.
+// The pathoscope workflow's shapes: the `results` blob once the server has
+// formatted it, at all three organisational levels.
 //
 // The *raw* blob is the worker's contract and stays exactly as the workflow
 // wrote it — `Analysis.results` types it as an opaque `JsonObject` for that
 // reason. What is declared here is the formatted envelope, which is ours: the
-// server derives every display metric from the raw alignments and the client
-// renders what it is given.
+// server derives every coverage and depth figure from the raw alignments, before
+// they are reduced to drawable polylines, and the client renders what it is
+// given.
 
-import type { NuvsBlast } from "./analyses";
-
-/** An `[x, y]` point in a coverage polyline. */
+/**
+ * An `[x, y]` point in a coverage polyline.
+ *
+ * Coverage is sent as a polyline rather than a per-position depth array: the
+ * arrays are as long as the reference genome, which is orders of magnitude more
+ * points than a chart a few hundred pixels wide can draw.
+ */
 export type Coordinate = [number, number];
 
 /** A pathoscope hit against one reference sequence. */
@@ -119,76 +125,4 @@ export type PathoscopeResults = {
 
 	/** The number of reads mapped to the subtractions */
 	subtractedCount: number;
-};
-
-/** An HMM annotation matched against a NuVs open reading frame. */
-export type NuvsOrfHit = {
-	best_bias: number;
-	best_e: number;
-	best_score: number;
-
-	/** The HMM cluster, merged in from the annotation */
-	cluster: number;
-
-	/** The viral families the annotation belongs to, merged in from the annotation */
-	families: { [key: string]: number };
-
-	full_bias: number;
-	full_e: number;
-	full_score: number;
-
-	/** The id of the matched annotation */
-	hit: number;
-
-	/** The annotation's names, merged in from the annotation */
-	names: string[];
-};
-
-/** An open reading frame found in a NuVs contig. */
-export type NuvsOrf = {
-	frame: number;
-	hits: NuvsOrfHit[];
-	index: number;
-	pos: number[];
-	pro: string;
-	strand: number;
-};
-
-/** A NuVs contig, with the metrics derived from its open reading frames. */
-export type NuvsHit = {
-	/** The number of the contig's ORFs that matched at least one annotation */
-	annotatedOrfCount: number;
-
-	/** The BLAST request made against this contig, if any */
-	blast: NuvsBlast | null;
-
-	/** The lowest e-value across the contig's ORF hits, or null if it has no ORFs */
-	e: number | null;
-
-	/** Every viral family named by the contig's ORF hits */
-	families: string[];
-
-	/** The unique identifier, which is the contig's index */
-	id: number;
-
-	/** The contig's position in the workflow's output */
-	index: number;
-
-	/** Every annotation name given to the contig's ORF hits */
-	names: string[];
-
-	/** The open reading frames found in the contig */
-	orfs: NuvsOrf[];
-
-	/** The assembled nucleotide sequence */
-	sequence: string;
-};
-
-/** A formatted NuVs analysis's results. */
-export type NuvsResults = {
-	/** The assembled contigs and their metrics */
-	hits: NuvsHit[];
-
-	/** The length of the longest contig, which the sequence rulers scale to */
-	maxSequenceLength: number;
 };
