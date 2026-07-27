@@ -1,6 +1,6 @@
-import type { NuvsOrf as NuvsOrfType } from "@analyses/types";
 import Badge from "@base/Badge";
 import { labelSvg } from "@samples/charting";
+import type { NuvsOrf as NuvsOrfType } from "@virtool/contracts";
 import { scaleLinear, select } from "d3";
 import { useEffect, useRef } from "react";
 import "./NuvsOrf.css";

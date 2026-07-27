@@ -123,7 +123,7 @@ export default function NuvsList({ detail }: NuVsListProps) {
 				analysisId={detail.id}
 				filterORFs={search.filterOrfs ?? true}
 				matches={sortedHits}
-				maxSequenceLength={detail.maxSequenceLength}
+				maxSequenceLength={detail.results.maxSequenceLength}
 			/>
 		</div>
 	);

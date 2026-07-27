@@ -5,12 +5,12 @@ import type { IndexMinimal } from "@indexes/types";
 import { useFetchSample } from "@samples/queries";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import type { SubtractionOption } from "@subtraction/types";
+import type { PathoscopeHit } from "@virtool/contracts";
 import { groupBy, maxBy, sortBy } from "es-toolkit";
 import type {
 	FormattedNuvsAnalysis,
 	FormattedNuvsHit,
 	FormattedPathoscopeAnalysis,
-	FormattedPathoscopeHit,
 } from "./types";
 
 /** Sort and filter a list of pathoscope hits  */
@@ -37,9 +37,7 @@ export function useSortAndFilterPathoscopeHits(
 		);
 	}
 
-	const sortedHits = sortBy(hits, [
-		(hit) => hit[sort as keyof FormattedPathoscopeHit],
-	]);
+	const sortedHits = sortBy(hits, [(hit) => hit[sort as keyof PathoscopeHit]]);
 
 	if (sortDesc) {
 		sortedHits.reverse();
@@ -56,14 +54,14 @@ export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 		search: { find, filterSequences, sort },
 	} = useAnalysisSearch();
 
-	const fuse = createFuse(hits, ["name", "families"]);
+	const fuse = createFuse(hits, ["names", "families"]);
 
 	if (find) {
 		hits = fuse.search(String(find)).map((result) => result.item);
 	}
 
 	if (filterSequences) {
-		hits = hits.filter((hit) => hit.e !== undefined);
+		hits = hits.filter((hit) => hit.e !== null);
 	}
 
 	const sortedHits =

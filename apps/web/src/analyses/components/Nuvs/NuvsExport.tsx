@@ -1,8 +1,4 @@
-import type {
-	FormattedNuvsHit,
-	FormattedNuvsResults,
-	NuvsOrfHit,
-} from "@analyses/types";
+import type { FormattedNuvsHit, FormattedNuvsResults } from "@analyses/types";
 import { followDynamicDownload } from "@app/utils";
 import Button from "@base/Button";
 import {
@@ -14,6 +10,7 @@ import {
 } from "@base/Dialog";
 import Icon from "@base/Icon";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@base/Tabs";
+import type { NuvsOrfHit } from "@virtool/contracts";
 import { Download } from "lucide-react";
 import { type FormEvent, useState } from "react";
 import NuvsExportPreview from "./NuvsExportPreview";

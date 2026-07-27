@@ -1,5 +1,5 @@
-import type { NuvsOrfHit } from "@analyses/types";
 import { Link } from "@tanstack/react-router";
+import type { NuvsOrfHit } from "@virtool/contracts";
 
 type NuvsOrfLabelProps = {
 	hmm?: NuvsOrfHit;
