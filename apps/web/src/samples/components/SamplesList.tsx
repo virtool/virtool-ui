@@ -10,7 +10,7 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useFetchLabels } from "@labels/queries";
 import { useListSamples } from "@samples/queries";
-import type { Sample, SampleMinimal } from "@samples/types";
+import type { Sample, SampleMinimal } from "@virtool/contracts";
 import { xor } from "es-toolkit/array";
 import { FlaskConical, SearchX } from "lucide-react";
 import { type MouseEvent, useState } from "react";

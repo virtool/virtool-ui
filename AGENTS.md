@@ -441,14 +441,16 @@ re-exports them so its own call sites are undisturbed.
 
 **A domain's wire shapes belong in `@virtool/contracts`, not in
 `data.ts`.** What a server function returns is read by both sides, so
-`data.ts` imports those types from the package and the client feature's
-`types.ts` re-exports them (`references/types.ts` is the worked example).
-A client `types.ts` must never `import type ... from "@server/*"` — that
-points the client at the server's emitted declarations for a shape the
-server does not own, and drags a data-layer module into the browser's
-type graph to get it. `data.ts` still owns what only it uses: its
-`*Values` and `*Options` argument types, its `AppError` subclasses, and
-its row mappers.
+`data.ts` imports those types from the package and components import the
+same names straight from `@virtool/contracts` — no feature `types.ts`
+re-export (`references/types.ts` and `samples/types.ts` are the worked
+examples; each keeps only its genuinely client-only shapes). A client
+`types.ts` must never `import type ... from "@server/*"` — that points
+the client at the server's emitted declarations for a shape the server
+does not own, and drags a data-layer module into the browser's type
+graph to get it. `data.ts` still owns what only it uses: its `*Values`
+and `*Options` argument types, its `AppError` subclasses, and its row
+mappers.
 
 ### Every server function declares an authorization policy
 

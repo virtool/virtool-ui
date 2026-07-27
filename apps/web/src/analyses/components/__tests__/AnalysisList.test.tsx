@@ -6,7 +6,7 @@ import { createFakeAnalysisMinimal } from "@tests/fake/analyses";
 import { createFakeHmmSearchResults } from "@tests/fake/hmm";
 import { createFakeSample } from "@tests/fake/samples";
 import { mockFindHmms } from "@tests/server-fn/hmm";
-import { mockGetSampleDetail } from "@tests/server-fn/samples";
+import { mockGetSample } from "@tests/server-fn/samples";
 import { mockGetAccount } from "@tests/server-fn/users";
 import { at, MemoryRouter, renderWithProviders } from "@tests/setup";
 import nock from "nock";
@@ -35,7 +35,7 @@ describe("<AnalysesToolbar />", () => {
 
 	it("should show analysis creation when user is full admin", async () => {
 		mockGetAccount(createFakeAccount({ administrator_role: "full" }));
-		mockGetSampleDetail(sample);
+		mockGetSample(sample);
 		renderList();
 
 		expect(await screen.findByText("Create")).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe("<AnalysesToolbar />", () => {
 		const account = createFakeAccount({ administrator_role: null });
 		sample.user.id = account.id;
 		mockGetAccount(account);
-		mockGetSampleDetail(sample);
+		mockGetSample(sample);
 		renderList();
 
 		expect(await screen.findByText("Create")).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe("<AnalysesToolbar />", () => {
 		sample.group = at(account.groups, 0);
 		sample.groupWrite = true;
 		mockGetAccount(account);
-		mockGetSampleDetail(sample);
+		mockGetSample(sample);
 		renderList();
 
 		expect(await screen.findByText("Create")).toBeInTheDocument();
@@ -66,7 +66,7 @@ describe("<AnalysesToolbar />", () => {
 		const account = createFakeAccount({ administrator_role: null });
 		sample.allWrite = true;
 		mockGetAccount(account);
-		mockGetSampleDetail(sample);
+		mockGetSample(sample);
 		renderList();
 
 		expect(await screen.findByText("Create")).toBeInTheDocument();
@@ -76,7 +76,7 @@ describe("<AnalysesToolbar />", () => {
 		sample.allWrite = false;
 		sample.groupWrite = false;
 		mockGetAccount(createFakeAccount({ administrator_role: null }));
-		mockGetSampleDetail(sample);
+		mockGetSample(sample);
 		renderList();
 
 		expect(await screen.findByText("Pathoscope")).toBeInTheDocument();

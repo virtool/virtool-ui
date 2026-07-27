@@ -10,7 +10,7 @@ import { createFakeShortlistSubtraction } from "@tests/fake/subtractions";
 import { createFakeUserNested } from "@tests/fake/user";
 import { mockFindHmms } from "@tests/server-fn/hmm";
 import { mockFindLabels } from "@tests/server-fn/labels";
-import { mockGetSamplePages, mockGetSamples } from "@tests/server-fn/samples";
+import { mockFindSamplePages, mockFindSamples } from "@tests/server-fn/samples";
 import { mockListSubtractionsShortlist } from "@tests/server-fn/subtractions";
 import { mockGetAccount, mockListUsers } from "@tests/server-fn/users";
 import { at, renderWithRouter } from "@tests/setup";
@@ -58,20 +58,20 @@ function SamplesListHarness({
  * @returns The sample on each page, in page order
  */
 function mockApiGetSamplePages() {
-	const documents = [
+	const samples = [
 		createFakeSampleMinimal({ name: "Page One Sample" }),
 		createFakeSampleMinimal({ name: "Page Two Sample" }),
 	] as const;
 
 	nock.cleanAll();
 
-	mockGetSamplePages(documents.map((document) => [document]));
+	mockFindSamplePages(samples.map((sample) => [sample]));
 
 	mockFindHmms(createFakeHmmSearchResults());
 	mockApiListIndexes([createFakeIndexMinimal()]);
 	mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);
 
-	return documents;
+	return samples;
 }
 
 /**
@@ -88,7 +88,7 @@ function mockApiGetSampleRange(names: string[]) {
 	mockFindHmms(createFakeHmmSearchResults());
 	mockApiListIndexes([createFakeIndexMinimal()]);
 	mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);
-	mockGetSamples(documents);
+	mockFindSamples(documents);
 
 	return documents;
 }
@@ -110,7 +110,7 @@ describe("<SamplesList />", () => {
 		];
 		mockListUsers(users);
 		mockFindLabels(labels);
-		mockGetSamples(samples);
+		mockFindSamples(samples);
 		mockFindHmms(createFakeHmmSearchResults());
 		mockApiListIndexes([createFakeIndexMinimal()]);
 		mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);
@@ -129,9 +129,9 @@ describe("<SamplesList />", () => {
 	});
 
 	it("should call onChange when search input changes in toolbar", async () => {
-		mockGetSamples(samples);
-		mockGetSamples(samples);
-		mockGetSamples(samples);
+		mockFindSamples(samples);
+		mockFindSamples(samples);
+		mockFindSamples(samples);
 		await renderWithRouter(<SamplesListHarness />, path);
 		expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -166,7 +166,7 @@ describe("<SamplesList />", () => {
 
 	describe("label filtering", () => {
 		it("should show a chip for a label selected in the dropdown", async () => {
-			mockGetSamples(samples);
+			mockFindSamples(samples);
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -187,8 +187,8 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should remove every chip when the dropdown is cleared", async () => {
-			mockGetSamples(samples);
-			mockGetSamples(samples);
+			mockFindSamples(samples);
+			mockFindSamples(samples);
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -215,8 +215,8 @@ describe("<SamplesList />", () => {
 		it("should show a chip for the search term", async () => {
 			// One interceptor per samples fetch: the initial empty-term render plus
 			// the single refetch the debounced toolbar commits for "Foo".
-			mockGetSamples(samples);
-			mockGetSamples(samples);
+			mockFindSamples(samples);
+			mockFindSamples(samples);
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -231,7 +231,7 @@ describe("<SamplesList />", () => {
 
 	describe("workflow filtering", () => {
 		it("should show a chip for a workflow state selected in the dropdown", async () => {
-			mockGetSamples(samples);
+			mockFindSamples(samples);
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -252,8 +252,8 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should keep the menu open and check both states toggled for one workflow", async () => {
-			mockGetSamples(samples);
-			mockGetSamples(samples);
+			mockFindSamples(samples);
+			mockFindSamples(samples);
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -277,8 +277,8 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should remove every workflow chip when the dropdown is cleared", async () => {
-			mockGetSamples(samples);
-			mockGetSamples(samples);
+			mockFindSamples(samples);
+			mockFindSamples(samples);
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -304,7 +304,7 @@ describe("<SamplesList />", () => {
 
 	describe("user filtering", () => {
 		it("should show a chip for a user selected in the dropdown", async () => {
-			mockGetSamples(samples);
+			mockFindSamples(samples);
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -322,8 +322,8 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should show a chip for each of several users selected at once", async () => {
-			mockGetSamples(samples);
-			mockGetSamples(samples);
+			mockFindSamples(samples);
+			mockFindSamples(samples);
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -384,8 +384,8 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should remove every chip when the dropdown is cleared", async () => {
-			mockGetSamples(samples);
-			mockGetSamples(samples);
+			mockFindSamples(samples);
+			mockFindSamples(samples);
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -430,7 +430,7 @@ describe("<SamplesList />", () => {
 			mockFindHmms(createFakeHmmSearchResults());
 			mockApiListIndexes([createFakeIndexMinimal()]);
 			mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);
-			mockGetSamples(samples, { foundCount: 2, totalCount: 17 });
+			mockFindSamples(samples, { foundCount: 2, totalCount: 17 });
 
 			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
@@ -537,7 +537,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should clear the selection when a filter changes", async () => {
-			mockGetSamples(samples);
+			mockFindSamples(samples);
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -825,7 +825,7 @@ describe("<SamplesList />", () => {
 			// The default samples interceptor is already registered, and it would
 			// answer the request before any empty one added here.
 			nock.cleanAll();
-			mockGetSamples([]);
+			mockFindSamples([]);
 			mockFindHmms(createFakeHmmSearchResults());
 			mockApiListIndexes([createFakeIndexMinimal()]);
 			mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);

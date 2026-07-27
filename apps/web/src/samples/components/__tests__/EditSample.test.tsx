@@ -1,7 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeSample } from "@tests/fake/samples";
-import { mockEditSample } from "@tests/server-fn/samples";
+import { mockUpdateSample } from "@tests/server-fn/samples";
 import { renderWithRouter } from "@tests/setup";
 import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -60,7 +60,7 @@ describe("<Editsample />", () => {
 	});
 
 	it("should update sample when form is submitted", async () => {
-		const updateSample = mockEditSample(sample, {
+		const updateSample = mockUpdateSample(sample, {
 			name: "newName",
 			isolate: "newIsolate",
 			host: "newHost",

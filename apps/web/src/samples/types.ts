@@ -1,34 +1,6 @@
-/**
- * Sample Types
- *
- * @remark
- * The sample wire shapes live in `@virtool/contracts`, where the server data
- * layer that produces them and the components that render them can both reach
- * them. They are re-exported here so the feature's call sites import from one
- * place. Client-only request shapes stay owned here.
- */
-
-export type {
-	LibraryType,
-	Quality,
-	Read,
-	Sample,
-	SampleArtifact,
-	SampleJobNested,
-	SampleMinimal,
-	SampleRightsUpdate,
-	SampleSearchResult,
-	SampleWorkflows,
-	WorkflowState,
-} from "@virtool/contracts";
-
-/* A Sample ID */
-export type SampleID = {
-	id: number;
-};
-
 /* A Sample with essential information */
-export type SampleNested = SampleID & {
+export type SampleNested = {
+	id: number;
 	name: string;
 };
 

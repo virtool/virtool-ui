@@ -5,7 +5,7 @@ import { mockApiListIndexes } from "@tests/api/indexes";
 import { createFakeAnalysisMinimal } from "@tests/fake/analyses";
 import { createFakeIndexMinimal } from "@tests/fake/indexes";
 import { createFakeSample } from "@tests/fake/samples";
-import { mockGetSampleDetail } from "@tests/server-fn/samples";
+import { mockGetSample } from "@tests/server-fn/samples";
 import { mockListSubtractionsShortlist } from "@tests/server-fn/subtractions";
 import { renderWithRouter } from "@tests/setup";
 import { describe, expect, it, vi } from "vitest";
@@ -23,7 +23,7 @@ async function renderForm(indexId?: number) {
 
 	mockApiListIndexes([index]);
 	mockListSubtractionsShortlist([]);
-	mockGetSampleDetail(sample);
+	mockGetSample(sample);
 
 	await renderWithRouter(
 		<CreateAnalysisForm

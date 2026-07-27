@@ -1,6 +1,6 @@
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
-import type { Read } from "@samples/types";
+import type { Read } from "@virtool/contracts";
 import ReadItem from "./ReadItem";
 
 type SampleReadsProps = {

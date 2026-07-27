@@ -6,7 +6,7 @@ import { createFakeGroup } from "@tests/fake/groups";
 import { createFakeSample } from "@tests/fake/samples";
 import { mockListGroups } from "@tests/server-fn/groups";
 import {
-	mockGetSampleDetail,
+	mockGetSample,
 	mockUpdateSampleRights,
 } from "@tests/server-fn/samples";
 import { mockGetAccount } from "@tests/server-fn/users";
@@ -25,7 +25,7 @@ describe("<SampleRights />", () => {
 			groupWrite: false,
 		});
 		group = createFakeGroup();
-		mockGetSampleDetail(sample);
+		mockGetSample(sample);
 		mockListGroups([group]);
 	});
 

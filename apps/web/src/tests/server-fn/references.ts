@@ -1,4 +1,4 @@
-import type { Reference, ReferenceMinimal } from "@references/types";
+import type { Reference, ReferenceMinimal } from "@virtool/contracts";
 import { type Mock, vi } from "vitest";
 
 /**

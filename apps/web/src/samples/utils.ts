@@ -1,11 +1,8 @@
 import type { JobNested, ServerJobNested } from "@jobs/types";
 import { stripMateToken } from "@uploads/pairing";
 import type { Upload } from "@uploads/types";
-import type {
-	CreateSampleRequest,
-	LibraryType,
-	SampleJobNested,
-} from "./types";
+import type { LibraryType, SampleJobNested } from "@virtool/contracts";
+import type { CreateSampleRequest } from "./types";
 
 /**
  * Adapt a sample's embedded job to the snake_case shape the jobs feature's

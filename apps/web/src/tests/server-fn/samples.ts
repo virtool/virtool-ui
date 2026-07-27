@@ -1,4 +1,4 @@
-import type { Sample, SampleMinimal } from "@samples/types";
+import type { Sample, SampleMinimal } from "@virtool/contracts";
 import { type Mock, vi } from "vitest";
 import { createFakeSample } from "../fake/samples";
 
@@ -24,7 +24,7 @@ export const sampleServerFnMocks = {
  *   number of samples. `totalCount` is every sample the user may see and
  *   `foundCount` is only those matching the filters.
  */
-export function mockGetSamples(
+export function mockFindSamples(
 	samples: SampleMinimal[],
 	counts: { foundCount?: number; totalCount?: number } = {},
 ): Mock {
@@ -46,7 +46,7 @@ export function mockGetSamples(
  *
  * @param pages - the samples on each page, in page order
  */
-export function mockGetSamplePages(pages: SampleMinimal[][]): Mock {
+export function mockFindSamplePages(pages: SampleMinimal[][]): Mock {
 	sampleServerFnMocks.findSamples.mockImplementation(
 		async ({ data }: { data?: { page?: number } }) => {
 			const page = data?.page ?? 1;
@@ -64,7 +64,7 @@ export function mockGetSamplePages(pages: SampleMinimal[][]): Mock {
 }
 
 /** Sets up getSample to resolve with the given sample. */
-export function mockGetSampleDetail(sample: Sample): Mock {
+export function mockGetSample(sample: Sample): Mock {
 	sampleServerFnMocks.getSample.mockResolvedValue(sample);
 	return sampleServerFnMocks.getSample;
 }
@@ -78,7 +78,7 @@ export function mockCreateSample(sample?: Sample): Mock {
 }
 
 /** Sets up updateSample to resolve with the given sample, patched with the fields. */
-export function mockEditSample(
+export function mockUpdateSample(
 	sample: Sample,
 	update: Partial<Sample> = {},
 ): Mock {
@@ -87,7 +87,7 @@ export function mockEditSample(
 }
 
 /** Sets up deleteSample to resolve. */
-export function mockRemoveSample(): Mock {
+export function mockDeleteSample(): Mock {
 	sampleServerFnMocks.deleteSample.mockResolvedValue(null);
 	return sampleServerFnMocks.deleteSample;
 }

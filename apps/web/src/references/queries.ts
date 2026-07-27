@@ -24,8 +24,6 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { postUpload } from "@uploads/uploader";
-import { useState } from "react";
-import type { ErrorResponse } from "@/types/api";
 import type {
 	Reference,
 	ReferenceGroup,
@@ -33,7 +31,9 @@ import type {
 	ReferenceSearchResult,
 	ReferenceUpdateRequest,
 	ReferenceUser,
-} from "./types";
+} from "@virtool/contracts";
+import { useState } from "react";
+import type { ErrorResponse } from "@/types/api";
 
 /** A reference member is either a user or a group. */
 export type ReferenceMemberNoun = "user" | "group";

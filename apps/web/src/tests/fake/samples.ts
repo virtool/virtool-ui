@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import type { Quality, Read, Sample, SampleMinimal } from "@samples/types";
+import type { Quality, Read, Sample, SampleMinimal } from "@virtool/contracts";
 import { createFakeLabelNested } from "./labels";
 import { createFakeSubtractionNested } from "./subtractions";
 import { createFakeUserNested } from "./user";

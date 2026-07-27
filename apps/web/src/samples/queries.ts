@@ -1,12 +1,12 @@
 import type { LabelNested } from "@labels/types";
 import { samplesQueryKeys } from "@samples/keys";
 import {
-	createSample as createSampleFn,
-	deleteSample as deleteSampleFn,
-	findSamples as findSamplesFn,
-	getSample as getSampleFn,
-	updateSample as updateSampleFn,
-	updateSampleRights as updateSampleRightsFn,
+	createSample,
+	deleteSample,
+	findSamples,
+	getSample,
+	updateSample,
+	updateSampleRights,
 } from "@server/samples/functions";
 import {
 	keepPreviousData,
@@ -17,33 +17,21 @@ import {
 	useSuspenseQuery,
 } from "@tanstack/react-query";
 import { fileQueryKeys } from "@uploads/keys";
-import { union } from "es-toolkit";
 import type {
-	CreateSampleRequest,
 	LibraryType,
 	Sample,
 	SampleMinimal,
 	SampleRightsUpdate,
 	SampleSearchResult,
-	SampleUpdate,
-} from "./types";
+} from "@virtool/contracts";
+import { union } from "es-toolkit";
+import type { CreateSampleRequest, SampleUpdate } from "./types";
 
 /** A label carried by at least one of the selected samples */
 export type SampleLabel = LabelNested & {
 	/** Whether all selected samples contain the label */
 	allLabeled: boolean;
 };
-
-/**
- * Updates the data for a sample.
- *
- * Shared by the single-sample update hook and the bulk label-update hook.
- */
-function updateSample(sampleId: number, update: SampleUpdate): Promise<Sample> {
-	return updateSampleFn({
-		data: { sampleId, ...update },
-	}) as Promise<Sample>;
-}
 
 /**
  * Fetch a page of samples from the API
@@ -73,7 +61,7 @@ export function useListSamples(
 			users,
 		]),
 		queryFn: () =>
-			findSamplesFn({
+			findSamples({
 				data: {
 					page,
 					perPage: per_page,
@@ -90,7 +78,7 @@ export function useListSamples(
 export function sampleQueryOptions(sampleId: number) {
 	return queryOptions<Sample, Error>({
 		queryKey: samplesQueryKeys.detail(sampleId),
-		queryFn: () => getSampleFn({ data: { sampleId } }) as Promise<Sample>,
+		queryFn: () => getSample({ data: { sampleId } }) as Promise<Sample>,
 	});
 }
 
@@ -115,37 +103,6 @@ export function useSuspenseSample(sampleId: number) {
 }
 
 /**
- * Creates a sample.
- *
- * Shared by the single-sample create hook and the bulk create hook.
- */
-function createSample({
-	name,
-	isolate,
-	host,
-	locale,
-	libraryType,
-	subtractions,
-	files,
-	labels,
-	group,
-}: CreateSampleRequest): Promise<Sample> {
-	return createSampleFn({
-		data: {
-			name,
-			isolate,
-			host,
-			locale,
-			libraryType: libraryType as LibraryType,
-			subtractions,
-			files,
-			labels,
-			group,
-		},
-	}) as Promise<Sample>;
-}
-
-/**
  * Initialize a mutator for creating a sample
  *
  * @returns A mutator for creating a sample
@@ -154,7 +111,30 @@ export function useCreateSample() {
 	const queryClient = useQueryClient();
 
 	return useMutation<Sample, Error, CreateSampleRequest>({
-		mutationFn: createSample,
+		mutationFn: ({
+			name,
+			isolate,
+			host,
+			locale,
+			libraryType,
+			subtractions,
+			files,
+			labels,
+			group,
+		}) =>
+			createSample({
+				data: {
+					name,
+					isolate,
+					host,
+					locale,
+					libraryType: libraryType as LibraryType,
+					subtractions,
+					files,
+					labels,
+					group,
+				},
+			}) as Promise<Sample>,
 		onSuccess: () => {
 			// The created sample reserves its read files, so the server stops
 			// returning them. Only the reads selector shows them — an infinite
@@ -175,7 +155,10 @@ export function useUpdateSample(sampleId: number) {
 	const queryClient = useQueryClient();
 
 	return useMutation<Sample, Error, { update: SampleUpdate }>({
-		mutationFn: ({ update }) => updateSample(sampleId, update),
+		mutationFn: ({ update }) =>
+			updateSample({
+				data: { sampleId, ...update },
+			}) as Promise<Sample>,
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: samplesQueryKeys.detail(sampleId),
@@ -192,7 +175,7 @@ export function useUpdateSample(sampleId: number) {
 export function useRemoveSample() {
 	return useMutation<null, Error, { sampleId: number }>({
 		mutationFn: ({ sampleId }) =>
-			deleteSampleFn({ data: { sampleId } }) as Promise<null>,
+			deleteSample({ data: { sampleId } }) as Promise<null>,
 	});
 }
 
@@ -204,7 +187,7 @@ export function useRemoveSample() {
 export function useUpdateSampleRights(sampleId: number) {
 	return useMutation<Sample, Error, { update: SampleRightsUpdate }>({
 		mutationFn: ({ update }) =>
-			updateSampleRightsFn({
+			updateSampleRights({
 				data: { sampleId, ...update },
 			}) as Promise<Sample>,
 	});
@@ -236,11 +219,14 @@ export function useUpdateLabel(
 				selectedSamples.map((sample) => {
 					const labelIds = sample.labels.map((label) => label.id);
 
-					return updateSample(sample.id, {
-						labels: allLabeled
-							? labelIds.filter((id) => id !== labelId)
-							: union(labelIds, [labelId]),
-					});
+					return updateSample({
+						data: {
+							sampleId: sample.id,
+							labels: allLabeled
+								? labelIds.filter((id) => id !== labelId)
+								: union(labelIds, [labelId]),
+						},
+					}) as Promise<Sample>;
 				}),
 			);
 		},
