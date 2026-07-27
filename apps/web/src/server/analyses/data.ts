@@ -5,6 +5,7 @@ import type {
 	AnalysisMinimal,
 	AnalysisSearchResult,
 	JsonObject,
+	NuvsBlast,
 	SubtractionNested,
 	UserNested,
 	WorkflowName,
@@ -51,20 +52,6 @@ export type CreateAnalysisValues = {
 	subtractionIds: number[];
 	workflow: WorkflowName;
 	userId: number;
-};
-
-/** A BLAST request against one NuVs contig, as returned to the client. */
-export type NuvsBlastRecord = {
-	id: number;
-	createdAt: string;
-	updatedAt: string;
-	lastCheckedAt: string;
-	error: string | null;
-	interval: number | null;
-	ready: boolean;
-	rid: string | null;
-	result: JsonObject | null;
-	sequenceIndex: number;
 };
 
 /** Thrown when a requested analysis does not exist. */
@@ -440,7 +427,7 @@ async function attachBlasts(
 	};
 }
 
-function mapBlast(row: typeof nuvsBlast.$inferSelect): NuvsBlastRecord {
+function mapBlast(row: typeof nuvsBlast.$inferSelect): NuvsBlast {
 	return {
 		id: row.id,
 		createdAt: row.created_at.toISOString(),
@@ -662,7 +649,7 @@ export async function blastNuvs(
 	db: Db,
 	analysisId: number,
 	sequenceIndex: number,
-): Promise<NuvsBlastRecord> {
+): Promise<NuvsBlast> {
 	const timestamp = new Date();
 
 	const [row] = await db

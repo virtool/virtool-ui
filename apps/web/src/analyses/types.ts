@@ -8,6 +8,7 @@ import type {
 	Analysis,
 	AnalysisFile,
 	AnalysisMinimal,
+	NuvsBlast,
 } from "@virtool/contracts";
 
 /**
@@ -150,20 +151,12 @@ export type FormattedNuvsHit = {
 };
 
 /**
- * A BLAST request against one NuVs contig. The envelope is ours; `result` is
- * NCBI's response, stored and returned verbatim.
+ * A BLAST request, with NCBI's verbatim `result` narrowed to the shape this side
+ * renders. The envelope itself is the wire shape from `@virtool/contracts`,
+ * which leaves `result` an uninterpreted JSON object.
  */
-export type Blast = {
-	createdAt: string;
-	error: string | null;
-	id: number;
-	interval: number | null;
-	lastCheckedAt: string;
-	ready: boolean;
+export type Blast = Omit<NuvsBlast, "result"> & {
 	result: BlastResults | null;
-	rid: string | null;
-	sequenceIndex: number;
-	updatedAt: string;
 };
 
 export type BlastResults = {
