@@ -13,6 +13,22 @@ import type {
 	FormattedPathoscopeAnalysis,
 } from "./types";
 
+/**
+ * The hit field a pathoscope sort key names.
+ *
+ * The toolbar calls `pi` "Weight", because that is the term the results are
+ * described in and nobody outside the workflow knows what pi is. The key it puts
+ * in the URL is therefore not a field name, and sorting by it read `undefined`
+ * off every hit — leaving the list in whatever order it already had.
+ */
+function pathoscopeSortField(sort: string | undefined): keyof PathoscopeHit {
+	if (sort === "weight") {
+		return "pi";
+	}
+
+	return sort === "depth" ? "depth" : "coverage";
+}
+
 /** Sort and filter a list of pathoscope hits  */
 export function useSortAndFilterPathoscopeHits(
 	detail: FormattedPathoscopeAnalysis,
@@ -37,7 +53,7 @@ export function useSortAndFilterPathoscopeHits(
 		);
 	}
 
-	const sortedHits = sortBy(hits, [(hit) => hit[sort as keyof PathoscopeHit]]);
+	const sortedHits = sortBy(hits, [(hit) => hit[pathoscopeSortField(sort)]]);
 
 	if (sortDesc) {
 		sortedHits.reverse();
