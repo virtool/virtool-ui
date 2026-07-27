@@ -1,4 +1,5 @@
 import { formatIsolateName } from "@app/utils";
+import type { Analysis } from "@virtool/contracts";
 import { compact, uniq } from "es-toolkit/array";
 import {
 	flatMap,
@@ -12,8 +13,7 @@ import {
 	sumBy,
 } from "es-toolkit/compat";
 import type {
-	Analysis,
-	AnalysisWorkflow,
+	FormattedAnalysis,
 	FormattedNuvsAnalysis,
 	FormattedPathoscopeAnalysis,
 	FormattedPathoscopeIsolate,
@@ -96,10 +96,10 @@ export function formatNuvsData(detail: FormattedNuvsAnalysis) {
 		hit.sequence.length > (longest?.sequence?.length ?? 0) ? hit : longest,
 	);
 
-	const { created_at, id, ready, user, workflow } = detail;
+	const { createdAt, id, ready, user, workflow } = detail;
 
 	return {
-		created_at,
+		createdAt,
 		id,
 		ready,
 		results: {
@@ -213,7 +213,7 @@ export function formatPathoscopeData(
 	}
 
 	const {
-		created_at,
+		createdAt,
 		results,
 		id,
 		index,
@@ -300,7 +300,7 @@ export function formatPathoscopeData(
 
 	return {
 		...detail,
-		created_at,
+		createdAt,
 		id,
 		index,
 		reference,
@@ -316,13 +316,17 @@ export function formatPathoscopeData(
 	};
 }
 
-export function formatData(detail: Analysis): Analysis {
+export function formatData(detail: Analysis): FormattedAnalysis {
 	if (detail?.workflow === "pathoscope") {
-		return formatPathoscopeData(detail as FormattedPathoscopeAnalysis);
+		return formatPathoscopeData(
+			detail as unknown as FormattedPathoscopeAnalysis,
+		);
 	}
 
 	if (detail?.workflow === "nuvs") {
-		return formatNuvsData(detail as FormattedNuvsAnalysis) as Analysis;
+		return formatNuvsData(
+			detail as unknown as FormattedNuvsAnalysis,
+		) as FormattedAnalysis;
 	}
 
 	return detail;
@@ -330,6 +334,6 @@ export function formatData(detail: Analysis): Analysis {
 
 const supportedWorkflows: string[] = ["pathoscope", "nuvs"];
 
-export function checkSupportedWorkflow(workflow: AnalysisWorkflow) {
+export function checkSupportedWorkflow(workflow: string) {
 	return supportedWorkflows.includes(workflow);
 }

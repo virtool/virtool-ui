@@ -32,6 +32,7 @@ import { Route as AuthenticatedJobsIndexRouteImport } from './routes/_authentica
 import { Route as AuthenticatedHmmsIndexRouteImport } from './routes/_authenticated/hmms/index'
 import { Route as AuthenticatedAdministrationIndexRouteImport } from './routes/_authenticated/administration/index'
 import { Route as AuthenticatedAccountIndexRouteImport } from './routes/_authenticated/account/index'
+import { Route as AnalysesDocumentsDocumentRouteImport } from './routes/analyses.documents.$document'
 import { Route as AuthenticatedSubtractionsFilesRouteImport } from './routes/_authenticated/subtractions/files'
 import { Route as AuthenticatedSubtractionsSubtractionIdRouteImport } from './routes/_authenticated/subtractions/$subtractionId'
 import { Route as AuthenticatedSamplesSettingsRouteImport } from './routes/_authenticated/samples/settings'
@@ -190,6 +191,12 @@ const AuthenticatedAccountIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedAccountRoute,
+  } as any)
+const AnalysesDocumentsDocumentRoute =
+  AnalysesDocumentsDocumentRouteImport.update({
+    id: '/analyses/documents/$document',
+    path: '/analyses/documents/$document',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const AuthenticatedSubtractionsFilesRoute =
   AuthenticatedSubtractionsFilesRouteImport.update({
@@ -448,6 +455,7 @@ export interface FileRoutesByFullPath {
   '/samples/settings': typeof AuthenticatedSamplesSettingsRoute
   '/subtractions/$subtractionId': typeof AuthenticatedSubtractionsSubtractionIdRoute
   '/subtractions/files': typeof AuthenticatedSubtractionsFilesRoute
+  '/analyses/documents/$document': typeof AnalysesDocumentsDocumentRoute
   '/account/': typeof AuthenticatedAccountIndexRoute
   '/administration/': typeof AuthenticatedAdministrationIndexRoute
   '/hmms/': typeof AuthenticatedHmmsIndexRoute
@@ -501,6 +509,7 @@ export interface FileRoutesByTo {
   '/samples/settings': typeof AuthenticatedSamplesSettingsRoute
   '/subtractions/$subtractionId': typeof AuthenticatedSubtractionsSubtractionIdRoute
   '/subtractions/files': typeof AuthenticatedSubtractionsFilesRoute
+  '/analyses/documents/$document': typeof AnalysesDocumentsDocumentRoute
   '/account': typeof AuthenticatedAccountIndexRoute
   '/administration': typeof AuthenticatedAdministrationIndexRoute
   '/hmms': typeof AuthenticatedHmmsIndexRoute
@@ -562,6 +571,7 @@ export interface FileRoutesById {
   '/_authenticated/samples/settings': typeof AuthenticatedSamplesSettingsRoute
   '/_authenticated/subtractions/$subtractionId': typeof AuthenticatedSubtractionsSubtractionIdRoute
   '/_authenticated/subtractions/files': typeof AuthenticatedSubtractionsFilesRoute
+  '/analyses/documents/$document': typeof AnalysesDocumentsDocumentRoute
   '/_authenticated/account/': typeof AuthenticatedAccountIndexRoute
   '/_authenticated/administration/': typeof AuthenticatedAdministrationIndexRoute
   '/_authenticated/hmms/': typeof AuthenticatedHmmsIndexRoute
@@ -626,6 +636,7 @@ export interface FileRouteTypes {
     | '/samples/settings'
     | '/subtractions/$subtractionId'
     | '/subtractions/files'
+    | '/analyses/documents/$document'
     | '/account/'
     | '/administration/'
     | '/hmms/'
@@ -679,6 +690,7 @@ export interface FileRouteTypes {
     | '/samples/settings'
     | '/subtractions/$subtractionId'
     | '/subtractions/files'
+    | '/analyses/documents/$document'
     | '/account'
     | '/administration'
     | '/hmms'
@@ -739,6 +751,7 @@ export interface FileRouteTypes {
     | '/_authenticated/samples/settings'
     | '/_authenticated/subtractions/$subtractionId'
     | '/_authenticated/subtractions/files'
+    | '/analyses/documents/$document'
     | '/_authenticated/account/'
     | '/_authenticated/administration/'
     | '/_authenticated/hmms/'
@@ -780,6 +793,7 @@ export interface RootRouteChildren {
   UploadsRoute: typeof UploadsRoute
   HealthLiveRoute: typeof HealthLiveRoute
   HealthReadyRoute: typeof HealthReadyRoute
+  AnalysesDocumentsDocumentRoute: typeof AnalysesDocumentsDocumentRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -944,6 +958,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/account/'
       preLoaderRoute: typeof AuthenticatedAccountIndexRouteImport
       parentRoute: typeof AuthenticatedAccountRoute
+    }
+    '/analyses/documents/$document': {
+      id: '/analyses/documents/$document'
+      path: '/analyses/documents/$document'
+      fullPath: '/analyses/documents/$document'
+      preLoaderRoute: typeof AnalysesDocumentsDocumentRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/subtractions/files': {
       id: '/_authenticated/subtractions/files'
@@ -1497,6 +1518,7 @@ const rootRouteChildren: RootRouteChildren = {
   UploadsRoute: UploadsRoute,
   HealthLiveRoute: HealthLiveRoute,
   HealthReadyRoute: HealthReadyRoute,
+  AnalysesDocumentsDocumentRoute: AnalysesDocumentsDocumentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

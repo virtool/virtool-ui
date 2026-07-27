@@ -8,6 +8,7 @@ export * from "./groups";
 export * from "./hmms";
 export * from "./indexes";
 export * from "./jobs";
+export * from "./json";
 export * from "./labels";
 export * from "./permissions";
 export * from "./permissionsSchema";
