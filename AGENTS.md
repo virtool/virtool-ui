@@ -458,7 +458,7 @@ Every server function names who may call it, as middleware, from
 `@server/auth/policy`:
 
 ```ts
-export const deleteGroup = createServerFn({ method: "POST" })
+export const deleteGroupFn = createServerFn({ method: "POST" })
 	.middleware([adminRole("base")])
 	.validator(groupIdSchema)
 	.handler(async ({ context, data }) => { ... });
@@ -634,9 +634,11 @@ The basics:
   string literal unions over `enum`.
 - **JSDoc:** Every exported `type` gets a one-line `/** ... */`.
 - **Naming:** `is`/`has`/`get` for pure reads; `check`/`validate`/
-  `assert` for may-throw. Don't suffix exports with their layer
-  (`Fn`, `Core`, `Handler`, `Impl`) — when two same-named functions
-  meet in one file, alias the import instead (`login as loginImpl`).
+  `assert` for may-throw. A `createServerFn` export gets an `Fn` suffix
+  (`loginFn`, `getSampleFn`) — it's an RPC call, not a plain function,
+  and the suffix marks that at every call site. The domain function it
+  wraps keeps the plain name (`login`, `getSample`) and never crosses
+  the network.
 - **Comments:** Default to none. Document *why* when non-obvious, not
   *what*.
 - **Concurrency:** Independent awaits go in `Promise.all` — don't pay
