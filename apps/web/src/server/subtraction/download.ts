@@ -1,26 +1,22 @@
 import { requireAuthenticatedRequest } from "../auth/middleware";
 import { db } from "../db/pg";
 import { StorageKeyNotFoundError, storage } from "../storage";
-import { getSubtractionFileLocation } from "./data";
+import { getSubtractionFileKey } from "./data";
 
 function textResponse(message: string, status: number): Response {
 	return new Response(message, { status });
 }
 
-// One chunk is pulled before the stream is built (see below), so it is enqueued
-// ahead of whatever the iterator has left. `ReadableStream.from` would do this
-// in one line but is absent from the DOM lib the app project type-checks
-// against.
+// `ReadableStream.from` would do this in one line, but it is absent from the DOM
+// lib the app project type-checks against.
 function toStream(
-	first: Uint8Array,
-	rest: AsyncIterator<Uint8Array>,
+	chunks: AsyncIterable<Uint8Array>,
 ): ReadableStream<Uint8Array> {
+	const iterator = chunks[Symbol.asyncIterator]();
+
 	return new ReadableStream<Uint8Array>({
-		start(controller) {
-			controller.enqueue(first);
-		},
 		async pull(controller) {
-			const { done, value } = await rest.next();
+			const { done, value } = await iterator.next();
 
 			if (done) {
 				controller.close();
@@ -32,7 +28,7 @@ function toStream(
 		async cancel(reason) {
 			// A client that aborts the download mid-stream leaves the backend's
 			// request open otherwise.
-			await rest.return?.(reason);
+			await iterator.return?.(reason);
 		},
 	});
 }
@@ -67,21 +63,21 @@ export async function handleSubtractionFile(
 		return textResponse("Invalid subtraction id", 400);
 	}
 
-	const location = await getSubtractionFileLocation(db, id, filename);
+	const key = await getSubtractionFileKey(db, id, filename);
 
-	if (location === null) {
+	if (key === null) {
 		return textResponse("Not found", 404);
 	}
 
-	// Headers cannot be taken back once the response is returned, so the first
-	// chunk is pulled up front: a row whose bytes are missing becomes a 404 rather
-	// than a 200 that fails halfway through. Mirrors what Python's handler does.
-	const chunks = storage.read(location.key)[Symbol.asyncIterator]();
-
-	let first: IteratorResult<Uint8Array>;
+	// `Content-Length` comes from the object rather than the `subtraction_files`
+	// row: the column is nullable and records what the create job wrote, so a
+	// stale or null value would truncate the download client-side. Sizing first
+	// also settles existence before any header is committed — a row whose bytes
+	// are missing becomes a 404 rather than a 200 that dies mid-stream.
+	let size: number;
 
 	try {
-		first = await chunks.next();
+		size = await storage.size(key);
 	} catch (err) {
 		if (err instanceof StorageKeyNotFoundError) {
 			return textResponse("Not found", 404);
@@ -89,14 +85,10 @@ export async function handleSubtractionFile(
 		throw err;
 	}
 
-	if (first.done) {
-		return textResponse("Not found", 404);
-	}
-
-	return new Response(toStream(first.value, chunks), {
+	return new Response(toStream(storage.read(key)), {
 		headers: {
 			"content-disposition": `attachment; filename=${filename}`,
-			"content-length": String(location.size),
+			"content-length": String(size),
 			"content-type": "application/octet-stream",
 		},
 	});

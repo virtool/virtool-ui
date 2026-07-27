@@ -349,9 +349,6 @@ export async function getSubtraction(
 	};
 }
 
-/** The storage location and size of a subtraction file being downloaded. */
-export type SubtractionFileLocation = { key: string; size: number };
-
 // A subtraction's files live under the prefix its storage id names, which is
 // the legacy Mongo id for anything migrated out of Mongo and the integer
 // primary key for everything created since. Mirrors Python's
@@ -372,21 +369,26 @@ async function resolveSubtractionStorageId(
 }
 
 /**
- * Locate a subtraction file in storage by the name it is registered under.
+ * Resolve the storage key of a subtraction file by the name it is registered
+ * under.
  *
  * Returns null when the subtraction, or a file of that name on it, does not
  * exist. The key is composed only from a name that matched a row, so a filename
  * taken from a URL can never traverse out of the subtraction's prefix.
+ *
+ * The row's `size` is deliberately not returned. It is nullable, and it records
+ * what the create job wrote rather than what the bucket currently holds — a
+ * caller that needs a byte count asks storage.
  */
-export async function getSubtractionFileLocation(
+export async function getSubtractionFileKey(
 	db: DbOrTx,
 	subtractionId: number,
 	filename: string,
-): Promise<SubtractionFileLocation | null> {
+): Promise<string | null> {
 	const [storageId, [file]] = await Promise.all([
 		resolveSubtractionStorageId(db, subtractionId),
 		db
-			.select({ name: subtractionFiles.name, size: subtractionFiles.size })
+			.select({ name: subtractionFiles.name })
 			.from(subtractionFiles)
 			.where(
 				and(
@@ -401,10 +403,7 @@ export async function getSubtractionFileLocation(
 		return null;
 	}
 
-	return {
-		key: subtractionFileKey(storageId, file.name),
-		size: file.size ?? 0,
-	};
+	return subtractionFileKey(storageId, file.name);
 }
 
 export async function createSubtraction(
@@ -486,18 +485,11 @@ export async function deleteSubtraction(
 	subtractionId: number,
 ): Promise<void> {
 	const storageId = await db.transaction(async (tx) => {
-		const [row] = await tx
-			.select({ id: subtractions.id, legacy_id: subtractions.legacy_id })
-			.from(subtractions)
-			.where(
-				and(
-					eq(subtractions.id, subtractionId),
-					eq(subtractions.deleted, false),
-				),
-			)
-			.limit(1);
+		// Doubles as the existence check: the resolver filters out deleted rows and
+		// returns null when nothing matches.
+		const resolved = await resolveSubtractionStorageId(tx, subtractionId);
 
-		if (!row) {
+		if (resolved === null) {
 			return null;
 		}
 
@@ -512,7 +504,7 @@ export async function deleteSubtraction(
 			.delete(legacySampleSubtractions)
 			.where(eq(legacySampleSubtractions.subtraction_id, subtractionId));
 
-		return subtractionStorageId(row.id, row.legacy_id);
+		return resolved;
 	});
 
 	if (storageId === null) {

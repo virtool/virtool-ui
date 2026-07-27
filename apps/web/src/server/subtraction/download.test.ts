@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import {
 	afterAll,
 	beforeAll,
@@ -166,6 +167,31 @@ describe("handleSubtractionFile", () => {
 
 		expect(response.status).toBe(200);
 		expect(await response.text()).toBe("hello");
+	});
+
+	// `subtraction_files.size` records what the create job wrote and is nullable,
+	// so the header has to come from the object or the client truncates.
+	it("sizes the response from storage, not the row", async () => {
+		const subtractionId = await seedSubtraction();
+		await seedFile(subtractionId);
+		await db
+			.update(subtractionFiles)
+			.set({ size: null })
+			.where(eq(subtractionFiles.subtraction_id, subtractionId));
+		await write(
+			`subtractions/${subtractionId}/subtraction.fa.gz`,
+			"considerably longer than five bytes",
+		);
+
+		const response = await handleSubtractionFile(
+			await request(userId),
+			String(subtractionId),
+			"subtraction.fa.gz",
+		);
+
+		expect(response.status).toBe(200);
+		expect(response.headers.get("content-length")).toBe("35");
+		expect(await response.text()).toBe("considerably longer than five bytes");
 	});
 
 	it("rejects an anonymous caller with a 401", async () => {
