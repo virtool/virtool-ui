@@ -747,6 +747,13 @@ is read from Postgres itself, filtering `pg_stat_activity` on the
 replica counts only its own pool. Client-side queue depth remains
 unavailable and needs per-query instrumentation.
 
+That name is built by `db/applicationName.ts` and bounded to 63 bytes —
+Postgres truncates a longer one silently, and the filter would then match
+nothing and report every bucket as zero. The probe itself is bounded too:
+it queries the very pool it measures, so a saturated pool queues it
+client-side where nothing rejects, and an unbounded read would cost the
+whole scrape rather than just the pool gauges.
+
 Anything reached from `start.ts` is in the browser program, so
 `metricsMiddleware` loads the registry through `createServerOnlyFn` and
 a dynamic import — never a static one, which would drag prom-client and

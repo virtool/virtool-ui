@@ -3,6 +3,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { config } from "../config";
 import { logger } from "../logger";
+import { buildApplicationName } from "./applicationName";
 import * as schema from "./schema";
 
 /**
@@ -14,7 +15,7 @@ import * as schema from "./schema";
  * every Virtool process sharing the database. Without it, every replica would
  * report the same cluster-wide total and summing the series would multiply it.
  */
-export const applicationName = `virtool-ts@${hostname()}`;
+export const applicationName = buildApplicationName(hostname());
 
 export const client = postgres(config.postgresUrl, {
 	max: config.postgresPoolMax,

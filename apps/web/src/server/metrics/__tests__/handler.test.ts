@@ -64,11 +64,25 @@ describe("handleMetrics", () => {
 		["a wrong token of a different length", "Bearer short"],
 		["a token with no Bearer scheme", TOKEN],
 		["Basic credentials", "Basic dXNlcjpwYXNz"],
+		["a token padded with whitespace", `Bearer  ${TOKEN}`],
 	])("rejects %s", async (_label, authorization) => {
 		const response = await scrape({ authorization });
 
 		expect(response.status).toBe(401);
+		expect(readConnectionCounts).not.toHaveBeenCalled();
 	});
+
+	// RFC 9110 §11.1: the auth scheme is case-insensitive.
+	it.each(["Bearer", "bearer", "BEARER", "BeArEr"])(
+		"accepts the %s scheme",
+		async (scheme) => {
+			const response = await scrape({
+				authorization: `${scheme} ${TOKEN}`,
+			});
+
+			expect(response.status).toBe(200);
+		},
+	);
 
 	it("serves the registry to a correctly authenticated scrape", async () => {
 		const response = await scrape({ authorization: `Bearer ${TOKEN}` });
@@ -95,6 +109,24 @@ describe("handleMetrics", () => {
 		readConnectionCounts.mockRejectedValue(new Error("connection refused"));
 
 		const response = await scrape({ authorization: `Bearer ${TOKEN}` });
+
+		expect(response.status).toBe(200);
+		expect(await response.text()).toContain("process_resident_memory_bytes");
+	});
+
+	// A saturated pool queues the probe client-side, where nothing rejects, so
+	// the scrape has to abandon it rather than hang past Prometheus' deadline.
+	it("still serves process metrics when the pool probe never settles", async () => {
+		readConnectionCounts.mockReturnValue(new Promise(() => {}));
+
+		vi.useFakeTimers();
+
+		const pending = scrape({ authorization: `Bearer ${TOKEN}` });
+
+		await vi.advanceTimersByTimeAsync(5000);
+		vi.useRealTimers();
+
+		const response = await pending;
 
 		expect(response.status).toBe(200);
 		expect(await response.text()).toContain("process_resident_memory_bytes");

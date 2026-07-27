@@ -10,6 +10,7 @@ exposition format, from a single process-wide registry.
 | `server/metrics/registry.ts` | The `Registry`, every metric definition, and the record/render functions |
 | `server/metrics/middleware.ts` | Global request middleware that counts and times requests |
 | `server/metrics/data.ts` | Reads pool occupancy from `pg_stat_activity` |
+| `server/db/applicationName.ts` | Builds the `application_name` that filter matches on |
 | `server/metrics/handler.ts` | Token check, pre-scrape collection, response |
 | `routes/metrics.ts` | The raw route |
 
@@ -37,6 +38,14 @@ The comparison uses `timingSafeEqual`, screening for a length mismatch
 first because it throws on unequal lengths. That screen reveals the
 configured token's length; an attacker learns nothing from it that
 meaningfully narrows the search.
+
+The **scheme** is matched case-insensitively, as RFC 9110 §11.1 requires
+— `bearer`, `Bearer`, and `BEARER` are the same scheme. The **credential**
+after it is not: it is compared byte for byte, so a token differing in
+case or carrying interior whitespace is a different token. Nothing trims
+it, and nothing needs to — the `Headers` implementation already strips
+the optional whitespace around a header value before the handler ever
+sees it.
 
 The gate exists because the server listens on **one port**
 (`EXPOSE 9900`). There is no separate admin socket, so `/metrics` shares
@@ -166,7 +175,7 @@ So occupancy is read from Postgres' own view instead. `db/pg.ts` sets a
 distinctive `application_name` on every connection:
 
 ```ts
-export const applicationName = `virtool-ts@${hostname()}`;
+export const applicationName = buildApplicationName(hostname());
 ```
 
 and `readConnectionCounts` filters `pg_stat_activity` on it, scoped to
@@ -175,11 +184,38 @@ counts its own pool**. Without it every replica would report the same
 cluster-wide total, and summing the series in Grafana would multiply it
 by the replica count.
 
+### The name has to survive the round trip
+
+`db/applicationName.ts` bounds the value at **63 bytes**. Postgres holds
+`application_name` in a `NAMEDATALEN` buffer and truncates anything
+longer *silently* — connections would then be opened under a clipped
+name while the filter still searched for the full one, and every pool
+gauge would read zero with nothing in the logs to say why.
+
+`virtool-ts@` leaves 52 bytes for the hostname, which a long deployment
+name can overflow. An overflowing hostname is replaced by a truncated
+SHA-256 digest of itself rather than clipped, because orchestrators put
+the part that distinguishes one replica from another — the pod's random
+suffix — at the *end*. Clipping would collapse a deployment's replicas
+onto one name and reintroduce the multiplication the hostname was there
+to prevent.
+
+### Collection is bounded, and happens in the handler
+
 Collection happens in the handler, before rendering, rather than in a
 prom-client `collect()` callback. A callback that rejects fails the
 whole `registry.metrics()` call — and a Postgres outage is exactly when
 the process metrics matter most. A failed read logs a warning and drops
 only the pool gauges; the rest of the scrape still serves.
+
+The read is also **time-bounded**, at two seconds. The probe is a query
+on the very pool it measures, so a saturated pool queues it *client-side*
+in the postgres.js closure, where nothing rejects and no statement
+timeout applies. Unbounded, it would hang past Prometheus' scrape
+deadline and cost the entire response — process and request metrics
+included — in precisely the situation the pool gauges exist to diagnose.
+Two seconds sits well inside a default 10s scrape timeout. The abandoned
+query is left to settle on its own and its result discarded.
 
 ### What this cannot see
 
