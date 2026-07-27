@@ -524,6 +524,15 @@ produce. Its `$document` param is the `{id}.{extension}` segment. It too
 enforces its own floor — `requireAuthenticatedRequest`, then the **read** right
 on the analysis's parent sample.
 
+Subtraction file downloads
+(`routes/subtractions.$subtractionId.files.$filename.ts` →
+`@server/subtraction/download`) are a raw route for the same reason, and stream
+the bytes out of storage rather than buffering a multi-GB Bowtie2 index. Their
+floor is `requireAuthenticatedRequest` alone — subtractions carry no per-row
+rights. The filename is only ever composed into a storage key *after* it has
+matched a `subtraction_files` row, which is what keeps a URL param from
+traversing out of the prefix.
+
 Raw routes are also the only endpoints reachable with an **API key**.
 `requireAuthenticatedRequest` accepts either the session cookie pair or an HTTP
 Basic `Authorization` header carrying `handle:key`; server functions stay

@@ -59,6 +59,7 @@ import { Route as AuthenticatedSamplesSampleIdFilesRouteImport } from './routes/
 import { Route as AuthenticatedSamplesSampleIdGeneralRouteImport } from './routes/_authenticated/samples/$sampleId/general'
 import { Route as AuthenticatedSamplesSampleIdQualityRouteImport } from './routes/_authenticated/samples/$sampleId/quality'
 import { Route as AuthenticatedSamplesSampleIdRightsRouteImport } from './routes/_authenticated/samples/$sampleId/rights'
+import { Route as SubtractionsSubtractionIdFilesFilenameRouteImport } from './routes/subtractions.$subtractionId.files.$filename'
 import { Route as AuthenticatedRefsRefIdIndexesIndexRouteImport } from './routes/_authenticated/refs/$refId/indexes/index'
 import { Route as AuthenticatedRefsRefIdIndexesIndexIdRouteImport } from './routes/_authenticated/refs/$refId/indexes/$indexId'
 import { Route as AuthenticatedRefsRefIdOtusIndexRouteImport } from './routes/_authenticated/refs/$refId/otus/index'
@@ -351,6 +352,12 @@ const AuthenticatedSamplesSampleIdRightsRoute =
     path: '/rights',
     getParentRoute: () => AuthenticatedSamplesSampleIdRoute,
   } as any)
+const SubtractionsSubtractionIdFilesFilenameRoute =
+  SubtractionsSubtractionIdFilesFilenameRouteImport.update({
+    id: '/subtractions/$subtractionId/files/$filename',
+    path: '/subtractions/$subtractionId/files/$filename',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedRefsRefIdIndexesIndexRoute =
   AuthenticatedRefsRefIdIndexesIndexRouteImport.update({
     id: '/indexes/',
@@ -471,6 +478,7 @@ export interface FileRoutesByFullPath {
   '/samples/$sampleId/general': typeof AuthenticatedSamplesSampleIdGeneralRoute
   '/samples/$sampleId/quality': typeof AuthenticatedSamplesSampleIdQualityRoute
   '/samples/$sampleId/rights': typeof AuthenticatedSamplesSampleIdRightsRoute
+  '/subtractions/$subtractionId/files/$filename': typeof SubtractionsSubtractionIdFilesFilenameRoute
   '/administration/users/': typeof AuthenticatedAdministrationUsersIndexRoute
   '/refs/$refId/': typeof AuthenticatedRefsRefIdIndexRoute
   '/samples/$sampleId/': typeof AuthenticatedSamplesSampleIdIndexRoute
@@ -524,6 +532,7 @@ export interface FileRoutesByTo {
   '/samples/$sampleId/general': typeof AuthenticatedSamplesSampleIdGeneralRoute
   '/samples/$sampleId/quality': typeof AuthenticatedSamplesSampleIdQualityRoute
   '/samples/$sampleId/rights': typeof AuthenticatedSamplesSampleIdRightsRoute
+  '/subtractions/$subtractionId/files/$filename': typeof SubtractionsSubtractionIdFilesFilenameRoute
   '/administration/users': typeof AuthenticatedAdministrationUsersIndexRoute
   '/refs/$refId': typeof AuthenticatedRefsRefIdIndexRoute
   '/samples/$sampleId': typeof AuthenticatedSamplesSampleIdIndexRoute
@@ -587,6 +596,7 @@ export interface FileRoutesById {
   '/_authenticated/samples/$sampleId/general': typeof AuthenticatedSamplesSampleIdGeneralRoute
   '/_authenticated/samples/$sampleId/quality': typeof AuthenticatedSamplesSampleIdQualityRoute
   '/_authenticated/samples/$sampleId/rights': typeof AuthenticatedSamplesSampleIdRightsRoute
+  '/subtractions/$subtractionId/files/$filename': typeof SubtractionsSubtractionIdFilesFilenameRoute
   '/_authenticated/administration/users/': typeof AuthenticatedAdministrationUsersIndexRoute
   '/_authenticated/refs/$refId/': typeof AuthenticatedRefsRefIdIndexRoute
   '/_authenticated/samples/$sampleId/': typeof AuthenticatedSamplesSampleIdIndexRoute
@@ -652,6 +662,7 @@ export interface FileRouteTypes {
     | '/samples/$sampleId/general'
     | '/samples/$sampleId/quality'
     | '/samples/$sampleId/rights'
+    | '/subtractions/$subtractionId/files/$filename'
     | '/administration/users/'
     | '/refs/$refId/'
     | '/samples/$sampleId/'
@@ -705,6 +716,7 @@ export interface FileRouteTypes {
     | '/samples/$sampleId/general'
     | '/samples/$sampleId/quality'
     | '/samples/$sampleId/rights'
+    | '/subtractions/$subtractionId/files/$filename'
     | '/administration/users'
     | '/refs/$refId'
     | '/samples/$sampleId'
@@ -767,6 +779,7 @@ export interface FileRouteTypes {
     | '/_authenticated/samples/$sampleId/general'
     | '/_authenticated/samples/$sampleId/quality'
     | '/_authenticated/samples/$sampleId/rights'
+    | '/subtractions/$subtractionId/files/$filename'
     | '/_authenticated/administration/users/'
     | '/_authenticated/refs/$refId/'
     | '/_authenticated/samples/$sampleId/'
@@ -794,6 +807,7 @@ export interface RootRouteChildren {
   HealthLiveRoute: typeof HealthLiveRoute
   HealthReadyRoute: typeof HealthReadyRoute
   AnalysesDocumentsDocumentRoute: typeof AnalysesDocumentsDocumentRoute
+  SubtractionsSubtractionIdFilesFilenameRoute: typeof SubtractionsSubtractionIdFilesFilenameRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1147,6 +1161,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/samples/$sampleId/rights'
       preLoaderRoute: typeof AuthenticatedSamplesSampleIdRightsRouteImport
       parentRoute: typeof AuthenticatedSamplesSampleIdRoute
+    }
+    '/subtractions/$subtractionId/files/$filename': {
+      id: '/subtractions/$subtractionId/files/$filename'
+      path: '/subtractions/$subtractionId/files/$filename'
+      fullPath: '/subtractions/$subtractionId/files/$filename'
+      preLoaderRoute: typeof SubtractionsSubtractionIdFilesFilenameRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/refs/$refId/indexes/': {
       id: '/_authenticated/refs/$refId/indexes/'
@@ -1519,6 +1540,8 @@ const rootRouteChildren: RootRouteChildren = {
   HealthLiveRoute: HealthLiveRoute,
   HealthReadyRoute: HealthReadyRoute,
   AnalysesDocumentsDocumentRoute: AnalysesDocumentsDocumentRoute,
+  SubtractionsSubtractionIdFilesFilenameRoute:
+    SubtractionsSubtractionIdFilesFilenameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

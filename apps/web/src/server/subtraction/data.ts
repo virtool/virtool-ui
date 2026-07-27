@@ -15,7 +15,12 @@ import { users } from "../db/schema/users";
 import { AppError } from "../errors";
 import { logger } from "../logger";
 import type { StorageBackend } from "../storage";
-import { deletePrefix, subtractionPrefix } from "../storage";
+import {
+	deletePrefix,
+	subtractionFileKey,
+	subtractionPrefix,
+	subtractionStorageId,
+} from "../storage";
 
 /** A user reduced to the fields shown alongside a resource. */
 export type UserNested = { id: number; handle: string };
@@ -292,8 +297,8 @@ async function getSubtractionFiles(
 		.where(eq(subtractionFiles.subtraction_id, subtractionId));
 
 	return rows.map((row) => ({
-		// The download route stays on the Python service; the client renders this
-		// path under its `/api` proxy prefix.
+		// Served from this server by `routes/subtractions.$subtractionId.files
+		// .$filename.ts`, so the client links to it directly.
 		download_url: `/subtractions/${subtractionId}/files/${row.name ?? ""}`,
 		id: row.id,
 		name: row.name ?? "",
@@ -341,6 +346,64 @@ export async function getSubtraction(
 		files,
 		gc: row.gc,
 		linked_samples,
+	};
+}
+
+/** The storage location and size of a subtraction file being downloaded. */
+export type SubtractionFileLocation = { key: string; size: number };
+
+// A subtraction's files live under the prefix its storage id names, which is
+// the legacy Mongo id for anything migrated out of Mongo and the integer
+// primary key for everything created since. Mirrors Python's
+// `_resolve_storage_id`.
+async function resolveSubtractionStorageId(
+	db: DbOrTx,
+	subtractionId: number,
+): Promise<string | null> {
+	const [row] = await db
+		.select({ id: subtractions.id, legacy_id: subtractions.legacy_id })
+		.from(subtractions)
+		.where(
+			and(eq(subtractions.id, subtractionId), eq(subtractions.deleted, false)),
+		)
+		.limit(1);
+
+	return row ? subtractionStorageId(row.id, row.legacy_id) : null;
+}
+
+/**
+ * Locate a subtraction file in storage by the name it is registered under.
+ *
+ * Returns null when the subtraction, or a file of that name on it, does not
+ * exist. The key is composed only from a name that matched a row, so a filename
+ * taken from a URL can never traverse out of the subtraction's prefix.
+ */
+export async function getSubtractionFileLocation(
+	db: DbOrTx,
+	subtractionId: number,
+	filename: string,
+): Promise<SubtractionFileLocation | null> {
+	const [storageId, [file]] = await Promise.all([
+		resolveSubtractionStorageId(db, subtractionId),
+		db
+			.select({ name: subtractionFiles.name, size: subtractionFiles.size })
+			.from(subtractionFiles)
+			.where(
+				and(
+					eq(subtractionFiles.subtraction_id, subtractionId),
+					eq(subtractionFiles.name, filename),
+				),
+			)
+			.limit(1),
+	]);
+
+	if (storageId === null || !file?.name) {
+		return null;
+	}
+
+	return {
+		key: subtractionFileKey(storageId, file.name),
+		size: file.size ?? 0,
 	};
 }
 
@@ -422,9 +485,9 @@ export async function deleteSubtraction(
 	storage: StorageBackend,
 	subtractionId: number,
 ): Promise<void> {
-	const deleted = await db.transaction(async (tx) => {
+	const storageId = await db.transaction(async (tx) => {
 		const [row] = await tx
-			.select({ id: subtractions.id })
+			.select({ id: subtractions.id, legacy_id: subtractions.legacy_id })
 			.from(subtractions)
 			.where(
 				and(
@@ -435,7 +498,7 @@ export async function deleteSubtraction(
 			.limit(1);
 
 		if (!row) {
-			return false;
+			return null;
 		}
 
 		// Soft delete: the row stays so historical analyses that reference it still
@@ -449,19 +512,16 @@ export async function deleteSubtraction(
 			.delete(legacySampleSubtractions)
 			.where(eq(legacySampleSubtractions.subtraction_id, subtractionId));
 
-		return true;
+		return subtractionStorageId(row.id, row.legacy_id);
 	});
 
-	if (!deleted) {
+	if (storageId === null) {
 		throw new SubtractionNotFoundError();
 	}
 
 	// The database write has committed, so a storage failure only orphans bytes
 	// rather than failing the delete. Log the orphans so they stay observable.
-	const failures = await deletePrefix(
-		storage,
-		subtractionPrefix(String(subtractionId)),
-	);
+	const failures = await deletePrefix(storage, subtractionPrefix(storageId));
 
 	for (const failure of failures) {
 		logger.warn(
