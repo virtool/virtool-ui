@@ -7,7 +7,7 @@ import {
 	useQueryClient,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { HmmSearchResults } from "./types";
+import type { HmmSearchResult } from "./types";
 
 /**
  * Query options for a page of HMM search results.
@@ -21,12 +21,10 @@ export function hmmsQueryOptions(
 	per_page: number,
 	term?: string,
 ) {
-	return queryOptions<HmmSearchResults, Error>({
+	return queryOptions<HmmSearchResult, Error>({
 		queryKey: hmmQueryKeys.list([page, per_page, term]),
 		queryFn: () =>
-			findHmmsFn({ data: { page, perPage: per_page, term: term ?? "" } }).then(
-				({ documents, ...rest }) => ({ ...rest, items: documents }),
-			),
+			findHmmsFn({ data: { page, perPage: per_page, term: term ?? "" } }),
 	});
 }
 
