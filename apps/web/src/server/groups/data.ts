@@ -52,10 +52,7 @@ function toGroupMinimal(row: GroupRow): GroupMinimal {
 	};
 }
 
-async function fetchGroupUsers(
-	db: Db,
-	groupId: number,
-): Promise<UserNested[]> {
+async function fetchGroupUsers(db: Db, groupId: number): Promise<UserNested[]> {
 	const rows = await db
 		.select({ id: usersTable.id, handle: usersTable.handle })
 		.from(usersTable)

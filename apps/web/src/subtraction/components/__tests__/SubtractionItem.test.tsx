@@ -15,6 +15,7 @@ describe("<SubtractionItem />", () => {
 
 		props = {
 			id: 1,
+			count: 12,
 			created_at: createdAt.toISOString(),
 			file: {
 				id: 23,
@@ -68,7 +69,7 @@ describe("<SubtractionItem />", () => {
 	});
 
 	it("should correctly render subtractions where job is absent", async () => {
-		props.job = undefined;
+		props.job = null;
 		props.ready = false;
 
 		await renderWithRouter(<SubtractionItem {...props} />);

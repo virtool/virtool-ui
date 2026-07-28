@@ -22,12 +22,12 @@ export const subtractionServerFnMocks = {
 /** Sets up findSubtractions to resolve with a single page of the given items. */
 export function mockFindSubtractions(items: SubtractionMinimal[]): Mock {
 	subtractionServerFnMocks.findSubtractionsFn.mockResolvedValue({
-		found_count: items.length,
-		total_count: items.length,
-		ready_count: items.filter((item) => item.ready).length,
+		foundCount: items.length,
+		totalCount: items.length,
+		readyCount: items.filter((item) => item.ready).length,
 		page: 1,
-		page_count: 1,
-		per_page: 25,
+		pageCount: 1,
+		perPage: 25,
 		items,
 	});
 	return subtractionServerFnMocks.findSubtractionsFn;

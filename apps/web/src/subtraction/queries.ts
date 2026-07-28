@@ -36,7 +36,7 @@ export function useCreateSubtraction() {
 		mutationFn: ({ name, nickname, uploadId }) =>
 			createSubtractionFn({
 				data: { name, nickname, uploadId },
-			}) as Promise<Subtraction>,
+			}),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: subtractionQueryKeys.lists(),
@@ -62,7 +62,7 @@ export function subtractionsQueryOptions(
 		queryFn: () =>
 			findSubtractionsFn({
 				data: { page, per_page, term },
-			}) as Promise<SubtractionSearchResult>,
+			}),
 	});
 }
 
@@ -95,7 +95,7 @@ export function useFetchSubtraction(subtractionId: number) {
 		queryFn: () =>
 			getSubtractionFn({
 				data: { subtractionId },
-			}) as Promise<Subtraction>,
+			}),
 	});
 }
 
@@ -111,7 +111,7 @@ export function useUpdateSubtraction(subtractionId: number) {
 		mutationFn: ({ name, nickname }) =>
 			updateSubtractionFn({
 				data: { subtractionId, name, nickname },
-			}) as Promise<Subtraction>,
+			}),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: subtractionQueryKeys.detail(subtractionId),

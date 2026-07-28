@@ -43,7 +43,7 @@ export function createFakeSubtractionNested(
 export function createFakeSubtractionMinimal(
 	overrides?: Partial<SubtractionMinimal>,
 ): SubtractionMinimal {
-	const defaultSubtractionMinimal = {
+	const defaultSubtractionMinimal: SubtractionMinimal = {
 		...createFakeSubtractionNested(),
 		count: faker.number.int({ max: 15 }),
 		created_at: faker.date.past().toISOString(),
@@ -51,6 +51,7 @@ export function createFakeSubtractionMinimal(
 			id: faker.number.int(),
 			name: `${faker.word.noun({ strategy: "any-length" })}s.fa`,
 		},
+		job: null,
 		nickname: faker.word.noun({ strategy: "any-length" }),
 		ready: true,
 		user: createFakeUserNested(),
