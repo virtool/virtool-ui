@@ -302,6 +302,19 @@ describe("parseServerConfig", () => {
 			});
 		});
 
+		it("pairs a file-backed credential with a plain one", () => {
+			const config = parseServerConfig({
+				...minimalS3,
+				VT_STORAGE_S3_ACCESS_KEY_ID: "ak",
+				VT_STORAGE_S3_SECRET_ACCESS_KEY_FILE: write("mixed-pair", "sk\n"),
+			} as NodeJS.ProcessEnv);
+
+			expect(config.storage).toMatchObject({
+				accessKeyId: "ak",
+				secretAccessKey: "sk",
+			});
+		});
+
 		it("errors when the file cannot be read", () => {
 			expect(() =>
 				parseServerConfig({
