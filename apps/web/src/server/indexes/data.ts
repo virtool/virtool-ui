@@ -57,9 +57,6 @@ export class UnverifiedOtusError extends AppError {}
 /** Thrown when a reference has no changes for a build to include. */
 export class NoUnbuiltChangesError extends AppError {}
 
-/** The task type the Python runner claims to finish a build. */
-const CREATE_INDEX_TASK_TYPE = "create_index";
-
 /** Options accepted by {@link findIndexes}. */
 export type FindIndexesOptions = {
 	/** Restrict the page to one reference's indexes */
@@ -518,7 +515,7 @@ export async function createIndex(
 			throw new IndexBuildInProgressError("Index build already in progress");
 		}
 
-		const taskId = await createTask(tx, CREATE_INDEX_TASK_TYPE);
+		const taskId = await createTask(tx, "create_index");
 
 		const index = takeFirstOrThrow(
 			await tx
