@@ -105,28 +105,27 @@ a test shape familiar.
 
 The raw routes — uploads, downloads, SSE — are the exception: the
 browser reaches those over real HTTP, so they are the only places a
-test has an HTTP boundary at all. No test mocks one today; the
-components that call them are tested with their caller stubbed
+test has an HTTP boundary at all. No test mocks one; the components
+that call them are tested with their caller stubbed
 (`vi.mock("@uploads/uploader")`) instead.
 
-### The harness fails loudly, so error paths are testable
+There is therefore no HTTP mocking library in the repo. Nothing blocks
+an outbound request either, so a test that reaches the network will
+attempt it for real — reach for `vi.mock` on the module that would make
+the call, not for an interceptor.
 
-`setup.tsx` calls `nock.disableNetConnect()` once per test file: any
-HTTP request errors instead of falling through to the real network,
-where it would pass or hang silently. Nothing declares an interceptor,
-so this is a bare guard rather than a mocking layer — a request that
-gets that far is a sign the test was under-mocked.
+### Retries are off, so error paths are testable
 
 The test `QueryClient` (`createTestQueryClient`, used by
 `wrapWithProviders`, `renderWithProviders`, and `renderRoute`) sets
 `retry: false`, so a failed query surfaces its error immediately rather
 than after three retries with backoff. This is what makes error-state
-assertions practical — mock a `500`, render, and assert the error UI
-without waiting out the retries.
+assertions practical — reject the server-function mock, render, and
+assert the error UI without waiting out the retries.
 
-The two together mean a request the test forgot to mock now shows the
-error state right away instead of masking it behind retries — so
-under-mocked tests fail where they used to pass by accident.
+It also means a call the test forgot to stub shows its error state right
+away instead of masking it behind retries, so an under-mocked test fails
+where it would otherwise pass by accident.
 
 ## Don't snapshot response shapes
 
@@ -209,8 +208,9 @@ await expectNoViolations(baseElement, withContrast);
 ```
 
 They run in `src/tests/setupA11y.ts`, not the jsdom `setup.tsx` — that
-setup imports nock, which is Node-only and throws in the browser. The
-browser setup only loads `@app/style.css`, because axe computes contrast
+setup wires in the global server-function mocks and jsdom-oriented
+providers these tests never need. The browser setup only loads
+`@app/style.css`, because axe computes contrast
 from *rendered* colours: without the real Tailwind theme, classes resolve
 to no colour and every check passes vacuously. For the same reason these
 tests render lean, provider-free subtrees with real theme classes rather
@@ -267,7 +267,7 @@ exists but mirrors `@server/account/functions`, which owns API keys.
 ### Asserting a server function was called
 
 A server-function mock returns the underlying `vi.fn()`, so assert on
-it directly rather than through a nock-style scope object:
+it directly:
 
 ```ts
 const getUser = mockGetUser(user.id, user);

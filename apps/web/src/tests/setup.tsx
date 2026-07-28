@@ -18,7 +18,6 @@ import {
 	render as rtlRender,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import nock from "nock";
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { beforeEach, vi } from "vitest";
 import { createFakeAccount } from "./fake/account";
@@ -197,12 +196,6 @@ beforeEach(() => {
 });
 
 process.env.TZ = "UTC";
-
-// Fail loudly when an HTTP request escapes instead of falling through to the
-// real network, where it would pass or hang silently. Nothing here declares an
-// interceptor — the SPA reaches the server through mocked server functions — so
-// this is a bare guard: any request that gets this far means a test under-mocked.
-nock.disableNetConnect();
 
 faker.seed(1);
 

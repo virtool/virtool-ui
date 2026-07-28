@@ -888,11 +888,10 @@ and make commits easier to find later.
 - **Imports:** Use explicit vitest imports (`import { describe, it,
   expect, vi } from "vitest"`).
 - **Setup:** `apps/web/src/tests/setup.tsx` provides
-  `renderWithProviders()`, `renderWithRouter()`, and `MemoryRouter`. It
-  also calls `nock.disableNetConnect()` (an unmocked request fails
-  instead of hitting the network) and gives the test `QueryClient`
-  `retry: false` (a failed query surfaces its error immediately), so
-  error paths are testable and under-mocked tests fail loudly.
+  `renderWithProviders()`, `renderWithRouter()`, and `MemoryRouter`, and
+  gives the test `QueryClient` `retry: false` (a failed query surfaces
+  its error immediately), so error paths are testable and under-mocked
+  tests fail loudly rather than sitting through retries.
 - **Test doubles** split two ways by what they do, and a helper lives
   in exactly one of them:
   - `src/tests/fake/` — `createFake*` data generators. No mocking.
@@ -904,8 +903,9 @@ and make commits easier to find later.
   Files under `server-fn/` mirror the mocked
   `@server/<feature>/functions` module, not the client feature —
   `getAccount` is stubbed from `server-fn/users.ts`. The SPA has no HTTP
-  client, so no test mocks an HTTP boundary; nock survives only as
-  `disableNetConnect`, a bare guard with no interceptors behind it.
+  client, so there is no HTTP mocking library either: stub the module
+  that would make the call, never an interceptor. Nothing blocks an
+  outbound request, so a test that reaches the network really will.
 - **Database tests:** `createTestDatabase()` from
   `@server/db/test/fixtures` gives a suite its own isolated Postgres
   database with the schema applied. Test files run in parallel, so
