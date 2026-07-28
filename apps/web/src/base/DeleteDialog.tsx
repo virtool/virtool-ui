@@ -3,12 +3,16 @@ import { AlertDialog as AlertDialogPrimitive } from "radix-ui";
 import { type ReactNode, useState } from "react";
 import Button from "./Button";
 
-/** Pull a server-provided message off a rejected deletion, if there is one. */
+/**
+ * Pull a server-provided message off a rejected deletion, if there is one.
+ *
+ * A `ClientError` thrown by a server function arrives as a plain `Error`, so
+ * the reason the deletion was refused is its `message`.
+ */
 function getDeleteErrorMessage(error: unknown): string {
-	const message = (error as { response?: { body?: { message?: unknown } } })
-		?.response?.body?.message;
+	const message = (error as { message?: unknown })?.message;
 
-	return typeof message === "string"
+	return typeof message === "string" && message
 		? message
 		: "Something went wrong. Please try again.";
 }

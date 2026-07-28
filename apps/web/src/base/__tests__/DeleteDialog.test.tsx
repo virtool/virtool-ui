@@ -54,9 +54,9 @@ describe("<DeleteDialog />", () => {
 	});
 
 	it("renders the error and stays open when onConfirm rejects", async () => {
-		const onConfirm = vi.fn().mockRejectedValue({
-			response: { body: { message: "Cannot delete this." } },
-		});
+		const onConfirm = vi
+			.fn()
+			.mockRejectedValue(new Error("Cannot delete this."));
 		renderWithProviders(
 			<DeleteDialog name="Foo" noun="Sample" onConfirm={onConfirm} open />,
 		);
@@ -67,6 +67,19 @@ describe("<DeleteDialog />", () => {
 			"Cannot delete this.",
 		);
 		expect(screen.getByText("Delete Sample")).toBeInTheDocument();
+	});
+
+	it("falls back to a generic message when the rejection carries none", async () => {
+		const onConfirm = vi.fn().mockRejectedValue(new Error(""));
+		renderWithProviders(
+			<DeleteDialog name="Foo" noun="Sample" onConfirm={onConfirm} open />,
+		);
+
+		await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
+
+		expect(await screen.findByRole("alert")).toHaveTextContent(
+			"Something went wrong. Please try again.",
+		);
 	});
 
 	it("closes without confirming when cancelled", async () => {
