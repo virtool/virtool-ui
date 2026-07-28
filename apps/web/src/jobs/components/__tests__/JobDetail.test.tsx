@@ -6,9 +6,10 @@ import { mockGetJob } from "@tests/server-fn/jobs";
 import { renderRoute } from "@tests/setup";
 import { describe, expect, it } from "vitest";
 
+// `toJob` builds `args` as a string map, so the index id arrives stringified.
 function createBuildIndexJob(indexId: number): ServerJob {
 	return {
-		args: { index_id: indexId },
+		args: { index_id: String(indexId) },
 		id: 123,
 		claimed_at: "2022-12-22T21:37:49.429000Z",
 		created_at: "2022-12-22T21:37:49.429000Z",
@@ -27,7 +28,7 @@ describe("<JobDetail /> build_index links", () => {
 		const indexId = 41;
 
 		const getJob = mockGetJob(123, createBuildIndexJob(indexId));
-		mockGetIndex(
+		const getIndex = mockGetIndex(
 			createFakeIndex({
 				id: indexId,
 				reference: { id: refId, name: "Plant Viruses" },
@@ -48,5 +49,9 @@ describe("<JobDetail /> build_index links", () => {
 		);
 
 		expect(getJob).toHaveBeenCalled();
+
+		// The id has to reach the server function as a number — its validator
+		// rejects the string the job args carry.
+		expect(getIndex).toHaveBeenCalledWith({ data: { indexId } });
 	});
 });
