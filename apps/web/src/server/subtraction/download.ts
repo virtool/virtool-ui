@@ -1,6 +1,6 @@
 import { requireAuthenticatedRequest } from "../auth/middleware";
 import { db } from "../db/pg";
-import { textResponse } from "../http";
+import { contentDisposition, textResponse } from "../http";
 import { StorageKeyNotFoundError, storage } from "../storage";
 import { getSubtractionFileKey } from "./data";
 
@@ -84,7 +84,7 @@ export async function handleSubtractionFile(
 
 	return new Response(toStream(storage.read(key)), {
 		headers: {
-			"content-disposition": `attachment; filename=${filename}`,
+			"content-disposition": contentDisposition(filename),
 			"content-length": String(size),
 			"content-type": "application/octet-stream",
 		},

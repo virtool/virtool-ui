@@ -1,6 +1,6 @@
 import { requireAuthenticatedRequest } from "../auth/middleware";
 import { db } from "../db/pg";
-import { textResponse } from "../http";
+import { contentDisposition, textResponse } from "../http";
 import { hasSampleRight, resolveSampleActor } from "../samples/data";
 import {
 	AnalysisNotFoundError,
@@ -87,7 +87,7 @@ export async function handleAnalysisDocument(
 	}
 
 	const headers = {
-		"content-disposition": `attachment; filename=${analysisId}.${extension}`,
+		"content-disposition": contentDisposition(`${analysisId}.${extension}`),
 		"content-type": CONTENT_TYPES[extension],
 	};
 

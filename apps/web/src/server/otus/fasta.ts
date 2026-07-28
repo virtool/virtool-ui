@@ -15,7 +15,7 @@ import { requireAuthenticatedRequest } from "../auth/middleware";
 import type { DbOrTx } from "../db/pg";
 import { db } from "../db/pg";
 import { legacyOtus, legacySequences } from "../db/schema/otus";
-import { textResponse } from "../http";
+import { contentDisposition, textResponse } from "../http";
 
 const CONTENT_TYPE = "text/plain; charset=utf-8";
 
@@ -42,36 +42,6 @@ function formatFastaEntry(
  */
 function formatFastaFilename(...parts: string[]): string {
 	return `${parts.join(".").replaceAll(" ", "_")}.fa`.toLowerCase();
-}
-
-// `encodeURIComponent` leaves `'`, `(`, `)`, and `*` unescaped, and none of the
-// four is an `attr-char` in RFC 5987's grammar.
-function encodeRfc5987(value: string): string {
-	return encodeURIComponent(value).replace(
-		/['()*]/g,
-		(character) => `%${character.charCodeAt(0).toString(16).toUpperCase()}`,
-	);
-}
-
-/**
- * A `Content-Disposition` naming the download, safe for a filename derived from
- * free text.
- *
- * An OTU or isolate name is only validated as a non-empty string, so the
- * filename can carry a quote, semicolon, or slash — which a browser misparses
- * out of an unquoted `filename` — or a newline, which makes the `Response`
- * constructor throw. The quoted parameter therefore carries an ASCII fallback
- * with anything unsafe replaced, and an RFC 5987 `filename*` carries the real
- * name whenever the two differ.
- */
-function contentDisposition(filename: string): string {
-	const fallback = filename.replace(/[^A-Za-z0-9._-]/g, "_");
-
-	if (fallback === filename) {
-		return `attachment; filename="${fallback}"`;
-	}
-
-	return `attachment; filename="${fallback}"; filename*=UTF-8''${encodeRfc5987(filename)}`;
 }
 
 // Only the sequence body is read out of the `data` JSONB. The metadata a FASTA
