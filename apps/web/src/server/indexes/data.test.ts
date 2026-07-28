@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { seedUser } from "../auth/test/fixtures";
 import type { Db } from "../db/pg";
-import { takeFirstOrThrow } from "../db/rows";
 import { legacyHistory } from "../db/schema/history";
 import { indexes, indexFiles } from "../db/schema/indexes";
 import { legacyOtus } from "../db/schema/otus";
@@ -19,6 +19,7 @@ import {
 	NoUnbuiltChangesError,
 	UnverifiedOtusError,
 } from "./data";
+import { seedChange, seedIndex, seedOtu, seedReference } from "./test/fixtures";
 
 let database: TestDatabase;
 let db: Db;
@@ -42,133 +43,23 @@ beforeEach(async () => {
 	await db.delete(users);
 });
 
+// Handles are unique case-insensitively, so every seeded user needs its own.
 let handleCounter = 0;
 
-async function seedUser(): Promise<number> {
+function seedNextUser(): Promise<number> {
 	handleCounter += 1;
-
-	return takeFirstOrThrow(
-		await db
-			.insert(users)
-			.values({
-				active: true,
-				administratorRole: null,
-				email: "",
-				forceReset: false,
-				handle: `user-${handleCounter}`,
-				lastPasswordChange: new Date(),
-				password: Buffer.from("not-a-real-hash"),
-				settings: {},
-			})
-			.returning({ id: users.id }),
-	).id;
-}
-
-async function seedReference(
-	userId: number,
-	{ archived = false, name = "Reference" } = {},
-): Promise<number> {
-	return takeFirstOrThrow(
-		await db
-			.insert(legacyReferences)
-			.values({
-				name,
-				description: "",
-				organism: "virus",
-				created_at: new Date(),
-				archived,
-				restrict_source_types: false,
-				source_types: [],
-				user_id: userId,
-			})
-			.returning({ id: legacyReferences.id }),
-	).id;
-}
-
-let storageKeyCounter = 0;
-
-async function seedIndex(values: {
-	referenceId: number;
-	userId: number;
-	version: number;
-	ready?: boolean;
-	createdAt?: Date;
-}): Promise<number> {
-	storageKeyCounter += 1;
-
-	return takeFirstOrThrow(
-		await db
-			.insert(indexes)
-			.values({
-				created_at: values.createdAt ?? new Date(),
-				manifest: {},
-				ready: values.ready ?? true,
-				reference_id: values.referenceId,
-				storage_key: `storage-${storageKeyCounter}`,
-				user_id: values.userId,
-				version: values.version,
-			})
-			.returning({ id: indexes.id }),
-	).id;
-}
-
-let otuCounter = 0;
-
-async function seedOtu(
-	referenceId: number,
-	{ verified = true, name = "OTU", version = 1 } = {},
-): Promise<string> {
-	otuCounter += 1;
-	const id = `otu${otuCounter}`;
-
-	await db.insert(legacyOtus).values({
-		id,
-		data: {},
-		name,
-		abbreviation: "",
-		reference_id: referenceId,
-		verified,
-		version,
-	});
-
-	return id;
-}
-
-let changeCounter = 0;
-
-async function seedChange(values: {
-	referenceId: number;
-	userId: number;
-	otuId: string;
-	otuName?: string;
-	otuVersion?: string | null;
-	indexId?: number;
-}): Promise<void> {
-	changeCounter += 1;
-
-	await db.insert(legacyHistory).values({
-		legacy_id: `${values.otuId}.${changeCounter}`,
-		created_at: new Date(),
-		description: `Change ${changeCounter}`,
-		method_name: "edit",
-		user_id: values.userId,
-		otu: values.otuId,
-		otu_name: values.otuName ?? "OTU",
-		otu_version: values.otuVersion === undefined ? "1" : values.otuVersion,
-		reference_id: values.referenceId,
-		index_id: values.indexId ?? null,
-	});
+	return seedUser(db, { handle: `user-${handleCounter}` });
 }
 
 describe("findIndexes", () => {
 	it("scopes a page to a reference and orders it by descending version", async () => {
-		const userId = await seedUser();
-		const referenceId = await seedReference(userId);
-		const otherId = await seedReference(userId, { name: "Other" });
+		const userId = await seedNextUser();
+		const referenceId = await seedReference(db, userId);
+		const otherId = await seedReference(db, userId, { name: "Other" });
 
-		await seedIndex({ referenceId, userId, version: 0 });
-		await seedIndex({ referenceId, userId, version: 1 });
-		await seedIndex({ referenceId: otherId, userId, version: 0 });
+		await seedIndex(db, { referenceId, userId, version: 0 });
+		await seedIndex(db, { referenceId, userId, version: 1 });
+		await seedIndex(db, { referenceId: otherId, userId, version: 0 });
 
 		const result = await findIndexes(db, {
 			referenceId,
@@ -186,16 +77,16 @@ describe("findIndexes", () => {
 	});
 
 	it("reports each build's own change and modified-OTU counts", async () => {
-		const userId = await seedUser();
-		const referenceId = await seedReference(userId);
-		const indexId = await seedIndex({ referenceId, userId, version: 0 });
+		const userId = await seedNextUser();
+		const referenceId = await seedReference(db, userId);
+		const indexId = await seedIndex(db, { referenceId, userId, version: 0 });
 
-		const first = await seedOtu(referenceId);
-		const second = await seedOtu(referenceId);
+		const first = await seedOtu(db, referenceId);
+		const second = await seedOtu(db, referenceId);
 
-		await seedChange({ referenceId, userId, otuId: first, indexId });
-		await seedChange({ referenceId, userId, otuId: first, indexId });
-		await seedChange({ referenceId, userId, otuId: second, indexId });
+		await seedChange(db, { referenceId, userId, otuId: first, indexId });
+		await seedChange(db, { referenceId, userId, otuId: first, indexId });
+		await seedChange(db, { referenceId, userId, otuId: second, indexId });
 
 		const result = await findIndexes(db, {
 			referenceId,
@@ -208,9 +99,9 @@ describe("findIndexes", () => {
 	});
 
 	it("reports zero counts for a build no change points at", async () => {
-		const userId = await seedUser();
-		const referenceId = await seedReference(userId);
-		await seedIndex({ referenceId, userId, version: 0 });
+		const userId = await seedNextUser();
+		const referenceId = await seedReference(db, userId);
+		await seedIndex(db, { referenceId, userId, version: 0 });
 
 		const result = await findIndexes(db, {
 			referenceId,
@@ -225,17 +116,17 @@ describe("findIndexes", () => {
 	// The top-level counts describe what the *next* build would include, not the
 	// page — a list view uses them to decide whether to offer a rebuild.
 	it("reports the reference's unbuilt totals alongside the page", async () => {
-		const userId = await seedUser();
-		const referenceId = await seedReference(userId);
-		const indexId = await seedIndex({ referenceId, userId, version: 0 });
+		const userId = await seedNextUser();
+		const referenceId = await seedReference(db, userId);
+		const indexId = await seedIndex(db, { referenceId, userId, version: 0 });
 
-		const first = await seedOtu(referenceId);
-		const second = await seedOtu(referenceId);
-		await seedOtu(referenceId);
+		const first = await seedOtu(db, referenceId);
+		const second = await seedOtu(db, referenceId);
+		await seedOtu(db, referenceId);
 
-		await seedChange({ referenceId, userId, otuId: first, indexId });
-		await seedChange({ referenceId, userId, otuId: first });
-		await seedChange({ referenceId, userId, otuId: second });
+		await seedChange(db, { referenceId, userId, otuId: first, indexId });
+		await seedChange(db, { referenceId, userId, otuId: first });
+		await seedChange(db, { referenceId, userId, otuId: second });
 
 		const result = await findIndexes(db, {
 			referenceId,
@@ -249,15 +140,15 @@ describe("findIndexes", () => {
 	});
 
 	it("filters an unscoped page by its reference's archived state", async () => {
-		const userId = await seedUser();
-		const active = await seedReference(userId);
-		const archived = await seedReference(userId, {
+		const userId = await seedNextUser();
+		const active = await seedReference(db, userId);
+		const archived = await seedReference(db, userId, {
 			archived: true,
 			name: "Archived",
 		});
 
-		await seedIndex({ referenceId: active, userId, version: 0 });
-		await seedIndex({ referenceId: archived, userId, version: 0 });
+		await seedIndex(db, { referenceId: active, userId, version: 0 });
+		await seedIndex(db, { referenceId: archived, userId, version: 0 });
 
 		const result = await findIndexes(db, {
 			page: 1,
@@ -274,22 +165,22 @@ describe("findIndexes", () => {
 
 describe("listReadyIndexes", () => {
 	it("returns only finished builds, oldest first", async () => {
-		const userId = await seedUser();
-		const referenceId = await seedReference(userId);
+		const userId = await seedNextUser();
+		const referenceId = await seedReference(db, userId);
 
-		await seedIndex({
+		await seedIndex(db, {
 			referenceId,
 			userId,
 			version: 0,
 			createdAt: new Date("2024-01-02"),
 		});
-		await seedIndex({
+		await seedIndex(db, {
 			referenceId,
 			userId,
 			version: 1,
 			createdAt: new Date("2024-01-01"),
 		});
-		await seedIndex({ referenceId, userId, version: 2, ready: false });
+		await seedIndex(db, { referenceId, userId, version: 2, ready: false });
 
 		const result = await listReadyIndexes(db);
 
@@ -297,15 +188,15 @@ describe("listReadyIndexes", () => {
 	});
 
 	it("filters by the reference's archived state", async () => {
-		const userId = await seedUser();
-		const active = await seedReference(userId);
-		const archived = await seedReference(userId, {
+		const userId = await seedNextUser();
+		const active = await seedReference(db, userId);
+		const archived = await seedReference(db, userId, {
 			archived: true,
 			name: "Archived",
 		});
 
-		await seedIndex({ referenceId: active, userId, version: 0 });
-		await seedIndex({ referenceId: archived, userId, version: 0 });
+		await seedIndex(db, { referenceId: active, userId, version: 0 });
+		await seedIndex(db, { referenceId: archived, userId, version: 0 });
 
 		const result = await listReadyIndexes(db, false);
 
@@ -320,27 +211,27 @@ describe("getIndex", () => {
 	});
 
 	it("returns the contributors, OTUs, files, and manifest", async () => {
-		const userId = await seedUser();
-		const otherId = await seedUser();
-		const referenceId = await seedReference(userId);
-		const indexId = await seedIndex({ referenceId, userId, version: 0 });
+		const userId = await seedNextUser();
+		const otherId = await seedNextUser();
+		const referenceId = await seedReference(db, userId);
+		const indexId = await seedIndex(db, { referenceId, userId, version: 0 });
 
 		await db
 			.update(indexes)
 			.set({ manifest: { abc: 3 } })
 			.where(eq(indexes.id, indexId));
 
-		const zebra = await seedOtu(referenceId);
-		const alpha = await seedOtu(referenceId);
+		const zebra = await seedOtu(db, referenceId);
+		const alpha = await seedOtu(db, referenceId);
 
-		await seedChange({
+		await seedChange(db, {
 			referenceId,
 			userId,
 			otuId: zebra,
 			otuName: "Zebra virus",
 			indexId,
 		});
-		await seedChange({
+		await seedChange(db, {
 			referenceId,
 			userId: otherId,
 			otuId: zebra,
@@ -348,7 +239,7 @@ describe("getIndex", () => {
 			otuVersion: "2",
 			indexId,
 		});
-		await seedChange({
+		await seedChange(db, {
 			referenceId,
 			userId,
 			otuId: alpha,
@@ -397,11 +288,11 @@ describe("createIndex", () => {
 		referenceId: number;
 		otuId: string;
 	}> {
-		const userId = await seedUser();
-		const referenceId = await seedReference(userId);
-		const otuId = await seedOtu(referenceId, { version: 4 });
+		const userId = await seedNextUser();
+		const referenceId = await seedReference(db, userId);
+		const otuId = await seedOtu(db, referenceId, { version: 4 });
 
-		await seedChange({ referenceId, userId, otuId });
+		await seedChange(db, { referenceId, userId, otuId });
 
 		return { userId, referenceId, otuId };
 	}
@@ -420,7 +311,7 @@ describe("createIndex", () => {
 
 	it("stamps every unbuilt change with the new build", async () => {
 		const { userId, referenceId, otuId } = await seedBuildable();
-		await seedChange({ referenceId, userId, otuId });
+		await seedChange(db, { referenceId, userId, otuId });
 
 		const index = await createIndex(db, referenceId, userId);
 
@@ -466,7 +357,7 @@ describe("createIndex", () => {
 	// another finished picks up where it left off.
 	it("numbers a build one above the highest existing version", async () => {
 		const { userId, referenceId } = await seedBuildable();
-		await seedIndex({ referenceId, userId, version: 7 });
+		await seedIndex(db, { referenceId, userId, version: 7 });
 
 		const index = await createIndex(db, referenceId, userId);
 
@@ -475,7 +366,7 @@ describe("createIndex", () => {
 
 	it("refuses when a build is already in progress", async () => {
 		const { userId, referenceId } = await seedBuildable();
-		await seedIndex({ referenceId, userId, version: 0, ready: false });
+		await seedIndex(db, { referenceId, userId, version: 0, ready: false });
 
 		await expect(createIndex(db, referenceId, userId)).rejects.toBeInstanceOf(
 			IndexBuildInProgressError,
@@ -484,7 +375,7 @@ describe("createIndex", () => {
 
 	it("refuses when the reference has unverified OTUs", async () => {
 		const { userId, referenceId } = await seedBuildable();
-		await seedOtu(referenceId, { verified: false });
+		await seedOtu(db, referenceId, { verified: false });
 
 		await expect(createIndex(db, referenceId, userId)).rejects.toBeInstanceOf(
 			UnverifiedOtusError,
@@ -492,9 +383,9 @@ describe("createIndex", () => {
 	});
 
 	it("refuses when there is nothing to build", async () => {
-		const userId = await seedUser();
-		const referenceId = await seedReference(userId);
-		await seedOtu(referenceId);
+		const userId = await seedNextUser();
+		const referenceId = await seedReference(db, userId);
+		await seedOtu(db, referenceId);
 
 		await expect(createIndex(db, referenceId, userId)).rejects.toBeInstanceOf(
 			NoUnbuiltChangesError,

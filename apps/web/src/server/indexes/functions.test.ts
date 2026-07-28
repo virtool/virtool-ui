@@ -8,7 +8,6 @@ import {
 	vi,
 } from "vitest";
 import type { Db } from "../db/pg";
-import { takeFirstOrThrow } from "../db/rows";
 import { legacyHistory } from "../db/schema/history";
 import { indexes, indexFiles } from "../db/schema/indexes";
 import { legacyOtus } from "../db/schema/otus";
@@ -21,6 +20,7 @@ import { tasks } from "../db/schema/tasks";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
 import { callServerFn, type SplitServerFnModule } from "../test/serverFn";
+import { seedChange, seedIndex, seedOtu, seedReference } from "./test/fixtures";
 
 const getRequest = vi.fn();
 const setResponseStatus = vi.fn();
@@ -108,69 +108,29 @@ async function signIn(): Promise<number> {
 	return userId;
 }
 
-async function seedReference(
+// A reference the caller may build: one verified OTU and one unbuilt change,
+// which is the minimum `createIndex` accepts.
+async function seedBuildableReference(
 	userId: number,
 	{ archived = false, build = true } = {},
 ): Promise<number> {
-	const referenceId = takeFirstOrThrow(
-		await db
-			.insert(legacyReferences)
-			.values({
-				name: "Reference",
-				description: "",
-				organism: "virus",
-				created_at: new Date(),
-				archived,
-				restrict_source_types: false,
-				source_types: [],
-				user_id: userId,
-			})
-			.returning({ id: legacyReferences.id }),
-	).id;
+	const referenceId = await seedReference(db, userId, {
+		archived,
+		member: { build },
+	});
 
-	await db.insert(legacyReferenceUsers).values({
-		reference_id: referenceId,
-		user_id: userId,
-		build,
-		modify: false,
-		modify_otu: false,
+	const otuId = await seedOtu(db, referenceId, { name: "Test virus" });
+
+	await seedChange(db, {
+		referenceId,
+		userId,
+		otuId,
+		otuName: "Test virus",
+		description: "Created Test virus",
+		methodName: "create",
 	});
 
 	return referenceId;
-}
-
-let changeCounter = 0;
-
-async function seedBuildable(
-	userId: number,
-	referenceId: number,
-): Promise<string> {
-	changeCounter += 1;
-	const otuId = `otu${changeCounter}`;
-
-	await db.insert(legacyOtus).values({
-		id: otuId,
-		data: {},
-		name: "Test virus",
-		abbreviation: "",
-		reference_id: referenceId,
-		verified: true,
-		version: 1,
-	});
-
-	await db.insert(legacyHistory).values({
-		legacy_id: `${otuId}.1`,
-		created_at: new Date(),
-		description: "Created Test virus",
-		method_name: "create",
-		user_id: userId,
-		otu: otuId,
-		otu_name: "Test virus",
-		otu_version: "1",
-		reference_id: referenceId,
-	});
-
-	return otuId;
 }
 
 function call(name: string, data?: unknown) {
@@ -198,8 +158,7 @@ describe("authorization", () => {
 
 	it("refuses a build without the reference's build right", async () => {
 		const userId = await signIn();
-		const referenceId = await seedReference(userId, { build: false });
-		await seedBuildable(userId, referenceId);
+		const referenceId = await seedBuildableReference(userId, { build: false });
 
 		await expect(call("createIndexFn", { referenceId })).rejects.toBeInstanceOf(
 			ForbiddenError,
@@ -221,35 +180,20 @@ describe("getIndexFn", () => {
 describe("findUnbuiltChangesFn", () => {
 	it("returns only the changes no build covers yet", async () => {
 		const userId = await signIn();
-		const referenceId = await seedReference(userId);
-		await seedBuildable(userId, referenceId);
+		const referenceId = await seedBuildableReference(userId);
 
-		const built = takeFirstOrThrow(
-			await db
-				.insert(indexes)
-				.values({
-					created_at: new Date(),
-					manifest: {},
-					ready: true,
-					reference_id: referenceId,
-					storage_key: "already-built",
-					user_id: userId,
-					version: 0,
-				})
-				.returning({ id: indexes.id }),
-		).id;
+		const built = await seedIndex(db, { referenceId, userId, version: 0 });
+		const builtOtuId = await seedOtu(db, referenceId, {
+			name: "Built virus",
+		});
 
-		await db.insert(legacyHistory).values({
-			legacy_id: "otuBuilt.1",
-			created_at: new Date(),
+		await seedChange(db, {
+			referenceId,
+			userId,
+			otuId: builtOtuId,
+			otuName: "Built virus",
 			description: "Already built",
-			method_name: "edit",
-			user_id: userId,
-			otu: "otuBuilt",
-			otu_name: "Built virus",
-			otu_version: "1",
-			reference_id: referenceId,
-			index_id: built,
+			indexId: built,
 		});
 
 		const result = (await call("findUnbuiltChangesFn", {
@@ -275,8 +219,7 @@ describe("findUnbuiltChangesFn", () => {
 describe("createIndexFn", () => {
 	it("builds the index and announces it", async () => {
 		const userId = await signIn();
-		const referenceId = await seedReference(userId);
-		await seedBuildable(userId, referenceId);
+		const referenceId = await seedBuildableReference(userId);
 
 		const index = (await call("createIndexFn", { referenceId })) as {
 			id: number;
@@ -294,8 +237,9 @@ describe("createIndexFn", () => {
 
 	it("answers 409 for an archived reference", async () => {
 		const userId = await signIn();
-		const referenceId = await seedReference(userId, { archived: true });
-		await seedBuildable(userId, referenceId);
+		const referenceId = await seedBuildableReference(userId, {
+			archived: true,
+		});
 
 		await expect(call("createIndexFn", { referenceId })).rejects.toThrow(
 			"Reference is archived",
@@ -305,18 +249,9 @@ describe("createIndexFn", () => {
 
 	it("answers 409 when a build is already in progress", async () => {
 		const userId = await signIn();
-		const referenceId = await seedReference(userId);
-		await seedBuildable(userId, referenceId);
+		const referenceId = await seedBuildableReference(userId);
 
-		await db.insert(indexes).values({
-			created_at: new Date(),
-			manifest: {},
-			ready: false,
-			reference_id: referenceId,
-			storage_key: "in-progress",
-			user_id: userId,
-			version: 0,
-		});
+		await seedIndex(db, { referenceId, userId, version: 0, ready: false });
 
 		await expect(call("createIndexFn", { referenceId })).rejects.toThrow(
 			"Index build already in progress",
@@ -328,17 +263,11 @@ describe("createIndexFn", () => {
 	// and the rebuild dialog matches on the unverified message to explain it.
 	it("answers 400 for unverified OTUs", async () => {
 		const userId = await signIn();
-		const referenceId = await seedReference(userId);
-		await seedBuildable(userId, referenceId);
+		const referenceId = await seedBuildableReference(userId);
 
-		await db.insert(legacyOtus).values({
-			id: "unverified",
-			data: {},
+		await seedOtu(db, referenceId, {
 			name: "Unverified virus",
-			abbreviation: "",
-			reference_id: referenceId,
 			verified: false,
-			version: 1,
 		});
 
 		await expect(call("createIndexFn", { referenceId })).rejects.toThrow(
@@ -349,7 +278,9 @@ describe("createIndexFn", () => {
 
 	it("answers 400 when there is nothing to build", async () => {
 		const userId = await signIn();
-		const referenceId = await seedReference(userId);
+		const referenceId = await seedReference(db, userId, {
+			member: { build: true },
+		});
 
 		await expect(call("createIndexFn", { referenceId })).rejects.toThrow(
 			"There are no unbuilt changes",
