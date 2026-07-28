@@ -15,12 +15,12 @@ import {
 } from "../references/data";
 import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 import {
-	createIndex as createIndexImpl,
-	findIndexes as findIndexesImpl,
-	getIndex as getIndexImpl,
+	createIndex,
+	findIndexes,
+	getIndex,
 	IndexBuildInProgressError,
 	IndexNotFoundError,
-	listReadyIndexes as listReadyIndexesImpl,
+	listReadyIndexes,
 	NoUnbuiltChangesError,
 	UnverifiedOtusError,
 } from "./data";
@@ -90,7 +90,7 @@ export const findIndexesFn = createServerFn({ method: "GET" })
 	.middleware([authenticated()])
 	.validator(findIndexesSchema)
 	.handler(async ({ data }) =>
-		findIndexesImpl(db, {
+		findIndexes(db, {
 			referenceId: data.referenceId,
 			page: data.page,
 			perPage: data.per_page,
@@ -100,14 +100,14 @@ export const findIndexesFn = createServerFn({ method: "GET" })
 export const listReadyIndexesFn = createServerFn({ method: "GET" })
 	.middleware([authenticated()])
 	.validator(listReadyIndexesSchema)
-	.handler(async ({ data }) => listReadyIndexesImpl(db, data.archived));
+	.handler(async ({ data }) => listReadyIndexes(db, data.archived));
 
 export const getIndexFn = createServerFn({ method: "GET" })
 	.middleware([authenticated()])
 	.validator(indexIdSchema)
 	.handler(async ({ data }) => {
 		try {
-			return await getIndexImpl(db, data.indexId);
+			return await getIndex(db, data.indexId);
 		} catch (err) {
 			return rethrowAsHttp(err);
 		}
@@ -127,7 +127,7 @@ export const createIndexFn = createServerFn({ method: "POST" })
 		try {
 			await authorizeBuild(data.referenceId, context.session.userId);
 
-			const index = await createIndexImpl(
+			const index = await createIndex(
 				db,
 				data.referenceId,
 				context.session.userId,
