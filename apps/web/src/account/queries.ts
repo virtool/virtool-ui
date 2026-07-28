@@ -16,7 +16,6 @@ import {
 	updateAccountHandleFn,
 } from "@server/users/functions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { ErrorResponse } from "@/types/api";
 
 /**
  * Initializes a mutator for updating the current account's email address
@@ -155,7 +154,7 @@ export function useRemoveApiKey() {
  * @returns A mutator for logging out a user
  */
 export function useLogout() {
-	return useMutation<null, ErrorResponse>({
+	return useMutation<null, Error>({
 		mutationFn: () => logoutFn(),
 		onSuccess: () => {
 			Sentry.setUser(null);

@@ -1,14 +1,3 @@
-export type ErrorResponse = {
-	response: {
-		status: number;
-		notFound: boolean;
-		statusText: string;
-		badRequest: boolean;
-		statusCode: number;
-		body: { message?: string; [key: string]: unknown };
-	};
-};
-
 export type SearchResult = {
 	/** The number of items found */
 	found_count: number;

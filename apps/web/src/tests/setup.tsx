@@ -198,9 +198,10 @@ beforeEach(() => {
 
 process.env.TZ = "UTC";
 
-// Fail loudly when a request escapes its nock mock instead of falling through to
-// the real network, where it would pass or hang silently. Every superagent call
-// in a component test must have a matching interceptor.
+// Fail loudly when an HTTP request escapes instead of falling through to the
+// real network, where it would pass or hang silently. The SPA reaches the server
+// through mocked server functions, so any request that gets this far is a test
+// that under-mocked — unless it declares a nock interceptor of its own.
 nock.disableNetConnect();
 
 faker.seed(1);

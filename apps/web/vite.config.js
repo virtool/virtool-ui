@@ -151,7 +151,6 @@ export default defineConfig(({ command, mode }) => ({
 			"radix-ui",
 			"react-dropzone",
 			"react-hook-form",
-			"superagent",
 			"tailwind-merge",
 			"zod",
 			"zod/v4",

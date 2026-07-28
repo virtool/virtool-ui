@@ -14,7 +14,6 @@ import {
 	useQueryClient,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { ErrorResponse } from "@/types/api";
 import type {
 	Subtraction,
 	SubtractionOption,
@@ -31,7 +30,7 @@ export function useCreateSubtraction() {
 
 	return useMutation<
 		Subtraction,
-		ErrorResponse,
+		Error,
 		{ name: string; nickname: string; uploadId: number }
 	>({
 		mutationFn: ({ name, nickname, uploadId }) =>
@@ -58,7 +57,7 @@ export function subtractionsQueryOptions(
 	per_page: number,
 	term: string,
 ) {
-	return queryOptions<SubtractionSearchResult, ErrorResponse>({
+	return queryOptions<SubtractionSearchResult, Error>({
 		queryKey: subtractionQueryKeys.list([page, per_page, term]),
 		queryFn: () =>
 			findSubtractionsFn({
@@ -91,7 +90,7 @@ export function useSuspenseSubtractions(
  * @returns A single subtraction
  */
 export function useFetchSubtraction(subtractionId: number) {
-	return useQuery<Subtraction, ErrorResponse>({
+	return useQuery<Subtraction, Error>({
 		queryKey: subtractionQueryKeys.detail(subtractionId),
 		queryFn: () =>
 			getSubtractionFn({
@@ -108,11 +107,7 @@ export function useFetchSubtraction(subtractionId: number) {
  */
 export function useUpdateSubtraction(subtractionId: number) {
 	const queryClient = useQueryClient();
-	return useMutation<
-		Subtraction,
-		ErrorResponse,
-		{ name: string; nickname: string }
-	>({
+	return useMutation<Subtraction, Error, { name: string; nickname: string }>({
 		mutationFn: ({ name, nickname }) =>
 			updateSubtractionFn({
 				data: { subtractionId, name, nickname },
@@ -131,7 +126,7 @@ export function useUpdateSubtraction(subtractionId: number) {
  * @returns A mutator for deleting a subtraction
  */
 export function useDeleteSubtraction() {
-	return useMutation<null, ErrorResponse, { subtractionId: number }>({
+	return useMutation<null, Error, { subtractionId: number }>({
 		mutationFn: ({ subtractionId }) =>
 			deleteSubtractionFn({
 				data: { subtractionId },

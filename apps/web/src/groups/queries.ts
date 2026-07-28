@@ -14,7 +14,6 @@ import {
 	useQuery,
 	useQueryClient,
 } from "@tanstack/react-query";
-import type { ErrorResponse } from "@/types/api";
 import type {
 	Group,
 	GroupMinimal,
@@ -84,7 +83,7 @@ export function useUpdateGroup() {
 	const queryClient = useQueryClient();
 	return useMutation<
 		Group,
-		ErrorResponse,
+		Error,
 		{
 			id: string | number;
 			name?: string;
@@ -109,7 +108,7 @@ export function useUpdateGroup() {
  */
 export function useRemoveGroup() {
 	const queryClient = useQueryClient();
-	return useMutation<null, ErrorResponse, { id: string | number }>({
+	return useMutation<null, Error, { id: string | number }>({
 		mutationFn: ({ id }) =>
 			deleteGroupFn({ data: { groupId: Number(id) } }) as Promise<null>,
 		onSuccess: () => {

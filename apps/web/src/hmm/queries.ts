@@ -7,7 +7,6 @@ import {
 	useQueryClient,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { ErrorResponse } from "@/types/api";
 import type { HmmSearchResults } from "./types";
 
 /**
@@ -22,7 +21,7 @@ export function hmmsQueryOptions(
 	per_page: number,
 	term?: string,
 ) {
-	return queryOptions<HmmSearchResults, ErrorResponse>({
+	return queryOptions<HmmSearchResults, Error>({
 		queryKey: hmmQueryKeys.list([page, per_page, term]),
 		queryFn: () =>
 			findHmmsFn({ data: { page, perPage: per_page, term: term ?? "" } }).then(

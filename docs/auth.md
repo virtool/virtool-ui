@@ -491,11 +491,9 @@ forced logout converges on `endSession` (`app/session.ts`),
 which clears
 `sessionStorage` and loads `/login?reason=session-ended&redirect=…`. The
 full document load is what drops everything held in memory, and the
-`reason` puts a "Your session ended" message on the wall. Three things
+`reason` puts a "Your session ended" message on the wall. Two things
 can call it:
 
-- **`app/api.ts`** — a SuperAgent plugin that ends the session on any
-  401 from the Python API.
 - **`router.tsx`** — the query and mutation cache `onError`, matching
   `UnauthorizedError` by name. Server-function errors reach the client
   with no status (`setResponseStatus` is not attached to the thrown
