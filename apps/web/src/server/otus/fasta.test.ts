@@ -154,10 +154,35 @@ describe("handleOtuFasta", () => {
 
 		// Every space is replaced, not just the first.
 		expect(response.headers.get("content-disposition")).toBe(
-			"attachment; filename=squash_browning_spot_virus.fa",
+			'attachment; filename="squash_browning_spot_virus.fa"',
 		);
 		expect(response.headers.get("content-type")).toBe(
 			"text/plain; charset=utf-8",
+		);
+	});
+
+	it("escapes a name that would otherwise malform the header", async () => {
+		// An OTU name is free text. A quote or semicolon makes an unquoted
+		// `filename` ambiguous, and a newline makes the `Response` constructor
+		// throw outright.
+		const name = 'Weird "virus"; \n α';
+
+		await db.insert(legacyOtus).values({
+			id: "weird",
+			data: { _id: "weird", name, isolates: [] },
+			name,
+			abbreviation: "",
+			reference_id: 1,
+			verified: true,
+			version: 0,
+		});
+
+		const response = await handleOtuFasta(signedIn(), "weird");
+
+		expect(response.status).toBe(200);
+		expect(response.headers.get("content-disposition")).toBe(
+			'attachment; filename="weird__virus______.fa"; ' +
+				"filename*=UTF-8''weird_%22virus%22%3B_%0A_%CE%B1.fa",
 		);
 	});
 
@@ -188,7 +213,7 @@ describe("handleIsolateFasta", () => {
 			">Squash browning spot virus|Strain Never|seq_b|6\nTTTTTT",
 		);
 		expect(response.headers.get("content-disposition")).toBe(
-			"attachment; filename=squash_browning_spot_virus.strain_never.fa",
+			'attachment; filename="squash_browning_spot_virus.strain_never.fa"',
 		);
 	});
 
@@ -224,7 +249,7 @@ describe("handleSequenceFasta", () => {
 			">Squash browning spot virus|Isolate Ever|seq_a0|4\nGGGG",
 		);
 		expect(response.headers.get("content-disposition")).toBe(
-			"attachment; filename=squash_browning_spot_virus.isolate_ever.seq_a0.fa",
+			'attachment; filename="squash_browning_spot_virus.isolate_ever.seq_a0.fa"',
 		);
 	});
 
