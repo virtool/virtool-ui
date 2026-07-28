@@ -301,20 +301,91 @@ async function joinLegacyOtu(
 	return (await joinLegacyOtus(tx, [otuId])).get(otuId);
 }
 
-// Take a `SELECT … FOR UPDATE` lock on the OTU's row, serializing concurrent
-// edits so no version bump is lost. Called before the first read in a write
-// transaction, so everything the edit is composed from is read under the lock.
-async function lockLegacyOtu(tx: DbOrTx, otuId: string): Promise<void> {
-	const [row] = await tx
-		.select({ id: legacyOtus.id })
+/** The parent reference of an OTU, with the policy an isolate write consults. */
+type ReferenceContext = {
+	id: number;
+	name: string;
+	restrictSourceTypes: boolean;
+	sourceTypes: string[];
+};
+
+/** An OTU joined together with its parent reference. */
+type OtuWithReference = {
+	document: OtuDocument;
+	reference: ReferenceContext;
+};
+
+// A sequence's document, in the `position` order a joined OTU must present.
+async function readSequenceDocuments(
+	tx: DbOrTx,
+	otuId: string,
+): Promise<SequenceDocument[]> {
+	const rows = await tx
+		.select({ data: legacySequences.data })
+		.from(legacySequences)
+		.where(eq(legacySequences.otu_id, otuId))
+		.orderBy(legacySequences.position);
+
+	return rows.map((row) => row.data);
+}
+
+/**
+ * Read an OTU and its parent reference together, optionally under a row lock.
+ *
+ * Two queries — the OTU with its reference, then its sequences — where the
+ * write path previously issued four against the same row: a lock, a reference
+ * lookup, the OTU half of the join, and for a sequence write a separate read of
+ * the schema. They all resolve the same `legacy_otus` row, so they collapse into
+ * one statement, and the schema and source-type policy the checks need come back
+ * with it rather than costing a query each.
+ *
+ * `lock` takes `FOR UPDATE OF legacy_otus`, which serializes concurrent edits so
+ * no version bump is lost. The lock names the OTU explicitly: an unqualified
+ * `FOR UPDATE` would also lock the joined reference row, which this is not
+ * editing and which every OTU in that reference would then contend on.
+ *
+ * Locking and reading in one statement is also stricter than the two-step it
+ * replaces — there is no longer a window between taking the lock and reading
+ * what the edit is composed from.
+ */
+async function readOtuWithReference(
+	tx: DbOrTx,
+	otuId: string,
+	lock: boolean,
+): Promise<OtuWithReference> {
+	const query = tx
+		.select({
+			data: legacyOtus.data,
+			referenceId: legacyReferences.id,
+			referenceName: legacyReferences.name,
+			restrictSourceTypes: legacyReferences.restrict_source_types,
+			sourceTypes: legacyReferences.source_types,
+		})
 		.from(legacyOtus)
+		.innerJoin(
+			legacyReferences,
+			eq(legacyOtus.reference_id, legacyReferences.id),
+		)
 		.where(eq(legacyOtus.id, otuId))
-		.for("update")
 		.limit(1);
+
+	const [row] = lock
+		? await query.for("update", { of: legacyOtus })
+		: await query;
 
 	if (row === undefined) {
 		throw new OtuNotFoundError(`OTU ${otuId} not found`);
 	}
+
+	return {
+		document: mergeOtu(row.data, await readSequenceDocuments(tx, otuId)),
+		reference: {
+			id: row.referenceId,
+			name: row.referenceName,
+			restrictSourceTypes: row.restrictSourceTypes,
+			sourceTypes: row.sourceTypes,
+		},
+	};
 }
 
 function isolatesOf(document: OtuDocument): Record<string, unknown>[] {
@@ -724,16 +795,28 @@ export async function findOtus(
 			: undefined,
 	);
 
-	const [[reference], [total], [found], rows, [modified]] = await Promise.all([
-		// A reference that does not exist is a 404 rather than an empty page, which
-		// would be indistinguishable from a reference holding no OTUs.
+	const matchesSearch = term
+		? or(
+				sql`${legacyOtus.name} ilike ${toSearchPattern(term)} escape '\\'`,
+				sql`${legacyOtus.abbreviation} ilike ${toSearchPattern(term)} escape '\\'`,
+			)
+		: sql`true`;
+
+	const [[counts], rows, [modified]] = await Promise.all([
+		// Anchored on the reference and left-joined to its OTUs, so one statement
+		// answers three questions: whether the reference exists at all (a row comes
+		// back either way, where counting OTUs alone cannot tell a missing
+		// reference from an empty one), how many OTUs it holds, and how many match
+		// the search. The two counts share the scan rather than repeating it.
 		db
-			.select({ id: legacyReferences.id })
+			.select({
+				total: count(legacyOtus.id),
+				found: sql<number>`count(${legacyOtus.id}) filter (where ${matchesSearch})`,
+			})
 			.from(legacyReferences)
+			.leftJoin(legacyOtus, eq(legacyOtus.reference_id, legacyReferences.id))
 			.where(eq(legacyReferences.id, referenceId))
-			.limit(1),
-		db.select({ value: count() }).from(legacyOtus).where(belongsToReference),
-		db.select({ value: count() }).from(legacyOtus).where(searchFilters),
+			.groupBy(legacyReferences.id),
 		db
 			.select({
 				id: legacyOtus.id,
@@ -766,11 +849,13 @@ export async function findOtus(
 			),
 	]);
 
-	if (reference === undefined) {
+	// No row at all means no such reference. A reference with no OTUs still
+	// returns one, with both counts at zero.
+	if (counts === undefined) {
 		throw new ReferenceNotFoundError("Reference does not exist");
 	}
 
-	const foundCount = found?.value ?? 0;
+	const foundCount = Number(counts.found);
 
 	const items: OtuMinimal[] = rows.map((row) => ({
 		abbreviation: row.abbreviation,
@@ -788,33 +873,8 @@ export async function findOtus(
 		page,
 		pageCount: Math.ceil(foundCount / perPage),
 		perPage,
-		totalCount: total?.value ?? 0,
+		totalCount: Number(counts.total),
 	};
-}
-
-// The parent reference of an OTU, as both the authorization check and every
-// write need it. Reads the promoted `reference_id` column rather than the
-// document's embedded `reference.id`, which a historical snapshot may hold as a
-// stale legacy string.
-async function readReference(
-	tx: DbOrTx,
-	otuId: string,
-): Promise<{ id: number; name: string }> {
-	const [row] = await tx
-		.select({ id: legacyReferences.id, name: legacyReferences.name })
-		.from(legacyOtus)
-		.innerJoin(
-			legacyReferences,
-			eq(legacyOtus.reference_id, legacyReferences.id),
-		)
-		.where(eq(legacyOtus.id, otuId))
-		.limit(1);
-
-	if (row === undefined) {
-		throw new OtuNotFoundError(`OTU ${otuId} not found`);
-	}
-
-	return row;
 }
 
 /**
@@ -876,34 +936,23 @@ export async function sequenceExists(
 
 /** A single OTU, with its isolates, their sequences, and its latest change. */
 export async function getOtu(db: DbOrTx, otuId: string): Promise<Otu> {
-	const [joined, reference, mostRecentChange] = await Promise.all([
-		joinLegacyOtu(db, otuId),
-		readReference(db, otuId),
+	const [{ document, reference }, mostRecentChange] = await Promise.all([
+		readOtuWithReference(db, otuId, false),
 		getMostRecentChange(db, otuId),
 	]);
 
-	if (joined === undefined) {
-		throw new OtuNotFoundError(`OTU ${otuId} not found`);
-	}
-
-	return formatOtu(joined, reference, mostRecentChange);
+	return formatOtu(document, reference, mostRecentChange);
 }
 
 // Read an OTU inside a write transaction and format it for the response, after
 // the mutation has committed its rows to the transaction.
 async function getOtuInTransaction(tx: DbOrTx, otuId: string): Promise<Otu> {
-	const joined = await joinLegacyOtu(tx, otuId);
+	// Sequential rather than concurrent: a transaction is one connection, and
+	// issuing overlapping statements on it relies on driver pipelining rather
+	// than on anything this code controls.
+	const { document, reference } = await readOtuWithReference(tx, otuId, false);
 
-	if (joined === undefined) {
-		throw new OtuNotFoundError(`OTU ${otuId} not found`);
-	}
-
-	const [reference, mostRecentChange] = await Promise.all([
-		readReference(tx, otuId),
-		getMostRecentChange(tx, otuId),
-	]);
-
-	return formatOtu(joined, reference, mostRecentChange);
+	return formatOtu(document, reference, await getMostRecentChange(tx, otuId));
 }
 
 // The name is matched on `lower(name)` rather than the denormalised `lower_name`
@@ -954,24 +1003,16 @@ async function checkNameAndAbbreviation(
 }
 
 // A segment is only checked when one is named; clearing it is always allowed.
-async function checkSequenceSegment(
-	tx: DbOrTx,
-	otuId: string,
+// The schema comes off the OTU the caller has already read under its lock.
+function checkSequenceSegment(
+	document: OtuDocument,
 	segment: string | null | undefined,
-): Promise<void> {
+): void {
 	if (!segment) {
 		return;
 	}
 
-	const [row] = await tx
-		.select({ data: legacyOtus.data })
-		.from(legacyOtus)
-		.where(eq(legacyOtus.id, otuId))
-		.limit(1);
-
-	const schema = row === undefined ? [] : formatSchema(row.data);
-
-	if (!schema.some((declared) => declared.name === segment)) {
+	if (!formatSchema(document).some((declared) => declared.name === segment)) {
 		throw new SegmentNotDefinedError(
 			`Segment ${segment} is not defined for the parent OTU`,
 		);
@@ -979,30 +1020,21 @@ async function checkSequenceSegment(
 }
 
 // A reference that restricts its source types permits only those it lists. The
-// `unknown` type and the empty string are always allowed.
-async function checkSourceType(
-	tx: DbOrTx,
-	referenceId: number,
+// `unknown` type and the empty string are always allowed. The policy arrives
+// with the OTU's locked read rather than costing a query of its own.
+function checkSourceType(
+	reference: ReferenceContext,
 	sourceType: string,
-): Promise<void> {
+): void {
 	if (sourceType === "unknown" || sourceType === "") {
 		return;
 	}
 
-	const [row] = await tx
-		.select({
-			restrictSourceTypes: legacyReferences.restrict_source_types,
-			sourceTypes: legacyReferences.source_types,
-		})
-		.from(legacyReferences)
-		.where(eq(legacyReferences.id, referenceId))
-		.limit(1);
-
-	if (row === undefined || !row.restrictSourceTypes) {
+	if (!reference.restrictSourceTypes) {
 		return;
 	}
 
-	if (!row.sourceTypes.includes(sourceType)) {
+	if (!reference.sourceTypes.includes(sourceType)) {
 		throw new SourceTypeNotAllowedError("Source type is not allowed");
 	}
 }
@@ -1077,13 +1109,11 @@ export async function updateOtu(
 	userId: number,
 ): Promise<Otu> {
 	return db.transaction(async (tx) => {
-		await lockLegacyOtu(tx, otuId);
-
-		const old = await joinLegacyOtu(tx, otuId);
-
-		if (old === undefined) {
-			throw new OtuNotFoundError(`OTU ${otuId} not found`);
-		}
+		const { document: old, reference } = await readOtuWithReference(
+			tx,
+			otuId,
+			true,
+		);
 
 		const oldDocument = splitOtu(old);
 		const oldAbbreviation = String(oldDocument.abbreviation ?? "");
@@ -1116,7 +1146,7 @@ export async function updateOtu(
 			return getOtuInTransaction(tx, otuId);
 		}
 
-		const referenceId = (await readReference(tx, otuId)).id;
+		const referenceId = reference.id;
 
 		// Only the changed values are checked, so an OTU keeping its own name never
 		// collides with itself.
@@ -1183,15 +1213,13 @@ export async function deleteOtu(
 	userId: number,
 ): Promise<void> {
 	await db.transaction(async (tx) => {
-		await lockLegacyOtu(tx, otuId);
+		const { document: joined, reference } = await readOtuWithReference(
+			tx,
+			otuId,
+			true,
+		);
 
-		const joined = await joinLegacyOtu(tx, otuId);
-
-		if (joined === undefined) {
-			throw new OtuNotFoundError(`OTU ${otuId} not found`);
-		}
-
-		const referenceId = (await readReference(tx, otuId)).id;
+		const referenceId = reference.id;
 
 		await tx.delete(legacyOtus).where(eq(legacyOtus.id, otuId));
 
@@ -1221,17 +1249,15 @@ export async function addIsolate(
 	const sourceType = values.sourceType.toLowerCase();
 
 	return db.transaction(async (tx) => {
-		const referenceId = (await readReference(tx, otuId)).id;
+		const { document: old, reference } = await readOtuWithReference(
+			tx,
+			otuId,
+			true,
+		);
 
-		await checkSourceType(tx, referenceId, sourceType);
+		const referenceId = reference.id;
 
-		await lockLegacyOtu(tx, otuId);
-
-		const old = await joinLegacyOtu(tx, otuId);
-
-		if (old === undefined) {
-			throw new OtuNotFoundError(`OTU ${otuId} not found`);
-		}
+		checkSourceType(reference, sourceType);
 
 		const oldDocument = splitOtu(old);
 		const existing = isolatesOf(oldDocument);
@@ -1299,18 +1325,16 @@ export async function updateIsolate(
 	const sourceType = values.sourceType?.toLowerCase();
 
 	return db.transaction(async (tx) => {
-		const referenceId = (await readReference(tx, otuId)).id;
+		const { document: old, reference } = await readOtuWithReference(
+			tx,
+			otuId,
+			true,
+		);
+
+		const referenceId = reference.id;
 
 		if (sourceType !== undefined) {
-			await checkSourceType(tx, referenceId, sourceType);
-		}
-
-		await lockLegacyOtu(tx, otuId);
-
-		const old = await joinLegacyOtu(tx, otuId);
-
-		if (old === undefined) {
-			throw new OtuNotFoundError(`OTU ${otuId} not found`);
+			checkSourceType(reference, sourceType);
 		}
 
 		const oldDocument = splitOtu(old);
@@ -1370,13 +1394,11 @@ export async function setIsolateAsDefault(
 	userId: number,
 ): Promise<OtuIsolate> {
 	return db.transaction(async (tx) => {
-		await lockLegacyOtu(tx, otuId);
-
-		const old = await joinLegacyOtu(tx, otuId);
-
-		if (old === undefined) {
-			throw new OtuNotFoundError(`OTU ${otuId} not found`);
-		}
+		const { document: old, reference } = await readOtuWithReference(
+			tx,
+			otuId,
+			true,
+		);
 
 		const oldDocument = splitOtu(old);
 		const target = findIsolate(oldDocument, isolateId);
@@ -1385,7 +1407,7 @@ export async function setIsolateAsDefault(
 			return formatIsolate(findIsolate(old, isolateId));
 		}
 
-		const referenceId = (await readReference(tx, otuId)).id;
+		const referenceId = reference.id;
 
 		const newDocument: OtuDocument = {
 			...oldDocument,
@@ -1433,17 +1455,15 @@ export async function deleteIsolate(
 	userId: number,
 ): Promise<void> {
 	await db.transaction(async (tx) => {
-		await lockLegacyOtu(tx, otuId);
-
-		const old = await joinLegacyOtu(tx, otuId);
-
-		if (old === undefined) {
-			throw new OtuNotFoundError(`OTU ${otuId} not found`);
-		}
+		const { document: old, reference } = await readOtuWithReference(
+			tx,
+			otuId,
+			true,
+		);
 
 		const oldDocument = splitOtu(old);
 		const target = findIsolate(oldDocument, isolateId);
-		const referenceId = (await readReference(tx, otuId)).id;
+		const referenceId = reference.id;
 
 		const remaining = isolatesOf(oldDocument).filter(
 			(candidate) => candidate.id !== isolateId,
@@ -1503,17 +1523,15 @@ export async function createSequence(
 	userId: number,
 ): Promise<OtuSequence> {
 	return db.transaction(async (tx) => {
-		await checkSequenceSegment(tx, otuId, values.segment);
+		const { document: old, reference } = await readOtuWithReference(
+			tx,
+			otuId,
+			true,
+		);
 
-		const referenceId = (await readReference(tx, otuId)).id;
+		const referenceId = reference.id;
 
-		await lockLegacyOtu(tx, otuId);
-
-		const old = await joinLegacyOtu(tx, otuId);
-
-		if (old === undefined) {
-			throw new OtuNotFoundError(`OTU ${otuId} not found`);
-		}
+		checkSequenceSegment(old, values.segment);
 
 		const isolate = findIsolate(old, isolateId);
 
@@ -1565,17 +1583,15 @@ export async function updateSequence(
 	userId: number,
 ): Promise<OtuSequence> {
 	return db.transaction(async (tx) => {
-		await checkSequenceSegment(tx, otuId, values.segment);
+		const { document: old, reference } = await readOtuWithReference(
+			tx,
+			otuId,
+			true,
+		);
 
-		const referenceId = (await readReference(tx, otuId)).id;
+		const referenceId = reference.id;
 
-		await lockLegacyOtu(tx, otuId);
-
-		const old = await joinLegacyOtu(tx, otuId);
-
-		if (old === undefined) {
-			throw new OtuNotFoundError(`OTU ${otuId} not found`);
-		}
+		checkSequenceSegment(old, values.segment);
 
 		const isolate = findIsolate(old, isolateId);
 
@@ -1642,15 +1658,13 @@ export async function deleteSequence(
 	userId: number,
 ): Promise<void> {
 	await db.transaction(async (tx) => {
-		const referenceId = (await readReference(tx, otuId)).id;
+		const { document: old, reference } = await readOtuWithReference(
+			tx,
+			otuId,
+			true,
+		);
 
-		await lockLegacyOtu(tx, otuId);
-
-		const old = await joinLegacyOtu(tx, otuId);
-
-		if (old === undefined) {
-			throw new OtuNotFoundError(`OTU ${otuId} not found`);
-		}
+		const referenceId = reference.id;
 
 		const isolate = findIsolate(old, isolateId);
 
