@@ -90,7 +90,7 @@ function getMethodIcon(methodName: string) {
 }
 
 type ChangeProps = {
-	createdAt: string | Date;
+	createdAt: Date;
 	description: string;
 	methodName: string;
 	otu: HistoryOtuNested;
