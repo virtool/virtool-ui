@@ -15,12 +15,9 @@ import { requireAuthenticatedRequest } from "../auth/middleware";
 import type { DbOrTx } from "../db/pg";
 import { db } from "../db/pg";
 import { legacyOtus, legacySequences } from "../db/schema/otus";
+import { textResponse } from "../http";
 
 const CONTENT_TYPE = "text/plain; charset=utf-8";
-
-function textResponse(message: string, status: number): Response {
-	return new Response(message, { status });
-}
 
 /**
  * One FASTA entry: a header naming the OTU, isolate, sequence and length,

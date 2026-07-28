@@ -1,5 +1,6 @@
 import { requireAuthenticatedRequest } from "../auth/middleware";
 import { db } from "../db/pg";
+import { textResponse } from "../http";
 import { hasSampleRight, resolveSampleActor } from "../samples/data";
 import {
 	AnalysisNotFoundError,
@@ -17,10 +18,6 @@ type Extension = keyof typeof CONTENT_TYPES;
 
 function isExtension(value: string): value is Extension {
 	return value in CONTENT_TYPES;
-}
-
-function textResponse(message: string, status: number): Response {
-	return new Response(message, { status });
 }
 
 /**
