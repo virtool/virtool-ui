@@ -5,9 +5,8 @@ import { createFakeFile } from "@tests/fake/files";
 import { mockFindUploads } from "@tests/server-fn/uploads";
 import { renderWithProviders } from "@tests/setup";
 import type { FileResponse, Upload } from "@uploads/types";
-import nock from "nock";
 import { useState } from "react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import ReadSelector from "../ReadSelector";
 
 function makeData(files: Upload[]): InfiniteData<FileResponse> {
@@ -66,8 +65,6 @@ async function setMode(name: "Auto-pair" | "Manual"): Promise<void> {
 }
 
 describe("<ReadSelector>", () => {
-	afterEach(() => nock.cleanAll());
-
 	it("defaults to Auto-pair mode", () => {
 		mockFindUploads([]);
 		renderWithProviders(<Harness files={[createFakeFile()]} />);

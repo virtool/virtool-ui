@@ -103,17 +103,19 @@ handler against the test database, mocking at the `data.ts` interface
 or stubbing the db handle. Don't reintroduce an HTTP mock just to keep
 a test shape familiar.
 
-The exceptions are the raw routes — uploads, downloads, SSE — which the
-browser reaches over real HTTP. Those are the only places a test has an
-HTTP boundary to mock, and they declare their own nock interceptor.
+The raw routes — uploads, downloads, SSE — are the exception: the
+browser reaches those over real HTTP, so they are the only places a
+test has an HTTP boundary at all. No test mocks one today; the
+components that call them are tested with their caller stubbed
+(`vi.mock("@uploads/uploader")`) instead.
 
 ### The harness fails loudly, so error paths are testable
 
 `setup.tsx` calls `nock.disableNetConnect()` once per test file: any
-HTTP request without a matching interceptor errors instead of falling
-through to the real network, where it would pass or hang silently.
-Since the SPA reaches the server through mocked server functions, a
-request that gets that far is a sign the test was under-mocked.
+HTTP request errors instead of falling through to the real network,
+where it would pass or hang silently. Nothing declares an interceptor,
+so this is a bare guard rather than a mocking layer — a request that
+gets that far is a sign the test was under-mocked.
 
 The test `QueryClient` (`createTestQueryClient`, used by
 `wrapWithProviders`, `renderWithProviders`, and `renderRoute`) sets

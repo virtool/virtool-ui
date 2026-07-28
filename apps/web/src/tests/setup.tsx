@@ -199,9 +199,9 @@ beforeEach(() => {
 process.env.TZ = "UTC";
 
 // Fail loudly when an HTTP request escapes instead of falling through to the
-// real network, where it would pass or hang silently. The SPA reaches the server
-// through mocked server functions, so any request that gets this far is a test
-// that under-mocked — unless it declares a nock interceptor of its own.
+// real network, where it would pass or hang silently. Nothing here declares an
+// interceptor — the SPA reaches the server through mocked server functions — so
+// this is a bare guard: any request that gets this far means a test under-mocked.
 nock.disableNetConnect();
 
 faker.seed(1);

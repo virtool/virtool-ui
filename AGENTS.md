@@ -904,9 +904,8 @@ and make commits easier to find later.
   Files under `server-fn/` mirror the mocked
   `@server/<feature>/functions` module, not the client feature —
   `getAccount` is stubbed from `server-fn/users.ts`. The SPA has no HTTP
-  client, so there is nothing to mock at an HTTP boundary except the raw
-  routes (uploads, downloads, SSE), which declare their own nock
-  interceptor in the test that needs one.
+  client, so no test mocks an HTTP boundary; nock survives only as
+  `disableNetConnect`, a bare guard with no interceptors behind it.
 - **Database tests:** `createTestDatabase()` from
   `@server/db/test/fixtures` gives a suite its own isolated Postgres
   database with the schema applied. Test files run in parallel, so

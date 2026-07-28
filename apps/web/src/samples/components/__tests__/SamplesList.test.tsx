@@ -14,9 +14,8 @@ import { mockFindSamplePages, mockFindSamples } from "@tests/server-fn/samples";
 import { mockListSubtractionsShortlist } from "@tests/server-fn/subtractions";
 import { mockGetAccount, mockListUsers } from "@tests/server-fn/users";
 import { at, renderWithRouter } from "@tests/setup";
-import nock from "nock";
 import { useState } from "react";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import SamplesList from "../SamplesList";
 
 type SamplesListSearch = {
@@ -63,8 +62,6 @@ function mockApiGetSamplePages() {
 		createFakeSampleMinimal({ name: "Page Two Sample" }),
 	] as const;
 
-	nock.cleanAll();
-
 	mockFindSamplePages(samples.map((sample) => [sample]));
 
 	mockFindHmms(createFakeHmmSearchResults());
@@ -81,8 +78,6 @@ function mockApiGetSamplePages() {
  * @returns The sample documents, in page order
  */
 function mockApiGetSampleRange(names: string[]) {
-	nock.cleanAll();
-
 	const documents = names.map((name) => createFakeSampleMinimal({ name }));
 
 	mockFindHmms(createFakeHmmSearchResults());
@@ -115,10 +110,6 @@ describe("<SamplesList />", () => {
 		mockListReadyIndexes([createFakeIndexMinimal()]);
 		mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);
 	});
-
-	// The paged sample mocks are persistent, so they have to be torn down rather
-	// than left to be overwritten by the next test's interceptors.
-	afterEach(() => nock.cleanAll());
 
 	it("should render correctly", async () => {
 		await renderWithRouter(<SamplesList />, path);
@@ -213,8 +204,8 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should show a chip for the search term", async () => {
-			// One interceptor per samples fetch: the initial empty-term render plus
-			// the single refetch the debounced toolbar commits for "Foo".
+			// One queued result per samples fetch: the initial empty-term render
+			// plus the single refetch the debounced toolbar commits for "Foo".
 			mockFindSamples(samples);
 			mockFindSamples(samples);
 			await renderWithRouter(<SamplesListHarness />, path);
@@ -425,7 +416,6 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should count the samples matching the filters, not every visible sample", async () => {
-			nock.cleanAll();
 			mockListUsers(users);
 			mockFindHmms(createFakeHmmSearchResults());
 			mockListReadyIndexes([createFakeIndexMinimal()]);
@@ -822,16 +812,12 @@ describe("<SamplesList />", () => {
 
 	describe("empty state", () => {
 		beforeEach(() => {
-			// The default samples interceptor is already registered, and it would
-			// answer the request before any empty one added here.
-			nock.cleanAll();
+			// Overrides the populated list the outer `beforeEach` queued.
 			mockFindSamples([]);
 			mockFindHmms(createFakeHmmSearchResults());
 			mockListReadyIndexes([createFakeIndexMinimal()]);
 			mockListSubtractionsShortlist([createFakeShortlistSubtraction()]);
 		});
-
-		afterEach(() => nock.cleanAll());
 
 		it("should say no samples exist when no filters are active", async () => {
 			await renderWithRouter(<SamplesListHarness />, path);

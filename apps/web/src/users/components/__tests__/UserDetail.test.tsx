@@ -16,8 +16,7 @@ import {
 import { renderWithProviders, renderWithRouter } from "@tests/setup";
 import UserDetail from "@users/components/UserDetail";
 import type { User } from "@users/types";
-import nock from "nock";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<UserDetail />", () => {
 	let groups: Group[];
@@ -37,8 +36,6 @@ describe("<UserDetail />", () => {
 		});
 		mockGetAccount(createFakeAccount({ administrator_role: "full" }));
 	});
-
-	afterEach(() => nock.cleanAll());
 
 	describe("<UserDetail />", () => {
 		it("should render correctly when administrator_role = AdministratorRoles.FULL, canModifyUser=true and 5 groups exist", async () => {
@@ -108,7 +105,6 @@ describe("<UserDetail />", () => {
 		});
 
 		it("should render correctly when user has insufficient permissions", async () => {
-			nock.cleanAll();
 			mockGetAccount(createFakeAccount({ administrator_role: "users" }));
 			const adminUser = createFakeUser({ administrator_role: "full" });
 			const getUser = mockGetUser(adminUser.id, adminUser);
