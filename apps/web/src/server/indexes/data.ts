@@ -426,16 +426,23 @@ async function getNextVersion(
  * Start an index build for a reference and return the index it inserted.
  *
  * The build itself is the Python `create_index` task's work; this mints the row
- * it claims, pins it to the OTU versions live at this moment, and stamps every
- * unbuilt change with the build that will include it.
+ * it claims, stamps every unbuilt change with the build that will include it,
+ * and pins the manifest to the OTU versions live once those changes are claimed.
  *
  * Concurrency is what most of this guards. Two builds of one reference would
  * each stamp the other's changes and collide on the `(reference_id, version)`
  * unique constraint, so the write runs under a transaction-scoped advisory lock
  * keyed on the reference — the same key Python takes, so a build started from
  * either service excludes one started from the other. The in-progress check runs
- * both before the lock (a cheap rejection that avoids the manifest read) and
- * again under it (the one that is actually race-free).
+ * both before the lock (a cheap rejection) and again under it (the one that is
+ * actually race-free).
+ *
+ * That lock excludes other builds, not OTU editors, so the manifest is read
+ * *after* the history rows are claimed rather than before. An edit landing
+ * between the two is then either unclaimed and absent from the manifest (built
+ * next time), or claimed and present. Reading the manifest first admits the one
+ * ordering that loses a change outright: claimed by this build, but at a version
+ * the manifest — and so the artifact Python writes — does not carry.
  */
 export async function createIndex(
 	db: Db,
@@ -491,17 +498,6 @@ export async function createIndex(
 		throw new NoUnbuiltChangesError("There are no unbuilt changes");
 	}
 
-	const otuRows = await db
-		.select({ id: legacyOtus.id, version: legacyOtus.version })
-		.from(legacyOtus)
-		.where(eq(legacyOtus.reference_id, referenceId));
-
-	const manifest: Record<string, number> = {};
-
-	for (const otu of otuRows) {
-		manifest[otu.id] = otu.version;
-	}
-
 	const indexId = await db.transaction(async (tx) => {
 		const lockRows = await tx.execute<{ locked: boolean }>(
 			sql`select pg_try_advisory_xact_lock(hashtext(${`index_build:${referenceId}`})) as locked`,
@@ -523,7 +519,8 @@ export async function createIndex(
 				.values({
 					version: await getNextVersion(tx, referenceId),
 					created_at: new Date(),
-					manifest,
+					// Filled in below, once this build owns its changes.
+					manifest: {},
 					ready: false,
 					// The storage prefix the build's files land under. Python mints a
 					// UUID here rather than deriving it from the id, because a migrated
@@ -546,6 +543,21 @@ export async function createIndex(
 					isNull(legacyHistory.index_id),
 				),
 			);
+
+		// The OTU versions the build is pinned to. Read after the claim above, so
+		// no change this build owns can be missing from it.
+		const otuRows = await tx
+			.select({ id: legacyOtus.id, version: legacyOtus.version })
+			.from(legacyOtus)
+			.where(eq(legacyOtus.reference_id, referenceId));
+
+		const manifest: Record<string, number> = {};
+
+		for (const otu of otuRows) {
+			manifest[otu.id] = otu.version;
+		}
+
+		await tx.update(indexes).set({ manifest }).where(eq(indexes.id, index.id));
 
 		// The task carries the index it is to build. It is stamped after the insert
 		// because the id does not exist until then, and the task has to exist first
