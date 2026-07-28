@@ -791,8 +791,13 @@ export async function checkSampleRight(
  * The storage key of one of a sample's read files, or `null` when the sample
  * has no read by that name.
  *
- * The key is composed from the reads row's own `sample` and `name` columns and
- * never the caller's filename, so a filename carrying path segments cannot
+ * The row is matched on `name`, which is what the URL carries, but the key is
+ * composed from `name_on_disk`, which is what the object was written under.
+ * `upload_reads` sets the two from the same argument, so they agree on every
+ * row today; keying on the column that means "the name on disk" is what keeps
+ * that an implementation detail rather than a load-bearing assumption.
+ *
+ * Neither comes from the caller, so a filename carrying path segments cannot
  * traverse out of the sample's prefix. `sample` is the prefix the file was
  * written under, which for a Mongo-migrated sample is its legacy id rather than
  * its integer one.
@@ -815,7 +820,10 @@ export async function getSampleReadsFileKey(
 	const storageId = sampleStorageId(sampleId, sample.legacy_id);
 
 	const [read] = await db
-		.select({ name: sampleReads.name, sample: sampleReads.sample })
+		.select({
+			nameOnDisk: sampleReads.name_on_disk,
+			sample: sampleReads.sample,
+		})
 		.from(sampleReads)
 		.where(
 			and(
@@ -832,7 +840,7 @@ export async function getSampleReadsFileKey(
 		return null;
 	}
 
-	return sampleFileKey(read.sample, read.name);
+	return sampleFileKey(read.sample, read.nameOnDisk);
 }
 
 async function checkNameInUse(

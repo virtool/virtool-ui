@@ -1,11 +1,11 @@
 import { requireAuthenticatedRequest } from "../auth/middleware";
 import { db } from "../db/pg";
-import { contentDisposition, textResponse, toStream } from "../http";
+import { streamStorageObject, textResponse } from "../http";
 import {
 	checkReferenceVisibility,
 	resolveReferenceActor,
 } from "../references/data";
-import { StorageKeyNotFoundError, storage } from "../storage";
+import { storage } from "../storage";
 import { getIndexFileKey, getIndexReferenceId } from "./data";
 
 /**
@@ -58,27 +58,10 @@ export async function handleIndexFile(
 		return textResponse("Not found", 404);
 	}
 
-	// `Content-Length` comes from the object rather than the `index_files` row:
-	// the column is nullable and records what the build task wrote, so a stale or
-	// null value would truncate the download client-side. Sizing first also
-	// settles existence before any header is committed — a row whose bytes are
-	// missing becomes a 404 rather than a 200 that dies mid-stream.
-	let size: number;
-
-	try {
-		size = await storage.size(key);
-	} catch (err) {
-		if (err instanceof StorageKeyNotFoundError) {
-			return textResponse("Not found", 404);
-		}
-		throw err;
-	}
-
-	return new Response(toStream(storage.read(key)), {
-		headers: {
-			"content-disposition": contentDisposition(filename),
-			"content-length": String(size),
-			"content-type": "application/octet-stream",
-		},
-	});
+	return streamStorageObject(
+		storage,
+		key,
+		filename,
+		"application/octet-stream",
+	);
 }

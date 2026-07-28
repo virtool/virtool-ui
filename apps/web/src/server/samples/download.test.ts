@@ -109,11 +109,15 @@ async function seedSample(
 // is the legacy id for a migrated sample and the integer id otherwise.
 async function seedRead(
 	sampleId: number,
-	{ name = "reads_1.fq.gz", sample = String(sampleId) } = {},
+	{
+		name = "reads_1.fq.gz",
+		nameOnDisk = name,
+		sample = String(sampleId),
+	}: { name?: string; nameOnDisk?: string; sample?: string } = {},
 ): Promise<void> {
 	await db.insert(sampleReads).values({
 		name,
-		name_on_disk: name,
+		name_on_disk: nameOnDisk,
 		sample,
 		sample_id: sampleId,
 		size: 5,
@@ -177,6 +181,29 @@ describe("handleSampleReads", () => {
 
 		expect(response.status).toBe(200);
 		expect(await response.text()).toBe("hello");
+	});
+
+	// `upload_reads` sets `name` and `name_on_disk` from the same argument, so
+	// the two agree on every row today. The URL still carries `name`, so the
+	// match and the key have to come from different columns for that to stay an
+	// implementation detail rather than something the route depends on.
+	it("matches on name but keys the object on name_on_disk", async () => {
+		const sampleId = await seedSample();
+		await seedRead(sampleId, { nameOnDisk: "stored_1.fq.gz" });
+		await write(`samples/${sampleId}/stored_1.fq.gz`, "hello");
+
+		const response = await handleSampleReads(
+			await request(ownerId),
+			String(sampleId),
+			"reads_1.fq.gz",
+		);
+
+		expect(response.status).toBe(200);
+		expect(await response.text()).toBe("hello");
+		// The download is still named for the public name, not the stored one.
+		expect(response.headers.get("content-disposition")).toBe(
+			'attachment; filename="reads_1.fq.gz"',
+		);
 	});
 
 	// `sample_reads.size` records what the create job wrote and is nullable, so
