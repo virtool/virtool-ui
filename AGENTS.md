@@ -168,7 +168,7 @@ module:
 - `src/server/` - TanStack Start server features (server functions,
   middleware, db, auth) — the new path for backend responsibility
   migrating into this repo
-- `src/tests/` - Test setup, fakes, REST mocks, and server-function mocks
+- `src/tests/` - Test setup, fakes, and server-function mocks
 - `src/types/` - Shared type definitions
 
 ### Path aliases
@@ -385,9 +385,6 @@ any function that might be called inside a `db.transaction(...)`.
 Drizzle's transaction handle is not assignable to `Db`, so a helper
 typed `Db` cannot be reused inside a transaction without being widened
 first.
-
-Legacy features that still call the Python API through their
-client-side `api.ts` are not subject to this layering.
 
 A `functions.ts` validator builds on the shared primitives in
 `@server/validation` — `rowIdSchema` for any row id, `pageSchema` and

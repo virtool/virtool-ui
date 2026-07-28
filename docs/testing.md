@@ -113,7 +113,7 @@ HTTP boundary to mock, and they declare their own nock interceptor.
 HTTP request without a matching interceptor errors instead of falling
 through to the real network, where it would pass or hang silently.
 Since the SPA reaches the server through mocked server functions, a
-request that gets that far is a test that under-mocked.
+request that gets that far is a sign the test was under-mocked.
 
 The test `QueryClient` (`createTestQueryClient`, used by
 `wrapWithProviders`, `renderWithProviders`, and `renderRoute`) sets
