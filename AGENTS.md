@@ -512,6 +512,16 @@ middleware runs on a route, the handler enforces the floor itself:
 check. Don't fold it back into a server function — the RPC client uses `fetch`
 and would lose progress.
 
+Reading an upload back is a separate raw route
+(`routes/uploads_.$uploadId.ts` → `@server/uploads/download`), reached from the
+uploads list with a plain `<a href>` and streamed out of storage. Its floor is
+`requireAuthenticatedRequest` alone — uploads carry no per-row rights, and
+`upload_file` gates *writing* one, not reading it back. The trailing underscore
+in the filename keeps it from nesting under `routes/uploads.ts` merely because
+the two share a URL segment; the URL is `/uploads/{uploadId}` either way. The
+`Content-Disposition` is built from the row's `name`, never the UUID-prefixed
+`name_on_disk` that keys the object.
+
 The analysis CSV/XLSX export (`routes/analyses.documents.$document.ts` →
 `@server/analyses/download`) is a raw route for the mirror-image reason: the
 client reaches it with a plain `<a href>`, so the browser has to receive a real
@@ -686,7 +696,9 @@ The basics:
   (`loginFn`, `getSampleFn`) — it's an RPC call, not a plain function,
   and the suffix marks that at every call site. The domain function it
   wraps keeps the plain name (`login`, `getSample`) and never crosses
-  the network.
+  the network. `functions.ts` imports that data function under its own
+  name — the `Fn` suffix already keeps the two apart, so don't alias it
+  to `...Impl` on the way in.
 - **Comments:** Default to none. Document *why* when non-obvious, not
   *what*.
 - **Concurrency:** Independent awaits go in `Promise.all` — don't pay
