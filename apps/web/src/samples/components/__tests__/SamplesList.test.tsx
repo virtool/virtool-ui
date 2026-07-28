@@ -56,7 +56,7 @@ function SamplesListHarness({
  *
  * @returns The sample on each page, in page order
  */
-function mockApiGetSamplePages() {
+function mockSamplePages() {
 	const samples = [
 		createFakeSampleMinimal({ name: "Page One Sample" }),
 		createFakeSampleMinimal({ name: "Page Two Sample" }),
@@ -77,7 +77,7 @@ function mockApiGetSamplePages() {
  *
  * @returns The sample documents, in page order
  */
-function mockApiGetSampleRange(names: string[]) {
+function mockSampleRange(names: string[]) {
 	const documents = names.map((name) => createFakeSampleMinimal({ name }));
 
 	mockFindHmms(createFakeHmmSearchResults());
@@ -501,7 +501,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should leave samples selected on other pages alone", async () => {
-			const [first, second] = mockApiGetSamplePages();
+			const [first, second] = mockSamplePages();
 
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
@@ -566,7 +566,7 @@ describe("<SamplesList />", () => {
 		}
 
 		async function renderRange(names: string[]) {
-			const documents = mockApiGetSampleRange(names);
+			const documents = mockSampleRange(names);
 			await renderWithRouter(<SamplesList />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
 			return documents;
@@ -645,7 +645,7 @@ describe("<SamplesList />", () => {
 		it("should fall back to a single toggle when the anchor is on another page", async () => {
 			const user = userEvent.setup();
 			const shiftSelect = withShift(user);
-			const [first, second] = mockApiGetSamplePages();
+			const [first, second] = mockSamplePages();
 
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();
@@ -738,7 +738,7 @@ describe("<SamplesList />", () => {
 		});
 
 		it("should include samples selected on an earlier page", async () => {
-			const [first, second] = mockApiGetSamplePages();
+			const [first, second] = mockSamplePages();
 
 			await renderWithRouter(<SamplesListHarness />, path);
 			expect(await screen.findByText("Samples")).toBeInTheDocument();

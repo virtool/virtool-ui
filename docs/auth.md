@@ -198,7 +198,14 @@ There are four:
   Not a fallback for "I haven't decided yet".
 - **`adminRole(role)`** — an administrator holding at least `role`.
   Roles rank `full` (strongest) through `base` (weakest), so
-  `adminRole("base")` means "any administrator".
+  `adminRole("base")` means "any administrator". The ranking is not a
+  total order: the Postgres `administratorrole` enum has five values,
+  and `virtool/users/data.py::check_administrator_role` scores them
+  `base` = 1, then `users` / `settings` / `spaces` as level-2 **peers**,
+  then `full` = 3. `spaces` is obsolete in product terms but remains a
+  valid value because Python still writes it — treat it as a level-2
+  peer, and note that dropping it from the enum needs a Python-side
+  migration first.
 - **`permission(name)`** — a user granted `name` through the union of
   their groups' permissions, or an administrator whose role covers it.
   Mirrors `checkAdminRoleOrPermissionsFromAccount` on the client; the
@@ -328,8 +335,20 @@ Defined in `server/auth/session.ts:15-17`:
 
 These mirror the Python values in `virtool/sessions/data.py` so a row
 written by either backend is indistinguishable. Don't drift them — the
-comment in `session.ts` exists because the migration depends on both
-sides minting interchangeable rows.
+comment in `session.ts` exists because both sides must mint
+interchangeable rows.
+
+### `sessions.created_at` is an invariant
+
+Python's sliding refresh extends `expires_at` once more than half the
+lifetime has elapsed, and reconstructs that lifetime from
+`expires_at - created_at`. So `created_at` is set by `defaultNow()` on
+insert and **never** by an `UPDATE`. A code path that touches it fails
+silently rather than loudly: sessions start refreshing on every request,
+or stop refreshing entirely.
+
+Reset sessions are the exception — a 10-minute absolute lifetime, no
+sliding refresh.
 
 ## Login
 

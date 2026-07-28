@@ -57,7 +57,6 @@ this file. It does if you have:
 - added or removed a top-level feature directory under `apps/web/src/`;
 - changed a command in the **Commands** table, or changed what one does;
 - added, removed, or changed a lint rule this file describes as enforced;
-- completed or abandoned a project listed under **Projects**;
 - changed the shape of an API this file tells agents to call.
 
 "I'll update the docs afterwards" is how a doc goes stale. There is no
@@ -166,8 +165,7 @@ module:
 - `src/nav/`, `src/banner/`, `src/wall/` - Navigation, banners, and the
   unauthenticated wall
 - `src/server/` - TanStack Start server features (server functions,
-  middleware, db, auth) — the new path for backend responsibility
-  migrating into this repo
+  middleware, db, auth) — every request the SPA makes is served from here
 - `src/tests/` - Test setup, fakes, and server-function mocks
 - `src/types/` - Shared type definitions
 
@@ -640,15 +638,6 @@ add a `detail(id)` invalidation back for jobs.
 
 See [docs/server-push.md](docs/server-push.md) for the wire format,
 auth on the SSE side, the job-batching queue, and the follow-up TODOs.
-
-## Projects
-
-Ongoing projects are documented in `docs/projects/`. These correspond to Linear
-projects. If your task relates to a project, check that directory for
-constraints, mappings, or decisions that apply to your work.
-
-- **Auth handoff** (login moves from Python to TanStack Start):
-  `docs/projects/auth-handoff.md`
 
 ## Linear
 
