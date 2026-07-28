@@ -34,10 +34,10 @@ export function useInfiniteFindGroups(per_page: number, term: string) {
 		queryFn: ({ pageParam }) =>
 			findGroupsFn({
 				data: { term, page: pageParam as number, per_page },
-			}) as Promise<GroupSearchResults>,
+			}),
 		initialPageParam: 1,
 		getNextPageParam: (lastPage) => {
-			if (lastPage.page >= lastPage.page_count) {
+			if (lastPage.page >= lastPage.pageCount) {
 				return undefined;
 			}
 			return (lastPage.page || 1) + 1;
