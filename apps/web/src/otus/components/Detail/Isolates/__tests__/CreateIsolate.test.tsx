@@ -22,7 +22,7 @@ describe("<CreateIsolate />", () => {
 	it("should render properly", () => {
 		renderWithProviders(<CreateIsolate {...props} />);
 
-		expect(screen.getByText("Add Isolate")).toBeInTheDocument();
+		expect(screen.getByText("Create Isolate")).toBeInTheDocument();
 		expect(screen.getByText("Source Type")).toBeInTheDocument();
 		expect(screen.getByText("Source Name")).toBeInTheDocument();
 		expect(screen.getByText("Isolate Name")).toBeInTheDocument();

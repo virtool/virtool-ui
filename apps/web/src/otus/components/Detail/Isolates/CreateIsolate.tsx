@@ -44,7 +44,7 @@ export default function CreateIsolate({
 	return (
 		<Dialog open={show} onOpenChange={onHide}>
 			<DialogContent>
-				<DialogTitle>Add Isolate</DialogTitle>
+				<DialogTitle>Create Isolate</DialogTitle>
 				<IsolateForm
 					allowedSourceTypes={allowedSourceTypes}
 					restrictSourceTypes={restrictSourceTypes}
