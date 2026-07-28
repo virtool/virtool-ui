@@ -17,7 +17,7 @@ import { legacyReferences } from "../db/schema/references";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
 import {
-	addIsolate,
+	createIsolate,
 	createOtu,
 	createSequence,
 	deleteSequence,
@@ -140,7 +140,7 @@ describe("write budgets", () => {
 			userId,
 		);
 
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },
@@ -163,7 +163,7 @@ describe("write budgets", () => {
 		// so the OTU still fails and the version bump already cleared `verified`.
 		expect(
 			await countQueries(() =>
-				addIsolate(
+				createIsolate(
 					db,
 					otu.id,
 					{ default: true, sourceName: "Ever", sourceType: "isolate" },
@@ -207,7 +207,7 @@ describe("write budgets", () => {
 			userId,
 		);
 
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },

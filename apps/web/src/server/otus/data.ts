@@ -1249,12 +1249,12 @@ export async function deleteOtu(
 }
 
 /**
- * Add an isolate to an OTU.
+ * Create an isolate on an OTU.
  *
  * The first isolate an OTU gets is its default whether or not one was asked for
  * — an OTU with isolates always has exactly one default.
  */
-export async function addIsolate(
+export async function createIsolate(
 	db: Db,
 	otuId: string,
 	values: IsolateCreateRequest,
@@ -1457,9 +1457,9 @@ export async function setIsolateAsDefault(
 }
 
 /**
- * Remove an isolate and its sequences.
+ * Delete an isolate and its sequences.
  *
- * Removing the default isolate promotes the first of those left, so an OTU with
+ * Deleting the default isolate promotes the first of those left, so an OTU with
  * isolates never ends up without a default.
  */
 export async function deleteIsolate(

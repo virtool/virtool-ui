@@ -1,7 +1,7 @@
 import { getErrorStatus } from "@app/queryErrors";
 import { getGenbankFn } from "@server/genbank/functions";
 import {
-	addIsolateFn,
+	createIsolateFn,
 	createOtuFn,
 	createSequenceFn,
 	deleteIsolateFn,
@@ -235,7 +235,7 @@ export function useCreateIsolate(otuId: string) {
 		{ otuId: string; sourceType: string; sourceName: string }
 	>({
 		mutationFn: ({ otuId, sourceType, sourceName }) =>
-			addIsolateFn({
+			createIsolateFn({
 				data: { otuId, default: false, sourceType, sourceName },
 			}) as Promise<OtuIsolate>,
 		onSuccess: () => {

@@ -170,7 +170,7 @@ beforeEach(() => {
 		otuServerFnMocks.createOtuFn,
 		otuServerFnMocks.updateOtuFn,
 		otuServerFnMocks.deleteOtuFn,
-		otuServerFnMocks.addIsolateFn,
+		otuServerFnMocks.createIsolateFn,
 		otuServerFnMocks.updateIsolateFn,
 		otuServerFnMocks.setIsolateAsDefaultFn,
 		otuServerFnMocks.deleteIsolateFn,

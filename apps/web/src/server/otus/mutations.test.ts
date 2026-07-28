@@ -13,7 +13,7 @@ import {
 } from "../history/data";
 import { ReferenceNotFoundError } from "../references/data";
 import {
-	addIsolate,
+	createIsolate,
 	createOtu,
 	createSequence,
 	deleteIsolate,
@@ -335,7 +335,7 @@ describe("updateOtu", () => {
 			userId,
 		);
 
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },
@@ -377,7 +377,7 @@ describe("isolates", () => {
 	it("makes the first isolate default whether or not asked", async () => {
 		const otu = await seedOtu();
 
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: false, sourceName: "Ever", sourceType: "Isolate" },
@@ -403,13 +403,13 @@ describe("isolates", () => {
 	it("moves the default when a second isolate claims it", async () => {
 		const otu = await seedOtu();
 
-		const first = await addIsolate(
+		const first = await createIsolate(
 			db,
 			otu.id,
 			{ default: false, sourceName: "One", sourceType: "isolate" },
 			userId,
 		);
-		const second = await addIsolate(
+		const second = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Two", sourceType: "isolate" },
@@ -426,7 +426,7 @@ describe("isolates", () => {
 	it("returns an already-default isolate untouched, writing no change", async () => {
 		const otu = await seedOtu();
 
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },
@@ -445,7 +445,7 @@ describe("isolates", () => {
 	it("renames an isolate and describes the rename", async () => {
 		const otu = await seedOtu();
 
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },
@@ -473,13 +473,13 @@ describe("isolates", () => {
 	it("promotes the next isolate when the default is removed", async () => {
 		const otu = await seedOtu();
 
-		const first = await addIsolate(
+		const first = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "One", sourceType: "isolate" },
 			userId,
 		);
-		const second = await addIsolate(
+		const second = await createIsolate(
 			db,
 			otu.id,
 			{ default: false, sourceName: "Two", sourceType: "isolate" },
@@ -502,7 +502,7 @@ describe("isolates", () => {
 	it("deletes the isolate's sequences with it", async () => {
 		const otu = await seedOtu();
 
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },
@@ -542,7 +542,7 @@ describe("isolates", () => {
 		const otu = await seedOtu();
 
 		await expect(
-			addIsolate(
+			createIsolate(
 				db,
 				otu.id,
 				{ default: true, sourceName: "Ever", sourceType: "strain" },
@@ -555,7 +555,7 @@ describe("isolates", () => {
 describe("sequences", () => {
 	async function seedIsolate() {
 		const otu = await seedOtu();
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },
@@ -702,13 +702,13 @@ describe("sequence scoping", () => {
 		const mine = await seedOtu("Mine");
 		const theirs = await seedOtu("Theirs");
 
-		const mineIsolate = await addIsolate(
+		const mineIsolate = await createIsolate(
 			db,
 			mine.id,
 			{ default: true, sourceName: "One", sourceType: "isolate" },
 			userId,
 		);
-		const theirsIsolate = await addIsolate(
+		const theirsIsolate = await createIsolate(
 			db,
 			theirs.id,
 			{ default: true, sourceName: "Two", sourceType: "isolate" },
@@ -933,7 +933,7 @@ describe("findOtus", () => {
 describe("getOtuReference", () => {
 	it("resolves the reference, and scopes to an isolate when one is named", async () => {
 		const otu = await seedOtu();
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },
@@ -973,7 +973,7 @@ describe("history round trip", () => {
 	it("patches an OTU back through the diffs this module wrote", async () => {
 		const otu = await seedOtu("Round Trip");
 
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },
@@ -1025,7 +1025,7 @@ describe("history round trip", () => {
 	it("recovers the verified an OTU actually held at each version", async () => {
 		const otu = await seedOtu("Verification");
 
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },
@@ -1062,7 +1062,7 @@ describe("history round trip", () => {
 	it("recovers a removed OTU from the change that removed it", async () => {
 		const otu = await seedOtu("Doomed");
 
-		await addIsolate(
+		await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },

@@ -7,7 +7,7 @@ type FormValues = {
 	sourceType: string;
 };
 
-type AddIsolateProps = {
+type CreateIsolateProps = {
 	allowedSourceTypes: string[];
 	/** A callback function to hide the dialog */
 	onHide: () => void;
@@ -19,15 +19,15 @@ type AddIsolateProps = {
 };
 
 /**
- * Displays dialog to add an OTU isolate
+ * Displays dialog to create an OTU isolate
  */
-export default function AddIsolate({
+export default function CreateIsolate({
 	allowedSourceTypes,
 	onHide,
 	otuId,
 	restrictSourceTypes,
 	show,
-}: AddIsolateProps) {
+}: CreateIsolateProps) {
 	const mutation = useCreateIsolate(otuId);
 
 	function handleSubmit({ sourceName, sourceType }: FormValues) {

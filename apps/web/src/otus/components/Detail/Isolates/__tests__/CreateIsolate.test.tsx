@@ -1,13 +1,13 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockAddIsolate } from "@tests/server-fn/otus";
+import { mockCreateIsolate } from "@tests/server-fn/otus";
 import { renderWithProviders } from "@tests/setup";
 import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import AddIsolate from "../AddIsolate";
+import CreateIsolate from "../CreateIsolate";
 
-describe("<AddIsolate />", () => {
-	let props: ComponentProps<typeof AddIsolate>;
+describe("<CreateIsolate />", () => {
+	let props: ComponentProps<typeof CreateIsolate>;
 
 	beforeEach(() => {
 		props = {
@@ -20,7 +20,7 @@ describe("<AddIsolate />", () => {
 	});
 
 	it("should render properly", () => {
-		renderWithProviders(<AddIsolate {...props} />);
+		renderWithProviders(<CreateIsolate {...props} />);
 
 		expect(screen.getByText("Add Isolate")).toBeInTheDocument();
 		expect(screen.getByText("Source Type")).toBeInTheDocument();
@@ -31,7 +31,7 @@ describe("<AddIsolate />", () => {
 
 	describe("<IsolateForm />", () => {
 		it("should render with source types restricted", async () => {
-			renderWithProviders(<AddIsolate {...props} />);
+			renderWithProviders(<CreateIsolate {...props} />);
 
 			await userEvent.click(screen.getByLabelText("Source Type"));
 
@@ -48,7 +48,7 @@ describe("<AddIsolate />", () => {
 
 		it("should render with source types unrestricted", () => {
 			props.restrictSourceTypes = false;
-			renderWithProviders(<AddIsolate {...props} />);
+			renderWithProviders(<CreateIsolate {...props} />);
 
 			expect(
 				screen.getByRole("textbox", { name: "Source Type" }),
@@ -62,8 +62,8 @@ describe("<AddIsolate />", () => {
 		])(
 			"should handle submit when source type changes to %p",
 			async (sourceType, sourceName) => {
-				const addIsolate = mockAddIsolate({ sourceName, sourceType });
-				renderWithProviders(<AddIsolate {...props} />);
+				const createIsolate = mockCreateIsolate({ sourceName, sourceType });
+				renderWithProviders(<CreateIsolate {...props} />);
 
 				await userEvent.click(screen.getByLabelText("Source Type"));
 				await userEvent.click(
@@ -82,7 +82,7 @@ describe("<AddIsolate />", () => {
 				await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
 				await waitFor(() =>
-					expect(addIsolate).toHaveBeenCalledWith({
+					expect(createIsolate).toHaveBeenCalledWith({
 						data: {
 							otuId: props.otuId,
 							default: false,
@@ -96,11 +96,11 @@ describe("<AddIsolate />", () => {
 
 		it("should handle submit with unrestricted source types", async () => {
 			props.restrictSourceTypes = false;
-			const addIsolate = mockAddIsolate({
+			const createIsolate = mockCreateIsolate({
 				sourceName: "testName",
 				sourceType: "Test type",
 			});
-			renderWithProviders(<AddIsolate {...props} />);
+			renderWithProviders(<CreateIsolate {...props} />);
 
 			await userEvent.type(
 				screen.getByRole("textbox", { name: "Source Type" }),
@@ -117,7 +117,7 @@ describe("<AddIsolate />", () => {
 			await userEvent.click(screen.getByRole("button"));
 
 			await waitFor(() =>
-				expect(addIsolate).toHaveBeenCalledWith({
+				expect(createIsolate).toHaveBeenCalledWith({
 					data: {
 						otuId: props.otuId,
 						default: false,

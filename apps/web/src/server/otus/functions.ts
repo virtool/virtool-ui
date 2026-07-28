@@ -22,7 +22,7 @@ import {
 } from "../references/data";
 import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 import {
-	addIsolate as addIsolateImpl,
+	createIsolate as createIsolateImpl,
 	createOtu as createOtuImpl,
 	createSequence as createSequenceImpl,
 	deleteIsolate as deleteIsolateImpl,
@@ -69,7 +69,7 @@ const createOtuSchema = z
 
 const updateOtuSchema = otuIdSchema.extend(OtuUpdateRequest.shape);
 
-const addIsolateSchema = otuIdSchema.extend(IsolateCreateRequest.shape);
+const createIsolateSchema = otuIdSchema.extend(IsolateCreateRequest.shape);
 
 const updateIsolateSchema = isolateIdSchema.extend(IsolateUpdateRequest.shape);
 
@@ -264,16 +264,16 @@ export const deleteOtuFn = createServerFn({ method: "POST" })
 		}
 	});
 
-export const addIsolateFn = createServerFn({ method: "POST" })
+export const createIsolateFn = createServerFn({ method: "POST" })
 	.middleware([authenticated()])
-	.validator(addIsolateSchema)
+	.validator(createIsolateSchema)
 	.handler(async ({ context, data }) => {
 		const { otuId, ...values } = data;
 
 		try {
 			await authorizeOtu(otuId, context.session.userId);
 
-			const isolate = await addIsolateImpl(
+			const isolate = await createIsolateImpl(
 				db,
 				otuId,
 				values,

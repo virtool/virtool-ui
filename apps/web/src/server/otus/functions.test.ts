@@ -52,7 +52,7 @@ const { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } = await import(
 	"../auth/cookies"
 );
 const { seedSession, seedUser } = await import("../auth/test/fixtures");
-const { addIsolate, createOtu } = await import("./data");
+const { createIsolate, createOtu } = await import("./data");
 
 let database: TestDatabase;
 
@@ -223,7 +223,7 @@ describe("authorizeOtu", () => {
 			{ name: "Alpha", abbreviation: "", schema: [] },
 			userId,
 		);
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },
@@ -256,7 +256,7 @@ describe("authorizeOtu", () => {
 			{ name: "Alpha", abbreviation: "", schema: [] },
 			userId,
 		);
-		const isolate = await addIsolate(
+		const isolate = await createIsolate(
 			db,
 			otu.id,
 			{ default: true, sourceName: "Ever", sourceType: "isolate" },

@@ -15,7 +15,7 @@ export const otuServerFnMocks = {
 	createOtuFn: vi.fn(),
 	updateOtuFn: vi.fn(),
 	deleteOtuFn: vi.fn(),
-	addIsolateFn: vi.fn(),
+	createIsolateFn: vi.fn(),
 	updateIsolateFn: vi.fn(),
 	setIsolateAsDefaultFn: vi.fn(),
 	deleteIsolateFn: vi.fn(),
@@ -51,12 +51,12 @@ export function mockDeleteOtu(): Mock {
 	return otuServerFnMocks.deleteOtuFn;
 }
 
-/** Sets up addIsolate to resolve with an isolate carrying the given source. */
-export function mockAddIsolate(overrides?: Partial<OtuIsolate>): Mock {
-	otuServerFnMocks.addIsolateFn.mockResolvedValue(
+/** Sets up createIsolate to resolve with an isolate carrying the given source. */
+export function mockCreateIsolate(overrides?: Partial<OtuIsolate>): Mock {
+	otuServerFnMocks.createIsolateFn.mockResolvedValue(
 		createFakeOtuIsolate({ sequences: [], ...overrides }),
 	);
-	return otuServerFnMocks.addIsolateFn;
+	return otuServerFnMocks.createIsolateFn;
 }
 
 /** Sets up deleteIsolate to resolve, as the 204 it answers with carries no body. */

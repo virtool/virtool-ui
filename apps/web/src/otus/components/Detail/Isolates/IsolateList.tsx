@@ -17,7 +17,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import type { OtuIsolate } from "@virtool/contracts";
 import { TestTubes } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
-import AddIsolate from "./AddIsolate";
+import CreateIsolate from "./CreateIsolate";
 import DeleteIsolate from "./DeleteIsolate";
 import IsolateItem from "./IsolateItem";
 
@@ -42,7 +42,7 @@ export default function IsolateList() {
 	const { isolates } = otu;
 	const { restrictSourceTypes, sourceTypes } = reference;
 
-	const [openAdd, setOpenAdd] = useState(false);
+	const [openCreate, setOpenCreate] = useState(false);
 	const [isolateToDelete, setIsolateToDelete] = useState<OtuIsolate | null>(
 		null,
 	);
@@ -92,7 +92,7 @@ export default function IsolateList() {
 						onChange={(e) => setTerm(e.target.value)}
 					/>
 					{canModifyIsolates && (
-						<Button color="blue" onClick={() => setOpenAdd(true)}>
+						<Button color="blue" onClick={() => setOpenCreate(true)}>
 							Create
 						</Button>
 					)}
@@ -151,12 +151,12 @@ export default function IsolateList() {
 				</Box>
 			)}
 
-			<AddIsolate
+			<CreateIsolate
 				allowedSourceTypes={sourceTypes}
 				otuId={otu.id}
 				restrictSourceTypes={restrictSourceTypes}
-				show={openAdd}
-				onHide={() => setOpenAdd(false)}
+				show={openCreate}
+				onHide={() => setOpenCreate(false)}
 			/>
 
 			<DeleteIsolate
