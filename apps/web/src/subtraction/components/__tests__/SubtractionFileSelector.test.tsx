@@ -4,20 +4,20 @@ import userEvent from "@testing-library/user-event";
 import { createFakeFile } from "@tests/fake/files";
 import { mockFindUploads } from "@tests/server-fn/uploads";
 import { renderWithProviders } from "@tests/setup";
-import type { FileResponse, Upload } from "@uploads/types";
+import type { Upload, UploadSearchResult } from "@uploads/types";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { SubtractionFileSelector } from "../SubtractionFileSelector";
 
-function makeData(files: Upload[]): InfiniteData<FileResponse> {
+function makeData(files: Upload[]): InfiniteData<UploadSearchResult> {
 	return {
 		pages: [
 			{
-				found_count: files.length,
+				foundCount: files.length,
 				page: 1,
-				page_count: 1,
-				per_page: 25,
-				total_count: files.length,
+				pageCount: 1,
+				perPage: 25,
+				totalCount: files.length,
 				items: files,
 			},
 		],
