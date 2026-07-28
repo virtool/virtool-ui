@@ -57,10 +57,7 @@ const handlers = (await import(
 const { ForbiddenError, UnauthorizedError } = await import(
 	"../auth/middleware"
 );
-const { SESSION_ID_COOKIE, SESSION_TOKEN_COOKIE } = await import(
-	"../auth/cookies"
-);
-const { seedSession, seedUser } = await import("../auth/test/fixtures");
+const { signIn } = await import("../auth/test/fixtures");
 
 let database: TestDatabase;
 
@@ -90,22 +87,12 @@ beforeEach(async () => {
 	);
 });
 
+// Handles are unique case-insensitively, so every signed-in user needs its own.
 let handleCounter = 0;
 
-async function signIn(): Promise<number> {
+function signInAsNewUser(): Promise<number> {
 	handleCounter += 1;
-	const userId = await seedUser(db, { handle: `user-${handleCounter}` });
-	const { sessionId, token } = await seedSession(db, userId);
-
-	getRequest.mockReturnValue(
-		new Request("https://virtool.test/_serverFn/test", {
-			headers: {
-				cookie: `${SESSION_ID_COOKIE}=${sessionId}; ${SESSION_TOKEN_COOKIE}=${token}`,
-			},
-		}),
-	);
-
-	return userId;
+	return signIn(db, getRequest, { handle: `user-${handleCounter}` });
 }
 
 // A reference the caller may build: one verified OTU and one unbuilt change,
@@ -157,7 +144,7 @@ describe("authorization", () => {
 	});
 
 	it("refuses a build without the reference's build right", async () => {
-		const userId = await signIn();
+		const userId = await signInAsNewUser();
 		const referenceId = await seedBuildableReference(userId, { build: false });
 
 		await expect(call("createIndexFn", { referenceId })).rejects.toBeInstanceOf(
@@ -168,7 +155,7 @@ describe("authorization", () => {
 
 describe("getIndexFn", () => {
 	it("answers 404 for an index that does not exist", async () => {
-		await signIn();
+		await signInAsNewUser();
 
 		await expect(call("getIndexFn", { indexId: 404 })).rejects.toThrow(
 			"Index not found.",
@@ -179,7 +166,7 @@ describe("getIndexFn", () => {
 
 describe("findUnbuiltChangesFn", () => {
 	it("returns only the changes no build covers yet", async () => {
-		const userId = await signIn();
+		const userId = await signInAsNewUser();
 		const referenceId = await seedBuildableReference(userId);
 
 		const built = await seedIndex(db, { referenceId, userId, version: 0 });
@@ -218,7 +205,7 @@ describe("findUnbuiltChangesFn", () => {
 
 describe("createIndexFn", () => {
 	it("builds the index and announces it", async () => {
-		const userId = await signIn();
+		const userId = await signInAsNewUser();
 		const referenceId = await seedBuildableReference(userId);
 
 		const index = (await call("createIndexFn", { referenceId })) as {
@@ -236,7 +223,7 @@ describe("createIndexFn", () => {
 	});
 
 	it("answers 409 for an archived reference", async () => {
-		const userId = await signIn();
+		const userId = await signInAsNewUser();
 		const referenceId = await seedBuildableReference(userId, {
 			archived: true,
 		});
@@ -248,7 +235,7 @@ describe("createIndexFn", () => {
 	});
 
 	it("answers 409 when a build is already in progress", async () => {
-		const userId = await signIn();
+		const userId = await signInAsNewUser();
 		const referenceId = await seedBuildableReference(userId);
 
 		await seedIndex(db, { referenceId, userId, version: 0, ready: false });
@@ -262,7 +249,7 @@ describe("createIndexFn", () => {
 	// Both "nothing to build" outcomes are 400s upstream rather than conflicts,
 	// and the rebuild dialog matches on the unverified message to explain it.
 	it("answers 400 for unverified OTUs", async () => {
-		const userId = await signIn();
+		const userId = await signInAsNewUser();
 		const referenceId = await seedBuildableReference(userId);
 
 		await seedOtu(db, referenceId, {
@@ -277,7 +264,7 @@ describe("createIndexFn", () => {
 	});
 
 	it("answers 400 when there is nothing to build", async () => {
-		const userId = await signIn();
+		const userId = await signInAsNewUser();
 		const referenceId = await seedReference(db, userId, {
 			member: { build: true },
 		});
