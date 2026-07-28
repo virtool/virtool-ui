@@ -297,6 +297,15 @@ triggered it — there is no window where the old password still
 authenticates. The self-service reset path does the same
 (`invalidateUserSessions` in `core.ts` before minting the new session).
 
+**A user changing their own password from the account page revokes every
+session too, including the one that made the request.** `changePassword`
+(`server/users/data.ts`) updates the row, calls `invalidateUserSessions`,
+and mints a replacement in one transaction; `changePasswordFn` writes that
+replacement to the response cookies. Skipping the cookie write would sign
+the user out of the form they just submitted. The replacement is always
+`remember: false`, matching `AccountData.update` in Python, so a password
+change downgrades a 30-day session to the 60-minute one.
+
 ## Session lifetimes
 
 Defined in `server/auth/session.ts:15-17`:
@@ -460,7 +469,7 @@ both cookies (`core.ts:104`). It's listed in the middleware's
 ### Client side
 
 A logout is either user-initiated or forced. The user-initiated path is
-`useLogout` in `account/queries.ts:149`, which runs `logoutFn()` and
+`useLogout` in `account/queries.ts:157`, which runs `logoutFn()` and
 then calls `resetClient()`.
 
 A forced logout is what happens when the session stops verifying
@@ -501,7 +510,8 @@ be told their session ended, and the wall could reload itself in a loop.
 
 Auth state on initial load is still checked by
 `routes/_authenticated.tsx`'s `beforeLoad`, which redirects to `/login`
-if `fetchAccount` throws.
+if `accountQueryOptions()` (`@account/account`, backed by `getAccountFn`)
+throws.
 
 ### `resetClient`
 
