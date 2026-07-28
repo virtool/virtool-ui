@@ -62,10 +62,7 @@ export default function JobDetail() {
 		data?.workflow === "build_index"
 			? (data.args.index_id as number)
 			: undefined;
-	const { data: index, isPending: isIndexPending } = useFetchIndex(
-		indexId === undefined ? "" : String(indexId),
-		indexId !== undefined,
-	);
+	const { data: index, isPending: isIndexPending } = useFetchIndex(indexId);
 
 	if (!Number.isInteger(numericJobId)) {
 		return <NotFound />;

@@ -1,11 +1,10 @@
 import type { ServerJob } from "@jobs/types";
 import { screen } from "@testing-library/react";
 import { createFakeIndex } from "@tests/fake/indexes";
-import { createFakeReferenceNested } from "@tests/fake/references";
+import { mockGetIndex } from "@tests/server-fn/indexes";
 import { mockGetJob } from "@tests/server-fn/jobs";
 import { renderRoute } from "@tests/setup";
-import nock from "nock";
-import { afterEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
 function createBuildIndexJob(indexId: number): ServerJob {
 	return {
@@ -23,21 +22,17 @@ function createBuildIndexJob(indexId: number): ServerJob {
 }
 
 describe("<JobDetail /> build_index links", () => {
-	afterEach(() => nock.cleanAll());
-
 	it("derives the reference id from the index so both links resolve", async () => {
 		const refId = 55;
 		const indexId = 41;
 
 		const getJob = mockGetJob(123, createBuildIndexJob(indexId));
-		nock("http://localhost")
-			.get(`/api/indexes/${indexId}`)
-			.reply(
-				200,
-				createFakeIndex({
-					reference: createFakeReferenceNested({ id: refId }),
-				}),
-			);
+		mockGetIndex(
+			createFakeIndex({
+				id: indexId,
+				reference: { id: refId, name: "Plant Viruses" },
+			}),
+		);
 
 		await renderRoute("/jobs/123");
 
