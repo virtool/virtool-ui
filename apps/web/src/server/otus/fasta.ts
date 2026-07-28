@@ -82,6 +82,36 @@ async function readOtu(
 }
 
 /**
+ * The OTU and isolate names a FASTA header and filename are built from, or
+ * `null` when the OTU does not exist or carries no isolate with this id.
+ *
+ * Both misses collapse to one `null`: the isolate is addressed through the OTU,
+ * so a caller who may not learn the OTU exists may not learn which of the two
+ * was wrong either.
+ */
+async function readIsolateNames(
+	tx: DbOrTx,
+	otuId: string,
+	isolateId: string,
+): Promise<{ isolateName: string; otuName: string } | null> {
+	const otu = await readOtu(tx, otuId);
+
+	if (otu === null) {
+		return null;
+	}
+
+	const isolate = otu.isolates.find(
+		(candidate) => String(candidate.id) === isolateId,
+	);
+
+	if (isolate === undefined) {
+		return null;
+	}
+
+	return { isolateName: formatIsolateName(isolate), otuName: otu.name };
+}
+
+/**
  * Serve every sequence in an OTU, grouped by isolate.
  *
  * Isolates are emitted in the order the document holds them and their sequences
@@ -138,21 +168,11 @@ export async function handleIsolateFasta(
 		return session;
 	}
 
-	const otu = await readOtu(db, otuId);
+	const names = await readIsolateNames(db, otuId, isolateId);
 
-	if (otu === null) {
+	if (names === null) {
 		return textResponse("Not found", 404);
 	}
-
-	const isolate = otu.isolates.find(
-		(candidate) => String(candidate.id) === isolateId,
-	);
-
-	if (isolate === undefined) {
-		return textResponse("Not found", 404);
-	}
-
-	const isolateName = formatIsolateName(isolate);
 
 	const rows = await selectSequenceBodies(db)
 		.where(
@@ -164,10 +184,18 @@ export async function handleIsolateFasta(
 		.orderBy(legacySequences.position);
 
 	const entries = rows.map((row) =>
-		formatFastaEntry(otu.name, isolateName, row.id, row.sequence ?? ""),
+		formatFastaEntry(
+			names.otuName,
+			names.isolateName,
+			row.id,
+			row.sequence ?? "",
+		),
 	);
 
-	return fastaResponse(entries, formatFastaFilename(otu.name, isolateName));
+	return fastaResponse(
+		entries,
+		formatFastaFilename(names.otuName, names.isolateName),
+	);
 }
 
 /** Serve one sequence. */
@@ -200,25 +228,22 @@ export async function handleSequenceFasta(
 		return textResponse("Not found", 404);
 	}
 
-	const otu = await readOtu(db, otuId);
+	const names = await readIsolateNames(db, otuId, isolateId);
 
-	if (otu === null) {
+	if (names === null) {
 		return textResponse("Not found", 404);
 	}
-
-	const isolate = otu.isolates.find(
-		(candidate) => String(candidate.id) === isolateId,
-	);
-
-	if (isolate === undefined) {
-		return textResponse("Not found", 404);
-	}
-
-	const isolateName = formatIsolateName(isolate);
 
 	return fastaResponse(
-		[formatFastaEntry(otu.name, isolateName, row.id, row.sequence ?? "")],
-		formatFastaFilename(otu.name, isolateName, sequenceId),
+		[
+			formatFastaEntry(
+				names.otuName,
+				names.isolateName,
+				row.id,
+				row.sequence ?? "",
+			),
+		],
+		formatFastaFilename(names.otuName, names.isolateName, sequenceId),
 	);
 }
 
