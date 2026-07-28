@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import type { HmmSearchResult } from "@hmm/types";
 import { createFakeTask } from "@tests/fake/tasks";
+import type { HmmSearchResult } from "@virtool/contracts";
 
 /**
  * Create a fake HMM minimal

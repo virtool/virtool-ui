@@ -1,8 +1,5 @@
-import type {
-	Subtraction,
-	SubtractionMinimal,
-	SubtractionOption,
-} from "@subtraction/types";
+import type { SubtractionOption } from "@subtraction/types";
+import type { Subtraction, SubtractionMinimal } from "@virtool/contracts";
 import { type Mock, vi } from "vitest";
 
 /**

@@ -1,5 +1,5 @@
 import { Dialog, DialogTitle } from "@base/Dialog";
-import type { HmmSearchResult } from "@hmm/types";
+import type { HmmSearchResult } from "@virtool/contracts";
 import HmmAlert from "../HmmAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
 import CreateAnalysisForm from "./CreateAnalysisForm";

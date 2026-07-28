@@ -14,11 +14,8 @@ import {
 	useQueryClient,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type {
-	Subtraction,
-	SubtractionOption,
-	SubtractionSearchResult,
-} from "./types";
+import type { Subtraction, SubtractionSearchResult } from "@virtool/contracts";
+import type { SubtractionOption } from "./types";
 
 /**
  * Initializes a mutator for creating a subtraction

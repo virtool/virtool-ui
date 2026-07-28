@@ -1,11 +1,11 @@
 import { faker } from "@faker-js/faker";
+import type { SubtractionOption } from "@subtraction/types";
 import type {
 	Subtraction,
 	SubtractionFile,
 	SubtractionMinimal,
 	SubtractionNested,
-	SubtractionOption,
-} from "@subtraction/types";
+} from "@virtool/contracts";
 import { pick } from "es-toolkit";
 import { createFakeUserNested } from "./user";
 

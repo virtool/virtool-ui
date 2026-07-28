@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { createFakeFile } from "@tests/fake/files";
 import { mockFindUploads } from "@tests/server-fn/uploads";
 import { renderWithProviders } from "@tests/setup";
-import type { Upload, UploadSearchResult } from "@uploads/types";
+import type { Upload, UploadSearchResult } from "@virtool/contracts";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import ReadSelector from "../ReadSelector";

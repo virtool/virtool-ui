@@ -1,13 +1,3 @@
-export type {
-	NucleotideComposition,
-	Subtraction,
-	SubtractionFile,
-	SubtractionMinimal,
-	SubtractionNested,
-	SubtractionSearchResult,
-	SubtractionUpload,
-} from "@virtool/contracts";
-
 /** A subtraction as an option for analysis */
 export type SubtractionOption = {
 	/** The unique identifier for the subtraction */

@@ -441,7 +441,7 @@ browser feature tree — a Biome `noRestrictedImports` override blocks
 a server file reaching into a DOM-typed module breaks the server project
 at a distance. Shapes and helpers both sides need live *down* in
 `@virtool/contracts` (roles, permissions, banner colors, the SSE schema,
-the reference wire shapes, `UserNested`, `Task`, `SearchResultV2`);
+the reference wire shapes, `UserNested`, `Task`, `SearchResult`);
 the server imports them from the package, and the client feature module
 re-exports them so its own call sites are undisturbed.
 

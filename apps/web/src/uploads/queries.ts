@@ -7,7 +7,7 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import { fileQueryKeys } from "@uploads/keys";
-import type { UploadSearchResult, UploadType } from "./types";
+import type { UploadSearchResult, UploadType } from "@virtool/contracts";
 
 export function useListFiles(type: UploadType, page: number, per_page: number) {
 	return useQuery<UploadSearchResult>({

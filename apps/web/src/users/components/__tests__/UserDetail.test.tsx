@@ -1,4 +1,3 @@
-import type { Group } from "@groups/types";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount } from "@tests/fake/account";
@@ -16,6 +15,7 @@ import {
 import { renderWithProviders, renderWithRouter } from "@tests/setup";
 import UserDetail from "@users/components/UserDetail";
 import type { User } from "@users/types";
+import type { Group } from "@virtool/contracts";
 import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<UserDetail />", () => {

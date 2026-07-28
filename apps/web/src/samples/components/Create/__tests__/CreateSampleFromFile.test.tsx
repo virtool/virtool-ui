@@ -9,7 +9,7 @@ import { mockCreateSample } from "@tests/server-fn/samples";
 import { mockListSubtractionsShortlist } from "@tests/server-fn/subtractions";
 import { mockGetAccount } from "@tests/server-fn/users";
 import { renderWithRouter } from "@tests/setup";
-import type { Upload } from "@uploads/types";
+import type { Upload } from "@virtool/contracts";
 import { beforeEach, describe, expect, it } from "vitest";
 import CreateSampleFromFile from "../CreateSampleFromFile";
 

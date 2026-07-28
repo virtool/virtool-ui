@@ -1,11 +1,5 @@
 import type { UploadType } from "@virtool/contracts";
 
-export type {
-	Upload,
-	UploadSearchResult,
-	UploadType,
-} from "@virtool/contracts";
-
 /** A file being uploaded from this browser, tracked until the request settles. */
 export type UploadInProgress = {
 	/* Whether the upload failed */

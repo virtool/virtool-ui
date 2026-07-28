@@ -17,7 +17,7 @@ import type {
 	InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
 import { useValidateFiles } from "@uploads/hooks";
-import type { Upload, UploadSearchResult } from "@uploads/types";
+import type { Upload, UploadSearchResult } from "@virtool/contracts";
 import { Files } from "lucide-react";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 

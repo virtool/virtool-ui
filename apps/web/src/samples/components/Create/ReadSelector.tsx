@@ -30,7 +30,7 @@ import type {
 } from "@tanstack/react-query/";
 import { useValidateFiles } from "@uploads/hooks";
 import { buildReadRows, detectMate, type ReadRow } from "@uploads/pairing";
-import type { Upload, UploadSearchResult } from "@uploads/types";
+import type { Upload, UploadSearchResult } from "@virtool/contracts";
 import { ChevronDown, Files, TriangleAlert, Undo } from "lucide-react";
 import { useCallback, useState } from "react";
 import ReadPairBadge from "./ReadPairBadge";

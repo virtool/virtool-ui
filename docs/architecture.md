@@ -176,10 +176,11 @@ Two shapes generalised out of that move and now live in the package
 alongside the reference contracts: `UserNested` (`{ id, handle }`, the
 user reduced to what is shown beside another resource) and `Task` (the
 background-task progress record embedded in resources a task acts on),
-plus `SearchResultV2`, the camelCase pagination envelope every
-server-function-backed list returns. `src/server/references/data.ts`
-used to carry a private copy of that envelope with a comment explaining
-that the server could not import the client's; that copy is gone.
+plus `SearchResult`, the camelCase pagination envelope every
+server-function-backed list returns. Every domain is on it: the
+snake_case envelope the Python API returned is gone, along with the
+`apps/web/src/types/api.ts` that declared it and the per-domain copies
+that restated it on both sides of the boundary.
 
 What stays in `data.ts` is what only `data.ts` uses: the `*Values` and
 `*Options` argument types its functions accept, its `AppError`

@@ -18,8 +18,8 @@ import type {
 	Group,
 	GroupMinimal,
 	GroupSearchResults,
-	PermissionsUpdate,
-} from "./types";
+} from "@virtool/contracts";
+import type { PermissionsUpdate } from "./types";
 
 /**
  * Setup query for fetching group search results for infinite scrolling view

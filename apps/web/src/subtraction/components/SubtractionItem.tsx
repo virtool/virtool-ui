@@ -2,7 +2,7 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import { useFetchJob } from "@jobs/queries";
-import type { SubtractionMinimal } from "../types";
+import type { SubtractionMinimal } from "@virtool/contracts";
 import { SubtractionAttribution } from "./Attribution";
 
 /**

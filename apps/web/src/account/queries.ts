@@ -1,7 +1,6 @@
 import { accountQueryKeys } from "@account/keys";
 import type { ApiKey } from "@account/types";
 import { resetClient } from "@app/utils";
-import type { Permissions } from "@groups/types";
 import * as Sentry from "@sentry/tanstackstart-react";
 import {
 	createApiKeyFn,
@@ -16,6 +15,7 @@ import {
 	updateAccountHandleFn,
 } from "@server/users/functions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { Permissions } from "@virtool/contracts";
 
 /**
  * Initializes a mutator for updating the current account's email address

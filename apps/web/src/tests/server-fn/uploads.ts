@@ -1,4 +1,4 @@
-import type { Upload } from "@uploads/types";
+import type { Upload } from "@virtool/contracts";
 import { type Mock, vi } from "vitest";
 
 /**

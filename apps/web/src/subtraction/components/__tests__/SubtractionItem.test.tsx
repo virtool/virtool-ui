@@ -1,7 +1,7 @@
-import type { SubtractionMinimal } from "@subtraction/types";
 import { screen } from "@testing-library/react";
 import { createFakeUserNested } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
+import type { SubtractionMinimal } from "@virtool/contracts";
 import { beforeEach, describe, expect, it } from "vitest";
 import { SubtractionItem } from "../SubtractionItem";
 

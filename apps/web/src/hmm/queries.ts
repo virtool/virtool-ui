@@ -7,7 +7,7 @@ import {
 	useQueryClient,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { HmmSearchResult } from "./types";
+import type { HmmSearchResult } from "@virtool/contracts";
 
 /**
  * Query options for a page of HMM search results.

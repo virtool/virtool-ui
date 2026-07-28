@@ -6,11 +6,11 @@ import Icon from "@base/Icon";
 import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import { useQueryClient } from "@tanstack/react-query";
 import { useFetchTask } from "@tasks/queries";
+import type { HmmSearchResult } from "@virtool/contracts";
 import { Info } from "lucide-react";
 import { useEffect } from "react";
 import { hmmQueryKeys } from "../keys";
 import { useInstallHmm } from "../queries";
-import type { HmmSearchResult } from "../types";
 
 type HmmInstallProps = {
 	/** The install status of the HMMs, read from the list the parent already fetched */
