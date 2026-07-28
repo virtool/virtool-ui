@@ -1,29 +1,15 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeIndex } from "@tests/fake/indexes";
+import { createFakeOtuHistory } from "@tests/fake/otus";
 import {
 	indexServerFnMocks,
 	mockCreateIndex,
 	mockFindUnbuiltChanges,
 } from "@tests/server-fn/indexes";
 import { renderWithProviders } from "@tests/setup";
-import type { OtuHistory } from "@virtool/contracts";
 import { describe, expect, it } from "vitest";
 import RebuildIndex from "../RebuildIndex";
-
-function createChange(overrides: Partial<OtuHistory> = {}): OtuHistory {
-	return {
-		id: "abc.1",
-		createdAt: new Date("2024-01-01"),
-		description: "Created Tobacco mosaic virus",
-		methodName: "create",
-		index: null,
-		otu: { id: "abc", name: "Tobacco mosaic virus", version: 1 },
-		reference: { id: 1, name: "Plant Viruses" },
-		user: { id: 1, handle: "alice" },
-		...overrides,
-	};
-}
 
 async function openDialog() {
 	await userEvent.click(screen.getByRole("button", { name: "Create" }));
@@ -32,9 +18,11 @@ async function openDialog() {
 describe("<RebuildIndex />", () => {
 	it("lists the changes the build would include", async () => {
 		mockFindUnbuiltChanges([
-			createChange(),
-			createChange({
-				id: "def.2",
+			createFakeOtuHistory({
+				description: "Created Tobacco mosaic virus",
+				otu: { id: "abc", name: "Tobacco mosaic virus", version: 1 },
+			}),
+			createFakeOtuHistory({
 				description: "Edited Potato virus X",
 				otu: { id: "def", name: "Potato virus X", version: 2 },
 			}),
@@ -51,7 +39,7 @@ describe("<RebuildIndex />", () => {
 	});
 
 	it("counts the changes a page does not show", async () => {
-		mockFindUnbuiltChanges([createChange()], {
+		mockFindUnbuiltChanges([createFakeOtuHistory()], {
 			foundCount: 40,
 			pageCount: 2,
 			perPage: 25,
@@ -64,7 +52,7 @@ describe("<RebuildIndex />", () => {
 	});
 
 	it("starts the build and closes", async () => {
-		mockFindUnbuiltChanges([createChange()]);
+		mockFindUnbuiltChanges([createFakeOtuHistory()]);
 		mockCreateIndex(createFakeIndex());
 
 		renderWithProviders(<RebuildIndex referenceId={1} />);
@@ -83,7 +71,7 @@ describe("<RebuildIndex />", () => {
 	// A `ClientError` crosses the server-function boundary as a plain `Error`, so
 	// the dialog reads its `message` — the unverified case gets extra guidance.
 	it("explains a build refused for unverified OTUs", async () => {
-		mockFindUnbuiltChanges([createChange()]);
+		mockFindUnbuiltChanges([createFakeOtuHistory()]);
 		indexServerFnMocks.createIndexFn.mockRejectedValue(
 			Object.assign(new Error("There are unverified OTUs"), { status: 400 }),
 		);
