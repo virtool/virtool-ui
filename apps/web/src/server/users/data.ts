@@ -460,20 +460,45 @@ export async function changePassword(
 	// with no session to show for it. The order keeps Python's — update the user,
 	// revoke the old sessions, then create the replacement, which has to come
 	// last or the revocation would take it with the rest.
+	//
+	// The update matches on the hash we verified, not just the id. Nothing held a
+	// lock across the read, the bcrypt verify, and the bcrypt hash above, and at
+	// cost 12 that gap is hundreds of milliseconds — long enough for an
+	// administrator responding to a compromise to reset this password or set
+	// force_reset in between. Without the guard we would overwrite their newer
+	// credential, clear the flag they just set, and hand the attacker a fresh
+	// session. Matching on the old hash makes the loser of that race update
+	// nothing, and an unchanged password is exactly the case the caller already
+	// reports as bad credentials.
 	const { sessionId, token } = await db.transaction(async (tx) => {
-		await tx
+		const updated = await tx
 			.update(usersTable)
 			.set({
 				password: hashed,
 				forceReset: false,
 				lastPasswordChange: new Date(),
 			})
-			.where(eq(usersTable.id, userId));
+			.where(
+				and(
+					eq(usersTable.id, userId),
+					eq(usersTable.password, existing.password),
+				),
+			)
+			.returning({ id: usersTable.id });
+
+		if (updated.length === 0) {
+			throw new InvalidPasswordError();
+		}
 
 		await invalidateUserSessions(tx, userId);
 
 		return createAuthenticatedSession(tx, { userId, ip, remember: false });
 	});
+
+	// An administrator with this user's detail open sees last_password_change and
+	// force_reset, both of which just moved, so the change is published the way
+	// updateUser publishes its own.
+	await emit("users", userId, "update");
 
 	return { account: await getAccount(db, userId), sessionId, token };
 }

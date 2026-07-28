@@ -306,6 +306,16 @@ the user out of the form they just submitted. The replacement is always
 `remember: false`, matching `AccountData.update` in Python, so a password
 change downgrades a 30-day session to the 60-minute one.
 
+That update matches on the hash it verified, not just the user id. Nothing
+holds a lock across the read, the bcrypt verify, and the bcrypt hash of the
+new password, and at cost 12 that gap is hundreds of milliseconds — enough
+for an administrator responding to a compromise to reset the password or set
+`force_reset` in between. Without the guard the self-service change would
+overwrite the newer credential, clear the flag, and mint the attacker a valid
+session; with it, the loser of that race updates no rows and is reported as
+bad credentials. Keep the condition if you touch this — the same reasoning is
+why `consumeResetSession` exists in `core.ts`.
+
 ## Session lifetimes
 
 Defined in `server/auth/session.ts:15-17`:

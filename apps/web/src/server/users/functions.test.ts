@@ -32,7 +32,8 @@ vi.mock("@sentry/tanstackstart-react", () => ({
 	setUser: vi.fn(),
 }));
 
-vi.mock("../events/emit", () => ({ emit: vi.fn() }));
+const emit = vi.fn();
+vi.mock("../events/emit", () => ({ emit }));
 
 // The handlers read the `db` singleton at module scope. A getter defers the
 // read until a handler actually runs, by which point beforeAll has pointed it
@@ -163,6 +164,19 @@ describe("changePassword", () => {
 
 		expect(idCookie?.[1]).toBe(rows[0]?.sessionId);
 		expect(hashToken(tokenCookie?.[1] as string)).toBe(rows[0]?.tokenHash);
+	});
+
+	// last_password_change and force_reset are both on the administration user
+	// detail, so an admin with it open needs the invalidation.
+	it("publishes a users update so an open administrator view refreshes", async () => {
+		const { userId } = await signIn();
+
+		await call("changePasswordFn", {
+			oldPassword: "old_password_123",
+			password: "new_password_123",
+		});
+
+		expect(emit).toHaveBeenCalledWith("users", userId, "update");
 	});
 
 	it("responds with 400 for a wrong old password and sets no cookies", async () => {

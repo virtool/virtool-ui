@@ -397,6 +397,40 @@ describe("changePassword", () => {
 			}),
 		).rejects.toBeInstanceOf(UserNotFoundError);
 	});
+
+	// Nothing holds a lock across the read, the verify, and the bcrypt hash, and at
+	// cost 12 that gap is hundreds of milliseconds — long enough for an
+	// administrator responding to a compromise to reset the password in between.
+	// The admin's hash is computed up front so the interleaving write itself is a
+	// fast statement landing well inside that window.
+	it("refuses when the password changed after it was verified", async () => {
+		const userId = await seedUserWithPassword("old_password_123");
+		await seedSession(db, userId);
+		const adminHash = await hashPassword("admin_reset_123");
+
+		const pending = changePassword(db, {
+			userId,
+			oldPassword: "old_password_123",
+			password: "new_password_123",
+			ip: "127.0.0.1",
+		});
+
+		await db
+			.update(users)
+			.set({ password: adminHash, forceReset: true })
+			.where(eq(users.id, userId));
+
+		await expect(pending).rejects.toBeInstanceOf(InvalidPasswordError);
+
+		// The administrator's credential and flag survive, and the rolled-back
+		// transaction took its session revocation with it.
+		const after = await readUser(userId);
+		expect(
+			await verifyPassword("admin_reset_123", after?.password as Buffer),
+		).toBe(true);
+		expect(after?.forceReset).toBe(true);
+		expect(await countSessions(userId)).toBe(1);
+	});
 });
 
 describe("getUserCount", () => {
