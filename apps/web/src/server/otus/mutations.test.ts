@@ -21,7 +21,7 @@ import {
 	deleteSequence,
 	findOtus,
 	getOtu,
-	getOtuReferenceId,
+	getOtuReference,
 	OtuNameConflictError,
 	OtuNotFoundError,
 	SegmentNotDefinedError,
@@ -930,7 +930,7 @@ describe("findOtus", () => {
 	});
 });
 
-describe("getOtuReferenceId", () => {
+describe("getOtuReference", () => {
 	it("resolves the reference, and scopes to an isolate when one is named", async () => {
 		const otu = await seedOtu();
 		const isolate = await addIsolate(
@@ -940,14 +940,32 @@ describe("getOtuReferenceId", () => {
 			userId,
 		);
 
-		await expect(getOtuReferenceId(db, otu.id)).resolves.toBe(referenceId);
-		await expect(getOtuReferenceId(db, otu.id, isolate.id)).resolves.toBe(
-			referenceId,
-		);
+		await expect(getOtuReference(db, otu.id)).resolves.toEqual({
+			id: referenceId,
+			archived: false,
+		});
+		await expect(getOtuReference(db, otu.id, isolate.id)).resolves.toEqual({
+			id: referenceId,
+			archived: false,
+		});
 		// An isolate the OTU does not carry resolves to nothing, which is what
 		// makes a bad isolate id a 404 rather than a 403.
-		await expect(getOtuReferenceId(db, otu.id, "nope")).resolves.toBeNull();
-		await expect(getOtuReferenceId(db, "nope")).resolves.toBeNull();
+		await expect(getOtuReference(db, otu.id, "nope")).resolves.toBeNull();
+		await expect(getOtuReference(db, "nope")).resolves.toBeNull();
+	});
+
+	it("reports an archived parent", async () => {
+		const otu = await seedOtu();
+
+		await db
+			.update(legacyReferences)
+			.set({ archived: true })
+			.where(eq(legacyReferences.id, referenceId));
+
+		await expect(getOtuReference(db, otu.id)).resolves.toEqual({
+			id: referenceId,
+			archived: true,
+		});
 	});
 });
 

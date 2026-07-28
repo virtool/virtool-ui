@@ -30,7 +30,7 @@ import {
 	deleteSequence as deleteSequenceImpl,
 	findOtus as findOtusImpl,
 	getOtu as getOtuImpl,
-	getOtuReferenceId,
+	getOtuReference,
 	IsolateNotFoundError,
 	OtuNameConflictError,
 	OtuNotFoundError,
@@ -126,6 +126,12 @@ const notFound = createServerOnlyFn((message: string): never => {
  * carry surfaces as a 404 rather than passing the rights check and failing
  * later. A missing OTU is a 404 for everyone, administrators included — there is
  * no reference to hold a right on.
+ *
+ * An archived reference accepts no writes at all, so it is refused even from a
+ * member who still holds the right. The check follows the rights check so that
+ * a caller with no rights learns nothing about the reference's state. `createOtu`
+ * makes the same refusal inside its own transaction, against the reference the
+ * request names rather than one an OTU points at.
  */
 const authorizeOtu = createServerOnlyFn(
 	async (
@@ -133,9 +139,9 @@ const authorizeOtu = createServerOnlyFn(
 		userId: number,
 		isolateId?: string,
 	): Promise<number> => {
-		const referenceId = await getOtuReferenceId(db, otuId, isolateId);
+		const reference = await getOtuReference(db, otuId, isolateId);
 
-		if (referenceId === null) {
+		if (reference === null) {
 			return notFound(
 				isolateId === undefined
 					? "OTU not found."
@@ -145,12 +151,16 @@ const authorizeOtu = createServerOnlyFn(
 
 		const actor = await resolveReferenceActor(db, userId);
 
-		if (!(await checkReferenceRight(db, referenceId, "modifyOtu", actor))) {
+		if (!(await checkReferenceRight(db, reference.id, "modifyOtu", actor))) {
 			setResponseStatus(403);
 			throw new ForbiddenError();
 		}
 
-		return referenceId;
+		if (reference.archived) {
+			throw new ReferenceArchivedError("Reference is archived");
+		}
+
+		return reference.id;
 	},
 );
 

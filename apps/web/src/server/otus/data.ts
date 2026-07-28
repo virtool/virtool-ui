@@ -877,22 +877,36 @@ export async function findOtus(
 	};
 }
 
+/** The reference an OTU belongs to, as an authorization check needs to see it. */
+export type OtuReference = { id: number; archived: boolean };
+
 /**
- * The id of the reference an OTU belongs to, or `null` when the OTU — or, when
- * one is named, the isolate — does not exist.
+ * The reference an OTU belongs to, or `null` when the OTU — or, when one is
+ * named, the isolate — does not exist.
  *
  * Scoping by isolate in the same query is what makes a bad isolate id a 404
  * rather than a 403: the authorization check cannot pass for an isolate the OTU
  * does not carry.
+ *
+ * `archived` rides along on the join because every OTU, isolate, and sequence
+ * mutation has to refuse an archived parent, and reading it here costs no extra
+ * round trip.
  */
-export async function getOtuReferenceId(
+export async function getOtuReference(
 	db: DbOrTx,
 	otuId: string,
 	isolateId?: string,
-): Promise<number | null> {
+): Promise<OtuReference | null> {
 	const [row] = await db
-		.select({ referenceId: legacyOtus.reference_id })
+		.select({
+			id: legacyOtus.reference_id,
+			archived: legacyReferences.archived,
+		})
 		.from(legacyOtus)
+		.innerJoin(
+			legacyReferences,
+			eq(legacyReferences.id, legacyOtus.reference_id),
+		)
 		.where(
 			and(
 				eq(legacyOtus.id, otuId),
@@ -903,7 +917,7 @@ export async function getOtuReferenceId(
 		)
 		.limit(1);
 
-	return row?.referenceId ?? null;
+	return row ?? null;
 }
 
 /**
