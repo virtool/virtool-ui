@@ -21,7 +21,7 @@ export default function PathoscopeSequenceEmpty({
 	width,
 }: PathoscopeSequenceEmptyProps) {
 	return (
-		<div className="bg-blue-100 inline-block rounded">
+		<div className="bg-blue-100 border border-blue-200 inline-block rounded-sm">
 			<p className="font-medium m-0 p-4 text-base text-gray-600">
 				{name ?? "Segment"}
 			</p>

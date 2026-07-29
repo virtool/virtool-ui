@@ -144,41 +144,47 @@ export default function PathoscopeOtuCoverage({
 			? `Read depth across each of the ${segments.length} segments of the reference genome`
 			: "Read depth across the reference genome";
 
+	// The border and padding sit on the outer element and the width is measured on
+	// the inner one, because `useElementSize` reports `offsetWidth` — a border-box
+	// figure. Measuring the bordered element would size the chart to two pixels
+	// wider than the box it has to fit inside.
 	return (
-		<div className="bg-blue-100 pt-2" ref={ref}>
-			<svg width={width} height={height} role="img" aria-label={description}>
-				<title>{description}</title>
-				{panels.map((panel) => {
-					const d = buildDepthPath(
-						panel.segment.align,
-						panel.segment.length,
-						panel.width,
-						maxDepth,
-					);
+		<div className="bg-blue-100 border border-blue-200 pt-2 rounded-sm">
+			<div ref={ref}>
+				<svg width={width} height={height} role="img" aria-label={description}>
+					<title>{description}</title>
+					{panels.map((panel) => {
+						const d = buildDepthPath(
+							panel.segment.align,
+							panel.segment.length,
+							panel.width,
+							maxDepth,
+						);
 
-					return d ? (
-						<path
-							className="fill-blue-500"
-							d={d}
-							key={panel.segment.name ?? panel.offset}
-							transform={`translate(${panel.offset},0)`}
-						/>
-					) : null;
-				})}
-			</svg>
-			{labelled && (
-				<div className="flex text-gray-600 text-xs" style={{ gap }}>
-					{panels.map((panel) => (
-						<span
-							className="truncate"
-							key={panel.segment.name ?? panel.offset}
-							style={{ width: panel.width }}
-						>
-							{labelOf(panel.segment)}
-						</span>
-					))}
-				</div>
-			)}
+						return d ? (
+							<path
+								className="fill-blue-500"
+								d={d}
+								key={panel.segment.name ?? panel.offset}
+								transform={`translate(${panel.offset},0)`}
+							/>
+						) : null;
+					})}
+				</svg>
+				{labelled && (
+					<div className="flex text-gray-600 text-xs" style={{ gap }}>
+						{panels.map((panel) => (
+							<span
+								className="truncate"
+								key={panel.segment.name ?? panel.offset}
+								style={{ width: panel.width }}
+							>
+								{labelOf(panel.segment)}
+							</span>
+						))}
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }
