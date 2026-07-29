@@ -54,6 +54,7 @@ export default function PathoscopeIsolate({
 		if (sequence === undefined) {
 			return (
 				<PathoscopeSequenceEmpty
+					detected={segment.detected}
 					key={segment.key}
 					name={segment.name}
 					width={width}

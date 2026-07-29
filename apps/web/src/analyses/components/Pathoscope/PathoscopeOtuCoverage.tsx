@@ -115,8 +115,13 @@ function formatLength(length: number): string {
 // A named segment is labelled with its name. One matched to its neighbours by
 // length is labelled with that length, approximately — the sequences filling it
 // differ, and the label says so rather than implying a figure it does not have.
+//
+// A segment nothing mapped to draws no curve, so its label has to carry the
+// reason. An empty panel on its own reads as a gap in the layout.
 function labelOf(segment: PathoscopeSegmentCoverage): string {
-	return segment.name ?? `≈${formatLength(segment.length)}`;
+	const label = segment.name ?? `≈${formatLength(segment.length)}`;
+
+	return segment.detected ? label : `${label} · no reads`;
 }
 
 type OtuCoverageProps = {
@@ -135,9 +140,11 @@ export default function PathoscopeOtuCoverage({
 
 	const panels = width > 0 ? layOutPanels(segments, width) : [];
 
-	// A single-segment OTU is the unsegmented case, where a label would only
-	// repeat what the accordion already says.
-	const labelled = panels.length > 1;
+	// A single-segment OTU is the unsegmented case, where a label would only repeat
+	// what the accordion already says. An undetected segment is labelled whatever
+	// the count, because it draws nothing and a blank panel needs its reason.
+	const labelled =
+		panels.length > 1 || panels.some((panel) => !panel.segment.detected);
 
 	const description =
 		segments.length > 1

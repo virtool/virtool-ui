@@ -210,12 +210,28 @@ function formatHits(
 
 	let maxSequenceLength = 0;
 
+	// The longest sequence declared for each named segment, over every sequence in
+	// the OTU rather than only the ones that were hit. It is what gives a segment
+	// nothing mapped to it a width to be drawn at — those sequences are absent
+	// from the formatted result, so nothing downstream could recover it.
+	const declaredLengths = new Map<string, number>();
+
 	for (const entry of isolates) {
 		for (const sequenceEntry of asArray(asRecord(entry)?.sequences)) {
-			const length = asText(asRecord(sequenceEntry)?.sequence).length;
+			const sequence = asRecord(sequenceEntry);
+			const length = asText(sequence?.sequence).length;
 
 			if (length > maxSequenceLength) {
 				maxSequenceLength = length;
+			}
+
+			const segment = sequence?.segment;
+
+			if (typeof segment === "string" && segment !== "") {
+				declaredLengths.set(
+					segment,
+					Math.max(declaredLengths.get(segment) ?? 0, length),
+				);
 			}
 		}
 	}
@@ -231,6 +247,7 @@ function formatHits(
 	const groups = groupSequencesIntoSegments(
 		measured.map((entry) => entry.sequences),
 		schemaNames,
+		declaredLengths,
 	);
 
 	// Each isolate's sequences, rebuilt in the order the segments are drawn in and
@@ -249,17 +266,32 @@ function formatHits(
 		}
 	}
 
-	const merged = groups.map((group) => ({
-		depths: mergeDepths(segmentDepths(group)),
-		key: group.key,
-		name: group.name,
-	}));
+	const merged = groups.map((group) => {
+		const depths = mergeDepths(segmentDepths(group));
+
+		return {
+			depths,
+			// A segment nothing mapped to has no merged curve, so its width comes
+			// from the longest sequence the OTU declares for it.
+			detected: group.isolates.length > 0,
+			key: group.key,
+			length: depths.length > 0 ? depths.length : group.declaredLength,
+			name: group.name,
+		};
+	});
 
 	// The OTU's depth figures are read across every segment taken together, so
 	// they stay figures about the whole genome now that it is drawn in pieces.
 	// Each segment counts once, at the longest length any isolate gave it — where
 	// the single concatenated curve this replaced counted the longest isolate and
 	// measured the rest against its positions.
+	//
+	// A segment nothing mapped to contributes no positions rather than a
+	// zero-filled genome, so it cannot drag the median down. That is deliberate:
+	// counting it would move the OTU's depth on how completely the *reference*
+	// describes the genome rather than on what the analysis found, and two
+	// references differing only in how many segments they declare would report
+	// different depths for the same reads.
 	const combined = merged.flatMap((segment) => segment.depths);
 
 	return {
@@ -283,8 +315,9 @@ function formatHits(
 		pi: measured.reduce((sum, entry) => sum + entry.isolate.pi, 0),
 		segments: merged.map((segment) => ({
 			align: transformCoverageToCoordinates(segment.depths),
+			detected: segment.detected,
 			key: segment.key,
-			length: segment.depths.length,
+			length: segment.length,
 			name: segment.name,
 		})),
 		version: asNumber(patchedOtu.version, 0),

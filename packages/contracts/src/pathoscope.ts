@@ -98,6 +98,17 @@ export type PathoscopeSegmentCoverage = {
 	 */
 	align: Coordinate[];
 
+	/**
+	 * Whether any isolate recorded a hit against this segment.
+	 *
+	 * A declared segment nothing mapped to is still reported, so a partial
+	 * detection reads as one rather than as an OTU whose reference never had the
+	 * segment. It carries no curve and no isolate's sequences name it, and it is
+	 * left out of the OTU's depth figures — counting it would move a headline
+	 * number on how complete the *reference* is rather than on what was found.
+	 */
+	detected: boolean;
+
 	/** The key the isolates' sequences name this segment by */
 	key: string;
 

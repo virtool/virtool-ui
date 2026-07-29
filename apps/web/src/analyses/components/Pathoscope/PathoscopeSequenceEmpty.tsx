@@ -1,6 +1,9 @@
 import { chartHeight, chartMargin } from "./columns";
 
 type PathoscopeSequenceEmptyProps = {
+	/** Whether any isolate recorded a hit against this segment */
+	detected: boolean;
+
 	/** The schema segment name, or null when the segment was inferred by length */
 	name: string | null;
 
@@ -9,14 +12,19 @@ type PathoscopeSequenceEmptyProps = {
 };
 
 /**
- * The column of a segment this isolate carries no sequence for.
+ * The column of a segment this isolate has no reads against.
  *
- * It holds the column open so the isolates below and above line up on the
- * segments they do share. An isolate missing a segment used to shift every
- * column after it along, which left the rows reading as though they were
- * showing the same segments when they were not.
+ * It holds the column open so the isolates above and below line up on the
+ * segments they do share. An isolate missing a segment used to shift every column
+ * after it along, which left the rows reading as though they were showing the
+ * same segments when they were not.
+ *
+ * A segment no isolate was hit against says so, rather than claiming this isolate
+ * does not carry it — nothing mapped to it anywhere, and the reference may well
+ * describe it for every isolate.
  */
 export default function PathoscopeSequenceEmpty({
+	detected,
 	name,
 	width,
 }: PathoscopeSequenceEmptyProps) {
@@ -29,7 +37,7 @@ export default function PathoscopeSequenceEmpty({
 				className="flex items-center justify-center text-gray-600 text-sm"
 				style={{ height: chartHeight + chartMargin, width }}
 			>
-				Not in this isolate
+				{detected ? "Not in this isolate" : "No reads mapped"}
 			</div>
 		</div>
 	);

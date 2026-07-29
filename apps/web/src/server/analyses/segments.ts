@@ -36,6 +36,15 @@ export type SegmentContribution<T> = {
 
 /** One genome segment, and what each isolate carrying it contributed. */
 export type SegmentGroup<T> = {
+	/**
+	 * The longest sequence the OTU declares for this segment, or zero when the
+	 * segment was inferred by length.
+	 *
+	 * It is the width a segment nothing mapped to is drawn at, since it has no
+	 * merged curve to take a length from.
+	 */
+	declaredLength: number;
+
 	/** The isolates that carried this segment. One that did not is absent. */
 	isolates: SegmentContribution<T>[];
 
@@ -208,18 +217,32 @@ function binOf(length: number, thresholds: number[]): number {
  * Groups come back in the order they should be drawn: the schema's declared
  * segments in schema order, then any segment named but not declared, then the
  * length-inferred bins, longest first.
+ *
+ * A declared segment the analysis recorded no hit against is kept, with no
+ * isolates contributing to it. Nothing mapped to it is a result about the
+ * genome — the OTU was detected and this part of it was not — and dropping it
+ * would show a partial detection as though the segment were never in the
+ * reference. `declaredLengths` is what lets one be kept: its sequences are not in
+ * the formatted result, so they can supply no width.
  */
 export function groupSequencesIntoSegments<T extends SegmentedSequence>(
 	isolates: T[][],
 	schemaNames: string[],
+	declaredLengths: Map<string, number> = new Map(),
 ): SegmentGroup<T>[] {
 	const groups: SegmentGroup<T>[] = [];
 
 	for (const name of schemaNames) {
 		const matched = collect(isolates, (sequence) => sequence.segment === name);
+		const declaredLength = declaredLengths.get(name) ?? 0;
 
-		if (matched.length > 0) {
-			groups.push({ isolates: matched, key: `seg:${name}`, name });
+		if (matched.length > 0 || declaredLength > 0) {
+			groups.push({
+				declaredLength,
+				isolates: matched,
+				key: `seg:${name}`,
+				name,
+			});
 		}
 	}
 
@@ -241,6 +264,7 @@ export function groupSequencesIntoSegments<T extends SegmentedSequence>(
 	groups.push(
 		...[...undeclared]
 			.map((name) => ({
+				declaredLength: declaredLengths.get(name) ?? 0,
 				isolates: collect(isolates, (sequence) => sequence.segment === name),
 				key: `seg:${name}`,
 				name,
@@ -271,7 +295,12 @@ export function groupSequencesIntoSegments<T extends SegmentedSequence>(
 		// A bin can come out empty when lengths tie across a cut, which only happens
 		// where the lengths carry no signal to separate the segments by.
 		if (matched.length > 0) {
-			groups.push({ isolates: matched, key: `len:${bin}`, name: null });
+			groups.push({
+				declaredLength: 0,
+				isolates: matched,
+				key: `len:${bin}`,
+				name: null,
+			});
 		}
 	}
 

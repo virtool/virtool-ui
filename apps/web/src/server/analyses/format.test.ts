@@ -586,6 +586,7 @@ describe("formatAnalysis for pathoscope", () => {
 					[4, 0],
 					[9, 0],
 				],
+				detected: true,
 				key: "len:0",
 				length: 10,
 				name: null,
@@ -642,6 +643,7 @@ describe("formatAnalysis for pathoscope", () => {
 				[4, 0],
 				[9, 0],
 			],
+			detected: true,
 			key: "len:0",
 			// The segment spans the longest sequence filling it.
 			length: 10,
@@ -687,6 +689,7 @@ async function seedSegmentedOtu(): Promise<void> {
 			reference: { id: REFERENCE_ID },
 			schema: [
 				{ molecule: "ssRNA", name: "L", required: true },
+				{ molecule: "ssRNA", name: "M", required: true },
 				{ molecule: "ssRNA", name: "S", required: false },
 			],
 			version: 1,
@@ -732,6 +735,23 @@ async function seedSegmentedOtu(): Promise<void> {
 			isolate_id: "iso_c",
 			segment: "S",
 			position: 1,
+		},
+		{
+			// Declared, carried, and never hit. It fixes the M segment's width without
+			// appearing in the formatted result.
+			id: "seq_c_m",
+			data: {
+				_id: "seq_c_m",
+				accession: "NC_M_C",
+				definition: "M segment",
+				isolate_id: "iso_c",
+				segment: "M",
+				sequence: "ATGCATGCATGCATGCATGCATGCATGCAT",
+			},
+			otu_id: "otu_two",
+			isolate_id: "iso_c",
+			segment: "M",
+			position: 3,
 		},
 		{
 			id: "seq_d_l",
@@ -792,8 +812,32 @@ describe("formatAnalysis for a segmented pathoscope hit", () => {
 			otu.segments.map((segment) => [segment.name, segment.length]),
 		).toEqual([
 			["L", 10],
+			// Nothing mapped to M, so it takes its width from the sequence the OTU
+			// declares for it rather than from a curve.
+			["M", 30],
 			["S", 4],
 		]);
+
+		expect(otu.segments.map((segment) => segment.detected)).toEqual([
+			true,
+			false,
+			true,
+		]);
+	});
+
+	it("draws no curve for a segment nothing mapped to", async () => {
+		const otu = await formatPathoscope("pathoscope", segmentedResults());
+
+		expect(otu.segments[1]).toMatchObject({ align: [], detected: false });
+	});
+
+	it("leaves a segment nothing mapped to out of the depth figures", async () => {
+		const otu = await formatPathoscope("pathoscope", segmentedResults());
+
+		// The fourteen positions L and S were measured across have a median depth of
+		// one. M is thirty positions long, so counting it as a zero-filled genome
+		// would outvote them all and report the OTU at zero.
+		expect(otu.depth).toBe(1);
 	});
 
 	it("merges a segment across only the isolates that carry it", async () => {
@@ -810,7 +854,7 @@ describe("formatAnalysis for a segmented pathoscope hit", () => {
 
 		// S is held by `iso_c` alone. Merging it against `iso_d` — which has no S —
 		// would read that isolate's L segment at these positions.
-		expect(otu.segments[1]?.align).toEqual([
+		expect(otu.segments[2]?.align).toEqual([
 			[0, 4],
 			[3, 4],
 		]);
@@ -826,6 +870,8 @@ describe("formatAnalysis for a segmented pathoscope hit", () => {
 			]),
 		);
 
+		// No key for M: the sequence exists in the reference but recorded no hit, so
+		// it is not part of the result.
 		expect(keys.get("Isolate C")).toEqual(["seg:L", "seg:S"]);
 
 		// The isolate with no S sequence names only L, so the detail view can leave

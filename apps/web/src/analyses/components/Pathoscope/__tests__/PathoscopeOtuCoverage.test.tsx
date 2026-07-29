@@ -19,6 +19,7 @@ function segment(
 ): PathoscopeSegmentCoverage {
 	return {
 		align,
+		detected: align.length > 0,
 		key: name === null ? `len:${length}` : `seg:${name}`,
 		length,
 		name,
@@ -208,6 +209,25 @@ describe("<PathoscopeOtuCoverage />", () => {
 		// approximately, because the sequences filling it differ.
 		expect(screen.getByText("L")).toBeVisible();
 		expect(screen.getByText("≈800 nt")).toBeVisible();
+	});
+
+	it("should say why a segment nothing mapped to is blank", () => {
+		mockElementWidth(400);
+
+		renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={12}
+				segments={[
+					segment(align, 3400, "L"),
+					{ align: [], detected: false, key: "seg:M", length: 1200, name: "M" },
+				]}
+			/>,
+		);
+
+		// The panel keeps its place in the layout but draws nothing, so the label has
+		// to carry the reason — a blank panel alone reads as a gap.
+		expect(paths()).toHaveLength(1);
+		expect(screen.getByText("M · no reads")).toBeVisible();
 	});
 
 	it("should not label the single segment of an unsegmented otu", () => {

@@ -27,6 +27,7 @@ function sequence(
 type Group = SegmentGroup<SegmentedSequence> | undefined;
 
 const empty: SegmentGroup<SegmentedSequence> = {
+	declaredLength: 0,
 	isolates: [],
 	key: "",
 	name: null,
@@ -175,10 +176,33 @@ describe("groupSequencesIntoSegments", () => {
 			expect(markers(groups[2])).toEqual([[3], [5]]);
 		});
 
-		it("drops a declared segment no isolate was hit against", () => {
+		it("keeps a declared segment no isolate was hit against, in its place", () => {
+			// Nothing mapped to M. It is a partial detection rather than an OTU whose
+			// reference never had the segment, so it keeps its column between L and S.
+			const groups = groupSequencesIntoSegments(
+				[[sequence(300, 1, "L"), sequence(100, 2, "S")]],
+				["L", "M", "S"],
+				new Map([
+					["L", 300],
+					["M", 200],
+					["S", 100],
+				]),
+			);
+
+			expect(groups.map((group) => group.name)).toEqual(["L", "M", "S"]);
+			expect(groups[1]?.isolates).toEqual([]);
+
+			// Its width has to come from the schema, since it has no curve.
+			expect(groups[1]?.declaredLength).toBe(200);
+		});
+
+		it("drops a declared segment the otu holds no sequence for at all", () => {
+			// A schema can declare a segment no isolate carries. There is nothing to
+			// draw and no width to draw it at, so it is not a column.
 			const groups = groupSequencesIntoSegments(
 				[[sequence(300, 1, "L")]],
 				["L", "M"],
+				new Map([["L", 300]]),
 			);
 
 			expect(groups.map((group) => group.name)).toEqual(["L"]);

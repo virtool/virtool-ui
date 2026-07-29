@@ -13,8 +13,9 @@ function segment(
 	key: string,
 	length: number,
 	name: string | null,
+	detected = true,
 ): PathoscopeSegmentCoverage {
-	return { align: [], key, length, name };
+	return { align: [], detected, key, length, name };
 }
 
 function sequence(
@@ -94,6 +95,33 @@ describe("<PathoscopeIsolate />", () => {
 		// The empty column is labelled with the segment it stands for, so it is not
 		// mistaken for a segment that was measured and found empty.
 		expect(screen.getByText("M")).toBeVisible();
+	});
+
+	it("should not claim the isolate lacks a segment nothing mapped to", () => {
+		// Every isolate is empty on a segment no hit was recorded against, and the
+		// reference may well describe it for all of them — so the column must not say
+		// this isolate does not carry it.
+		renderWithProviders(
+			<AnalysisSearchProvider search={{}} setSearch={vi.fn()}>
+				<PathoscopeIsolate
+					coverage={0.9}
+					depth={12}
+					genomeLength={genomeLength}
+					maxDepth={20}
+					name="Isolate A"
+					pi={0.5}
+					reads={30}
+					segments={[
+						segment("seg:L", 8900, "L"),
+						segment("seg:M", 4800, "M", false),
+					]}
+					sequences={[sequence("seg:L", "NC_L", 8900)]}
+				/>
+			</AnalysisSearchProvider>,
+		);
+
+		expect(screen.getByText("No reads mapped")).toBeVisible();
+		expect(screen.queryByText("Not in this isolate")).toBeNull();
 	});
 
 	it("should lay the columns out in the order the segments are given in", () => {
