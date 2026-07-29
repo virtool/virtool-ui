@@ -4,60 +4,52 @@ import type { Coordinate } from "@virtool/contracts";
 import { area, axisBottom, axisLeft, format, scaleLinear, select } from "d3";
 import { useEffect, useRef } from "react";
 import "./area.css";
+import { chartHeight, chartMargin } from "./columns";
 
 type DrawParams = {
-	element: HTMLElement;
 	data: Coordinate[] | null;
+	element: HTMLElement;
 	label: string;
-	length: number;
+
+	/** The span the horizontal axis covers — the segment, not this sequence */
+	segmentLength: number;
+
+	width: number;
 	yMax: number;
-	xMin: number;
-	maxGenomeLength: number;
-	ratio: number;
 };
 
 function draw({
-	element,
 	data,
+	element,
 	label,
-	length,
+	segmentLength,
+	width,
 	yMax,
-	xMin,
-	maxGenomeLength,
-	ratio,
 }: DrawParams) {
-	select(element).append("svg");
-
-	const margin = 50;
-	const height = 120;
-
-	let width = maxGenomeLength > 800 ? maxGenomeLength / 5 : maxGenomeLength;
-
-	if (width < xMin) {
-		width = xMin;
-	}
-
-	width *= ratio;
-
-	const x = scaleLinear().range([0, width]).domain([0, length]);
-	const y = scaleLinear().range([height, 0]).domain([0, yMax]);
+	// The axis spans the segment rather than this sequence, so a sequence shorter
+	// than the longest filling the segment stops short of the column's edge
+	// instead of being stretched across it.
+	const x = scaleLinear().range([0, width]).domain([0, segmentLength]);
+	const y = scaleLinear().range([chartHeight, 0]).domain([0, yMax]);
 
 	select(element).selectAll("*").remove();
 
 	const svgRoot = select(element)
 		.append("svg")
-		.attr("width", width + margin)
-		.attr("height", height + margin);
+		.attr("width", width + chartMargin)
+		.attr("height", chartHeight + chartMargin);
 
 	labelSvg(svgRoot, label);
 
-	const svg = svgRoot.append("g").attr("transform", `translate(${margin},5)`);
+	const svg = svgRoot
+		.append("g")
+		.attr("transform", `translate(${chartMargin},5)`);
 
 	if (data) {
 		const areaDrawer = area<Coordinate>()
 			.x((d) => x(d[0]))
 			.y0((d) => y(d[1]))
-			.y1(height);
+			.y1(chartHeight);
 
 		svg
 			.append("path")
@@ -70,7 +62,7 @@ function draw({
 	svg
 		.append("g")
 		.attr("class", "x axis")
-		.attr("transform", `translate(0,${height})`)
+		.attr("transform", `translate(0,${chartHeight})`)
 		.call(axisBottom(x).ticks(10))
 		.selectAll("text")
 		.style("text-anchor", "end")
@@ -88,10 +80,14 @@ type CoverageChartProps = {
 	accession: string;
 	data: Coordinate[] | null;
 	definition: string;
-	id: string;
 	length: number;
-	maxGenomeLength: number;
-	ratio: number;
+
+	/** The span the horizontal axis covers — the segment, not this sequence */
+	segmentLength: number;
+
+	/** The width of the column, shared with every other isolate's */
+	width: number;
+
 	yMax: number;
 };
 
@@ -100,8 +96,8 @@ export default function PathoscopeSequence({
 	data,
 	definition,
 	length,
-	maxGenomeLength,
-	ratio,
+	segmentLength,
+	width,
 	yMax,
 }: CoverageChartProps) {
 	const chartEl = useRef<HTMLDivElement | null>(null);
@@ -109,17 +105,15 @@ export default function PathoscopeSequence({
 	useEffect(() => {
 		if (chartEl.current) {
 			draw({
-				element: chartEl.current,
 				data,
+				element: chartEl.current,
 				label: `Read depth coverage across the ${accession} sequence, ${pluralize(length, "nucleotide")} long.`,
-				length,
+				segmentLength,
+				width,
 				yMax,
-				xMin: chartEl.current.offsetWidth,
-				maxGenomeLength,
-				ratio,
 			});
 		}
-	}, [accession, data, length, maxGenomeLength, ratio, yMax]);
+	}, [accession, data, length, segmentLength, width, yMax]);
 
 	return (
 		<div className="bg-stone-50 inline-block rounded">

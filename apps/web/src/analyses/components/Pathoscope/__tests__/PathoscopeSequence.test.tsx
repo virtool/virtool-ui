@@ -3,31 +3,20 @@ import { renderWithProviders } from "@tests/setup";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import PathoscopeSequence from "../PathoscopeSequence";
 
-/**
- * jsdom does not lay out elements, so `offsetWidth` is always zero. The chart
- * measures its container to size the plot, so stub a realistic width.
- */
-function mockElementWidth(width: number) {
-	vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(width);
-}
-
 afterEach(() => {
 	vi.restoreAllMocks();
 });
 
 describe("<PathoscopeSequence />", () => {
 	it("should render an accessible coverage chart with a data-informed label", () => {
-		mockElementWidth(400);
-
 		renderWithProviders(
 			<PathoscopeSequence
 				accession="NC_001498"
 				data={[]}
 				definition="Measles virus"
-				id="foo"
 				length={1000}
-				maxGenomeLength={1000}
-				ratio={1}
+				segmentLength={1000}
+				width={400}
 				yMax={12}
 			/>,
 		);
@@ -40,5 +29,36 @@ describe("<PathoscopeSequence />", () => {
 		expect(svg.querySelector("title")?.textContent).toBe(
 			svg.getAttribute("aria-label"),
 		);
+	});
+
+	it("should scale the horizontal axis to the segment, not the sequence", () => {
+		// A sequence covering half of the segment it fills must stop halfway across
+		// the column rather than being stretched over it.
+		renderWithProviders(
+			<PathoscopeSequence
+				accession="NC_001498"
+				data={[
+					[0, 12],
+					[500, 12],
+				]}
+				definition="Measles virus"
+				length={500}
+				segmentLength={1000}
+				width={400}
+				yMax={12}
+			/>,
+		);
+
+		const d =
+			screen
+				.getByRole("img")
+				.querySelector("path.depth-area")
+				?.getAttribute("d") ?? "";
+
+		const xValues = [...d.matchAll(/[ML]([\d.]+),/g)].map((match) =>
+			Number(match[1]),
+		);
+
+		expect(Math.max(...xValues)).toBe(200);
 	});
 });

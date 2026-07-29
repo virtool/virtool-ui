@@ -4,6 +4,8 @@ import {
 	groupSequencesIntoSegments,
 	readSchemaNames,
 	type SegmentedSequence,
+	type SegmentGroup,
+	segmentDepths,
 } from "./segments";
 
 /**
@@ -22,9 +24,21 @@ function sequence(
 	};
 }
 
+type Group = SegmentGroup<SegmentedSequence> | undefined;
+
+const empty: SegmentGroup<SegmentedSequence> = {
+	isolates: [],
+	key: "",
+	name: null,
+};
+
 // The markers each group collected, one entry per contributing isolate.
-function markers(depths: number[][]): number[][] {
-	return depths.map((entry) => [...new Set(entry)]);
+function markers(group: Group): number[][] {
+	return segmentDepths(group ?? empty).map((entry) => [...new Set(entry)]);
+}
+
+function depthsOf(group: Group): number[][] {
+	return segmentDepths(group ?? empty);
 }
 
 describe("readSchemaNames", () => {
@@ -85,7 +99,7 @@ describe("groupSequencesIntoSegments", () => {
 			);
 
 			expect(groups).toHaveLength(1);
-			expect(markers(groups[0]?.depths ?? [])).toEqual([[1], [2]]);
+			expect(markers(groups[0])).toEqual([[1], [2]]);
 		});
 
 		it("makes as many segments as the largest isolate carries sequences", () => {
@@ -98,8 +112,8 @@ describe("groupSequencesIntoSegments", () => {
 			);
 
 			expect(groups).toHaveLength(2);
-			expect(markers(groups[0]?.depths ?? [])).toEqual([[1], [3]]);
-			expect(markers(groups[1]?.depths ?? [])).toEqual([[2], [4]]);
+			expect(markers(groups[0])).toEqual([[1], [3]]);
+			expect(markers(groups[1])).toEqual([[2], [4]]);
 		});
 
 		it("leaves a missing sequence's segment unfilled rather than shifting the rest", () => {
@@ -115,9 +129,14 @@ describe("groupSequencesIntoSegments", () => {
 			);
 
 			expect(groups).toHaveLength(3);
-			expect(markers(groups[0]?.depths ?? [])).toEqual([[1], [4]]);
-			expect(markers(groups[1]?.depths ?? [])).toEqual([[2]]);
-			expect(markers(groups[2]?.depths ?? [])).toEqual([[3], [5]]);
+			expect(markers(groups[0])).toEqual([[1], [4]]);
+			expect(markers(groups[1])).toEqual([[2]]);
+			expect(markers(groups[2])).toEqual([[3], [5]]);
+
+			// The unfilled segment names the isolate that did carry it, so the other
+			// can be told apart from an isolate that simply came later in the list.
+			expect(groups[1]?.isolates.map((entry) => entry.index)).toEqual([0]);
+			expect(groups[2]?.isolates.map((entry) => entry.index)).toEqual([0, 1]);
 		});
 
 		it("concatenates an isolate's sequences that fall in one segment", () => {
@@ -132,9 +151,9 @@ describe("groupSequencesIntoSegments", () => {
 			);
 
 			expect(groups).toHaveLength(2);
-			expect(markers(groups[0]?.depths ?? [])).toEqual([[1, 2], [3]]);
-			expect(groups[0]?.depths[0]).toHaveLength(198);
-			expect(markers(groups[1]?.depths ?? [])).toEqual([[4]]);
+			expect(markers(groups[0])).toEqual([[1, 2], [3]]);
+			expect(depthsOf(groups[0])[0]).toHaveLength(198);
+			expect(markers(groups[1])).toEqual([[4]]);
 		});
 	});
 
@@ -152,8 +171,8 @@ describe("groupSequencesIntoSegments", () => {
 
 			// The isolate with no M sequence contributes to L and S and nothing else,
 			// so M is read across the one isolate that carried it.
-			expect(markers(groups[1]?.depths ?? [])).toEqual([[2]]);
-			expect(markers(groups[2]?.depths ?? [])).toEqual([[3], [5]]);
+			expect(markers(groups[1])).toEqual([[2]]);
+			expect(markers(groups[2])).toEqual([[3], [5]]);
 		});
 
 		it("drops a declared segment no isolate was hit against", () => {
@@ -178,7 +197,7 @@ describe("groupSequencesIntoSegments", () => {
 			);
 
 			expect(groups.map((group) => group.name)).toEqual(["L", "Absent"]);
-			expect(markers(groups[1]?.depths ?? [])).toEqual([[2], [4]]);
+			expect(markers(groups[1])).toEqual([[2], [4]]);
 		});
 
 		it("bins the unassigned sequences behind the declared segments", () => {
@@ -191,8 +210,18 @@ describe("groupSequencesIntoSegments", () => {
 			);
 
 			expect(groups.map((group) => group.name)).toEqual(["L", null]);
-			expect(markers(groups[1]?.depths ?? [])).toEqual([[2], [4]]);
+			expect(markers(groups[1])).toEqual([[2], [4]]);
 		});
+	});
+
+	it("keys named and length-inferred segments into separate spaces", () => {
+		// An OTU declaring a segment named `0` must not collide with the first bin.
+		const groups = groupSequencesIntoSegments(
+			[[sequence(300, 1, "0"), sequence(40, 2)]],
+			["0"],
+		);
+
+		expect(groups.map((group) => group.key)).toEqual(["seg:0", "len:0"]);
 	});
 
 	it("makes no segments for an otu with no hit sequences", () => {

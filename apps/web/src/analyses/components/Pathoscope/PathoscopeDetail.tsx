@@ -1,7 +1,6 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import ScrollSyncContainer from "@base/ScrollSyncContainer";
 import type { PathoscopeHit } from "@virtool/contracts";
-import { maxBy } from "es-toolkit";
 import PathoscopeIsolate from "./PathoscopeIsolate";
 
 type PathoscopeDetailProps = {
@@ -20,13 +19,19 @@ export default function PathoscopeDetail({
 	const { search } = useAnalysisSearch();
 	const filterIsolates = search.filterIsolates ?? true;
 
-	const { isolates, pi } = hit;
+	const { isolates, pi, segments } = hit;
 
 	const filtered = isolates.filter(
 		(isolate) => !filterIsolates || isolate.pi >= 0.03 * pi,
 	);
 
-	const maxGenomeLength = maxBy(filtered, (item) => item.length)?.length;
+	// The OTU's genome, taken across its segments. Every row lays its columns out
+	// against this rather than against its own sequences, so the rows line up on
+	// the segments they share.
+	const genomeLength = segments.reduce(
+		(total, segment) => total + segment.length,
+		0,
+	);
 
 	const isolateComponents = filtered.map((isolate) => {
 		return (
@@ -34,11 +39,12 @@ export default function PathoscopeDetail({
 				key={isolate.id}
 				coverage={isolate.coverage}
 				depth={isolate.depth}
+				genomeLength={genomeLength}
 				maxDepth={hit.maxDepth}
-				maxGenomeLength={maxGenomeLength ?? 0}
 				name={isolate.name}
 				pi={isolate.pi}
 				reads={Math.round(isolate.pi * mappedCount)}
+				segments={segments}
 				sequences={isolate.sequences}
 			/>
 		);

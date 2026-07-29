@@ -45,6 +45,15 @@ export type PathoscopeSequence = {
 
 	/** The number of reads the workflow assigned to this sequence */
 	reads: number;
+
+	/**
+	 * The key of the OTU segment this sequence fills.
+	 *
+	 * Matches one `PathoscopeSegmentCoverage.key` on the parent hit, which is what
+	 * lets the isolates be laid out in columns — a segment an isolate has no
+	 * sequence for leaves its column empty rather than shifting the rest along.
+	 */
+	segmentKey: string;
 };
 
 /** A detected isolate, with the metrics derived from the sequences it owns. */
@@ -88,6 +97,9 @@ export type PathoscopeSegmentCoverage = {
 	 * no sequence for the segment contributes nothing rather than zeroes.
 	 */
 	align: Coordinate[];
+
+	/** The key the isolates' sequences name this segment by */
+	key: string;
 
 	/** The length the polyline spans — the longest sequence filling this segment */
 	length: number;

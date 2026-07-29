@@ -41,6 +41,7 @@ import {
 	compareBySegment,
 	groupSequencesIntoSegments,
 	readSchemaNames,
+	segmentDepths,
 } from "./segments";
 import { transformCoverageToCoordinates } from "./simplify";
 
@@ -55,18 +56,22 @@ type RawResults = Record<string, unknown>;
 // derived from, and the schema segment it names. The depths themselves never
 // reach the wire: every metric that needs them is computed here, and only the
 // drawn polyline is sent.
+//
+// The segment key is the one field it cannot carry: which segment a sequence
+// fills is only decided once every isolate has been measured, so the OTU stamps
+// it on afterwards.
 type MeasuredSequence = {
 	depths: number[];
 	length: number;
 	segment: string | null;
-	sequence: PathoscopeSequence;
+	sequence: Omit<PathoscopeSequence, "segmentKey">;
 };
 
 // The same pairing one level up, so an OTU can match its isolates' sequences up
 // segment by segment.
 type MeasuredIsolate = {
 	depths: number[];
-	isolate: PathoscopeIsolate;
+	isolate: Omit<PathoscopeIsolate, "sequences">;
 	sequences: MeasuredSequence[];
 };
 
@@ -189,7 +194,6 @@ function formatIsolates(
 				length: depths.length,
 				name: formatIsolateName(isolate),
 				pi: sequences.reduce((sum, entry) => sum + entry.sequence.pi, 0),
-				sequences: sequences.map((entry) => entry.sequence),
 			},
 		});
 	}
@@ -224,10 +228,32 @@ function formatHits(
 		schemaNames,
 	);
 
-	const merged = groupSequencesIntoSegments(
+	const groups = groupSequencesIntoSegments(
 		measured.map((entry) => entry.sequences),
 		schemaNames,
-	).map((group) => ({ depths: mergeDepths(group.depths), name: group.name }));
+	);
+
+	// Each isolate's sequences, rebuilt in the order the segments are drawn in and
+	// stamped with the segment each one fills. Every measured sequence lands in
+	// exactly one group, so nothing is dropped by going around this way.
+	const sequencesByIsolate: PathoscopeSequence[][] = measured.map(() => []);
+
+	for (const group of groups) {
+		for (const entry of group.isolates) {
+			for (const measuredSequence of entry.sequences) {
+				sequencesByIsolate[entry.index]?.push({
+					...measuredSequence.sequence,
+					segmentKey: group.key,
+				});
+			}
+		}
+	}
+
+	const merged = groups.map((group) => ({
+		depths: mergeDepths(segmentDepths(group)),
+		key: group.key,
+		name: group.name,
+	}));
 
 	// The OTU's depth figures are read across every segment taken together, so
 	// they stay figures about the whole genome now that it is drawn in pieces.
@@ -246,7 +272,10 @@ function formatHits(
 		depth: medianDepth(combined),
 		// Highest coverage first, which is the order the detail view reads down.
 		isolates: measured
-			.map((entry) => entry.isolate)
+			.map((entry, index) => ({
+				...entry.isolate,
+				sequences: sequencesByIsolate[index] ?? [],
+			}))
 			.sort((a, b) => b.coverage - a.coverage),
 		length: maxSequenceLength,
 		maxDepth: maxDepthOf(combined),
@@ -254,6 +283,7 @@ function formatHits(
 		pi: measured.reduce((sum, entry) => sum + entry.isolate.pi, 0),
 		segments: merged.map((segment) => ({
 			align: transformCoverageToCoordinates(segment.depths),
+			key: segment.key,
 			length: segment.depths.length,
 			name: segment.name,
 		})),

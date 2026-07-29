@@ -17,7 +17,12 @@ function segment(
 	length: number,
 	name: string | null = null,
 ): PathoscopeSegmentCoverage {
-	return { align, length, name };
+	return {
+		align,
+		key: name === null ? `len:${length}` : `seg:${name}`,
+		length,
+		name,
+	};
 }
 
 const align: Coordinate[] = [

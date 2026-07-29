@@ -25,10 +25,27 @@ export type SegmentedSequence = {
 	segment: string | null;
 };
 
-/** One genome segment's depths, one array per isolate that carried it. */
-export type SegmentGroup = {
-	/** The depths of each isolate that carried this segment */
-	depths: number[][];
+/** What one isolate contributed to a segment. */
+export type SegmentContribution<T> = {
+	/** The isolate's position in the list the group was built from */
+	index: number;
+
+	/** The sequences that isolate carried for this segment */
+	sequences: T[];
+};
+
+/** One genome segment, and what each isolate carrying it contributed. */
+export type SegmentGroup<T> = {
+	/** The isolates that carried this segment. One that did not is absent. */
+	isolates: SegmentContribution<T>[];
+
+	/**
+	 * The key a sequence is matched to this segment by.
+	 *
+	 * Named and length-inferred segments key into separate spaces, so an OTU
+	 * declaring a segment literally named `0` cannot collide with the first bin.
+	 */
+	key: string;
 
 	/** The schema segment name, or null when the segment was inferred by length */
 	name: string | null;
@@ -90,31 +107,50 @@ export function compareBySegment<
 	return b.length - a.length;
 }
 
-// An isolate that carried more than one sequence for the same segment
-// contributes them concatenated, which is the shape the isolate charts already
-// draw a multi-sequence isolate in. Nothing prevents the case:
-// `legacy_sequences.segment` has no unique index and `checkSegment` only
-// verifies a name is declared, not that it is unclaimed, and two sequences of
-// near-identical length fall in one bin.
-function concatenate(sequences: SegmentedSequence[]): number[] {
-	return sequences.flatMap((sequence) => sequence.depths);
-}
-
-// The depths of every isolate holding a sequence this segment matches. An
-// isolate holding none is absent rather than zero-filled, so `mergeDepths` reads
-// the segment across only the isolates that carried it.
-function collect(
-	isolates: SegmentedSequence[][],
-	matches: (sequence: SegmentedSequence) => boolean,
+/**
+ * The depths each isolate contributed to a segment, ready to merge.
+ *
+ * An isolate that carried more than one sequence for the same segment
+ * contributes them concatenated, which is the shape the isolate charts already
+ * draw a multi-sequence isolate in. Nothing prevents the case:
+ * `legacy_sequences.segment` has no unique index and `checkSegment` only verifies
+ * a name is declared, not that it is unclaimed, and two sequences of
+ * near-identical length fall in one bin.
+ */
+export function segmentDepths<T extends SegmentedSequence>(
+	group: SegmentGroup<T>,
 ): number[][] {
-	return isolates
-		.map((sequences) => sequences.filter(matches))
-		.filter((matched) => matched.length > 0)
-		.map(concatenate);
+	return group.isolates.map((entry) =>
+		entry.sequences.flatMap((sequence) => sequence.depths),
+	);
 }
 
-function longestOf(depths: number[][]): number {
-	return depths.reduce((longest, entry) => Math.max(longest, entry.length), 0);
+// Every isolate holding a sequence this segment matches. One holding none is
+// absent rather than contributing zeroes, so the segment is merged across only
+// the isolates that carried it.
+function collect<T extends SegmentedSequence>(
+	isolates: T[][],
+	matches: (sequence: T) => boolean,
+): SegmentContribution<T>[] {
+	return isolates
+		.map((sequences, index) => ({
+			index,
+			sequences: sequences.filter(matches),
+		}))
+		.filter((entry) => entry.sequences.length > 0);
+}
+
+function longestOf<T extends SegmentedSequence>(
+	isolates: SegmentContribution<T>[],
+): number {
+	return isolates.reduce(
+		(longest, entry) =>
+			Math.max(
+				longest,
+				entry.sequences.reduce((sum, sequence) => sum + sequence.length, 0),
+			),
+		0,
+	);
 }
 
 /**
@@ -173,17 +209,17 @@ function binOf(length: number, thresholds: number[]): number {
  * segments in schema order, then any segment named but not declared, then the
  * length-inferred bins, longest first.
  */
-export function groupSequencesIntoSegments(
-	isolates: SegmentedSequence[][],
+export function groupSequencesIntoSegments<T extends SegmentedSequence>(
+	isolates: T[][],
 	schemaNames: string[],
-): SegmentGroup[] {
-	const groups: SegmentGroup[] = [];
+): SegmentGroup<T>[] {
+	const groups: SegmentGroup<T>[] = [];
 
 	for (const name of schemaNames) {
-		const depths = collect(isolates, (sequence) => sequence.segment === name);
+		const matched = collect(isolates, (sequence) => sequence.segment === name);
 
-		if (depths.length > 0) {
-			groups.push({ depths, name });
+		if (matched.length > 0) {
+			groups.push({ isolates: matched, key: `seg:${name}`, name });
 		}
 	}
 
@@ -205,10 +241,11 @@ export function groupSequencesIntoSegments(
 	groups.push(
 		...[...undeclared]
 			.map((name) => ({
-				depths: collect(isolates, (sequence) => sequence.segment === name),
+				isolates: collect(isolates, (sequence) => sequence.segment === name),
+				key: `seg:${name}`,
 				name,
 			}))
-			.sort((a, b) => longestOf(b.depths) - longestOf(a.depths)),
+			.sort((a, b) => longestOf(b.isolates) - longestOf(a.isolates)),
 	);
 
 	const unassigned = isolates.map((sequences) =>
@@ -226,15 +263,15 @@ export function groupSequencesIntoSegments(
 	);
 
 	for (let bin = 0; bin < binCount; bin++) {
-		const depths = collect(
+		const matched = collect(
 			unassigned,
 			(sequence) => binOf(sequence.length, thresholds) === bin,
 		);
 
 		// A bin can come out empty when lengths tie across a cut, which only happens
 		// where the lengths carry no signal to separate the segments by.
-		if (depths.length > 0) {
-			groups.push({ depths, name: null });
+		if (matched.length > 0) {
+			groups.push({ isolates: matched, key: `len:${bin}`, name: null });
 		}
 	}
 

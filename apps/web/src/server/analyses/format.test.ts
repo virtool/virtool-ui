@@ -514,6 +514,8 @@ describe("formatAnalysis for pathoscope", () => {
 			length: 10,
 			pi: 0.5,
 			reads: 30,
+			// The OTU is unsegmented, so its one segment was inferred by length.
+			segmentKey: "len:0",
 		});
 	});
 
@@ -584,6 +586,7 @@ describe("formatAnalysis for pathoscope", () => {
 					[4, 0],
 					[9, 0],
 				],
+				key: "len:0",
 				length: 10,
 				name: null,
 			},
@@ -639,6 +642,7 @@ describe("formatAnalysis for pathoscope", () => {
 				[4, 0],
 				[9, 0],
 			],
+			key: "len:0",
 			// The segment spans the longest sequence filling it.
 			length: 10,
 			name: null,
@@ -665,6 +669,168 @@ describe("formatAnalysis for pathoscope", () => {
 				hits: [{ id: "seq_x", otu: { id: "otu_missing", version: 1 } }],
 			}),
 		).rejects.toBeInstanceOf(AnalysisResultsError);
+	});
+});
+
+// An OTU with a two-segment schema. `iso_c` carries both segments and `iso_d`
+// carries only L, which is the case that used to shift every position after the
+// gap and merge the rest of the isolate against the wrong loci.
+async function seedSegmentedOtu(): Promise<void> {
+	const name = "Tomato spotted wilt virus";
+
+	await db.insert(legacyOtus).values({
+		id: "otu_two",
+		data: {
+			_id: "otu_two",
+			abbreviation: "TSWV",
+			name,
+			reference: { id: REFERENCE_ID },
+			schema: [
+				{ molecule: "ssRNA", name: "L", required: true },
+				{ molecule: "ssRNA", name: "S", required: false },
+			],
+			version: 1,
+			isolates: [
+				{ id: "iso_c", source_type: "isolate", source_name: "C" },
+				{ id: "iso_d", source_type: "isolate", source_name: "D" },
+			],
+		},
+		name,
+		abbreviation: "TSWV",
+		reference_id: REFERENCE_ID,
+		verified: true,
+		version: 1,
+	});
+
+	await db.insert(legacySequences).values([
+		{
+			id: "seq_c_l",
+			data: {
+				_id: "seq_c_l",
+				accession: "NC_L_C",
+				definition: "L segment",
+				isolate_id: "iso_c",
+				segment: "L",
+				sequence: "ATGCATGCAT",
+			},
+			otu_id: "otu_two",
+			isolate_id: "iso_c",
+			segment: "L",
+			position: 0,
+		},
+		{
+			id: "seq_c_s",
+			data: {
+				_id: "seq_c_s",
+				accession: "NC_S_C",
+				definition: "S segment",
+				isolate_id: "iso_c",
+				segment: "S",
+				sequence: "ATGC",
+			},
+			otu_id: "otu_two",
+			isolate_id: "iso_c",
+			segment: "S",
+			position: 1,
+		},
+		{
+			id: "seq_d_l",
+			data: {
+				_id: "seq_d_l",
+				accession: "NC_L_D",
+				definition: "L segment",
+				isolate_id: "iso_d",
+				segment: "L",
+				sequence: "ATGCATGCAT",
+			},
+			otu_id: "otu_two",
+			isolate_id: "iso_d",
+			segment: "L",
+			position: 2,
+		},
+	]);
+}
+
+describe("formatAnalysis for a segmented pathoscope hit", () => {
+	beforeEach(seedSegmentedOtu);
+
+	function segmentedResults() {
+		const otu = { id: "otu_two", version: 1 };
+
+		return {
+			read_count: 1024,
+			hits: [
+				{
+					id: "seq_c_l",
+					otu,
+					align: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+					coverage: 1,
+					final: { best: 12, pi: 0.5, reads: 30 },
+				},
+				{
+					id: "seq_c_s",
+					otu,
+					align: [4, 4, 4, 4],
+					coverage: 1,
+					final: { best: 8, pi: 0.2, reads: 12 },
+				},
+				{
+					id: "seq_d_l",
+					otu,
+					align: [9, 9],
+					coverage: 0.2,
+					final: { best: 4, pi: 0.1, reads: 6 },
+				},
+			],
+		};
+	}
+
+	it("emits one segment per schema segment, in schema order", async () => {
+		const otu = await formatPathoscope("pathoscope", segmentedResults());
+
+		expect(
+			otu.segments.map((segment) => [segment.name, segment.length]),
+		).toEqual([
+			["L", 10],
+			["S", 4],
+		]);
+	});
+
+	it("merges a segment across only the isolates that carry it", async () => {
+		const otu = await formatPathoscope("pathoscope", segmentedResults());
+
+		// L is held by both isolates, so its first two positions take `iso_d`'s
+		// deeper reads and the rest keep `iso_c`'s.
+		expect(otu.segments[0]?.align).toEqual([
+			[0, 9],
+			[1, 9],
+			[2, 1],
+			[9, 1],
+		]);
+
+		// S is held by `iso_c` alone. Merging it against `iso_d` — which has no S —
+		// would read that isolate's L segment at these positions.
+		expect(otu.segments[1]?.align).toEqual([
+			[0, 4],
+			[3, 4],
+		]);
+	});
+
+	it("names the segment each isolate's sequences fill", async () => {
+		const otu = await formatPathoscope("pathoscope", segmentedResults());
+
+		const keys = new Map(
+			otu.isolates.map((isolate) => [
+				isolate.name,
+				isolate.sequences.map((sequence) => sequence.segmentKey),
+			]),
+		);
+
+		expect(keys.get("Isolate C")).toEqual(["seg:L", "seg:S"]);
+
+		// The isolate with no S sequence names only L, so the detail view can leave
+		// the S column empty rather than sliding L into it.
+		expect(keys.get("Isolate D")).toEqual(["seg:L"]);
 	});
 });
 
