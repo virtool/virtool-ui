@@ -21,12 +21,12 @@ export default function PathoscopeSequenceEmpty({
 	width,
 }: PathoscopeSequenceEmptyProps) {
 	return (
-		<div className="bg-stone-50 inline-block rounded">
-			<p className="font-medium m-0 p-4 text-base text-gray-500">
+		<div className="bg-blue-100 inline-block rounded">
+			<p className="font-medium m-0 p-4 text-base text-gray-600">
 				{name ?? "Segment"}
 			</p>
 			<div
-				className="flex items-center justify-center text-gray-400 text-sm"
+				className="flex items-center justify-center text-gray-600 text-sm"
 				style={{ height: chartHeight + chartMargin, width }}
 			>
 				Not in this isolate

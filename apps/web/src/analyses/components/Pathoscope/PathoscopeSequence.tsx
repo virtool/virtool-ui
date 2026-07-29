@@ -116,7 +116,7 @@ export default function PathoscopeSequence({
 	}, [accession, data, length, segmentLength, width, yMax]);
 
 	return (
-		<div className="bg-stone-50 inline-block rounded">
+		<div className="bg-blue-100 inline-block rounded">
 			<p className="font-medium m-0 p-4 r-1 text-base text-gray-800">
 				{accession} - {definition}
 			</p>

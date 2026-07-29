@@ -145,7 +145,7 @@ export default function PathoscopeOtuCoverage({
 			: "Read depth across the reference genome";
 
 	return (
-		<div className="bg-blue-50 pt-2" ref={ref}>
+		<div className="bg-blue-100 pt-2" ref={ref}>
 			<svg width={width} height={height} role="img" aria-label={description}>
 				<title>{description}</title>
 				{panels.map((panel) => {
@@ -167,7 +167,7 @@ export default function PathoscopeOtuCoverage({
 				})}
 			</svg>
 			{labelled && (
-				<div className="flex text-gray-500 text-xs" style={{ gap }}>
+				<div className="flex text-gray-600 text-xs" style={{ gap }}>
 					{panels.map((panel) => (
 						<span
 							className="truncate"
