@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "@tests/setup";
-import type { Coordinate } from "@virtool/contracts";
+import type { Coordinate, PathoscopeSegmentCoverage } from "@virtool/contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import PathoscopeOtuCoverage from "../PathoscopeOtuCoverage";
 
@@ -12,6 +12,14 @@ function mockElementWidth(width: number) {
 	vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(width);
 }
 
+function segment(
+	align: Coordinate[],
+	length: number,
+	name: string | null = null,
+): PathoscopeSegmentCoverage {
+	return { align, length, name };
+}
+
 const align: Coordinate[] = [
 	[0, 0],
 	[1, 5],
@@ -19,6 +27,18 @@ const align: Coordinate[] = [
 	[3, 3],
 	[4, 0],
 ];
+
+const single = [segment(align, 5)];
+
+function paths(): SVGPathElement[] {
+	return [...screen.getByRole("img").querySelectorAll("path")];
+}
+
+function xValuesOf(path: SVGPathElement | undefined): number[] {
+	const d = path?.getAttribute("d") ?? "";
+
+	return [...d.matchAll(/[ML]([\d.]+),/g)].map((match) => Number(match[1]));
+}
 
 afterEach(() => {
 	vi.restoreAllMocks();
@@ -28,28 +48,32 @@ describe("<PathoscopeOtuCoverage />", () => {
 	it("should render an area path for the coverage polyline", () => {
 		mockElementWidth(400);
 
-		renderWithProviders(<PathoscopeOtuCoverage align={align} length={5} />);
+		renderWithProviders(
+			<PathoscopeOtuCoverage maxDepth={12} segments={single} />,
+		);
 
-		const path = screen.getByRole("img").querySelector("path");
+		const [path] = paths();
 
-		expect(path).not.toBeNull();
+		expect(path).not.toBeUndefined();
 		expect(path?.getAttribute("d")).toMatch(/^M0,60L/);
 	});
 
 	it("should render no path when the container has not been measured", () => {
 		mockElementWidth(0);
 
-		renderWithProviders(<PathoscopeOtuCoverage align={align} length={5} />);
+		renderWithProviders(
+			<PathoscopeOtuCoverage maxDepth={12} segments={single} />,
+		);
 
-		expect(screen.getByRole("img").querySelector("path")).toBeNull();
+		expect(paths()).toHaveLength(0);
 	});
 
 	it("should render no path when the OTU recorded no coverage", () => {
 		mockElementWidth(400);
 
-		renderWithProviders(<PathoscopeOtuCoverage align={[]} length={0} />);
+		renderWithProviders(<PathoscopeOtuCoverage maxDepth={0} segments={[]} />);
 
-		expect(screen.getByRole("img").querySelector("path")).toBeNull();
+		expect(paths()).toHaveLength(0);
 	});
 
 	it("should draw no more points than the container has pixels", () => {
@@ -62,10 +86,14 @@ describe("<PathoscopeOtuCoverage />", () => {
 			index === 2510 ? 900 : index % 7,
 		]);
 
-		renderWithProviders(<PathoscopeOtuCoverage align={dense} length={5000} />);
+		renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={900}
+				segments={[segment(dense, 5000)]}
+			/>,
+		);
 
-		const d =
-			screen.getByRole("img").querySelector("path")?.getAttribute("d") ?? "";
+		const d = paths()[0]?.getAttribute("d") ?? "";
 
 		// The area path repeats each point on the way back along the baseline.
 		const points = [...d.matchAll(/[ML]([\d.]+),/g)].length / 2;
@@ -77,30 +105,113 @@ describe("<PathoscopeOtuCoverage />", () => {
 		expect(d).toContain(",0L");
 	});
 
-	it("should scale the polyline across the full genome length", () => {
+	it("should scale the polyline across the full segment length", () => {
 		mockElementWidth(400);
 
 		// The polyline stops well short of the genome it spans, which is what a
-		// simplified curve does. The chart must scale to the genome rather than to
+		// simplified curve does. The chart must scale to the segment rather than to
 		// the last point it was given.
 		renderWithProviders(
 			<PathoscopeOtuCoverage
-				align={[
-					[0, 0],
-					[100, 8],
+				maxDepth={8}
+				segments={[
+					segment(
+						[
+							[0, 0],
+							[100, 8],
+						],
+						200,
+					),
 				]}
-				length={200}
 			/>,
 		);
 
-		const d =
-			screen.getByRole("img").querySelector("path")?.getAttribute("d") ?? "";
+		// 100 of 200 positions is half the 400px container.
+		expect(Math.max(...xValuesOf(paths()[0]))).toBe(200);
+	});
 
-		const xValues = [...d.matchAll(/[ML]([\d.]+),/g)].map((match) =>
-			Number(match[1]),
+	it("should draw one path per segment, each offset to its own panel", () => {
+		mockElementWidth(406);
+
+		renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={12}
+				segments={[
+					segment(
+						[
+							[0, 0],
+							[300, 12],
+						],
+						300,
+						"L",
+					),
+					segment(
+						[
+							[0, 0],
+							[100, 12],
+						],
+						100,
+						"S",
+					),
+				]}
+			/>,
 		);
 
-		// 100 of 200 positions is half the 400px container.
-		expect(Math.max(...xValues)).toBe(200);
+		const [first, second] = paths();
+
+		// 300 and 100 nucleotides of 400, across 400px once the 6px gap between the
+		// panels is taken out.
+		expect(Math.max(...xValuesOf(first))).toBe(300);
+		expect(first?.getAttribute("transform")).toBe("translate(0,0)");
+
+		expect(Math.max(...xValuesOf(second))).toBe(100);
+		expect(second?.getAttribute("transform")).toBe("translate(306,0)");
+	});
+
+	it("should draw every segment against the deepest point in the OTU", () => {
+		mockElementWidth(400);
+
+		// The second segment peaks at a fifth of the first's depth, so it must be
+		// drawn a fifth as tall rather than filling its own panel.
+		renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={100}
+				segments={[segment([[0, 100]], 10, "L"), segment([[0, 20]], 10, "S")]}
+			/>,
+		);
+
+		const heightOf = (path: SVGPathElement | undefined) =>
+			Number(
+				/^M[\d.]+,([\d.]+)/.exec(path?.getAttribute("d") ?? "")?.[1] ?? "",
+			);
+
+		expect(heightOf(paths()[0])).toBe(0);
+		expect(heightOf(paths()[1])).toBe(48);
+	});
+
+	it("should label each segment when the OTU has more than one", () => {
+		mockElementWidth(400);
+
+		renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={12}
+				segments={[segment(align, 3400, "L"), segment(align, 800)]}
+			/>,
+		);
+
+		// A named segment carries its name; one matched by length says so
+		// approximately, because the sequences filling it differ.
+		expect(screen.getByText("L")).toBeVisible();
+		expect(screen.getByText("≈800 nt")).toBeVisible();
+	});
+
+	it("should not label the single segment of an unsegmented otu", () => {
+		mockElementWidth(400);
+
+		renderWithProviders(
+			<PathoscopeOtuCoverage maxDepth={12} segments={[segment(align, 5000)]} />,
+		);
+
+		expect(screen.queryByText("≈5.0 kb")).toBeNull();
 	});
 });

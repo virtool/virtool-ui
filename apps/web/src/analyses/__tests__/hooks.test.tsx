@@ -16,16 +16,15 @@ import { describe, expect, it, vi } from "vitest";
 function createHit(overrides: Partial<PathoscopeHit>): PathoscopeHit {
 	return {
 		abbreviation: "",
-		align: [],
 		coverage: 0,
 		depth: 0,
 		id: "otu",
 		isolates: [],
 		length: 100,
 		maxDepth: 0,
-		maxGenomeLength: 100,
 		name: "OTU",
 		pi: 0,
+		segments: [],
 		version: 1,
 		...overrides,
 	};

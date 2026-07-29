@@ -565,22 +565,28 @@ describe("formatAnalysis for pathoscope", () => {
 			coverage: 0.4,
 			depth: 0,
 			maxDepth: 5,
-			maxGenomeLength: 10,
 			pi: 0.5,
 		});
 	});
 
-	it("merges the isolate curves into one polyline for the otu", async () => {
+	it("merges the isolate curves into one polyline per segment", async () => {
 		const otu = await formatPathoscope();
 
-		// One isolate, so the merged curve is that isolate's — zero-padded to the
-		// full length of the sequence the alignment fell short of.
-		expect(otu.align).toEqual([
-			[0, 1],
-			[2, 1],
-			[3, 5],
-			[4, 0],
-			[9, 0],
+		// One isolate carrying one sequence, so the OTU has a single segment and its
+		// curve is that isolate's — zero-padded to the full length of the sequence
+		// the alignment fell short of.
+		expect(otu.segments).toEqual([
+			{
+				align: [
+					[0, 1],
+					[2, 1],
+					[3, 5],
+					[4, 0],
+					[9, 0],
+				],
+				length: 10,
+				name: null,
+			},
 		]);
 	});
 
@@ -617,20 +623,26 @@ describe("formatAnalysis for pathoscope", () => {
 			// The best any isolate managed, not the average.
 			coverage: 1,
 			maxDepth: 5,
-			// The merged curve spans the longest isolate.
-			maxGenomeLength: 10,
 			pi: 0.75,
 		});
 
-		// Each position takes the greatest depth any isolate recorded there.
-		expect(otu.align).toEqual([
-			[0, 2],
-			[1, 2],
-			[2, 1],
-			[3, 5],
-			[4, 0],
-			[9, 0],
-		]);
+		// Both isolates carry one sequence, so however far the two lengths diverge
+		// there is one segment for them to share — and each position of it takes the
+		// greatest depth either isolate recorded there.
+		expect(otu.segments).toHaveLength(1);
+		expect(otu.segments[0]).toEqual({
+			align: [
+				[0, 2],
+				[1, 2],
+				[2, 1],
+				[3, 5],
+				[4, 0],
+				[9, 0],
+			],
+			// The segment spans the longest sequence filling it.
+			length: 10,
+			name: null,
+		});
 	});
 
 	it("throws when a hit is missing its OTU", async () => {

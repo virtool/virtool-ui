@@ -31,16 +31,8 @@ export function PathoscopeItem({
 	hit,
 	onSelect,
 }: PathoscopeItemProps) {
-	const {
-		abbreviation,
-		align,
-		coverage,
-		depth,
-		maxGenomeLength,
-		name,
-		pi,
-		id,
-	} = hit;
+	const { abbreviation, coverage, depth, maxDepth, name, pi, id, segments } =
+		hit;
 	const { search } = useAnalysisSearch();
 	const showReads = search.reads ?? false;
 
@@ -85,7 +77,7 @@ export function PathoscopeItem({
 						</div>
 					</div>
 
-					<PathoscopeOtuCoverage align={align} length={maxGenomeLength} />
+					<PathoscopeOtuCoverage maxDepth={maxDepth} segments={segments} />
 				</AccordionTrigger>
 			</div>
 			<AccordionContent>

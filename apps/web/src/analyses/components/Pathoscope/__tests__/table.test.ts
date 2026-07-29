@@ -5,16 +5,15 @@ import { formatPathoscopeHitsAsTsv } from "../table";
 function createHit(overrides: Partial<PathoscopeHit>): PathoscopeHit {
 	return {
 		abbreviation: "TMV",
-		align: [],
 		coverage: 0.5,
 		depth: 12,
 		id: "hit",
 		isolates: [],
 		length: 6000,
 		maxDepth: 20,
-		maxGenomeLength: 6000,
 		name: "Tobacco mosaic virus",
 		pi: 0.25,
+		segments: [],
 		version: 3,
 		...overrides,
 	};

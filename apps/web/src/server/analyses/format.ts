@@ -37,6 +37,11 @@ import {
 	mergeDepths,
 	toDepths,
 } from "./metrics";
+import {
+	compareBySegment,
+	groupSequencesIntoSegments,
+	readSchemaNames,
+} from "./segments";
 import { transformCoverageToCoordinates } from "./simplify";
 
 /** Thrown when an analysis's stored results cannot be shaped for presentation. */
@@ -47,18 +52,22 @@ export class AnalysisResultsError extends AppError {}
 type RawResults = Record<string, unknown>;
 
 // A formatted sequence carried alongside the raw per-position depths it was
-// derived from. The depths themselves never reach the wire: every metric that
-// needs them is computed here, and only the drawn polyline is sent.
+// derived from, and the schema segment it names. The depths themselves never
+// reach the wire: every metric that needs them is computed here, and only the
+// drawn polyline is sent.
 type MeasuredSequence = {
 	depths: number[];
+	length: number;
+	segment: string | null;
 	sequence: PathoscopeSequence;
 };
 
-// The same pairing one level up, so an OTU can merge its isolates' curves.
+// The same pairing one level up, so an OTU can match its isolates' sequences up
+// segment by segment.
 type MeasuredIsolate = {
 	depths: number[];
 	isolate: PathoscopeIsolate;
-	maxDepth: number;
+	sequences: MeasuredSequence[];
 };
 
 // The hits a single detected OTU accounts for, keyed by the sequence they hit.
@@ -81,6 +90,7 @@ function indexHitsBySequence(
 function formatSequences(
 	sequences: unknown[],
 	hitsBySequenceId: Map<string, Record<string, unknown>>,
+	schemaNames: string[],
 ): MeasuredSequence[] {
 	const measured: MeasuredSequence[] = [];
 
@@ -105,8 +115,16 @@ function formatSequences(
 		const align = hit.align;
 		const length = asText(sequence.sequence).length;
 
+		// An unset segment is an *absent* field in `data`, not a null one — the
+		// write path removes the key with the JSONB `-` operator so a stored
+		// document stays a faithful lift of the one it was written from. Both read
+		// as unassigned here.
+		const segment = sequence.segment;
+
 		measured.push({
 			depths: toDepths(align, length),
+			length,
+			segment: typeof segment === "string" && segment !== "" ? segment : null,
 			sequence: {
 				id: sequenceId,
 				accession: asText(sequence.accession),
@@ -123,15 +141,17 @@ function formatSequences(
 		});
 	}
 
-	// Shortest first. The order is what the per-isolate charts are laid out in,
-	// and it fixes how the depth arrays concatenate — which the OTU's merged
-	// curve reads positionally.
-	return measured.sort((a, b) => a.sequence.length - b.sequence.length);
+	// By schema segment, longest first within a rank. The order is what the
+	// per-isolate charts are laid out in, and the OTU's segments are drawn in the
+	// same one. It no longer decides how the OTU's curves are merged — that is
+	// matched by segment rather than by position.
+	return measured.sort((a, b) => compareBySegment(a, b, schemaNames));
 }
 
 function formatIsolates(
 	isolates: unknown[],
 	hitsBySequenceId: Map<string, Record<string, unknown>>,
+	schemaNames: string[],
 ): MeasuredIsolate[] {
 	const measured: MeasuredIsolate[] = [];
 
@@ -145,6 +165,7 @@ function formatIsolates(
 		const sequences = formatSequences(
 			asArray(isolate.sequences),
 			hitsBySequenceId,
+			schemaNames,
 		);
 
 		// Python gates this on any formatted sequence carrying a `pi` or `final`
@@ -154,13 +175,13 @@ function formatIsolates(
 			continue;
 		}
 
-		// The isolate is measured across its sequences laid end to end, so a
-		// multi-segment genome is one curve rather than several.
+		// The isolate's own figures are measured across its sequences laid end to
+		// end, so a multi-segment genome reports one coverage rather than several.
 		const depths = sequences.flatMap((entry) => entry.depths);
 
 		measured.push({
 			depths,
-			maxDepth: maxDepthOf(depths),
+			sequences,
 			isolate: {
 				coverage: coverageOf(depths),
 				depth: medianDepth(depths),
@@ -195,31 +216,47 @@ function formatHits(
 		}
 	}
 
-	const measured = formatIsolates(isolates, indexHitsBySequence(hits));
+	const schemaNames = readSchemaNames(patchedOtu);
 
-	const merged = mergeDepths(measured.map((entry) => entry.depths));
+	const measured = formatIsolates(
+		isolates,
+		indexHitsBySequence(hits),
+		schemaNames,
+	);
+
+	const merged = groupSequencesIntoSegments(
+		measured.map((entry) => entry.sequences),
+		schemaNames,
+	).map((group) => ({ depths: mergeDepths(group.depths), name: group.name }));
+
+	// The OTU's depth figures are read across every segment taken together, so
+	// they stay figures about the whole genome now that it is drawn in pieces.
+	// Each segment counts once, at the longest length any isolate gave it — where
+	// the single concatenated curve this replaced counted the longest isolate and
+	// measured the rest against its positions.
+	const combined = merged.flatMap((segment) => segment.depths);
 
 	return {
 		id: otuId,
 		abbreviation: asText(patchedOtu.abbreviation),
-		align: transformCoverageToCoordinates(merged),
 		coverage: measured.reduce(
 			(greatest, entry) => Math.max(greatest, entry.isolate.coverage),
 			0,
 		),
-		depth: medianDepth(merged),
+		depth: medianDepth(combined),
 		// Highest coverage first, which is the order the detail view reads down.
 		isolates: measured
 			.map((entry) => entry.isolate)
 			.sort((a, b) => b.coverage - a.coverage),
 		length: maxSequenceLength,
-		maxDepth: measured.reduce(
-			(greatest, entry) => Math.max(greatest, entry.maxDepth),
-			0,
-		),
-		maxGenomeLength: merged.length,
+		maxDepth: maxDepthOf(combined),
 		name: asText(patchedOtu.name),
 		pi: measured.reduce((sum, entry) => sum + entry.isolate.pi, 0),
+		segments: merged.map((segment) => ({
+			align: transformCoverageToCoordinates(segment.depths),
+			length: segment.depths.length,
+			name: segment.name,
+		})),
 		version: asNumber(patchedOtu.version, 0),
 	};
 }

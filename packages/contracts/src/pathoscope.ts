@@ -71,23 +71,40 @@ export type PathoscopeIsolate = {
 	sequences: PathoscopeSequence[];
 };
 
+/**
+ * One of an OTU's genome segments, with its isolates' curves merged into one.
+ *
+ * A segment is matched across isolates by the schema segment its sequences name,
+ * and by sequence length where they name none. An unsegmented OTU has exactly
+ * one of these.
+ */
+export type PathoscopeSegmentCoverage = {
+	/**
+	 * The isolates' coverage polylines for this segment merged into one,
+	 * simplified for drawing.
+	 *
+	 * Each position takes the greatest depth any isolate recorded there, so the
+	 * curve represents the OTU rather than any single isolate. An isolate carrying
+	 * no sequence for the segment contributes nothing rather than zeroes.
+	 */
+	align: Coordinate[];
+
+	/** The length the polyline spans — the longest sequence filling this segment */
+	length: number;
+
+	/** The schema segment name, or null when the segment was inferred by length */
+	name: string | null;
+};
+
 /** A detected OTU, with the metrics derived from the isolates it owns. */
 export type PathoscopeHit = {
 	/** The abbreviation of the OTU, as it was at the analysed version */
 	abbreviation: string;
 
-	/**
-	 * The isolate coverage polylines merged into one, simplified for drawing.
-	 *
-	 * Each position takes the greatest depth any isolate recorded there, so the
-	 * curve represents the OTU rather than any single isolate.
-	 */
-	align: Coordinate[];
-
 	/** The greatest coverage any of the OTU's isolates achieved */
 	coverage: number;
 
-	/** The median read depth across the merged curve, in whole reads */
+	/** The median read depth across the merged curves, in whole reads */
 	depth: number;
 
 	/** The unique identifier */
@@ -102,14 +119,19 @@ export type PathoscopeHit = {
 	/** The greatest depth recorded on any single nucleotide */
 	maxDepth: number;
 
-	/** The length of the longest isolate, which the merged curve spans */
-	maxGenomeLength: number;
-
 	/** The name of the OTU, as it was at the analysed version */
 	name: string;
 
 	/** The proportion of reads from the entire sample that match this OTU */
 	pi: number;
+
+	/**
+	 * The OTU's genome segments, in the order they should be drawn.
+	 *
+	 * Segments the schema declares come first, in schema order, then any named but
+	 * not declared, then those inferred by length, longest first.
+	 */
+	segments: PathoscopeSegmentCoverage[];
 
 	/** The version of the OTU the analysis saw */
 	version: number;
