@@ -27,8 +27,14 @@ export default function AnalysisValue({
 	label,
 	value,
 }: AnalysisValueProps) {
+	// Positioned so a hidden label has a containing block. `sr-only` is
+	// `position: absolute` with no offsets, and the scrolling content container is
+	// not positioned — without this the label resolves against the initial
+	// containing block, at a static position thousands of pixels down a long list,
+	// and grows the document until it sprouts a scrollbar of its own beside the
+	// shell's.
 	return (
-		<span className={cn("flex flex-col w-22", className)}>
+		<span className={cn("flex flex-col relative w-22", className)}>
 			<span
 				className={cn(
 					{
