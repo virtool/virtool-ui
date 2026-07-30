@@ -88,7 +88,9 @@ describe("<PathoscopeIsolate />", () => {
 			sequence("seg:S", "NC_S", 2900),
 		]);
 
-		expect(screen.getAllByRole("img")).toHaveLength(1);
+		expect(
+			screen.getByRole("group", { name: /Read depth across each/ }),
+		).toBeVisible();
 		expect(screen.getByText("L")).toBeVisible();
 		expect(screen.getByText("M")).toBeVisible();
 		expect(screen.getByText("S")).toBeVisible();
@@ -154,16 +156,54 @@ describe("<PathoscopeIsolate />", () => {
 		expect(screen.queryByText("M · not in this isolate")).toBeNull();
 	});
 
-	it("should reveal a sequence's accession and definition in a popover when its label is clicked", async () => {
+	it("should reveal a sequence's figures in a popover when its panel is clicked", async () => {
 		mockElementWidth(400);
 
 		renderIsolate([sequence("seg:L", "NC_L", 8900)]);
 
-		await userEvent.click(screen.getByText("L"));
+		// The whole panel is the trigger, curve included, not just the caption
+		// beneath it.
+		await userEvent.click(
+			screen.getByRole("button", { name: "L sequence details" }),
+		);
+
+		expect(await screen.findByRole("link", { name: "NC_L" })).toHaveAttribute(
+			"href",
+			"https://www.ncbi.nlm.nih.gov/nuccore/NC_L",
+		);
+		expect(screen.getByText("NC_L definition")).toBeVisible();
+		expect(
+			screen.getByRole("rowheader", { name: "Coverage" }).nextSibling,
+		).toHaveTextContent("1.000");
+		expect(
+			screen.getByRole("rowheader", { name: "Length" }).nextSibling,
+		).toHaveTextContent("8,900 nt");
+	});
+
+	it("should not make a panel the isolate has no sequence for a trigger", () => {
+		mockElementWidth(400);
+
+		renderIsolate([sequence("seg:L", "NC_L", 8900)]);
 
 		expect(
-			await screen.findAllByText("NC_L · NC_L definition"),
-		).not.toHaveLength(0);
+			screen.queryByRole("button", { name: /M · not in this isolate/ }),
+		).toBeNull();
+	});
+
+	it("should show the isolate's figures in the same columns as the otu's", () => {
+		mockElementWidth(400);
+
+		renderIsolate([sequence("seg:L", "NC_L", 8900)]);
+
+		// The labels are only drawn in the OTU's row, so the isolate's carry them
+		// for assistive technology alone — but the columns themselves have to match.
+		expect(screen.getByText("Weight").previousSibling).toHaveTextContent(
+			"0.500",
+		);
+		expect(screen.getByText("Depth").previousSibling).toHaveTextContent("12");
+		expect(screen.getByText("Coverage").previousSibling).toHaveTextContent(
+			"0.900",
+		);
 	});
 
 	it("should render nothing but the heading for an isolate with no segments", () => {
@@ -180,7 +220,7 @@ describe("<PathoscopeIsolate />", () => {
 			/>,
 		);
 
-		expect(screen.queryAllByRole("img")).toHaveLength(0);
-		expect(screen.getByText("Isolate A")).toBeVisible();
+		expect(screen.queryByRole("group")).toBeNull();
+		expect(screen.getByRole("heading", { name: "Isolate A" })).toBeVisible();
 	});
 });

@@ -136,7 +136,7 @@ describe("<PathoscopeOtuCoverage />", () => {
 		expect(Math.max(...xValuesOf(paths()[0]))).toBe(200);
 	});
 
-	it("should draw one path per segment, each offset to its own panel", () => {
+	it("should draw one path per segment, each in a panel of its own width", () => {
 		mockElementWidth(406);
 
 		renderWithProviders(
@@ -166,12 +166,13 @@ describe("<PathoscopeOtuCoverage />", () => {
 		const [first, second] = paths();
 
 		// 300 and 100 nucleotides of 400, across 400px once the 6px gap between the
-		// panels is taken out.
+		// panels is taken out. Each panel is drawn in an svg of its own, so a curve
+		// starts at its panel's left edge rather than at an offset into a shared one.
 		expect(Math.max(...xValuesOf(first))).toBe(300);
-		expect(first?.getAttribute("transform")).toBe("translate(0,0)");
+		expect(first?.closest("svg")?.getAttribute("width")).toBe("300");
 
 		expect(Math.max(...xValuesOf(second))).toBe(100);
-		expect(second?.getAttribute("transform")).toBe("translate(306,0)");
+		expect(second?.closest("svg")?.getAttribute("width")).toBe("100");
 	});
 
 	it("should draw every segment against the deepest point in the OTU", () => {

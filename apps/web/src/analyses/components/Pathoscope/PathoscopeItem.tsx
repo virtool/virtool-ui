@@ -60,14 +60,25 @@ export function PathoscopeItem({
 				</div>
 				<div className="flex-1 min-w-0">
 					<AccordionTrigger className="flex-col items-stretch gap-4 w-full">
-						<div className="flex justify-between">
-							<header className="flex flex-col font-medium items-start text-lg">
-								<span className="mb-0.5">{name}</span>
-								<span className="text-gray-500">
-									{abbreviation || "No Abbreviation"}
-								</span>
-							</header>
-							<div className="flex gap-4">
+						{/* Everything in here is phrasing content: the trigger is a button,
+						    which may not contain a `div`. The abbreviation is a column of
+						    its own rather than a second line under the name, so it reads
+						    across with the figures beside it; an OTU without one leaves the
+						    column out entirely, and the figures stay put because the row is
+						    aligned from the right. */}
+						<span className="flex gap-4 items-start justify-between w-full">
+							<span className="font-medium min-w-0 text-lg truncate">
+								{name}
+							</span>
+							<span className="flex gap-4 shrink-0">
+								{abbreviation && (
+									<AnalysisValue
+										className="w-32"
+										color="gray"
+										label="ABBREVIATION"
+										value={abbreviation}
+									/>
+								)}
 								<AnalysisValue
 									color="green"
 									label={showReads ? "READS" : "WEIGHT"}
@@ -79,8 +90,8 @@ export function PathoscopeItem({
 									label="COVERAGE"
 									value={coverage.toFixed(3)}
 								/>
-							</div>
-						</div>
+							</span>
+						</span>
 
 						<PathoscopeOtuCoverage maxDepth={maxDepth} segments={segments} />
 					</AccordionTrigger>

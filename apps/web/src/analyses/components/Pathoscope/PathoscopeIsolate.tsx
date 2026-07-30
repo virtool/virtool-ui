@@ -1,4 +1,5 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
+import AnalysisValue from "@analyses/components/AnalysisValue";
 import { toScientificNotation } from "@app/format";
 import type {
 	PathoscopeSegmentCoverage,
@@ -7,6 +8,7 @@ import type {
 import PathoscopeCoverageChart, {
 	type CoveragePanel,
 } from "./PathoscopeCoverageChart";
+import PathoscopeSequenceDetail from "./PathoscopeSequenceDetail";
 
 const height = 60;
 
@@ -70,9 +72,9 @@ export default function PathoscopeIsolate({
 
 		return {
 			align: sequence?.align ?? null,
-			detail: sequence
-				? `${sequence.accession} · ${sequence.definition}`
-				: undefined,
+			detail: sequence ? (
+				<PathoscopeSequenceDetail sequence={sequence} />
+			) : undefined,
 			key: segment.key,
 			label: labelOf(segment, sequence),
 			length: segment.length,
@@ -85,17 +87,28 @@ export default function PathoscopeIsolate({
 			: `Read depth across the ${name} isolate`;
 
 	return (
-		<div className="mb-6 relative">
-			<div className="flex gap-4 items-end mb-2 text-lg font-medium">
-				{name}
-				<div className="flex gap-2 text-base">
-					<span className="text-green-700">
-						{showReads ? reads : toScientificNotation(pi)}
-					</span>
-					<span className="text-red-700">{depth.toFixed(0)}</span>
-					<span className="text-blue-700">
-						{toScientificNotation(coverage)}
-					</span>
+		<div className="mb-6">
+			{/* The figures sit in the same fixed-width columns, in the same order, as
+			    the OTU's own — every column is right-aligned against the same edge, so
+			    an isolate's weight, depth and coverage read directly under the OTU's.
+			    Their labels are only in the OTU's row, so they are not repeated down
+			    the panel; assistive technology still gets them from each value. */}
+			<div className="flex gap-4 items-start justify-between mb-2">
+				<h4 className="font-medium m-0 min-w-0 text-lg truncate">{name}</h4>
+				<div className="flex gap-4 shrink-0">
+					<AnalysisValue
+						color="green"
+						hideLabel
+						label={showReads ? "Reads" : "Weight"}
+						value={showReads ? reads : toScientificNotation(pi)}
+					/>
+					<AnalysisValue color="red" hideLabel label="Depth" value={depth} />
+					<AnalysisValue
+						color="blue"
+						hideLabel
+						label="Coverage"
+						value={coverage.toFixed(3)}
+					/>
 				</div>
 			</div>
 			{panels.length > 0 && (
