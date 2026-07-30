@@ -17,7 +17,6 @@ export default function ToggleGroupItem({
 			className={cn(
 				buttonVariants(),
 				"rounded-none",
-				"aria-checked:bg-gray-300",
 				"first:rounded-l-md",
 				"last:rounded-r-md",
 			)}

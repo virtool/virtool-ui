@@ -51,8 +51,8 @@ describe("<PathoscopeToolbar />", () => {
 		expect(setSearch).toHaveBeenCalledWith({ table: false });
 	});
 
-	// The trigger shows the sort key alone, so its name is the only thing left
-	// saying the control sorts.
+	// The trigger shows the sort key alone, so its name is the only thing saying
+	// the control sorts.
 	it("should name the sort trigger for the key it sorts by", () => {
 		renderToolbar({ sortKey: "depth" });
 
@@ -61,8 +61,8 @@ describe("<PathoscopeToolbar />", () => {
 		).toBeInTheDocument();
 	});
 
-	// The direction button is an arrow and nothing else, so without a name it
-	// reaches assistive technology as an unlabelled button.
+	// The direction button is an arrow and nothing else, so its name is all a
+	// screen reader has.
 	it("should name the sort direction button for the direction it switches to", async () => {
 		const setSearch = renderToolbar({ sortDirection: "desc" });
 

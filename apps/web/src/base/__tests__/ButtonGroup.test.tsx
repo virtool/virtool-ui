@@ -24,8 +24,7 @@ describe("<ButtonGroup />", () => {
 	});
 
 	// The seams are drawn with `:first-child` / `:last-child`, so a member has to
-	// be a DOM child of the group. A wrapper that renders an element of its own
-	// would take the corner rounding with it.
+	// be a DOM child of the group.
 	it("should render its members as its own children", () => {
 		const { container } = render(
 			<ButtonGroup>

@@ -21,8 +21,8 @@ type PathoscopeTableProps = {
 /**
  * The pathoscope hits as a plain table of figures, with no coverage charts.
  *
- * The columns and their formatting match what the copied table and the export
- * carry, so a reader comparing the two cannot find them disagreeing.
+ * The columns and their formatting match the copied table and the export, so
+ * the three cannot disagree.
  */
 export default function PathoscopeTable({
 	hits,

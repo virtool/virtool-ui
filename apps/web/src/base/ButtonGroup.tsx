@@ -12,17 +12,12 @@ type ButtonGroupProps = {
 };
 
 /**
- * Joins related buttons into a single control.
+ * Joins related buttons into a single control, rounding only the outer corners.
  *
- * Members keep whatever they already are — a `Button`, a `ButtonToggle`, a
- * dropdown trigger — and the group squares off the corners between them so only
- * the outer two stay rounded. Anything that renders no element of its own, such
- * as a Radix `Root` or a portalled menu, does not count as a member: the seams
- * are drawn with `:first-child` / `:last-child`, which see the DOM rather than
- * the JSX.
- *
- * Members do not share roving focus — each is tabbed to in turn, as in shadcn.
- * Reach for a Radix `Toolbar` if a group grows long enough to want one stop.
+ * Seams are drawn with `:first-child` / `:last-child`, so a member has to be a
+ * DOM child — a wrapper that renders an element of its own becomes the member
+ * instead. Each member is its own tab stop; reach for a Radix `Toolbar` if a
+ * group grows long enough to want one.
  */
 export default function ButtonGroup({
 	"aria-label": ariaLabel,
@@ -38,17 +33,12 @@ export default function ButtonGroup({
 				"items-stretch",
 				"[&>*:not(:first-child)]:rounded-l-none",
 				"[&>*:not(:last-child)]:rounded-r-none",
-				// Our buttons are solid fills rather than outlines, so where shadcn
-				// collapses a shared border this has to add one — otherwise two
-				// adjacent gray buttons read as a single wide one. Translucent black
-				// rather than a gray, so the seam holds its contrast on a blue or red
-				// member as well.
+				// Our buttons are solid fills, so adjacent ones need a seam to read as
+				// two. Translucent, to hold up on a member of any colour.
 				"[&>*:not(:first-child)]:border-l",
 				"[&>*:not(:first-child)]:border-black/10",
-				// A member's `hover:shadow-lg` would otherwise be painted under its
-				// neighbour, clipping the shadow along the seam.
-				"[&>*:hover]:relative",
-				"[&>*:hover]:z-10",
+				// Siblings paint in order, so a member's focus ring would otherwise be
+				// painted over by its neighbour.
 				"[&>*:focus-visible]:relative",
 				"[&>*:focus-visible]:z-10",
 				className,
