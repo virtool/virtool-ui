@@ -2,7 +2,7 @@ import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import AnalysisValue from "@analyses/components/AnalysisValue";
 import { toScientificNotation } from "@app/format";
 import AccordionContent from "@base/AccordionContent";
-import AccordionScrollingItem from "@base/AccordionScrollingItem";
+import AccordionItem from "@base/AccordionItem";
 import AccordionTrigger from "@base/AccordionTrigger";
 import Checkbox from "@base/Checkbox";
 import type { PathoscopeHit } from "@virtool/contracts";
@@ -41,7 +41,7 @@ export function PathoscopeItem({
 		: toScientificNotation(pi);
 
 	return (
-		<AccordionScrollingItem value={id}>
+		<AccordionItem value={id}>
 			{/* The checkbox is a sibling of the trigger and content rather than a
 			    child of either: the trigger is a button, and a checkbox nested
 			    inside one is neither valid markup nor reachable with a keyboard.
@@ -100,6 +100,6 @@ export function PathoscopeItem({
 					</AccordionContent>
 				</div>
 			</div>
-		</AccordionScrollingItem>
+		</AccordionItem>
 	);
 }
