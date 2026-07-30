@@ -9,7 +9,7 @@ import type { WorkflowName } from "@virtool/contracts";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 
 const sortKeys: Record<WorkflowName, string[]> = {
-	pathoscope: ["coverage", "depth", "weight"],
+	pathoscope: ["coverage", "depth", "weight", "name"],
 	nuvs: ["length", "e", "orfs"],
 };
 

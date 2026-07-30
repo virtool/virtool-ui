@@ -12,7 +12,9 @@ import ToggleGroup from "@base/ToggleGroup";
 import ToggleGroupItem from "@base/ToggleGroupItem";
 import Tooltip from "@base/Tooltip";
 import {
+	ArrowDownAZ,
 	ArrowDownWideNarrow,
+	ArrowUpAZ,
 	ArrowUpWideNarrow,
 	ChevronDown,
 	File,
@@ -35,6 +37,12 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 	const sortKey = search.sortKey ?? "coverage";
 	const sortDirection = search.sortDirection ?? "desc";
 	const showTable = search.table ?? false;
+
+	// The wide-to-narrow arrows read as magnitude, which a name sort is not.
+	const directionIcons =
+		sortKey === "name"
+			? { asc: ArrowUpAZ, desc: ArrowDownAZ }
+			: { asc: ArrowUpWideNarrow, desc: ArrowDownWideNarrow };
 
 	return (
 		<SearchToolbar
@@ -60,7 +68,9 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 				>
 					<Icon
 						icon={
-							sortDirection === "desc" ? ArrowDownWideNarrow : ArrowUpWideNarrow
+							sortDirection === "desc"
+								? directionIcons.desc
+								: directionIcons.asc
 						}
 					/>
 				</Button>

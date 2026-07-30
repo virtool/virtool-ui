@@ -13,19 +13,30 @@ import type {
 } from "./types";
 
 /**
- * The hit field a pathoscope sort key names.
+ * The value a pathoscope sort key ranks a hit by.
  *
  * The toolbar calls `pi` "Weight", because that is the term the results are
  * described in and nobody outside the workflow knows what pi is. The key it puts
  * in the URL is therefore not a field name, and sorting by it read `undefined`
  * off every hit — leaving the list in whatever order it already had.
+ *
+ * Names are compared lower-cased, so an OTU named "adenovirus" is not ranked
+ * behind every capitalised name by the codepoint order a raw comparison gives.
  */
-function pathoscopeSortField(sortKey: string | undefined): keyof PathoscopeHit {
-	if (sortKey === "weight") {
-		return "pi";
+function pathoscopeSortValue(
+	hit: PathoscopeHit,
+	sortKey: string | undefined,
+): number | string {
+	switch (sortKey) {
+		case "name":
+			return hit.name.toLowerCase();
+		case "weight":
+			return hit.pi;
+		case "depth":
+			return hit.depth;
+		default:
+			return hit.coverage;
 	}
-
-	return sortKey === "depth" ? "depth" : "coverage";
 }
 
 /** Sort and filter a list of pathoscope hits  */
@@ -52,7 +63,7 @@ export function useSortAndFilterPathoscopeHits(
 		);
 	}
 
-	const sortedHits = sortBy(hits, [(hit) => hit[pathoscopeSortField(sortKey)]]);
+	const sortedHits = sortBy(hits, [(hit) => pathoscopeSortValue(hit, sortKey)]);
 
 	// Descending is the default: a freshly-opened analysis should lead with its
 	// strongest hits, not its weakest.

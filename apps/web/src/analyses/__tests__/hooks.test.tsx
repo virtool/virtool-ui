@@ -30,12 +30,32 @@ function createHit(overrides: Partial<PathoscopeHit>): PathoscopeHit {
 	};
 }
 
-// Three hits whose coverage, depth and weight each rank them differently, so a
-// sort that reads the wrong field cannot accidentally produce the right order.
+// Three hits whose name, coverage, depth and weight each rank them differently,
+// so a sort that reads the wrong field cannot accidentally produce the right
+// order. Only one name is capitalised out of alphabetical order, so a raw
+// codepoint comparison ranks them differently again.
 const hits = [
-	createHit({ id: "a", name: "A", coverage: 0.1, depth: 30, pi: 0.5 }),
-	createHit({ id: "b", name: "B", coverage: 0.9, depth: 10, pi: 0.2 }),
-	createHit({ id: "c", name: "C", coverage: 0.5, depth: 20, pi: 0.9 }),
+	createHit({
+		id: "a",
+		name: "adenovirus",
+		coverage: 0.1,
+		depth: 30,
+		pi: 0.5,
+	}),
+	createHit({
+		id: "b",
+		name: "Betaflexivirus",
+		coverage: 0.9,
+		depth: 10,
+		pi: 0.2,
+	}),
+	createHit({
+		id: "c",
+		name: "Cucumovirus",
+		coverage: 0.5,
+		depth: 20,
+		pi: 0.9,
+	}),
 ];
 
 type Search = {
@@ -84,6 +104,13 @@ describe("useSortAndFilterPathoscopeHits()", () => {
 
 	it("should sort by depth", () => {
 		expect(renderSort("depth", "asc")).toEqual(["b", "c", "a"]);
+	});
+
+	it("should sort by name, ignoring case", () => {
+		// A raw codepoint comparison would rank "adenovirus" behind every
+		// capitalised name, giving ["b", "c", "a"] ascending.
+		expect(renderSort("name", "asc")).toEqual(["a", "b", "c"]);
+		expect(renderSort("name", "desc")).toEqual(["c", "b", "a"]);
 	});
 
 	it("should default to coverage, descending, when nothing has been chosen", () => {
