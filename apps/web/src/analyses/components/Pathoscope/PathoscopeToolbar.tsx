@@ -28,8 +28,8 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 	const filterIsolates = search.filterIsolates ?? true;
 	const find = search.find ?? "";
 	const showReads = search.reads ?? false;
-	const sortKey = search.sort ?? "coverage";
-	const sortDesc = search.sortDesc ?? true;
+	const sortKey = search.sortKey ?? "coverage";
+	const sortDirection = search.sortDirection ?? "desc";
 
 	return (
 		<SearchToolbar
@@ -40,13 +40,19 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 			<AnalysisViewerSort
 				workflow="pathoscope"
 				sortKey={sortKey}
-				onSelect={(sort) => setSearch({ sort })}
+				onSelect={(sortKey) => setSearch({ sortKey })}
 			/>
 			<ButtonToggle
-				onPressedChange={(sortDesc) => setSearch({ sortDesc })}
-				pressed={Boolean(sortDesc)}
+				onPressedChange={(pressed) =>
+					setSearch({ sortDirection: pressed ? "desc" : "asc" })
+				}
+				pressed={sortDirection === "desc"}
 			>
-				<Icon icon={sortDesc ? ArrowDownWideNarrow : ArrowUpWideNarrow} />
+				<Icon
+					icon={
+						sortDirection === "desc" ? ArrowDownWideNarrow : ArrowUpWideNarrow
+					}
+				/>
 			</ButtonToggle>
 			<Tooltip tip="Show read pseudo-counts instead of weight">
 				<ButtonToggle

@@ -17,7 +17,7 @@ export default function NuvsToolbar({
 	const filterORFs = search.filterOrfs ?? true;
 	const filterSequences = search.filterSequences ?? true;
 	const find = search.find ?? "";
-	const sortKey = search.sort ?? "length";
+	const sortKey = search.sortKey ?? "length";
 
 	return (
 		<SearchToolbar
@@ -29,7 +29,7 @@ export default function NuvsToolbar({
 			<AnalysisViewerSort
 				workflow="nuvs"
 				sortKey={sortKey}
-				onSelect={(sort) => setSearch({ sort })}
+				onSelect={(sortKey) => setSearch({ sortKey })}
 			/>
 			<Tooltip tip="Hide sequences that have no HMM hits">
 				<ButtonToggle

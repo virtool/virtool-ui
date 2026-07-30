@@ -20,12 +20,12 @@ import type {
  * in the URL is therefore not a field name, and sorting by it read `undefined`
  * off every hit — leaving the list in whatever order it already had.
  */
-function pathoscopeSortField(sort: string | undefined): keyof PathoscopeHit {
-	if (sort === "weight") {
+function pathoscopeSortField(sortKey: string | undefined): keyof PathoscopeHit {
+	if (sortKey === "weight") {
 		return "pi";
 	}
 
-	return sort === "depth" ? "depth" : "coverage";
+	return sortKey === "depth" ? "depth" : "coverage";
 }
 
 /** Sort and filter a list of pathoscope hits  */
@@ -36,7 +36,7 @@ export function useSortAndFilterPathoscopeHits(
 	let hits = detail.results.hits;
 
 	const {
-		search: { find, filterOtus, sort, sortDesc },
+		search: { find, filterOtus, sortKey, sortDirection },
 	} = useAnalysisSearch();
 
 	const fuse = createFuse(hits, ["name", "abbreviation"]);
@@ -52,9 +52,11 @@ export function useSortAndFilterPathoscopeHits(
 		);
 	}
 
-	const sortedHits = sortBy(hits, [(hit) => hit[pathoscopeSortField(sort)]]);
+	const sortedHits = sortBy(hits, [(hit) => hit[pathoscopeSortField(sortKey)]]);
 
-	if (sortDesc) {
+	// Descending is the default: a freshly-opened analysis should lead with its
+	// strongest hits, not its weakest.
+	if ((sortDirection ?? "desc") === "desc") {
 		sortedHits.reverse();
 	}
 
@@ -66,7 +68,7 @@ export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 	let hits = detail.results.hits;
 
 	const {
-		search: { find, filterSequences, sort },
+		search: { find, filterSequences, sortKey },
 	} = useAnalysisSearch();
 
 	const fuse = createFuse(hits, ["names", "families"]);
@@ -80,9 +82,9 @@ export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 	}
 
 	const sortedHits =
-		sort === "orfs"
+		sortKey === "orfs"
 			? sortBy(hits, [(hit) => hit.annotatedOrfCount]).reverse()
-			: sortBy(hits, [(hit) => hit[sort as keyof FormattedNuvsHit]]);
+			: sortBy(hits, [(hit) => hit[sortKey as keyof FormattedNuvsHit]]);
 
 	return sortedHits;
 }

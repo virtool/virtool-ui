@@ -8,8 +8,8 @@ type AnalysisSearch = {
 	filterSequences?: boolean;
 	find?: string;
 	reads?: boolean;
-	sort?: string;
-	sortDesc?: boolean;
+	sortKey?: string;
+	sortDirection?: "asc" | "desc";
 };
 
 type AnalysisSearchContextValue = {

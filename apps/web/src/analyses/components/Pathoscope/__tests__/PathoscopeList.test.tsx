@@ -47,11 +47,17 @@ const writeText = vi.fn().mockResolvedValue(undefined);
 
 // Wrapped in a landmark the way the app shell wraps it, so each hit's
 // ``<header>`` is scoped out of the banner role as it is in a real page.
+// Ascending is set explicitly so the display order differs from click order
+// below, regardless of which direction the app defaults to.
 function renderList() {
 	return renderWithProviders(
 		<main>
 			<AnalysisSearchProvider
-				search={{ filterOtus: false, sort: "coverage" }}
+				search={{
+					filterOtus: false,
+					sortKey: "coverage",
+					sortDirection: "asc",
+				}}
 				setSearch={vi.fn()}
 			>
 				<PathoscopeList analysis={analysis} sample={sample} />

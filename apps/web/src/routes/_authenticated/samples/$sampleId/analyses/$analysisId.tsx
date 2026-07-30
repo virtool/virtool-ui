@@ -1,15 +1,17 @@
 import AnalysisDetail from "@analyses/components/AnalysisDetail";
 import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
 import { getErrorStatus } from "@app/queryErrors";
-import { boolOptional, strOptional } from "@app/searchParams";
+import { boolOptional, oneOfOptional, strOptional } from "@app/searchParams";
 import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute, notFound } from "@tanstack/react-router";
+
+const SORT_DIRECTIONS = ["asc", "desc"] as const;
 
 /** Search params for the analysis viewer. */
 type AnalysisDetailSearch = {
 	find?: string;
-	sort?: string;
-	sortDesc?: boolean;
+	sortKey?: string;
+	sortDirection?: (typeof SORT_DIRECTIONS)[number];
 	filterOtus?: boolean;
 	filterIsolates?: boolean;
 	reads?: boolean;
@@ -23,8 +25,8 @@ function validateAnalysisDetailSearch(
 ): AnalysisDetailSearch {
 	return {
 		find: strOptional(input.find),
-		sort: strOptional(input.sort),
-		sortDesc: boolOptional(input.sortDesc),
+		sortKey: strOptional(input.sortKey),
+		sortDirection: oneOfOptional(input.sortDirection, SORT_DIRECTIONS),
 		filterOtus: boolOptional(input.filterOtus),
 		filterIsolates: boolOptional(input.filterIsolates),
 		reads: boolOptional(input.reads),
