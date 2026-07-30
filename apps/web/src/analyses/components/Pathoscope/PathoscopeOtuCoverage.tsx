@@ -11,11 +11,15 @@ const gap = 6;
  * Reduce the polyline to at most one point per pixel, keeping the deepest point
  * in each column.
  *
- * The server simplifies a curve to a proportion of its points rather than to a
- * point count, so a high-variance profile over a long genome still arrives as
- * thousands of coordinates. Every hit draws this overview in its accordion
- * trigger, so an analysis with many OTUs would otherwise put hundreds of
- * thousands of segments in the document while all of them are still collapsed.
+ * The server caps a curve at a point count wide enough for any chart, not for
+ * this one — the overview splits its width across a genome's segments, so a
+ * panel is a fraction of that. Every hit draws this overview in its accordion
+ * trigger, so an analysis with many OTUs would otherwise put far more segments
+ * in the document than can be seen while all of them are still collapsed.
+ *
+ * This is the same reduction the server applies, run again at the width actually
+ * being drawn. The two cannot share a module: server code must not be reachable
+ * from the browser tree.
  *
  * A column reports its deepest point, so peaks survive at the position they
  * were recorded at.
