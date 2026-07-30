@@ -1,21 +1,41 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import { toScientificNotation } from "@app/format";
-import ScrollSync from "@base/ScrollSync";
 import type {
 	PathoscopeSegmentCoverage,
 	PathoscopeSequence as PathoscopeSequenceData,
 } from "@virtool/contracts";
-import { columnWidth } from "./columns";
-import PathoscopeSequence from "./PathoscopeSequence";
-import PathoscopeSequenceEmpty from "./PathoscopeSequenceEmpty";
+import PathoscopeCoverageChart, {
+	type CoveragePanel,
+} from "./PathoscopeCoverageChart";
+
+const height = 60;
+
+// A schema segment name identifies the panel across every isolate, so a
+// matched sequence is labelled with that rather than its accession where one
+// is declared — the accession and definition move into a popover instead,
+// alongside every other detail the row doesn't have room for. A segment the
+// schema left unnamed has nothing to label it with but the accession itself.
+// An unmatched segment names the reason: distinct from the OTU-wide "no
+// reads", so this isolate reads as lacking the segment rather than the
+// segment being absent everywhere.
+function labelOf(
+	segment: PathoscopeSegmentCoverage,
+	sequence: PathoscopeSequenceData | undefined,
+): string {
+	if (sequence) {
+		return segment.name ?? sequence.accession;
+	}
+
+	const name = segment.name ?? "Segment";
+
+	return segment.detected
+		? `${name} · not in this isolate`
+		: `${name} · no reads`;
+}
 
 type PathoscopeIsolateProps = {
 	coverage: number;
 	depth: number;
-
-	/** The summed length of the OTU's segments, which fixes the column widths */
-	genomeLength: number;
-
 	maxDepth: number;
 	name: string;
 	pi: number;
@@ -30,7 +50,6 @@ type PathoscopeIsolateProps = {
 export default function PathoscopeIsolate({
 	coverage,
 	depth,
-	genomeLength,
 	maxDepth,
 	name,
 	pi,
@@ -42,39 +61,28 @@ export default function PathoscopeIsolate({
 	const showReads = search.reads ?? false;
 
 	// The isolate is laid out against the OTU's segments rather than against its
-	// own sequences, so every isolate's columns line up and a segment this one has
-	// no sequence for leaves its column empty instead of shifting the rest along.
-	const columns = segments.map((segment) => {
+	// own sequences, so every isolate's panels line up and a segment this one has
+	// no sequence for leaves its panel empty instead of shifting the rest along.
+	const panels: CoveragePanel[] = segments.map((segment) => {
 		const sequence = sequences.find(
 			(entry) => entry.segmentKey === segment.key,
 		);
 
-		const width = columnWidth(genomeLength, segment.length);
-
-		if (sequence === undefined) {
-			return (
-				<PathoscopeSequenceEmpty
-					detected={segment.detected}
-					key={segment.key}
-					name={segment.name}
-					width={width}
-				/>
-			);
-		}
-
-		return (
-			<PathoscopeSequence
-				accession={sequence.accession}
-				data={sequence.align}
-				definition={sequence.definition}
-				key={segment.key}
-				length={sequence.length}
-				segmentLength={segment.length}
-				width={width}
-				yMax={maxDepth}
-			/>
-		);
+		return {
+			align: sequence?.align ?? null,
+			detail: sequence
+				? `${sequence.accession} · ${sequence.definition}`
+				: undefined,
+			key: segment.key,
+			label: labelOf(segment, sequence),
+			length: segment.length,
+		};
 	});
+
+	const description =
+		segments.length > 1
+			? `Read depth across each of the ${segments.length} segments of the ${name} isolate`
+			: `Read depth across the ${name} isolate`;
 
 	return (
 		<div className="mb-6 relative">
@@ -90,7 +98,14 @@ export default function PathoscopeIsolate({
 					</span>
 				</div>
 			</div>
-			<ScrollSync className="flex gap-4">{columns}</ScrollSync>
+			{panels.length > 0 && (
+				<PathoscopeCoverageChart
+					description={description}
+					height={height}
+					maxDepth={maxDepth}
+					panels={panels}
+				/>
+			)}
 		</div>
 	);
 }

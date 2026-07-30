@@ -61,7 +61,7 @@ describe("<PathoscopeOtuCoverage />", () => {
 		const [path] = paths();
 
 		expect(path).not.toBeUndefined();
-		expect(path?.getAttribute("d")).toMatch(/^M0,60L/);
+		expect(path?.getAttribute("d")).toMatch(/^M0,80L/);
 	});
 
 	it("should render no path when the container has not been measured", () => {
@@ -192,7 +192,7 @@ describe("<PathoscopeOtuCoverage />", () => {
 			);
 
 		expect(heightOf(paths()[0])).toBe(0);
-		expect(heightOf(paths()[1])).toBe(48);
+		expect(heightOf(paths()[1])).toBe(64);
 	});
 
 	it("should label each segment when the OTU has more than one", () => {
@@ -238,5 +238,35 @@ describe("<PathoscopeOtuCoverage />", () => {
 		);
 
 		expect(screen.queryByText("≈5.0 kb")).toBeNull();
+	});
+
+	it("should reserve the label row's height even when it has nothing to say", () => {
+		mockElementWidth(400);
+
+		// The unsegmented case draws no label text, but the box must still be the
+		// same height as one that does — otherwise it sits flush against the
+		// bottom of its box while a labelled one grows to fit its caption.
+		const { container } = renderWithProviders(
+			<PathoscopeOtuCoverage maxDepth={12} segments={[segment(align, 5000)]} />,
+		);
+
+		const labelRow = container.querySelector(".text-gray-600.text-xs");
+
+		expect(labelRow).not.toBeNull();
+		expect((labelRow as HTMLElement).style.height).toBe("18px");
+		expect(labelRow?.textContent).toBe("");
+	});
+
+	it("should left-justify segment labels", () => {
+		mockElementWidth(400);
+
+		renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={12}
+				segments={[segment(align, 3400, "L"), segment(align, 800)]}
+			/>,
+		);
+
+		expect(screen.getByText("L").className).toContain("text-left");
 	});
 });

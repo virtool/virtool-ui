@@ -1,5 +1,6 @@
 import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import type {
 	PathoscopeSegmentCoverage,
@@ -8,6 +9,14 @@ import type {
 import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 import PathoscopeIsolate from "../PathoscopeIsolate";
+
+/**
+ * jsdom does not lay out elements, so `offsetWidth` is always zero. The chart
+ * measures its container to size the area, so stub a realistic width.
+ */
+function mockElementWidth(width: number) {
+	vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(width);
+}
 
 function segment(
 	key: string,
@@ -25,7 +34,10 @@ function sequence(
 ): PathoscopeSequence {
 	return {
 		accession,
-		align: [],
+		align: [
+			[0, 5],
+			[length, 5],
+		],
 		best: 10,
 		coverage: 1,
 		definition: `${accession} definition`,
@@ -43,8 +55,6 @@ const segments = [
 	segment("seg:S", 2900, "S"),
 ];
 
-const genomeLength = 16_600;
-
 function render(children: ReactNode) {
 	renderWithProviders(
 		<AnalysisSearchProvider search={{}} setSearch={vi.fn()}>
@@ -58,7 +68,6 @@ function renderIsolate(sequences: PathoscopeSequence[]) {
 		<PathoscopeIsolate
 			coverage={0.9}
 			depth={12}
-			genomeLength={genomeLength}
 			maxDepth={20}
 			name="Isolate A"
 			pi={0.5}
@@ -70,76 +79,91 @@ function renderIsolate(sequences: PathoscopeSequence[]) {
 }
 
 describe("<PathoscopeIsolate />", () => {
-	it("should render a chart for every segment the isolate carries", () => {
+	it("should label a named segment's panel with the segment's name, not the sequence's accession", () => {
+		mockElementWidth(400);
+
 		renderIsolate([
 			sequence("seg:L", "NC_L", 8900),
 			sequence("seg:M", "NC_M", 4800),
 			sequence("seg:S", "NC_S", 2900),
 		]);
 
-		expect(screen.getAllByRole("img")).toHaveLength(3);
-		expect(screen.queryByText("Not in this isolate")).toBeNull();
+		expect(screen.getAllByRole("img")).toHaveLength(1);
+		expect(screen.getByText("L")).toBeVisible();
+		expect(screen.getByText("M")).toBeVisible();
+		expect(screen.getByText("S")).toBeVisible();
+		expect(screen.queryByText("NC_L")).toBeNull();
+		expect(screen.queryByText(/not in this isolate/)).toBeNull();
 	});
 
-	it("should hold the column open for a segment the isolate does not carry", () => {
-		// No M sequence. The column has to stay in place, or L and S would read as
+	it("should fall back to the accession when the segment has no schema name", () => {
+		mockElementWidth(400);
+
+		render(
+			<PathoscopeIsolate
+				coverage={0.9}
+				depth={12}
+				maxDepth={20}
+				name="Isolate A"
+				pi={0.5}
+				reads={30}
+				segments={[segment("len:8900", 8900, null)]}
+				sequences={[sequence("len:8900", "NC_X", 8900)]}
+			/>,
+		);
+
+		expect(screen.getByText("NC_X")).toBeVisible();
+	});
+
+	it("should hold the panel open for a segment the isolate does not carry", () => {
+		mockElementWidth(400);
+
+		// No M sequence. The panel has to stay in place, or L and S would read as
 		// though they were the isolate's first two segments.
 		renderIsolate([
 			sequence("seg:L", "NC_L", 8900),
 			sequence("seg:S", "NC_S", 2900),
 		]);
 
-		expect(screen.getAllByRole("img")).toHaveLength(2);
-		expect(screen.getByText("Not in this isolate")).toBeVisible();
-
-		// The empty column is labelled with the segment it stands for, so it is not
-		// mistaken for a segment that was measured and found empty.
-		expect(screen.getByText("M")).toBeVisible();
+		expect(screen.getByText("M · not in this isolate")).toBeVisible();
 	});
 
 	it("should not claim the isolate lacks a segment nothing mapped to", () => {
+		mockElementWidth(400);
+
 		// Every isolate is empty on a segment no hit was recorded against, and the
-		// reference may well describe it for all of them — so the column must not say
+		// reference may well describe it for all of them — so the label must not say
 		// this isolate does not carry it.
-		renderWithProviders(
-			<AnalysisSearchProvider search={{}} setSearch={vi.fn()}>
-				<PathoscopeIsolate
-					coverage={0.9}
-					depth={12}
-					genomeLength={genomeLength}
-					maxDepth={20}
-					name="Isolate A"
-					pi={0.5}
-					reads={30}
-					segments={[
-						segment("seg:L", 8900, "L"),
-						segment("seg:M", 4800, "M", false),
-					]}
-					sequences={[sequence("seg:L", "NC_L", 8900)]}
-				/>
-			</AnalysisSearchProvider>,
+		render(
+			<PathoscopeIsolate
+				coverage={0.9}
+				depth={12}
+				maxDepth={20}
+				name="Isolate A"
+				pi={0.5}
+				reads={30}
+				segments={[
+					segment("seg:L", 8900, "L"),
+					segment("seg:M", 4800, "M", false),
+				]}
+				sequences={[sequence("seg:L", "NC_L", 8900)]}
+			/>,
 		);
 
-		expect(screen.getByText("No reads mapped")).toBeVisible();
-		expect(screen.queryByText("Not in this isolate")).toBeNull();
+		expect(screen.getByText("M · no reads")).toBeVisible();
+		expect(screen.queryByText("M · not in this isolate")).toBeNull();
 	});
 
-	it("should lay the columns out in the order the segments are given in", () => {
-		renderIsolate([
-			sequence("seg:S", "NC_S", 2900),
-			sequence("seg:L", "NC_L", 8900),
-			sequence("seg:M", "NC_M", 4800),
-		]);
+	it("should reveal a sequence's accession and definition in a popover when its label is clicked", async () => {
+		mockElementWidth(400);
 
-		// The isolate's own sequence order does not decide the layout — the OTU's
-		// segments do, so every isolate's columns line up.
+		renderIsolate([sequence("seg:L", "NC_L", 8900)]);
+
+		await userEvent.click(screen.getByText("L"));
+
 		expect(
-			screen.getAllByRole("img").map((svg) => svg.getAttribute("aria-label")),
-		).toEqual([
-			expect.stringContaining("NC_L"),
-			expect.stringContaining("NC_M"),
-			expect.stringContaining("NC_S"),
-		]);
+			await screen.findAllByText("NC_L · NC_L definition"),
+		).not.toHaveLength(0);
 	});
 
 	it("should render nothing but the heading for an isolate with no segments", () => {
@@ -147,7 +171,6 @@ describe("<PathoscopeIsolate />", () => {
 			<PathoscopeIsolate
 				coverage={0}
 				depth={0}
-				genomeLength={0}
 				maxDepth={0}
 				name="Isolate A"
 				pi={0}

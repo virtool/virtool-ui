@@ -1,5 +1,4 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
-import ScrollSyncContainer from "@base/ScrollSyncContainer";
 import type { PathoscopeHit } from "@virtool/contracts";
 import PathoscopeIsolate from "./PathoscopeIsolate";
 
@@ -25,21 +24,12 @@ export default function PathoscopeDetail({
 		(isolate) => !filterIsolates || isolate.pi >= 0.03 * pi,
 	);
 
-	// The OTU's genome, taken across its segments. Every row lays its columns out
-	// against this rather than against its own sequences, so the rows line up on
-	// the segments they share.
-	const genomeLength = segments.reduce(
-		(total, segment) => total + segment.length,
-		0,
-	);
-
 	const isolateComponents = filtered.map((isolate) => {
 		return (
 			<PathoscopeIsolate
 				key={isolate.id}
 				coverage={isolate.coverage}
 				depth={isolate.depth}
-				genomeLength={genomeLength}
 				maxDepth={hit.maxDepth}
 				name={isolate.name}
 				pi={isolate.pi}
@@ -50,9 +40,5 @@ export default function PathoscopeDetail({
 		);
 	});
 
-	return (
-		<div className="pt-4">
-			<ScrollSyncContainer>{isolateComponents}</ScrollSyncContainer>
-		</div>
-	);
+	return <div className="pt-4">{isolateComponents}</div>;
 }
