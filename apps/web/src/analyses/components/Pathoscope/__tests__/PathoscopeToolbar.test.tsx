@@ -51,6 +51,28 @@ describe("<PathoscopeToolbar />", () => {
 		expect(setSearch).toHaveBeenCalledWith({ table: false });
 	});
 
+	// The trigger shows the sort key alone, so its name is the only thing left
+	// saying the control sorts.
+	it("should name the sort trigger for the key it sorts by", () => {
+		renderToolbar({ sortKey: "depth" });
+
+		expect(
+			screen.getByRole("button", { name: "Sort by Depth" }),
+		).toBeInTheDocument();
+	});
+
+	// The direction button is an arrow and nothing else, so without a name it
+	// reaches assistive technology as an unlabelled button.
+	it("should name the sort direction button for the direction it switches to", async () => {
+		const setSearch = renderToolbar({ sortDirection: "desc" });
+
+		await userEvent.click(
+			screen.getByRole("button", { name: "Sort ascending" }),
+		);
+
+		expect(setSearch).toHaveBeenCalledWith({ sortDirection: "asc" });
+	});
+
 	// The isolate filter only narrows an expanded hit's detail, which the table
 	// layout does not render.
 	it("should drop the isolate filter in the table layout", () => {

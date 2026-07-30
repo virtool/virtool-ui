@@ -1,4 +1,5 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
+import ButtonGroup from "@base/ButtonGroup";
 import ButtonToggle from "@base/ButtonToggle";
 import Dropdown from "@base/Dropdown";
 import DropdownButton from "@base/DropdownButton";
@@ -40,23 +41,28 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 			onChange={(find) => setSearch({ find })}
 			value={find}
 		>
-			<AnalysisViewerSort
-				workflow="pathoscope"
-				sortKey={sortKey}
-				onSelect={(sortKey) => setSearch({ sortKey })}
-			/>
-			<ButtonToggle
-				onPressedChange={(pressed) =>
-					setSearch({ sortDirection: pressed ? "desc" : "asc" })
-				}
-				pressed={sortDirection === "desc"}
-			>
-				<Icon
-					icon={
-						sortDirection === "desc" ? ArrowDownWideNarrow : ArrowUpWideNarrow
-					}
+			<ButtonGroup>
+				<AnalysisViewerSort
+					workflow="pathoscope"
+					sortKey={sortKey}
+					onSelect={(sortKey) => setSearch({ sortKey })}
 				/>
-			</ButtonToggle>
+				<ButtonToggle
+					ariaLabel={
+						sortDirection === "desc" ? "Sort ascending" : "Sort descending"
+					}
+					onPressedChange={(pressed) =>
+						setSearch({ sortDirection: pressed ? "desc" : "asc" })
+					}
+					pressed={sortDirection === "desc"}
+				>
+					<Icon
+						icon={
+							sortDirection === "desc" ? ArrowDownWideNarrow : ArrowUpWideNarrow
+						}
+					/>
+				</ButtonToggle>
+			</ButtonGroup>
 			<ToggleGroup
 				onValueChange={(value) => setSearch({ table: value === "table" })}
 				value={showTable ? "table" : "charts"}

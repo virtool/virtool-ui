@@ -4,6 +4,9 @@ import { buttonVariants } from "./buttonVariants";
 import type { PaletteColor } from "./types";
 
 export type ButtonProps = {
+	/** Names the button where its children are a bare value or an icon */
+	"aria-label"?: string;
+
 	active?: boolean;
 	as?: ElementType;
 	children: ReactNode;
@@ -17,6 +20,7 @@ export type ButtonProps = {
 };
 
 function Button({
+	"aria-label": ariaLabel,
 	as = "button",
 	children,
 	className,
@@ -31,6 +35,7 @@ function Button({
 
 	return (
 		<As
+			aria-label={ariaLabel}
 			className={cn(
 				buttonVariants({ color, size }),
 				"gap-1.5",
