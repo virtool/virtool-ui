@@ -18,6 +18,7 @@ type AnalysisDetailSearch = {
 	filterSequences?: boolean;
 	filterOrfs?: boolean;
 	activeHit?: string;
+	table?: boolean;
 };
 
 function validateAnalysisDetailSearch(
@@ -33,6 +34,7 @@ function validateAnalysisDetailSearch(
 		filterSequences: boolOptional(input.filterSequences),
 		filterOrfs: boolOptional(input.filterOrfs),
 		activeHit: strOptional(input.activeHit),
+		table: boolOptional(input.table),
 	};
 }
 

@@ -6,6 +6,8 @@ import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuDownload from "@base/DropdownMenuDownload";
 import Icon from "@base/Icon";
 import SearchToolbar from "@base/SearchToolbar";
+import ToggleGroup from "@base/ToggleGroup";
+import ToggleGroupItem from "@base/ToggleGroupItem";
 import Tooltip from "@base/Tooltip";
 import {
 	ArrowDownWideNarrow,
@@ -30,6 +32,7 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 	const showReads = search.reads ?? false;
 	const sortKey = search.sortKey ?? "coverage";
 	const sortDirection = search.sortDirection ?? "desc";
+	const showTable = search.table ?? false;
 
 	return (
 		<SearchToolbar
@@ -54,6 +57,13 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 					}
 				/>
 			</ButtonToggle>
+			<ToggleGroup
+				onValueChange={(value) => setSearch({ table: value === "table" })}
+				value={showTable ? "table" : "charts"}
+			>
+				<ToggleGroupItem value="charts">Charts</ToggleGroupItem>
+				<ToggleGroupItem value="table">Table</ToggleGroupItem>
+			</ToggleGroup>
 			<Tooltip tip="Show read pseudo-counts instead of weight">
 				<ButtonToggle
 					onPressedChange={(reads) => setSearch({ reads })}
@@ -70,14 +80,18 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 					Filter OTUs
 				</ButtonToggle>
 			</Tooltip>
-			<Tooltip tip="Hide isolates with low coverage support">
-				<ButtonToggle
-					onPressedChange={(filterIsolates) => setSearch({ filterIsolates })}
-					pressed={Boolean(filterIsolates)}
-				>
-					Filter Isolates
-				</ButtonToggle>
-			</Tooltip>
+			{/* Isolates are only ever shown in an expanded hit, which the table
+			    layout has none of — the toggle would change nothing on screen. */}
+			{!showTable && (
+				<Tooltip tip="Hide isolates with low coverage support">
+					<ButtonToggle
+						onPressedChange={(filterIsolates) => setSearch({ filterIsolates })}
+						pressed={Boolean(filterIsolates)}
+					>
+						Filter Isolates
+					</ButtonToggle>
+				</Tooltip>
+			)}
 			<Dropdown>
 				<DropdownButton>
 					<span>

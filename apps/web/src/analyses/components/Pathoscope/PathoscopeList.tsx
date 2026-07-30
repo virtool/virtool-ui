@@ -7,6 +7,7 @@ import type { PathoscopeHit, Sample } from "@virtool/contracts";
 import type { MouseEvent } from "react";
 import { PathoscopeItem } from "./PathoscopeItem";
 import PathoscopeListHeader from "./PathoscopeListHeader";
+import PathoscopeTable from "./PathoscopeTable";
 import { formatPathoscopeHitsAsTsv } from "./table";
 
 type PathoscopeListProps = {
@@ -23,6 +24,7 @@ export function PathoscopeList({ analysis, sample }: PathoscopeListProps) {
 
 	const { search } = useAnalysisSearch();
 	const showReads = search.reads ?? false;
+	const showTable = search.table ?? false;
 
 	// Every hit is on screen at once, so a selection that outlived a filter would
 	// be copied without ever being visible. The key is built from the hit ids
@@ -35,6 +37,13 @@ export function PathoscopeList({ analysis, sample }: PathoscopeListProps) {
 			.sort()
 			.join(","),
 	});
+
+	function selectHit(hit: PathoscopeHit, event: MouseEvent<HTMLButtonElement>) {
+		selection.select(hit, {
+			shiftKey: event.shiftKey,
+			visibleItems: hits,
+		});
+	}
 
 	// Taken from the hits rather than the selection so the pasted rows come out
 	// in the order they are shown, not the order they were clicked.
@@ -56,22 +65,28 @@ export function PathoscopeList({ analysis, sample }: PathoscopeListProps) {
 				onSelectAll={() => selection.toggleVisible(hits)}
 				selectedCount={selection.selected.length}
 			/>
-			<Accordion type="single" collapsible>
-				{hits.map((hit) => (
-					<PathoscopeItem
-						key={hit.id}
-						checked={selection.isSelected(hit)}
-						hit={hit}
-						mappedCount={analysis.results.readCount}
-						onSelect={(event: MouseEvent<HTMLButtonElement>) =>
-							selection.select(hit, {
-								shiftKey: event.shiftKey,
-								visibleItems: hits,
-							})
-						}
-					/>
-				))}
-			</Accordion>
+			{showTable ? (
+				<PathoscopeTable
+					hits={hits}
+					isSelected={selection.isSelected}
+					mappedCount={analysis.results.readCount}
+					onSelect={selectHit}
+				/>
+			) : (
+				<Accordion type="single" collapsible>
+					{hits.map((hit) => (
+						<PathoscopeItem
+							key={hit.id}
+							checked={selection.isSelected(hit)}
+							hit={hit}
+							mappedCount={analysis.results.readCount}
+							onSelect={(event: MouseEvent<HTMLButtonElement>) =>
+								selectHit(hit, event)
+							}
+						/>
+					))}
+				</Accordion>
+			)}
 		</>
 	);
 }

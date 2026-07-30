@@ -1,4 +1,7 @@
-import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
+import {
+	type AnalysisSearch,
+	AnalysisSearchProvider,
+} from "@analyses/components/AnalysisSearchContext";
 import type { FormattedPathoscopeAnalysis } from "@analyses/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -49,7 +52,7 @@ const writeText = vi.fn().mockResolvedValue(undefined);
 // ``<header>`` is scoped out of the banner role as it is in a real page.
 // Ascending is set explicitly so the display order differs from click order
 // below, regardless of which direction the app defaults to.
-function renderList() {
+function renderList(search: AnalysisSearch = {}) {
 	return renderWithProviders(
 		<main>
 			<AnalysisSearchProvider
@@ -57,6 +60,7 @@ function renderList() {
 					filterOtus: false,
 					sortKey: "coverage",
 					sortDirection: "asc",
+					...search,
 				}}
 				setSearch={vi.fn()}
 			>
@@ -156,5 +160,64 @@ describe("<PathoscopeList />", () => {
 		expect(
 			screen.getByRole("checkbox", { name: "Select Beta virus" }),
 		).toBeChecked();
+	});
+
+	describe("in table mode", () => {
+		it("should show one row per hit, with no expandable detail", () => {
+			renderList({ table: true });
+
+			expect(
+				screen.getByRole("columnheader", { name: "Coverage" }),
+			).toBeInTheDocument();
+
+			// The header row plus one row per hit.
+			expect(screen.getAllByRole("row")).toHaveLength(3);
+
+			const [beta, alpha] = screen.getAllByRole("row").slice(1);
+
+			expect(beta).toHaveTextContent("Beta virus");
+			expect(beta).toHaveTextContent("0.250");
+			expect(beta).toHaveTextContent("7");
+
+			expect(alpha).toHaveTextContent("Alpha virus");
+			expect(alpha).toHaveTextContent("12");
+			expect(alpha).toHaveTextContent("0.500");
+
+			expect(
+				screen.queryByRole("button", { name: /Alpha virus/ }),
+			).not.toBeInTheDocument();
+		});
+
+		it("should label the weight column reads when read counts are shown", () => {
+			renderList({ reads: true, table: true });
+
+			expect(
+				screen.getByRole("columnheader", { name: "Reads" }),
+			).toBeInTheDocument();
+			expect(
+				screen.queryByRole("columnheader", { name: "Weight" }),
+			).not.toBeInTheDocument();
+		});
+
+		it("should copy the hits selected from its rows", async () => {
+			renderList({ table: true });
+
+			await userEvent.click(
+				screen.getByRole("checkbox", { name: "Select Beta virus" }),
+			);
+			await userEvent.click(screen.getByRole("button", { name: "Copy" }));
+
+			expect(writeText).toHaveBeenCalledWith(
+				["Name\tWeight\tDepth\tCoverage", "Beta virus\t0.250\t7\t0.250"].join(
+					"\n",
+				),
+			);
+		});
+
+		it("should have no accessibility violations", async () => {
+			const { container } = renderList({ table: true });
+
+			await expectNoViolations(container);
+		});
 	});
 });

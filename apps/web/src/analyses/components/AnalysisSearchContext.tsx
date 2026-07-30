@@ -1,6 +1,7 @@
 import { createContext, type ReactNode, useContext } from "react";
 
-type AnalysisSearch = {
+/** The presentation and filter state an analysis viewer reads from the URL. */
+export type AnalysisSearch = {
 	activeHit?: string;
 	filterIsolates?: boolean;
 	filterOrfs?: boolean;
@@ -10,6 +11,7 @@ type AnalysisSearch = {
 	reads?: boolean;
 	sortKey?: string;
 	sortDirection?: "asc" | "desc";
+	table?: boolean;
 };
 
 type AnalysisSearchContextValue = {
