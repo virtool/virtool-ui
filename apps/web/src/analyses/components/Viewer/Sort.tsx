@@ -5,10 +5,10 @@ import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuRadioGroup from "@base/DropdownMenuRadioGroup";
 import DropdownMenuRadioItem from "@base/DropdownMenuRadioItem";
 import Icon from "@base/Icon";
-import type { WorkflowName } from "@virtool/contracts";
+import type { AnalysisWorkflow } from "@virtool/contracts";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 
-const sortKeys: Record<WorkflowName, string[]> = {
+const sortKeys: Record<AnalysisWorkflow, string[]> = {
 	pathoscope: ["coverage", "depth", "weight", "name"],
 	nuvs: ["length", "e", "orfs"],
 };
@@ -25,7 +25,7 @@ const sortTitles: Record<string, string> = {
 };
 
 type AnalysisViewerSortProps = {
-	workflow: WorkflowName;
+	workflow: AnalysisWorkflow;
 	sortKey: string;
 	onSelect: (key: string) => void;
 };

@@ -417,6 +417,14 @@ a name conflict). The Sentry `beforeSend` filter drops `ClientError`
 `Error` is reported as a false incident. A bare `throw` stays reserved
 for the genuinely unexpected.
 
+**Never set a null-body status — 204, 205, or 304 — from a server
+function.** Start always serializes a body for an RPC call, so the
+`Response` constructor rejects the pair and the operation reports a
+failure it already completed. A deletion returns `null` and answers 200;
+the RPC client reads the body and never the status.
+`server/__tests__/responseStatus.test.ts` fails the build on any of the
+three.
+
 See [docs/architecture.md](docs/architecture.md) for the import-direction
 invariant in full, the labels (minimal) and auth (carve-out) shapes,
 the pure-policy-vs-framework-shell principle, and when to introduce
@@ -452,8 +460,7 @@ a server file reaching into a DOM-typed module breaks the server project
 at a distance. Shapes and helpers both sides need live *down* in
 `@virtool/contracts` (roles, permissions, banner colors, the SSE schema,
 the reference wire shapes, `UserNested`, `Task`, `SearchResult`);
-the server imports them from the package, and the client feature module
-re-exports them so its own call sites are undisturbed.
+both sides import them straight from the package.
 
 **A domain's wire shapes belong in `@virtool/contracts`, not in
 `data.ts`.** What a server function returns is read by both sides, so
@@ -468,6 +475,19 @@ does not own, and drags a data-layer module into the browser's type
 graph to get it. `data.ts` still owns what only it uses: its `*Values`
 and `*Options` argument types, its `AppError` subclasses, and its row
 mappers.
+
+**A feature module must never re-export a name that originates in
+`@virtool/contracts`.** Consumers import it from the package directly.
+A `types.ts` that re-exports `UserNested`, or a `utils.ts` that
+re-exports `hasSufficientAdminRole`, makes the feature a middleman on a
+shape it does not own: the real definition site stops being greppable,
+and a module that wanted one client-only type now drags the feature in
+to get a package one. Keep the client-only shapes that genuinely live
+there — `administration/types.ts` still owns `AdministratorRole` and
+`Settings`, `banner/types.ts` still owns `Banner` and
+`bannerColorClasses` — and delete only the pass-through lines. The rule
+covers values as well as types, and applies just as much inside
+`src/server/**`.
 
 ### Every server function declares an authorization policy
 
