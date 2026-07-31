@@ -79,31 +79,44 @@ export default function PathoscopeListHeader({
 	}
 
 	return (
-		<div className="flex items-center gap-4 border border-gray-300 mb-2.5 rounded-sm bg-gray-50 px-4 h-14 text-sm font-medium text-gray-600">
-			<Checkbox
-				ariaLabel="Select all hits"
-				checked={checked}
-				id="PathoscopeSelectAll"
-				onClick={onSelectAll}
-			/>
-			{/* The count stays put once hits are selected. It is the only statement
-			    of how long the list is, and the selection is measured against it. */}
-			<span>
-				{selectedCount
-					? `${selectedCount} selected · ${describeCount(found, total)}`
-					: describeCount(found, total)}
-			</span>
-			{selectedCount > 0 && (
-				<div className="ml-auto flex items-center gap-2">
-					{/* The clipboard API is unavailable outside a secure context. */}
-					{window.isSecureContext && (
-						<Button size="small" onClick={handleCopy}>
-							<Icon icon={copied ? Check : ClipboardCopy} />{" "}
-							{copied ? "Copied" : "Copy"}
-						</Button>
-					)}
-				</div>
-			)}
+		// A hit's coverage charts are tall enough that the select-all checkbox and
+		// the copy action scroll out of reach after two or three of them, so the
+		// bar sticks. `top-0` is the top of `#content-scroll` rather than the
+		// window: the nav sits outside that container, so nothing overlaps. The
+		// z-index stays below the named scale in `style.css` — this only has to
+		// beat the hits scrolling under it, not any overlay.
+		//
+		// The gap under the nav is padding on the sticky box, not `top-2.5`. The
+		// page has no background of its own, so an offset would leave the hits
+		// visible in the band above the bar as they scrolled past; an opaque
+		// white strip that sticks along with the bar covers them instead.
+		<div className="sticky top-0 z-1 mb-2.5 bg-white pt-2.5">
+			<div className="flex items-center gap-4 border border-gray-300 rounded-sm bg-gray-50 px-4 h-14 text-sm font-medium text-gray-600">
+				<Checkbox
+					ariaLabel="Select all hits"
+					checked={checked}
+					id="PathoscopeSelectAll"
+					onClick={onSelectAll}
+				/>
+				{/* The count stays put once hits are selected. It is the only statement
+				    of how long the list is, and the selection is measured against it. */}
+				<span>
+					{selectedCount
+						? `${selectedCount} selected · ${describeCount(found, total)}`
+						: describeCount(found, total)}
+				</span>
+				{selectedCount > 0 && (
+					<div className="ml-auto flex items-center gap-2">
+						{/* The clipboard API is unavailable outside a secure context. */}
+						{window.isSecureContext && (
+							<Button size="small" onClick={handleCopy}>
+								<Icon icon={copied ? Check : ClipboardCopy} />{" "}
+								{copied ? "Copied" : "Copy"}
+							</Button>
+						)}
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }
