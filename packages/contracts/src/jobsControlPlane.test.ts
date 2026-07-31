@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
 	CreateJobClaimRequest,
+	FinalizeSubtractionRequest,
 	fromStoredJobClaim,
 	fromStoredJobStep,
 	Job,
@@ -148,6 +149,37 @@ describe("wire shapes", () => {
 			sample_id: 4,
 			nested: { deep: [1, "two", null] },
 		});
+	});
+});
+
+describe("subtraction finalize", () => {
+	const gc = { a: 0.25, c: 0.25, g: 0.25, t: 0.24, n: 0.01 };
+
+	it("accepts nucleotide fractions", () => {
+		expect(
+			FinalizeSubtractionRequest.parse({ count: 12, gc, files: [] }).gc,
+		).toStrictEqual(gc);
+	});
+
+	it("rejects a composition sent as percentages", () => {
+		// The plausible unit error: a workflow finalizing with 25 rather than 0.25.
+		expect(
+			FinalizeSubtractionRequest.safeParse({
+				count: 12,
+				gc: { a: 25, c: 25, g: 25, t: 24, n: 1 },
+				files: [],
+			}).success,
+		).toBe(false);
+	});
+
+	it("rejects a negative fraction", () => {
+		expect(
+			FinalizeSubtractionRequest.safeParse({
+				count: 12,
+				gc: { ...gc, n: -0.01 },
+				files: [],
+			}).success,
+		).toBe(false);
 	});
 });
 

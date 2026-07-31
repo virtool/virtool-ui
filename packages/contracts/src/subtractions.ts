@@ -13,18 +13,25 @@ export type SubtractionNested = {
 };
 
 /**
- * The percentage of the genome made up by each nucleotide.
+ * The fraction of the genome made up by each nucleotide.
+ *
+ * Each value is in `[0, 1]`, **not** a percentage — `toGcContent` formats it as
+ * one for display. The bound is what catches a workflow that finalizes with
+ * percentages by mistake, which is the plausible unit error here; a per-nucleotide
+ * `count / total` can never exceed 1, so it costs a correct payload nothing.
  *
  * A schema rather than a plain type because the control plane validates it at
  * subtraction finalize.
  */
+const nucleotideFraction = z.number().min(0).max(1);
+
 export const NucleotideComposition = z.object({
-	a: z.number(),
-	c: z.number(),
-	g: z.number(),
-	t: z.number(),
+	a: nucleotideFraction,
+	c: nucleotideFraction,
+	g: nucleotideFraction,
+	t: nucleotideFraction,
 	/** Unknown nucleotide */
-	n: z.number(),
+	n: nucleotideFraction,
 });
 
 export type NucleotideComposition = z.infer<typeof NucleotideComposition>;
