@@ -165,9 +165,16 @@ export type PathoscopeResults = {
 	/** The detected OTUs and their metrics */
 	hits: PathoscopeHit[];
 
-	/** The number of reads mapped to the reference during the analysis */
+	/**
+	 * The number of reads mapped to the reference and kept — subtracted reads
+	 * are already gone. Add {@link subtractedCount} for the number that mapped
+	 * before subtraction.
+	 */
 	readCount: number;
 
-	/** The number of reads mapped to the subtractions */
+	/**
+	 * The number of reads that mapped to the reference but aligned at least as
+	 * well to a subtraction, and were removed before reassignment.
+	 */
 	subtractedCount: number;
 };
