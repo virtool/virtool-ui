@@ -18,6 +18,16 @@ const gap = 6;
  */
 const labelHeight = 18;
 
+/**
+ * The space above a panel's curve.
+ *
+ * It belongs to the panel rather than to the box around it, so that a panel's
+ * hover and focus styling covers the full height of the chart. Held on the box,
+ * it left a strip along the top that was inside the border but outside every
+ * panel, and so stayed unhighlighted while the panel below it was hovered.
+ */
+const topPadding = 8;
+
 /** One panel of a coverage chart: the curve to draw, and its caption. */
 export type CoveragePanel = {
 	/** The coverage polyline to draw, or null/empty to draw nothing */
@@ -137,7 +147,8 @@ export default function PathoscopeCoverageChart({
 						trigger={
 							<button
 								aria-label={`${panel.label} sequence details`}
-								className="block w-full cursor-pointer rounded-sm border-0 bg-transparent p-0 text-left hover:bg-blue-200 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-700"
+								className="block w-full cursor-pointer border-0 bg-transparent px-0 pb-0 text-left hover:bg-blue-200 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-700"
+								style={{ paddingTop: topPadding }}
 								type="button"
 							>
 								{body}
@@ -147,7 +158,9 @@ export default function PathoscopeCoverageChart({
 						{panel.detail}
 					</Popover>
 				) : (
-					body
+					<span className="block" style={{ paddingTop: topPadding }}>
+						{body}
+					</span>
 				)}
 			</span>
 		);
@@ -155,7 +168,7 @@ export default function PathoscopeCoverageChart({
 
 	// The height is fixed rather than left to the panels, so the box does not
 	// collapse in the frame before the container has been measured.
-	const style = { gap, height: height + labelHeight };
+	const style = { gap, height: height + labelHeight + topPadding };
 
 	// The border and padding sit on the outer element and the width is measured on
 	// the inner one, because `useElementSize` reports `offsetWidth` — a border-box
@@ -166,7 +179,7 @@ export default function PathoscopeCoverageChart({
 	// because `useAriaPropsSupportedByRole` can only check a literal, and an
 	// unchecked `aria-label` is worth less than the duplication costs.
 	return (
-		<span className="block bg-blue-100 border border-blue-200 pt-2 rounded-sm">
+		<span className="block bg-blue-100 border border-blue-200 rounded-sm">
 			{interactive ? (
 				// biome-ignore lint/a11y/useSemanticElements: a fieldset groups form controls, not a set of related graphics
 				<span

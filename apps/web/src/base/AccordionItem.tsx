@@ -12,7 +12,7 @@ type AccordionItemProps = {
 export default function AccordionItem({ value, children }: AccordionItemProps) {
 	return (
 		<AccordionPrimitive.Item
-			className="border border-gray-300 mb-2.5"
+			className="border border-gray-300 mb-2.5 overflow-hidden rounded-sm"
 			value={value}
 		>
 			{children}

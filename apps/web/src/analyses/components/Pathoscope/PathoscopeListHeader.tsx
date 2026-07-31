@@ -79,7 +79,7 @@ export default function PathoscopeListHeader({
 	}
 
 	return (
-		<div className="flex items-center gap-4 border border-gray-300 mb-2.5 bg-gray-50 px-4 h-14 text-sm font-medium text-gray-600">
+		<div className="flex items-center gap-4 border border-gray-300 mb-2.5 rounded-sm bg-gray-50 px-4 h-14 text-sm font-medium text-gray-600">
 			<Checkbox
 				ariaLabel="Select all hits"
 				checked={checked}
