@@ -107,7 +107,7 @@ export default function PathoscopeListHeader({
 			    below its content, which would push the bar wider than the hits. */}
 			<fieldset
 				aria-label="Hit list"
-				className="min-w-0 flex items-center gap-4 border border-gray-300 rounded-sm bg-gray-50 px-4 h-14 text-sm font-medium text-gray-600"
+				className="min-w-0 flex items-center gap-4 border border-gray-300 rounded-sm bg-gray-50 px-4 h-14 text-sm font-medium text-gray-700"
 			>
 				<Checkbox
 					ariaLabel="Select all hits"
@@ -117,7 +117,7 @@ export default function PathoscopeListHeader({
 				/>
 				{/* The count stays put once hits are selected. It is the only statement
 				    of how long the list is, and the selection is measured against it. */}
-				<span>
+				<span className="text-base">
 					{selectedCount
 						? `${selectedCount} selected · ${describeCount(found, total)}`
 						: describeCount(found, total)}

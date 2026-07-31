@@ -14,7 +14,7 @@ function DetailRow({ label, value }: DetailRowProps) {
 	return (
 		<tr className="border-b border-gray-200 last:border-b-0">
 			<th
-				className="font-medium px-3 py-1.5 text-gray-600 text-left"
+				className="font-medium px-3 py-1.5 text-gray-500 text-left"
 				scope="row"
 			>
 				{label}
@@ -54,9 +54,7 @@ export default function PathoscopeSequenceDetail({
 						{sequence.accession}
 						<Icon className="size-3.5" icon={SquareArrowOutUpRight} />
 					</ExternalLink>
-					<span className="block text-gray-600 text-xs">
-						{sequence.definition}
-					</span>
+					<span className="block text-gray-500">{sequence.definition}</span>
 				</caption>
 				<tbody>
 					<DetailRow

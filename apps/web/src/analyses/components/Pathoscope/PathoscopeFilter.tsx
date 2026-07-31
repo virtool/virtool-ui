@@ -55,7 +55,9 @@ function CoverageSlider({ disabled, onCommit, value }: CoverageSliderProps) {
 				<span className="text-gray-700 text-sm">
 					Hide when coverage less than
 				</span>
-				<span className="font-medium tabular-nums">{draft.toFixed(2)}</span>
+				<span className="font-semibold tabular-nums text-sm">
+					{draft.toFixed(2)}
+				</span>
 			</div>
 			<Slider
 				aria-label="Minimum coverage"

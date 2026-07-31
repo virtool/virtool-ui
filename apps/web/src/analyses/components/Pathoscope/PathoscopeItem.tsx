@@ -69,7 +69,9 @@ export function PathoscopeItem({
 						    assistive technology still gets them from each value. */}
 						<div className="flex gap-4 items-start justify-between">
 							<AccordionTrigger>
-								<span className="font-medium text-lg truncate">{name}</span>
+								<span className="font-semibold text-gray-900 truncate">
+									{name}
+								</span>
 							</AccordionTrigger>
 							<div className="flex gap-4 shrink-0">
 								{abbreviation && (

@@ -33,7 +33,7 @@ export default function AccordionTrigger({
 				className={cn(
 					"group inline-flex items-center gap-1.5 max-w-full min-w-0",
 					"bg-transparent border-none cursor-pointer p-0 rounded-sm text-left",
-					"hover:text-gray-600",
+					"hover:text-gray-700",
 					"focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700",
 					className,
 				)}

@@ -44,7 +44,7 @@ function MappingRow({
 }: MappingRowProps) {
 	return (
 		<tr>
-			<th className="font-normal text-left py-0.5" scope="row">
+			<th className="font-normal text-gray-700 text-left py-0.5" scope="row">
 				<span className={cn("flex items-center gap-2.5", { "pl-5": !marker })}>
 					{marker && (
 						<span
@@ -58,7 +58,7 @@ function MappingRow({
 					<span>{title}</span>
 				</span>
 			</th>
-			<td className="pl-8 text-right tabular-nums whitespace-nowrap">
+			<td className="font-medium pl-8 text-gray-700 text-right tabular-nums whitespace-nowrap">
 				{negative && MINUS}
 				{toThousand(count)}
 			</td>
@@ -129,7 +129,7 @@ export function AnalysisMapping({ totalReads, detail }: AnalysisMappingProps) {
 
 	return (
 		<Box className="mb-8">
-			<h3 className="text-xl font-normal mb-2.5">
+			<h3 className="text-lg font-semibold mb-2.5 text-gray-900">
 				{mappedPercent
 					? `${mappedPercent} of reads mapped to the reference`
 					: "Mapped to the reference"}

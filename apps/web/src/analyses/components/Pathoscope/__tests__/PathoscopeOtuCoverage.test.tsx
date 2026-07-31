@@ -251,7 +251,7 @@ describe("<PathoscopeOtuCoverage />", () => {
 			<PathoscopeOtuCoverage maxDepth={12} segments={[segment(align, 5000)]} />,
 		);
 
-		const labelRow = container.querySelector(".text-gray-600.text-xs");
+		const labelRow = container.querySelector(".text-gray-600.text-sm");
 
 		expect(labelRow).not.toBeNull();
 		expect((labelRow as HTMLElement).style.height).toBe("18px");

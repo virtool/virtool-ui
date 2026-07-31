@@ -38,7 +38,7 @@ export default function AnalysisValue({
 						"text-green-700": color === "green",
 						"text-red-700": color === "red",
 					},
-					"font-bold",
+					"font-semibold",
 					"truncate",
 				)}
 			>

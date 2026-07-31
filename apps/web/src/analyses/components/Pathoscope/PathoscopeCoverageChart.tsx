@@ -125,8 +125,10 @@ export default function PathoscopeCoverageChart({
 				>
 					{d ? <path className="fill-blue-500" d={d} /> : null}
 				</svg>
+				{/* `gray-600`, not the `gray-500` other captions use: on `blue-100`
+				    `gray-500` is 4.0:1 and fails AA. */}
 				<div
-					className="pl-0.5 pt-0.5 text-gray-600 text-left text-xs truncate"
+					className="pl-0.5 pt-0.5 text-gray-600 text-left text-sm truncate"
 					style={{ height: labelHeight }}
 				>
 					{panel.label}

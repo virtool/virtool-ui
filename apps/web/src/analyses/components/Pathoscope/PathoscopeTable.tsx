@@ -56,7 +56,9 @@ export default function PathoscopeTable({
 						/>
 					</div>
 					<div className="flex flex-1 min-w-0 gap-4 items-center justify-between px-4 py-2.5">
-						<span className="font-medium truncate">{hit.name}</span>
+						<span className="font-semibold text-gray-900 truncate">
+							{hit.name}
+						</span>
 						<div className="flex gap-4 shrink-0">
 							{hit.abbreviation && (
 								<AnalysisValue

@@ -94,7 +94,9 @@ export default function PathoscopeIsolate({
 			    Their labels are only in the OTU's row, so they are not repeated down
 			    the panel; assistive technology still gets them from each value. */}
 			<div className="flex gap-4 items-start justify-between mb-2">
-				<h4 className="font-medium m-0 min-w-0 text-lg truncate">{name}</h4>
+				<h4 className="font-medium m-0 min-w-0 text-gray-900 truncate">
+					{name}
+				</h4>
 				<div className="flex gap-4 shrink-0">
 					<AnalysisValue
 						color="green"
