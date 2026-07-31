@@ -3,7 +3,7 @@ import { useSortAndFilterPathoscopeHits } from "@analyses/hooks";
 import type { FormattedPathoscopeAnalysis } from "@analyses/types";
 import Accordion from "@base/Accordion";
 import { useListSelection } from "@base/useListSelection";
-import type { PathoscopeHit, Sample } from "@virtool/contracts";
+import type { PathoscopeHit } from "@virtool/contracts";
 import type { MouseEvent } from "react";
 import { PathoscopeItem } from "./PathoscopeItem";
 import PathoscopeListHeader from "./PathoscopeListHeader";
@@ -12,15 +12,11 @@ import { formatPathoscopeHitsAsTsv } from "./table";
 
 type PathoscopeListProps = {
 	analysis: FormattedPathoscopeAnalysis;
-	sample: Sample;
 };
 
 /** A list of Pathoscope hits. */
-export function PathoscopeList({ analysis, sample }: PathoscopeListProps) {
-	const hits = useSortAndFilterPathoscopeHits(
-		analysis,
-		sample.quality?.length[1] ?? 0,
-	);
+export function PathoscopeList({ analysis }: PathoscopeListProps) {
+	const hits = useSortAndFilterPathoscopeHits(analysis);
 
 	const { search } = useAnalysisSearch();
 	const showReads = search.reads ?? false;

@@ -39,15 +39,25 @@ function pathoscopeSortValue(
 	}
 }
 
+/**
+ * The coverage a hit or isolate must reach to survive its filter, unless the
+ * viewer has been given another.
+ *
+ * The filter this replaced compared a hit's estimated read count against the
+ * reads it would take to tile 80% of its genome — 0.8 genome-equivalents, which
+ * is an expected breadth of `1 - e^-0.8`, or about 55%. Half is that figure,
+ * rounded to something a person would pick.
+ */
+export const DEFAULT_MIN_COVERAGE = 0.5;
+
 /** Sort and filter a list of pathoscope hits  */
 export function useSortAndFilterPathoscopeHits(
 	detail: FormattedPathoscopeAnalysis,
-	maxReadLength: number,
 ) {
 	let hits = detail.results.hits;
 
 	const {
-		search: { find, filterOtus, sortKey, sortDirection },
+		search: { find, filterOtus, minCoverage, sortKey, sortDirection },
 	} = useAnalysisSearch();
 
 	const fuse = createFuse(hits, ["name", "abbreviation"]);
@@ -56,11 +66,12 @@ export function useSortAndFilterPathoscopeHits(
 		hits = fuse.search(String(find)).map((result) => result.item);
 	}
 
+	// Measured breadth, not a read budget: reads piled onto one conserved locus
+	// buy an OTU the reads to tile its genome without covering any more of it.
 	if (filterOtus) {
-		hits = hits.filter(
-			(hit) =>
-				hit.pi * detail.results.readCount >= (hit.length * 0.8) / maxReadLength,
-		);
+		const cutoff = minCoverage ?? DEFAULT_MIN_COVERAGE;
+
+		hits = hits.filter((hit) => hit.coverage >= cutoff);
 	}
 
 	const sortedHits = sortBy(hits, [(hit) => pathoscopeSortValue(hit, sortKey)]);

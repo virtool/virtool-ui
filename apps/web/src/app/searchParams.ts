@@ -24,6 +24,25 @@ export function num(value: unknown, fallback: number): number {
 	return typeof value === "number" && Number.isFinite(value) ? value : fallback;
 }
 
+/**
+ * Coerce an optional number, discarding one outside `[min, max]`.
+ *
+ * A cutoff a hand-edited URL puts out of range would silently filter a list to
+ * nothing, so it reads as absent and the caller's default stands.
+ */
+export function numInRangeOptional(
+	value: unknown,
+	min: number,
+	max: number,
+): number | undefined {
+	return typeof value === "number" &&
+		Number.isFinite(value) &&
+		value >= min &&
+		value <= max
+		? value
+		: undefined;
+}
+
 export function bool(value: unknown, fallback: boolean): boolean {
 	return typeof value === "boolean" ? value : fallback;
 }

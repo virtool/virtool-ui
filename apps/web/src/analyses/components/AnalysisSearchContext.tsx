@@ -8,6 +8,12 @@ export type AnalysisSearch = {
 	filterOtus?: boolean;
 	filterSequences?: boolean;
 	find?: string;
+
+	/**
+	 * The coverage a hit or isolate must reach to survive its filter, from 0 to 1
+	 */
+	minCoverage?: number;
+
 	reads?: boolean;
 	sortKey?: string;
 	sortDirection?: "asc" | "desc";

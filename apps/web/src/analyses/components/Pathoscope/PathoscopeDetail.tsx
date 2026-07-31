@@ -1,4 +1,5 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
+import { DEFAULT_MIN_COVERAGE } from "@analyses/hooks";
 import type { PathoscopeHit } from "@virtool/contracts";
 import PathoscopeIsolate from "./PathoscopeIsolate";
 
@@ -17,11 +18,17 @@ export default function PathoscopeDetail({
 }: PathoscopeDetailProps) {
 	const { search } = useAnalysisSearch();
 	const filterIsolates = search.filterIsolates ?? true;
+	const minCoverage = search.minCoverage ?? DEFAULT_MIN_COVERAGE;
 
-	const { isolates, pi, segments } = hit;
+	const { isolates, segments } = hit;
 
+	// The same cutoff the OTU list is held to, against each isolate's own
+	// coverage. The rule this replaced kept an isolate carrying at least 3% of
+	// its OTU's weight, which said nothing about how much of it was covered —
+	// and scaled with the parent, so the same isolate survived under a weak OTU
+	// and was dropped under a strong one.
 	const filtered = isolates.filter(
-		(isolate) => !filterIsolates || isolate.pi >= 0.03 * pi,
+		(isolate) => !filterIsolates || isolate.coverage >= minCoverage,
 	);
 
 	const isolateComponents = filtered.map((isolate) => {

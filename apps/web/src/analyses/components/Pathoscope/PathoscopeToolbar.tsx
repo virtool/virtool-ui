@@ -16,11 +16,16 @@ import {
 	ArrowDownWideNarrow,
 	ArrowUpAZ,
 	ArrowUpWideNarrow,
+	ChartArea,
 	ChevronDown,
 	File,
 	FileDown,
+	Hash,
+	Table,
 } from "lucide-react";
 import { AnalysisViewerSort } from "../Viewer/Sort";
+import { collapsingLabel } from "./collapsingLabel";
+import PathoscopeFilter from "./PathoscopeFilter";
 
 type PathoscopeToolbarProps = {
 	/** The unique identifier the analysis being viewed */
@@ -30,8 +35,6 @@ type PathoscopeToolbarProps = {
 /** A selection of filters and toggles for pathoscope data presentation */
 export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 	const { search, setSearch } = useAnalysisSearch();
-	const filterOtus = search.filterOtus ?? true;
-	const filterIsolates = search.filterIsolates ?? true;
 	const find = search.find ?? "";
 	const showReads = search.reads ?? false;
 	const sortKey = search.sortKey ?? "coverage";
@@ -79,43 +82,38 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 				onValueChange={(value) => setSearch({ table: value === "table" })}
 				value={showTable ? "table" : "charts"}
 			>
-				<ToggleGroupItem value="charts">Charts</ToggleGroupItem>
-				<ToggleGroupItem value="table">Table</ToggleGroupItem>
+				<Tooltip tip="Chart view">
+					<ToggleGroupItem aria-label="Charts" value="charts">
+						<Icon icon={ChartArea} />
+						<span className={collapsingLabel}>Charts</span>
+					</ToggleGroupItem>
+				</Tooltip>
+				<Tooltip tip="Table view">
+					<ToggleGroupItem aria-label="Table" value="table">
+						<Icon icon={Table} />
+						<span className={collapsingLabel}>Table</span>
+					</ToggleGroupItem>
+				</Tooltip>
 			</ToggleGroup>
 			<Tooltip tip="Show read pseudo-counts instead of weight">
 				<ButtonToggle
+					aria-label="Show Reads"
 					onPressedChange={(reads) => setSearch({ reads })}
 					pressed={Boolean(showReads)}
 				>
-					Show Reads
+					<Icon icon={Hash} />
+					<span className={collapsingLabel}>Show Reads</span>
 				</ButtonToggle>
 			</Tooltip>
-			<Tooltip tip="Hide OTUs with low coverage support">
-				<ButtonToggle
-					onPressedChange={(filterOtus) => setSearch({ filterOtus })}
-					pressed={Boolean(filterOtus)}
-				>
-					Filter OTUs
-				</ButtonToggle>
-			</Tooltip>
-			{/* Isolates are only ever shown in an expanded hit, which the table
-			    layout has none of — the toggle would change nothing on screen. */}
-			{!showTable && (
-				<Tooltip tip="Hide isolates with low coverage support">
-					<ButtonToggle
-						onPressedChange={(filterIsolates) => setSearch({ filterIsolates })}
-						pressed={Boolean(filterIsolates)}
-					>
-						Filter Isolates
-					</ButtonToggle>
-				</Tooltip>
-			)}
+			<PathoscopeFilter />
 			<Dropdown>
-				<DropdownButton>
-					<span>
-						<Icon icon={FileDown} /> Export <Icon icon={ChevronDown} />
-					</span>
-				</DropdownButton>
+				<Tooltip tip="Export results">
+					<DropdownButton aria-label="Export">
+						<Icon icon={FileDown} />
+						<span className={collapsingLabel}>Export</span>
+						<Icon icon={ChevronDown} />
+					</DropdownButton>
+				</Tooltip>
 				<DropdownMenuContent>
 					<DropdownMenuDownload href={`/analyses/documents/${analysisId}.csv`}>
 						<Icon icon={File} /> CSV

@@ -80,11 +80,11 @@ function renderSort(sortKey?: string, sortDirection?: "asc" | "desc") {
 		results: { hits, readCount: 1000, subtractedCount: 0 },
 	} as FormattedPathoscopeAnalysis;
 
-	// A read length of zero would make the OTU filter's threshold infinite, so
-	// pass a realistic one. `filterOtus` is off here regardless.
 	const { result } = renderHook(
-		() => useSortAndFilterPathoscopeHits(analysis, 150),
-		{ wrapper: createWrapper({ sortKey, sortDirection }) },
+		() => useSortAndFilterPathoscopeHits(analysis),
+		{
+			wrapper: createWrapper({ sortKey, sortDirection }),
+		},
 	);
 
 	return result.current.map((hit) => hit.id);

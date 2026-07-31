@@ -73,16 +73,25 @@ describe("<PathoscopeToolbar />", () => {
 		expect(setSearch).toHaveBeenCalledWith({ sortDirection: "asc" });
 	});
 
-	// The isolate filter only narrows an expanded hit's detail, which the table
-	// layout does not render.
-	it("should drop the isolate filter in the table layout", () => {
-		renderToolbar({ table: true });
+	// Below 2xl every one of these shows its icon alone, so the tooltip is what
+	// says which is which.
+	it.each([
+		["radio", "Charts", "Chart view"],
+		["radio", "Table", "Table view"],
+		["button", "Show Reads", "Show read pseudo-counts instead of weight"],
+		["button", "Export", "Export results"],
+	])("should describe the %s named %s on hover", async (role, name, tip) => {
+		renderToolbar();
 
-		expect(
-			screen.getByRole("button", { name: "Filter OTUs" }),
-		).toBeInTheDocument();
-		expect(
-			screen.queryByRole("button", { name: "Filter Isolates" }),
-		).not.toBeInTheDocument();
+		await userEvent.hover(screen.getByRole(role, { name }));
+
+		expect(await screen.findByRole("tooltip")).toHaveTextContent(tip);
+	});
+
+	// The filters moved behind a popover, so the toolbar only carries its trigger.
+	it("should offer the filters behind one button", () => {
+		renderToolbar();
+
+		expect(screen.getByRole("button", { name: /^Filter/ })).toBeInTheDocument();
 	});
 });

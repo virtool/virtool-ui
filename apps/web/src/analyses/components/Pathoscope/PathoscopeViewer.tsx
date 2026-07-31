@@ -22,7 +22,7 @@ export function PathoscopeViewer({ analysis, sample }: PathoscopeViewerProps) {
 				totalReads={sample.quality?.count ?? 0}
 			/>
 			<PathoscopeToolbar analysisId={analysis.id} />
-			<PathoscopeList analysis={analysis} sample={sample} />
+			<PathoscopeList analysis={analysis} />
 			<PathoscopeViewerScroller />
 		</>
 	);

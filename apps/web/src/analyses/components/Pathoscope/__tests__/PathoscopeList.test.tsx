@@ -7,7 +7,6 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { expectNoViolations } from "@tests/axe";
 import { createFakeAnalysisMinimal } from "@tests/fake/analyses";
-import { createFakeSample } from "@tests/fake/samples";
 import { renderWithProviders } from "@tests/setup";
 import type { PathoscopeHit } from "@virtool/contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -42,10 +41,6 @@ const analysis: FormattedPathoscopeAnalysis = {
 	workflow: "pathoscope",
 };
 
-// The sample only supplies the read length the OTU filter divides by, and the
-// filter is off in these tests.
-const sample = createFakeSample();
-
 const writeText = vi.fn().mockResolvedValue(undefined);
 
 // Wrapped in a landmark the way the app shell wraps it, so each hit's
@@ -64,7 +59,7 @@ function renderList(search: AnalysisSearch = {}) {
 				}}
 				setSearch={vi.fn()}
 			>
-				<PathoscopeList analysis={analysis} sample={sample} />
+				<PathoscopeList analysis={analysis} />
 			</AnalysisSearchProvider>
 		</main>,
 	);

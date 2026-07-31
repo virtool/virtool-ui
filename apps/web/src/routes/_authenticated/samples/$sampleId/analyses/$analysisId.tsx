@@ -1,7 +1,12 @@
 import AnalysisDetail from "@analyses/components/AnalysisDetail";
 import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
 import { getErrorStatus } from "@app/queryErrors";
-import { boolOptional, oneOfOptional, strOptional } from "@app/searchParams";
+import {
+	boolOptional,
+	numInRangeOptional,
+	oneOfOptional,
+	strOptional,
+} from "@app/searchParams";
 import type { SearchSchemaInput } from "@tanstack/react-router";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
@@ -14,6 +19,7 @@ type AnalysisDetailSearch = {
 	sortDirection?: (typeof SORT_DIRECTIONS)[number];
 	filterOtus?: boolean;
 	filterIsolates?: boolean;
+	minCoverage?: number;
 	reads?: boolean;
 	filterSequences?: boolean;
 	filterOrfs?: boolean;
@@ -30,6 +36,7 @@ function validateAnalysisDetailSearch(
 		sortDirection: oneOfOptional(input.sortDirection, SORT_DIRECTIONS),
 		filterOtus: boolOptional(input.filterOtus),
 		filterIsolates: boolOptional(input.filterIsolates),
+		minCoverage: numInRangeOptional(input.minCoverage, 0, 1),
 		reads: boolOptional(input.reads),
 		filterSequences: boolOptional(input.filterSequences),
 		filterOrfs: boolOptional(input.filterOrfs),
