@@ -28,8 +28,23 @@ const SOURCES = import.meta.glob("../**/functions.ts", {
 }) as Record<string, string>;
 
 describe("server functions", () => {
-	it("covers every functions.ts", () => {
-		expect(Object.keys(SOURCES).length).toBeGreaterThan(10);
+	// A glob that matched nothing, or that stopped yielding source text, would
+	// make every scan below pass while asserting nothing. Naming known modules
+	// pins the pattern without pinning how many features the server has.
+	it("reads every functions.ts as source", () => {
+		expect(Object.keys(SOURCES)).toEqual(
+			expect.arrayContaining([
+				"../groups/functions.ts",
+				"../samples/functions.ts",
+				"../uploads/functions.ts",
+			]),
+		);
+
+		for (const [path, source] of Object.entries(SOURCES)) {
+			expect(typeof source, `${path} did not load as source text`).toBe(
+				"string",
+			);
+		}
 	});
 
 	it.each(NULL_BODY_STATUSES)(
