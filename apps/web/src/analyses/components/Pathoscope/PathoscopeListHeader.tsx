@@ -2,7 +2,7 @@ import Button from "@base/Button";
 import Checkbox from "@base/Checkbox";
 import Icon from "@base/Icon";
 import * as Sentry from "@sentry/tanstackstart-react";
-import { Check, ClipboardPlus } from "lucide-react";
+import { Check, ClipboardCopy } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type PathoscopeListHeaderProps = {
@@ -98,7 +98,7 @@ export default function PathoscopeListHeader({
 					{/* The clipboard API is unavailable outside a secure context. */}
 					{window.isSecureContext && (
 						<Button size="small" onClick={handleCopy}>
-							<Icon icon={copied ? Check : ClipboardPlus} />{" "}
+							<Icon icon={copied ? Check : ClipboardCopy} />{" "}
 							{copied ? "Copied" : "Copy"}
 						</Button>
 					)}

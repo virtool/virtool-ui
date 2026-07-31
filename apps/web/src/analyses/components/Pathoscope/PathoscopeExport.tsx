@@ -13,7 +13,7 @@ import Icon from "@base/Icon";
 import Tooltip from "@base/Tooltip";
 import * as Sentry from "@sentry/tanstackstart-react";
 import type { PathoscopeHit } from "@virtool/contracts";
-import { Check, ClipboardCopy, Download, File } from "lucide-react";
+import { Check, ClipboardCopy, Download, FileSpreadsheet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { collapsingLabel } from "./collapsingLabel";
 import {
@@ -31,11 +31,11 @@ type CopyItem = {
 };
 
 const copyItems: CopyItem[] = [
-	{ format: formatPathoscopeHitsAsTsv, headers: true, label: "Viruses" },
+	{ format: formatPathoscopeHitsAsTsv, headers: true, label: "OTUs" },
 	{
 		format: formatPathoscopeHitsAsTsv,
 		headers: false,
-		label: "Viruses without headers",
+		label: "OTUs without headers",
 	},
 	{ format: formatPathoscopeIsolatesAsTsv, headers: true, label: "Isolates" },
 	{
@@ -131,10 +131,10 @@ export default function PathoscopeExport({ analysis }: PathoscopeExportProps) {
 					<DropdownMenuDownload
 						href={`/analyses/documents/${analysis.id}.xlsx`}
 					>
-						<Icon icon={File} /> Excel
+						<Icon icon={FileSpreadsheet} /> Excel
 					</DropdownMenuDownload>
 					<DropdownMenuDownload href={`/analyses/documents/${analysis.id}.csv`}>
-						<Icon icon={File} /> CSV
+						<Icon icon={FileSpreadsheet} /> CSV
 					</DropdownMenuDownload>
 				</DropdownMenuGroup>
 			</DropdownMenuContent>

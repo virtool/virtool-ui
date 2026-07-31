@@ -122,7 +122,7 @@ describe("<PathoscopeExport />", () => {
 	it("should copy the shown viruses as a tab-separated table", async () => {
 		renderExport({ sortKey: "coverage" });
 		await openMenu();
-		await userEvent.click(screen.getByRole("menuitem", { name: "Viruses" }));
+		await userEvent.click(screen.getByRole("menuitem", { name: "OTUs" }));
 
 		expect(writeText).toHaveBeenCalledWith(
 			[
@@ -152,7 +152,7 @@ describe("<PathoscopeExport />", () => {
 		renderExport({ find: "Beta" });
 		await openMenu();
 		await userEvent.click(
-			screen.getByRole("menuitem", { name: "Viruses without headers" }),
+			screen.getByRole("menuitem", { name: "OTUs without headers" }),
 		);
 
 		expect(writeText).toHaveBeenCalledWith("Beta virus\t0.500\t7\t0.250");
@@ -161,7 +161,7 @@ describe("<PathoscopeExport />", () => {
 	it("should copy read pseudo-counts when reads are shown", async () => {
 		renderExport({ find: "Alpha", reads: true });
 		await openMenu();
-		await userEvent.click(screen.getByRole("menuitem", { name: "Viruses" }));
+		await userEvent.click(screen.getByRole("menuitem", { name: "OTUs" }));
 
 		expect(writeText).toHaveBeenCalledWith(
 			["Name\tReads\tDepth\tCoverage", "Alpha virus\t250\t12\t0.500"].join(
@@ -175,7 +175,7 @@ describe("<PathoscopeExport />", () => {
 	it("should report a copy on the trigger", async () => {
 		renderExport();
 		await openMenu();
-		await userEvent.click(screen.getByRole("menuitem", { name: "Viruses" }));
+		await userEvent.click(screen.getByRole("menuitem", { name: "OTUs" }));
 
 		expect(
 			await screen.findByRole("button", { name: "Copied" }),
