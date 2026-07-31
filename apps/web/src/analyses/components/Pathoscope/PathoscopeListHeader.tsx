@@ -122,33 +122,33 @@ export default function PathoscopeListHeader({
 						? `${selectedCount} selected · ${describeCount(found, total)}`
 						: describeCount(found, total)}
 				</span>
-				{/* Kept beside the count rather than pushed to the right: the column
-				    labels take that edge, and a copy button up against them would read
-				    as belonging to the first column rather than to the selection. The
+				{/* Pushed to the right edge, beside the column labels it precedes: the
 				    clipboard API is unavailable outside a secure context. */}
-				{selectedCount > 0 && window.isSecureContext && (
-					<Button size="small" onClick={handleCopy}>
-						<Icon icon={copied ? Check : ClipboardCopy} />{" "}
-						{copied ? "Copied" : "Copy"}
-					</Button>
-				)}
-				{/* The columns of figures are labelled here instead of on every hit.
-				    They are the same fixed widths, in the same order, aligned against
-				    the same right edge, so each label lands over its column — a hit
-				    without an abbreviation leaves that one empty rather than shifting
-				    the rest, because the group is aligned from the right.
+				<div className="ml-auto flex items-center gap-4 shrink-0">
+					{selectedCount > 0 && window.isSecureContext && (
+						<Button size="small" onClick={handleCopy}>
+							<Icon icon={copied ? Check : ClipboardCopy} />{" "}
+							{copied ? "Copied" : "Copy"}
+						</Button>
+					)}
+					{/* The columns of figures are labelled here instead of on every hit.
+					    They are the same fixed widths, in the same order, aligned against
+					    the same right edge, so each label lands over its column — a hit
+					    without an abbreviation leaves that one empty rather than shifting
+					    the rest, because the group is aligned from the right.
 
-				    Hidden from assistive technology: every figure still carries its
-				    own label, so announcing these too would read each column name
-				    once here and again on every hit. */}
-				<div
-					aria-hidden
-					className="ml-auto flex gap-4 shrink-0 font-medium text-gray-500"
-				>
-					{showAbbreviation && <span className="w-32">Abbreviation</span>}
-					<span className="w-22">{search.reads ? "Reads" : "Weight"}</span>
-					<span className="w-22">Depth</span>
-					<span className="w-22">Coverage</span>
+					    Hidden from assistive technology: every figure still carries its
+					    own label, so announcing these too would read each column name
+					    once here and again on every hit. */}
+					<div
+						aria-hidden
+						className="flex gap-4 shrink-0 font-medium text-gray-500"
+					>
+						{showAbbreviation && <span className="w-32">Abbreviation</span>}
+						<span className="w-22">{search.reads ? "Reads" : "Weight"}</span>
+						<span className="w-22">Depth</span>
+						<span className="w-22">Coverage</span>
+					</div>
 				</div>
 			</fieldset>
 		</div>
