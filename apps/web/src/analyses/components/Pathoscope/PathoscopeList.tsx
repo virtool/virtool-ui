@@ -60,6 +60,7 @@ export function PathoscopeList({ analysis }: PathoscopeListProps) {
 				onCopy={copySelected}
 				onSelectAll={() => selection.toggleVisible(hits)}
 				selectedCount={selection.selected.length}
+				total={analysis.results.hits.length}
 			/>
 			{showTable ? (
 				<PathoscopeTable

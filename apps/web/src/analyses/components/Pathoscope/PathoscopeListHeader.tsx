@@ -20,11 +20,31 @@ type PathoscopeListHeaderProps = {
 
 	/** The number of selected hits, which the actions apply to */
 	selectedCount: number;
+
+	/** The number of hits before the search and filters narrowed them */
+	total: number;
 };
 
 /**
- * The header for the pathoscope hit list. Shows the hit count until hits are
- * selected, then swaps in the actions that apply to the selection.
+ * The count of what is on screen, against the whole list when something is
+ * being held back.
+ *
+ * The hidden hits are the ones a reader cannot see to ask about, so the total
+ * is what says they exist. It is left out entirely when nothing is hidden,
+ * rather than saying so — a permanent "matching filters" would be noise on a
+ * list that is showing everything.
+ */
+function describeCount(found: number, total: number): string {
+	if (found === total) {
+		return `${found} ${found === 1 ? "hit" : "hits"}`;
+	}
+
+	return `${found} of ${total} hits`;
+}
+
+/**
+ * The header for the pathoscope hit list. Carries the hit count, and the
+ * actions that apply to a selection once there is one.
  */
 export default function PathoscopeListHeader({
 	checked,
@@ -32,6 +52,7 @@ export default function PathoscopeListHeader({
 	onCopy,
 	onSelectAll,
 	selectedCount,
+	total,
 }: PathoscopeListHeaderProps) {
 	const [copied, setCopied] = useState(false);
 
@@ -65,10 +86,12 @@ export default function PathoscopeListHeader({
 				id="PathoscopeSelectAll"
 				onClick={onSelectAll}
 			/>
+			{/* The count stays put once hits are selected. It is the only statement
+			    of how long the list is, and the selection is measured against it. */}
 			<span>
 				{selectedCount
-					? `${selectedCount} selected`
-					: `${found} ${found === 1 ? "hit" : "hits"}`}
+					? `${selectedCount} selected · ${describeCount(found, total)}`
+					: describeCount(found, total)}
 			</span>
 			{selectedCount > 0 && (
 				<div className="ml-auto flex items-center gap-2">

@@ -73,7 +73,9 @@ beforeEach(() => {
 });
 
 describe("<PathoscopeList />", () => {
-	it("should show the hit count until a hit is selected", async () => {
+	// The count is the only statement of how long the list is, so a selection
+	// joins it rather than replacing it.
+	it("should keep the hit count once a hit is selected", async () => {
 		renderList();
 
 		expect(screen.getByText("2 hits")).toBeInTheDocument();
@@ -85,8 +87,23 @@ describe("<PathoscopeList />", () => {
 			screen.getByRole("checkbox", { name: "Select Alpha virus" }),
 		);
 
-		expect(screen.getByText("1 selected")).toBeInTheDocument();
+		expect(screen.getByText("1 selected · 2 hits")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument();
+	});
+
+	// A reader cannot see the hits that were held back, so the total is what
+	// says they are there.
+	it("should count the shown hits against the whole list when filtering", () => {
+		// Alpha covers 0.5 and Beta 0.25, so only Alpha clears the cutoff.
+		renderList({ filterOtus: true, minCoverage: 0.3 });
+
+		expect(screen.getByText("1 of 2 hits")).toBeInTheDocument();
+	});
+
+	it("should drop the total once nothing is held back", () => {
+		renderList({ filterOtus: true, minCoverage: 0 });
+
+		expect(screen.getByText("2 hits")).toBeInTheDocument();
 	});
 
 	it("should copy the selected hits as a tab-separated table", async () => {
@@ -120,7 +137,7 @@ describe("<PathoscopeList />", () => {
 			screen.getByRole("checkbox", { name: "Select Beta virus" }),
 		);
 
-		expect(screen.getByText("2 selected")).toBeInTheDocument();
+		expect(screen.getByText("2 selected · 2 hits")).toBeInTheDocument();
 
 		await userEvent.click(screen.getByRole("button", { name: "Copy" }));
 
@@ -148,7 +165,7 @@ describe("<PathoscopeList />", () => {
 			screen.getByRole("checkbox", { name: "Select all hits" }),
 		);
 
-		expect(screen.getByText("2 selected")).toBeInTheDocument();
+		expect(screen.getByText("2 selected · 2 hits")).toBeInTheDocument();
 		expect(
 			screen.getByRole("checkbox", { name: "Select Alpha virus" }),
 		).toBeChecked();
