@@ -1,3 +1,4 @@
+import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import Button from "@base/Button";
 import Checkbox from "@base/Checkbox";
 import Icon from "@base/Icon";
@@ -21,6 +22,9 @@ type PathoscopeListHeaderProps = {
 	/** The number of selected hits, which the actions apply to */
 	selectedCount: number;
 
+	/** Whether any hit on screen carries an abbreviation to label */
+	showAbbreviation: boolean;
+
 	/** The number of hits before the search and filters narrowed them */
 	total: number;
 };
@@ -43,8 +47,12 @@ function describeCount(found: number, total: number): string {
 }
 
 /**
- * The header for the pathoscope hit list. Carries the hit count, and the
- * actions that apply to a selection once there is one.
+ * The header for the hit list. Carries the hit count, the actions that apply to
+ * a selection once there is one, and the labels for the columns of figures each
+ * hit is summarised by.
+ *
+ * Shared by both views: they draw the same columns in the same places, and
+ * differ only in whether a coverage chart is drawn under each hit.
  */
 export default function PathoscopeListHeader({
 	checked,
@@ -52,8 +60,10 @@ export default function PathoscopeListHeader({
 	onCopy,
 	onSelectAll,
 	selectedCount,
+	showAbbreviation,
 	total,
 }: PathoscopeListHeaderProps) {
+	const { search } = useAnalysisSearch();
 	const [copied, setCopied] = useState(false);
 
 	useEffect(() => {
@@ -91,7 +101,14 @@ export default function PathoscopeListHeader({
 		// visible in the band above the bar as they scrolled past; an opaque
 		// white strip that sticks along with the bar covers them instead.
 		<div className="sticky top-0 z-1 mb-2.5 bg-white pt-2.5">
-			<div className="flex items-center gap-4 border border-gray-300 rounded-sm bg-gray-50 px-4 h-14 text-sm font-medium text-gray-600">
+			{/* A named group, so the select-all, the count and the copy action are
+			    announced as belonging together rather than as loose controls ahead
+			    of the list. `min-w-0` because a fieldset will not otherwise shrink
+			    below its content, which would push the bar wider than the hits. */}
+			<fieldset
+				aria-label="Hit list"
+				className="min-w-0 flex items-center gap-4 border border-gray-300 rounded-sm bg-gray-50 px-4 h-14 text-sm font-medium text-gray-600"
+			>
 				<Checkbox
 					ariaLabel="Select all hits"
 					checked={checked}
@@ -105,18 +122,35 @@ export default function PathoscopeListHeader({
 						? `${selectedCount} selected · ${describeCount(found, total)}`
 						: describeCount(found, total)}
 				</span>
-				{selectedCount > 0 && (
-					<div className="ml-auto flex items-center gap-2">
-						{/* The clipboard API is unavailable outside a secure context. */}
-						{window.isSecureContext && (
-							<Button size="small" onClick={handleCopy}>
-								<Icon icon={copied ? Check : ClipboardCopy} />{" "}
-								{copied ? "Copied" : "Copy"}
-							</Button>
-						)}
-					</div>
+				{/* Kept beside the count rather than pushed to the right: the column
+				    labels take that edge, and a copy button up against them would read
+				    as belonging to the first column rather than to the selection. The
+				    clipboard API is unavailable outside a secure context. */}
+				{selectedCount > 0 && window.isSecureContext && (
+					<Button size="small" onClick={handleCopy}>
+						<Icon icon={copied ? Check : ClipboardCopy} />{" "}
+						{copied ? "Copied" : "Copy"}
+					</Button>
 				)}
-			</div>
+				{/* The columns of figures are labelled here instead of on every hit.
+				    They are the same fixed widths, in the same order, aligned against
+				    the same right edge, so each label lands over its column — a hit
+				    without an abbreviation leaves that one empty rather than shifting
+				    the rest, because the group is aligned from the right.
+
+				    Hidden from assistive technology: every figure still carries its
+				    own label, so announcing these too would read each column name
+				    once here and again on every hit. */}
+				<div
+					aria-hidden
+					className="ml-auto flex gap-4 shrink-0 font-medium text-gray-500"
+				>
+					{showAbbreviation && <span className="w-32">Abbreviation</span>}
+					<span className="w-22">{search.reads ? "Reads" : "Weight"}</span>
+					<span className="w-22">Depth</span>
+					<span className="w-22">Coverage</span>
+				</div>
+			</fieldset>
 		</div>
 	);
 }

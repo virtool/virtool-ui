@@ -55,12 +55,17 @@ export function PathoscopeList({ analysis }: PathoscopeListProps) {
 
 	return (
 		<>
+			{/* One header for both views: they draw the same columns in the same
+			    places, and differ only in whether a coverage chart is drawn under
+			    each hit. Labelling a column no hit fills would put a heading over
+			    empty space, so the header is told whether there is one to label. */}
 			<PathoscopeListHeader
 				checked={selection.getVisibleState(hits)}
 				found={hits.length}
 				onCopy={copySelected}
 				onSelectAll={() => selection.toggleVisible(hits)}
 				selectedCount={selection.selected.length}
+				showAbbreviation={hits.some((hit) => Boolean(hit.abbreviation))}
 				total={analysis.results.hits.length}
 			/>
 			{showTable ? (

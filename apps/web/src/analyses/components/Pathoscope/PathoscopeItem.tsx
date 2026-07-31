@@ -62,7 +62,11 @@ export function PathoscopeItem({
 						    its own rather than a second line under the name, so it reads
 						    across with the figures beside it; an OTU without one leaves the
 						    column out entirely, and the figures stay put because the row is
-						    aligned from the right. */}
+						    aligned from the right.
+
+						    The labels are in the list header rather than on each hit, so a
+						    column is named once for the list instead of once per row;
+						    assistive technology still gets them from each value. */}
 						<div className="flex gap-4 items-start justify-between">
 							<AccordionTrigger>
 								<span className="font-medium text-lg truncate">{name}</span>
@@ -72,19 +76,27 @@ export function PathoscopeItem({
 									<AnalysisValue
 										className="w-32"
 										color="gray"
-										label="ABBREVIATION"
+										hideLabel
+										label="Abbreviation"
 										value={abbreviation}
 									/>
 								)}
 								<AnalysisValue
 									color="green"
-									label={showReads ? "READS" : "WEIGHT"}
+									hideLabel
+									label={showReads ? "Reads" : "Weight"}
 									value={piValue}
 								/>
-								<AnalysisValue color="red" label="DEPTH" value={depth} />
+								<AnalysisValue
+									color="red"
+									hideLabel
+									label="Depth"
+									value={depth}
+								/>
 								<AnalysisValue
 									color="blue"
-									label="COVERAGE"
+									hideLabel
+									label="Coverage"
 									value={coverage.toFixed(3)}
 								/>
 							</div>

@@ -1,7 +1,7 @@
 import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
 import { type AnalysisSearch, DEFAULT_ANALYSIS_SEARCH } from "@analyses/search";
 import type { FormattedPathoscopeAnalysis } from "@analyses/types";
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { expectNoViolations } from "@tests/axe";
 import { createFakeAnalysisMinimal } from "@tests/fake/analyses";
@@ -45,7 +45,10 @@ const writeText = vi.fn().mockResolvedValue(undefined);
 // ``<header>`` is scoped out of the banner role as it is in a real page.
 // Ascending is set explicitly so the display order differs from click order
 // below, regardless of which direction the app defaults to.
-function renderList(search: Partial<AnalysisSearch> = {}) {
+function renderList(
+	search: Partial<AnalysisSearch> = {},
+	listHits: PathoscopeHit[] = hits,
+) {
 	return renderWithProviders(
 		<main>
 			<AnalysisSearchProvider
@@ -58,7 +61,12 @@ function renderList(search: Partial<AnalysisSearch> = {}) {
 				}}
 				setSearch={vi.fn()}
 			>
-				<PathoscopeList analysis={analysis} />
+				<PathoscopeList
+					analysis={{
+						...analysis,
+						results: { ...analysis.results, hits: listHits },
+					}}
+				/>
 			</AnalysisSearchProvider>
 		</main>,
 	);
@@ -191,18 +199,44 @@ describe("<PathoscopeList />", () => {
 		).toBeChecked();
 	});
 
+	// Scoped to the header because each figure keeps a label of its own for
+	// assistive technology, so the same words appear once per hit as well.
+	function headerLabels() {
+		return within(screen.getByRole("group", { name: "Hit list" }));
+	}
+
+	// The columns are labelled on the header rather than on every hit, so a
+	// column is named once however long the list is.
+	it("should label the columns of figures in the header", () => {
+		renderList();
+
+		for (const label of ["Abbreviation", "Weight", "Depth", "Coverage"]) {
+			expect(headerLabels().getByText(label)).toBeInTheDocument();
+		}
+	});
+
+	it("should label the weight column reads when read counts are shown", () => {
+		renderList({ reads: true });
+
+		expect(headerLabels().getByText("Reads")).toBeInTheDocument();
+		expect(headerLabels().queryByText("Weight")).not.toBeInTheDocument();
+	});
+
+	// Nothing fills the column, so a heading would sit over empty space.
+	it("should not label the abbreviation column when no hit has one", () => {
+		renderList({}, [createHit({ abbreviation: "", id: "a" })]);
+
+		expect(headerLabels().queryByText("Abbreviation")).not.toBeInTheDocument();
+		expect(headerLabels().getByText("Coverage")).toBeInTheDocument();
+	});
+
 	describe("in table mode", () => {
 		it("should show one row per hit, with no expandable detail", () => {
 			renderList({ table: true });
 
-			expect(
-				screen.getByRole("columnheader", { name: "Coverage" }),
-			).toBeInTheDocument();
+			const [beta, alpha] = screen.getAllByRole("listitem");
 
-			// The header row plus one row per hit.
-			expect(screen.getAllByRole("row")).toHaveLength(3);
-
-			const [beta, alpha] = screen.getAllByRole("row").slice(1);
+			expect(screen.getAllByRole("listitem")).toHaveLength(2);
 
 			expect(beta).toHaveTextContent("Beta virus");
 			expect(beta).toHaveTextContent("0.250");
@@ -217,15 +251,18 @@ describe("<PathoscopeList />", () => {
 			).not.toBeInTheDocument();
 		});
 
-		it("should label the weight column reads when read counts are shown", () => {
+		// The columns are labelled by the shared header rather than by the view,
+		// so a figure keeps only the label assistive technology reads.
+		it("should label each figure without repeating the column names", () => {
 			renderList({ reads: true, table: true });
 
-			expect(
-				screen.getByRole("columnheader", { name: "Reads" }),
-			).toBeInTheDocument();
-			expect(
-				screen.queryByRole("columnheader", { name: "Weight" }),
-			).not.toBeInTheDocument();
+			expect(headerLabels().getByText("Reads")).toBeInTheDocument();
+			expect(headerLabels().queryByText("Weight")).not.toBeInTheDocument();
+
+			// Named once by the header, and once more on each hit — those copies
+			// are `sr-only`, so only assistive technology reads them.
+			expect(screen.getAllByText("Reads")).toHaveLength(hits.length + 1);
+			expect(screen.getAllByText("Coverage")).toHaveLength(hits.length + 1);
 		});
 
 		it("should copy the hits selected from its rows", async () => {
