@@ -3,6 +3,14 @@ import { cva } from "class-variance-authority";
 export const buttonVariants = cva(
 	[
 		"cursor-pointer items-center inline-flex font-medium px-4 rounded-md select-none",
+		// Every button-like control gets the icon-to-label gap, not just `Button`
+		// — a toggle carrying an icon needs it just as much.
+		"gap-1.5",
+		// A squeezed toolbar shrinks its buttons before it shrinks its search
+		// input. Wrapping the label mid-word makes the button two lines tall and
+		// shifts everything below it down the page; overflowing is the tamer
+		// failure, and the caller decides what collapses before it comes to that.
+		"whitespace-nowrap",
 		"transition-colors",
 		// Dims whatever the button currently is, so one rule covers every colour
 		// and the on state below, which a `bg-` utility could not.
