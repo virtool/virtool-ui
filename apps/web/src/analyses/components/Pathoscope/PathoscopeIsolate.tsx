@@ -1,6 +1,6 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import AnalysisValue from "@analyses/components/AnalysisValue";
-import { toScientificNotation } from "@app/format";
+import { toScientificNotation, toThousand } from "@app/format";
 import type {
 	PathoscopeSegmentCoverage,
 	PathoscopeSequence as PathoscopeSequenceData,
@@ -78,6 +78,10 @@ export default function PathoscopeIsolate({
 			key: segment.key,
 			label: labelOf(segment, sequence),
 			length: segment.length,
+			// The sequence's own length, not the segment's — which is the longest any
+			// isolate gave it, and would attribute a length to a sequence that is not
+			// there.
+			lengthLabel: sequence ? `${toThousand(sequence.length)} nt` : "",
 		};
 	});
 

@@ -102,6 +102,34 @@ describe("<PathoscopeIsolate />", () => {
 		expect(screen.queryByText(/not in this isolate/)).toBeNull();
 	});
 
+	it("should carry each panel's own sequence length, exactly", () => {
+		mockElementWidth(1200);
+
+		// The sequence's length, not the segment's, which is as long as the longest
+		// sequence any isolate filled it with.
+		renderIsolate([
+			sequence("seg:L", "NC_L", 8700),
+			sequence("seg:M", "NC_M", 4800),
+			sequence("seg:S", "NC_S", 2900),
+		]);
+
+		expect(screen.getByText("8,700 nt")).toBeVisible();
+		expect(screen.getByText("4,800 nt")).toBeVisible();
+		expect(screen.getByText("2,900 nt")).toBeVisible();
+	});
+
+	it("should give no length to a panel the isolate has no sequence for", () => {
+		mockElementWidth(1200);
+
+		renderIsolate([
+			sequence("seg:L", "NC_L", 8900),
+			sequence("seg:S", "NC_S", 2900),
+		]);
+
+		expect(screen.getByText("M · not in this isolate")).toBeVisible();
+		expect(screen.queryByText("4,800 nt")).toBeNull();
+	});
+
 	it("should fall back to the accession when the segment has no schema name", () => {
 		mockElementWidth(400);
 

@@ -1,3 +1,4 @@
+import { toThousand } from "@app/format";
 import type { PathoscopeSegmentCoverage } from "@virtool/contracts";
 import PathoscopeCoverageChart, {
 	type CoveragePanel,
@@ -5,20 +6,18 @@ import PathoscopeCoverageChart, {
 
 const height = 80;
 
-function formatLength(length: number): string {
-	return length >= 1000 ? `${(length / 1000).toFixed(1)} kb` : `${length} nt`;
-}
-
-// A named segment is labelled with its name. One matched to its neighbours by
-// length is labelled with that length, approximately — the sequences filling it
-// differ, and the label says so rather than implying a figure it does not have.
+// A named segment is labelled with its name; one matched to its neighbours by
+// length has nothing to be called, and its length — now in the caption's own
+// right — is identity enough.
 //
 // A segment nothing mapped to draws no curve, so its label has to carry the
 // reason. An empty panel on its own reads as a gap in the layout.
 function labelOf(segment: PathoscopeSegmentCoverage): string {
-	const label = segment.name ?? `≈${formatLength(segment.length)}`;
+	if (segment.detected) {
+		return segment.name ?? "";
+	}
 
-	return segment.detected ? label : `${label} · no reads`;
+	return segment.name ? `${segment.name} · no reads` : "No reads";
 }
 
 type OtuCoverageProps = {
@@ -33,9 +32,10 @@ export default function PathoscopeOtuCoverage({
 	maxDepth,
 	segments,
 }: OtuCoverageProps) {
-	// A single-segment OTU is the unsegmented case, where a label would only repeat
-	// what the accordion already says. An undetected segment is labelled whatever
-	// the count, because it draws nothing and a blank panel needs its reason.
+	// A single-segment OTU is the unsegmented case, where a name would only repeat
+	// what the accordion already says — but its length still gets drawn. An
+	// undetected segment is named whatever the count, because it draws nothing and
+	// a blank panel needs its reason.
 	const labelled =
 		segments.length > 1 || segments.some((segment) => !segment.detected);
 
@@ -49,6 +49,7 @@ export default function PathoscopeOtuCoverage({
 		key: segment.key,
 		label: labelled ? labelOf(segment) : "",
 		length: segment.length,
+		lengthLabel: `${toThousand(segment.length)} nt`,
 	}));
 
 	return (

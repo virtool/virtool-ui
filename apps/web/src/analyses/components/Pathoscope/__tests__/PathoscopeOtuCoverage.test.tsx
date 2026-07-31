@@ -112,7 +112,8 @@ describe("<PathoscopeOtuCoverage />", () => {
 	});
 
 	it("should scale the polyline across the full segment length", () => {
-		mockElementWidth(400);
+		// 408px leaves 400px of drawing area once the gutters are taken out.
+		mockElementWidth(408);
 
 		// The polyline stops well short of the genome it spans, which is what a
 		// simplified curve does. The chart must scale to the segment rather than to
@@ -132,12 +133,12 @@ describe("<PathoscopeOtuCoverage />", () => {
 			/>,
 		);
 
-		// 100 of 200 positions is half the 400px container.
+		// 100 of 200 positions is half the drawing area.
 		expect(Math.max(...xValuesOf(paths()[0]))).toBe(200);
 	});
 
 	it("should draw one path per segment, each in a panel of its own width", () => {
-		mockElementWidth(406);
+		mockElementWidth(414);
 
 		renderWithProviders(
 			<PathoscopeOtuCoverage
@@ -165,9 +166,10 @@ describe("<PathoscopeOtuCoverage />", () => {
 
 		const [first, second] = paths();
 
-		// 300 and 100 nucleotides of 400, across 400px once the 6px gap between the
-		// panels is taken out. Each panel is drawn in an svg of its own, so a curve
-		// starts at its panel's left edge rather than at an offset into a shared one.
+		// 300 and 100 nucleotides of 400, across the 400px left once the gutters and
+		// the 6px gap between the panels are taken out. Each panel is drawn in an svg
+		// of its own, so a curve starts at its panel's left edge rather than at an
+		// offset into a shared one.
 		expect(Math.max(...xValuesOf(first))).toBe(300);
 		expect(first?.closest("svg")?.getAttribute("width")).toBe("300");
 
@@ -196,6 +198,83 @@ describe("<PathoscopeOtuCoverage />", () => {
 		expect(heightOf(paths()[1])).toBe(64);
 	});
 
+	it("should give the gutter to the outermost panels, not to the box", () => {
+		mockElementWidth(414);
+
+		renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={12}
+				segments={[segment(align, 300, "L"), segment(align, 100, "S")]}
+			/>,
+		);
+
+		// A panel's hover styling covers its own padding, so the gutter has to
+		// belong to a panel — held on the box it leaves a strip inside the border
+		// that stays unhighlighted while the panel beside it is hovered.
+		const [first, second] = [...screen.getByRole("img").children].map(
+			(panel) => (panel as HTMLElement).style,
+		);
+
+		expect(first?.width).toBe("304px");
+		expect(second?.width).toBe("104px");
+	});
+
+	it("should rule every panel at the depth the chart is drawn to", () => {
+		mockElementWidth(414);
+
+		const { container } = renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={1240}
+				segments={[segment(align, 300, "L"), segment(align, 100, "S")]}
+			/>,
+		);
+
+		const rules = [...container.querySelectorAll("line")];
+
+		// The curve area starts below the rule, so a curve reaching the ceiling
+		// meets it rather than running off the top of the panel.
+		expect(rules).toHaveLength(2);
+		expect(rules.map((rule) => rule.getAttribute("y1"))).toEqual(["18", "18"]);
+		expect(rules.map((rule) => rule.getAttribute("x2"))).toEqual([
+			"300",
+			"100",
+		]);
+	});
+
+	it("should label the ceiling once for the chart, rounded", () => {
+		mockElementWidth(400);
+
+		renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={1240}
+				segments={[segment(align, 300, "L"), segment(align, 100, "S")]}
+			/>,
+		);
+
+		// The label is drawn over the chart, so it is hidden from the name the
+		// chart carries — which spells the figure out instead.
+		expect(screen.getByText("1.2k")).toBeVisible();
+		expect(screen.getByRole("img")).toHaveAccessibleName(/peak depth of 1240$/);
+	});
+
+	it("should draw no ceiling for an OTU nothing mapped to", () => {
+		mockElementWidth(400);
+
+		// There is no depth to rule the chart at, and a line along the top would
+		// read as one.
+		const { container } = renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={0}
+				segments={[{ ...segment(align, 300, "L"), detected: false, align: [] }]}
+			/>,
+		);
+
+		expect(container.querySelectorAll("line")).toHaveLength(0);
+		expect(screen.getByRole("img")).toHaveAccessibleName(
+			"Read depth across the reference genome",
+		);
+	});
+
 	it("should label each segment when the OTU has more than one", () => {
 		mockElementWidth(400);
 
@@ -206,10 +285,61 @@ describe("<PathoscopeOtuCoverage />", () => {
 			/>,
 		);
 
-		// A named segment carries its name; one matched by length says so
-		// approximately, because the sequences filling it differ.
+		// A segment matched by length has no name; its length identifies it.
 		expect(screen.getByText("L")).toBeVisible();
-		expect(screen.getByText("≈800 nt")).toBeVisible();
+		expect(screen.getByText("3,400 nt")).toBeVisible();
+		expect(screen.getByText("800 nt")).toBeVisible();
+	});
+
+	it("should read a caption as its name, then its length", () => {
+		mockElementWidth(1000);
+
+		renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={12}
+				segments={[
+					segment(align, 3760, "RNA 1"),
+					segment(align, 1200, "RNA 2"),
+				]}
+			/>,
+		);
+
+		// The caption is a flex row, so its spacing is gap rather than text.
+		expect(screen.getByText("RNA 1").parentElement).toHaveTextContent(
+			"RNA 1·3,760 nt",
+		);
+	});
+
+	it("should drop a panel's length when the panel is too narrow to hold it", () => {
+		// Two equal panels in 200px are under 100px each.
+		mockElementWidth(200);
+
+		renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={12}
+				segments={[segment(align, 3400, "L"), segment(align, 3400, "S")]}
+			/>,
+		);
+
+		expect(screen.getByText("L")).toBeVisible();
+		expect(screen.getByText("S")).toBeVisible();
+		expect(screen.queryByText(/nt$/)).toBeNull();
+	});
+
+	it("should keep a narrow panel's length when it is all that identifies it", () => {
+		mockElementWidth(200);
+
+		// Dropping the length of a segment with no name would leave the caption
+		// blank, which reads as a gap in the chart.
+		renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={12}
+				segments={[segment(align, 3400), segment(align, 800)]}
+			/>,
+		);
+
+		expect(screen.getByText("3,400 nt")).toBeVisible();
+		expect(screen.getByText("800 nt")).toBeVisible();
 	});
 
 	it("should say why a segment nothing mapped to is blank", () => {
@@ -231,22 +361,26 @@ describe("<PathoscopeOtuCoverage />", () => {
 		expect(screen.getByText("M · no reads")).toBeVisible();
 	});
 
-	it("should not label the single segment of an unsegmented otu", () => {
+	it("should carry the length but not the name of an unsegmented otu's segment", () => {
 		mockElementWidth(400);
 
+		// The name would only repeat what the accordion above already says.
 		renderWithProviders(
-			<PathoscopeOtuCoverage maxDepth={12} segments={[segment(align, 5000)]} />,
+			<PathoscopeOtuCoverage
+				maxDepth={12}
+				segments={[segment(align, 5000, "L")]}
+			/>,
 		);
 
-		expect(screen.queryByText("≈5.0 kb")).toBeNull();
+		expect(screen.getByText("5,000 nt")).toBeVisible();
+		expect(screen.queryByText("L")).toBeNull();
 	});
 
-	it("should reserve the label row's height even when it has nothing to say", () => {
+	it("should fix the label row's height rather than let its content set it", () => {
 		mockElementWidth(400);
 
-		// The unsegmented case draws no label text, but the box must still be the
-		// same height as one that does — otherwise it sits flush against the
-		// bottom of its box while a labelled one grows to fit its caption.
+		// Every chart has to be the same total height whatever its captions say, or
+		// the two read as different components rather than one in two states.
 		const { container } = renderWithProviders(
 			<PathoscopeOtuCoverage maxDepth={12} segments={[segment(align, 5000)]} />,
 		);
@@ -255,7 +389,6 @@ describe("<PathoscopeOtuCoverage />", () => {
 
 		expect(labelRow).not.toBeNull();
 		expect((labelRow as HTMLElement).style.height).toBe("18px");
-		expect(labelRow?.textContent).toBe("");
 	});
 
 	it("should left-justify segment labels", () => {
