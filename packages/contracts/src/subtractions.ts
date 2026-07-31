@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { JobState, JobWorkflow } from "./jobs";
 import type { SearchResult } from "./search";
 import type { UserNested } from "./users";
@@ -11,15 +12,31 @@ export type SubtractionNested = {
 	name: string;
 };
 
-/** The percentage of the genome made up by each nucleotide. */
-export type NucleotideComposition = {
-	a: number;
-	c: number;
-	g: number;
-	t: number;
+/**
+ * The percentage of the genome made up by each nucleotide.
+ *
+ * A schema rather than a plain type because the control plane validates it at
+ * subtraction finalize.
+ */
+export const NucleotideComposition = z.object({
+	a: z.number(),
+	c: z.number(),
+	g: z.number(),
+	t: z.number(),
 	/** Unknown nucleotide */
-	n: number;
-};
+	n: z.number(),
+});
+
+export type NucleotideComposition = z.infer<typeof NucleotideComposition>;
+
+/**
+ * One of the file types a subtraction can hold.
+ *
+ * `fasta` is the source genome; `bowtie2` is one shard of the built index.
+ */
+export const SubtractionFileType = z.enum(["fasta", "bowtie2"]);
+
+export type SubtractionFileType = z.infer<typeof SubtractionFileType>;
 
 /** The compact upload snapshot attached to a subtraction as `file`. */
 export type SubtractionUpload = {
