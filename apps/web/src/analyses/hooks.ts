@@ -40,6 +40,29 @@ function pathoscopeSortValue(
 	}
 }
 
+/**
+ * The value a NuVs sort key ranks a contig by.
+ *
+ * "Length" is the length of the contig's own sequence. A `NuvsHit` carries no
+ * `length` field — reading the key off the hit gave `undefined` for every one of
+ * them, so the list stayed in the workflow's output order while the toolbar
+ * reported it was sorted by length.
+ *
+ * A contig with no ORF hits has no e-value. It ranks last rather than first,
+ * where `null` would otherwise put it: it is the absence of a hit, not the
+ * strongest one.
+ */
+function nuvsSortValue(hit: FormattedNuvsHit, sortKey: string): number {
+	switch (sortKey) {
+		case "e":
+			return hit.e ?? Number.POSITIVE_INFINITY;
+		case "orfs":
+			return hit.annotatedOrfCount;
+		default:
+			return hit.sequence.length;
+	}
+}
+
 /** Sort and filter a list of pathoscope hits  */
 export function useSortAndFilterPathoscopeHits(
 	detail: FormattedPathoscopeAnalysis,
@@ -95,10 +118,12 @@ export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 
 	const sortKey = sort ?? DEFAULT_SORT_KEY.nuvs;
 
-	const sortedHits =
-		sortKey === "orfs"
-			? sortBy(hits, [(hit) => hit.annotatedOrfCount]).reverse()
-			: sortBy(hits, [(hit) => hit[sortKey as keyof FormattedNuvsHit]]);
+	const sortedHits = sortBy(hits, [(hit) => nuvsSortValue(hit, sortKey)]);
+
+	// The lowest e-value is the strongest hit, so that key alone reads upward.
+	if (sortKey !== "e") {
+		sortedHits.reverse();
+	}
 
 	return sortedHits;
 }

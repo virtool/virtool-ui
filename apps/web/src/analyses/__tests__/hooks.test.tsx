@@ -181,9 +181,12 @@ const nuvsHits = [
 	}),
 ];
 
-function renderNuvs(search: Partial<AnalysisSearch>) {
+function renderNuvs(
+	search: Partial<AnalysisSearch>,
+	hits: FormattedNuvsHit[] = nuvsHits,
+) {
 	const analysis = {
-		results: { hits: nuvsHits, maxSequenceLength: 4 },
+		results: { hits, maxSequenceLength: 4 },
 	} as FormattedNuvsAnalysis;
 
 	const { result } = renderHook(() => useSortAndFilterNuVsHits(analysis), {
@@ -223,6 +226,37 @@ describe("useSortAndFilterNuVsHits()", () => {
 	it("should sort by annotated ORF count, highest first", () => {
 		expect(renderNuvs({ showUnhitSequences: true, sort: "orfs" })).toEqual([
 			2, 3, 1,
+		]);
+	});
+
+	// A contig's length is the length of its own sequence. A hit carries no
+	// `length` field, so reading the key off the hit ranked every contig by
+	// `undefined` and left the list in the workflow's output order — while the
+	// toolbar reported it was sorted by length.
+	it("should sort by contig length, longest first", () => {
+		const byLength = [
+			createNuvsHit({ id: 1, e: 0.5, sequence: "AT" }),
+			createNuvsHit({ id: 2, e: 0.5, sequence: "ATGCAT" }),
+			createNuvsHit({ id: 3, e: 0.5, sequence: "ATGC" }),
+		];
+
+		expect(renderNuvs({ sort: "length" }, byLength)).toEqual([2, 3, 1]);
+	});
+
+	it("should sort by contig length by default", () => {
+		const byLength = [
+			createNuvsHit({ id: 1, e: 0.5, sequence: "AT" }),
+			createNuvsHit({ id: 2, e: 0.5, sequence: "ATGCAT" }),
+		];
+
+		expect(renderNuvs({}, byLength)).toEqual([2, 1]);
+	});
+
+	// The absence of a hit, not the strongest one — `null` would otherwise lead
+	// the list it belongs at the end of.
+	it("should rank a contig with no e-value last", () => {
+		expect(renderNuvs({ showUnhitSequences: true, sort: "e" })).toEqual([
+			2, 1, 3,
 		]);
 	});
 });
