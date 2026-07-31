@@ -1,4 +1,5 @@
 import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
+import { DEFAULT_ANALYSIS_SEARCH } from "@analyses/search";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
@@ -57,7 +58,10 @@ const segments = [
 
 function render(children: ReactNode) {
 	renderWithProviders(
-		<AnalysisSearchProvider search={{}} setSearch={vi.fn()}>
+		<AnalysisSearchProvider
+			search={DEFAULT_ANALYSIS_SEARCH}
+			setSearch={vi.fn()}
+		>
 			{children}
 		</AnalysisSearchProvider>,
 	);

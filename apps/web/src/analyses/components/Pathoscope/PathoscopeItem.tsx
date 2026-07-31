@@ -34,7 +34,7 @@ export function PathoscopeItem({
 	const { abbreviation, coverage, depth, maxDepth, name, pi, id, segments } =
 		hit;
 	const { search } = useAnalysisSearch();
-	const showReads = search.reads ?? false;
+	const showReads = search.reads;
 
 	const piValue = showReads
 		? Math.round(pi * mappedCount)

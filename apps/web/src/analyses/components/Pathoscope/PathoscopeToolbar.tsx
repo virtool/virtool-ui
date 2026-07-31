@@ -1,4 +1,5 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
+import { DEFAULT_SORT_KEY } from "@analyses/search";
 import type { FormattedPathoscopeAnalysis } from "@analyses/types";
 import Button from "@base/Button";
 import ButtonGroup from "@base/ButtonGroup";
@@ -30,11 +31,8 @@ type PathoscopeToolbarProps = {
 /** A selection of filters and toggles for pathoscope data presentation */
 export function PathoscopeToolbar({ analysis }: PathoscopeToolbarProps) {
 	const { search, setSearch } = useAnalysisSearch();
-	const find = search.find ?? "";
-	const showReads = search.reads ?? false;
-	const sortKey = search.sortKey ?? "coverage";
-	const sortDirection = search.sortDirection ?? "desc";
-	const showTable = search.table ?? false;
+	const { dir, find, reads, table } = search;
+	const sortKey = search.sort ?? DEFAULT_SORT_KEY.pathoscope;
 
 	// The wide-to-narrow arrows read as magnitude, which a name sort is not.
 	const directionIcons =
@@ -52,30 +50,20 @@ export function PathoscopeToolbar({ analysis }: PathoscopeToolbarProps) {
 				<AnalysisViewerSort
 					workflow="pathoscope"
 					sortKey={sortKey}
-					onSelect={(sortKey) => setSearch({ sortKey })}
+					onSelect={(sort) => setSearch({ sort })}
 				/>
 				<Button
-					aria-label={
-						sortDirection === "desc" ? "Sort ascending" : "Sort descending"
-					}
-					onClick={() =>
-						setSearch({
-							sortDirection: sortDirection === "desc" ? "asc" : "desc",
-						})
-					}
+					aria-label={dir === "desc" ? "Sort ascending" : "Sort descending"}
+					onClick={() => setSearch({ dir: dir === "desc" ? "asc" : "desc" })}
 				>
 					<Icon
-						icon={
-							sortDirection === "desc"
-								? directionIcons.desc
-								: directionIcons.asc
-						}
+						icon={dir === "desc" ? directionIcons.desc : directionIcons.asc}
 					/>
 				</Button>
 			</ButtonGroup>
 			<ToggleGroup
 				onValueChange={(value) => setSearch({ table: value === "table" })}
-				value={showTable ? "table" : "charts"}
+				value={table ? "table" : "charts"}
 			>
 				<Tooltip tip="Chart view">
 					<ToggleGroupItem aria-label="Charts" value="charts">
@@ -94,7 +82,7 @@ export function PathoscopeToolbar({ analysis }: PathoscopeToolbarProps) {
 				<ButtonToggle
 					aria-label="Show Reads"
 					onPressedChange={(reads) => setSearch({ reads })}
-					pressed={Boolean(showReads)}
+					pressed={reads}
 				>
 					<Icon icon={Hash} />
 					<span className={collapsingLabel}>Show Reads</span>

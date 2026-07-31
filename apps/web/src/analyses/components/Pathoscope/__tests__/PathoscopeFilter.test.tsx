@@ -1,18 +1,19 @@
-import {
-	type AnalysisSearch,
-	AnalysisSearchProvider,
-} from "@analyses/components/AnalysisSearchContext";
+import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
+import { type AnalysisSearch, DEFAULT_ANALYSIS_SEARCH } from "@analyses/search";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import { describe, expect, it, vi } from "vitest";
 import PathoscopeFilter from "../PathoscopeFilter";
 
-async function openFilter(search: AnalysisSearch = {}) {
+async function openFilter(search: Partial<AnalysisSearch> = {}) {
 	const setSearch = vi.fn();
 
 	renderWithProviders(
-		<AnalysisSearchProvider search={search} setSearch={setSearch}>
+		<AnalysisSearchProvider
+			search={{ ...DEFAULT_ANALYSIS_SEARCH, ...search }}
+			setSearch={setSearch}
+		>
 			<PathoscopeFilter />
 		</AnalysisSearchProvider>,
 	);
@@ -29,7 +30,10 @@ describe("<PathoscopeFilter />", () => {
 	// `aria-expanded`.
 	it("should say in its name that hits are being hidden", () => {
 		renderWithProviders(
-			<AnalysisSearchProvider search={{}} setSearch={vi.fn()}>
+			<AnalysisSearchProvider
+				search={DEFAULT_ANALYSIS_SEARCH}
+				setSearch={vi.fn()}
+			>
 				<PathoscopeFilter />
 			</AnalysisSearchProvider>,
 		);
@@ -42,7 +46,11 @@ describe("<PathoscopeFilter />", () => {
 	it("should drop that from its name once nothing is filtered", () => {
 		renderWithProviders(
 			<AnalysisSearchProvider
-				search={{ filterIsolates: false, filterOtus: false }}
+				search={{
+					...DEFAULT_ANALYSIS_SEARCH,
+					showLowIsolates: true,
+					showLowOtus: true,
+				}}
 				setSearch={vi.fn()}
 			>
 				<PathoscopeFilter />
@@ -70,17 +78,17 @@ describe("<PathoscopeFilter />", () => {
 			screen.getByRole("switch", { name: "Hide low-coverage OTUs" }),
 		);
 
-		expect(setSearch).toHaveBeenCalledWith({ filterOtus: false });
+		expect(setSearch).toHaveBeenCalledWith({ showLowOtus: true });
 	});
 
 	it("should turn the isolate filter off", async () => {
-		const setSearch = await openFilter({ filterIsolates: true });
+		const setSearch = await openFilter();
 
 		await userEvent.click(
 			screen.getByRole("switch", { name: "Hide low-coverage isolates" }),
 		);
 
-		expect(setSearch).toHaveBeenCalledWith({ filterIsolates: false });
+		expect(setSearch).toHaveBeenCalledWith({ showLowIsolates: true });
 	});
 
 	// Isolates are only ever shown in an expanded hit, which the table layout
@@ -106,7 +114,7 @@ describe("<PathoscopeFilter />", () => {
 	});
 
 	it("should keep the cutoff live while only one filter is on", async () => {
-		await openFilter({ filterOtus: false });
+		await openFilter({ showLowOtus: true });
 
 		expect(
 			screen.getByRole("slider", { name: "Minimum coverage" }),
@@ -124,7 +132,7 @@ describe("<PathoscopeFilter />", () => {
 	// it from the tab order; the `aria-disabled` goes on the root, which carries
 	// no role.
 	it("should disable the cutoff once neither filter is on", async () => {
-		await openFilter({ filterIsolates: false, filterOtus: false });
+		await openFilter({ showLowIsolates: true, showLowOtus: true });
 
 		expect(
 			screen.getByRole("slider", { name: "Minimum coverage" }),

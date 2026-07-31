@@ -1,7 +1,5 @@
-import {
-	type AnalysisSearch,
-	AnalysisSearchProvider,
-} from "@analyses/components/AnalysisSearchContext";
+import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
+import { type AnalysisSearch, DEFAULT_ANALYSIS_SEARCH } from "@analyses/search";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "@tests/setup";
 import type { PathoscopeHit, PathoscopeIsolate } from "@virtool/contracts";
@@ -38,9 +36,12 @@ const hit = {
 	segments: [],
 } as unknown as PathoscopeHit;
 
-function renderDetail(search: AnalysisSearch = {}) {
+function renderDetail(search: Partial<AnalysisSearch> = {}) {
 	renderWithProviders(
-		<AnalysisSearchProvider search={search} setSearch={vi.fn()}>
+		<AnalysisSearchProvider
+			search={{ ...DEFAULT_ANALYSIS_SEARCH, ...search }}
+			setSearch={vi.fn()}
+		>
 			<PathoscopeDetailComponent hit={hit} mappedCount={1000} />
 		</AnalysisSearchProvider>,
 	);
@@ -55,7 +56,7 @@ describe("<PathoscopeDetail />", () => {
 	});
 
 	it("should show every isolate once the filter is off", () => {
-		renderDetail({ filterIsolates: false });
+		renderDetail({ showLowIsolates: true });
 
 		expect(screen.getByText("Covered")).toBeInTheDocument();
 		expect(screen.getByText("Sparse")).toBeInTheDocument();

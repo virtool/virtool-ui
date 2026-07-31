@@ -58,7 +58,7 @@ type PathoscopeExportProps = {
 export default function PathoscopeExport({ analysis }: PathoscopeExportProps) {
 	const hits = useSortAndFilterPathoscopeHits(analysis);
 	const { search } = useAnalysisSearch();
-	const showReads = search.reads ?? false;
+	const showReads = search.reads;
 
 	const [copied, setCopied] = useState(false);
 

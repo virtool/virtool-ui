@@ -1,7 +1,5 @@
-import {
-	type AnalysisSearch,
-	AnalysisSearchProvider,
-} from "@analyses/components/AnalysisSearchContext";
+import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
+import { type AnalysisSearch, DEFAULT_ANALYSIS_SEARCH } from "@analyses/search";
 import type { FormattedPathoscopeAnalysis } from "@analyses/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -79,10 +77,15 @@ const analysis: FormattedPathoscopeAnalysis = {
 
 const writeText = vi.fn().mockResolvedValue(undefined);
 
-function renderExport(search: AnalysisSearch = {}) {
+function renderExport(search: Partial<AnalysisSearch> = {}) {
 	renderWithProviders(
 		<AnalysisSearchProvider
-			search={{ filterOtus: false, sortDirection: "asc", ...search }}
+			search={{
+				...DEFAULT_ANALYSIS_SEARCH,
+				showLowOtus: true,
+				dir: "asc",
+				...search,
+			}}
 			setSearch={vi.fn()}
 		>
 			<PathoscopeExport analysis={analysis} />
@@ -120,7 +123,7 @@ describe("<PathoscopeExport />", () => {
 	});
 
 	it("should copy the shown viruses as a tab-separated table", async () => {
-		renderExport({ sortKey: "coverage" });
+		renderExport({ sort: "coverage" });
 		await openMenu();
 		await userEvent.click(screen.getByRole("menuitem", { name: "OTUs" }));
 
@@ -134,7 +137,7 @@ describe("<PathoscopeExport />", () => {
 	});
 
 	it("should copy the isolates of every shown virus", async () => {
-		renderExport({ sortKey: "coverage" });
+		renderExport({ sort: "coverage" });
 		await openMenu();
 		await userEvent.click(screen.getByRole("menuitem", { name: "Isolates" }));
 

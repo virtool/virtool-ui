@@ -1,4 +1,5 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
+import { DEFAULT_SORT_KEY } from "@analyses/search";
 import { createFuse } from "@app/fuse";
 import { useListReadyIndexes } from "@indexes/queries";
 import { useFetchSample } from "@samples/queries";
@@ -25,7 +26,7 @@ import type {
  */
 function pathoscopeSortValue(
 	hit: PathoscopeHit,
-	sortKey: string | undefined,
+	sortKey: string,
 ): number | string {
 	switch (sortKey) {
 		case "name":
@@ -39,17 +40,6 @@ function pathoscopeSortValue(
 	}
 }
 
-/**
- * The coverage a hit or isolate must reach to survive its filter, unless the
- * viewer has been given another.
- *
- * The filter this replaced compared a hit's estimated read count against the
- * reads it would take to tile 80% of its genome — 0.8 genome-equivalents, which
- * is an expected breadth of `1 - e^-0.8`, or about 55%. Half is that figure,
- * rounded to something a person would pick.
- */
-export const DEFAULT_MIN_COVERAGE = 0.5;
-
 /** Sort and filter a list of pathoscope hits  */
 export function useSortAndFilterPathoscopeHits(
 	detail: FormattedPathoscopeAnalysis,
@@ -57,28 +47,28 @@ export function useSortAndFilterPathoscopeHits(
 	let hits = detail.results.hits;
 
 	const {
-		search: { find, filterOtus, minCoverage, sortKey, sortDirection },
+		search: { dir, find, minCoverage, showLowOtus, sort },
 	} = useAnalysisSearch();
 
 	const fuse = createFuse(hits, ["name", "abbreviation"]);
 
 	if (find) {
-		hits = fuse.search(String(find)).map((result) => result.item);
+		hits = fuse.search(find).map((result) => result.item);
 	}
 
 	// Measured breadth, not a read budget: reads piled onto one conserved locus
 	// buy an OTU the reads to tile its genome without covering any more of it.
-	if (filterOtus) {
-		const cutoff = minCoverage ?? DEFAULT_MIN_COVERAGE;
-
-		hits = hits.filter((hit) => hit.coverage >= cutoff);
+	if (!showLowOtus) {
+		hits = hits.filter((hit) => hit.coverage >= minCoverage);
 	}
 
-	const sortedHits = sortBy(hits, [(hit) => pathoscopeSortValue(hit, sortKey)]);
+	const sortedHits = sortBy(hits, [
+		(hit) => pathoscopeSortValue(hit, sort ?? DEFAULT_SORT_KEY.pathoscope),
+	]);
 
 	// Descending is the default: a freshly-opened analysis should lead with its
 	// strongest hits, not its weakest.
-	if ((sortDirection ?? "desc") === "desc") {
+	if (dir === "desc") {
 		sortedHits.reverse();
 	}
 
@@ -90,18 +80,20 @@ export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 	let hits = detail.results.hits;
 
 	const {
-		search: { find, filterSequences, sortKey },
+		search: { find, showUnhitSequences, sort },
 	} = useAnalysisSearch();
 
 	const fuse = createFuse(hits, ["names", "families"]);
 
 	if (find) {
-		hits = fuse.search(String(find)).map((result) => result.item);
+		hits = fuse.search(find).map((result) => result.item);
 	}
 
-	if (filterSequences) {
+	if (!showUnhitSequences) {
 		hits = hits.filter((hit) => hit.e !== null);
 	}
+
+	const sortKey = sort ?? DEFAULT_SORT_KEY.nuvs;
 
 	const sortedHits =
 		sortKey === "orfs"
@@ -113,14 +105,12 @@ export function useSortAndFilterNuVsHits(detail: FormattedNuvsAnalysis) {
 
 export function useActiveHit(matches: FormattedNuvsHit[]) {
 	const {
-		search: { activeHit },
+		search: { hit },
 	} = useAnalysisSearch();
 
-	if (activeHit) {
+	if (hit) {
 		return (
-			matches.find((match) => match.id === Number(activeHit)) ??
-			matches[0] ??
-			null
+			matches.find((match) => match.id === Number(hit)) ?? matches[0] ?? null
 		);
 	}
 

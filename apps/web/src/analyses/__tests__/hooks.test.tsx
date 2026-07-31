@@ -3,6 +3,7 @@ import {
 	useSortAndFilterNuVsHits,
 	useSortAndFilterPathoscopeHits,
 } from "@analyses/hooks";
+import { type AnalysisSearch, DEFAULT_ANALYSIS_SEARCH } from "@analyses/search";
 import type {
 	FormattedNuvsAnalysis,
 	FormattedNuvsHit,
@@ -58,24 +59,25 @@ const hits = [
 	}),
 ];
 
-type Search = {
-	filterSequences?: boolean;
-	find?: string;
-	sortKey?: string;
-	sortDirection?: "asc" | "desc";
-};
-
-function createWrapper(search: Search) {
+function createWrapper(search: Partial<AnalysisSearch>) {
 	return function wrapper({ children }: { children: ReactNode }) {
 		return (
-			<AnalysisSearchProvider search={search} setSearch={vi.fn()}>
+			<AnalysisSearchProvider
+				search={{ ...DEFAULT_ANALYSIS_SEARCH, ...search }}
+				setSearch={vi.fn()}
+			>
 				{children}
 			</AnalysisSearchProvider>
 		);
 	};
 }
 
-function renderSort(sortKey?: string, sortDirection?: "asc" | "desc") {
+// `dir` always has a value on a real route — the URL only ever narrows the
+// default — so passing none here means the default, not `undefined`.
+function renderSort(
+	sort?: string,
+	dir: "asc" | "desc" = DEFAULT_ANALYSIS_SEARCH.dir,
+) {
 	const analysis = {
 		results: { hits, readCount: 1000, subtractedCount: 0 },
 	} as FormattedPathoscopeAnalysis;
@@ -83,7 +85,9 @@ function renderSort(sortKey?: string, sortDirection?: "asc" | "desc") {
 	const { result } = renderHook(
 		() => useSortAndFilterPathoscopeHits(analysis),
 		{
-			wrapper: createWrapper({ sortKey, sortDirection }),
+			// Sorting only, so nothing is held back by the coverage filter the
+			// viewer opens with.
+			wrapper: createWrapper({ sort, dir, showLowOtus: true }),
 		},
 	);
 
@@ -116,6 +120,23 @@ describe("useSortAndFilterPathoscopeHits()", () => {
 	it("should default to coverage, descending, when nothing has been chosen", () => {
 		// A freshly-opened analysis should lead with its strongest hits.
 		expect(renderSort()).toEqual(["b", "c", "a"]);
+	});
+
+	// The switch that turns this off draws itself pressed on an untouched URL,
+	// so an untouched URL has to filter — the two read one resolved param now
+	// rather than defaulting apart.
+	it("should hold hits to the cutoff when the URL says nothing", () => {
+		const analysis = {
+			results: { hits, readCount: 1000, subtractedCount: 0 },
+		} as FormattedPathoscopeAnalysis;
+
+		const { result } = renderHook(
+			() => useSortAndFilterPathoscopeHits(analysis),
+			{ wrapper: createWrapper({}) },
+		);
+
+		// Only "a", at 0.1 coverage, is under the 0.5 default.
+		expect(result.current.map((hit) => hit.id)).toEqual(["b", "c"]);
 	});
 });
 
@@ -160,7 +181,7 @@ const nuvsHits = [
 	}),
 ];
 
-function renderNuvs(search: Search) {
+function renderNuvs(search: Partial<AnalysisSearch>) {
 	const analysis = {
 		results: { hits: nuvsHits, maxSequenceLength: 4 },
 	} as FormattedNuvsAnalysis;
@@ -186,20 +207,22 @@ describe("useSortAndFilterNuVsHits()", () => {
 	it("should hide only the contigs with no e-value when filtering", () => {
 		// An e-value of zero is the strongest hit there is, so a filter that tests
 		// for truthiness rather than for null would drop the best contig.
-		expect(renderNuvs({ filterSequences: true }).toSorted()).toEqual([1, 2]);
+		expect(renderNuvs({}).toSorted()).toEqual([1, 2]);
 	});
 
 	it("should keep unannotated contigs when not filtering", () => {
-		expect(renderNuvs({ filterSequences: false }).toSorted()).toEqual([
+		expect(renderNuvs({ showUnhitSequences: true }).toSorted()).toEqual([
 			1, 2, 3,
 		]);
 	});
 
 	it("should sort by e-value, lowest first", () => {
-		expect(renderNuvs({ filterSequences: true, sortKey: "e" })).toEqual([2, 1]);
+		expect(renderNuvs({ sort: "e" })).toEqual([2, 1]);
 	});
 
 	it("should sort by annotated ORF count, highest first", () => {
-		expect(renderNuvs({ sortKey: "orfs" })).toEqual([2, 3, 1]);
+		expect(renderNuvs({ showUnhitSequences: true, sort: "orfs" })).toEqual([
+			2, 3, 1,
+		]);
 	});
 });

@@ -1,24 +1,5 @@
+import type { AnalysisSearch } from "@analyses/search";
 import { createContext, type ReactNode, useContext } from "react";
-
-/** The presentation and filter state an analysis viewer reads from the URL. */
-export type AnalysisSearch = {
-	activeHit?: string;
-	filterIsolates?: boolean;
-	filterOrfs?: boolean;
-	filterOtus?: boolean;
-	filterSequences?: boolean;
-	find?: string;
-
-	/**
-	 * The coverage a hit or isolate must reach to survive its filter, from 0 to 1
-	 */
-	minCoverage?: number;
-
-	reads?: boolean;
-	sortKey?: string;
-	sortDirection?: "asc" | "desc";
-	table?: boolean;
-};
 
 type AnalysisSearchContextValue = {
 	search: AnalysisSearch;

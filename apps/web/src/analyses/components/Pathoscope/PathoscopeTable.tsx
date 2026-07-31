@@ -31,7 +31,7 @@ export default function PathoscopeTable({
 	onSelect,
 }: PathoscopeTableProps) {
 	const { search } = useAnalysisSearch();
-	const showReads = search.reads ?? false;
+	const showReads = search.reads;
 
 	return (
 		<table className="w-full border border-gray-300 border-collapse bg-white text-sm">

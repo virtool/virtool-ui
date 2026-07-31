@@ -1,7 +1,5 @@
-import {
-	type AnalysisSearch,
-	AnalysisSearchProvider,
-} from "@analyses/components/AnalysisSearchContext";
+import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
+import { type AnalysisSearch, DEFAULT_ANALYSIS_SEARCH } from "@analyses/search";
 import type { FormattedPathoscopeAnalysis } from "@analyses/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -17,11 +15,14 @@ const analysis: FormattedPathoscopeAnalysis = {
 	workflow: "pathoscope",
 };
 
-function renderToolbar(search: AnalysisSearch = {}) {
+function renderToolbar(search: Partial<AnalysisSearch> = {}) {
 	const setSearch = vi.fn();
 
 	renderWithProviders(
-		<AnalysisSearchProvider search={search} setSearch={setSearch}>
+		<AnalysisSearchProvider
+			search={{ ...DEFAULT_ANALYSIS_SEARCH, ...search }}
+			setSearch={setSearch}
+		>
 			<PathoscopeToolbar analysis={analysis} />
 		</AnalysisSearchProvider>,
 	);
@@ -63,7 +64,7 @@ describe("<PathoscopeToolbar />", () => {
 	// The trigger shows the sort key alone, so its name is the only thing saying
 	// the control sorts.
 	it("should name the sort trigger for the key it sorts by", () => {
-		renderToolbar({ sortKey: "depth" });
+		renderToolbar({ sort: "depth" });
 
 		expect(
 			screen.getByRole("button", { name: "Sort by Depth" }),
@@ -73,13 +74,13 @@ describe("<PathoscopeToolbar />", () => {
 	// The direction button is an arrow and nothing else, so its name is all a
 	// screen reader has.
 	it("should name the sort direction button for the direction it switches to", async () => {
-		const setSearch = renderToolbar({ sortDirection: "desc" });
+		const setSearch = renderToolbar({ dir: "desc" });
 
 		await userEvent.click(
 			screen.getByRole("button", { name: "Sort ascending" }),
 		);
 
-		expect(setSearch).toHaveBeenCalledWith({ sortDirection: "asc" });
+		expect(setSearch).toHaveBeenCalledWith({ dir: "asc" });
 	});
 
 	// Below 2xl every one of these shows its icon alone, so the tooltip is what

@@ -19,8 +19,8 @@ export function PathoscopeList({ analysis }: PathoscopeListProps) {
 	const hits = useSortAndFilterPathoscopeHits(analysis);
 
 	const { search } = useAnalysisSearch();
-	const showReads = search.reads ?? false;
-	const showTable = search.table ?? false;
+	const showReads = search.reads;
+	const showTable = search.table;
 
 	// Every hit is on screen at once, so a selection that outlived a filter would
 	// be copied without ever being visible. The key is built from the hit ids

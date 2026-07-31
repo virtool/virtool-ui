@@ -1,7 +1,5 @@
-import {
-	type AnalysisSearch,
-	AnalysisSearchProvider,
-} from "@analyses/components/AnalysisSearchContext";
+import { AnalysisSearchProvider } from "@analyses/components/AnalysisSearchContext";
+import { type AnalysisSearch, DEFAULT_ANALYSIS_SEARCH } from "@analyses/search";
 import type { FormattedPathoscopeAnalysis } from "@analyses/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -47,14 +45,15 @@ const writeText = vi.fn().mockResolvedValue(undefined);
 // ``<header>`` is scoped out of the banner role as it is in a real page.
 // Ascending is set explicitly so the display order differs from click order
 // below, regardless of which direction the app defaults to.
-function renderList(search: AnalysisSearch = {}) {
+function renderList(search: Partial<AnalysisSearch> = {}) {
 	return renderWithProviders(
 		<main>
 			<AnalysisSearchProvider
 				search={{
-					filterOtus: false,
-					sortKey: "coverage",
-					sortDirection: "asc",
+					...DEFAULT_ANALYSIS_SEARCH,
+					showLowOtus: true,
+					sort: "coverage",
+					dir: "asc",
 					...search,
 				}}
 				setSearch={vi.fn()}
@@ -95,13 +94,13 @@ describe("<PathoscopeList />", () => {
 	// says they are there.
 	it("should count the shown hits against the whole list when filtering", () => {
 		// Alpha covers 0.5 and Beta 0.25, so only Alpha clears the cutoff.
-		renderList({ filterOtus: true, minCoverage: 0.3 });
+		renderList({ showLowOtus: false, minCoverage: 0.3 });
 
 		expect(screen.getByText("1 of 2 hits")).toBeInTheDocument();
 	});
 
 	it("should drop the total once nothing is held back", () => {
-		renderList({ filterOtus: true, minCoverage: 0 });
+		renderList({ showLowOtus: false, minCoverage: 0 });
 
 		expect(screen.getByText("2 hits")).toBeInTheDocument();
 	});

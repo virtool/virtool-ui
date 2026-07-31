@@ -1,5 +1,4 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
-import { DEFAULT_MIN_COVERAGE } from "@analyses/hooks";
 import { cn } from "@app/cn";
 import Button from "@base/Button";
 import Icon from "@base/Icon";
@@ -75,14 +74,11 @@ function CoverageSlider({ disabled, onCommit, value }: CoverageSliderProps) {
 /** The filters that decide which pathoscope hits and isolates are shown. */
 export default function PathoscopeFilter() {
 	const { search, setSearch } = useAnalysisSearch();
-	const filterOtus = search.filterOtus ?? true;
-	const filterIsolates = search.filterIsolates ?? true;
-	const minCoverage = search.minCoverage ?? DEFAULT_MIN_COVERAGE;
-	const showTable = search.table ?? false;
+	const { minCoverage, showLowIsolates, showLowOtus, table } = search;
 
 	// The isolate filter only reaches an expanded hit, so it is not narrowing
 	// anything in the table layout.
-	const isFiltering = filterOtus || (filterIsolates && !showTable);
+	const isFiltering = !showLowOtus || (!showLowIsolates && !table);
 
 	return (
 		<Popover
@@ -123,20 +119,20 @@ export default function PathoscopeFilter() {
 			<div className="flex flex-col gap-4 p-4">
 				<div className="flex flex-col gap-3">
 					<FilterSwitch
-						checked={filterOtus}
+						checked={!showLowOtus}
 						id="PathoscopeFilterOtus"
 						label="Hide low-coverage OTUs"
-						onCheckedChange={(filterOtus) => setSearch({ filterOtus })}
+						onCheckedChange={(checked) => setSearch({ showLowOtus: !checked })}
 					/>
 					{/* Isolates are only ever shown in an expanded hit, which the table
 					    layout has none of — the switch would change nothing on screen. */}
-					{!showTable && (
+					{!table && (
 						<FilterSwitch
-							checked={filterIsolates}
+							checked={!showLowIsolates}
 							id="PathoscopeFilterIsolates"
 							label="Hide low-coverage isolates"
-							onCheckedChange={(filterIsolates) =>
-								setSearch({ filterIsolates })
+							onCheckedChange={(checked) =>
+								setSearch({ showLowIsolates: !checked })
 							}
 						/>
 					)}

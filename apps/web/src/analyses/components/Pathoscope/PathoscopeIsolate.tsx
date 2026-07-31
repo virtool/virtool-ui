@@ -60,7 +60,7 @@ export default function PathoscopeIsolate({
 	sequences,
 }: PathoscopeIsolateProps) {
 	const { search } = useAnalysisSearch();
-	const showReads = search.reads ?? false;
+	const showReads = search.reads;
 
 	// The isolate is laid out against the OTU's segments rather than against its
 	// own sequences, so every isolate's panels line up and a segment this one has

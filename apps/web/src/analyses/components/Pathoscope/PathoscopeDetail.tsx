@@ -1,5 +1,4 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
-import { DEFAULT_MIN_COVERAGE } from "@analyses/hooks";
 import type { PathoscopeHit } from "@virtool/contracts";
 import PathoscopeIsolate from "./PathoscopeIsolate";
 
@@ -16,9 +15,9 @@ export default function PathoscopeDetail({
 	hit,
 	mappedCount,
 }: PathoscopeDetailProps) {
-	const { search } = useAnalysisSearch();
-	const filterIsolates = search.filterIsolates ?? true;
-	const minCoverage = search.minCoverage ?? DEFAULT_MIN_COVERAGE;
+	const {
+		search: { minCoverage, showLowIsolates },
+	} = useAnalysisSearch();
 
 	const { isolates, segments } = hit;
 
@@ -28,7 +27,7 @@ export default function PathoscopeDetail({
 	// and scaled with the parent, so the same isolate survived under a weak OTU
 	// and was dropped under a strong one.
 	const filtered = isolates.filter(
-		(isolate) => !filterIsolates || isolate.coverage >= minCoverage,
+		(isolate) => showLowIsolates || isolate.coverage >= minCoverage,
 	);
 
 	const isolateComponents = filtered.map((isolate) => {
