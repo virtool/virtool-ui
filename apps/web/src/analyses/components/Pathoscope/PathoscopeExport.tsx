@@ -1,6 +1,7 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import { useSortAndFilterPathoscopeHits } from "@analyses/hooks";
 import type { FormattedPathoscopeAnalysis } from "@analyses/types";
+import { writeToClipboard } from "@app/clipboard";
 import Dropdown from "@base/Dropdown";
 import DropdownButton from "@base/DropdownButton";
 import DropdownMenuContent from "@base/DropdownMenuContent";
@@ -75,21 +76,19 @@ export default function PathoscopeExport({ analysis }: PathoscopeExportProps) {
 	// Only a resolved write flips the label, so a rejected one — a revoked
 	// permission, an unfocused document — cannot claim the table was copied.
 	function handleCopy({ format, headers }: CopyItem) {
-		navigator.clipboard
-			.writeText(
-				format(hits, {
-					headers,
-					mappedCount: analysis.results.readCount,
-					showReads,
+		writeToClipboard(
+			format(hits, {
+				headers,
+				mappedCount: analysis.results.readCount,
+				showReads,
+			}),
+		).then(
+			() => setCopied(true),
+			(error) =>
+				Sentry.captureException(error, {
+					tags: { clipboard: "pathoscope-export" },
 				}),
-			)
-			.then(
-				() => setCopied(true),
-				(error) =>
-					Sentry.captureException(error, {
-						tags: { clipboard: "pathoscope-export" },
-					}),
-			);
+		);
 	}
 
 	return (

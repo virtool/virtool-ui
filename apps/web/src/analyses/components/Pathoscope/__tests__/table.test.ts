@@ -79,6 +79,17 @@ describe("formatPathoscopeHitsAsTsv()", () => {
 			}),
 		).toBe("Name\tWeight\tDepth\tCoverage");
 	});
+
+	// A name carrying a tab or a newline would otherwise open a column or a row
+	// of its own and shift every field after it out of line.
+	it("should collapse tabs and newlines in a name", () => {
+		const table = formatPathoscopeHitsAsTsv(
+			[createHit({ name: "Alpha\tvirus\nstrain" })],
+			{ headers: false, mappedCount: 1000, showReads: false },
+		);
+
+		expect(table).toBe("Alpha virus strain\t0.250\t12\t0.500");
+	});
 });
 
 function createIsolate(

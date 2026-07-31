@@ -13,6 +13,17 @@ type PathoscopeTableOptions = {
 	showReads: boolean;
 };
 
+// A name is free text and can carry a tab or a newline — the API trims only the
+// ends of one — either of which would open a column or a row of its own in the
+// pasted table and shift every field after it.
+//
+// Collapsed to a space rather than quoted: TSV has no quoting convention that
+// spreadsheets agree on, so a quoted field is as likely to paste its quotes as
+// to be understood.
+function sanitize(text: string): string {
+	return text.replace(/[\t\r\n]+/g, " ");
+}
+
 // Both number formatters this reaches have grouping disabled, which keeps every
 // field parseable as a number on the other side.
 function formatWeight(
@@ -42,7 +53,7 @@ export function formatPathoscopeHitsAsTsv(
 	options: PathoscopeTableOptions,
 ): string {
 	const rows = hits.map((hit) => [
-		hit.name,
+		sanitize(hit.name),
 		formatWeight(hit.pi, options),
 		String(hit.depth),
 		hit.coverage.toFixed(3),
@@ -68,8 +79,8 @@ export function formatPathoscopeIsolatesAsTsv(
 ): string {
 	const rows = hits.flatMap((hit) =>
 		hit.isolates.map((isolate) => [
-			hit.name,
-			isolate.name,
+			sanitize(hit.name),
+			sanitize(isolate.name),
 			formatWeight(isolate.pi, options),
 			String(isolate.depth),
 			isolate.coverage.toFixed(3),

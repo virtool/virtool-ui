@@ -1,6 +1,7 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
 import { useSortAndFilterPathoscopeHits } from "@analyses/hooks";
 import type { FormattedPathoscopeAnalysis } from "@analyses/types";
+import { writeToClipboard } from "@app/clipboard";
 import Accordion from "@base/Accordion";
 import { useListSelection } from "@base/useListSelection";
 import type { PathoscopeHit } from "@virtool/contracts";
@@ -44,7 +45,7 @@ export function PathoscopeList({ analysis }: PathoscopeListProps) {
 	// Taken from the hits rather than the selection so the pasted rows come out
 	// in the order they are shown, not the order they were clicked.
 	function copySelected() {
-		return navigator.clipboard.writeText(
+		return writeToClipboard(
 			formatPathoscopeHitsAsTsv(hits.filter(selection.isSelected), {
 				headers: true,
 				mappedCount: analysis.results.readCount,
