@@ -50,7 +50,18 @@ export const Route = createFileRoute(
 )({
 	validateSearch: validateAnalysisDetailSearch,
 	loader: async ({ context: { queryClient }, params: { analysisId } }) => {
-		const { analysisQueryOptions } = await import("@analyses/queries");
+		const { analysisQueryOptions, analysisResultsQueryOptions } = await import(
+			"@analyses/queries"
+		);
+
+		// The results are the slow half of an analysis, and nothing above the
+		// viewer needs them. Start the request here so it runs alongside the one
+		// below, but don't hold the route open for it — the viewer suspends on it
+		// instead. `prefetchQuery` swallows its own errors; the viewer's
+		// `useSuspenseQuery` is what surfaces them.
+		void queryClient.prefetchQuery(
+			analysisResultsQueryOptions(Number(analysisId)),
+		);
 
 		try {
 			await queryClient.ensureQueryData(
