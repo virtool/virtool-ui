@@ -14,12 +14,7 @@ type AnalysisValueProps = {
 	value: ReactNode;
 };
 
-/**
- * One labelled figure in a column of them.
- *
- * Rendered as phrasing content — the OTU-level row sits inside the accordion's
- * trigger, which is a button and may not contain flow content.
- */
+/** One labelled figure in a column of them. */
 export default function AnalysisValue({
 	className,
 	color,
@@ -34,7 +29,7 @@ export default function AnalysisValue({
 	// and grows the document until it sprouts a scrollbar of its own beside the
 	// shell's.
 	return (
-		<span className={cn("flex flex-col relative w-22", className)}>
+		<div className={cn("flex flex-col relative w-22", className)}>
 			<span
 				className={cn(
 					{
@@ -57,6 +52,6 @@ export default function AnalysisValue({
 			>
 				{label}
 			</small>
-		</span>
+		</div>
 	);
 }

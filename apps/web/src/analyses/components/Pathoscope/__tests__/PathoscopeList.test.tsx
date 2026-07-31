@@ -149,6 +149,24 @@ describe("<PathoscopeList />", () => {
 		);
 	});
 
+	// The trigger is the hit's name and nothing else. One spanning the whole
+	// summary row reads every figure in that row out as part of its own name,
+	// and bars the row from holding a control or a labelled graphic at all.
+	it("should expand a hit from its name alone", async () => {
+		renderList();
+
+		const trigger = screen.getByRole("button", { name: "Alpha virus" });
+
+		expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+		await userEvent.click(trigger);
+
+		expect(trigger).toHaveAttribute("aria-expanded", "true");
+		expect(
+			screen.getByRole("region", { name: "Alpha virus" }),
+		).toBeInTheDocument();
+	});
+
 	// The checkbox sits beside the accordion trigger rather than inside it; a
 	// checkbox nested in the trigger button would trip `nested-interactive`.
 	it("should have no accessibility violations", async () => {

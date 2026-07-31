@@ -92,9 +92,6 @@ type PathoscopeCoverageChartProps = {
  * box, one depth domain, and one measured width — used for both an OTU's
  * merged overview and each of its isolates, so the two read as the same kind
  * of figure rather than two different ones.
- *
- * Every element is phrasing content: the OTU's overview is drawn inside the
- * accordion's trigger, which is a button and may not contain a `div`.
  */
 export default function PathoscopeCoverageChart({
 	description,
@@ -102,7 +99,7 @@ export default function PathoscopeCoverageChart({
 	maxDepth,
 	panels,
 }: PathoscopeCoverageChartProps) {
-	const [ref, { width }] = useElementSize<HTMLSpanElement>();
+	const [ref, { width }] = useElementSize<HTMLDivElement>();
 
 	const laidOut = width > 0 ? layOutPanels(panels, width) : [];
 
@@ -128,17 +125,17 @@ export default function PathoscopeCoverageChart({
 				>
 					{d ? <path className="fill-blue-500" d={d} /> : null}
 				</svg>
-				<span
-					className="block pl-0.5 pt-0.5 text-gray-600 text-left text-xs truncate"
+				<div
+					className="pl-0.5 pt-0.5 text-gray-600 text-left text-xs truncate"
 					style={{ height: labelHeight }}
 				>
 					{panel.label}
-				</span>
+				</div>
 			</>
 		);
 
 		return (
-			<span className="block" key={panel.key} style={{ width: panel.width }}>
+			<div key={panel.key} style={{ width: panel.width }}>
 				{panel.detail ? (
 					<Popover
 						align="center"
@@ -158,11 +155,9 @@ export default function PathoscopeCoverageChart({
 						{panel.detail}
 					</Popover>
 				) : (
-					<span className="block" style={{ paddingTop: topPadding }}>
-						{body}
-					</span>
+					<div style={{ paddingTop: topPadding }}>{body}</div>
 				)}
-			</span>
+			</div>
 		);
 	}
 
@@ -179,10 +174,10 @@ export default function PathoscopeCoverageChart({
 	// because `useAriaPropsSupportedByRole` can only check a literal, and an
 	// unchecked `aria-label` is worth less than the duplication costs.
 	return (
-		<span className="block bg-blue-100 border border-blue-200 rounded-sm">
+		<div className="bg-blue-100 border border-blue-200 rounded-sm">
 			{interactive ? (
 				// biome-ignore lint/a11y/useSemanticElements: a fieldset groups form controls, not a set of related graphics
-				<span
+				<div
 					aria-label={description}
 					className="flex"
 					ref={ref}
@@ -190,9 +185,9 @@ export default function PathoscopeCoverageChart({
 					style={style}
 				>
 					{laidOut.map(renderPanel)}
-				</span>
+				</div>
 			) : (
-				<span
+				<div
 					aria-label={description}
 					className="flex"
 					ref={ref}
@@ -200,8 +195,8 @@ export default function PathoscopeCoverageChart({
 					style={style}
 				>
 					{laidOut.map(renderPanel)}
-				</span>
+				</div>
 			)}
-		</span>
+		</div>
 	);
 }
