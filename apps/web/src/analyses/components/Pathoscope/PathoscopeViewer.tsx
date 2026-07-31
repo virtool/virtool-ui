@@ -21,7 +21,7 @@ export function PathoscopeViewer({ analysis, sample }: PathoscopeViewerProps) {
 				detail={analysis}
 				totalReads={sample.quality?.count ?? 0}
 			/>
-			<PathoscopeToolbar analysisId={analysis.id} />
+			<PathoscopeToolbar analysis={analysis} />
 			<PathoscopeList analysis={analysis} />
 			<PathoscopeViewerScroller />
 		</>

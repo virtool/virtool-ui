@@ -46,6 +46,7 @@ export function PathoscopeList({ analysis }: PathoscopeListProps) {
 	function copySelected() {
 		return navigator.clipboard.writeText(
 			formatPathoscopeHitsAsTsv(hits.filter(selection.isSelected), {
+				headers: true,
 				mappedCount: analysis.results.readCount,
 				showReads,
 			}),

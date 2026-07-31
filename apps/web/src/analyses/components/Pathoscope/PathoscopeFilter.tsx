@@ -91,7 +91,9 @@ export default function PathoscopeFilter() {
 			// written for.
 			align="end"
 			alignOffset={0}
-			sideOffset={8}
+			// Matches `DropdownMenuContent`'s offset, so the export menu beside it
+			// in the toolbar does not sit at a different distance from its trigger.
+			sideOffset={4}
 			trigger={
 				// Not `aria-pressed`: the trigger already reports open/closed through
 				// `aria-expanded`, and a second state on the same control would leave

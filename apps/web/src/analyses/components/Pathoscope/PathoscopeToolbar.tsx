@@ -1,11 +1,8 @@
 import { useAnalysisSearch } from "@analyses/components/AnalysisSearchContext";
+import type { FormattedPathoscopeAnalysis } from "@analyses/types";
 import Button from "@base/Button";
 import ButtonGroup from "@base/ButtonGroup";
 import ButtonToggle from "@base/ButtonToggle";
-import Dropdown from "@base/Dropdown";
-import DropdownButton from "@base/DropdownButton";
-import DropdownMenuContent from "@base/DropdownMenuContent";
-import DropdownMenuDownload from "@base/DropdownMenuDownload";
 import Icon from "@base/Icon";
 import SearchToolbar from "@base/SearchToolbar";
 import ToggleGroup from "@base/ToggleGroup";
@@ -17,23 +14,21 @@ import {
 	ArrowUpAZ,
 	ArrowUpWideNarrow,
 	ChartArea,
-	ChevronDown,
-	File,
-	FileDown,
 	Hash,
 	Table,
 } from "lucide-react";
 import { AnalysisViewerSort } from "../Viewer/Sort";
 import { collapsingLabel } from "./collapsingLabel";
+import PathoscopeExport from "./PathoscopeExport";
 import PathoscopeFilter from "./PathoscopeFilter";
 
 type PathoscopeToolbarProps = {
-	/** The unique identifier the analysis being viewed */
-	analysisId: number;
+	/** The analysis being viewed */
+	analysis: FormattedPathoscopeAnalysis;
 };
 
 /** A selection of filters and toggles for pathoscope data presentation */
-export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
+export function PathoscopeToolbar({ analysis }: PathoscopeToolbarProps) {
 	const { search, setSearch } = useAnalysisSearch();
 	const find = search.find ?? "";
 	const showReads = search.reads ?? false;
@@ -106,23 +101,7 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
 				</ButtonToggle>
 			</Tooltip>
 			<PathoscopeFilter />
-			<Dropdown>
-				<Tooltip tip="Export results">
-					<DropdownButton aria-label="Export">
-						<Icon icon={FileDown} />
-						<span className={collapsingLabel}>Export</span>
-						<Icon icon={ChevronDown} />
-					</DropdownButton>
-				</Tooltip>
-				<DropdownMenuContent>
-					<DropdownMenuDownload href={`/analyses/documents/${analysisId}.csv`}>
-						<Icon icon={File} /> CSV
-					</DropdownMenuDownload>
-					<DropdownMenuDownload href={`/analyses/documents/${analysisId}.xlsx`}>
-						<Icon icon={File} /> Excel
-					</DropdownMenuDownload>
-				</DropdownMenuContent>
-			</Dropdown>
+			<PathoscopeExport analysis={analysis} />
 		</SearchToolbar>
 	);
 }

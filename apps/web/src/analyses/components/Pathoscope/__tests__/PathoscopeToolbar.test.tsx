@@ -2,18 +2,27 @@ import {
 	type AnalysisSearch,
 	AnalysisSearchProvider,
 } from "@analyses/components/AnalysisSearchContext";
+import type { FormattedPathoscopeAnalysis } from "@analyses/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeAnalysisMinimal } from "@tests/fake/analyses";
 import { renderWithProviders } from "@tests/setup";
 import { describe, expect, it, vi } from "vitest";
 import { PathoscopeToolbar } from "../PathoscopeToolbar";
+
+const analysis: FormattedPathoscopeAnalysis = {
+	...createFakeAnalysisMinimal({ id: 5, workflow: "pathoscope" }),
+	files: [],
+	results: { hits: [], readCount: 1000, subtractedCount: 0 },
+	workflow: "pathoscope",
+};
 
 function renderToolbar(search: AnalysisSearch = {}) {
 	const setSearch = vi.fn();
 
 	renderWithProviders(
 		<AnalysisSearchProvider search={search} setSearch={setSearch}>
-			<PathoscopeToolbar analysisId={5} />
+			<PathoscopeToolbar analysis={analysis} />
 		</AnalysisSearchProvider>,
 	);
 
