@@ -62,7 +62,6 @@ and are wired up in `apps/web/src/start.ts`:
 const authenticationMiddleware = createAuthenticationMiddleware();
 
 export const startInstance = createStart(() => ({
-  defaultSsr: false,
   serializationAdapters: [serverErrorSerializationAdapter],
   requestMiddleware: [
     sentryGlobalRequestMiddleware,

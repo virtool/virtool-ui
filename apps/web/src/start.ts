@@ -89,7 +89,6 @@ const csrfMiddleware = createCsrfMiddleware({
 // csrf/header request middleware and the function span wraps the auth function
 // middleware, rather than nesting inside them.
 export const startInstance = createStart(() => ({
-	defaultSsr: false,
 	// Runs before TanStack Router's ShallowErrorPlugin, which would otherwise
 	// flatten every server-function Error to its message alone. Keeps the auth
 	// errors' `name` intact so the query retry guard can recognize a 401/403,
