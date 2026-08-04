@@ -21,7 +21,11 @@ This is a **pnpm monorepo**:
   packages:
   - `@virtool/logger` — pino wrapper, server-side log defaults and
     `child({...})` pattern
-  - `@virtool/bio` — sequence utilities (complement, translation, etc.)
+  - `@virtool/bio` — sequence utilities (complement, translation, ORF
+    finding, FASTA/FASTQ) and the pure text parsers the ported workflows
+    need: FastQC `fastqc_data.txt` (`./fastqc`) and `hmmscan --tblout`
+    (`./hmmer`). Its output is pinned byte-for-byte against Python's —
+    see [docs/bio.md](docs/bio.md) before changing a parser.
   - `@virtool/contracts` — cross-process data shapes, zod-validated where a
     boundary parses them
   - `@virtool/sentry` — shared Sentry option helpers (node + browser entry
@@ -344,6 +348,14 @@ internal route triggers a full page reload. For query strings, use `search` on
 
 `<a>` is only for external URLs and deliberate full reloads.
 
+`routes/index.tsx` — the `/` to `/samples` redirect — stays **outside**
+`_authenticated`, and its `beforeLoad` stays synchronous. Nested, resolving `/`
+ran that layout's async guard before throwing a second redirect, so signing in
+navigated `/login` to `/` to `/samples` with the layout match re-rendering
+mid-chain — the window the router throws `undefined` in. Moving it back under
+the guard reintroduces that. Nothing is exposed by leaving it unguarded: it
+renders nothing, and `/samples` carries the guard.
+
 ### API calls
 
 There is no HTTP client. The SPA reaches the backend through TanStack Start
@@ -385,6 +397,16 @@ initial-load failure spins forever. See
 route-loader prefetch, the two-tier error/loading policy, and mutation
 patterns.
 
+Below both tiers sits `@base/ShellErrorBoundary`, mounted in the root route's
+shell inside `<body>`. It catches what the router's own boundaries cannot: a
+falsy thrown value. `MatchInner` throws a match's `loadPromise` to suspend, a
+chained redirect can clear that promise first, and TanStack's `CatchBoundary`
+tests the thrown value for truthiness — so `undefined` escapes every boundary
+and unmounts the app to a blank page (TanStack/router#7753, open). The shell
+boundary remounts the router once the race settles, and falls back to a reload
+prompt. It is a backstop for that upstream bug, not a place to route ordinary
+route or query errors — those belong in the two tiers above.
+
 ### Styling
 
 - Styling is Tailwind utility classes. There is no CSS-in-JS; styled-components
@@ -396,6 +418,19 @@ patterns.
   `apps/web/src/app/style.css` under `@theme`, with keyframes in
   `apps/web/src/app/animations.css`. Check there before inventing a color or
   spacing value, and add a token rather than hardcoding a hex.
+- The root font size is `100%` — the reader's browser preference. Never put a
+  length back on `html`; `body` carries the app's base size.
+- Every rem-valued token Tailwind ships is overridden in `@theme` at 0.875, so
+  a class does **not** render its documented px figure: `text-sm` is 12.25px,
+  `md:` breaks at 672px.
+- Size anything that holds text in `rem`; keep px for graphics that hold none.
+  Where a size has to be a number — a threshold compared against a measured
+  width — write it as a rem multiple and resolve it with `useRootFontSize`
+  (`@app/hooks`), never as a px constant.
+
+See [docs/type-scale.md](docs/type-scale.md) for which token families are
+overridden and why they move together, the class-to-px table, and the px
+holdouts that still need fixing.
 
 ### Base component color props
 
