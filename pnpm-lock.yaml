@@ -138,12 +138,18 @@ importers:
       '@virtool/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@virtool/data':
+        specifier: workspace:*
+        version: link:../../packages/data
       '@virtool/logger':
         specifier: workspace:*
         version: link:../../packages/logger
       '@virtool/sentry':
         specifier: workspace:*
         version: link:../../packages/sentry
+      '@virtool/storage':
+        specifier: workspace:*
+        version: link:../../packages/storage
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
@@ -313,6 +319,12 @@ importers:
         specifier: ^4.1.10
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
+  packages/data:
+    devDependencies:
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
   packages/logger:
     dependencies:
       pino:
@@ -324,6 +336,12 @@ importers:
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
   packages/sentry: {}
+
+  packages/storage:
+    devDependencies:
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
 packages:
 

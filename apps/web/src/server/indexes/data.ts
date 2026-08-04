@@ -15,6 +15,7 @@ import type {
 	IndexOtu,
 	IndexSearchResult,
 } from "@virtool/contracts";
+import { indexFileKey } from "@virtool/storage/keys";
 import {
 	and,
 	asc,
@@ -39,7 +40,6 @@ import {
 	ReferenceArchivedError,
 	ReferenceNotFoundError,
 } from "../references/data";
-import { indexFileKey } from "../storage/keys";
 import { createTask } from "../tasks/data";
 
 /** Thrown when a requested index does not exist. */

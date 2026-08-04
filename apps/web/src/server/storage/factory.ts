@@ -1,7 +1,7 @@
+import type { StorageBackend } from "@virtool/storage/types";
 import type { StorageConfig } from "../config";
 import { createAzureStorage } from "./azure";
 import { createS3Storage } from "./s3";
-import type { StorageBackend } from "./types";
 
 /**
  * Build a backend from storage configuration. Kept apart from `index.ts` so a

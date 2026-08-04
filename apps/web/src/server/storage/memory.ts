@@ -1,5 +1,5 @@
-import { StorageKeyNotFoundError } from "./errors";
-import type { StorageBackend, StorageObjectInfo } from "./types";
+import { StorageKeyNotFoundError } from "@virtool/storage/errors";
+import type { StorageBackend, StorageObjectInfo } from "@virtool/storage/types";
 
 type StoredObject = {
 	body: Uint8Array;

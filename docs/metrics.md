@@ -10,7 +10,7 @@ exposition format, from a single process-wide registry.
 | `server/metrics/registry.ts` | The `Registry`, every metric definition, and the record/render functions |
 | `server/metrics/middleware.ts` | Global request middleware that counts and times requests |
 | `server/metrics/data.ts` | Reads pool occupancy from `pg_stat_activity` |
-| `server/db/applicationName.ts` | Builds the `application_name` that filter matches on |
+| `@virtool/data/db/applicationName` | Builds the `application_name` that filter matches on |
 | `server/metrics/handler.ts` | Token check, pre-scrape collection, response |
 | `routes/metrics.ts` | The raw route |
 
@@ -192,7 +192,7 @@ by the replica count.
 
 ### The name has to survive the round trip
 
-`db/applicationName.ts` bounds the value at **63 bytes**. Postgres holds
+`@virtool/data/db/applicationName` bounds the value at **63 bytes**. Postgres holds
 `application_name` in a `NAMEDATALEN` buffer and truncates anything
 longer *silently* — connections would then be opened under a clipped
 name while the filter still searched for the full one, and every pool

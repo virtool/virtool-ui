@@ -6,7 +6,9 @@ and the TypeScript server read and write **the same bucket**, so this layer is
 a port of Python's, not a design of its own. Where the two could drift, they
 must not.
 
-The layer lives in `apps/web/src/server/storage/`.
+The layer lives in the `@virtool/storage` workspace package, so the jobs API
+and the TypeScript workflow ports can reach it without pulling in the Vite app.
+It is server-side only.
 
 ## The interface
 
@@ -28,7 +30,11 @@ type StorageBackend = {
 - `write` creates or overwrites and returns the number of bytes written.
 - `delete` is idempotent — deleting a key that was never there is not an error.
 - `read` and `size` throw `StorageKeyNotFoundError` when the key is absent.
-- Everything else that goes wrong throws `StorageError`. Both extend `AppError`.
+- Everything else that goes wrong throws `StorageError`. Both come from
+  `@virtool/storage/errors` and extend plain `Error` — not the data layer's
+  `AppError`, which would make the storage package depend on the data one.
+  `StorageError`'s constructor stamps the subclass name itself, so a
+  `StorageKeyNotFoundError` still reports under that name.
 
 `StorageObjectInfo` carries `key`, `size`, and `lastModified`. The
 `lastModified` semantics differ per backend — a server timestamp for a real
@@ -47,7 +53,7 @@ prefix comes back in place of a key.
 
 ## Keys
 
-Key builders live in `keys.ts` and must stay byte-for-byte identical to
+Key builders live in `@virtool/storage/keys` and must stay byte-for-byte identical to
 Python's. A divergence does not fail loudly: it silently reads nothing and
 orphans whatever it writes.
 
@@ -125,10 +131,10 @@ an empty value for something it has nothing to put in.
 Both-or-neither is judged **after** the files are read, so an S3 access key id
 supplied by env and a secret access key supplied by a mount are a valid pair.
 
-The backend is built once at startup. `src/server/storage/index.ts` exports the
-`storage` singleton; **pass it into `data.ts` functions the way `db` is
+The backend is built once at startup, by the composition root in
+`apps/web/src/server`; **pass it into `data.ts` functions the way `db` is
 passed**, as an argument. `data.ts` never imports it. Use `createStorageBackend`
-from `factory.ts` when you need a backend without the singleton.
+from `@virtool/storage` when you need a backend without the singleton.
 
 ### Never let storage secrets reach the browser
 
@@ -178,7 +184,7 @@ Storage is tested in two layers, mirroring Python.
 `StorageBackend` argument, so it can be tested without a bucket. Reach for the
 fake by default; it is what keeps the ordinary test loop container-free.
 Helpers for streaming, draining, and listing are in
-`src/server/storage/test/fixtures.ts`.
+`@virtool/storage/test/fixtures`.
 
 **The backends themselves are tested against real services.** The `storage`
 Vitest project starts Garage (S3-compatible) and Azurite in testcontainers and

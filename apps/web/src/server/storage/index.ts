@@ -1,17 +1,17 @@
+import type { StorageBackend } from "@virtool/storage/types";
 import { config } from "../config";
 import { createStorageBackend } from "./factory";
-import type { StorageBackend } from "./types";
 
-export { type DeleteFailure, deletePrefix } from "./cleanup";
-export { StorageError, StorageKeyNotFoundError } from "./errors";
-export { createStorageBackend } from "./factory";
-export * from "./keys";
-export { MemoryStorage } from "./memory";
+export { StorageError, StorageKeyNotFoundError } from "@virtool/storage/errors";
+export * from "@virtool/storage/keys";
 export {
 	STORAGE_CHUNK_SIZE,
 	type StorageBackend,
 	type StorageObjectInfo,
-} from "./types";
+} from "@virtool/storage/types";
+export { type DeleteFailure, deletePrefix } from "./cleanup";
+export { createStorageBackend } from "./factory";
+export { MemoryStorage } from "./memory";
 
 /**
  * The process-wide storage backend, built once at startup. Pass it into

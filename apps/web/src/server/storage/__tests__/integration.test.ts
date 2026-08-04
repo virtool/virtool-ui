@@ -1,11 +1,11 @@
+import { StorageKeyNotFoundError } from "@virtool/storage/errors";
+import type { StorageBackend } from "@virtool/storage/types";
 import { beforeEach, describe, expect, it } from "vitest";
 import type { StorageConfig } from "../../config";
 import { deletePrefix } from "../cleanup";
-import { StorageKeyNotFoundError } from "../errors";
 import { createStorageBackend } from "../factory";
 import { S3_MIN_PART_SIZE } from "../s3";
 import { collect, listAll, readText, stream, streamOf } from "../test/fixtures";
-import type { StorageBackend } from "../types";
 
 function env(key: string): string {
 	const value = process.env[key];

@@ -26,6 +26,13 @@ This is a **pnpm monorepo**:
     boundary parses them
   - `@virtool/sentry` — shared Sentry option helpers (node + browser entry
     points)
+  - `@virtool/storage` — object storage: the S3 and Azure backends, the
+    key builders, and `MemoryStorage`
+  - `@virtool/data` — the database and domain data layer: the Drizzle schema,
+    the db handle, and every domain's `data.ts`
+
+  `@virtool/data` and `@virtool/storage` are server-side only. Browser code
+  must never import them; they reach `apps/web` through `src/server/**`.
 
 Use `pnpm` for all install, run, and exec commands — not `npm` or `bun`.
 
@@ -643,11 +650,15 @@ column-default convention.
 
 Uploads, reads, analysis results, indexes, subtractions, HMM profiles,
 and caches live in S3 or Azure Blob — **the same bucket Python uses**.
-`src/server/storage/` exposes a five-method streaming interface
+`@virtool/storage` exposes a five-method streaming interface
 (`read`, `write`, `delete`, `list`, `size`); there are no paths, file
-handles, or presigned URLs. Keys are built by `keys.ts` and must stay
-byte-for-byte identical to Python's — a divergence silently reads
-nothing and orphans what it writes. There is no filesystem backend.
+handles, or presigned URLs. Keys are built by `@virtool/storage/keys` and
+must stay byte-for-byte identical to Python's — a divergence silently
+reads nothing and orphans what it writes. There is no filesystem backend.
+
+`StorageError` and `StorageKeyNotFoundError` come from
+`@virtool/storage/errors` and extend plain `Error`, not the data layer's
+`AppError`, so the storage package carries no dependency on the data layer.
 
 The backend is built once at startup and **passed into `data.ts`
 functions as an argument, the way `db` is**. `deletePrefix` never
@@ -835,7 +846,7 @@ is read from Postgres itself, filtering `pg_stat_activity` on the
 replica counts only its own pool. Client-side queue depth remains
 unavailable and needs per-query instrumentation.
 
-That name is built by `db/applicationName.ts` and bounded to 63 bytes —
+That name is built by `@virtool/data/db/applicationName` and bounded to 63 bytes —
 Postgres truncates a longer one silently, and the filter would then match
 nothing and report every bucket as zero. The probe itself is bounded too:
 it queries the very pool it measures, so a saturated pool queues it

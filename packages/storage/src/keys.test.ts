@@ -12,7 +12,7 @@ import {
 	subtractionFileKey,
 	subtractionPrefix,
 	uploadFileKey,
-} from "../keys";
+} from "./keys";
 
 describe("storage keys", () => {
 	it("composes upload and analysis keys", () => {

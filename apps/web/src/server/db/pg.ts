@@ -1,9 +1,9 @@
 import { hostname } from "node:os";
+import { buildApplicationName } from "@virtool/data/db/applicationName";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { config } from "../config";
 import { logger } from "../logger";
-import { buildApplicationName } from "./applicationName";
 import * as schema from "./schema";
 
 /**

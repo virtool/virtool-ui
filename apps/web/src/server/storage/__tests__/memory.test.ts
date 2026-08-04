@@ -1,5 +1,5 @@
+import { StorageKeyNotFoundError } from "@virtool/storage/errors";
 import { describe, expect, it } from "vitest";
-import { StorageKeyNotFoundError } from "../errors";
 import { MemoryStorage } from "../memory";
 import { collect, listAll, readText, stream, streamOf } from "../test/fixtures";
 
