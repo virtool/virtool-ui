@@ -238,6 +238,10 @@ describe("<PathoscopeOtuCoverage />", () => {
 			"0.5",
 			"0.5",
 		]);
+		expect(rules.map((rule) => rule.getAttribute("y2"))).toEqual([
+			"0.5",
+			"0.5",
+		]);
 		expect(rules.map((rule) => rule.getAttribute("x2"))).toEqual([
 			"300",
 			"100",

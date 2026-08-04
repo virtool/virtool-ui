@@ -364,15 +364,16 @@ patterns.
   `apps/web/src/app/style.css` under `@theme`, with keyframes in
   `apps/web/src/app/animations.css`. Check there before inventing a color or
   spacing value, and add a token rather than hardcoding a hex.
-- The root font size is `100%` — the reader's browser preference. Every
-  rem-valued token Tailwind ships (`--text-*`, `--spacing`, `--container-*`,
-  `--breakpoint-*`, `--radius-*`) is overridden in `@theme` at 0.875 of its
-  stock value, so a class does **not** render its documented px figure:
-  `text-sm` is 12.25px, `md:` breaks at 672px. `body` carries the app's base
-  size; never put a font size back on `html`.
-- A px figure reserving space for text is overrun by a reader who asked for a
-  larger font. Size anything holding text in `rem`, and keep px for graphics
-  that hold none, as `PathoscopeCoverageChart` does.
+- The root font size is `100%` — the reader's browser preference. Never put a
+  length back on `html`; `body` carries the app's base size.
+- Every rem-valued token Tailwind ships is overridden in `@theme` at 0.875, so
+  a class does **not** render its documented px figure: `text-sm` is 12.25px,
+  `md:` breaks at 672px.
+- Size anything that holds text in `rem`; keep px for graphics that hold none.
+
+See [docs/type-scale.md](docs/type-scale.md) for which token families are
+overridden and why they move together, the class-to-px table, and the px
+holdouts that still need fixing.
 
 ### Base component color props
 
