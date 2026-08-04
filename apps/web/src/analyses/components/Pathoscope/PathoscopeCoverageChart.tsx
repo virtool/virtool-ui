@@ -21,18 +21,24 @@ const gutter = 4;
  * without it, a chart whose panels have nothing to say sits flush against the
  * bottom of its box while one with labelled panels grows to fit them, and the
  * two read as different components rather than the same chart in two states.
+ *
+ * In rem, not px: the caption it holds grows with the reader's font-size
+ * preference.
  */
-const labelHeight = 18;
+const labelHeight = "1.125rem";
 
 /**
  * The space above a panel's curve, which the depth ceiling and its label sit in.
  *
- * It belongs to the panel's own svg rather than to the box around it, so that a
- * panel's hover and focus styling covers the full height of the chart. Held on
- * the box, it left a strip along the top that was inside the border but outside
- * every panel, and so stayed unhighlighted while the panel below it was hovered.
+ * It is reserved by a spacer inside the panel rather than by padding on the box
+ * around it, so that a panel's hover and focus styling covers the full height of
+ * the chart. Held on the box, it left a strip along the top that was inside the
+ * border but outside every panel, and so stayed unhighlighted while the panel
+ * below it was hovered.
+ *
+ * In rem, like the label row: the depth label sits in it.
  */
-const headroom = 18;
+const headroom = "1.125rem";
 
 /** The narrowest panel that carries both a label and its length. */
 const lengthMinWidth = 120;
@@ -162,15 +168,19 @@ export default function PathoscopeCoverageChart({
 		// than exposed as an unlabelled graphic of its own.
 		const body = (
 			<>
+				<div style={{ height: headroom }} />
 				<svg
 					aria-hidden="true"
 					className="block"
-					height={height + headroom}
+					height={height}
 					width={panel.width}
 				>
 					{/* Every panel draws the ceiling, but only the chart labels it: the
 					    domain is shared, so the curves are what differ from panel to
-					    panel and the line they are measured against does not. */}
+					    panel and the line they are measured against does not.
+
+					    Half a pixel down, so a one-pixel stroke lands inside the svg
+					    rather than being clipped by its top edge. */}
 					{maxDepth > 0 && (
 						<line
 							className="stroke-gray-500"
@@ -178,13 +188,11 @@ export default function PathoscopeCoverageChart({
 							strokeDasharray="2 3"
 							x1={0}
 							x2={panel.width}
-							y1={headroom}
-							y2={headroom}
+							y1={0.5}
+							y2={0.5}
 						/>
 					)}
-					<g transform={`translate(0,${headroom})`}>
-						{d ? <path className="fill-blue-500" d={d} /> : null}
-					</g>
+					{d ? <path className="fill-blue-500" d={d} /> : null}
 				</svg>
 				{/* The label gives way first: an ellipsis destroys a length outright
 				    where a truncated label is still recognisable.
@@ -247,7 +255,10 @@ export default function PathoscopeCoverageChart({
 
 	// The height is fixed rather than left to the panels, so the box does not
 	// collapse in the frame before the container has been measured.
-	const style = { gap, height: height + labelHeight + headroom };
+	const style = {
+		gap,
+		height: `calc(${height}px + ${headroom} + ${labelHeight})`,
+	};
 
 	// The label is drawn over the chart rather than inside a panel's svg, which
 	// clips its own overflow — a narrow first panel would cut it off.

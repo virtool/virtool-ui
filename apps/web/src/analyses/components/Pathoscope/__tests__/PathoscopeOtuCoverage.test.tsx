@@ -231,10 +231,13 @@ describe("<PathoscopeOtuCoverage />", () => {
 
 		const rules = [...container.querySelectorAll("line")];
 
-		// The curve area starts below the rule, so a curve reaching the ceiling
-		// meets it rather than running off the top of the panel.
+		// The rule sits at the top of the curve area, so a curve reaching the
+		// ceiling meets it rather than running off the top of the panel.
 		expect(rules).toHaveLength(2);
-		expect(rules.map((rule) => rule.getAttribute("y1"))).toEqual(["18", "18"]);
+		expect(rules.map((rule) => rule.getAttribute("y1"))).toEqual([
+			"0.5",
+			"0.5",
+		]);
 		expect(rules.map((rule) => rule.getAttribute("x2"))).toEqual([
 			"300",
 			"100",
@@ -388,7 +391,9 @@ describe("<PathoscopeOtuCoverage />", () => {
 		const labelRow = container.querySelector(".text-gray-600.text-sm");
 
 		expect(labelRow).not.toBeNull();
-		expect((labelRow as HTMLElement).style.height).toBe("18px");
+
+		// In rem, so it grows with the reader's font-size preference.
+		expect((labelRow as HTMLElement).style.height).toBe("1.125rem");
 	});
 
 	it("should left-justify segment labels", () => {
