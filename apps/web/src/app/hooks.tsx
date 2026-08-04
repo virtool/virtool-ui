@@ -1,3 +1,4 @@
+import { readServerNow } from "@app/serverNow";
 import type { RefObject } from "react";
 import {
 	useEffect,
@@ -7,13 +8,34 @@ import {
 	useSyncExternalStore,
 } from "react";
 
+// Advanced only on a tick. `Date.now` cannot be the snapshot itself: React
+// calls it repeatedly to decide whether the store changed, and a value that
+// differs on every call never settles — it warns that the result should be
+// cached, and re-renders until it does.
+let now = Date.now();
+
 function subscribeToTime(callback: () => void) {
-	const interval = setInterval(callback, 1000);
+	const interval = setInterval(() => {
+		now = Date.now();
+		callback();
+	}, 1000);
+
 	return () => clearInterval(interval);
 }
 
-export function useNow() {
-	return useSyncExternalStore(subscribeToTime, Date.now, Date.now);
+function getNow() {
+	return now;
+}
+
+/**
+ * The current time in epoch milliseconds, refreshed every second.
+ *
+ * Subscribed to rather than read during render, so render stays a pure function
+ * of its inputs — the React Compiler would otherwise cache the first reading
+ * and never recompute it.
+ */
+export function useNow(): number {
+	return useSyncExternalStore(subscribeToTime, getNow, readServerNow);
 }
 
 // Whether a document is secure is fixed for its lifetime, so there is nothing
