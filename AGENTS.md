@@ -17,6 +17,17 @@ This is a **pnpm monorepo**:
   gates — Astro is not linted by biome and is opaque to knip — so its own
   Vite build (a `build-site` CI job) and Vitest suite are its gate. Deploy is
   manual: `pnpm --filter @virtool/site deploy`.
+- `apps/jobs-api/` — `@virtool/jobs-api`, the jobs control plane. A plain Node
+  HTTP service on port 9950, mirroring Python's `virtool/jobs/main.py`
+  (`api-jobs-service`, ClusterIP, no ingress). Serves `/health/live` and
+  `/health/ready` today. Image: `ghcr.io/virtool/jobs-api`, Alpine.
+- `apps/create-subtraction/` — `@virtool/create-subtraction`, the first workflow
+  executor: a one-shot process that starts, works, exits. Only its object
+  storage half is wired so far. Image: `ghcr.io/virtool/ts-create-subtraction`,
+  **Debian** — it copies binaries from `ghcr.io/virtool/tools`, which are built
+  against `python:3.13-bookworm` and cannot load under musl. The other three
+  workflow executors get a directory, a Dockerfile stage and a CI matrix entry
+  when their port lands.
 - `packages/` — shared, framework-agnostic libraries published as workspace
   packages:
   - `@virtool/logger` — pino wrapper, server-side log defaults and
@@ -48,6 +59,29 @@ This is a **pnpm monorepo**:
   does the construction: it builds `storage`, calls `createDb(config)` to get
   `client` and `db`, and calls `createEmitter({ client, logger })`. Every
   `db`, `client`, and `storage` import in `apps/web` comes from there.
+
+**Apps bundle; packages stay source.** Every package under `packages/` is
+unbuilt TypeScript — no `build` script, no `dist`, `noEmit: true`, and an
+`exports` map pointing at `./src/*.ts`. A plain `node` process cannot import a
+`.ts` file, so the non-Vite apps are where compilation happens: each bundles to
+a single `dist/index.mjs` with every `@virtool/*` inlined from source, via
+**tsdown**. Do not give a package a `dist` build to sidestep this — the apps
+bundling *is* the design. A new app is `apps/<name>/` with a `package.json`, a
+`tsconfig.json` extending `apps/tsconfig.node.json`, a `tsdown.config.ts` and
+`src/index.ts`; that is enough for `pnpm build`, `check`, `typecheck`, `test`
+and `knip` to cover it with no edits to root scripts, `knip.json`, `biome.json`
+or the Dockerfile install layer. A new *image* still needs a Dockerfile stage
+and a CI matrix entry.
+
+A non-Vite app must **never import from `apps/web`**, in either direction. A
+`biome.json` override over `apps/*/src/**` (excluding `apps/web/src/**`) bans
+every feature alias, `@server/**`, the `@/*` catch-all and relative reaches into
+`apps/web`. Shared shapes go down into `@virtool/contracts`.
+
+See [docs/apps.md](docs/apps.md) for the bundler rationale, the
+bundled-vs-external rule and why externals must be string literals, the
+`pnpm deploy` / `injectWorkspacePackages` mechanism, and the Alpine-vs-Debian
+image split.
 
 Use `pnpm` for all install, run, and exec commands — not `npm` or `bun`.
 
@@ -125,6 +159,12 @@ pnpm check                        # biome check (whole repo)
 | Test (watch, web app) | `pnpm --filter @virtool/web test:watch` |
 | Test (filtered) | `pnpm --filter @virtool/web exec vitest run src/path/to/file` |
 | Build | `pnpm build` |
+
+`pnpm build` builds **every app but `apps/site`**, which is gated by its own
+`build-site` CI job. `pnpm check` and `pnpm format` run biome over `apps` and
+`packages` rather than a literal `apps/web/src`, so a new app's source is linted
+without an edit; `apps/site` is excluded once, in `biome.json`'s
+`files.includes`.
 
 Don't use the dev server. Live development is done using Tilt and Minikube and is
 currently configured in another repository.
@@ -915,6 +955,12 @@ moving to the mount can still carry the stale env var from the `Secret`
 it replaces, and erroring on the overlap would crashloop the rollout
 that fixes it. An unreadable path throws at startup; an empty file is an
 unset value.
+
+The non-Vite apps carry their own copy of the resolver in their
+`src/config.ts` — they cannot reach `apps/web/src/server`, and they parse
+a much smaller set of keys than the web app's zod schema. Keep the
+`<KEY>_FILE` behaviour in any new one; do not add a plain
+`process.env` read that skips it.
 
 ## Logging
 
