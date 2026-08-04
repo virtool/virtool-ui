@@ -353,6 +353,16 @@ initial-load failure spins forever. See
 route-loader prefetch, the two-tier error/loading policy, and mutation
 patterns.
 
+Below both tiers sits `@base/ShellErrorBoundary`, mounted in the root route's
+shell inside `<body>`. It catches what the router's own boundaries cannot: a
+falsy thrown value. `MatchInner` throws a match's `loadPromise` to suspend, a
+chained redirect can clear that promise first, and TanStack's `CatchBoundary`
+tests the thrown value for truthiness — so `undefined` escapes every boundary
+and unmounts the app to a blank page (TanStack/router#7753, open). The shell
+boundary remounts the router once the race settles, and falls back to a reload
+prompt. It is a backstop for that upstream bug, not a place to route ordinary
+route or query errors — those belong in the two tiers above.
+
 ### Styling
 
 - Styling is Tailwind utility classes. There is no CSS-in-JS; styled-components
