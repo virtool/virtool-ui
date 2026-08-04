@@ -117,11 +117,8 @@ describe("reactQueryHandler", () => {
 				queryKey: bannerQueryKeys.lists(),
 			},
 
-			// Tasks cache details but no list, so an insert falls back.
-			{
-				message: { domain: "tasks", operation: "update", id: 9 },
-				queryKey: taskQueryKeys.detail(9),
-			},
+			// Tasks cache details but no list, so an insert falls back. Their
+			// updates skip this mapping entirely — see the batching test below.
 			{
 				message: { domain: "tasks", operation: "insert", id: 9 },
 				queryKey: taskQueryKeys.all(),
@@ -260,6 +257,25 @@ describe("reactQueryHandler", () => {
 		expect(invalidate).not.toHaveBeenCalled();
 		expect(
 			queryClient.getQueryState(jobQueryKeys.detail(42))?.isInvalidated,
+		).toBe(false);
+	});
+
+	// A running task emits a frame per progress step — over a hundred for a
+	// reference clone — and every task-bearing row holds its own detail query.
+	// These frames go to the batching queue instead — see
+	// `tasks/__tests__/refresh.test.ts`.
+	it("batches task updates rather than invalidating a detail per frame", () => {
+		queryClient.setQueryData(taskQueryKeys.detail(9), { id: 9 });
+
+		reactQueryHandler(queryClient)({
+			domain: "tasks",
+			operation: "update",
+			id: 9,
+		});
+
+		expect(invalidate).not.toHaveBeenCalled();
+		expect(
+			queryClient.getQueryState(taskQueryKeys.detail(9))?.isInvalidated,
 		).toBe(false);
 	});
 

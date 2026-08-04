@@ -200,15 +200,17 @@ application's own doing.
   flipping to `ready`) changes a per-sample list row the frame can't
   target, since it carries only the analysis id and not the `sampleId`
   the list is keyed by. Unknown domains are ignored.
-- `jobs/refresh.ts` is the one exception to that mapping. See below.
+- `jobs/refresh.ts` and `tasks/refresh.ts` are the two exceptions to that
+  mapping. See below.
 
-## Job updates are batched, not invalidated
+## Job and task updates are batched, not invalidated
 
-Jobs are the only domain that emits an update frame per running job per
-progress wave, and every job on screen holds its own `detail(id)` query
-(see the nested-job sites below). Invalidating each frame's detail
-therefore cost one `getJobFn` request per running job per tick — 25 rows,
-25 requests.
+Jobs and tasks are the two domains that emit an update frame per running
+record per progress step, and every one on screen holds its own
+`detail(id)` query (see the nested sites below). Invalidating each
+frame's detail therefore cost one `getJobFn`/`getTaskFn` request per
+record per tick — 25 job rows, 25 requests; a reference clone reports
+~130 progress steps, each one a request per browser watching it.
 
 So `jobs`/`update` frames do not go through `selectQueryKey`. They go to
 a queue built by `createJobRefreshQueue` (`jobs/refresh.ts`), one per
@@ -233,7 +235,15 @@ a queue built by `createJobRefreshQueue` (`jobs/refresh.ts`), one per
 A failed batch falls back to invalidating each id's detail, taking the
 fan-out it was avoiding rather than leaving every progress bar frozen.
 
-Two properties of that queue are load-bearing, and both are easy to
+`tasks`/`update` frames go to `createTaskRefreshQueue`
+(`tasks/refresh.ts`), which is the same queue against `getTasksFn` and
+`taskQueryKeys` — **minus step 2**. Nothing caches a task collection, so
+there is no `lists()` key to mark stale and no counts or ordering to
+drift; adding the invalidation would be a no-op that reads as a
+requirement. Everything else carries over unchanged, including the
+active-observer filter and the serialized drain.
+
+Two properties of these queues are load-bearing, and both are easy to
 undo by accident:
 
 - **Active observers, not cached data.** Filtering on
@@ -277,13 +287,11 @@ undo by accident:
   until a batch's size, rather than its count, shows up in metrics.
 - **`hmm` has no push domain.** Task-nested sites
   (`references/components/ReferenceItem.tsx`,
-  `references/components/Detail/Remote.tsx`,
-  `hmm/components/HmmInstall.tsx`) now keep live task `progress`/`step`
+  `hmm/components/HmmInstall.tsx`) keep live task `progress`/`step`
   fresh by mounting `useFetchTask(id)` seeded with the nested task, so
-  a `tasks` update frame invalidates `taskQueryKeys.detail(id)` and
-  refetches through the `getTaskFn` server function. `hmm` itself is not
-  an `SseDomain` and has no `/hmms` refetch trigger; `HmmInstall`
-  bridges that gap by watching the live task's `complete` and
-  invalidating `hmmQueryKeys.lists()` from a `useEffect`. If HMM gains
-  its own push domain, drop that effect in favour of a direct
-  invalidation.
+  a `tasks` update frame refreshes `taskQueryKeys.detail(id)` through
+  the batching queue above. `hmm` itself is not an `SseDomain` and has
+  no `/hmms` refetch trigger; `HmmInstall` bridges that gap by watching
+  the live task's `complete` and invalidating `hmmQueryKeys.lists()`
+  from a `useEffect`. If HMM gains its own push domain, drop that effect
+  in favour of a direct invalidation.
