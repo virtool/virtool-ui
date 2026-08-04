@@ -16,6 +16,38 @@ export function useNow() {
 	return useSyncExternalStore(subscribeToTime, Date.now, Date.now);
 }
 
+// Whether a document is secure is fixed for its lifetime, so there is nothing
+// to subscribe to.
+function subscribeToNothing() {
+	return () => {};
+}
+
+function readIsSecureContext() {
+	return window.isSecureContext;
+}
+
+function readIsSecureContextOnServer() {
+	return false;
+}
+
+/**
+ * Whether the document is in a secure context, and with it whether the
+ * clipboard API can be reached.
+ *
+ * Read through a store rather than straight off `window`, which does not exist
+ * while rendering on the server. A `typeof window` guard would only convert
+ * that crash into a hydration mismatch; React uses the server snapshot for both
+ * the server render and the hydration render that has to match it, then swaps
+ * in the real value on the pass immediately after.
+ */
+export function useIsSecureContext(): boolean {
+	return useSyncExternalStore(
+		subscribeToNothing,
+		readIsSecureContext,
+		readIsSecureContextOnServer,
+	);
+}
+
 /**
  * Two-way binding for an input whose committed value lives in the parent (URL,
  * store, etc.). Returns a local `draft` for the input and a setter; commits
