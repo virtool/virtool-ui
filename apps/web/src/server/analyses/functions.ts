@@ -14,6 +14,7 @@ import {
 	deleteAnalysis,
 	findAnalyses,
 	getAnalysis,
+	getAnalysisResults,
 	getAnalysisSampleRights,
 } from "@virtool/data/analyses/data";
 import {
@@ -135,6 +136,20 @@ export const getAnalysisFn = createServerFn({ method: "GET" })
 				"read",
 			]);
 			return await getAnalysis(db, data.analysisId);
+		} catch (err) {
+			return rethrowAsHttp(err);
+		}
+	});
+
+export const getAnalysisResultsFn = createServerFn({ method: "GET" })
+	.middleware([authenticated()])
+	.validator(analysisIdSchema)
+	.handler(async ({ context, data }) => {
+		try {
+			await authorizeAnalysis(data.analysisId, context.session.userId, [
+				"read",
+			]);
+			return await getAnalysisResults(db, data.analysisId);
 		} catch (err) {
 			return rethrowAsHttp(err);
 		}

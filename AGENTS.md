@@ -21,7 +21,11 @@ This is a **pnpm monorepo**:
   packages:
   - `@virtool/logger` — pino wrapper, server-side log defaults and
     `child({...})` pattern
-  - `@virtool/bio` — sequence utilities (complement, translation, etc.)
+  - `@virtool/bio` — sequence utilities (complement, translation, ORF
+    finding, FASTA/FASTQ) and the pure text parsers the ported workflows
+    need: FastQC `fastqc_data.txt` (`./fastqc`) and `hmmscan --tblout`
+    (`./hmmer`). Its output is pinned byte-for-byte against Python's —
+    see [docs/bio.md](docs/bio.md) before changing a parser.
   - `@virtool/contracts` — cross-process data shapes, zod-validated where a
     boundary parses them
   - `@virtool/sentry` — shared Sentry option helpers (node + browser entry
@@ -211,6 +215,38 @@ alias and are reached through the catch-all `@/*`, which maps to
   dynamic `import()` inside `@server/analyses/export` so it stays out of every
   other bundle
 
+### Every route renders on the server
+
+`createStart` sets no `defaultSsr`, so it defaults to `true`: a hard load
+runs a route's `beforeLoad`, `loader` and `component` in Node and ships
+finished HTML. So render must not reach a browser global — `window`,
+`document`, `localStorage`, a viewport measurement — and must not read
+anything the server cannot know, above all the clock, the timezone and the
+locale. The first crashes the render; the second is a hydration mismatch,
+and a `typeof window` guard only converts one into the other.
+
+Read those through `useSyncExternalStore` with a **cached** server
+snapshot, which covers the server render and the hydration render that
+must match it (`useIsSecureContext` in `@app/hooks` is the worked
+example). Anything measuring elapsed time reads `@app/serverNow` rather
+than the clock; a module-level `let now = Date.now()` is the deploy time
+on a long-lived process, not page load. Wrap a genuinely browser-only
+subtree — a virtualizer, which decides its rows by measuring — in
+`ClientOnly` with a fallback of the same dimensions, in preference to
+`ssr: false` on the whole route.
+
+An `ssr` setting can only be made **more restrictive** down the tree, and
+`defaultSsr` fills in for the root as well, so `defaultSsr: false` turns
+SSR off everywhere and no leaf can opt back in. Turn a single page off
+with `ssr: false` on that route.
+
+Module-scope mutable state in client code is now shared by every
+concurrent request, not per-tab. Keep per-user state out of it.
+
+See [docs/ssr.md](docs/ssr.md) for the per-route settings and their
+inheritance, the time rules, which queries participate in SSR and
+streaming, and the CSP nonce.
+
 ### The React Compiler memoizes render, so render must be pure
 
 The compiler is a Babel pass, wired up in `apps/web/vite.config.js` as
@@ -269,6 +305,16 @@ So, in a route's critical exports:
   dependency-free coercion helpers in `@app/searchParams` and type the function
   as `(input: Partial<T> & SearchSchemaInput) => T` — the `SearchSchemaInput`
   tag is what keeps `<Link search={{ page: 2 }}>` partial.
+- **`validateSearch` resolves every default; nothing downstream repeats one.**
+  A param with a default is required on the search type and coerced with a
+  fallback (`bool(input.reads, false)`), never left optional for components to
+  fill in with `search.reads ?? false` — a second copy of a default is free to
+  disagree with the first, which is how the analysis viewer came to draw its
+  coverage filters as on while filtering nothing. Keep the defaults in one
+  exported object and hand it to `stripSearchParams` in the route's
+  `search.middlewares`, so a resolved default costs nothing in the URL and a
+  shared link carries only what its sender changed
+  (`analyses/search.ts` and the analysis route are the worked example).
 - **Paginated list routes share `@app/pagination`.** Spread `paginated(input)`
   into the returned object and intersect the route's search type with
   `Paginated` (`type FooSearch = Paginated & { term: string }`) rather than
@@ -320,6 +366,14 @@ internal route triggers a full page reload. For query strings, use `search` on
 
 `<a>` is only for external URLs and deliberate full reloads.
 
+`routes/index.tsx` — the `/` to `/samples` redirect — stays **outside**
+`_authenticated`, and its `beforeLoad` stays synchronous. Nested, resolving `/`
+ran that layout's async guard before throwing a second redirect, so signing in
+navigated `/login` to `/` to `/samples` with the layout match re-rendering
+mid-chain — the window the router throws `undefined` in. Moving it back under
+the guard reintroduces that. Nothing is exposed by leaving it unguarded: it
+renders nothing, and `/samples` carries the guard.
+
 ### API calls
 
 There is no HTTP client. The SPA reaches the backend through TanStack Start
@@ -361,6 +415,16 @@ initial-load failure spins forever. See
 route-loader prefetch, the two-tier error/loading policy, and mutation
 patterns.
 
+Below both tiers sits `@base/ShellErrorBoundary`, mounted in the root route's
+shell inside `<body>`. It catches what the router's own boundaries cannot: a
+falsy thrown value. `MatchInner` throws a match's `loadPromise` to suspend, a
+chained redirect can clear that promise first, and TanStack's `CatchBoundary`
+tests the thrown value for truthiness — so `undefined` escapes every boundary
+and unmounts the app to a blank page (TanStack/router#7753, open). The shell
+boundary remounts the router once the race settles, and falls back to a reload
+prompt. It is a backstop for that upstream bug, not a place to route ordinary
+route or query errors — those belong in the two tiers above.
+
 ### Styling
 
 - Styling is Tailwind utility classes. There is no CSS-in-JS; styled-components
@@ -372,6 +436,19 @@ patterns.
   `apps/web/src/app/style.css` under `@theme`, with keyframes in
   `apps/web/src/app/animations.css`. Check there before inventing a color or
   spacing value, and add a token rather than hardcoding a hex.
+- The root font size is `100%` — the reader's browser preference. Never put a
+  length back on `html`; `body` carries the app's base size.
+- Every rem-valued token Tailwind ships is overridden in `@theme` at 0.875, so
+  a class does **not** render its documented px figure: `text-sm` is 12.25px,
+  `md:` breaks at 672px.
+- Size anything that holds text in `rem`; keep px for graphics that hold none.
+  Where a size has to be a number — a threshold compared against a measured
+  width — write it as a rem multiple and resolve it with `useRootFontSize`
+  (`@app/hooks`), never as a px constant.
+
+See [docs/type-scale.md](docs/type-scale.md) for which token families are
+overridden and why they move together, the class-to-px table, and the px
+holdouts that still need fixing.
 
 ### Base component color props
 

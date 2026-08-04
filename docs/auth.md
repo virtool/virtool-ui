@@ -61,6 +61,7 @@ not per-handler. The exempt endpoints live in
 export const authenticationExceptions: ReadonlyArray<{ url: string }> = [
   createFirstUserFn,
   getPasswordPolicyFn,
+  getRootFn,
   loginFn,
   logoutFn,
   resetPasswordFn,
@@ -70,16 +71,29 @@ export const authenticationExceptions: ReadonlyArray<{ url: string }> = [
 and are wired up in `apps/web/src/start.ts`:
 
 ```ts
-const authenticationMiddleware = createAuthenticationMiddleware(
-  authenticationExceptions,
-);
+const authenticationMiddleware = createAuthenticationMiddleware();
 
 export const startInstance = createStart(() => ({
-  defaultSsr: false,
-  requestMiddleware: [csrfMiddleware, cspNonce],
-  functionMiddleware: [authenticationMiddleware],
+  serializationAdapters: [serverErrorSerializationAdapter],
+  requestMiddleware: [
+    sentryGlobalRequestMiddleware,
+    metricsMiddleware,
+    csrfMiddleware,
+    documentHeadersMiddleware,
+  ],
+  functionMiddleware: [
+    sentryGlobalFunctionMiddleware,
+    errorLoggingMiddleware,
+    authenticationMiddleware,
+  ],
 }));
 ```
+
+`createAuthenticationMiddleware` takes no list in production — it
+reaches `./exceptions` through a `createServerOnlyFn` dynamic import on
+first call, so `start.ts`, which is part of the browser program, never
+drags those functions' modules into the eager client bundle. The
+parameter exists only so tests can supply their own list.
 
 Every server function is gated by default. Public endpoints opt out by
 being listed in the `exceptions` array — passed as **server-function
@@ -407,8 +421,9 @@ The client mutation (`useCreateFirstUser` in `wall/queries.ts`) drops
 the cached `root` and `account` documents on success so the guard
 refetches them fresh instead of reusing the pre-setup snapshot (which
 still says `first_user: true` and would bounce the user back to
-`/setup`). It then navigates to `/`; the now-authenticated guard admits
-the user.
+`/setup`). It then navigates to `/`, which is an unguarded route that
+redirects straight to `/samples`; the now-authenticated guard admits the
+user there.
 
 ## Forced password reset
 

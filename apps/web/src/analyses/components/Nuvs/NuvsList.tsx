@@ -8,6 +8,7 @@ import { cn } from "@app/cn";
 import Badge from "@base/Badge";
 import Box from "@base/Box";
 import Key from "@base/Key";
+import { ClientOnly } from "@tanstack/react-router";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useRef } from "react";
 
@@ -114,7 +115,7 @@ export default function NuvsList({ detail }: NuVsListProps) {
 		nextIndex,
 		previousId,
 		previousIndex,
-		(activeHit) => setSearch({ activeHit }),
+		(id) => setSearch({ hit: id }),
 	);
 
 	const hitComponents = sortedHits.map((hit) => (
@@ -122,7 +123,7 @@ export default function NuvsList({ detail }: NuVsListProps) {
 			key={hit.id}
 			activeHit={activeHit}
 			hit={hit}
-			setActiveHit={(activeHit) => setSearch({ activeHit })}
+			setActiveHit={(id) => setSearch({ hit: id })}
 		/>
 	));
 
@@ -141,23 +142,37 @@ export default function NuvsList({ detail }: NuVsListProps) {
 						className="h-[500px] overflow-auto"
 						style={{ width }}
 					>
-						<div
-							className="relative w-full"
-							style={{ height: virtualizer.getTotalSize() }}
-						>
-							{virtualizer.getVirtualItems().map((virtualRow) => (
+						{/* Which rows are virtualized depends on measuring the scroll
+						    container, which does not exist while rendering on the server —
+						    so the server would emit an empty list and hydration would find
+						    a full one. The fallback holds the same scroll height, so the
+						    rows land without moving anything. */}
+						<ClientOnly
+							fallback={
 								<div
-									key={virtualRow.key}
-									className="absolute left-0 top-0 w-full"
-									style={{
-										height: virtualRow.size,
-										transform: `translateY(${virtualRow.start}px)`,
-									}}
-								>
-									{hitComponents[virtualRow.index]}
-								</div>
-							))}
-						</div>
+									className="relative w-full"
+									style={{ height: shown * ROW_HEIGHT }}
+								/>
+							}
+						>
+							<div
+								className="relative w-full"
+								style={{ height: virtualizer.getTotalSize() }}
+							>
+								{virtualizer.getVirtualItems().map((virtualRow) => (
+									<div
+										key={virtualRow.key}
+										className="absolute left-0 top-0 w-full"
+										style={{
+											height: virtualRow.size,
+											transform: `translateY(${virtualRow.start}px)`,
+										}}
+									>
+										{hitComponents[virtualRow.index]}
+									</div>
+								))}
+							</div>
+						</ClientOnly>
 					</div>
 				</div>
 				<div className="p-4 text-sm text-center">
@@ -166,7 +181,7 @@ export default function NuvsList({ detail }: NuVsListProps) {
 			</div>
 			<NuvsDetail
 				analysisId={detail.id}
-				filterORFs={search.filterOrfs ?? true}
+				filterORFs={!search.showUnhitOrfs}
 				matches={sortedHits}
 				maxSequenceLength={detail.results.maxSequenceLength}
 			/>
