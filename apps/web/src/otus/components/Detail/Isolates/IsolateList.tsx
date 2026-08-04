@@ -16,7 +16,7 @@ import { ClientOnly, getRouteApi } from "@tanstack/react-router";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import type { OtuIsolate } from "@virtool/contracts";
 import { TestTubes } from "lucide-react";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import CreateIsolate from "./CreateIsolate";
 import DeleteIsolate from "./DeleteIsolate";
 import IsolateItem from "./IsolateItem";
@@ -59,14 +59,16 @@ export default function IsolateList() {
 		ISOLATE_SEARCH_KEYS,
 	);
 
-	const listRef = useRef<HTMLDivElement>(null);
 	const [scrollMargin, setScrollMargin] = useState(0);
 
-	useLayoutEffect(() => {
+	// A ref callback, not a mount effect: ClientOnly swaps in this element
+	// after hydration, on a render the initial mount effect would not rerun
+	// for, so the measurement has to fire off the element's own attachment.
+	const listRef = useCallback((node: HTMLDivElement | null) => {
 		const scrollElement = getContentScrollElement();
-		if (listRef.current && scrollElement) {
+		if (node && scrollElement) {
 			const top =
-				listRef.current.getBoundingClientRect().top -
+				node.getBoundingClientRect().top -
 				scrollElement.getBoundingClientRect().top +
 				scrollElement.scrollTop;
 			setScrollMargin(top);
