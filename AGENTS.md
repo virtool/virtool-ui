@@ -312,6 +312,14 @@ internal route triggers a full page reload. For query strings, use `search` on
 
 `<a>` is only for external URLs and deliberate full reloads.
 
+`routes/index.tsx` — the `/` to `/samples` redirect — stays **outside**
+`_authenticated`, and its `beforeLoad` stays synchronous. Nested, resolving `/`
+ran that layout's async guard before throwing a second redirect, so signing in
+navigated `/login` to `/` to `/samples` with the layout match re-rendering
+mid-chain — the window the router throws `undefined` in. Moving it back under
+the guard reintroduces that. Nothing is exposed by leaving it unguarded: it
+renders nothing, and `/samples` carries the guard.
+
 ### API calls
 
 There is no HTTP client. The SPA reaches the backend through TanStack Start
