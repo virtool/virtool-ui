@@ -1,3 +1,14 @@
+import type { Db } from "@virtool/data/db/pg";
+import { sessions } from "@virtool/data/db/schema/sessions";
+import {
+	type UploadRow,
+	uploads as uploadsTable,
+} from "@virtool/data/db/schema/uploads";
+import { users } from "@virtool/data/db/schema/users";
+import {
+	createTestDatabase,
+	type TestDatabase,
+} from "@virtool/data/db/test/fixtures";
 import { MemoryStorage } from "@virtool/storage";
 import {
 	afterAll,
@@ -8,11 +19,6 @@ import {
 	it,
 	vi,
 } from "vitest";
-import type { Db } from "../db/pg";
-import { sessions } from "../db/schema/sessions";
-import { type UploadRow, uploads as uploadsTable } from "../db/schema/uploads";
-import { users } from "../db/schema/users";
-import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
 import { callServerFn, type SplitServerFnModule } from "../test/serverFn";
 
 const getRequest = vi.fn();
@@ -32,25 +38,29 @@ vi.mock("@sentry/tanstackstart-react", () => ({
 }));
 
 let db: Db;
-vi.mock("../db/pg", () => ({
+vi.mock("../composition", () => ({
 	client: {},
 	get db() {
 		return db;
 	},
+	storage,
 }));
 
-vi.mock("../events/emit", () => ({ emit: vi.fn() }));
+vi.mock("@virtool/data/events/emit", () => ({
+	createEmitter: vi.fn(),
+	emit: vi.fn(),
+}));
 
 const storage = new MemoryStorage();
-vi.mock("../composition", () => ({ storage }));
 
 const handlers = (await import(
 	"./functions.ts?tss-serverfn-split"
 )) as SplitServerFnModule;
 const { ForbiddenError } = await import("../auth/middleware");
-const { seedSession, seedUser, sessionCookie } = await import(
-	"../auth/test/fixtures"
+const { seedSession, seedUser } = await import(
+	"@virtool/data/auth/test/fixtures"
 );
+const { sessionCookie } = await import("../auth/test/fixtures");
 
 let database: TestDatabase;
 let cookieHeader = "";

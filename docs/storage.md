@@ -132,8 +132,9 @@ Both-or-neither is judged **after** the files are read, so an S3 access key id
 supplied by env and a secret access key supplied by a mount are a valid pair.
 
 The backend is built once at startup, by the composition root at
-`apps/web/src/server/composition.ts`; **pass it into `data.ts` functions the way
-`db` is passed**, as an argument. `data.ts` never imports it — that would put
+`apps/web/src/server/composition.ts`, alongside `db` and `client`; **pass it
+into `data.ts` functions the way `db` is passed**, as an argument — db handle
+first, then storage, then logger. `data.ts` never imports it — that would put
 the app's configuration back inside the package's call graph. Use
 `createStorageBackend` from `@virtool/storage` when you need a backend without
 the singleton.

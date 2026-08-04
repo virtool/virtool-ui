@@ -27,9 +27,13 @@ against a stubbed query builder and fails against Postgres.
 that project: the `web` project's jsdom tests never reach Postgres,
 because the client transform strips server function bodies along with
 the server-only imports behind them. Component tests therefore run
-without Docker. Call `createTestDatabase()` from
-`@server/db/test/fixtures` in `beforeAll` to get an isolated database
-with the schema already applied, and `drop()` it in `afterAll`:
+without Docker. `@virtool/data` has its own globalSetup with byte-for-byte
+identical container options, so `withReuse()` matches the same container
+locally; CI runs the two suites as separate jobs and so boots two.
+
+Call `createTestDatabase()` from `@virtool/data/db/test/fixtures` in
+`beforeAll` to get an isolated database with the schema already applied,
+and `drop()` it in `afterAll`:
 
 ```ts
 let database: TestDatabase;
@@ -47,8 +51,21 @@ Each call creates its **own** database, because Vitest runs test files
 in parallel workers against that single container — sharing `public`
 would let one file's seed data and truncations leak into another's.
 
+It also installs the `client_events` emitter on the new connection, so a
+mutation that calls `emit` reaches the database the test is asserting
+against. A test that stubs `@virtool/data/events/emit` must therefore
+stub `createEmitter` alongside `emit`, or the fixture's install call
+finds nothing to call:
+
+```ts
+vi.mock("@virtool/data/events/emit", () => ({
+    createEmitter: vi.fn(),
+    emit: vi.fn(),
+}));
+```
+
 The schema is materialized by diffing the Drizzle schema against an
-empty one with `drizzle-kit`, so it tracks `src/server/db/schema/`
+empty one with `drizzle-kit`, so it tracks `packages/data/src/db/schema/`
 automatically and there is no second copy of the DDL to keep in step.
 `drizzle-kit` is a test-only dependency and this is **not** a migration
 path — Python still owns the real schema, and nothing here is ever

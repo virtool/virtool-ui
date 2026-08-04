@@ -8,9 +8,11 @@ them:
 - **This repo** — TanStack Start server functions under
   `apps/web/src/server/<feature>/`, called from the SPA via the React
   Query hooks that wrap them, plus a few raw routes for what a server
-  function cannot do (uploads, downloads, SSE, metrics). Every read and
-  write the browser makes goes through here; there is no HTTP client in
-  the SPA and no direct call to Python.
+  function cannot do (uploads, downloads, SSE, metrics). They read and
+  write through `@virtool/data`, the workspace package that holds the
+  Drizzle schema and every domain's `data.ts`. Every read and write the
+  browser makes goes through here; there is no HTTP client in the SPA and
+  no direct call to Python.
 - **The Python service** — still runs the job runner and owns the
   Postgres schema and its Alembic migration history. It reaches the same
   database and the same object storage bucket this repo does, so the two
@@ -29,33 +31,44 @@ migrations. When a migrating endpoint needs a schema change, the
 change lands in Python's Alembic tree first and the TS code follows.
 
 Everything below — the three-file layering, the import-direction
-invariant, the auth carve-out — governs `src/server/<feature>/`.
+invariant, the auth carve-out — governs a server feature, which spans
+`packages/data/src/<feature>/` and `apps/web/src/server/<feature>/`.
 
 ### Types are inferred from the schema, not hand-copied
 
 Older feature modules kept manually maintained types in their `types.ts`,
 matching the Python Pydantic models by convention. Where a feature's
-backend lives in `server/<feature>/data.ts`, prefer Drizzle inference
-(`InferSelectModel`, `InferInsertModel`) over re-declaring the row shape,
+backend lives in `@virtool/data`'s `<feature>/data.ts`, prefer Drizzle
+inference (`InferSelectModel`, `InferInsertModel`) over re-declaring the
+row shape,
 and re-export the inferred types from `data.ts` so `functions.ts`, hooks,
 and components share one definition. This is per-feature work — don't
 bulk-convert the `types.ts` files that remain.
 
 ## Server modules
 
-Server features live in `apps/web/src/server/<feature>/` and follow a
-three-file layering convention. Use the exact filenames `data.ts`,
-`service.ts`, and `functions.ts` — don't rename them per feature.
-They're how the layering is recognised at a glance and how the
-import-direction invariant stays enforceable.
+A server feature follows a three-file layering convention. Use the exact
+filenames `data.ts`, `service.ts`, and `functions.ts` — don't rename them
+per feature. They're how the layering is recognised at a glance and how
+the import-direction invariant stays enforceable.
+
+The three do not all live in the same place. `data.ts` lives in
+`packages/data/src/<feature>/`, published as `@virtool/data`, because it
+carries no framework surface and the jobs API and the TypeScript workflow
+ports consume it. `service.ts` and `functions.ts` live in
+`apps/web/src/server/<feature>/`.
 
 - `data.ts` — pure domain layer plus persistence and external IO
   (drizzle / postgres, blob storage, outbound HTTP to upstream
   services). No framework imports. Exports domain types, typed errors
-  that extend `AppError`, and the functions that read or mutate
-  persistent state or call external systems. Resources (db handle,
-  storage client, HTTP client) come in as explicit arguments, not
-  module-scope singletons.
+  that extend `AppError` (`@virtool/data/errors`), and the functions that
+  read or mutate persistent state or call external systems. Every
+  resource it needs — the db handle, the storage backend, the logger —
+  comes in as an explicit argument, in that order, never as a
+  module-scope singleton. The one exception is `emit`, which reads a
+  handle installed once by `createEmitter` at a composition root rather
+  than threading a client and a logger through two dozen plain mutations
+  that do not otherwise log.
 - `service.ts` — orchestration across multiple `data` modules, or
   cross-resource logic that doesn't fit cleanly in any one feature's
   `data.ts`. **Skip this file when the data layer covers the feature on
@@ -122,9 +135,11 @@ cut.
 
 Imports flow `functions → service → data` and never the reverse.
 
-- `data.ts` may import from `db/`, `errors.ts`, `events/`, and other
-  feature `data.ts` modules — but never from `service.ts` or
-  `functions.ts`.
+- `data.ts` may import from its package's `db/`, `errors.ts`, `events/`,
+  and other feature `data.ts` modules — but never from `service.ts`,
+  `functions.ts`, or anything in `apps/web`. It is in a package that does
+  not depend on the app, so the last of those is a resolution error
+  rather than a convention.
 - `service.ts` may import from any feature's `data.ts` — but never from
   `functions.ts`.
 - `functions.ts` is the only layer that imports framework code
@@ -181,12 +196,14 @@ functions, every shape they declared turned out to be a wire shape and
 moved into the package.
 
 The failure mode to avoid is a client `types.ts` that does
-`import type { Reference } from "@server/references/data"`. It
-type-checks — the arrow client → `@server/*` is legal — but it makes the
-browser's view of a shape depend on a *data-layer* module's emitted
-declarations, so a `data.ts` refactor becomes a client type break. That
-problem disappears when the type has a home neither side reaches
-through the other — `@virtool/contracts`, imported directly.
+`import type { Reference } from "@virtool/data/references/data"`. A Biome
+`noRestrictedImports` override outside `apps/web/src/server/**` now
+rejects it outright, but the reason it is worth rejecting is that it
+makes the browser's view of a shape depend on a *data-layer* module, so a
+`data.ts` refactor becomes a client type break. That problem disappears
+when the type has a home neither side reaches through the other —
+`@virtool/contracts`, imported directly. `ApiKey` was the last one, and
+moved into the package for exactly this reason.
 
 Two shapes generalised out of that move and now live in the package
 alongside the reference contracts: `UserNested` (`{ id, handle }`, the
@@ -201,9 +218,13 @@ that restated it on both sides of the boundary.
 What stays in `data.ts` is what only `data.ts` uses: the `*Values` and
 `*Options` argument types its functions accept, its `AppError`
 subclasses, and its row-to-shape mappers. A type the client never sees
-does not belong in a shared package. `@labels/*` and `@groups/*` are not
-in the block list — `labels/data.ts` still reads `DEFAULT_LABEL_COLOR`
-from `@labels/constants`, the one remaining sanctioned sideways import.
+does not belong in a shared package.
+
+There are no sanctioned sideways imports left. `DEFAULT_LABEL_COLOR` used
+to be one — `labels/data.ts` read it from `@labels/constants` — and it
+moved into `@virtool/contracts` when the data layer moved into its own
+package, which cannot reach the app's feature tree at all. The password
+policy went the same way, for the same reason.
 
 ### The labels shape (minimal)
 
@@ -220,12 +241,16 @@ No `service.ts` — the data layer is enough.
 ### The auth carve-out
 
 `auth/` is the documented exception to the three-file layout. Its
-pure layer is split by primitive (`core.ts`, `session.ts`, `tokens.ts`,
-`password.ts`, `cookies.ts`, `verify.ts`) and its wired layer adds a
-`middleware.ts` alongside `functions.ts`. The split is finer-grained
-because the primitives are distinct (crypto vs. persistence vs.
-cookies vs. verification), but the principle is the same as labels:
-pure below, framework wiring above.
+pure layer is split by primitive, and the split runs across the package
+boundary rather than along it: `password.ts`, `tokens.ts`, and
+`session.ts` are in `@virtool/data/auth/` because they are bcrypt, crypto,
+and plain Drizzle access on the `sessions` table; `core.ts`, `cookies.ts`,
+and `verify.ts` stay in `apps/web/src/server/auth/` because `cookies.ts`
+imports `@tanstack/react-start` and the other two reach it. Its wired
+layer adds a `middleware.ts` and a `policy.ts` alongside `functions.ts`.
+The split is finer-grained because the primitives are distinct (crypto
+vs. persistence vs. cookies vs. verification), but the principle is the
+same as labels: pure below, framework wiring above.
 
 Treat auth as a one-off shape, not a template. New features start with
 the standard three-file layout and only split further if the primitives

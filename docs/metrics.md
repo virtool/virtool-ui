@@ -9,7 +9,7 @@ exposition format, from a single process-wide registry.
 | --- | --- |
 | `server/metrics/registry.ts` | The `Registry`, every metric definition, and the record/render functions |
 | `server/metrics/middleware.ts` | Global request middleware that counts and times requests |
-| `server/metrics/data.ts` | Reads pool occupancy from `pg_stat_activity` |
+| `@virtool/data/metrics/data` | Reads pool occupancy from `pg_stat_activity` |
 | `@virtool/data/db/applicationName` | Builds the `application_name` that filter matches on |
 | `server/metrics/handler.ts` | Token check, pre-scrape collection, response |
 | `routes/metrics.ts` | The raw route |
@@ -177,14 +177,21 @@ no matching increment cannot drive a gauge.
 `totalCount` / `idleCount` / `waitingCount` belong to **node-postgres**
 (`pg`), a different library. Do not go looking for them here.
 
-So occupancy is read from Postgres' own view instead. `db/pg.ts` sets a
-distinctive `application_name` on every connection:
+So occupancy is read from Postgres' own view instead. `createDb`
+(`@virtool/data/db/pg`) sets a distinctive `application_name` on every
+connection and hands it back alongside the pool:
 
 ```ts
-export const applicationName = buildApplicationName(hostname());
+const applicationName = buildApplicationName(hostname());
+
+const client = postgres(config.postgresUrl, {
+	max: config.postgresPoolMax,
+	connection: { application_name: applicationName },
+});
 ```
 
-and `readConnectionCounts` filters `pg_stat_activity` on it, scoped to
+`apps/web/src/server/composition.ts` re-exports it, and the handler reads
+it from there. `readConnectionCounts` filters `pg_stat_activity` on it, scoped to
 the current database. The hostname is part of the name so **each replica
 counts its own pool**. Without it every replica would report the same
 cluster-wide total, and summing the series in Grafana would multiply it

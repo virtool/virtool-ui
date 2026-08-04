@@ -1,3 +1,22 @@
+import type { Db } from "@virtool/data/db/pg";
+import { takeFirstOrThrow } from "@virtool/data/db/rows";
+import { analyses } from "@virtool/data/db/schema/analyses";
+import { apiKeys } from "@virtool/data/db/schema/apiKeys";
+import { groups, userGroups } from "@virtool/data/db/schema/groups";
+import {
+	legacySampleLabels,
+	legacySampleSubtractions,
+	legacySamples,
+	sampleArtifacts,
+	sampleReads,
+	sampleUploads,
+} from "@virtool/data/db/schema/samples";
+import { sessions } from "@virtool/data/db/schema/sessions";
+import { users } from "@virtool/data/db/schema/users";
+import {
+	createTestDatabase,
+	type TestDatabase,
+} from "@virtool/data/db/test/fixtures";
 import { MemoryStorage } from "@virtool/storage";
 import {
 	afterAll,
@@ -8,22 +27,6 @@ import {
 	it,
 	vi,
 } from "vitest";
-import type { Db } from "../db/pg";
-import { takeFirstOrThrow } from "../db/rows";
-import { analyses } from "../db/schema/analyses";
-import { apiKeys } from "../db/schema/apiKeys";
-import { groups, userGroups } from "../db/schema/groups";
-import {
-	legacySampleLabels,
-	legacySampleSubtractions,
-	legacySamples,
-	sampleArtifacts,
-	sampleReads,
-	sampleUploads,
-} from "../db/schema/samples";
-import { sessions } from "../db/schema/sessions";
-import { users } from "../db/schema/users";
-import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
 
 vi.mock("@tanstack/react-start/server", () => ({
 	deleteCookie: vi.fn(),
@@ -39,20 +42,26 @@ vi.mock("@sentry/tanstackstart-react", () => ({
 }));
 
 let db: Db;
-vi.mock("../db/pg", () => ({
+vi.mock("../composition", () => ({
 	client: {},
 	get db() {
 		return db;
 	},
+	storage,
 }));
 
 const storage = new MemoryStorage();
-vi.mock("../composition", () => ({ storage }));
 
 const { handleSampleReads } = await import("./download");
-const { basicAuthHeader, seedApiKey, seedSession, seedUser, sessionCookie } =
-	await import("../auth/test/fixtures");
-const { addToGroup, seedGroup } = await import("../groups/test/fixtures");
+const { seedApiKey, seedSession, seedUser } = await import(
+	"@virtool/data/auth/test/fixtures"
+);
+const { basicAuthHeader, sessionCookie } = await import(
+	"../auth/test/fixtures"
+);
+const { addToGroup, seedGroup } = await import(
+	"@virtool/data/groups/test/fixtures"
+);
 
 let database: TestDatabase;
 let ownerId: number;

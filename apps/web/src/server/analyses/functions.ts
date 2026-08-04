@@ -1,20 +1,6 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { AnalysisWorkflow } from "@virtool/contracts";
-import { z } from "zod";
-import { ForbiddenError } from "../auth/middleware";
-import { authenticated } from "../auth/policy";
-import { storage } from "../composition";
-import { db } from "../db/pg";
-import { ClientError } from "../errors";
-import {
-	checkSampleRight,
-	getSampleOwnerId,
-	hasSampleRight,
-	resolveSampleActor,
-	type SampleRight,
-} from "../samples/data";
-import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 import {
 	AnalysisNoReadyIndexError,
 	AnalysisNotFoundError,
@@ -29,7 +15,21 @@ import {
 	findAnalyses,
 	getAnalysis,
 	getAnalysisSampleRights,
-} from "./data";
+} from "@virtool/data/analyses/data";
+import {
+	checkSampleRight,
+	getSampleOwnerId,
+	hasSampleRight,
+	resolveSampleActor,
+	type SampleRight,
+} from "@virtool/data/samples/data";
+import { z } from "zod";
+import { ForbiddenError } from "../auth/middleware";
+import { authenticated } from "../auth/policy";
+import { db, storage } from "../composition";
+import { ClientError } from "../errors";
+import { logger } from "../logger";
+import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 
 const analysisIdSchema = z.object({
 	analysisId: rowIdSchema,
@@ -185,7 +185,7 @@ export const deleteAnalysisFn = createServerFn({ method: "POST" })
 				"read",
 				"write",
 			]);
-			await deleteAnalysis(db, storage, data.analysisId);
+			await deleteAnalysis(db, storage, logger, data.analysisId);
 			return null;
 		} catch (err) {
 			return rethrowAsHttp(err);

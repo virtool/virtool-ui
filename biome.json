@@ -88,6 +88,26 @@
 	},
 	"overrides": [
 		{
+			"includes": ["apps/web/src/**", "!apps/web/src/server/**"],
+			"linter": {
+				"rules": {
+					"style": {
+						"noRestrictedImports": {
+							"level": "error",
+							"options": {
+								"patterns": [
+									{
+										"group": ["@virtool/data/**", "@virtool/storage", "@virtool/storage/**"],
+										"message": "@virtool/data and @virtool/storage are server-only: they open Postgres and object storage, and reach node:* APIs the browser has none of. Reach them through src/server/**, which the client transform strips."
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		{
 			"includes": ["apps/web/src/server/**"],
 			"linter": {
 				"rules": {
