@@ -37,6 +37,16 @@ export function parseHmmerTblout(lines: Iterable<string>): HmmerHit[] {
 
 		const fields = line.trim().split(/\s+/);
 
+		// Python indexes up to field 9 and raises IndexError on a short row.
+		// Failing here keeps that loud: parsing on would put NaN into a hit and
+		// carry it into the stored analysis document, where it is far harder to
+		// trace back to a truncated table.
+		if (fields.length < 10) {
+			throw new Error(
+				`Malformed hmmscan --tblout row: expected at least 10 fields, got ${fields.length}`,
+			);
+		}
+
 		const cluster = Number.parseInt(fields[0].split("_")[1], 10);
 
 		// The query name is formatted `sequence_<contig>.<orf>`.

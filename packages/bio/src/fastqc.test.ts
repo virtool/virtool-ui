@@ -286,6 +286,31 @@ describe("parseFastqcData", () => {
 		expect(quality.sequences.filter((count) => count === 99)).toEqual([]);
 	});
 
+	/**
+	 * A negative or non-numeric score would otherwise be used as an index and
+	 * hang a `-1` or `NaN` property off the array, leaving 50 elements but a
+	 * different shape.
+	 */
+	it("ignores quality scores that are negative or unparseable", () => {
+		const quality = parseFastqcData(
+			build([
+				section("Per sequence quality scores", "pass", [
+					"#Quality\tCount",
+					"-1\t7.0",
+					"bogus\t9.0",
+					"30\t11.0",
+				]),
+			]),
+		);
+
+		expect(quality.sequences).toHaveLength(50);
+		expect(quality.sequences[30]).toBe(11);
+		expect(Object.keys(quality.sequences)).toHaveLength(50);
+		expect(quality.sequences.every((count) => Number.isInteger(count))).toBe(
+			true,
+		);
+	});
+
 	it("ignores lines outside a section and content after END_MODULE", () => {
 		const quality = parseFastqcData(
 			build([["##FastQC\t0.12.1"], BASIC_STATISTICS, ["Total Sequences\t999"]]),

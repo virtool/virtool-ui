@@ -1,6 +1,15 @@
 import type { Quality } from "@virtool/contracts";
 
 /**
+ * Scratch space for decomposing a double in `roundHalfEven`.
+ *
+ * Shared rather than allocated per call — a FastQC file rounds several
+ * thousand values — and safe to share because `roundHalfEven` is synchronous
+ * and never re-enters.
+ */
+const FLOAT_VIEW = new DataView(new ArrayBuffer(8));
+
+/**
  * Round half-to-even, matching Python's built-in `round`.
  *
  * JavaScript has no equivalent. `Math.round` rounds half away from zero, and
@@ -21,10 +30,9 @@ export function roundHalfEven(value: number, digits: number): number {
 	const negative = value < 0;
 	const absolute = Math.abs(value);
 
-	const view = new DataView(new ArrayBuffer(8));
-	view.setFloat64(0, absolute);
-	const high = view.getUint32(0);
-	const low = view.getUint32(4);
+	FLOAT_VIEW.setFloat64(0, absolute);
+	const high = FLOAT_VIEW.getUint32(0);
+	const low = FLOAT_VIEW.getUint32(4);
 
 	const rawExponent = (high >>> 20) & 0x7ff;
 	const rawMantissa = (BigInt(high & 0xfffff) << 32n) | BigInt(low);
@@ -282,7 +290,12 @@ function parseSequenceQuality(lines: string[]): number[] {
 
 		const quality = Number.parseInt(parts[0], 10);
 
-		if (quality < sequences.length) {
+		// The lower bound has no counterpart in Python, where a negative index
+		// would assign from the end of the list and a non-numeric score would
+		// raise. Neither occurs in real FastQC output — Phred scores are
+		// non-negative — but without the guard a malformed line would write a
+		// `-1` or `NaN` property onto the array and quietly change its shape.
+		if (quality >= 0 && quality < sequences.length) {
 			// Truncation toward zero, not a round — Python does `int(float(...))`.
 			sequences[quality] = Math.trunc(Number.parseFloat(parts[1]));
 		}

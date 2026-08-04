@@ -79,6 +79,16 @@ describe("parseHmmerTblout", () => {
 		expect(hit.best_score).toBe(0.3);
 	});
 
+	/**
+	 * Python raises IndexError here. Parsing on would put NaN into the hit and
+	 * carry it into the stored analysis document.
+	 */
+	it("throws on a truncated vFam row rather than emitting NaN", () => {
+		expect(() => parse("vFam_5 - sequence_1.2 - 1e-10 10.0 0.1")).toThrow(
+			/expected at least 10 fields/,
+		);
+	});
+
 	it("returns an empty array for a table with no vFam rows", () => {
 		expect(parse("# comment only\n//")).toEqual([]);
 	});
