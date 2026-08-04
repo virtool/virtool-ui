@@ -76,6 +76,19 @@ RUN pnpm --filter @virtool/create-subtraction build \
 # does.
 FROM node:24-bookworm-slim AS create-subtraction
 WORKDIR /workflow
+# Not every tool in that image is a binary. `bowtie2-build` is a python3 script
+# wrapping the real `bowtie2-build-s` / `bowtie2-build-l`, choosing between them
+# by index size, and `bowtie2` is a perl one. An interpreter or two in a
+# TypeScript workflow image reads oddly, but the alternative is porting
+# bowtie2's own size heuristic, which belongs with the workflow rather than with
+# its base image.
+#
+# Neither can be trimmed. `python3-minimal` omits the stdlib, and
+# `bowtie2-build` dies on `import gzip`; the base's `perl-base` omits
+# `Sys::Hostname`, which `bowtie2` needs. Install the full packages.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends perl python3 \
+    && rm -rf /var/lib/apt/lists/*
 COPY --from=ghcr.io/virtool/tools /tools/bowtie2/2.5.4 /tools/bowtie2/2.5.4
 COPY --from=ghcr.io/virtool/tools /tools/pigz/2.8 /tools/pigz/2.8
 ENV PATH="/tools/bowtie2/2.5.4:/tools/pigz/2.8:${PATH}"

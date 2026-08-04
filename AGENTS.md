@@ -25,9 +25,10 @@ This is a **pnpm monorepo**:
   executor: a one-shot process that starts, works, exits. Only its object
   storage half is wired so far. Image: `ghcr.io/virtool/ts-create-subtraction`,
   **Debian** — it copies binaries from `ghcr.io/virtool/tools`, which are built
-  against `python:3.13-bookworm` and cannot load under musl. The other three
-  workflow executors get a directory, a Dockerfile stage and a CI matrix entry
-  when their port lands.
+  against `python:3.13-bookworm` and cannot load under musl. It also installs
+  `perl` and `python3`, because `bowtie2` and `bowtie2-build` are interpreter
+  scripts wrapping the real binaries. The other three workflow executors get a
+  directory, a Dockerfile stage and a CI matrix entry when their port lands.
 - `packages/` — shared, framework-agnostic libraries published as workspace
   packages:
   - `@virtool/logger` — pino wrapper, server-side log defaults and

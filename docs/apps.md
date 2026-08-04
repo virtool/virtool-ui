@@ -177,6 +177,19 @@ install layer stays untouched when an app is added.
   Alpine for uniformity, and do not move `apps/jobs-api` to Debian for it
   either.
 
+**Not every tool in that image is a binary,** so a workflow image also
+installs `perl` and `python3`. `bowtie2-build` is a python3 script that
+picks between the real `bowtie2-build-s` and `bowtie2-build-l` by index
+size; `bowtie2` is a perl one. Neither package can be trimmed:
+`python3-minimal` omits the stdlib and `bowtie2-build` dies on
+`import gzip`, and the base image's `perl-base` omits `Sys::Hostname`,
+which `bowtie2` needs. The alternative — calling the `-s`/`-l` binaries
+directly and porting bowtie2's own size heuristic — belongs with a
+workflow, not with the base image every workflow shares.
+
+Check a new tool's entry point rather than assuming it is an ELF:
+`docker run --rm --entrypoint sh <image> -c 'head -1 /tools/<tool>/...'`.
+
 The workflow build stage still runs on the Alpine `base`, which is safe
 only because the deployed tree carries no native addon. Check
 `find /prod/<app> -name '*.node'` before adding a dependency that might.
