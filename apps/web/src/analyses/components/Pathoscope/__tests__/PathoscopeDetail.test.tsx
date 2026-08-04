@@ -12,6 +12,7 @@ function createIsolate(
 	pi: number,
 ): PathoscopeIsolate {
 	return {
+		absentSegmentKeys: [],
 		coverage,
 		depth: 5,
 		id: name,
