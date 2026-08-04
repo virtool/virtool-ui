@@ -40,9 +40,8 @@ Older feature modules kept manually maintained types in their `types.ts`,
 matching the Python Pydantic models by convention. Where a feature's
 backend lives in `@virtool/data`'s `<feature>/data.ts`, prefer Drizzle
 inference (`InferSelectModel`, `InferInsertModel`) over re-declaring the
-row shape,
-and re-export the inferred types from `data.ts` so `functions.ts`, hooks,
-and components share one definition. This is per-feature work — don't
+row shape, and re-export the inferred types from `data.ts` so
+`functions.ts`, hooks, and components share one definition. This is per-feature work — don't
 bulk-convert the `types.ts` files that remain.
 
 ## Server modules
@@ -159,15 +158,30 @@ the `@server/*` alias, which resolves to the server project's emitted
 declarations — a one-way arrow, client → `@server/*`.
 
 The server must not reach back the other way. A `src/server` file that
-imports a browser feature module (`@administration/*`, `@app/*`,
-`@banner/*`, `@users/*`) pulls a DOM-typed source graph into the Node
-project; the moment anyone adds something DOM-dependent to that module
-the server program breaks, at a distance, for reasons that won't be
-obvious to whoever did it. And an authorization decision living in a
+imports a browser feature module pulls a DOM-typed source graph into the
+Node project; the moment anyone adds something DOM-dependent to that
+module the server program breaks, at a distance, for reasons that won't
+be obvious to whoever did it. And an authorization decision living in a
 module the browser owns is exactly the kind of thing that gets
 "simplified" by someone with no idea the server depends on it. A Biome
 `noRestrictedImports` override scoped to `apps/web/src/server/**` blocks
-those four namespaces so the boundary can't be re-crossed.
+the boundary from being re-crossed.
+
+It lists **every** feature alias, plus the `@/*` catch-all that would
+otherwise reach the same modules under another name. It used to
+enumerate four — `@administration/*`, `@app/*`, `@banner/*`, `@users/*` —
+and was already leaking by the time anyone noticed: `labels/data.ts`
+imported `DEFAULT_LABEL_COLOR` from `@labels/constants`, which was not on
+the list. An enumerated list that grows only when someone spots a
+violation is a list that is always one violation behind. Add the alias in
+the same commit as the feature directory.
+
+`packages/**` needs no such rule. It has no `@<feature>/*` path mapping
+at all, so a browser feature module is not resolvable from `@virtool/data`
+or `@virtool/storage` in the first place — which is what forced
+`DEFAULT_LABEL_COLOR` and the password policy down into
+`@virtool/contracts` when `labels/data.ts` and `settings/data.ts` moved
+into the package.
 
 Anything both sides genuinely share — the administrator-role model and
 `hasSufficientAdminRole`, the legacy `Permission` union, the banner

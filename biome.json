@@ -118,12 +118,33 @@
 								"patterns": [
 									{
 										"group": [
+											"@/**",
+											"@account/**",
 											"@administration/**",
+											"@analyses/**",
 											"@app/**",
 											"@banner/**",
-											"@users/**"
+											"@base/**",
+											"@forms/**",
+											"@groups/**",
+											"@hmm/**",
+											"@indexes/**",
+											"@jobs/**",
+											"@labels/**",
+											"@nav/**",
+											"@otus/**",
+											"@quality/**",
+											"@references/**",
+											"@samples/**",
+											"@sequences/**",
+											"@subtraction/**",
+											"@tasks/**",
+											"@tests/**",
+											"@uploads/**",
+											"@users/**",
+											"@wall/**"
 										],
-										"message": "src/server must not import from browser feature modules. The dependency arrow runs client -> @server/*; shared types and helpers belong in @virtool/contracts, which both sides import down into."
+										"message": "src/server must not import from browser feature modules. The dependency arrow runs client -> @server/*; shared types and helpers belong in @virtool/contracts, which both sides import down into. Every feature alias is listed, plus the @/* catch-all that would otherwise reach the same modules by another name."
 									}
 								]
 							}

@@ -469,14 +469,43 @@ type re-exported from the direct dependency — as `src/server/logger.ts`
 does with `Logger` from `@virtool/logger` rather than letting the type be
 inferred as pino's.
 
-The arrow runs one way. `src/server/**` must **not** import from the
-browser feature tree — a Biome `noRestrictedImports` override blocks
-`@administration/*`, `@app/*`, `@banner/*`, and `@users/*` there, because
-a server file reaching into a DOM-typed module breaks the server project
-at a distance. Shapes and helpers both sides need live *down* in
-`@virtool/contracts` (roles, permissions, banner colors, the SSE schema,
-the reference wire shapes, `UserNested`, `Task`, `SearchResult`);
-both sides import them straight from the package.
+**That trap is scoped to `apps/web/src/server/**`** — `functions.ts`,
+`service.ts`, `auth/`, `config.ts`, and the raw-route handlers. It is
+created by the declaration emit itself, and the workspace packages have
+none: their `exports` maps point at `./src/*.ts`, there is no build step
+and no `dist`, and `packages/tsconfig.base.json` sets `noEmit`. A
+`@virtool/data` or `@virtool/storage` export can infer whatever type it
+likes.
+
+The arrow runs one way, and two Biome `noRestrictedImports` overrides
+hold it there:
+
+- `apps/web/src/**` outside `src/server/**` may not import
+  `@virtool/data/**` or `@virtool/storage`. Without it those packages
+  are resolvable from any React component — the workspace makes them so
+  — and nothing else in the toolchain would say a word before Drizzle
+  and postgres.js landed in the client bundle. The `web` Vitest project
+  aliases `@server/composition`, `@server/config`, and
+  `@virtool/data/db/pg` to a guard that throws, covering the same ground
+  at runtime.
+- `apps/web/src/server/**` may not import from the browser feature tree,
+  because a server file reaching into a DOM-typed module breaks the
+  server project at a distance. **Every** feature alias is listed, plus
+  the `@/*` catch-all that would otherwise reach the same modules under
+  another name. It used to enumerate four, and was already leaking:
+  `labels/data.ts` read `DEFAULT_LABEL_COLOR` from `@labels/constants`
+  and nothing caught it. Add the alias when you add a feature directory.
+
+The packages need no rule of their own for the second: `packages/**` has
+no `@<feature>/*` path mapping at all, so a browser feature module is not
+resolvable from there. That is what forced `DEFAULT_LABEL_COLOR` and the
+password policy down into `@virtool/contracts` when `labels/data.ts` and
+`settings/data.ts` moved.
+
+Shapes and helpers both sides need live *down* in `@virtool/contracts`
+(roles, permissions, banner colors, the SSE schema, the reference wire
+shapes, `UserNested`, `Task`, `SearchResult`, `ApiKey`); both sides
+import them straight from the package.
 
 **A domain's wire shapes belong in `@virtool/contracts`, not in
 `data.ts`.** What a server function returns is read by both sides, so
@@ -629,11 +658,14 @@ flows.
 ### Data store: Postgres-first
 
 The TypeScript server reads and writes **Postgres only** (via
-Drizzle). Python is the sole owner of schema and migrations — TS code
-reads and writes against the schema Python defines. Mirror Python-side
-column defaults with Drizzle `.$defaultFn()`, never `.default()` —
-the real columns have no `server_default`, so `.default()` inserts
-`null`.
+Drizzle), through `@virtool/data`: the schema mirror is
+`packages/data/src/db/schema/`, the pool comes from `createDb`
+(`@virtool/data/db/pg`), and every query lives in a
+`packages/data/src/<feature>/data.ts`. Python is the sole owner of schema
+and migrations — TS code reads and writes against the schema Python
+defines. Mirror Python-side column defaults with Drizzle `.$defaultFn()`,
+never `.default()` — the real columns have no `server_default`, so
+`.default()` inserts `null`.
 
 Postgres is now Virtool's sole data store — Python removed MongoDB
 entirely, so every domain's records live in Postgres and there is no
@@ -649,7 +681,7 @@ this side misapplies every diff already recorded and corrupts the
 analyses read path. Renormalizing is a Python-side migration.
 
 **An index build is started here and finished by Python.**
-`createIndex` (`@server/indexes/data`) inserts the pending `indexes` row,
+`createIndex` (`@virtool/data/indexes/data`) inserts the pending `indexes` row,
 mints its `storage_key`, stamps every unbuilt `legacy_history` row with
 it, and creates the `create_index` task the Python runner claims — that
 task writes the artifact and flips `ready`. The insert runs under
