@@ -370,6 +370,9 @@ patterns.
   a class does **not** render its documented px figure: `text-sm` is 12.25px,
   `md:` breaks at 672px.
 - Size anything that holds text in `rem`; keep px for graphics that hold none.
+  Where a size has to be a number — a threshold compared against a measured
+  width — write it as a rem multiple and resolve it with `useRootFontSize`
+  (`@app/hooks`), never as a px constant.
 
 See [docs/type-scale.md](docs/type-scale.md) for which token families are
 overridden and why they move together, the class-to-px table, and the px

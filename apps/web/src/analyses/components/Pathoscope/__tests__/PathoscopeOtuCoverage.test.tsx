@@ -12,6 +12,15 @@ function mockElementWidth(width: number) {
 	vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(width);
 }
 
+/**
+ * jsdom resolves no root font size of its own, so the chart falls back to 16px
+ * and every other test here reads against that. Set one to stand in for a
+ * reader who has asked for larger text.
+ */
+function mockRootFontSize(pixels: number) {
+	document.documentElement.style.fontSize = `${pixels}px`;
+}
+
 function segment(
 	align: Coordinate[],
 	length: number,
@@ -48,6 +57,7 @@ function xValuesOf(path: SVGPathElement | undefined): number[] {
 
 afterEach(() => {
 	vi.restoreAllMocks();
+	document.documentElement.style.fontSize = "";
 });
 
 describe("<PathoscopeOtuCoverage />", () => {
@@ -347,6 +357,25 @@ describe("<PathoscopeOtuCoverage />", () => {
 
 		expect(screen.getByText("3,400 nt")).toBeVisible();
 		expect(screen.getByText("800 nt")).toBeVisible();
+	});
+
+	it("should raise the bar a panel clears to hold its length as the reader's text grows", () => {
+		// Two equal panels in 414px are 200px each — room for a length at the
+		// default preference, and none at twice it. The bar is in rem, so it
+		// doubles with the caption instead of letting it overrun the panel.
+		mockElementWidth(414);
+		mockRootFontSize(32);
+
+		renderWithProviders(
+			<PathoscopeOtuCoverage
+				maxDepth={12}
+				segments={[segment(align, 3400, "L"), segment(align, 3400, "S")]}
+			/>,
+		);
+
+		expect(screen.getByText("L")).toBeVisible();
+		expect(screen.getByText("S")).toBeVisible();
+		expect(screen.queryByText(/nt$/)).toBeNull();
 	});
 
 	it("should say why a segment nothing mapped to is blank", () => {

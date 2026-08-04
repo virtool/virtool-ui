@@ -1,4 +1,4 @@
-import { useElementSize } from "@app/hooks";
+import { useElementSize, useRootFontSize } from "@app/hooks";
 import Icon from "@base/Icon";
 import Popover from "@base/Popover";
 import Tooltip from "@base/Tooltip";
@@ -40,8 +40,15 @@ const labelHeight = "1.125rem";
  */
 const headroom = "1.125rem";
 
-/** The narrowest panel that carries both a label and its length. */
-const lengthMinWidth = 120;
+/**
+ * The narrowest panel that carries both a label and its length, in rem.
+ *
+ * The caption it has to fit is sized in rem, so this is too. Held in px it
+ * would be right at the default preference and wrong at every other, letting a
+ * panel just over the bar draw a length too wide to sit inside it — the length
+ * does not shrink, so it spills into the panel alongside.
+ */
+const lengthMinWidth = 7.5;
 
 // The ceiling is read at a glance against the curve below it, so it is rounded
 // hard rather than given the exact figure the depth column already carries.
@@ -117,10 +124,10 @@ function layOutPanels(panels: CoveragePanel[], width: number): Panel[] {
 
 // A panel with no label has nothing else to identify it, so it keeps its length
 // at any width rather than be left with a blank caption.
-function showsLength(panel: Panel): boolean {
+function showsLength(panel: Panel, rootFontSize: number): boolean {
 	return (
 		Boolean(panel.lengthLabel) &&
-		(!panel.label || panel.width >= lengthMinWidth)
+		(!panel.label || panel.width >= lengthMinWidth * rootFontSize)
 	);
 }
 
@@ -151,6 +158,7 @@ export default function PathoscopeCoverageChart({
 	panels,
 }: PathoscopeCoverageChartProps) {
 	const [ref, { width }] = useElementSize<HTMLDivElement>();
+	const rootFontSize = useRootFontSize();
 
 	const laidOut = width > 0 ? layOutPanels(panels, width) : [];
 
@@ -204,7 +212,7 @@ export default function PathoscopeCoverageChart({
 					style={{ height: labelHeight }}
 				>
 					<span className="min-w-0 text-left truncate">{panel.label}</span>
-					{showsLength(panel) && (
+					{showsLength(panel, rootFontSize) && (
 						<>
 							{panel.label && (
 								<span aria-hidden="true" className="shrink-0">

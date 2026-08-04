@@ -84,19 +84,45 @@ styling still covers it; held on the box it left a strip along the top that no
 panel covered and that stayed unhighlighted while the panel below it was
 hovered.
 
+## When it has to be a number
+
+Some sizes cannot be a CSS length. A threshold compared against a width
+measured off the DOM is a number on both sides of the comparison; so is a
+virtualizer's row height. For those, `useRootFontSize` (`@app/hooks`) reports
+the reader's preference in CSS pixels, and the figure is written as a rem
+multiple and resolved at the point of use:
+
+```ts
+const lengthMinWidth = 7.5;
+
+function showsLength(panel: Panel, rootFontSize: number): boolean {
+	return (
+		Boolean(panel.lengthLabel) &&
+		(!panel.label || panel.width >= lengthMinWidth * rootFontSize)
+	);
+}
+```
+
+Reach for it only when a rem genuinely cannot do the job. It is a subscription,
+not a read: the preference change fires no event and does not resize the root's
+own box, so the hook watches a shared off-screen 1rem probe with a
+`ResizeObserver`. Reading the size during render instead would be cached
+against inputs that never change, and a reader who enlarged their text would
+see nothing happen.
+
+The hook falls back to 16 when the document resolves no size of its own, which
+is what jsdom does — so a component test reads against the same figure the
+default preference gives, and a test that wants another sets
+`document.documentElement.style.fontSize`.
+
 ## Known px holdouts
 
-These are px today and will misbehave at a large preference. They are known,
-not overlooked, and each needs more than a unit swap:
+These are px today and misbehave at a large preference:
 
 - **Virtualized row heights** — `NuvsList` (`ROW_HEIGHT = 75`) and
-  `IsolateList` (`ROW_HEIGHT = 48`) feed a virtualizer's `estimateSize`. The
-  scroll geometry is tied to the constant, so scaling it needs measured rows or
-  a resolved px-per-rem, not a rem string.
-- **`lengthMinWidth`** in `PathoscopeCoverageChart` — a px threshold compared
-  against a measured px panel width, deciding whether a panel is wide enough to
-  carry both its label and its length. The text either side of the comparison
-  scales and the threshold does not, so at a large preference a panel just over
-  the cutoff draws a length it cannot fit.
+  `IsolateList` (`ROW_HEIGHT = 48`) feed a virtualizer's `estimateSize`. These
+  are the case `useRootFontSize` exists for, but the rows also have to actually
+  render at the height the virtualizer positions them by, so the fix is a
+  measurement question and not only a scaling one.
 - **`InitialIcon`** — sets avatar font sizes in px, so initials don't scale.
   Arguably correct for a fixed-size avatar.
