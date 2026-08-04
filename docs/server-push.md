@@ -237,11 +237,25 @@ fan-out it was avoiding rather than leaving every progress bar frozen.
 
 `tasks`/`update` frames go to `createTaskRefreshQueue`
 (`tasks/refresh.ts`), which is the same queue against `getTasksFn` and
-`taskQueryKeys` — **minus step 2**. Nothing caches a task collection, so
-there is no `lists()` key to mark stale and no counts or ordering to
-drift; adding the invalidation would be a no-op that reads as a
-requirement. Everything else carries over unchanged, including the
-active-observer filter and the serialized drain.
+`taskQueryKeys`, with two differences.
+
+**No `lists()` invalidation (step 2).** Nothing caches a task
+collection, so there is no key to mark stale and no counts or ordering
+to drift; adding the invalidation would be a no-op that reads as a
+requirement.
+
+**An id the filter drops is still marked stale.** Step 3 skips reading
+a detail with no active observer, but it invalidates it with
+`refetchType: "none"` on the way past. `useFetchTask` pins a seeded
+entry with `staleTime: Infinity`, and a remount reads that cached entry
+rather than the fresher seed its parent now holds — so a task that
+finished while the page was away would render its last in-progress step
+for the whole `gcTime`. `isInvalidated` outranks `staleTime`, so
+marking it is what makes the remount refetch, and it is exactly what
+the per-frame `invalidateQueries` this replaced did. `refetchType:
+"none"` is what keeps it from becoming the fan-out the filter exists to
+avoid. **The jobs queue does not do this yet and has the same gap** —
+`useFetchJob` seeds and pins the same way (VIR-2882 review).
 
 Two properties of these queues are load-bearing, and both are easy to
 undo by accident:
@@ -250,9 +264,12 @@ undo by accident:
   `getQueryData(...) !== undefined` looks equivalent and is not.
   React Query keeps a detail's data for the whole `gcTime` after its row
   unmounts, and `invalidateQueries` defaults to `refetchType: "active"`
-  — so the invalidation this replaced never refetched those. Reading
-  them here would mean a batch per wave for minutes after navigating off
-  a job-heavy page: a fan-out the old path did not have.
+  — so the invalidation this replaced never refetched those *then*.
+  Reading them here would mean a batch per wave for minutes after
+  navigating off a job-heavy page: a fan-out the old path did not have.
+  Note what it *did* do, which the tasks queue restores and the jobs
+  queue still does not: mark them invalidated, so the remount refetches
+  rather than rendering a pinned, seeded entry until `gcTime` elapses.
 - **Batches never overlap.** `drain()` runs waves one at a time. Two
   reads in flight at once can resolve out of order, and the loser's
   `setQueryData` writes a stale snapshot over a newer one — dragging a

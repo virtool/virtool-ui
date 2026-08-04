@@ -74,11 +74,26 @@ export function createTaskRefreshQueue(
 		// defaults to `refetchType: "active"` and never refetched those, so
 		// reading them here would be a fan-out the old path did not have.
 		const cache = queryClient.getQueryCache();
-		const watched = ids.filter(
-			(id) =>
-				cache.find({ queryKey: taskQueryKeys.detail(id), type: "active" }) !==
-				undefined,
-		);
+		const watched: number[] = [];
+
+		for (const id of ids) {
+			const queryKey = taskQueryKeys.detail(id);
+
+			if (cache.find({ queryKey, type: "active" })) {
+				watched.push(id);
+				continue;
+			}
+
+			// Dropping the id is not the same as ignoring the frame. `useFetchTask`
+			// pins a seeded entry with `staleTime: Infinity`, and a remount reads
+			// the cached entry rather than the fresher seed its parent now holds —
+			// so a task that finished while the page was away would render its last
+			// in-progress step until gcTime elapsed. Marking it invalidated is what
+			// the per-frame invalidation this replaced did, and `isInvalidated`
+			// outranks `staleTime`, so the remount refetches. `refetchType: "none"`
+			// keeps that from becoming the fan-out the filter exists to avoid.
+			queryClient.invalidateQueries({ queryKey, refetchType: "none" });
+		}
 
 		if (watched.length === 0) {
 			return;

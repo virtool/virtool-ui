@@ -139,6 +139,22 @@ describe("createTaskRefreshQueue", () => {
 		expect(taskServerFnMocks.getTasksFn).not.toHaveBeenCalled();
 	});
 
+	// `useFetchTask` pins a seeded entry with `staleTime: Infinity`, so without
+	// this the remount would render the last in-progress step for the whole
+	// gcTime rather than refetching a task that finished while the page was away.
+	it("marks a cached but unmounted detail stale so its remount refetches", async () => {
+		queryClient.setQueryData(taskQueryKeys.detail(1), createTask(1));
+
+		const queue = createTaskRefreshQueue(queryClient);
+		queue(1);
+
+		await vi.advanceTimersByTimeAsync(FLUSH_MS);
+
+		expect(
+			queryClient.getQueryState(taskQueryKeys.detail(1))?.isInvalidated,
+		).toBe(true);
+	});
+
 	it("splits a wave larger than the request cap", async () => {
 		const ids = Array.from({ length: 150 }, (_, index) => index + 1);
 		mockGetTasks(ids.map((id) => createTask(id)));

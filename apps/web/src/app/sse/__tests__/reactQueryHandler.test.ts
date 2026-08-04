@@ -17,6 +17,22 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { reactQueryHandler } from "../reactQueryHandler";
 import handlerSource from "../reactQueryHandler.ts?raw";
 
+// The batching queues are covered by their own suites. Stubbing them here keeps
+// this file about routing: which frames reach a queue and which reach
+// `invalidateQueries`.
+const { queueJobRefresh, queueTaskRefresh } = vi.hoisted(() => ({
+	queueJobRefresh: vi.fn(),
+	queueTaskRefresh: vi.fn(),
+}));
+
+vi.mock("@jobs/refresh", () => ({
+	createJobRefreshQueue: () => queueJobRefresh,
+}));
+
+vi.mock("@tasks/refresh", () => ({
+	createTaskRefreshQueue: () => queueTaskRefresh,
+}));
+
 describe("reactQueryHandler", () => {
 	let queryClient: QueryClient;
 	let invalidate: ReturnType<typeof vi.spyOn>;
@@ -24,6 +40,8 @@ describe("reactQueryHandler", () => {
 	beforeEach(() => {
 		queryClient = new QueryClient();
 		invalidate = vi.spyOn(queryClient, "invalidateQueries");
+		queueJobRefresh.mockClear();
+		queueTaskRefresh.mockClear();
 	});
 
 	describe("selects the narrowest key the domain actually caches under", () => {
@@ -246,18 +264,14 @@ describe("reactQueryHandler", () => {
 	// detail is a request per running job per progress wave. These frames go to
 	// the batching queue instead — see `jobs/__tests__/refresh.test.ts`.
 	it("batches job updates rather than invalidating a detail per frame", () => {
-		queryClient.setQueryData(jobQueryKeys.detail(42), { id: 42 });
-
 		reactQueryHandler(queryClient)({
 			domain: "jobs",
 			operation: "update",
 			id: 42,
 		});
 
+		expect(queueJobRefresh).toHaveBeenCalledExactlyOnceWith(42);
 		expect(invalidate).not.toHaveBeenCalled();
-		expect(
-			queryClient.getQueryState(jobQueryKeys.detail(42))?.isInvalidated,
-		).toBe(false);
 	});
 
 	// A running task emits a frame per progress step — over a hundred for a
@@ -265,18 +279,29 @@ describe("reactQueryHandler", () => {
 	// These frames go to the batching queue instead — see
 	// `tasks/__tests__/refresh.test.ts`.
 	it("batches task updates rather than invalidating a detail per frame", () => {
-		queryClient.setQueryData(taskQueryKeys.detail(9), { id: 9 });
-
 		reactQueryHandler(queryClient)({
 			domain: "tasks",
 			operation: "update",
 			id: 9,
 		});
 
+		expect(queueTaskRefresh).toHaveBeenCalledExactlyOnceWith(9);
 		expect(invalidate).not.toHaveBeenCalled();
-		expect(
-			queryClient.getQueryState(taskQueryKeys.detail(9))?.isInvalidated,
-		).toBe(false);
+	});
+
+	// Only `update` frames are hot enough to batch. An insert or delete still
+	// takes the generic path, so a domain cannot lose them to the queue.
+	it("leaves non-update task frames on the invalidation path", () => {
+		reactQueryHandler(queryClient)({
+			domain: "tasks",
+			operation: "insert",
+			id: 9,
+		});
+
+		expect(queueTaskRefresh).not.toHaveBeenCalled();
+		expect(invalidate).toHaveBeenCalledExactlyOnceWith({
+			queryKey: taskQueryKeys.all(),
+		});
 	});
 
 	it("ignores messages for unknown domains", () => {
