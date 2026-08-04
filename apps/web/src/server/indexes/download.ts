@@ -1,11 +1,11 @@
 import { requireAuthenticatedRequest } from "../auth/middleware";
+import { storage } from "../composition";
 import { db } from "../db/pg";
 import { streamStorageObject, textResponse } from "../http";
 import {
 	checkReferenceVisibility,
 	resolveReferenceActor,
 } from "../references/data";
-import { storage } from "../storage";
 import { getIndexFileKey, getIndexReferenceId } from "./data";
 
 /**

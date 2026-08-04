@@ -1,3 +1,4 @@
+import { MemoryStorage } from "@virtool/storage";
 import { eq } from "drizzle-orm";
 import {
 	afterAll,
@@ -8,7 +9,6 @@ import {
 	it,
 	vi,
 } from "vitest";
-
 import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import { apiKeys } from "../db/schema/apiKeys";
@@ -25,7 +25,6 @@ import { sessions } from "../db/schema/sessions";
 import { tasks } from "../db/schema/tasks";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
-import { MemoryStorage } from "../storage/memory";
 
 vi.mock("@tanstack/react-start/server", () => ({
 	deleteCookie: vi.fn(),
@@ -49,10 +48,7 @@ vi.mock("../db/pg", () => ({
 }));
 
 const storage = new MemoryStorage();
-vi.mock("../storage", async (importOriginal) => ({
-	...(await importOriginal<typeof import("../storage")>()),
-	storage,
-}));
+vi.mock("../composition", () => ({ storage }));
 
 const { handleIndexFile } = await import("./download");
 const { basicAuthHeader, seedApiKey, seedSession, seedUser, sessionCookie } =

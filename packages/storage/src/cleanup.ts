@@ -1,4 +1,4 @@
-import type { StorageBackend } from "@virtool/storage/types";
+import type { StorageBackend } from "./types";
 
 /** A key that could not be deleted, paired with the error that stopped it. */
 export type DeleteFailure = {

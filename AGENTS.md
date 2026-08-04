@@ -671,7 +671,7 @@ keys instead; `src/app/__tests__/clientEnv.test.ts` enforces this.
 
 Unit-test anything that stores files against `MemoryStorage`. The
 backends themselves are tested against real Garage and Azurite
-containers in the `storage` Vitest project.
+containers in `@virtool/storage`'s `integration` Vitest project.
 
 See [docs/storage.md](docs/storage.md) for the interface, the key
 layout, the backend configuration and its both-or-neither credential
@@ -926,11 +926,13 @@ and make commits easier to find later.
   `server` runs `src/server/**` under **node** — server code runs on
   Node in production, and under jsdom its typed arrays come from a
   different realm, so bytes compare unequal to identical bytes.
-  `storage` runs the storage backends against real Garage and Azurite
-  containers. `a11y` runs `*.a11y.test.tsx` under headless Chromium
+  `a11y` runs `*.a11y.test.tsx` under headless Chromium
   (Playwright) so axe's layout-dependent rules — `color-contrast` above
   all — can actually run; it needs `playwright install chromium`. `pnpm
-  test` runs all four; use `--project <name>` to narrow.
+  test` runs all three; use `--project <name>` to narrow.
+- **Projects (`@virtool/storage`):** `unit` covers everything testable
+  against `MemoryStorage`; `integration` runs the S3 and Azure backends
+  against real Garage and Azurite containers and has its own CI job.
 - **Test location:** `__tests__/` directories alongside source files
   (web), or sibling `*.test.ts` files (packages).
 - **Test files:** `ComponentName.test.tsx` or `functionName.test.ts`.

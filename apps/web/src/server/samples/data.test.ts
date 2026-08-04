@@ -1,3 +1,4 @@
+import { MemoryStorage } from "@virtool/storage";
 import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { seedUser } from "../auth/test/fixtures";
@@ -20,7 +21,6 @@ import { uploads } from "../db/schema/uploads";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
 import { addToGroup, seedGroup } from "../groups/test/fixtures";
-import { MemoryStorage } from "../storage";
 import { UploadNotFoundError } from "../uploads/data";
 import {
 	type CreateSampleValues,

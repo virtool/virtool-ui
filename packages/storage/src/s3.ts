@@ -7,9 +7,9 @@ import {
 	S3Client,
 } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
-import { StorageError, StorageKeyNotFoundError } from "@virtool/storage/errors";
-import type { StorageBackend, StorageObjectInfo } from "@virtool/storage/types";
-import type { StorageConfig } from "../config";
+import type { StorageConfig } from "./config";
+import { StorageError, StorageKeyNotFoundError } from "./errors";
+import type { StorageBackend, StorageObjectInfo } from "./types";
 
 type S3Config = Extract<StorageConfig, { kind: "s3" }>;
 

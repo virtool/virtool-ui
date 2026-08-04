@@ -3,9 +3,9 @@ import { setResponseStatus } from "@tanstack/react-start/server";
 import { UPLOAD_TYPES } from "@virtool/contracts";
 import { z } from "zod";
 import { authenticated, permission } from "../auth/policy";
+import { storage } from "../composition";
 import { db } from "../db/pg";
 import { ClientError } from "../errors";
-import { storage } from "../storage";
 import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 import {
 	deleteUpload,

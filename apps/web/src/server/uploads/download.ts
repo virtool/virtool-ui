@@ -1,7 +1,7 @@
 import { requireAuthenticatedRequest } from "../auth/middleware";
+import { storage } from "../composition";
 import { db } from "../db/pg";
 import { streamStorageObject, textResponse } from "../http";
-import { storage } from "../storage";
 import { getUploadFile } from "./data";
 
 /**

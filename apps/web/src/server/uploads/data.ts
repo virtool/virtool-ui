@@ -4,6 +4,8 @@ import type {
 	UploadType,
 	UserNested,
 } from "@virtool/contracts";
+import type { StorageBackend } from "@virtool/storage";
+import { uploadFileKey } from "@virtool/storage";
 import { and, count, desc, eq, inArray } from "drizzle-orm";
 import type { DbOrTx } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
@@ -12,8 +14,6 @@ import { users as usersTable } from "../db/schema/users";
 import { AppError } from "../errors";
 import { emit } from "../events/emit";
 import { logger } from "../logger";
-import type { StorageBackend } from "../storage";
-import { uploadFileKey } from "../storage";
 
 /** Fields needed to create an upload; `body` streams straight to storage. */
 export type UploadCreateValues = {

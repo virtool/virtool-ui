@@ -1,7 +1,7 @@
-import { StorageKeyNotFoundError } from "@virtool/storage/errors";
 import { describe, expect, it } from "vitest";
-import { MemoryStorage } from "../memory";
-import { collect, listAll, readText, stream, streamOf } from "../test/fixtures";
+import { StorageKeyNotFoundError } from "./errors";
+import { MemoryStorage } from "./memory";
+import { collect, listAll, readText, stream, streamOf } from "./test/fixtures";
 
 describe("MemoryStorage", () => {
 	it("round-trips a written object and reports bytes written", async () => {

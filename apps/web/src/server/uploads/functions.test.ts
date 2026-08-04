@@ -1,3 +1,4 @@
+import { MemoryStorage } from "@virtool/storage";
 import {
 	afterAll,
 	beforeAll,
@@ -7,13 +8,11 @@ import {
 	it,
 	vi,
 } from "vitest";
-
 import type { Db } from "../db/pg";
 import { sessions } from "../db/schema/sessions";
 import { type UploadRow, uploads as uploadsTable } from "../db/schema/uploads";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
-import { MemoryStorage } from "../storage/memory";
 import { callServerFn, type SplitServerFnModule } from "../test/serverFn";
 
 const getRequest = vi.fn();
@@ -43,10 +42,7 @@ vi.mock("../db/pg", () => ({
 vi.mock("../events/emit", () => ({ emit: vi.fn() }));
 
 const storage = new MemoryStorage();
-vi.mock("../storage", () => ({
-	storage,
-	uploadFileKey: (nameOnDisk: string) => `files/${nameOnDisk}`,
-}));
+vi.mock("../composition", () => ({ storage }));
 
 const handlers = (await import(
 	"./functions.ts?tss-serverfn-split"

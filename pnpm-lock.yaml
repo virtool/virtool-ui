@@ -87,18 +87,6 @@ importers:
 
   apps/web:
     dependencies:
-      '@aws-sdk/client-s3':
-        specifier: ^3.1085.0
-        version: 3.1085.0
-      '@aws-sdk/lib-storage':
-        specifier: ^3.1094.0
-        version: 3.1094.0(@aws-sdk/client-s3@3.1085.0)
-      '@azure/identity':
-        specifier: ^4.13.1
-        version: 4.13.1
-      '@azure/storage-blob':
-        specifier: ^12.33.0
-        version: 12.33.0
       '@dnd-kit/core':
         specifier: ^6.3.1
         version: 6.3.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -289,9 +277,6 @@ importers:
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
-      testcontainers:
-        specifier: ^12.0.4
-        version: 12.0.4
       vite:
         specifier: ^8.1.5
         version: 8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0)
@@ -338,7 +323,23 @@ importers:
   packages/sentry: {}
 
   packages/storage:
+    dependencies:
+      '@aws-sdk/client-s3':
+        specifier: ^3.1085.0
+        version: 3.1085.0
+      '@aws-sdk/lib-storage':
+        specifier: ^3.1094.0
+        version: 3.1094.0(@aws-sdk/client-s3@3.1085.0)
+      '@azure/identity':
+        specifier: ^4.13.1
+        version: 4.13.1
+      '@azure/storage-blob':
+        specifier: ^12.33.0
+        version: 12.33.0
     devDependencies:
+      testcontainers:
+        specifier: ^12.0.4
+        version: 12.0.4
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(jsdom@29.1.1)(vite@8.1.5(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
@@ -3300,10 +3301,6 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
-
-  '@smithy/core@3.29.3':
-    resolution: {integrity: sha512-L+Ys6ecjk5vwPMAKHBpPKlJ3DkqwNcnfEISXBZIsVvWG/XKXfsAP8mwIYlTeLcd2ElHdesPI8OuOmJSFAPhm6A==}
-    engines: {node: '>=18.0.0'}
 
   '@smithy/core@3.29.8':
     resolution: {integrity: sha512-rpCbCV+TimOBi3VLNBMmtTvgfOWcFIEAru3+TFlG87SL2F+te4jOnnNR+cf3uR4eJ5Qf4LnT80fqnBKgPRS6zA==}
@@ -8393,7 +8390,7 @@ snapshots:
       '@aws-sdk/middleware-sdk-s3': 3.972.62
       '@aws-sdk/signature-v4-multi-region': 3.996.39
       '@aws-sdk/types': 3.974.0
-      '@smithy/core': 3.29.3
+      '@smithy/core': 3.29.8
       '@smithy/fetch-http-handler': 5.6.5
       '@smithy/node-http-handler': 4.9.5
       '@smithy/types': 4.16.1
@@ -11078,11 +11075,6 @@ snapshots:
   '@sindresorhus/is@7.2.0': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
-
-  '@smithy/core@3.29.3':
-    dependencies:
-      '@smithy/types': 4.16.1
-      tslib: 2.8.1
 
   '@smithy/core@3.29.8':
     dependencies:

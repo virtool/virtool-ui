@@ -1,3 +1,4 @@
+import { MemoryStorage } from "@virtool/storage";
 import {
 	afterAll,
 	beforeAll,
@@ -7,14 +8,12 @@ import {
 	it,
 	vi,
 } from "vitest";
-
 import type { Db } from "../db/pg";
 import { apiKeys } from "../db/schema/apiKeys";
 import { sessions } from "../db/schema/sessions";
 import { uploads as uploadsTable } from "../db/schema/uploads";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
-import { MemoryStorage } from "../storage/memory";
 
 vi.mock("@tanstack/react-start/server", () => ({
 	deleteCookie: vi.fn(),
@@ -40,10 +39,7 @@ vi.mock("../db/pg", () => ({
 vi.mock("../events/emit", () => ({ emit: vi.fn() }));
 
 const storage = new MemoryStorage();
-vi.mock("../storage", () => ({
-	storage,
-	uploadFileKey: (nameOnDisk: string) => `files/${nameOnDisk}`,
-}));
+vi.mock("../composition", () => ({ storage }));
 
 const { handleUpload } = await import("./upload");
 const { basicAuthHeader, seedApiKey, seedSession, seedUser, sessionCookie } =

@@ -15,7 +15,7 @@ import type {
 	IndexOtu,
 	IndexSearchResult,
 } from "@virtool/contracts";
-import { indexFileKey } from "@virtool/storage/keys";
+import { indexFileKey } from "@virtool/storage";
 import {
 	and,
 	asc,

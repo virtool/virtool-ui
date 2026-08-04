@@ -1,5 +1,5 @@
-import { StorageKeyNotFoundError } from "@virtool/storage/errors";
-import type { StorageBackend, StorageObjectInfo } from "@virtool/storage/types";
+import { StorageKeyNotFoundError } from "../errors";
+import type { StorageBackend, StorageObjectInfo } from "../types";
 
 /** An async stream of the given chunks, as a backend's write() expects. */
 export async function* stream(

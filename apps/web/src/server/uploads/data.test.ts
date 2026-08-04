@@ -1,13 +1,12 @@
 import type { UploadType } from "@virtool/contracts";
+import { MemoryStorage, uploadFileKey } from "@virtool/storage";
 import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-
 import { seedUser } from "../auth/test/fixtures";
 import type { Db } from "../db/pg";
 import { type UploadRow, uploads as uploadsTable } from "../db/schema/uploads";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
-import { MemoryStorage, uploadFileKey } from "../storage";
 import {
 	createUpload,
 	deleteUpload,

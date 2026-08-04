@@ -2,8 +2,8 @@ import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { authenticated, permission } from "../auth/policy";
+import { storage } from "../composition";
 import { db } from "../db/pg";
-import { storage } from "../storage";
 import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 import {
 	createSubtraction,

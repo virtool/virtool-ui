@@ -4,10 +4,10 @@ import {
 	BlobServiceClient,
 	StorageSharedKeyCredential,
 } from "@azure/storage-blob";
-import { StorageError, StorageKeyNotFoundError } from "@virtool/storage/errors";
-import type { StorageBackend, StorageObjectInfo } from "@virtool/storage/types";
-import { STORAGE_CHUNK_SIZE } from "@virtool/storage/types";
-import type { StorageConfig } from "../config";
+import type { StorageConfig } from "./config";
+import { StorageError, StorageKeyNotFoundError } from "./errors";
+import type { StorageBackend, StorageObjectInfo } from "./types";
+import { STORAGE_CHUNK_SIZE } from "./types";
 
 type AzureConfig = Extract<StorageConfig, { kind: "azure" }>;
 

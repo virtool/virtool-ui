@@ -131,10 +131,15 @@ an empty value for something it has nothing to put in.
 Both-or-neither is judged **after** the files are read, so an S3 access key id
 supplied by env and a secret access key supplied by a mount are a valid pair.
 
-The backend is built once at startup, by the composition root in
-`apps/web/src/server`; **pass it into `data.ts` functions the way `db` is
-passed**, as an argument. `data.ts` never imports it. Use `createStorageBackend`
-from `@virtool/storage` when you need a backend without the singleton.
+The backend is built once at startup, by the composition root at
+`apps/web/src/server/composition.ts`; **pass it into `data.ts` functions the way
+`db` is passed**, as an argument. `data.ts` never imports it — that would put
+the app's configuration back inside the package's call graph. Use
+`createStorageBackend` from `@virtool/storage` when you need a backend without
+the singleton.
+
+The package constructs nothing at import time, which is what lets the jobs API
+and the workflow ports reuse it, and is why it can declare `sideEffects: false`.
 
 ### Never let storage secrets reach the browser
 
@@ -186,15 +191,16 @@ fake by default; it is what keeps the ordinary test loop container-free.
 Helpers for streaming, draining, and listing are in
 `@virtool/storage/test/fixtures`.
 
-**The backends themselves are tested against real services.** The `storage`
-Vitest project starts Garage (S3-compatible) and Azurite in testcontainers and
-runs the same suite against both. These are the tests that catch the quirks
-above; `MemoryStorage` cannot.
+**The backends themselves are tested against real services.** The package's
+`integration` Vitest project starts Garage (S3-compatible) and Azurite in
+testcontainers and runs the same suite against both. These are the tests that
+catch the quirks above; `MemoryStorage` cannot. It has its own CI job, so
+pulling those images stays out of the fast package loop.
 
 ```bash
-pnpm test                                  # everything, including the containers
-pnpm --filter @virtool/web exec vitest run --project storage  # storage only
-pnpm --filter @virtool/web exec vitest run --project web      # no containers
+pnpm test                                                          # everything
+pnpm --filter @virtool/storage test                                # both projects
+pnpm --filter @virtool/storage exec vitest run --project unit      # no containers
 ```
 
 Two details of that setup matter if you touch it:

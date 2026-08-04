@@ -4,9 +4,9 @@ import { SampleCreateRequest, SampleUpdateRequest } from "@virtool/contracts";
 import { z } from "zod";
 import { ForbiddenError } from "../auth/middleware";
 import { authenticated, permission } from "../auth/policy";
+import { storage } from "../composition";
 import { db } from "../db/pg";
 import { ClientError } from "../errors";
-import { storage } from "../storage";
 import { UploadNotFoundError, UploadReservedError } from "../uploads/data";
 import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 import {

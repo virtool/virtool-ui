@@ -4,6 +4,7 @@ import { AnalysisWorkflow } from "@virtool/contracts";
 import { z } from "zod";
 import { ForbiddenError } from "../auth/middleware";
 import { authenticated } from "../auth/policy";
+import { storage } from "../composition";
 import { db } from "../db/pg";
 import { ClientError } from "../errors";
 import {
@@ -13,7 +14,6 @@ import {
 	resolveSampleActor,
 	type SampleRight,
 } from "../samples/data";
-import { storage } from "../storage";
 import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 import {
 	AnalysisNoReadyIndexError,

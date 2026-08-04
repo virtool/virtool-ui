@@ -1,6 +1,6 @@
+import { MemoryStorage } from "@virtool/storage";
 import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-
 import { seedUser } from "../auth/test/fixtures";
 import type { Db } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
@@ -10,7 +10,6 @@ import { subtractionFiles, subtractions } from "../db/schema/subtractions";
 import { uploads } from "../db/schema/uploads";
 import { users } from "../db/schema/users";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
-import { MemoryStorage } from "../storage";
 import {
 	createSubtraction,
 	deleteSubtraction,

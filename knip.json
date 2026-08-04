@@ -12,7 +12,6 @@
 				"src/router.tsx",
 				"src/instrument.server.ts",
 				"src/routes/**/*.{ts,tsx}",
-				"src/server/storage/index.ts",
 				"src/types/window.ts",
 				"src/tests/postgresGuard.ts"
 			],

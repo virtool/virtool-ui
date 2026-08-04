@@ -189,9 +189,9 @@ so `color-contrast` stays off unless you re-enable it explicitly.
 
 `color-contrast` — and any axe rule that depends on computed layout or
 visibility — only produces meaningful results with a real layout engine,
-so it runs in a fourth Vitest project, `a11y`, under headless Chromium
-via Playwright. `pnpm test` runs it alongside `web`, `server`, and
-`storage`; narrow to it with `pnpm --filter @virtool/web exec vitest run
+so it runs in a third Vitest project, `a11y`, under headless Chromium
+via Playwright. `pnpm test` runs it alongside `web` and `server`;
+narrow to it with `pnpm --filter @virtool/web exec vitest run
 --project a11y`. It needs the Chromium binary — `pnpm --filter
 @virtool/web exec playwright install chromium` once locally (CI installs
 it before the test step).

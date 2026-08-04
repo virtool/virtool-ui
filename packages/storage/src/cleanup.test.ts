@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { deletePrefix } from "../cleanup";
-import { MemoryStorage } from "../memory";
-import { failingStorage, listAll, streamOf } from "../test/fixtures";
+import { deletePrefix } from "./cleanup";
+import { MemoryStorage } from "./memory";
+import { failingStorage, listAll, streamOf } from "./test/fixtures";
 
 describe("deletePrefix", () => {
 	it("deletes every object under the prefix and leaves the rest", async () => {
