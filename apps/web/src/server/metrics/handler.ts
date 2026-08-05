@@ -1,5 +1,5 @@
 import { isBearerTokenValid } from "@virtool/contracts/bearer";
-import { readConnectionCounts } from "@virtool/data/metrics/data";
+import { readConnectionCountsBounded } from "@virtool/data/metrics/data";
 import { applicationName, client } from "../composition";
 import { config } from "../config";
 import { logger } from "../logger";
@@ -8,34 +8,6 @@ import {
 	renderMetrics,
 	setPostgresConnections,
 } from "./registry";
-
-/**
- * How long a scrape waits on the pool probe before abandoning it.
- *
- * The probe is a query on the very pool it measures, so a saturated pool queues
- * it *client-side*, where nothing rejects and no statement timeout applies. Left
- * unbounded it would hang past Prometheus' scrape deadline and lose the whole
- * response — the process and request metrics included — exactly when saturation
- * is the thing worth seeing. Two seconds sits well inside a default 10s scrape
- * timeout.
- */
-const POOL_PROBE_TIMEOUT_MS = 2000;
-
-/**
- * Resolve `promise`, or reject once `ms` have passed.
- *
- * The abandoned promise is left to settle on its own; it is a single trivial
- * query and its result is simply discarded.
- */
-function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
-	let timer: ReturnType<typeof setTimeout> | undefined;
-
-	const deadline = new Promise<never>((_, reject) => {
-		timer = setTimeout(() => reject(new Error("timed out")), ms);
-	});
-
-	return Promise.race([promise, deadline]).finally(() => clearTimeout(timer));
-}
 
 /**
  * Serve the Prometheus scrape endpoint backing `GET /metrics`.
@@ -70,10 +42,7 @@ export async function handleMetrics(request: Request): Promise<Response> {
 	// metrics carry on.
 	try {
 		setPostgresConnections(
-			await withTimeout(
-				readConnectionCounts(client, applicationName),
-				POOL_PROBE_TIMEOUT_MS,
-			),
+			await readConnectionCountsBounded(client, applicationName),
 		);
 	} catch (err) {
 		logger.warn({ err }, "could not read postgres connection counts");
