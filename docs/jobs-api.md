@@ -167,12 +167,18 @@ connects as `virtool-ts-jobs-api@<hostname>` and counts **only its own
 backends** — not the web app's, which share the database and, on a
 developer machine, the hostname too.
 
-The read is time-bounded at two seconds. The probe is a query on the very
+The handler calls `readConnectionCountsBounded`, which applies the shared
+`POOL_PROBE_TIMEOUT_MS` (two seconds). The probe is a query on the very
 pool it measures, so a saturated pool queues it *client-side*, where
 nothing rejects and no statement timeout applies; unbounded it would hang
 past the scrape deadline and cost the whole response — process and
 request metrics included — exactly when saturation is worth seeing. A
 failed or slow read logs a warning and drops only the pool gauges.
+
+The deadline lives in `@virtool/data` rather than beside each handler
+because both services expose pool gauges and both need the same bound for
+the same reason; a second copy is free to drift to a value that no longer
+fits inside the scrape timeout.
 
 ## Sentry
 
@@ -191,6 +197,15 @@ environment by the SDK helper. `readDsn` goes straight to `process.env`
 and would skip the `<KEY>_FILE` resolution that `config.ts` has already
 done. No DSN means no `init`, so dev and unconfigured deploys are
 untouched.
+
+**The process must be started with `node --import @sentry/node/preload`**,
+as the Dockerfile `CMD` and the `start` script both do. Because the DSN
+comes from file-backed config, `Sentry.init` cannot run until config has
+been read — by which point ESM has already evaluated every static import,
+including `@hono/node-server` and `postgres`. The preload hook installs
+the SDK's module hooks ahead of all of them, which is what makes that late
+init safe. Drop the flag and the service still reports errors while
+recording no HTTP or database spans, with nothing in the logs to say so.
 
 There is **no `beforeSend` filter**, and that asymmetry with `apps/web`
 is deliberate. The web app needs one because a server function signals an

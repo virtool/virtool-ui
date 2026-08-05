@@ -10,6 +10,15 @@ export type ServerConfig = {
 	postgresUrl: string;
 	postgresPoolMax: number;
 	metricsToken: string | undefined;
+	/**
+	 * Server-side Sentry DSN.
+	 *
+	 * Parsed here rather than read by `@virtool/sentry`'s `readDsn`, which goes
+	 * straight to `process.env` and so would miss a `VT_SENTRY_DSN_FILE` mount.
+	 * The browser DSN is a separate value baked in at build time by Vite and
+	 * cannot be file-backed at all.
+	 */
+	sentryDsn: string | undefined;
 	storage: StorageConfig;
 };
 
@@ -26,6 +35,12 @@ const ServerEnv = z.object({
 	// tooling injects for a value it has nothing to put in — leaves `/metrics`
 	// returning 404, so upgrading never starts exposing internals by surprise.
 	VT_METRICS_TOKEN: z.preprocess(
+		(value) => (value === "" ? undefined : value),
+		z.string().optional(),
+	),
+	// Listed here so it picks up the `<KEY>_FILE` resolution every other key
+	// gets. Unset — or empty, which deployment tooling injects — disables Sentry.
+	VT_SENTRY_DSN: z.preprocess(
 		(value) => (value === "" ? undefined : value),
 		z.string().optional(),
 	),
@@ -47,6 +62,7 @@ const ServerEnvSchema = ServerEnv.transform((raw, ctx) => ({
 	postgresUrl: raw.VT_POSTGRES_URL,
 	postgresPoolMax: raw.VT_POSTGRES_POOL_MAX ?? DEFAULT_POSTGRES_POOL_MAX,
 	metricsToken: raw.VT_METRICS_TOKEN,
+	sentryDsn: raw.VT_SENTRY_DSN,
 	storage: buildStorage(raw, ctx),
 }));
 

@@ -74,7 +74,13 @@ COPY --from=build-jobs-api /prod/jobs-api ./
 EXPOSE 9950
 ENV VT_JOBS_API_HOST="0.0.0.0"
 ENV VT_JOBS_API_PORT="9950"
-CMD ["node", "dist/index.mjs"]
+# `--import @sentry/node/preload` installs Sentry's module hooks before any
+# application import is evaluated. Without it the app's own static imports —
+# @hono/node-server, postgres — resolve before `Sentry.init` runs in the module
+# body, and neither HTTP nor database spans are ever recorded. The DSN is
+# resolved from `<KEY>_FILE`-backed config, so init genuinely cannot happen any
+# earlier than that; the preload hook is what makes late init safe.
+CMD ["node", "--import", "@sentry/node/preload", "dist/index.mjs"]
 
 FROM base AS build-create-subtraction
 COPY apps/create-subtraction ./apps/create-subtraction
