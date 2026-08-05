@@ -112,33 +112,22 @@ commit that removes styled-components from this file.
   unrelated material to stay self-contained → split it along the
   mixed-concerns line so each half is again a leaf.
 
-## Package manager
-
-This repo uses **pnpm**. Common commands:
-
-```bash
-pnpm install                      # install everything (root + apps + packages)
-pnpm -r test                      # run every package's tests
-pnpm -r typecheck                 # typecheck every package
-pnpm check                        # biome check (whole repo)
-```
-
 ## Tooling
 
 ### Commands (from repo root)
 
 | Task | Command |
 | --- | --- |
+| Install | `pnpm install` |
 | Typecheck | `pnpm typecheck` |
 | Lint + format | `pnpm check` |
 | Format only | `pnpm format` |
 | Dead-code scan | `pnpm knip` |
-| Test (single run, all packages) | `pnpm test` |
-| Test (watch, web app) | `pnpm --filter @virtool/web test:watch` |
-| Test (filtered) | `pnpm --filter @virtool/web exec vitest run src/path/to/file` |
 | Build | `pnpm build` |
-| Test the Rust crate | `cargo test` (in `packages/pathoscope-core`) |
-| Format the Rust crate | `cargo fmt` (in `packages/pathoscope-core`) |
+| Test (all packages) | `pnpm test` |
+| Test (watch, web app) | `pnpm --filter @virtool/web test:watch` |
+| Test (one file) | `TZ=UTC pnpm --filter @virtool/web exec vitest run <path>` |
+| Rust crate | `cargo test` / `cargo fmt` (in `packages/pathoscope-core`) |
 
 `pnpm test` does **not** reach `packages/pathoscope-core` — it is not a pnpm
 workspace. Run `cargo` there directly; a `test-rust` CI job gates it.
@@ -299,6 +288,10 @@ worked by accident under un-memoized render will now break:
 - **Sync props into a form with `useForm({ values })`, not a `reset()` effect.**
   `values` deep-compares, so an unrelated re-render cannot wipe a validation
   error the way a re-fired `reset()` does.
+- **Never use `useMatchRoute`.** It breaks React Compiler reactivity, so a
+  component using it stops updating on navigation (TanStack Router #4499).
+  Use `useMatchPartialPath` (`@app/useMatchPartialPath`), which subscribes
+  through `useLocation`. A Biome `noRestrictedImports` rule blocks the import.
 
 Opt a single function out with a `"use no memo"` directive — useful for
 bisecting a suspected compiler interaction, but a fix, not a resting place.
@@ -474,8 +467,8 @@ route or query errors — those belong in the two tiers above.
 
 - Styling is Tailwind utility classes. There is no CSS-in-JS; styled-components
   has been removed from the repo.
-- Use the `cn()` function from `@app/utils` for conditional classes (combines
-  `clsx` + `tailwind-merge`).
+- Use `cn()` from `@app/cn` for conditional classes (combines `clsx` +
+  `tailwind-merge`).
 - Don't use arbitrary Tailwind classes like `max-h-[210px]`.
 - Design tokens — colors, spacing, fonts — are defined in
   `apps/web/src/app/style.css` under `@theme`, with keyframes in
@@ -692,79 +685,53 @@ definition site; behind a factory it stops treating the function as a
 server function at all — no RPC endpoint, and the handler body ships to
 the browser. This was tried and reverted.
 
-Raw `Request` handlers in `createFileRoute` (e.g. SSE routes) run
-outside the server-function context and call
-`requireAuthenticatedRequest(request)` instead.
+Raw `Request` handlers in `createFileRoute` run outside the server-function
+context, so **no policy middleware runs on them** and each enforces its own
+floor — nearly always `requireAuthenticatedRequest(request)`, which is the raw
+spelling of `authenticated()`. This table is the whole inventory:
 
-File uploads are a raw route (`routes/uploads.ts` → `@server/uploads/upload`),
-**not** a server function. `uploads/uploader.ts`'s `postUpload` posts the raw
-`File` to `POST /uploads` with `XMLHttpRequest`, because only XHR reports upload
-progress — `fetch` cannot — and read files can run to many gigabytes. The handler
-reads `name`/`type` from the query string and streams `request.body` to storage
-(never `request.formData()`, which buffers the whole file in the Node heap), and
-returns a plain-JSON `Response` the XHR can `JSON.parse`. Because no policy
-middleware runs on a route, the handler enforces the floor itself:
-`requireAuthenticatedRequest` then a `hasPermission(session, "upload_file")`
-check. Don't fold it back into a server function — the RPC client uses `fetch`
-and would lose progress.
+| Route | Handler | Floor |
+| --- | --- | --- |
+| `events.ts` | `@server/events/*` | authenticated |
+| `uploads.ts` | `@server/uploads/upload` | authenticated + `upload_file` |
+| `uploads_.$uploadId.ts` | `@server/uploads/download` | authenticated |
+| `analyses.documents.$document.ts` | `@server/analyses/download` | authenticated + sample `read` |
+| `otus.$otuId.fasta.ts` (+ isolate, sequence siblings) | `@server/otus/fasta` | authenticated |
+| `subtractions.$subtractionId.files.$filename.ts` | `@server/subtraction/download` | authenticated |
+| `indexes.$indexId.files.$filename.ts` | `@server/indexes/download` | authenticated + `checkReferenceVisibility` |
+| `samples.$sampleId.reads.$filename.ts` | `@server/samples/download` | authenticated + sample `read` |
+| `metrics.ts` | `@server/metrics/handler` | `VT_METRICS_TOKEN` bearer; 404 when unset |
+| `monitoring.ts` | `Sentry.createSentryTunnelRoute` | **none**, deliberately |
+| `health/live.ts`, `health/ready.ts` | `@server/health/ready` | **none**, deliberately |
 
-Reading an upload back is a separate raw route
-(`routes/uploads_.$uploadId.ts` → `@server/uploads/download`), reached from the
-uploads list with a plain `<a href>` and streamed out of storage. Its floor is
-`requireAuthenticatedRequest` alone — uploads carry no per-row rights, and
-`upload_file` gates *writing* one, not reading it back. The trailing underscore
-in the filename keeps it from nesting under `routes/uploads.ts` merely because
-the two share a URL segment; the URL is `/uploads/{uploadId}` either way. The
-`Content-Disposition` is built from the row's `name`, never the UUID-prefixed
-`name_on_disk` that keys the object.
+A route is raw only where RPC cannot do the job: `XMLHttpRequest` for upload
+progress, a plain `<a href>` that needs a real `Content-Disposition`,
+`EventSource`, or a non-RPC client like Prometheus. The two unauthenticated
+entries are considered exceptions rather than oversights — Sentry's tunnel
+exists to capture errors thrown *on the login wall* and is bounded by its DSN
+check instead, and kubelet probes cannot hold a session. Don't add a floor to
+either.
 
-The analysis CSV/XLSX export (`routes/analyses.documents.$document.ts` →
-`@server/analyses/download`) is a raw route for the mirror-image reason: the
-client reaches it with a plain `<a href>`, so the browser has to receive a real
-response carrying a `Content-Disposition` header, which an RPC call cannot
-produce. Its `$document` param is the `{id}.{extension}` segment. It too
-enforces its own floor — `requireAuthenticatedRequest`, then the **read** right
-on the analysis's parent sample.
+Constraints these handlers carry, each of which has been a bug:
 
-The FASTA downloads (`routes/otus.$otuId.fasta.ts` and its isolate and sequence
-siblings → `@server/otus/fasta`) are raw routes for the same reason. Each ends
-in a literal `fasta` segment rather than carrying a `.fa` suffix on the resource
-URL: Python sniffs that suffix inside its OTU and sequence *read* handlers and
-branches, which puts two representations on one URL. Give a download its own
-route and let `Content-Disposition` carry the filename. They enforce
-`requireAuthenticatedRequest` and nothing more, matching the OTU read endpoints.
-
-Subtraction file downloads
-(`routes/subtractions.$subtractionId.files.$filename.ts` →
-`@server/subtraction/download`) are a raw route for the same reason, and stream
-the bytes out of storage rather than buffering a multi-GB Bowtie2 index. Their
-floor is `requireAuthenticatedRequest` alone — subtractions carry no per-row
-rights. The filename is only ever composed into a storage key *after* it has
-matched a `subtraction_files` row, which is what keeps a URL param from
-traversing out of the prefix.
-
-Index file downloads (`routes/indexes.$indexId.files.$filename.ts` →
-`@server/indexes/download`) are a raw route for the same reason. Their floor is
-`requireAuthenticatedRequest` **and** the caller being able to see the index's
-parent reference (`checkReferenceVisibility`), which is the TypeScript spelling
-of Python's reference `read` right — an index is only as visible as the
-reference it was built from, and without the check every signed-in user could
-read every reference's builds. The filename is matched against a whitelist of
-the names a build produces before it is looked up, and the storage key is
-composed from the `index_files` row's own `name` and the index's `storage_key`
-column, never the row id.
-
-Sample reads downloads (`routes/samples.$sampleId.reads.$filename.ts` →
-`@server/samples/download`) are a raw route for the same reason. Their floor is
-`requireAuthenticatedRequest` then the **read** right on the sample, matching
-the analysis export. The Python endpoint this replaced checked only the session;
-that gap was deliberately not carried over.
-
-The Prometheus scrape endpoint (`routes/metrics.ts` → `@server/metrics/handler`)
-is a raw route for the same reason as the upload: Prometheus speaks plain HTTP,
-not the generated RPC client. It enforces its own floor too — a bearer token
-compared against `VT_METRICS_TOKEN`, with an unset token reporting 404 rather
-than serving openly.
+- **Stream, never buffer.** `request.body` to storage on the way in, storage to
+  the response on the way out. `request.formData()` puts a multi-gigabyte read
+  file in the Node heap. For the same reason the upload must not become a server
+  function: the RPC client uses `fetch`, which cannot report progress.
+- **Compose a storage key only from a row already matched.** A `$filename` param
+  is looked up first — against `subtraction_files`, or a whitelist of the names
+  an index build produces — and the key is then built from that row's own `name`
+  and `storage_key`. Never from the URL param, which is how a param traverses
+  out of the prefix, and never from the row id.
+- **`Content-Disposition` carries the row's `name`**, never the UUID-prefixed
+  `name_on_disk` that keys the object.
+- **A download gets its own URL.** The FASTA routes end in a literal `fasta`
+  segment rather than a `.fa` suffix on the resource URL — sniffing a suffix
+  inside a read handler is what puts two representations on one path.
+- **`uploads_.$uploadId.ts` keeps its trailing underscore**, which stops it
+  nesting under `routes/uploads.ts`. The URL is `/uploads/{uploadId}` regardless.
+- **The sample reads floor is deliberately stricter than the endpoint it
+  replaced**, which checked only the session. Don't relax it to match.
 
 Raw routes are also the only endpoints reachable with an **API key**.
 `requireAuthenticatedRequest` accepts either the session cookie pair or an HTTP
@@ -920,7 +887,10 @@ The basics:
   name — the `Fn` suffix already keeps the two apart, so don't alias it
   to `...Impl` on the way in.
 - **Comments:** Default to none. Document *why* when non-obvious, not
-  *what*.
+  *what*. Never narrate history ("this used to do X, now it does Y") —
+  that's git blame's job, and it just accretes stale layers; write a
+  comment about a past change only if reverting it would silently
+  reintroduce a bug, phrased as a standing warning, not a changelog.
 - **Concurrency:** Independent awaits go in `Promise.all` — don't pay
   the sum of latencies.
 
