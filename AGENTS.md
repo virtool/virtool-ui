@@ -875,7 +875,6 @@ auth on the SSE side, the batching queues, and the follow-up TODOs.
 - **Team**: Virtool
 - **Team ID**: `76cf3c46-c5d9-4df4-b457-0fc053d402f7`
 - **Issue prefix**: `VIR`
-- **Default label**: Frontend
 
 ### Issue conventions
 
