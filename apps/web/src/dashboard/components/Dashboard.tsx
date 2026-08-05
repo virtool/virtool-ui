@@ -4,7 +4,6 @@ import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ActiveJobs from "./ActiveJobs";
-import QuickActions from "./QuickActions";
 import RecentAnalyses from "./RecentAnalyses";
 import RecentSamples from "./RecentSamples";
 
@@ -30,8 +29,6 @@ export default function Dashboard() {
 			<ViewHeader title="Dashboard">
 				<ViewHeaderTitle>Welcome back, {account.handle}</ViewHeaderTitle>
 			</ViewHeader>
-
-			<QuickActions />
 
 			<div className="flex flex-col gap-8">
 				<RecentSamples userId={account.id} />

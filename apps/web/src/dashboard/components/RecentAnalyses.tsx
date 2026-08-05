@@ -9,7 +9,10 @@ import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import { ChartArea } from "lucide-react";
 import { DASHBOARD_ITEM_COUNT } from "../constants";
-import DashboardCard, { DashboardCardEmpty } from "./DashboardCard";
+import DashboardCard, {
+	DashboardCardEmpty,
+	DashboardCardMore,
+} from "./DashboardCard";
 
 type RecentAnalysesProps = {
 	/** The id of the signed-in user, whose analyses are listed. */
@@ -43,6 +46,8 @@ export default function RecentAnalyses({ userId }: RecentAnalysesProps) {
 			</DashboardCard>
 		);
 	}
+
+	const remaining = data.foundCount - data.items.length;
 
 	return (
 		<DashboardCard title="My analyses">
@@ -86,6 +91,12 @@ export default function RecentAnalyses({ userId }: RecentAnalysesProps) {
 							/>
 						</BoxGroupSection>
 					))}
+					{remaining > 0 && (
+						<DashboardCardMore>
+							{remaining} more{" "}
+							{remaining === 1 ? "analysis is" : "analyses are"} not shown
+						</DashboardCardMore>
+					)}
 				</BoxGroup>
 			)}
 		</DashboardCard>

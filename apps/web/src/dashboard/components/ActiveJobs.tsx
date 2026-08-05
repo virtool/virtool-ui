@@ -8,7 +8,10 @@ import { useQuery } from "@tanstack/react-query";
 import type { JobState } from "@virtool/contracts";
 import { Cog } from "lucide-react";
 import { DASHBOARD_ITEM_COUNT } from "../constants";
-import DashboardCard, { DashboardCardEmpty } from "./DashboardCard";
+import DashboardCard, {
+	DashboardCardEmpty,
+	DashboardCardMore,
+} from "./DashboardCard";
 
 /** Matches the default view of the jobs list. */
 const activeStates: JobState[] = ["pending", "running"];
@@ -19,11 +22,7 @@ export default function ActiveJobs() {
 		jobsQueryOptions(1, DASHBOARD_ITEM_COUNT, activeStates),
 	);
 
-	const action = (
-		<Link search={{ state: activeStates }} to="/jobs">
-			View all
-		</Link>
-	);
+	const action = <Link to="/jobs">View all</Link>;
 
 	if (isError && !data) {
 		return (
@@ -41,6 +40,8 @@ export default function ActiveJobs() {
 		);
 	}
 
+	const remaining = data.foundCount - data.items.length;
+
 	return (
 		<DashboardCard action={action} title="Active jobs">
 			{data.items.length === 0 ? (
@@ -54,6 +55,13 @@ export default function ActiveJobs() {
 					{data.items.map((job) => (
 						<JobItem as="li" key={job.id} {...job} />
 					))}
+					{remaining > 0 && (
+						<DashboardCardMore>
+							<Link search={{ state: activeStates }} to="/jobs">
+								View {remaining} more active {remaining === 1 ? "job" : "jobs"}
+							</Link>
+						</DashboardCardMore>
+					)}
 				</BoxGroup>
 			)}
 		</DashboardCard>

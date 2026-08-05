@@ -1,4 +1,5 @@
 import Box from "@base/Box";
+import BoxGroupSection from "@base/BoxGroupSection";
 import { Empty, EmptyDescription, EmptyMedia, EmptyTitle } from "@base/Empty";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
@@ -75,5 +76,28 @@ export function DashboardCardEmpty({
 				{description && <EmptyDescription>{description}</EmptyDescription>}
 			</Empty>
 		</Box>
+	);
+}
+
+type DashboardCardMoreProps = {
+	/** The overflow line — a link where there is somewhere to send the reader. */
+	children: ReactNode;
+};
+
+/**
+ * The last row of a dashboard card's list, accounting for the rows the card
+ * does not have room for.
+ *
+ * Sits inside the same `BoxGroup` as the rows it follows, so a card that is
+ * showing everything simply ends at its last row with nothing to explain.
+ */
+export function DashboardCardMore({ children }: DashboardCardMoreProps) {
+	return (
+		<BoxGroupSection
+			as="li"
+			className="bg-gray-50 text-center text-gray-600 text-sm"
+		>
+			{children}
+		</BoxGroupSection>
 	);
 }

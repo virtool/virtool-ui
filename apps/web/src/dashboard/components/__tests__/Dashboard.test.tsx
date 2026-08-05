@@ -39,17 +39,6 @@ describe("<Dashboard />", () => {
 		).toBeInTheDocument();
 	});
 
-	it("links the quick actions to the sample create and file views", async () => {
-		await renderWithRouter(<Dashboard />);
-
-		expect(
-			await screen.findByRole("link", { name: "New Sample" }),
-		).toHaveAttribute("href", "/samples/create");
-		expect(
-			screen.getByRole("link", { name: "Upload Read Files" }),
-		).toHaveAttribute("href", "/samples/files?page=1");
-	});
-
 	it("scopes samples and analyses to the signed-in user", async () => {
 		const findSamples = mockFindSamples([]);
 		const findAnalyses = mockFindAnalyses([]);
@@ -64,7 +53,7 @@ describe("<Dashboard />", () => {
 
 		await waitFor(() => {
 			expect(findAnalyses).toHaveBeenCalledWith({
-				data: { userId: account.id, page: 1, perPage: 5 },
+				data: { userId: account.id, page: 1, perPage: 10 },
 			});
 		});
 	});
@@ -76,7 +65,7 @@ describe("<Dashboard />", () => {
 
 		await waitFor(() => {
 			expect(findJobs).toHaveBeenCalledWith({
-				data: { page: 1, perPage: 5, states: ["pending", "running"] },
+				data: { page: 1, perPage: 10, states: ["pending", "running"] },
 			});
 		});
 	});
@@ -100,6 +89,53 @@ describe("<Dashboard />", () => {
 			"href",
 			"/jobs/7",
 		);
+	});
+
+	it("sends View all to the unfiltered list views", async () => {
+		await renderWithRouter(<Dashboard />);
+
+		const [samples, jobs] = await screen.findAllByRole("link", {
+			name: "View all",
+		});
+
+		expect(samples).toHaveAttribute("href", "/samples");
+		expect(jobs).toHaveAttribute("href", "/jobs");
+	});
+
+	it("accounts for the rows a card has no room for", async () => {
+		mockFindSamples([createFakeSampleMinimal()], { foundCount: 14 });
+		mockFindAnalyses([createFakeAnalysisMinimal()], 3);
+		mockFindJobs([createFakeServerJobMinimal()], 2);
+
+		await renderWithRouter(<Dashboard />);
+
+		expect(
+			await screen.findByRole("link", {
+				name: "View 13 more samples of yours",
+			}),
+		).toHaveAttribute("href", `/samples?users=%5B${account.id}%5D`);
+
+		// No global analyses list to send the reader to, so this one is not a link.
+		expect(
+			await screen.findByText("2 more analyses are not shown"),
+		).toBeInTheDocument();
+
+		expect(
+			await screen.findByRole("link", { name: "View 1 more active job" }),
+		).toBeInTheDocument();
+	});
+
+	it("omits the overflow row when a card is showing everything", async () => {
+		mockFindSamples([createFakeSampleMinimal()]);
+		mockFindAnalyses([createFakeAnalysisMinimal()]);
+		mockFindJobs([createFakeServerJobMinimal()]);
+
+		await renderWithRouter(<Dashboard />);
+
+		expect(
+			await screen.findByRole("heading", { name: "My samples" }),
+		).toBeInTheDocument();
+		expect(screen.queryByText(/more/)).toBeNull();
 	});
 
 	it("shows an empty state per card when there is nothing to list", async () => {

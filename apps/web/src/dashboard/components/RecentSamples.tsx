@@ -8,7 +8,10 @@ import WorkflowTags from "@samples/components/Tag/WorkflowTags";
 import { useListSamples } from "@samples/queries";
 import { FlaskConical } from "lucide-react";
 import { DASHBOARD_ITEM_COUNT } from "../constants";
-import DashboardCard, { DashboardCardEmpty } from "./DashboardCard";
+import DashboardCard, {
+	DashboardCardEmpty,
+	DashboardCardMore,
+} from "./DashboardCard";
 
 type RecentSamplesProps = {
 	/** The id of the signed-in user, whose samples are listed. */
@@ -26,11 +29,7 @@ export default function RecentSamples({ userId }: RecentSamplesProps) {
 		[userId],
 	);
 
-	const action = (
-		<Link search={{ users: [userId] }} to="/samples">
-			View all
-		</Link>
-	);
+	const action = <Link to="/samples">View all</Link>;
 
 	if (isError && !data) {
 		return (
@@ -47,6 +46,8 @@ export default function RecentSamples({ userId }: RecentSamplesProps) {
 			</DashboardCard>
 		);
 	}
+
+	const remaining = data.foundCount - data.items.length;
 
 	return (
 		<DashboardCard action={action} title="My samples">
@@ -81,6 +82,14 @@ export default function RecentSamples({ userId }: RecentSamplesProps) {
 							</div>
 						</BoxGroupSection>
 					))}
+					{remaining > 0 && (
+						<DashboardCardMore>
+							<Link search={{ users: [userId] }} to="/samples">
+								View {remaining} more {remaining === 1 ? "sample" : "samples"}{" "}
+								of yours
+							</Link>
+						</DashboardCardMore>
+					)}
 				</BoxGroup>
 			)}
 		</DashboardCard>
