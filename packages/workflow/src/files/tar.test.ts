@@ -113,6 +113,18 @@ describe("writePathAsTar and extractTarToDir", () => {
 		).rejects.toThrow(TarArchiveError);
 	});
 
+	// `stat` follows a symlinked root; `lstat` does not. Following one archives
+	// whatever it points at, which can be a tree outside the work path entirely.
+	it("refuses to archive a symlinked root", async () => {
+		await mkdir(join(workPath, "outside"), { recursive: true });
+		await writeFile(join(workPath, "outside", "secret.fq"), "data");
+		await symlink(join(workPath, "outside"), join(workPath, "link"));
+
+		await expect(
+			writePathAsTar(join(workPath, "link"), join(workPath, "cache.tar")),
+		).rejects.toThrow(TarArchiveError);
+	});
+
 	it("refuses to archive a symlink", async () => {
 		const source = join(workPath, "tree");
 		await mkdir(source, { recursive: true });
@@ -126,6 +138,23 @@ describe("writePathAsTar and extractTarToDir", () => {
 });
 
 describe("extractTarToDir guards", () => {
+	// `pipe` does not forward a source error, so this used to surface as an
+	// uncaught exception that took the process down instead of rejecting.
+	it("rejects rather than crashing when the archive does not exist", async () => {
+		await expect(
+			extractTarToDir(join(workPath, "absent.tar"), join(workPath, "restored")),
+		).rejects.toThrow(/ENOENT/);
+	});
+
+	it("rejects when the archive is not a tar at all", async () => {
+		const archive = join(workPath, "not-a-tar");
+		await writeFile(archive, "just some bytes");
+
+		await expect(
+			extractTarToDir(archive, join(workPath, "restored")),
+		).rejects.toThrow();
+	});
+
 	it("refuses a target that already exists", async () => {
 		const source = join(workPath, "trimmed");
 		const archive = join(workPath, "cache.tar");

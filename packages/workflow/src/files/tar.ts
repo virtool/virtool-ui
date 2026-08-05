@@ -104,8 +104,16 @@ export async function extractTarToDir(
 
 	try {
 		const entries = extract();
+		const source = createReadStream(archivePath);
 
-		createReadStream(archivePath).pipe(entries);
+		// `pipe` does not forward a source error to its destination, and an
+		// `error` on a stream nothing listens to is an uncaught exception — so a
+		// missing or unreadable archive would take the pod down rather than reject
+		// this call, and the `ScaledJob` would retry a job that failed for a reason
+		// the runtime never got to report. Destroying the extractor with the error
+		// makes the loop below reject with it instead.
+		source.on("error", (err) => entries.destroy(err));
+		source.pipe(entries);
 
 		for await (const entry of entries) {
 			const { name, type } = entry.header;
@@ -207,7 +215,10 @@ export async function writePathAsTar(
 	source: string,
 	archivePath: string,
 ): Promise<void> {
-	const info = await stat(source).catch(() => null);
+	// `lstat`, not `stat`: `stat` follows a symlinked root and archives whatever
+	// it points at, which can pull a tree in from outside the work path. `walk`
+	// already refuses a nested link, and the root is held to the same rule.
+	const info = await lstat(source).catch(() => null);
 
 	if (info === null || (!info.isFile() && !info.isDirectory())) {
 		throw new TarArchiveError(`${source} is neither a file nor a directory`);

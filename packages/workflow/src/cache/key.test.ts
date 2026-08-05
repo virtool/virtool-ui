@@ -51,6 +51,24 @@ const GOLDENS: ReadonlyArray<{
 		key: "1b9b5cd19f11f6c5ff6a52452afe5e2917e94efe12cf999ca8fe07f7d1a71776",
 	},
 	{
+		name: "negative zero, whose sign Python keeps",
+		params: { value: float(-0) },
+		canonical: '{"value":-0.0}',
+		key: "c848a4efa987f46ba3bfd46242333afcb1c68c3240e0f35ae9d269b1c980648b",
+	},
+	{
+		name: "a negative integral float",
+		params: { value: float(-1.0) },
+		canonical: '{"value":-1.0}',
+		key: "25b0cd67ad547ad0a368b2337cae534414de1bdeae750e3274f241021d73a7ff",
+	},
+	{
+		name: "negative and positive zero side by side",
+		params: { a: float(-0), b: float(0) },
+		canonical: '{"a":-0.0,"b":0.0}',
+		key: "090e793f6c71f1cb8b6bfec4af997131680663892a43c60839cfd7b579cfc56d",
+	},
+	{
 		name: "fractional floats",
 		params: { max_error_rate: float(0.1), max_indel_rate: float(0.03) },
 		canonical: '{"max_error_rate":0.1,"max_indel_rate":0.03}',
@@ -185,5 +203,11 @@ describe("rejections", () => {
 
 	it("accepts zero as a float, which is inside the exact band", () => {
 		expect(canonicalizeCacheParams({ value: float(0) })).toBe('{"value":0.0}');
+	});
+
+	it("derives a different key for negative and positive zero", () => {
+		expect(deriveCacheKey({ value: float(-0) })).not.toBe(
+			deriveCacheKey({ value: float(0) }),
+		);
 	});
 });

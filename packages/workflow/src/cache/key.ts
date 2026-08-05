@@ -100,6 +100,13 @@ function formatFloat(value: number): string {
 		);
 	}
 
+	// Negative zero survives arithmetic in JavaScript but `String(-0)` is `"0"`,
+	// where Python's `repr` is `"-0.0"`. Checked before the integral branch,
+	// which would otherwise drop the sign and derive a different key.
+	if (Object.is(value, -0)) {
+		return "-0.0";
+	}
+
 	// `String` and Python's `repr` are both shortest-round-trip inside the band,
 	// so they agree on everything but the trailing `.0` Python adds to an
 	// integral float.
