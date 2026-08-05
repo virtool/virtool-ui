@@ -2,6 +2,7 @@ import type { JobWorkflow, JsonObject } from "@virtool/contracts";
 import type { Logger } from "@virtool/logger";
 import { assertSerializableData } from "./serializable";
 import type { Workflow } from "./step";
+import type { RunSubprocess } from "./subprocess/types";
 
 /** The claimed job, as steps see it. */
 export type RunJob = {
@@ -18,6 +19,7 @@ export type BuildContextInput = {
 	mem: number;
 	logger: Logger;
 	signal: AbortSignal;
+	runSubprocess: RunSubprocess;
 };
 
 /**
@@ -47,11 +49,15 @@ export type WorkflowContext<TData, TState> = {
 	readonly logger: Logger;
 	/** Aborts on cancellation or SIGTERM. Forward it to anything long-running. */
 	readonly signal: AbortSignal;
+	/**
+	 * Runs a bioinformatics tool. Already bound to `signal`, so a step does not
+	 * forward cancellation itself.
+	 */
+	readonly runSubprocess: RunSubprocess;
 
-	// Three more members land here, each added by its own issue: `runSubprocess`
-	// (the subprocess runner), `storage` (direct object storage access), and
-	// `client` (the control-plane client). Only `data` is serializable-
-	// constrained; those three carry live handles by design.
+	// Two more members land here, each added by its own issue: `storage` (direct
+	// object storage access) and `client` (the control-plane client). Only
+	// `data` is serializable-constrained; the live handles are so by design.
 };
 
 /**

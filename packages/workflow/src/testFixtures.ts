@@ -1,5 +1,6 @@
 import { createLogger, type Logger } from "@virtool/logger";
 import type { BuildContextInput, RunJob, WorkflowContext } from "./context";
+import type { RunSubprocess, SubprocessResult } from "./subprocess/types";
 
 /**
  * A logger that keeps its records instead of writing them.
@@ -42,6 +43,35 @@ export function createFakeRunJob(overrides: Partial<RunJob> = {}): RunJob {
 	return { id: 1, workflow: "create_subtraction", args: {}, ...overrides };
 }
 
+/** A subprocess runner that records its calls and spawns nothing. */
+export type RecordingRunSubprocess = RunSubprocess & {
+	calls: () => readonly (readonly string[])[];
+};
+
+export function createFakeRunSubprocess(
+	result: Partial<SubprocessResult> = {},
+): RecordingRunSubprocess {
+	const calls: (readonly string[])[] = [];
+
+	const run = (async ({ command }) => {
+		calls.push(command);
+
+		return {
+			command,
+			exitCode: 0,
+			signal: null,
+			cancelled: false,
+			stderrTail: [],
+			durationMs: 0,
+			...result,
+		};
+	}) as RecordingRunSubprocess;
+
+	run.calls = () => calls;
+
+	return run;
+}
+
 /** The input a per-workflow `buildContext` is handed. */
 export function createFakeBuildContextInput(
 	overrides: Partial<BuildContextInput> = {},
@@ -53,6 +83,7 @@ export function createFakeBuildContextInput(
 		mem: 4,
 		logger: createRecordingLogger().logger,
 		signal: new AbortController().signal,
+		runSubprocess: createFakeRunSubprocess(),
 		...overrides,
 	};
 }

@@ -465,6 +465,9 @@ importers:
       '@virtool/logger':
         specifier: workspace:*
         version: link:../logger
+      execa:
+        specifier: ^9.6.1
+        version: 9.6.1
       zod:
         specifier: ^4.3.6
         version: 4.4.3
