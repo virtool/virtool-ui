@@ -13,7 +13,8 @@ The two halves are kept strictly apart. `runWorkflow` is the run loop: it
 **returns** an outcome and never touches the network, `process.exit`, or a
 signal handler. `runWorkflowApp` is the lifecycle loop that owns all of
 that — claiming, heartbeating, reporting, and the exit code. It knows
-nothing about object storage or subprocesses.
+nothing about object storage, and touches subprocesses only to build the
+runner it puts on the context.
 
 ## The step model
 
