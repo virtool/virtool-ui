@@ -223,6 +223,37 @@ describe("handleRegisterCache", () => {
 		await expect(storage.size(cacheKey(UUID_B))).rejects.toThrow();
 		expect(await db.select().from(caches)).toHaveLength(1);
 	});
+
+	// A lost response or an ordinary client retry re-sends the same uuid. That
+	// re-selects the caller's own row, so the object it names must survive — a
+	// row pointing at a deleted blob is unreadable and unrepairable.
+	it("leaves the object in place when a retry repeats the same uuid", async () => {
+		await storage.write(cacheKey(UUID_A), body("hello world!"));
+
+		const payload = {
+			key: "trimmed-reads:abc",
+			uuid: UUID_A,
+			params: {},
+		};
+
+		const first = await handleRegisterCache(deps, post(payload));
+		const retry = await handleRegisterCache(deps, post(payload));
+
+		expect(first.status).toBe(201);
+		expect(retry.status).toBe(200);
+		expect((await retry.json()).created).toBe(false);
+
+		// The whole point: the row the retry returned still resolves to bytes.
+		const lookup = await handleGetCache(
+			deps,
+			get("trimmed-reads:abc"),
+			"trimmed-reads:abc",
+		);
+
+		await expect(storage.size((await lookup.json()).storageKey)).resolves.toBe(
+			12,
+		);
+	});
 });
 
 describe("handleGetCache", () => {

@@ -233,6 +233,32 @@ describe("registerCache", () => {
 		expect(await db.select().from(caches)).toHaveLength(1);
 	});
 
+	// A retry re-selects the caller's *own* row, so the object it names is the
+	// live one. Deleting it as if it were an orphan would strand the row on
+	// nothing — a state no lookup can detect and no eviction repairs, since
+	// eviction walks rows and this row still exists.
+	it("keeps the object when a retry sends the same key and uuid", async () => {
+		const storage = await storageWith({ [UUID_A]: "aaa" });
+
+		const first = await registerCache(db, storage, testLogger, {
+			key: "trimmed-reads:abc",
+			uuid: UUID_A,
+			params: {},
+		});
+
+		const retry = await registerCache(db, storage, testLogger, {
+			key: "trimmed-reads:abc",
+			uuid: UUID_A,
+			params: {},
+		});
+
+		expect(retry.created).toBe(false);
+		expect(retry.row.id).toBe(first.row.id);
+		expect(retry.row.storage_key).toBe(cacheKey(UUID_A));
+
+		await expect(storage.size(cacheKey(UUID_A))).resolves.toBe(3);
+	});
+
 	// `onConflictDoNothing` is targeted at `cache_key` specifically. A
 	// `storage_key` collision can only mean a reused uuid, which is a bug, and
 	// swallowing it would leave two logical caches sharing one object.

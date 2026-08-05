@@ -292,10 +292,17 @@ logical caches sharing one object.
 When the insert takes no row, the loser re-selects by `key` and returns
 the **winner's** row, so it reads the blob that actually survived. It
 then deletes its own orphan, after the write has committed, logging a
-failure rather than throwing. That is safe because `storage_key` is a
-per-write uuid — the winner's row points elsewhere — and necessary
-because an orphan has no row, so Python's LRU eviction, which walks
-rows, will never reclaim it.
+failure rather than throwing. That is necessary because an orphan has no
+row, so Python's LRU eviction, which walks rows, will never reclaim it.
+
+**The delete is guarded on the winner's `storage_key` differing from the
+one this call composed.** A retry — a lost response, an ordinary client
+retry — arrives with the *same* uuid, so it re-selects its own row and
+the object it would delete is the live one that row names. Deleting
+there leaves a row pointing at nothing: unreadable to every later
+lookup, and unrepairable by eviction, which walks rows and would find
+this one perfectly intact. The guard is what makes `POST /caches`
+idempotent rather than merely conflict-tolerant.
 
 This deliberately diverges from Python, which raises
 `CacheAlreadyExistsError` on the same race. The divergence is the reason
@@ -504,7 +511,8 @@ for this service:
 
 ## What is not here yet
 
-Health, metrics and the two cache endpoints. Every remaining
-runner-facing endpoint — claim, ping, step start, finish, and the three
-finalize routes — lands in its own issue, against the wire contract
-already written in `packages/contracts/src/jobsApi.ts`.
+This service serves health, metrics and the two cache endpoints, and
+nothing else yet. Every remaining runner-facing endpoint — claim, ping,
+step start, finish, and the three finalize routes — lands in its own
+issue, against the wire contract already written in
+`packages/contracts/src/jobsApi.ts`.

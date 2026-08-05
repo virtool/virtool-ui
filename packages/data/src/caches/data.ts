@@ -100,10 +100,13 @@ export async function getCache(db: Db, key: string): Promise<CacheRow> {
  * swallowed. This deliberately diverges from Python, which raises
  * `CacheAlreadyExistsError` on the same race.
  *
- * The loser then deletes its own orphan. That is safe because `storage_key` is a
- * per-write uuid — the winner's row points somewhere else — and it is necessary
- * because an orphan has no row, so Python's LRU eviction, which walks rows, will
- * never reclaim it. It happens after the write has committed, so a storage
+ * The loser then deletes its own orphan — but **only once it has established
+ * the winner is somebody else**. A retry of a call that already succeeded
+ * arrives with the same uuid and so re-selects its own row, and deleting there
+ * would leave a live row pointing at nothing. Otherwise the delete is safe,
+ * because `storage_key` is a per-write uuid and the winner's row points
+ * elsewhere, and it is necessary, because an orphan has no row and Python's LRU
+ * eviction walks rows. It happens after the write has committed, so a storage
  * failure only leaks bytes and is logged rather than thrown.
  */
 export async function registerCache(
@@ -157,13 +160,18 @@ export async function registerCache(
 		throw new Error(`cache row for ${values.key} vanished mid-registration`);
 	}
 
-	try {
-		await storage.delete(storageKey);
-	} catch (err) {
-		logger.warn(
-			{ err, key: values.key, storageKey },
-			"cache orphan cleanup failed; object orphaned",
-		);
+	// Same uuid means this is a retry of a call that already inserted, so the
+	// object is the one the winning row names. Deleting it would strand a live
+	// row on nothing, which no later lookup could detect and no eviction fix.
+	if (winner.storage_key !== storageKey) {
+		try {
+			await storage.delete(storageKey);
+		} catch (err) {
+			logger.warn(
+				{ err, key: values.key, storageKey },
+				"cache orphan cleanup failed; object orphaned",
+			);
+		}
 	}
 
 	return { row: winner, created: false };
