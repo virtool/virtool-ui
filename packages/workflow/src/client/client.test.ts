@@ -8,12 +8,12 @@ import {
 	type TestServerHandler,
 	UNREACHABLE_BASE_URL,
 } from "../testServer";
-import { type ControlPlaneClient, createControlPlaneClient } from "./client";
+import { createJobsApiClient, type JobsApiClient } from "./client";
 import {
 	BadRequestError,
 	ConflictError,
-	ControlPlaneError,
 	ForbiddenError,
+	JobsApiError,
 	NotFoundError,
 	ServerError,
 	TransportError,
@@ -24,7 +24,7 @@ const JOB_ID = 17;
 const KEY = "bocxcbnu";
 
 let server: TestServer | undefined;
-let client: ControlPlaneClient | undefined;
+let client: JobsApiClient | undefined;
 
 afterEach(async () => {
 	await client?.close();
@@ -37,10 +37,10 @@ afterEach(async () => {
 async function setup(
 	handler: TestServerHandler,
 	options: { baseUrl?: string; signal?: AbortSignal } = {},
-): Promise<ControlPlaneClient> {
+): Promise<JobsApiClient> {
 	server = await startTestServer(handler);
 
-	client = createControlPlaneClient({
+	client = createJobsApiClient({
 		baseUrl: options.baseUrl ?? server.baseUrl,
 		jobId: JOB_ID,
 		key: KEY,
@@ -145,7 +145,7 @@ describe("paths", () => {
 			respondJson(response, 200, {}),
 		);
 
-		client = createControlPlaneClient({
+		client = createJobsApiClient({
 			baseUrl: `${server.baseUrl}/internal`,
 			jobId: JOB_ID,
 			key: KEY,
@@ -199,16 +199,16 @@ describe("status mapping", () => {
 		await expect(client.finish()).rejects.toThrow('{"detail":"nope"}');
 	});
 
-	it("throws a control plane error naming an unmapped status", async () => {
+	it("throws a jobs API error naming an unmapped status", async () => {
 		const client = await setup((_, response) =>
 			respondJson(response, 418, { message: "teapot" }),
 		);
 
 		const caught = await client.finish().catch((err: unknown) => err);
 
-		expect(caught).toBeInstanceOf(ControlPlaneError);
+		expect(caught).toBeInstanceOf(JobsApiError);
 		expect(caught).not.toBeInstanceOf(ServerError);
-		expect((caught as ControlPlaneError).status).toBe(418);
+		expect((caught as JobsApiError).status).toBe(418);
 		expect((caught as Error).message).toContain("418");
 	});
 
@@ -241,12 +241,12 @@ describe("response parsing", () => {
 			respondJson(response, 200, { id: "not a number" }),
 		);
 
-		await expect(client.getJob()).rejects.toBeInstanceOf(ControlPlaneError);
+		await expect(client.getJob()).rejects.toBeInstanceOf(JobsApiError);
 	});
 });
 
 describe("transport failures", () => {
-	it("reports an unreachable control plane as a transport error", async () => {
+	it("reports an unreachable jobs API as a transport error", async () => {
 		const client = await setup(
 			(_, response) => respondJson(response, 200, {}),
 			{

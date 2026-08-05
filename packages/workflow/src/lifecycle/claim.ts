@@ -6,7 +6,7 @@ import {
 import type { Logger } from "@virtool/logger";
 import { fetch } from "undici";
 import { createDispatcher, joinUrl, REQUEST_BUDGET_MS } from "../client/client";
-import { assertOkResponse, ControlPlaneError } from "../client/errors";
+import { assertOkResponse, JobsApiError } from "../client/errors";
 import { sleep } from "../client/retry";
 
 /** Seconds between claim attempts, matching `acquire.py`'s `poll_interval`. */
@@ -34,7 +34,7 @@ export type ClaimJobOptions = {
  * @returns the claimed job, or `null` when the signal aborted before one was
  *   available. Abort is an ordinary outcome — a claim timeout and a SIGTERM
  *   both land here — so it is a return value rather than an exception.
- * @throws {ControlPlaneError} when the jobs API answers with a status other
+ * @throws {JobsApiError} when the jobs API answers with a status other
  *   than 200 or 404.
  */
 export async function claimJob({
@@ -82,8 +82,8 @@ export async function claimJob({
 						// and the runner would poll a broken or incompatible jobs API
 						// until its timeout and then exit 0 as though no job had been
 						// waiting.
-						throw new ControlPlaneError(
-							"control plane returned a claim body that was not json",
+						throw new JobsApiError(
+							"jobs API returned a claim body that was not json",
 							{ method, path, status: 200, cause: err },
 						);
 					}
@@ -91,15 +91,15 @@ export async function claimJob({
 					const parsed = JobClaimed.safeParse(body);
 
 					if (!parsed.success) {
-						throw new ControlPlaneError(
-							`control plane returned an unexpected claim body: ${parsed.error.message}`,
+						throw new JobsApiError(
+							`jobs API returned an unexpected claim body: ${parsed.error.message}`,
 							{ method, path, status: 200, cause: parsed.error },
 						);
 					}
 
 					logger.info(
 						{ jobId: parsed.data.id, workflow },
-						"claimed a job from the control plane",
+						"claimed a job from the jobs API",
 					);
 
 					return parsed.data;
@@ -121,7 +121,7 @@ export async function claimJob({
 					);
 				}
 			} catch (err) {
-				if (err instanceof ControlPlaneError) {
+				if (err instanceof JobsApiError) {
 					throw err;
 				}
 
@@ -131,7 +131,7 @@ export async function claimJob({
 
 				logger.warn(
 					{ err },
-					"could not reach the control plane while claiming a job",
+					"could not reach the jobs API while claiming a job",
 				);
 			}
 

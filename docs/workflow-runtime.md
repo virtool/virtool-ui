@@ -41,7 +41,7 @@ There is no module scanning. Python's `collect()` reads a module's
 and tree-shaking make that order an unsafe thing to depend on.
 
 **A step's `id` is authored in `snake_case` and must match the Python
-function name it was ported from.** It is the identifier the control plane
+function name it was ported from.** It is the identifier the jobs API
 stores — `POST /jobs/{jobId}/steps/{stepId}/start` takes it, and Python
 sends `step.function.__name__`. Never derive it by slugifying a display
 name: a ported workflow whose step ids drift changes the shape of a job's
@@ -161,7 +161,7 @@ The three real callbacks resolve without a registry:
   than at the end. It survives as `onStepStart` on `RunWorkflowOptions`: one
   optional function, no registry, no dispatch semantics.
 
-A rejection from `onStepStart` fails the run. The control plane not knowing
+A rejection from `onStepStart` fails the run. The jobs API not knowing
 which step is executing is not a thing to continue past.
 
 Do not reintroduce a hook registry to give a workflow a place to put teardown.
@@ -267,7 +267,7 @@ runtime does that read once, eagerly, before the first step.
 
 ### The client
 
-`createControlPlaneClient` returns one client per run, created after the
+`createJobsApiClient` returns one client per run, created after the
 claim. It authenticates every request with HTTP Basic as `job-{id}:{key}`,
 the handle prefix the jobs API reserves for a runner.
 
@@ -311,7 +311,7 @@ The retry sleep is interruptible by the run's cancellation signal, so a
 cancelled run does not sit in it for 25 s before noticing. Each retry logs
 at `info` and the exhaustion at `warn`.
 
-Statuses map to named errors, all extending `ControlPlaneError`, which
+Statuses map to named errors, all extending `JobsApiError`, which
 extends `WorkflowError`:
 
 | Status | Error |
@@ -322,7 +322,7 @@ extends `WorkflowError`:
 | 404 | `NotFoundError` |
 | 409 | `ConflictError` |
 | 500 | `ServerError` |
-| anything else | `ControlPlaneError`, naming the status |
+| anything else | `JobsApiError`, naming the status |
 
 The message is the JSON body's `message` key when there is one, else the
 stringified JSON, else the response text, else a fixed fallback — mirroring
@@ -355,7 +355,7 @@ On the fifth consecutive failure the loop logs at `warn` — naming the
 consequence, because this is otherwise silent — stops, and **lets the run
 continue**. It does not cancel.
 
-That give-up window is roughly 20 s. **The control plane fails a running
+That give-up window is roughly 20 s. **The jobs API fails a running
 job whose last ping is more than five minutes old**
 (`Data.timeout_stalled_jobs` in `virtool/jobs/data.py`, which sweeps
 `pinged_at < utcnow() - 5 minutes`). The loop must give up well inside that
@@ -386,7 +386,7 @@ would redo all of it; the job is left to the ping timeout instead.
 | SIGTERM | 124 |
 | Claim error, work path, or `buildContext` failed | 1 |
 
-**A failed workflow exits 0.** The control plane owns the failure
+**A failed workflow exits 0.** The jobs API owns the failure
 transition, and a non-zero exit makes the `ScaledJob` retry the pod, which
 is not wanted. The failure is logged at `error` with the error as a
 structured field before exiting, or it would disappear.
@@ -449,7 +449,7 @@ config is then passed on as an argument. **Nothing in the package reads
 
 `WorkflowError` is the base for everything this package throws, with
 `WorkflowDefinitionError` for a malformed definition. The subprocess runner
-and the control-plane client extend `WorkflowError` rather than `Error`, so
+and the jobs API client extend `WorkflowError` rather than `Error`, so
 a workflow app can tell a runtime failure from anything that went wrong
 inside a step.
 

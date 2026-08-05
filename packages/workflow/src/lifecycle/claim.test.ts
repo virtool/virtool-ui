@@ -1,6 +1,6 @@
 import type { CreateJobClaimRequest } from "@virtool/contracts";
 import { afterEach, describe, expect, it } from "vitest";
-import { ControlPlaneError, ServerError } from "../client/errors";
+import { JobsApiError, ServerError } from "../client/errors";
 import { createRecordingLogger } from "../testFixtures";
 import {
 	respondJson,
@@ -147,7 +147,7 @@ describe("claimJob", () => {
 		expect(server.requests).toHaveLength(3);
 	});
 
-	it("warns and polls again when the control plane is unreachable", async () => {
+	it("warns and polls again when the jobs API is unreachable", async () => {
 		const { logger, records } = createRecordingLogger();
 		const controller = new AbortController();
 
@@ -169,7 +169,7 @@ describe("claimJob", () => {
 		const warnings = records().filter((record) => record.level === 40);
 
 		expect(warnings.length).toBeGreaterThan(1);
-		expect(warnings[0]?.msg).toContain("could not reach the control plane");
+		expect(warnings[0]?.msg).toContain("could not reach the jobs API");
 	});
 
 	it("throws on any other status, after logging it", async () => {
@@ -188,7 +188,7 @@ describe("claimJob", () => {
 		}).catch((err: unknown) => err);
 
 		expect(caught).toBeInstanceOf(ServerError);
-		expect((caught as ControlPlaneError).status).toBe(500);
+		expect((caught as JobsApiError).status).toBe(500);
 
 		const errors = records().filter((record) => record.level === 50);
 
@@ -210,7 +210,7 @@ describe("claimJob", () => {
 			pollIntervalMs: 5,
 		}).catch((err: unknown) => err);
 
-		expect(caught).toBeInstanceOf(ControlPlaneError);
+		expect(caught).toBeInstanceOf(JobsApiError);
 		expect(server.requests).toHaveLength(1);
 	});
 

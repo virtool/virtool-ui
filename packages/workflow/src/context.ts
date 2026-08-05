@@ -1,6 +1,6 @@
 import type { JobWorkflow, JsonObject } from "@virtool/contracts";
 import type { Logger } from "@virtool/logger";
-import type { ControlPlaneClient } from "./client/client";
+import type { JobsApiClient } from "./client/client";
 import { assertSerializableData } from "./serializable";
 import type { Workflow } from "./step";
 
@@ -20,10 +20,10 @@ export type BuildContextInput = {
 	logger: Logger;
 	signal: AbortSignal;
 	/**
-	 * The run's authenticated control-plane client, already built by the time
+	 * The run's authenticated jobs API client, already built by the time
 	 * `buildContext` runs so a metadata read needs no second construction path.
 	 */
-	client: ControlPlaneClient;
+	client: JobsApiClient;
 };
 
 /**
@@ -53,8 +53,8 @@ export type WorkflowContext<TData, TState> = {
 	readonly logger: Logger;
 	/** Aborts on cancellation or SIGTERM. Forward it to anything long-running. */
 	readonly signal: AbortSignal;
-	/** The run's authenticated control-plane client. */
-	readonly client: ControlPlaneClient;
+	/** The run's authenticated jobs API client. */
+	readonly client: JobsApiClient;
 
 	// Two more members land here, each added by its own issue: `runSubprocess`
 	// (the subprocess runner) and `storage` (direct object storage access). Only

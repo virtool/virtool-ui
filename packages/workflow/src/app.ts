@@ -2,7 +2,7 @@ import { hostname } from "node:os";
 import * as Sentry from "@sentry/node";
 import { createLogger, type Logger } from "@virtool/logger";
 import { getCommonOptions } from "@virtool/sentry";
-import { createControlPlaneClient } from "./client/client";
+import { createJobsApiClient } from "./client/client";
 import type { WorkflowRunConfig } from "./config";
 import { createWorkflowContext } from "./context";
 import { claimJob } from "./lifecycle/claim";
@@ -14,7 +14,7 @@ import { createWorkPath } from "./workPath";
 /**
  * Exit codes a workflow pod reports.
  *
- * A workflow that failed exits **0**: failure is a transition the control plane
+ * A workflow that failed exits **0**: failure is a transition the jobs API
  * owns, and a non-zero exit makes the `ScaledJob` retry the pod, which is not
  * wanted. Only a genuinely broken pod exits 1, and only an intentional
  * termination exits 124 — the code the orchestrator distinguishes.
@@ -100,7 +100,7 @@ function initSentry(
 }
 
 /**
- * Identifies one runner to the control plane. Matches Python's
+ * Identifies one runner to the jobs API. Matches Python's
  * `f"{socket.gethostname()}-{os.getpid()}"`.
  */
 function buildRunnerId(): string {
@@ -219,7 +219,7 @@ async function claimAndRun<TData, TState>({
 		jobId: claimed.id,
 	});
 
-	const client = createControlPlaneClient({
+	const client = createJobsApiClient({
 		baseUrl: config.jobsApiUrl,
 		jobId: claimed.id,
 		key: claimed.key,
@@ -290,11 +290,11 @@ async function claimAndRun<TData, TState>({
 				await client.finish();
 			} catch (err) {
 				// The work is done and the outputs are written, so retrying the pod
-				// would redo all of it. The job is left to the control plane's ping
+				// would redo all of it. The job is left to the jobs API's ping
 				// timeout instead.
 				logger.error(
 					{ err },
-					"workflow succeeded but the control plane could not be told",
+					"workflow succeeded but the jobs API could not be told",
 				);
 			}
 

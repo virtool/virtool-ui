@@ -1,7 +1,7 @@
 import { WorkflowError } from "../errors";
 
-/** Everything {@link ControlPlaneError} needs to say where it came from. */
-export type ControlPlaneErrorOptions = {
+/** Everything {@link JobsApiError} needs to say where it came from. */
+export type JobsApiErrorOptions = {
 	method: string;
 	path: string;
 	status?: number;
@@ -9,18 +9,18 @@ export type ControlPlaneErrorOptions = {
 };
 
 /**
- * Base for every failure reaching the control plane.
+ * Base for every failure reaching the jobs API.
  *
  * Thrown directly when a non-2xx status has no named subclass. Python raises a
  * bare `ValueError` there (`api/utils.py:140`), which is indistinguishable from
  * a programming error; a named error carrying the status is the improvement.
  */
-export class ControlPlaneError extends WorkflowError {
+export class JobsApiError extends WorkflowError {
 	readonly status: number | undefined;
 	readonly method: string;
 	readonly path: string;
 
-	constructor(message: string, options: ControlPlaneErrorOptions) {
+	constructor(message: string, options: JobsApiErrorOptions) {
 		super(message, { cause: options.cause });
 
 		this.status = options.status;
@@ -34,13 +34,13 @@ export class ControlPlaneError extends WorkflowError {
  * timeout, or the per-request budget expiring.
  *
  * This is the **only** retryable failure. A status-mapped error is a decision
- * the control plane made and repeating it five times over 25 s is a bug, which
+ * the jobs API made and repeating it five times over 25 s is a bug, which
  * is why the two are different classes rather than one carrying a flag.
  */
-export class TransportError extends ControlPlaneError {}
+export class TransportError extends JobsApiError {}
 
 /** 400. */
-export class BadRequestError extends ControlPlaneError {}
+export class BadRequestError extends JobsApiError {}
 
 /**
  * 401.
@@ -48,26 +48,26 @@ export class BadRequestError extends ControlPlaneError {}
  * The jobs API's request guard answers an unauthenticated caller with an opaque
  * 401, so this is the shape a wrong or revoked job key takes.
  */
-export class UnauthorizedError extends ControlPlaneError {}
+export class UnauthorizedError extends JobsApiError {}
 
 /** 403. */
-export class ForbiddenError extends ControlPlaneError {}
+export class ForbiddenError extends JobsApiError {}
 
 /** 404. */
-export class NotFoundError extends ControlPlaneError {}
+export class NotFoundError extends JobsApiError {}
 
 /** 409. */
-export class ConflictError extends ControlPlaneError {}
+export class ConflictError extends JobsApiError {}
 
 /** 500. */
-export class ServerError extends ControlPlaneError {}
+export class ServerError extends JobsApiError {}
 
-type ControlPlaneErrorConstructor = new (
+type JobsApiErrorConstructor = new (
 	message: string,
-	options: ControlPlaneErrorOptions,
-) => ControlPlaneError;
+	options: JobsApiErrorOptions,
+) => JobsApiError;
 
-const BY_STATUS: ReadonlyMap<number, ControlPlaneErrorConstructor> = new Map([
+const BY_STATUS: ReadonlyMap<number, JobsApiErrorConstructor> = new Map([
 	[400, BadRequestError],
 	[401, UnauthorizedError],
 	[403, ForbiddenError],
@@ -138,7 +138,7 @@ export async function readErrorMessage(
  *
  * A 2xx response returns without reading the body, which the caller still owns.
  *
- * @throws {ControlPlaneError} for any non-2xx status.
+ * @throws {JobsApiError} for any non-2xx status.
  */
 export async function assertOkResponse(
 	response: ErrorResponse,
@@ -158,7 +158,7 @@ export async function assertOkResponse(
 		throw new Named(message, errorOptions);
 	}
 
-	throw new ControlPlaneError(
+	throw new JobsApiError(
 		`unhandled status ${response.status}: ${message}`,
 		errorOptions,
 	);

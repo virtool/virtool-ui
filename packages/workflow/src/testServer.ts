@@ -33,7 +33,7 @@ export type TestServer = {
 };
 
 /**
- * Start a real HTTP server for the control-plane client to talk to.
+ * Start a real HTTP server for the jobs API client to talk to.
  *
  * Retry, cancellation and status-to-error mapping all live in the space between
  * `fetch` and the wire, which is exactly what a fetch mock would assert into

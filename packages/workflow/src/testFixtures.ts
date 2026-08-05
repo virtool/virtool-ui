@@ -1,5 +1,5 @@
 import { createLogger, type Logger } from "@virtool/logger";
-import type { ControlPlaneClient } from "./client/client";
+import type { JobsApiClient } from "./client/client";
 import type { BuildContextInput, RunJob, WorkflowContext } from "./context";
 
 /**
@@ -38,26 +38,24 @@ export function createRecordingLogger(): RecordingLogger {
 	};
 }
 
-/** A claimed job standing in for whatever the control plane handed back. */
+/** A claimed job standing in for whatever the jobs API handed back. */
 export function createFakeRunJob(overrides: Partial<RunJob> = {}): RunJob {
 	return { id: 1, workflow: "create_subtraction", args: {}, ...overrides };
 }
 
 /**
- * A control-plane client that refuses every call.
+ * A jobs API client that refuses every call.
  *
  * A context needs one to typecheck, and a test that did not set out to exercise
  * the lifecycle should fail loudly rather than silently reach the network. The
  * fake the *workflow* test harness offers is a different thing and belongs to
  * its own issue; override individual methods here to stand in for it.
  */
-export function createUnreachableControlPlaneClient(
-	overrides: Partial<ControlPlaneClient> = {},
-): ControlPlaneClient {
+export function createUnreachableJobsApiClient(
+	overrides: Partial<JobsApiClient> = {},
+): JobsApiClient {
 	const refuse = (name: string) => () =>
-		Promise.reject(
-			new Error(`control plane client ${name} was called in a test`),
-		);
+		Promise.reject(new Error(`jobs API client ${name} was called in a test`));
 
 	return {
 		request: refuse("request"),
@@ -81,7 +79,7 @@ export function createFakeBuildContextInput(
 		mem: 4,
 		logger: createRecordingLogger().logger,
 		signal: new AbortController().signal,
-		client: createUnreachableControlPlaneClient(),
+		client: createUnreachableJobsApiClient(),
 		...overrides,
 	};
 }

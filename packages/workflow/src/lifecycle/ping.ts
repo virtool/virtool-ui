@@ -1,5 +1,5 @@
 import type { Logger } from "@virtool/logger";
-import type { ControlPlaneClient } from "../client/client";
+import type { JobsApiClient } from "../client/client";
 import { sleep } from "../client/retry";
 import type { RunSignals } from "../run";
 
@@ -13,7 +13,7 @@ export const PING_INTERVAL_MS = 5_000;
  * Consecutive failures before the loop gives up.
  *
  * With retries disabled on the ping request, five failures at a 5 s cadence is
- * a give-up window of roughly 20 s. The control plane fails a running job whose
+ * a give-up window of roughly 20 s. The jobs API fails a running job whose
  * last ping is more than **five minutes** old, so the pod stops heartbeating
  * well inside the sweep — which is the whole point of owning the retry policy
  * here rather than inheriting a hidden 25 s of retries per attempt.
@@ -28,14 +28,14 @@ export type PingLoop = {
 
 /** Options for {@link startPingLoop}. */
 export type StartPingLoopOptions = {
-	client: ControlPlaneClient;
+	client: JobsApiClient;
 	logger: Logger;
 	signals: RunSignals;
 	intervalMs?: number;
 };
 
 /**
- * Heartbeat the control plane for as long as the run lasts.
+ * Heartbeat the jobs API for as long as the run lasts.
  *
  * This is also the cancellation channel: a ping answered with `cancelled: true`
  * aborts the run's signal, which is what unwinds the run loop. A runner has no
@@ -70,7 +70,7 @@ export function startPingLoop({
 				failures = 0;
 
 				if (cancelled) {
-					logger.info("control plane reported the job as cancelled");
+					logger.info("jobs API reported the job as cancelled");
 
 					signals.cancel();
 
@@ -79,7 +79,7 @@ export function startPingLoop({
 			} catch (err) {
 				// The run's own abort races the `stop()` call that follows it, so a
 				// ping already in flight rejects on a signal that means the run is
-				// over rather than that the control plane is unreachable.
+				// over rather than that the jobs API is unreachable.
 				if (controller.signal.aborted || signals.signal.aborted) {
 					return;
 				}
@@ -89,13 +89,13 @@ export function startPingLoop({
 				if (failures >= MAX_PING_FAILURES) {
 					logger.warn(
 						{ err, failures },
-						"giving up on pinging the control plane; the job will be failed by its ping timeout while this pod keeps running",
+						"giving up on pinging the jobs API; the job will be failed by its ping timeout while this pod keeps running",
 					);
 
 					return;
 				}
 
-				logger.info({ err, failures }, "control plane ping failed");
+				logger.info({ err, failures }, "jobs API ping failed");
 			}
 
 			await sleep(intervalMs, controller.signal);

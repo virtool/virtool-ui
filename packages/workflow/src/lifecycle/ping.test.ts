@@ -1,10 +1,10 @@
 import type { JobPing } from "@virtool/contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ControlPlaneClient } from "../client/client";
+import type { JobsApiClient } from "../client/client";
 import { createRunSignals } from "../run";
 import {
 	createRecordingLogger,
-	createUnreachableControlPlaneClient,
+	createUnreachableJobsApiClient,
 } from "../testFixtures";
 import {
 	MAX_PING_FAILURES,
@@ -17,8 +17,8 @@ function pong(cancelled = false): JobPing {
 	return { cancelled, pingedAt: "2026-08-05T00:00:00Z" };
 }
 
-function clientPinging(ping: ControlPlaneClient["ping"]): ControlPlaneClient {
-	return createUnreachableControlPlaneClient({ ping });
+function clientPinging(ping: JobsApiClient["ping"]): JobsApiClient {
+	return createUnreachableJobsApiClient({ ping });
 }
 
 describe("startPingLoop", () => {
@@ -58,7 +58,7 @@ describe("startPingLoop", () => {
 		]);
 	});
 
-	it("cancels the run and stops when the control plane reports cancellation", async () => {
+	it("cancels the run and stops when the jobs API reports cancellation", async () => {
 		const signals = createRunSignals();
 		const ping = vi.fn(() => Promise.resolve(pong(true)));
 
@@ -101,9 +101,7 @@ describe("startPingLoop", () => {
 		const warnings = records().filter((record) => record.level === 40);
 
 		expect(warnings).toHaveLength(1);
-		expect(warnings[0]?.msg).toContain(
-			"giving up on pinging the control plane",
-		);
+		expect(warnings[0]?.msg).toContain("giving up on pinging the jobs API");
 		expect(warnings[0]?.msg).toContain("ping timeout");
 
 		// The run is left alone — giving up on the heartbeat is not a cancellation.

@@ -9,7 +9,7 @@ export const MAX_RETRIES = 5;
  *
  * Python's `retry` decorator only backs off exponentially when a caller passes
  * a non-default `base_delay`, and nothing does — so the observed behaviour is
- * six attempts spread over 25 s, which is what the control plane's five-minute
+ * six attempts spread over 25 s, which is what the jobs API's five-minute
  * ping-timeout sweep is calibrated against. Do not "improve" this.
  */
 export const RETRY_DELAY_MS = 5_000;
@@ -71,7 +71,7 @@ export async function withRetry<T>(
 			if (attemptIndex >= retries) {
 				logger.warn(
 					{ err, attempts: attemptIndex + 1 },
-					"giving up on control plane request after exhausting retries",
+					"giving up on jobs API request after exhausting retries",
 				);
 
 				throw err;
@@ -79,7 +79,7 @@ export async function withRetry<T>(
 
 			logger.info(
 				{ attempt: attemptIndex + 1, delayMs: RETRY_DELAY_MS, err },
-				"retrying control plane request after transport failure",
+				"retrying jobs API request after transport failure",
 			);
 
 			await sleep(RETRY_DELAY_MS, signal);

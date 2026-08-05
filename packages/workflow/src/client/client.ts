@@ -2,7 +2,7 @@ import { Job, JobPing, type JsonValue } from "@virtool/contracts";
 import type { Logger } from "@virtool/logger";
 import { Agent, fetch } from "undici";
 import type { ZodType } from "zod";
-import { assertOkResponse, ControlPlaneError, TransportError } from "./errors";
+import { assertOkResponse, JobsApiError, TransportError } from "./errors";
 import { withRetry } from "./retry";
 
 /**
@@ -75,7 +75,7 @@ export type RequestOptions<T> = {
  * Authenticated client for one claimed job. One instance per run, created after
  * the claim because the key only exists from then on.
  */
-export type ControlPlaneClient = {
+export type JobsApiClient = {
 	/**
 	 * Generic authenticated request with retry and status mapping.
 	 *
@@ -99,8 +99,8 @@ export type ControlPlaneClient = {
 	close: () => Promise<void>;
 };
 
-/** Options for {@link createControlPlaneClient}. */
-export type CreateControlPlaneClientOptions = {
+/** Options for {@link createJobsApiClient}. */
+export type CreateJobsApiClientOptions = {
 	/** Cluster-internal jobs API service URL. Never the public web origin. */
 	baseUrl: string;
 	jobId: number;
@@ -131,13 +131,13 @@ function buildSignal(signals: (AbortSignal | undefined)[]): AbortSignal {
 	]);
 }
 
-export function createControlPlaneClient({
+export function createJobsApiClient({
 	baseUrl,
 	jobId,
 	key,
 	logger,
 	signal: runSignal,
-}: CreateControlPlaneClientOptions): ControlPlaneClient {
+}: CreateJobsApiClientOptions): JobsApiClient {
 	const dispatcher = createDispatcher();
 	const authorization = buildAuthorization(jobId, key);
 
@@ -177,7 +177,7 @@ export function createControlPlaneClient({
 			}
 
 			throw new TransportError(
-				`could not reach the control plane at ${method} ${path}`,
+				`could not reach the jobs API at ${method} ${path}`,
 				{ method, path, cause: err },
 			);
 		}
@@ -195,8 +195,8 @@ export function createControlPlaneClient({
 		const parsed = schema.safeParse(await response.json());
 
 		if (!parsed.success) {
-			throw new ControlPlaneError(
-				`control plane returned an unexpected body for ${method} ${path}: ${parsed.error.message}`,
+			throw new JobsApiError(
+				`jobs API returned an unexpected body for ${method} ${path}: ${parsed.error.message}`,
 				{ method, path, status: response.status, cause: parsed.error },
 			);
 		}

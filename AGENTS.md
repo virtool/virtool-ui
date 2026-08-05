@@ -999,7 +999,7 @@ Three decisions shape it and are not up for re-litigation:
 
 Steps are an **explicit ordered array**, never a scanned module. A step's
 `id` is authored in `snake_case` and **must match the Python function name
-it was ported from** — the control plane stores it, so a slugified display
+it was ported from** — the jobs API stores it, so a slugified display
 name changes the shape of a job's step list at cutover.
 
 Cancellation is **cooperative** and is the one real divergence from Python:
@@ -1013,8 +1013,8 @@ its defaults point at nothing and at a relative path `createWorkPath` would
 delete. The former is also a rename; Python calls it
 `VT_JOBS_API_CONNECTION_STRING`. `VT_TIMEOUT` is in **seconds**.
 
-The lifecycle half — `createControlPlaneClient`, `claimJob`,
-`startPingLoop`, `runWorkflowApp` — carries five rules:
+The lifecycle half — `createJobsApiClient`, `claimJob`, `startPingLoop`,
+`runWorkflowApp` — carries five rules:
 
 - **Paths are unprefixed and every wire field is camelCase.** The jobs API
   serves no SPA, so `/jobs/claim` and `/jobs/{id}/ping` match Python's byte
@@ -1032,8 +1032,7 @@ The lifecycle half — `createControlPlaneClient`, `claimJob`,
   (pings are issued with retries disabled). It gives up after five
   *consecutive* failures — resetting on success, which Python does not —
   logging at `warn`, and lets the run continue. Its ~20 s give-up window
-  must stay well inside the control plane's **five-minute** stalled-job
-  sweep.
+  must stay well inside the jobs API's **five-minute** stalled-job sweep.
 - **A failed workflow exits 0.** Failure is an API-side transition and a
   non-zero exit makes the `ScaledJob` retry the pod. Only a broken pod exits
   1; only SIGTERM exits 124. There is deliberately no failure call to make —
