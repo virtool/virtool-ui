@@ -314,6 +314,28 @@ describe("termination", () => {
 		expect(code).toBe(EXIT_TERMINATED);
 	});
 
+	it("exits 124 when sigterm arrives while preparing the run", async () => {
+		server = await startTestServer(createHandler({}));
+
+		// An abort-aware buildContext forwards the run's signal, so a termination
+		// arriving here surfaces as a rejection. Reading that as a broken pod
+		// would have the ScaledJob retry one that was deliberately stopped.
+		const workflow = defineWorkflow<Data, State>({
+			name: "create_subtraction",
+			buildContext: () => {
+				process.emit("SIGTERM", "SIGTERM");
+
+				return Promise.reject(new Error("aborted"));
+			},
+			createState: () => ({ visited: [] }),
+			steps: [step("prepare")],
+		});
+
+		const { code } = await run(workflow);
+
+		expect(code).toBe(EXIT_TERMINATED);
+	});
+
 	it("removes its sigterm handler when the run is over", async () => {
 		server = await startTestServer(createHandler({}));
 

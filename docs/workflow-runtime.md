@@ -336,8 +336,12 @@ response with `cancelled: true` calls `signals.cancel()`, which aborts the
 run's signal and unwinds the run loop. A runner has no other way to learn it
 should stop.
 
-Ping requests are issued with **retries disabled**, so the loop owns the
-policy end to end. Python's ping goes through `@retry`, so one "failure" as
+Ping requests are issued with **retries disabled** and bounded by the
+loop's own signal, so the loop owns the policy end to end. The second half
+matters as much as the first: on a successful run nothing aborts the run's
+signal, so a hung ping would otherwise hold `stop()` open for the 600 s
+request budget with the finish call queued behind it — long enough for the
+sweep to fail a job whose work is already done. Python's ping goes through `@retry`, so one "failure" as
 its loop counts it costs 25 s of hidden retries first, and with the loop's
 own five-failure budget on top the pod can go over two minutes without a
 successful ping while still believing it is healthy.

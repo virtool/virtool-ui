@@ -84,7 +84,15 @@ export type ControlPlaneClient = {
 	 */
 	request: <T>(options: RequestOptions<T>) => Promise<T>;
 	getJob: () => Promise<Job>;
-	ping: () => Promise<JobPing>;
+	/**
+	 * Heartbeat.
+	 *
+	 * Takes a signal because the ping loop must be able to abandon a hung ping
+	 * when it stops: the run's own signal is not aborted on a successful run, so
+	 * without this the loop's `stop()` would wait out the 600 s request budget
+	 * with the finish call queued behind it.
+	 */
+	ping: (signal?: AbortSignal) => Promise<JobPing>;
 	startStep: (stepId: string) => Promise<void>;
 	finish: () => Promise<void>;
 	/** Closes the dispatcher. Called once at the end of a run. */
@@ -214,12 +222,13 @@ export function createControlPlaneClient({
 		// end. Python's ping goes through `@retry`, so one failure as its loop
 		// counts it costs 25 s of hidden retries first and the pod can go over two
 		// minutes without a successful ping while believing it is healthy.
-		ping: () =>
+		ping: (signal) =>
 			request({
 				method: "PUT",
 				path: `/jobs/${jobId}/ping`,
 				schema: JobPing,
 				retries: 0,
+				signal,
 			}),
 
 		startStep: (stepId) =>

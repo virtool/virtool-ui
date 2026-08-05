@@ -1,6 +1,6 @@
 import type { CreateJobClaimRequest } from "@virtool/contracts";
 import { afterEach, describe, expect, it } from "vitest";
-import { type ControlPlaneError, ServerError } from "../client/errors";
+import { ControlPlaneError, ServerError } from "../client/errors";
 import { createRecordingLogger } from "../testFixtures";
 import {
 	respondJson,
@@ -193,6 +193,25 @@ describe("claimJob", () => {
 		const errors = records().filter((record) => record.level === 50);
 
 		expect(errors[0]).toMatchObject({ status: 500 });
+	});
+
+	it("throws rather than polling on when a 200 body is not json", async () => {
+		server = await startTestServer((_, response) => {
+			response.writeHead(200, { "content-type": "application/json" });
+			response.end("{ not json");
+		});
+
+		const caught = await claimJob({
+			baseUrl: server.baseUrl,
+			workflow: "create_subtraction",
+			request: REQUEST,
+			logger: createRecordingLogger().logger,
+			signal: new AbortController().signal,
+			pollIntervalMs: 5,
+		}).catch((err: unknown) => err);
+
+		expect(caught).toBeInstanceOf(ControlPlaneError);
+		expect(server.requests).toHaveLength(1);
 	});
 
 	it("returns null when the signal aborts before a job is available", async () => {

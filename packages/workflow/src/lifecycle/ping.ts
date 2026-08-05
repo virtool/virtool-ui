@@ -60,7 +60,12 @@ export function startPingLoop({
 
 		while (!controller.signal.aborted) {
 			try {
-				const { cancelled } = await client.ping();
+				// Bound by the loop's own signal, not just the run's. On a successful
+				// run nothing aborts the run signal, so a hung ping would otherwise
+				// hold `stop()` open for the 600 s request budget with the finish call
+				// queued behind it — long enough for the sweep to fail a job whose
+				// work is already done.
+				const { cancelled } = await client.ping(controller.signal);
 
 				failures = 0;
 

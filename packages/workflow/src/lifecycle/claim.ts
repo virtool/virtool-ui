@@ -73,7 +73,22 @@ export async function claimJob({
 				);
 
 				if (response.status === 200) {
-					const parsed = JobClaimed.safeParse(await response.json());
+					let body: unknown;
+
+					try {
+						body = await response.json();
+					} catch (err) {
+						// Left to the outer catch this would read as a connection blip,
+						// and the runner would poll a broken or incompatible jobs API
+						// until its timeout and then exit 0 as though no job had been
+						// waiting.
+						throw new ControlPlaneError(
+							"control plane returned a claim body that was not json",
+							{ method, path, status: 200, cause: err },
+						);
+					}
+
+					const parsed = JobClaimed.safeParse(body);
 
 					if (!parsed.success) {
 						throw new ControlPlaneError(

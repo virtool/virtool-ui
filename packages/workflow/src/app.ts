@@ -251,6 +251,16 @@ async function claimAndRun<TData, TState>({
 				client,
 			});
 		} catch (err) {
+			// Preparation reaches the network and the filesystem with the run's
+			// signal, so a SIGTERM arriving here surfaces as a rejection rather
+			// than as a clean unwind. Reporting that as a broken pod would have
+			// the `ScaledJob` retry a pod that was deliberately stopped.
+			if (signals.isTerminated()) {
+				logger.info({ err }, "terminated while preparing the workflow run");
+
+				return EXIT_TERMINATED;
+			}
+
 			logger.error({ err }, "failed to prepare the workflow run");
 
 			return EXIT_INFRASTRUCTURE_FAILURE;

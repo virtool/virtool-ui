@@ -153,6 +153,33 @@ describe("startPingLoop", () => {
 		expect(vi.getTimerCount()).toBe(0);
 	});
 
+	it("abandons a hung ping when stopped rather than waiting it out", async () => {
+		const signals = createRunSignals();
+
+		// Only the signal handed to `ping` can end this, so a loop that passed
+		// nothing would leave `stop()` pending for the whole request budget.
+		const loop = startPingLoop({
+			client: clientPinging(
+				(signal) =>
+					new Promise((_, reject) => {
+						signal?.addEventListener(
+							"abort",
+							() => reject(new Error("aborted")),
+							{ once: true },
+						);
+					}),
+			),
+			logger: createRecordingLogger().logger,
+			signals,
+		});
+
+		await vi.advanceTimersByTimeAsync(PING_STAGGER_MS + 1);
+
+		await loop.stop();
+
+		expect(vi.getTimerCount()).toBe(0);
+	});
+
 	it("stays quiet when a ping in flight rejects because the run ended", async () => {
 		const { logger, records } = createRecordingLogger();
 		const signals = createRunSignals();
