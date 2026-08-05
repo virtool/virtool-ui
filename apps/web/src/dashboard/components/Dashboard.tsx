@@ -1,4 +1,5 @@
 import { useFetchAccount } from "@account/account";
+import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
@@ -25,7 +26,7 @@ export default function Dashboard() {
 	}
 
 	return (
-		<>
+		<ContainerNarrow>
 			<ViewHeader title="Dashboard">
 				<ViewHeaderTitle>Welcome back, {account.handle}</ViewHeaderTitle>
 			</ViewHeader>
@@ -35,6 +36,6 @@ export default function Dashboard() {
 				<RecentAnalyses userId={account.id} />
 				<ActiveJobs />
 			</div>
-		</>
+		</ContainerNarrow>
 	);
 }
