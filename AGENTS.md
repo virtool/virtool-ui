@@ -38,7 +38,11 @@ This is a **pnpm monorepo**:
   (`ghcr.io/virtool/ts-pathoscope`). Holds only a `Dockerfile` today: it
   compiles `packages/pathoscope-core` and layers the `ghcr.io/virtool/tools`
   binaries on a Debian Node base. Built from the **repo root**
-  (`docker build -f apps/workflow-pathoscope/Dockerfile .`).
+  (`docker build -f apps/workflow-pathoscope/Dockerfile .`). **CI builds it but
+  must not publish it** — `virtool/workflow-pathoscope` still releases the
+  pathoscope workflow, and a second pipeline shipping it from here would leave
+  two candidates for what the cluster runs. Don't add a publish job until that
+  repo retires.
 - `packages/` — shared, framework-agnostic libraries published as workspace
   packages, plus one Rust crate:
   - `@virtool/logger` — pino wrapper, server-side log defaults and
