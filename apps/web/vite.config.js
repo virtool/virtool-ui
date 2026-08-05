@@ -150,7 +150,6 @@ export default defineConfig(({ command, mode }) => ({
 			"class-variance-authority",
 			"clsx",
 			"d3",
-			"d3-transition",
 			"downshift",
 			"es-toolkit",
 			"es-toolkit/array",
