@@ -13,8 +13,8 @@ This is a **pnpm monorepo**:
   here.
 - `apps/site/` — `@virtool/site`, the product website at
   [virtool.ca](https://www.virtool.ca) (Astro + Tailwind, deployed to
-  Cloudflare Workers). Kept out of the repo-wide `pnpm check`/`pnpm knip`
-  gates — Astro is not linted by biome and is opaque to knip — so its own
+  Cloudflare Workers). Kept out of the `pnpm check`/`pnpm knip` gates —
+  Astro is not linted by biome and is opaque to knip — so its own
   Vite build (a `build-site` CI job) and Vitest suite are its gate. Deploy is
   manual: `pnpm --filter @virtool/site deploy`.
 - `apps/workflow-pathoscope/` — the pathoscope workflow image
@@ -128,6 +128,9 @@ commit that removes styled-components from this file.
 | Test (watch, web app) | `pnpm --filter @virtool/web test:watch` |
 | Test (one file) | `TZ=UTC pnpm --filter @virtool/web exec vitest run <path>` |
 | Rust crate | `cargo test` / `cargo fmt` (in `packages/pathoscope-core`) |
+
+`TZ=UTC` matches the `test` script and every CI test job — drop it and that
+command becomes the only unpinned way to run the suite.
 
 `pnpm test` does **not** reach `packages/pathoscope-core` — it is not a pnpm
 workspace. Run `cargo` there directly; a `test-rust` CI job gates it.
