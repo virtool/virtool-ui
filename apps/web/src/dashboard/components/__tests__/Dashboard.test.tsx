@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakeAnalysisMinimal } from "@tests/fake/analyses";
 import { createFakeServerJobMinimal } from "@tests/fake/jobs";
@@ -11,8 +11,29 @@ import { renderWithRouter } from "@tests/setup";
 import { beforeEach, describe, expect, it } from "vitest";
 import Dashboard from "../Dashboard";
 
+type CardTables = [
+	samples: HTMLElement,
+	analyses: HTMLElement,
+	jobs: HTMLElement,
+];
+
+/** The three card tables, in page order, once every card has loaded. */
+async function findTables(): Promise<CardTables> {
+	await waitFor(() => {
+		expect(screen.getAllByRole("table")).toHaveLength(3);
+	});
+
+	return screen.getAllByRole("table") as CardTables;
+}
+
+function getColumnLabels(table: HTMLElement) {
+	return within(table)
+		.getAllByRole("columnheader")
+		.map((header) => header.textContent);
+}
+
 describe("<Dashboard />", () => {
-	const account = createFakeAccount({ handle: "bob" });
+	const account = createFakeAccount();
 
 	beforeEach(() => {
 		mockGetAccount(account);
@@ -21,11 +42,11 @@ describe("<Dashboard />", () => {
 		mockFindJobs([]);
 	});
 
-	it("greets the signed-in user and renders every card", async () => {
+	it("renders every card under the view heading", async () => {
 		await renderWithRouter(<Dashboard />);
 
 		expect(
-			await screen.findByRole("heading", { name: "Welcome back, bob" }),
+			await screen.findByRole("heading", { name: "Dashboard" }),
 		).toBeInTheDocument();
 
 		expect(
@@ -91,14 +112,81 @@ describe("<Dashboard />", () => {
 		);
 	});
 
-	it("sends View all to the unfiltered list views", async () => {
+	it("names the columns of every card's table", async () => {
+		mockFindSamples([createFakeSampleMinimal()]);
+		mockFindAnalyses([createFakeAnalysisMinimal()]);
+		mockFindJobs([createFakeServerJobMinimal()]);
+
+		await renderWithRouter(<Dashboard />);
+
+		const [samples, analyses, jobs] = await findTables();
+
+		expect(samples).toHaveAccessibleName("My samples");
+		expect(getColumnLabels(samples)).toEqual(["Sample", "Analyses", "Created"]);
+
+		expect(analyses).toHaveAccessibleName("My analyses");
+		expect(getColumnLabels(analyses)).toEqual([
+			"Workflow",
+			"Sample",
+			"Created",
+		]);
+
+		expect(jobs).toHaveAccessibleName("Active jobs");
+		expect(getColumnLabels(jobs)).toEqual(["Workflow", "State", "Created"]);
+	});
+
+	it("ends every card's table with the created time, and no attribution", async () => {
+		mockFindSamples([createFakeSampleMinimal()]);
+		mockFindAnalyses([createFakeAnalysisMinimal()]);
+		mockFindJobs([createFakeServerJobMinimal()]);
+
+		await renderWithRouter(<Dashboard />);
+
+		for (const table of await findTables()) {
+			// Skip the header row, which holds column headers rather than cells.
+			for (const row of within(table).getAllByRole("row").slice(1)) {
+				const cells = within(row).getAllByRole("cell");
+
+				expect(cells).toHaveLength(3);
+
+				// Just the time: the "created" the attribution used to read is now
+				// only in the column header.
+				expect(cells[2]).toHaveTextContent(/ago|just now/);
+				expect(cells[2]).not.toHaveTextContent(/created/i);
+			}
+		}
+	});
+
+	it("names the parent sample of each analysis", async () => {
+		const sample = createFakeSampleMinimal({ name: "Parent sample" });
+
+		mockFindAnalyses([
+			createFakeAnalysisMinimal({
+				sample: { id: sample.id, name: sample.name },
+			}),
+		]);
+
+		await renderWithRouter(<Dashboard />);
+
+		expect(
+			await screen.findByRole("link", { name: "Parent sample" }),
+		).toHaveAttribute("href", `/samples/${sample.id}`);
+	});
+
+	it("sends View all to the list view the card is a window onto", async () => {
 		await renderWithRouter(<Dashboard />);
 
 		const [samples, jobs] = await screen.findAllByRole("link", {
 			name: "View all",
 		});
 
-		expect(samples).toHaveAttribute("href", "/samples");
+		// The card lists the reader's own samples, so its link keeps that filter.
+		expect(samples).toHaveAttribute(
+			"href",
+			`/samples?users=%5B${account.id}%5D`,
+		);
+
+		// Active jobs is account-wide, so its link is not filtered by user.
 		expect(jobs).toHaveAttribute("href", "/jobs");
 	});
 

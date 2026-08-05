@@ -1,7 +1,5 @@
-import { useFetchAccount } from "@account/account";
+import { useSuspenseAccount } from "@account/account";
 import ContainerNarrow from "@base/ContainerNarrow";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import QueryError from "@base/QueryError";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ActiveJobs from "./ActiveJobs";
@@ -11,24 +9,17 @@ import RecentSamples from "./RecentSamples";
 /**
  * The landing page at `/`.
  *
- * Every card fetches independently and shows its own error, so one failing
- * request leaves the rest of the dashboard usable.
+ * Every card suspends, so the route's `Suspense` covers the whole page with one
+ * placeholder and the cards appear together rather than popping in one at a
+ * time. A card that fails still fails alone — see `DashboardCardBoundary`.
  */
 export default function Dashboard() {
-	const { data: account, isPending, isError } = useFetchAccount();
-
-	if (isError && !account) {
-		return <QueryError noun="your account" />;
-	}
-
-	if (isPending) {
-		return <LoadingPlaceholder />;
-	}
+	const { data: account } = useSuspenseAccount();
 
 	return (
 		<ContainerNarrow>
 			<ViewHeader title="Dashboard">
-				<ViewHeaderTitle>Welcome back, {account.handle}</ViewHeaderTitle>
+				<ViewHeaderTitle>Dashboard</ViewHeaderTitle>
 			</ViewHeader>
 
 			<div className="flex flex-col gap-8">

@@ -1,17 +1,18 @@
-import Attribution from "@base/Attribution";
-import BoxGroup from "@base/BoxGroup";
-import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
-import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import QueryError from "@base/QueryError";
 import WorkflowTags from "@samples/components/Tag/WorkflowTags";
-import { useListSamples } from "@samples/queries";
+import { useSuspenseSamples } from "@samples/queries";
 import { FlaskConical } from "lucide-react";
 import { DASHBOARD_ITEM_COUNT } from "../constants";
 import DashboardCard, {
+	DashboardCardBoundary,
 	DashboardCardEmpty,
-	DashboardCardMore,
 } from "./DashboardCard";
+import DashboardTable, {
+	DashboardTableCell,
+	DashboardTableCreatedCell,
+	DashboardTableMore,
+	DashboardTableRow,
+} from "./DashboardTable";
 
 type RecentSamplesProps = {
 	/** The id of the signed-in user, whose samples are listed. */
@@ -20,7 +21,24 @@ type RecentSamplesProps = {
 
 /** The signed-in user's most recently created samples. */
 export default function RecentSamples({ userId }: RecentSamplesProps) {
-	const { data, isPending, isError } = useListSamples(
+	return (
+		<DashboardCard
+			action={
+				<Link search={{ users: [userId] }} to="/samples">
+					View all
+				</Link>
+			}
+			title="My samples"
+		>
+			<DashboardCardBoundary noun="samples">
+				<RecentSamplesBody userId={userId} />
+			</DashboardCardBoundary>
+		</DashboardCard>
+	);
+}
+
+function RecentSamplesBody({ userId }: RecentSamplesProps) {
+	const { data } = useSuspenseSamples(
 		1,
 		DASHBOARD_ITEM_COUNT,
 		"",
@@ -29,69 +47,45 @@ export default function RecentSamples({ userId }: RecentSamplesProps) {
 		[userId],
 	);
 
-	const action = <Link to="/samples">View all</Link>;
-
-	if (isError && !data) {
+	if (data.items.length === 0) {
 		return (
-			<DashboardCard action={action} title="My samples">
-				<QueryError noun="samples" />
-			</DashboardCard>
-		);
-	}
-
-	if (isPending) {
-		return (
-			<DashboardCard action={action} title="My samples">
-				<LoadingPlaceholder />
-			</DashboardCard>
+			<DashboardCardEmpty
+				description="Samples you create will appear here."
+				icon={FlaskConical}
+				title="No samples yet"
+			/>
 		);
 	}
 
 	const remaining = data.foundCount - data.items.length;
 
 	return (
-		<DashboardCard action={action} title="My samples">
-			{data.items.length === 0 ? (
-				<DashboardCardEmpty
-					description="Samples you create will appear here."
-					icon={FlaskConical}
-					title="No samples yet"
-				/>
-			) : (
-				<BoxGroup as="ul" className="mb-0">
-					{data.items.map((sample) => (
-						<BoxGroupSection
-							as="li"
-							className="flex flex-wrap gap-x-4 gap-y-1 items-center"
-							key={sample.id}
+		<DashboardTable labels={["Sample", "Analyses", "Created"]}>
+			{data.items.map((sample) => (
+				<DashboardTableRow key={sample.id}>
+					<DashboardTableCell>
+						<Link
+							className="font-medium truncate"
+							params={{ sampleId: String(sample.id) }}
+							to="/samples/$sampleId"
 						>
-							<Link
-								className="font-medium"
-								params={{ sampleId: String(sample.id) }}
-								to="/samples/$sampleId"
-							>
-								{sample.name}
-							</Link>
-							<Attribution
-								className="text-sm"
-								time={sample.createdAt}
-								user={sample.user.handle}
-							/>
-							<div className="ml-auto">
-								<WorkflowTags id={sample.id} workflows={sample.workflows} />
-							</div>
-						</BoxGroupSection>
-					))}
-					{remaining > 0 && (
-						<DashboardCardMore>
-							<Link search={{ users: [userId] }} to="/samples">
-								View {remaining} more {remaining === 1 ? "sample" : "samples"}{" "}
-								of yours
-							</Link>
-						</DashboardCardMore>
-					)}
-				</BoxGroup>
+							{sample.name}
+						</Link>
+					</DashboardTableCell>
+					<DashboardTableCell>
+						<WorkflowTags id={sample.id} workflows={sample.workflows} />
+					</DashboardTableCell>
+					<DashboardTableCreatedCell time={sample.createdAt} />
+				</DashboardTableRow>
+			))}
+			{remaining > 0 && (
+				<DashboardTableMore>
+					<Link search={{ users: [userId] }} to="/samples">
+						View {remaining} more {remaining === 1 ? "sample" : "samples"} of
+						yours
+					</Link>
+				</DashboardTableMore>
 			)}
-		</DashboardCard>
+		</DashboardTable>
 	);
 }
