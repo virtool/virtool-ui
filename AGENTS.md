@@ -300,105 +300,59 @@ worked by accident under un-memoized render will now break:
 Opt a single function out with a `"use no memo"` directive — useful for
 bisecting a suspected compiler interaction, but a fix, not a resting place.
 
-### Nothing heavy in a route's critical exports
+### Bundling: the chunk is the unit of loading, not the export
 
-`autoCodeSplitting` splits each route file in two. The **critical** half —
-`loader`, `beforeLoad`, `validateSearch`, `loaderDeps` — is imported
-*statically* by `routeTree.gen.ts`, so whatever it reaches lands in the eager
-bundle that **every** page load pays for, including `/login`. Only the
-`component` half is lazy.
+Tree-shaking removes unused code *within* a chunk; it does not decide which
+chunks a page fetches. So importing one symbol pulls the whole module's chunk,
+and `sideEffects: false` does nothing about it. Five rules follow:
 
-So, in a route's critical exports:
+- **Nothing heavy in a route's critical exports.** `autoCodeSplitting` makes
+  `loader`, `beforeLoad`, `validateSearch` and `loaderDeps` a statically
+  imported half that every page load pays for, `/login` included; only
+  `component` is lazy. Never statically import a feature's `queries.ts` — pull
+  the `queryOptions` factory in from inside the loader body — and never use zod
+  in `validateSearch`, which is synchronous and so pins ~108 KB eagerly. Use
+  `@app/searchParams` there instead.
+- **What a route guard reaches is downloaded on the login wall**, dynamic
+  imports included. The `queryOptions` the guards need therefore live apart
+  from their feature's `queries.ts`, one server function each:
+  `@account/account`, `@administration/passwordPolicy`, `@nav/queries`. Keep
+  them there even when the feature module looks light today.
+- **Heavy dependencies get their own module.** `cn()` is in `@app/cn`, not
+  `@app/utils`, to keep `tailwind-merge` out of every bundle that wants a plain
+  utility. Don't merge it back.
+- **Reach `src/server/**` through `createServerOnlyFn`**, never a top-level
+  import — `start.ts` puts it in the browser program (`auth/middleware.ts` and
+  `metricsMiddleware` are the worked examples).
+- **A native dependency must never be bundled.** It resolves its `.node` addon
+  against `__dirname`, which an ES module has none of, so it builds clean and
+  throws at first import. It needs both `environments.ssr.resolve.external` in
+  `apps/web/vite.config.js` and an `apps/web` dependency entry.
 
-- **Never statically import a feature's `queries.ts`.** Pull the
-  `queryOptions` factory in from inside the loader body instead:
-  `const { sampleQueryOptions } = await import("@samples/queries");`. A static
-  import drags the feature's whole request layer — every server-function stub
-  and the zod schemas they carry — into the eager bundle. Importing them in the
-  `component` half is fine — that half is lazy.
-- **Never use zod in `validateSearch`.** It is synchronous and cannot be
-  deferred, so a zod schema pins all ~108 KB of zod eagerly. Use the
-  dependency-free coercion helpers in `@app/searchParams` and type the function
-  as `(input: Partial<T> & SearchSchemaInput) => T` — the `SearchSchemaInput`
-  tag is what keeps `<Link search={{ page: 2 }}>` partial.
-- **`validateSearch` resolves every default; nothing downstream repeats one.**
-  A param with a default is required on the search type and coerced with a
-  fallback (`bool(input.reads, false)`), never left optional for components to
-  fill in with `search.reads ?? false` — a second copy of a default is free to
-  disagree with the first, which is how the analysis viewer came to draw its
-  coverage filters as on while filtering nothing. Keep the defaults in one
-  exported object and hand it to `stripSearchParams` in the route's
-  `search.middlewares`, so a resolved default costs nothing in the URL and a
-  shared link carries only what its sender changed
-  (`analyses/search.ts` and the analysis route are the worked example).
-- **Paginated list routes share `@app/pagination`.** Spread `paginated(input)`
-  into the returned object and intersect the route's search type with
-  `Paginated` (`type FooSearch = Paginated & { term: string }`) rather than
-  re-declaring `page: num(input.page, 1)`. Loaders pass `DEFAULT_PER_PAGE` from
-  the same module, not a literal `25`.
+See [docs/bundling.md](docs/bundling.md) for the eager/lazy split in full, why
+the login wall is reachability rather than timing, Nitro's two bundling stages
+and what `traceDeps` can and cannot reclaim, and how to verify the built output
+rather than trusting a green build.
 
-`src/server/**` is reachable from the browser program via `start.ts`, so the
-same rule applies there: reach server-function modules through
-`createServerOnlyFn` (see `auth/middleware.ts`), never a top-level import.
+### Route search params
 
-### What a route guard reaches gets its own module
+`validateSearch` resolves every default; nothing downstream repeats one. A
+param with a default is required on the search type and coerced with a fallback
+(`bool(input.reads, false)`), never left optional for a component to fill in
+with `search.reads ?? false` — a second copy of a default is free to disagree
+with the first, which is how the analysis viewer came to draw its coverage
+filters as on while filtering nothing.
 
-A `beforeLoad` that resolves an account, or a loader on `/login` or `/setup`,
-runs for unauthenticated visitors. Anything it reaches — even *dynamically* —
-is downloaded on the login wall.
+Keep the defaults in one exported object and hand it to `stripSearchParams` in
+the route's `search.middlewares`, so a resolved default costs nothing in the URL
+and a shared link carries only what its sender changed. `analyses/search.ts`
+and the analysis route are the worked example.
 
-**Tree-shaking will not save you here: the chunk is the unit of loading, not
-the export.** Importing a feature's `queries.ts` for one `queryOptions` factory
-pulls that module's whole chunk — every other request it defines, and the zod
-schemas those carry. Marking a module side-effect-free does nothing about this.
-
-So the queryOptions the guards need live apart from their feature's
-`queries.ts`, each importing one server function and nothing else:
-
-- `@account/account` — `accountQueryOptions` / `useFetchAccount`, backed by the
-  `getAccount` server function.
-- `@administration/passwordPolicy` — `passwordPolicyQueryOptions`, backed by
-  `getPasswordPolicyFn`.
-- `@nav/queries` — `rootQueryOptions` / `useRootQuery`, backed by the `getRoot`
-  server function. The guard reads `firstUser` from it before a session exists.
-
-Keep them out of their feature's `queries.ts` even when that module looks light
-today — the next request added there rides along onto the login wall with
-nothing to catch it.
-
-### Heavy dependencies get their own module
-
-A module's imports survive tree-shaking if the package does not declare
-`sideEffects: false` — so a grab-bag module leaks its heaviest dependency into
-every bundle that wants *any* of its exports. `cn()` (`@app/cn`) is split out
-of `@app/utils` for exactly this reason — it keeps `tailwind-merge` out of every
-bundle that only wants a plain utility. Don't merge it back.
-
-### A native dependency must never be bundled
-
-A package that loads a `.node` addon finds it relative to `__dirname`, which
-has no value in an ES module — so bundling one produces a server that builds
-cleanly and throws `ReferenceError: __dirname is not defined` the first time
-anything imports it. `bcrypt` shipped that way and took the whole auth path
-down with it.
-
-Nitro knows the common native packages and traces them out of its own bundle
-automatically, copying each into `.output/server/node_modules` — the dist
-image ships only `.output`, so nothing else puts them there. Reach for
-`traceDeps` on the `nitro()` plugin only for one it does not already know.
-What it cannot do is reclaim a package the **Vite** stage inlined first, and
-Nitro bundles the server in two stages. So a native package needs:
-
-- `environments.ssr.resolve.external` in `apps/web/vite.config.js`, so the Vite
-  stage leaves the import alone;
-- an entry in `apps/web/package.json` dependencies, even when no file in
-  `apps/web` imports it. Nitro resolves the external from the app root, and a
-  package reached only through a workspace package is not there under pnpm.
-  Add it to `ignoreDependencies` for `apps/web` in `knip.json` alongside.
-
-Check the built output rather than trusting a green build:
-`grep -rn "__dirname" apps/web/.output/server/_ssr/` should turn up no bare
-read — only lines that define one first.
+Paginated list routes share `@app/pagination`. Spread `paginated(input)` into
+the returned object and intersect the route's search type with `Paginated`
+(`type FooSearch = Paginated & { term: string }`) rather than re-declaring
+`page: num(input.page, 1)`. Loaders pass `DEFAULT_PER_PAGE` from the same
+module, not a literal `25`.
 
 ### Routing: in-app navigation uses `<Link>`
 
@@ -1007,10 +961,9 @@ it queries the very pool it measures, so a saturated pool queues it
 client-side where nothing rejects, and an unbounded read would cost the
 whole scrape rather than just the pool gauges.
 
-Anything reached from `start.ts` is in the browser program, so
-`metricsMiddleware` loads the registry through `createServerOnlyFn` and
-a dynamic import — never a static one, which would drag prom-client and
-its `node:*` reads into the client graph.
+`metricsMiddleware` loads the registry through `createServerOnlyFn`
+because a static import would drag prom-client and its `node:*` reads
+into the client graph.
 
 See [docs/metrics.md](docs/metrics.md) for the exported series, the
 token check, cardinality rules, and what deeper instrumentation would
