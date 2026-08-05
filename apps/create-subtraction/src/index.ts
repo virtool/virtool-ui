@@ -15,16 +15,10 @@ async function main(): Promise<void> {
 	const config = readConfig();
 	const logger = createLogger({ name: "create-subtraction" });
 
-	const subtractionId = process.env.VT_SUBTRACTION_ID;
-
-	if (!subtractionId) {
-		throw new Error("VT_SUBTRACTION_ID is required");
-	}
-
 	await checkStorageAccess(
 		createStorageBackend(config.storage),
 		logger,
-		subtractionId,
+		config.subtractionId,
 	);
 
 	logger.error("the workflow runtime is not implemented yet");

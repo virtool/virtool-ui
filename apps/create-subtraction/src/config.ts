@@ -4,6 +4,7 @@ import type { StorageConfig } from "@virtool/storage";
 /** Everything this process reads from the environment at startup. */
 export type Config = {
 	storage: StorageConfig;
+	subtractionId: string;
 };
 
 /**
@@ -76,7 +77,15 @@ function readStorage(): StorageConfig {
 	};
 }
 
-/** Resolve configuration from the environment. */
+/**
+ * Resolve configuration from the environment.
+ *
+ * `VT_SUBTRACTION_ID` is a stand-in for the id carried by a claimed job, and
+ * gives way to it when the runtime core lands.
+ */
 export function readConfig(): Config {
-	return { storage: readStorage() };
+	return {
+		storage: readStorage(),
+		subtractionId: requireEnv("VT_SUBTRACTION_ID"),
+	};
 }
