@@ -1,11 +1,11 @@
 # The workflow runtime
 
 `@virtool/workflow` (`packages/workflow`) is the runtime a workflow executor
-runs on: the step model, the lifecycle hooks, the run loop, the work
-directory, and the seam that builds a run's context. It is the port of
-Python's `virtool/workflow/` — `workflow.py`, `decorators.py`, `hooks.py`,
-`runtime/hook.py`, `runtime/run.py` and `runtime/path.py` — minus the two
-mechanisms this side deliberately does not have.
+runs on: the step model, the run loop, the work directory, and the seam
+that builds a run's context. It is the port of Python's
+`virtool/workflow/` — `workflow.py`, `decorators.py`, `runtime/run.py` and
+`runtime/path.py` — minus the three mechanisms this side deliberately does
+not have: dependency injection, teardown, and lifecycle hooks.
 
 It knows nothing about HTTP, object storage, subprocesses, or job claiming.
 `runWorkflow` returns an outcome and never touches the network,
@@ -122,53 +122,67 @@ Because that function unconditionally deletes its target and the target
 comes from an environment variable, it refuses a blank path and one that
 resolves somewhere with no parent directory. Python has no such guard.
 
-## Hooks
+## There are no lifecycle hooks
 
-Ten hooks, camel-cased: `workflowStart`, `stepStart`, `stepFinish`,
-`result`, `success`, `cancelled`, `error`, `terminated`, `failure`,
-`finish`.
+Python exposes ten module-level hooks — `on_workflow_start`, `on_step_start`,
+`on_step_finish`, `on_result`, `on_success`, `on_cancelled`, `on_error`,
+`on_terminated`, `on_failure`, `on_finish` — with a registry, concurrent
+`asyncio.gather` dispatch, and a `cleanup_builtin_status_hooks()` call to stop
+one run's callbacks leaking into the next. **None of it is ported.**
 
-**The registry is per-run, never a module singleton.** Python's hooks are
-module-level `Hook` objects, which forced a `cleanup_builtin_status_hooks()`
-call between runs and left a standing TODO about isolating hooks to a run.
-`createHookRegistry(logger)` removes both.
+A survey of every production registration across `virtool` and the four
+`workflow-*` repos found the whole mechanism carrying three callbacks:
 
-Callbacks on one hook are invoked **concurrently** with `Promise.allSettled`
-and are unordered relative to each other, matching Python's
-`asyncio.gather`. Registration order binds them; it does not sequence them.
-Anything that must happen after something else belongs in the same
-callback.
+| Hook | Registrations |
+| --- | --- |
+| `on_failure` | 4 — one per workflow, each deleting the resource it was building |
+| `on_step_start` | 1 — runtime-internal, reports the step to the jobs API |
+| `on_success` | 1 — runtime-internal, `POST /jobs/{id}/finish` |
+| the other seven | **0** |
 
-**Failure-path hooks never propagate.** A rejection from `error`,
-`cancelled`, `terminated`, `failure`, or `finish` is logged at `error` and
-swallowed. Python does not do this, and a throwing `on_failure` callback
-there escapes `execute()` and loses the original failure — the one thing
-the run was still trying to report. The other five rethrow: a failing
-`success` callback means the job was never marked finished, and that must
-not be silent.
+`on_result` is worth calling out: it has never had a registration. A workflow
+uploads its result with an explicit call inside its final step, so the hook
+fires into nothing.
 
-Python's `until=` and `once=` registration options are not ported. Nothing
-in its production code used either.
+The three real callbacks resolve without a registry:
 
-### Firing order
+- **`on_failure`'s deletions are gone by decision.** A failed run now leaves
+  its half-built sample, subtraction, or analysis for the user to delete. The
+  cleanup was best-effort anyway — it ran in the workflow process, so an OOM
+  kill or a lost node skipped it and stranded the resource regardless.
+- **`on_success` is redundant.** `runWorkflow` returns `RunOutcome`, so the
+  caller marks the job finished on `"succeeded"` itself.
+- **`on_step_start` is the only genuine one**, because it fires mid-run rather
+  than at the end. It survives as `onStepStart` on `RunWorkflowOptions`: one
+  optional function, no registry, no dispatch semantics.
 
-`runWorkflow` fires `workflowStart`, then per step `stepStart` → the step →
-`stepFinish`, then one terminal group, then `finish` in a `finally`.
+A rejection from `onStepStart` fails the run. The control plane not knowing
+which step is executing is not a thing to continue past.
 
-| Outcome | Hooks after the last step | `RunOutcome.state` |
+Do not reintroduce a hook registry to give a workflow a place to put teardown.
+That is the same argument the no-teardown rule already answers.
+
+## How a run ends
+
+`runWorkflow` reports every outcome by returning a `RunOutcome`, never by
+throwing:
+
+| Outcome | `state` | `error` |
 | --- | --- | --- |
-| Clean completion | `result` (only when the definition supplies one), `success` | `succeeded` |
-| A step threw | `error`, `failure` | `failed` |
-| Aborted, `isCancelled()` | `cancelled`, `failure` | `cancelled` |
-| Aborted, not cancelled | `terminated`, `failure` | `failed` |
-
-`finish` fires on **every** path, including the one where a `failure`
-callback itself rejects.
+| Every step completed | `succeeded` | absent |
+| A step threw | `failed` | what it threw |
+| `onStepStart` rejected | `failed` | what it threw |
+| Aborted, `isCancelled()` | `cancelled` | absent |
+| Aborted, not cancelled | `failed` | absent |
 
 An abort with neither `isCancelled()` nor `isTerminated()` set takes the
 termination path and logs `workflow terminated without sigterm`. Nothing
 should be able to produce it, so the run says so rather than reporting a
 plain termination.
+
+`state` is tracked separately from `error` because a step is free to throw a
+falsy value; keying the outcome off the captured error alone would read
+`throw undefined` as a clean run.
 
 ## Cancellation is cooperative, and this is the one real divergence
 
@@ -183,8 +197,8 @@ the same signal.
 
 The abandoned step is left with a `catch` attached. Its eventual rejection
 would otherwise be an unhandled rejection that takes the process down
-before the failure hooks have finished reporting the run — which is the
-whole point of not waiting for it.
+before the caller has finished reporting the run — which is the whole point
+of not waiting for it.
 
 **An abort outranks whatever the step threw.** A step that forwards
 `context.signal` to an abort-aware API rejects from that API's own abort
@@ -264,4 +278,6 @@ ungreppable.
   apps are compiled entrypoints with an explicit step array.
 - The `pyfixtures` dependency and everything built on it.
 - `AsyncExitStack` and every teardown path.
-- `Hook`'s `until=` and `once=` options.
+- `hooks.py` and `runtime/hook.py` — the whole lifecycle hook mechanism,
+  including `cleanup_builtin_status_hooks()` and `Hook`'s `until=` / `once=`
+  options.

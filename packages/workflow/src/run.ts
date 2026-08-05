@@ -1,7 +1,10 @@
 import type { Logger } from "@virtool/logger";
 import type { WorkflowContext } from "./context";
-import type { HookRegistry } from "./hooks";
-import type { ResolvedWorkflowStep, Workflow } from "./step";
+import type {
+	ResolvedWorkflowStep,
+	Workflow,
+	WorkflowStepMetadata,
+} from "./step";
 
 /** Terminal state of a run. Mirrors Python's `JobState`. */
 export type RunState = "succeeded" | "failed" | "cancelled";
@@ -24,9 +27,18 @@ export type RunSignals = {
 export type RunWorkflowOptions<TData, TState> = {
 	workflow: Workflow<TData, TState>;
 	context: WorkflowContext<TData, TState>;
-	hooks: HookRegistry;
 	signals: RunSignals;
 	logger: Logger;
+	/**
+	 * Reports a step to the control plane immediately before it runs.
+	 *
+	 * The only seam the run loop needs into the job lifecycle, and the reason it
+	 * is a callback rather than a return value: it fires mid-run, where every
+	 * other outcome this function reports is terminal and rides back on
+	 * {@link RunOutcome}. A rejection is a failed run — the control plane not
+	 * knowing which step is executing is not something to continue past.
+	 */
+	onStepStart?: (step: WorkflowStepMetadata) => Promise<void>;
 };
 
 /**
@@ -122,8 +134,8 @@ async function runStep<TData, TState>(
 		// A step that forwards `context.signal` to an abort-aware API rejects from
 		// that API's own abort listener, which `step.run` registered before this
 		// one and which therefore runs first. Classifying that as a step failure
-		// would report a cancelled job as `error`/`failure` and hide the
-		// cancellation, so an abort outranks whatever the step threw.
+		// would report a cancelled job as failed and hide the cancellation, so an
+		// abort outranks whatever the step threw.
 		if (!signal.aborted) {
 			throw error;
 		}
@@ -139,8 +151,8 @@ async function runStep<TData, TState>(
 	}
 
 	// The step is still running and cannot be stopped. Its eventual rejection
-	// would otherwise be unhandled and take the process down before the failure
-	// hooks have finished reporting the run.
+	// would otherwise be unhandled and take the process down before the caller
+	// has finished reporting the run.
 	running.catch((err) => {
 		logger.warn(
 			{ err, stepId: step.id },
@@ -161,96 +173,69 @@ async function runStep<TData, TState>(
  *
  * Steps run strictly sequentially. The function **returns** its outcome rather
  * than throwing, and never touches the network, `process.exit`, or signal
- * handlers — the job lifecycle loop owns all of that.
- *
- * A rejection from a failure-path hook is logged and swallowed by the registry,
- * so the only way this rejects is a non-failure hook callback throwing. `finish`
- * fires on every path, that one included.
+ * handlers — the job lifecycle loop owns all of that, driven by the returned
+ * {@link RunOutcome} and by `onStepStart`.
  */
 export async function runWorkflow<TData, TState>({
 	workflow,
 	context,
-	hooks,
 	signals,
 	logger,
+	onStepStart,
 }: RunWorkflowOptions<TData, TState>): Promise<RunOutcome> {
-	// Initialised to the honest answer for a run that ends before it picks a
-	// terminal state, which is what `finish` is told if a hook throws early.
-	let state: RunState = "failed";
 	let aborted = false;
 	let failed = false;
 	let error: unknown;
 
 	try {
-		await hooks.trigger("workflowStart", undefined);
-
-		try {
-			for (const step of workflow.steps) {
-				if (signals.signal.aborted) {
-					aborted = true;
-					break;
-				}
-
-				await hooks.trigger("stepStart", { step });
-
-				logger.info(
-					{ stepId: step.id, name: step.name },
-					"running workflow step",
-				);
-
-				if (!(await runStep(step, context, signals.signal, logger))) {
-					aborted = true;
-					break;
-				}
-
-				await hooks.trigger("stepFinish", { step });
+		for (const step of workflow.steps) {
+			if (signals.signal.aborted) {
+				aborted = true;
+				break;
 			}
-		} catch (caught) {
-			failed = true;
-			error = caught;
+
+			await onStepStart?.(step);
+
+			logger.info(
+				{ stepId: step.id, name: step.name },
+				"running workflow step",
+			);
+
+			if (!(await runStep(step, context, signals.signal, logger))) {
+				aborted = true;
+				break;
+			}
 		}
-
-		if (aborted) {
-			if (signals.isCancelled()) {
-				state = "cancelled";
-
-				logger.info("workflow cancelled");
-
-				await hooks.trigger("cancelled", undefined);
-			} else {
-				state = "failed";
-
-				if (!signals.isTerminated()) {
-					logger.warn("workflow terminated without sigterm");
-				}
-
-				logger.info("workflow terminated");
-
-				await hooks.trigger("terminated", undefined);
-			}
-
-			await hooks.trigger("failure", { state, error });
-		} else if (failed) {
-			state = "failed";
-
-			logger.error({ err: error }, "workflow failed");
-
-			await hooks.trigger("error", { error });
-			await hooks.trigger("failure", { state, error });
-		} else {
-			state = "succeeded";
-
-			if (workflow.result) {
-				await hooks.trigger("result", {
-					result: workflow.result(context.state),
-				});
-			}
-
-			await hooks.trigger("success", undefined);
-		}
-	} finally {
-		await hooks.trigger("finish", { state, error });
+	} catch (caught) {
+		// Tracked separately from `error` because a step is free to throw a falsy
+		// value, and `error !== undefined` would then read as a clean run.
+		failed = true;
+		error = caught;
 	}
 
-	return error === undefined ? { state } : { state, error };
+	if (aborted) {
+		if (signals.isCancelled()) {
+			logger.info("workflow cancelled");
+
+			return { state: "cancelled" };
+		}
+
+		if (!signals.isTerminated()) {
+			logger.warn("workflow terminated without sigterm");
+		}
+
+		logger.info("workflow terminated");
+
+		return { state: "failed" };
+	}
+
+	if (failed) {
+		logger.error({ err: error }, "workflow failed");
+
+		return error === undefined
+			? { state: "failed" }
+			: { state: "failed", error };
+	}
+
+	return { state: "succeeded" };
 }

@@ -59,8 +59,11 @@ export type WorkflowDefinition<TData, TState> = {
 	createState: () => TState;
 	steps: readonly WorkflowStep<TData, TState>[];
 	/**
-	 * Derives the result payload passed to the `result` hook. Omit when the
-	 * workflow has no result.
+	 * Derives the result payload the job lifecycle loop sends with its finalize
+	 * call. Omit when the workflow has no result.
+	 *
+	 * The run loop never calls this — it reports only how the run ended, and a
+	 * result is meaningful only once the run has succeeded.
 	 */
 	result?: (state: TState) => JsonObject;
 };

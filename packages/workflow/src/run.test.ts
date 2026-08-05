@@ -1,5 +1,4 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { createHookRegistry, type HookName, type HookRegistry } from "./hooks";
 import {
 	createRunSignals,
 	type RunOutcome,
@@ -8,19 +7,6 @@ import {
 } from "./run";
 import { defineWorkflow, type WorkflowStep } from "./step";
 import { createFakeContext, createRecordingLogger } from "./testFixtures";
-
-const HOOK_NAMES: HookName[] = [
-	"workflowStart",
-	"stepStart",
-	"stepFinish",
-	"result",
-	"success",
-	"cancelled",
-	"error",
-	"terminated",
-	"failure",
-	"finish",
-];
 
 type Data = { referenceId: string };
 type State = { visited: string[] };
@@ -55,7 +41,7 @@ function visitStep(id: string): WorkflowStep<Data, State> {
 }
 
 /** A step that throws. */
-function throwingStep(id: string, error: Error): WorkflowStep<Data, State> {
+function throwingStep(id: string, error: unknown): WorkflowStep<Data, State> {
 	return {
 		id,
 		description: `Run ${id}.`,
@@ -66,10 +52,9 @@ function throwingStep(id: string, error: Error): WorkflowStep<Data, State> {
 }
 
 type Harness = {
-	/** Every hook the run loop fired, in order. */
-	sequence: string[];
 	context: ReturnType<typeof createFakeContext<Data, State>>;
-	hooks: HookRegistry;
+	/** Every step id passed to `onStepStart`, in order. */
+	started: string[];
 	records: () => Array<Record<string, unknown>>;
 	logged: (message: string) => boolean;
 	run: () => Promise<RunOutcome>;
@@ -87,24 +72,16 @@ type Harness = {
 function setup(
 	signals: RunSignals,
 	steps: WorkflowStep<Data, State>[],
-	result?: (state: State) => { visited: string[] },
+	onStepStart?: (step: { id: string }) => Promise<void>,
 ): Harness {
 	const recording = createRecordingLogger();
-	const hooks = createHookRegistry(recording.logger);
-	const sequence: string[] = [];
-
-	for (const name of HOOK_NAMES) {
-		hooks.on(name, () => {
-			sequence.push(name);
-		});
-	}
+	const started: string[] = [];
 
 	const workflow = defineWorkflow<Data, State>({
 		name: "pathoscope",
 		buildContext: async () => ({ referenceId: "ref" }),
 		createState: () => ({ visited: [] }),
 		steps,
-		result,
 	});
 
 	const context = createFakeContext<Data, State>(
@@ -114,9 +91,8 @@ function setup(
 	);
 
 	return {
-		sequence,
 		context,
-		hooks,
+		started,
 		records: recording.records,
 		logged: (message) =>
 			recording.records().some((record) => record.msg === message),
@@ -124,29 +100,13 @@ function setup(
 			runWorkflow({
 				workflow,
 				context,
-				hooks,
 				signals,
 				logger: recording.logger,
+				onStepStart: async (step) => {
+					started.push(step.id);
+					await onStepStart?.(step);
+				},
 			}),
-	};
-}
-
-/**
- * Signalling that aborts without either flag set.
- *
- * `createRunSignals` cannot produce this — both its methods set a flag — which
- * is exactly why the run loop warns when it sees it.
- */
-function createUnflaggedSignals(): RunSignals & { abort: () => void } {
-	const controller = new AbortController();
-
-	return {
-		signal: controller.signal,
-		isCancelled: () => false,
-		isTerminated: () => false,
-		cancel: () => {},
-		terminate: () => {},
-		abort: () => controller.abort(),
 	};
 }
 
@@ -191,15 +151,32 @@ describe("runWorkflow", () => {
 
 		expect(outcome).toEqual({ state: "succeeded" });
 		expect(harness.context.state.visited).toEqual(["first", "second"]);
-		expect(harness.sequence).toEqual([
-			"workflowStart",
-			"stepStart",
-			"stepFinish",
-			"stepStart",
-			"stepFinish",
-			"success",
-			"finish",
-		]);
+		expect(harness.started).toEqual(["first", "second"]);
+	});
+
+	it("runs without an onStepStart callback", async () => {
+		const signals = createRunSignals();
+		const recording = createRecordingLogger();
+		const context = createFakeContext<Data, State>(
+			{ referenceId: "ref" },
+			{ visited: [] },
+			{ signal: signals.signal },
+		);
+
+		const outcome = await runWorkflow({
+			workflow: defineWorkflow<Data, State>({
+				name: "pathoscope",
+				buildContext: async () => ({ referenceId: "ref" }),
+				createState: () => ({ visited: [] }),
+				steps: [visitStep("first")],
+			}),
+			context,
+			signals,
+			logger: recording.logger,
+		});
+
+		expect(outcome).toEqual({ state: "succeeded" });
+		expect(context.state.visited).toEqual(["first"]);
 	});
 
 	it("logs each step it runs", async () => {
@@ -215,32 +192,45 @@ describe("runWorkflow", () => {
 		expect(record?.name).toBe("Map Reads");
 	});
 
-	it("fires result before success when the workflow declares one", async () => {
+	it("reports the step before running it", async () => {
+		const order: string[] = [];
 		const harness = setup(
 			createRunSignals(),
-			[visitStep("first")],
-			(state) => ({
-				visited: state.visited,
-			}),
+			[
+				{
+					id: "map_reads",
+					description: "Map reads.",
+					run: async () => {
+						order.push("ran");
+					},
+				},
+			],
+			async () => {
+				order.push("reported");
+			},
 		);
-		const results: unknown[] = [];
 
-		harness.hooks.on("result", (payload) => {
-			results.push(payload.result);
-		});
+		await harness.run();
+
+		expect(order).toEqual(["reported", "ran"]);
+	});
+
+	// The control plane not knowing which step is executing is not something to
+	// continue past, so it ends the run rather than propagating or being ignored.
+	it("fails the run when onStepStart rejects, without running the step", async () => {
+		const failure = new Error("control plane unreachable");
+		const harness = setup(
+			createRunSignals(),
+			[visitStep("first"), visitStep("second")],
+			async () => {
+				throw failure;
+			},
+		);
 
 		const outcome = await harness.run();
 
-		expect(outcome).toEqual({ state: "succeeded" });
-		expect(results).toEqual([{ visited: ["first"] }]);
-		expect(harness.sequence).toEqual([
-			"workflowStart",
-			"stepStart",
-			"stepFinish",
-			"result",
-			"success",
-			"finish",
-		]);
+		expect(outcome).toEqual({ state: "failed", error: failure });
+		expect(harness.context.state.visited).toEqual([]);
 	});
 
 	it("reports a step that throws as a failure without rethrowing", async () => {
@@ -254,39 +244,17 @@ describe("runWorkflow", () => {
 
 		expect(outcome).toEqual({ state: "failed", error: failure });
 		expect(harness.context.state.visited).toEqual([]);
-		expect(harness.sequence).toEqual([
-			"workflowStart",
-			"stepStart",
-			"error",
-			"failure",
-			"finish",
-		]);
+		expect(harness.started).toEqual(["map_reads"]);
 	});
 
-	it("carries the error on the error, failure and finish payloads", async () => {
-		const failure = new Error("bowtie2 exited 1");
+	// A step is free to throw a falsy value, and reading the outcome off the
+	// captured error alone would report that as a clean run.
+	it("reports a step that throws undefined as a failure", async () => {
 		const harness = setup(createRunSignals(), [
-			throwingStep("map_reads", failure),
+			throwingStep("map_reads", undefined),
 		]);
-		const payloads: unknown[] = [];
 
-		harness.hooks.on("error", (payload) => {
-			payloads.push(payload.error);
-		});
-		harness.hooks.on("failure", (payload) => {
-			payloads.push(payload);
-		});
-		harness.hooks.on("finish", (payload) => {
-			payloads.push(payload);
-		});
-
-		await harness.run();
-
-		expect(payloads).toEqual([
-			failure,
-			{ state: "failed", error: failure },
-			{ state: "failed", error: failure },
-		]);
+		expect(await harness.run()).toEqual({ state: "failed" });
 	});
 
 	it("reports cancellation when the cancelled flag is set", async () => {
@@ -308,13 +276,6 @@ describe("runWorkflow", () => {
 
 		expect(outcome).toEqual({ state: "cancelled" });
 		expect(harness.context.state.visited).toEqual([]);
-		expect(harness.sequence).toEqual([
-			"workflowStart",
-			"stepStart",
-			"cancelled",
-			"failure",
-			"finish",
-		]);
 		expect(harness.logged("workflow cancelled")).toBe(true);
 
 		gate.resolve();
@@ -337,13 +298,7 @@ describe("runWorkflow", () => {
 		const outcome = await harness.run();
 
 		expect(outcome).toEqual({ state: "failed" });
-		expect(harness.sequence).toEqual([
-			"workflowStart",
-			"stepStart",
-			"terminated",
-			"failure",
-			"finish",
-		]);
+		expect(harness.logged("workflow terminated")).toBe(true);
 		expect(harness.logged("workflow terminated without sigterm")).toBe(false);
 
 		gate.resolve();
@@ -352,14 +307,21 @@ describe("runWorkflow", () => {
 	// Nothing should be able to abort without setting a flag, which is why the
 	// run loop says so rather than silently reporting a plain termination.
 	it("warns when the run aborts with neither flag set", async () => {
-		const signals = createUnflaggedSignals();
+		const controller = new AbortController();
+		const signals: RunSignals = {
+			signal: controller.signal,
+			isCancelled: () => false,
+			isTerminated: () => false,
+			cancel: () => {},
+			terminate: () => {},
+		};
 		const gate = deferred();
 		const harness = setup(signals, [
 			{
 				id: "long_step",
 				description: "Take a while.",
 				run: async () => {
-					signals.abort();
+					controller.abort();
 					await gate.promise;
 				},
 			},
@@ -368,13 +330,6 @@ describe("runWorkflow", () => {
 		const outcome = await harness.run();
 
 		expect(outcome).toEqual({ state: "failed" });
-		expect(harness.sequence).toEqual([
-			"workflowStart",
-			"stepStart",
-			"terminated",
-			"failure",
-			"finish",
-		]);
 		expect(harness.logged("workflow terminated without sigterm")).toBe(true);
 
 		gate.resolve();
@@ -383,7 +338,7 @@ describe("runWorkflow", () => {
 	// A step forwarding `context.signal` to an abort-aware API rejects from that
 	// API's abort listener, which is registered inside the step and so runs
 	// before the run loop's own. The rejection must not be read as a step
-	// failure, or a cancelled job reports `error`/`failure` and the cancellation
+	// failure, or a cancelled job reports as failed and the cancellation
 	// disappears.
 	it("reports a step that rejects on abort as cancellation", async () => {
 		const signals = createRunSignals();
@@ -408,83 +363,29 @@ describe("runWorkflow", () => {
 
 		signals.cancel();
 
-		const outcome = await running;
-
-		expect(outcome).toEqual({ state: "cancelled" });
-		expect(harness.sequence).toEqual([
-			"workflowStart",
-			"stepStart",
-			"cancelled",
-			"failure",
-			"finish",
-		]);
+		expect(await running).toEqual({ state: "cancelled" });
 		expect(harness.logged("workflow step rejected on abort")).toBe(true);
-	});
-
-	it("still reports a step that rejects without an abort as a failure", async () => {
-		const failure = new Error("bowtie2 exited 1");
-		const harness = setup(createRunSignals(), [
-			throwingStep("map_reads", failure),
-		]);
-
-		const outcome = await harness.run();
-
-		expect(outcome).toEqual({ state: "failed", error: failure });
 	});
 
 	it("checks the signal before starting each step", async () => {
 		const signals = createRunSignals();
 		const harness = setup(signals, [
-			visitStep("first"),
+			{
+				id: "first",
+				description: "Cancel once finished.",
+				run: async (context) => {
+					context.state.visited.push("first");
+					signals.cancel();
+				},
+			},
 			visitStep("never_runs"),
 		]);
-
-		harness.hooks.on("stepFinish", () => {
-			signals.cancel();
-		});
 
 		const outcome = await harness.run();
 
 		expect(outcome).toEqual({ state: "cancelled" });
 		expect(harness.context.state.visited).toEqual(["first"]);
-		expect(harness.sequence).toEqual([
-			"workflowStart",
-			"stepStart",
-			"stepFinish",
-			"cancelled",
-			"failure",
-			"finish",
-		]);
-	});
-
-	it("fires finish even when a failure callback rejects", async () => {
-		const harness = setup(createRunSignals(), [
-			throwingStep("map_reads", new Error("bowtie2 exited 1")),
-		]);
-
-		harness.hooks.on("failure", () =>
-			Promise.reject(new Error("reporting failed")),
-		);
-
-		const outcome = await harness.run();
-
-		expect(outcome.state).toBe("failed");
-		expect(harness.sequence).toContain("finish");
-	});
-
-	// A failing `success` callback means the job was never marked finished. It
-	// must not be silent, so it comes out as a rejection — but `finish` still
-	// fires first.
-	it("rejects when a success callback rejects, after firing finish", async () => {
-		const harness = setup(createRunSignals(), [visitStep("first")]);
-
-		harness.hooks.on("success", () =>
-			Promise.reject(new Error("finish call failed")),
-		);
-
-		await expect(harness.run()).rejects.toThrow("finish call failed");
-
-		expect(harness.sequence).toContain("finish");
+		expect(harness.started).toEqual(["first"]);
 	});
 });
 
@@ -526,14 +427,12 @@ describe("runWorkflow cancellation of an in-flight step", () => {
 
 		signals.cancel();
 
-		const outcome = await running;
-
-		expect(outcome).toEqual({ state: "cancelled" });
+		expect(await running).toEqual({ state: "cancelled" });
 		expect(finished).toBe(false);
 
 		// The abandoned step keeps running and eventually fails. Nothing is
 		// awaiting it any more, so without the catch the run loop attaches, this
-		// would take the process down before the failure hooks finished.
+		// would take the process down before the caller finished reporting the run.
 		gate.reject(new Error("bowtie2 killed"));
 
 		// Node fires `unhandledRejection` once the microtask queue drains, so a
