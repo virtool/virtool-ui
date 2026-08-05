@@ -174,3 +174,11 @@ Both the `build-pathoscope` and `publish-pathoscope` CI jobs set
 `cache-from: type=gha` and `cache-to: type=gha,mode=max` under a `pathoscope`
 scope. Dropping either from the publish job means the release path rebuilds
 htslib from scratch every time, which is the trap the old repo fell into.
+
+**A job that exports a cache must run `docker/setup-buildx-action` first.** The
+runner's default builder uses the `docker` driver, which cannot export a build
+cache at all — `cache-to` fails the build outright with "Cache export is not
+supported for the docker driver" rather than degrading to an uncached build.
+The action swaps in a `docker-container` builder that can. This applies to
+every job here that sets `cache-to`, the UI image's `build` and `publish-ghcr`
+included.
