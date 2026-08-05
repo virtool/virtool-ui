@@ -20,14 +20,25 @@ describe("<AnalysisItem />", () => {
 		);
 	}
 
-	function unreadyWith(state: JobState): Partial<AnalysisMinimal> {
+	function withJob(state: JobState, ready: boolean): Partial<AnalysisMinimal> {
 		const { job } = createFakeAnalysisMinimal();
 
-		return { ready: false, job: job && { ...job, state } };
+		return { ready, job: job && { ...job, state } };
+	}
+
+	/**
+	 * The remove button only ever appears once the account query resolves, so
+	 * its absence means nothing until that has had a chance to happen. Waiting
+	 * for the find to time out is what makes these assertions non-vacuous.
+	 */
+	async function expectNoRemoveButton() {
+		await expect(
+			screen.findByRole("button", { name: "remove" }),
+		).rejects.toThrow();
 	}
 
 	it("offers removal for a finished analysis", async () => {
-		renderItem({ ready: true });
+		renderItem(withJob("succeeded", true));
 
 		expect(
 			await screen.findByRole("button", { name: "remove" }),
@@ -37,22 +48,27 @@ describe("<AnalysisItem />", () => {
 	it.each<JobState>(["pending", "running"])(
 		"withholds removal while the job is %s",
 		async (state) => {
-			renderItem(unreadyWith(state));
+			renderItem(withJob(state, false));
 
-			// The account query has to settle before the absence means anything.
 			expect(await screen.findByRole("progressbar")).toBeInTheDocument();
-			expect(
-				screen.queryByRole("button", { name: "remove" }),
-			).not.toBeInTheDocument();
+			await expectNoRemoveButton();
 		},
 	);
+
+	// The workflow writes its analysis result before the job is marked terminal,
+	// so `ready` alone would advertise a button the server answers with a 409.
+	it("withholds removal from a ready analysis whose job is still running", async () => {
+		renderItem(withJob("running", true));
+
+		await expectNoRemoveButton();
+	});
 
 	// An OOM-killed or evicted pod leaves the analysis unready forever. It has to
 	// stay removable, or the user is stuck looking at it.
 	it.each<JobState>(["cancelled", "failed", "succeeded"])(
 		"offers removal for an unready analysis whose job is %s",
 		async (state) => {
-			renderItem(unreadyWith(state));
+			renderItem(withJob(state, false));
 
 			expect(
 				await screen.findByRole("button", { name: "remove" }),

@@ -59,12 +59,13 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 		analysis.job ? toServerJobNested(analysis.job) : undefined,
 	);
 
-	// Mirrors the server's delete guard. An unready analysis is not necessarily
-	// in flight: a workflow pod that is OOM-killed or evicted leaves the row
-	// unready forever, and gating the trash on `ready` alone left the user
-	// staring at a failed analysis with no way to remove it.
+	// The same predicate `deleteAnalysis` applies, and deliberately not `ready`.
+	// It reads both ways: an unready analysis whose pod was OOM-killed or evicted
+	// stays removable rather than stranding the user, and a finished analysis
+	// whose job has not been marked terminal yet does not advertise a button the
+	// server would answer with a 409.
 	const state = job?.state ?? analysis.job?.state;
-	const canDelete = ready || state === undefined || isJobStateTerminal(state);
+	const canDelete = state === undefined || isJobStateTerminal(state);
 
 	return (
 		<Box as="li" className="text-gray-600 mb-2.5">
