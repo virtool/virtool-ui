@@ -296,6 +296,13 @@ run's signal sends **SIGTERM** to the group and **SIGKILL** after
 cleanup-on-exit, so the runner registers a `process.once("exit")` group kill
 in its place — without it a crash in the parent strands a running aligner.
 
+**Once a kill has gone out, both of those deliberately outlive the call.**
+Everything the runner awaits can settle while the group is still alive: the
+direct child dies on the SIGTERM, and a descendant that ignores it and holds
+none of the piped stdio leaves nothing left to wait on. Clearing the timer
+when the call returns is exactly what would strand that descendant, so the
+teardown only runs on the path where no kill was ever sent.
+
 `ESRCH` from a kill that lands after the subprocess has already exited, and
 `EPIPE` from the same race seen from the other end, are logged at `debug`
 and never surfaced. A cancellation racing an exit is ordinary.

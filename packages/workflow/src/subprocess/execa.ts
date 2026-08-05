@@ -126,6 +126,10 @@ export function createRunSubprocess({
 
 			forceKillTimer = setTimeout(() => {
 				killGroup("SIGKILL");
+
+				// Nothing can ignore SIGKILL, so the group is gone and the
+				// exit fallback has nothing left to cover.
+				process.off("exit", killOnExit);
 			}, forceKillAfterDelay);
 
 			// The timer must never be the reason this process stays alive.
@@ -213,9 +217,17 @@ export function createRunSubprocess({
 		try {
 			[result] = await Promise.all([subprocess, ...readers]);
 		} finally {
-			clearTimeout(forceKillTimer);
 			signal.removeEventListener("abort", terminate);
-			process.off("exit", killOnExit);
+
+			// The escalation deliberately outlives this call once a kill has
+			// gone out. Everything awaited above can settle while the group is
+			// still alive: the direct child dies on SIGTERM, and a descendant
+			// that ignores it and holds none of the piped stdio leaves nothing
+			// to wait on. Tearing the timer down here is what would strand it.
+			if (!killSent) {
+				clearTimeout(forceKillTimer);
+				process.off("exit", killOnExit);
+			}
 		}
 
 		const exitCode = result.exitCode ?? null;

@@ -1020,7 +1020,7 @@ each of which is a departure from Python or from execa's defaults:
   it fast. stderr is always piped, logged line by line, and its last twenty
   lines ride on `SubprocessFailedError`.
 - **Lines are split with a byte ceiling**, 128 MiB by default — the same
-  `limit` Python passes `asyncio.create_subprocess_exec`. `node:readline`
+  `limit` Python passes to `asyncio.create_subprocess_exec`. `node:readline`
   has no ceiling at all. Overrunning it throws `SubprocessLineLimitError`
   and kills the tree.
 - **Descendants are killed, and execa cannot do it.** There is no

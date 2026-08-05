@@ -267,6 +267,72 @@ describe("createRunSubprocess", () => {
 		}
 	});
 
+	// The escalation has to outlive the call. The direct child dies on SIGTERM
+	// and the descendant holds none of the piped stdio, so everything the call
+	// awaits settles while the descendant is still running — and it only ever
+	// receives SIGKILL if the timer survives the runner returning.
+	it("escalates to SIGKILL after the call returns, for a descendant that ignored SIGTERM", async () => {
+		const readyPath = join(scriptDir, "stubborn-ready");
+
+		// The descendant announces itself through a file rather than stderr,
+		// because holding the inherited pipe open is the very thing that would
+		// keep the call from returning early.
+		const child = await script(
+			"stubbornDescendant",
+			`import { writeFileSync } from "node:fs";
+			 process.on("SIGTERM", () => {});
+			 writeFileSync(${JSON.stringify(readyPath)}, "ok");
+			 setInterval(() => {}, 1000);`,
+		);
+
+		// Announcing only once the handler is installed. Node takes tens of
+		// milliseconds to boot, and a SIGTERM arriving before then is the
+		// default action, which would kill the descendant and prove nothing.
+		const parent = await script(
+			"stubbornParent",
+			`import { spawn } from "node:child_process";
+			 import { existsSync } from "node:fs";
+			 const child = spawn(process.execPath, [${JSON.stringify(child)}], {
+			 	stdio: ["ignore", "ignore", "ignore"],
+			 });
+			 const wait = setInterval(() => {
+			 	if (existsSync(${JSON.stringify(readyPath)})) {
+			 		clearInterval(wait);
+			 		process.stderr.write("descendant " + child.pid + "\\n");
+			 	}
+			 }, 10);
+			 setInterval(() => {}, 1000);`,
+		);
+
+		const controller = new AbortController();
+		const { runSubprocess } = createRunner(controller.signal);
+
+		let descendantPid: number | undefined;
+
+		const result = await runSubprocess({
+			command: node(parent),
+			stderr: (line) => {
+				const match = /^descendant (\d+)$/.exec(line);
+
+				if (match?.[1]) {
+					descendantPid = Number(match[1]);
+					controller.abort();
+				}
+			},
+		});
+
+		expect(result.cancelled).toBe(true);
+		expect(descendantPid).toBeDefined();
+
+		if (descendantPid !== undefined) {
+			survivors.push(descendantPid);
+
+			// Still alive when the call returned: it ignored the SIGTERM.
+			expect(isAlive(descendantPid)).toBe(true);
+			expect(await waitForExit(descendantPid, 2000)).toBe(true);
+		}
+	});
+
 	// Python treats 15 as a success, on the reasoning that the run was already
 	// failing. A tool is free to use 15 as an ordinary error code.
 	it("fails on exit code 15 when nothing cancelled the run", async () => {
