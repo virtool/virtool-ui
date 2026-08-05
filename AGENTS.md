@@ -141,8 +141,6 @@ currently configured in another repository.
 
 ### When to run checks
 
-- After changing behavior covered by a `docs/` file: update that file
-  in the same commit (see Documentation above).
 - After changing route files in `apps/web/src/routes/`: run
   `pnpm --filter @virtool/web exec tsr generate` (or the equivalent
   `@tanstack/router-cli generate`) to regenerate
@@ -201,13 +199,10 @@ module:
 - `src/tests/` - Test setup, fakes, and server-function mocks
 - `src/types/` - Shared type definitions
 
-### Path aliases
-
-Feature directories have a `@name` alias (e.g., `@app/utils`, `@base/Button`,
-`@samples/queries`) — see `paths` in `apps/web/tsconfig.json` for the
-authoritative list. A few directories (`src/types/`, `src/routes/`) have no
-alias and are reached through the catch-all `@/*`, which maps to
-`apps/web/src/*`. Prefer specific aliases over `@/`.
+Each has a `@name` alias (`@app/utils`, `@base/Button`, `@samples/queries`) —
+`paths` in `apps/web/tsconfig.json` is the authoritative list. `src/types/` and
+`src/routes/` have none and are reached through the catch-all `@/*`, which maps
+to `apps/web/src/*`. Prefer a specific alias over `@/`.
 
 ### Key libraries
 
@@ -441,23 +436,18 @@ route or query errors — those belong in the two tiers above.
   Where a size has to be a number — a threshold compared against a measured
   width — write it as a rem multiple and resolve it with `useRootFontSize`
   (`@app/hooks`), never as a px constant.
+- A `color` prop on a `src/base/` component takes the shared `PaletteColor`
+  from `@base/types` (`blue`, `green`, `gray`, `orange`, `purple`, `red`), or
+  `IconColor` — `PaletteColor | "black"` — for the icon-based ones (`Icon`,
+  `IconButton`, `Circle`). Don't redeclare the union locally, add a one-off
+  color, or trim the set per component.
+- Where a component has variants (`solid` / `soft`), `color` works in every
+  one. A variant that silently ignores it is a footgun: honor it across the
+  board or drop the prop for that variant.
 
 See [docs/type-scale.md](docs/type-scale.md) for which token families are
 overridden and why they move together, the class-to-px table, and the px
 holdouts that still need fixing.
-
-### Base component color props
-
-Base components in `src/base/` that expose a `color` prop should accept the
-shared `PaletteColor` type from `@base/types`
-(`"blue" | "green" | "gray" | "orange" | "purple" | "red"`). Don't redeclare the
-union locally, add one-off colors, or trim the set per component — keep the
-surface uniform. Icon-based components (`Icon`, `IconButton`, `Circle`) use
-`IconColor`, which is `PaletteColor | "black"`.
-
-If a component has multiple variants (e.g. `solid` / `soft`), `color` should
-work in every variant. A variant that silently ignores `color` is a footgun;
-either honor it across the board or drop the prop for that variant.
 
 ### Server modules layer as `data.ts` → `service.ts` → `functions.ts`
 
