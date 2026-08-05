@@ -47,6 +47,23 @@ export function useListAnalyses(
 }
 
 /**
+ * Fetch the most recent analyses one user started, across every sample.
+ *
+ * Apart from {@link useListAnalyses}, which is scoped to a single sample. The
+ * server still applies the caller's own sample-read filter, so this narrows
+ * within what the caller may already see.
+ *
+ * @param userId - The id of the user whose analyses to fetch
+ * @param perPage - The number of analyses to fetch
+ */
+export function useListRecentAnalyses(userId: number, perPage: number) {
+	return useQuery<AnalysisSearchResult, Error>({
+		queryKey: analysesQueryKeys.list(["recent", userId, perPage]),
+		queryFn: () => findAnalysesFn({ data: { userId, page: 1, perPage } }),
+	});
+}
+
+/**
  * Initializes a mutator for removing an analysis
  *
  * @param analysisId - The id of the analysis to remove

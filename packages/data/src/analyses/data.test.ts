@@ -249,6 +249,41 @@ describe("findAnalyses", () => {
 		expect(result.foundCount).toBe(1);
 	});
 
+	it("restricts the page to one user when a userId is given", async () => {
+		const other = await seedUser(db, { handle: "other" });
+
+		const wanted = await seedAnalysisOnNewSample({ user_id: other });
+		await seedAnalysisOnNewSample();
+
+		const result = await findAnalyses(
+			db,
+			{ ...page, userId: other },
+			adminActor,
+		);
+
+		expect(result.items.map((item) => item.id)).toEqual([wanted]);
+		expect(result.foundCount).toBe(1);
+	});
+
+	it("intersects a userId with the caller's readable samples", async () => {
+		const other = await seedUser(db, { handle: "other" });
+
+		await seedAnalysis({
+			sample_id: await seedSample({ all_read: false }),
+			user_id: other,
+		});
+		const readable = await seedAnalysis({
+			sample_id: await seedSample({ all_read: true }),
+			user_id: other,
+		});
+
+		const actor = await resolveSampleActor(db, other);
+		const result = await findAnalyses(db, { ...page, userId: other }, actor);
+
+		expect(result.items.map((item) => item.id)).toEqual([readable]);
+		expect(result.foundCount).toBe(1);
+	});
+
 	it("orders by created_at descending, then id descending", async () => {
 		const sampleId = await seedSample();
 		const older = new Date("2024-01-01T00:00:00Z");

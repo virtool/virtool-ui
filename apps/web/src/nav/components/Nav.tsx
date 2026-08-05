@@ -7,6 +7,7 @@ import DropdownMenuSeparator from "@base/DropdownMenuSeparator";
 import DropdownMenuTrigger from "@base/DropdownMenuTrigger";
 import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
+import Link from "@base/Link";
 import Logo from "@base/Logo";
 import type { AdministratorRoleName } from "@virtool/contracts";
 import { hasSufficientAdminRole } from "@virtool/contracts";
@@ -37,7 +38,9 @@ export default function Nav({ administrator_role, handle }: NavBarProps) {
 			className="bg-virtool flex h-13 items-center justify-between text-white"
 		>
 			<div className="flex gap-3 items-center">
-				<Logo className="mt-0 pl-10 pr-4" color="white" height={28} />
+				<Link aria-label="Dashboard" to="/">
+					<Logo className="mt-0 pl-10 pr-4" color="white" height={28} />
+				</Link>
 				<NavLink to="/jobs" search={{ state: "running" }}>
 					Jobs
 				</NavLink>

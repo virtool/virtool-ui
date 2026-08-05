@@ -43,6 +43,8 @@ export type FindAnalysesOptions = {
 	perPage: number;
 	/** Restrict the page to one sample's analyses. */
 	sampleId?: number;
+	/** Restrict the page to the analyses one user started. */
+	userId?: number;
 };
 
 /** The fields an analysis is created from, plus the user starting it. */
@@ -272,6 +274,10 @@ export async function findAnalyses(
 
 	if (options.sampleId !== undefined) {
 		filters.push(eq(analyses.sample_id, options.sampleId));
+	}
+
+	if (options.userId !== undefined) {
+		filters.push(eq(analyses.user_id, options.userId));
 	}
 
 	const where = filters.length > 0 ? and(...filters) : undefined;
