@@ -9,8 +9,7 @@ React + TypeScript single-page application for Virtool, a bioinformatics platfor
 
 This is a **pnpm monorepo**:
 
-- `apps/web/` — the Vite SPA (formerly the top-level repo). All UI code lives
-  here.
+- `apps/web/` — the Vite SPA. All UI code lives here.
 - `apps/site/` — `@virtool/site`, the product website at
   [virtool.ca](https://www.virtool.ca) (Astro + Tailwind, deployed to
   Cloudflare Workers). Kept out of the `pnpm check`/`pnpm knip` gates —
@@ -612,9 +611,10 @@ hold it there:
   because a server file reaching into a DOM-typed module breaks the
   server project at a distance. **Every** feature alias is listed, plus
   the `@/*` catch-all that would otherwise reach the same modules under
-  another name. It used to enumerate four, and was already leaking:
-  `labels/data.ts` read `DEFAULT_LABEL_COLOR` from `@labels/constants`
-  and nothing caught it. Add the alias when you add a feature directory.
+  another name — not merely the aliases something imports today. A
+  partial list let `labels/data.ts` read `DEFAULT_LABEL_COLOR` from
+  `@labels/constants` with nothing to catch it. Add the alias when you
+  add a feature directory.
 
 The packages need no rule of their own for the second: `packages/**` has
 no `@<feature>/*` path mapping at all, so a browser feature module is not
@@ -688,7 +688,7 @@ Do not try to wrap `createServerFn` in a factory that takes the policy
 as an argument. The Vite plugin matches that call syntactically at the
 definition site; behind a factory it stops treating the function as a
 server function at all — no RPC endpoint, and the handler body ships to
-the browser. This was tried and reverted.
+the browser.
 
 Raw `Request` handlers in `createFileRoute` run outside the server-function
 context, so **no policy middleware runs on them** and each enforces its own
