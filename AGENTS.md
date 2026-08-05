@@ -954,7 +954,7 @@ Two decisions shape it and are not up for re-litigation:
   context is an ordinary object built once, before the first step, by a
   per-workflow `buildContext`. Its `data` half must survive a JSON round
   trip — no class instances, no closures, no live handles — because the
-  deferred end-to-end bed expresses a run as files plus a JSON blob.
+  deferred end-to-end test bed expresses a run as files plus a JSON blob.
   `createWorkflowContext` asserts that on every run, not only under test.
   `state` is the mutable cross-step scratch and carries no such constraint.
   Lazy or memoized accessors were rejected; per-workflow construction is

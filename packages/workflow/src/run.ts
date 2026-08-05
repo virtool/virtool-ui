@@ -118,6 +118,22 @@ async function runStep<TData, TState>(
 		if (outcome !== ABANDONED) {
 			return true;
 		}
+	} catch (error) {
+		// A step that forwards `context.signal` to an abort-aware API rejects from
+		// that API's own abort listener, which `step.run` registered before this
+		// one and which therefore runs first. Classifying that as a step failure
+		// would report a cancelled job as `error`/`failure` and hide the
+		// cancellation, so an abort outranks whatever the step threw.
+		if (!signal.aborted) {
+			throw error;
+		}
+
+		logger.info(
+			{ err: error, stepId: step.id },
+			"workflow step rejected on abort",
+		);
+
+		return false;
 	} finally {
 		aborted.dispose();
 	}

@@ -98,7 +98,7 @@ forty minutes in.
 `assertSerializableData` runs a `JSON.parse(JSON.stringify(x))` round trip
 and reports **every path** at which the value came back changed
 (`job.createdAt: Date became "1970-01-01T00:00:00.000Z"`). Hunting for the
-one `Date` in a nested domain object is exactly the work that saves. The
+one `Date` in a nested domain object is exactly the work this check saves. The
 check is a runtime assertion only; a conditional type mapping functions and
 class instances to `never` was not added, because a `TData` with any
 optional field would then have to fight the type system to satisfy it.
@@ -185,6 +185,14 @@ The abandoned step is left with a `catch` attached. Its eventual rejection
 would otherwise be an unhandled rejection that takes the process down
 before the failure hooks have finished reporting the run — which is the
 whole point of not waiting for it.
+
+**An abort outranks whatever the step threw.** A step that forwards
+`context.signal` to an abort-aware API rejects from that API's own abort
+listener, and that listener was registered inside `step.run` — before the
+run loop's — so it fires first and its rejection can win the race. Reading
+that as a step failure would report a cancelled job as `error`/`failure`
+and lose the cancellation entirely, so a rejection arriving while
+`signal.aborted` is set takes the abort path instead.
 
 `createRunSignals` replaces Python's `Events`. Both `cancel()` (a ping
 response reported `cancelled: true`) and `terminate()` (SIGTERM) abort the
