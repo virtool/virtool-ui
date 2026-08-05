@@ -249,6 +249,17 @@ describe("findAnalyses", () => {
 		expect(result.foundCount).toBe(1);
 	});
 
+	it("names the parent sample of each analysis", async () => {
+		const sampleId = await seedSample({ name: "Parent sample" });
+		await seedAnalysis({ sample_id: sampleId });
+
+		const result = await findAnalyses(db, page, adminActor);
+
+		expect(result.items.map((item) => item.sample)).toEqual([
+			{ id: sampleId, name: "Parent sample" },
+		]);
+	});
+
 	it("restricts the page to one user when a userId is given", async () => {
 		const other = await seedUser(db, { handle: "other" });
 
@@ -389,7 +400,7 @@ describe("findAnalyses", () => {
 
 describe("getAnalysis", () => {
 	it("returns the full shape, including files and subtractions", async () => {
-		const sampleId = await seedSample();
+		const sampleId = await seedSample({ name: "Parent sample" });
 		const jobId = await seedJob();
 		const analysisId = await seedAnalysis({
 			sample_id: sampleId,
@@ -419,7 +430,7 @@ describe("getAnalysis", () => {
 		expect(analysis.id).toBe(analysisId);
 		expect(analysis.workflow).toBe("pathoscope");
 		expect(analysis.ready).toBe(false);
-		expect(analysis.sample).toEqual({ id: sampleId });
+		expect(analysis.sample).toEqual({ id: sampleId, name: "Parent sample" });
 		expect(analysis.reference).toEqual({ id: referenceId, name: "Reference" });
 		expect(analysis.index).toEqual({ id: indexId, version: 1 });
 		expect(analysis.user).toEqual({ id: ownerId, handle: "owner" });
@@ -536,7 +547,7 @@ describe("getAnalysisResults", () => {
 
 describe("createAnalysis", () => {
 	it("inserts the analysis, its subtractions, and a job in one transaction", async () => {
-		const sampleId = await seedSample();
+		const sampleId = await seedSample({ name: "Parent sample" });
 		const first = await seedSubtraction("Arabidopsis");
 		const second = await seedSubtraction("Zebra");
 
@@ -550,7 +561,7 @@ describe("createAnalysis", () => {
 
 		expect(analysis.workflow).toBe("nuvs");
 		expect(analysis.ready).toBe(false);
-		expect(analysis.sample).toEqual({ id: sampleId });
+		expect(analysis.sample).toEqual({ id: sampleId, name: "Parent sample" });
 		expect(analysis.index).toEqual({ id: indexId, version: 1 });
 		expect(analysis.subtractions.map((subtraction) => subtraction.id)).toEqual([
 			first,
