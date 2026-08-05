@@ -66,7 +66,7 @@ COPY apps/jobs-api ./apps/jobs-api
 RUN pnpm --filter @virtool/jobs-api build \
     && pnpm deploy --filter @virtool/jobs-api --prod /prod/jobs-api
 
-# The control plane needs no bioinformatics tools, so it stays on Alpine. The
+# The jobs API needs no bioinformatics tools, so it stays on Alpine. The
 # Debian base below is a cost paid only to satisfy the tools binaries.
 FROM node:24-alpine AS jobs-api
 WORKDIR /jobs-api

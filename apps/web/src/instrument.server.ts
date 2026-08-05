@@ -7,7 +7,7 @@ import { getCommonOptions } from "@virtool/sentry";
 // (set in `getCommonOptions`) is what lets `@virtool/logger` forward records via
 // `Sentry.logger`. No DSN means no init, so dev and unconfigured deploys are
 // untouched.
-const options = getCommonOptions();
+const options = getCommonOptions("web");
 
 if (options.dsn) {
 	// Import the profiler lazily and only when configured. `@sentry/profiling-node`

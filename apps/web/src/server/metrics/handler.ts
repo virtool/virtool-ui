@@ -1,4 +1,4 @@
-import { timingSafeEqual } from "node:crypto";
+import { isBearerTokenValid } from "@virtool/contracts/bearer";
 import { readConnectionCounts } from "@virtool/data/metrics/data";
 import { applicationName, client } from "../composition";
 import { config } from "../config";
@@ -8,8 +8,6 @@ import {
 	renderMetrics,
 	setPostgresConnections,
 } from "./registry";
-
-const BEARER_PREFIX = "bearer ";
 
 /**
  * How long a scrape waits on the pool probe before abandoning it.
@@ -40,35 +38,6 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 }
 
 /**
- * Compare the presented bearer token to the configured one without leaking
- * where they first differ.
- *
- * `timingSafeEqual` throws on a length mismatch, so that case is screened
- * first. The screen reveals the configured token's length, which is not worth
- * defending: an attacker learns nothing that narrows the search meaningfully.
- *
- * The scheme is matched case-insensitively, as RFC 9110 §11.1 requires. The
- * credential after it is not — it is compared byte for byte, so a token that
- * differs only in case or surrounding whitespace is a different token.
- */
-function isAuthorized(request: Request, token: string): boolean {
-	const header = request.headers.get("authorization");
-
-	if (header?.slice(0, BEARER_PREFIX.length).toLowerCase() !== BEARER_PREFIX) {
-		return false;
-	}
-
-	const presented = Buffer.from(header.slice(BEARER_PREFIX.length));
-	const expected = Buffer.from(token);
-
-	if (presented.length !== expected.length) {
-		return false;
-	}
-
-	return timingSafeEqual(presented, expected);
-}
-
-/**
  * Serve the Prometheus scrape endpoint backing `GET /metrics`.
  *
  * A raw route rather than a server function, because Prometheus scrapes over
@@ -88,7 +57,7 @@ export async function handleMetrics(request: Request): Promise<Response> {
 		return new Response("Not Found", { status: 404 });
 	}
 
-	if (!isAuthorized(request, token)) {
+	if (!isBearerTokenValid(request.headers.get("authorization"), token)) {
 		return new Response("Unauthorized", {
 			status: 401,
 			headers: { "www-authenticate": "Bearer" },

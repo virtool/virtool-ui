@@ -17,10 +17,21 @@ This is a **pnpm monorepo**:
   gates — Astro is not linted by biome and is opaque to knip — so its own
   Vite build (a `build-site` CI job) and Vitest suite are its gate. Deploy is
   manual: `pnpm --filter @virtool/site deploy`.
-- `apps/jobs-api/` — `@virtool/jobs-api`, the jobs control plane. A plain Node
-  HTTP service on port 9950, mirroring Python's `virtool/jobs/main.py`
-  (`api-jobs-service`, ClusterIP, no ingress). Serves `/health/live` and
-  `/health/ready` today. Image: `ghcr.io/virtool/jobs-api`, Alpine.
+- `apps/jobs-api/` — `@virtool/jobs-api`, the jobs API: the control plane
+  workflow runners call to claim, run and finish jobs. **Always "the jobs
+  API"** — the directory, the package, the image, the Kubernetes service and
+  the prose all use that one name, matching what Python and the workflow
+  runtime already call it. "Control plane" describes its role, not a second
+  name for it. A **Hono** app on `@hono/node-server`, port 9950, mirroring
+  Python's `virtool/jobs/main.py` (`api-jobs-service`, ClusterIP, **no
+  ingress** — that absence is the security boundary the service is built
+  around). Serves `/health/live`, `/health/ready` and a token-gated
+  `/metrics` today; every runner-facing endpoint lands in its own issue
+  against the wire contract in `packages/contracts/src/jobsApi.ts`. Image:
+  `ghcr.io/virtool/jobs-api`, Alpine. **Every route it exposes must refuse an
+  unauthenticated caller or be named in `PUBLIC_ROUTES` in `app.ts`** —
+  `src/__tests__/authorization.test.ts` enumerates `app.routes` and fails the
+  build on any that does neither. See [docs/jobs-api.md](docs/jobs-api.md).
 - `apps/create-subtraction/` — `@virtool/create-subtraction`, the first workflow
   executor: a one-shot process that starts, works, exits. Only its object
   storage half is wired so far. Image: `ghcr.io/virtool/ts-create-subtraction`,
@@ -1002,11 +1013,27 @@ it replaces, and erroring on the overlap would crashloop the rollout
 that fixes it. An unreadable path throws at startup; an empty file is an
 unset value.
 
-The non-Vite apps carry their own copy of the resolver in their
-`src/config.ts` — they cannot reach `apps/web/src/server`, and they parse
-a much smaller set of keys than the web app's zod schema. Keep the
-`<KEY>_FILE` behaviour in any new one; do not add a plain
-`process.env` read that skips it.
+**The resolver itself is shared, not copied.** It is
+`resolveFileBacked` in `@virtool/contracts/env`, and both
+`apps/web/src/server/config.ts` and `apps/jobs-api/src/config.ts` call
+it — a non-Vite app cannot reach `apps/web/src/server`, and a second
+copy would be free to drift on the precedence rule above. Each caller
+passes the keys it wants resolved (the web app hands it its zod schema's
+keys; the jobs API names a `KEYS` list), so **a key missing from that
+list silently loses its file variant**. Add a key to both places.
+
+It lives behind the `/env` subpath rather than the package barrel because
+it uses `node:fs`, and most of `@virtool/contracts` is imported by React
+components. `packages/contracts` therefore typechecks as two projects:
+`tsconfig.json` for the browser-safe modules, with no Node types at all,
+and `tsconfig.node.json` for the server-only ones (`env.ts`, `bearer.ts`).
+A new server-only module in that package needs its own subpath export and
+an entry in both tsconfigs.
+
+Never add a plain `process.env` read that skips this. `@virtool/sentry`'s
+`readDsn` is exactly that trap: it goes straight to `process.env`, so
+`VT_SENTRY_DSN` is resolved in `config.ts` and passed to `Sentry.init`
+explicitly instead.
 
 ## Logging
 
@@ -1050,6 +1077,18 @@ Prometheus scrapes `GET /metrics`, gated by a bearer token
 (`VT_METRICS_TOKEN`). With the variable unset the route reports 404, so
 metrics are off until a deployment opts in.
 
+**There are two scrape targets, not one.** `apps/jobs-api` is a separate
+process with its own registry and its own token-gated `/metrics`, and
+needs its own authenticated Prometheus job. The series names deliberately
+match this app's so one dashboard covers both; the two are told apart by
+the scrape's target labels and by `application_name`, never by renaming a
+metric. The rest of this section describes `apps/web` — see
+[docs/jobs-api.md](docs/jobs-api.md) for the other one.
+
+The bearer-token comparison is `isBearerTokenValid` from
+`@virtool/contracts/bearer`, shared by both services. It is constant-time;
+do not reimplement it locally, and do not reduce it to `===`.
+
 `server/metrics/registry.ts` owns the one process-wide `Registry`.
 Default process metrics keep prom-client's standard unprefixed names
 (`process_*`, `nodejs_*`) so off-the-shelf dashboards match; everything
@@ -1074,7 +1113,11 @@ unavailable and needs per-query instrumentation.
 
 That name is built by `@virtool/data/db/applicationName` and bounded to 63 bytes —
 Postgres truncates a longer one silently, and the filter would then match
-nothing and report every bucket as zero. The probe itself is bounded too:
+nothing and report every bucket as zero. It takes the **service** as well
+as the hostname (`createDb(config, "web")`, `createDb(config, "jobs-api")`),
+because the two services share a database and, on a developer machine, a
+hostname — without it each would count the other's backends and both
+would report the sum. The probe itself is bounded too:
 it queries the very pool it measures, so a saturated pool queues it
 client-side where nothing rejects, and an unbounded read would cost the
 whole scrape rather than just the pool gauges.
