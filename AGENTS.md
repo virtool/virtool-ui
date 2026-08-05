@@ -62,55 +62,6 @@ This is a **pnpm monorepo**:
 
 Use `pnpm` for all install, run, and exec commands — not `npm` or `bun`.
 
-## Documentation
-
-`AGENTS.md` is the index. It carries the rules an agent needs to
-start work — terse statements with pointers into `docs/` for the
-full treatment. Detailed explanations, examples, and rationale live
-in `docs/`.
-
-**`docs/` files are self-contained leaves.** Each doc covers one
-topic end-to-end and does not link to or reference other docs.
-Routing between topics is `AGENTS.md`'s job, not the docs'. If you
-find yourself wanting to write "see other-doc.md", either the detail
-belongs in `AGENTS.md` as the routing layer, or the two docs need to
-be reorganised so each is complete on its own.
-
-**`AGENTS.md` is updated in the same commit as the change that
-invalidates it.** It is the first file every agent and contributor
-reads. A stale line does not merely fail to help — it actively
-misleads, sending readers to deleted files and dead APIs.
-
-Before committing, check whether your change contradicts anything in
-this file. It does if you have:
-
-- removed, added, or replaced a dependency listed under **Key libraries**;
-- deleted, moved, or renamed a file or directory named anywhere in this
-  document;
-- added or removed a top-level feature directory under `apps/web/src/`;
-- changed a command in the **Commands** table, or changed what one does;
-- added, removed, or changed a lint rule this file describes as enforced;
-- changed the shape of an API this file tells agents to call.
-
-"I'll update the docs afterwards" is how a doc goes stale. There is no
-afterwards — the commit that removes the last `styled.` call site is the
-commit that removes styled-components from this file.
-
-**When to update what:**
-
-- New behavioural rule or convention → add a one-line statement in
-  the right `AGENTS.md` section and put the detail in the matching
-  `docs/<topic>.md`. Create a new doc only when no existing one
-  covers the area.
-- Change to behaviour described in a doc → update the doc in the
-  same commit. `docs/` goes stale the moment the code it describes
-  changes.
-- A section in `AGENTS.md` keeps growing → move the detail into a
-  doc and leave a one-or-two-line pointer behind.
-- A doc grows past one cohesive topic, or starts pulling in
-  unrelated material to stay self-contained → split it along the
-  mixed-concerns line so each half is again a leaf.
-
 ## Tooling
 
 ### Commands (from repo root)
@@ -172,7 +123,7 @@ currently configured in another repository.
   main looks like" — that risks dropping uncommitted work. Just trust that
   main is green and debug your own changes.
 
-## Architecture
+## Client
 
 ### Web app (`apps/web/`)
 
@@ -295,39 +246,21 @@ worked by accident under un-memoized render will now break:
 Opt a single function out with a `"use no memo"` directive — useful for
 bisecting a suspected compiler interaction, but a fix, not a resting place.
 
-### Bundling: the chunk is the unit of loading, not the export
+### Routing: in-app navigation uses `<Link>`
 
-Tree-shaking removes unused code *within* a chunk; it does not decide which
-chunks a page fetches. So importing one symbol pulls the whole module's chunk,
-and `sideEffects: false` does nothing about it. Five rules follow:
+Internal links use `<Link>` from `@tanstack/react-router`. A plain `<a>` to an
+internal route triggers a full page reload. For query strings, use `search` on
+`<Link>` — don't add an `href` escape hatch to link wrappers.
 
-- **Nothing heavy in a route's critical exports.** `autoCodeSplitting` makes
-  `loader`, `beforeLoad`, `validateSearch` and `loaderDeps` a statically
-  imported half that every page load pays for, `/login` included; only
-  `component` is lazy. Never statically import a feature's `queries.ts` — pull
-  the `queryOptions` factory in from inside the loader body — and never use zod
-  in `validateSearch`, which is synchronous and so pins ~108 KB eagerly. Use
-  `@app/searchParams` there instead.
-- **What a route guard reaches is downloaded on the login wall**, dynamic
-  imports included. The `queryOptions` the guards need therefore live apart
-  from their feature's `queries.ts`, one server function each:
-  `@account/account`, `@administration/passwordPolicy`, `@nav/queries`. Keep
-  them there even when the feature module looks light today.
-- **Heavy dependencies get their own module.** `cn()` is in `@app/cn`, not
-  `@app/utils`, to keep `tailwind-merge` out of every bundle that wants a plain
-  utility. Don't merge it back.
-- **Reach `src/server/**` through `createServerOnlyFn`**, never a top-level
-  import — `start.ts` puts it in the browser program (`auth/middleware.ts` and
-  `metricsMiddleware` are the worked examples).
-- **A native dependency must never be bundled.** It resolves its `.node` addon
-  against `__dirname`, which an ES module has none of, so it builds clean and
-  throws at first import. It needs both `environments.ssr.resolve.external` in
-  `apps/web/vite.config.js` and an `apps/web` dependency entry.
+`<a>` is only for external URLs and deliberate full reloads.
 
-See [docs/bundling.md](docs/bundling.md) for the eager/lazy split in full, why
-the login wall is reachability rather than timing, Nitro's two bundling stages
-and what `traceDeps` can and cannot reclaim, and how to verify the built output
-rather than trusting a green build.
+`routes/index.tsx` — the `/` to `/samples` redirect — stays **outside**
+`_authenticated`, and its `beforeLoad` stays synchronous. Nested, resolving `/`
+ran that layout's async guard before throwing a second redirect, so signing in
+navigated `/login` to `/` to `/samples` with the layout match re-rendering
+mid-chain — the window the router throws `undefined` in. Moving it back under
+the guard reintroduces that. Nothing is exposed by leaving it unguarded: it
+renders nothing, and `/samples` carries the guard.
 
 ### Route search params
 
@@ -348,22 +281,6 @@ the returned object and intersect the route's search type with `Paginated`
 (`type FooSearch = Paginated & { term: string }`) rather than re-declaring
 `page: num(input.page, 1)`. Loaders pass `DEFAULT_PER_PAGE` from the same
 module, not a literal `25`.
-
-### Routing: in-app navigation uses `<Link>`
-
-Internal links use `<Link>` from `@tanstack/react-router`. A plain `<a>` to an
-internal route triggers a full page reload. For query strings, use `search` on
-`<Link>` — don't add an `href` escape hatch to link wrappers.
-
-`<a>` is only for external URLs and deliberate full reloads.
-
-`routes/index.tsx` — the `/` to `/samples` redirect — stays **outside**
-`_authenticated`, and its `beforeLoad` stays synchronous. Nested, resolving `/`
-ran that layout's async guard before throwing a second redirect, so signing in
-navigated `/login` to `/` to `/samples` with the layout match re-rendering
-mid-chain — the window the router throws `undefined` in. Moving it back under
-the guard reintroduces that. Nothing is exposed by leaving it unguarded: it
-renders nothing, and `/samples` carries the guard.
 
 ### API calls
 
@@ -448,6 +365,42 @@ route or query errors — those belong in the two tiers above.
 See [docs/type-scale.md](docs/type-scale.md) for which token families are
 overridden and why they move together, the class-to-px table, and the px
 holdouts that still need fixing.
+
+## Bundling: the chunk is the unit of loading, not the export
+
+Tree-shaking removes unused code *within* a chunk; it does not decide which
+chunks a page fetches. So importing one symbol pulls the whole module's chunk,
+and `sideEffects: false` does nothing about it. Five rules follow:
+
+- **Nothing heavy in a route's critical exports.** `autoCodeSplitting` makes
+  `loader`, `beforeLoad`, `validateSearch` and `loaderDeps` a statically
+  imported half that every page load pays for, `/login` included; only
+  `component` is lazy. Never statically import a feature's `queries.ts` — pull
+  the `queryOptions` factory in from inside the loader body — and never use zod
+  in `validateSearch`, which is synchronous and so pins ~108 KB eagerly. Use
+  `@app/searchParams` there instead.
+- **What a route guard reaches is downloaded on the login wall**, dynamic
+  imports included. The `queryOptions` the guards need therefore live apart
+  from their feature's `queries.ts`, one server function each:
+  `@account/account`, `@administration/passwordPolicy`, `@nav/queries`. Keep
+  them there even when the feature module looks light today.
+- **Heavy dependencies get their own module.** `cn()` is in `@app/cn`, not
+  `@app/utils`, to keep `tailwind-merge` out of every bundle that wants a plain
+  utility. Don't merge it back.
+- **Reach `src/server/**` through `createServerOnlyFn`**, never a top-level
+  import — `start.ts` puts it in the browser program (`auth/middleware.ts` and
+  `metricsMiddleware` are the worked examples).
+- **A native dependency must never be bundled.** It resolves its `.node` addon
+  against `__dirname`, which an ES module has none of, so it builds clean and
+  throws at first import. It needs both `environments.ssr.resolve.external` in
+  `apps/web/vite.config.js` and an `apps/web` dependency entry.
+
+See [docs/bundling.md](docs/bundling.md) for the eager/lazy split in full, why
+the login wall is reachability rather than timing, Nitro's two bundling stages
+and what `traceDeps` can and cannot reclaim, and how to verify the built output
+rather than trusting a green build.
+
+## Server
 
 ### Server modules layer as `data.ts` → `service.ts` → `functions.ts`
 
@@ -693,6 +646,119 @@ See [docs/auth.md](docs/auth.md) for the middleware composition, the
 session model, cookies, lifetimes, and the login / reset / logout
 flows.
 
+### Environment variables are prefixed with `VT_`
+
+Every Virtool-owned env var must start with `VT_`. The prefix keeps our
+variables clearly separated from third-party ones (`SENTRY_*`, `NODE_*`,
+cloud-provider injected vars) and matches the `envPrefix` Vite is configured
+to expose. This applies to the zod schema keys in
+`apps/web/src/server/config.ts`, `apps/web/.env.example`, and any
+`process.env.*` reads anywhere in the app.
+
+Good: `VT_WORKER_MODE`, `VT_WORKER_CONCURRENCY`, `VT_POSTGRES_URL`.
+
+Bad: `WORKER_MODE`, `POSTGRES_URL`.
+
+The only exception is upstream-defined names (e.g. `SENTRY_AUTH_TOKEN`,
+`NODE_OPTIONS`) — leave those as the third party expects.
+
+### Every config key also reads from a `_FILE` variant
+
+`parseServerConfig` resolves `<KEY>_FILE` before zod parses: the named
+file is read, trimmed, and used as `<KEY>`'s value. It applies to every
+key in the schema — add one and it gets the behaviour for free — so
+secrets reach a pod through the secrets-store CSI driver's file mount
+(`VT_METRICS_TOKEN_FILE=/mnt/secrets-store/metrics-token`) instead of a
+Kubernetes `Secret`, which goes stale when a key is added to the
+`SecretProviderClass`. Plain variables still work for local dev.
+
+**The file wins over a plain variable of the same name.** A rollout
+moving to the mount can still carry the stale env var from the `Secret`
+it replaces, and erroring on the overlap would crashloop the rollout
+that fixes it. An unreadable path throws at startup; an empty file is an
+unset value.
+
+### Logging
+
+Server code logs through `@virtool/logger`, not `console.*`. Biome's
+`noConsole` bans `console.*` across the whole repo; on the client, report
+unexpected conditions to Sentry (`Sentry.captureException`) rather than the
+user's console, which no one can read.
+
+Import the `logger` singleton from `@server/logger` and call it directly:
+
+```ts
+logger.warn({ err }, "postgres health check failed");
+```
+
+`@virtool/data` cannot reach that singleton — it carries the Sentry
+forwarding stream, which is the app's. The six data functions that log
+take a `Logger` as an argument instead, after `db` and `storage`, and the
+web app's `functions.ts` passes `@server/logger` in. `emit` is the one
+exception: its logger is bound once by `createEmitter`.
+
+Pass structured fields as the first arg and the message as the second —
+never interpolate values into the message string, that defeats the
+redaction list and makes records ungreppable.
+
+There is no request-scoped logger. `logger.child({...})` is available for
+attaching scoped context, but nothing in the server currently uses it and
+no `context.logger` exists — don't write code that assumes one.
+
+When `VT_SENTRY_DSN` is set, server logs at `info` and above are
+forwarded to Sentry automatically (via a pino destination stream, not
+`Sentry.pinoIntegration()`); redaction still applies and dev does not
+forward.
+
+See [docs/logging.md](docs/logging.md) for the redaction
+defaults, `VT_LOG_LEVEL` resolution, where the logger singleton lives, and
+the Sentry forwarding wiring.
+
+### Metrics
+
+Prometheus scrapes `GET /metrics`, gated by a bearer token
+(`VT_METRICS_TOKEN`). With the variable unset the route reports 404, so
+metrics are off until a deployment opts in.
+
+`server/metrics/registry.ts` owns the one process-wide `Registry`.
+Default process metrics keep prom-client's standard unprefixed names
+(`process_*`, `nodejs_*`) so off-the-shelf dashboards match; everything
+we define is prefixed `virtool_`.
+
+Request rate and latency come from `metricsMiddleware`, a global
+`requestMiddleware` in `start.ts` that sees every request — server
+function, raw route, and rendered page alike.
+
+**No label may be unbounded.** The request path is deliberately not a
+label: pathnames carry ids. Server functions are identified by
+`serverFnMeta.name` instead, which is bounded by the number of functions
+in the codebase.
+
+**postgres.js exposes no pool statistics** — its connection queues live
+in a closure, and `onclose` has no `onopen` counterpart. Pool occupancy
+is read from Postgres itself, filtering `pg_stat_activity` on the
+`applicationName` that `createDb` (`@virtool/data/db/pg`) sets and
+`@server/composition` re-exports, which carries the hostname so each
+replica counts only its own pool. Client-side queue depth remains
+unavailable and needs per-query instrumentation.
+
+That name is built by `@virtool/data/db/applicationName` and bounded to 63 bytes —
+Postgres truncates a longer one silently, and the filter would then match
+nothing and report every bucket as zero. The probe itself is bounded too:
+it queries the very pool it measures, so a saturated pool queues it
+client-side where nothing rejects, and an unbounded read would cost the
+whole scrape rather than just the pool gauges.
+
+`metricsMiddleware` loads the registry through `createServerOnlyFn`
+because a static import would drag prom-client and its `node:*` reads
+into the client graph.
+
+See [docs/metrics.md](docs/metrics.md) for the exported series, the
+token check, cardinality rules, and what deeper instrumentation would
+take.
+
+## Data
+
 ### Data store: Postgres-first
 
 The TypeScript server reads and writes **Postgres only** (via
@@ -786,24 +852,6 @@ Don't add a `detail(id)` invalidation back for either.
 See [docs/server-push.md](docs/server-push.md) for the wire format,
 auth on the SSE side, the batching queues, and the follow-up TODOs.
 
-## Linear
-
-- **Team**: Virtool
-- **Team ID**: `76cf3c46-c5d9-4df4-b457-0fc053d402f7`
-- **Issue prefix**: `VIR`
-
-### Issue conventions
-
-- Capitalize issue titles.
-- Place issues in **Todo** by default; use **Backlog** only when explicitly
-  asked. If an issue seems like it should be Backlog, say so and ask.
-- Never assign issues to anyone.
-- **Never change an issue's status.** Status is managed automatically from
-  branch and PR activity. Move an issue by hand only when explicitly told to.
-  The Todo-by-default rule above governs issues you create, not ones already
-  in flight.
-- Label bugs as **Bug** in addition to any other labels.
-
 ## Code style
 
 The basics:
@@ -845,176 +893,6 @@ The basics:
 
 See [docs/code-style.md](docs/code-style.md) for the full TypeScript,
 naming, comments, and concurrency rules with examples.
-
-## Configuration
-
-### Environment variables are prefixed with `VT_`
-
-Every Virtool-owned env var must start with `VT_`. The prefix keeps our
-variables clearly separated from third-party ones (`SENTRY_*`, `NODE_*`,
-cloud-provider injected vars) and matches the `envPrefix` Vite is configured
-to expose. This applies to the zod schema keys in
-`apps/web/src/server/config.ts`, `apps/web/.env.example`, and any
-`process.env.*` reads anywhere in the app.
-
-Good: `VT_WORKER_MODE`, `VT_WORKER_CONCURRENCY`, `VT_POSTGRES_URL`.
-
-Bad: `WORKER_MODE`, `POSTGRES_URL`.
-
-The only exception is upstream-defined names (e.g. `SENTRY_AUTH_TOKEN`,
-`NODE_OPTIONS`) — leave those as the third party expects.
-
-### Every config key also reads from a `_FILE` variant
-
-`parseServerConfig` resolves `<KEY>_FILE` before zod parses: the named
-file is read, trimmed, and used as `<KEY>`'s value. It applies to every
-key in the schema — add one and it gets the behaviour for free — so
-secrets reach a pod through the secrets-store CSI driver's file mount
-(`VT_METRICS_TOKEN_FILE=/mnt/secrets-store/metrics-token`) instead of a
-Kubernetes `Secret`, which goes stale when a key is added to the
-`SecretProviderClass`. Plain variables still work for local dev.
-
-**The file wins over a plain variable of the same name.** A rollout
-moving to the mount can still carry the stale env var from the `Secret`
-it replaces, and erroring on the overlap would crashloop the rollout
-that fixes it. An unreadable path throws at startup; an empty file is an
-unset value.
-
-## Logging
-
-Server code logs through `@virtool/logger`, not `console.*`. Biome's
-`noConsole` bans `console.*` across the whole repo; on the client, report
-unexpected conditions to Sentry (`Sentry.captureException`) rather than the
-user's console, which no one can read.
-
-Import the `logger` singleton from `@server/logger` and call it directly:
-
-```ts
-logger.warn({ err }, "postgres health check failed");
-```
-
-`@virtool/data` cannot reach that singleton — it carries the Sentry
-forwarding stream, which is the app's. The six data functions that log
-take a `Logger` as an argument instead, after `db` and `storage`, and the
-web app's `functions.ts` passes `@server/logger` in. `emit` is the one
-exception: its logger is bound once by `createEmitter`.
-
-Pass structured fields as the first arg and the message as the second —
-never interpolate values into the message string, that defeats the
-redaction list and makes records ungreppable.
-
-There is no request-scoped logger. `logger.child({...})` is available for
-attaching scoped context, but nothing in the server currently uses it and
-no `context.logger` exists — don't write code that assumes one.
-
-When `VT_SENTRY_DSN` is set, server logs at `info` and above are
-forwarded to Sentry automatically (via a pino destination stream, not
-`Sentry.pinoIntegration()`); redaction still applies and dev does not
-forward.
-
-See [docs/logging.md](docs/logging.md) for the redaction
-defaults, `VT_LOG_LEVEL` resolution, where the logger singleton lives, and
-the Sentry forwarding wiring.
-
-## Metrics
-
-Prometheus scrapes `GET /metrics`, gated by a bearer token
-(`VT_METRICS_TOKEN`). With the variable unset the route reports 404, so
-metrics are off until a deployment opts in.
-
-`server/metrics/registry.ts` owns the one process-wide `Registry`.
-Default process metrics keep prom-client's standard unprefixed names
-(`process_*`, `nodejs_*`) so off-the-shelf dashboards match; everything
-we define is prefixed `virtool_`.
-
-Request rate and latency come from `metricsMiddleware`, a global
-`requestMiddleware` in `start.ts` that sees every request — server
-function, raw route, and rendered page alike.
-
-**No label may be unbounded.** The request path is deliberately not a
-label: pathnames carry ids. Server functions are identified by
-`serverFnMeta.name` instead, which is bounded by the number of functions
-in the codebase.
-
-**postgres.js exposes no pool statistics** — its connection queues live
-in a closure, and `onclose` has no `onopen` counterpart. Pool occupancy
-is read from Postgres itself, filtering `pg_stat_activity` on the
-`applicationName` that `createDb` (`@virtool/data/db/pg`) sets and
-`@server/composition` re-exports, which carries the hostname so each
-replica counts only its own pool. Client-side queue depth remains
-unavailable and needs per-query instrumentation.
-
-That name is built by `@virtool/data/db/applicationName` and bounded to 63 bytes —
-Postgres truncates a longer one silently, and the filter would then match
-nothing and report every bucket as zero. The probe itself is bounded too:
-it queries the very pool it measures, so a saturated pool queues it
-client-side where nothing rejects, and an unbounded read would cost the
-whole scrape rather than just the pool gauges.
-
-`metricsMiddleware` loads the registry through `createServerOnlyFn`
-because a static import would drag prom-client and its `node:*` reads
-into the client graph.
-
-See [docs/metrics.md](docs/metrics.md) for the exported series, the
-token check, cardinality rules, and what deeper instrumentation would
-take.
-
-## Git
-
-Commit messages use **Conventional Commits**. Releases are automated with
-semantic-release: only `feat` (minor) and `fix` (patch) trigger a release.
-Anything user-visible must be one of those — never `refactor` or `chore`.
-
-```
-type(scope): description
-```
-
-### Types
-
-- `feat`: new user-facing feature or capability
-- `fix`: bug fix or correcting wrong behavior (includes UI adjustments and
-  performance improvements)
-- `chore`: internal code not yet exposed to users (e.g., new hook, data model),
-  configs, dependencies, file moves/renames, build scripts
-- `refactor`: restructuring code without changing behavior (e.g., extracting
-  functions, renaming variables, reorganizing modules)
-- `style`: formatting only — no logic changes
-- `docs`: documentation changes only
-- `test`: adding or updating tests
-- `ci`: CI/CD pipeline changes
-
-### Titles
-
-`feat` and `fix` titles are user-facing. Describe the outcome for the user,
-not the code change. Implementation details go in the body, not the title.
-
-- Bad: `fix: use shared Button component with corrected label`
-- Good: `fix: correct submit button label`
-- Bad: `feat: wrap save handler in a transaction`
-- Good: `fix: prevent rare data loss when saving`
-
-All other types are developer-facing — implementation details are helpful
-and make commits easier to find later.
-
-- Good: `refactor: extract form helpers into src/forms/`
-- Good: `chore: add csv parser`
-- Good: `test: add tests for table components and hooks`
-
-### Other rules
-
-- Title: lowercase, no period, under 72 characters.
-- Scope is optional. Allowed scope: `deps` (dependency changes). Do not scope
-  by domain.
-- Don't push or create PRs unless asked.
-- Don't include a Test plan section in pull request descriptions or comments.
-- Don't use `git -C <path>` unless necessary. It triggers permission prompts
-  that aren't worth the trouble. Run git commands from the working directory
-  instead.
-
-### GitHub
-
-- PR titles must follow Conventional Commits format so they can be cleanly
-  squash-merged into a single well-formed commit.
 
 ## Testing
 
@@ -1087,3 +965,128 @@ and make commits easier to find later.
 See [docs/testing.md](docs/testing.md) for the unit / integration
 layer split, where to mock the network boundary, snapshot guidance, the
 axe-core accessibility helper, and the shared-fixtures rule.
+## Process
+
+### Documentation
+
+`AGENTS.md` is the index. It carries the rules an agent needs to
+start work — terse statements with pointers into `docs/` for the
+full treatment. Detailed explanations, examples, and rationale live
+in `docs/`.
+
+**`docs/` files are self-contained leaves.** Each doc covers one
+topic end-to-end and does not link to or reference other docs.
+Routing between topics is `AGENTS.md`'s job, not the docs'. If you
+find yourself wanting to write "see other-doc.md", either the detail
+belongs in `AGENTS.md` as the routing layer, or the two docs need to
+be reorganised so each is complete on its own.
+
+**`AGENTS.md` is updated in the same commit as the change that
+invalidates it.** It is the first file every agent and contributor
+reads. A stale line does not merely fail to help — it actively
+misleads, sending readers to deleted files and dead APIs.
+
+Before committing, check whether your change contradicts anything in
+this file. It does if you have:
+
+- removed, added, or replaced a dependency listed under **Key libraries**;
+- deleted, moved, or renamed a file or directory named anywhere in this
+  document;
+- added or removed a top-level feature directory under `apps/web/src/`;
+- changed a command in the **Commands** table, or changed what one does;
+- added, removed, or changed a lint rule this file describes as enforced;
+- changed the shape of an API this file tells agents to call.
+
+"I'll update the docs afterwards" is how a doc goes stale. There is no
+afterwards — the commit that removes the last `styled.` call site is the
+commit that removes styled-components from this file.
+
+**When to update what:**
+
+- New behavioural rule or convention → add a one-line statement in
+  the right `AGENTS.md` section and put the detail in the matching
+  `docs/<topic>.md`. Create a new doc only when no existing one
+  covers the area.
+- Change to behaviour described in a doc → update the doc in the
+  same commit. `docs/` goes stale the moment the code it describes
+  changes.
+- A section in `AGENTS.md` keeps growing → move the detail into a
+  doc and leave a one-or-two-line pointer behind.
+- A doc grows past one cohesive topic, or starts pulling in
+  unrelated material to stay self-contained → split it along the
+  mixed-concerns line so each half is again a leaf.
+
+### Git
+
+Commit messages use **Conventional Commits**. Releases are automated with
+semantic-release: only `feat` (minor) and `fix` (patch) trigger a release.
+Anything user-visible must be one of those — never `refactor` or `chore`.
+
+```
+type(scope): description
+```
+
+#### Types
+
+- `feat`: new user-facing feature or capability
+- `fix`: bug fix or correcting wrong behavior (includes UI adjustments and
+  performance improvements)
+- `chore`: internal code not yet exposed to users (e.g., new hook, data model),
+  configs, dependencies, file moves/renames, build scripts
+- `refactor`: restructuring code without changing behavior (e.g., extracting
+  functions, renaming variables, reorganizing modules)
+- `style`: formatting only — no logic changes
+- `docs`: documentation changes only
+- `test`: adding or updating tests
+- `ci`: CI/CD pipeline changes
+
+#### Titles
+
+`feat` and `fix` titles are user-facing. Describe the outcome for the user,
+not the code change. Implementation details go in the body, not the title.
+
+- Bad: `fix: use shared Button component with corrected label`
+- Good: `fix: correct submit button label`
+- Bad: `feat: wrap save handler in a transaction`
+- Good: `fix: prevent rare data loss when saving`
+
+All other types are developer-facing — implementation details are helpful
+and make commits easier to find later.
+
+- Good: `refactor: extract form helpers into src/forms/`
+- Good: `chore: add csv parser`
+- Good: `test: add tests for table components and hooks`
+
+#### Other rules
+
+- Title: lowercase, no period, under 72 characters.
+- Scope is optional. Allowed scope: `deps` (dependency changes). Do not scope
+  by domain.
+- Don't push or create PRs unless asked.
+- Don't include a Test plan section in pull request descriptions or comments.
+- Don't use `git -C <path>` unless necessary. It triggers permission prompts
+  that aren't worth the trouble. Run git commands from the working directory
+  instead.
+
+#### GitHub
+
+- PR titles must follow Conventional Commits format so they can be cleanly
+  squash-merged into a single well-formed commit.
+
+### Linear
+
+- **Team**: Virtool
+- **Team ID**: `76cf3c46-c5d9-4df4-b457-0fc053d402f7`
+- **Issue prefix**: `VIR`
+
+#### Issue conventions
+
+- Capitalize issue titles.
+- Place issues in **Todo** by default; use **Backlog** only when explicitly
+  asked. If an issue seems like it should be Backlog, say so and ask.
+- Never assign issues to anyone.
+- **Never change an issue's status.** Status is managed automatically from
+  branch and PR activity. Move an issue by hand only when explicitly told to.
+  The Todo-by-default rule above governs issues you create, not ones already
+  in flight.
+- Label bugs as **Bug** in addition to any other labels.
