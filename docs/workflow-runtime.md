@@ -210,7 +210,7 @@ unset value.
 
 | Key | Default |
 | --- | --- |
-| `VT_JOBS_API_CONNECTION_STRING` | **none — required** |
+| `VT_JOBS_API_URL` | **none — required** |
 | `VT_WORK_PATH` | **none — required** |
 | `VT_WORKFLOW` | none — required, parsed as `JobWorkflow` |
 | `VT_MEM` | `4` |
@@ -220,10 +220,20 @@ unset value.
 | `VT_SENTRY_DSN` | unset |
 
 Two of those are deliberate departures from Python's defaults. Python
-defaults the connection string to `https://localhost:9950`, which in a pod
+defaults the jobs API address to `https://localhost:9950`, which in a pod
 silently polls nothing and reads as an idle runner rather than a
 misconfigured one; and it defaults the work path to the relative path
 `temp`, which `createWorkPath` would then delete. Both are required here.
+
+**`VT_JOBS_API_URL` is also a rename.** Python calls it
+`VT_JOBS_API_CONNECTION_STRING`, but it is a base URL that a path is
+appended to (`client.py` does `f"{connection_string}{path}"`), not a DSN,
+and `VT_POSTGRES_URL` already settles this repo's convention in the harder
+case — that one *is* a credential-bearing connection string and is still
+named `_URL`. A workflow pod's manifest therefore renames the variable in
+the same change that switches it to a TypeScript image. Getting that wrong
+fails loudly at startup rather than quietly, which is the practical reason
+this key keeps no default.
 
 An empty string is treated as unset throughout, because deployment tooling
 routinely injects one for a value it has nothing to put in — and coercing

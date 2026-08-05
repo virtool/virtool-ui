@@ -985,7 +985,7 @@ in-flight step against the signal and abandons it rather than waiting,
 leaving a `catch` attached so its later rejection cannot take the process
 down mid-report.
 
-`VT_JOBS_API_CONNECTION_STRING` and `VT_WORK_PATH` have **no defaults**,
+`VT_JOBS_API_URL` and `VT_WORK_PATH` have **no defaults**,
 unlike Python — its defaults point at nothing and at a relative path
 `createWorkPath` would delete.
 

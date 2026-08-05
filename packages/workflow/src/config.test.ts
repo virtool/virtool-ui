@@ -14,7 +14,7 @@ function writeSecret(contents: string): string {
 /** The smallest environment that parses. */
 function minimalEnv(overrides: NodeJS.ProcessEnv = {}): NodeJS.ProcessEnv {
 	return {
-		VT_JOBS_API_CONNECTION_STRING: "http://api-jobs-service:9950",
+		VT_JOBS_API_URL: "http://api-jobs-service:9950",
 		VT_WORKFLOW: "pathoscope",
 		VT_WORK_PATH: "/work",
 		...overrides,
@@ -34,7 +34,7 @@ describe("parseWorkflowRunConfig", () => {
 		);
 
 		expect(config).toEqual({
-			jobsApiConnectionString: "http://api-jobs-service:9950",
+			jobsApiUrl: "http://api-jobs-service:9950",
 			mem: 16,
 			proc: 8,
 			workflow: "pathoscope",
@@ -61,9 +61,9 @@ describe("parseWorkflowRunConfig", () => {
 	// silently loses its file variant and reads only the plain environment.
 	it.each<[string, string, keyof WorkflowRunConfig, unknown]>([
 		[
-			"VT_JOBS_API_CONNECTION_STRING",
+			"VT_JOBS_API_URL",
 			"http://from-file:9950",
-			"jobsApiConnectionString",
+			"jobsApiUrl",
 			"http://from-file:9950",
 		],
 		["VT_MEM", "32", "mem", 32],
@@ -96,12 +96,12 @@ describe("parseWorkflowRunConfig", () => {
 	it("prefers the file over a plain variable of the same name", () => {
 		const config = parseWorkflowRunConfig(
 			minimalEnv({
-				VT_JOBS_API_CONNECTION_STRING: "http://stale:9950",
-				VT_JOBS_API_CONNECTION_STRING_FILE: writeSecret("http://current:9950"),
+				VT_JOBS_API_URL: "http://stale:9950",
+				VT_JOBS_API_URL_FILE: writeSecret("http://current:9950"),
 			}),
 		);
 
-		expect(config.jobsApiConnectionString).toBe("http://current:9950");
+		expect(config.jobsApiUrl).toBe("http://current:9950");
 	});
 
 	it("throws naming the key and path when a _FILE path cannot be read", () => {
@@ -122,15 +122,13 @@ describe("parseWorkflowRunConfig", () => {
 
 	// Python defaults this to `https://localhost:9950`, which in a pod silently
 	// polls nothing.
-	it("throws when VT_JOBS_API_CONNECTION_STRING is missing", () => {
+	it("throws when VT_JOBS_API_URL is missing", () => {
 		const env = minimalEnv();
 
-		delete env.VT_JOBS_API_CONNECTION_STRING;
+		delete env.VT_JOBS_API_URL;
 
 		expect(() => parseWorkflowRunConfig(env)).toThrow(WorkflowError);
-		expect(() => parseWorkflowRunConfig(env)).toThrow(
-			/VT_JOBS_API_CONNECTION_STRING/,
-		);
+		expect(() => parseWorkflowRunConfig(env)).toThrow(/VT_JOBS_API_URL/);
 	});
 
 	// Python defaults this to the relative path `temp`, and `createWorkPath`

@@ -11,7 +11,7 @@ import { WorkflowError } from "./errors";
  * variant and reads only the plain environment.
  */
 const KEYS = [
-	"VT_JOBS_API_CONNECTION_STRING",
+	"VT_JOBS_API_URL",
 	"VT_MEM",
 	"VT_PROC",
 	"VT_WORKFLOW",
@@ -24,10 +24,14 @@ const KEYS = [
 const positiveInteger = z.coerce.number().int().positive();
 
 const schema = z.object({
-	// Python defaults this to `https://localhost:9950`, which in a pod silently
-	// polls nothing and looks like an idle runner rather than a misconfigured
-	// one. Required here instead.
-	VT_JOBS_API_CONNECTION_STRING: z.string().min(1),
+	// Python calls this `VT_JOBS_API_CONNECTION_STRING` and defaults it to
+	// `https://localhost:9950`, which in a pod silently polls nothing and looks
+	// like an idle runner rather than a misconfigured one. Required here
+	// instead, and named for what it is — a base URL a path is appended to, not
+	// a DSN — matching `VT_POSTGRES_URL`. A pod switched to a TypeScript image
+	// without its manifest renaming the variable fails loudly at startup, which
+	// is the whole reason this key keeps no default.
+	VT_JOBS_API_URL: z.string().min(1),
 	VT_MEM: positiveInteger.default(4),
 	VT_PROC: positiveInteger.default(2),
 	VT_WORKFLOW: JobWorkflow,
@@ -41,7 +45,7 @@ const schema = z.object({
 
 /** Everything a workflow run reads from the environment at startup. */
 export type WorkflowRunConfig = {
-	jobsApiConnectionString: string;
+	jobsApiUrl: string;
 	mem: number;
 	proc: number;
 	workflow: JobWorkflow;
@@ -104,7 +108,7 @@ export function parseWorkflowRunConfig(
 	const values = resolved.data;
 
 	return {
-		jobsApiConnectionString: values.VT_JOBS_API_CONNECTION_STRING,
+		jobsApiUrl: values.VT_JOBS_API_URL,
 		mem: values.VT_MEM,
 		proc: values.VT_PROC,
 		workflow: values.VT_WORKFLOW,
