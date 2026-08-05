@@ -8,7 +8,7 @@ import ProgressCircle from "@base/ProgressCircle";
 import SlashList from "@base/SlashList";
 import { useFetchJob } from "@jobs/queries";
 import { toServerJobNested } from "@jobs/utils";
-import type { AnalysisMinimal } from "@virtool/contracts";
+import { type AnalysisMinimal, isJobStateTerminal } from "@virtool/contracts";
 import { Equal, EqualNot } from "lucide-react";
 import { useRemoveAnalysis } from "../queries";
 import { checkSupportedWorkflow } from "../utils";
@@ -59,6 +59,13 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 		analysis.job ? toServerJobNested(analysis.job) : undefined,
 	);
 
+	// Mirrors the server's delete guard. An unready analysis is not necessarily
+	// in flight: a workflow pod that is OOM-killed or evicted leaves the row
+	// unready forever, and gating the trash on `ready` alone left the user
+	// staring at a failed analysis with no way to remove it.
+	const state = job?.state ?? analysis.job?.state;
+	const canDelete = ready || state === undefined || isJobStateTerminal(state);
+
 	return (
 		<Box as="li" className="text-gray-600 mb-2.5">
 			<div className="grid grid-cols-5 items-center text-base font-medium [&_a]:font-medium">
@@ -68,16 +75,17 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
 					user={user.handle}
 					time={createdAt}
 				/>
-				<div className="flex justify-end">
-					{ready ? (
-						<AnalysisItemRightIcon
-							canModify={canModify ?? false}
-							onRemove={onRemove}
-						/>
-					) : (
+				<div className="flex justify-end items-center gap-2">
+					{!ready && (
 						<ProgressCircle
 							progress={job?.progress ?? 0}
 							state={job?.state ?? "pending"}
+						/>
+					)}
+					{canDelete && (
+						<AnalysisItemRightIcon
+							canModify={canModify ?? false}
+							onRemove={onRemove}
 						/>
 					)}
 				</div>
