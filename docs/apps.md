@@ -161,6 +161,14 @@ onto one path. That needs the `# syntax=docker/dockerfile:1-labs` parser
 directive on the first line of the file. Adding a workspace must not mean
 editing a list of `COPY` lines.
 
+**Package *source*, though, is copied one `COPY` per package.** The glob
+above matches manifests only, so it skips `packages/pathoscope-core`,
+which is a Rust crate with no `package.json`. A blanket
+`COPY packages ./packages` would pull that crate's `src/` and
+`Cargo.lock` into the layer and bust its cache on every Rust edit, for a
+tree no TypeScript image has any use for. Add a line when a new
+TypeScript package appears.
+
 **App source is copied per build stage, not in `base`.** A change to
 `apps/web` then does not invalidate the jobs-api image's cache, and the
 install layer stays untouched when an app is added.

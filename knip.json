@@ -3,6 +3,7 @@
 	"ignoreExportsUsedInFile": true,
 	"ignoreDependencies": ["conventional-changelog-conventionalcommits"],
 	"ignoreWorkspaces": ["apps/site"],
+	"ignore": ["packages/pathoscope-core/**"],
 	"workspaces": {
 		"apps/web": {
 			"entry": [
@@ -16,7 +17,7 @@
 				"src/tests/postgresGuard.ts"
 			],
 			"project": ["src/**/*.{ts,tsx}"],
-			"ignoreDependencies": ["tailwindcss", "@tanstack/router-cli"]
+			"ignoreDependencies": ["bcrypt", "tailwindcss", "@tanstack/router-cli"]
 		},
 		"packages/bio": {
 			"entry": ["src/**/*.test.ts"]

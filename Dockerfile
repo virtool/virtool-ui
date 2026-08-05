@@ -11,7 +11,19 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
 COPY --parents apps/*/package.json packages/*/package.json ./
 RUN pnpm install --frozen-lockfile
 COPY biome.json ./
-COPY packages ./packages
+# Copied per package rather than as a blanket `COPY packages ./packages`.
+# packages/pathoscope-core is a Rust crate with no package.json — it is not a
+# pnpm workspace and this image has no use for it, but a blanket copy would
+# pull its src/ and Cargo.lock in and bust this layer's cache on every Rust
+# edit. Add a line here when a new TypeScript package appears.
+COPY packages/tsconfig.base.json ./packages/
+COPY packages/bio ./packages/bio
+COPY packages/contracts ./packages/contracts
+COPY packages/data ./packages/data
+COPY packages/logger ./packages/logger
+COPY packages/sentry ./packages/sentry
+COPY packages/storage ./packages/storage
+
 # The Node-app tsconfig base every non-Vite app extends. A fixed path, so it
 # needs no edit when an app is added — unlike the per-workspace manifest list it
 # replaced.

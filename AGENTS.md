@@ -29,8 +29,13 @@ This is a **pnpm monorepo**:
   `perl` and `python3`, because `bowtie2` and `bowtie2-build` are interpreter
   scripts wrapping the real binaries. The other three workflow executors get a
   directory, a Dockerfile stage and a CI matrix entry when their port lands.
+- `apps/workflow-pathoscope/` — the pathoscope workflow image
+  (`ghcr.io/virtool/ts-pathoscope`). Holds only a `Dockerfile` today: it
+  compiles `packages/pathoscope-core` and layers the `ghcr.io/virtool/tools`
+  binaries on a Debian Node base. Built from the **repo root**
+  (`docker build -f apps/workflow-pathoscope/Dockerfile .`).
 - `packages/` — shared, framework-agnostic libraries published as workspace
-  packages:
+  packages, plus one Rust crate:
   - `@virtool/logger` — pino wrapper, server-side log defaults and
     `child({...})` pattern
   - `@virtool/bio` — sequence utilities (complement, translation, ORF
@@ -47,6 +52,12 @@ This is a **pnpm monorepo**:
   - `@virtool/data` — the database and domain data layer: the Drizzle schema,
     `createDb`, every domain's `data.ts`, the `client_events` emitter, the
     bcrypt/session/token primitives, and `AppError`
+  - `pathoscope-core` — **Rust, not TypeScript.** Pathoscope's EM core as a
+    standalone CLI, invoked as a subprocess. It is not a pnpm workspace (it
+    has no `package.json`) and is excluded from biome and knip by name —
+    see [docs/pathoscope-core.md](docs/pathoscope-core.md) before touching
+    it. Its results are pinned byte-for-byte against the Python extension
+    module it replaced.
 
   `@virtool/data` and `@virtool/storage` are server-side only. Browser code
   must never import them; they reach `apps/web` through `src/server/**`. A
@@ -160,6 +171,13 @@ pnpm check                        # biome check (whole repo)
 | Test (watch, web app) | `pnpm --filter @virtool/web test:watch` |
 | Test (filtered) | `pnpm --filter @virtool/web exec vitest run src/path/to/file` |
 | Build | `pnpm build` |
+| Test the Rust crate | `cargo test` (in `packages/pathoscope-core`) |
+| Format the Rust crate | `cargo fmt` (in `packages/pathoscope-core`) |
+
+`pnpm test` does **not** reach `packages/pathoscope-core` — it is not a pnpm
+workspace. Run `cargo` there directly; a `test-rust` CI job gates it.
+Building the crate needs `libclang-dev` installed, because `hts-sys` runs
+bindgen against htslib's headers.
 
 `pnpm build` builds **every app but `apps/site`**, which is gated by its own
 `build-site` CI job. `pnpm check` and `pnpm format` run biome over `apps` and
@@ -398,6 +416,32 @@ A module's imports survive tree-shaking if the package does not declare
 every bundle that wants *any* of its exports. `cn()` (`@app/cn`) is split out
 of `@app/utils` for exactly this reason — it keeps `tailwind-merge` out of every
 bundle that only wants a plain utility. Don't merge it back.
+
+### A native dependency must never be bundled
+
+A package that loads a `.node` addon finds it relative to `__dirname`, which
+has no value in an ES module — so bundling one produces a server that builds
+cleanly and throws `ReferenceError: __dirname is not defined` the first time
+anything imports it. `bcrypt` shipped that way and took the whole auth path
+down with it.
+
+Nitro knows the common native packages and traces them out of its own bundle
+automatically, copying each into `.output/server/node_modules` — the dist
+image ships only `.output`, so nothing else puts them there. Reach for
+`traceDeps` on the `nitro()` plugin only for one it does not already know.
+What it cannot do is reclaim a package the **Vite** stage inlined first, and
+Nitro bundles the server in two stages. So a native package needs:
+
+- `environments.ssr.resolve.external` in `apps/web/vite.config.js`, so the Vite
+  stage leaves the import alone;
+- an entry in `apps/web/package.json` dependencies, even when no file in
+  `apps/web` imports it. Nitro resolves the external from the app root, and a
+  package reached only through a workspace package is not there under pnpm.
+  Add it to `ignoreDependencies` for `apps/web` in `knip.json` alongside.
+
+Check the built output rather than trusting a green build:
+`grep -rn "__dirname" apps/web/.output/server/_ssr/` should turn up no bare
+read — only lines that define one first.
 
 ### Routing: in-app navigation uses `<Link>`
 
@@ -855,15 +899,16 @@ enforced on the refetch instead of in a fanout broadcast. Both
 Python and Node publish onto the Postgres `client_events` channel;
 `routes/events.ts` is the sole consumer.
 
-`jobs` update frames are the one exception: a running job emits one per
-progress wave and every job on screen holds its own `detail(id)` query,
-so invalidating per frame cost a request per running job. They route
-through `createJobRefreshQueue` (`jobs/refresh.ts`), which buffers ids
-and reads them with the batched `getJobs` server function instead. Don't
-add a `detail(id)` invalidation back for jobs.
+`jobs` and `tasks` update frames are the exceptions: a running job or
+task emits one per progress step and every one on screen holds its own
+`detail(id)` query, so invalidating per frame cost a request per record.
+They route through `createJobRefreshQueue` (`jobs/refresh.ts`) and
+`createTaskRefreshQueue` (`tasks/refresh.ts`), which buffer ids and read
+them with the batched `getJobs`/`getTasks` server functions instead.
+Don't add a `detail(id)` invalidation back for either.
 
 See [docs/server-push.md](docs/server-push.md) for the wire format,
-auth on the SSE side, the job-batching queue, and the follow-up TODOs.
+auth on the SSE side, the batching queues, and the follow-up TODOs.
 
 ## Linear
 
