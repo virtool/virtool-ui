@@ -89,8 +89,29 @@ export type CreateSampleValues = Omit<SampleCreateRequest, "group"> & {
 /** The fields that can be changed when updating a sample. */
 export type UpdateSampleValues = SampleUpdateRequest;
 
+/** A reads file a create_sample job wrote, as {@link finalizeSample} records it. */
+export type SampleReadValues = {
+	/** `reads_1.fq.gz` or `reads_2.fq.gz`; the caller has already checked it. */
+	name: string;
+
+	/** The byte count the caller read back from storage, never a declared one. */
+	size: number;
+
+	/** The complete key the workflow wrote to, recorded verbatim. */
+	storageKey: string;
+};
+
+/** Fields a create_sample job supplies when it finishes. */
+export type FinalizeSampleValues = {
+	quality: Quality;
+	files: SampleReadValues[];
+};
+
 /** Thrown when a requested sample does not exist. */
 export class SampleNotFoundError extends AppError {}
+
+/** Thrown when a sample has already been finalized. */
+export class SampleAlreadyFinalizedError extends AppError {}
 
 /** Thrown when a sample name is already taken. */
 export class SampleNameConflictError extends AppError {}
@@ -1161,6 +1182,134 @@ export async function updateSampleRights(
 			.update(legacySamples)
 			.set(scalars)
 			.where(eq(legacySamples.id, sampleId));
+	}
+
+	await emit("samples", sampleId, "update");
+
+	return getSample(db, sampleId);
+}
+
+/**
+ * Record the reads a create_sample job produced and flip the sample ready.
+ *
+ * The parent update is conditional on `ready = false` and its row count checked,
+ * so a retry or a racing second call is a {@link SampleAlreadyFinalizedError}
+ * rather than a second set of reads rows. A sample that does not exist is a
+ * {@link SampleNotFoundError}.
+ *
+ * **A read's source upload is derived, not declared.** `sample_uploads.index` is
+ * the position the upload held in the create request, and the workflow writes
+ * them out in that order as `reads_1.fq.gz` and `reads_2.fq.gz` — so the link is
+ * by position, and a runner has no field with which to name another sample's
+ * upload. A sample with no `sample_uploads` rows leaves the column null.
+ *
+ * **The input uploads are removed, blobs and all.** Python does the same, and the
+ * alternative is worse than it looks: `removed = true` already means the bytes
+ * are gone everywhere else, and a removed row that still names a live object is
+ * invisible to the UI *and* to any orphan sweep, because the object is named by
+ * a row. That leaks one full duplicate of every sample's reads, permanently.
+ * `reserveUploads` rejects an already-reserved upload, so an upload belongs to
+ * exactly one sample and no other row can name those bytes.
+ *
+ * The rows are marked inside the transaction and the objects deleted after it
+ * commits, so a storage failure orphans bytes rather than failing a finalize
+ * that has already happened. `reserved` is deliberately left alone — `removed`
+ * gates every read path.
+ */
+export async function finalizeSample(
+	db: Db,
+	storage: StorageBackend,
+	logger: Logger,
+	sampleId: number,
+	values: FinalizeSampleValues,
+): Promise<Sample> {
+	const uploadKeys = await db.transaction(async (tx) => {
+		const [updated] = await tx
+			.update(legacySamples)
+			.set({ quality: values.quality, ready: true })
+			.where(
+				and(eq(legacySamples.id, sampleId), eq(legacySamples.ready, false)),
+			)
+			.returning({ id: legacySamples.id, legacyId: legacySamples.legacy_id });
+
+		if (!updated) {
+			const [row] = await tx
+				.select({ id: legacySamples.id })
+				.from(legacySamples)
+				.where(eq(legacySamples.id, sampleId))
+				.limit(1);
+
+			if (!row) {
+				throw new SampleNotFoundError();
+			}
+
+			throw new SampleAlreadyFinalizedError();
+		}
+
+		const storageId = sampleStorageId(sampleId, updated.legacyId);
+
+		// Rows may be keyed by the integer id or the legacy storage string
+		// depending on when the sample was created.
+		const uploadRows = await tx
+			.select({ uploadId: sampleUploads.upload_id })
+			.from(sampleUploads)
+			.where(
+				or(
+					eq(sampleUploads.sample_id, sampleId),
+					eq(sampleUploads.sample, storageId),
+				),
+			)
+			.orderBy(asc(sampleUploads.index));
+
+		const now = new Date();
+
+		// Sorted so the first read pairs with the first upload. `name_on_disk`
+		// repeats `name`, which is what Python writes for a reads file.
+		const files = [...values.files].sort((a, b) =>
+			a.name.localeCompare(b.name),
+		);
+
+		if (files.length > 0) {
+			await tx.insert(sampleReads).values(
+				files.map((file, index) => ({
+					// The dead legacy prefix column, still `NOT NULL`. Python fills it
+					// with the sample's primary key and nothing reads it.
+					sample: String(sampleId),
+					sample_id: sampleId,
+					name: file.name,
+					name_on_disk: file.name,
+					size: file.size,
+					storage_key: file.storageKey,
+					upload: uploadRows[index]?.uploadId ?? null,
+					uploaded_at: now,
+				})),
+			);
+		}
+
+		const uploadIds = [...new Set(uploadRows.map((row) => row.uploadId))];
+
+		if (uploadIds.length === 0) {
+			return [];
+		}
+
+		const removed = await tx
+			.update(uploads)
+			.set({ removed: true, removedAt: now })
+			.where(and(inArray(uploads.id, uploadIds), eq(uploads.removed, false)))
+			.returning({ storageKey: uploads.storageKey });
+
+		return removed
+			.map(({ storageKey }) => storageKey)
+			.filter((key) => key !== null);
+	});
+
+	// Committed, so a storage failure only orphans bytes. A row without a key
+	// predates keys being recorded and is left for the orphan sweep.
+	for (const failure of await deleteKeys(storage, uploadKeys)) {
+		logger.error(
+			{ sampleId, key: failure.key, err: failure.error },
+			"sample input cleanup failed; file orphaned",
+		);
 	}
 
 	await emit("samples", sampleId, "update");

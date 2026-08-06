@@ -64,7 +64,7 @@ import { AnalysisFormat } from "./analyses";
 import { JobState, JobWorkflow } from "./jobs";
 import { JsonObject } from "./json";
 import { Quality } from "./samples";
-import { NucleotideComposition, SubtractionFileType } from "./subtractions";
+import { NucleotideComposition } from "./subtractions";
 import { UserNested } from "./users";
 
 // Python serialises `datetime` to an ISO-8601 string, so every timestamp on this
@@ -273,20 +273,19 @@ export function fromStoredJobStep(stored: StoredJobStep): JobStep {
 	};
 }
 
-// A byte count out of a `bigint` column. Workflow outputs — reads files, Bowtie2
-// index shards — routinely exceed 2 GiB, so this must not be narrowed to
-// `z.int32()`. A JS number is exact to 2^53, which is the same bound the Drizzle
-// mirrors of these tables already accept with `mode: "number"`.
-const fileSize = z.number().int().nonnegative();
-
 const fileName = z.string().min(1);
+
+// The complete object-storage key the workflow wrote to, minted with
+// `mintStorageKey(domain, parentId)`. Structure and prefix are checked by the
+// route against the resource in its own path — the schema only knows it is a
+// non-empty string.
+const storageKey = z.string().min(1);
 
 /** A reads file a workflow wrote, to be registered in `sample_reads`. */
 export const SampleReadManifest = z.object({
 	kind: z.literal("sampleRead"),
 	name: fileName,
-	nameOnDisk: fileName,
-	size: fileSize,
+	storageKey,
 });
 
 export type SampleReadManifest = z.infer<typeof SampleReadManifest>;
@@ -295,8 +294,7 @@ export type SampleReadManifest = z.infer<typeof SampleReadManifest>;
 export const SubtractionFileManifest = z.object({
 	kind: z.literal("subtractionFile"),
 	name: fileName,
-	size: fileSize,
-	type: SubtractionFileType,
+	storageKey,
 });
 
 export type SubtractionFileManifest = z.infer<typeof SubtractionFileManifest>;
@@ -305,8 +303,7 @@ export type SubtractionFileManifest = z.infer<typeof SubtractionFileManifest>;
 export const AnalysisFileManifest = z.object({
 	kind: z.literal("analysisFile"),
 	name: fileName,
-	nameOnDisk: fileName,
-	size: fileSize,
+	storageKey,
 	format: AnalysisFormat,
 	description: z.string().nullable(),
 });
@@ -321,11 +318,19 @@ export type AnalysisFileManifest = z.infer<typeof AnalysisFileManifest>;
  * wrote both the bytes and the row. Workflows now have direct object-storage
  * access and write the bytes themselves, so they declare what they wrote instead.
  *
- * **The manifest carries no storage key.** Keys are built by `@virtool/storage`
- * from ids the jobs API already holds and must stay byte-for-byte identical
- * to Python's. Letting a runner name its own key would put key construction on
- * the untrusted side of the boundary and silently orphan objects; the control
- * plane derives the key and the manifest carries only `nameOnDisk`.
+ * **The manifest carries the storage key, and the route records it verbatim.**
+ * The alternative — composing the key server-side from ids the route already
+ * holds — puts a second opinion about where the bytes went next to the writer's,
+ * and the two are free to disagree. It buys nothing here either: the principal
+ * is a workflow pod holding the same unscoped bucket credentials as every other
+ * service, so a compromised one deletes directly rather than laundering a
+ * deletion through a manifest. The route's guard is a prefix check against
+ * `{domain}/{parentId}/` for the resource in its own path, which keeps the blast
+ * radius of the uuid scheme without pretending to be a trust boundary.
+ *
+ * **It carries no size.** The row is written with the byte count the route read
+ * back from storage, so a declared one would be a field nothing stores and
+ * nothing checks. `name_on_disk` is likewise derived at the route.
  */
 export const JobFileManifest = z.discriminatedUnion("kind", [
 	SampleReadManifest,
