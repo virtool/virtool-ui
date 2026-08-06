@@ -5,7 +5,6 @@ import type {
 	Quality,
 	Read,
 	Sample,
-	SampleArtifact,
 	SampleCreateRequest,
 	SampleJobNested,
 	SampleMinimal,
@@ -124,8 +123,8 @@ export class SampleOwnerlessError extends AppError {}
  * for everything since.
  *
  * This is row matching, not a storage key. `sample_id` is nullable on rows old
- * enough to predate it, so a query for a sample's artifacts, reads or uploads
- * has to accept either column.
+ * enough to predate it, so a query for a sample's reads or uploads has to
+ * accept either column.
  */
 export function sampleStorageId(
 	sampleId: number,
@@ -291,30 +290,6 @@ async function getSubtractionsBySample(
 		)
 		.where(eq(legacySampleSubtractions.sample_id, sampleId))
 		.orderBy(asc(legacySampleSubtractions.subtraction_id));
-}
-
-async function getArtifacts(
-	db: DbOrTx,
-	sampleId: number,
-	storageId: string,
-): Promise<SampleArtifact[]> {
-	const rows = await db
-		.select()
-		.from(sampleArtifacts)
-		.where(
-			or(
-				eq(sampleArtifacts.sample_id, sampleId),
-				eq(sampleArtifacts.sample, storageId),
-			),
-		)
-		.orderBy(asc(sampleArtifacts.id));
-
-	return rows.map((row) => ({
-		id: row.id,
-		name: row.name,
-		size: row.size ?? 0,
-		downloadUrl: `/samples/${sampleId}/artifacts/${row.name_on_disk ?? ""}`,
-	}));
 }
 
 async function getReads(
@@ -665,8 +640,8 @@ export async function findSamples(
 
 export async function getSample(db: Db, sampleId: number): Promise<Sample> {
 	// The owner and group are one-to-one, so they join onto the sample row; the
-	// collection relationships (labels, subtractions, reads, artifacts, analyses)
-	// are separate result sets that fan out below.
+	// collection relationships (labels, subtractions, reads, analyses) are
+	// separate result sets that fan out below.
 	const [row] = await db
 		.select({
 			sample: legacySamples,
@@ -692,21 +667,14 @@ export async function getSample(db: Db, sampleId: number): Promise<Sample> {
 	const jobIds = sample.job_id != null ? [sample.job_id] : [];
 	const storageId = sampleStorageId(sampleId, sample.legacy_id);
 
-	const [
-		labelsBySample,
-		tagsBySample,
-		jobsById,
-		sampleSubtractions,
-		artifacts,
-		reads,
-	] = await Promise.all([
-		getLabelsBySample(db, [sampleId]),
-		getWorkflowTagsBySample(db, [sampleId]),
-		getSampleJobs(db, jobIds),
-		getSubtractionsBySample(db, sampleId),
-		getArtifacts(db, sampleId, storageId),
-		getReads(db, sampleId, storageId),
-	]);
+	const [labelsBySample, tagsBySample, jobsById, sampleSubtractions, reads] =
+		await Promise.all([
+			getLabelsBySample(db, [sampleId]),
+			getWorkflowTagsBySample(db, [sampleId]),
+			getSampleJobs(db, jobIds),
+			getSubtractionsBySample(db, sampleId),
+			getReads(db, sampleId, storageId),
+		]);
 
 	const minimal = mapMinimal(
 		sample,
@@ -722,7 +690,6 @@ export async function getSample(db: Db, sampleId: number): Promise<Sample> {
 		...minimal,
 		allRead: sample.all_read,
 		allWrite: sample.all_write,
-		artifacts,
 		format: sample.format,
 		group: groupRow,
 		groupRead: sample.group_read,

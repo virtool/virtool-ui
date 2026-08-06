@@ -63,7 +63,7 @@ import { z } from "zod";
 import { AnalysisFormat } from "./analyses";
 import { JobState, JobWorkflow } from "./jobs";
 import { JsonObject } from "./json";
-import { Quality, SampleArtifactType } from "./samples";
+import { Quality } from "./samples";
 import { NucleotideComposition, SubtractionFileType } from "./subtractions";
 import { UserNested } from "./users";
 
@@ -291,17 +291,6 @@ export const SampleReadManifest = z.object({
 
 export type SampleReadManifest = z.infer<typeof SampleReadManifest>;
 
-/** An artifact a workflow wrote, to be registered in `sample_artifacts`. */
-export const SampleArtifactManifest = z.object({
-	kind: z.literal("sampleArtifact"),
-	name: fileName,
-	nameOnDisk: fileName,
-	size: fileSize,
-	type: SampleArtifactType,
-});
-
-export type SampleArtifactManifest = z.infer<typeof SampleArtifactManifest>;
-
 /** A file a workflow wrote, to be registered in `subtraction_files`. */
 export const SubtractionFileManifest = z.object({
 	kind: z.literal("subtractionFile"),
@@ -340,7 +329,6 @@ export type AnalysisFileManifest = z.infer<typeof AnalysisFileManifest>;
  */
 export const JobFileManifest = z.discriminatedUnion("kind", [
 	SampleReadManifest,
-	SampleArtifactManifest,
 	SubtractionFileManifest,
 	AnalysisFileManifest,
 ]);
@@ -355,9 +343,7 @@ export type JobFileManifest = z.infer<typeof JobFileManifest>;
 /** Body for `PATCH /samples/{id}` — the sample finalize call. */
 export const FinalizeSampleRequest = z.object({
 	quality: Quality,
-	files: z.array(
-		z.discriminatedUnion("kind", [SampleReadManifest, SampleArtifactManifest]),
-	),
+	files: z.array(SampleReadManifest),
 });
 
 export type FinalizeSampleRequest = z.infer<typeof FinalizeSampleRequest>;
