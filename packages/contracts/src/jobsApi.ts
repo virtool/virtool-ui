@@ -30,11 +30,11 @@
 // nothing collides with the SPA's own `/jobs/{jobId}` route and these match
 // Python's byte for byte.
 //
-//   POST   /jobs/claim                         CreateJobClaimRequest -> JobClaimed     (200 | 404 no job available)
-//   GET    /jobs/{jobId}                       -                     -> Job            (200 | 404)
-//   POST   /jobs/{jobId}/steps/{stepId}/start  StartJobStepRequest   -> JobStepStarted (200 | 404 | 409)
-//   PUT    /jobs/{jobId}/ping                  -                     -> JobPing        (200 | 404)
-//   POST   /jobs/{jobId}/finish                -                     -> Job            (200 | 404 | 409)
+//   POST   /jobs/claim                         CreateJobClaimRequest -> JobClaimed     (200 | 404 no job available | 422 unclaimable workflow)
+//   GET    /jobs/{jobId}                       -                     -> Job            (200 | 401 | 403 | 404)
+//   POST   /jobs/{jobId}/steps/{stepId}/start  StartJobStepRequest   -> JobStepStarted (200 | 401 | 403 | 404 | 409)
+//   PUT    /jobs/{jobId}/ping                  -                     -> JobPing        (200 | 401 terminal | 403 | 404)
+//   POST   /jobs/{jobId}/finish                -                     -> Job            (200 | 401 | 403 | 404 | 409)
 //   PATCH  /samples/{id}                       FinalizeSampleRequest      -> Sample
 //   PATCH  /subtractions/{id}                  FinalizeSubtractionRequest -> Subtraction
 //   PATCH  /analyses/{id}                      FinalizeAnalysisRequest    -> Analysis
@@ -182,16 +182,18 @@ export const Job = z.object({
 
 export type Job = z.infer<typeof Job>;
 
-/** Response to `PUT /jobs/{jobId}/ping`. */
+/**
+ * Response to `PUT /jobs/{jobId}/ping`.
+ *
+ * Carries no cancellation flag, matching Python's model. **A refusal is the
+ * cancellation channel**: reaching a terminal state is what stops a job key
+ * authenticating, so a cancelled job's next ping is answered `401` rather than
+ * `200` with a flag set. A flag would have to be readable by a credential the
+ * same transition revokes, and it would speak only for `cancelled` — a job
+ * swept up by the ping timeout is `failed`, and the runner has to stop for that
+ * too. See the ping loop in `@virtool/workflow`.
+ */
 export const JobPing = z.object({
-	/**
-	 * Whether the job has been cancelled.
-	 *
-	 * This is the cancellation channel. A runner has no other way to learn it
-	 * should stop: it reads this on every ping and tears down when it is true.
-	 */
-	cancelled: z.boolean(),
-
 	pingedAt: timestamp,
 });
 
