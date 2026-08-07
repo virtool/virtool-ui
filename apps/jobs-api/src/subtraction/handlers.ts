@@ -6,6 +6,7 @@ import {
 	getSubtraction,
 	SubtractionAlreadyFinalizedError,
 	SubtractionNotFoundError,
+	SubtractionNotOwnedError,
 } from "@virtool/data/subtraction/data";
 import type { Logger } from "@virtool/logger";
 import type { StorageBackend } from "@virtool/storage";
@@ -117,6 +118,11 @@ const FILE_NAMES = ["subtraction.fa.gz"] as const;
  *
  * Every object the manifest names is measured before any row is written, and the
  * rows carry those measurements rather than anything the caller declared.
+ *
+ * A job may only finalize the subtraction it produced. That check is the
+ * resource counterpart of `requireOwnJob` on the lifecycle routes, and answers
+ * the same 403 — but it is `subtractions.job_id` that decides it, so it happens
+ * inside the same statement that writes, not in a guard here.
  */
 export async function handleFinalizeSubtraction(
 	deps: SubtractionHandlerDeps,
@@ -171,18 +177,23 @@ export async function handleFinalizeSubtraction(
 	}
 
 	try {
-		const subtraction = await finalizeSubtraction(deps.db, subtractionId, {
-			count,
-			gc,
-			files: measured.map((file) => ({
-				name: file.name,
-				// The whitelist admits the FASTA and nothing else, so there is no
-				// type left to derive and no wire field with which to declare one.
-				type: "fasta" as const,
-				size: file.size,
-				storageKey: file.storageKey,
-			})),
-		});
+		const subtraction = await finalizeSubtraction(
+			deps.db,
+			subtractionId,
+			principal.jobId,
+			{
+				count,
+				gc,
+				files: measured.map((file) => ({
+					name: file.name,
+					// The whitelist admits the FASTA and nothing else, so there is no
+					// type left to derive and no wire field with which to declare one.
+					type: "fasta" as const,
+					size: file.size,
+					storageKey: file.storageKey,
+				})),
+			},
+		);
 
 		deps.logger.info(
 			{ jobId: principal.jobId, subtractionId, files: files.length },
@@ -193,6 +204,10 @@ export async function handleFinalizeSubtraction(
 	} catch (err) {
 		if (err instanceof SubtractionNotFoundError) {
 			return jsonError(404, "Subtraction not found");
+		}
+
+		if (err instanceof SubtractionNotOwnedError) {
+			return jsonError(403, "Job did not produce this subtraction");
 		}
 
 		if (err instanceof SubtractionAlreadyFinalizedError) {

@@ -585,6 +585,48 @@ that calls `requireJobRequest` first; the row work lives in
 `@virtool/data`, typed `DbOrTx`, because it is the same data layer the
 web app reads through.
 
+### Only the job that produced a resource may finalize it
+
+The metadata reads take no ownership check — which jobs may read which
+rows is not a question this service answers — but the writes do. Without
+it, every running job holds a credential that would flip *any* sample,
+subtraction or analysis ready and hang file rows off it, and there are
+always several running.
+
+The owning job is recorded on the row itself: `legacy_samples.job_id`,
+`subtractions.job_id` (both `UNIQUE` — a create job produces exactly one
+resource) and `analyses.job_id`. Each finalize function in
+`@virtool/data` therefore takes a `jobId` positional after the resource
+id, and the handler passes `principal.jobId`.
+
+**The predicate rides on the `UPDATE`, not a read before it.** The
+`WHERE` already carried `id = ? AND ready = false`; ownership joins it as
+`AND job_id = ?`, so there is no window between checking and writing and
+no extra statement. The fallback `SELECT` that already told a missing row
+from a finalized one reads `job_id` too, so the disambiguation still
+costs one query.
+
+Its checks run in a fixed order — **404, then 403, then 409**:
+
+| Fallback finds | Answer |
+| --- | --- |
+| no row (or, for a subtraction, `deleted`) | `404` |
+| `job_id` is not the caller's, or is null | `403` |
+| otherwise | `409` |
+
+403 last-but-one and 409 last is the whole point: a row a job does not
+own must not report whether it has been finalized. A null `job_id` — a
+resource created before jobs, or by hand — is not owned by whoever asks,
+so it is a 403 as well.
+
+403 rather than 404 matches `requireOwnJob` on the lifecycle routes, and
+for the same reason: the caller authenticated, and hiding the row's
+existence buys nothing against a client that already knows ids are
+consecutive integers.
+
+`POST /caches` is deliberately exempt. A cache row is shared derived
+work; no job owns one.
+
 ### A resource that is unusable without its files must carry them
 
 Riding the manifest along with the parent update only prevents "parent
@@ -705,13 +747,14 @@ already written rows.
 
 ### 409, not idempotent
 
-Each parent update is conditional — `WHERE id = ? AND ready = false`,
-plus `AND deleted = false` for a subtraction — and its row count is
-checked. A zero row count re-selects the row to tell the two cases apart:
-gone or soft-deleted is `404`, already finalized is `409`. Python makes
-the same split, and a second finalize must not be quietly accepted:
-these calls write file rows, and accepting one twice writes the set
-twice.
+Each parent update is conditional — `WHERE id = ? AND job_id = ? AND
+ready = false`, plus `AND deleted = false` for a subtraction — and its
+row count is checked. A zero row count re-selects the row to tell the
+cases apart, in the order given above: gone or soft-deleted is `404`,
+someone else's is `403`, already finalized is `409`. Python makes the
+same not-found/already-finalized split, and a second finalize must not be
+quietly accepted: these calls write file rows, and accepting one twice
+writes the set twice.
 
 ### Finalizing a sample destroys its input uploads
 

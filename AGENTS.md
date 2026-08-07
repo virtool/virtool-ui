@@ -46,9 +46,15 @@ This is a **pnpm monorepo**:
   — no user, no permissions — and there is no cookie fallback; this service
   has no session model. A route carrying a **job** id in its path must
   also check it against `principal.jobId` and answer **403** on a
-  mismatch; that is the handlers' job, not the guard's. The resource
-  routes take no such check — a sample id is not a job id, and which jobs
-  may read which rows is not a question this service answers. Reaching a
+  mismatch; that is the handlers' job, not the guard's. On the resource
+  routes, **reads take no ownership check and writes do**: which jobs may
+  read which rows is not a question this service answers, but a finalize
+  may only be issued by the job that produced the row. That predicate
+  rides on the `UPDATE ... WHERE` in `@virtool/data` — each finalize takes
+  a `jobId` after the resource id — so there is no window between checking
+  and writing, and the fallback `SELECT` answers **404 → 403 → 409** in
+  that order, because a row a job does not own must not report its state.
+  `POST /caches` is exempt: a cache row is owned by no job. Reaching a
   terminal state
   (`cancelled`, `failed`, `succeeded`) is the only thing that revokes a job
   key, and **that refusal is the cancellation channel** — it is the one 401

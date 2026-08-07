@@ -32,6 +32,8 @@ let db: Db;
 let storage: MemoryStorage;
 let deps: SubtractionHandlerDeps;
 let credential: string;
+let jobId: number;
+let userId: number;
 
 const logger = createLogger({ name: "test", level: "silent" });
 
@@ -61,10 +63,13 @@ beforeEach(async () => {
 	await db.delete(jobs);
 	await db.delete(users);
 
-	const job = await seedJob(db, await seedUser(db), {
+	userId = await seedUser(db);
+
+	const job = await seedJob(db, userId, {
 		workflow: "create_subtraction",
 	});
 
+	jobId = job.id;
 	credential = Buffer.from(`job-${job.id}:${job.key}`).toString("base64");
 	storage = new MemoryStorage();
 	deps = { db, storage: recording(storage), logger };
@@ -94,7 +99,11 @@ async function seedSubtraction(
 ): Promise<number> {
 	const [row] = await db
 		.insert(subtractions)
-		.values({ name: `Subtraction ${Math.random()}`, ...overrides })
+		.values({
+			name: `Subtraction ${Math.random()}`,
+			job_id: jobId,
+			...overrides,
+		})
 		.returning({ id: subtractions.id });
 
 	if (!row) {
@@ -274,7 +283,7 @@ describe("handleFinalizeSubtraction", () => {
 	// only the prefix check stands between this and a row that names them.
 	it("refuses a key belonging to another subtraction", async () => {
 		const subtractionId = await seedSubtraction();
-		const otherId = await seedSubtraction();
+		const otherId = await seedSubtraction({ job_id: null });
 
 		const response = await finalize(subtractionId, [
 			await written(otherId, "subtraction.fa.gz", "not yours"),
@@ -310,6 +319,74 @@ describe("handleFinalizeSubtraction", () => {
 
 		expect(second.status).toBe(409);
 		expect(await db.select().from(subtractionFiles)).toHaveLength(1);
+	});
+
+	// Every running job holds a valid credential, so without this check any one
+	// of them could flip any subtraction ready and hang file rows off it.
+	it("answers 403 for a subtraction another job produced", async () => {
+		const other = await seedJob(db, userId, { workflow: "create_subtraction" });
+		const subtractionId = await seedSubtraction({ job_id: other.id });
+
+		const response = await finalize(subtractionId, [
+			await written(subtractionId, "subtraction.fa.gz", "a genome!"),
+		]);
+
+		expect(response.status).toBe(403);
+		expect(await db.select().from(subtractionFiles)).toEqual([]);
+
+		const [row] = await db
+			.select({ ready: subtractions.ready })
+			.from(subtractions)
+			.where(eq(subtractions.id, subtractionId));
+
+		expect(row?.ready).toBe(false);
+	});
+
+	// A subtraction created before jobs, or by hand, is owned by nobody — which
+	// is not the same as being owned by whoever asks.
+	it("answers 403 for a subtraction no job produced", async () => {
+		const subtractionId = await seedSubtraction({ job_id: null });
+
+		const response = await finalize(subtractionId, [
+			await written(subtractionId, "subtraction.fa.gz", "a genome!"),
+		]);
+
+		expect(response.status).toBe(403);
+		expect(await db.select().from(subtractionFiles)).toEqual([]);
+	});
+
+	// 403 rather than 409: a subtraction a job does not own never reports its
+	// state.
+	it("answers 403, not 409, for a finalized subtraction another job produced", async () => {
+		const other = await seedJob(db, userId, { workflow: "create_subtraction" });
+
+		const subtractionId = await seedSubtraction({
+			job_id: other.id,
+			ready: true,
+		});
+
+		const response = await finalize(subtractionId, [
+			await written(subtractionId, "subtraction.fa.gz", "a genome!"),
+		]);
+
+		expect(response.status).toBe(403);
+	});
+
+	// 404 rather than 403: a deleted row is gone, and the ownership check never
+	// gets to speak for it.
+	it("answers 404, not 403, for a deleted subtraction another job produced", async () => {
+		const other = await seedJob(db, userId, { workflow: "create_subtraction" });
+
+		const subtractionId = await seedSubtraction({
+			job_id: other.id,
+			deleted: true,
+		});
+
+		const response = await finalize(subtractionId, [
+			await written(subtractionId, "subtraction.fa.gz", "a genome!"),
+		]);
+
+		expect(response.status).toBe(404);
 	});
 
 	it("answers 404 for a subtraction that does not exist", async () => {

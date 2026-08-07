@@ -6,6 +6,7 @@ import {
 	getSample,
 	SampleAlreadyFinalizedError,
 	SampleNotFoundError,
+	SampleNotOwnedError,
 } from "@virtool/data/samples/data";
 import type { Logger } from "@virtool/logger";
 import type { StorageBackend } from "@virtool/storage";
@@ -96,6 +97,11 @@ export async function handleGetSample(
  *
  * The sample's input uploads are removed as part of this, matching Python — see
  * `finalizeSample` for why the blobs go rather than only the rows.
+ *
+ * A job may only finalize the sample it produced. That check is the resource
+ * counterpart of `requireOwnJob` on the lifecycle routes, and answers the same
+ * 403 — but it is `legacy_samples.job_id` that decides it, so it happens inside
+ * the same statement that writes, not in a guard here.
  */
 export async function handleFinalizeSample(
 	deps: SampleHandlerDeps,
@@ -151,6 +157,7 @@ export async function handleFinalizeSample(
 			deps.storage,
 			deps.logger,
 			sampleId,
+			principal.jobId,
 			{
 				quality,
 				files: measured.map((file) => ({
@@ -170,6 +177,10 @@ export async function handleFinalizeSample(
 	} catch (err) {
 		if (err instanceof SampleNotFoundError) {
 			return jsonError(404, "Sample not found");
+		}
+
+		if (err instanceof SampleNotOwnedError) {
+			return jsonError(403, "Job did not produce this sample");
 		}
 
 		if (err instanceof SampleAlreadyFinalizedError) {

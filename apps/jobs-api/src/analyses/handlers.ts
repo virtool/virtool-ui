@@ -3,6 +3,7 @@ import { FinalizeAnalysisRequest } from "@virtool/contracts";
 import {
 	AnalysisAlreadyFinalizedError,
 	AnalysisNotFoundError,
+	AnalysisNotOwnedError,
 	finalizeAnalysis,
 	getAnalysis,
 } from "@virtool/data/analyses/data";
@@ -94,6 +95,11 @@ export async function handleGetAnalysis(
  * choose — a NuVs run names its own FASTA and HMM outputs — so they are checked
  * for shape rather than against a whitelist. The download route addresses these
  * by row id, not by name.
+ *
+ * A job may only finalize the analysis it was started for. That check is the
+ * resource counterpart of `requireOwnJob` on the lifecycle routes, and answers
+ * the same 403 — but it is `analyses.job_id` that decides it, so it happens
+ * inside the same statement that writes, not in a guard here.
  */
 export async function handleFinalizeAnalysis(
 	deps: AnalysisHandlerDeps,
@@ -144,16 +150,21 @@ export async function handleFinalizeAnalysis(
 	}
 
 	try {
-		const analysis = await finalizeAnalysis(deps.db, analysisId, {
-			results,
-			files: measured.map((file) => ({
-				name: file.name,
-				format: file.format,
-				description: file.description,
-				size: file.size,
-				storageKey: file.storageKey,
-			})),
-		});
+		const analysis = await finalizeAnalysis(
+			deps.db,
+			analysisId,
+			principal.jobId,
+			{
+				results,
+				files: measured.map((file) => ({
+					name: file.name,
+					format: file.format,
+					description: file.description,
+					size: file.size,
+					storageKey: file.storageKey,
+				})),
+			},
+		);
 
 		deps.logger.info(
 			{ jobId: principal.jobId, analysisId, files: files.length },
@@ -164,6 +175,10 @@ export async function handleFinalizeAnalysis(
 	} catch (err) {
 		if (err instanceof AnalysisNotFoundError) {
 			return jsonError(404, "Analysis not found");
+		}
+
+		if (err instanceof AnalysisNotOwnedError) {
+			return jsonError(403, "Job was not started for this analysis");
 		}
 
 		if (err instanceof AnalysisAlreadyFinalizedError) {

@@ -34,6 +34,7 @@ let db: Db;
 let storage: MemoryStorage;
 let deps: SampleHandlerDeps;
 let credential: string;
+let jobId: number;
 let userId: number;
 
 const logger = createLogger({ name: "test", level: "silent" });
@@ -69,6 +70,7 @@ beforeEach(async () => {
 
 	const job = await seedJob(db, userId, { workflow: "create_sample" });
 
+	jobId = job.id;
 	credential = Buffer.from(`job-${job.id}:${job.key}`).toString("base64");
 	storage = new MemoryStorage();
 	deps = { db, storage, logger };
@@ -88,6 +90,7 @@ async function seedSample(
 			library_type: "normal",
 			created_at: new Date(),
 			user_id: userId,
+			job_id: jobId,
 			...overrides,
 		})
 		.returning({ id: legacySamples.id });
@@ -327,7 +330,7 @@ describe("handleFinalizeSample", () => {
 
 	it("refuses a key belonging to another sample", async () => {
 		const sampleId = await seedSample();
-		const otherId = await seedSample();
+		const otherId = await seedSample({ job_id: null });
 
 		const response = await finalize(sampleId, [
 			await written(otherId, "reads_1.fq.gz", "not yours"),
@@ -411,6 +414,52 @@ describe("handleFinalizeSample", () => {
 
 		expect(second.status).toBe(409);
 		expect(await db.select().from(sampleReads)).toHaveLength(1);
+	});
+
+	// Every running job holds a valid credential, so without this check any one
+	// of them could flip any sample ready and hang reads rows off it.
+	it("answers 403 for a sample another job produced", async () => {
+		const other = await seedJob(db, userId, { workflow: "create_sample" });
+		const sampleId = await seedSample({ job_id: other.id });
+
+		const response = await finalize(sampleId, [
+			await written(sampleId, "reads_1.fq.gz", "forward reads"),
+		]);
+
+		expect(response.status).toBe(403);
+		expect(await db.select().from(sampleReads)).toEqual([]);
+
+		const [sample] = await db
+			.select({ ready: legacySamples.ready })
+			.from(legacySamples)
+			.where(eq(legacySamples.id, sampleId));
+
+		expect(sample?.ready).toBe(false);
+	});
+
+	// A sample created before jobs, or by hand, is owned by nobody — which is not
+	// the same as being owned by whoever asks.
+	it("answers 403 for a sample no job produced", async () => {
+		const sampleId = await seedSample({ job_id: null });
+
+		const response = await finalize(sampleId, [
+			await written(sampleId, "reads_1.fq.gz", "forward reads"),
+		]);
+
+		expect(response.status).toBe(403);
+		expect(await db.select().from(sampleReads)).toEqual([]);
+	});
+
+	// 403 rather than 409: a sample a job does not own never reports its state.
+	it("answers 403, not 409, for a finalized sample another job produced", async () => {
+		const other = await seedJob(db, userId, { workflow: "create_sample" });
+		const sampleId = await seedSample({ job_id: other.id, ready: true });
+
+		const response = await finalize(sampleId, [
+			await written(sampleId, "reads_1.fq.gz", "forward reads"),
+		]);
+
+		expect(response.status).toBe(403);
 	});
 
 	it("answers 404 for a sample that does not exist", async () => {
