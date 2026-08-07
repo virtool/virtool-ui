@@ -174,6 +174,52 @@ describe("createShutdownController", () => {
 		expect(unref).toHaveBeenCalled();
 	});
 
+	// A failed step that exited 0 would be indistinguishable from a clean
+	// shutdown, so an undrained pool or an unflushed Sentry buffer would pass
+	// unnoticed through every rollout.
+	it("reports a non-zero exit code when a step throws", async () => {
+		const controller = createShutdownController(
+			deps([], {
+				closeListener: async () => {
+					throw new Error("listener failed");
+				},
+			}),
+		);
+
+		await controller.shutdown("SIGTERM");
+
+		expect(process.exitCode).toBe(1);
+	});
+
+	it("reports a non-zero exit code when a hook throws", async () => {
+		const controller = createShutdownController(deps([]));
+
+		controller.onShutdown("thrower", async () => {
+			throw new Error("hook failed");
+		});
+
+		await controller.shutdown("SIGTERM");
+
+		expect(process.exitCode).toBe(1);
+	});
+
+	// The pool still has to drain and Sentry still has to flush, whatever the
+	// listener did.
+	it("runs the steps after one that throws", async () => {
+		const order: string[] = [];
+		const controller = createShutdownController(
+			deps(order, {
+				closeListener: async () => {
+					throw new Error("listener failed");
+				},
+			}),
+		);
+
+		await controller.shutdown("SIGTERM");
+
+		expect(order).toEqual(["setReady:false", "closeDatabase", "flushSentry"]);
+	});
+
 	it("reports a non-zero exit code when the sequence overruns", async () => {
 		const controller = createShutdownController(
 			deps([], {

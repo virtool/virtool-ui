@@ -1,10 +1,13 @@
 import type { Logger } from "@virtool/logger";
 
-/** Exit code set when the shutdown sequence completes within its budget. */
+/** Exit code set when every step of the sequence ran within its budget. */
 const EXIT_CLEAN = 0;
 
-/** Exit code set when the backstop fires before the sequence finishes. */
-const EXIT_OVERRAN = 1;
+/** Exit code set when a step failed, or the backstop fired before the end. */
+const EXIT_UNCLEAN = 1;
+
+/** How the shutdown sequence ended. */
+type Outcome = "clean" | "failed" | "overran";
 
 /** One registered shutdown callback and the name it is logged under. */
 type Hook = {
@@ -36,10 +39,16 @@ export type ShutdownController = {
 	listen: () => void;
 };
 
-/** Run `promise`, or resolve `false` once `ms` milliseconds have passed. */
-function withBackstop(promise: Promise<void>, ms: number): Promise<boolean> {
-	return new Promise<boolean>((resolve) => {
-		const timer = setTimeout(() => resolve(false), ms);
+/**
+ * Resolve what `promise` reports, or `"overran"` once `ms` have passed.
+ *
+ * `promise` settling `false` is a sequence that ran to the end with at least
+ * one failed step, and a rejection is one that could not — neither is a clean
+ * shutdown, and neither may be reported as one.
+ */
+function withBackstop(promise: Promise<boolean>, ms: number): Promise<Outcome> {
+	return new Promise<Outcome>((resolve) => {
+		const timer = setTimeout(() => resolve("overran"), ms);
 
 		// Without this the timer holds the event loop open for its full duration
 		// on an otherwise clean shutdown, so a process that finished winding down
@@ -47,13 +56,13 @@ function withBackstop(promise: Promise<void>, ms: number): Promise<boolean> {
 		timer.unref();
 
 		promise.then(
-			() => {
+			(ok) => {
 				clearTimeout(timer);
-				resolve(true);
+				resolve(ok ? "clean" : "failed");
 			},
 			() => {
 				clearTimeout(timer);
-				resolve(true);
+				resolve("failed");
 			},
 		);
 	});
@@ -83,6 +92,12 @@ function withBackstop(promise: Promise<void>, ms: number): Promise<boolean> {
  * 5. Sentry flushes. `flush()`, never `close()`: `close()` flushes *and*
  *    disables, so anything raised later in shutdown goes unreported.
  *
+ * **No step can abort the ones after it, and none can pass unreported.** Each
+ * is caught and logged on its own, so a listener that will not close still
+ * leaves the pool to drain; and any failure — a hook's included — is what the
+ * process exits `1` on, so a shutdown that failed is never indistinguishable
+ * from one that did not.
+ *
  * The whole sequence is bounded by the backstop, which means a hook cannot
  * assume unlimited time. The budget must stay strictly under
  * `terminationGracePeriodSeconds` — which covers `preStop` and shutdown
@@ -95,26 +110,53 @@ export function createShutdownController(
 	const hooks: Hook[] = [];
 	let started = false;
 
-	async function runHooks(): Promise<void> {
+	async function runHooks(): Promise<boolean> {
+		const results: boolean[] = [];
+
 		// Reverse registration order: a hook registered later may depend on what an
 		// earlier one set up, so it has to come down first.
 		for (const hook of [...hooks].reverse()) {
 			try {
 				await hook.run();
 				deps.logger.debug({ hook: hook.name }, "ran shutdown hook");
+				results.push(true);
 			} catch (err) {
 				deps.logger.error({ err, hook: hook.name }, "shutdown hook failed");
+				results.push(false);
 			}
+		}
+
+		return results.every((ok) => ok);
+	}
+
+	async function runStep(
+		step: string,
+		run: () => Promise<void>,
+	): Promise<boolean> {
+		try {
+			await run();
+			return true;
+		} catch (err) {
+			deps.logger.error({ err, step }, "shutdown step failed");
+			return false;
 		}
 	}
 
-	async function sequence(): Promise<void> {
+	async function sequence(): Promise<boolean> {
 		deps.setReady(false);
 
-		await runHooks();
-		await deps.closeListener();
-		await deps.closeDatabase();
-		await deps.flushSentry();
+		// Every step runs and every result is collected, rather than the first
+		// failure aborting the rest: a listener that would not close is no reason
+		// to leave the pool undrained or the Sentry buffer unflushed. The collected
+		// results are what stop a failed shutdown reporting itself as a clean one.
+		const results = [
+			await runHooks(),
+			await runStep("closeListener", deps.closeListener),
+			await runStep("closeDatabase", deps.closeDatabase),
+			await runStep("flushSentry", deps.flushSentry),
+		];
+
+		return results.every((ok) => ok);
 	}
 
 	async function shutdown(signal: string): Promise<void> {
@@ -129,11 +171,17 @@ export function createShutdownController(
 
 		deps.logger.info({ signal }, "shutting down");
 
-		const finished = await withBackstop(sequence(), deps.timeout * 1000);
+		const outcome = await withBackstop(sequence(), deps.timeout * 1000);
 
-		if (finished) {
+		if (outcome === "clean") {
 			deps.logger.info("shutdown complete");
 			process.exitCode = EXIT_CLEAN;
+			return;
+		}
+
+		if (outcome === "failed") {
+			deps.logger.error("shutdown finished with failed steps");
+			process.exitCode = EXIT_UNCLEAN;
 			return;
 		}
 
@@ -142,7 +190,7 @@ export function createShutdownController(
 			"shutdown did not finish within its budget",
 		);
 
-		process.exitCode = EXIT_OVERRAN;
+		process.exitCode = EXIT_UNCLEAN;
 	}
 
 	return {
