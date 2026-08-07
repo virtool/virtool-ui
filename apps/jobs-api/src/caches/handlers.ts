@@ -11,9 +11,15 @@ import type { CacheRow } from "@virtool/data/db/schema/caches";
 import type { Logger } from "@virtool/logger";
 import type { StorageBackend } from "@virtool/storage";
 import { requireJobRequest } from "../auth/guard";
-import { jsonError } from "../http";
+import { jsonError, type ReadHandlerDeps } from "../http";
 
-/** What the cache handlers need to serve a request. */
+/**
+ * What {@link handleRegisterCache} needs to serve a request.
+ *
+ * The register route is the only one of the two that touches object storage: it
+ * reads back the size of the blob the caller says it wrote. The lookup takes
+ * {@link ReadHandlerDeps} instead, and so cannot reach a bucket at all.
+ */
 export type CacheHandlerDeps = {
 	db: Db;
 	storage: StorageBackend;
@@ -45,9 +51,13 @@ function toCache(row: CacheRow): Cache {
  * Metadata only. Workflows read object storage directly, so nothing here
  * streams cache bytes — the caller takes `storageKey` to the bucket itself.
  * This diverges from Python, which streamed the payload through its jobs API.
+ *
+ * `ReadHandlerDeps` rather than {@link CacheHandlerDeps}: a read that could
+ * reach `storage` is a read that could write one, so it is handed no backend
+ * to reach.
  */
 export async function handleGetCache(
-	deps: CacheHandlerDeps,
+	deps: ReadHandlerDeps,
 	request: Request,
 	key: string,
 ): Promise<Response> {

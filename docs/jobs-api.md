@@ -490,6 +490,11 @@ object-storage access, so the writer puts its blob at `caches/v1/<uuid>`
 and then registers the row, and the reader takes `storageKey` to the
 bucket. Python streamed payloads through its jobs API; this does not.
 
+The lookup is handed `ReadHandlerDeps` — `{ db }` — like every other
+read in the service, so it has no backend to reach even by mistake.
+`CacheHandlerDeps`, with `storage` and a logger, belongs to the register
+route alone, which reads the blob's size back to write the row with it.
+
 **Lookup is not optional garnish.** A row's `storageKey` is a per-write
 UUID and is not derivable from the cache key, so a workflow holding a
 derived key cannot read the blob at all until this server resolves one
