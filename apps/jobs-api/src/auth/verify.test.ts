@@ -1,3 +1,4 @@
+import type { JobState } from "@virtool/contracts";
 import { seedUser } from "@virtool/data/auth/test/fixtures";
 import type { Db } from "@virtool/data/db/pg";
 import { jobs } from "@virtool/data/db/schema/jobs";
@@ -201,7 +202,7 @@ describe("verifyJobRequest", () => {
 	// Each names the state, which is how a runner tells a cancellation from a
 	// ping-timeout sweep from a job it already finished. That is only reachable
 	// with the right key; the tests above are what pin the other half.
-	it.each([
+	it.each<[JobState, string]>([
 		["cancelled", "Job is cancelled."],
 		["failed", "Job has failed."],
 		["succeeded", "Job has succeeded."],

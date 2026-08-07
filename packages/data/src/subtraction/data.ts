@@ -1,5 +1,4 @@
 import type {
-	JobState,
 	JobWorkflow,
 	NucleotideComposition,
 	Subtraction,
@@ -149,14 +148,13 @@ function toMinimal(row: SubtractionResourceRow): SubtractionMinimal {
 					id: row.jobId,
 					createdAt: row.jobCreatedAt ?? new Date(),
 					progress: computeProgress(row.jobState, row.jobSteps),
-					// `state` and `workflow` are plain text columns; Python only ever
-					// writes the union members, so assert here rather than widening the
-					// wire shape to `string` for every reader.
-					state: (row.jobState ?? "pending") as JobState,
+					state: row.jobState ?? "pending",
 					user:
 						row.jobUserId == null
 							? null
 							: { id: row.jobUserId, handle: row.jobUserHandle ?? "" },
+					// `jobs.workflow` carries no constraint, so it arrives as free
+					// text; Python only ever writes the union members here.
 					workflow: (row.jobWorkflow ?? "create_subtraction") as JobWorkflow,
 				};
 

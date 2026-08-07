@@ -1,10 +1,10 @@
 import { createServerFn, createServerOnlyFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
+import { JobState } from "@virtool/contracts";
 import {
 	findJobs,
 	getJob,
 	getJobs,
-	JOB_STATES,
 	JobNotFoundError,
 } from "@virtool/data/jobs/data";
 import { z } from "zod";
@@ -13,12 +13,10 @@ import { db } from "../composition";
 import { ClientError } from "../errors";
 import { rowIdSchema } from "../validation";
 
-const jobStateSchema = z.enum(JOB_STATES);
-
 const findJobsSchema = z.object({
 	page: z.number().int().min(1).default(1),
 	perPage: z.number().int().min(1).max(100).default(25),
-	states: z.array(jobStateSchema).default([]),
+	states: z.array(JobState).default([]),
 });
 
 const jobIdSchema = z.object({

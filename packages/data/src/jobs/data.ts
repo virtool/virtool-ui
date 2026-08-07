@@ -1,4 +1,8 @@
-import { isJobStateTerminal, type SearchResult } from "@virtool/contracts";
+import {
+	isJobStateTerminal,
+	JobState,
+	type SearchResult,
+} from "@virtool/contracts";
 import { and, asc, count, desc, eq, inArray, sql } from "drizzle-orm";
 import { hashToken, newJobKey } from "../auth/tokens";
 import type { Db, DbOrTx } from "../db/pg";
@@ -13,25 +17,13 @@ import { withTimeout } from "../db/timeout";
 import { AppError } from "../errors";
 import { emit } from "../events/emit";
 
-/** The canonical list of a job's lifecycle states. */
-export const JOB_STATES = [
-	"cancelled",
-	"failed",
-	"pending",
-	"running",
-	"succeeded",
-] as const;
-
-/** One of a job's lifecycle states. */
-export type JobState = (typeof JOB_STATES)[number];
-
 /**
  * The states a job can still leave — `pending` and `running`.
  *
  * Derived rather than written out, so it cannot fall out of step with
- * {@link JOB_STATES} or with `isJobStateTerminal`.
+ * `JobState` or with `isJobStateTerminal`.
  */
-export const NON_TERMINAL_JOB_STATES = JOB_STATES.filter(
+export const NON_TERMINAL_JOB_STATES = JobState.options.filter(
 	(state) => !isJobStateTerminal(state),
 );
 
@@ -40,8 +32,12 @@ export type JobMinimal = {
 	id: number;
 	createdAt: Date;
 	progress: number;
-	state: string;
+	state: JobState;
 	user: { id: number; handle: string };
+	/**
+	 * Deliberately open. `jobs.workflow` carries no CHECK constraint, so a row
+	 * can name a workflow this build has never heard of.
+	 */
 	workflow: string;
 };
 
@@ -55,9 +51,10 @@ export type Job = {
 	finishedAt: Date | null;
 	pingedAt: Date | null;
 	progress: number;
-	state: string;
+	state: JobState;
 	steps: JobStep[] | null;
 	user: { id: number; handle: string };
+	/** Open for the same reason as {@link JobMinimal.workflow}. */
 	workflow: string;
 };
 
@@ -114,7 +111,7 @@ function buildCounts(
 	const counts: Record<string, Record<string, number>> = {};
 
 	// Seed every state so empty states report 0 rather than going missing.
-	for (const state of JOB_STATES) {
+	for (const state of JobState.options) {
 		counts[state] = {};
 	}
 

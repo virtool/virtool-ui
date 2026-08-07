@@ -981,6 +981,25 @@ defines. Mirror Python-side column defaults with Drizzle `.$defaultFn()`,
 never `.default()` — the real columns have no `server_default`, so
 `.default()` inserts `null`.
 
+**Mirror a column's constraint, and only its constraint.** A `text`
+column Python closes with a CHECK constraint is typed
+`text("state").$type<JobState>()`, with the constraint named in a comment
+— `$type` asserts rather than validates, which is exactly right when the
+database is doing the enforcing. A column with **no** constraint stays
+`string` no matter how enumerable its values look: `jobs.workflow` is one,
+Python's `Workflow` being an application-level enum, and that openness is
+what `apps/jobs-api/src/metrics/registry.ts`'s `other` folding and
+`isJobStateTerminal`'s `string` parameter exist for. Never narrow a column
+the database leaves open, and never widen one it closes. The union itself
+lives in `@virtool/contracts` — one definition, imported by the mirror.
+
+Three `pgEnum` declarations (`messagecolor`, `indextype`,
+`session_type_enum`) describe a Postgres enum where the real column is
+`text` plus a CHECK. Each carries a comment saying so. They are inert —
+nothing generates migrations from this side — so leave them alone rather
+than restructuring. `subtraction_files.type` is the opposite case and is
+genuinely backed by the `subtractiontype` enum.
+
 Postgres is now Virtool's sole data store — Python removed MongoDB
 entirely, so every domain's records live in Postgres and there is no
 Mongoose / Mongo-driver layer here. A domain not yet reachable from the

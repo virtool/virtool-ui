@@ -1,5 +1,4 @@
 import type {
-	JobState,
 	LabelNested,
 	LibraryType,
 	Quality,
@@ -287,11 +286,10 @@ async function getSampleJobs(
 				createdAt: job.createdAt,
 				id: job.id,
 				progress: job.progress,
-				// The mirror stores states and workflows as free text; the columns
-				// only ever hold the enumerated values, and a sample's job is always
-				// the `create_sample` job that built it.
-				state: job.state as JobState,
+				state: job.state,
 				user: job.user,
+				// `jobs.workflow` carries no constraint, so it arrives as free text.
+				// A sample's job is always the `create_sample` job that built it.
 				workflow: job.workflow as "create_sample",
 			},
 		]),

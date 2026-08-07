@@ -1,3 +1,4 @@
+import type { JobState } from "@virtool/contracts";
 import { seedUser } from "@virtool/data/auth/test/fixtures";
 import type { Db } from "@virtool/data/db/pg";
 import { jobs } from "@virtool/data/db/schema/jobs";
@@ -123,7 +124,7 @@ function seedPending(options: { workflow?: string; createdAt?: Date } = {}) {
 }
 
 /** A job mid-run, with a step list a runner can start steps against. */
-function seedRunning(options: { state?: string } = {}) {
+function seedRunning(options: { state?: JobState } = {}) {
 	return seedJob(db, userId, {
 		steps: STEPS.map((step) => ({ ...step, started_at: null })),
 		workflow: "pathoscope",
