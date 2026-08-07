@@ -329,7 +329,7 @@ export type JobQueueSnapshot = {
  * How long a scrape waits on the job-queue reads before abandoning them.
  *
  * Matched to the pool probe's bound, and for the same reason: these run on the
- * pool the control plane serves workflows from, so a saturated pool queues them
+ * pool the jobs API serves workflows from, so a saturated pool queues them
  * client-side where nothing rejects.
  */
 export const JOB_QUEUE_PROBE_TIMEOUT_MS = 2000;

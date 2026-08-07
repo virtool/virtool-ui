@@ -91,7 +91,7 @@ describe("createJobQueueReader", () => {
 	});
 
 	// Two Prometheus replicas, or a human curling in a loop, would otherwise
-	// multiply an unindexed scan across the pool the control plane serves
+	// multiply an unindexed scan across the pool the jobs API serves
 	// workflows from.
 	it("does not re-query inside its TTL", async () => {
 		await seedQueuedJob("nuvs", "pending");
@@ -237,6 +237,35 @@ describe("setJobQueue", () => {
 				workflow: "other",
 			}),
 		).toBe("900");
+	});
+
+	// Re-serving the last known depth on every scrape of an outage would have
+	// Prometheus record it as fresh, hiding a queue that grew behind a flat line
+	// or holding an alert open for one that drained. An absent series says
+	// "unknown", which is the true answer.
+	it("drops the series entirely when a refresh fails", async () => {
+		const metrics = createMetrics(10);
+
+		metrics.setJobQueue({
+			counts: [{ workflow: "nuvs", state: "pending", count: 47 }],
+			oldestPendingAges: [{ workflow: "nuvs", ageSeconds: 900 }],
+		});
+
+		metrics.clearJobQueue();
+
+		const rendered = await metrics.render();
+
+		// Absent, not zeroed — zero asserts an empty queue, which is a different
+		// claim from not knowing. `sample` returns undefined either way only if
+		// the line is gone entirely, which the raw checks below pin.
+		expect(rendered).not.toContain("virtool_jobs{");
+		expect(rendered).not.toContain("virtool_jobs_oldest_pending_age_seconds{");
+		expect(
+			sample(rendered, "virtool_jobs", { workflow: "nuvs", state: "pending" }),
+		).toBeUndefined();
+
+		// The rest of the exposition is untouched.
+		expect(rendered).toContain("virtool_postgres_pool_max 10");
 	});
 
 	// The query restricts the state already; the guard keeps the label bounded

@@ -58,6 +58,11 @@ export async function handleMetrics(
 			try {
 				deps.metrics.setJobQueue(await deps.readJobQueue());
 			} catch (err) {
+				// Unlike the pool gauges above, these are dropped rather than left
+				// to go stale: a queue depth is only meaningful as of a moment, and
+				// re-serving the last one would have Prometheus record it as fresh
+				// on every scrape of the outage.
+				deps.metrics.clearJobQueue();
 				deps.logger.warn({ err }, "could not read job queue counts");
 			}
 		})(),

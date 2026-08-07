@@ -10,7 +10,7 @@ import {
  * Well under a typical 15–60s scrape interval, so a scrape still sees a fresh
  * queue. The point is the other direction: two Prometheus replicas, or a human
  * curling the endpoint in a loop, would otherwise multiply an unindexed scan
- * across the very pool the control plane serves workflows from.
+ * across the very pool the jobs API serves workflows from.
  */
 export const JOB_QUEUE_TTL_MS = 10_000;
 

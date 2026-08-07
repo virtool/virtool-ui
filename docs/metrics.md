@@ -11,7 +11,7 @@ both.
 Two series belong to that second target alone and are **not** exposed
 here: `virtool_jobs{workflow,state}` and
 `virtool_jobs_oldest_pending_age_seconds{workflow}`, the job queue as
-seen from the control plane. They report on workflow pods, which are
+seen from the jobs API. They report on workflow pods, which are
 one-shot Kubernetes Jobs and so cannot be scraped directly — one may run
 for hours and vanish between scrapes, and a pod-name label would be
 unbounded. Adding them here instead would put the same numbers behind a

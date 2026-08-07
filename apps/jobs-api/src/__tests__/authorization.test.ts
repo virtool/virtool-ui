@@ -200,6 +200,10 @@ describe("metrics", () => {
 		expect(response.status).toBe(200);
 		expect(rendered).toContain("process_cpu_seconds_total");
 		expect(rendered).toContain("virtool_http_requests_total");
+
+		// The queue series are dropped rather than served stale, so a scrape
+		// during an outage records no depth at all.
+		expect(rendered).not.toContain("virtool_jobs{");
 	});
 });
 

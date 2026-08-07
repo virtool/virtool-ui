@@ -548,7 +548,7 @@ pod name is unbounded cardinality, which this repo forbids outright:
 every job mints a pod name and the series set would never retire.
 cAdvisor already covers per-pod CPU and memory, so the resource
 dimension was never the missing one — the *queue* dimension was. The
-control plane sees the whole fleet from one place.
+jobs API sees the whole fleet from one place.
 
 #### The labels are bounded, but only because this code makes them so
 
@@ -595,9 +595,29 @@ keep these series dark for ten seconds past a blip that lasted one.
 
 Both reads go out concurrently under one `readJobQueueBounded` deadline,
 matched to the pool probe's two seconds for the same reason. A failure
-drops only these series, logs a warning, and leaves the pool gauges and
-the rest of the scrape alone — the two pre-scrape reads are independent,
-so one failing does not take the other's series with it.
+logs a warning and leaves the pool gauges and the rest of the scrape
+alone — the two pre-scrape reads are independent, so one failing does
+not take the other's series with it.
+
+#### A failed refresh drops these series, rather than letting them go stale
+
+This is the one place the queue gauges are treated differently from the
+pool gauges beside them, which do go stale at their last value.
+
+A gauge holds its last value forever, and `registry.metrics()` renders
+whatever is standing. So a queue depth left in place after a failed read
+is re-served on **every** scrape of the outage, and Prometheus records
+each one as a fresh sample — a flat line hiding a backlog that grew, or
+an alert held open for a queue that has since drained. `clearJobQueue`
+resets both gauges instead, so the series go absent and `absent()` can
+alert on the gap.
+
+Absent rather than zero: zero asserts an empty queue, which is a
+different claim from not knowing.
+
+A pool occupancy is a property of this process and its last reading is
+still roughly true while the probe fails. A queue depth is only
+meaningful as of a moment, so the same treatment would be a lie.
 
 #### The age is computed in Postgres, pinned to UTC
 

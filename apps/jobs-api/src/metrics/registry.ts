@@ -24,10 +24,20 @@ const OTHER_WORKFLOW = "other";
 /** Every workflow label this process will ever emit. */
 const WORKFLOW_LABELS = [...JobWorkflow.options, OTHER_WORKFLOW];
 
+/**
+ * The workflows that keep their own label.
+ *
+ * Deliberately not {@link WORKFLOW_LABELS}, which is the wider question of what
+ * this process emits — a row whose workflow really is the string `other` is an
+ * unrecognised workflow, not a recognised one.
+ */
+const KNOWN_WORKFLOWS = new Set<string>(JobWorkflow.options);
+
+/** The states a row may be counted under, as a set for the guard below. */
+const COUNTABLE_STATES = new Set<string>(NON_TERMINAL_JOB_STATES);
+
 function workflowLabel(workflow: string): string {
-	return (JobWorkflow.options as readonly string[]).includes(workflow)
-		? workflow
-		: OTHER_WORKFLOW;
+	return KNOWN_WORKFLOWS.has(workflow) ? workflow : OTHER_WORKFLOW;
 }
 
 /** One handled request, as observed by the metrics middleware. */
@@ -50,6 +60,7 @@ export type Metrics = {
 	recordHttpRequest: (sample: RequestSample) => void;
 	setPostgresConnections: (counts: ConnectionCounts) => void;
 	setJobQueue: (snapshot: JobQueueSnapshot) => void;
+	clearJobQueue: () => void;
 	contentType: string;
 	render: () => Promise<string>;
 };
@@ -107,8 +118,8 @@ export function createMetrics(poolMax: number): Metrics {
 
 	// The queue dimension. Workflow pods are one-shot Kubernetes Jobs — a poor
 	// scrape target, since one may run for hours and vanish between scrapes, and
-	// a pod-name label would be unbounded. The control plane sees the whole fleet
-	// from one place, over two labels that are bounded by construction.
+	// a pod-name label would be unbounded. The jobs API sees the whole fleet from
+	// one place, over two labels that are bounded by construction.
 	const jobsGauge = new Gauge({
 		name: "virtool_jobs",
 		help: "Jobs in a non-terminal state, by workflow and state.",
@@ -159,9 +170,7 @@ export function createMetrics(poolMax: number): Metrics {
 			// label bounded here rather than relying on the query's `WHERE` to do
 			// it from a distance.
 			for (const row of snapshot.counts) {
-				if (
-					!(NON_TERMINAL_JOB_STATES as readonly string[]).includes(row.state)
-				) {
+				if (!COUNTABLE_STATES.has(row.state)) {
 					continue;
 				}
 
@@ -188,6 +197,19 @@ export function createMetrics(poolMax: number): Metrics {
 			for (const [workflow, ageSeconds] of oldest) {
 				oldestPendingJobAge.set({ workflow }, ageSeconds);
 			}
+		},
+
+		clearJobQueue() {
+			// Drop the series rather than leaving them standing. A gauge holds its
+			// last value forever, so a refresh that failed would otherwise have
+			// every scrape of the outage record a stale backlog as a *fresh*
+			// sample — hiding a queue that grew behind a flat line, or holding an
+			// alert open for one that drained. An absent series says "unknown",
+			// which is the true answer, and `absent()` can alert on it.
+			//
+			// Zeroing would be worse than either: it asserts an empty queue.
+			jobsGauge.reset();
+			oldestPendingJobAge.reset();
 		},
 
 		contentType: registry.contentType,

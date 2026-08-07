@@ -835,8 +835,8 @@ this section is `apps/web`; see [docs/jobs-api.md](docs/jobs-api.md) and
 that service's registry, fed by `readJobQueueBounded`
 (`@virtool/data/jobs/data`). Workflow pods are one-shot Kubernetes Jobs
 and a poor scrape target — one may run for hours and vanish between
-scrapes, and a pod-name label is unbounded — so the control plane
-reports the queue on their behalf. Three rules hold the bound: the read
+scrapes, and a pod-name label is unbounded — so the jobs API reports
+the queue on their behalf. Three rules hold the bound: the read
 covers only `pending` and `running` (a scan over every job ever run
 grows forever against a table this side cannot index), an unrecognised
 `workflow` folds into `other` (the column is plain `text`), and every
