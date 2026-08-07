@@ -82,12 +82,18 @@ This is a **pnpm monorepo**:
   registry. See [docs/tasks.md](docs/tasks.md).
 - `apps/create-subtraction/` — `@virtool/create-subtraction`, the first workflow
   executor: a one-shot process that starts, works, exits. Only its object
-  storage half is wired so far. Image: `ghcr.io/virtool/ts-create-subtraction`,
-  **Debian** — it copies binaries from `ghcr.io/virtool/tools`, which are built
-  against `python:3.13-bookworm` and cannot load under musl. It also installs
-  `perl` and `python3`, because `bowtie2` and `bowtie2-build` are interpreter
-  scripts wrapping the real binaries. The other three workflow executors get a
-  directory, a Dockerfile stage and a CI matrix entry when their port lands.
+  storage half is wired so far. It ports Python's `create_subtraction`
+  **without `build_index`**: nothing consumes a subtraction's bowtie2 shards,
+  and the jobs API's finalize route accepts only `subtraction.fa.gz`, so the
+  run decompresses the FASTA, computes `gc`/`count`, compresses and finalizes.
+  Don't port the step or the `*.bt2` upload loop back. That leaves it running
+  no external tool at all — the gzip is `@virtool/workflow`'s, in-process — so
+  the image, `ghcr.io/virtool/ts-create-subtraction`, is **Alpine** and copies
+  nothing from `ghcr.io/virtool/tools`. Reintroducing a tools binary means
+  moving the stage to Debian in the same edit, because they are built against
+  `python:3.13-bookworm` and musl cannot load them. The other three workflow
+  executors get a directory, a Dockerfile stage and a CI matrix entry when
+  their port lands.
 - `apps/workflow-pathoscope/` — the pathoscope workflow image
   (`ghcr.io/virtool/ts-pathoscope`). Holds only a `Dockerfile` today: it
   compiles `packages/pathoscope-core` and layers the `ghcr.io/virtool/tools`

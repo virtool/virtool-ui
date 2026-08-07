@@ -1187,8 +1187,8 @@ image.
 
 The runtime base is **`node:24-alpine`**. This service copies nothing
 from `ghcr.io/virtool/tools` and needs no bioinformatics binaries, so it
-does not pay the Debian base the workflow images pay to satisfy those
-binaries. Do not move it to Debian for uniformity's sake.
+does not pay the Debian base an image carrying those binaries pays. Do
+not move it to Debian for uniformity's sake.
 
 The app bundles to a single `dist/index.mjs` with tsdown, every
 `@virtool/*` inlined from TypeScript source. `postgres` and `pino` stay
