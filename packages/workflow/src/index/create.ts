@@ -38,7 +38,15 @@ export async function createIndexArtifact(
 	reference: CreateIndexReference | null,
 	otus: AsyncIterable<IndexOtu> | Iterable<IndexOtu>,
 ): Promise<void> {
-	await unlink(path).catch(() => {});
+	// Only an absent file is unremarkable. A path that cannot be unlinked is
+	// reported here rather than swallowed, because the DDL would otherwise run
+	// against the file still sitting there and fail as "table already exists",
+	// naming neither the path nor the real reason.
+	await unlink(path).catch((error: NodeJS.ErrnoException) => {
+		if (error.code !== "ENOENT") {
+			throw error;
+		}
+	});
 
 	const database = createIndexArtifactSchema(path);
 
@@ -97,6 +105,16 @@ export async function createIndexArtifact(
 					);
 
 					const isolateId = Number(row?.id);
+
+					// `INSERT … RETURNING` either throws or hands back the row, so
+					// this cannot fire today. It is here because the alternative to
+					// checking is writing `NaN` into every one of the isolate's
+					// sequences, and the rowid is what ties them to their OTU.
+					if (!Number.isInteger(isolateId)) {
+						throw new Error(
+							`Inserting isolate ${isolate.id} of OTU ${otu.id} returned no rowid`,
+						);
+					}
 
 					for (const sequence of isolate.sequences) {
 						insertSequence.run(

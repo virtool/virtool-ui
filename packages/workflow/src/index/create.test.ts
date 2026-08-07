@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { chmod, mkdir, mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
@@ -175,6 +175,27 @@ describe("createIndexArtifact", () => {
 
 		index.close();
 	});
+
+	// Root ignores the directory mode this leans on, so there is no way to make
+	// the unlink fail for it.
+	it.skipIf(process.getuid?.() === 0)(
+		"surfaces an unlink failure rather than swallowing it",
+		async () => {
+			const locked = join(workPath, "locked");
+
+			await mkdir(locked);
+			await createIndexArtifact(join(locked, INDEX_SQLITE_FILE_NAME), null, []);
+			await chmod(locked, 0o500);
+
+			try {
+				await expect(
+					createIndexArtifact(join(locked, INDEX_SQLITE_FILE_NAME), null, []),
+				).rejects.toThrow(/EACCES|EPERM/);
+			} finally {
+				await chmod(locked, 0o700);
+			}
+		},
+	);
 
 	it("rolls back and leaves no partial artifact when a row is bad", async () => {
 		const path = join(workPath, INDEX_SQLITE_FILE_NAME);
