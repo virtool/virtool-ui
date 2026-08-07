@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import type { JobNested, ServerJobMinimal } from "@jobs/types";
-import type { JobState, JobWorkflow } from "@virtool/contracts";
+import type { ServerJobMinimal } from "@jobs/types";
+import type { JobNested, JobState, JobWorkflow } from "@virtool/contracts";
 import { createFakeUserNested } from "./user";
 
 /**

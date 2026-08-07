@@ -240,6 +240,45 @@ moved into `@virtool/contracts` when the data layer moved into its own
 package, which cannot reach the app's feature tree at all. The password
 policy went the same way, for the same reason.
 
+### Narrowing an open column happens where the wire shape is published
+
+Some columns are wider than what the client renders. `jobs.workflow` is a
+`text` column carrying no CHECK constraint, so `data.ts` types it
+`string` — a row can name a workflow this build has never heard of, and
+saying otherwise would be an assertion nothing enforces. The SPA turns a
+workflow into a label and a link, so it reads the closed union.
+
+The narrowing belongs in `functions.ts`, the boundary that publishes the
+wire shape. `server/jobs/functions.ts` parses `workflow` onto the union
+on the way out and throws when a row does not fit. The throw is a **bare
+`Error`**, not a `ClientError`: nothing the caller sent is wrong, so it
+is a 500 and a Sentry event rather than routine control flow the
+`beforeSend` filter drops. The message names the job id and never the
+value — it becomes a Sentry title, and an unbounded one buries the
+incident among its own variants. `apps/jobs-api` does the same thing on
+its own read path, parsing outbound jobs through the `Job` schema.
+
+The alternative — declaring the narrow union on the client and parsing
+there — moves the failure to a component that can do nothing about it,
+and hides the disagreement from TypeScript entirely: `Schema.parse`
+accepts `unknown`, so a server function returning `string` for a field
+the client types as a union compiles cleanly and fails at runtime. Two
+things close that. The server function annotates its handler's return
+type, and the query annotates its `select` parameter with the shape the
+schema parses:
+
+```ts
+select: (job: ServerJob) => JobSchema.parse(job),
+```
+
+React Query checks a `select` parameter contravariantly against what the
+query function resolves to, so a widened wire shape is a type error at
+the query rather than a `ZodError` in a view.
+
+This is narrowing, not validation. It is worth doing only for a value the
+client branches on; a free-text column the client merely displays stays
+`string` all the way through.
+
 ### The labels shape (minimal)
 
 `labels/` is the smallest valid form:

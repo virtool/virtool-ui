@@ -557,6 +557,17 @@ values genuinely come out of a JSONB column, so the narrowing is honest;
 assert it once at the boundary rather than threading the type through
 every internal helper.
 
+**A column the database leaves open is narrowed in `functions.ts`, not on
+the client.** `jobs.workflow` is `text` with no CHECK constraint, so
+`data.ts` types it `string` while the SPA reads a closed union;
+`server/jobs/functions.ts` parses it onto that union on the way out and
+**bare-throws** — a 500 and a Sentry event, not a `ClientError` — when a
+row does not fit, because nothing the caller sent is wrong and this side
+owns the data. Declaring the narrow type on the client instead hides the
+disagreement from TypeScript. Annotate the query's `select` parameter
+with the shape the client parses, so what the server publishes is checked
+against it.
+
 A handler maps an expected outcome to an HTTP status with
 `setResponseStatus`, then throws `ClientError` (`@server/errors`) — never
 a plain `Error` — for any deliberate 4xx (a bad login, a missing record,

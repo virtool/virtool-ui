@@ -17,7 +17,6 @@ export const JobNestedSchema = z.object({
 // `@virtool/contracts`) carries — so the pre-parse and parsed shapes still
 // diverge even with no field renamed.
 export type ServerJobNested = z.input<typeof JobNestedSchema>;
-export type JobNested = z.infer<typeof JobNestedSchema>;
 
 export const JobMinimalSchema = z.object({
 	id: z.int(),
@@ -101,17 +100,22 @@ export const JobSchema = z.object({
 });
 export type ServerJob = z.input<typeof JobSchema>;
 
+// Keyed off `JobState.options` rather than the response's own keys, so every
+// state carries a number. A filter button reads its count directly, and a state
+// nothing is queued in is a zero rather than a missing key rendering as blank.
 const JobCountsSchema = z
 	.record(z.string(), z.record(z.string(), z.number()))
 	.transform((counts) => {
-		const result: Partial<Record<JobState, number>> = {};
-		for (const [state, stateCounts] of Object.entries(counts)) {
-			result[state as JobState] = Object.values(stateCounts).reduce(
+		const result = {} as Record<JobState, number>;
+
+		for (const state of JobState.options) {
+			result[state] = Object.values(counts[state] ?? {}).reduce(
 				(sum, count) => sum + count,
 				0,
 			);
 		}
-		return result as Record<JobState, number>;
+
+		return result;
 	});
 
 export type JobCounts = z.infer<typeof JobCountsSchema>;
@@ -125,3 +129,5 @@ export const JobSearchResultSchema = z.object({
 	perPage: z.number(),
 	totalCount: z.number(),
 });
+
+export type ServerJobSearchResult = z.input<typeof JobSearchResultSchema>;
