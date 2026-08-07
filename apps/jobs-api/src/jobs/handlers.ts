@@ -29,7 +29,7 @@ import {
 import type { Logger } from "@virtool/logger";
 import { requireJobRequest } from "../auth/guard";
 import type { JobPrincipal } from "../auth/verify";
-import { jsonError, parseJsonBody, parseRowId } from "../http";
+import { jsonError, parseJsonBody, requireRowId } from "../http";
 
 /** What the job lifecycle handlers need to serve a request. */
 export type JobHandlerDeps = {
@@ -147,10 +147,10 @@ async function requireOwnJob(
 		return principal;
 	}
 
-	const jobId = parseRowId(jobIdParam);
+	const jobId = requireRowId(jobIdParam, "Job not found");
 
-	if (jobId === null) {
-		return jsonError(404, "Job not found");
+	if (jobId instanceof Response) {
+		return jobId;
 	}
 
 	if (jobId !== principal.jobId) {

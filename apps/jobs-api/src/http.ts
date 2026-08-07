@@ -80,7 +80,7 @@ export async function parseJsonBody<T>(
  * Returns `null` for anything that is not a positive integer, including the
  * `"1e3"` and `"1.5"` forms `Number.parseInt` would otherwise round into an id.
  */
-export function parseRowId(value: string | undefined): number | null {
+function parseRowId(value: string | undefined): number | null {
 	if (value === undefined || !/^[1-9]\d*$/.test(value)) {
 		return null;
 	}
@@ -88,4 +88,23 @@ export function parseRowId(value: string | undefined): number | null {
 	const id = Number(value);
 
 	return Number.isSafeInteger(id) ? id : null;
+}
+
+/**
+ * Resolve a path parameter that names a row, or the `Response` to refuse the
+ * request with — the `requireJobRequest` idiom again, tested with `instanceof
+ * Response`.
+ *
+ * `notFound` is the same message the resource answers a row that does not exist
+ * with, because the two are one outcome to a caller: an id that cannot name a
+ * row and an id that names none both mean there is nothing there, and saying
+ * which would tell an unauthorised caller what the id space looks like.
+ */
+export function requireRowId(
+	value: string | undefined,
+	notFound: string,
+): number | Response {
+	const id = parseRowId(value);
+
+	return id === null ? jsonError(404, notFound) : id;
 }

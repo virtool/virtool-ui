@@ -14,8 +14,8 @@ import { requireJobRequest } from "../auth/guard";
 import {
 	jsonError,
 	parseJsonBody,
-	parseRowId,
 	type ReadHandlerDeps,
+	requireRowId,
 } from "../http";
 import { checkManifest, measureManifest } from "../manifest";
 
@@ -74,10 +74,13 @@ export async function handleGetSubtraction(
 		return principal;
 	}
 
-	const subtractionId = parseRowId(subtractionIdParam);
+	const subtractionId = requireRowId(
+		subtractionIdParam,
+		"Subtraction not found",
+	);
 
-	if (subtractionId === null) {
-		return jsonError(404, "Subtraction not found");
+	if (subtractionId instanceof Response) {
+		return subtractionId;
 	}
 
 	try {
@@ -140,10 +143,13 @@ export async function handleFinalizeSubtraction(
 		return principal;
 	}
 
-	const subtractionId = parseRowId(subtractionIdParam);
+	const subtractionId = requireRowId(
+		subtractionIdParam,
+		"Subtraction not found",
+	);
 
-	if (subtractionId === null) {
-		return jsonError(404, "Subtraction not found");
+	if (subtractionId instanceof Response) {
+		return subtractionId;
 	}
 
 	const parsed = await parseJsonBody(request, FinalizeSubtractionRequest);

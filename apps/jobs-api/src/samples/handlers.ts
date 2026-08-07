@@ -14,8 +14,8 @@ import { requireJobRequest } from "../auth/guard";
 import {
 	jsonError,
 	parseJsonBody,
-	parseRowId,
 	type ReadHandlerDeps,
+	requireRowId,
 } from "../http";
 import { checkManifest, measureManifest } from "../manifest";
 
@@ -79,10 +79,10 @@ export async function handleGetSample(
 		return principal;
 	}
 
-	const sampleId = parseRowId(sampleIdParam);
+	const sampleId = requireRowId(sampleIdParam, "Sample not found");
 
-	if (sampleId === null) {
-		return jsonError(404, "Sample not found");
+	if (sampleId instanceof Response) {
+		return sampleId;
 	}
 
 	try {
@@ -119,10 +119,10 @@ export async function handleFinalizeSample(
 		return principal;
 	}
 
-	const sampleId = parseRowId(sampleIdParam);
+	const sampleId = requireRowId(sampleIdParam, "Sample not found");
 
-	if (sampleId === null) {
-		return jsonError(404, "Sample not found");
+	if (sampleId instanceof Response) {
+		return sampleId;
 	}
 
 	const parsed = await parseJsonBody(request, FinalizeSampleRequest);

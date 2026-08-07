@@ -14,8 +14,8 @@ import { requireJobRequest } from "../auth/guard";
 import {
 	jsonError,
 	parseJsonBody,
-	parseRowId,
 	type ReadHandlerDeps,
+	requireRowId,
 } from "../http";
 import { checkManifest, measureManifest } from "../manifest";
 
@@ -73,10 +73,10 @@ export async function handleGetAnalysis(
 		return principal;
 	}
 
-	const analysisId = parseRowId(analysisIdParam);
+	const analysisId = requireRowId(analysisIdParam, "Analysis not found");
 
-	if (analysisId === null) {
-		return jsonError(404, "Analysis not found");
+	if (analysisId instanceof Response) {
+		return analysisId;
 	}
 
 	try {
@@ -117,10 +117,10 @@ export async function handleFinalizeAnalysis(
 		return principal;
 	}
 
-	const analysisId = parseRowId(analysisIdParam);
+	const analysisId = requireRowId(analysisIdParam, "Analysis not found");
 
-	if (analysisId === null) {
-		return jsonError(404, "Analysis not found");
+	if (analysisId instanceof Response) {
+		return analysisId;
 	}
 
 	const parsed = await parseJsonBody(request, FinalizeAnalysisRequest);
