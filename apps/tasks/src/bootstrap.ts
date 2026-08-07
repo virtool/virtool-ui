@@ -32,8 +32,9 @@ export type AppContext = {
 	 * flipped to unavailable; hooks run **before** the database pool closes, so a
 	 * hook may still write — releasing a task claim, for instance; hooks run in
 	 * reverse registration order; each is awaited; a throwing hook does not
-	 * prevent the others from running; and the whole sequence is bounded by the
-	 * backstop, so a hook must not assume unlimited time.
+	 * prevent the others from running, though it does make the process exit
+	 * non-zero; and the whole sequence is bounded by the backstop, so a hook must
+	 * not assume unlimited time.
 	 */
 	onShutdown: (name: string, hook: () => Promise<void>) => void;
 	/** Flip readiness independently of shutdown — e.g. while draining. */
@@ -137,7 +138,22 @@ export async function bootstrap(
 
 	shutdown.listen();
 
-	await listen(server, config.probePort);
+	try {
+		await listen(server, config.probePort);
+	} catch (err) {
+		// The pool is open by now, and registering the signal handlers above has
+		// already displaced Node's default exit behaviour — so a port that will not
+		// bind would otherwise leave a container running forever with no listener
+		// for the kubelet to fail, which is the one state Kubernetes cannot restart
+		// its way out of. Release what was built before the failure propagates.
+		await close(server);
+
+		await client.end().catch((endErr) => {
+			logger.error({ err: endErr }, "failed to close the database pool");
+		});
+
+		throw err;
+	}
 
 	logger.info(
 		{

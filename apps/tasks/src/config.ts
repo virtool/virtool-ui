@@ -192,20 +192,20 @@ function buildStorage(
 		};
 	}
 
-	const account = requirePresent(
+	const hasAccount = requirePresent(
 		ctx,
 		"VT_STORAGE_AZURE_ACCOUNT",
 		raw.VT_STORAGE_AZURE_ACCOUNT,
 		"azure",
 	);
-	const container = requirePresent(
+	const hasContainer = requirePresent(
 		ctx,
 		"VT_STORAGE_AZURE_CONTAINER",
 		raw.VT_STORAGE_AZURE_CONTAINER,
 		"azure",
 	);
 
-	if (!account || !container) {
+	if (!hasAccount || !hasContainer) {
 		return z.NEVER;
 	}
 

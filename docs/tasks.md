@@ -68,6 +68,12 @@ A failure anywhere in that sequence propagates to `src/index.ts`, which logs
 through a logger of its own — `bootstrap`'s may not exist yet — and sets
 `process.exitCode = 1` without the listener ever starting.
 
+**A listener that fails to bind closes the pool on the way out.** By step 7 the
+pool is open and the signal handlers have already displaced Node's default exit
+behaviour, so an occupied `VT_TASKS_PROBE_PORT` would otherwise leave a
+container running forever on referenced sockets with no listener for the
+kubelet to fail — the one state Kubernetes cannot restart its way out of.
+
 ### `AppContext`
 
 What `bootstrap` returns, and the contract the spawn and claim loops build on:
@@ -213,7 +219,8 @@ On the first SIGTERM or SIGINT, each step awaited before the next:
 
 1. **Readiness flips to unavailable.** The listener stays up.
 2. **Registered hooks run in reverse registration order (LIFO)**, each awaited.
-   A hook that throws is logged and does not abort the ones after it.
+   A hook that throws is logged and does not abort the ones after it, but the
+   process still exits non-zero.
 3. **The probe listener closes.** Idle keep-alive sockets are dropped so the
    wait is bounded by a probe in flight rather than the next one.
 4. **The database pool drains** — after the hooks, so a hook may still write.
@@ -221,8 +228,14 @@ On the first SIGTERM or SIGINT, each step awaited before the next:
 5. **Sentry flushes.** `flush()`, never `close()`: `close()` flushes *and*
    disables, so anything raised later in shutdown would go unreported.
 
-Then `process.exitCode` is set — `0` on completion, `1` if the backstop fired
-first — and the loop drains.
+**No step aborts the ones after it, and none passes unreported.** Each is
+caught and logged on its own, so a listener that will not close still leaves
+the pool to drain and Sentry to flush.
+
+Then `process.exitCode` is set — `0` only when every step ran, `1` if any of
+them failed or the backstop fired first — and the loop drains. A failed
+shutdown that exited `0` would be indistinguishable from a clean one, and an
+undrained pool would pass unnoticed through every rollout.
 
 A **second signal is logged and ignored.** Re-entering would run every hook
 twice and close the pool out from under the first pass.
