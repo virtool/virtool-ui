@@ -668,7 +668,7 @@ export async function getSample(db: Db, sampleId: number): Promise<Sample> {
 		.select({
 			sample: legacySamples,
 			ownerHandle: users.handle,
-			group: { id: groups.id, name: groups.name, legacy_id: groups.legacyId },
+			group: { id: groups.id, name: groups.name, legacyId: groups.legacyId },
 		})
 		.from(legacySamples)
 		.leftJoin(users, eq(users.id, legacySamples.user_id))

@@ -32,15 +32,15 @@ export class UploadReservedError extends AppError {}
 function toUpload(row: UploadRow, user: UserNested | null): Upload {
 	return {
 		id: row.id,
-		created_at: row.createdAt?.toISOString() ?? "",
+		createdAt: row.createdAt ?? new Date(0),
 		name: row.name ?? "",
 		ready: row.ready,
 		removed: row.removed,
-		removed_at: row.removedAt?.toISOString() ?? null,
+		removedAt: row.removedAt ?? null,
 		reserved: row.reserved,
 		size: row.size ?? 0,
 		type: row.type ?? "",
-		uploaded_at: row.uploadedAt?.toISOString() ?? "",
+		uploadedAt: row.uploadedAt ?? new Date(0),
 		user,
 	};
 }

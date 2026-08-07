@@ -11,22 +11,22 @@ export type UploadType = (typeof UPLOAD_TYPES)[number];
  * An upload as returned to the client. Mirrors Python's `UploadMinimal`:
  * `name_on_disk` is internal and never exposed.
  *
- * Every field but `removed_at` and `user` is non-null: the columns are nullable
+ * Every field but `removedAt` and `user` is non-null: the columns are nullable
  * at the database level, but Python sets them all when it creates a row and
  * `findUploads` only ever returns `ready` rows, so a listed or created upload
  * always carries them.
  */
 export type Upload = {
 	id: number;
-	created_at: string;
+	createdAt: Date;
 	name: string;
 	ready: boolean;
 	removed: boolean;
-	removed_at: string | null;
+	removedAt: Date | null;
 	reserved: boolean;
 	size: number;
 	type: string;
-	uploaded_at: string;
+	uploadedAt: Date;
 
 	/** The uploading user, or null if that account was removed */
 	user: UserNested | null;

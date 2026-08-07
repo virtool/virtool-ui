@@ -18,8 +18,8 @@ export type Message = {
 	active: boolean;
 	color: MessageColor;
 	message: string;
-	created_at: string;
-	updated_at: string;
+	createdAt: Date;
+	updatedAt: Date;
 	user: MessageUser;
 };
 
@@ -55,8 +55,8 @@ function toMessage(row: MessageJoinRow): Message {
 		active: row.active ?? false,
 		color: row.color,
 		message: row.message ?? "",
-		created_at: row.createdAt?.toISOString() ?? "",
-		updated_at: row.updatedAt?.toISOString() ?? "",
+		createdAt: row.createdAt ?? new Date(),
+		updatedAt: row.updatedAt ?? new Date(),
 		user: row.user,
 	};
 }

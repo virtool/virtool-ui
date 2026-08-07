@@ -14,9 +14,9 @@ export const bannerColorClasses: Record<BannerColor, string> = {
 export type Banner = {
 	active: boolean;
 	color: BannerColor;
-	created_at: string;
+	createdAt: Date;
 	id: number;
 	message: string;
-	updated_at: string;
+	updatedAt: Date;
 	user: UserNested;
 };
