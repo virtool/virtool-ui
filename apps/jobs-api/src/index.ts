@@ -6,14 +6,18 @@ import { createStorageBackend } from "@virtool/storage";
 import { createApp } from "./app";
 import { parseConfig } from "./config";
 import { initSentry, SERVICE } from "./instrument";
-import { logger } from "./logger";
+import { createAppLogger } from "./logger";
 import { createMetrics } from "./metrics/registry";
 
 const config = parseConfig();
 
+// Built first, and before `initSentry`, because everything below logs — and
+// because the Sentry destination it attaches is decided by the same DSN.
+const logger = createAppLogger(config.sentryDsn);
+
 // Before the pool opens or the server listens, so Sentry's Node
 // auto-instrumentation can install its import hooks ahead of what it patches.
-initSentry(config.sentryDsn);
+initSentry(config.sentryDsn, logger);
 
 const { client, db, applicationName } = createDb(config, SERVICE);
 

@@ -30,6 +30,9 @@
 		"packages/logger": {
 			"entry": ["src/**/*.test.ts"]
 		},
+		"packages/sentry": {
+			"entry": ["src/**/*.test.ts"]
+		},
 		"packages/workflow": {
 			"entry": ["src/**/*.test.ts"]
 		}

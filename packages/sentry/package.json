@@ -5,9 +5,15 @@
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts",
-		"./browser": "./src/browser.ts"
+		"./browser": "./src/browser.ts",
+		"./log": "./src/log.ts"
 	},
 	"scripts": {
+		"test": "vitest run",
 		"typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.browser.json"
+	},
+	"devDependencies": {
+		"@virtool/logger": "workspace:*",
+		"vitest": "^4.1.10"
 	}
 }

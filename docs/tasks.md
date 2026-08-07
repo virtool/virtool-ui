@@ -287,13 +287,14 @@ miss a `VT_SENTRY_DSN_FILE` mount. Events are tagged `service: tasks` and carry
 their own `dist`, both from `getCommonOptions`, so this image's source maps do
 not collide with the others' under the shared release version.
 
-There is deliberately **no pino destination forwarding log records to Sentry**,
-as `apps/web` has. That stream is written against `@sentry/tanstackstart-react`,
-so bringing it here means a third copy rather than a shared one, and the SDK's
-own uncaught-exception and unhandled-rejection integrations already report what
-a crash needs. Code wanting a *handled* failure in Sentry calls
-`Sentry.captureException` explicitly. Lift the stream into `@virtool/sentry`
-before copying it.
+`initSentry` runs **before** the logger is built, and its returned `enabled`
+flag is what decides whether that logger gets the pino destination from
+`@virtool/sentry/log` — the shared stream that forwards `info`-and-above
+records to Sentry's structured logging API. It takes `Sentry.logger` as an
+argument, so the same stream serves this app, `apps/jobs-api` and `apps/web`
+without any of them agreeing on an SDK. Without a DSN no stream is attached at
+all and logs go to stdout only. Code wanting a *handled* failure reported as an
+event rather than a log still calls `Sentry.captureException` explicitly.
 
 ## Testing
 

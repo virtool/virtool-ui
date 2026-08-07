@@ -39,7 +39,7 @@ process:
 | `src/app.ts` | `createApp` — the Hono app, its middleware and its routes |
 | `src/config.ts` | Environment parsing, including every `<KEY>_FILE` variant |
 | `src/instrument.ts` | Sentry initialisation and the `SERVICE` constant |
-| `src/logger.ts` | The pino logger singleton |
+| `src/logger.ts` | `createAppLogger` — the pino logger and its Sentry stream |
 | `src/auth/verify.ts` | `verifyJobRequest` — the job credential check |
 | `src/auth/guard.ts` | `requireJobRequest` — the guard every handler starts with |
 | `src/auth/test/fixtures.ts` | `seedJob` — a job row and the plaintext key for it |
@@ -920,6 +920,17 @@ environment by the SDK helper. `readDsn` goes straight to `process.env`
 and would skip the `<KEY>_FILE` resolution that `config.ts` has already
 done. No DSN means no `init`, so dev and unconfigured deploys are
 untouched.
+
+The same DSN decides the logger. `createAppLogger(config.sentryDsn)`
+(`src/logger.ts`) attaches the pino destination from
+`@virtool/sentry/log` when one is present, so `info`-and-above records
+reach Sentry's structured logging API as well as stdout; the stream takes
+`Sentry.logger` as an argument, which is what lets `apps/web`,
+`apps/tasks` and this service share one implementation across two
+different SDKs. `src/index.ts` builds the logger *before* calling
+`initSentry`, because everything below that line logs — so the two lines
+`initSentry` itself writes are the only ones that predate `init` and go
+to stdout alone.
 
 **The process must be started with `node --import @sentry/node/preload`**,
 as the Dockerfile `CMD` and the `start` script both do. Because the DSN

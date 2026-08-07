@@ -95,7 +95,8 @@ This is a **pnpm monorepo**:
   - `@virtool/contracts` — cross-process data shapes, zod-validated where a
     boundary parses them
   - `@virtool/sentry` — shared Sentry option helpers (node + browser entry
-    points)
+    points), plus the pino-to-Sentry log destination every server process
+    attaches (`./log`)
   - `@virtool/storage` — object storage: the S3 and Azure backends, the
     key builders, and `MemoryStorage`
   - `@virtool/data` — the database and domain data layer: the Drizzle schema,
@@ -824,10 +825,16 @@ There is no request-scoped logger. `logger.child({...})` is available for
 attaching scoped context, but nothing in the server currently uses it and
 no `context.logger` exists — don't write code that assumes one.
 
-When `VT_SENTRY_DSN` is set, server logs at `info` and above are
+When a Sentry DSN is configured, server logs at `info` and above are
 forwarded to Sentry automatically (via a pino destination stream, not
 `Sentry.pinoIntegration()`); redaction still applies and dev does not
-forward.
+forward. That holds for **all three** server processes — `apps/web`,
+`apps/jobs-api` and `apps/tasks` — which share one stream,
+`createSentryLogStream` from `@virtool/sentry/log`. It takes the SDK's
+`logger` as an argument rather than importing one, because each process
+initialises a different SDK and only the one it called `init` on sends
+anything. Attach it only when a DSN is present, so the SDK graph stays
+unloaded in dev and tests.
 
 See [docs/logging.md](docs/logging.md) for the redaction
 defaults, `VT_LOG_LEVEL` resolution, where the logger singleton lives, and
