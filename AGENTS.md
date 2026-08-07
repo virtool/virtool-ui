@@ -21,14 +21,19 @@ This is a **pnpm monorepo**:
   mirroring Python's `virtool/jobs/main.py` (`api-jobs-service`, ClusterIP,
   **no ingress** — that absence is the security boundary). Serves
   `/health/live`, `/health/ready`, a token-gated `/metrics`, the two
-  cache endpoints — `GET /caches/{key}` and `POST /caches` — and the three
+  cache endpoints — `GET /caches/{key}` and `POST /caches` — the three
   finalize routes — `PATCH /subtractions/{id}`, `PATCH /samples/{id}`,
-  `PATCH /analyses/{id}` — today. Image:
-  `ghcr.io/virtool/jobs-api`, Alpine. Three rules: it is **always "the jobs
+  `PATCH /analyses/{id}` — and the six metadata reads —
+  `GET /samples/{id}`, `/subtractions/{id}`, `/indexes/{id}`,
+  `/analyses/{id}`, `/refs/{id}` and `/settings` — today. Image:
+  `ghcr.io/virtool/jobs-api`, Alpine. Four rules: it is **always "the jobs
   API"**, never "the control plane" — that names its role, not the service;
   **every route must refuse an unauthenticated caller or be named in
   `PUBLIC_ROUTES`**, which `src/__tests__/authorization.test.ts` enforces;
-  and a handler's floor is `requireJobRequest` (`src/auth/guard.ts`), which
+  **it serves records, never bytes** — a read hands back the recorded
+  `storageKey` and the workflow fetches the object itself, so no handler
+  streams a payload or builds a derived artifact; and a handler's floor is
+  `requireJobRequest` (`src/auth/guard.ts`), which
   authenticates a workflow pod as `job-{id}:{key}` over HTTP Basic and
   **returns** an opaque 401 rather than throwing one. It resolves to a
   `JobPrincipal` of `{ jobId }` — no user, no permissions — and there is no
