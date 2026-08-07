@@ -11,6 +11,7 @@ import type { CacheRow } from "@virtool/data/db/schema/caches";
 import type { Logger } from "@virtool/logger";
 import type { StorageBackend } from "@virtool/storage";
 import { requireJobRequest } from "../auth/guard";
+import { jsonError } from "../http";
 
 /** What the cache handlers need to serve a request. */
 export type CacheHandlerDeps = {
@@ -60,7 +61,7 @@ export async function handleGetCache(
 		return Response.json(toCache(await getCache(deps.db, key)));
 	} catch (err) {
 		if (err instanceof CacheNotFoundError) {
-			return Response.json({ message: "Cache not found" }, { status: 404 });
+			return jsonError(404, "Cache not found");
 		}
 
 		throw err;
@@ -94,7 +95,7 @@ export async function handleRegisterCache(
 	try {
 		body = await request.json();
 	} catch {
-		return Response.json({ message: "Malformed body" }, { status: 400 });
+		return jsonError(400, "Malformed body");
 	}
 
 	const parsed = RegisterCacheRequest.safeParse(body);
@@ -124,10 +125,7 @@ export async function handleRegisterCache(
 		return Response.json(registered, { status: created ? 201 : 200 });
 	} catch (err) {
 		if (err instanceof CacheObjectMissingError) {
-			return Response.json(
-				{ message: "No object stored under that uuid" },
-				{ status: 400 },
-			);
+			return jsonError(400, "No object stored under that uuid");
 		}
 
 		throw err;
