@@ -32,15 +32,18 @@ export class UploadReservedError extends AppError {}
 function toUpload(row: UploadRow, user: UserNested | null): Upload {
 	return {
 		id: row.id,
-		createdAt: row.createdAt ?? new Date(0),
+		// Passed through, never defaulted. These columns are nullable, and an epoch
+		// date substituted for a missing one renders as a real instant in 1970
+		// rather than as the absence it is — `RelativeTime` renders null as nothing.
+		createdAt: row.createdAt,
 		name: row.name ?? "",
 		ready: row.ready,
 		removed: row.removed,
-		removedAt: row.removedAt ?? null,
+		removedAt: row.removedAt,
 		reserved: row.reserved,
 		size: row.size ?? 0,
 		type: row.type ?? "",
-		uploadedAt: row.uploadedAt ?? new Date(0),
+		uploadedAt: row.uploadedAt,
 		user,
 	};
 }

@@ -18,8 +18,13 @@ export type Message = {
 	active: boolean;
 	color: MessageColor;
 	message: string;
-	createdAt: Date;
-	updatedAt: Date;
+
+	/** When the message was written, or null if the row does not record it. */
+	createdAt: Date | null;
+
+	/** When the message was last changed, or null if the row does not record it. */
+	updatedAt: Date | null;
+
 	user: MessageUser;
 };
 
@@ -55,8 +60,11 @@ function toMessage(row: MessageJoinRow): Message {
 		active: row.active ?? false,
 		color: row.color,
 		message: row.message ?? "",
-		createdAt: row.createdAt ?? new Date(),
-		updatedAt: row.updatedAt ?? new Date(),
+		// Passed through, never defaulted. Substituting `new Date()` for a missing
+		// timestamp does not hide the gap, it fabricates a current one — a message
+		// with no recorded time would read as having just been written.
+		createdAt: row.createdAt,
+		updatedAt: row.updatedAt,
 		user: row.user,
 	};
 }
