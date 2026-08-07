@@ -337,6 +337,47 @@ describe("handleFinalizeSample", () => {
 		expect(await db.select().from(sampleReads)).toEqual([]);
 	});
 
+	// A sample with no reads is not a usable sample, and the parent must not flip
+	// ready over nothing.
+	it("refuses an empty manifest", async () => {
+		const sampleId = await seedSample();
+		const uploadId = await seedInput(sampleId, 0);
+
+		const response = await finalize(sampleId, []);
+
+		expect(response.status).toBe(400);
+		expect(await db.select().from(sampleReads)).toEqual([]);
+
+		const [sample] = await db
+			.select({ ready: legacySamples.ready })
+			.from(legacySamples)
+			.where(eq(legacySamples.id, sampleId));
+
+		expect(sample?.ready).toBe(false);
+
+		// The inputs survive a refused finalize.
+		const [upload] = await db
+			.select({ removed: uploads.removed })
+			.from(uploads)
+			.where(eq(uploads.id, uploadId));
+
+		expect(upload?.removed).toBe(false);
+	});
+
+	// A `create_sample` run writes one read or a pair, never three.
+	it("refuses a third read", async () => {
+		const sampleId = await seedSample();
+
+		const response = await finalize(sampleId, [
+			await written(sampleId, "reads_1.fq.gz", "fwd"),
+			await written(sampleId, "reads_2.fq.gz", "rev"),
+			await written(sampleId, "reads_1.fq.gz", "extra"),
+		]);
+
+		expect(response.status).toBe(400);
+		expect(await db.select().from(sampleReads)).toEqual([]);
+	});
+
 	it("refuses anything but the two reads filenames", async () => {
 		const sampleId = await seedSample();
 
@@ -373,7 +414,11 @@ describe("handleFinalizeSample", () => {
 	});
 
 	it("answers 404 for a sample that does not exist", async () => {
-		expect((await finalize(999_999, [])).status).toBe(404);
+		const response = await finalize(999_999, [
+			await written(999_999, "reads_1.fq.gz", "forward reads"),
+		]);
+
+		expect(response.status).toBe(404);
 	});
 
 	it("answers 404 for an id that is not a row id", async () => {

@@ -1272,7 +1272,19 @@ derivable. The only fixed builders left are the two HMM constants.
 fields plus the manifest, so a run cannot end with the parent flipped
 `ready` and its file rows missing. The manifest declares no `size` and no
 `name_on_disk`: the row is written with the byte count the route reads back
-from storage, which is what makes a row pointing at nothing impossible. See
+from storage, which is what makes a row pointing at nothing impossible.
+
+**A resource that is unusable without its files must carry them**, and the
+bound is on the contract in `@virtool/contracts` so the runtime cannot build
+the call: a sample sends one or two reads (`.min(1).max(2)`), a subtraction
+sends its source FASTA (`.min(1)`). An analysis manifest is legitimately
+empty — pathoscope's whole output is the `results` blob — and `results`
+being required is the guard there. A **subtraction accepts one filename,
+`subtraction.fa.gz`**, not Python's seven: nothing consumes the bowtie2
+shards, because both analysis workflows build the index locally from the
+`.fa.gz`. That is the **write** path only — subtractions Python finalized
+still have `bowtie2` rows, `GET /subtractions/{id}` keeps serving them, and
+`SubtractionFileType` keeps both members. See
 [docs/jobs-api.md](docs/jobs-api.md).
 
 `tar.ts` is `tar-stream`, not `node-tar`, because it is a pure stream

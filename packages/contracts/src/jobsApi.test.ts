@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
 	CreateJobClaimRequest,
+	FinalizeAnalysisRequest,
+	FinalizeSampleRequest,
 	FinalizeSubtractionRequest,
 	fromStoredJobClaim,
 	fromStoredJobStep,
@@ -224,9 +226,15 @@ describe("wire shapes", () => {
 describe("subtraction finalize", () => {
 	const gc = { a: 0.25, c: 0.25, g: 0.25, t: 0.24, n: 0.01 };
 
+	const fasta = {
+		kind: "subtractionFile",
+		name: "subtraction.fa.gz",
+		storageKey: "subtractions/7/0f1e2d3c4b5a69788796a5b4c3d2e1f0",
+	};
+
 	it("accepts nucleotide fractions", () => {
 		expect(
-			FinalizeSubtractionRequest.parse({ count: 12, gc, files: [] }).gc,
+			FinalizeSubtractionRequest.parse({ count: 12, gc, files: [fasta] }).gc,
 		).toStrictEqual(gc);
 	});
 
@@ -236,7 +244,7 @@ describe("subtraction finalize", () => {
 			FinalizeSubtractionRequest.safeParse({
 				count: 12,
 				gc: { a: 25, c: 25, g: 25, t: 24, n: 1 },
-				files: [],
+				files: [fasta],
 			}).success,
 		).toBe(false);
 	});
@@ -246,9 +254,84 @@ describe("subtraction finalize", () => {
 			FinalizeSubtractionRequest.safeParse({
 				count: 12,
 				gc: { ...gc, n: -0.01 },
-				files: [],
+				files: [fasta],
 			}).success,
 		).toBe(false);
+	});
+
+	// A subtraction with no source genome is not a subtraction; accepting one
+	// would flip the parent ready with no file rows under it.
+	it("rejects an empty manifest", () => {
+		expect(
+			FinalizeSubtractionRequest.safeParse({ count: 12, gc, files: [] })
+				.success,
+		).toBe(false);
+	});
+});
+
+describe("sample finalize", () => {
+	const quality = {
+		bases: [[30, 31, 32, 33, 34]],
+		composition: [[25, 25, 25, 25]],
+		count: 1000,
+		encoding: "Sanger",
+		gc: 0.42,
+		length: [100, 100],
+		sequences: [1, 2, 3],
+	};
+
+	function read(name: string) {
+		return {
+			kind: "sampleRead",
+			name,
+			storageKey: `samples/7/${name.replace(/\W/g, "")}0f1e2d3c4b5a6978`,
+		};
+	}
+
+	it("accepts one read", () => {
+		expect(
+			FinalizeSampleRequest.parse({ quality, files: [read("reads_1.fq.gz")] })
+				.files,
+		).toHaveLength(1);
+	});
+
+	it("accepts a pair", () => {
+		expect(
+			FinalizeSampleRequest.safeParse({
+				quality,
+				files: [read("reads_1.fq.gz"), read("reads_2.fq.gz")],
+			}).success,
+		).toBe(true);
+	});
+
+	// A sample with no reads is not a usable sample.
+	it("rejects an empty manifest", () => {
+		expect(
+			FinalizeSampleRequest.safeParse({ quality, files: [] }).success,
+		).toBe(false);
+	});
+
+	it("rejects a third read", () => {
+		expect(
+			FinalizeSampleRequest.safeParse({
+				quality,
+				files: [
+					read("reads_1.fq.gz"),
+					read("reads_2.fq.gz"),
+					read("reads_3.fq.gz"),
+				],
+			}).success,
+		).toBe(false);
+	});
+});
+
+describe("analysis finalize", () => {
+	// Pathoscope retains no files at all — its whole output is `results`, which
+	// is the guard here. Requiring a manifest would make that run unfinalizable.
+	it("accepts an empty manifest", () => {
+		expect(
+			FinalizeAnalysisRequest.parse({ results: { hits: [] }, files: [] }).files,
+		).toStrictEqual([]);
 	});
 });
 

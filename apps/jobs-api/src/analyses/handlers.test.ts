@@ -240,6 +240,24 @@ describe("handleFinalizeAnalysis", () => {
 		}
 	});
 
+	// Unlike samples and subtractions, an empty manifest is legitimate here:
+	// pathoscope's entire output is `results` and it retains no files.
+	it("accepts an empty manifest and still flips the analysis ready", async () => {
+		const analysisId = await seedAnalysis();
+
+		const response = await finalize(analysisId, []);
+
+		expect(response.status).toBe(200);
+		expect(await db.select().from(analysisFiles)).toEqual([]);
+
+		const [row] = await db
+			.select({ ready: analyses.ready })
+			.from(analyses)
+			.where(eq(analyses.id, analysisId));
+
+		expect(row?.ready).toBe(true);
+	});
+
 	it("bumps updated_at", async () => {
 		const analysisId = await seedAnalysis({
 			updated_at: new Date("2020-01-01T00:00:00.000Z"),

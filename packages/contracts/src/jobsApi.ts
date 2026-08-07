@@ -387,20 +387,36 @@ export type JobFileManifest = z.infer<typeof JobFileManifest>;
 // separate step, so a workflow cannot end in a state where the row exists and
 // the file list does not. Each payload narrows the union to the variants its own
 // domain can accept.
+//
+// Where a resource is unusable without its files, the manifest is required to
+// carry them: an empty array would flip the parent `ready` over nothing, which
+// is the state a single finalize call exists to prevent.
 
-/** Body for `PATCH /samples/{id}` — the sample finalize call. */
+/**
+ * Body for `PATCH /samples/{id}` — the sample finalize call.
+ *
+ * A `create_sample` run writes `reads_1.fq.gz` and, for a paired library,
+ * `reads_2.fq.gz`. Neither zero reads nor three is ever a valid outcome, so the
+ * bound is on the contract rather than left to the route.
+ */
 export const FinalizeSampleRequest = z.object({
 	quality: Quality,
-	files: z.array(SampleReadManifest),
+	files: z.array(SampleReadManifest).min(1).max(2),
 });
 
 export type FinalizeSampleRequest = z.infer<typeof FinalizeSampleRequest>;
 
-/** Body for `PATCH /subtractions/{id}` — the subtraction finalize call. */
+/**
+ * Body for `PATCH /subtractions/{id}` — the subtraction finalize call.
+ *
+ * The route's whitelist accepts one filename, `subtraction.fa.gz`, and rejects
+ * a duplicate, so requiring a non-empty manifest here makes the source genome
+ * exactly-once without a second check.
+ */
 export const FinalizeSubtractionRequest = z.object({
 	count: z.number().int().nonnegative(),
 	gc: NucleotideComposition,
-	files: z.array(SubtractionFileManifest),
+	files: z.array(SubtractionFileManifest).min(1),
 });
 
 export type FinalizeSubtractionRequest = z.infer<
@@ -416,6 +432,11 @@ export const FinalizeAnalysisRequest = z.object({
 	 */
 	results: JsonObject,
 
+	/**
+	 * Empty is legitimate here, unlike the other two. Pathoscope's entire output
+	 * is `results` and it retains no files; NuVs is the workflow that writes
+	 * FASTA and HMM outputs. `results` is the guard on an analysis being usable.
+	 */
 	files: z.array(AnalysisFileManifest),
 });
 

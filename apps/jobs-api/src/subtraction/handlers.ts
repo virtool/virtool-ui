@@ -1,7 +1,6 @@
 import type { Subtraction, WorkflowSubtraction } from "@virtool/contracts";
 import { FinalizeSubtractionRequest } from "@virtool/contracts";
 import type { Db } from "@virtool/data/db/pg";
-import type { SubtractionFileType } from "@virtool/data/db/schema/subtractions";
 import {
 	finalizeSubtraction,
 	getSubtraction,
@@ -51,8 +50,10 @@ function toWorkflowSubtraction(subtraction: Subtraction): WorkflowSubtraction {
 }
 
 /**
- * Serve a subtraction's metadata and the files that make it up — its source
- * genome and the shards of its built bowtie2 index.
+ * Serve a subtraction's metadata and the files that make it up: its source
+ * genome, plus the bowtie2 shards a subtraction finalized under Python still
+ * carries. Those rows are served as they stand, `type` and all — only the write
+ * path stopped accepting shards.
  *
  * Records only. Nothing here reads or writes an object.
  */
@@ -87,34 +88,28 @@ export async function handleGetSubtraction(
 }
 
 /**
- * The only filenames a subtraction accepts, matching Python's
- * `virtool/subtractions/utils.py:FILES`.
+ * The only filename a subtraction accepts.
+ *
+ * Python's `virtool/subtractions/utils.py:FILES` names seven — the source FASTA
+ * plus the six shards of a bowtie2 index — but **nothing consumes the shards**.
+ * Both analysis workflows build a subtraction's bowtie2 index locally from the
+ * `.fa.gz` and memoize it through their own workflow cache, so the shards are
+ * written by one workflow and read by none. There is no parity constraint
+ * either: this service has no per-file upload route, so Python's
+ * `create_subtraction` cannot finalize against it at all, and
+ * `apps/create-subtraction` is the only writer this route will ever have.
+ *
+ * This is the **write** path. Subtractions finalized under Python still carry
+ * `bowtie2` rows and {@link handleGetSubtraction} keeps serving them.
  *
  * Python addresses a subtraction file by `name` in the URL of its download
  * endpoint, so this is what keeps that URL space closed. It is no longer doing
  * duty as key safety — the key is checked against the subtraction's own prefix.
+ * With one name whitelisted, the duplicate check in `checkManifest` and the
+ * non-empty manifest `FinalizeSubtractionRequest` requires, the FASTA arrives
+ * exactly once.
  */
-const FILE_NAMES = [
-	"subtraction.fa.gz",
-	"subtraction.1.bt2",
-	"subtraction.2.bt2",
-	"subtraction.3.bt2",
-	"subtraction.4.bt2",
-	"subtraction.rev.1.bt2",
-	"subtraction.rev.2.bt2",
-] as const;
-
-/**
- * The type column follows from the extension, as it does in Python's
- * `check_subtraction_file_type`.
- *
- * Derived rather than declared: with the name whitelisted there is nothing for a
- * caller to decide, and a wire field would only let a `.bt2` shard be recorded
- * as the FASTA.
- */
-function fileType(name: string): SubtractionFileType {
-	return name.endsWith(".fa.gz") ? "fasta" : "bowtie2";
-}
+const FILE_NAMES = ["subtraction.fa.gz"] as const;
 
 /**
  * Finalize a subtraction: record what the create_subtraction job produced and
@@ -181,7 +176,9 @@ export async function handleFinalizeSubtraction(
 			gc,
 			files: measured.map((file) => ({
 				name: file.name,
-				type: fileType(file.name),
+				// The whitelist admits the FASTA and nothing else, so there is no
+				// type left to derive and no wire field with which to declare one.
+				type: "fasta" as const,
 				size: file.size,
 				storageKey: file.storageKey,
 			})),

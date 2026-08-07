@@ -585,6 +585,19 @@ that calls `requireJobRequest` first; the row work lives in
 `@virtool/data`, typed `DbOrTx`, because it is the same data layer the
 web app reads through.
 
+### A resource that is unusable without its files must carry them
+
+Riding the manifest along with the parent update only prevents "parent
+ready, file rows missing" if the manifest cannot be empty. Two of the
+three refuse an empty array, and the bound lives on the contract in
+`@virtool/contracts` so the workflow runtime cannot build the call:
+
+| Resource | Manifest | Why |
+| --- | --- | --- |
+| Sample | `.min(1).max(2)` | A `create_sample` run writes `reads_1.fq.gz` and, for a paired library, `reads_2.fq.gz`. Zero reads is not a sample; three is not an outcome. |
+| Subtraction | `.min(1)` | One whitelisted name plus the duplicate check makes the source FASTA exactly-once. |
+| Analysis | unbounded | Legitimately empty. Pathoscope's entire output is the `results` blob and it retains no files at all; NuVs is the workflow that writes FASTA and HMM outputs. `results` being required is the guard here. |
+
 ### The wire carries a storage key, and the row records it verbatim
 
 This is the opposite of what `POST /caches` does, and the difference is
@@ -621,9 +634,43 @@ those rows by `name`.
 
 | Resource | Accepted names |
 | --- | --- |
-| Subtraction | `subtraction.fa.gz`, `subtraction.{1,2,3,4}.bt2`, `subtraction.rev.{1,2}.bt2` |
+| Subtraction | `subtraction.fa.gz` |
 | Sample | `reads_1.fq.gz`, `reads_2.fq.gz` |
 | Analysis | any plain filename — the workflow names its own outputs |
+
+#### A subtraction accepts one name, not Python's seven
+
+Python's `virtool/subtractions/utils.py:FILES` names seven — the source
+FASTA plus the six shards of a bowtie2 index — and this route accepted
+all seven until it was narrowed to the FASTA alone.
+
+**Nothing consumes the shards.** Both analysis workflows build a
+subtraction's bowtie2 index locally from the `.fa.gz` and memoize it
+through their own workflow cache — `workflow-pathoscope`'s
+`create_subtraction_index` and `workflow-nuvs`'s
+`create_subtraction_indexes` — and neither touches
+`WFSubtraction.bowtie2_index_path`, which is defined and never read. The
+shards are written by one workflow and read by none. Python's own
+`create_subtraction` compounds it: its upload glob is `*.bt2`, and
+`bowtie2-build` emits `.bt2l` for a large genome, so a large subtraction
+has been uploading nothing but the FASTA for as long as that has been
+true.
+
+There is no parity constraint to hold either. This service has no
+per-file upload route, so Python's `create_subtraction` cannot finalize
+against it at all; `apps/create-subtraction` is the only writer this
+route will ever have.
+
+**This is the write path only.** Every subtraction Python finalized
+carries `bowtie2` rows, `GET /subtractions/{id}` keeps serving them with
+their `type`, and `SubtractionFileType` keeps both members. A read that
+stopped reporting the shards would break nothing on the workflow side
+and would still be a lie about the row.
+
+With one name whitelisted, the duplicate check in `checkManifest` and
+the non-empty manifest the contract requires, the FASTA arrives exactly
+once — so the row's `type` is written `"fasta"` outright rather than
+derived from the extension.
 
 ### The manifest declares neither a size nor a name on disk
 
@@ -637,10 +684,9 @@ matching Python. An analysis file gets `{uuid}-{name}`, following the
 `createUpload` precedent rather than Python's post-flush `{id}-{name}`,
 which needs the row id and so a second write — the column is unique
 across the whole table, so it cannot simply be the workflow's filename.
-A subtraction file's `type` is likewise derived from the extension, as
-Python's `check_subtraction_file_type` does; with the name whitelisted
-there is nothing left to decide, and no way to record a `.bt2` shard as
-the FASTA.
+A subtraction file's `type` is not on the contract either: the whitelist
+admits `subtraction.fa.gz` and nothing else, so the row is written
+`"fasta"` outright.
 
 ### Verify, then transact
 
