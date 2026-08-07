@@ -54,7 +54,12 @@ This is a **pnpm monorepo**:
   key, and **that refusal is the cancellation channel** — it is the one 401
   that is not opaque, naming the state (`Job is cancelled.`) in a JSON
   body, which is safe only because the check sits *after* the key
-  comparison. It winds down through `@virtool/service`'s
+  comparison. The **job read path parses on the way out**: `toJob` runs
+  the response through the `Job` schema, and a row naming a workflow the
+  union does not carry is a 500 with a Sentry event naming the row —
+  the runtime's client parses with the same schema, so the alternative
+  is a `JobsApiError` at a runner that can do nothing about it. Nothing
+  else in the service validates a response. It winds down through `@virtool/service`'s
   `createShutdownController`, with **no hooks registered** — it holds no
   work to hand back — and `/health/ready` reports 503 from the moment
   that flips readiness. See [docs/jobs-api.md](docs/jobs-api.md).

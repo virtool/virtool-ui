@@ -338,6 +338,33 @@ the same bytes. `fromStoredJobClaim` / `fromStoredJobStep` in
 `@virtool/contracts` are the only crossing points, and a route must never
 return a JSONB element straight out of the column.
 
+### The job shapes are parsed on the way out
+
+`jobs.workflow` is a plain `text` column with no CHECK constraint, so the
+data layer types it `string` while the wire types it as a union. `toJob`
+therefore **parses** the response through the `Job` schema rather than
+asserting it into shape, and a row that does not fit is thrown:
+`app.onError` logs it, hands it to Sentry and answers
+`jsonError(500, "Internal server error")`. The message names the job id
+and the failing field paths — never the values, because a message is a
+Sentry title and row content does not belong in one.
+
+Failing the read is not new strictness. `@virtool/workflow`'s client
+parses what it receives with the same schema, so an unrecognised
+workflow was already a hard `JobsApiError` — raised at a runner that can
+do nothing about it, on the far side of a retry policy. Parsing here
+puts the failure on the side that owns the data, where it is one Sentry
+issue naming a row rather than a pod that claimed a job and died.
+
+`JobClaimed` needs no parse of its own. `toJobClaimed` takes the
+`workflow` the handler already validated off the query parameter with
+`ClaimableJobWorkflow`, and every other field it builds is a literal or
+already narrow.
+
+**Nothing else in the service validates a response.** A blanket
+outbound-validation layer would tax every route for a looseness that
+exists on one column.
+
 ### Timestamps are `Date`, on both sides
 
 The wire contract types every timestamp as a `Date` — `z.coerce.date()`
