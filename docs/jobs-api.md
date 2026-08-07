@@ -945,9 +945,23 @@ The request middleware labels each observation with the route's
 number of routes rather than by the number of jobs. A request matching
 nothing falls to the middleware's own `/*`, which is bounded too.
 
-A handler that throws leaves no status behind, so those are counted as
-`status="error"` — a bounded sentinel that keeps the counter's total
-honest either way.
+The status label is gated on `c.finalized`, not on `c.error`. Hono's
+`c.res` is a lazy getter that mints an empty 200 when nothing has set a
+response, so reading it unconditionally counts a request that crashed as
+one that succeeded; `c.finalized` is what says a response was actually
+set.
+
+That is the whole gate, because `app.onError` now stands behind a thrown
+`Error`: Hono's `compose` catches it, calls the handler, and finalizes
+its 500 before the middleware's `next()` resolves. Such a request is
+labelled `status="500"` — the status the caller actually got — and the
+crash is reported through the pino line and the Sentry event instead.
+
+What is left for `status="error"` is a request that produced no response
+at all. A **non-`Error` throw** is the one that gets there: `compose`
+rethrows it without setting `c.error` and without reaching `onError`,
+whose guard is `err instanceof Error`. The sentinel is bounded, and it
+keeps the counter's total honest.
 
 ### Pool occupancy
 

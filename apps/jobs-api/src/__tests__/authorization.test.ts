@@ -314,4 +314,55 @@ describe("request metrics", () => {
 
 		expect(await metrics.render()).toContain('route="/health/live"');
 	});
+
+	// A path matching no route falls through to the middleware's own `/*`, which
+	// is a pattern rather than a path and so is bounded like every other label.
+	it("counts a genuinely unmatched path under the middleware's pattern", async () => {
+		const metrics = createMetrics(10);
+		const app = createApp(deps({ metrics }));
+
+		await app.request("/no-such-route");
+
+		const rendered = await metrics.render();
+
+		expect(rendered).toContain('route="/*",method="GET",status="404"');
+		expect(rendered).not.toContain("no-such-route");
+	});
+
+	// `app.onError` turns a thrown `Error` into a real 500, so the counter records
+	// the status the caller actually got. The `"error"` sentinel is for the case
+	// where there is no status at all, below.
+	it("counts a thrown Error under the status onError answered with", async () => {
+		const metrics = createMetrics(10);
+		const app = createApp(deps({ metrics }));
+
+		app.get("/boom", () => {
+			throw new Error("boom");
+		});
+
+		await app.request("/boom");
+
+		expect(await metrics.render()).toContain(
+			'route="/boom",method="GET",status="500"',
+		);
+	});
+
+	// Hono's `compose` rethrows a non-`Error` throw without setting `c.error` and
+	// without reaching `onError`, whose guard is `err instanceof Error`. Nothing
+	// finalizes a response, and `c.res`'s getter would mint an empty 200 — so
+	// without the `finalized` gate a crashed request is counted as a success.
+	it("counts a non-Error throw under the error sentinel", async () => {
+		const metrics = createMetrics(10);
+		const app = createApp(deps({ metrics }));
+
+		app.get("/boom", () => {
+			throw undefined;
+		});
+
+		await expect(app.request("/boom")).rejects.toBeUndefined();
+
+		expect(await metrics.render()).toContain(
+			'route="/boom",method="GET",status="error"',
+		);
+	});
 });

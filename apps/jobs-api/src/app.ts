@@ -116,9 +116,20 @@ export function createApp(deps: AppDeps): Hono {
 			deps.metrics.recordHttpRequest({
 				method: c.req.method,
 				route: routePath(c, -1),
-				// A thrown handler leaves no status behind. `"error"` is a bounded
-				// sentinel and keeps the counter's total honest either way.
-				status: c.error ? "error" : String(c.res.status),
+				// `c.res` is a lazy getter that mints an empty 200 when nothing has
+				// set a response, so reading it unconditionally counts a request that
+				// crashed as one that succeeded. `c.finalized` is what says a response
+				// was actually set, and it is the whole gate: a handler that throws an
+				// `Error` is caught by Hono's `compose`, which calls `app.onError` and
+				// finalizes its 500 before `next()` resolves — so that request is
+				// labelled `"500"`, which is what the caller saw.
+				//
+				// What is left for the `"error"` sentinel is a request that produced no
+				// response at all. A non-`Error` throw is the one that gets there:
+				// `compose` rethrows it without setting `c.error` and without reaching
+				// `onError`, whose guard is `err instanceof Error`. The sentinel is
+				// bounded, and it keeps the counter's total honest.
+				status: c.finalized ? String(c.res.status) : "error",
 				durationSeconds: (performance.now() - start) / 1000,
 			});
 		}
