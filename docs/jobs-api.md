@@ -146,9 +146,11 @@ The sequence, in order:
 1. Read the `Authorization` header. Missing is a failure.
 2. Parse it as Basic. A non-Basic scheme, undecodable base64, a missing
    `:`, or an empty login is a failure.
-3. Match the login against `/^job-(\d+)$/` — **anchored and
-   case-sensitive**.
-4. Screen the id: at least 1, and no larger than a Postgres `integer`.
+3. Match the login against `/^job-([1-9]\d*)$/` — **anchored and
+   case-sensitive**. The digits are spelled the way `parseRowId` spells
+   them, so a row id has one spelling on both parsers: `job-007` is not
+   a login for job 7, and `job-0` never reaches the range screen.
+4. Screen the id: no larger than a Postgres `integer`.
 5. Read `key` and `state` for that id, in **one** query.
 6. Fail if `key` is null — that job was never claimed.
 7. Compare `hashToken(key)` to the stored digest with `timingSafeEqual`,
@@ -239,6 +241,8 @@ divergences, both stricter:
 - The login is matched against an anchored pattern rather than
   `holder_id.split("-")`, which checks only the first part. `job-1-2`
   reaches Python's `int()` and raises; here it is simply not a login.
+  The pattern also refuses a leading zero, where Python's `int()`
+  accepts `007` as 7.
 - The key comparison is timing-safe. Python's is a plain `!=`.
 
 Python also answers 403 when the authenticated job id does not match a

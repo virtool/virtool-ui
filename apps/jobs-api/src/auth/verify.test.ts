@@ -284,9 +284,23 @@ describe("verifyJobRequest", () => {
 		).toEqual(REJECTED);
 	});
 
-	it("rejects a zero id", async () => {
-		await seedJob(db, userId);
+	it.each(["job-0", "job-00", "job-01"])(
+		"rejects %j as a login",
+		async (login) => {
+			await seedJob(db, userId);
 
-		expect(await verifyJobRequest(db, request("job-0", "k"))).toEqual(REJECTED);
+			expect(await verifyJobRequest(db, request(login, "k"))).toEqual(REJECTED);
+		},
+	);
+
+	// A row id has one spelling. `\d+` would let a padded login authenticate as
+	// the job it pads, which is a second, laxer id parser sitting beside
+	// `parseRowId`'s strict one.
+	it("rejects a padded id even with that job's key", async () => {
+		const job = await seedJob(db, userId);
+
+		expect(
+			await verifyJobRequest(db, request(`job-00${job.id}`, job.key)),
+		).toEqual(REJECTED);
 	});
 });
