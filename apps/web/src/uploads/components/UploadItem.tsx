@@ -21,7 +21,10 @@ export type UploadItemProps = {
 	/** Selects the file. Omitting it hides the checkbox. */
 	onSelect?: (event: MouseEvent<HTMLButtonElement>) => void;
 	size: number;
-	uploadedAt: Date;
+
+	/** When the file was uploaded, or null for a row that predates the column */
+	uploadedAt: Date | null;
+
 	user: UserNested | null;
 };
 

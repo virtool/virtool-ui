@@ -17,21 +17,10 @@ export function SubtractionItem({
 	user,
 }: SubtractionMinimal) {
 	// The seed needs a user, and a job whose creator was removed has none — fall
-	// back to fetching rather than priming the cache with a half-built job. The
-	// jobs feature is still served from Python, so its seed keeps the
-	// snake_case `created_at` field name.
+	// back to fetching rather than priming the cache with a half-built job.
 	const { data: fetchedJob } = useFetchJob(
 		job?.id ?? Number.NaN,
-		job?.user
-			? {
-					created_at: job.createdAt,
-					id: job.id,
-					progress: job.progress,
-					state: job.state,
-					user: job.user,
-					workflow: job.workflow,
-				}
-			: undefined,
+		job?.user ? { ...job, user: job.user } : undefined,
 	);
 
 	return (

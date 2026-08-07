@@ -17,8 +17,8 @@ type SubtractionFileItemProps = {
 	name: string;
 	/** A callback function to handle file selection */
 	onClick: (selected: number[]) => void;
-	/** When the file was uploaded */
-	uploadedAt: Date;
+	/** When the file was uploaded, or null for a row that predates the column */
+	uploadedAt: Date | null;
 	/** The user who created the file, or null for a retrieved file */
 	user: UserNested | null;
 };

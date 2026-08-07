@@ -284,7 +284,7 @@ async function getSampleJobs(
 		jobs.map((job) => [
 			job.id,
 			{
-				createdAt: job.created_at.toISOString(),
+				createdAt: job.createdAt,
 				id: job.id,
 				progress: job.progress,
 				// The mirror stores states and workflows as free text; the columns
@@ -352,10 +352,10 @@ async function getReads(
 						id: upload.id,
 						name: upload.name ?? "",
 						size: upload.size,
-						uploadedAt: upload.uploadedAt?.toISOString() ?? null,
+						uploadedAt: upload.uploadedAt,
 						user: uploadUser?.id != null ? uploadUser : null,
 					},
-		uploadedAt: read.uploaded_at?.toISOString() ?? "",
+		uploadedAt: read.uploaded_at,
 	}));
 }
 
@@ -367,7 +367,7 @@ function mapMinimal(
 	user: UserNested,
 ): SampleMinimal {
 	return {
-		createdAt: row.created_at.toISOString(),
+		createdAt: row.created_at,
 		host: row.host,
 		id: row.id,
 		isolate: row.isolate,
