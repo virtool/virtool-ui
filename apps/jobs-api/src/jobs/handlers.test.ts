@@ -157,6 +157,26 @@ describe("handleClaimJob", () => {
 		expect(read.status).toBe(200);
 	});
 
+	// The handler hands `Response.json` the `Date` it read out of Postgres
+	// rather than encoding one itself, and JSON has no date type, so what
+	// crosses is still the ISO string Python's serialiser produces. This is the
+	// half a type change is free to break silently.
+	it("encodes its timestamps as ISO strings on the wire", async () => {
+		const pending = await seedPending();
+
+		const body = await (
+			await handleClaimJob(deps, claimRequest("pathoscope"))
+		).json();
+
+		const [row] = await db
+			.select({ created_at: jobs.created_at, claimed_at: jobs.claimed_at })
+			.from(jobs)
+			.where(eq(jobs.id, pending.id));
+
+		expect(body.createdAt).toBe(row?.created_at?.toISOString());
+		expect(body.claimedAt).toBe(row?.claimed_at?.toISOString());
+	});
+
 	// Only the digest is stored. A column holding the plaintext would let anyone
 	// who can read the table act as every running job.
 	it("stores only the key's digest", async () => {
@@ -466,7 +486,6 @@ describe("handleStartJobStep", () => {
 		const body = await response.json();
 
 		expect(body.id).toBe("map_default_isolates");
-		expect(body.startedAt).toEqual(expect.any(String));
 
 		const [row] = await db
 			.select({ steps: jobs.steps })
@@ -477,6 +496,12 @@ describe("handleStartJobStep", () => {
 			true,
 			false,
 		]);
+
+		// The contract carries a `Date`, but JSON has no date type — so what
+		// actually crosses is the same ISO string it always was, and it is the
+		// same string the column holds. Python reads both, so neither may move.
+		expect(body.startedAt).toEqual(expect.any(String));
+		expect(body.startedAt).toBe(row?.steps?.[1]?.started_at);
 	});
 
 	it("reports 404 for a step the job does not have", async () => {

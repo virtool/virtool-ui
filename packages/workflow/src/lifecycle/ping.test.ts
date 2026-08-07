@@ -15,7 +15,7 @@ import {
 } from "./ping";
 
 function pong(): JobPing {
-	return { pingedAt: "2026-08-05T00:00:00Z" };
+	return { pingedAt: new Date("2026-08-05T00:00:00Z") };
 }
 
 /** What the jobs API answers a ping with once its job has finished. */

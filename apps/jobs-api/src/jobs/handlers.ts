@@ -39,6 +39,11 @@ export type JobHandlerDeps = {
 	logger: Logger;
 };
 
+// A timestamp crosses as a `Date` and is encoded by `Response.json`, so nothing
+// here calls `toISOString`. A column that already holds a `timestamp` is passed
+// straight through; the one that holds an ISO string — `steps[].started_at`,
+// which Python writes — is converted by `fromStoredJobStep`.
+//
 // `jobs.state` and `jobs.workflow` are `text` columns, so the data layer types
 // them as plain strings and the wire types them as unions. Narrowing here rather
 // than parsing the whole response keeps a row Python wrote under a state or
@@ -49,9 +54,9 @@ function toJob(record: JobRecord): Job {
 		id: record.id,
 		args: record.args,
 		claim: record.claim ? fromStoredJobClaim(record.claim) : null,
-		claimedAt: record.claimed_at?.toISOString() ?? null,
-		createdAt: record.created_at.toISOString(),
-		pingedAt: record.pinged_at?.toISOString() ?? null,
+		claimedAt: record.claimed_at,
+		createdAt: record.created_at,
+		pingedAt: record.pinged_at,
 		progress: record.progress,
 		state: record.state as JobState,
 		steps: record.steps?.map(fromStoredJobStep) ?? null,
@@ -65,8 +70,8 @@ function toJobClaimed(claimed: ClaimedJob): JobClaimed {
 		id: claimed.id,
 		acquired: true,
 		claim: fromStoredJobClaim(claimed.claim),
-		claimedAt: claimed.claimed_at.toISOString(),
-		createdAt: claimed.created_at.toISOString(),
+		claimedAt: claimed.claimed_at,
+		createdAt: claimed.created_at,
 		key: claimed.key,
 		state: "running",
 		steps: claimed.steps.map(fromStoredJobStep),
@@ -80,7 +85,7 @@ function toJobStepStarted(step: StartedJobStep): JobStepStarted {
 		id: step.id,
 		name: step.name,
 		description: step.description,
-		startedAt: step.started_at,
+		startedAt: new Date(step.started_at),
 	};
 }
 
@@ -235,9 +240,7 @@ export async function handlePingJob(
 	}
 
 	try {
-		const pingedAt = await pingJob(deps.db, principal.jobId);
-
-		const body: JobPing = { pingedAt: pingedAt.toISOString() };
+		const body: JobPing = { pingedAt: await pingJob(deps.db, principal.jobId) };
 
 		return Response.json(body);
 	} catch (err) {

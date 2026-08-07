@@ -67,12 +67,34 @@ import { Quality } from "./samples";
 import { NucleotideComposition } from "./subtractions";
 import { UserNested } from "./users";
 
-// Python serialises `datetime` to an ISO-8601 string, so every timestamp on this
-// wire is a string. `z.date()` would reject the JSON the wire actually carries,
-// and a strict datetime format check would couple us to Python's exact
-// serialiser for no gain — the value is passed through to Postgres, which is the
-// thing that actually validates it.
-const timestamp = z.string();
+/**
+ * A moment on this wire, as a `Date` on both sides of it.
+ *
+ * JSON has no date type, so the bytes are an ISO-8601 string either way —
+ * `JSON.stringify` calls `Date.prototype.toJSON`, which is `toISOString`, and
+ * Python serialises `datetime` to the same shape. What this buys is the type:
+ * a handler hands the `Date` it read out of Postgres straight to
+ * `Response.json`, and the runtime's client gets a `Date` back rather than a
+ * string every caller would have to remember to parse.
+ *
+ * `z.coerce.date()` rather than `z.date()`, because the value arriving over the
+ * wire really is a string; `z.date()` would reject it. It passes a `Date`
+ * through unchanged, so the same schema types both directions.
+ *
+ * The refinement is not decoration. `coerce` runs `new Date(value)`, which
+ * answers `Invalid Date` rather than throwing for anything it cannot read — so
+ * without it a malformed timestamp parses successfully and surfaces as `NaN`
+ * somewhere much later in a run.
+ *
+ * **This is the wire only.** The `jobs.steps` JSONB array stores `started_at`
+ * as a string, because Python reads and writes those same bytes; see
+ * {@link StoredJobStep}.
+ */
+const timestamp = z.coerce
+	.date()
+	.refine((value) => !Number.isNaN(value.getTime()), {
+		message: "not a readable timestamp",
+	});
 
 /** A workflow step as the runner declares it at claim time. The runner owns its own step list. */
 export const JobStepDefinition = z.object({
@@ -255,13 +277,18 @@ export function fromStoredJobClaim(stored: StoredJobClaim): JobClaim {
 	};
 }
 
+// These two are where a `Date` becomes column bytes and back. The wire carries
+// `Date`; the column carries the ISO string Python wrote. Keeping the
+// conversion here means no handler does it by hand, and no handler can forget
+// to.
+
 /** Maps a wire step to the shape written to the `steps` JSONB array. */
 export function toStoredJobStep(step: JobStep): StoredJobStep {
 	return {
 		id: step.id,
 		name: step.name,
 		description: step.description,
-		started_at: step.startedAt,
+		started_at: step.startedAt === null ? null : step.startedAt.toISOString(),
 	};
 }
 
@@ -271,7 +298,7 @@ export function fromStoredJobStep(stored: StoredJobStep): JobStep {
 		id: stored.id,
 		name: stored.name,
 		description: stored.description,
-		startedAt: stored.started_at,
+		startedAt: stored.started_at === null ? null : new Date(stored.started_at),
 	};
 }
 

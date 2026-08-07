@@ -282,6 +282,37 @@ the same bytes. `fromStoredJobClaim` / `fromStoredJobStep` in
 `@virtool/contracts` are the only crossing points, and a route must never
 return a JSONB element straight out of the column.
 
+### Timestamps are `Date`, on both sides
+
+The wire contract types every timestamp as a `Date` — `z.coerce.date()`
+behind the `timestamp` alias in `jobsApi.ts` — so a handler passes the
+`Date` it read out of Postgres straight to `Response.json`, and the
+runtime's client gets a `Date` back rather than a string every caller
+has to remember to parse. **No handler calls `toISOString`.**
+
+The bytes are unchanged. JSON has no date type, so `JSON.stringify`
+calls `Date.prototype.toJSON` and produces exactly the ISO-8601 string
+Python's serialiser does. That is worth pinning rather than assuming,
+which is what the wire-encoding tests in `jobs/handlers.test.ts` and
+`jobsApi.test.ts` are for: a type change here is free to move the bytes
+silently, and Python reads them.
+
+Two things the schema has to do that `z.date()` would not. It accepts
+the *string* the wire actually carries, which is why it is `coerce`; and
+it refuses one it cannot read, which is why it carries a refinement —
+`coerce` runs `new Date(value)`, and that answers `Invalid Date` rather
+than throwing, so without the check a malformed timestamp parses cleanly
+and surfaces as `NaN` much later in a run.
+
+**`steps[].started_at` is the exception and stays a string.** It lives
+inside a JSONB array Python reads and writes, and `jsonb` revives no
+dates on either side. `fromStoredJobStep` / `toStoredJobStep` are where
+the two spellings meet, so nothing else converts by hand.
+
+This is the jobs API's contract only. The other domains in
+`@virtool/contracts` still type their timestamps as strings, and moving
+them is its own change — the SPA-facing shapes drag components in.
+
 There is **no delete and no failure route**. A job fails by being
 cancelled or by Python's stalled-job sweep, neither of which a runner
 drives, so a workflow that fails simply stops calling.
