@@ -930,6 +930,18 @@ the SDK's module hooks ahead of all of them, which is what makes that late
 init safe. Drop the flag and the service still reports errors while
 recording no HTTP or database spans, with nothing in the logs to say so.
 
+**A thrown handler reaches Sentry only through `app.onError`.** Hono
+catches inside its own `compose`, so a bug in a route never becomes an
+`uncaughtException` and the SDK's global handlers never see it — `init`
+alone leaves the service reporting nothing at all. `createApp` registers
+the handler, which logs the failure with the bounded `routePath(c, -1)`,
+calls the optional `captureException` dep and answers
+`jsonError(500, "Internal server error")` so the body shape matches every
+other refusal here. The hook is **injected**, and `src/index.ts` is the
+only place `Sentry.captureException` is named: `app.ts` then carries no
+dependency on the SDK, its graph stays out of the test path, and "did we
+report it?" is assertable with a `vi.fn()`.
+
 There is **no `beforeSend` filter**, and that asymmetry with `apps/web`
 is deliberate. The web app needs one because a server function signals an
 expected 4xx by *throwing* `ClientError`, which would otherwise be

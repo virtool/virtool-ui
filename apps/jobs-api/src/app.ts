@@ -6,6 +6,7 @@ import { Hono } from "hono";
 import { routePath } from "hono/route";
 import { handleFinalizeAnalysis, handleGetAnalysis } from "./analyses/handlers";
 import { handleGetCache, handleRegisterCache } from "./caches/handlers";
+import { jsonError } from "./http";
 import { handleGetIndex } from "./indexes/handlers";
 import {
 	handleClaimJob,
@@ -65,6 +66,15 @@ export type AppDeps = {
 	metrics: Metrics;
 	applicationName: string;
 	metricsToken: string | undefined;
+	/**
+	 * Report an unhandled error to Sentry.
+	 *
+	 * Injected rather than imported so `app.ts` carries no dependency on
+	 * `@sentry/node` — the SDK's graph stays out of the test path, and "did we
+	 * report it?" is assertable with a `vi.fn()`. Optional because a test app
+	 * has nothing to report to.
+	 */
+	captureException?: (err: unknown) => void;
 };
 
 /**
@@ -105,6 +115,25 @@ export function createApp(deps: AppDeps): Hono {
 				durationSeconds: (performance.now() - start) / 1000,
 			});
 		}
+	});
+
+	// Hono catches a thrown handler itself, so the error never reaches Node's
+	// `uncaughtException` and the Sentry SDK's global handlers never see it.
+	// Without this the only trace of a bug in a route is Hono's default
+	// `console.error` and a plain-text 500: no pino line, and nothing in Sentry.
+	//
+	// The route label is `routePath(c, -1)` for the same reason the metrics
+	// middleware uses it — the registered pattern, never the request path, which
+	// carries ids.
+	app.onError((err, c) => {
+		deps.logger.error(
+			{ err, method: c.req.method, route: routePath(c, -1) },
+			"unhandled error",
+		);
+
+		deps.captureException?.(err);
+
+		return jsonError(500, "Internal server error");
 	});
 
 	app.get("/health/live", (c) => c.json({ status: "alive" }));

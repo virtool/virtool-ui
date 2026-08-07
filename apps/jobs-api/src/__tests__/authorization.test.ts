@@ -1,7 +1,7 @@
 import type { Db, PgClient } from "@virtool/data/db/pg";
 import type { Logger } from "@virtool/logger";
 import { MemoryStorage } from "@virtool/storage";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { type AppDeps, createApp, PUBLIC_ROUTES } from "../app";
 import { createMetrics } from "../metrics/registry";
 
@@ -46,12 +46,11 @@ function fakeDb(): Db {
 }
 
 function fakeLogger(): Logger {
-	const noop = () => undefined;
 	return {
-		info: noop,
-		warn: noop,
-		error: noop,
-		debug: noop,
+		info: vi.fn(),
+		warn: vi.fn(),
+		error: vi.fn(),
+		debug: vi.fn(),
 	} as unknown as Logger;
 }
 
@@ -204,6 +203,62 @@ describe("metrics", () => {
 		// The queue series are dropped rather than served stale, so a scrape
 		// during an outage records no depth at all.
 		expect(rendered).not.toContain("virtool_jobs{");
+	});
+});
+
+describe("unhandled errors", () => {
+	/**
+	 * An app with one route that always throws.
+	 *
+	 * Registered after `createApp` so the failure comes from a real handler
+	 * running under the app's own middleware and error handler, rather than from
+	 * a stubbed Hono.
+	 */
+	function throwingApp(overrides: Partial<AppDeps> = {}) {
+		const app = createApp(deps(overrides));
+
+		app.get("/boom", () => {
+			throw new Error("boom");
+		});
+
+		return app;
+	}
+
+	// Hono's default handler answers plain text. A caller parsing every other
+	// refusal in this service as JSON would then fail on the one response it has
+	// least context for.
+	it("answers a JSON 500", async () => {
+		const response = await throwingApp().request("/boom");
+
+		expect(response.status).toBe(500);
+		expect(await response.json()).toEqual({ message: "Internal server error" });
+	});
+
+	it("logs the failure against a bounded route pattern", async () => {
+		const logger = fakeLogger();
+
+		await throwingApp({ logger }).request("/boom");
+
+		expect(logger.error).toHaveBeenCalledWith(
+			expect.objectContaining({
+				err: expect.objectContaining({ message: "boom" }),
+				method: "GET",
+				route: "/boom",
+			}),
+			"unhandled error",
+		);
+	});
+
+	// Hono catches before the error can reach Node, so this hook is the only way
+	// a bug in a route becomes a Sentry event.
+	it("reports the error through the injected hook", async () => {
+		const captureException = vi.fn();
+
+		await throwingApp({ captureException }).request("/boom");
+
+		expect(captureException).toHaveBeenCalledWith(
+			expect.objectContaining({ message: "boom" }),
+		);
 	});
 });
 

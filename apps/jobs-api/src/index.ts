@@ -1,4 +1,5 @@
 import { serve } from "@hono/node-server";
+import * as Sentry from "@sentry/node";
 import { createDb, logPostgresVersion } from "@virtool/data/db/pg";
 import { createEmitter } from "@virtool/data/events/emit";
 import { createStorageBackend } from "@virtool/storage";
@@ -30,6 +31,7 @@ const app = createApp({
 	metrics: createMetrics(config.postgresPoolMax),
 	applicationName,
 	metricsToken: config.metricsToken,
+	captureException: Sentry.captureException,
 });
 
 logPostgresVersion(client, logger);
