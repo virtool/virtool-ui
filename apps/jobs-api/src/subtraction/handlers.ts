@@ -11,7 +11,12 @@ import {
 import type { Logger } from "@virtool/logger";
 import type { StorageBackend } from "@virtool/storage";
 import { requireJobRequest } from "../auth/guard";
-import { jsonError, parseRowId, type ReadHandlerDeps } from "../http";
+import {
+	jsonError,
+	parseJsonBody,
+	parseRowId,
+	type ReadHandlerDeps,
+} from "../http";
 import { checkManifest, measureManifest } from "../manifest";
 
 /** What the subtraction handlers need to serve a request. */
@@ -141,24 +146,13 @@ export async function handleFinalizeSubtraction(
 		return jsonError(404, "Subtraction not found");
 	}
 
-	let body: unknown;
+	const parsed = await parseJsonBody(request, FinalizeSubtractionRequest);
 
-	try {
-		body = await request.json();
-	} catch {
-		return jsonError(400, "Malformed body");
+	if (parsed instanceof Response) {
+		return parsed;
 	}
 
-	const parsed = FinalizeSubtractionRequest.safeParse(body);
-
-	if (!parsed.success) {
-		return Response.json(
-			{ message: "Invalid body", errors: parsed.error.issues },
-			{ status: 400 },
-		);
-	}
-
-	const { count, gc, files } = parsed.data;
+	const { count, gc, files } = parsed;
 
 	const invalid = checkManifest(
 		files,

@@ -11,7 +11,7 @@ import type { CacheRow } from "@virtool/data/db/schema/caches";
 import type { Logger } from "@virtool/logger";
 import type { StorageBackend } from "@virtool/storage";
 import { requireJobRequest } from "../auth/guard";
-import { jsonError, type ReadHandlerDeps } from "../http";
+import { jsonError, parseJsonBody, type ReadHandlerDeps } from "../http";
 
 /**
  * What {@link handleRegisterCache} needs to serve a request.
@@ -100,21 +100,10 @@ export async function handleRegisterCache(
 		return principal;
 	}
 
-	let body: unknown;
+	const parsed = await parseJsonBody(request, RegisterCacheRequest);
 
-	try {
-		body = await request.json();
-	} catch {
-		return jsonError(400, "Malformed body");
-	}
-
-	const parsed = RegisterCacheRequest.safeParse(body);
-
-	if (!parsed.success) {
-		return Response.json(
-			{ message: "Invalid body", errors: parsed.error.issues },
-			{ status: 400 },
-		);
+	if (parsed instanceof Response) {
+		return parsed;
 	}
 
 	try {
@@ -122,7 +111,7 @@ export async function handleRegisterCache(
 			deps.db,
 			deps.storage,
 			deps.logger,
-			parsed.data,
+			parsed,
 		);
 
 		const registered: CacheRegistered = { ...toCache(row), created };

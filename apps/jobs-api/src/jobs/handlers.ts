@@ -29,7 +29,7 @@ import {
 import type { Logger } from "@virtool/logger";
 import { requireJobRequest } from "../auth/guard";
 import type { JobPrincipal } from "../auth/verify";
-import { jsonError, parseRowId } from "../http";
+import { jsonError, parseJsonBody, parseRowId } from "../http";
 
 /** What the job lifecycle handlers need to serve a request. */
 export type JobHandlerDeps = {
@@ -185,24 +185,13 @@ export async function handleClaimJob(
 		return jsonError(422, "Unknown or unclaimable workflow");
 	}
 
-	let body: unknown;
+	const parsed = await parseJsonBody(request, CreateJobClaimRequest);
 
-	try {
-		body = await request.json();
-	} catch {
-		return jsonError(400, "Malformed body");
+	if (parsed instanceof Response) {
+		return parsed;
 	}
 
-	const parsed = CreateJobClaimRequest.safeParse(body);
-
-	if (!parsed.success) {
-		return Response.json(
-			{ message: "Invalid body", errors: parsed.error.issues },
-			{ status: 400 },
-		);
-	}
-
-	const { steps, ...claim } = parsed.data;
+	const { steps, ...claim } = parsed;
 
 	try {
 		const claimed = await claimJob(deps.db, workflow.data, {

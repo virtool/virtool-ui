@@ -11,7 +11,12 @@ import type { Db } from "@virtool/data/db/pg";
 import type { Logger } from "@virtool/logger";
 import type { StorageBackend } from "@virtool/storage";
 import { requireJobRequest } from "../auth/guard";
-import { jsonError, parseRowId, type ReadHandlerDeps } from "../http";
+import {
+	jsonError,
+	parseJsonBody,
+	parseRowId,
+	type ReadHandlerDeps,
+} from "../http";
 import { checkManifest, measureManifest } from "../manifest";
 
 /** What the analysis handlers need to serve a request. */
@@ -118,24 +123,13 @@ export async function handleFinalizeAnalysis(
 		return jsonError(404, "Analysis not found");
 	}
 
-	let body: unknown;
+	const parsed = await parseJsonBody(request, FinalizeAnalysisRequest);
 
-	try {
-		body = await request.json();
-	} catch {
-		return jsonError(400, "Malformed body");
+	if (parsed instanceof Response) {
+		return parsed;
 	}
 
-	const parsed = FinalizeAnalysisRequest.safeParse(body);
-
-	if (!parsed.success) {
-		return Response.json(
-			{ message: "Invalid body", errors: parsed.error.issues },
-			{ status: 400 },
-		);
-	}
-
-	const { results, files } = parsed.data;
+	const { results, files } = parsed;
 
 	const invalid = checkManifest(files, `analyses/${analysisId}/`, null);
 

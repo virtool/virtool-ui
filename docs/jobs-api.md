@@ -45,7 +45,7 @@ process:
 | `src/auth/test/fixtures.ts` | `seedJob` — a job row and the plaintext key for it |
 | `src/jobs/handlers.ts` | The five lifecycle routes |
 | `src/caches/handlers.ts` | Cache lookup and registration |
-| `src/http.ts` | `jsonError`, `parseRowId`, and the `ReadHandlerDeps` a read takes |
+| `src/http.ts` | `jsonError`, `parseJsonBody`, `parseRowId`, and the `ReadHandlerDeps` a read takes |
 | `src/samples/handlers.ts` | Sample read and finalize |
 | `src/subtraction/handlers.ts` | Subtraction read and finalize |
 | `src/analyses/handlers.ts` | Analysis read and finalize |
