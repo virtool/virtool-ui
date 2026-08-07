@@ -209,8 +209,12 @@ app is covered by through its publish-matrix entry.
 Registering a SIGTERM listener **removes Node's default exit behaviour**. From
 that moment, exiting is entirely this app's responsibility.
 
-`src/shutdown.ts` discharges that with `process.exitCode` and a natural drain,
-**never `process.exit()`**. Node's own documentation is explicit that `exit()`
+`createShutdownController` from `@virtool/service/shutdown` discharges that
+with `process.exitCode` and a natural drain, **never `process.exit()`**. It is
+a shared package rather than a module of this app because the jobs API winds
+down the same way; every dependency below — the readiness flip, the listener
+close, the pool drain, the Sentry flush and the budget — is injected by
+`bootstrap`, so the controller itself knows nothing about tasks. Node's own documentation is explicit that `exit()`
 forces the process down "even if there are still asynchronous operations
 pending", writes to `process.stdout` included — which here means a dropped pino
 line, an unsent Sentry envelope, and an uncommitted transaction.

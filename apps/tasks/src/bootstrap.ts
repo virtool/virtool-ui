@@ -9,12 +9,12 @@ import {
 import { createEmitter } from "@virtool/data/events/emit";
 import { createLogger, type Logger } from "@virtool/logger";
 import { createSentryLogStream } from "@virtool/sentry/log";
+import { createShutdownController } from "@virtool/service/shutdown";
 import { createStorageBackend, type StorageBackend } from "@virtool/storage";
 import { parseTasksConfig, type TasksConfig } from "./config";
 import { initSentry, SERVICE } from "./instrument";
 import { createMetrics } from "./metrics/registry";
 import { createProbeServer } from "./probes";
-import { createShutdownController } from "./shutdown";
 
 /** How long Sentry may spend flushing buffered envelopes, in milliseconds. */
 const SENTRY_FLUSH_TIMEOUT = 2_000;

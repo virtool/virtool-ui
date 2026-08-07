@@ -35,7 +35,7 @@ process:
 
 | File | Responsibility |
 | --- | --- |
-| `src/index.ts` | Entry point: config, Sentry, pool, server, graceful shutdown |
+| `src/index.ts` | Entry point: config, Sentry, pool, server, shutdown wiring |
 | `src/app.ts` | `createApp` — the Hono app, its middleware and its routes |
 | `src/config.ts` | Environment parsing, including every `<KEY>_FILE` variant |
 | `src/instrument.ts` | Sentry initialisation and the `SERVICE` constant |
@@ -265,11 +265,59 @@ belong in the fast package loop.
 | `GET /health/live` | The process is up. Always `200`, no I/O. |
 | `GET /health/ready` | `200` when Postgres answers, `503` when it does not. |
 
-Both fold `checkPostgres` through `summarizeReadiness` from
+Readiness folds `checkPostgres` through `summarizeReadiness` from
 `@virtool/data/health/data` — the same pair `apps/web` uses, so the two
-services' probes cannot drift. Neither requires the metrics token: a
-probe that needed a credential would be one more thing to get wrong
+services' probes cannot drift. Neither route requires the metrics token:
+a probe that needed a credential would be one more thing to get wrong
 during a rollout.
+
+Readiness also answers `503` from the moment shutdown begins, before the
+listener closes and **without querying**, through the `isReady` predicate
+on `AppDeps`. That is what takes the pod out of the Service's endpoints
+while there is still a listener there to say so; a claim arriving after
+that point would be held by a process on its way out.
+
+## Shutdown
+
+Registering a SIGTERM listener **removes Node's default exit behaviour**.
+From that moment, exiting is entirely this process's responsibility.
+
+`createShutdownController` from `@virtool/service/shutdown` discharges
+that, with every dependency injected from `src/index.ts`. It is a shared
+package rather than a module of this app because `apps/tasks` winds down
+the same way, and the two drifting apart is how one of them quietly
+stops flushing Sentry.
+
+On the first SIGTERM or SIGINT, each step awaited before the next:
+
+1. **Readiness flips to unavailable**, so `/health/ready` reports 503
+   with the listener still up to answer.
+2. **Registered hooks run**, in reverse registration order. This service
+   registers **none**, deliberately — it holds no work it must hand
+   back, unlike tasks releasing a claim. A job is held by the workflow
+   pod that claimed it, and a pod outliving this process is exactly what
+   the ping loop and Python's stalled-job sweep already cover.
+3. **The listener closes.** `closeIdleConnections()` runs alongside
+   `close()`: a workflow pod holds its socket open through undici's
+   dispatcher between requests, so a bare `close()` waits out every idle
+   runner's keep-alive rather than the requests actually in flight.
+4. **The pool drains.**
+5. **Sentry flushes.** `flush()`, never `close()`: `close()` flushes
+   *and* disables, so anything raised later in shutdown goes unreported.
+
+No step aborts the ones after it, and each failure is logged on its own.
+`process.exitCode` is then set — `0` only when every step ran, `1` if any
+failed or the backstop fired first — and the loop drains. **Never
+`process.exit()`**, which would force the process down with a pino line
+unwritten and a Sentry envelope unsent.
+
+A second signal is logged and ignored; re-entering would close the pool
+out from under the first pass. The backstop is `.unref()`'d, so a
+shutdown that finishes in 200 ms does not sit out the whole budget.
+`VT_JOBS_API_SHUTDOWN_TIMEOUT` must stay strictly under the
+deployment's `terminationGracePeriodSeconds`, which covers `preStop` and
+shutdown combined, or SIGKILL lands before the backstop can report the
+overrun.
 
 ## The job lifecycle
 
@@ -969,6 +1017,7 @@ throwing for an expected outcome — and prefer not to.
 | `VT_POSTGRES_POOL_MAX` | `10` | postgres-js pool size |
 | `VT_JOBS_API_HOST` | `0.0.0.0` | Listen address |
 | `VT_JOBS_API_PORT` | `9950` | Listen port, matching Python's jobs API |
+| `VT_JOBS_API_SHUTDOWN_TIMEOUT` | `30` | Seconds the shutdown sequence may take |
 | `VT_METRICS_TOKEN` | unset | Bearer token for `/metrics`; unset means `404` |
 | `VT_SENTRY_DSN` | unset | Unset disables Sentry |
 | `VT_STORAGE_BACKEND` | *required* | `s3` or `azure` |

@@ -63,6 +63,7 @@ function deps(overrides: Partial<AppDeps> = {}): AppDeps {
 		metrics: createMetrics(10),
 		applicationName: "virtool-ts-jobs-api@test",
 		metricsToken: METRICS_TOKEN,
+		isReady: () => true,
 		...overrides,
 	};
 }
@@ -141,6 +142,34 @@ describe("health", () => {
 			status: "unavailable",
 			checks: { postgres: { ok: false } },
 		});
+	});
+
+	// The shutdown sequence flips readiness before it closes anything, so this is
+	// the window in which the kubelet has to learn the pod is going away — with
+	// the listener still up to tell it.
+	it("reports unavailable from the moment shutdown begins", async () => {
+		const app = createApp(deps({ isReady: () => false }));
+
+		const response = await app.request("/health/ready");
+
+		expect(response.status).toBe(503);
+		expect(await response.json()).toEqual({
+			status: "unavailable",
+			checks: {},
+		});
+	});
+
+	// Answering has to cost nothing: a pod winding down should not be waiting on
+	// a query it is about to close the pool on. `fakeDb`-style throwing is not
+	// enough here — the check is that the client is never called at all.
+	it("does not query postgres once shutdown has begun", async () => {
+		const client = vi.fn(() => Promise.resolve([])) as unknown as PgClient;
+
+		await createApp(deps({ client, isReady: () => false })).request(
+			"/health/ready",
+		);
+
+		expect(client).not.toHaveBeenCalled();
 	});
 });
 

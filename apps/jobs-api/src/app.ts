@@ -67,6 +67,13 @@ export type AppDeps = {
 	applicationName: string;
 	metricsToken: string | undefined;
 	/**
+	 * Whether this process is still accepting work.
+	 *
+	 * Flipped to `false` the moment shutdown begins, so `/health/ready` reports
+	 * 503 while the listener is still up to say so.
+	 */
+	isReady: () => boolean;
+	/**
 	 * Report an unhandled error to Sentry.
 	 *
 	 * Injected rather than imported so `app.ts` carries no dependency on
@@ -138,7 +145,15 @@ export function createApp(deps: AppDeps): Hono {
 
 	app.get("/health/live", (c) => c.json({ status: "alive" }));
 
+	// Reports 503 from the moment shutdown begins, before the listener closes and
+	// without querying, so the kubelet takes the pod out of the Service's
+	// endpoints while there is still something there to answer. A claim that
+	// arrived after that would be held by a process on its way out.
 	app.get("/health/ready", async (c) => {
+		if (!deps.isReady()) {
+			return c.json({ status: "unavailable", checks: {} }, 503);
+		}
+
 		const report = summarizeReadiness(
 			await checkPostgres(deps.client, deps.logger),
 		);

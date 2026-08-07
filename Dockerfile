@@ -22,6 +22,7 @@ COPY packages/contracts ./packages/contracts
 COPY packages/data ./packages/data
 COPY packages/logger ./packages/logger
 COPY packages/sentry ./packages/sentry
+COPY packages/service ./packages/service
 COPY packages/storage ./packages/storage
 
 # The Node-app tsconfig base every non-Vite app extends. A fixed path, so it

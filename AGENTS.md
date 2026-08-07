@@ -54,7 +54,10 @@ This is a **pnpm monorepo**:
   key, and **that refusal is the cancellation channel** — it is the one 401
   that is not opaque, naming the state (`Job is cancelled.`) in a JSON
   body, which is safe only because the check sits *after* the key
-  comparison. See [docs/jobs-api.md](docs/jobs-api.md).
+  comparison. It winds down through `@virtool/service`'s
+  `createShutdownController`, with **no hooks registered** — it holds no
+  work to hand back — and `/health/ready` reports 503 from the moment
+  that flips readiness. See [docs/jobs-api.md](docs/jobs-api.md).
 - `apps/tasks/` — `@virtool/tasks`, the task service: **one** long-lived
   process carrying both halves of Virtool's task system, the periodic
   spawner and the runner that claims and executes what it spawns. Image:
@@ -97,6 +100,13 @@ This is a **pnpm monorepo**:
   - `@virtool/sentry` — shared Sentry option helpers (node + browser entry
     points), plus the pino-to-Sentry log destination every server process
     attaches (`./log`)
+  - `@virtool/service` — the process-lifecycle pieces every long-lived
+    service shares. Today that is `createShutdownController`
+    (`./shutdown`) alone: readiness flip, LIFO hooks, listener, pool,
+    Sentry **flush**, `process.exitCode` and an `.unref()`'d backstop,
+    with every dependency injected. It is **not** a home for the probe
+    server or the metrics registries, however alike those look across
+    the three services.
   - `@virtool/storage` — object storage: the S3 and Azure backends, the
     key builders, and `MemoryStorage`
   - `@virtool/data` — the database and domain data layer: the Drizzle schema,
@@ -948,7 +958,10 @@ Four rules it carries:
   moment: readiness flips, hooks run LIFO, the listener closes, the pool
   drains, Sentry **flushes** (never `close()`), and `process.exitCode` is
   set for a natural drain. The backstop timer is `.unref()`'d and its
-  budget must stay under `terminationGracePeriodSeconds`.
+  budget must stay under `terminationGracePeriodSeconds`. The sequence
+  itself is `createShutdownController` from `@virtool/service/shutdown`,
+  shared with the jobs API; only the hooks and the injected
+  `closeListener` are this app's.
 
 See [docs/tasks.md](docs/tasks.md) for the full config table, the
 `AppContext` contract, the shutdown ordering and its guarantees, and the
