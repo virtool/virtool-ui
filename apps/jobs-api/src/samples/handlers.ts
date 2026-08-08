@@ -1,6 +1,5 @@
 import type { Sample, WorkflowSample } from "@virtool/contracts";
 import { FinalizeSampleRequest } from "@virtool/contracts";
-import type { Db } from "@virtool/data/db/pg";
 import {
 	finalizeSample,
 	getSample,
@@ -8,23 +7,12 @@ import {
 	SampleNotFoundError,
 	SampleNotOwnedError,
 } from "@virtool/data/samples/data";
-import type { Logger } from "@virtool/logger";
-import type { StorageBackend } from "@virtool/storage";
 import { requireJobRequest } from "../auth/guard";
-import {
-	jsonError,
-	parseJsonBody,
-	type ReadHandlerDeps,
-	requireRowId,
-} from "../http";
-import { checkManifest, measureManifest } from "../manifest";
+import { type FinalizeHandlerDeps, finalizeResource } from "../finalize";
+import { jsonError, type ReadHandlerDeps, requireRowId } from "../http";
 
-/** What the sample handlers need to serve a request. */
-export type SampleHandlerDeps = {
-	db: Db;
-	storage: StorageBackend;
-	logger: Logger;
-};
+/** What the sample finalize route needs to serve a request. */
+export type SampleHandlerDeps = FinalizeHandlerDeps;
 
 /**
  * The only filenames a sample's reads may be registered under, matching the
@@ -113,74 +101,42 @@ export async function handleFinalizeSample(
 	request: Request,
 	sampleIdParam: string,
 ): Promise<Response> {
-	const principal = await requireJobRequest(deps.db, request);
+	return await finalizeResource(deps, request, sampleIdParam, {
+		body: FinalizeSampleRequest,
+		prefix: (sampleId) => `samples/${sampleId}/`,
+		allowedNames: FILE_NAMES,
+		notFound: { error: SampleNotFoundError, message: "Sample not found" },
+		notOwned: {
+			error: SampleNotOwnedError,
+			message: "Job did not produce this sample",
+		},
+		alreadyFinalized: {
+			error: SampleAlreadyFinalizedError,
+			message: "Sample has already been finalized",
+		},
+		write: async ({ id: sampleId, jobId, values, files }) => {
+			const sample = await finalizeSample(
+				deps.db,
+				deps.storage,
+				deps.logger,
+				sampleId,
+				jobId,
+				{
+					quality: values.quality,
+					files: files.map((file) => ({
+						name: file.name,
+						size: file.size,
+						storageKey: file.storageKey,
+					})),
+				},
+			);
 
-	if (principal instanceof Response) {
-		return principal;
-	}
+			deps.logger.info(
+				{ jobId, sampleId, files: files.length },
+				"finalized sample",
+			);
 
-	const sampleId = requireRowId(sampleIdParam, "Sample not found");
-
-	if (sampleId instanceof Response) {
-		return sampleId;
-	}
-
-	const parsed = await parseJsonBody(request, FinalizeSampleRequest);
-
-	if (parsed instanceof Response) {
-		return parsed;
-	}
-
-	const { quality, files } = parsed;
-
-	const invalid = checkManifest(files, `samples/${sampleId}/`, FILE_NAMES);
-
-	if (invalid) {
-		return jsonError(400, invalid);
-	}
-
-	const measured = await measureManifest(deps.storage, files);
-
-	if (measured === null) {
-		return jsonError(400, "A manifest entry names no stored object");
-	}
-
-	try {
-		const sample = await finalizeSample(
-			deps.db,
-			deps.storage,
-			deps.logger,
-			sampleId,
-			principal.jobId,
-			{
-				quality,
-				files: measured.map((file) => ({
-					name: file.name,
-					size: file.size,
-					storageKey: file.storageKey,
-				})),
-			},
-		);
-
-		deps.logger.info(
-			{ jobId: principal.jobId, sampleId, files: files.length },
-			"finalized sample",
-		);
-
-		return Response.json(sample);
-	} catch (err) {
-		if (err instanceof SampleNotFoundError) {
-			return jsonError(404, "Sample not found");
-		}
-
-		if (err instanceof SampleNotOwnedError) {
-			return jsonError(403, "Job did not produce this sample");
-		}
-
-		if (err instanceof SampleAlreadyFinalizedError) {
-			return jsonError(409, "Sample has already been finalized");
-		}
-
-		throw err;
-	}
+			return sample;
+		},
+	});
 }

@@ -1,6 +1,5 @@
 import type { Subtraction, WorkflowSubtraction } from "@virtool/contracts";
 import { FinalizeSubtractionRequest } from "@virtool/contracts";
-import type { Db } from "@virtool/data/db/pg";
 import {
 	finalizeSubtraction,
 	getSubtraction,
@@ -8,23 +7,12 @@ import {
 	SubtractionNotFoundError,
 	SubtractionNotOwnedError,
 } from "@virtool/data/subtraction/data";
-import type { Logger } from "@virtool/logger";
-import type { StorageBackend } from "@virtool/storage";
 import { requireJobRequest } from "../auth/guard";
-import {
-	jsonError,
-	parseJsonBody,
-	type ReadHandlerDeps,
-	requireRowId,
-} from "../http";
-import { checkManifest, measureManifest } from "../manifest";
+import { type FinalizeHandlerDeps, finalizeResource } from "../finalize";
+import { jsonError, type ReadHandlerDeps, requireRowId } from "../http";
 
-/** What the subtraction handlers need to serve a request. */
-export type SubtractionHandlerDeps = {
-	db: Db;
-	storage: StorageBackend;
-	logger: Logger;
-};
+/** What the subtraction finalize route needs to serve a request. */
+export type SubtractionHandlerDeps = FinalizeHandlerDeps;
 
 /**
  * Narrow a subtraction to what a workflow reads.
@@ -137,83 +125,47 @@ export async function handleFinalizeSubtraction(
 	request: Request,
 	subtractionIdParam: string,
 ): Promise<Response> {
-	const principal = await requireJobRequest(deps.db, request);
+	return await finalizeResource(deps, request, subtractionIdParam, {
+		body: FinalizeSubtractionRequest,
+		prefix: (subtractionId) => `subtractions/${subtractionId}/`,
+		allowedNames: FILE_NAMES,
+		notFound: {
+			error: SubtractionNotFoundError,
+			message: "Subtraction not found",
+		},
+		notOwned: {
+			error: SubtractionNotOwnedError,
+			message: "Job did not produce this subtraction",
+		},
+		alreadyFinalized: {
+			error: SubtractionAlreadyFinalizedError,
+			message: "Subtraction has already been finalized",
+		},
+		write: async ({ id: subtractionId, jobId, values, files }) => {
+			const subtraction = await finalizeSubtraction(
+				deps.db,
+				subtractionId,
+				jobId,
+				{
+					count: values.count,
+					gc: values.gc,
+					files: files.map((file) => ({
+						name: file.name,
+						// The whitelist admits the FASTA and nothing else, so there is no
+						// type left to derive and no wire field with which to declare one.
+						type: "fasta" as const,
+						size: file.size,
+						storageKey: file.storageKey,
+					})),
+				},
+			);
 
-	if (principal instanceof Response) {
-		return principal;
-	}
+			deps.logger.info(
+				{ jobId, subtractionId, files: files.length },
+				"finalized subtraction",
+			);
 
-	const subtractionId = requireRowId(
-		subtractionIdParam,
-		"Subtraction not found",
-	);
-
-	if (subtractionId instanceof Response) {
-		return subtractionId;
-	}
-
-	const parsed = await parseJsonBody(request, FinalizeSubtractionRequest);
-
-	if (parsed instanceof Response) {
-		return parsed;
-	}
-
-	const { count, gc, files } = parsed;
-
-	const invalid = checkManifest(
-		files,
-		`subtractions/${subtractionId}/`,
-		FILE_NAMES,
-	);
-
-	if (invalid) {
-		return jsonError(400, invalid);
-	}
-
-	const measured = await measureManifest(deps.storage, files);
-
-	if (measured === null) {
-		return jsonError(400, "A manifest entry names no stored object");
-	}
-
-	try {
-		const subtraction = await finalizeSubtraction(
-			deps.db,
-			subtractionId,
-			principal.jobId,
-			{
-				count,
-				gc,
-				files: measured.map((file) => ({
-					name: file.name,
-					// The whitelist admits the FASTA and nothing else, so there is no
-					// type left to derive and no wire field with which to declare one.
-					type: "fasta" as const,
-					size: file.size,
-					storageKey: file.storageKey,
-				})),
-			},
-		);
-
-		deps.logger.info(
-			{ jobId: principal.jobId, subtractionId, files: files.length },
-			"finalized subtraction",
-		);
-
-		return Response.json(subtraction);
-	} catch (err) {
-		if (err instanceof SubtractionNotFoundError) {
-			return jsonError(404, "Subtraction not found");
-		}
-
-		if (err instanceof SubtractionNotOwnedError) {
-			return jsonError(403, "Job did not produce this subtraction");
-		}
-
-		if (err instanceof SubtractionAlreadyFinalizedError) {
-			return jsonError(409, "Subtraction has already been finalized");
-		}
-
-		throw err;
-	}
+			return subtraction;
+		},
+	});
 }

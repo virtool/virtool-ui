@@ -7,24 +7,12 @@ import {
 	finalizeAnalysis,
 	getAnalysis,
 } from "@virtool/data/analyses/data";
-import type { Db } from "@virtool/data/db/pg";
-import type { Logger } from "@virtool/logger";
-import type { StorageBackend } from "@virtool/storage";
 import { requireJobRequest } from "../auth/guard";
-import {
-	jsonError,
-	parseJsonBody,
-	type ReadHandlerDeps,
-	requireRowId,
-} from "../http";
-import { checkManifest, measureManifest } from "../manifest";
+import { type FinalizeHandlerDeps, finalizeResource } from "../finalize";
+import { jsonError, type ReadHandlerDeps, requireRowId } from "../http";
 
-/** What the analysis handlers need to serve a request. */
-export type AnalysisHandlerDeps = {
-	db: Db;
-	storage: StorageBackend;
-	logger: Logger;
-};
+/** What the analysis finalize route needs to serve a request. */
+export type AnalysisHandlerDeps = FinalizeHandlerDeps;
 
 /**
  * Narrow an analysis to what a workflow reads.
@@ -111,74 +99,37 @@ export async function handleFinalizeAnalysis(
 	request: Request,
 	analysisIdParam: string,
 ): Promise<Response> {
-	const principal = await requireJobRequest(deps.db, request);
-
-	if (principal instanceof Response) {
-		return principal;
-	}
-
-	const analysisId = requireRowId(analysisIdParam, "Analysis not found");
-
-	if (analysisId instanceof Response) {
-		return analysisId;
-	}
-
-	const parsed = await parseJsonBody(request, FinalizeAnalysisRequest);
-
-	if (parsed instanceof Response) {
-		return parsed;
-	}
-
-	const { results, files } = parsed;
-
-	const invalid = checkManifest(files, `analyses/${analysisId}/`, null);
-
-	if (invalid) {
-		return jsonError(400, invalid);
-	}
-
-	const measured = await measureManifest(deps.storage, files);
-
-	if (measured === null) {
-		return jsonError(400, "A manifest entry names no stored object");
-	}
-
-	try {
-		const analysis = await finalizeAnalysis(
-			deps.db,
-			analysisId,
-			principal.jobId,
-			{
-				results,
-				files: measured.map((file) => ({
+	return await finalizeResource(deps, request, analysisIdParam, {
+		body: FinalizeAnalysisRequest,
+		prefix: (analysisId) => `analyses/${analysisId}/`,
+		allowedNames: null,
+		notFound: { error: AnalysisNotFoundError, message: "Analysis not found" },
+		notOwned: {
+			error: AnalysisNotOwnedError,
+			message: "Job was not started for this analysis",
+		},
+		alreadyFinalized: {
+			error: AnalysisAlreadyFinalizedError,
+			message: "Analysis has already been finalized",
+		},
+		write: async ({ id: analysisId, jobId, values, files }) => {
+			const analysis = await finalizeAnalysis(deps.db, analysisId, jobId, {
+				results: values.results,
+				files: files.map((file) => ({
 					name: file.name,
 					format: file.format,
 					description: file.description,
 					size: file.size,
 					storageKey: file.storageKey,
 				})),
-			},
-		);
+			});
 
-		deps.logger.info(
-			{ jobId: principal.jobId, analysisId, files: files.length },
-			"finalized analysis",
-		);
+			deps.logger.info(
+				{ jobId, analysisId, files: files.length },
+				"finalized analysis",
+			);
 
-		return Response.json(analysis);
-	} catch (err) {
-		if (err instanceof AnalysisNotFoundError) {
-			return jsonError(404, "Analysis not found");
-		}
-
-		if (err instanceof AnalysisNotOwnedError) {
-			return jsonError(403, "Job was not started for this analysis");
-		}
-
-		if (err instanceof AnalysisAlreadyFinalizedError) {
-			return jsonError(409, "Analysis has already been finalized");
-		}
-
-		throw err;
-	}
+			return analysis;
+		},
+	});
 }

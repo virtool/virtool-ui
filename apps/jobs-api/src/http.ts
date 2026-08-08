@@ -29,7 +29,7 @@ export function jsonError(status: number, message: string): Response {
  * would leave a runtime `import` of zod in a bundle that inlines it today
  * along with `@virtool/contracts`, for a type that is erased anyway.
  */
-type BodySchema<T> = {
+export type BodySchema<T> = {
 	safeParse: (
 		data: unknown,
 	) =>

@@ -46,6 +46,8 @@ process:
 | `src/jobs/handlers.ts` | The five lifecycle routes |
 | `src/caches/handlers.ts` | Cache lookup and registration |
 | `src/http.ts` | `jsonError`, `parseJsonBody`, `requireRowId`, and the `ReadHandlerDeps` a read takes |
+| `src/manifest.ts` | `checkManifest` and `measureManifest` — the finalize manifest checks |
+| `src/finalize.ts` | `finalizeResource` — the sequence all three finalize routes run |
 | `src/samples/handlers.ts` | Sample read and finalize |
 | `src/subtraction/handlers.ts` | Subtraction read and finalize |
 | `src/analyses/handlers.ts` | Analysis read and finalize |
@@ -589,10 +591,21 @@ writes the artifact and its file rows itself.
 The manifest rides along with the finalize call rather than arriving as
 a separate step, so a run cannot end with the parent flipped `ready` and
 its file list missing. Each handler is an ordinary
-`Request → Promise<Response>` in `apps/jobs-api/src/<feature>/handlers.ts`
-that calls `requireJobRequest` first; the row work lives in
-`@virtool/data`, typed `DbOrTx`, because it is the same data layer the
-web app reads through.
+`Request → Promise<Response>` in `apps/jobs-api/src/<feature>/handlers.ts`;
+the row work lives in `@virtool/data`, typed `DbOrTx`, because it is the
+same data layer the web app reads through.
+
+All three run one sequence — authenticate the job, resolve the id, parse
+the body, check the manifest against the resource's prefix, measure every
+object it names — and it is written once, as `finalizeResource`
+(`src/finalize.ts`). A route hands in the four things that are its own:
+the prefix, the filenames it accepts, the classes the data layer reports
+its outcomes with, and a `write` callback carrying the rest — the data
+function it calls, the columns it maps each measured entry onto, and the
+line it logs. The statuses are **not** a route's to choose. `notFound` is
+404, `notOwned` 403 and `alreadyFinalized` 409 for all three, because a
+resource picking its own would be a resource whose ownership check said
+something different from the other two's.
 
 ### Only the job that produced a resource may finalize it
 
