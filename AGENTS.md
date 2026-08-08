@@ -219,9 +219,15 @@ currently configured in another repository.
 ### When to run checks
 
 - After changing route files in `apps/web/src/routes/`: run
-  `pnpm --filter @virtool/web exec tsr generate` (or the equivalent
-  `@tanstack/router-cli generate`) to regenerate
-  `apps/web/src/routeTree.gen.ts` before running type checks.
+  `pnpm --filter @virtool/web build` to regenerate
+  `apps/web/src/routeTree.gen.ts` before running type checks. The generator is
+  `@tanstack/router-plugin`, which `tanstackStart()` wires in
+  (`apps/web/vite.config.js`). **Never `tsr generate`.** The standalone
+  `@tanstack/router-cli` has not been published past 1.167.x while the router
+  is on 1.170.x, and that older generator emits no
+  `declare module '@tanstack/react-start'` block — so it silently deletes the
+  app's `Register` types, loosening router typing everywhere with nothing
+  failing.
 - `apps/web/src/routeTree.gen.ts` is checked in. If it shows up in
   `git status` — even when it looks like unrelated drift from a
   regen — commit it alongside your other changes. Never leave it
