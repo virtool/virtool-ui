@@ -294,7 +294,7 @@ describe("unhandled errors", () => {
 describe("request metrics", () => {
 	// Ids in a label would grow one time series per job. The registered pattern
 	// is bounded by the number of routes instead.
-	it("labels an unmatched path with a bounded route pattern", async () => {
+	it("labels a matched route with its pattern, not the requested path", async () => {
 		const metrics = createMetrics(10);
 		const app = createApp(deps({ metrics }));
 
@@ -302,8 +302,8 @@ describe("request metrics", () => {
 
 		const rendered = await metrics.render();
 
+		expect(rendered).toContain('route="/jobs/:jobId"');
 		expect(rendered).not.toContain("12345");
-		expect(rendered).toContain("virtool_http_requests_total");
 	});
 
 	it("counts a handled request under its own route", async () => {
