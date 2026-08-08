@@ -668,13 +668,31 @@ import them straight from the package.
 `data.ts` imports those types from the package and components import the
 same names straight from `@virtool/contracts` — no feature `types.ts`
 re-export (`samples/types.ts` is the worked example, keeping only its
-genuinely client-only shapes; `references/` and `indexes/` have no
-`types.ts` left at all, because every shape they had was a wire shape). A client
-`types.ts` must never import a shape from `@virtool/data` — the Biome
+genuinely client-only shapes; `references/`, `indexes/` and `jobs/` have no
+`types.ts` left at all, because every shape they had was a wire shape). A
+client `types.ts` must never import a shape from `@virtool/data` — the Biome
 override rejects it, and it would point the client at a module the server
 does not own the shape of. `data.ts` still owns what only it uses: its
 `*Values` and `*Options` argument types, its `AppError` subclasses, and
 its row mappers.
+
+**Shape the payload in `functions.ts`, and parse nothing on the client.**
+A `select` that runs a zod schema over a server function's result is a
+second declaration of a shape this app owns both ends of, free to
+disagree with the first, and it pays zod at every read. Rename a field,
+fold a nested count, narrow an open column at the boundary that publishes
+it — `server/jobs/functions.ts` is the worked example, mapping the
+`steps` and `claim` JSONB blobs with `@virtool/contracts`' shared
+`fromStoredJobStep` / `fromStoredJobClaim` rather than a second copy of
+that conversion.
+
+**A timestamp crosses as a `Date`.** Server functions serialize with
+seroval, not `JSON.stringify`, and seroval revives a `Date` as a `Date` —
+so a handler hands back the value it read out of Postgres, the contract
+types it `Date`, and no `z.coerce.date()` runs on either side. The
+exception is a timestamp stored *inside* a JSONB blob (`steps[].started_at`),
+which is column bytes Python also writes and is converted by the mappers
+above.
 
 **A feature module must never re-export a name that originates in
 `@virtool/contracts`.** Consumers import it from the package directly.

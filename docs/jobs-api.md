@@ -344,12 +344,22 @@ the same bytes. `fromStoredJobClaim` / `fromStoredJobStep` in
 `@virtool/contracts` are the only crossing points, and a route must never
 return a JSONB element straight out of the column.
 
+Those two mappers, and the `JobStep` / `JobClaim` / `StoredJobStep` /
+`StoredJobClaim` shapes they run between, live in
+`packages/contracts/src/jobs.ts` rather than in `jobsApi.ts`. They are
+not this service's contract: the web app publishes the same two shapes
+to the SPA, off the same JSONB column, through the same mappers, and a
+second implementation of that conversion is exactly the kind of drift
+one definition prevents. `jobsApi.ts` holds only what is genuinely the
+jobs API's — the request bodies, the responses, and the `Workflow*`
+metadata reads.
+
 ### The job shapes are parsed on the way out
 
 `jobs.workflow` is a plain `text` column with no CHECK constraint, so the
 data layer types it `string` while the wire types it as a union. `toJob`
-therefore **parses** the response through the `Job` schema rather than
-asserting it into shape, and a row that does not fit is thrown:
+therefore **parses** the response through the `WorkflowJob` schema rather
+than asserting it into shape, and a row that does not fit is thrown:
 `app.onError` logs it, hands it to Sentry and answers
 `jsonError(500, "Internal server error")`. The message names the job id
 and the failing field paths — never the values, because a message is a
@@ -374,10 +384,10 @@ exists on one column.
 ### Timestamps are `Date`, on both sides
 
 The wire contract types every timestamp as a `Date` — `z.coerce.date()`
-behind the `timestamp` alias in `jobsApi.ts` — so a handler passes the
-`Date` it read out of Postgres straight to `Response.json`, and the
-runtime's client gets a `Date` back rather than a string every caller
-has to remember to parse. **No handler calls `toISOString`.**
+behind `JobTimestamp` in `packages/contracts/src/jobs.ts` — so a handler
+passes the `Date` it read out of Postgres straight to `Response.json`,
+and the runtime's client gets a `Date` back rather than a string every
+caller has to remember to parse. **No handler calls `toISOString`.**
 
 The bytes are unchanged. JSON has no date type, so `JSON.stringify`
 calls `Date.prototype.toJSON` and produces exactly the ISO-8601 string
@@ -398,9 +408,13 @@ inside a JSONB array Python reads and writes, and `jsonb` revives no
 dates on either side. `fromStoredJobStep` / `toStoredJobStep` are where
 the two spellings meet, so nothing else converts by hand.
 
-This is the jobs API's contract only. The other domains in
-`@virtool/contracts` still type their timestamps as strings, and moving
-them is its own change — the SPA-facing shapes drag components in.
+The SPA-facing job shapes type their timestamps as `Date` too, but they
+get there without a schema. Their boundary is a TanStack Start server
+function, which serialises with seroval rather than `JSON.stringify`, and
+seroval revives a `Date` as a `Date` — so `apps/web/src/server/jobs/functions.ts`
+hands back the column value and the client parses nothing. Only
+`steps[].started_at` is converted, by the same `fromStoredJobStep` this
+service uses.
 
 There is **no delete and no failure route**. A job fails by being
 cancelled or by Python's stalled-job sweep, neither of which a runner
@@ -1260,7 +1274,9 @@ for this service:
 
 This service serves health, metrics, the job lifecycle, the two cache
 endpoints, the three finalize routes and the six metadata reads — the
-whole of the surface `packages/contracts/src/jobsApi.ts` describes.
+whole of the surface `packages/contracts/src/jobsApi.ts` describes,
+plus the job element shapes it shares with the web app from
+`packages/contracts/src/jobs.ts`.
 
 What stays Python's: cancelling a job, deleting one, the counts
 endpoint, and the five-minute stalled-job sweep that fails a job whose

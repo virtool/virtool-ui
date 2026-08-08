@@ -58,9 +58,17 @@ export type Job = {
 	workflow: string;
 };
 
-/** A page of jobs, with per-state/workflow counts attached. */
+/**
+ * A page of jobs, with per-state/workflow counts attached.
+ *
+ * Every {@link JobState} is a key, whether or not anything is queued in it, so
+ * a caller folding these into totals never has to reason about a missing one. A
+ * row naming a state outside the union is dropped rather than adding a sixth
+ * key: `jobs.state` is a `text` column, and no reader has anything to do with a
+ * bucket it cannot name.
+ */
 export type JobSearchResult = SearchResult & {
-	counts: Record<string, Record<string, number>>;
+	counts: Record<JobState, Record<string, number>>;
 	items: JobMinimal[];
 };
 
@@ -107,18 +115,24 @@ function computeProgress(state: string, steps: JobStep[] | null): number {
 
 function buildCounts(
 	rows: { state: string; workflow: string; count: number }[],
-): Record<string, Record<string, number>> {
-	const counts: Record<string, Record<string, number>> = {};
-
-	// Seed every state so empty states report 0 rather than going missing.
-	for (const state of JobState.options) {
-		counts[state] = {};
-	}
+): Record<JobState, Record<string, number>> {
+	// Spelled out rather than seeded from `JobState.options`, so the compiler
+	// requires a new state to be added here rather than letting the record go
+	// out with a key missing.
+	const counts: Record<JobState, Record<string, number>> = {
+		cancelled: {},
+		failed: {},
+		pending: {},
+		running: {},
+		succeeded: {},
+	};
 
 	for (const row of rows) {
-		const workflowCounts = counts[row.state] ?? {};
-		counts[row.state] = workflowCounts;
-		workflowCounts[row.workflow] = row.count;
+		const state = JobState.safeParse(row.state);
+
+		if (state.success) {
+			counts[state.data][row.workflow] = row.count;
+		}
 	}
 
 	return counts;

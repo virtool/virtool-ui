@@ -256,24 +256,25 @@ is a 500 and a Sentry event rather than routine control flow the
 `beforeSend` filter drops. The message names the job id and never the
 value — it becomes a Sentry title, and an unbounded one buries the
 incident among its own variants. `apps/jobs-api` does the same thing on
-its own read path, parsing outbound jobs through the `Job` schema.
+its own read path, parsing outbound jobs through the `WorkflowJob`
+schema.
 
 The alternative — declaring the narrow union on the client and parsing
 there — moves the failure to a component that can do nothing about it,
 and hides the disagreement from TypeScript entirely: `Schema.parse`
 accepts `unknown`, so a server function returning `string` for a field
-the client types as a union compiles cleanly and fails at runtime. Two
-things close that. The server function annotates its handler's return
-type, and the query annotates its `select` parameter with the shape the
-schema parses:
+the client types as a union compiles cleanly and fails at runtime. What
+closes it is the handler's annotated return type: `findJobsFn` and
+`getJobFn` are declared to return `@virtool/contracts`' `Job` shapes, so
+a row field that no longer fits is a type error inside the handler, at
+the only place that can fix it.
 
-```ts
-select: (job: ServerJob) => JobSchema.parse(job),
-```
-
-React Query checks a `select` parameter contravariantly against what the
-query function resolves to, so a widened wire shape is a type error at
-the query rather than a `ZodError` in a view.
+**The same argument rules out a client-side re-parse of a shape this
+side already published.** A `select` that runs a zod schema over a
+server function's result is a second declaration of that shape, free to
+disagree with the first, and it pays zod at every read for a value that
+crossed a boundary this app owns both ends of. Do the shaping once, in
+`functions.ts`, and let components consume what it returns.
 
 This is narrowing, not validation. It is worth doing only for a value the
 client branches on; a free-text column the client merely displays stays

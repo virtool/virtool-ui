@@ -5,14 +5,7 @@ import {
 	useQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { JobState } from "@virtool/contracts";
-import {
-	JobSchema,
-	JobSearchResultSchema,
-	type ServerJob,
-	type ServerJobNested,
-	type ServerJobSearchResult,
-} from "./types";
+import type { Job, JobNested, JobState } from "@virtool/contracts";
 
 /**
  * Query options for a page of job search results.
@@ -29,14 +22,6 @@ export function jobsQueryOptions(
 	return queryOptions({
 		queryKey: jobQueryKeys.list([page, perPage, ...states]),
 		queryFn: () => findJobsFn({ data: { page, perPage, states } }),
-		// The parameter is annotated rather than left to infer from
-		// `Schema.parse`, which takes `unknown` and so agrees with anything.
-		// React Query checks a `select` parameter contravariantly against what
-		// the query function resolves to, making a server function that no
-		// longer publishes what this side parses a type error here instead of a
-		// `ZodError` in a view.
-		select: (result: ServerJobSearchResult) =>
-			JobSearchResultSchema.parse(result),
 	});
 }
 
@@ -58,14 +43,14 @@ export function useSuspenseJobs(
 }
 
 /**
- * Expand a nested job into a full server-shaped job for seeding the cache.
+ * Expand a nested job into a full job for seeding the cache.
  *
  * A nested job carried on a parent resource (sample, index, etc.) lacks the
  * args, claim, and steps that `/jobs/:id` returns. Filling them with empty
  * values lets the nested data seed `jobQueryKeys.detail` so the first paint is
  * instant; the SSE-triggered refetch later replaces it with the full job.
  */
-function getJobSeed(job: ServerJobNested): ServerJob {
+function getJobSeed(job: JobNested): Job {
 	return {
 		...job,
 		args: {},
@@ -87,12 +72,10 @@ function getJobSeed(job: ServerJobNested): ServerJob {
  * @param seed - Nested job data to seed the cache with
  * @returns Query results containing the job
  */
-export function useFetchJob(jobId: number, seed?: ServerJobNested) {
+export function useFetchJob(jobId: number, seed?: JobNested) {
 	return useQuery({
 		queryKey: jobQueryKeys.detail(jobId),
 		queryFn: () => getJobFn({ data: { jobId } }),
-		// Annotated for the reason given in `jobsQueryOptions` above.
-		select: (job: ServerJob) => JobSchema.parse(job),
 		enabled: Number.isInteger(jobId),
 		initialData: seed ? getJobSeed(seed) : undefined,
 		staleTime: seed ? Number.POSITIVE_INFINITY : undefined,
