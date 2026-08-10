@@ -184,7 +184,7 @@ export default function SubtractionDetail() {
 							Samples that reference this subtraction
 						</p>
 					</div>
-					<span>{data.linkedSamples.length}</span>
+					<span>{data.sampleCount}</span>
 				</BoxGroupSection>
 			</BoxGroup>
 		</>

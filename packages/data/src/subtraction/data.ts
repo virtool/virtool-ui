@@ -7,19 +7,18 @@ import {
 	type SubtractionJobMinimal,
 	type SubtractionMinimal,
 	type SubtractionNested,
-	type SubtractionSampleNested,
 	type SubtractionSearchResult,
 	type SubtractionUpload,
 } from "@virtool/contracts";
 import type { Logger } from "@virtool/logger";
 import type { StorageBackend } from "@virtool/storage";
 import { deleteKeys } from "@virtool/storage";
-import { and, asc, count, eq, ilike, or } from "drizzle-orm";
+import { and, asc, count, eq, ilike, or, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import type { Db, DbOrTx } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import { jobs } from "../db/schema/jobs";
-import { legacySampleSubtractions, legacySamples } from "../db/schema/samples";
+import { legacySampleSubtractions } from "../db/schema/samples";
 import {
 	type SubtractionFileType,
 	subtractionFiles,
@@ -90,6 +89,11 @@ const jobUser = alias(users, "job_user");
 
 // A subtraction row joined to its owning user, its create job, and that job's
 // user — the shape every read maps into a `SubtractionMinimal`.
+//
+// `sampleCount` is a correlated subquery rather than a join: a join to the
+// sample link table would multiply the row out and force every other column
+// into a `group by`. `::int` because `count(*)` is a bigint, which arrives as a
+// string.
 function selectSubtractionsWithResources(db: DbOrTx) {
 	return db
 		.select({
@@ -100,6 +104,10 @@ function selectSubtractionsWithResources(db: DbOrTx) {
 			nickname: subtractions.nickname,
 			ready: subtractions.ready,
 			gc: subtractions.gc,
+			sampleCount: sql<number>`(
+				select count(*)::int from ${legacySampleSubtractions}
+				where ${legacySampleSubtractions.subtraction_id} = ${subtractions.id}
+			)`,
 			uploadId: uploads.id,
 			uploadName: uploads.name,
 			userId: users.id,
@@ -155,6 +163,7 @@ function toMinimal(row: SubtractionResourceRow): SubtractionMinimal {
 		job,
 		nickname: row.nickname,
 		ready: row.ready,
+		sampleCount: row.sampleCount,
 		user:
 			row.userId == null
 				? null
@@ -261,22 +270,6 @@ async function getSubtractionFiles(
 	}));
 }
 
-async function getLinkedSamples(
-	db: DbOrTx,
-	subtractionId: number,
-): Promise<SubtractionSampleNested[]> {
-	return db
-		.select({ id: legacySamples.id, name: legacySamples.name })
-		.from(legacySamples)
-		.innerJoin(
-			legacySampleSubtractions,
-			eq(legacySampleSubtractions.sample_id, legacySamples.id),
-		)
-		.where(eq(legacySampleSubtractions.subtraction_id, subtractionId))
-		.orderBy(asc(legacySamples.id))
-		.then((rows) => rows.map((row) => ({ id: row.id, name: row.name ?? "" })));
-}
-
 export async function getSubtraction(
 	db: DbOrTx,
 	subtractionId: number,
@@ -289,16 +282,10 @@ export async function getSubtraction(
 		throw new SubtractionNotFoundError();
 	}
 
-	const [files, linkedSamples] = await Promise.all([
-		getSubtractionFiles(db, subtractionId),
-		getLinkedSamples(db, subtractionId),
-	]);
-
 	return {
 		...toMinimal(row),
-		files,
+		files: await getSubtractionFiles(db, subtractionId),
 		gc: row.gc,
-		linkedSamples,
 	};
 }
 

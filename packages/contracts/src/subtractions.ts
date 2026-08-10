@@ -101,15 +101,6 @@ export type SubtractionFile = {
 	type: string;
 };
 
-/** A sample linked to a subtraction through the default-subtraction join. */
-export type SubtractionSampleNested = {
-	/** The unique identifier */
-	id: number;
-
-	/** The display name */
-	name: string;
-};
-
 /** A subtraction as it appears in a search-result list. */
 export type SubtractionMinimal = SubtractionNested & {
 	/** The number of sequences, or null before the create job finishes */
@@ -125,6 +116,15 @@ export type SubtractionMinimal = SubtractionNested & {
 
 	nickname: string;
 
+	/**
+	 * How many samples name this subtraction as a default.
+	 *
+	 * A count rather than the samples themselves: nothing shows their names, and
+	 * a subtraction used by a large study would otherwise ship a list every read
+	 * pays for and every consumer reduces to its length.
+	 */
+	sampleCount: number;
+
 	/** The creating user, or null if that account was removed */
 	user: UserNested | null;
 };
@@ -136,9 +136,6 @@ export type Subtraction = SubtractionMinimal & {
 
 	/** The ATGC ratios in the genome, or null before the job computes them */
 	gc: NucleotideComposition | null;
-
-	/** Samples that name this subtraction as a default */
-	linkedSamples: SubtractionSampleNested[];
 };
 
 /** A page of subtractions, with a count of those ready to use. */

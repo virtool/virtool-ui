@@ -53,6 +53,7 @@ export function createFakeSubtractionMinimal(
 		},
 		job: null,
 		nickname: faker.word.noun({ strategy: "any-length" }),
+		sampleCount: faker.number.int({ max: 5 }),
 		user: createFakeUserNested(),
 	};
 
@@ -65,11 +66,10 @@ export function createFakeSubtractionMinimal(
 export function createFakeSubtraction(
 	overrides?: Partial<Subtraction>,
 ): Subtraction {
-	const { files, gc, linkedSamples, ...props } = overrides || {};
+	const { files, gc, ...props } = overrides || {};
 	return {
 		...createFakeSubtractionMinimal(props),
 		files: files || [createFakeSubtractionFile()],
 		gc: gc || { a: 1, c: 1, g: 1, n: 1, t: 1 },
-		linkedSamples: linkedSamples || [],
 	};
 }
