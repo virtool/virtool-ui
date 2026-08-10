@@ -94,15 +94,25 @@ This is a **pnpm monorepo**:
   `python:3.13-bookworm` and musl cannot load them. The other three workflow
   executors get a directory, a Dockerfile stage and a CI matrix entry when
   their port lands.
-- `apps/workflow-pathoscope/` — the pathoscope workflow image
-  (`ghcr.io/virtool/ts-pathoscope`). Holds only a `Dockerfile` today: it
-  compiles `packages/pathoscope-core` and layers the `ghcr.io/virtool/tools`
-  binaries on a Debian Node base. Built from the **repo root**
-  (`docker build -f apps/workflow-pathoscope/Dockerfile .`). **CI builds it but
-  must not publish it** — `virtool/workflow-pathoscope` still releases the
-  pathoscope workflow, and a second pipeline shipping it from here would leave
-  two candidates for what the cluster runs. Don't add a publish job until that
-  repo retires.
+- `apps/workflow-pathoscope/` — `@virtool/workflow-pathoscope`, the pathoscope
+  workflow executor and its image (`ghcr.io/virtool/ts-pathoscope`). Eight
+  steps, four external tools and `pathoscope-core`, which it drives **as a
+  subprocess** — there is no FFI here and adding one is out of scope by
+  decision. Its Dockerfile carries three halves: a cargo-chef stage compiling
+  `packages/pathoscope-core`, a Node stage bundling the app, and a Debian
+  runtime layering the `ghcr.io/virtool/tools` binaries over both. Built from
+  the **repo root** (`docker build -f apps/workflow-pathoscope/Dockerfile .`).
+  Two rules it carries: it writes **no result file** — Python uploaded a
+  `report.tsv` whose every figure is already in the `results` blob, so the
+  finalize manifest is empty and `FinalizeAnalysisRequest.files` allows that
+  for this workflow's sake; and **nothing deletes an analysis on failure** —
+  Python's `on_failure` hook is not ported and the jobs API has no delete route.
+  **CI builds it but must not publish it** — `virtool/workflow-pathoscope` still
+  releases the pathoscope workflow, and a second pipeline shipping it from here
+  would leave two candidates for what the cluster runs. Don't add a publish job
+  until that repo retires; note that `publish-ghcr` is also what stamps a real
+  version, so until then `APP_VERSION` is `0.0.0` in every built image and the
+  `workflow_version` in its cache keys with it.
 - `packages/` — shared, framework-agnostic libraries published as workspace
   packages, plus one Rust crate:
   - `@virtool/logger` — pino wrapper, server-side log defaults and
@@ -1182,7 +1192,22 @@ calls — owns all of that.
 
 Object storage is reached the way `db` is on the server side: a
 `StorageBackend` is **passed in as an argument**, never constructed here and
-never a module-level singleton. See the file layer below.
+never a module-level singleton. `runWorkflowApp` builds it once from
+`config.storage` and puts it on the run context as `storage`, so a step reaches
+the bucket without constructing anything and a test hands the whole runtime a
+`MemoryStorage`. The `VT_STORAGE_*` keys are part of `parseWorkflowRunConfig`
+and are **required** — a pod with no bucket cannot download the reads it was
+claimed to analyse. See the file layer below.
+
+**The cache is the workflow's, not the jobs API's.** `createWorkflowCache`
+(`cache/cache.ts`) resolves a logical key through `GET /caches/{key}` and then
+moves the bytes itself; `POST /caches` registers a row **after** the blob
+lands, because a row published ahead of its blob makes the next reader fail
+where it should have missed. The blob is an **uncompressed tar of one
+directory** whose single top-level entry is that directory's basename — Python's
+`write_path_as_tar` layout exactly, which is what lets the two implementations
+share the `reference_mapping_index` and `subtraction_mapping_index` namespaces.
+An already-registered key is **success**, not an error.
 
 Three decisions shape it and are not up for re-litigation:
 

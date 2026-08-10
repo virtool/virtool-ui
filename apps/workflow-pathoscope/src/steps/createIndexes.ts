@@ -1,0 +1,95 @@
+import { mkdtemp, rm } from "node:fs/promises";
+import { join } from "node:path";
+import { openWorkflowIndex, writeFasta } from "@virtool/workflow";
+import { cacheFor } from "../cache";
+import { REFERENCE_INDEX_EXTRA_PARAMS } from "../cacheParams";
+import { createMappingIndex } from "../mappingIndex";
+import {
+	collapsedReferencePath,
+	referenceIndexPrefix,
+	subtractionIndexPrefix,
+} from "../paths";
+import { APP_VERSION } from "../version";
+import type { PathoscopeStep } from "./types";
+
+/**
+ * Build the bowtie2 index the candidate search maps against.
+ *
+ * Only the collapsed reference's **default isolates** go into it. The point of
+ * this pass is to find which OTUs are present at all, and one representative per
+ * OTU answers that far more cheaply than every isolate would.
+ */
+export const createReferenceIndexStep: PathoscopeStep = {
+	id: "create_reference_index",
+	description: "Ensure the reference Bowtie2 index exists locally.",
+	async run(context) {
+		const { data, logger, proc, runSubprocess, workPath } = context;
+
+		// The FASTA is an input to `bowtie2-build` and nothing reads it again, so
+		// it is staged and removed rather than left in the work path.
+		const temp = await mkdtemp(join(workPath, "reference-fasta-"));
+		const fastaPath = join(temp, "reference.fa");
+
+		const index = openWorkflowIndex({
+			id: data.index.id,
+			path: collapsedReferencePath(workPath),
+		});
+
+		try {
+			// Streamed from SQLite straight to disk. The sequence order is the index
+			// reader's, which decides the FASTA order and so every SAM line mapped
+			// against the built index.
+			await writeFasta(fastaPath, index.iterDefaultSequences());
+
+			logger.info({ fastaPath }, "assembled default reference fasta");
+
+			await createMappingIndex({
+				cache: cacheFor(context),
+				extraParams: REFERENCE_INDEX_EXTRA_PARAMS,
+				fastaPath,
+				indexKind: "reference_mapping_index",
+				indexPrefix: referenceIndexPrefix(workPath),
+				logger,
+				parentId: data.index.id,
+				proc,
+				runSubprocess,
+				workflowVersion: APP_VERSION,
+			});
+		} finally {
+			index.close();
+
+			await rm(temp, { force: true, recursive: true });
+		}
+	},
+};
+
+/**
+ * Build one bowtie2 index per subtraction.
+ *
+ * The gzipped FASTA is handed to `bowtie2-build` directly — it reads gzip — so
+ * unlike NuVs there is nothing to decompress first.
+ */
+export const createSubtractionIndexStep: PathoscopeStep = {
+	id: "create_subtraction_index",
+	description: "Ensure subtraction Bowtie2 indexes exist locally.",
+	async run(context) {
+		const { data, logger, proc, runSubprocess, workPath } = context;
+		const cache = cacheFor(context);
+
+		// Sequentially, not concurrently: `bowtie2-build --threads {proc}` is
+		// already using every core, so overlapping two of them only contends.
+		for (const subtraction of data.subtractions) {
+			await createMappingIndex({
+				cache,
+				fastaPath: subtraction.fastaPath,
+				indexKind: "subtraction_mapping_index",
+				indexPrefix: subtractionIndexPrefix(workPath, subtraction.id),
+				logger,
+				parentId: subtraction.id,
+				proc,
+				runSubprocess,
+				workflowVersion: APP_VERSION,
+			});
+		}
+	},
+};

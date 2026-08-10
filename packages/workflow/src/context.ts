@@ -1,5 +1,6 @@
 import type { JobWorkflow, JsonObject } from "@virtool/contracts";
 import type { Logger } from "@virtool/logger";
+import type { StorageBackend } from "@virtool/storage";
 import type { JobsApiClient } from "./client/client";
 import { assertSerializableData } from "./serializable";
 import type { Workflow } from "./step";
@@ -26,6 +27,14 @@ export type BuildContextInput = {
 	 */
 	client: JobsApiClient;
 	runSubprocess: RunSubprocess;
+	/**
+	 * The bucket, reached directly.
+	 *
+	 * Passed in the way `db` is on the server side, never constructed here and
+	 * never a module-level singleton, so a test hands the whole runtime a
+	 * `MemoryStorage` without intercepting anything.
+	 */
+	storage: StorageBackend;
 };
 
 /**
@@ -62,10 +71,11 @@ export type WorkflowContext<TData, TState> = {
 	 * forward cancellation itself.
 	 */
 	readonly runSubprocess: RunSubprocess;
+	/** Object storage, reached directly. The jobs API serves records, never bytes. */
+	readonly storage: StorageBackend;
 
-	// One more member lands here with its own issue: `storage`, for direct
-	// object storage access. Only `data` is serializable-constrained; the live
-	// handles are so by design.
+	// Only `data` is serializable-constrained; the live handles above are so by
+	// design.
 };
 
 /**

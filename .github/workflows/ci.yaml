@@ -92,12 +92,13 @@ jobs:
     # push a pathoscope image on release. That repo publishes
     # `ghcr.io/virtool/pathoscope`; the Dockerfile here targets
     # `ghcr.io/virtool/ts-pathoscope`, so nothing would be overwritten today —
-    # but two pipelines shipping the same workflow is the ambiguity to avoid,
-    # and the port is not finished. `apps/workflow-pathoscope` holds only a
-    # Dockerfile.
+    # but two pipelines shipping the same workflow is the ambiguity to avoid.
     #
     # Restore a publish job when `virtool/workflow-pathoscope` is retired, and
-    # settle which image name the cluster pulls in the same change.
+    # settle which image name the cluster pulls in the same change. Note that
+    # `publish-ghcr` is also what runs `pnpm -C <workspace> version`, so until
+    # this app has a publish entry its `APP_VERSION` is `0.0.0` in every built
+    # image — and `workflow_version` is part of every cache key it derives.
     build-pathoscope:
         name: Pathoscope / Build
         runs-on: ubuntu-24.04

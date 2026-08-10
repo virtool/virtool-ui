@@ -114,10 +114,11 @@ fixture, and is **not** serializable-constrained. It holds whatever a
 workflow needs between steps.
 
 Everything on `BuildContextInput` is spread onto the context, so a member
-added there is a member a step sees. The run's `client` and `runSubprocess`
-are both built before `buildContext` runs — a step that needs a metadata
-read or a tool reaches either without a second construction path — and
-`storage` lands the same way with its own issue. Only `data` is
+added there is a member a step sees. The run's `client`, `runSubprocess` and
+`storage` are all built before `buildContext` runs, so a step that needs a
+metadata read, a tool or the bucket reaches each without a second
+construction path — and `buildContext` itself can use all three, which is how
+a workflow downloads its inputs eagerly. Only `data` is
 serializable-constrained; the live handles are so by design.
 
 ## There is no teardown
@@ -569,8 +570,30 @@ unset value.
 | `VT_TIMEOUT` | `1000` — **seconds**, matching Python's `asyncio.timeout` |
 | `VT_IMAGE` | `"unknown"` |
 | `VT_SENTRY_DSN` | unset |
+| `VT_STORAGE_BACKEND` | **none — required**, one of `s3`, `azure` |
+| `VT_STORAGE_S3_BUCKET` | none — required when the backend is `s3` |
+| `VT_STORAGE_S3_REGION` | unset |
+| `VT_STORAGE_S3_ENDPOINT` | unset — real AWS resolves it from the region |
+| `VT_STORAGE_S3_ACCESS_KEY_ID` | unset |
+| `VT_STORAGE_S3_SECRET_ACCESS_KEY` | unset |
+| `VT_STORAGE_AZURE_ACCOUNT` | none — required when the backend is `azure` |
+| `VT_STORAGE_AZURE_CONTAINER` | none — required when the backend is `azure` |
+| `VT_STORAGE_AZURE_ACCESS_KEY` | unset |
+| `VT_STORAGE_AZURE_ENDPOINT` | unset |
 
-Two of those are deliberate departures from Python's defaults. Python
+**Storage is required, not optional.** A workflow pod holds its own bucket
+credentials and moves every byte itself — the jobs API serves records and
+never payloads — so a run with no bucket cannot download the reads it was
+claimed to analyse. The narrowing onto `StorageConfig`'s discriminated union
+is done by hand rather than with a zod union so the error names the one key
+that is missing; a pod misconfigured this way otherwise fails at its first
+read, which for these workflows is after an aligner has already run. The two
+S3 credentials must be **set together or both left empty** — both empty means
+the AWS credential chain supplies an IAM role, and exactly one set would send
+the pod to production authenticating as the wrong principal.
+
+Two of the required keys above are deliberate departures from Python's
+defaults. Python
 defaults the jobs API address to `https://localhost:9950`, which in a pod
 silently polls nothing and reads as an idle runner rather than a
 misconfigured one; and it defaults the work path to the relative path
