@@ -12,6 +12,7 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useFetchJob } from "@jobs/queries";
 import { useFetchSubtraction } from "@subtraction/queries";
 import {
+	getCreateJobStatus,
 	getSubtractionFastaName,
 	isJobStateUnsuccessful,
 } from "@subtraction/utils";
@@ -50,7 +51,7 @@ export default function SubtractionDetail() {
 		job?.id ?? Number.NaN,
 		job?.user ? { ...job, user: job.user } : undefined,
 	);
-	const jobState = fetchedJob?.state ?? job?.state;
+	const jobState = getCreateJobStatus(job, fetchedJob)?.state;
 
 	if (isError) {
 		return <NotFound />;
@@ -86,13 +87,17 @@ export default function SubtractionDetail() {
 							{jobState === "cancelled" ? "was cancelled" : "failed"}. This
 							subtraction can't be used and should be deleted.
 						</span>
-						<Link
-							className="ml-auto whitespace-nowrap text-red-800 underline"
-							to="/jobs/$jobId"
-							params={{ jobId: String(job.id) }}
-						>
-							View job
-						</Link>
+						{/* The jobs read inner-joins its user, so a job whose creator
+						    was removed is a 404 rather than a page worth linking to. */}
+						{job.user ? (
+							<Link
+								className="ml-auto whitespace-nowrap text-red-800 underline"
+								to="/jobs/$jobId"
+								params={{ jobId: String(job.id) }}
+							>
+								View job
+							</Link>
+						) : null}
 					</Alert>
 				</>
 			);

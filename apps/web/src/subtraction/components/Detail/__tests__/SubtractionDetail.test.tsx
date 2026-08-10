@@ -115,6 +115,28 @@ describe("<SubtractionDetail />", () => {
 		},
 	);
 
+	it("should not link to the job of a failed subtraction whose creator was removed", async () => {
+		const permissions = createFakePermissions({ modify_subtraction: true });
+		const account = createFakeAccount({ permissions });
+		const failedSubtraction = createFakeSubtraction({
+			ready: false,
+			job: {
+				...createFakeJobNested({
+					state: "failed",
+					workflow: "create_subtraction",
+				}),
+				user: null,
+			},
+		});
+		mockGetSubtraction(failedSubtraction);
+
+		await renderRoute(formatSubtractionPath(failedSubtraction), { account });
+
+		expect(await screen.findByText(failedSubtraction.name)).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "delete" })).toBeInTheDocument();
+		expect(screen.queryByRole("link", { name: "View job" })).toBeNull();
+	});
+
 	it("should not offer deletion of a failed subtraction without permission", async () => {
 		const permissions = createFakePermissions({ modify_subtraction: false });
 		const account = createFakeAccount({ permissions });
