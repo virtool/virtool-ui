@@ -112,7 +112,7 @@ exposed, plus what this side needs:
 | --- | --- |
 | `job` | The one job served. Flip `state` to drive cancellation. |
 | `key` | The runner key the claim hands out and every call authenticates with. |
-| `acquired` | Whether the job is claimed. A second claim is a 404. |
+| `acquired` | Whether the job is claimed. A second claim, or one naming another workflow, is a 404. |
 | `stepStartUpdates` | Step ids started, in order. |
 | `finishCalled` | Whether `POST /jobs/{id}/finish` succeeded. |
 | `finalizeCalls` | Every finalize call with the manifest it carried. |
@@ -152,6 +152,44 @@ state.job.state = "cancelled";
 await expect(client.ping()).rejects.toThrow(UnauthorizedError);
 await expect(client.ping()).rejects.toThrow("Job is cancelled.");
 ```
+
+**The refusal covers every route but the claim**, not the ping alone. The real
+service refuses in `requireJobRequest`, which is the floor under every handler;
+the ping is only where a run *notices*. So a terminal job's key stops serving
+metadata reads, step starts and finalize calls too, and the three messages are
+the service's own wording — `Job is cancelled.`, `Job has failed.`,
+`Job has succeeded.` A fixture that checked terminal state on the ping alone
+would let a workflow keep working against a job production had already shut off,
+and finishing a job would leave its own key working.
+
+One consequence worth naming: `POST /jobs/{id}/finish` revokes the key that made
+it, so a second finish is a 401 rather than the 409 the handler would answer. The
+409 is still there, unreachable through a credential, because production keeps it
+for the race between the guard's read and the transaction's lock.
+
+### The claim is filtered by workflow
+
+`POST /jobs/claim` reads its `workflow` query parameter, the way Python's
+`ClaimJobView` and `handleClaimJob` do. Asking for a workflow this fixture's job
+does not run is answered **404**, the same "no job available" a second claim
+gets; a workflow that is not claimable at all — `build_index`, which parses as a
+job workflow but which nothing creates any more — is **422**. Without the filter
+a test could claim `nuvs` off a `create_subtraction` fixture and pass with a
+configuration that leaves a real pod polling until its timeout.
+
+### Duplicate step starts and finalized files
+
+Two more places the fixture matches the service rather than being permissive:
+
+- Starting a step twice is **409**. Progress is derived from how many steps have
+  started, so a silent restamp would move a job's progress without moving its
+  work.
+- Finalizing a sample or a subtraction **records the manifest's files on the
+  row**, so the next metadata read serves the keys the workflow just declared.
+  The read path has to be reachable from the write path — that round trip is
+  what a create-sample or create-subtraction test asserts. Sizes come back as
+  `0`: the real route reads each one from storage, and the manifest declares
+  none.
 
 ### Basic auth, arbitrary statuses, and hung responses
 

@@ -17,6 +17,7 @@
 import {
 	type Cache,
 	type CacheRegistered,
+	ClaimableJobWorkflow,
 	CreateJobClaimRequest,
 	FinalizeAnalysisRequest,
 	FinalizeSampleRequest,
@@ -27,6 +28,7 @@ import {
 	type JobPing,
 	type JobStepStarted,
 	RegisterCacheRequest,
+	type WorkflowSample,
 } from "@virtool/contracts";
 import { cacheKey } from "@virtool/storage";
 import type { JobsApiState } from "./state";
@@ -36,6 +38,14 @@ export type JobsApiRequest = {
 	method: string;
 	/** Unprefixed, matching the jobs API's paths byte for byte. */
 	path: string;
+	/**
+	 * The query string, which only `POST /jobs/claim` reads.
+	 *
+	 * Separate from `path` because the embedded server has it parsed already and
+	 * because the claim's `workflow` is the one thing this fixture routes on that
+	 * is not a segment.
+	 */
+	searchParams?: URLSearchParams;
 	/** The parsed request body, or undefined when there was none. */
 	body?: unknown;
 };
@@ -59,6 +69,21 @@ function notFound(message = "Not found"): JobsApiResponse {
 function conflict(message: string): JobsApiResponse {
 	return { status: 409, body: { message } };
 }
+
+/**
+ * The states a job never leaves, and what a runner holding a key for one is
+ * told.
+ *
+ * A copy of `TERMINAL_REFUSALS` in `apps/jobs-api/src/auth/verify.ts`, wording
+ * and all. The message is the whole of the cancellation channel, so a fixture
+ * that answered `Job is failed.` where the service answers `Job has failed.`
+ * would let a run that keyed on the wording pass here and stall in production.
+ */
+const TERMINAL_REFUSALS: Record<string, string> = {
+	cancelled: "Job is cancelled.",
+	failed: "Job has failed.",
+	succeeded: "Job has succeeded.",
+};
 
 /**
  * Split a path into its segments.
@@ -90,18 +115,43 @@ function readJob(state: JobsApiState): Job {
 	};
 }
 
-function handleClaim(state: JobsApiState, body: unknown): JobsApiResponse {
-	// Python's fixture answers a second claim with a 404, the same status it uses
-	// for "no job available" — a runner cannot tell the two apart and does not
-	// need to.
-	if (state.acquired) {
-		return notFound("No job available");
+/**
+ * Hand out the one job this fixture holds.
+ *
+ * The workflow arrives as a query parameter rather than a body field, matching
+ * Python's `ClaimJobView` and `handleClaimJob`, and it is **checked against the
+ * job's own workflow**. A fixture that handed its `create_subtraction` job to a
+ * runner asking for `nuvs` would let a test pass with a claim configuration the
+ * real service answers 404 to, which is the runner polling forever.
+ */
+function handleClaim(
+	state: JobsApiState,
+	requested: string | null,
+	body: unknown,
+): JobsApiResponse {
+	// `build_index` parses as a job workflow and is refused here: nothing creates
+	// one any more, so handing one out would start a pod nothing finishes.
+	const workflow = ClaimableJobWorkflow.safeParse(requested);
+
+	if (!workflow.success) {
+		return {
+			status: 422,
+			body: { message: "Unknown or unclaimable workflow" },
+		};
 	}
 
 	const parsed = CreateJobClaimRequest.safeParse(body);
 
 	if (!parsed.success) {
-		return { status: 422, body: { message: parsed.error.message } };
+		return { status: 400, body: { message: parsed.error.message } };
+	}
+
+	// Python's fixture answers a second claim with a 404, the same status it uses
+	// for "no job available" — a runner cannot tell the two apart and does not
+	// need to. Asking for a workflow this fixture's job does not run is the same
+	// answer for the same reason.
+	if (state.acquired || workflow.data !== state.job.workflow) {
+		return notFound("No job available");
 	}
 
 	const { steps, ...claim } = parsed.data;
@@ -135,21 +185,11 @@ function handleClaim(state: JobsApiState, body: unknown): JobsApiResponse {
 /**
  * Heartbeat.
  *
- * **A refusal is the cancellation channel.** A job key stops authenticating the
- * moment its job reaches a terminal state, so a cancelled job's next ping is a
- * 401 naming the state rather than a 200 carrying a flag — `JobPing` has no
- * `cancelled` field and deliberately never will, because a flag would have to be
- * readable by a credential the same transition revokes. This check sits *after*
- * the server's key comparison, which is what makes naming the state safe.
+ * A terminal job never reaches here: its key stops authenticating first, and
+ * that refusal is the cancellation channel. See {@link TERMINAL_REFUSALS} and
+ * the check at the top of {@link handleJobsApiRequest}.
  */
 function handlePing(state: JobsApiState): JobsApiResponse {
-	if (isJobStateTerminal(state.job.state)) {
-		return {
-			status: 401,
-			body: { message: `Job is ${state.job.state}.` },
-		};
-	}
-
 	const pingedAt = state.now();
 
 	state.job.pingedAt = pingedAt;
@@ -159,11 +199,22 @@ function handlePing(state: JobsApiState): JobsApiResponse {
 	return { status: 200, body: ping };
 }
 
+/**
+ * Stamp a start time on one of the job's steps.
+ *
+ * Starting a step twice is a **conflict**, not a no-op, matching
+ * `handleStartJobStep`: progress is derived from how many steps have started, so
+ * a silent restamp would move a job's progress without moving its work.
+ */
 function handleStartStep(state: JobsApiState, stepId: string): JobsApiResponse {
 	const step = state.job.steps?.find((candidate) => candidate.id === stepId);
 
 	if (!step) {
 		return notFound(`No step ${stepId}`);
+	}
+
+	if (step.startedAt !== null) {
+		return conflict("Step already started");
 	}
 
 	step.startedAt = state.now();
@@ -179,6 +230,14 @@ function handleStartStep(state: JobsApiState, stepId: string): JobsApiResponse {
 	return { status: 200, body: started };
 }
 
+/**
+ * Mark the job succeeded.
+ *
+ * The conflict below is unreachable through a credential — finishing revokes the
+ * key, so a second finish is refused as a 401 before it arrives here — and is
+ * kept because production keeps it, where it is reachable as a race between the
+ * guard's read and the transaction's lock.
+ */
 function handleFinish(state: JobsApiState): JobsApiResponse {
 	if (isJobStateTerminal(state.job.state)) {
 		return conflict(`Job is already ${state.job.state}.`);
@@ -255,7 +314,24 @@ function handleFinalize(
 
 		state.finalizeCalls.push({ resource: "sample", id, request: parsed.data });
 
-		const updated = { ...sample, quality: parsed.data.quality };
+		const updated: WorkflowSample = {
+			...sample,
+			quality: parsed.data.quality,
+			// The route records each manifest entry as a `sample_reads` row, so the
+			// next `GET /samples/{id}` serves the keys the workflow just declared.
+			// Leaving the row's `reads` alone would make the fixture's read path
+			// unreachable from its own write path. Size is read back from storage by
+			// the real route; zero stands in for a fixture that wrote no bytes.
+			reads: parsed.data.files.map((file, index) => ({
+				id: index + 1,
+				name: file.name,
+				size: 0,
+				storageKey: file.storageKey,
+			})),
+			// Derived from the reads rather than stored, the same way `getSample`
+			// derives it.
+			paired: parsed.data.files.length === 2,
+		};
 
 		state.samples.set(id, updated);
 
@@ -334,10 +410,29 @@ const FINALIZABLE = new Set(["samples", "subtractions", "analyses"]);
  */
 export function handleJobsApiRequest(
 	state: JobsApiState,
-	{ method, path, body }: JobsApiRequest,
+	{ method, path, searchParams, body }: JobsApiRequest,
 ): JobsApiResponse {
 	const parts = segments(path);
 	const [head, second, third, fourth, fifth] = parts;
+
+	if (method === "POST" && head === "jobs" && second === "claim") {
+		return handleClaim(state, searchParams?.get("workflow") ?? null, body);
+	}
+
+	// **A terminal job's key stops authenticating, on every route.** The real
+	// service refuses it in `requireJobRequest`, which is the floor under every
+	// handler — not in the ping handler, which is only where a run notices. A
+	// fixture that checked it on the ping alone would serve reads, step starts
+	// and finalize calls to a cancelled job that production refuses.
+	//
+	// It sits behind the server's key comparison and after the claim, which is
+	// what makes naming the state safe: only a caller already holding this job's
+	// key reaches it, and the claim is where the key is minted.
+	const refusal = TERMINAL_REFUSALS[state.job.state];
+
+	if (refusal) {
+		return { status: 401, body: { message: refusal } };
+	}
 
 	if (head === "settings" && parts.length === 1 && method === "GET") {
 		return { status: 200, body: state.settings };
@@ -359,10 +454,6 @@ export function handleJobsApiRequest(
 	}
 
 	if (head === "jobs") {
-		if (method === "POST" && second === "claim") {
-			return handleClaim(state, body);
-		}
-
 		const jobId = parseId(second);
 
 		if (jobId === null) {

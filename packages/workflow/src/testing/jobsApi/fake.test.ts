@@ -1,11 +1,20 @@
-import { CacheRegistered, WorkflowSubtraction } from "@virtool/contracts";
+import {
+	CacheRegistered,
+	WorkflowSample,
+	WorkflowSubtraction,
+} from "@virtool/contracts";
 import { describe, expect, it } from "vitest";
 import {
 	ConflictError,
 	NotFoundError,
 	UnauthorizedError,
 } from "../../client/errors";
-import { createFakeNewSubtraction, createFakeSample } from "../builders";
+import {
+	createFakeNewSample,
+	createFakeNewSubtraction,
+	createFakeQuality,
+	createFakeSample,
+} from "../builders";
 import { createFakeJobsApiClient } from "./fake";
 import { createJobsApiState } from "./state";
 
@@ -53,9 +62,30 @@ describe("the lifecycle, without a socket", () => {
 			NotFoundError,
 		);
 
+		await client.startStep("prepare");
+
+		// Progress is derived from how many steps have started, so a restamp would
+		// move a job's progress without moving its work.
+		await expect(client.startStep("prepare")).rejects.toThrow(ConflictError);
+		expect(state.stepStartUpdates).toEqual(["prepare"]);
+	});
+
+	// Finishing is a terminal transition, so it revokes the key that made it. The
+	// second call is refused as a credential, exactly as the real service refuses
+	// it in `requireJobRequest` — not as a 409 from a handler it never reaches.
+	it("refuses every call once the job has finished", async () => {
+		const state = createJobsApiState();
+		const client = createFakeJobsApiClient(state);
+
 		await client.finish();
 
-		await expect(client.finish()).rejects.toThrow(ConflictError);
+		expect(state.job.state).toBe("succeeded");
+
+		await expect(client.finish()).rejects.toThrow(UnauthorizedError);
+		await expect(client.getJob()).rejects.toThrow("Job has succeeded.");
+		await expect(client.startStep("prepare")).rejects.toThrow(
+			UnauthorizedError,
+		);
 	});
 
 	it("abandons a call whose signal has already aborted", async () => {
@@ -130,6 +160,51 @@ describe("recorded calls", () => {
 
 		expect(second.created).toBe(false);
 		expect(second.storageKey).toBe(registered.storageKey);
+	});
+
+	// The read path has to be reachable from the write path: a workflow that
+	// finalizes a sample and reads it back gets the keys it just declared, the
+	// way the real route serves the `sample_reads` rows it just inserted.
+	it("records a finalized sample's reads on the row it serves back", async () => {
+		const sample = createFakeNewSample();
+
+		const state = createJobsApiState({
+			samples: new Map([[sample.id, sample]]),
+		});
+
+		const client = createFakeJobsApiClient(state);
+
+		const files = [
+			{
+				kind: "sampleRead" as const,
+				name: "reads_1.fq.gz",
+				storageKey: `samples/${sample.id}/abc`,
+			},
+			{
+				kind: "sampleRead" as const,
+				name: "reads_2.fq.gz",
+				storageKey: `samples/${sample.id}/def`,
+			},
+		];
+
+		await client.request({
+			method: "PATCH",
+			path: `/samples/${sample.id}`,
+			body: { quality: createFakeQuality(), files },
+			schema: WorkflowSample,
+		});
+
+		const read = await client.request({
+			method: "GET",
+			path: `/samples/${sample.id}`,
+			schema: WorkflowSample,
+		});
+
+		expect(read.paired).toBe(true);
+		expect(read.quality).not.toBeNull();
+		expect(read.reads.map((entry) => entry.storageKey)).toEqual(
+			files.map((file) => file.storageKey),
+		);
 	});
 
 	it("refuses to finalize a resource it does not hold", async () => {

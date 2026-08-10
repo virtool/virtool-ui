@@ -115,6 +115,7 @@ export async function startJobsApiTestServer(
 		const { status, body } = handleJobsApiRequest(state, {
 			method: request.method,
 			path: request.path,
+			searchParams: request.searchParams,
 			body: request.json,
 		});
 

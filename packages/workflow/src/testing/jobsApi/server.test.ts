@@ -143,7 +143,45 @@ describe("the lifecycle, end to end", () => {
 		).resolves.toBeNull();
 	});
 
-	it("records finish and refuses a second one", async () => {
+	// Finishing is a terminal transition, so it revokes the key that made it.
+	// Every later call is refused as a credential — the way `requireJobRequest`
+	// refuses one — rather than reaching a handler that answers 409.
+	// Handing a `create_subtraction` job to a runner asking for `nuvs` would let a
+	// test pass with a claim configuration the real service answers 404 to, which
+	// in production is a pod polling until its timeout.
+	it("answers a claim for another workflow the way no-job-available is answered", async () => {
+		const { server } = await setup();
+
+		await expect(
+			claimJob({
+				baseUrl: server.baseUrl,
+				workflow: "nuvs",
+				request: CLAIM_REQUEST,
+				logger: createRecordingLogger().logger,
+				signal: AbortSignal.timeout(300),
+				pollIntervalMs: 20,
+			}),
+		).resolves.toBeNull();
+	});
+
+	// `build_index` parses as a job workflow — rows exist — but nothing creates
+	// one any more, so the claim refuses it rather than hanging.
+	it("answers a claim for an unclaimable workflow with a 422", async () => {
+		const { server } = await setup();
+
+		const response = await fetch(
+			`${server.baseUrl}/jobs/claim?workflow=build_index`,
+			{
+				method: "POST",
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify(CLAIM_REQUEST),
+			},
+		);
+
+		expect(response.status).toBe(422);
+	});
+
+	it("records finish and revokes the key it was made with", async () => {
 		const { state, server } = await setup();
 		const client = connect(state, server.baseUrl);
 
@@ -152,7 +190,8 @@ describe("the lifecycle, end to end", () => {
 		expect(state.finishCalled).toBe(true);
 		expect(state.job.state).toBe("succeeded");
 
-		await expect(client.finish()).rejects.toThrow(ConflictError);
+		await expect(client.finish()).rejects.toThrow(UnauthorizedError);
+		await expect(client.getJob()).rejects.toThrow("Job has succeeded.");
 	});
 
 	it("answers an unknown step id with a 404", async () => {
@@ -163,6 +202,18 @@ describe("the lifecycle, end to end", () => {
 			"No step no_such_step",
 		);
 		expect(state.stepStartUpdates).toEqual([]);
+	});
+
+	// Progress is derived from how many steps have started, so a silent restamp
+	// would move a job's progress without moving its work.
+	it("answers a second start of the same step with a 409", async () => {
+		const { state, server } = await setup();
+		const client = connect(state, server.baseUrl);
+
+		await client.startStep("prepare");
+
+		await expect(client.startStep("prepare")).rejects.toThrow(ConflictError);
+		expect(state.stepStartUpdates).toEqual(["prepare"]);
 	});
 });
 
@@ -301,6 +352,34 @@ describe("authentication", () => {
 		});
 
 		expect(response.status).toBe(401);
+	});
+
+	// The real guard is the floor under *every* handler, so a terminal job's key
+	// stops working on the metadata reads and the finalize calls too — not only
+	// on the ping, which is merely where a run notices.
+	it("refuses a terminal job's key on every route, naming the state", async () => {
+		const sample = createFakeSample();
+
+		const { state, server } = await setup({
+			samples: new Map([[sample.id, sample]]),
+		});
+
+		const client = connect(state, server.baseUrl);
+
+		state.job.state = "failed";
+
+		await expect(client.getJob()).rejects.toThrow(UnauthorizedError);
+		await expect(client.startStep("prepare")).rejects.toThrow(
+			"Job has failed.",
+		);
+		await expect(
+			client.request({ method: "GET", path: `/samples/${sample.id}` }),
+		).rejects.toThrow("Job has failed.");
+		await expect(
+			client.request({ method: "GET", path: "/settings" }),
+		).rejects.toThrow("Job has failed.");
+
+		expect(state.stepStartUpdates).toEqual([]);
 	});
 
 	// The key comes back *from* the claim, so there is nothing to authenticate
