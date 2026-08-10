@@ -674,8 +674,9 @@ import them straight from the package.
 `data.ts` imports those types from the package and components import the
 same names straight from `@virtool/contracts` — no feature `types.ts`
 re-export (`samples/types.ts` is the worked example, keeping only its
-genuinely client-only shapes; `references/`, `indexes/` and `jobs/` have no
-`types.ts` left at all, because every shape they had was a wire shape). A
+genuinely client-only shapes; `references/`, `indexes/`, `jobs/` and
+`labels/` have no `types.ts` left at all, because every shape they had was
+a wire shape). A
 client `types.ts` must never import a shape from `@virtool/data` — the Biome
 override rejects it, and it would point the client at a module the server
 does not own the shape of. `data.ts` still owns what only it uses: its
