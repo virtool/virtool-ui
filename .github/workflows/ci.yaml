@@ -49,10 +49,18 @@ jobs:
                   # This file is in the filter so that a change to the
                   # pathoscope jobs themselves is still gated by them. Neither
                   # job uses ./.github/actions/setup, so that action is not.
+                  #
+                  # `.dockerignore` is: build-pathoscope builds with
+                  # `context: .`, so a rule there decides what the Dockerfile's
+                  # `COPY packages/pathoscope-core .` can see. It already
+                  # carries `**/target` for that crate specifically, and a rule
+                  # that excluded the crate would fail the build on main with
+                  # nothing having caught it on the PR.
                   filters: |
                       pathoscope:
                         - 'packages/pathoscope-core/**'
                         - 'apps/workflow-pathoscope/**'
+                        - '.dockerignore'
                         - '.github/workflows/ci.yaml'
 
     # -------------------------------------------------------------------------
