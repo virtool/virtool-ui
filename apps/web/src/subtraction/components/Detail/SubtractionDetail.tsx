@@ -1,15 +1,22 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import { toGcContent } from "@app/format";
+import Alert from "@base/Alert";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
+import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
 import ViewHeader from "@base/ViewHeader";
 import ViewHeaderIcons from "@base/ViewHeaderIcons";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import { useFetchJob } from "@jobs/queries";
 import { useFetchSubtraction } from "@subtraction/queries";
-import { getSubtractionFastaName } from "@subtraction/utils";
+import {
+	getSubtractionFastaName,
+	isJobStateUnsuccessful,
+} from "@subtraction/utils";
 import type { NucleotideComposition } from "@virtool/contracts";
+import { TriangleAlert } from "lucide-react";
 import { SubtractionAttribution } from "../Attribution";
 import DeleteSubtraction from "./DeleteSubtraction";
 import EditSubtraction from "./EditSubtraction";
@@ -34,6 +41,17 @@ export default function SubtractionDetail() {
 	const { hasPermission: canModify } =
 		useCheckAdminRoleOrPermission("modify_subtraction");
 
+	// A create job that fails writes nothing to the subtraction, so no
+	// `subtractions` frame announces it. The job is followed directly instead, as
+	// the list rows do, so the view flips without a reload. The seed needs a
+	// user, and a job whose creator was removed has none.
+	const job = data?.job ?? null;
+	const { data: fetchedJob } = useFetchJob(
+		job?.id ?? Number.NaN,
+		job?.user ? { ...job, user: job.user } : undefined,
+	);
+	const jobState = fetchedJob?.state ?? job?.state;
+
 	if (isError) {
 		return <NotFound />;
 	}
@@ -43,6 +61,43 @@ export default function SubtractionDetail() {
 	}
 
 	if (!data.ready || !data.gc) {
+		if (job && isJobStateUnsuccessful(jobState)) {
+			return (
+				<>
+					<ViewHeader title={data.name}>
+						<ViewHeaderTitle>
+							{data.name}
+							{canModify && (
+								<ViewHeaderIcons>
+									<DeleteSubtraction subtraction={data} />
+								</ViewHeaderIcons>
+							)}
+						</ViewHeaderTitle>
+						{data.user ? (
+							<SubtractionAttribution
+								handle={data.user.handle}
+								time={data.createdAt}
+							/>
+						) : null}
+					</ViewHeader>
+					<Alert color="red" icon={TriangleAlert} level>
+						<span>
+							The create job{" "}
+							{jobState === "cancelled" ? "was cancelled" : "failed"}. This
+							subtraction can't be used and should be deleted.
+						</span>
+						<Link
+							className="ml-auto whitespace-nowrap text-red-800 underline"
+							to="/jobs/$jobId"
+							params={{ jobId: String(job.id) }}
+						>
+							View job
+						</Link>
+					</Alert>
+				</>
+			);
+		}
+
 		return <LoadingPlaceholder message="Subtraction is still being imported" />;
 	}
 

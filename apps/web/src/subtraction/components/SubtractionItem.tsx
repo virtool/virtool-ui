@@ -2,6 +2,7 @@ import BoxGroupSection from "@base/BoxGroupSection";
 import Link from "@base/Link";
 import ProgressCircle from "@base/ProgressCircle";
 import { useFetchJob } from "@jobs/queries";
+import { isJobStateUnsuccessful } from "@subtraction/utils";
 import type { SubtractionMinimal } from "@virtool/contracts";
 import { SubtractionAttribution } from "./Attribution";
 
@@ -23,6 +24,8 @@ export function SubtractionItem({
 		job?.user ? { ...job, user: job.user } : undefined,
 	);
 
+	const state = fetchedJob?.state ?? job?.state;
+
 	return (
 		<BoxGroupSection as="li" className="grid grid-cols-5 items-center">
 			<Link
@@ -37,9 +40,12 @@ export function SubtractionItem({
 			</div>
 			{!ready && job && (
 				<span className="flex items-center justify-end gap-1 font-medium">
+					{isJobStateUnsuccessful(state) && (
+						<span className="capitalize">{state}</span>
+					)}
 					<ProgressCircle
 						progress={fetchedJob?.progress ?? job.progress}
-						state={fetchedJob?.state ?? job.state}
+						state={state}
 					/>
 				</span>
 			)}
