@@ -1,9 +1,9 @@
 import {
-	Job,
 	JobClaimed,
 	JobStepStarted,
 	WorkflowAnalysis,
 	WorkflowIndex,
+	WorkflowJob,
 	WorkflowReference,
 	WorkflowSample,
 	WorkflowSettings,
@@ -143,9 +143,6 @@ describe("the lifecycle, end to end", () => {
 		).resolves.toBeNull();
 	});
 
-	// Finishing is a terminal transition, so it revokes the key that made it.
-	// Every later call is refused as a credential — the way `requireJobRequest`
-	// refuses one — rather than reaching a handler that answers 409.
 	// Handing a `create_subtraction` job to a runner asking for `nuvs` would let a
 	// test pass with a claim configuration the real service answers 404 to, which
 	// in production is a pod polling until its timeout.
@@ -181,6 +178,9 @@ describe("the lifecycle, end to end", () => {
 		expect(response.status).toBe(422);
 	});
 
+	// Finishing is a terminal transition, so it revokes the key that made it.
+	// Every later call is refused as a credential — the way `requireJobRequest`
+	// refuses one — rather than reaching a handler that answers 409.
 	it("records finish and revokes the key it was made with", async () => {
 		const { state, server } = await setup();
 		const client = connect(state, server.baseUrl);
@@ -460,7 +460,7 @@ describe("failure injection", () => {
 			method: "GET",
 			path: `/jobs/${state.job.id}`,
 			retries: 1,
-			schema: Job,
+			schema: WorkflowJob,
 		});
 
 		expect(job.id).toBe(state.job.id);

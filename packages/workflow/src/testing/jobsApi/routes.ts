@@ -23,11 +23,11 @@ import {
 	FinalizeSampleRequest,
 	FinalizeSubtractionRequest,
 	isJobStateTerminal,
-	type Job,
 	type JobClaimed,
 	type JobPing,
 	type JobStepStarted,
 	RegisterCacheRequest,
+	type WorkflowJob,
 	type WorkflowSample,
 } from "@virtool/contracts";
 import { cacheKey } from "@virtool/storage";
@@ -108,7 +108,7 @@ function parseId(segment: string | undefined): number | null {
  *
  * A copy, so a caller mutating what it read cannot reach back into the fixture.
  */
-function readJob(state: JobsApiState): Job {
+function readJob(state: JobsApiState): WorkflowJob {
 	return {
 		...state.job,
 		steps: state.job.steps?.map((step) => ({ ...step })) ?? null,

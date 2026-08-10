@@ -11,10 +11,10 @@ import type {
 	FinalizeAnalysisRequest,
 	FinalizeSampleRequest,
 	FinalizeSubtractionRequest,
-	Job,
 	RegisterCacheRequest,
 	WorkflowAnalysis,
 	WorkflowIndex,
+	WorkflowJob,
 	WorkflowReference,
 	WorkflowSample,
 	WorkflowSettings,
@@ -32,7 +32,7 @@ export type FinalizeCall =
 /** Everything the jobs API harness knows and everything it records. */
 export type JobsApiState = {
 	/** The one job this fixture serves. Flip `state` to drive cancellation. */
-	job: Job;
+	job: WorkflowJob;
 
 	/** The runner key `POST /jobs/claim` hands out and every call authenticates with. */
 	key: string;
