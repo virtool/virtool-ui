@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { SearchResult } from "./search";
-import type { UserNested } from "./users";
+import { UserNested } from "./users";
 
 /** A job's lifecycle state. Shared by every resource that embeds a job. */
 export const JobState = z.enum([
@@ -253,31 +253,39 @@ export type JobMinimal = {
 };
 
 /**
- * A job as the SPA's detail endpoint publishes it.
+ * A job as a boundary publishes it — the SPA's detail endpoint and the jobs
+ * API's lifecycle routes alike.
  *
- * `pingedAt` is deliberately absent: a heartbeat is a fact about a runner, and
- * no view shows it. The jobs API publishes its own narrower shape to workflow
- * runners — see `WorkflowJob` — which drops `finishedAt` for the mirror-image
- * reason.
+ * **One shape, not one per audience.** Don't narrow it into a runner-facing
+ * half and an SPA-facing half: both would be built from the same record, a
+ * field one audience does not read costs it nothing, and zod strips what a
+ * schema does not name, so an added field cannot break an older runner.
+ *
+ * A schema rather than a plain type because the jobs API parses on the way out
+ * and the workflow runtime parses on the way in. The SPA parses nothing and
+ * imports the inferred type.
  */
-export type Job = {
+export const Job = z.object({
 	/**
 	 * The workflow's arguments, recomposed from the resources that reference the
-	 * job rather than read from a column. Every value is an id, stringified.
+	 * job rather than read from a column — `jobs` has no `args`. Every value is
+	 * an id, stringified.
 	 */
-	args: Record<string, string>;
+	args: z.record(z.string(), z.string()),
 
-	claim: JobClaim | null;
-	claimedAt: Date | null;
-	createdAt: Date;
-	finishedAt: Date | null;
-	id: number;
-	progress: number;
-	state: JobState;
-	steps: JobStep[] | null;
-	user: UserNested;
-	workflow: JobWorkflow;
-};
+	claim: JobClaim.nullable(),
+	claimedAt: JobTimestamp.nullable(),
+	createdAt: JobTimestamp,
+	finishedAt: JobTimestamp.nullable(),
+	id: z.number().int(),
+	progress: z.number().int(),
+	state: JobState,
+	steps: z.array(JobStep).nullable(),
+	user: UserNested,
+	workflow: JobWorkflow,
+});
+
+export type Job = z.infer<typeof Job>;
 
 /**
  * How many jobs sit in each state, across every workflow.

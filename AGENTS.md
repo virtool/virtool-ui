@@ -65,7 +65,12 @@ This is a **pnpm monorepo**:
   union does not carry is a 500 with a Sentry event naming the row —
   the runtime's client parses with the same schema, so the alternative
   is a `JobsApiError` at a runner that can do nothing about it. Nothing
-  else in the service validates a response. It winds down through `@virtool/service`'s
+  else in the service validates a response. That `Job` is **one shape,
+  not one per audience**: this service, the web app and the runtime all
+  publish and parse the same schema. Don't narrow it into a runner-facing
+  half — both halves would be built from the same record, a field one
+  audience ignores costs it nothing, and zod strips what a schema does
+  not name, so an added field cannot break an older runner. It winds down through `@virtool/service`'s
   `createShutdownController`, with **no hooks registered** — it holds no
   work to hand back — and `/health/ready` reports 503 from the moment
   that flips readiness. See [docs/jobs-api.md](docs/jobs-api.md).
