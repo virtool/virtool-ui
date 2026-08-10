@@ -65,7 +65,12 @@ This is a **pnpm monorepo**:
   union does not carry is a 500 with a Sentry event naming the row —
   the runtime's client parses with the same schema, so the alternative
   is a `JobsApiError` at a runner that can do nothing about it. Nothing
-  else in the service validates a response. It winds down through `@virtool/service`'s
+  else in the service validates a response. That `Job` is **one shape,
+  not one per audience**: this service, the web app and the runtime all
+  publish and parse the same schema. Don't narrow it into a runner-facing
+  half — both halves would be built from the same record, a field one
+  audience ignores costs it nothing, and zod strips what a schema does
+  not name, so an added field cannot break an older runner. It winds down through `@virtool/service`'s
   `createShutdownController`, with **no hooks registered** — it holds no
   work to hand back — and `/health/ready` reports 503 from the moment
   that flips readiness. See [docs/jobs-api.md](docs/jobs-api.md).
@@ -216,6 +221,11 @@ command becomes the only unpinned way to run the suite.
 workspace. Run `cargo` there directly; a `pathoscope-test` CI job gates it.
 Building the crate needs `libclang-dev` installed, because `hts-sys` runs
 bindgen against htslib's headers.
+
+`pathoscope-test` and `build-pathoscope` are the only path-filtered jobs in
+`ci.yaml` — on a pull request they run only when the crate, the workflow app,
+`.dockerignore` or `ci.yaml` changes. Extend the `changes` job's filter in the
+same commit as anything that gives either job a new input.
 
 `pnpm build` builds **every app but `apps/site`**, which is gated by its own
 `site-build` CI job. `pnpm check` and `pnpm format` run biome over `apps` and
@@ -683,9 +693,9 @@ import them straight from the package.
 `data.ts`.** What a server function returns is read by both sides, so
 `data.ts` imports those types from the package and components import the
 same names straight from `@virtool/contracts` — no feature `types.ts`
-re-export (`samples/types.ts` is the worked example, keeping only its
-genuinely client-only shapes; `references/`, `indexes/` and `jobs/` have no
-`types.ts` left at all, because every shape they had was a wire shape). A
+re-export. `samples/types.ts` is the worked example, keeping only the
+shapes that are genuinely client-only; a feature whose every shape is a
+wire shape needs no `types.ts` at all. A
 client `types.ts` must never import a shape from `@virtool/data` — the Biome
 override rejects it, and it would point the client at a module the server
 does not own the shape of. `data.ts` still owns what only it uses: its
@@ -1025,9 +1035,38 @@ Four rules it carries:
   shared with the jobs API; only the hooks and the injected
   `closeListener` are this app's.
 
+A claim is a **lease encoded on `acquired_at`** — live while that column
+is within `TASK_LEASE_SECONDS` (300) of now, renewed every
+`TASK_HEARTBEAT_SECONDS` (60). No lease column and no DDL. The claim,
+lease and completion queries are `packages/data/src/tasks/data.ts`, and
+four rules hold them:
+
+- **Reclaim is folded into the claim**, as a disjunction in one
+  statement, and the whole predicate is repeated as the outer `UPDATE`'s
+  trailing guard — under Read Committed a blocked updater re-evaluates
+  its own `WHERE` and never the subquery that chose the row. Python's
+  `progress = 0` term is deliberately dropped: it excluded exactly the
+  rows a reclaim exists for.
+- **Anything that takes work back off a runner is scoped to a `ts-`
+  `runner_id`**, which `buildRunnerId()` mints. Python never renews
+  `acquired_at`, so its long-running tasks look abandoned; the scope is
+  what stops a reclaim pulling live work out from under it. Never add a
+  flag to widen it.
+- **Every runner write is fenced** on `runner_id` and `complete = false`
+  and returns `false` when it matches nothing; `renewLeases` reports the
+  ids it renewed so a caller can abandon the rest. `failTask` sets
+  `complete` as well as `error`, which Python does not. Every timestamp
+  write is `timezone('utc', clock_timestamp())`, never `now()`.
+- **The data layer publishes every `tasks` frame** — from
+  `updateTaskProgress`, `completeTask` and `failTask` only, never from a
+  claim, release or reclaim, and never from a guarded write that
+  returned `false`. Those three take `Db` rather than `DbOrTx` so a
+  frame cannot precede the commit of the row it describes.
+
 See [docs/tasks.md](docs/tasks.md) for the full config table, the
-`AppContext` contract, the shutdown ordering and its guarantees, and the
-probe and metrics surface.
+`AppContext` contract, the shutdown ordering and its guarantees, the
+probe and metrics surface, and the lease, fencing and frame rules in
+full.
 
 ## Data
 
