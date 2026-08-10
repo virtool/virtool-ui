@@ -311,7 +311,15 @@ On the first SIGTERM or SIGINT, each step awaited before the next:
 5. **Sentry flushes.** `flush()`, never `close()`: `close()` flushes
    *and* disables, so anything raised later in shutdown goes unreported.
 
-No step aborts the ones after it, and each failure is logged on its own.
+No step aborts the ones after it, and each failure is logged on its own —
+a step that hangs included, because the budget is **divided rather than
+pooled**. Every step gets an equal share of the time still left when it
+starts and is abandoned once that share is spent, so one in-flight
+request that will not finish cannot eat the budget and take the pool
+drain and the Sentry flush down with it. An abandoned step is not
+cancelled, so the process may still have to be reaped; what the division
+buys is that everything after it still runs.
+
 `process.exitCode` is then set — `0` only when every step ran, `1` if any
 failed or the backstop fired first — and the loop drains. **Never
 `process.exit()`**, which would force the process down with a pino line

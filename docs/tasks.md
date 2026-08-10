@@ -236,6 +236,16 @@ On the first SIGTERM or SIGINT, each step awaited before the next:
 caught and logged on its own, so a listener that will not close still leaves
 the pool to drain and Sentry to flush.
 
+That covers a step that *hangs* as well as one that throws, because the budget
+is **divided rather than pooled**: every step, each hook included, gets an
+equal share of the time still left when it starts, and is abandoned once that
+share is spent. A step that finishes early hands its remainder on. Awaiting the
+whole sequence against a single deadline instead would let one stuck socket eat
+the budget and take the pool drain and the Sentry flush with it — losing the
+record of the failure exactly when there was one to keep. An abandoned step is
+not cancelled, so the process may still have to be reaped; what the division
+buys is that everything after it still runs.
+
 Then `process.exitCode` is set — `0` only when every step ran, `1` if any of
 them failed or the backstop fired first — and the loop drains. A failed
 shutdown that exited `0` would be indistinguishable from a clean one, and an
