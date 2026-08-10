@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
+	computeJobProgress,
 	fromStoredJobClaim,
 	fromStoredJobStep,
+	isJobStateUnsuccessful,
 	Job,
 	JobClaim,
 	JobStep,
@@ -191,5 +193,48 @@ describe("Job", () => {
 		const parsed = Job.parse({ ...base, pingedAt: "2026-07-31T16:31:00.000Z" });
 
 		expect(parsed).not.toHaveProperty("pingedAt");
+	});
+});
+
+describe("isJobStateUnsuccessful()", () => {
+	it.each(["cancelled", "failed"])("is true for %s", (state) => {
+		expect(isJobStateUnsuccessful(state)).toBe(true);
+	});
+
+	// Narrower than terminal on purpose: a succeeded job produced its resource.
+	it.each(["pending", "running", "succeeded"])("is false for %s", (state) => {
+		expect(isJobStateUnsuccessful(state)).toBe(false);
+	});
+
+	it("is false when the state is missing", () => {
+		expect(isJobStateUnsuccessful(undefined)).toBe(false);
+		expect(isJobStateUnsuccessful(null)).toBe(false);
+	});
+});
+
+describe("computeJobProgress()", () => {
+	function step(id: string, started: boolean): StoredJobStep {
+		return {
+			id,
+			name: id,
+			description: id,
+			started_at: started ? "2026-07-31T16:38:58.852Z" : null,
+		};
+	}
+
+	it.each(["cancelled", "failed", "succeeded"])("is 100 for %s", (state) => {
+		expect(computeJobProgress(state, [step("one", false)])).toBe(100);
+	});
+
+	it("is the floored fraction of started steps while running", () => {
+		const steps = [step("one", true), step("two", false), step("three", false)];
+
+		expect(computeJobProgress("running", steps)).toBe(33);
+	});
+
+	it("is 0 for a pending job, a job with no steps, and a job with none", () => {
+		expect(computeJobProgress("pending", [step("one", true)])).toBe(0);
+		expect(computeJobProgress("running", [])).toBe(0);
+		expect(computeJobProgress(null, null)).toBe(0);
 	});
 });

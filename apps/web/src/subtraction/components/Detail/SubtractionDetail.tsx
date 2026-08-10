@@ -14,9 +14,11 @@ import { useFetchSubtraction } from "@subtraction/queries";
 import {
 	getCreateJobStatus,
 	getSubtractionFastaName,
-	isJobStateUnsuccessful,
 } from "@subtraction/utils";
-import type { NucleotideComposition } from "@virtool/contracts";
+import {
+	isJobStateUnsuccessful,
+	type NucleotideComposition,
+} from "@virtool/contracts";
 import { TriangleAlert } from "lucide-react";
 import { SubtractionAttribution } from "../Attribution";
 import DeleteSubtraction from "./DeleteSubtraction";

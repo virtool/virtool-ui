@@ -26,6 +26,19 @@ export function isJobStateTerminal(state: string): boolean {
 }
 
 /**
+ * Whether a job reached a terminal state without producing anything.
+ *
+ * Deliberately narrower than {@link isJobStateTerminal}: `succeeded` is
+ * terminal and is not this. A subtraction whose create job ends this way is
+ * stuck at `ready: false` with no files, and nothing will ever finish it — the
+ * detail view has to offer deletion in that state, or the row is unreachable
+ * for the rest of its life.
+ */
+export function isJobStateUnsuccessful(state?: string | null): boolean {
+	return state === "cancelled" || state === "failed";
+}
+
+/**
  * A workflow a job can run.
  *
  * This is the job *read* path and carries every member of Python's `Workflow`
@@ -223,6 +236,34 @@ export function fromStoredJobStep(stored: StoredJobStep): JobStep {
 		description: stored.description,
 		startedAt: stored.started_at === null ? null : new Date(stored.started_at),
 	};
+}
+
+/**
+ * How far a job has got, as a percentage.
+ *
+ * Mirror of Python's `compute_progress`: a terminal job is 100%, a running job
+ * is the fraction of its steps that have started, and everything else is 0%.
+ *
+ * Reads the stored step shape rather than the wire one, because every caller
+ * derives this from the `jobs.steps` JSONB column. `state` is a plain `string`
+ * and nullable for the same reason {@link isJobStateTerminal} takes one: the
+ * column is `text`, and a resource read through a left join has no job at all.
+ */
+export function computeJobProgress(
+	state: string | null,
+	steps: StoredJobStep[] | null,
+): number {
+	if (state !== null && isJobStateTerminal(state)) {
+		return 100;
+	}
+
+	if (state !== "running" || !steps || steps.length === 0) {
+		return 0;
+	}
+
+	const started = steps.filter((step) => step.started_at != null).length;
+
+	return Math.floor((started / steps.length) * 100);
 }
 
 /** A job embedded in another resource, e.g. a sample's creation job. */

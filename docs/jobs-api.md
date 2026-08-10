@@ -458,7 +458,8 @@ query parameter is validated against, and `@virtool/workflow`'s
 ### Progress is derived, never stored
 
 There is no `progress` column. A job's progress is the fraction of its
-steps that have started, computed on read by `computeProgress` — terminal
+steps that have started, computed on read by `computeJobProgress` in
+`@virtool/contracts` — terminal
 is 100%, running is `floor(started / total * 100)`, everything else is 0.
 That is what makes starting a step twice a `409` rather than a no-op: a
 silent restamp would move a job's progress without moving its work.

@@ -1,14 +1,15 @@
-import type {
-	JobWorkflow,
-	NucleotideComposition,
-	Subtraction,
-	SubtractionFile,
-	SubtractionJobMinimal,
-	SubtractionMinimal,
-	SubtractionSampleNested,
-	SubtractionSearchResult,
-	SubtractionShortlistItem,
-	SubtractionUpload,
+import {
+	computeJobProgress,
+	type JobWorkflow,
+	type NucleotideComposition,
+	type Subtraction,
+	type SubtractionFile,
+	type SubtractionJobMinimal,
+	type SubtractionMinimal,
+	type SubtractionSampleNested,
+	type SubtractionSearchResult,
+	type SubtractionShortlistItem,
+	type SubtractionUpload,
 } from "@virtool/contracts";
 import type { Logger } from "@virtool/logger";
 import type { StorageBackend } from "@virtool/storage";
@@ -17,7 +18,7 @@ import { and, asc, count, eq, ilike, or } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import type { Db, DbOrTx } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
-import { type JobStep, jobs } from "../db/schema/jobs";
+import { jobs } from "../db/schema/jobs";
 import { legacySampleSubtractions, legacySamples } from "../db/schema/samples";
 import {
 	type SubtractionFileType,
@@ -79,25 +80,6 @@ export class SubtractionNotOwnedError extends AppError {}
 /** Thrown when the upload a subtraction is created from does not exist. */
 export class SubtractionUploadNotFoundError extends AppError {}
 
-// Mirror of the Python `compute_progress` helper: terminal jobs are 100%, a
-// running job is the fraction of its steps that have started, everything else
-// is 0%.
-function computeProgress(
-	state: string | null,
-	steps: JobStep[] | null,
-): number {
-	if (state === "succeeded" || state === "failed" || state === "cancelled") {
-		return 100;
-	}
-
-	if (state !== "running" || !steps || steps.length === 0) {
-		return 0;
-	}
-
-	const started = steps.filter((step) => step.started_at != null).length;
-	return Math.floor((started / steps.length) * 100);
-}
-
 // The Python endpoint escapes LIKE wildcards in the search term so a user's `%`
 // or `_` matches literally rather than acting as a pattern.
 function escapeLike(term: string): string {
@@ -153,7 +135,7 @@ function toMinimal(row: SubtractionResourceRow): SubtractionMinimal {
 			: {
 					id: row.jobId,
 					createdAt: row.jobCreatedAt ?? new Date(),
-					progress: computeProgress(row.jobState, row.jobSteps),
+					progress: computeJobProgress(row.jobState, row.jobSteps),
 					state: row.jobState ?? "pending",
 					user:
 						row.jobUserId == null
