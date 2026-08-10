@@ -332,7 +332,7 @@ here in its own commit:
   progress seam. Lives in `apps/tasks/src/framework/`: it is an execution shell
   rather than persistence, only this process ever runs a task, and it needs zod,
   which `@virtool/data` does not depend on and should not start to. It
-  publishes **no** frames of its own — see below.
+  publishes **no** frames of its own — see below. Its own section follows.
 - **Claim, lease and reclaim** — `acquireTask`, `renewLeases`, `completeTask`,
   `failTask`, `releaseTask`, `releaseRunnerClaims`, `reclaimExpiredLeases`,
   `updateTaskProgress`. These are pure persistence over a table both halves
@@ -347,6 +347,204 @@ the web app's orchestration layer and stays in `apps/web/src/server/<feature>/`,
 unreachable from here. A body's cross-`data` orchestration goes either into
 `@virtool/data` — when it is persistence plus injected external IO — or into
 the handler module itself. Do not add a `service.ts` under `packages/data/`.
+
+## The framework
+
+Three modules under `apps/tasks/src/framework/`:
+
+| Module | Holds |
+| --- | --- |
+| `define.ts` | `defineTask`, `TaskDef`, `TaskHelpers`, `TaskHandlerArgs`, `RegisteredTask`, `TaskRegistry` |
+| `progress.ts` | `createProgressWriter`, `PROGRESS_DEBOUNCE_MS`, `roundHalfToEven`, `createAccumulator` |
+| `run.ts` | `runTask`, `TaskOutcome` |
+
+A body declares a type, a payload schema and its steps, and gets back a payload
+already parsed, an `AbortSignal`, a `runStep`, the injected context and a
+logger. It never touches the `tasks` table, never emits, and never learns which
+runner is executing it.
+
+`defineTask` is identity at run time. It exists for two things: inferring the
+payload type from the schema so neither `run` nor `cleanup` needs an
+annotation, and **erasing** that payload type on the way out so one
+`TaskRegistry` can hold tasks whose payloads have nothing in common. The
+erasure is the reason there is no `any` in the registry type, and it is sound
+because the only caller of `run` is `runTask`, which parses `payload` first and
+passes what the schema produced. A body that reads `ctx` supplies both type
+arguments: `defineTask<typeof payloadSchema, TaskContext>({ ... })`.
+
+### Steps are equal slices of 0–100
+
+`runStep(name, fn)` looks `name` up in the declared `steps` and gives it an
+equal slice of the bar. Entry writes `step = name` and the slice's basis; exit
+writes the slice's end, so a step that reported nothing still advances. Both
+are written **immediately** rather than on the debounce — entering a step is
+the transition a watching user notices. `report(frac)` clamps `frac` into
+`[0, 1]` and maps it into the slice.
+
+A name that is **not** in `steps` — or a task that declares none — still sets
+the column, and its reports map straight onto 0–100. Nothing is written on
+entry or exit for one, because there is no slice to write.
+
+Rounding is **half-to-even**, matching Python's `round`, not `Math.round`.
+`Math.round(62.5)` is 63 and Python's is 62, and Python still runs tasks until
+the cutover finishes; two runners writing different numbers for the same step
+of the same task type is a difference nobody could explain later.
+
+With four steps, entering the third writes 50, and `report(0.5)` inside it
+writes 62 — arithmetically Python's `basis + progress * (1 / n)`, which is a
+match rather than a divergence.
+
+### Progress writes are debounced, monotonic and serialized
+
+`createProgressWriter` coalesces writes on `PROGRESS_DEBOUNCE_MS` (250). A body
+reporting per HMM profile would otherwise cost one `UPDATE` and one `tasks`
+frame per item, and every frame is a refetch in every connected browser. A
+quarter of a second is below what a bar needs to look continuous.
+
+Three properties it holds:
+
+- **Monotonic.** A value below one already recorded is logged at `debug` and
+  dropped. Python's `TaskProgressHandler.set_progress` **raises** on a
+  decrease, which means a rounding wobble or a retried chunk inside a data
+  function destroys an otherwise-healthy reference import. Progress is
+  cosmetic; it does not get to fail a task.
+- **Serialized.** Each write is chained behind the last, so a flush cannot race
+  a debounced write into landing the older value second.
+- **Fenced for good.** A write that matches nothing means the lease expired and
+  another runner owns the task. The writer stops there — no further write, no
+  further frame, no retry.
+
+A write that throws is logged at `warn` and swallowed for the same reason the
+decrease is: a task that did its work must not fail over a bar that did not
+move. A database that is genuinely gone surfaces on the terminal write, which
+goes through the same pool.
+
+`createAccumulator(total, report)` lets a body count items off instead of
+computing a fraction, and **guards `total <= 0`**. Python's
+`AccumulatingProgressHandlerWrapper` divides blind, so a zero-length download
+raises `ZeroDivisionError` out of a progress helper and fails a task that had
+nothing to do.
+
+### The terminal contract
+
+`runTask` returns a `TaskOutcome` and writes at most one terminal status.
+
+| Outcome | When | Row |
+| --- | --- | --- |
+| `completed` | `run` returned, signal clear | `complete = true`, `progress = 100` |
+| `failed` | `run` threw, or the payload failed its schema | `error` set |
+| `aborted` | the signal aborted, whether `run` threw or returned | untouched — the caller releases |
+| `fenced` | a guarded write matched nothing | untouched — another runner owns it |
+
+Progress is flushed before either terminal write, so a bar can never be
+stranded at the value a pending debounce was holding.
+
+An error is recorded as `` `${err.name}: ${err.message}` `` — `String(err)` for
+a non-`Error`. Python writes `f"{type(e)}: {e!s}"`, which puts
+`"<class 'ValueError'>: boom"` in front of a user; the name alone is what
+anyone reading the task list wants.
+
+A payload the schema rejects fails the task **before any handler code runs**,
+with a message beginning `Invalid payload`. `cleanup` does not run for it —
+nothing ran to clean up, and there is no parsed payload to hand it.
+
+Abort **wins over a throw**. A body interrupted mid-shutdown usually throws on
+its way out, and recording that as a permanent failure would burn a task whose
+only problem was the pod going away.
+
+`runTask` does not release, retry or reschedule. What to do with an `aborted`
+or `fenced` outcome is the runner's.
+
+### `cleanup` runs on every outcome but success
+
+Including the one that is easy to miss: a handler that notices
+`signal.aborted` and returns **cleanly**. That path looks exactly like success
+to a `catch`-only implementation and skips the cleanup silently, which is why
+there is a test for it by name.
+
+It does **not** run after a fence. Another runner owns the task and is
+re-running it from step zero; a cleanup here would be tearing down the new
+owner's work.
+
+A throwing `cleanup` is caught and logged and never rethrown. Losing the
+failure that provoked it to a secondary error in the handler meant to tidy up
+after it is how an original cause disappears.
+
+### A reclaimed task re-runs from step zero
+
+The claim query deliberately dropped Python's `progress = 0` filter, so a task
+whose lease expired starts again from the top with whatever partial work the
+previous attempt left in place. Nothing records which steps already ran.
+
+**Every task body must be idempotent.** `taskId` is on `TaskHandlerArgs`
+precisely so a body can key its own idempotency off it, and a `runStep`
+boundary is the natural place to check whether the work is already done.
+
+### The progress seam into `data.ts`
+
+A data function reports progress through an injected callback and never learns
+that a task exists:
+
+```ts
+export async function populateSomething(
+	db: DbOrTx,
+	values: SomethingValues,
+	onProgress?: (percent: number) => Promise<void>,
+): Promise<void>;
+```
+
+- **Optional and trailing**, and deliberately not universal — several task
+  bodies pass nothing.
+- **Percent (0–100)** at the `data.ts` boundary. `runStep`'s `report` takes a
+  **fraction (0–1)**, because it is scaling into a slice. A body bridges the
+  two explicitly: `async (percent) => report(percent / 100)`.
+- **Called with optional-call syntax at every site**: `await onProgress?.(n)`.
+- `data.ts` never imports the framework, never touches the `tasks` table and
+  never emits.
+
+It composes by rescaling. A caller that does 5% of the work itself before
+handing off maps the child's full range into the band it has left:
+
+```ts
+export async function populateImportedReference(
+	db: DbOrTx,
+	values: ImportValues,
+	onProgress?: (percent: number) => Promise<void>,
+): Promise<void> {
+	await createReferenceRow(db, values);
+	await onProgress?.(5);
+
+	await insertOtus(db, values.otus, async (percent) => {
+		await onProgress?.(5 + percent * 0.95);
+	});
+}
+```
+
+And in the body, where the fraction and the percent meet:
+
+```ts
+await helpers.runStep("import_otus", async (report) => {
+	await populateImportedReference(ctx.db, values, async (percent) => {
+		report(percent / 100);
+	});
+});
+```
+
+### Testing the framework
+
+`apps/tasks`'s own Vitest project, against `createTestDatabase()` from
+`@virtool/data/db/test/fixtures` — a real row, a real claim and a real
+`LISTEN`. Two things are asserted rather than assumed:
+
+- **Intermediate progress values**, not just a terminal `progress = 100`. A
+  body that jumps straight to complete passes a terminal-only assertion.
+- **The frames themselves**, collected off `client_events` with a sentinel
+  frame published last so a count of zero means zero rather than "not yet".
+  A row that changed is not evidence a frame went out.
+
+The debounce is exercised by passing `debounceMs` rather than by faking
+timers: a window long enough never to close proves coalescing, and the flush
+before the terminal write proves the last value still lands.
 
 ## Claiming, leases and fencing
 
