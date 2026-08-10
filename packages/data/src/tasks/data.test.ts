@@ -515,6 +515,17 @@ describe("releaseTask", () => {
 
 		expect(await readRow(taskId)).toMatchObject({ runner_id: RUNNER_B });
 	});
+
+	it("never releases a task Python is holding", async () => {
+		// The scope has to hold at the query, not at the caller: a Python-format id
+		// reaching this argument would otherwise hand live work to our fleet.
+		const taskId = await createTask(db, "install_hmms");
+		await holdTask(taskId, "somehost-4242", 10);
+
+		await expect(releaseTask(db, taskId, "somehost-4242")).resolves.toBe(false);
+
+		expect(await readRow(taskId)).toMatchObject({ runner_id: "somehost-4242" });
+	});
 });
 
 describe("releaseRunnerClaims", () => {
@@ -544,6 +555,15 @@ describe("releaseRunnerClaims", () => {
 		await expect(releaseRunnerClaims(db, RUNNER_A)).resolves.toEqual([]);
 
 		expect(await readRow(taskId)).toMatchObject({ runner_id: RUNNER_A });
+	});
+
+	it("never releases the claims of a Python runner", async () => {
+		const taskId = await createTask(db, "install_hmms");
+		await holdTask(taskId, "somehost-4242", 10);
+
+		await expect(releaseRunnerClaims(db, "somehost-4242")).resolves.toEqual([]);
+
+		expect(await readRow(taskId)).toMatchObject({ runner_id: "somehost-4242" });
 	});
 });
 

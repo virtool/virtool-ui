@@ -453,6 +453,10 @@ async function writeHeldTask(
  * rather than letting it sit until the lease expires. Returns `false` when the
  * runner no longer holds the task.
  *
+ * Scoped to {@link RUNNER_ID_PREFIX} like every other query that takes work off
+ * a runner, so the scope holds however the id was obtained rather than only
+ * when it came from {@link buildRunnerId}.
+ *
  * Emits nothing. The task returns to exactly the state a client last saw it
  * in — nothing about the row that any view renders has changed.
  */
@@ -468,6 +472,7 @@ export async function releaseTask(
 			and(
 				eq(tasksTable.id, taskId),
 				eq(tasksTable.runner_id, runnerId),
+				like(tasksTable.runner_id, `${RUNNER_ID_PREFIX}%`),
 				eq(tasksTable.complete, false),
 			),
 		)
@@ -480,8 +485,8 @@ export async function releaseTask(
  * Give up every unfinished claim `runnerId` holds, and report which.
  *
  * The bulk form of {@link releaseTask}, for a runner draining on shutdown or
- * clearing whatever a previous incarnation left behind at startup. Emits
- * nothing, for the same reason.
+ * clearing whatever a previous incarnation left behind at startup. Scoped and
+ * silent for the same reasons.
  */
 export async function releaseRunnerClaims(
 	db: Db,
@@ -491,7 +496,11 @@ export async function releaseRunnerClaims(
 		.update(tasksTable)
 		.set({ acquired_at: null, runner_id: null })
 		.where(
-			and(eq(tasksTable.runner_id, runnerId), eq(tasksTable.complete, false)),
+			and(
+				eq(tasksTable.runner_id, runnerId),
+				like(tasksTable.runner_id, `${RUNNER_ID_PREFIX}%`),
+				eq(tasksTable.complete, false),
+			),
 		)
 		.returning({ id: tasksTable.id });
 
