@@ -64,22 +64,28 @@ export type PathoscopeData = {
 };
 
 /**
- * Read a job argument that must be a positive integer.
+ * Read a job argument naming a resource.
  *
- * The blob is a JSONB column Python wrote, so nothing about it is typed on the
- * way in. A job pointing at no analysis cannot be run, and failing here names
- * the argument rather than producing a 404 from a metadata read.
+ * **Every arg value is a stringified id** — `args` is recomposed by the jobs API
+ * from the resources that reference the job rather than read from a column, and
+ * `Job.args` types it `Record<string, string>`. So this parses rather than
+ * type-checks, and rejects anything `Number` would quietly accept: an empty
+ * string is `0`, and a trailing-garbage id would silently address a different
+ * row.
+ *
+ * A job pointing at no analysis cannot be run, and failing here names the
+ * argument rather than producing a 404 from a metadata read.
  */
-function readIdArg(args: Record<string, unknown>, name: string): number {
-	const value = args[name];
+function readIdArg(args: Record<string, string>, name: string): number {
+	const raw = args[name];
 
-	if (typeof value !== "number" || !Number.isInteger(value) || value <= 0) {
+	if (raw === undefined || !/^[1-9]\d*$/.test(raw)) {
 		throw new Error(
-			`Job argument ${name} must be a positive integer, got ${JSON.stringify(value)}`,
+			`Job argument ${name} must be a positive integer id, got ${JSON.stringify(raw)}`,
 		);
 	}
 
-	return value;
+	return Number(raw);
 }
 
 export async function buildPathoscopeContext({
