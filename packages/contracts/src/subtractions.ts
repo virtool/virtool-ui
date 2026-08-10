@@ -3,13 +3,23 @@ import type { JobState, JobWorkflow } from "./jobs";
 import type { SearchResult } from "./search";
 import type { UserNested } from "./users";
 
-/** A subtraction reduced to the fields embedded in other resources. */
+/**
+ * A subtraction reduced to the fields embedded in other resources.
+ *
+ * `ready` is here rather than on {@link SubtractionMinimal} because every
+ * consumer of this shape has to know it: a subtraction that is still building
+ * cannot be analysed against, so the pickers filter on it and the sample and
+ * analysis reads that embed one show it as pending.
+ */
 export type SubtractionNested = {
 	/** The unique identifier */
 	id: number;
 
 	/** The display name */
 	name: string;
+
+	/** Whether the create job finished and the subtraction can be used */
+	ready: boolean;
 };
 
 /**
@@ -115,9 +125,6 @@ export type SubtractionMinimal = SubtractionNested & {
 
 	nickname: string;
 
-	/** Whether the create job finished and the subtraction can be used */
-	ready: boolean;
-
 	/** The creating user, or null if that account was removed */
 	user: UserNested | null;
 };
@@ -132,11 +139,6 @@ export type Subtraction = SubtractionMinimal & {
 
 	/** Samples that name this subtraction as a default */
 	linkedSamples: SubtractionSampleNested[];
-};
-
-/** A subtraction reduced to the fields the analysis picker needs. */
-export type SubtractionShortlistItem = SubtractionNested & {
-	ready: boolean;
 };
 
 /** A page of subtractions, with a count of those ready to use. */

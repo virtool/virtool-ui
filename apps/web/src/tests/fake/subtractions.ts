@@ -1,12 +1,10 @@
 import { faker } from "@faker-js/faker";
-import type { SubtractionOption } from "@subtraction/types";
 import type {
 	Subtraction,
 	SubtractionFile,
 	SubtractionMinimal,
 	SubtractionNested,
 } from "@virtool/contracts";
-import { pick } from "es-toolkit";
 import { createFakeUserNested } from "./user";
 
 /**
@@ -33,6 +31,7 @@ export function createFakeSubtractionNested(
 	const defaultSubtractionNested = {
 		id: faker.number.int(),
 		name: faker.word.noun({ strategy: "any-length" }),
+		ready: true,
 	};
 
 	return { ...defaultSubtractionNested, ...overrides };
@@ -54,7 +53,6 @@ export function createFakeSubtractionMinimal(
 		},
 		job: null,
 		nickname: faker.word.noun({ strategy: "any-length" }),
-		ready: true,
 		user: createFakeUserNested(),
 	};
 
@@ -74,11 +72,4 @@ export function createFakeSubtraction(
 		gc: gc || { a: 1, c: 1, g: 1, n: 1, t: 1 },
 		linkedSamples: linkedSamples || [],
 	};
-}
-
-/**
- * Create a fake subtraction shortlist
- */
-export function createFakeShortlistSubtraction(): SubtractionOption {
-	return pick(createFakeSubtractionMinimal(), ["id", "name", "ready"]);
 }

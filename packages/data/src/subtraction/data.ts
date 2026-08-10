@@ -6,9 +6,9 @@ import {
 	type SubtractionFile,
 	type SubtractionJobMinimal,
 	type SubtractionMinimal,
+	type SubtractionNested,
 	type SubtractionSampleNested,
 	type SubtractionSearchResult,
-	type SubtractionShortlistItem,
 	type SubtractionUpload,
 } from "@virtool/contracts";
 import type { Logger } from "@virtool/logger";
@@ -221,13 +221,13 @@ export async function findSubtractions(
 	};
 }
 
-// Every non-deleted subtraction, reduced to the fields the selectors need. Each
-// item carries its `ready` flag, so a consumer that wants only ready
-// subtractions (analysis creation) filters client-side rather than the server
-// serving a separate ready-only list.
+// Every non-deleted subtraction, reduced to the embedded shape. Each item
+// carries its `ready` flag, so a consumer that wants only ready subtractions
+// (analysis creation) filters client-side rather than the server serving a
+// separate ready-only list.
 export async function listSubtractionsShortlist(
 	db: Db,
-): Promise<SubtractionShortlistItem[]> {
+): Promise<SubtractionNested[]> {
 	return db
 		.select({
 			id: subtractions.id,
