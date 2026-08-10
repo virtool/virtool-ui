@@ -11,9 +11,8 @@ import { describe, expect, it, onTestFinished, vi } from "vitest";
 import {
 	type CollapseSegment,
 	collapseOtu,
-	createCollapseSummary,
+	createCollapseTally,
 	createSegmentCollapser,
-	createSemaphore,
 	prepareOtuCollapse,
 	writeSegmentFasta,
 } from "./collapse";
@@ -381,44 +380,9 @@ describe("writeSegmentFasta", () => {
 	});
 });
 
-describe("createSemaphore", () => {
-	it("never runs more than the limit concurrently", async () => {
-		const acquire = createSemaphore(2);
-
-		let active = 0;
-		let peak = 0;
-
-		await Promise.all(
-			Array.from({ length: 10 }, () =>
-				acquire(async () => {
-					active += 1;
-					peak = Math.max(peak, active);
-
-					await new Promise((resolve) => setTimeout(resolve, 1));
-
-					active -= 1;
-				}),
-			),
-		);
-
-		expect(peak).toBe(2);
-		expect(active).toBe(0);
-	});
-
-	it("releases its slot when the task throws", async () => {
-		const acquire = createSemaphore(1);
-
-		await expect(
-			acquire(() => Promise.reject(new Error("boom"))),
-		).rejects.toThrow("boom");
-
-		await expect(acquire(() => Promise.resolve("ok"))).resolves.toBe("ok");
-	});
-});
-
-describe("createCollapseSummary", () => {
+describe("createCollapseTally", () => {
 	it("starts at zero", () => {
-		expect(createCollapseSummary()).toEqual({
+		expect(createCollapseTally().summary()).toEqual({
 			isolate_count_before: 0,
 			isolate_count_after: 0,
 			isolate_count_removed: 0,
@@ -426,5 +390,95 @@ describe("createCollapseSummary", () => {
 			otu_count_unchanged: 0,
 			otu_count_skipped: 0,
 		});
+	});
+
+	// `isolate_count_removed` is derived, so it can only be read once every
+	// result has been recorded — which is what the tally makes explicit and the
+	// caller-allocated summary object it replaced did not.
+	it("counts isolates before and after, and the outcomes", async () => {
+		const tally = createCollapseTally();
+		const directory = await tempDir();
+
+		tally.record(
+			await collapseOtu(
+				createOtu([
+					createIsolate("iso_1", [createSequence("seq_1")], true),
+					createIsolate("iso_2", [createSequence("seq_2")]),
+				]),
+				directory,
+				collapseTo("seq_1"),
+			),
+		);
+
+		tally.record(
+			await collapseOtu(
+				createOtu([createIsolate("iso_1", [createSequence("seq_3")], true)]),
+				directory,
+				collapseToSelf,
+			),
+		);
+
+		expect(tally.summary()).toEqual({
+			isolate_count_before: 3,
+			isolate_count_after: 2,
+			isolate_count_removed: 1,
+			otu_count_collapsed: 1,
+			otu_count_unchanged: 1,
+			otu_count_skipped: 0,
+		});
+	});
+});
+
+describe("collapseOtu concurrency", () => {
+	// Each cd-hit-est run is given `-T 1`, so the parallelism is this bound
+	// rather than the tool's.
+	it("runs at most `limit` segments at a time", async () => {
+		let active = 0;
+		let peak = 0;
+
+		const collapseSegment: CollapseSegment = async (
+			_input,
+			_output,
+			sequences,
+		) => {
+			active += 1;
+			peak = Math.max(peak, active);
+
+			await new Promise((resolve) => setTimeout(resolve, 1));
+
+			active -= 1;
+
+			return new Map(sequences.map((sequence) => [sequence.id, sequence.id]));
+		};
+
+		const schema = ["A", "B", "C", "D", "E", "F"].map((name) => ({
+			molecule: null,
+			name,
+			required: false,
+		}));
+
+		const otu = createOtu(
+			[
+				createIsolate(
+					"iso_1",
+					schema.map((item, index) =>
+						createSequence(`seq_${index}`, { segment: item.name }),
+					),
+					true,
+				),
+				createIsolate(
+					"iso_2",
+					schema.map((item, index) =>
+						createSequence(`other_${index}`, { segment: item.name }),
+					),
+				),
+			],
+			schema,
+		);
+
+		await collapseOtu(otu, await tempDir(), collapseSegment, 2);
+
+		expect(peak).toBe(2);
+		expect(active).toBe(0);
 	});
 });

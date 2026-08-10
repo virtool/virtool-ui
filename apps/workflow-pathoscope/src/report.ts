@@ -1,5 +1,5 @@
 /**
- * Reshaping the EM output into the per-sequence report the analysis is built
+ * Reshaping the EM output into the per-reference report the analysis is built
  * from.
  *
  * The port of Python's `write_report`, minus the writing. Python also emitted a
@@ -9,9 +9,9 @@
  * side writes no file at all, which is why `FinalizeAnalysisRequest.files` is
  * allowed to be empty and pathoscope is the reason it is.
  *
- * The EM core hands back eleven parallel arrays plus `refs`. They are zipped into
- * rows, sorted, cut off at the first uninteresting row, and turned into one
- * entry per surviving reference.
+ * The EM core hands back eleven parallel arrays plus `refs`. They are gathered
+ * into one entry per reference, ordered, and cut off at the first uninteresting
+ * one.
  */
 
 import type { PathoscopeEmResults } from "./pathoscopeCore";
@@ -24,13 +24,11 @@ import type { PathoscopeEmResults } from "./pathoscopeCore";
  * noise and keeping them only makes the JSONB blob larger. Ties at the tenth
  * place round however `toFixed` rounds them — Python's `round` breaks them to
  * even and this does not, and nothing depends on which.
+ *
+ * Applied **after** the cutoff, so rounding can never move a reference across
+ * it.
  */
 const PLACES = 10;
-
-/** Round for storage. See {@link PLACES}. */
-function round(value: number): number {
-	return Number(value.toFixed(PLACES));
-}
 
 /**
  * The cutoff below which a reference is uninteresting, if it also has no
@@ -38,7 +36,7 @@ function round(value: number): number {
  */
 const PI_CUTOFF = 0.01;
 
-/** One reference's figures, before and after reassignment. */
+/** One reference's figures, before or after reassignment. */
 export type ReportEntryLevel = {
 	/** The proportion of reads from the entire sample matching this reference */
 	pi: number;
@@ -56,8 +54,11 @@ export type ReportEntryLevel = {
 	reads: number;
 };
 
-/** One reference's entry in the report, keyed by its sequence id. */
+/** One reference's entry in the report. */
 export type ReportEntry = {
+	/** The reference sequence id */
+	id: string;
+
 	/** Figures after expectation maximization reassigned the multi-mapping reads */
 	final: ReportEntryLevel;
 
@@ -65,70 +66,80 @@ export type ReportEntry = {
 	initial: ReportEntryLevel;
 };
 
-/** One reference's figures, gathered from the eleven parallel arrays. */
-type Row = {
-	pi: number;
-	ref: string;
-	initPi: number;
-	bestHitInitial: number;
-	bestHitInitialReads: number;
-	bestHitFinal: number;
-	bestHitFinalReads: number;
-	level1Initial: number;
-	level2Initial: number;
-	level1Final: number;
-	level2Final: number;
-};
-
 /**
- * Zip the eleven parallel arrays into rows, one per reference.
+ * Gather the eleven parallel arrays into one entry per reference.
  *
- * Python zips them and lets a short array truncate the result silently. Here a
- * length mismatch is an error: the arrays are positional, so one short by a
- * single element shifts every figure after it onto the wrong reference, and the
- * report would look entirely plausible.
+ * The arrays are positional, so one short by a single element would shift every
+ * figure after it onto the wrong reference and the report would still look
+ * entirely plausible. Python zips them and lets a short array truncate the
+ * result silently; here it is an error.
  *
  * @throws {Error} when any array is not the same length as `refs`.
  */
-function zipRows(results: PathoscopeEmResults): Row[] {
-	const columns = {
-		pi: results.pi,
-		initPi: results.init_pi,
-		bestHitInitial: results.best_hit_initial,
-		bestHitInitialReads: results.best_hit_initial_reads,
-		bestHitFinal: results.best_hit_final,
-		bestHitFinalReads: results.best_hit_final_reads,
-		level1Initial: results.level_1_initial,
-		level2Initial: results.level_2_initial,
-		level1Final: results.level_1_final,
-		level2Final: results.level_2_final,
-	} as const;
+function gatherEntries(results: PathoscopeEmResults): ReportEntry[] {
+	const {
+		best_hit_final,
+		best_hit_final_reads,
+		best_hit_initial,
+		best_hit_initial_reads,
+		init_pi,
+		level_1_final,
+		level_1_initial,
+		level_2_final,
+		level_2_initial,
+		pi,
+		refs,
+	} = results;
 
-	const expected = results.refs.length;
-
-	for (const [name, values] of Object.entries(columns)) {
-		if (values.length !== expected) {
+	for (const [name, values] of Object.entries(results)) {
+		if (
+			Array.isArray(values) &&
+			name !== "reads" &&
+			values.length !== refs.length
+		) {
 			throw new Error(
-				`Expectation maximization returned ${values.length} ${name} values for ${expected} references`,
+				`Expectation maximization returned ${values.length} ${name} values for ${refs.length} references`,
 			);
 		}
 	}
 
-	return results.refs.map((ref, index) => {
-		const row: Row = { ref } as Row;
+	// Indexed rather than mapped over each array in turn: every read below is
+	// bounds-checked by the loop above, so the non-null assertions the index would
+	// otherwise need are gone.
+	return refs.map((id, index) => ({
+		id,
+		final: {
+			pi: at(pi, index),
+			best: at(best_hit_final, index),
+			high: at(level_1_final, index),
+			low: at(level_2_final, index),
+			reads: at(best_hit_final_reads, index),
+		},
+		initial: {
+			pi: at(init_pi, index),
+			best: at(best_hit_initial, index),
+			high: at(level_1_initial, index),
+			low: at(level_2_initial, index),
+			reads: at(best_hit_initial_reads, index),
+		},
+	}));
+}
 
-		for (const [name, values] of Object.entries(columns)) {
-			// Checked above, so this cannot be undefined — the assertion is what
-			// lets the loop stay a loop rather than eleven repeated lines.
-			row[name as keyof typeof columns] = values[index] as number;
-		}
+function at(values: readonly number[], index: number): number {
+	const value = values[index];
 
-		return row;
-	});
+	// Unreachable: every array was measured against `refs` above. It throws
+	// rather than defaulting because a zero here is a plausible-looking figure
+	// and would be read as a real one.
+	if (value === undefined) {
+		throw new Error(`Expectation maximization returned no value at ${index}`);
+	}
+
+	return value;
 }
 
 /**
- * Order rows by share of reads, descending, breaking ties by reference id.
+ * Order entries by share of reads, descending, breaking ties by reference id.
  *
  * The order is not cosmetic — it decides where the report is cut off, and so
  * which references reach the analysis at all.
@@ -140,82 +151,64 @@ function zipRows(results: PathoscopeEmResults): Row[] {
  * at all — two runs over the same alignment could cut the report in different
  * places. The reference id is the only field here that is unique and stable, so
  * it settles it.
- *
- * Python compares the whole eleven-element tuple, falling through `pi` to `refs`
- * and then through the remaining nine floats. Those further fields are
- * unreachable once `ref` has decided it, so they are not reproduced.
  */
-function compareRows(a: Row, b: Row): number {
+function compareEntries(a: ReportEntry, b: ReportEntry): number {
 	// Descending, so `b` before `a`.
-	if (a.pi !== b.pi) {
-		return b.pi - a.pi;
+	if (a.final.pi !== b.final.pi) {
+		return b.final.pi - a.final.pi;
 	}
 
-	if (a.ref === b.ref) {
+	if (a.id === b.id) {
 		return 0;
 	}
 
-	return a.ref < b.ref ? 1 : -1;
+	return a.id < b.id ? 1 : -1;
 }
 
 /**
- * Whether a row is past the point the report stops at.
+ * Whether an entry is past the point the report stops at.
  *
  * A reference with a negligible share of the reads and no confident hits either
  * way carries no information.
  */
-function isUninteresting(row: Row): boolean {
-	return row.pi < PI_CUTOFF && row.level1Final <= 0 && row.level2Final <= 0;
+function isUninteresting({ final }: ReportEntry): boolean {
+	return final.pi < PI_CUTOFF && final.high <= 0 && final.low <= 0;
+}
+
+function roundLevel(level: ReportEntryLevel): ReportEntryLevel {
+	return {
+		pi: round(level.pi),
+		best: round(level.best),
+		high: round(level.high),
+		low: round(level.low),
+		// The EM core types every read count as an `f64`, so it arrives fractional
+		// and is truncated to a whole read.
+		reads: Math.trunc(level.reads),
+	};
+}
+
+function round(value: number): number {
+	return Number(value.toFixed(PLACES));
 }
 
 /**
  * Build the report from an EM run's results.
  *
- * @returns one entry per surviving reference, keyed by sequence id.
+ * @returns the surviving references, most abundant first. An **ordered list**
+ *   rather than a lookup: Python keyed a dict by sequence id, but nothing here
+ *   addresses an entry by id — the order is the meaning.
  */
-export function buildReport(
-	results: PathoscopeEmResults,
-): Map<string, ReportEntry> {
-	const rows = zipRows(results);
+export function buildReport(results: PathoscopeEmResults): ReportEntry[] {
+	const entries = gatherEntries(results).sort(compareEntries);
 
-	rows.sort(compareRows);
+	// The index of the first uninteresting entry, not a filter. Everything from
+	// there on is dropped however interesting it looks, because the sort has
+	// already put the interesting ones first.
+	const end = entries.findIndex(isUninteresting);
 
-	// The count of leading rows before the first uninteresting one — not a
-	// filter. A row past the cutoff is dropped along with everything after it,
-	// however interesting it looks, because the sort has already put the
-	// interesting ones first.
-	let end = 0;
-
-	for (const row of rows) {
-		if (isUninteresting(row)) {
-			break;
-		}
-
-		end += 1;
-	}
-
-	const report = new Map<string, ReportEntry>();
-
-	for (const row of rows.slice(0, end)) {
-		report.set(row.ref, {
-			final: {
-				pi: round(row.pi),
-				best: round(row.bestHitFinal),
-				high: round(row.level1Final),
-				low: round(row.level2Final),
-				// The EM core types every read count as an `f64`, so it arrives
-				// fractional and is truncated to a whole read.
-				reads: Math.trunc(row.bestHitFinalReads),
-			},
-			initial: {
-				pi: round(row.initPi),
-				best: round(row.bestHitInitial),
-				high: round(row.level1Initial),
-				low: round(row.level2Initial),
-				reads: Math.trunc(row.bestHitInitialReads),
-			},
-		});
-	}
-
-	return report;
+	return (end === -1 ? entries : entries.slice(0, end)).map((entry) => ({
+		id: entry.id,
+		final: roundLevel(entry.final),
+		initial: roundLevel(entry.initial),
+	}));
 }

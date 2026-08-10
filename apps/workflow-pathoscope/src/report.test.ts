@@ -51,7 +51,11 @@ describe("buildReport", () => {
 			]),
 		);
 
-		expect([...report.keys()]).toEqual(["seq_b", "seq_c", "seq_a"]);
+		expect(report.map((entry) => entry.id)).toEqual([
+			"seq_b",
+			"seq_c",
+			"seq_a",
+		]);
 	});
 
 	// `pi` ties routinely — a segmented OTU's isolates share one — and the EM
@@ -66,7 +70,11 @@ describe("buildReport", () => {
 			]),
 		);
 
-		expect([...report.keys()]).toEqual(["seq_c", "seq_b", "seq_a"]);
+		expect(report.map((entry) => entry.id)).toEqual([
+			"seq_c",
+			"seq_b",
+			"seq_a",
+		]);
 	});
 
 	it("orders identically however the input rows are ordered", () => {
@@ -76,8 +84,12 @@ describe("buildReport", () => {
 			{ ref: "seq_c", pi: 0.9 },
 		];
 
-		expect([...buildReport(createResults(rows)).keys()]).toEqual([
-			...buildReport(createResults([...rows].reverse())).keys(),
+		expect([
+			...buildReport(createResults(rows)).map((entry) => entry.id),
+		]).toEqual([
+			...buildReport(createResults([...rows].reverse())).map(
+				(entry) => entry.id,
+			),
 		]);
 	});
 
@@ -92,7 +104,7 @@ describe("buildReport", () => {
 			]),
 		);
 
-		expect([...report.keys()]).toEqual(["seq_a"]);
+		expect(report.map((entry) => entry.id)).toEqual(["seq_a"]);
 	});
 
 	it("keeps a low-pi reference that still has confident hits", () => {
@@ -103,7 +115,7 @@ describe("buildReport", () => {
 			]),
 		);
 
-		expect([...report.keys()]).toEqual(["seq_a", "seq_b"]);
+		expect(report.map((entry) => entry.id)).toEqual(["seq_a", "seq_b"]);
 	});
 
 	it("keeps a reference at the cutoff exactly", () => {
@@ -113,7 +125,7 @@ describe("buildReport", () => {
 			]),
 		);
 
-		expect([...report.keys()]).toEqual(["seq_a"]);
+		expect(report.map((entry) => entry.id)).toEqual(["seq_a"]);
 	});
 
 	it("returns nothing when every reference is uninteresting", () => {
@@ -123,7 +135,7 @@ describe("buildReport", () => {
 			]),
 		);
 
-		expect(report.size).toBe(0);
+		expect(report.length).toBe(0);
 	});
 
 	it("splits each reference's figures into final and initial", () => {
@@ -145,7 +157,8 @@ describe("buildReport", () => {
 			]),
 		);
 
-		expect(report.get("seq_a")).toEqual({
+		expect(report[0]).toEqual({
+			id: "seq_a",
 			final: { pi: 0.75, best: 0.8, high: 3, low: 2, reads: 42 },
 			initial: { pi: 0.5, best: 0.6, high: 1, low: 4, reads: 30 },
 		});
@@ -154,7 +167,7 @@ describe("buildReport", () => {
 	it("rounds to ten decimal places", () => {
 		const report = buildReport(createResults([{ ref: "seq_a", pi: 1 / 3 }]));
 
-		expect(report.get("seq_a")?.final.pi).toBe(0.3333333333);
+		expect(report[0]?.final.pi).toBe(0.3333333333);
 	});
 
 	// The EM core types every read count as an `f64`, so it arrives fractional.
@@ -165,12 +178,12 @@ describe("buildReport", () => {
 			]),
 		);
 
-		expect(report.get("seq_a")?.final.reads).toBe(41);
-		expect(report.get("seq_a")?.initial.reads).toBe(30);
+		expect(report[0]?.final.reads).toBe(41);
+		expect(report[0]?.initial.reads).toBe(30);
 	});
 
 	it("returns nothing for an alignment with no references", () => {
-		expect(buildReport(createResults([])).size).toBe(0);
+		expect(buildReport(createResults([])).length).toBe(0);
 	});
 
 	// The arrays are positional, so one short by a single element shifts every

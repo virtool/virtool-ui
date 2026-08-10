@@ -13,7 +13,7 @@
  * here.
  */
 
-import { basename, join } from "node:path";
+import { basename } from "node:path";
 import {
 	WorkflowAnalysis,
 	WorkflowIndex,
@@ -25,7 +25,7 @@ import {
 	downloadToPath,
 	INDEX_SQLITE_FILE_NAME,
 } from "@virtool/workflow";
-import { sourceIndexPath, subtractionFastaPath } from "./paths";
+import { type PathoscopePaths, workPaths } from "./paths";
 
 /**
  * The minimum alignment score an alignment must reach to be counted.
@@ -95,6 +95,7 @@ export async function buildPathoscopeContext({
 	storage,
 	workPath,
 }: BuildContextInput): Promise<PathoscopeData> {
+	const paths = workPaths(workPath);
 	const analysisId = readIdArg(job.args, "analysis_id");
 
 	const analysis = await client.request({
@@ -137,8 +138,8 @@ export async function buildPathoscopeContext({
 		"resolved analysis metadata",
 	);
 
-	const readPaths = resolveReadPaths(sample, workPath);
-	const indexPath = sourceIndexPath(workPath, index.id);
+	const readPaths = resolveReadPaths(sample, paths);
+	const indexPath = paths.sourceIndex(index.id);
 
 	await Promise.all([
 		downloadReads(storage, sample, readPaths),
@@ -147,7 +148,7 @@ export async function buildPathoscopeContext({
 			downloadSubtractionFasta(
 				storage,
 				subtraction,
-				subtractionFastaPath(workPath, subtraction.id),
+				paths.subtraction(subtraction.id).fasta,
 			),
 		),
 	]);
@@ -165,7 +166,7 @@ export async function buildPathoscopeContext({
 		subtractions: subtractions.map((subtraction) => ({
 			id: subtraction.id,
 			name: subtraction.name,
-			fastaPath: subtractionFastaPath(workPath, subtraction.id),
+			fastaPath: paths.subtraction(subtraction.id).fasta,
 		})),
 	};
 }
@@ -177,11 +178,14 @@ export async function buildPathoscopeContext({
  * files are `reads_1.fq.gz` and `reads_2.fq.gz`, the pairing is by position, and
  * handing bowtie2 the pair the wrong way round is not something it reports.
  */
-function resolveReadPaths(sample: WorkflowSample, workPath: string): string[] {
+function resolveReadPaths(
+	sample: WorkflowSample,
+	paths: PathoscopePaths,
+): string[] {
 	return sample.reads
 		.map((read) => read.name)
 		.sort()
-		.map((name) => join(workPath, "reads", name));
+		.map(paths.read);
 }
 
 async function downloadReads(

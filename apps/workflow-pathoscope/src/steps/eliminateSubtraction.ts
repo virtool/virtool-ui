@@ -1,15 +1,6 @@
 import { copyFile, rename, rm } from "node:fs/promises";
-import { join } from "node:path";
 import { eliminateSubtraction, subtractionProc } from "../pathoscopeCore";
-import {
-	currentFastqPath,
-	isolateBamPath,
-	isolateFastqPath,
-	subtractedBamPath,
-	subtractionIndexPrefix,
-	toSubtractionBamPath,
-	workingIsolateBamPath,
-} from "../paths";
+import { workPaths } from "../paths";
 import type { PathoscopeStep } from "./types";
 
 /**
@@ -25,6 +16,8 @@ export const eliminateSubtractionStep: PathoscopeStep = {
 	description:
 		"Remove reads that map better to a subtraction than to a reference.",
 	async run({ data, logger, proc, runSubprocess, state, workPath }) {
+		const paths = workPaths(workPath);
+
 		if (state.candidateSequenceIds.length === 0) {
 			logger.info("no candidate otus; nothing to subtract");
 
@@ -36,19 +29,19 @@ export const eliminateSubtractionStep: PathoscopeStep = {
 
 			// Renamed rather than copied. The isolate alignments are already what
 			// the reassignment step needs, and they run to gigabytes.
-			await rename(isolateBamPath(workPath), subtractedBamPath(workPath));
+			await rename(paths.isolateBam, paths.subtractedBam);
 
 			return;
 		}
 
-		const currentFastq = currentFastqPath(workPath);
-		const toSubtraction = toSubtractionBamPath(workPath);
+		const currentFastq = paths.currentFastq;
+		const toSubtraction = paths.toSubtractionBam;
 
 		// Copied so the reads bowtie2 wrote with `--al` survive untouched; the
 		// working copy is filtered in place, one subtraction at a time.
-		await copyFile(isolateFastqPath(workPath), currentFastq);
+		await copyFile(paths.isolateFastq, currentFastq);
 
-		let currentBam = isolateBamPath(workPath);
+		let currentBam = paths.isolateBam;
 
 		for (const subtraction of data.subtractions) {
 			const log = logger.child({
@@ -64,7 +57,7 @@ export const eliminateSubtractionStep: PathoscopeStep = {
 				"--no-unal",
 				"-N 0",
 				`-p ${proc}`,
-				`-x ${quote(subtractionIndexPrefix(workPath, subtraction.id))}`,
+				`-x ${quote(paths.subtraction(subtraction.id).indexPrefix)}`,
 				`-U ${currentFastq}`,
 			].join(" ");
 
@@ -79,7 +72,7 @@ export const eliminateSubtractionStep: PathoscopeStep = {
 			const eliminated = await eliminateSubtraction(
 				{
 					runSubprocess,
-					outputPath: join(workPath, "eliminate-subtraction.json"),
+					outputPath: paths.coreResults("eliminate-subtraction"),
 				},
 				{
 					// Read and written in place: the FASTQ carried into the next pass
@@ -88,7 +81,7 @@ export const eliminateSubtractionStep: PathoscopeStep = {
 					outputFastqPath: currentFastq,
 					isolateAlignmentsPath: currentBam,
 					subtractionAlignmentsPath: toSubtraction,
-					outputAlignmentsPath: subtractedBamPath(workPath),
+					outputAlignmentsPath: paths.subtractedBam,
 					proc: subtractionProc(proc),
 				},
 			);
@@ -97,12 +90,9 @@ export const eliminateSubtractionStep: PathoscopeStep = {
 
 			// Moved aside so the next pass can write `subtracted.bam` again, and
 			// becomes that pass's input.
-			await rename(
-				subtractedBamPath(workPath),
-				workingIsolateBamPath(workPath),
-			);
+			await rename(paths.subtractedBam, paths.workingIsolateBam);
 
-			currentBam = workingIsolateBamPath(workPath);
+			currentBam = paths.workingIsolateBam;
 			state.subtractedCount += eliminated;
 
 			log.info(
@@ -111,7 +101,7 @@ export const eliminateSubtractionStep: PathoscopeStep = {
 			);
 		}
 
-		await rename(currentBam, subtractedBamPath(workPath));
+		await rename(currentBam, paths.subtractedBam);
 	},
 };
 

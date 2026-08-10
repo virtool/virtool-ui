@@ -1,9 +1,8 @@
-import { join } from "node:path";
 import type { FinalizeAnalysisRequest, JsonObject } from "@virtool/contracts";
 import type { JobsApiClient } from "@virtool/workflow";
 import { openWorkflowIndex } from "@virtool/workflow";
 import { runExpectationMaximization } from "../pathoscopeCore";
-import { collapsedReferencePath, subtractedBamPath } from "../paths";
+import { workPaths } from "../paths";
 import { buildReport } from "../report";
 import type { PathoscopeStep } from "./types";
 
@@ -25,6 +24,8 @@ export const reassignmentStep: PathoscopeStep = {
 	id: "reassignment",
 	description: "Run the Pathoscope reassignment algorithm.",
 	async run({ client, data, logger, runSubprocess, state, workPath }) {
+		const paths = workPaths(workPath);
+
 		if (state.candidateSequenceIds.length === 0) {
 			logger.info("no candidate otus found; uploading empty result");
 
@@ -38,9 +39,9 @@ export const reassignmentStep: PathoscopeStep = {
 		}
 
 		const results = await runExpectationMaximization(
-			{ runSubprocess, outputPath: join(workPath, "em.json") },
+			{ runSubprocess, outputPath: paths.coreResults("em") },
 			{
-				alignmentPath: subtractedBamPath(workPath),
+				alignmentPath: paths.subtractedBam,
 				pScoreCutoff: data.pScoreCutoff,
 			},
 		);
@@ -49,29 +50,30 @@ export const reassignmentStep: PathoscopeStep = {
 
 		const index = openWorkflowIndex({
 			id: data.index.id,
-			path: collapsedReferencePath(workPath),
+			path: paths.collapsedReference,
 		});
 
 		let hits: JsonObject[];
 
 		try {
-			const otuRefs = await index.getOtuRefsBySequenceIds(report.keys());
+			const otuRefs = await index.getOtuRefsBySequenceIds(
+				report.map((entry) => entry.id),
+			);
 
-			hits = [...report].map(([sequenceId, entry]) => {
-				const otuRef = otuRefs[sequenceId];
+			hits = report.map((entry) => {
+				const otuRef = otuRefs[entry.id];
 
 				// `getOtuRefsBySequenceIds` throws on an id it cannot resolve, so this
 				// is unreachable; it is here because the alternative is a hit with no
 				// OTU, which renders as an unnamed row.
 				if (!otuRef) {
-					throw new Error(`No OTU for sequence ${sequenceId}`);
+					throw new Error(`No OTU for sequence ${entry.id}`);
 				}
 
-				const coverage = results.coverage[sequenceId] ?? [];
+				const coverage = results.coverage[entry.id] ?? [];
 
 				return {
 					...entry,
-					id: sequenceId,
 					otu: { id: otuRef.id, version: otuRef.version },
 					align: coverage,
 					...summarizeCoverage(coverage),

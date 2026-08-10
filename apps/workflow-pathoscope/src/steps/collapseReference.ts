@@ -12,13 +12,11 @@ import {
 	buildCollapsedReferenceCacheParams,
 	getCdHitEstVersion,
 } from "../cacheParams";
-import { collapsedReferenceDir, collapsedReferencePath } from "../paths";
+import { type PathoscopePaths, workPaths } from "../paths";
 import {
-	type CollapseSegment,
 	collapseOtus,
-	createCollapseSummary,
+	createCollapseTally,
 	createSegmentCollapser,
-	createSemaphore,
 	type ReferenceCollapseSummary,
 } from "../reference/collapse";
 import { APP_VERSION } from "../version";
@@ -37,6 +35,7 @@ export const collapseReferenceStep: PathoscopeStep = {
 	description: "Ensure a cd-hit-est collapsed reference index exists locally.",
 	async run(context) {
 		const { data, logger, proc, runSubprocess, workPath } = context;
+		const paths = workPaths(workPath);
 		const cache = cacheFor(context);
 
 		const params = buildCollapsedReferenceCacheParams({
@@ -46,7 +45,7 @@ export const collapseReferenceStep: PathoscopeStep = {
 		});
 
 		const key = deriveCacheKey(params);
-		const targetDir = collapsedReferenceDir(workPath);
+		const targetDir = paths.collapsedReferenceDir;
 		const log = logger.child({ key, indexId: data.index.id });
 
 		// Restored into the work path, so the archive's one top-level entry
@@ -62,9 +61,9 @@ export const collapseReferenceStep: PathoscopeStep = {
 		const summary = await collapseReference({
 			index: data.index,
 			logger: log,
+			paths,
 			proc,
 			runSubprocess,
-			workPath,
 		});
 
 		log.info(summary, "reference collapse complete");
@@ -80,24 +79,24 @@ export const collapseReferenceStep: PathoscopeStep = {
 async function collapseReference({
 	index,
 	logger,
+	paths,
 	proc,
 	runSubprocess,
-	workPath,
 }: {
 	index: { id: number; path: string };
 	logger: Logger;
+	paths: PathoscopePaths;
 	proc: number;
 	runSubprocess: RunSubprocess;
-	workPath: string;
 }): Promise<ReferenceCollapseSummary> {
 	const source = openWorkflowIndex({ id: index.id, path: index.path });
 
 	// Staged outside `collapsed_reference/`, which is archived into the cache
 	// whole — a scratch directory inside it would be cached along with it.
-	const temp = await mkdtemp(join(workPath, "collapse-"));
+	const temp = await mkdtemp(join(paths.root, "collapse-"));
 
 	try {
-		await mkdir(collapsedReferenceDir(workPath), { recursive: true });
+		await mkdir(paths.collapsedReferenceDir, { recursive: true });
 
 		// **Read before collapsing, and deliberately not caught.** Python wrapped
 		// this in a `try/except ValueError` that substituted `None`, so an index
@@ -106,44 +105,35 @@ async function collapseReference({
 		// tell was degraded. Here it fails the step.
 		const reference = await source.getReferenceMetadata();
 
-		const summary = createCollapseSummary();
+		const tally = createCollapseTally();
 
-		// `collapseOtus` is a generator and `createIndexArtifact` consumes it
-		// lazily, so the collapsed reference is never held in memory whole.
+		const collapsed = collapseOtus(
+			source,
+			temp,
+			createSegmentCollapser(runSubprocess),
+			proc,
+		);
+
+		// Consumed lazily by `createIndexArtifact`, so the collapsed reference is
+		// never held in memory whole — the tally rides along on the same pass.
 		await createIndexArtifact(
-			collapsedReferencePath(workPath),
+			paths.collapsedReference,
 			reference,
-			collapseOtus(
-				source,
-				temp,
-				// One cd-hit-est per segment, each given `-T 1`, so the parallelism
-				// is the semaphore's rather than the tool's.
-				withSemaphore(
-					createSemaphore(proc),
-					createSegmentCollapser(runSubprocess),
-				),
-				summary,
-			),
+			(async function* () {
+				for await (const result of collapsed) {
+					tally.record(result);
+
+					yield result.otu;
+				}
+			})(),
 		);
 
-		logger.info(
-			{ path: collapsedReferencePath(workPath) },
-			"wrote collapsed index",
-		);
+		logger.info({ path: paths.collapsedReference }, "wrote collapsed index");
 
-		return summary;
+		return tally.summary();
 	} finally {
 		await rm(temp, { force: true, recursive: true });
 
 		source.close();
 	}
-}
-
-/** Bound how many `cd-hit-est` runs are in flight across every OTU. */
-function withSemaphore(
-	acquire: <T>(run: () => Promise<T>) => Promise<T>,
-	collapseSegment: CollapseSegment,
-): CollapseSegment {
-	return (inputPath, outputPath, sequences) =>
-		acquire(() => collapseSegment(inputPath, outputPath, sequences));
 }

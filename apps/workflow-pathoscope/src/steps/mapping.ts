@@ -1,17 +1,8 @@
 import { mkdir } from "node:fs/promises";
-import { join } from "node:path";
 import { openWorkflowIndex, writeFasta } from "@virtool/workflow";
 import { buildBowtie2Index } from "../mappingIndex";
 import { findCandidateSequenceIds } from "../pathoscopeCore";
-import {
-	collapsedReferencePath,
-	isolateBamPath,
-	isolateFastaPath,
-	isolateFastqPath,
-	isolateIndexPrefix,
-	isolatesDir,
-	referenceIndexPrefix,
-} from "../paths";
+import { workPaths } from "../paths";
 import type { PathoscopeStep } from "./types";
 
 /**
@@ -26,10 +17,12 @@ export const mapDefaultIsolatesStep: PathoscopeStep = {
 	description:
 		"Map sample reads to all default isolates to identify candidate OTUs.",
 	async run({ data, logger, proc, runSubprocess, state, workPath }) {
+		const paths = workPaths(workPath);
+
 		state.candidateSequenceIds = await findCandidateSequenceIds(
-			{ runSubprocess, outputPath: join(workPath, "candidates.json") },
+			{ runSubprocess, outputPath: paths.coreResults("candidates") },
 			{
-				indexPrefix: referenceIndexPrefix(workPath),
+				indexPrefix: paths.referenceIndexPrefix,
 				pScoreCutoff: data.pScoreCutoff,
 				proc,
 				readPaths: data.readPaths,
@@ -55,6 +48,8 @@ export const buildIsolateIndexStep: PathoscopeStep = {
 	description:
 		"Build a mapping index containing all isolates of candidate OTUs.",
 	async run({ data, logger, proc, runSubprocess, state, workPath }) {
+		const paths = workPaths(workPath);
+
 		// `bowtie2-build` exits 1 on an empty FASTA, and every step after this one
 		// short-circuits on the same condition.
 		if (state.candidateSequenceIds.length === 0) {
@@ -65,7 +60,7 @@ export const buildIsolateIndexStep: PathoscopeStep = {
 
 		const index = openWorkflowIndex({
 			id: data.index.id,
-			path: collapsedReferencePath(workPath),
+			path: paths.collapsedReference,
 		});
 
 		try {
@@ -75,12 +70,9 @@ export const buildIsolateIndexStep: PathoscopeStep = {
 
 			const otuIds = new Set(Object.values(otuRefs).map((otuRef) => otuRef.id));
 
-			await mkdir(isolatesDir(workPath), { recursive: true });
+			await mkdir(paths.isolatesDir, { recursive: true });
 
-			await writeFasta(
-				isolateFastaPath(workPath),
-				index.iterOtuSequences(otuIds),
-			);
+			await writeFasta(paths.isolateFasta, index.iterOtuSequences(otuIds));
 
 			logger.info({ otuCount: otuIds.size }, "wrote isolate fasta");
 		} finally {
@@ -89,8 +81,8 @@ export const buildIsolateIndexStep: PathoscopeStep = {
 
 		await buildBowtie2Index(
 			runSubprocess,
-			isolateFastaPath(workPath),
-			isolateIndexPrefix(workPath),
+			paths.isolateFasta,
+			paths.isolateIndexPrefix,
 			proc,
 		);
 	},
@@ -111,6 +103,8 @@ export const mapIsolatesStep: PathoscopeStep = {
 	id: "map_isolates",
 	description: "Map sample reads to the all isolate index.",
 	async run({ data, logger, proc, runSubprocess, state, workPath }) {
+		const paths = workPaths(workPath);
+
 		if (state.candidateSequenceIds.length === 0) {
 			logger.info("no candidate otus; skipping isolate mapping");
 
@@ -130,17 +124,17 @@ export const mapIsolatesStep: PathoscopeStep = {
 			"-N 0",
 			"-L 15",
 			"-k 100",
-			`--al ${isolateFastqPath(workPath)}`,
-			`-x ${isolateIndexPrefix(workPath)}`,
+			`--al ${paths.isolateFastq}`,
+			`-x ${paths.isolateIndexPrefix}`,
 			`-U ${reads}`,
 		].join(" ");
 
-		const samtools = `samtools view -bS - -o ${isolateBamPath(workPath)}`;
+		const samtools = `samtools view -bS - -o ${paths.isolateBam}`;
 
 		await runSubprocess({
 			command: ["bash", "-c", `${bowtie2} | ${samtools}`],
 		});
 
-		logger.info({ path: isolateBamPath(workPath) }, "mapped reads to isolates");
+		logger.info({ path: paths.isolateBam }, "mapped reads to isolates");
 	},
 };

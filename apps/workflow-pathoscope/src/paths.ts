@@ -1,119 +1,142 @@
 /**
- * Every path this workflow writes under its work path.
+ * Every path this workflow reads or writes under its work path.
  *
- * One module, because several of these are shared between steps and a second
- * spelling of one is a file-not-found at best and a stale read at worst. The
- * layout is Python's `fixtures.py` verbatim — a cached mapping index restored
- * from Python's namespace unpacks to the directory names below, so they are part
- * of the cache contract rather than a local convention.
+ * One factory rather than a function per path — Python had a fixture each, which
+ * transliterates into seventeen exports and a `workPath` argument at every call
+ * site. A step resolves them once (`const paths = workPaths(context.workPath)`)
+ * and reads fields from there.
+ *
+ * The layout is Python's `fixtures.py` verbatim, and that is a **contract, not a
+ * convention**: a mapping index restored from the cache namespace shared with
+ * Python unpacks to these directory names.
  */
 
 import { join } from "node:path";
 import { INDEX_SQLITE_FILE_NAME } from "@virtool/workflow";
 
-/** The reference index artifact, as downloaded from object storage. */
-export function sourceIndexPath(workPath: string, indexId: number): string {
-	return join(workPath, "indexes", String(indexId), INDEX_SQLITE_FILE_NAME);
-}
+/** Where one subtraction's genome and its bowtie2 index live. */
+export type SubtractionPaths = {
+	/** The directory archived into the subtraction mapping-index cache */
+	dir: string;
 
-/**
- * The collapsed reference this workflow writes and then reads back.
- *
- * Named `virtool-index-sqlite-v1.sqlite` like the source, not `index.sqlite`:
- * the collapsed file is an artifact of the same format and the filename is what
- * distinguishes it from an incompatible future one before it is opened.
- */
-export function collapsedReferencePath(workPath: string): string {
-	return join(workPath, "collapsed_reference", INDEX_SQLITE_FILE_NAME);
-}
+	/** The gzipped source genome, handed to `bowtie2-build` without decompressing */
+	fasta: string;
 
-/**
- * The directory the collapsed reference lives in.
- *
- * This is what is archived into the cache, so its basename is the archive's
- * single top-level entry and restoring it recreates the path above.
- */
-export function collapsedReferenceDir(workPath: string): string {
-	return join(workPath, "collapsed_reference");
-}
+	/** The bowtie2 index prefix — the shards sit beside it */
+	indexPrefix: string;
+};
 
-/** The bowtie2 index prefix over the collapsed default isolates. */
-export function referenceIndexPrefix(workPath: string): string {
-	return join(workPath, "reference_index", "reference");
-}
+/** Every path one pathoscope run uses. */
+export type PathoscopePaths = {
+	/** The reference index artifact, as downloaded from object storage */
+	sourceIndex: (indexId: number) => string;
 
-/** The gzipped source FASTA a subtraction is downloaded to. */
-export function subtractionFastaPath(
-	workPath: string,
-	subtractionId: number,
-): string {
-	return join(
-		workPath,
-		"subtractions",
-		String(subtractionId),
-		"subtraction.fa.gz",
-	);
-}
+	/** One of the sample's reads files, by the name the row carries */
+	read: (name: string) => string;
 
-export function subtractionIndexesDir(workPath: string): string {
-	return join(workPath, "subtraction_indexes");
-}
+	/**
+	 * The collapsed reference this workflow writes and then reads back.
+	 *
+	 * Named like the source rather than `index.sqlite`: it is an artifact of the
+	 * same format, and the filename is what distinguishes it from an incompatible
+	 * future one before it is opened.
+	 */
+	collapsedReference: string;
 
-export function subtractionIndexDir(
-	workPath: string,
-	subtractionId: number,
-): string {
-	return join(subtractionIndexesDir(workPath), String(subtractionId));
-}
+	/** The directory archived into the collapsed-reference cache */
+	collapsedReferenceDir: string;
 
-/** The bowtie2 index prefix for one subtraction. */
-export function subtractionIndexPrefix(
-	workPath: string,
-	subtractionId: number,
-): string {
-	return join(subtractionIndexDir(workPath, subtractionId), "subtraction");
-}
+	/** The bowtie2 index prefix over the collapsed default isolates */
+	referenceIndexPrefix: string;
 
-export function isolatesDir(workPath: string): string {
-	return join(workPath, "isolates");
-}
+	subtraction: (subtractionId: number) => SubtractionPaths;
 
-/** Every sequence of every candidate OTU. */
-export function isolateFastaPath(workPath: string): string {
-	return join(isolatesDir(workPath), "isolate_index.fa");
-}
+	/** Every sequence of every candidate OTU */
+	isolateFasta: string;
 
-/** The bowtie2 index prefix over {@link isolateFastaPath}. */
-export function isolateIndexPrefix(workPath: string): string {
-	return join(isolatesDir(workPath), "isolates");
-}
+	/** The bowtie2 index prefix over {@link isolateFasta} */
+	isolateIndexPrefix: string;
 
-/** Reads that aligned to an isolate, written by `bowtie2 --al`. */
-export function isolateFastqPath(workPath: string): string {
-	return join(isolatesDir(workPath), "isolate_mapped.fq");
-}
+	/** Reads that aligned to an isolate, written by `bowtie2 --al` */
+	isolateFastq: string;
 
-/** Alignments against the isolate index. */
-export function isolateBamPath(workPath: string): string {
-	return join(isolatesDir(workPath), "to_isolates.bam");
-}
+	/** Alignments against the isolate index */
+	isolateBam: string;
 
-/** The FASTQ carried from one subtraction pass to the next, read and written in place. */
-export function currentFastqPath(workPath: string): string {
-	return join(workPath, "current_fastq.fq");
-}
+	isolatesDir: string;
 
-/** One subtraction pass's alignments, deleted at the end of that pass. */
-export function toSubtractionBamPath(workPath: string): string {
-	return join(workPath, "to_subtraction.bam");
-}
+	/** The FASTQ carried from one subtraction pass to the next, filtered in place */
+	currentFastq: string;
 
-/** The BAM carried from one subtraction pass to the next. */
-export function workingIsolateBamPath(workPath: string): string {
-	return join(workPath, "working_isolate.bam");
-}
+	/** One subtraction pass's alignments, deleted at the end of that pass */
+	toSubtractionBam: string;
 
-/** The alignments left after every subtraction has been eliminated. */
-export function subtractedBamPath(workPath: string): string {
-	return join(workPath, "subtracted.bam");
+	/** The BAM carried from one subtraction pass to the next */
+	workingIsolateBam: string;
+
+	/** The alignments left after every subtraction has been eliminated */
+	subtractedBam: string;
+
+	/** Where each subcommand of `pathoscope-core` writes its JSON results */
+	coreResults: (name: string) => string;
+
+	/** Where cache archives are staged, on the volume the pod is sized for */
+	cacheStaging: string;
+
+	/** The run's work path, for the two places that need it whole */
+	root: string;
+};
+
+export function workPaths(workPath: string): PathoscopePaths {
+	const isolatesDir = join(workPath, "isolates");
+
+	return {
+		root: workPath,
+
+		sourceIndex: (indexId) =>
+			join(workPath, "indexes", String(indexId), INDEX_SQLITE_FILE_NAME),
+
+		read: (name) => join(workPath, "reads", name),
+
+		collapsedReference: join(
+			workPath,
+			"collapsed_reference",
+			INDEX_SQLITE_FILE_NAME,
+		),
+		collapsedReferenceDir: join(workPath, "collapsed_reference"),
+
+		referenceIndexPrefix: join(workPath, "reference_index", "reference"),
+
+		subtraction: (subtractionId) => {
+			const dir = join(workPath, "subtraction_indexes", String(subtractionId));
+
+			return {
+				dir,
+				// Downloaded under `subtractions/`, built under
+				// `subtraction_indexes/` — the index directory is what the cache
+				// archives, and mixing the genome into it would cache the genome too.
+				fasta: join(
+					workPath,
+					"subtractions",
+					String(subtractionId),
+					"subtraction.fa.gz",
+				),
+				indexPrefix: join(dir, "subtraction"),
+			};
+		},
+
+		isolatesDir,
+		isolateFasta: join(isolatesDir, "isolate_index.fa"),
+		isolateIndexPrefix: join(isolatesDir, "isolates"),
+		isolateFastq: join(isolatesDir, "isolate_mapped.fq"),
+		isolateBam: join(isolatesDir, "to_isolates.bam"),
+
+		currentFastq: join(workPath, "current_fastq.fq"),
+		toSubtractionBam: join(workPath, "to_subtraction.bam"),
+		workingIsolateBam: join(workPath, "working_isolate.bam"),
+		subtractedBam: join(workPath, "subtracted.bam"),
+
+		coreResults: (name) => join(workPath, `${name}.json`),
+		cacheStaging: join(workPath, "caches"),
+	};
 }

@@ -4,11 +4,7 @@ import { openWorkflowIndex, writeFasta } from "@virtool/workflow";
 import { cacheFor } from "../cache";
 import { REFERENCE_INDEX_EXTRA_PARAMS } from "../cacheParams";
 import { createMappingIndex } from "../mappingIndex";
-import {
-	collapsedReferencePath,
-	referenceIndexPrefix,
-	subtractionIndexPrefix,
-} from "../paths";
+import { workPaths } from "../paths";
 import { APP_VERSION } from "../version";
 import type { PathoscopeStep } from "./types";
 
@@ -24,6 +20,7 @@ export const createReferenceIndexStep: PathoscopeStep = {
 	description: "Ensure the reference Bowtie2 index exists locally.",
 	async run(context) {
 		const { data, logger, proc, runSubprocess, workPath } = context;
+		const paths = workPaths(workPath);
 
 		// The FASTA is an input to `bowtie2-build` and nothing reads it again, so
 		// it is staged and removed rather than left in the work path.
@@ -32,7 +29,7 @@ export const createReferenceIndexStep: PathoscopeStep = {
 
 		const index = openWorkflowIndex({
 			id: data.index.id,
-			path: collapsedReferencePath(workPath),
+			path: paths.collapsedReference,
 		});
 
 		try {
@@ -48,7 +45,7 @@ export const createReferenceIndexStep: PathoscopeStep = {
 				extraParams: REFERENCE_INDEX_EXTRA_PARAMS,
 				fastaPath,
 				indexKind: "reference_mapping_index",
-				indexPrefix: referenceIndexPrefix(workPath),
+				indexPrefix: paths.referenceIndexPrefix,
 				logger,
 				parentId: data.index.id,
 				proc,
@@ -74,6 +71,7 @@ export const createSubtractionIndexStep: PathoscopeStep = {
 	description: "Ensure subtraction Bowtie2 indexes exist locally.",
 	async run(context) {
 		const { data, logger, proc, runSubprocess, workPath } = context;
+		const paths = workPaths(workPath);
 		const cache = cacheFor(context);
 
 		// Sequentially, not concurrently: `bowtie2-build --threads {proc}` is
@@ -83,7 +81,7 @@ export const createSubtractionIndexStep: PathoscopeStep = {
 				cache,
 				fastaPath: subtraction.fastaPath,
 				indexKind: "subtraction_mapping_index",
-				indexPrefix: subtractionIndexPrefix(workPath, subtraction.id),
+				indexPrefix: paths.subtraction(subtraction.id).indexPrefix,
 				logger,
 				parentId: subtraction.id,
 				proc,

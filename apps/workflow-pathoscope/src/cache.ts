@@ -1,10 +1,10 @@
-import { join } from "node:path";
 import {
 	createWorkflowCache,
 	type WorkflowCache,
 	type WorkflowContext,
 } from "@virtool/workflow";
 import type { PathoscopeData } from "./context";
+import { workPaths } from "./paths";
 import type { PathoscopeState } from "./state";
 
 /**
@@ -25,6 +25,6 @@ export function cacheFor(
 	return createWorkflowCache({
 		client: context.client,
 		storage: context.storage,
-		stagingPath: join(context.workPath, "caches"),
+		stagingPath: workPaths(context.workPath).cacheStaging,
 	});
 }
