@@ -101,7 +101,7 @@ describe("eliminateSubtraction", () => {
 				{ runSubprocess: coreWriting({ subtracted: 17 }), outputPath },
 				{
 					inputFastqPath: "/work/current_fastq.fq",
-					outputFastqPath: "/work/current_fastq.fq",
+					outputFastqPath: "/work/filtered_fastq.fq",
 					isolateAlignmentsPath: "/work/isolates/to_isolates.bam",
 					subtractionAlignmentsPath: "/work/to_subtraction.bam",
 					outputAlignmentsPath: "/work/subtracted.bam",
@@ -121,7 +121,7 @@ describe("eliminateSubtraction", () => {
 			{ runSubprocess, outputPath },
 			{
 				inputFastqPath: "/work/current_fastq.fq",
-				outputFastqPath: "/work/current_fastq.fq",
+				outputFastqPath: "/work/filtered_fastq.fq",
 				isolateAlignmentsPath: "/work/isolates/to_isolates.bam",
 				subtractionAlignmentsPath: "/work/to_subtraction.bam",
 				outputAlignmentsPath: "/work/subtracted.bam",
@@ -141,7 +141,7 @@ describe("eliminateSubtraction", () => {
 			"--input-fastq",
 			"/work/current_fastq.fq",
 			"--output-fastq",
-			"/work/current_fastq.fq",
+			"/work/filtered_fastq.fq",
 			"--proc",
 			"3",
 			"--output",

@@ -38,7 +38,7 @@ export const eliminateSubtractionStep: PathoscopeStep = {
 		const toSubtraction = paths.toSubtractionBam;
 
 		// Copied so the reads bowtie2 wrote with `--al` survive untouched; the
-		// working copy is filtered in place, one subtraction at a time.
+		// working copy is replaced by each subtraction pass in turn.
 		await copyFile(paths.isolateFastq, currentFastq);
 
 		let currentBam = paths.isolateBam;
@@ -75,16 +75,20 @@ export const eliminateSubtractionStep: PathoscopeStep = {
 					outputPath: paths.coreResults("eliminate-subtraction"),
 				},
 				{
-					// Read and written in place: the FASTQ carried into the next pass
-					// is the one this pass filtered.
 					inputFastqPath: currentFastq,
-					outputFastqPath: currentFastq,
+					outputFastqPath: paths.filteredFastq,
 					isolateAlignmentsPath: currentBam,
 					subtractionAlignmentsPath: toSubtraction,
 					outputAlignmentsPath: paths.subtractedBam,
 					proc: subtractionProc(proc),
 				},
 			);
+
+			// The core truncates its output FASTQ before reading its input, so the
+			// filtered reads are staged beside the file they replace. Renamed rather
+			// than copied: same directory, so it is atomic, and the FASTQ runs to
+			// gigabytes.
+			await rename(paths.filteredFastq, currentFastq);
 
 			await rm(toSubtraction, { force: true });
 

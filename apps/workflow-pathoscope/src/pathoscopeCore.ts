@@ -115,8 +115,9 @@ export async function findCandidateSequenceIds(
 /**
  * Drop alignments whose read aligned at least as well to a subtraction.
  *
- * The input and output FASTQ are deliberately the same path — the rolling FASTQ
- * is filtered in place, one subtraction at a time.
+ * The two FASTQ paths must differ. The core creates its output before reading a
+ * byte of its input, so naming one path for both truncates the reads it was
+ * asked to filter and every later subtraction pass sees an empty file.
  *
  * @returns the number of reads eliminated.
  */

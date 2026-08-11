@@ -65,8 +65,18 @@ export type PathoscopePaths = {
 
 	isolatesDir: string;
 
-	/** The FASTQ carried from one subtraction pass to the next, filtered in place */
+	/** The FASTQ carried from one subtraction pass to the next */
 	currentFastq: string;
+
+	/**
+	 * Where one subtraction pass writes its filtered FASTQ.
+	 *
+	 * A sibling of {@link currentFastq} rather than that path itself: the core
+	 * truncates its output before reading a byte of its input, so writing in place
+	 * empties the file it is filtering. Renamed over {@link currentFastq} once the
+	 * pass succeeds.
+	 */
+	filteredFastq: string;
 
 	/** One subtraction pass's alignments, deleted at the end of that pass */
 	toSubtractionBam: string;
@@ -132,6 +142,7 @@ export function workPaths(workPath: string): PathoscopePaths {
 		isolateBam: join(isolatesDir, "to_isolates.bam"),
 
 		currentFastq: join(workPath, "current_fastq.fq"),
+		filteredFastq: join(workPath, "filtered_fastq.fq"),
 		toSubtractionBam: join(workPath, "to_subtraction.bam"),
 		workingIsolateBam: join(workPath, "working_isolate.bam"),
 		subtractedBam: join(workPath, "subtracted.bam"),
