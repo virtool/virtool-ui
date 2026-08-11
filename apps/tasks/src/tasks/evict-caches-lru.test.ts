@@ -228,16 +228,26 @@ describe("evictCachesLruTask", () => {
 
 		const controller = new AbortController();
 
+		let started = 0;
+		let settled = 0;
+
 		// Ten candidates against a concurrency of eight, so the abort raised inside
 		// the first wave's deletes is seen by the workers that go back for the rest.
+		// Each delete takes long enough that one abandoned mid-flight would still be
+		// running when the run reports its outcome.
 		const aborting: StorageBackend = {
 			read: (key) => storage.read(key),
 			write: (key, data) => storage.write(key, data),
 			list: (prefix) => storage.list(prefix),
 			size: (key) => storage.size(key),
 			delete: async (key) => {
+				started++;
 				controller.abort();
+
+				await new Promise((resolve) => setTimeout(resolve, 100));
 				await storage.delete(key);
+
+				settled++;
 			},
 		};
 
@@ -253,6 +263,12 @@ describe("evictCachesLruTask", () => {
 		});
 
 		expect(outcome).toEqual({ status: "aborted" });
+
+		// An abort raised out of one worker must not abandon the deletes its
+		// siblings still have in flight: the run cannot report itself quiesced with
+		// work still moving behind it.
+		expect(started).toBeGreaterThan(0);
+		expect(settled).toBe(started);
 
 		// The row is left exactly as it stands, for the runner to release.
 		expect(await readRow(task.id)).toMatchObject({

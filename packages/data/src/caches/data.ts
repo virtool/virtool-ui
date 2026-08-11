@@ -303,6 +303,13 @@ async function selectEvictionCandidates(
  * ordering already accepts, because the alternative is objects no row names and
  * no eviction can ever reach. The next run selects those same rows, being still
  * the least recently used, and finishes the job.
+ *
+ * An aborting worker **stops rather than throws**, and the abort is raised only
+ * once every worker has settled. Throwing from inside one rejects the `Promise.all`
+ * on the spot and abandons the deletes its siblings still have in flight, which
+ * then run on past the run that reported the abort — the drain would report a
+ * quiesced task with work still moving behind it. Stopping bounds the tail at one
+ * in-flight delete per worker.
  */
 async function deleteCandidateObjects(
 	storage: StorageBackend,
@@ -315,7 +322,9 @@ async function deleteCandidateObjects(
 
 	async function worker(): Promise<void> {
 		for (let index = next++; index < candidates.length; index = next++) {
-			signal?.throwIfAborted();
+			if (signal?.aborted) {
+				return;
+			}
 
 			const candidate = candidates[index];
 
@@ -342,6 +351,10 @@ async function deleteCandidateObjects(
 			worker,
 		),
 	);
+
+	// Every worker has settled by here, so nothing is still deleting behind the
+	// abort this raises.
+	signal?.throwIfAborted();
 
 	// The earliest candidate's failure, matching the order `gather` raises in.
 	const [first] = failures.sort((a, b) => a.index - b.index);
