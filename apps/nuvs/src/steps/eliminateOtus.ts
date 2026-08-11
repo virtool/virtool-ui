@@ -34,15 +34,9 @@ export const eliminateOtusStep: NuvsStep = {
 				paths.referenceIndexPrefix,
 				"--un",
 				paths.unmappedOtus,
-				// A paired sample passes both files as separate arguments, and
-				// **that is correct** — `-U` accumulates every path that follows it.
-				// The manual documents the value as a comma-separated list, which
-				// reads like only the first path is taken and the second falls
-				// through to the positional `<sam>` output, silently overwriting the
-				// reads. Directly verified against bowtie2 2.5.4 that it does not:
-				// with one non-aligning read in each file the run reports two reads,
-				// `--un` carries a record from both, and the second file is
-				// byte-identical afterwards. Comma-joining is equivalent, not a fix.
+				// `-U` accumulates every path that follows it, verified against
+				// bowtie2 2.5.4 — the manual's "comma-separated list" wording makes
+				// the multi-argument form read like a bug.
 				"-U",
 				...trimmedReadPaths(paths, data.sample.paired),
 			],
