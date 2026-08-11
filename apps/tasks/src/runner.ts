@@ -13,6 +13,7 @@ import {
 import type { Logger } from "@virtool/logger";
 import type { TaskRegistry } from "./framework/define";
 import { runTask, type TaskOutcome } from "./framework/run";
+import type { RunOutcome, TaskRunSample } from "./metrics/registry";
 
 /**
  * How long the claim loop waits between polls.
@@ -82,6 +83,14 @@ export type TaskRunnerOptions<C> = {
 	 * hook declares. Part of it is reserved for the release.
 	 */
 	drainTimeoutMs: number;
+	/**
+	 * Record a run that reached a terminal state, for `virtool_task_runs_total`
+	 * and `virtool_task_duration_seconds`.
+	 *
+	 * Required rather than optional: a seam that can be forgotten is one whose
+	 * series go quiet with nothing failing to say so.
+	 */
+	recordRun: (sample: TaskRunSample) => void;
 	/** Defaults to `buildRunnerId()`. */
 	runnerId?: string;
 	/** Defaults to {@link POLL_INTERVAL_MS}. */
@@ -311,10 +320,28 @@ export function createTaskRunner<C>(options: TaskRunnerOptions<C>): TaskRunner {
 		heartbeat.unref();
 	}
 
+	/**
+	 * The metrics outcome for a run that reached a terminal state, or `null`.
+	 *
+	 * `aborted` and `fenced` are deliberately unrecorded: the counter's help calls
+	 * it tasks *run to completion*, and both of those leave the row for another
+	 * attempt that will be counted when it ends. Counting them would make the
+	 * total exceed the number of tasks that actually ran.
+	 */
+	function runOutcome(outcome: TaskOutcome): RunOutcome | null {
+		if (outcome.status === "completed") {
+			return "succeeded";
+		}
+
+		return outcome.status === "failed" ? "failed" : null;
+	}
+
 	async function dispatch(task: ClaimedTask): Promise<void> {
 		const controller = new AbortController();
 
 		inFlight.set(task.id, controller);
+
+		const startedAt = performance.now();
 
 		try {
 			const outcome = await dispatchTask({
@@ -333,6 +360,19 @@ export function createTaskRunner<C>(options: TaskRunnerOptions<C>): TaskRunner {
 				{ status: outcome.status, task_id: task.id, type: task.type },
 				"finished a task",
 			);
+
+			const recorded = runOutcome(outcome);
+
+			if (recorded !== null) {
+				// Measured around the dispatch rather than from the row's `acquiredAt`,
+				// which is Postgres's clock. Mixing the two to save one round trip's
+				// worth of accuracy is how a duration histogram acquires a fixed skew.
+				options.recordRun({
+					type: task.type,
+					outcome: recorded,
+					durationSeconds: (performance.now() - startedAt) / 1_000,
+				});
+			}
 
 			// `aborted` leaves the row carrying this runner's claim and incomplete —
 			// a drain that ran out, or a terminal write the database refused. Handing

@@ -16,7 +16,8 @@ import {
 import { createStorageBackend, type StorageBackend } from "@virtool/storage";
 import { parseTasksConfig, type TasksConfig } from "./config";
 import { initSentry, SERVICE } from "./instrument";
-import { createMetrics } from "./metrics/registry";
+import { createTaskQueueReader } from "./metrics/queue";
+import { createMetrics, type Metrics } from "./metrics/registry";
 import { createProbeServer } from "./probes";
 
 /** How long Sentry may spend flushing buffered envelopes, in milliseconds. */
@@ -29,6 +30,13 @@ export type AppContext = {
 	db: Db;
 	client: PgClient;
 	storage: StorageBackend;
+	/**
+	 * The write side of this process's Prometheus registry.
+	 *
+	 * The spawn and claim loops record through it; the read side is already wired
+	 * to `/metrics` by the probe listener.
+	 */
+	metrics: Metrics;
 	/**
 	 * Register a callback to run on SIGTERM or SIGINT.
 	 *
@@ -140,11 +148,19 @@ export async function bootstrap(
 		ready = value;
 	}
 
+	const metrics = createMetrics(options.version);
+
 	const server = createProbeServer({
 		client,
 		logger,
-		metrics: createMetrics(options.version),
+		metrics,
 		metricsToken: config.metricsToken,
+		// Every replica carries the spawner, so every replica publishes the queue
+		// gauges — N scrapes each scanning the same table to report N copies of one
+		// queue depth. The scan is served by `idx_tasks_active` and a dashboard
+		// picks one target, so it is waste rather than a problem; there is no
+		// longer a flag to make it conditional on.
+		readTaskQueue: createTaskQueueReader(db),
 		isReady: () => ready,
 	});
 
@@ -189,6 +205,7 @@ export async function bootstrap(
 		db,
 		client,
 		storage,
+		metrics,
 		onShutdown: shutdown.onShutdown,
 		setReady,
 	};

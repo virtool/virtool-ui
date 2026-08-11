@@ -23,6 +23,7 @@ import {
 } from "vitest";
 import { z } from "zod";
 import { defineTask, type TaskRegistry } from "./framework/define";
+import type { TaskRunSample } from "./metrics/registry";
 import { createTaskRunner, dispatchTask, type TaskRunner } from "./runner";
 import { collectFrames } from "./testing/frames";
 
@@ -98,6 +99,7 @@ type RunnerOverrides = {
 	drainTimeoutMs?: number;
 	heartbeatIntervalMs?: number;
 	pollIntervalMs?: number;
+	recordRun?: (sample: TaskRunSample) => void;
 };
 
 function buildRunner(
@@ -109,6 +111,7 @@ function buildRunner(
 		db,
 		drainTimeoutMs: overrides.drainTimeoutMs ?? 5_000,
 		logger,
+		recordRun: overrides.recordRun ?? (() => undefined),
 		// Fast enough that a test does not wait out Python's two seconds, and the
 		// interval is injectable for exactly that reason.
 		pollIntervalMs: overrides.pollIntervalMs ?? 10,
@@ -370,6 +373,106 @@ describe("createTaskRunner", () => {
 		expect(await readRow(taskId)).toMatchObject({
 			acquired_at: null,
 			runner_id: null,
+		});
+	});
+
+	describe("run metrics", () => {
+		it("records a completed run as succeeded", async () => {
+			const taskId = await createTask(db, "install_hmms");
+			const samples: TaskRunSample[] = [];
+
+			const runner = buildRunner(
+				{ install_hmms: noopTask() },
+				{
+					recordRun: (sample) => {
+						samples.push(sample);
+					},
+				},
+			);
+
+			runner.start();
+
+			try {
+				await waitFor(async () => (await readRow(taskId)).complete === true);
+			} finally {
+				await runner.stop();
+			}
+
+			expect(samples).toHaveLength(1);
+			expect(samples[0]).toMatchObject({
+				type: "install_hmms",
+				outcome: "succeeded",
+			});
+			expect(samples[0]?.durationSeconds).toBeGreaterThanOrEqual(0);
+		});
+
+		it("records a thrown run as failed", async () => {
+			const taskId = await createTask(db, "install_hmms");
+			const samples: TaskRunSample[] = [];
+
+			const runner = buildRunner(
+				{
+					install_hmms: noopTask(async () => {
+						throw new TypeError("kaboom");
+					}),
+				},
+				{
+					recordRun: (sample) => {
+						samples.push(sample);
+					},
+				},
+			);
+
+			runner.start();
+
+			try {
+				await waitFor(async () => (await readRow(taskId)).error !== null);
+			} finally {
+				await runner.stop();
+			}
+
+			expect(samples).toEqual([
+				{
+					type: "install_hmms",
+					outcome: "failed",
+					durationSeconds: expect.any(Number),
+				},
+			]);
+		});
+
+		// The counter's help calls it tasks run to completion. An abort leaves the
+		// row for another attempt, which will be counted when it ends — counting it
+		// here too would put the total above the number of tasks that ran.
+		it("records nothing for a run the drain aborted", async () => {
+			await createTask(db, "install_hmms");
+			const samples: TaskRunSample[] = [];
+
+			let started: () => void = () => undefined;
+			const running = new Promise<void>((resolve) => {
+				started = resolve;
+			});
+
+			const runner = buildRunner(
+				{
+					install_hmms: noopTask(async () => {
+						started();
+						await new Promise<void>(() => undefined);
+					}),
+				},
+				{
+					drainTimeoutMs: 2_100,
+					recordRun: (sample) => {
+						samples.push(sample);
+					},
+				},
+			);
+
+			runner.start();
+
+			await running;
+			await runner.stop();
+
+			expect(samples).toEqual([]);
 		});
 	});
 

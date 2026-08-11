@@ -24,6 +24,7 @@ async function main(): Promise<void> {
 		db: context.db,
 		drainTimeoutMs,
 		logger: context.logger,
+		recordRun: context.metrics.recordRun,
 		registry: taskRegistry,
 	});
 
