@@ -1169,12 +1169,15 @@ no signal handler and binds no listener; `src/index.ts` builds it from the
   fenced, and the runner aborts their signals. **Bulk OTU preparation
   must yield**, or it starves the beat.
 - **Shutdown is drain, then release**: stop claiming, wait out the
-  in-flight task for `VT_TASKS_DRAIN_TIMEOUT` less a two-second reserve,
-  abort what is left, stop the heartbeat *after* the drain, then
+  in-flight task, abort what is left, **wait out a bounded grace for it
+  to actually stop**, stop the heartbeat *after* the drain, then
   `releaseRunnerClaims`. A release makes a task claimable in
-  milliseconds where abandoning it costs the full lease. `stop()` is
-  idempotent — a second call returns the first's promise — and never
-  rejects.
+  milliseconds where abandoning it costs the full lease. The grace is not
+  optional: `runTask` renews the lease to confirm ownership before
+  tearing down, so releasing on top of an abort makes that renewal fail
+  and **skips the body's `cleanup`**. All three phases share the one
+  `VT_TASKS_DRAIN_TIMEOUT` ceiling. `stop()` is idempotent — a second
+  call returns the first's promise — and never rejects.
 
 See [docs/tasks.md](docs/tasks.md) for the full config table, the
 `AppContext` contract, the shutdown ordering and its guarantees, the

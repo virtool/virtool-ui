@@ -47,6 +47,22 @@ const HEARTBEAT_LAG_WARN_MS = 5_000;
  */
 const RELEASE_RESERVE_MS = 2_000;
 
+/**
+ * How long an aborted task is given to unwind before its claim is released
+ * anyway.
+ *
+ * **Releasing before it settles skips its `cleanup`.** `runTask` renews the
+ * lease to confirm it still holds the task before tearing anything down, and a
+ * release has already cleared `runner_id` — so the renewal matches nothing, the
+ * run reports `fenced`, and the cleanup that should have run on the abort path
+ * is silently skipped. Waiting is what keeps the claim alive long enough for the
+ * body to answer that question truthfully.
+ *
+ * A cooperative body unwinds in milliseconds, so this is spent only on one that
+ * ignores its signal — and for that one the release below is the right backstop.
+ */
+const ABORT_GRACE_MS = 3_000;
+
 /** The runner surface the app wires into its lifecycle. */
 export type TaskRunner = {
 	/** Begin claiming. Calling it again does nothing. */
@@ -97,6 +113,8 @@ export type TaskRunnerOptions<C> = {
 	pollIntervalMs?: number;
 	/** Defaults to `TASK_HEARTBEAT_SECONDS`. */
 	heartbeatIntervalMs?: number;
+	/** Defaults to {@link ABORT_GRACE_MS}. */
+	abortGraceMs?: number;
 	/** Overrides the progress debounce window. For tests. */
 	debounceMs?: number;
 };
@@ -467,7 +485,22 @@ export function createTaskRunner<C>(options: TaskRunnerOptions<C>): TaskRunner {
 		// resolves and releases its result instead of dispatching it.
 		stopping.abort();
 
-		const waitMs = Math.max(0, options.drainTimeoutMs - RELEASE_RESERVE_MS);
+		// The three phases share the one ceiling the hook declares. The grace is
+		// clamped rather than validated, so a drain window too small to hold it
+		// degrades to a shorter grace instead of overrunning the ceiling and being
+		// abandoned mid-release.
+		const graceMs = Math.max(
+			0,
+			Math.min(
+				options.abortGraceMs ?? ABORT_GRACE_MS,
+				options.drainTimeoutMs - RELEASE_RESERVE_MS,
+			),
+		);
+
+		const waitMs = Math.max(
+			0,
+			options.drainTimeoutMs - graceMs - RELEASE_RESERVE_MS,
+		);
 
 		if (loop !== undefined && !(await settles(loop, waitMs))) {
 			logger.warn(
@@ -479,6 +512,18 @@ export function createTaskRunner<C>(options: TaskRunnerOptions<C>): TaskRunner {
 			// working on past the release below.
 			for (const controller of inFlight.values()) {
 				controller.abort();
+			}
+
+			// Then wait for it to actually stop. The abort only *signals*; releasing
+			// on top of it clears `runner_id` under a body that is still unwinding,
+			// which makes `runTask`'s ownership renewal fail and skips the `cleanup`
+			// the abort path is supposed to run. The heartbeat is still going here,
+			// so the lease holds for however long the cleanup takes.
+			if (!(await settles(loop, graceMs))) {
+				logger.warn(
+					{ in_flight: inFlight.size, ms: graceMs },
+					"a task did not stop when it was aborted",
+				);
 			}
 		}
 

@@ -96,6 +96,7 @@ function noopTask(run: () => Promise<void> = async () => undefined) {
 }
 
 type RunnerOverrides = {
+	abortGraceMs?: number;
 	drainTimeoutMs?: number;
 	heartbeatIntervalMs?: number;
 	pollIntervalMs?: number;
@@ -117,6 +118,9 @@ function buildRunner(
 		pollIntervalMs: overrides.pollIntervalMs ?? 10,
 		registry,
 		runnerId: RUNNER,
+		// A body that ignores its signal burns the whole grace, so the tests that
+		// use one shorten it rather than waiting out the real three seconds twice.
+		abortGraceMs: overrides.abortGraceMs ?? 50,
 		...(overrides.heartbeatIntervalMs !== undefined && {
 			heartbeatIntervalMs: overrides.heartbeatIntervalMs,
 		}),
@@ -331,6 +335,53 @@ describe("createTaskRunner", () => {
 		await running;
 		await runner.stop();
 
+		expect(await readRow(taskId)).toMatchObject({
+			acquired_at: null,
+			complete: false,
+			runner_id: null,
+		});
+	});
+
+	// Releasing on top of the abort clears `runner_id` under a body that is still
+	// unwinding, so `runTask`'s ownership renewal fails, the run reports `fenced`,
+	// and the cleanup the abort path is supposed to run is skipped silently.
+	it("lets an aborted task run its cleanup before releasing its claim", async () => {
+		const taskId = await createTask(db, "install_hmms");
+		const cleaned: number[] = [];
+
+		let started: () => void = () => undefined;
+		const running = new Promise<void>((resolve) => {
+			started = resolve;
+		});
+
+		const runner = buildRunner(
+			{
+				install_hmms: defineTask({
+					type: "install_hmms",
+					payload: z.object({}),
+					cleanup: async ({ taskId: id }) => {
+						cleaned.push(id);
+					},
+					// Cooperative: it notices the abort and returns *cleanly*, which is
+					// the path a `catch`-only implementation misses entirely.
+					run: async ({ signal }) => {
+						started();
+
+						await new Promise<void>((resolve) => {
+							signal.addEventListener("abort", () => resolve(), { once: true });
+						});
+					},
+				}),
+			},
+			{ abortGraceMs: 2_000, drainTimeoutMs: 2_200 },
+		);
+
+		runner.start();
+
+		await running;
+		await runner.stop();
+
+		expect(cleaned).toEqual([taskId]);
 		expect(await readRow(taskId)).toMatchObject({
 			acquired_at: null,
 			complete: false,

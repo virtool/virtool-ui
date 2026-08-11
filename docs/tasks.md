@@ -904,13 +904,29 @@ pool, the Sentry flush, and the guard against a second signal.
 
 1. Stop claiming. The loop observes it and its poll wait is woken rather than
    waited out.
-2. Wait for the in-flight task, up to `VT_TASKS_DRAIN_TIMEOUT` less a two-second
-   reserve.
+2. Wait for the in-flight task, up to `VT_TASKS_DRAIN_TIMEOUT` less the abort
+   grace and the release reserve.
 3. If the window expires, abort what is still running so a cooperative body stops
    instead of working on past the release.
-4. Stop the heartbeat — *after* the drain, because a task still working needs its
+4. **Wait for it to actually stop**, up to the abort grace.
+5. Stop the heartbeat — *after* the drain, because a task still working needs its
    lease held.
-5. `releaseRunnerClaims`, clearing `acquired_at` and `runner_id`.
+6. `releaseRunnerClaims`, clearing `acquired_at` and `runner_id`.
+
+**Step 4 is not politeness, and skipping it skips the body's `cleanup`.** The
+abort only *signals*. `runTask` renews the lease to confirm it still holds the
+task before tearing anything down, so a release landing on top of the abort
+clears `runner_id` under a body that is still unwinding: the renewal matches
+nothing, the run reports `fenced`, and the cleanup the abort path is supposed to
+run is skipped without a word. Waiting keeps the claim alive long enough for that
+ownership question to be answered truthfully. A cooperative body unwinds in
+milliseconds, so the grace is only ever spent on one that ignores its signal —
+and for that one the release is the correct backstop.
+
+The three phases share the one ceiling the hook declares, and the grace is
+**clamped rather than validated**: a drain window too small to hold it degrades
+to a shorter grace instead of overrunning the ceiling and being abandoned
+mid-release.
 
 Draining to completion is not on offer at any grace period we can set: these
 tasks run for minutes, and a cluster autoscaler force-removes a pod well before
