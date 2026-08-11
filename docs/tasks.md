@@ -680,6 +680,147 @@ The debounce is exercised by passing `debounceMs` rather than by faking
 timers: a window long enough never to close proves coalescing, and the flush
 before the terminal write proves the last value still lands.
 
+The frame collector is `collectFrames` in `apps/tasks/src/testing/frames.ts`,
+which takes the `PgClient` to listen on. It is the harness the body tests share
+with the framework's own, so the sentinel protocol is written once.
+
+## Task bodies
+
+A body is a module under `apps/tasks/src/tasks/<type>.ts`, named for the value
+in the `type` column — `refresh_hmms.ts`, not `refreshHmms.ts`, so a row and its
+handler are grep-identical. It exports one `defineTask` result and registers in
+`apps/tasks/src/tasks/registry.ts`.
+
+`refresh_hmms` is the first, and the worked example for the nine that follow.
+Every decision below is visible in it.
+
+### The body is a shell; the work is in `data.ts`
+
+```ts
+export const refreshHmmsTask = defineTask<typeof payload, TaskContext>({
+	type: "refresh_hmms",
+	payload,
+	steps: ["refresh"],
+	async run({ ctx, helpers }) {
+		await helpers.runStep("refresh", async () => {
+			await fetchAndUpdateRelease(ctx.db);
+		});
+	},
+});
+```
+
+The domain function is `@virtool/data`'s and knows nothing about tasks. The body
+adds the step name, the payload schema and the registration, and nothing else.
+A body that grew a query would be putting persistence somewhere the web app and
+the jobs API cannot reach it.
+
+### The registry is the allowed-types filter
+
+`taskRegistry` maps each type to its body, and its **keys are what the runner
+hands `acquireTask`**. That is the whole of how an unrecognised `tasks.type` is
+rejected: a row naming a task absent from the registry is never claimed, so it
+stays queued for the Python runner that does know it. Nothing validates the
+column and nothing needs to, because the filter *is* the registry.
+
+It is a literal map rather than one derived from each body's `type`, so the set
+of names this process claims reads in one place. `registry.test.ts` pins the two
+against each other — a key that disagreed with its body's `type` would claim
+under one name and dispatch another — and pins every key to `TaskName`.
+
+### `ctx` is `{ db, storage }`
+
+The handles a body cannot construct, injected the way `data.ts` takes them.
+Its logger, its payload and its `taskId` arrive on `TaskHandlerArgs` instead,
+because those are per-run rather than per-process. A body that reads `ctx`
+supplies both type arguments to `defineTask`; one that does not reads none of
+this.
+
+There is no module-scope anything. `bootstrap()` builds the context and the
+runner passes it in, so importing a body to test it opens no pool.
+
+### A step name is Python's function name
+
+`refresh_hmms` declares one step, `refresh`, which is what Python's `BaseTask`
+writes into the column — it stores `func.__name__` of the bound method it is
+running. Both runners write the same name for the same work, which is what makes
+the cutover comparison possible. A slugified display name would change the shape
+of a task's step list at the moment the fleet switched over.
+
+A single step is the degenerate case and stays explicit: declaring `steps` gives
+the framework the slice arithmetic, and a body that declared none would map its
+one step onto the whole bar to the same effect but say less.
+
+### A body that has no progress to report declares none
+
+`fetchAndUpdateRelease` is one request and one upsert, with no intermediate
+position worth publishing, so it takes no `onProgress` seam. The bar moves 0 →
+100 on the framework's step-entry and completion writes alone, and the run
+publishes exactly two frames. The seam is opt-in per data function — see the
+progress seam above — and adding one where there is nothing to report costs a
+write and a refetch in every connected browser for no information.
+
+### Errors surface by throwing
+
+A body that throws fails the task: `runTask` writes `${err.name}: ${err.message}`
+to `error`, sets `complete`, and returns `{ status: "failed" }`. There is no
+error channel of a body's own and no partial-success state.
+
+**`refresh_hmms` can therefore fail, and Python's cannot.** Python's
+`fetch_and_update_release` builds its `errors` list by substring-matching the
+exception's `str()` against `"ClientConnectorError"` and `"404"`, neither of
+which any exception it catches ever contains — so `errors` is always `[]`, the
+`raise` guarded on it is unreachable, and an unreachable virtool.ca is reported
+to the user as a successful refresh against a stale release. Deciding between a
+stale release and a current one is the entire point of the call, so this side
+records the message on `legacy_hmm_status.errors` *and* rethrows. The task shows
+its error in the task list, the HMM page shows it too, and the next spawn ten
+minutes later supersedes it.
+
+The manifest fetch also carries an `AbortSignal.timeout`, which Python does not.
+`fetch` has no deadline of its own, and a hung connection inside a task holds its
+lease open until the lease expires — at which point another runner reclaims the
+task and starts a second hung fetch behind the first. A timeout is reported as
+`Could not reach Virtool.ca`, the same as a refused connection, because to the
+caller it means the same thing.
+
+### Frames are the framework's, never a body's
+
+A body never emits. `updateTaskProgress`, `completeTask` and `failTask` publish
+the `tasks` frames, and they are reached only through the framework. A body that
+called `emit` would publish a frame for a row it may no longer hold.
+
+### Every body must be idempotent
+
+A reclaimed task re-runs from step zero and nothing records which steps already
+ran. `refresh_hmms` is idempotent by construction — it reads the manifest and
+overwrites the status singleton, so a second run leaves what the first left —
+and its test asserts that rather than assuming it. A body that cannot tolerate
+re-entry keys its own idempotency off `taskId`.
+
+### Testing a body
+
+Two projects, both node, both against `createTestDatabase()`:
+
+- **`@virtool/data`** covers the domain function directly — the release is
+  stored, an unreachable host records the error and rethrows, and a manifest
+  naming no release against a status row holding none returns `null` rather
+  than reading through the absent release.
+- **`apps/tasks`** covers the body end to end: insert the row, `acquireTask`,
+  `runTask`, then assert the outcome, the row and the frames. The runner loop
+  is not involved, so a body's test does not wait on a poll interval.
+
+The manifest fetch is stubbed with `vi.stubGlobal("fetch", ...)` and
+`vi.unstubAllGlobals()` in `afterEach`. There is no HTTP interception library
+here, and there should not be one: the boundary is a single global.
+
+The timeout is asserted by capturing the `signal` the body passed and checking
+that an abort surfaces as `HmmReleaseError`. Waiting the real ten seconds out
+proves the same thing and costs ten seconds.
+
+A periodic task's row is inserted directly rather than through `createTask`,
+whose `TaskType` union lists only the four the web app spawns. Spawning the
+periodic ones is the spawner's job.
+
 ## Claiming, leases and fencing
 
 A claim is a lease with a deadline, and the deadline is encoded on

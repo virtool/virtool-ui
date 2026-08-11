@@ -26,6 +26,16 @@ export const HMM_INSTALL_TASK_TYPE = "install_hmms";
 const MANIFEST_URL = "https://www.virtool.ca/releases/hmms.json";
 
 /**
+ * How long the manifest fetch may take before it is abandoned.
+ *
+ * `fetch` has no timeout of its own, and this call is made from a periodic task
+ * whose claim is a lease. A connection that hangs rather than refusing would
+ * hold that lease open until it expired, at which point another runner reclaims
+ * the task and starts a second hung fetch behind the first.
+ */
+const MANIFEST_TIMEOUT_MS = 10_000;
+
+/**
  * The record returned when an install is started. Mirrors the GitHub releases
  * API payload shape (plus the appended install metadata), so it stays
  * snake_case rather than following this domain's camelCase convention.
@@ -265,16 +275,28 @@ function formatRelease(
 	};
 }
 
+/**
+ * Read the newest release from the www.virtool.ca manifest.
+ *
+ * Returns `null` when the manifest names no HMM release at all, which is the
+ * only way this can succeed without one.
+ *
+ * **Do not add a `304` branch.** Nothing here sends `If-None-Match` or
+ * `If-Modified-Since`, so the server has nothing to compare against and cannot
+ * answer `304`. Python carries such a branch and it has never been reachable
+ * either; a conditional request would need an ETag stored on the status row,
+ * and `legacy_hmm_status` has no column for one.
+ */
 async function fetchManifestRelease(): Promise<ManifestRelease | null> {
 	let response: Response;
 	try {
-		response = await fetch(MANIFEST_URL);
+		response = await fetch(MANIFEST_URL, {
+			signal: AbortSignal.timeout(MANIFEST_TIMEOUT_MS),
+		});
 	} catch {
+		// A timeout lands here too, and means the same thing to the caller as a
+		// refused connection: virtool.ca did not answer.
 		throw new HmmReleaseError("Could not reach Virtool.ca");
-	}
-
-	if (response.status === 304) {
-		return null;
 	}
 
 	if (response.status !== 200) {
@@ -312,8 +334,17 @@ async function upsertStatus(
  *
  * Mirrors the Python `fetch_and_update_release`: the latest manifest entry
  * replaces the stored release, `retrieved_at` is stamped, and the status
- * singleton is upserted. A fetch failure records the error on the status row
- * and rethrows.
+ * singleton is upserted.
+ *
+ * **A fetch failure records the message on the status row and rethrows**, which
+ * Python does not do. Its handler builds `errors` by substring-matching the
+ * exception's `str()` against `"ClientConnectorError"` and `"404"`, neither of
+ * which any exception it catches ever contains — so `errors` is always `[]`,
+ * the `raise` that guards on it is unreachable, and an unreachable virtool.ca
+ * is reported to the user as a successful refresh. Deciding between a stale
+ * release and a current one is the whole point of the call, so failing is the
+ * honest outcome: the caller sees the error, and `HmmStatus.errors` carries it
+ * to the HMM page.
  */
 export async function fetchAndUpdateRelease(
 	db: DbOrTx,

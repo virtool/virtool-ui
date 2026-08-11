@@ -1125,12 +1125,48 @@ declaration (`define.ts`), the debounced progress writer
 - **A reclaimed task re-runs from step zero, so every body must be
   idempotent.** Nothing records which steps already ran.
 
+A body itself is `apps/tasks/src/tasks/<type>.ts`, named for the value in
+the `type` column — `refresh_hmms.ts`, not `refreshHmms.ts` — exporting
+one `defineTask` result and registered in
+`apps/tasks/src/tasks/registry.ts`. `refresh_hmms` is the first and the
+worked example for the nine that follow. Four rules on top of the
+framework's:
+
+- **The registry's keys are the runner's allowed-types filter**, handed
+  to `acquireTask`, and that is the whole of how an unrecognised
+  `tasks.type` is rejected — an unregistered row is never claimed, so it
+  stays queued for the Python runner that knows it. Keep it a literal
+  map rather than deriving it from each body's `type`;
+  `registry.test.ts` pins the two against each other and pins every key
+  to `TaskName`.
+- **`ctx` is `{ db, storage }`** — the handles a body cannot construct,
+  injected the way `data.ts` takes them. The logger, the payload and the
+  `taskId` arrive on `TaskHandlerArgs`, being per-run rather than
+  per-process.
+- **A step's name is the Python function name it was ported from**,
+  which `BaseTask` writes to the column as `func.__name__` — both
+  runners write the same name for the same work until the cutover
+  completes.
+- **A body that has nothing intermediate to report declares no
+  `onProgress` seam**, and its bar moves 0 → 100 on step entry and
+  completion alone. Adding one where there is no position worth
+  publishing costs a write and a refetch in every connected browser.
+
+`refresh_hmms` can fail, and Python's cannot: Python's `errors` list is
+built by substring-matching an exception's `str()` against strings it
+never contains, so its `raise` is unreachable and an unreachable
+virtool.ca reads as a successful refresh against a stale release. This
+side records the message on `legacy_hmm_status.errors` **and** rethrows.
+Its manifest fetch also carries an `AbortSignal.timeout`, without which
+a hung connection holds the lease until it expires and the reclaim
+starts a second hung fetch behind the first.
+
 See [docs/tasks.md](docs/tasks.md) for the full config table, the
 `AppContext` contract, the shutdown ordering and its guarantees, the
 probe and metrics surface including the five task series and their
 bucket, label and folding rules, the lease, fencing and frame rules in
-full, and the framework's step model, terminal-outcome table and
-progress seam.
+full, the framework's step model, terminal-outcome table and progress
+seam, and the task-body contracts with `refresh_hmms` worked through.
 
 ## Data
 
