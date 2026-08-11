@@ -1,6 +1,7 @@
 import { copyFile, rename, rm } from "node:fs/promises";
 import { eliminateSubtraction, subtractionProc } from "../pathoscopeCore";
 import { workPaths } from "../paths";
+import { pipeline, quote } from "../shell";
 import type { PathoscopeStep } from "./types";
 
 /**
@@ -58,14 +59,14 @@ export const eliminateSubtractionStep: PathoscopeStep = {
 				"-N 0",
 				`-p ${proc}`,
 				`-x ${quote(paths.subtraction(subtraction.id).indexPrefix)}`,
-				`-U ${currentFastq}`,
+				`-U ${quote(currentFastq)}`,
 			].join(" ");
 
 			await runSubprocess({
 				command: [
 					"bash",
 					"-c",
-					`${bowtie2} | samtools view -bS - -o ${toSubtraction}`,
+					pipeline(bowtie2, `samtools view -bS - -o ${quote(toSubtraction)}`),
 				],
 			});
 
@@ -108,15 +109,3 @@ export const eliminateSubtractionStep: PathoscopeStep = {
 		await rename(currentBam, paths.subtractedBam);
 	},
 };
-
-/**
- * Quote a path for the shell.
- *
- * Only the subtraction index prefix goes through this, matching Python. Every
- * path here is composed from the work path and an integer id, so none can carry
- * a metacharacter — this is a guard against that stopping being true, not a
- * response to untrusted input.
- */
-function quote(value: string): string {
-	return `'${value.replaceAll("'", `'\\''`)}'`;
-}

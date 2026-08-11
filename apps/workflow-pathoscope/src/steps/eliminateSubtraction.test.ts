@@ -30,10 +30,28 @@ function flagValue(command: readonly string[], flag: string): string {
 	return command[command.indexOf(flag) + 1] ?? "";
 }
 
-function shellFlagValue(script: string, flag: string): string {
-	const tokens = script.split(/\s+/);
+const PIPEFAIL_PREFIX = "set -o pipefail; ";
 
-	return tokens[tokens.indexOf(flag) + 1] ?? "";
+/**
+ * The value of a flag in a bash pipeline, unquoted.
+ *
+ * The `set -o pipefail` prefix is dropped before the split, or its own `-o`
+ * would answer for samtools'. Naive otherwise: no path here carries a space.
+ */
+function shellFlagValue(script: string, flag: string): string {
+	const tokens = script.startsWith(PIPEFAIL_PREFIX)
+		? script.slice(PIPEFAIL_PREFIX.length).split(/\s+/)
+		: script.split(/\s+/);
+
+	return unquote(tokens[tokens.indexOf(flag) + 1] ?? "");
+}
+
+function unquote(token: string): string {
+	if (!token.startsWith("'") || !token.endsWith("'")) {
+		return token;
+	}
+
+	return token.slice(1, -1).replaceAll(`'\\''`, "'");
 }
 
 /**
@@ -45,6 +63,7 @@ function shellFlagValue(script: string, flag: string): string {
  */
 function createFakeTools(eliminationsPerPass: readonly (readonly string[])[]) {
 	const bowtie2Inputs: string[] = [];
+	const scripts: string[] = [];
 	let pass = 0;
 
 	async function runCore(command: readonly string[]): Promise<void> {
@@ -78,6 +97,8 @@ function createFakeTools(eliminationsPerPass: readonly (readonly string[])[]) {
 		const script = command[2] ?? "";
 
 		if (command[0] === "bash") {
+			scripts.push(script);
+
 			bowtie2Inputs.push(
 				await readFile(shellFlagValue(script, "-U"), "utf8").catch(() => ""),
 			);
@@ -97,42 +118,57 @@ function createFakeTools(eliminationsPerPass: readonly (readonly string[])[]) {
 		};
 	};
 
-	return { bowtie2Inputs, runSubprocess };
+	return { bowtie2Inputs, runSubprocess, scripts };
 }
 
 function createSubtraction(id: number): PathoscopeSubtraction {
 	return { id, name: `subtraction ${id}`, fastaPath: `/work/${id}.fa.gz` };
 }
 
+/** Run the step over a real work path seeded with three isolate-mapped reads. */
+async function runStep(
+	eliminationsPerPass: readonly (readonly string[])[],
+	subtractionCount: number,
+) {
+	const { path: workPath, cleanup } = await createTestWorkPath();
+	onTestFinished(cleanup);
+
+	const paths = workPaths(workPath);
+
+	await mkdir(paths.isolatesDir, { recursive: true });
+	await writeFile(paths.isolateFastq, fastq("r1", "r2", "r3"));
+	await writeFile(paths.isolateBam, "");
+
+	const tools = createFakeTools(eliminationsPerPass);
+
+	const data: PathoscopeData = {
+		analysisId: 1,
+		index: { id: 1, path: paths.collapsedReference },
+		readPaths: [join(workPath, "reads", "reads_1.fq.gz")],
+		subtractions: Array.from({ length: subtractionCount }, (_, index) =>
+			createSubtraction(index + 1),
+		),
+		pScoreCutoff: 0.01,
+	};
+
+	const state: PathoscopeState = {
+		candidateSequenceIds: ["seq_a"],
+		subtractedCount: 0,
+	};
+
+	await eliminateSubtractionStep.run(
+		createFakeContext(data, state, {
+			workPath,
+			runSubprocess: tools.runSubprocess,
+		}),
+	);
+
+	return { ...tools, paths, state };
+}
+
 describe("eliminateSubtractionStep", () => {
 	it("carries the filtered reads into every later subtraction pass", async () => {
-		const { path: workPath, cleanup } = await createTestWorkPath();
-		onTestFinished(cleanup);
-
-		const paths = workPaths(workPath);
-
-		await mkdir(paths.isolatesDir, { recursive: true });
-		await writeFile(paths.isolateFastq, fastq("r1", "r2", "r3"));
-		await writeFile(paths.isolateBam, "");
-
-		const { bowtie2Inputs, runSubprocess } = createFakeTools([["r1"], ["r2"]]);
-
-		const data: PathoscopeData = {
-			analysisId: 1,
-			index: { id: 1, path: paths.collapsedReference },
-			readPaths: [join(workPath, "reads", "reads_1.fq.gz")],
-			subtractions: [createSubtraction(1), createSubtraction(2)],
-			pScoreCutoff: 0.01,
-		};
-
-		const state: PathoscopeState = {
-			candidateSequenceIds: ["seq_a"],
-			subtractedCount: 0,
-		};
-
-		await eliminateSubtractionStep.run(
-			createFakeContext(data, state, { workPath, runSubprocess }),
-		);
+		const { bowtie2Inputs, paths, state } = await runStep([["r1"], ["r2"]], 2);
 
 		expect(parseFastqIds(bowtie2Inputs[0] ?? "")).toEqual(["r1", "r2", "r3"]);
 		expect(parseFastqIds(bowtie2Inputs[1] ?? "")).toEqual(["r2", "r3"]);
@@ -142,5 +178,26 @@ describe("eliminateSubtractionStep", () => {
 		]);
 
 		expect(state.subtractedCount).toBe(2);
+	});
+
+	// Without it a bowtie2 killed part way through leaves a truncated BAM that
+	// samtools closes cleanly, and the pipeline reports success.
+	it("runs its pipeline with pipefail set", async () => {
+		const { scripts } = await runStep([["r1"], ["r2"]], 2);
+
+		expect(scripts).toHaveLength(2);
+
+		for (const script of scripts) {
+			expect(script.startsWith(PIPEFAIL_PREFIX)).toBe(true);
+		}
+	});
+
+	it("quotes every path it interpolates into the pipeline", async () => {
+		const { paths, scripts } = await runStep([["r1"]], 1);
+		const script = scripts[0] ?? "";
+
+		expect(script).toContain(`-U '${paths.currentFastq}'`);
+		expect(script).toContain(`-o '${paths.toSubtractionBam}'`);
+		expect(script).toContain(`-x '${paths.subtraction(1).indexPrefix}'`);
 	});
 });

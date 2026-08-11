@@ -3,6 +3,7 @@ import { openWorkflowIndex, writeFasta } from "@virtool/workflow";
 import { buildBowtie2Index } from "../mappingIndex";
 import { findCandidateSequenceIds } from "../pathoscopeCore";
 import { workPaths } from "../paths";
+import { pipeline, quote } from "../shell";
 import type { PathoscopeStep } from "./types";
 
 /**
@@ -93,8 +94,8 @@ export const buildIsolateIndexStep: PathoscopeStep = {
  *
  * Run as a shell pipeline so the SAM stream goes straight into `samtools` and is
  * never written out. The runtime's runner never takes a shell string, so
- * `bash -c` is explicit here; every path in the command is composed from the
- * work path and an integer id.
+ * `bash -c` is explicit here, and every interpolated path is quoted — the read
+ * paths end in a name the sample's rows carry.
  *
  * `-k 100` keeps up to a hundred alignments per read, which is the point — the
  * multi-mapping reads are exactly what expectation maximization later reassigns.
@@ -112,8 +113,9 @@ export const mapIsolatesStep: PathoscopeStep = {
 		}
 
 		// Comma-joined, unlike the repeated `--reads` the candidate search takes.
-		// `bowtie2 -U` reads one comma-separated list.
-		const reads = data.readPaths.join(",");
+		// `bowtie2 -U` reads one comma-separated list. Each path is quoted on its
+		// own so the commas stay the separators bowtie2 splits on.
+		const reads = data.readPaths.map(quote).join(",");
 
 		const bowtie2 = [
 			"bowtie2",
@@ -124,15 +126,15 @@ export const mapIsolatesStep: PathoscopeStep = {
 			"-N 0",
 			"-L 15",
 			"-k 100",
-			`--al ${paths.isolateFastq}`,
-			`-x ${paths.isolateIndexPrefix}`,
+			`--al ${quote(paths.isolateFastq)}`,
+			`-x ${quote(paths.isolateIndexPrefix)}`,
 			`-U ${reads}`,
 		].join(" ");
 
-		const samtools = `samtools view -bS - -o ${paths.isolateBam}`;
+		const samtools = `samtools view -bS - -o ${quote(paths.isolateBam)}`;
 
 		await runSubprocess({
-			command: ["bash", "-c", `${bowtie2} | ${samtools}`],
+			command: ["bash", "-c", pipeline(bowtie2, samtools)],
 		});
 
 		logger.info({ path: paths.isolateBam }, "mapped reads to isolates");

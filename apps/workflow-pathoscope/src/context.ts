@@ -182,10 +182,35 @@ function resolveReadPaths(
 	sample: WorkflowSample,
 	paths: PathoscopePaths,
 ): string[] {
-	return sample.reads
-		.map((read) => read.name)
-		.sort()
-		.map(paths.read);
+	const names = sample.reads.map((read) => read.name);
+
+	for (const name of names) {
+		checkReadName(name);
+	}
+
+	return names.sort().map(paths.read);
+}
+
+/**
+ * Refuse a read name that is not a plain filename.
+ *
+ * The name comes off the sample's row, and this is the point it becomes both a
+ * path under `reads/` and a word in a `bash -c` string. A name carrying a
+ * separator writes outside the work path, so it is rejected here rather than
+ * left for every later step to be careful about.
+ */
+function checkReadName(name: string): void {
+	if (
+		name === "" ||
+		name === "." ||
+		name === ".." ||
+		name.includes("/") ||
+		name.includes("\0")
+	) {
+		throw new Error(
+			`Sample read name must be a plain filename, got ${JSON.stringify(name)}`,
+		);
+	}
 }
 
 async function downloadReads(

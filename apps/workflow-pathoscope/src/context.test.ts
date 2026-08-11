@@ -249,6 +249,31 @@ describe("buildPathoscopeContext", () => {
 		);
 	});
 
+	// A read name is joined into a path under `reads/` and interpolated into a
+	// bash pipeline, so anything but a plain filename is refused before either.
+	it.each([
+		["a path separator", "../../etc/passwd"],
+		["a shell metacharacter and a separator", "reads_1.fq.gz; rm -rf /"],
+		["nothing", ""],
+		["a parent reference", ".."],
+		["a nul byte", "reads_1\0.fq.gz"],
+	])("refuses a read name carrying %s", async (_label, name) => {
+		const { input, state } = await setup();
+
+		const sample = state.samples.get(SAMPLE_ID);
+
+		if (sample) {
+			state.samples.set(SAMPLE_ID, {
+				...sample,
+				reads: [{ id: 1, name, size: 3, storageKey: "reads/33/abc" }],
+			});
+		}
+
+		await expect(buildPathoscopeContext(input)).rejects.toThrow(
+			/plain filename/,
+		);
+	});
+
 	it("refuses a subtraction with no source fasta", async () => {
 		const { input, state } = await setup();
 
