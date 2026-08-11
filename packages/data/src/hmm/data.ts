@@ -358,11 +358,15 @@ async function upsertStatus(
  * Python does not do. Its handler builds `errors` by substring-matching the
  * exception's `str()` against `"ClientConnectorError"` and `"404"`, neither of
  * which any exception it catches ever contains — so `errors` is always `[]`,
- * the `raise` that guards on it is unreachable, and an unreachable virtool.ca
- * is reported to the user as a successful refresh. Deciding between a stale
- * release and a current one is the whole point of the call, so failing is the
- * honest outcome: the caller sees the error, and `HmmStatus.errors` carries it
- * to the HMM page.
+ * the `raise` that guards on it is unreachable, and a refresh that reached
+ * nothing finishes as a success. Deciding between a stale release and a current
+ * one is the whole point of the call, so failing is the honest outcome: the
+ * caller sees the error, the row carries it on `errors`, and a task running
+ * this is recorded failed rather than complete.
+ *
+ * Nothing renders `errors` today — `HmmInstall` reads the status row for its
+ * task's progress and step alone. It is recorded because the row is what the
+ * next reader has, not because a page is showing it.
  *
  * `signal` aborts the manifest fetch. A caller running under a lease passes the
  * one it was given: `fetch` would otherwise run its own deadline out with the

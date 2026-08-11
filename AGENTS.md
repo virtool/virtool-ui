@@ -1217,9 +1217,14 @@ framework's:
 
 `refresh_hmms` can fail, and Python's cannot: Python's `errors` list is
 built by substring-matching an exception's `str()` against strings it
-never contains, so its `raise` is unreachable and an unreachable
-virtool.ca reads as a successful refresh against a stale release. This
-side records the message on `legacy_hmm_status.errors` **and** rethrows.
+never contains, so its `raise` is unreachable and a refresh that reached
+nothing finishes as a success against a stale release. This side records
+the message on `legacy_hmm_status.errors` **and** rethrows, marking the
+task failed rather than complete. Neither string is rendered today —
+`HmmInstall` reads the status row for its task's progress and step
+alone, and there is no task list page — so don't justify an error
+message by what a user sees; they are recorded for whoever reads the
+row next.
 Its manifest fetch also carries an `AbortSignal.timeout`, without which
 a hung connection holds the lease until it expires and the reclaim
 starts a second hung fetch behind the first.

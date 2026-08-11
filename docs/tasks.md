@@ -803,12 +803,16 @@ error channel of a body's own and no partial-success state.
 `fetch_and_update_release` builds its `errors` list by substring-matching the
 exception's `str()` against `"ClientConnectorError"` and `"404"`, neither of
 which any exception it catches ever contains — so `errors` is always `[]`, the
-`raise` guarded on it is unreachable, and an unreachable virtool.ca is reported
-to the user as a successful refresh against a stale release. Deciding between a
-stale release and a current one is the entire point of the call, so this side
-records the message on `legacy_hmm_status.errors` *and* rethrows. The task shows
-its error in the task list, the HMM page shows it too, and the next spawn ten
-minutes later supersedes it.
+`raise` guarded on it is unreachable, and a refresh that reached nothing
+finishes as a success against a stale release. Deciding between a stale release
+and a current one is the entire point of the call, so this side records the
+message on `legacy_hmm_status.errors` *and* rethrows — which marks the task
+failed rather than complete. The next spawn ten minutes later supersedes it.
+
+Neither string is rendered anywhere today: `HmmInstall` reads the status row for
+its task's progress and step alone, and there is no task list page. They are
+recorded because the row is what the next reader has — an operator on the
+database, a support question, or the page that eventually shows them.
 
 The manifest fetch also carries an `AbortSignal.timeout`, which Python does not.
 `fetch` has no deadline of its own, and a hung connection inside a task holds its
