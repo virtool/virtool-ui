@@ -4,7 +4,7 @@ The first workflow executor: a one-shot process that starts, works, exits. It
 ports Python's `create_subtraction` workflow, which turns an uploaded FASTA into
 a subtraction a sample analysis can be run against.
 
-Image: `ghcr.io/virtool/ts-create-subtraction` (Alpine).
+Image: `ghcr.io/virtool/ts-create-subtraction`.
 
 Only its object-storage half is wired so far; claiming a job arrives with the
 workflow runtime core.
@@ -31,10 +31,9 @@ parallelism and checksums are taken over decompressed content, so the gzip bytes
 need not match. The `gc`/`count` step is a scan over the decompressed FASTA.
 Transfers are `downloadToPath` / `uploadFromPath` against the storage backend.
 
-That is the whole reason this image is Alpine rather than Debian, and it is the
-chain to re-check before reintroducing a step: a workflow that runs a tool
-binary needs the glibc base back, and the move belongs in the same edit as the
-`COPY --from=ghcr.io/virtool/tools` line that forces it.
+So the runtime stage copies nothing from `ghcr.io/virtool/tools`. Reintroducing
+a step that shells out to a tool means adding that `COPY --from` line, and the
+shared libraries and interpreters the binary needs alongside it.
 
 ## Commands
 
@@ -50,5 +49,5 @@ Run from the monorepo root.
 
 `docs/workflow-runtime.md` covers the runtime every executor runs on — the step
 model, the eager context, cancellation, the subprocess runner and the config
-table. `docs/apps.md` covers the bundling, `pnpm deploy` and image pipeline
-every non-Vite app shares.
+table. `docs/apps.md` covers the bundling and `pnpm deploy` pipeline every
+non-Vite app shares, and `docs/images.md` the image pipeline.

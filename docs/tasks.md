@@ -2,7 +2,7 @@
 
 `apps/tasks` (`@virtool/tasks`) is Virtool's task service: a long-lived Node
 process that spawns periodic tasks and runs them. It is the TypeScript port of
-Python's `task_runner`, and it ships as `ghcr.io/virtool/tasks` on Alpine.
+Python's `task_runner`, and it ships as `ghcr.io/virtool/tasks`.
 
 It is deliberately small in surface. It serves no API, has no Service and no
 ingress, and the only HTTP it speaks is three routes on a probe listener. Its

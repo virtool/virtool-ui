@@ -49,15 +49,16 @@ jobs:
               with:
                   # Two filters, because the two jobs do not share inputs:
                   # pathoscope-test runs cargo over the crate and touches no
-                  # TypeScript, while build-pathoscope bundles the app and so
-                  # takes every workspace package the Dockerfile copies. One
-                  # filter would run the libclang-and-cargo job on any
+                  # TypeScript, while build-pathoscope bundles the app on the
+                  # shared `base` stage and so takes every workspace package.
+                  # One filter would run the libclang-and-cargo job on any
                   # packages/workflow change.
                   #
                   # **Every path the Dockerfile COPYs must appear under
                   # pathoscope-image.** A missing one skips the build on the PR
                   # that breaks it and fails on the subsequent push to main,
-                  # where nothing gates it.
+                  # where nothing gates it. `packages/**` is the catch-all that
+                  # keeps that from depending on anyone remembering.
                   #
                   # This file is in both so that a change to the pathoscope jobs
                   # themselves is still gated by them. Neither job uses
@@ -74,22 +75,16 @@ jobs:
                         - 'packages/pathoscope-core/**'
                         - '.github/workflows/ci.yaml'
                       pathoscope-image:
-                        - 'packages/pathoscope-core/**'
-                        - '.github/workflows/ci.yaml'
+                        - 'packages/**'
                         - 'apps/workflow-pathoscope/**'
-                        - 'packages/contracts/**'
-                        - 'packages/logger/**'
-                        - 'packages/sentry/**'
-                        - 'packages/storage/**'
-                        - 'packages/workflow/**'
-                        - 'packages/tsconfig.base.json'
                         - 'apps/tsconfig.node.json'
                         - 'apps/*/package.json'
-                        - 'packages/*/package.json'
                         - 'package.json'
                         - 'pnpm-workspace.yaml'
                         - 'pnpm-lock.yaml'
+                        - 'Dockerfile'
                         - '.dockerignore'
+                        - '.github/workflows/ci.yaml'
 
     # -------------------------------------------------------------------------
     # Checks (repo-wide)
@@ -120,10 +115,9 @@ jobs:
         timeout-minutes: 20
         strategy:
             fail-fast: false
-            # The runtime base differs per image, so it belongs here rather than
-            # being branched on inside a step. Adding an app needs a Dockerfile
-            # stage and an entry here; everything else about a new app is
-            # generic. Keep this list and the one in release-ghcr in step.
+            # Adding an app needs a Dockerfile stage and an entry here;
+            # everything else about a new app is generic. Keep this list and the
+            # one in release-ghcr in step.
             matrix:
                 include:
                     - image: ui
@@ -191,7 +185,7 @@ jobs:
               uses: docker/build-push-action@v7
               with:
                   context: .
-                  file: apps/workflow-pathoscope/Dockerfile
+                  target: pathoscope
                   cache-from: type=gha,scope=pathoscope
                   cache-to: type=gha,mode=max,scope=pathoscope
 

@@ -30,7 +30,7 @@ This is a **pnpm monorepo**:
   `/indexes/{id}`, `/analyses/{id}`, `/refs/{id}` and `/settings`.
   There is **no delete and no failure route**: cancelling a job, deleting
   one and the five-minute stalled-job sweep all stay Python's. Image:
-  `ghcr.io/virtool/jobs-api`, Alpine. Four rules: it is **always "the jobs
+  `ghcr.io/virtool/jobs-api`. Four rules: it is **always "the jobs
   API"**, never "the control plane" — that names its role, not the service;
   **every route must refuse an unauthenticated caller or be named in
   `PUBLIC_ROUTES`**, which `src/__tests__/authorization.test.ts` enforces —
@@ -77,7 +77,7 @@ This is a **pnpm monorepo**:
 - `apps/tasks/` — `@virtool/tasks`, the task service: **one** long-lived
   process carrying both halves of Virtool's task system, the periodic
   spawner and the runner that claims and executes what it spawns. Image:
-  `ghcr.io/virtool/tasks`, Alpine, no ingress and **no Service** — its HTTP
+  `ghcr.io/virtool/tasks`, no ingress and **no Service** — its HTTP
   listener serves only `/health/live`, `/health/ready` and a token-gated
   `/metrics` on `VT_TASKS_PROBE_PORT` (9900). Neither half has a flag to
   turn it off: the cutover from Python is two deployments inside a minute,
@@ -93,20 +93,16 @@ This is a **pnpm monorepo**:
   run decompresses the FASTA, computes `gc`/`count`, compresses and finalizes.
   Don't port the step or the `*.bt2` upload loop back. That leaves it running
   no external tool at all — the gzip is `@virtool/workflow`'s, in-process — so
-  the image, `ghcr.io/virtool/ts-create-subtraction`, is **Alpine** and copies
-  nothing from `ghcr.io/virtool/tools`. Reintroducing a tools binary means
-  moving the stage to Debian in the same edit, because they are built against
-  `python:3.13-bookworm` and musl cannot load them. The other three workflow
-  executors get a directory, a Dockerfile stage and a CI matrix entry when
-  their port lands.
+  the image, `ghcr.io/virtool/ts-create-subtraction`, copies nothing from
+  `ghcr.io/virtool/tools`. The other three workflow executors get a directory,
+  a Dockerfile stage and a CI matrix entry when their port lands.
 - `apps/workflow-pathoscope/` — `@virtool/workflow-pathoscope`, the pathoscope
   workflow executor and its image (`ghcr.io/virtool/ts-pathoscope`). Eight
   steps, four external tools and `pathoscope-core`, which it drives **as a
   subprocess** — there is no FFI here and adding one is out of scope by
-  decision. Its Dockerfile carries three halves: a cargo-chef stage compiling
-  `packages/pathoscope-core`, a Node stage bundling the app, and a Debian
-  runtime layering the `ghcr.io/virtool/tools` binaries over both. Built from
-  the **repo root** (`docker build -f apps/workflow-pathoscope/Dockerfile .`).
+  decision. Its stages in the root `Dockerfile` are a cargo-chef build of
+  `packages/pathoscope-core`, a Node build on the shared `base`, and a runtime
+  layering the `ghcr.io/virtool/tools` binaries over both.
   Two rules it carries: it writes **no result file** — Python uploaded a
   `report.tsv` whose every figure is already in the `results` blob, so the
   finalize manifest is empty and `FinalizeAnalysisRequest.files` allows that
@@ -194,9 +190,12 @@ A non-Vite app must **never import from `apps/web`**, in either direction — a
 
 See [docs/apps.md](docs/apps.md) for the bundler rationale, the
 bundled-vs-external rule and why externals must be string literals, the
-`pnpm deploy` / `injectWorkspacePackages` mechanism, and the Alpine-vs-Debian
-image split. That doc is about the pipeline every app shares; each app's own
-`README.md` covers what that app is, its port, image and commands.
+`pnpm deploy` / `injectWorkspacePackages` mechanism, and the repo-wide
+gates. [docs/images.md](docs/images.md) covers the image side: the
+target inventory, the one-base-for-everything rule, the install and
+source layers, the tools-image interpreters, and what building and
+publishing an image takes. Each app's own `README.md` covers what that
+app is, its port, image and commands.
 
 Use `pnpm` for all install, run, and exec commands — not `npm` or `bun`.
 
@@ -1942,7 +1941,8 @@ particular to that directory which no shared doc owns, and point at the
 because it is an entry point rather than a leaf.
 
 Keep it short. Anything past a screen belongs in a `docs/` leaf,
-anything true of every app belongs in `docs/apps.md`, and anything a
+anything true of every app belongs in `docs/apps.md` (or
+`docs/images.md`, if it is about the image), and anything a
 reader needs while editing one function belongs in the JSDoc above it. A
 package left with no full treatment to give once those are written needs
 no leaf at all — `@virtool/bio` is the worked example, and its README is

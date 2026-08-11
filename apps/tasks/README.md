@@ -4,7 +4,7 @@ The task service: **one** long-lived process carrying both halves of Virtool's
 task system — the periodic spawner that inserts scheduled tasks, and the runner
 that claims and executes what it spawns.
 
-Image: `ghcr.io/virtool/tasks` (Alpine). No ingress and **no Service** — its
+Image: `ghcr.io/virtool/tasks`. No ingress and **no Service** — its
 HTTP listener serves only `GET /health/live`, `GET /health/ready` and a
 token-gated `GET /metrics` on `VT_TASKS_PROBE_PORT` (**9900**).
 
@@ -44,5 +44,6 @@ Run from the monorepo root.
 
 `docs/tasks.md` covers the config table, the `AppContext` contract, shutdown
 ordering, the lease and fencing rules, the framework's step model, the runner's
-loop and the task-body contracts in full. `docs/apps.md` covers the bundling,
-`pnpm deploy` and image pipeline every non-Vite app shares.
+loop and the task-body contracts in full. `docs/apps.md` covers the bundling
+and `pnpm deploy` pipeline every non-Vite app shares, and `docs/images.md` the
+image pipeline.

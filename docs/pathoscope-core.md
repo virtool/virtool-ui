@@ -143,10 +143,10 @@ every Rust edit. Add a line there when a new TypeScript package appears.
 
 ## The image build
 
-`apps/workflow-pathoscope/Dockerfile` builds `ghcr.io/virtool/ts-pathoscope`
-from the repo root. The crate is compiled in the same Dockerfile as its only
-consumer, so there is no second release stream to coordinate and no window in
-which the workflow and its core disagree.
+The root `Dockerfile`'s `pathoscope` target builds
+`ghcr.io/virtool/ts-pathoscope`. The crate is compiled in the same Dockerfile as
+its only consumer, so there is no second release stream to coordinate and no
+window in which the workflow and its core disagree.
 
 **CI builds this image but does not publish it, and that is deliberate.** The
 `Pathoscope / Build` job compiles the Dockerfile on every run — enough to catch
@@ -159,12 +159,11 @@ overwritten today; the point is that the port is unfinished, not that the names
 clash. Add a publish job when that repo is retired, and settle which image name
 the cluster pulls in the same change.
 
-**The base is Debian, and that is settled rather than a choice.** The runtime
-copies binaries from `ghcr.io/virtool/tools`, which are built against
-`python:3.13-bookworm`, so the Rust core has to be an ordinary glibc build and
-`rust-htslib`'s unverified musl support never arises. This repo's *root*
-`Dockerfile` is `node:24-alpine` and builds `ghcr.io/virtool/ui` — that is a
-different image, and the Rust binary must not be built in an Alpine stage.
+**The crate is built on `rust:1.97-bookworm`.** The runtime copies binaries from
+`ghcr.io/virtool/tools`, which are built against `python:3.13-bookworm`, so the
+Rust core has to be an ordinary glibc build and `rust-htslib`'s unverified musl
+support never arises. Every other stage in that file is Debian too, so nothing
+here is a special case any more.
 
 The build is cargo-chef layered: dependencies are cooked in their own layer
 before `src` is copied. `hts-sys` vendors htslib's C source and compiles it with

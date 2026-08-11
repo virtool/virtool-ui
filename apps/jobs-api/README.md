@@ -5,7 +5,7 @@ A [Hono](https://hono.dev) app on `@hono/node-server`, port **9950**, mirroring
 Python's `virtool/jobs/main.py`. It runs as `api-jobs-service` behind a
 ClusterIP with **no ingress** — that absence is the security boundary.
 
-Image: `ghcr.io/virtool/jobs-api` (Alpine).
+Image: `ghcr.io/virtool/jobs-api`.
 
 It serves records, never bytes: a read hands back the recorded `storageKey` and
 the workflow fetches the object itself.
@@ -41,5 +41,6 @@ Run from the monorepo root.
 ## Documentation
 
 `docs/jobs-api.md` covers the routes, the auth model, the ownership and
-finalize rules, config and metrics in full. `docs/apps.md` covers the bundling,
-`pnpm deploy` and image pipeline every non-Vite app shares.
+finalize rules, config and metrics in full. `docs/apps.md` covers the bundling
+and `pnpm deploy` pipeline every non-Vite app shares, and `docs/images.md` the
+image pipeline.

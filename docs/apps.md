@@ -1,6 +1,3 @@
-# Non-Vite Node apps
-
-
 ## Apps bundle, packages stay source
 
 The workspace packages under `packages/` are **unbuilt TypeScript**.
@@ -126,82 +123,6 @@ Adding a directory in that shape is enough to be covered by `pnpm build`,
 edits to root scripts, `knip.json`, `biome.json`, the Dockerfile install
 layer, or `pnpm-workspace.yaml`. Adding a new *image* still needs a
 Dockerfile stage and a CI matrix entry — the one deliberate exception.
-
-## Images
-
-Most apps get a build stage and a runtime stage in the root `Dockerfile`,
-and those build stages share `base`, which installs once from every
-workspace manifest.
-
-**An app whose runtime must be Debian carries its own Dockerfile
-instead**, because `base` is Alpine and a build stage cannot be shared
-across the libc split. `apps/workflow-pathoscope` is the only one today:
-it defines its own `node-base` on `node:24-bookworm-slim` and repeats the
-install layer there. That duplication is the cost of the split, not an
-oversight — see the runtime-base rule below.
-
-**The install layer takes manifests by glob.** `COPY --parents
-apps/*/package.json packages/*/package.json ./` preserves directory
-structure — a plain `COPY apps/*/package.json apps/` flattens them all
-onto one path. That needs the `# syntax=docker/dockerfile:1-labs` parser
-directive on the first line of the file. Adding a workspace must not mean
-editing a list of `COPY` lines.
-
-**Package *source*, though, is copied one `COPY` per package.** The glob
-above matches manifests only, so it skips `packages/pathoscope-core`,
-which is a Rust crate with no `package.json`. A blanket
-`COPY packages ./packages` would pull that crate's `src/` and
-`Cargo.lock` into the layer and bust its cache on every Rust edit, for a
-tree no TypeScript image has any use for. Add a line when a new
-TypeScript package appears.
-
-**App source is copied per build stage, not in `base`.** A change to
-`apps/web` then does not invalidate the jobs-api image's cache, and the
-install layer stays untouched when an app is added.
-
-**The runtime base is decided by one question: does the app run a
-binary from `ghcr.io/virtool/tools`?**
-
-- **No** — `node:24-alpine`. `apps/jobs-api`, `apps/tasks` and
-  `apps/create-subtraction` all copy nothing from the tools image, so
-  none of them pays Debian's size. Do not move one to Debian for
-  uniformity with a workflow image.
-- **Yes** — `node:24-bookworm-slim`. Those binaries are built against
-  `python:3.13-bookworm` and dynamically linked against glibc; Alpine is
-  musl and could not load them. `apps/workflow-pathoscope`, which has its
-  own Dockerfile, is the worked example. Do not move a tools-carrying
-  image to Alpine for uniformity either.
-
-Being a workflow does not by itself answer the question — a workflow
-whose steps are all in-process belongs on Alpine. Adding a
-`COPY --from=ghcr.io/virtool/tools` line to an Alpine stage means moving
-that stage to Debian in the same edit.
-
-**Not every tool in that image is a binary,** so a Debian stage has to
-install interpreters as well as shared libraries. Check a new tool's
-entry point rather than assuming it is an ELF, and check it against the
-tools image rather than against upstream's current source — the pinned
-version is what ships:
-
-```
-docker run --rm --entrypoint sh ghcr.io/virtool/tools:1.2.0 \
-    -c 'head -1 /tools/<tool>/<version>/<tool>'
-```
-
-A missing interpreter does not fail the build. It fails the first time
-that step runs, in a pod, as `env: '<interpreter>': No such file or
-directory` — long after the image passed CI. Which interpreters a given
-image needs is that app's business; `apps/workflow-pathoscope/README.md`
-carries the worked example.
-
-A build stage and its runtime stage share a libc, so nothing in this repo
-builds a deployed tree against one and runs it on the other. Keep it that
-way: check `find /prod/<app> -name '*.node'` before adding a dependency
-carrying a native addon, and if an app ever does need a cross-libc build,
-give it its own Dockerfile the way `apps/workflow-pathoscope` does rather
-than reaching for prebuilds. (`bcrypt`, which reaches `apps/jobs-api`
-through `@virtool/data`, ships prebuilds for both flavours — it is not a
-counterexample, because that image is Alpine end to end.)
 
 ## Repo-wide gates
 

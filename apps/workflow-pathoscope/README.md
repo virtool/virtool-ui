@@ -6,7 +6,7 @@ against one representative per OTU to find candidates, rebuilds an index
 carrying every isolate of just those OTUs, maps again, drops reads that belong
 to the host, and reassigns the reads that matched more than one isolate.
 
-Image: `ghcr.io/virtool/ts-pathoscope` (Debian). Eight steps, four external
+Image: `ghcr.io/virtool/ts-pathoscope`. Eight steps, four external
 tools — `bowtie2`, `cd-hit-est`, `pigz`, `samtools` — and `pathoscope-core`,
 which it drives **as a subprocess**; there is no FFI here and adding one is out
 of scope by decision.
@@ -21,22 +21,13 @@ of scope by decision.
 
 ## Building the image
 
-This app has its own Dockerfile, carrying three halves: a cargo-chef stage
-compiling `packages/pathoscope-core`, a Node stage bundling the app, and a
-Debian runtime layering the `ghcr.io/virtool/tools` binaries over both. Build it
-from the **repo root**:
+Its stages in the root `Dockerfile` are a cargo-chef build of
+`packages/pathoscope-core`, a Node build on the shared `base`, and a runtime
+layering the `ghcr.io/virtool/tools` binaries over both:
 
 ```
-docker build -f apps/workflow-pathoscope/Dockerfile .
+docker build --target pathoscope .
 ```
-
-### Why it has its own Dockerfile
-
-The root `Dockerfile`'s shared `base` is Alpine, and this image has to be
-Debian: the `ghcr.io/virtool/tools` binaries are built against
-`python:3.13-bookworm` and dynamically linked against glibc, which musl cannot
-load. A build stage and its runtime stage share a libc, so this app repeats the
-install layer on its own `node-base` rather than reaching across the split.
 
 ### The runtime stage installs interpreters, not just libraries
 
@@ -94,5 +85,5 @@ The Rust crate is not a pnpm workspace — run `cargo test` in
 
 `docs/workflow-runtime.md` covers the runtime every executor runs on,
 `docs/pathoscope-core.md` the Rust crate, `docs/index-artifact.md` the SQLite
-reference index it reads, and `docs/apps.md` the bundling and image pipeline
-every non-Vite app shares.
+reference index it reads, `docs/apps.md` the bundling and `pnpm deploy`
+pipeline every non-Vite app shares, and `docs/images.md` the image pipeline.
