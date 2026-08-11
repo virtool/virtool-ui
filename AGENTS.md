@@ -99,14 +99,14 @@ This is a **pnpm monorepo**:
   `python:3.13-bookworm` and musl cannot load them. The other three workflow
   executors get a directory, a Dockerfile stage and a CI matrix entry when
   their port lands.
-- `apps/workflow-pathoscope/` — `@virtool/workflow-pathoscope`, the pathoscope
-  workflow executor and its image (`ghcr.io/virtool/ts-pathoscope`). Eight
-  steps, four external tools and `pathoscope-core`, which it drives **as a
-  subprocess** — there is no FFI here and adding one is out of scope by
-  decision. Its Dockerfile carries three halves: a cargo-chef stage compiling
-  `packages/pathoscope-core`, a Node stage bundling the app, and a Debian
-  runtime layering the `ghcr.io/virtool/tools` binaries over both. Built from
-  the **repo root** (`docker build -f apps/workflow-pathoscope/Dockerfile .`).
+- `apps/pathoscope/` — `@virtool/pathoscope`, the pathoscope workflow executor
+  and its image (`ghcr.io/virtool/ts-pathoscope`). Eight steps, four external
+  tools and `pathoscope-core`, which it drives **as a subprocess** — there is
+  no FFI here and adding one is out of scope by decision. Its Dockerfile
+  carries three halves: a cargo-chef stage compiling `packages/pathoscope-core`,
+  a Node stage bundling the app, and a Debian runtime layering the
+  `ghcr.io/virtool/tools` binaries over both. Built from the **repo root**
+  (`docker build -f apps/pathoscope/Dockerfile .`).
   Two rules it carries: it writes **no result file** — Python uploaded a
   `report.tsv` whose every figure is already in the `results` blob, so the
   finalize manifest is empty and `FinalizeAnalysisRequest.files` allows that
@@ -149,11 +149,12 @@ This is a **pnpm monorepo**:
   - `@virtool/workflow` — the workflow runtime every executor runs on: the
     step model, the run loop, the work path, the subprocess runner, the eager
     `buildContext` seam, the job lifecycle loop that claims, heartbeats and
-    reports over the jobs API, and the file layer — streaming transfer, gzip,
-    tar and cache-key derivation. It takes a `StorageBackend` as an argument
-    and knows nothing about a database — see the section below. It is the
-    only place in the repo that spawns a process, and so the only one
-    depending on `execa`.
+    reports over the jobs API, the file layer — streaming transfer, gzip,
+    tar and cache-key derivation — and the bowtie2 mapping index, which is
+    shared between the analysis workflows rather than owned by one. It takes
+    a `StorageBackend` as an argument and knows nothing about a database —
+    see the section below. It is the only place in the repo that spawns a
+    process, and so the only one depending on `execa`.
   - `pathoscope-core` — **Rust, not TypeScript.** Pathoscope's EM core as a
     standalone CLI, invoked as a subprocess. It is not a pnpm workspace (it
     has no `package.json`) and is excluded from biome and knip by name —

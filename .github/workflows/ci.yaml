@@ -76,7 +76,7 @@ jobs:
                       pathoscope-image:
                         - 'packages/pathoscope-core/**'
                         - '.github/workflows/ci.yaml'
-                        - 'apps/workflow-pathoscope/**'
+                        - 'apps/pathoscope/**'
                         - 'packages/contracts/**'
                         - 'packages/logger/**'
                         - 'packages/sentry/**'
@@ -112,7 +112,7 @@ jobs:
 
     # -------------------------------------------------------------------------
     # Docker images (apps/web, apps/jobs-api, apps/tasks, apps/create-subtraction,
-    # apps/workflow-pathoscope)
+    # apps/pathoscope)
     # -------------------------------------------------------------------------
     build:
         name: ${{ matrix.area }} / Build
@@ -191,7 +191,7 @@ jobs:
               uses: docker/build-push-action@v7
               with:
                   context: .
-                  file: apps/workflow-pathoscope/Dockerfile
+                  file: apps/pathoscope/Dockerfile
                   cache-from: type=gha,scope=pathoscope
                   cache-to: type=gha,mode=max,scope=pathoscope
 
@@ -285,7 +285,7 @@ jobs:
                   TZ: UTC
 
     # -------------------------------------------------------------------------
-    # Pathoscope (apps/workflow-pathoscope, packages/pathoscope-core)
+    # Pathoscope (apps/pathoscope, packages/pathoscope-core)
     # -------------------------------------------------------------------------
     pathoscope-test:
         name: Pathoscope / Test
