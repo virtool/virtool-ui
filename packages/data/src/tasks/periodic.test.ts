@@ -13,7 +13,7 @@ import {
 import type { Db, PgClient } from "../db/pg";
 import { tasks } from "../db/schema/tasks";
 import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
-import { CLIENT_EVENTS_CHANNEL, type ClientEvent } from "../events/channel";
+import { collectFrames } from "../test/frames";
 import { createPeriodicTask } from "./data";
 
 let database: TestDatabase;
@@ -163,53 +163,24 @@ describe("createPeriodicTask", () => {
 	});
 
 	it("publishes a create frame once the transaction has committed", async () => {
-		const received: ClientEvent[] = [];
+		let spawnedId: number | undefined;
 
-		let seal: () => void = () => undefined;
-		const sealed = new Promise<void>((resolve) => {
-			seal = resolve;
-		});
-
-		const subscription = await database.client.listen(
-			CLIENT_EVENTS_CHANNEL,
-			(payload) => {
-				const event = JSON.parse(payload) as ClientEvent;
-
-				if (event.domain === "roles" && event.resource_id === "sentinel") {
-					seal();
-					return;
-				}
-
-				received.push(event);
-			},
-		);
-
-		try {
+		// The suppressed spawn is what makes this an assertion of *one* frame
+		// rather than of at least one: it runs before the sentinel, so a frame
+		// from a spawn that did not happen would have arrived by the time this
+		// resolves.
+		const frames = await collectFrames(database.client, async () => {
 			const spawned = await createPeriodicTask(db, "sweep_blast", 30);
 			const suppressed = await createPeriodicTask(db, "sweep_blast", 30);
 
-			await database.client.notify(
-				CLIENT_EVENTS_CHANNEL,
-				JSON.stringify({
-					domain: "roles",
-					resource_id: "sentinel",
-					operation: "update",
-				}),
-			);
-
-			await sealed;
-
 			expect(suppressed.outcome).toBe("not_due");
-			expect(received).toEqual([
-				{
-					domain: "tasks",
-					resource_id: spawned.task?.id,
-					operation: "create",
-				},
-			]);
-		} finally {
-			await subscription.unlisten();
-		}
+
+			spawnedId = spawned.task?.id;
+		});
+
+		expect(frames).toEqual([
+			{ domain: "tasks", resource_id: spawnedId, operation: "create" },
+		]);
 	});
 });
 

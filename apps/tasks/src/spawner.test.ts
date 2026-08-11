@@ -25,9 +25,7 @@ import {
 	type PeriodicTaskRegistration,
 	SPAWN_TICK_INTERVAL_MS,
 } from "./tasks/periodic";
-
-/** How long a `waitFor` predicate has to come true before the test fails. */
-const WAIT_TIMEOUT_MS = 10_000;
+import { waitFor } from "./testing/waitFor";
 
 const logger: Logger = createLogger({ name: "test", level: "silent" });
 
@@ -46,20 +44,6 @@ afterAll(async () => {
 beforeEach(async () => {
 	await db.delete(tasks);
 });
-
-async function waitFor(predicate: () => Promise<boolean>): Promise<void> {
-	const deadline = Date.now() + WAIT_TIMEOUT_MS;
-
-	while (Date.now() < deadline) {
-		if (await predicate()) {
-			return;
-		}
-
-		await delay(10);
-	}
-
-	throw new Error("timed out waiting for a condition");
-}
 
 async function countTasks(type: string): Promise<number> {
 	const rows = await db
