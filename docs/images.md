@@ -11,7 +11,8 @@ manifest.
 | `jobs-api` | `ghcr.io/virtool/jobs-api` | `apps/jobs-api` |
 | `tasks` | `ghcr.io/virtool/tasks` | `apps/tasks` |
 | `create-subtraction` | `ghcr.io/virtool/ts-create-subtraction` | `apps/create-subtraction` |
-| `pathoscope` | `ghcr.io/virtool/ts-pathoscope` | `apps/workflow-pathoscope` |
+| `pathoscope` | `ghcr.io/virtool/ts-pathoscope` | `apps/pathoscope` |
+| `nuvs` | `ghcr.io/virtool/ts-nuvs` | `apps/nuvs` |
 
 `dist` is named that rather than `web` because tooling outside this repo
 targets it. There is also a `dev` stage carrying `apps/web` on the
@@ -31,6 +32,13 @@ The pathoscope image additionally compiles `packages/pathoscope-core` on
 their own layer before `src` is copied. That crate needs `libclang-dev`
 at build time, and exactly one binary out of the whole Rust build reaches
 the runtime stage.
+
+The nuvs image compiles SPAdes 4.2.0 from source, on `python:3.13-bookworm`,
+because it ships no binary release this base can use — the recipe is
+`virtool/workflow-nuvs`'s Dockerfile verbatim, version included, since the
+assembler decides the contigs and a different one is a different analysis.
+That stage depends on nothing else in the file, so a warm layer cache skips
+it entirely regardless of what else changed.
 
 ## The install layer takes manifests by glob
 
@@ -67,13 +75,13 @@ docker run --rm --entrypoint sh ghcr.io/virtool/tools:1.2.0 \
 A missing interpreter does not fail the build. It fails the first time
 that step runs, in a pod, as `env: '<interpreter>': No such file or
 directory` — long after the image passed CI. Which interpreters a given
-image needs is that app's business; `apps/workflow-pathoscope/README.md`
-carries the worked example.
+image needs is that app's business; `apps/pathoscope/README.md` carries
+the worked example.
 
 ## Building and publishing
 
-CI builds four of the five in a matrix (`build`), and publishes the same
-four from a second matrix (`release-ghcr`) on a release. **Keep the two
+CI builds five of the six in a matrix (`build`), and publishes the same
+five from a second matrix (`release-ghcr`) on a release. **Keep the two
 lists in step** — an app added to one and not the other either goes
 unbuilt on pull requests or unpublished on release, and neither fails
 anything.
@@ -82,24 +90,29 @@ Adding an app to the repo needs no Dockerfile edit until it needs an
 image; adding an *image* needs a stage here and an entry in both
 matrices.
 
-**Pathoscope is the fifth, and it is built but deliberately not
-published.** It has its own `build-pathoscope` job with no publish
-counterpart, because `virtool/workflow-pathoscope` still releases the
-pathoscope workflow and a second pipeline shipping it from here would
-leave two candidates for what the cluster runs. Restore a publish job
-when that repo retires. Note that `release-ghcr` is also what stamps a
-real version, so until then `APP_VERSION` is `0.0.0` in every built
-pathoscope image, and the `workflow_version` in its cache keys with it.
+**Pathoscope and nuvs are the odd two, and both are built but
+deliberately not published.** Each has its own build job
+(`build-pathoscope`, `build-nuvs`) with no publish counterpart, because
+`virtool/workflow-pathoscope` and `virtool/workflow-nuvs` still release
+those workflows, and a second pipeline shipping either from here would
+leave two candidates for what the cluster runs. Restore a publish job for
+one when its Python repo retires. Note that `release-ghcr` is also what
+stamps a real version, so until then `APP_VERSION` is `0.0.0` in every
+built pathoscope or nuvs image, and the `workflow_version` in their cache
+keys with it.
 
-That job and `pathoscope-test` are the only path-filtered jobs in
-`ci.yaml`, and they take a filter each: `pathoscope-test` runs cargo over
-the crate and reads no TypeScript, while `build-pathoscope` bundles the
-app on the shared `base` and so takes every workspace package.
-**Everything the Dockerfile `COPY`s must appear under
-`pathoscope-image`** — a missing path skips the build on the pull request
-that breaks it and fails on the push to `main`, where nothing gates it.
-`packages/**` is the catch-all that keeps that from depending on anyone
-remembering.
+Both build jobs, plus `pathoscope-test`, are the only path-filtered jobs
+in `ci.yaml`, and they take a filter each because their inputs differ:
+`pathoscope-test` runs cargo over the crate and reads no TypeScript,
+while `build-pathoscope` and `build-nuvs` bundle their app on the shared
+`base` and so take every workspace package their build stage copies.
+**Everything a build stage `COPY`s must appear under that image's
+filter** — a missing path skips the build on the pull request that breaks
+it and fails on the push to `main`, where nothing gates it. The two image
+filters are nearly identical and are kept separate rather than merged,
+because nuvs copies `packages/bio` and pathoscope copies
+`packages/pathoscope-core`, and folding them into one would rebuild each
+image for the other's inputs.
 
 Build a single image locally by naming its target:
 

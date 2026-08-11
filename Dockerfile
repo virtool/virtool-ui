@@ -162,9 +162,9 @@ COPY packages/pathoscope-core .
 RUN cargo build --release --bin pathoscope-core
 
 FROM base AS build-pathoscope
-COPY apps/workflow-pathoscope ./apps/workflow-pathoscope
-RUN pnpm --filter @virtool/workflow-pathoscope build \
-    && pnpm deploy --filter @virtool/workflow-pathoscope --prod /prod/workflow-pathoscope
+COPY apps/pathoscope ./apps/pathoscope
+RUN pnpm --filter @virtool/pathoscope build \
+    && pnpm deploy --filter @virtool/pathoscope --prod /prod/pathoscope
 
 FROM node:24-bookworm-slim AS pathoscope
 WORKDIR /workflow
@@ -194,10 +194,75 @@ COPY --from=ghcr.io/virtool/tools:1.2.0 /tools/samtools/1.22.1/bin/samtools /usr
 # Node process. There is no FFI here and adding one is out of scope by decision.
 COPY --from=builder /build/target/release/pathoscope-core /usr/local/bin/
 
-COPY --from=build-pathoscope /prod/workflow-pathoscope ./
+COPY --from=build-pathoscope /prod/pathoscope ./
 
 # Exec form, and `node` directly rather than `npm start`: npm does not forward
 # signals to the process it spawns (npm/rfcs#829, still open), so SIGTERM would
 # never reach the run's handler and a drained node would SIGKILL a job mid-step
 # instead of reporting 124.
+CMD ["node", "dist/index.mjs"]
+
+# The NuVs workflow, published as ghcr.io/virtool/ts-nuvs. It finds viruses the
+# reference does not describe, by discarding reads that map to a known OTU or a
+# subtraction, assembling what is left with SPAdes and searching the contigs
+# for viral motifs with HMMER.
+#
+# SPAdes ships no binary release this base can use, so it is compiled here.
+# The recipe is `virtool/workflow-nuvs`'s Dockerfile verbatim, including the
+# version: the assembler decides the contigs, so a different one is a
+# different analysis. It depends on nothing else in this file, so a warm layer
+# cache skips it regardless of what else changed.
+FROM python:3.13-bookworm AS spades
+WORKDIR /build
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        cmake \
+        libbz2-dev \
+        wget \
+        zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+RUN wget -q https://github.com/ablab/spades/releases/download/v4.2.0/SPAdes-4.2.0.tar.gz
+RUN tar -xzf SPAdes-4.2.0.tar.gz
+WORKDIR /build/SPAdes-4.2.0
+ENV PREFIX=/build/spades
+RUN ./spades_compile.sh
+
+FROM base AS build-nuvs
+COPY apps/nuvs ./apps/nuvs
+RUN pnpm --filter @virtool/nuvs build \
+    && pnpm deploy --filter @virtool/nuvs --prod /prod/nuvs
+
+FROM node:24-bookworm-slim AS nuvs
+WORKDIR /workflow
+
+# Each package here backs a specific runtime dependency of a copied binary.
+# perl and libgomp1 are for bowtie2, a set of Perl wrappers around
+# OpenMP-compiled binaries. libbz2-1.0 is for SPAdes, which links it.
+#
+# python3 is for SPAdes, not for us: `spades.py` is a Python script that
+# drives the compiled assembler binaries — dropping it leaves an image whose
+# `assemble` step fails at exec with no clue why.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libbz2-1.0 \
+        libgomp1 \
+        perl \
+        python3 \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+COPY --from=ghcr.io/virtool/tools:1.2.0 /tools/bowtie2/2.5.4/bowtie* /usr/local/bin/
+COPY --from=ghcr.io/virtool/tools:1.2.0 /tools/skewer/0.2.2/ /usr/local/bin/
+COPY --from=ghcr.io/virtool/tools:1.2.0 /tools/hmmer/3.3.2/ /opt/hmmer/
+COPY --from=spades /build/spades /opt/spades
+
+# There is deliberately no pigz. Python shells out to it for every compression;
+# `@virtool/workflow`'s gzip helpers are `node:zlib` in-process, and checksums
+# are taken over decompressed content, so nothing depends on pigz's output.
+ENV PATH="/opt/hmmer/bin:/opt/spades/bin:${PATH}"
+
+COPY --from=build-nuvs /prod/nuvs ./
+
 CMD ["node", "dist/index.mjs"]

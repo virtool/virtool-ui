@@ -111,8 +111,10 @@
 											"**/tasks/src/**",
 											"**/apps/create-subtraction/**",
 											"**/create-subtraction/src/**",
-											"**/apps/workflow-pathoscope/**",
-											"**/workflow-pathoscope/src/**"
+											"**/apps/pathoscope/**",
+											"**/pathoscope/src/**",
+											"**/apps/nuvs/**",
+											"**/nuvs/src/**"
 										],
 										"message": "No app may import another app's source, in any direction. Shared code goes down into a package instead."
 									}
@@ -171,8 +173,10 @@
 											"**/tasks/src/**",
 											"**/apps/create-subtraction/**",
 											"**/create-subtraction/src/**",
-											"**/apps/workflow-pathoscope/**",
-											"**/workflow-pathoscope/src/**"
+											"**/apps/pathoscope/**",
+											"**/pathoscope/src/**",
+											"**/apps/nuvs/**",
+											"**/nuvs/src/**"
 										],
 										"message": "No app may import another app's source, in any direction. Shared code goes down into a package instead."
 									}
@@ -230,8 +234,10 @@
 											"**/tasks/src/**",
 											"**/apps/create-subtraction/**",
 											"**/create-subtraction/src/**",
-											"**/apps/workflow-pathoscope/**",
-											"**/workflow-pathoscope/src/**"
+											"**/apps/pathoscope/**",
+											"**/pathoscope/src/**",
+											"**/apps/nuvs/**",
+											"**/nuvs/src/**"
 										],
 										"message": "No app may import another app's source, in any direction. apps/jobs-api is the likeliest offender against apps/web because it does work src/server also does, so copying an import from there is an easy mistake. Shared shapes and helpers belong in @virtool/contracts, @virtool/data or @virtool/storage, which every app imports down into."
 									}

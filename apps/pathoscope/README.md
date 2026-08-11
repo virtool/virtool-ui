@@ -1,4 +1,4 @@
-# @virtool/workflow-pathoscope
+# @virtool/pathoscope
 
 The pathoscope workflow executor. Pathoscope quantifies known viruses in a
 sample: it collapses redundant isolates out of the reference, maps the sample
@@ -72,11 +72,11 @@ Run from the monorepo root.
 
 | Command | Action |
 | --- | --- |
-| `pnpm --filter @virtool/workflow-pathoscope build` | Bundle to `dist/index.mjs` |
-| `pnpm --filter @virtool/workflow-pathoscope start` | Run the bundle |
-| `pnpm --filter @virtool/workflow-pathoscope test` | Run the Vitest suite |
-| `pnpm --filter @virtool/workflow-pathoscope test:watch` | Vitest in watch mode |
-| `pnpm --filter @virtool/workflow-pathoscope typecheck` | `tsc --noEmit` |
+| `pnpm --filter @virtool/pathoscope build` | Bundle to `dist/index.mjs` |
+| `pnpm --filter @virtool/pathoscope start` | Run the bundle |
+| `pnpm --filter @virtool/pathoscope test` | Run the Vitest suite |
+| `pnpm --filter @virtool/pathoscope test:watch` | Vitest in watch mode |
+| `pnpm --filter @virtool/pathoscope typecheck` | `tsc --noEmit` |
 
 The Rust crate is not a pnpm workspace — run `cargo test` in
 `packages/pathoscope-core` directly. Building it needs `libclang-dev`.
