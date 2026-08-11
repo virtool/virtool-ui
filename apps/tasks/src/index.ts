@@ -15,7 +15,8 @@ import { APP_VERSION } from "./version";
  *
  * The spawner is the half that ships *first* and runs beside Python's, which is
  * still spawning the same five types into the same table until the cutover. The
- * runner claims nothing until a task body is registered.
+ * runner claims only the types `taskRegistry` names, so a row of any other type
+ * stays queued for the Python runner that still knows it.
  */
 async function main(): Promise<void> {
 	const context = await bootstrap({ version: APP_VERSION });
