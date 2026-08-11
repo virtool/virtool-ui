@@ -17,7 +17,6 @@ import {
 	vi,
 } from "vitest";
 import {
-	createAccumulator,
 	createProgressWriter,
 	PROGRESS_DEBOUNCE_MS,
 	roundHalfToEven,
@@ -147,6 +146,25 @@ describe("createProgressWriter", () => {
 		expect((await readRow(taskId)).progress).toBe(90);
 	});
 
+	it("measures a decrease from the progress already on the row", async () => {
+		const taskId = await heldTask(RUNNER_A);
+
+		await db.update(tasks).set({ progress: 87 }).where(eq(tasks.id, taskId));
+
+		const writer = createProgressWriter({
+			db,
+			taskId,
+			runnerId: RUNNER_A,
+			logger,
+			progress: 87,
+			debounceMs: NEVER_FIRES_MS,
+		});
+
+		await writer.setNow({ progress: 0, step: "one" });
+
+		expect(await readRow(taskId)).toMatchObject({ progress: 87, step: "one" });
+	});
+
 	it("writes a step change even when progress stands still", async () => {
 		const taskId = await heldTask(RUNNER_A);
 
@@ -240,26 +258,5 @@ describe("createProgressWriter", () => {
 
 		expect(countUpdates()).toBe(1);
 		expect((await readRow(taskId)).progress).toBe(0);
-	});
-});
-
-describe("createAccumulator", () => {
-	it("reports the fraction done as items are counted off", () => {
-		const report = vi.fn();
-		const add = createAccumulator(4, report);
-
-		add();
-		add(2);
-
-		expect(report).toHaveBeenNthCalledWith(1, 0.25);
-		expect(report).toHaveBeenNthCalledWith(2, 0.75);
-	});
-
-	it("guards a zero total instead of dividing by it", () => {
-		const report = vi.fn();
-		const add = createAccumulator(0, report);
-
-		expect(() => add()).not.toThrow();
-		expect(report).not.toHaveBeenCalled();
 	});
 });

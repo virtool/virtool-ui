@@ -279,6 +279,120 @@ describe("runTask", () => {
 		});
 	});
 
+	it("leaves the bar where a step that threw started", async () => {
+		const task = await claim();
+
+		const def = defineTask({
+			type: "install_hmms",
+			payload: z.object({}),
+			steps: ["one", "two", "three", "four"],
+			run: async ({ helpers }) => {
+				await helpers.runStep("one", async () => undefined);
+				await helpers.runStep("two", async () => {
+					throw new Error("boom");
+				});
+			},
+		});
+
+		const outcome = await runTask({
+			db,
+			def,
+			task,
+			ctx: undefined,
+			logger,
+			signal: new AbortController().signal,
+			debounceMs: NEVER_FIRES_MS,
+		});
+
+		expect(outcome).toEqual({ status: "failed", error: "Error: boom" });
+		expect(await readRow(task.id)).toMatchObject({
+			error: "Error: boom",
+			progress: 25,
+			step: "two",
+		});
+	});
+
+	it("never writes the bar below what a reclaimed task already reported", async () => {
+		const claimed = await claim();
+
+		// What a reclaim leaves behind: the previous attempt's progress on the row,
+		// and a body about to start again from step zero.
+		await db
+			.update(tasks)
+			.set({ progress: 87 })
+			.where(eq(tasks.id, claimed.id));
+
+		const task: ClaimedTask = { ...claimed, progress: 87 };
+		let insideSecondStep: number | null = null;
+
+		const def = defineTask({
+			type: "install_hmms",
+			payload: z.object({}),
+			steps: ["one", "two"],
+			run: async ({ helpers, taskId }) => {
+				await helpers.runStep("one", async (report) => {
+					report(1);
+				});
+
+				await helpers.runStep("two", async () => {
+					insideSecondStep = (await readRow(taskId)).progress;
+				});
+			},
+		});
+
+		const outcome = await runTask({
+			db,
+			def,
+			task,
+			ctx: undefined,
+			logger,
+			signal: new AbortController().signal,
+			debounceMs: NEVER_FIRES_MS,
+		});
+
+		expect(outcome).toEqual({ status: "completed" });
+		expect(insideSecondStep).toBe(87);
+		expect(await readRow(task.id)).toMatchObject({
+			progress: 100,
+			step: "two",
+		});
+	});
+
+	it("drops the progress of a step the task does not declare", async () => {
+		const task = await claim();
+		let insideDeclaredStep: number | null = null;
+
+		const def = defineTask({
+			type: "install_hmms",
+			payload: z.object({}),
+			steps: ["one", "two"],
+			run: async ({ helpers, taskId }) => {
+				// A typo against the declared steps. Taking the whole bar for it would
+				// write 100 and silence every declared step after it.
+				await helpers.runStep("on", async (report) => {
+					report(1);
+				});
+
+				await helpers.runStep("two", async () => {
+					insideDeclaredStep = (await readRow(taskId)).progress;
+				});
+			},
+		});
+
+		const outcome = await runTask({
+			db,
+			def,
+			task,
+			ctx: undefined,
+			logger,
+			signal: new AbortController().signal,
+			debounceMs: NEVER_FIRES_MS,
+		});
+
+		expect(outcome).toEqual({ status: "completed" });
+		expect(insideDeclaredStep).toBe(50);
+	});
+
 	it("names an undeclared step and maps its reports straight onto 0–100", async () => {
 		const task = await claim();
 
@@ -342,9 +456,11 @@ describe("runTask", () => {
 			});
 		});
 
-		// Two step entries, two step exits, and the completion.
+		// Two step entries and the completion. A step writes nothing on its way
+		// out: the next entry carries the same value, and the completion carries
+		// the last step's end.
 		expect(frames).toEqual(
-			Array.from({ length: 5 }, () => ({
+			Array.from({ length: 3 }, () => ({
 				domain: "tasks",
 				resource_id: task.id,
 				operation: "update",
@@ -507,6 +623,78 @@ describe("runTask", () => {
 
 		expect(outcome).toEqual({ status: "failed", error: "TypeError: kaboom" });
 		expect((await readRow(task.id)).error).toBe("TypeError: kaboom");
+	});
+
+	it("returns without running the handler when the signal is already aborted", async () => {
+		const task = await claim();
+		const run = vi.fn();
+		const cleanup = vi.fn(async () => undefined);
+		const controller = new AbortController();
+
+		controller.abort();
+
+		const def = defineTask({
+			type: "install_hmms",
+			payload: z.object({}),
+			cleanup,
+			run,
+		});
+
+		const outcome = await runTask({
+			db,
+			def,
+			task,
+			ctx: undefined,
+			logger,
+			signal: controller.signal,
+		});
+
+		expect(outcome).toEqual({ status: "aborted" });
+		expect(run).not.toHaveBeenCalled();
+		expect(cleanup).not.toHaveBeenCalled();
+		expect(await readRow(task.id)).toMatchObject({
+			complete: false,
+			error: null,
+			progress: 0,
+		});
+	});
+
+	it("does not run cleanup after a reclaim no progress write could reveal", async () => {
+		const task = await claim();
+		const cleanup = vi.fn(async () => undefined);
+
+		const def = defineTask({
+			type: "install_hmms",
+			payload: z.object({}),
+			cleanup,
+			run: async ({ taskId }) => {
+				// Nothing has been reported, so the writer has no outstanding write to
+				// discover the reclaim through.
+				await db
+					.update(tasks)
+					.set({ runner_id: OTHER_RUNNER })
+					.where(eq(tasks.id, taskId));
+
+				throw new Error("boom");
+			},
+		});
+
+		const outcome = await runTask({
+			db,
+			def,
+			task,
+			ctx: undefined,
+			logger,
+			signal: new AbortController().signal,
+			debounceMs: NEVER_FIRES_MS,
+		});
+
+		expect(outcome).toEqual({ status: "fenced" });
+		expect(cleanup).not.toHaveBeenCalled();
+		expect(await readRow(task.id)).toMatchObject({
+			complete: false,
+			error: null,
+		});
 	});
 
 	it("stops without writing when another runner has reclaimed the task", async () => {

@@ -1,7 +1,6 @@
 import type { Db } from "@virtool/data/db/pg";
 import { updateTaskProgress } from "@virtool/data/tasks/data";
 import type { Logger } from "@virtool/logger";
-import type { StepProgressReporter } from "./define";
 
 /**
  * How long progress writes are coalesced for.
@@ -61,6 +60,11 @@ export type ProgressWriterOptions = {
 	taskId: number;
 	runnerId: string;
 	logger: Logger;
+	/**
+	 * The progress already on the row, which the monotonic rule is measured
+	 * against. Defaults to 0.
+	 */
+	progress?: number;
 	/** Defaults to {@link PROGRESS_DEBOUNCE_MS}. */
 	debounceMs?: number;
 };
@@ -77,6 +81,11 @@ export type ProgressWriterOptions = {
  * writer for good — the task belongs to another runner from that moment, and
  * this one must stop writing and stop emitting rather than announce a state the
  * row is not in.
+ *
+ * The monotonic rule is measured from `options.progress`, the value already on
+ * the row, and not from zero. A reclaimed task re-runs from step zero, so its
+ * first step would otherwise write the bar back to 0 — a run that resumes at
+ * 87% must hold there until it passes it again.
  */
 export function createProgressWriter(
 	options: ProgressWriterOptions,
@@ -84,7 +93,7 @@ export function createProgressWriter(
 	const { db, taskId, runnerId, logger } = options;
 	const debounceMs = options.debounceMs ?? PROGRESS_DEBOUNCE_MS;
 
-	let progress = 0;
+	let progress = options.progress ?? 0;
 	let step: string | undefined;
 	let pending = false;
 	let timer: NodeJS.Timeout | undefined;
@@ -200,30 +209,4 @@ export function createProgressWriter(
 	}
 
 	return { set, setNow, flush, isFenced: () => fenced };
-}
-
-/**
- * Wrap a reporter so a body can count items off against a total rather than
- * compute a fraction.
- *
- * `total <= 0` is guarded rather than divided by. Python's
- * `AccumulatingProgressHandlerWrapper` divides blind, so a zero-length download
- * raises `ZeroDivisionError` out of a progress helper and fails a task that had
- * nothing to do.
- */
-export function createAccumulator(
-	total: number,
-	report: StepProgressReporter,
-): (count?: number) => void {
-	let done = 0;
-
-	return function add(count = 1): void {
-		if (total <= 0) {
-			return;
-		}
-
-		done += count;
-
-		report(done / total);
-	};
 }

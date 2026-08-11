@@ -355,7 +355,7 @@ Three modules under `apps/tasks/src/framework/`:
 | Module | Holds |
 | --- | --- |
 | `define.ts` | `defineTask`, `TaskDef`, `TaskHelpers`, `TaskHandlerArgs`, `RegisteredTask`, `TaskRegistry` |
-| `progress.ts` | `createProgressWriter`, `PROGRESS_DEBOUNCE_MS`, `roundHalfToEven`, `createAccumulator` |
+| `progress.ts` | `createProgressWriter`, `PROGRESS_DEBOUNCE_MS`, `roundHalfToEven` |
 | `run.ts` | `runTask`, `TaskOutcome` |
 
 A body declares a type, a payload schema and its steps, and gets back a payload
@@ -375,15 +375,27 @@ arguments: `defineTask<typeof payloadSchema, TaskContext>({ ... })`.
 ### Steps are equal slices of 0–100
 
 `runStep(name, fn)` looks `name` up in the declared `steps` and gives it an
-equal slice of the bar. Entry writes `step = name` and the slice's basis; exit
-writes the slice's end, so a step that reported nothing still advances. Both
-are written **immediately** rather than on the debounce — entering a step is
-the transition a watching user notices. `report(frac)` clamps `frac` into
-`[0, 1]` and maps it into the slice.
+equal slice of the bar. Entry writes `step = name` and the slice's basis,
+**immediately** rather than on the debounce — entering a step is the transition
+a watching user notices. `report(frac)` clamps `frac` into `[0, 1]` and maps it
+into the slice.
 
-A name that is **not** in `steps` — or a task that declares none — still sets
-the column, and its reports map straight onto 0–100. Nothing is written on
-entry or exit for one, because there is no slice to write.
+**A step writes nothing on the way out.** The next step's entry writes the same
+value the exit would have, and the last step's end is what the completion
+writes — so an exit write is a second `UPDATE` and a second frame for a number
+already going out, and every frame is a refetch in every connected browser.
+More than cosmetics: an exit write that fired however the step ended would
+report a step that *threw* as finished, leaving a failed task sitting at 75%
+and — on the abort path — releasing the row for another runner with a progress
+value no attempt actually reached.
+
+A task that declares **no** steps maps every step it runs onto the whole 0–100
+bar. A task that declares them and then runs a name absent from the list has a
+typo, and its reports are **dropped**, at `warn`: giving that step the whole
+range would write 100 and, by the monotonic rule, silence every declared step
+that came after it — a bar pinned at 100 for the rest of the run. Nothing ties
+`runStep`'s `name` to `steps` at compile time, so this is the only place the
+mistake surfaces.
 
 Rounding is **half-to-even**, matching Python's `round`, not `Math.round`.
 `Math.round(62.5)` is 63 and Python's is 62, and Python still runs tasks until
@@ -403,11 +415,15 @@ quarter of a second is below what a bar needs to look continuous.
 
 Three properties it holds:
 
-- **Monotonic.** A value below one already recorded is logged at `debug` and
-  dropped. Python's `TaskProgressHandler.set_progress` **raises** on a
-  decrease, which means a rounding wobble or a retried chunk inside a data
-  function destroys an otherwise-healthy reference import. Progress is
-  cosmetic; it does not get to fail a task.
+- **Monotonic, from the value already on the row.** A value below one already
+  recorded is logged at `debug` and dropped. Python's
+  `TaskProgressHandler.set_progress` **raises** on a decrease, which means a
+  rounding wobble or a retried chunk inside a data function destroys an
+  otherwise-healthy reference import. Progress is cosmetic; it does not get to
+  fail a task. The baseline is seeded from `ClaimedTask.progress` rather than
+  from zero — a reclaimed task re-runs from step zero, and a writer starting at
+  0 would send a run resuming at 87% straight back to the beginning of the bar
+  in every connected browser.
 - **Serialized.** Each write is chained behind the last, so a flush cannot race
   a debounced write into landing the older value second.
 - **Fenced for good.** A write that matches nothing means the lease expired and
@@ -419,25 +435,41 @@ decrease is: a task that did its work must not fail over a bar that did not
 move. A database that is genuinely gone surfaces on the terminal write, which
 goes through the same pool.
 
-`createAccumulator(total, report)` lets a body count items off instead of
-computing a fraction, and **guards `total <= 0`**. Python's
-`AccumulatingProgressHandlerWrapper` divides blind, so a zero-length download
-raises `ZeroDivisionError` out of a progress helper and fails a task that had
-nothing to do.
+A body that wants to count items off against a total rather than compute a
+fraction writes that arithmetic itself for now. Whatever ends up sharing it
+must **guard `total <= 0`**: Python's `AccumulatingProgressHandlerWrapper`
+divides blind, so a zero-length download raises `ZeroDivisionError` out of a
+progress helper and fails a task that had nothing to do.
 
 ### The terminal contract
 
-`runTask` returns a `TaskOutcome` and writes at most one terminal status.
+`runTask` returns a `TaskOutcome` and writes at most one terminal status. It
+**always returns one** — a terminal write that rejects is folded into an
+outcome rather than escaping, since a rejection would leave the caller with no
+outcome to act on and the claim standing until its lease ran out.
 
 | Outcome | When | Row |
 | --- | --- | --- |
 | `completed` | `run` returned, signal clear | `complete = true`, `progress = 100` |
 | `failed` | `run` threw, or the payload failed its schema | `error` set |
-| `aborted` | the signal aborted, whether `run` threw or returned | untouched — the caller releases |
-| `fenced` | a guarded write matched nothing | untouched — another runner owns it |
+| `aborted` | the signal aborted, or a terminal write was refused | untouched — the caller releases |
+| `fenced` | a guarded write matched nothing, or the lease was gone | untouched — another runner owns it |
+
+A refused terminal write — a pool timeout, a reset connection — is `aborted`
+because it leaves the row in exactly the state an abort does: this runner's
+claim, not complete. The caller releases it and the task runs again, which
+every body is required to be idempotent for.
 
 Progress is flushed before either terminal write, so a bar can never be
 stranded at the value a pending debounce was holding.
+
+`signal.aborted` is sampled **once**, immediately after `run` returns and
+before that flush. The flush is a round trip; an abort arriving inside it would
+otherwise turn a run that finished into an abort, tear down work that
+succeeded, and leave the task to be done a second time. A signal that is
+already aborted when `runTask` is entered returns `aborted` **without running
+the body at all** — the claim and the dispatch are not one operation, and a
+body started during a drain gets killed mid-write with nothing recorded.
 
 An error is recorded as `` `${err.name}: ${err.message}` `` — `String(err)` for
 a non-`Error`. Python writes `f"{type(e)}: {e!s}"`, which puts
@@ -465,6 +497,22 @@ there is a test for it by name.
 It does **not** run after a fence. Another runner owns the task and is
 re-running it from step zero; a cleanup here would be tearing down the new
 owner's work.
+
+**The claim is renewed and checked immediately before the cleanup**, rather
+than inferred from the progress writer's fence flag. That flag only flips when
+a progress write happened to be outstanding, so a body with coarse steps — or
+one that throws before its next `report` — reaches the cleanup still believing
+it holds a task another runner reclaimed 300 s ago. The renewal answers the
+question directly and holds the claim for however long the cleanup takes. A
+renewal that *rejects* skips the cleanup too and reports `aborted`: tearing
+down a task another runner may have taken over is worse than leaving a
+half-built one behind.
+
+Progress is flushed **again** after the cleanup. A cleanup reports through the
+same writer, and its debounce timer is `.unref()`'d — so without the second
+flush its write either lands after the terminal one, where it matches nothing
+and logs a fence that never happened, or is dropped silently on the way out of
+a shutdown.
 
 A throwing `cleanup` is caught and logged and never rethrown. Losing the
 failure that provoked it to a secondary error in the handler meant to tidy up

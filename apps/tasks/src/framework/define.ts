@@ -36,8 +36,11 @@ export type TaskHelpers = {
 	 * each declared step occupies an equal slice of 0–100. Call `report(0..1)`
 	 * from inside to move progress within that slice.
 	 *
-	 * A name absent from the declared `steps` still sets the column, and its
-	 * reports map straight onto 0–100.
+	 * A task that declares no `steps` maps each step it runs onto the whole
+	 * 0–100 bar. A task that declares them and then runs a name absent from the
+	 * list still sets the column, but its reports are dropped and logged: the
+	 * name is a typo, and giving it the whole bar would pin progress at 100 for
+	 * the rest of the run.
 	 */
 	runStep: <T>(
 		name: string,
