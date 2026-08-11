@@ -52,6 +52,16 @@ export type CreateMappingIndexOptions = {
 	logger: Logger;
 	/** The index or subtraction the artifact belongs to. */
 	parentId: number;
+	/**
+	 * Write the FASTA at `fastaPath`, called only once the cache has missed.
+	 *
+	 * Omitted where the file is already on disk — a subtraction's genome is
+	 * downloaded with the rest of the run's inputs. A caller that has to produce
+	 * one passes this rather than producing it up front: on a hit the index is
+	 * restored and the FASTA is never read, so producing it eagerly is a scan and
+	 * a large write for nothing.
+	 */
+	prepareFasta?: () => Promise<void>;
 	proc: number;
 	runSubprocess: RunSubprocess;
 	workflowVersion: string;
@@ -74,6 +84,7 @@ export async function createMappingIndex({
 	indexPrefix,
 	logger,
 	parentId,
+	prepareFasta,
 	proc,
 	runSubprocess,
 	workflowVersion,
@@ -98,6 +109,8 @@ export async function createMappingIndex({
 	}
 
 	log.info("building mapping index");
+
+	await prepareFasta?.();
 
 	await buildBowtie2Index(runSubprocess, fastaPath, indexPrefix, proc);
 

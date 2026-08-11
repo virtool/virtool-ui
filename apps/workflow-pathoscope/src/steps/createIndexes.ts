@@ -1,5 +1,6 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { join } from "node:path";
+import type { Logger } from "@virtool/logger";
 import { openWorkflowIndex, writeFasta } from "@virtool/workflow";
 import { cacheFor } from "../cache";
 import { REFERENCE_INDEX_EXTRA_PARAMS } from "../cacheParams";
@@ -27,19 +28,7 @@ export const createReferenceIndexStep: PathoscopeStep = {
 		const temp = await mkdtemp(join(workPath, "reference-fasta-"));
 		const fastaPath = join(temp, "reference.fa");
 
-		const index = openWorkflowIndex({
-			id: data.index.id,
-			path: paths.collapsedReference,
-		});
-
 		try {
-			// Streamed from SQLite straight to disk. The sequence order is the index
-			// reader's, which decides the FASTA order and so every SAM line mapped
-			// against the built index.
-			await writeFasta(fastaPath, index.iterDefaultSequences());
-
-			logger.info({ fastaPath }, "assembled default reference fasta");
-
 			await createMappingIndex({
 				cache: cacheFor(context),
 				extraParams: REFERENCE_INDEX_EXTRA_PARAMS,
@@ -48,17 +37,55 @@ export const createReferenceIndexStep: PathoscopeStep = {
 				indexPrefix: paths.referenceIndexPrefix,
 				logger,
 				parentId: data.index.id,
+				prepareFasta: () =>
+					writeDefaultIsolateFasta({
+						fastaPath,
+						indexId: data.index.id,
+						indexPath: paths.collapsedReference,
+						logger,
+					}),
 				proc,
 				runSubprocess,
 				workflowVersion: APP_VERSION,
 			});
 		} finally {
-			index.close();
-
 			await rm(temp, { force: true, recursive: true });
 		}
 	},
 };
+
+/**
+ * Write the collapsed reference's default isolates as one FASTA.
+ *
+ * Handed to {@link createMappingIndex} as a producer rather than run before it:
+ * the `reference_mapping_index` namespace is shared with Python, so a hit is the
+ * common outcome and the whole collapsed reference would be scanned into a file
+ * nothing then reads.
+ */
+async function writeDefaultIsolateFasta({
+	fastaPath,
+	indexId,
+	indexPath,
+	logger,
+}: {
+	fastaPath: string;
+	indexId: number;
+	indexPath: string;
+	logger: Logger;
+}): Promise<void> {
+	const source = openWorkflowIndex({ id: indexId, path: indexPath });
+
+	try {
+		// Streamed from SQLite straight to disk. The sequence order is the index
+		// reader's, which decides the FASTA order and so every SAM line mapped
+		// against the built index.
+		await writeFasta(fastaPath, source.iterDefaultSequences());
+	} finally {
+		source.close();
+	}
+
+	logger.info({ fastaPath }, "assembled default reference fasta");
+}
 
 /**
  * Build one bowtie2 index per subtraction.
