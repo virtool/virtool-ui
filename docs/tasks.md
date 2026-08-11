@@ -699,10 +699,9 @@ with the framework's own, so the sentinel protocol is written once.
 
 ## Task bodies
 
-A body is a module under `apps/tasks/src/tasks/<type>.ts`, named for the value
-in the `type` column — `refresh_hmms.ts`, not `refreshHmms.ts`, so a row and its
-handler are grep-identical. It exports one `defineTask` result and registers in
-`apps/tasks/src/tasks/registry.ts`.
+A body is a module under `apps/tasks/src/tasks/`, named for the value in the
+`type` column in skewer case — `refresh-hmms.ts` for `refresh_hmms`. It exports
+one `defineTask` result and registers in `apps/tasks/src/tasks/registry.ts`.
 
 `refresh_hmms` is the first, and the worked example for the nine that follow.
 Every decision below is visible in it.
@@ -742,9 +741,9 @@ under one name and dispatch another — and pins every key to `TaskName`.
 
 ### `ctx` is `{ db, storage }`
 
-The handles a body cannot construct, injected the way `data.ts` takes them.
-Its logger, its payload and its `taskId` arrive on `TaskHandlerArgs` instead,
-because those are per-run rather than per-process. A body that reads `ctx`
+These are the handles a body cannot construct, injected the way `data.ts` takes
+them. Its logger, its payload and its `taskId` arrive on `TaskHandlerArgs`
+instead, because those are per-run rather than per-process. A body that reads `ctx`
 supplies both type arguments to `defineTask`; one that does not reads none of
 this.
 
@@ -771,6 +770,28 @@ position worth publishing, so it takes no `onProgress` seam. The bar moves 0 →
 publishes exactly two frames. The seam is opt-in per data function — see the
 progress seam above — and adding one where there is nothing to report costs a
 write and a refetch in every connected browser for no information.
+
+### A body forwards its signal into anything that waits
+
+`runTask` awaits the body. It does not race it against the signal the way
+`runWorkflow` races a step, so **nothing interrupts a body on its own** — an
+abort is a request the body has to act on. `refresh_hmms` forwards its `signal`
+into `fetchAndUpdateRelease`, which combines it with the fetch deadline through
+`AbortSignal.any`.
+
+Two things go wrong without that. The drain waits out the in-flight task before
+aborting and then waits a bounded grace, so a request left to run its own
+ten-second deadline out holds shutdown open for that long. And when the grace
+expires the runner releases the claim regardless — leaving the abandoned attempt
+free to finish its request and write, on behalf of a runner that no longer owns
+the work. The `tasks` row is safe either way, every write to it being fenced on
+`runner_id`, but a domain row is not.
+
+An abort from the caller's signal is **rethrown untranslated and records
+nothing**: the process is going away, and writing `Could not reach Virtool.ca`
+onto the status row would blame virtool.ca for a shutdown. `runTask` samples
+`signal.aborted` after the body returns, so the outcome is `aborted` rather than
+`failed` and the row stays claimable.
 
 ### Errors surface by throwing
 

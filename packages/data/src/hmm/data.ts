@@ -287,20 +287,38 @@ function formatRelease(
  * either; a conditional request would need an ETag stored on the status row,
  * and `legacy_hmm_status` has no column for one.
  */
-async function fetchManifestRelease(): Promise<ManifestRelease | null> {
+async function fetchManifestRelease(
+	signal?: AbortSignal,
+): Promise<ManifestRelease | null> {
 	let response: Response;
 	try {
 		response = await fetch(MANIFEST_URL, {
-			signal: AbortSignal.timeout(MANIFEST_TIMEOUT_MS),
+			signal: signal
+				? AbortSignal.any([signal, AbortSignal.timeout(MANIFEST_TIMEOUT_MS)])
+				: AbortSignal.timeout(MANIFEST_TIMEOUT_MS),
 		});
-	} catch {
-		// A timeout lands here too, and means the same thing to the caller as a
+	} catch (err) {
+		// The caller's signal is a shutdown or a fence, not a fault of
+		// virtool.ca's. It escapes untranslated so the caller can tell the two
+		// apart and leave the status row alone.
+		if (signal?.aborted) {
+			throw err;
+		}
+
+		// The deadline lands here too, and means the same thing to the caller as a
 		// refused connection: virtool.ca did not answer.
 		throw new HmmReleaseError("Could not reach Virtool.ca");
 	}
 
-	if (response.status !== 200) {
+	if (response.status === 404) {
 		throw new HmmReleaseError("Release does not exist");
+	}
+
+	// Any other refusal is virtool.ca's, not a manifest that is missing. Reporting
+	// a 503 as a release that does not exist sends whoever reads it on the HMM
+	// page looking for a release that is in fact sitting there.
+	if (response.status !== 200) {
+		throw new HmmReleaseError(`Virtool.ca answered ${response.status}`);
 	}
 
 	const manifest = (await response.json()) as {
@@ -345,9 +363,17 @@ async function upsertStatus(
  * release and a current one is the whole point of the call, so failing is the
  * honest outcome: the caller sees the error, and `HmmStatus.errors` carries it
  * to the HMM page.
+ *
+ * `signal` aborts the manifest fetch. A caller running under a lease passes the
+ * one it was given: `fetch` would otherwise run its own deadline out with the
+ * claim already released, and reach the upsert below on behalf of a runner that
+ * no longer owns the work. An abort from it is rethrown untouched and writes
+ * nothing — the release is neither stale nor unreachable, the process is going
+ * away.
  */
 export async function fetchAndUpdateRelease(
 	db: DbOrTx,
+	signal?: AbortSignal,
 ): Promise<HmmRelease | null> {
 	const [status] = await db
 		.select()
@@ -359,8 +385,12 @@ export async function fetchAndUpdateRelease(
 
 	let updated: ManifestRelease | null;
 	try {
-		updated = await fetchManifestRelease();
+		updated = await fetchManifestRelease(signal);
 	} catch (err) {
+		if (signal?.aborted) {
+			throw err;
+		}
+
 		const errors = err instanceof HmmReleaseError ? [err.message] : [];
 		await upsertStatus(db, { errors, installed, release });
 		throw err;

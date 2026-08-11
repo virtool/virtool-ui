@@ -1,7 +1,7 @@
 import type { Db } from "@virtool/data/db/pg";
 import type { StorageBackend } from "@virtool/storage";
 import type { TaskRegistry } from "../framework/define";
-import { refreshHmmsTask } from "./refresh_hmms";
+import { refreshHmmsTask } from "./refresh-hmms";
 
 /**
  * What every task handler is given as `ctx`.

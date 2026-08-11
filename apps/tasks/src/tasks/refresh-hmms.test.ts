@@ -22,7 +22,7 @@ import {
 } from "vitest";
 import { runTask } from "../framework/run";
 import { collectFrames } from "../testing/frames";
-import { refreshHmmsTask } from "./refresh_hmms";
+import { refreshHmmsTask } from "./refresh-hmms";
 import type { TaskContext } from "./registry";
 
 const RUNNER = "ts-runner-a-1";
@@ -192,6 +192,59 @@ describe("refreshHmmsTask", () => {
 			.where(eq(legacyHmmStatus.id, HMM_STATUS_ID));
 
 		expect(status?.errors).toEqual(["Could not reach Virtool.ca"]);
+	});
+
+	// Nothing interrupts a body on its own: `runTask` awaits it. A fetch left to
+	// run its own deadline out would hold the drain open for ten seconds and
+	// could reach the status upsert after the claim was released.
+	it("abandons the fetch when the run is aborted", async () => {
+		const controller = new AbortController();
+
+		// The already-aborted check is not redundant: `addEventListener("abort")`
+		// never fires on a signal that aborted before it was attached.
+		vi.stubGlobal(
+			"fetch",
+			vi.fn(
+				(_url: string, init?: { signal?: AbortSignal }) =>
+					new Promise<Response>((_resolve, reject) => {
+						const signal = init?.signal;
+
+						if (signal?.aborted) {
+							reject(signal.reason);
+							return;
+						}
+
+						signal?.addEventListener("abort", () => {
+							reject(signal.reason);
+						});
+					}),
+			),
+		);
+
+		const task = await claim();
+
+		const run = runTask({
+			db,
+			def: refreshHmmsTask,
+			task,
+			ctx,
+			logger,
+			signal: controller.signal,
+		});
+
+		controller.abort();
+
+		// Left claimed and incomplete for the runner to release, not failed — the
+		// task never got its answer, and burning it over a shutdown would cost the
+		// next spawn's refresh for nothing.
+		expect(await run).toEqual({ status: "aborted" });
+
+		expect(await readRow(task.id)).toMatchObject({
+			complete: false,
+			error: null,
+		});
+
+		expect(await db.select().from(legacyHmmStatus)).toEqual([]);
 	});
 
 	// A reclaimed task re-runs from step zero, so the second attempt must leave

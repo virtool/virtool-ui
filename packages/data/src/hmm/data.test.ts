@@ -234,6 +234,34 @@ describe("fetchAndUpdateRelease", () => {
 		);
 	}
 
+	/**
+	 * Answer nothing until the request's signal aborts.
+	 *
+	 * The already-aborted check is not redundant: `addEventListener("abort")`
+	 * never fires on a signal that aborted before it was attached, and a stub
+	 * without it hangs for whatever `AbortSignal.any` was handed.
+	 */
+	function stubHangingFetch(): void {
+		vi.stubGlobal(
+			"fetch",
+			vi.fn(
+				(_url: string, init?: { signal?: AbortSignal }) =>
+					new Promise<Response>((_resolve, reject) => {
+						const signal = init?.signal;
+
+						if (signal?.aborted) {
+							reject(signal.reason);
+							return;
+						}
+
+						signal?.addEventListener("abort", () => {
+							reject(signal.reason);
+						});
+					}),
+			),
+		);
+	}
+
 	afterEach(() => {
 		vi.unstubAllGlobals();
 	});
@@ -317,6 +345,41 @@ describe("fetchAndUpdateRelease", () => {
 		const [row] = await db.select().from(legacyHmmStatus);
 
 		expect(row?.errors).toEqual(["Release does not exist"]);
+	});
+
+	// A 503 reported as a release that does not exist sends whoever reads the HMM
+	// page looking for a release that is in fact sitting there.
+	it("distinguishes a refusal by virtool.ca from a missing manifest", async () => {
+		await seedStatus();
+		stubFetch(503, {});
+
+		await expect(fetchAndUpdateRelease(db)).rejects.toBeInstanceOf(
+			HmmReleaseError,
+		);
+
+		const [row] = await db.select().from(legacyHmmStatus);
+
+		expect(row?.errors).toEqual(["Virtool.ca answered 503"]);
+	});
+
+	it("rethrows the caller's abort without recording an error", async () => {
+		await seedStatus({ errors: [] });
+
+		const controller = new AbortController();
+
+		stubHangingFetch();
+
+		const refresh = fetchAndUpdateRelease(db, controller.signal);
+
+		controller.abort();
+
+		// Not an `HmmReleaseError`: the process is going away, and the release is
+		// neither stale nor unreachable.
+		await expect(refresh).rejects.not.toBeInstanceOf(HmmReleaseError);
+
+		const [row] = await db.select().from(legacyHmmStatus);
+
+		expect(row?.errors).toEqual([]);
 	});
 
 	// The deadline itself is not waited out — ten seconds of wall clock buys

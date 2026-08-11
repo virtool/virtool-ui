@@ -1179,11 +1179,11 @@ no signal handler and binds no listener; `src/index.ts` builds it from the
   `VT_TASKS_DRAIN_TIMEOUT` ceiling. `stop()` is idempotent — a second
   call returns the first's promise — and never rejects.
 
-A body itself is `apps/tasks/src/tasks/<type>.ts`, named for the value in
-the `type` column — `refresh_hmms.ts`, not `refreshHmms.ts` — exporting
-one `defineTask` result and registered in
+A body itself lives in `apps/tasks/src/tasks/`, named for the value in the
+`type` column in skewer case — `refresh-hmms.ts` for `refresh_hmms` —
+exporting one `defineTask` result and registered in
 `apps/tasks/src/tasks/registry.ts`. `refresh_hmms` is the first and the
-worked example for the nine that follow. Four rules on top of the
+worked example for the nine that follow. Five rules on top of the
 framework's:
 
 - **The registry's keys are the runner's allowed-types filter**, handed
@@ -1205,6 +1205,15 @@ framework's:
   `onProgress` seam**, and its bar moves 0 → 100 on step entry and
   completion alone. Adding one where there is no position worth
   publishing costs a write and a refetch in every connected browser.
+- **A body forwards its `signal` into anything that waits.** `runTask`
+  awaits the body rather than racing it, so nothing interrupts one on
+  its own: a request left to run its own deadline out holds the drain
+  open for that long, and outlives the release that follows the grace —
+  free to write on behalf of a runner that no longer owns the work. The
+  `tasks` row is fenced on `runner_id`; a domain row is not. Combine it
+  with any deadline of the callee's through `AbortSignal.any`, and
+  **rethrow that abort untranslated, recording nothing** — the process
+  is going away, and the outcome is `aborted`, not `failed`.
 
 `refresh_hmms` can fail, and Python's cannot: Python's `errors` list is
 built by substring-matching an exception's `str()` against strings it

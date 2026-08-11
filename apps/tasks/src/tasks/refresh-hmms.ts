@@ -6,9 +6,10 @@ import type { TaskContext } from "./registry";
 /**
  * `refresh_hmms` is spawned on a schedule and carries nothing.
  *
- * Non-strict, so a row Python wrote with a key this side does not read still
- * runs. A strict schema would fail the task on the extra key instead, and the
- * body reads no key at all.
+ * `z.object` strips unknown keys rather than rejecting them, which is what is
+ * wanted here: a row Python wrote carrying a key this side does not read still
+ * runs. `z.strictObject` would fail the task on that key, and the body reads no
+ * key at all.
  */
 const payload = z.object({});
 
@@ -27,6 +28,11 @@ const payload = z.object({});
  * request and a single upsert, with no intermediate position worth publishing,
  * so it takes no `onProgress` seam and the bar moves 0 → 100 on the framework's
  * step entry and completion writes alone.
+ *
+ * The run's signal is forwarded into the fetch. Nothing interrupts a body on
+ * its own — `runTask` awaits it — so a request left to run its own ten-second
+ * deadline out holds the drain open for that long, and can reach the status
+ * upsert after the runner has released the claim.
  */
 export const refreshHmmsTask = defineTask<typeof payload, TaskContext>({
 	type: "refresh_hmms",
@@ -35,9 +41,9 @@ export const refreshHmmsTask = defineTask<typeof payload, TaskContext>({
 	// writing `func.__name__` into the column. Both runners write `refresh` for
 	// the same work until the cutover completes.
 	steps: ["refresh"],
-	async run({ ctx, helpers }) {
+	async run({ ctx, helpers, signal }) {
 		await helpers.runStep("refresh", async () => {
-			await fetchAndUpdateRelease(ctx.db);
+			await fetchAndUpdateRelease(ctx.db, signal);
 		});
 	},
 });
