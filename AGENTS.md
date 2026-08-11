@@ -223,9 +223,15 @@ Building the crate needs `libclang-dev` installed, because `hts-sys` runs
 bindgen against htslib's headers.
 
 `pathoscope-test` and `build-pathoscope` are the only path-filtered jobs in
-`ci.yaml` — on a pull request they run only when the crate, the workflow app,
-`.dockerignore` or `ci.yaml` changes. Extend the `changes` job's filter in the
-same commit as anything that gives either job a new input.
+`ci.yaml`, and they take **a filter each**, because their inputs differ:
+`pathoscope-test` runs cargo over the crate and reads no TypeScript, while
+`build-pathoscope` bundles the app and so depends on every workspace package
+the Dockerfile copies. One shared filter would run the libclang-and-cargo job
+on any `packages/workflow` change. Extend the `changes` job's filters in the
+same commit as anything that gives either job a new input — in particular,
+**every path the pathoscope Dockerfile `COPY`s must appear under
+`pathoscope-image`**, or the build is skipped on the pull request that breaks
+it and fails on the push to `main`, where nothing gates it.
 
 `pnpm build` builds **every app but `apps/site`**, which is gated by its own
 `site-build` CI job. `pnpm check` and `pnpm format` run biome over `apps` and
