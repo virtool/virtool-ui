@@ -85,7 +85,7 @@ export const reassignmentStep: PathoscopeStep = {
 
 		await finalize(client, data.analysisId, {
 			subtracted_count: state.subtractedCount,
-			read_count: results.reads.length,
+			read_count: results.read_count,
 			hits,
 		});
 

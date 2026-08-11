@@ -151,10 +151,29 @@ describe("eliminateSubtraction", () => {
 });
 
 describe("runExpectationMaximization", () => {
+	// The core emits a count rather than the read names, which at ordinary
+	// Illumina depths were hundreds of megabytes of JSON — past V8's maximum
+	// string length, and so a failure in the run's last step.
+	it("reads the read count back from the results file", async () => {
+		const outputPath = join(await tempDir(), "em.json");
+		const runSubprocess = coreWriting({
+			refs: ["seq_a"],
+			read_count: 12345,
+			coverage: {},
+		});
+
+		const results = await runExpectationMaximization(
+			{ runSubprocess, outputPath },
+			{ alignmentPath: "/work/subtracted.bam", pScoreCutoff: 0.01 },
+		);
+
+		expect(results.read_count).toBe(12345);
+	});
+
 	// Singular, and unchanged from the PyO3 shim's parameter name.
 	it("passes the alignment as --alignment", async () => {
 		const outputPath = join(await tempDir(), "em.json");
-		const runSubprocess = coreWriting({ refs: [], reads: [] });
+		const runSubprocess = coreWriting({ refs: [], read_count: 0 });
 
 		await runExpectationMaximization(
 			{ runSubprocess, outputPath },

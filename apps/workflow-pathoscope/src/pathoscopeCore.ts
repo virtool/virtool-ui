@@ -41,8 +41,14 @@ export type PathoscopeEmResults = {
 	/** The reference sequence ids, parallel to every array above */
 	refs: string[];
 
-	/** Every read name the alignment carried */
-	reads: string[];
+	/**
+	 * How many distinct reads the alignment carried.
+	 *
+	 * A count rather than the read names. Only the number was ever used, and at
+	 * ordinary Illumina depths the names run to hundreds of megabytes of JSON —
+	 * past V8's maximum string length, which failed the run in its last step.
+	 */
+	read_count: number;
 
 	/** Per-position depth for each reference, as long as the reference itself */
 	coverage: Record<string, number[]>;
@@ -60,8 +66,8 @@ type CoreRun = {
  *
  * The results file is read whole. That is safe for `candidates` and
  * `eliminate-subtraction`, whose outputs are a sequence-id list and a single
- * count; `em`'s is the one to watch, because it carries every read name and a
- * per-position depth array for every reference.
+ * count; `em`'s is the one to watch, because it carries a per-position depth
+ * array as long as every reference the sample hit.
  */
 async function runCore<T>(
 	{ runSubprocess, outputPath }: CoreRun,

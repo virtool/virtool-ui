@@ -92,11 +92,7 @@ function gatherEntries(results: PathoscopeEmResults): ReportEntry[] {
 	} = results;
 
 	for (const [name, values] of Object.entries(results)) {
-		if (
-			Array.isArray(values) &&
-			name !== "reads" &&
-			values.length !== refs.length
-		) {
+		if (Array.isArray(values) && values.length !== refs.length) {
 			throw new Error(
 				`Expectation maximization returned ${values.length} ${name} values for ${refs.length} references`,
 			);

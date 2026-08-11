@@ -35,7 +35,7 @@ function createResults(
 		level_2_initial: column("level2Initial", 1),
 		level_1_final: column("level1Final", 1),
 		level_2_final: column("level2Final", 1),
-		reads: [],
+		read_count: 0,
 		coverage: {},
 		...overrides,
 	};
