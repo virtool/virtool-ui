@@ -9,7 +9,10 @@ import {
 import { createEmitter } from "@virtool/data/events/emit";
 import { createLogger, type Logger } from "@virtool/logger";
 import { createSentryLogStream } from "@virtool/sentry/log";
-import { createShutdownController } from "@virtool/service/shutdown";
+import {
+	createShutdownController,
+	type ShutdownOptions,
+} from "@virtool/service/shutdown";
 import { createStorageBackend, type StorageBackend } from "@virtool/storage";
 import { parseTasksConfig, type TasksConfig } from "./config";
 import { initSentry, SERVICE } from "./instrument";
@@ -35,9 +38,15 @@ export type AppContext = {
 	 * reverse registration order; each is awaited; a throwing hook does not
 	 * prevent the others from running, though it does make the process exit
 	 * non-zero; and the whole sequence is bounded by the backstop, so a hook must
-	 * not assume unlimited time.
+	 * not assume unlimited time — one waiting out real work declares its own
+	 * ceiling with `options.timeoutMs` rather than taking the equal share, which
+	 * is sized for a socket close.
 	 */
-	onShutdown: (name: string, hook: () => Promise<void>) => void;
+	onShutdown: (
+		name: string,
+		hook: () => Promise<void>,
+		options?: ShutdownOptions,
+	) => void;
 	/** Flip readiness independently of shutdown — e.g. while draining. */
 	setReady: (ready: boolean) => void;
 };
@@ -170,12 +179,7 @@ export async function bootstrap(
 	}
 
 	logger.info(
-		{
-			port: config.probePort,
-			version: options.version,
-			claimEnabled: config.claimEnabled,
-			spawnEnabled: config.spawnEnabled,
-		},
+		{ port: config.probePort, version: options.version },
 		"listening",
 	);
 
