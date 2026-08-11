@@ -1,7 +1,12 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import { join } from "node:path";
 import type { Logger } from "@virtool/logger";
-import { openWorkflowIndex, writeFasta } from "@virtool/workflow";
+import {
+	type BuildContextInput,
+	downloadToPath,
+	openWorkflowIndex,
+	writeFasta,
+} from "@virtool/workflow";
 import { cacheFor } from "../cache";
 import { REFERENCE_INDEX_EXTRA_PARAMS } from "../cacheParams";
 import { createMappingIndex } from "../mappingIndex";
@@ -92,12 +97,17 @@ async function writeDefaultIsolateFasta({
  *
  * The gzipped FASTA is handed to `bowtie2-build` directly — it reads gzip — so
  * unlike NuVs there is nothing to decompress first.
+ *
+ * The genome is downloaded here rather than with the run's other inputs, and
+ * only once the cache has missed. The `subtraction_mapping_index` namespace is
+ * shared with Python, so a hit is the common outcome, and a host genome is
+ * gigabytes that would otherwise be pulled out of storage and never opened.
  */
 export const createSubtractionIndexStep: PathoscopeStep = {
 	id: "create_subtraction_index",
 	description: "Ensure subtraction Bowtie2 indexes exist locally.",
 	async run(context) {
-		const { data, logger, proc, runSubprocess, workPath } = context;
+		const { data, logger, proc, runSubprocess, storage, workPath } = context;
 		const paths = workPaths(workPath);
 		const cache = cacheFor(context);
 
@@ -106,11 +116,19 @@ export const createSubtractionIndexStep: PathoscopeStep = {
 		for (const subtraction of data.subtractions) {
 			await createMappingIndex({
 				cache,
-				fastaPath: subtraction.fastaPath,
+				fastaPath: subtraction.path,
 				indexKind: "subtraction_mapping_index",
 				indexPrefix: paths.subtraction(subtraction.id).indexPrefix,
 				logger,
 				parentId: subtraction.id,
+				prepareFasta: () =>
+					downloadSubtractionFasta({
+						fastaPath: subtraction.path,
+						logger,
+						storage,
+						storageKey: subtraction.storageKey,
+						subtractionId: subtraction.id,
+					}),
 				proc,
 				runSubprocess,
 				workflowVersion: APP_VERSION,
@@ -118,3 +136,22 @@ export const createSubtractionIndexStep: PathoscopeStep = {
 		}
 	},
 };
+
+/** Stream a subtraction's gzipped genome out of storage and onto the work path. */
+async function downloadSubtractionFasta({
+	fastaPath,
+	logger,
+	storage,
+	storageKey,
+	subtractionId,
+}: {
+	fastaPath: string;
+	logger: Logger;
+	storage: BuildContextInput["storage"];
+	storageKey: string;
+	subtractionId: number;
+}): Promise<void> {
+	await downloadToPath(storage, storageKey, fastaPath);
+
+	logger.info({ fastaPath, subtractionId }, "downloaded subtraction genome");
+}

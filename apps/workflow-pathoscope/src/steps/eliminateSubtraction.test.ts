@@ -122,7 +122,12 @@ function createFakeTools(eliminationsPerPass: readonly (readonly string[])[]) {
 }
 
 function createSubtraction(id: number): PathoscopeSubtraction {
-	return { id, name: `subtraction ${id}`, fastaPath: `/work/${id}.fa.gz` };
+	return {
+		id,
+		name: `subtraction ${id}`,
+		storageKey: `subtractions/${id}/genome`,
+		path: `/work/${id}.fa.gz`,
+	};
 }
 
 /** Run the step over a real work path seeded with three isolate-mapped reads. */
@@ -143,8 +148,17 @@ async function runStep(
 
 	const data: PathoscopeData = {
 		analysisId: 1,
-		index: { id: 1, path: paths.collapsedReference },
-		readPaths: [join(workPath, "reads", "reads_1.fq.gz")],
+		index: {
+			id: 1,
+			storageKey: "indexes/1/artifact",
+			path: paths.collapsedReference,
+		},
+		reads: [
+			{
+				storageKey: "samples/1/reads_1.fq.gz",
+				path: join(workPath, "reads", "reads_1.fq.gz"),
+			},
+		],
 		subtractions: Array.from({ length: subtractionCount }, (_, index) =>
 			createSubtraction(index + 1),
 		),

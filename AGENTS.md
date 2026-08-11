@@ -1259,7 +1259,12 @@ Three decisions shape it and are not up for re-litigation:
   `createWorkflowContext` asserts that on every run, not only under test.
   `state` is the mutable cross-step scratch and carries no such constraint.
   Lazy or memoized accessors were rejected; per-workflow construction is
-  how one workflow fetches HMMs and another does not.
+  how one workflow fetches HMMs and another does not. **What is eager is
+  resolution, not necessarily transfer**: every metadata read happens here
+  and `data` records each input's storage key beside its work path, but a
+  file only one branch reads is downloaded by the step that takes that
+  branch, with `buildContext` checking the key with `storage.size` to keep
+  failing fast.
 - **No teardown.** The container is ephemeral and process exit reclaims
   everything. Do not port `AsyncExitStack` or add a `dispose` /
   `Symbol.asyncDispose` layer.

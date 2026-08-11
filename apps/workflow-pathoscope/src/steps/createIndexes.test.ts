@@ -27,12 +27,18 @@ import type { PathoscopeData } from "../context";
 import { workPaths } from "../paths";
 import type { PathoscopeState } from "../state";
 import { APP_VERSION } from "../version";
-import { createReferenceIndexStep } from "./createIndexes";
+import {
+	createReferenceIndexStep,
+	createSubtractionIndexStep,
+} from "./createIndexes";
 
 const BOWTIE2_BUILD = "bowtie2-build";
 const BOWTIE2_BUILD_VERSION = "2.4.4";
 const INDEX_ID = 7;
 const SHARD_NAME = "reference.1.bt2";
+const SUBTRACTION_ID = 9;
+const SUBTRACTION_SHARD_NAME = "subtraction.1.bt2";
+const SUBTRACTION_GENOME = "genome bytes";
 
 const OTU: IndexOtu = {
 	abbreviation: "TMV",
@@ -87,21 +93,31 @@ function referenceIndexCacheParams(): CacheParams {
 	});
 }
 
+function subtractionIndexCacheParams(): CacheParams {
+	return buildMappingIndexCacheParams({
+		indexKind: "subtraction_mapping_index",
+		parentId: SUBTRACTION_ID,
+		toolVersion: BOWTIE2_BUILD_VERSION,
+		workflowVersion: APP_VERSION,
+	});
+}
+
 /**
- * The step over a real work path, a faked jobs API and a faked `bowtie2-build`.
+ * A real work path, a faked jobs API and a faked `bowtie2-build`.
  *
- * The fake tool records the FASTA it was handed **as it is called**: the file is
- * staged in a temporary directory the step removes on the way out, so its
- * absence afterwards says nothing.
+ * The fake tool records the FASTA it was handed **as it is called**: the
+ * reference FASTA is staged in a temporary directory the step removes on the way
+ * out, so its absence afterwards says nothing.
  */
-async function setup() {
+async function createHarness() {
 	const { path: workPath, cleanup } = await createTestWorkPath();
 	onTestFinished(cleanup);
 
 	const paths = workPaths(workPath);
 	const state = createJobsApiState();
 	const client = createFakeJobsApiClient(state);
-	const { storage } = createTestStorage();
+	const testStorage = createTestStorage();
+	const { storage } = testStorage;
 
 	const runner = createFakeSubprocessRunner();
 
@@ -127,14 +143,6 @@ async function setup() {
 		return runner(options);
 	};
 
-	const data: PathoscopeData = {
-		analysisId: 1,
-		index: { id: INDEX_ID, path: paths.sourceIndex(INDEX_ID) },
-		readPaths: [],
-		subtractions: [],
-		pScoreCutoff: 0.01,
-	};
-
 	const pathoscopeState: PathoscopeState = {
 		candidateSequenceIds: [],
 		subtractedCount: 0,
@@ -142,8 +150,64 @@ async function setup() {
 
 	return {
 		builtFastas,
+		client,
 		paths,
+		pathoscopeState,
+		runSubprocess,
 		state,
+		storage,
+		testStorage,
+		workPath,
+
+		/**
+		 * Register a built index under the key a run derives.
+		 *
+		 * Archived from outside the work path, so restoring it lands the shard
+		 * where `bowtie2-build` would have written one.
+		 */
+		async seedCachedIndex(
+			params: CacheParams,
+			directoryName: string,
+			shardName: string,
+		) {
+			const source = await mkdtemp(join(tmpdir(), "pathoscope-cache-"));
+			onTestFinished(() => rm(source, { force: true, recursive: true }));
+
+			const directory = join(source, directoryName);
+
+			await mkdir(directory);
+			await writeFile(join(directory, shardName), "cached shard");
+
+			await createWorkflowCache({
+				client,
+				storage,
+				stagingPath: join(source, "staging"),
+			}).put(deriveCacheKey(params), directory, params);
+
+			state.cacheRegistrations.length = 0;
+		},
+	};
+}
+
+async function setup() {
+	const harness = await createHarness();
+	const { client, paths, pathoscopeState, runSubprocess, storage, workPath } =
+		harness;
+
+	const data: PathoscopeData = {
+		analysisId: 1,
+		index: {
+			id: INDEX_ID,
+			storageKey: `indexes/${INDEX_ID}/artifact`,
+			path: paths.sourceIndex(INDEX_ID),
+		},
+		reads: [],
+		subtractions: [],
+		pScoreCutoff: 0.01,
+	};
+
+	return {
+		...harness,
 
 		run() {
 			return createReferenceIndexStep.run(
@@ -163,30 +227,75 @@ async function setup() {
 			await createIndexArtifact(paths.collapsedReference, null, [OTU]);
 		},
 
-		/**
-		 * Register a built index under the key this run derives.
-		 *
-		 * Archived from outside the work path, so restoring it lands the shard
-		 * where `bowtie2-build` would have written one.
-		 */
-		async seedCachedIndex() {
-			const source = await mkdtemp(join(tmpdir(), "pathoscope-cache-"));
-			onTestFinished(() => rm(source, { force: true, recursive: true }));
+		seedCachedIndex() {
+			return harness.seedCachedIndex(
+				referenceIndexCacheParams(),
+				"reference_index",
+				SHARD_NAME,
+			);
+		},
+	};
+}
 
-			const directory = join(source, "reference_index");
+/** The subtraction step over one subtraction whose genome is seeded in storage. */
+async function setupSubtraction() {
+	const harness = await createHarness();
+	const {
+		client,
+		paths,
+		pathoscopeState,
+		runSubprocess,
+		storage,
+		testStorage,
+		workPath,
+	} = harness;
 
-			await mkdir(directory);
-			await writeFile(join(directory, SHARD_NAME), "cached shard");
+	const [genome] = await testStorage.seedSubtractionFiles(SUBTRACTION_ID, [
+		{ name: "subtraction.fa.gz", contents: SUBTRACTION_GENOME },
+	]);
 
-			const params = referenceIndexCacheParams();
+	const fastaPath = paths.subtraction(SUBTRACTION_ID).fasta;
 
-			await createWorkflowCache({
-				client,
-				storage,
-				stagingPath: join(source, "staging"),
-			}).put(deriveCacheKey(params), directory, params);
+	const data: PathoscopeData = {
+		analysisId: 1,
+		index: {
+			id: INDEX_ID,
+			storageKey: `indexes/${INDEX_ID}/artifact`,
+			path: paths.sourceIndex(INDEX_ID),
+		},
+		reads: [],
+		subtractions: [
+			{
+				id: SUBTRACTION_ID,
+				name: "Sub",
+				storageKey: genome?.storageKey ?? "",
+				path: fastaPath,
+			},
+		],
+		pScoreCutoff: 0.01,
+	};
 
-			state.cacheRegistrations.length = 0;
+	return {
+		...harness,
+		fastaPath,
+
+		run() {
+			return createSubtractionIndexStep.run(
+				createFakeContext(data, pathoscopeState, {
+					client,
+					runSubprocess,
+					storage,
+					workPath,
+				}),
+			);
+		},
+
+		seedCachedIndex() {
+			return harness.seedCachedIndex(
+				subtractionIndexCacheParams(),
+				String(SUBTRACTION_ID),
+				SUBTRACTION_SHARD_NAME,
+			);
 		},
 	};
 }
@@ -227,6 +336,52 @@ describe("createReferenceIndexStep", () => {
 
 		await expect(
 			readFile(join(dirname(paths.referenceIndexPrefix), SHARD_NAME), "utf8"),
+		).resolves.toBe("cached shard");
+	});
+});
+
+describe("createSubtractionIndexStep", () => {
+	it("downloads the genome and caches the index on a miss", async () => {
+		const { builtFastas, fastaPath, paths, run, state } =
+			await setupSubtraction();
+
+		await run();
+
+		await expect(readFile(fastaPath, "utf8")).resolves.toBe(SUBTRACTION_GENOME);
+		expect(builtFastas).toEqual([SUBTRACTION_GENOME]);
+
+		expect(state.cacheRegistrations.map(({ key }) => key)).toEqual([
+			deriveCacheKey(subtractionIndexCacheParams()),
+		]);
+
+		await expect(
+			readFile(
+				`${paths.subtraction(SUBTRACTION_ID).indexPrefix}.1.bt2`,
+				"utf8",
+			),
+		).resolves.toBe("built shard");
+	});
+
+	// The genome is gigabytes for a host subtraction and the shared
+	// `subtraction_mapping_index` namespace makes a hit the steady state, so a run
+	// that restores the index must not have pulled it out of storage at all.
+	it("downloads no genome on a cache hit", async () => {
+		const { builtFastas, fastaPath, paths, run, seedCachedIndex, state } =
+			await setupSubtraction();
+
+		await seedCachedIndex();
+
+		await run();
+
+		await expect(readFile(fastaPath, "utf8")).rejects.toThrow(/ENOENT/);
+		expect(builtFastas).toEqual([]);
+		expect(state.cacheRegistrations).toEqual([]);
+
+		await expect(
+			readFile(
+				join(paths.subtraction(SUBTRACTION_ID).dir, SUBTRACTION_SHARD_NAME),
+				"utf8",
+			),
 		).resolves.toBe("cached shard");
 	});
 });

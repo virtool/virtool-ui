@@ -26,7 +26,7 @@ export const mapDefaultIsolatesStep: PathoscopeStep = {
 				indexPrefix: paths.referenceIndexPrefix,
 				pScoreCutoff: data.pScoreCutoff,
 				proc,
-				readPaths: data.readPaths,
+				readPaths: data.reads.map((read) => read.path),
 			},
 		);
 
@@ -115,7 +115,7 @@ export const mapIsolatesStep: PathoscopeStep = {
 		// Comma-joined, unlike the repeated `--reads` the candidate search takes.
 		// `bowtie2 -U` reads one comma-separated list. Each path is quoted on its
 		// own so the commas stay the separators bowtie2 splits on.
-		const reads = data.readPaths.map(quote).join(",");
+		const reads = data.reads.map((read) => quote(read.path)).join(",");
 
 		const bowtie2 = [
 			"bowtie2",

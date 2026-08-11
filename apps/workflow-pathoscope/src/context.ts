@@ -2,10 +2,17 @@
  * Building a pathoscope run's context.
  *
  * Everything a step needs is resolved once, here, before step 1: the metadata
- * reads against the jobs API and the three downloads that follow from them. That
- * is the eager model — Python resolved fixtures lazily by parameter name, so a
- * storage failure surfaced forty minutes into a run at whichever step first
- * touched the file. Here it surfaces before any work is done.
+ * reads against the jobs API, and from them the storage key and work-path
+ * destination of every file the run reads. That is the eager model — Python
+ * resolved fixtures lazily by parameter name, so a storage failure surfaced
+ * forty minutes into a run at whichever step first touched the file. Here every
+ * key is checked before any work is done.
+ *
+ * **Resolution is eager; transfer is not always.** The reads and the index
+ * artifact are read by every run, so they are downloaded here. A subtraction's
+ * genome is read only when `create_subtraction_index` misses its cache, which is
+ * the exception rather than the steady state, so that transfer belongs to the
+ * step and this side only asks storage whether the object is there.
  *
  * Every value below survives a JSON round trip. `createWorkflowContext` asserts
  * that on every run, so nothing here may be a handle, a closure, or a class
@@ -13,7 +20,6 @@
  * here.
  */
 
-import { basename } from "node:path";
 import {
 	WorkflowAnalysis,
 	WorkflowIndex,
@@ -41,8 +47,27 @@ const SUBTRACTION_FASTA_NAME = "subtraction.fa.gz";
 export type PathoscopeSubtraction = {
 	id: number;
 	name: string;
-	/** Where the gzipped source genome was downloaded to. */
-	fastaPath: string;
+	/** The recorded key of the gzipped source genome. */
+	storageKey: string;
+	/** Where `create_subtraction_index` downloads that genome to. */
+	path: string;
+};
+
+/** One of the sample's read files. */
+export type PathoscopeRead = {
+	/** The recorded key of the read file. */
+	storageKey: string;
+	/** Where the file was downloaded to. */
+	path: string;
+};
+
+/** The reference index artifact the analysis is pinned to. */
+export type PathoscopeIndex = {
+	id: number;
+	/** The recorded key of the SQLite artifact. */
+	storageKey: string;
+	/** Where the artifact was downloaded to. */
+	path: string;
 };
 
 /** The eagerly resolved data half of a pathoscope run's context. */
@@ -51,10 +76,10 @@ export type PathoscopeData = {
 	analysisId: number;
 
 	/** The reference index the analysis is pinned to */
-	index: { id: number; path: string };
+	index: PathoscopeIndex;
 
 	/** The sample's reads, in pair order */
-	readPaths: string[];
+	reads: PathoscopeRead[];
 
 	/** The subtractions to eliminate reads against, in the analysis's order */
 	subtractions: PathoscopeSubtraction[];
@@ -138,57 +163,81 @@ export async function buildPathoscopeContext({
 		"resolved analysis metadata",
 	);
 
-	const readPaths = resolveReadPaths(sample, paths);
-	const indexPath = paths.sourceIndex(index.id);
+	const reads = resolveReads(sample, paths);
+	const resolvedIndex = resolveIndex(index, paths.sourceIndex(index.id));
+
+	const resolvedSubtractions = subtractions.map((subtraction) =>
+		resolveSubtraction(subtraction, paths.subtraction(subtraction.id).fasta),
+	);
 
 	await Promise.all([
-		downloadReads(storage, sample, readPaths),
-		downloadIndexArtifact(storage, index, indexPath),
-		...subtractions.map((subtraction) =>
-			downloadSubtractionFasta(
-				storage,
-				subtraction,
-				paths.subtraction(subtraction.id).fasta,
-			),
+		...reads.map((read) => downloadToPath(storage, read.storageKey, read.path)),
+		downloadToPath(storage, resolvedIndex.storageKey, resolvedIndex.path),
+		...resolvedSubtractions.map((subtraction) =>
+			checkStorageKeyExists(storage, subtraction.storageKey),
 		),
 	]);
 
 	logger.info(
-		{ readCount: readPaths.length, indexPath },
+		{ readCount: reads.length, indexPath: resolvedIndex.path },
 		"downloaded run inputs",
 	);
 
 	return {
 		analysisId,
-		index: { id: index.id, path: indexPath },
-		readPaths,
+		index: resolvedIndex,
+		reads,
 		pScoreCutoff: P_SCORE_CUTOFF,
-		subtractions: subtractions.map((subtraction) => ({
-			id: subtraction.id,
-			name: subtraction.name,
-			fastaPath: paths.subtraction(subtraction.id).fasta,
-		})),
+		subtractions: resolvedSubtractions,
 	};
 }
 
 /**
- * Where each of the sample's read files lands, in pair order.
+ * Fail now if `key` names no object.
+ *
+ * A `size` is one metadata request and moves no bytes, which is what lets a file
+ * whose transfer is deferred to the step that reads it still fail before step 1.
+ * A missing key surfaces as `StorageKeyNotFoundError` naming the key.
+ */
+async function checkStorageKeyExists(
+	storage: BuildContextInput["storage"],
+	key: string,
+): Promise<void> {
+	await storage.size(key);
+}
+
+/**
+ * Each of the sample's read files, in pair order.
  *
  * Sorted by name rather than taken in the order the read arrived in: the two
  * files are `reads_1.fq.gz` and `reads_2.fq.gz`, the pairing is by position, and
  * handing bowtie2 the pair the wrong way round is not something it reports.
  */
-function resolveReadPaths(
+function resolveReads(
 	sample: WorkflowSample,
 	paths: PathoscopePaths,
-): string[] {
+): PathoscopeRead[] {
 	const names = sample.reads.map((read) => read.name);
 
 	for (const name of names) {
 		checkReadName(name);
 	}
 
-	return names.sort().map(paths.read);
+	const byName = new Map(sample.reads.map((read) => [read.name, read]));
+
+	return names.sort().map((name) => {
+		const read = byName.get(name);
+
+		// Nullable wherever its column is, and there is no fallback that finds the
+		// object — nothing composes a key from row identity on either side.
+		if (!read?.storageKey) {
+			throw new Error(
+				`Sample ${sample.id} read ${name} records no storage key`,
+			);
+		}
+
+		return { storageKey: read.storageKey, path: paths.read(name) };
+	});
 }
 
 /**
@@ -213,44 +262,15 @@ function checkReadName(name: string): void {
 	}
 }
 
-async function downloadReads(
-	storage: BuildContextInput["storage"],
-	sample: WorkflowSample,
-	readPaths: readonly string[],
-): Promise<void> {
-	const byName = new Map(sample.reads.map((read) => [read.name, read]));
-
-	await Promise.all(
-		readPaths.map((path) => {
-			const name = basename(path);
-			const read = byName.get(name);
-
-			// Nullable wherever its column is, and there is no fallback that finds
-			// the object — nothing composes a key from row identity on either side.
-			if (!read?.storageKey) {
-				throw new Error(
-					`Sample ${sample.id} read ${name} records no storage key`,
-				);
-			}
-
-			return downloadToPath(storage, read.storageKey, path);
-		}),
-	);
-}
-
 /**
- * Download the index's SQLite artifact.
+ * Locate the index's SQLite artifact.
  *
  * There is no fallback to the JSON forms Python still reads. A 200–500 MB
  * reference document exceeds V8's maximum string length, so `JSON.parse` cannot
  * open one at all — an index without a SQLite artifact is not analysable here
  * and must say so rather than degrade.
  */
-async function downloadIndexArtifact(
-	storage: BuildContextInput["storage"],
-	index: WorkflowIndex,
-	path: string,
-): Promise<void> {
+function resolveIndex(index: WorkflowIndex, path: string): PathoscopeIndex {
 	const file = index.files.find(({ name }) => name === INDEX_SQLITE_FILE_NAME);
 
 	if (!file) {
@@ -259,11 +279,11 @@ async function downloadIndexArtifact(
 		);
 	}
 
-	await downloadToPath(storage, file.storageKey, path);
+	return { id: index.id, storageKey: file.storageKey, path };
 }
 
 /**
- * Download a subtraction's gzipped source genome, and only that.
+ * Locate a subtraction's gzipped source genome, and only that.
  *
  * Python downloads every file a subtraction has, including the six bowtie2
  * shards. Pathoscope reads none of them — `create_subtraction_index` builds its
@@ -271,11 +291,10 @@ async function downloadIndexArtifact(
  * subtraction finalized by the TypeScript `create_subtraction` workflow has no
  * shards to download in any case.
  */
-async function downloadSubtractionFasta(
-	storage: BuildContextInput["storage"],
+function resolveSubtraction(
 	subtraction: WorkflowSubtraction,
 	path: string,
-): Promise<void> {
+): PathoscopeSubtraction {
 	const file = subtraction.files.find(
 		({ name }) => name === SUBTRACTION_FASTA_NAME,
 	);
@@ -286,5 +305,10 @@ async function downloadSubtractionFasta(
 		);
 	}
 
-	await downloadToPath(storage, file.storageKey, path);
+	return {
+		id: subtraction.id,
+		name: subtraction.name,
+		storageKey: file.storageKey,
+		path,
+	};
 }

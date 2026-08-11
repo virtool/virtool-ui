@@ -21,6 +21,9 @@ const INDEX_ID = 22;
 const SAMPLE_ID = 33;
 const SUBTRACTION_ID = 44;
 
+/** A key no seeding helper ever mints, so storage genuinely holds nothing at it. */
+const MISSING_KEY = `subtractions/${SUBTRACTION_ID}/absent`;
+
 /**
  * A jobs API and a bucket holding everything one pathoscope run reads.
  *
@@ -141,27 +144,61 @@ describe("buildPathoscopeContext", () => {
 
 		expect(data.analysisId).toBe(ANALYSIS_ID);
 		expect(data.index.id).toBe(INDEX_ID);
-		expect(data.readPaths).toEqual([
+		expect(data.reads.map(({ path }) => path)).toEqual([
 			join(workPath, "reads", "reads_1.fq.gz"),
 			join(workPath, "reads", "reads_2.fq.gz"),
 		]);
 		expect(data.subtractions.map(({ id }) => id)).toEqual([SUBTRACTION_ID]);
 	});
 
-	it("downloads the reads, the index artifact and each subtraction fasta", async () => {
+	it("downloads the reads and the index artifact", async () => {
 		const { input } = await setup();
 
 		const data = await buildPathoscopeContext(input);
 
-		await expect(readFile(data.readPaths[0] ?? "", "utf8")).resolves.toBe(
+		await expect(readFile(data.reads[0]?.path ?? "", "utf8")).resolves.toBe(
 			"one",
 		);
 		await expect(readFile(data.index.path, "utf8")).resolves.toBe(
 			"sqlite bytes",
 		);
-		await expect(
-			readFile(data.subtractions[0]?.fastaPath ?? "", "utf8"),
-		).resolves.toBe(`genome ${SUBTRACTION_ID}`);
+	});
+
+	// The genome has one consumer, `create_subtraction_index`, which reads it only
+	// on a cache miss. Its key is carried so that step can fetch it; fetching it
+	// here would be gigabytes moved for a file the steady state never opens.
+	it("records each subtraction genome's key without downloading it", async () => {
+		const { input, storage } = await setup();
+
+		const data = await buildPathoscopeContext(input);
+
+		const subtraction = data.subtractions[0];
+
+		await expect(storage.size(subtraction?.storageKey ?? "")).resolves.toBe(
+			`genome ${SUBTRACTION_ID}`.length,
+		);
+
+		await expect(readFile(subtraction?.path ?? "", "utf8")).rejects.toThrow(
+			/ENOENT/,
+		);
+	});
+
+	// The genome is not transferred here, so nothing else would notice a key
+	// naming no object until the step that needs it, forty minutes in.
+	it("refuses a subtraction whose genome is missing from storage", async () => {
+		const { input, state } = await setup();
+
+		const subtraction = state.subtractions.get(SUBTRACTION_ID);
+		const file = subtraction?.files[0];
+
+		if (subtraction && file) {
+			state.subtractions.set(SUBTRACTION_ID, {
+				...subtraction,
+				files: [{ ...file, storageKey: MISSING_KEY }],
+			});
+		}
+
+		await expect(buildPathoscopeContext(input)).rejects.toThrow(MISSING_KEY);
 	});
 
 	// The two files are `reads_1.fq.gz` and `reads_2.fq.gz`, the pairing is by
@@ -181,7 +218,7 @@ describe("buildPathoscopeContext", () => {
 
 		const data = await buildPathoscopeContext(input);
 
-		expect(data.readPaths.map((path) => path.split("/").at(-1))).toEqual([
+		expect(data.reads.map(({ path }) => path.split("/").at(-1))).toEqual([
 			"reads_1.fq.gz",
 			"reads_2.fq.gz",
 		]);

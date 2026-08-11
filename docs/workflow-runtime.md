@@ -101,6 +101,21 @@ and create-sample's does not — not by the injection mechanism. Eager also
 fails fast: a storage read that fails surfaces before step 1 rather than
 forty minutes in.
 
+**What is eager is resolution, not necessarily transfer.** A `buildContext`
+resolves the whole shape of a run — every metadata read, and for each input
+file both its recorded storage key and the work path it belongs at — and
+`data` carries both halves, which is what lets the blob describe the run's
+inputs rather than the residue of having already fetched them. Downloading
+is a separate question, decided per file: a file every run reads is
+downloaded here, and a file only one branch reads is left to the step that
+takes that branch. Pathoscope's subtraction genomes are the case — the
+`create_subtraction_index` cache hit is the steady state, so the genome is
+transferred behind the miss and `buildContext` only checks its key with
+`storage.size`, one metadata call that moves no bytes and keeps the
+fail-fast guarantee above. Deferring a *metadata read* is a different
+matter and is not done: nothing about a run's shape may be discovered
+mid-run.
+
 `assertSerializableData` runs a `JSON.parse(JSON.stringify(x))` round trip
 and reports **every path** at which the value came back changed
 (`job.createdAt: Date became "1970-01-01T00:00:00.000Z"`). Hunting for the

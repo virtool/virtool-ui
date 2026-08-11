@@ -43,8 +43,15 @@ async function runStep(readNames: readonly string[]) {
 
 	const data: PathoscopeData = {
 		analysisId: 1,
-		index: { id: 1, path: paths.collapsedReference },
-		readPaths: readNames.map((name) => join(workPath, "reads", name)),
+		index: {
+			id: 1,
+			storageKey: "indexes/1/artifact",
+			path: paths.collapsedReference,
+		},
+		reads: readNames.map((name) => ({
+			storageKey: `samples/1/${name}`,
+			path: join(workPath, "reads", name),
+		})),
 		subtractions: [],
 		pScoreCutoff: 0.01,
 	};
@@ -96,8 +103,17 @@ describe("mapIsolatesStep", () => {
 
 		const data: PathoscopeData = {
 			analysisId: 1,
-			index: { id: 1, path: paths.collapsedReference },
-			readPaths: [join(workPath, "reads", "reads_1.fq.gz")],
+			index: {
+				id: 1,
+				storageKey: "indexes/1/artifact",
+				path: paths.collapsedReference,
+			},
+			reads: [
+				{
+					storageKey: "samples/1/reads_1.fq.gz",
+					path: join(workPath, "reads", "reads_1.fq.gz"),
+				},
+			],
 			subtractions: [],
 			pScoreCutoff: 0.01,
 		};
