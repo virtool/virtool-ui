@@ -422,8 +422,7 @@ one Postgres across all of them locally.
 ## The framework and the loops
 
 `bootstrap` is the floor. The task framework, the claim/lease/reclaim data
-layer, the runner and the spawn schedule land on top of it, and each fills in
-its section here in its own commit:
+layer, the runner and the spawn schedule sit on top of it:
 
 - **Framework** — `defineTask`, the step model, and the percent/fraction
   progress seam. Lives in `apps/tasks/src/framework/`: it is an execution shell
@@ -435,11 +434,14 @@ its section here in its own commit:
   `updateTaskProgress`. These are pure persistence over a table both halves
   write, so they belong in `packages/data/src/tasks/data.ts`, extending the
   module already there.
+- **The spawner** — `apps/tasks/src/spawner.ts`, the tick loop, over the
+  schedule in `apps/tasks/src/tasks/periodic.ts` and `createPeriodicTask` in
+  the data layer. Its own section follows.
 - **The runner** — `apps/tasks/src/runner.ts`, the claim loop, the dispatcher and
   the heartbeat. Its own section follows.
 - **The task bodies** — `apps/tasks/src/tasks/<type>.ts`, registered in
   `apps/tasks/src/tasks/registry.ts`. The shell lives with its runtime, the way
-  `functions.ts` lives with the web app.
+  `functions.ts` lives with the web app. Their own section follows.
 
 Note there is **no `service.ts` tier available to a task body.** `service.ts` is
 the web app's orchestration layer and stays in `apps/web/src/server/<feature>/`,
@@ -693,6 +695,172 @@ The debounce is exercised by passing `debounceMs` rather than by faking
 timers: a window long enough never to close proves coalescing, and the flush
 before the terminal write proves the last value still lands.
 
+The frame collector is `collectFrames` in `apps/tasks/src/testing/frames.ts`,
+which takes the `PgClient` to listen on. It is the harness the body tests share
+with the framework's own, so the sentinel protocol is written once.
+
+## Task bodies
+
+A body is a module under `apps/tasks/src/tasks/`, named for the value in the
+`type` column in skewer case — `refresh-hmms.ts` for `refresh_hmms`. It exports
+one `defineTask` result and registers in `apps/tasks/src/tasks/registry.ts`.
+
+`refresh_hmms` is the first, and the worked example for the nine that follow.
+Every decision below is visible in it.
+
+### The body is a shell; the work is in `data.ts`
+
+```ts
+export const refreshHmmsTask = defineTask<typeof payload, TaskContext>({
+	type: "refresh_hmms",
+	payload,
+	steps: ["refresh"],
+	async run({ ctx, helpers }) {
+		await helpers.runStep("refresh", async () => {
+			await fetchAndUpdateRelease(ctx.db);
+		});
+	},
+});
+```
+
+The domain function is `@virtool/data`'s and knows nothing about tasks. The body
+adds the step name, the payload schema and the registration, and nothing else.
+A body that grew a query would be putting persistence somewhere the web app and
+the jobs API cannot reach it.
+
+### The registry is the allowed-types filter
+
+`taskRegistry` maps each type to its body, and its **keys are what the runner
+hands `acquireTask`**. That is the whole of how an unrecognised `tasks.type` is
+rejected: a row naming a task absent from the registry is never claimed, so it
+stays queued for the Python runner that does know it. Nothing validates the
+column and nothing needs to, because the filter *is* the registry.
+
+It is a literal map rather than one derived from each body's `type`, so the set
+of names this process claims reads in one place. `registry.test.ts` pins the two
+against each other — a key that disagreed with its body's `type` would claim
+under one name and dispatch another — and pins every key to `TaskName`.
+
+### `ctx` is `{ db, storage }`
+
+These are the handles a body cannot construct, injected the way `data.ts` takes
+them. Its logger, its payload and its `taskId` arrive on `TaskHandlerArgs`
+instead, because those are per-run rather than per-process. A body that reads `ctx`
+supplies both type arguments to `defineTask`; one that does not reads none of
+this.
+
+There is no module-scope anything. `bootstrap()` builds the context and the
+runner passes it in, so importing a body to test it opens no pool.
+
+### A step name is Python's function name
+
+`refresh_hmms` declares one step, `refresh`, which is what Python's `BaseTask`
+writes into the column — it stores `func.__name__` of the bound method it is
+running. Both runners write the same name for the same work, which is what makes
+the cutover comparison possible. A slugified display name would change the shape
+of a task's step list at the moment the fleet switched over.
+
+A single step is the degenerate case and stays explicit: declaring `steps` gives
+the framework the slice arithmetic, and a body that declared none would map its
+one step onto the whole bar to the same effect but say less.
+
+### A body that has no progress to report declares none
+
+`fetchAndUpdateRelease` is one request and one upsert, with no intermediate
+position worth publishing, so it takes no `onProgress` seam. The bar moves 0 →
+100 on the framework's step-entry and completion writes alone, and the run
+publishes exactly two frames. The seam is opt-in per data function — see the
+progress seam above — and adding one where there is nothing to report costs a
+write and a refetch in every connected browser for no information.
+
+### A body forwards its signal into anything that waits
+
+`runTask` awaits the body. It does not race it against the signal the way
+`runWorkflow` races a step, so **nothing interrupts a body on its own** — an
+abort is a request the body has to act on. `refresh_hmms` forwards its `signal`
+into `fetchAndUpdateRelease`, which combines it with the fetch deadline through
+`AbortSignal.any`.
+
+Two things go wrong without that. The drain waits out the in-flight task before
+aborting and then waits a bounded grace, so a request left to run its own
+ten-second deadline out holds shutdown open for that long. And when the grace
+expires the runner releases the claim regardless — leaving the abandoned attempt
+free to finish its request and write, on behalf of a runner that no longer owns
+the work. The `tasks` row is safe either way, every write to it being fenced on
+`runner_id`, but a domain row is not.
+
+An abort from the caller's signal is **rethrown untranslated and records
+nothing**: the process is going away, and writing `Could not reach Virtool.ca`
+onto the status row would blame virtool.ca for a shutdown. `runTask` samples
+`signal.aborted` after the body returns, so the outcome is `aborted` rather than
+`failed` and the row stays claimable.
+
+### Errors surface by throwing
+
+A body that throws fails the task: `runTask` writes `${err.name}: ${err.message}`
+to `error`, sets `complete`, and returns `{ status: "failed" }`. There is no
+error channel of a body's own and no partial-success state.
+
+**`refresh_hmms` can therefore fail, and Python's cannot.** Python's
+`fetch_and_update_release` builds its `errors` list by substring-matching the
+exception's `str()` against `"ClientConnectorError"` and `"404"`, neither of
+which any exception it catches ever contains — so `errors` is always `[]`, the
+`raise` guarded on it is unreachable, and a refresh that reached nothing
+finishes as a success against a stale release. Deciding between a stale release
+and a current one is the entire point of the call, so this side records the
+message on `legacy_hmm_status.errors` *and* rethrows — which marks the task
+failed rather than complete. The next spawn ten minutes later supersedes it.
+
+Neither string is rendered anywhere today: `HmmInstall` reads the status row for
+its task's progress and step alone, and there is no task list page. They are
+recorded because the row is what the next reader has — an operator on the
+database, a support question, or the page that eventually shows them.
+
+The manifest fetch also carries an `AbortSignal.timeout`, which Python does not.
+`fetch` has no deadline of its own, and a hung connection inside a task holds its
+lease open until the lease expires — at which point another runner reclaims the
+task and starts a second hung fetch behind the first. A timeout is reported as
+`Could not reach Virtool.ca`, the same as a refused connection, because to the
+caller it means the same thing.
+
+### Frames are the framework's, never a body's
+
+A body never emits. `updateTaskProgress`, `completeTask` and `failTask` publish
+the `tasks` frames, and they are reached only through the framework. A body that
+called `emit` would publish a frame for a row it may no longer hold.
+
+### Every body must be idempotent
+
+A reclaimed task re-runs from step zero and nothing records which steps already
+ran. `refresh_hmms` is idempotent by construction — it reads the manifest and
+overwrites the status singleton, so a second run leaves what the first left —
+and its test asserts that rather than assuming it. A body that cannot tolerate
+re-entry keys its own idempotency off `taskId`.
+
+### Testing a body
+
+Two projects, both node, both against `createTestDatabase()`:
+
+- **`@virtool/data`** covers the domain function directly — the release is
+  stored, an unreachable host records the error and rethrows, and a manifest
+  naming no release against a status row holding none returns `null` rather
+  than reading through the absent release.
+- **`apps/tasks`** covers the body end to end: insert the row, `acquireTask`,
+  `runTask`, then assert the outcome, the row and the frames. The runner loop
+  is not involved, so a body's test does not wait on a poll interval.
+
+The manifest fetch is stubbed with `vi.stubGlobal("fetch", ...)` and
+`vi.unstubAllGlobals()` in `afterEach`. There is no HTTP interception library
+here, and there should not be one: the boundary is a single global.
+
+The timeout is asserted by capturing the `signal` the body passed and checking
+that an abort surfaces as `HmmReleaseError`. Waiting the real ten seconds out
+proves the same thing and costs ten seconds.
+
+A periodic task's row is inserted directly rather than through `createTask`,
+whose `TaskType` union lists only the four the web app spawns. Spawning the
+periodic ones is the spawner's job.
+
 ## Claiming, leases and fencing
 
 A claim is a lease with a deadline, and the deadline is encoded on
@@ -780,14 +948,21 @@ session's `TimeZone`, which `localtimestamp` is not.
 ### The data layer publishes every `tasks` frame
 
 `updateTaskProgress`, `completeTask` and `failTask` each emit one `tasks`
-frame. The framework and the runner emit none — there is one place a `tasks`
-row changes, so there is one place the frame comes from.
+frame, and `createPeriodicTask` emits one `create` frame after its transaction
+commits. The framework, the runner and the spawn loop emit none — there is one
+place a `tasks` row changes, so there is one place the frame comes from.
 
 Nothing else emits. `acquireTask`, `renewLeases`, `releaseTask`,
 `releaseRunnerClaims` and `reclaimExpiredLeases` are all silent: a claim, a
 release and a reclaim each leave the row in the state a client last saw it in,
 and a heartbeat every minute per running task would cost every connected
 browser a refetch for a timestamp no view renders.
+
+`createTask` is silent too, and that asymmetry with `createPeriodicTask` is
+Python's: `tasks.db.create` emits nothing, and `create_periodic` emits by hand
+after committing. It costs nothing, because every `createTask` call site is a
+request the SPA is already awaiting a response to; a periodic spawn has no
+client waiting on it.
 
 **A guarded write that returns `false` emits nothing.** A frame for a change
 that did not happen costs every browser a refetch and announces a state the row
@@ -801,6 +976,132 @@ state and then get no second frame. Typing them `Db` makes that unrepresentable
 instead of documenting it. If a task body ever genuinely needs a completion
 atomic with a final domain write, widening the parameter is a one-line change
 that has to answer the ordering question at the same time.
+
+## The spawner
+
+`createTaskSpawner` in `apps/tasks/src/spawner.ts`, over the schedule in
+`apps/tasks/src/tasks/periodic.ts` and `createPeriodicTask` in
+`packages/data/src/tasks/data.ts`.
+
+It **only ever inserts.** It never claims, updates or completes a task; that is
+the runner's half of this process.
+
+### It runs beside Python's spawner, and the lock is the whole design
+
+This is the half that goes to production *first*, while Python's API replicas
+are still running `PeriodicTaskSpawner`. Both insert the same five types into
+the same `tasks` table. There are already several Python spawners racing each
+other across replicas — the advisory lock is what makes that safe, and this
+process joins as one more participant in a protocol that already exists.
+
+Its correctness has one observable definition: **no duplicate rows appear.** If
+the two sides stop excluding each other nothing errors, nothing logs and
+nothing alerts — both simply spawn, and the fleet quietly runs every periodic
+task twice.
+
+So the lock is not an implementation detail to be improved:
+
+- **`pg_try_advisory_xact_lock(hashtext('<task name>'))`, computed in SQL.**
+  Python emits `hashtext($1)` from
+  `func.pg_try_advisory_xact_lock(func.hashtext(task_class.name))`. Hashing in
+  TypeScript and passing a literal `bigint`, namespacing the key
+  (`periodic:sweep_blast`), substituting another hash, or reaching for the
+  two-argument `(int4, int4)` form — which is a *different lock namespace* —
+  each silently stops excluding Python.
+- **Transaction-scoped, never session-level.** `pg_try_advisory_lock` survives
+  rollback, is reentrant so two logical spawners sharing one pooled connection
+  do not exclude each other, and PgBouncer lists it as never supported under
+  transaction pooling.
+- **The lock, the recency check and the insert are one transaction**, and it is
+  one transaction *per task name per tick* — not one spanning all five, which
+  would hold every lock for the length of the whole tick.
+- **`try_` never blocks.** `false` means another spawner is handling this name
+  this tick: record `skipped_locked`, log at debug, move on. No retry, no
+  backoff, no escalation to a blocking lock.
+
+`hashtext` returns a signed **int4**, so the real keyspace is 2³² rather than
+the 2⁶⁴ the advisory-lock signature implies, and the function is undocumented
+by deliberate policy and has changed behaviour across major versions. At
+Virtool's key population — five task names plus one `index_build:{id}` per
+reference, sharing one namespace — a collision is ~10⁻⁵, and every call site is
+a `try_` lock, so it degrades to a spurious skip rather than to corruption.
+Widening the hash would break exclusion with Python, which is the entire point.
+Accept the keyspace.
+
+### The recency check is Python's predicate, not a better one
+
+Any row of the type with `created_at > now - interval` suppresses the spawn,
+**whatever its state** — complete, errored, or neither. Filtering to incomplete
+rows or excluding errored ones is not an improvement: a stricter rule here
+loses to Python's looser one, and the pair then produces exactly the duplicate
+the lock exists to prevent.
+
+The window is `timezone('utc', clock_timestamp()) - make_interval(...)`, and
+the rows are inserted with `timezone('utc', clock_timestamp())` too. The
+columns are naive UTC and nothing sets the session `TimeZone`, so a window
+built from a `timestamptz` — a JavaScript `Date`, or `now()` — is compared
+through whatever zone the session happens to carry, and the result is a silent
+hour-scale offset: the window is either always open (a spawn every tick) or
+never open (the task stops running). `clock_timestamp()` rather than `now()`,
+which freezes at transaction start and back-dates the window by the
+transaction's age.
+
+### The interval is a suppression window; the tick is 30 seconds
+
+| type | interval |
+| --- | --- |
+| `sweep_blast` | 30 s |
+| `refresh_hmms` | 600 s |
+| `timeout_jobs` | 600 s |
+| `evict_caches_lru` | 3600 s |
+| `reap_orphaned_uploads` | 86400 s |
+
+Python walks every registered task and then sleeps a hardcoded 30 s, whatever
+the intervals are. So a type's effective period is `max(30, interval)`,
+quantised to tick boundaries — and matching the *tick* matters as much as
+matching the intervals, because a per-task timer firing exactly on its interval
+opens its window at a different moment than Python's tick and the two then
+disagree about when a window is open.
+
+While both spawners run the shorter of the two intervals sets the effective
+rate, so a divergence changes production cadence rather than failing.
+
+This also puts `sweep_blast` — a 30 s interval on a 30 s tick — right on the
+boundary where a `created_at`-only dedup can admit a concurrent duplicate. That
+is a known, accepted defect of Python's design, and the stricter rule that
+fixes it lands when Python's spawner is deleted. A stricter rule now would lose
+to Python's looser one.
+
+**Do not register a sixth type.** Python's runner is the only runner until the
+cutover, and it *strands* a name it does not recognise — it acquires the row,
+logs a warning and returns, leaving `acquired_at` set with no error and no
+completion, so the row is counted as running forever and nothing can clear it.
+`PERIODIC_TASKS` is pinned by a test to exactly the five, so adding one is a
+deliberate act. New types are registered at cutover.
+
+### The loop
+
+`start()` logs one line naming the schedule and its intervals; each tick walks
+`PERIODIC_TASKS` in registration order, recording `spawned`, `skipped_locked`
+or `not_due` through `recordSpawn` and logging a spawn at info with the row id.
+
+**A failure on one type does not cost the rest of the tick, or the loop.** The
+types are independent — a `sweep_blast` that cannot be inserted is no reason
+for `refresh_hmms` to go unconsidered for another thirty seconds — and a
+crash-looping spawner is strictly worse than a tick that partly failed. A
+failed type records nothing, because the counter has no error outcome.
+
+**A non-positive interval is rejected at construction**, not per tick. Python
+raises inside `create_periodic`, which is per call; checking once means a bad
+schedule fails the process at startup instead of every thirty seconds forever.
+An interval of zero leaves the window permanently open.
+
+**Shutdown is stop-and-finish.** The spawner holds no work — a tick is a lock,
+a read and an insert — so there is nothing to drain and no ceiling to declare:
+it takes the equal share the other shutdown steps do. It is registered
+*after* the runner so it stops *first* (hooks run LIFO), which means the
+runner's drain is not racing a fresh row into the queue. `stop()` is
+idempotent and never rejects.
 
 ## The runner
 

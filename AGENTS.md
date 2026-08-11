@@ -391,6 +391,13 @@ subtree — a virtualizer, which decides its rows by measuring — in
 `ClientOnly` with a fallback of the same dimensions, in preference to
 `ssr: false` on the whole route.
 
+**A `<title>` takes exactly one string child**, so an interpolated one is
+written `` <title>{`Progress: ${progress}%`}</title> `` and never
+`<title>Progress: {progress}%</title>`. The second form is three
+children, which React's server renderer will not serialize — it emits an
+empty `<title>` and the browser fills it in at hydration, failing the
+match. That holds for an `<svg>`'s `<title>` as much as the document's.
+
 An `ssr` setting can only be made **more restrictive** down the tree, and
 `defaultSsr` fills in for the root as well, so `defaultSsr: false` turns
 SSR off everywhere and no leaf can opt back in. Turn a single page off
@@ -659,6 +666,15 @@ a name conflict). The Sentry `beforeSend` filter drops `ClientError`
 (and the auth middleware's 401/403) as routine control flow; a plain
 `Error` is reported as a false incident. A bare `throw` stays reserved
 for the genuinely unexpected.
+
+That same filter drops the `Error: aborted` Node raises when a client's
+socket closes mid-request — unactionable by construction, and steady
+traffic here because the SSE client probes `HEAD /events` from its
+`onerror` handler, which is exactly when a deploy is tearing the
+connection down. It matches `ECONNRESET` **paired with** the literal
+message `aborted`, never the code alone: `ECONNRESET` also arrives from
+connections this side opens — Postgres, object storage, GenBank — and
+those are real incidents.
 
 **Never set a null-body status — 204, 205, or 304 — from a server
 function.** Start always serializes a body for an RPC call, so the
@@ -1136,10 +1152,50 @@ four rules hold them:
   `complete` as well as `error`, which Python does not. Every timestamp
   write is `timezone('utc', clock_timestamp())`, never `now()`.
 - **The data layer publishes every `tasks` frame** — from
-  `updateTaskProgress`, `completeTask` and `failTask` only, never from a
-  claim, release or reclaim, and never from a guarded write that
-  returned `false`. Those three take `Db` rather than `DbOrTx` so a
-  frame cannot precede the commit of the row it describes.
+  `updateTaskProgress`, `completeTask` and `failTask`, plus the `create`
+  `createPeriodicTask` emits after its commit; never from a claim,
+  release or reclaim, never from `createTask` (Python's `create` is
+  silent too), and never from a guarded write that returned `false`.
+  All four take `Db` rather than `DbOrTx` so a frame cannot precede the
+  commit of the row it describes.
+
+The periodic spawner is `createTaskSpawner`
+(`apps/tasks/src/spawner.ts`) over `PERIODIC_TASKS`
+(`apps/tasks/src/tasks/periodic.ts`) and `createPeriodicTask`
+(`@virtool/data/tasks/data`). It **only ever inserts**, and it ships to
+production **beside** Python's `PeriodicTaskSpawner` rather than
+replacing it — both write the same five types into the same table, and
+nothing but a shared advisory lock keeps them from spawning everything
+twice. The failure is silent: no error, no log, no alert. Six rules:
+
+- **The key is `pg_try_advisory_xact_lock(hashtext('<task name>'))`,
+  computed in SQL**, matching what Python's
+  `func.pg_try_advisory_xact_lock(func.hashtext(task_class.name))`
+  emits. Hashing in TypeScript, namespacing the name, substituting
+  another hash, or using the two-argument `(int4, int4)` form — a
+  *different lock namespace* — each stops excluding Python. It is the
+  same shape `createIndex` already takes for `index_build:{id}`, and
+  `hashtext`'s int4 keyspace is accepted, not fixed.
+- **Transaction-scoped, never session-level**, and one transaction per
+  task name per tick — never one spanning all five. `try_` never
+  blocks; `false` is `skipped_locked`, logged at debug, and is never
+  retried or escalated.
+- **The recency predicate is Python's**: any row of the type with
+  `created_at > clock_timestamp() - interval`, **complete and errored
+  rows included**. A stricter rule here loses to Python's looser one
+  and spawns the duplicate the lock exists to prevent.
+- **The tick is a hardcoded 30 s and the interval is only a suppression
+  window**, so a type's effective period is `max(30, interval)`. A
+  per-task timer would open its window at a different moment than
+  Python's tick.
+- **`PERIODIC_TASKS` holds exactly five types**, with Python's
+  intervals, and a test pins the list. Do not register a sixth before
+  the cutover: Python's runner strands a name it does not recognise,
+  leaving a row claimed and incomplete forever.
+- **A failure on one type stops neither the tick nor the loop**, and a
+  non-positive interval is rejected at construction rather than per
+  tick. The spawner holds no work, so its shutdown hook declares no
+  ceiling — and it registers *after* the runner so LIFO stops it first.
 
 The spawn and claim loops report through the `virtool_task_*` and
 `virtool_tasks*` series described under **Metrics** above. `recordSpawn`
@@ -1233,12 +1289,63 @@ no signal handler and binds no listener; `src/index.ts` builds it from the
   `VT_TASKS_DRAIN_TIMEOUT` ceiling. `stop()` is idempotent — a second
   call returns the first's promise — and never rejects.
 
+A body itself lives in `apps/tasks/src/tasks/`, named for the value in the
+`type` column in skewer case — `refresh-hmms.ts` for `refresh_hmms` —
+exporting one `defineTask` result and registered in
+`apps/tasks/src/tasks/registry.ts`. `refresh_hmms` is the first and the
+worked example for the nine that follow. Five rules on top of the
+framework's:
+
+- **The registry's keys are the runner's allowed-types filter**, handed
+  to `acquireTask`, and that is the whole of how an unrecognised
+  `tasks.type` is rejected — an unregistered row is never claimed, so it
+  stays queued for the Python runner that knows it. Keep it a literal
+  map rather than deriving it from each body's `type`;
+  `registry.test.ts` pins the two against each other and pins every key
+  to `TaskName`.
+- **`ctx` is `{ db, storage }`** — the handles a body cannot construct,
+  injected the way `data.ts` takes them. The logger, the payload and the
+  `taskId` arrive on `TaskHandlerArgs`, being per-run rather than
+  per-process.
+- **A step's name is the Python function name it was ported from**,
+  which `BaseTask` writes to the column as `func.__name__` — both
+  runners write the same name for the same work until the cutover
+  completes.
+- **A body that has nothing intermediate to report declares no
+  `onProgress` seam**, and its bar moves 0 → 100 on step entry and
+  completion alone. Adding one where there is no position worth
+  publishing costs a write and a refetch in every connected browser.
+- **A body forwards its `signal` into anything that waits.** `runTask`
+  awaits the body rather than racing it, so nothing interrupts one on
+  its own: a request left to run its own deadline out holds the drain
+  open for that long, and outlives the release that follows the grace —
+  free to write on behalf of a runner that no longer owns the work. The
+  `tasks` row is fenced on `runner_id`; a domain row is not. Combine it
+  with any deadline of the callee's through `AbortSignal.any`, and
+  **rethrow that abort untranslated, recording nothing** — the process
+  is going away, and the outcome is `aborted`, not `failed`.
+
+`refresh_hmms` can fail, and Python's cannot: Python's `errors` list is
+built by substring-matching an exception's `str()` against strings it
+never contains, so its `raise` is unreachable and a refresh that reached
+nothing finishes as a success against a stale release. This side records
+the message on `legacy_hmm_status.errors` **and** rethrows, marking the
+task failed rather than complete. Neither string is rendered today —
+`HmmInstall` reads the status row for its task's progress and step
+alone, and there is no task list page — so don't justify an error
+message by what a user sees; they are recorded for whoever reads the
+row next.
+Its manifest fetch also carries an `AbortSignal.timeout`, without which
+a hung connection holds the lease until it expires and the reclaim
+starts a second hung fetch behind the first.
+
 See [docs/tasks.md](docs/tasks.md) for the full config table, the
 `AppContext` contract, the shutdown ordering and its guarantees, the
 probe and metrics surface including the five task series and their
 bucket, label and folding rules, the lease, fencing and frame rules in
 full, the framework's step model, terminal-outcome table and progress
-seam, and the runner's loop, heartbeat and drain in full.
+seam, the runner's loop, heartbeat and drain in full, and the
+task-body contracts with `refresh_hmms` worked through.
 
 ## Data
 
