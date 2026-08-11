@@ -1,4 +1,4 @@
-import { copyFile, rename, rm } from "node:fs/promises";
+import { rename, rm } from "node:fs/promises";
 import { eliminateSubtraction, subtractionProc } from "../pathoscopeCore";
 import { workPaths } from "../paths";
 import { pipeline, quote } from "../shell";
@@ -38,9 +38,9 @@ export const eliminateSubtractionStep: PathoscopeStep = {
 		const currentFastq = paths.currentFastq;
 		const toSubtraction = paths.toSubtractionBam;
 
-		// Copied so the reads bowtie2 wrote with `--al` survive untouched; the
-		// working copy is replaced by each subtraction pass in turn.
-		await copyFile(paths.isolateFastq, currentFastq);
+		// Renamed rather than copied. Nothing reads the reads bowtie2 wrote with
+		// `--al` after this step, and they run to gigabytes.
+		await rename(paths.isolateFastq, currentFastq);
 
 		let currentBam = paths.isolateBam;
 

@@ -206,6 +206,16 @@ describe("eliminateSubtractionStep", () => {
 		}
 	});
 
+	// Nothing reads what bowtie2 wrote with `--al` after this step, and it runs to
+	// gigabytes on a pod whose disk is sized for one copy.
+	it("moves the isolate fastq rather than copying it", async () => {
+		const { paths } = await runStep([["r1"]], 1);
+
+		await expect(readFile(paths.isolateFastq, "utf8")).rejects.toThrow(
+			/ENOENT/,
+		);
+	});
+
 	it("quotes every path it interpolates into the pipeline", async () => {
 		const { paths, scripts } = await runStep([["r1"]], 1);
 		const script = scripts[0] ?? "";
