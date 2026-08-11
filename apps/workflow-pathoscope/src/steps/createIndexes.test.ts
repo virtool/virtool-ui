@@ -227,10 +227,10 @@ async function setup() {
 			await createIndexArtifact(paths.collapsedReference, null, [OTU]);
 		},
 
-		seedCachedIndex() {
+		seedCachedIndex(directoryName = "reference_index") {
 			return harness.seedCachedIndex(
 				referenceIndexCacheParams(),
-				"reference_index",
+				directoryName,
 				SHARD_NAME,
 			);
 		},
@@ -337,6 +337,23 @@ describe("createReferenceIndexStep", () => {
 		await expect(
 			readFile(join(dirname(paths.referenceIndexPrefix), SHARD_NAME), "utf8"),
 		).resolves.toBe("cached shard");
+	});
+
+	// The namespace is shared with Python, so a blob can have been archived from a
+	// directory named something else and unpacks beside the index rather than onto
+	// it. Reported here rather than left for bowtie2 to hit as a missing index.
+	it("fails when a cached blob restores outside the index directory", async () => {
+		const { builtFastas, paths, run, seedCachedIndex, state, workPath } =
+			await setup();
+
+		await seedCachedIndex("reference-index");
+
+		await expect(run()).rejects.toThrow(
+			`restored to ${join(workPath, "reference-index")}, not ${dirname(paths.referenceIndexPrefix)}`,
+		);
+
+		expect(builtFastas).toEqual([]);
+		expect(state.cacheRegistrations).toEqual([]);
 	});
 });
 

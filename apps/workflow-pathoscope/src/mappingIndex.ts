@@ -101,7 +101,23 @@ export async function createMappingIndex({
 	const key = deriveCacheKey(params);
 	const log = logger.child({ indexKind, key, parentId });
 
-	if (await cache.get(key, dirname(indexDir))) {
+	const restored = await cache.get(key, dirname(indexDir));
+
+	if (restored !== null) {
+		// A blob's one top-level entry is named after the directory its writer
+		// archived, and both namespaces here are shared with Python — so a blob
+		// archived from a differently named directory unpacks *beside* the index
+		// rather than onto it. Thrown rather than treated as a miss: `cache.put`
+		// cannot replace a registered key, so rebuilding would hand the same blob
+		// back to every later run while leaving the stray tree on a disk sized for
+		// one copy of the index. Reported here, where the key and the two paths
+		// say what is wrong, rather than as bowtie2 failing on a missing index.
+		if (restored !== indexDir) {
+			throw new Error(
+				`Cached ${indexKind} restored to ${restored}, not ${indexDir}`,
+			);
+		}
+
 		log.info("restored cached mapping index");
 
 		return;
