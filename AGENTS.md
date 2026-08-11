@@ -1736,9 +1736,13 @@ The basics:
   augmenting `Window` or TanStack Router's `Register` requires an
   `interface`; those sites carry a `biome-ignore` explaining why. Prefer
   string literal unions over `enum`.
-- **JSDoc:** Every exported `type` gets a one-line `/** ... */`.
+- **JSDoc:** Every exported `type` gets a one-line `/** ... */`, leading
+  with what the thing *is* rather than a sentence about its behavior — the
+  label is the first thing a hover shows.
 - **Naming:** `is`/`has`/`get` for pure reads; `check`/`validate`/
-  `assert` for may-throw. A `createServerFn` export gets an `Fn` suffix
+  `assert` for may-throw. The `is`/`has` line is loose — don't overthink
+  it. A prepositional name (`lifetimeFor`) isn't part of the rule; prefer
+  `getLifetime`. A `createServerFn` export gets an `Fn` suffix
   (`loginFn`, `getSampleFn`) — it's an RPC call, not a plain function,
   and the suffix marks that at every call site. The domain function it
   wraps keeps the plain name (`login`, `getSample`) and never crosses
@@ -1746,15 +1750,21 @@ The basics:
   name — the `Fn` suffix already keeps the two apart, so don't alias it
   to `...Impl` on the way in.
 - **Comments:** Default to none. Document *why* when non-obvious, not
-  *what*. Never narrate history ("this used to do X, now it does Y") —
-  that's git blame's job, and it just accretes stale layers; write a
-  comment about a past change only if reverting it would silently
-  reintroduce a bug, phrased as a standing warning, not a changelog.
+  *what* — never restate the code, reference the current task, or name
+  the caller (those rot the moment something moves). Never narrate
+  history ("this used to do X, now it does Y") — that's git blame's job,
+  and it just accretes stale layers; write a comment about a past change
+  only if reverting it would silently reintroduce a bug, phrased as a
+  standing warning, not a changelog. Syntax: `/** ... */` for the one-line
+  JSDoc on an exported type (or a label on a function/constant that needs
+  one); `/* ... */` for a multi-line *why*; `//` for one-liners only —
+  never chain `//` lines into a block.
 - **Concurrency:** Independent awaits go in `Promise.all` — don't pay
-  the sum of latencies.
-
-See [docs/code-style.md](docs/code-style.md) for the full TypeScript,
-naming, comments, and concurrency rules with examples.
+  the sum of latencies. Skip it when a later call needs an earlier
+  result, the calls share one Postgres transaction (serialised
+  server-side regardless), or an early failure should short-circuit
+  expensive later work. Use `Promise.allSettled` when every result is
+  needed regardless of failures.
 
 ## Testing
 
