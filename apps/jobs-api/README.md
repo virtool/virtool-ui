@@ -328,41 +328,6 @@ already narrow.
 outbound-validation layer would tax every route for a looseness that exists
 on one column.
 
-### Timestamps are `Date`, on both sides
-
-The wire contract types every timestamp as a `Date` — `z.coerce.date()`
-behind `JobTimestamp` in `packages/contracts/src/jobs.ts` — so a handler
-passes the `Date` it read out of Postgres straight to `Response.json`, and
-the runtime's client gets a `Date` back rather than a string every caller has
-to remember to parse. **No handler calls `toISOString`.**
-
-The bytes are unchanged. JSON has no date type, so `JSON.stringify` calls
-`Date.prototype.toJSON` and produces exactly the ISO-8601 string Python's
-serialiser does. That is worth pinning rather than assuming, which is what
-the wire-encoding tests in `jobs/handlers.test.ts` and `jobsApi.test.ts` are
-for: a type change here is free to move the bytes silently, and Python reads
-them.
-
-Two things the schema has to do that `z.date()` would not. It accepts the
-*string* the wire actually carries, which is why it is `coerce`; and it
-refuses one it cannot read, which is why it carries a refinement — `coerce`
-runs `new Date(value)`, and that answers `Invalid Date` rather than
-throwing, so without the check a malformed timestamp parses cleanly and
-surfaces as `NaN` much later in a run.
-
-**`steps[].started_at` is the exception and stays a string.** It lives
-inside a JSONB array Python reads and writes, and `jsonb` revives no dates on
-either side. `fromStoredJobStep` / `toStoredJobStep` are where the two
-spellings meet, so nothing else converts by hand.
-
-The SPA-facing job shapes type their timestamps as `Date` too, but they get
-there without a schema. Their boundary is a TanStack Start server function,
-which serialises with seroval rather than `JSON.stringify`, and seroval
-revives a `Date` as a `Date` — so
-`apps/web/src/server/jobs/functions.ts` hands back the column value and the
-client parses nothing. Only `steps[].started_at` is converted, by the same
-`fromStoredJobStep` this service uses.
-
 ### Claiming is a lock, not a query
 
 `claimJob` (`@virtool/data/jobs/data`) selects the oldest row matching the
@@ -403,19 +368,6 @@ and the whole array written back. The row is held `FOR UPDATE` across that
 read-modify-write — two steps starting at once would otherwise each write an
 array built from the state before the other, and the loser's timestamp would
 vanish.
-
-### Which routes emit
-
-`emit("jobs", id, "update")` fires after the transaction commits on **claim,
-step start and finish**. Ping emits nothing: a running job pings every five
-seconds and every job on screen holds its own `detail(id)` query, so a frame
-each would cost a refetch per job per five seconds for a timestamp no view
-displays.
-
-That emitter is installed in `src/index.ts` with `createEmitter({ client,
-logger })`. `emit` throws when nothing has been created, so without that
-call every mutating route in this service — finalize included — answers 500
-having already committed its work.
 
 ### The job in the path must be the job in the credential
 

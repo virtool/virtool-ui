@@ -110,6 +110,23 @@ Import these model constants by their exported names. Do not alias
 them with `as` to avoid collisions; instead name other imports
 clearly enough that the model can keep its `*Document` name.
 
+## Comments: three syntaxes, three jobs
+
+- `/** ... */` — a doc comment (TSDoc). Reserved for the one-line JSDoc every
+  exported type gets (see above), and the same on an exported (or
+  non-exported) function or constant when it needs a label.
+- `/* ... */` — a plain multiline comment. Use this for a *why* explanation
+  that runs more than one line and isn't a doc comment — a constant's value
+  choice, a non-obvious coupling. Prefer rewriting it as a one-line doc
+  comment when the explanation can be tightened to fit.
+- `//` — one-liners only. Never chain consecutive `//` lines to build a
+  block comment; reach for `/* ... */` instead.
+
+A doc comment leads with what the thing *is*, not with a sentence about its
+behavior — the label is the first thing a hover shows. `The max age set on
+both cookies, regardless of...` reads as a label; `Both cookies use a max age
+of...` reads as narration and buries the label past the first clause.
+
 ## Comments: default to no comment; document the *why*, not the *what*
 
 Well-named code does not need a narrator. A comment is worth writing
@@ -126,8 +143,8 @@ invariant, a quirk being preserved for compatibility, an edge case
 the body handles silently.
 
 ```ts
-// created_at is set once on insert and never mutated: the sliding-refresh
-// lifetime is reconstructed as `expiresAt - createdAt`.
+/* created_at is set once on insert and never mutated: the sliding-refresh
+   lifetime is reconstructed as `expiresAt - createdAt`. */
 await db.update(sessions).set({ expiresAt }).where(eq(sessions.id, id));
 ```
 
@@ -136,9 +153,11 @@ non-obvious. `COOKIE_NAME = 'session'` does not. `COST = 12` does,
 because changing it invalidates pinned bcrypt fixtures elsewhere:
 
 ```ts
-// Bcrypt cost factor. Matches the value passlib used on the Python side, which
-// is required for the pinned $2b$12$ fixture in password.test.ts and
-// session.test.ts to verify; raising this invalidates those fixtures.
+/**
+ * Bcrypt cost factor. Matches the value passlib used on the Python side,
+ * which is required for the pinned $2b$12$ fixture in password.test.ts and
+ * session.test.ts to verify; raising this invalidates those fixtures.
+ */
 const COST = 12
 ```
 
@@ -164,8 +183,8 @@ What not to write:
   standing warning, not a narrative:
 
   ```ts
-  // Do not fall back to `req.ip` here: it read the LB's address before
-  // the trust-proxy fix and silently rate-limited the wrong client.
+  /* Do not fall back to `req.ip` here: it read the LB's address before
+     the trust-proxy fix and silently rate-limited the wrong client. */
   const ip = getClientIp(req);
   ```
 

@@ -9,72 +9,32 @@ React + TypeScript single-page application for Virtool, a bioinformatics platfor
 
 This is a **pnpm monorepo**:
 
-- `apps/web/` — the Vite SPA. All UI code lives here.
-- `apps/site/` — `@virtool/site`, the product website at
-  [virtool.ca](https://www.virtool.ca) (Astro + Tailwind, deployed to
-  Cloudflare Workers). Kept out of the repo-wide `pnpm check`/`pnpm knip`
-  gates — Astro is not linted by biome and is opaque to knip — so its own
-  Vite build (a `site-build` CI job) and Vitest suite are its gate. Deploy is
-  manual: `pnpm --filter @virtool/site deploy`.
-- `apps/jobs-api/` — `@virtool/jobs-api`, the jobs API: the service workflow
-  runners call to claim, run and finish jobs. A Hono app on port 9950,
-  mirroring Python's `virtool/jobs/main.py` (`api-jobs-service`, ClusterIP,
-  **no ingress** — that absence is the security boundary). Serves
-  `/health/live`, `/health/ready`, a token-gated `/metrics`, the five
-  lifecycle routes — `POST /jobs/claim`, `GET /jobs/{id}`,
-  `PUT /jobs/{id}/ping`, `POST /jobs/{id}/steps/{stepId}/start`,
-  `POST /jobs/{id}/finish` — the two cache endpoints —
-  `GET /caches/{key}` and `POST /caches` — the three finalize routes —
-  `PATCH /subtractions/{id}`, `PATCH /samples/{id}`, `PATCH /analyses/{id}` —
-  and the six metadata reads — `GET /samples/{id}`, `/subtractions/{id}`,
-  `/indexes/{id}`, `/analyses/{id}`, `/refs/{id}` and `/settings`.
-  There is **no delete and no failure route**: cancelling a job, deleting
-  one and the five-minute stalled-job sweep all stay Python's. Image:
-  `ghcr.io/virtool/jobs-api`. Four rules: it is **always "the jobs
-  API"**, never "the control plane" — that names its role, not the service;
-  **every route must refuse an unauthenticated caller or be named in
-  `PUBLIC_ROUTES`**, which `src/__tests__/authorization.test.ts` enforces —
-  `POST /jobs/claim` is named there, because the key it returns is the
-  thing a caller would otherwise authenticate with; **it serves records,
-  never bytes** — a read hands back the recorded `storageKey` and the
-  workflow fetches the object itself, so no handler streams a payload or
-  builds a derived artifact, and a read is handed a `{ db }` and no
-  `storage`; and a handler's floor
-  is `requireJobRequest` (`src/auth/guard.ts`), which authenticates a
-  workflow pod as `job-{id}:{key}` over HTTP Basic and **returns** a 401
-  rather than throwing one. It resolves to a `JobPrincipal` of `{ jobId }`
-  — no user, no permissions — and there is no cookie fallback; this service
-  has no session model. A route carrying a **job** id in its path must
-  also check it against `principal.jobId` and answer **403** on a
-  mismatch; that is the handlers' job, not the guard's. On the resource
-  routes, **reads take no ownership check and writes do**: which jobs may
-  read which rows is not a question this service answers, but a finalize
-  may only be issued by the job that produced the row. That predicate
-  rides on the `UPDATE ... WHERE` in `@virtool/data` — each finalize takes
-  a `jobId` after the resource id — so there is no window between checking
-  and writing, and the fallback `SELECT` answers **404 → 403 → 409** in
-  that order, because a row a job does not own must not report its state.
-  `POST /caches` is exempt: a cache row is owned by no job. Reaching a
-  terminal state
-  (`cancelled`, `failed`, `succeeded`) is the only thing that revokes a job
-  key, and **that refusal is the cancellation channel** — it is the one 401
-  that is not opaque, naming the state (`Job is cancelled.`) in a JSON
-  body, which is safe only because the check sits *after* the key
-  comparison. The **job read path parses on the way out**: `toJob` runs
-  the response through the `Job` schema, and a row naming a workflow the
-  union does not carry is a 500 with a Sentry event naming the row —
-  the runtime's client parses with the same schema, so the alternative
-  is a `JobsApiError` at a runner that can do nothing about it. Nothing
-  else in the service validates a response. That `Job` is **one shape,
-  not one per audience**: this service, the web app and the runtime all
-  publish and parse the same schema. Don't narrow it into a runner-facing
-  half — both halves would be built from the same record, a field one
-  audience ignores costs it nothing, and zod strips what a schema does
-  not name, so an added field cannot break an older runner. It winds down through `@virtool/service`'s
-  `createShutdownController`, with **no hooks registered** — it holds no
-  work to hand back — and `/health/ready` reports 503 from the moment
-  that flips readiness. See [docs/jobs-api.md](docs/jobs-api.md).
-- `apps/tasks/` — `@virtool/tasks`, the task service: **one** long-lived
+### apps/site
+
+`@virtool/site`
+
+- The product website at [virtool.ca](https://www.virtool.ca), deployed to
+  Cloudflare Workers.
+- Libraries: Astro + Tailwind.
+- Gates: kept out of the repo-wide `pnpm check`/`pnpm knip` gates — Astro is
+  not linted by biome and is opaque to knip — so its own Vite build (a
+  `site-build` CI job) and Vitest suite are its gate.
+- Deploy: manual, `pnpm --filter @virtool/site deploy`.
+
+### apps/jobs-api
+
+`@virtool/jobs-api`
+
+- The jobs API: the service workflow runners call to claim, run and finish
+  jobs. A Hono app on port 9950, mirroring Python's `virtool/jobs/main.py`
+  (`api-jobs-service`, ClusterIP, **no ingress** — that absence is the
+  security boundary). Image: `ghcr.io/virtool/jobs-api`.
+- See [apps/jobs-api/README.md](apps/jobs-api/README.md) for its route
+  surface and commands, and [docs/jobs-api.md](docs/jobs-api.md) for the
+  auth model, ownership rules, caching, finalize, and metrics in full.
+
+### `apps/tasks/` — `@virtool/tasks`, the task service: **one** long-lived
+
   process carrying both halves of Virtool's task system, the periodic
   spawner and the runner that claims and executes what it spawns. Image:
   `ghcr.io/virtool/tasks`, no ingress and **no Service** — its HTTP
@@ -116,19 +76,6 @@ This is a **pnpm monorepo**:
   `workflow_version` in its cache keys with it.
 - `packages/` — shared, framework-agnostic libraries published as workspace
   packages, plus one Rust crate:
-  - `@virtool/logger` — pino wrapper, server-side log defaults and
-    `child({...})` pattern
-  - `@virtool/bio` — sequence utilities (complement, translation, ORF
-    finding, FASTA/FASTQ) and the pure text parsers the ported workflows
-    need: FastQC `fastqc_data.txt` (`./fastqc`) and `hmmscan --tblout`
-    (`./hmmer`). Its output is pinned byte-for-byte against Python's —
-    see [packages/bio/README.md](packages/bio/README.md) before changing
-    a parser.
-  - `@virtool/contracts` — cross-process data shapes, zod-validated where a
-    boundary parses them
-  - `@virtool/sentry` — shared Sentry option helpers (node + browser entry
-    points), plus the pino-to-Sentry log destination every server process
-    attaches (`./log`)
   - `@virtool/service` — the process-lifecycle pieces every long-lived
     service shares. Today that is `createShutdownController`
     (`./shutdown`) alone: readiness flip, LIFO hooks, listener, pool,
@@ -138,25 +85,6 @@ This is a **pnpm monorepo**:
     out of what the rest divide. It is **not** a home for the probe
     server or the metrics registries, however alike those look across
     the three services.
-  - `@virtool/storage` — object storage: the S3 and Azure backends, the
-    key builders, and `MemoryStorage`
-  - `@virtool/data` — the database and domain data layer: the Drizzle schema,
-    `createDb`, every domain's `data.ts`, the `client_events` emitter, the
-    bcrypt/session/token primitives, and `AppError`
-  - `@virtool/workflow` — the workflow runtime every executor runs on: the
-    step model, the run loop, the work path, the subprocess runner, the eager
-    `buildContext` seam, the job lifecycle loop that claims, heartbeats and
-    reports over the jobs API, and the file layer — streaming transfer, gzip,
-    tar and cache-key derivation. It takes a `StorageBackend` as an argument
-    and knows nothing about a database — see the section below. It is the
-    only place in the repo that spawns a process, and so the only one
-    depending on `execa`.
-  - `pathoscope-core` — **Rust, not TypeScript.** Pathoscope's EM core as a
-    standalone CLI, invoked as a subprocess. It is not a pnpm workspace (it
-    has no `package.json`) and is excluded from biome and knip by name —
-    see [docs/pathoscope-core.md](docs/pathoscope-core.md) before touching
-    it. Its results are pinned byte-for-byte against the Python extension
-    module it replaced.
 
   `@virtool/data` and `@virtool/storage` are server-side only. Browser code
   must never import them; they reach `apps/web` through `src/server/**`. A
@@ -170,6 +98,7 @@ This is a **pnpm monorepo**:
   does the construction: it builds `storage`, calls `createDb(config, "web")`
   to get `client` and `db`, and calls `createEmitter({ client, logger })`. Every
   `db`, `client`, and `storage` import in `apps/web` comes from there.
+
 
 **Apps bundle; packages stay source.** Every package under `packages/` is
 unbuilt TypeScript — no `build` script, no `dist`, `noEmit: true`, and an
@@ -185,8 +114,10 @@ and `knip` to cover it with no edits to root scripts, `knip.json`, `biome.json`
 or the Dockerfile install layer. A new *image* still needs a Dockerfile stage
 and a CI matrix entry.
 
-A non-Vite app must **never import from `apps/web`**, in either direction — a
-`biome.json` override over `apps/*/src/**` enforces the half it can see.
+**No app may import another app's source, in any direction.** Three
+`biome.json` overrides enforce it, one scoped to each of `apps/web/src/**`
+(excluding and then covering `server/**`) and one to every other app's
+`src/**`. Shared code goes *down* into a package instead.
 
 See [docs/apps.md](docs/apps.md) for the bundler rationale, the
 bundled-vs-external rule and why externals must be string literals, the
@@ -750,13 +681,19 @@ it — `server/jobs/functions.ts` is the worked example, mapping the
 `fromStoredJobStep` / `fromStoredJobClaim` rather than a second copy of
 that conversion.
 
-**A timestamp crosses as a `Date`.** Server functions serialize with
-seroval, not `JSON.stringify`, and seroval revives a `Date` as a `Date` —
-so a handler hands back the value it read out of Postgres, the contract
-types it `Date`, and no `z.coerce.date()` runs on either side. The
-exception is a timestamp stored *inside* a JSONB blob (`steps[].started_at`),
-which is column bytes Python also writes and is converted by the mappers
-above.
+**A timestamp crosses every wire as a `Date`, never a string — this holds
+across the whole codebase, not just this boundary.** A handler hands back
+the value it read out of Postgres and the receiving side gets a `Date`
+back, with no hand-written parsing on either end. The mechanism follows
+the transport: a TanStack Start server function serializes with seroval,
+which revives a `Date` as a `Date`, so no `z.coerce.date()` runs on either
+side; a raw JSON wire — like the jobs API's HTTP contract — has no such
+codec, so its schema uses `z.coerce.date()` instead, typing both
+directions the same way. No handler on either kind of boundary calls
+`toISOString()` by hand. The one exception is a timestamp stored *inside*
+a JSONB blob (`jobs.steps[].started_at`), which is column bytes Python
+also writes and stays a string at rest; see the mapper comments in
+`packages/contracts/src/jobs.ts` for why.
 
 See [docs/architecture.md](docs/architecture.md) for the client-boundary
 rationale in full and the history of what moved into the package.
@@ -852,10 +789,6 @@ Basic `Authorization` header carrying `handle:key`; server functions stay
 cookie-only. A key-authenticated session carries the key's permissions, and
 `hasPermission` intersects them with the user's own — the key caps
 administrators too.
-
-See [docs/auth.md](docs/auth.md) for the middleware composition, the
-session model, cookies, lifetimes, and the login / reset / logout
-flows.
 
 ### Environment variables are prefixed with `VT_`
 
@@ -1925,13 +1858,6 @@ start work — terse statements with pointers into `docs/` for the
 full treatment. Detailed explanations, examples, and rationale live
 in `docs/`.
 
-**`docs/` files are self-contained leaves.** Each doc covers one
-topic end-to-end and does not link to or reference other docs.
-Routing between topics is `AGENTS.md`'s job, not the docs'. If you
-find yourself wanting to write "see other-doc.md", either the detail
-belongs in `AGENTS.md` as the routing layer, or the two docs need to
-be reorganised so each is complete on its own.
-
 **Every app and every package has a `README.md`, and it is the human
 entry point, not a third copy of the rules.** An app's says what the app
 is, its port and image, and its commands; a package's says what it
@@ -1939,18 +1865,6 @@ exports and where it may be imported from. Both then carry the decisions
 particular to that directory which no shared doc owns, and point at the
 `docs/` leaves — a README is the one place allowed to name a doc,
 because it is an entry point rather than a leaf.
-
-Keep it short. Anything past a screen belongs in a `docs/` leaf,
-anything true of every app belongs in `docs/apps.md` (or
-`docs/images.md`, if it is about the image), and anything a
-reader needs while editing one function belongs in the JSDoc above it. A
-package left with no full treatment to give once those are written needs
-no leaf at all — `@virtool/bio` is the worked example, and its README is
-a standing rule and a pointer at its own parsers.
-
-The package READMEs are being written as their packages are touched;
-`@virtool/bio` is the only one so far. A package with no README yet is
-not an exception to the rule.
 
 **`AGENTS.md` is updated in the same commit as the change that
 invalidates it.** It is the first file every agent and contributor
