@@ -126,7 +126,8 @@ This is a **pnpm monorepo**:
     finding, FASTA/FASTQ) and the pure text parsers the ported workflows
     need: FastQC `fastqc_data.txt` (`./fastqc`) and `hmmscan --tblout`
     (`./hmmer`). Its output is pinned byte-for-byte against Python's —
-    see [docs/bio.md](docs/bio.md) before changing a parser.
+    see [packages/bio/README.md](packages/bio/README.md) before changing
+    a parser.
   - `@virtool/contracts` — cross-process data shapes, zod-validated where a
     boundary parses them
   - `@virtool/sentry` — shared Sentry option helpers (node + browser entry
@@ -180,22 +181,22 @@ unbuilt TypeScript — no `build` script, no `dist`, `noEmit: true`, and an
 `.ts` file, so the non-Vite apps are where compilation happens: each bundles to
 a single `dist/index.mjs` with every `@virtool/*` inlined from source, via
 **tsdown**. Do not give a package a `dist` build to sidestep this — the apps
-bundling *is* the design. A new app is `apps/<name>/` with a `package.json`, a
-`tsconfig.json` extending `apps/tsconfig.node.json`, a `tsdown.config.ts` and
-`src/index.ts`; that is enough for `pnpm build`, `check`, `typecheck`, `test`
+bundling *is* the design. A new app is `apps/<name>/` with a `README.md`, a
+`package.json`, a `tsconfig.json` extending `apps/tsconfig.node.json`, a
+`tsdown.config.ts` and `src/index.ts`; that is enough for `pnpm build`,
+`check`, `typecheck`, `test`
 and `knip` to cover it with no edits to root scripts, `knip.json`, `biome.json`
 or the Dockerfile install layer. A new *image* still needs a Dockerfile stage
 and a CI matrix entry.
 
-A non-Vite app must **never import from `apps/web`**, in either direction. A
-`biome.json` override over `apps/*/src/**` (excluding `apps/web/src/**`) bans
-every feature alias, `@server/**`, the `@/*` catch-all and relative reaches into
-`apps/web`. Shared shapes go down into `@virtool/contracts`.
+A non-Vite app must **never import from `apps/web`**, in either direction — a
+`biome.json` override over `apps/*/src/**` enforces the half it can see.
 
 See [docs/apps.md](docs/apps.md) for the bundler rationale, the
 bundled-vs-external rule and why externals must be string literals, the
 `pnpm deploy` / `injectWorkspacePackages` mechanism, and the Alpine-vs-Debian
-image split.
+image split. That doc is about the pipeline every app shares; each app's own
+`README.md` covers what that app is, its port, image and commands.
 
 Use `pnpm` for all install, run, and exec commands — not `npm` or `bun`.
 
@@ -708,23 +709,37 @@ resolvable from there. That is what forced `DEFAULT_LABEL_COLOR` and the
 password policy down into `@virtool/contracts` when `labels/data.ts` and
 `settings/data.ts` moved.
 
-Shapes and helpers both sides need live *down* in `@virtool/contracts`
-(roles, permissions, banner colors, the SSE schema, the reference wire
-shapes, `UserNested`, `Task`, `SearchResult`, `ApiKey`); both sides
-import them straight from the package.
+### The client boundary: shared shapes live in `@virtool/contracts`
 
-**A domain's wire shapes belong in `@virtool/contracts`, not in
-`data.ts`.** What a server function returns is read by both sides, so
-`data.ts` imports those types from the package and components import the
-same names straight from `@virtool/contracts` — no feature `types.ts`
-re-export. `samples/types.ts` is the worked example, keeping only the
-shapes that are genuinely client-only; a feature whose every shape is a
-wire shape needs no `types.ts` at all. A
-client `types.ts` must never import a shape from `@virtool/data` — the Biome
+**Search the package before you declare a type.** Anything both sides
+need is already there or belongs there — roles, permissions, banner
+colors, the SSE schema, the reference wire shapes, `UserNested`, `Task`,
+`SearchResult`, `ApiKey`. A second declaration of a shape the package
+already owns is free to disagree with it, and nothing in the toolchain
+will say so.
+
+**A domain's wire shapes go in the package, not in `data.ts`.** What a
+server function returns is read by both sides, so `data.ts` imports those
+types to annotate its returns and components import the same names.
+`data.ts` keeps only what it alone uses: its `*Values` and `*Options`
+argument types, its `AppError` subclasses, and its row mappers. A client
+`types.ts` must never import a shape from `@virtool/data` — the Biome
 override rejects it, and it would point the client at a module the server
-does not own the shape of. `data.ts` still owns what only it uses: its
-`*Values` and `*Options` argument types, its `AppError` subclasses, and
-its row mappers.
+does not own the shape of. `samples/types.ts` is the worked example,
+keeping only the genuinely client-only shapes; a feature whose every
+shape is a wire shape needs no `types.ts` at all.
+
+**Never re-export a name that originates in the package.** Consumers
+import it directly. A `types.ts` that re-exports `UserNested`, or a
+`utils.ts` that re-exports `hasSufficientAdminRole`, makes the feature a
+middleman on a shape it does not own: the real definition site stops
+being greppable, and a module that wanted one client-only type now drags
+the feature in to get a package one. Keep the client-only shapes that
+genuinely live there — `administration/types.ts` still owns
+`AdministratorRole` and `Settings`, `banner/types.ts` still owns `Banner`
+and `bannerColorClasses` — and delete only the pass-through lines. The
+rule covers values as well as types, and applies just as much inside
+`src/server/**`.
 
 **Shape the payload in `functions.ts`, and parse nothing on the client.**
 A `select` that runs a zod schema over a server function's result is a
@@ -744,18 +759,8 @@ exception is a timestamp stored *inside* a JSONB blob (`steps[].started_at`),
 which is column bytes Python also writes and is converted by the mappers
 above.
 
-**A feature module must never re-export a name that originates in
-`@virtool/contracts`.** Consumers import it from the package directly.
-A `types.ts` that re-exports `UserNested`, or a `utils.ts` that
-re-exports `hasSufficientAdminRole`, makes the feature a middleman on a
-shape it does not own: the real definition site stops being greppable,
-and a module that wanted one client-only type now drags the feature in
-to get a package one. Keep the client-only shapes that genuinely live
-there — `administration/types.ts` still owns `AdministratorRole` and
-`Settings`, `banner/types.ts` still owns `Banner` and
-`bannerColorClasses` — and delete only the pass-through lines. The rule
-covers values as well as types, and applies just as much inside
-`src/server/**`.
+See [docs/architecture.md](docs/architecture.md) for the client-boundary
+rationale in full and the history of what moved into the package.
 
 ### Every server function declares an authorization policy
 
@@ -1928,6 +1933,25 @@ find yourself wanting to write "see other-doc.md", either the detail
 belongs in `AGENTS.md` as the routing layer, or the two docs need to
 be reorganised so each is complete on its own.
 
+**Every app and every package has a `README.md`, and it is the human
+entry point, not a third copy of the rules.** An app's says what the app
+is, its port and image, and its commands; a package's says what it
+exports and where it may be imported from. Both then carry the decisions
+particular to that directory which no shared doc owns, and point at the
+`docs/` leaves — a README is the one place allowed to name a doc,
+because it is an entry point rather than a leaf.
+
+Keep it short. Anything past a screen belongs in a `docs/` leaf,
+anything true of every app belongs in `docs/apps.md`, and anything a
+reader needs while editing one function belongs in the JSDoc above it. A
+package left with no full treatment to give once those are written needs
+no leaf at all — `@virtool/bio` is the worked example, and its README is
+a standing rule and a pointer at its own parsers.
+
+The package READMEs are being written as their packages are touched;
+`@virtool/bio` is the only one so far. A package with no README yet is
+not an exception to the rule.
+
 **`AGENTS.md` is updated in the same commit as the change that
 invalidates it.** It is the first file every agent and contributor
 reads. A stale line does not merely fail to help — it actively
@@ -1962,6 +1986,9 @@ commit that removes styled-components from this file.
 - A doc grows past one cohesive topic, or starts pulling in
   unrelated material to stay self-contained → split it along the
   mixed-concerns line so each half is again a leaf.
+- New app or package, or a change to an app's port, image, surface or
+  commands, or to what a package exports → update that directory's
+  `README.md` in the same commit.
 
 ### Git
 

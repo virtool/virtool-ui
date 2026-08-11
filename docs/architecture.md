@@ -200,10 +200,10 @@ Anything both sides genuinely share — the administrator-role model and
 `hasSufficientAdminRole`, the legacy `Permission` union, the banner
 color list, the SSE domain/message schemas — lives *down* in the
 framework-agnostic `@virtool/contracts` package, which neither side's
-type project can break. The server imports these from the package
-directly; each client feature module re-exports its piece from the
-package, so browser call sites keep importing from `@administration/*`,
-`@banner/*`, and friends unchanged.
+type project can break. Both sides import them from the package
+directly — a feature module that re-exports its piece becomes a
+middleman on a shape it does not own, and the real definition site stops
+being greppable.
 
 A domain's **wire shapes** are shared in exactly this sense, and belong
 in the package for the same reason. What a server function returns is

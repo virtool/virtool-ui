@@ -88,11 +88,10 @@ COPY apps/tasks ./apps/tasks
 RUN pnpm --filter @virtool/tasks build \
     && pnpm deploy --filter @virtool/tasks --prod /prod/tasks
 
-# One binary carries both halves of the task system. The spawner and the runner
-# are turned off independently with VT_TASKS_SPAWN_ENABLED and
-# VT_TASKS_CLAIM_ENABLED, so a staged cutover is a flag on one Deployment rather
-# than a second image. Like the jobs API, this needs no bioinformatics tools and
-# stays on Alpine.
+# One binary carries both halves of the task system, and neither half has a flag
+# to turn it off: the cutover from Python is two deployments inside a minute, and
+# a minute of task lag is invisible to a user, so a staged rollout buys nothing.
+# Like the jobs API, this needs no bioinformatics tools and stays on Alpine.
 FROM node:24-alpine AS tasks
 WORKDIR /tasks
 COPY --from=build-tasks /prod/tasks ./
