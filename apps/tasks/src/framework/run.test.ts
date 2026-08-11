@@ -22,7 +22,7 @@ import {
 	vi,
 } from "vitest";
 import { z } from "zod";
-import { collectFrames as collectPublishedFrames } from "../testing/frames";
+import { collectFrames as collect } from "../testing/frames";
 import { defineTask, type TaskRegistry } from "./define";
 import { runTask } from "./run";
 
@@ -78,9 +78,9 @@ async function claim(
 	return claimed;
 }
 
-/** Collect the frames published while `run` executes. */
+/** Collect the `client_events` frames published while `run` executes. */
 function collectFrames(run: () => Promise<void>): Promise<ClientEvent[]> {
-	return collectPublishedFrames(database.client, run);
+	return collect(database.client, run);
 }
 
 describe("defineTask", () => {
