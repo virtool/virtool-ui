@@ -12,7 +12,11 @@
  */
 
 import { WorkflowSubtraction } from "@virtool/contracts";
-import { type BuildContextInput, downloadToPath } from "@virtool/workflow";
+import {
+	type BuildContextInput,
+	downloadToPath,
+	isGzipped,
+} from "@virtool/workflow";
 import { type CreateSubtractionPaths, workPaths } from "./paths";
 
 /** The eagerly resolved data half of a create_subtraction run's context. */
@@ -25,6 +29,16 @@ export type CreateSubtractionData = {
 
 	/** The recorded key of the upload the genome was read from */
 	uploadStorageKey: string;
+
+	/**
+	 * Whether the upload is actually gzipped.
+	 *
+	 * The name never says: it is `subtraction.fa.gz` either way. Resolved once,
+	 * here, because both steps branch on it and reading the file twice invites
+	 * them to disagree — the scan would gunzip what finalize then uploads as
+	 * plain.
+	 */
+	uploadIsGzipped: boolean;
 
 	paths: CreateSubtractionPaths;
 };
@@ -74,16 +88,20 @@ export async function buildCreateSubtractionContext({
 		"resolved subtraction metadata",
 	);
 
-	// Downloaded here rather than in `decompress`: it is the run's only input and
-	// every step reads what it produces, so there is no branch that would skip it.
 	await downloadToPath(storage, uploadStorageKey, paths.upload);
 
-	logger.info({ path: paths.upload }, "downloaded source genome");
+	const uploadIsGzipped = await isGzipped(paths.upload);
+
+	logger.info(
+		{ path: paths.upload, gzipped: uploadIsGzipped },
+		"downloaded source genome",
+	);
 
 	return {
 		subtractionId,
 		subtractionName: subtraction.name,
 		uploadStorageKey,
+		uploadIsGzipped,
 		paths,
 	};
 }

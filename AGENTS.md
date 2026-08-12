@@ -88,34 +88,38 @@ This is a **pnpm monorepo**:
 - `apps/create-subtraction/` — `@virtool/create-subtraction`, the
   create-subtraction workflow executor and its image
   (`ghcr.io/virtool/ts-create-subtraction`). A user uploads a genome; this turns
-  it into a subtraction an analysis can eliminate reads against. Three steps —
-  `decompress`, `compute_gc_and_count`, `finalize` — and **no external tool at
-  all**, which is why the image is **Alpine** and copies nothing from
-  `ghcr.io/virtool/tools`; the gzip either way is `@virtool/workflow`'s
-  `node:zlib` helpers, in-process. Unlike the two analysis workflows it **is**
-  published, so a released image carries a real `APP_VERSION`. Four rules it
-  carries: Python's fourth step, `build_index`, is deliberately **not ported** —
+  it into a subtraction an analysis can eliminate reads against. Two steps —
+  `compute_gc_and_count` and `finalize` — and **no external tool at all**, which
+  is why the image is **Alpine** and copies nothing from
+  `ghcr.io/virtool/tools`. Unlike the two analysis workflows it **is**
+  published, so a released image carries a real `APP_VERSION`. Five rules it
+  carries: Python's third step, `build_index`, is deliberately **not ported** —
   nothing consumes a subtraction's bowtie2 shards and the finalize route
   whitelists `subtraction.fa.gz` alone, so a port that kept it could not
   finalize; reintroducing it means moving the image to Debian in the same edit.
-  **Python's extension check in `compute_gc_and_count` is unreachable** — `not
-  path.suffix != "fa"` is inverted twice — and the dead branch is replicated
-  rather than fixed, so this step never rejects a path; writing the check as
-  intended would refuse inputs nothing refuses today. **The `gc` denominator is
-  the five nucleotide counters' sum, not the sequence length**, so an IUPAC
-  ambiguity code is on neither side of the ratio, and the rounding is
-  `roundHalfEven` from `@virtool/bio` because Python's `round` breaks a tie
-  toward the even digit where `Math.round` goes up. And **the input and output
-  `subtraction.fa.gz` are different paths** — the upload lands under
-  `subtractions/{id}/` and the recompressed genome at the work-path root —
-  because collapsing them has `finalize` overwrite the file it read. As with the
-  analysis workflows, **nothing deletes a subtraction on failure**: Python's
-  `on_failure` hook is not ported and the jobs API has no delete route. Its
-  input reaches it as `WorkflowSubtraction.upload`, which the jobs API's
-  `GET /subtractions/{id}` carries — a subtraction it is running has no
-  `subtraction_files` rows yet, so the upload is the only file it has.
-  `create_sample`, the one workflow still unported, gets a directory, a
-  Dockerfile stage and a CI matrix entry when its port lands.
+  **Nothing decompresses the genome to disk.** Python once had a `decompress`
+  step and dropped it: `seqkit` and `bowtie2-build` read gzip natively, and this
+  side gunzips through a stream (`lines.ts`), so no step needs a plain FASTA and
+  reintroducing one writes tens of gigabytes to read them once. **Python
+  computes `gc` with `seqkit fx2tab --base-count` and this side scans
+  in-process** — the figures are identical, which is what makes running no tool
+  the cheaper of two equal answers; taking `seqkit` would mean a tools copy and
+  a Debian base for an image that otherwise runs no binary. **The `gc`
+  denominator is the five nucleotide counters' sum, not the sequence length**,
+  so an IUPAC ambiguity code is on neither side of the ratio, and the rounding
+  is `roundHalfEven` from `@virtool/bio` because Python's `round` breaks a tie
+  toward the even digit where `Math.round` goes up. And **an already-gzipped
+  upload is stored as it stands** — almost every one is, so compressing would
+  decompress a genome and gzip it back to produce the file the user already
+  sent; only a plain upload is gzipped, to a sibling path, since writing in
+  place truncates the file being read. As with the analysis workflows,
+  **nothing deletes a subtraction on failure**: Python's `on_failure` hook is
+  not ported and the jobs API has no delete route. Its input reaches it as
+  `WorkflowSubtraction.upload`, which the jobs API's `GET /subtractions/{id}`
+  carries — a subtraction it is running has no `subtraction_files` rows yet, so
+  the upload is the only file it has. `create_sample`, the one workflow still
+  unported, gets a directory, a Dockerfile stage and a CI matrix entry when its
+  port lands.
 - `apps/nuvs/` — `@virtool/nuvs`, the NuVs workflow executor and its image
   (`ghcr.io/virtool/ts-nuvs`). Ten steps and five external tools — skewer,
   bowtie2, SPAdes, `hmmpress` and `hmmscan`. It finds viruses the reference

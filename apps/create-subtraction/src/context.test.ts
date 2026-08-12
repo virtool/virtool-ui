@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { gzipSync } from "node:zlib";
 import {
 	buildTestContext,
 	createFakeBuildContextInput,
@@ -27,6 +28,7 @@ const GENOME = ">one\naattggccnn\n";
  */
 async function setup(
 	subtraction: Partial<ReturnType<typeof createFakeNewSubtraction>> = {},
+	contents: string | Uint8Array = GENOME,
 ) {
 	const { path: workPath, cleanup } = await createTestWorkPath();
 
@@ -35,7 +37,7 @@ async function setup(
 	const state = createJobsApiState();
 	const { storage, seedUpload } = createTestStorage();
 
-	const upload = await seedUpload("genome.fa", GENOME);
+	const upload = await seedUpload("genome.fa", contents);
 
 	state.subtractions.set(
 		SUBTRACTION_ID,
@@ -87,9 +89,9 @@ describe("buildCreateSubtractionContext", () => {
 		expect(data.subtractionId).toBe(SUBTRACTION_ID);
 		expect(data.uploadStorageKey).toBe(fixture.upload.storageKey);
 
-		// Downloaded under `subtractions/{id}/`, while the output is written at the
-		// work-path root. Collapsing the two would have finalize overwrite its
-		// input.
+		// Downloaded under `subtractions/{id}/`, while a gzip this run has to make
+		// goes at the work-path root. Writing the second in place would truncate
+		// the file being compressed.
 		expect(data.paths.upload).toBe(
 			join(
 				fixture.workPath,
@@ -104,6 +106,28 @@ describe("buildCreateSubtractionContext", () => {
 		expect(data.paths.upload).not.toBe(data.paths.compressedFasta);
 
 		expect(await readFile(data.paths.upload, "utf8")).toBe(GENOME);
+	});
+
+	// The name is `subtraction.fa.gz` either way, so nothing but the magic bytes
+	// says which this is — and both steps branch on the answer.
+	it("records whether the upload is actually gzipped", async () => {
+		const plain = await setup();
+
+		expect(
+			(await buildTestContext(createSubtractionWorkflow, inputOverrides(plain)))
+				.data.uploadIsGzipped,
+		).toBe(false);
+
+		const compressed = await setup({}, gzipSync(Buffer.from(GENOME)));
+
+		expect(
+			(
+				await buildTestContext(
+					createSubtractionWorkflow,
+					inputOverrides(compressed),
+				)
+			).data.uploadIsGzipped,
+		).toBe(true);
 	});
 
 	it("refuses a subtraction that names no upload", async () => {

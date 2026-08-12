@@ -1,12 +1,22 @@
 /**
  * The nucleotide scan behind `compute_gc_and_count`.
  *
- * Python's version, term for term. It is **not** a FASTA parse: a line beginning
- * `>` bumps the count and every other line is tallied character by character,
- * with no record ever assembled. Keeping it that way is both what makes the
- * figures identical and what keeps a chromosome off the heap — a FASTA parser
- * joins each record into one string, and a large genome's is hundreds of
- * megabytes for nothing.
+ * Python drives `seqkit fx2tab --base-count` for this and sums the per-record
+ * columns. **The figures are the same either way**, which is what makes running
+ * no tool here the cheaper of two identical answers: seqkit's base count ignores
+ * case, as the lowercasing below does, and Python still divides by the five
+ * counters' sum and still rounds with `round(x, 3)`. Both of Python's fixtures
+ * land on the same values through this scan.
+ *
+ * Taking the tool would mean `COPY --from=ghcr.io/virtool/tools` and a Debian
+ * base for an image that otherwise runs no binary at all. What seqkit actually
+ * bought Python was reading gzip without a decompressed intermediate, and a
+ * stream buys that for nothing — see `lines.ts`.
+ *
+ * It is **not** a FASTA parse: a line beginning `>` bumps the count and every
+ * other line is tallied character by character, with no record ever assembled.
+ * That keeps a chromosome off the heap — a parser joins each record into one
+ * string, and a large genome's is hundreds of megabytes for nothing.
  */
 
 import { roundHalfEven } from "@virtool/bio";
@@ -42,8 +52,9 @@ export type GenomeComposition = {
  * half-up, so the two disagree on a ratio landing exactly on a half at the
  * third place.
  *
- * @throws {Error} when the file holds none of the five nucleotides, where
- *   Python divides by zero.
+ * @throws {Error} when the file holds no sequences, or holds sequences but none
+ *   of the five nucleotides. Python raises separately for each, in that order,
+ *   rather than dividing by zero.
  */
 export async function computeComposition(
 	lines: AsyncIterable<string>,
@@ -70,15 +81,17 @@ export async function computeComposition(
 		}
 	}
 
+	if (count === 0) {
+		throw new Error("No sequences found in subtraction FASTA");
+	}
+
 	const total = NUCLEOTIDES.reduce(
 		(sum, nucleotide) => sum + tally[nucleotide],
 		0,
 	);
 
 	if (total === 0) {
-		throw new Error(
-			"Genome holds no nucleotides; the source file is empty or is not a FASTA",
-		);
+		throw new Error("No A, T, G, C, or N bases found in subtraction FASTA");
 	}
 
 	return {

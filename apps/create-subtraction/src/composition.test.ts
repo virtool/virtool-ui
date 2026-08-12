@@ -68,9 +68,29 @@ describe("computeComposition", () => {
 		expect(gc.t).toBe(0.188);
 	});
 
-	it("refuses a file holding no nucleotides", async () => {
-		await expect(computeComposition(lines(">one"))).rejects.toThrow(
-			/no nucleotides/,
+	// Python's own fixture, mixing upper and lower case deliberately: `seqkit
+	// fx2tab --base-count` ignores case, as the lowercasing here does. Matching it
+	// is what says this scan and that tool are interchangeable.
+	it("matches Python's mixed-case fixture", async () => {
+		const { count, gc } = await computeComposition(
+			lines(">seq_1", "ATGCATGCNN", ">seq_2", "atgcatgcat"),
+		);
+
+		expect(count).toBe(2);
+		expect(gc).toEqual({ a: 0.25, t: 0.25, g: 0.2, c: 0.2, n: 0.1 });
+	});
+
+	// Python raises for each separately, in this order, rather than dividing by
+	// zero.
+	it("refuses a file holding no sequences", async () => {
+		await expect(computeComposition(lines(""))).rejects.toThrow(
+			"No sequences found in subtraction FASTA",
+		);
+	});
+
+	it("refuses sequences holding none of the five bases", async () => {
+		await expect(computeComposition(lines(">seq_1", "RYKM"))).rejects.toThrow(
+			"No A, T, G, C, or N bases found in subtraction FASTA",
 		);
 	});
 });

@@ -149,7 +149,7 @@ Dockerfile stage and a CI matrix entry — the one deliberate exception.
   Image: `ghcr.io/virtool/jobs-api`.
 - **`apps/create-subtraction`** — `@virtool/create-subtraction`, the
   create-subtraction workflow executor. One-shot: the pod starts, does its
-  work, exits. Three steps, no external tool, and the only workflow
+  work, exits. Two steps, no external tool, and the only workflow
   executor that is published — CI stamps a real version into it, where
   `apps/pathoscope` and `apps/nuvs` stay at `0.0.0` until the repos that
   release them retire. Image: `ghcr.io/virtool/ts-create-subtraction`.
@@ -159,11 +159,11 @@ matrix entry when its port lands.
 
 ### `create_subtraction` is ported without `build_index`
 
-Python's workflow has four steps — decompress the source FASTA, compute
-`gc` and `count`, build a bowtie2 index, then compress the FASTA, upload
-it alongside `bowtie_index_path.glob("*.bt2")` and finalize. **The port
-drops the third step and that glob**, and the decision is settled rather
-than pending.
+Python's workflow has three steps — compute `gc` and `count`, build a
+bowtie2 index, then upload the FASTA alongside
+`bowtie_index_path.glob("*.bt2")` and finalize. **The port drops the
+middle step and that glob**, and the decision is settled rather than
+pending.
 
 Nothing consumes the shards. Both analysis workflows build a
 subtraction's bowtie2 index locally from the `.fa.gz` and memoize it
@@ -173,45 +173,65 @@ and read by none. The jobs API's `PATCH /subtractions/{id}` whitelists
 `subtraction.fa.gz` and nothing else, so a manifest carrying a shard is
 refused: a port that kept the step could not finalize.
 
-What is left runs **no external process**. `decompressFile`,
-`compressFile` and `isGzipped` in `@virtool/workflow`'s `files/`
-deliberately do not shell out to `pigz` — they are `node:zlib` streams,
-because Python's `pigz` branch exists for parallelism and checksums are
-taken over decompressed content, so the gzip bytes need not match. The
-`gc`/`count` step is a scan over the decompressed FASTA. Transfers are
-`downloadToPath` / `uploadFromPath` against the storage backend.
+What is left runs **no external process**, which is the whole reason this
+image is Alpine rather than Debian. It is also the chain to re-check
+before reintroducing a step: a workflow that runs a tool binary needs the
+glibc base back.
 
-That is the whole reason this image is Alpine rather than Debian, and it
-is the chain to re-check before reintroducing a step: a workflow that
-runs a tool binary needs the glibc base back.
+### The genome is never decompressed to disk
 
-### Three details the port pins
+Python used to have a fourth step, `decompress`, writing a plain
+`subtraction.fa` for the two steps after it to read. It doesn't any more:
+`seqkit` and `bowtie2-build` both read gzip natively, so the compressed
+upload is used where it lies.
 
-**Python's extension check cannot fire, and the dead branch is
-replicated.** `compute_gc_and_count` guards itself with `if not
-path.suffix != "fa": raise ValueError(...)`. `Path.suffix` returns `".fa"`
-*with* the leading dot, so `path.suffix != "fa"` is always true and `not`
-of it is always false. The TypeScript step therefore accepts any input
-path and never raises on the extension. Writing the check the way it was
-evidently intended would reject inputs nothing rejects today, on a path
-where a user's upload is the input — that is a behaviour change, and it
-belongs to its own issue.
+This side gets the same property without a tool. `lines.ts` gunzips
+through a `node:zlib` stream into the scan, so no step ever needs a plain
+FASTA — and a decompressed chromosome is tens of gigabytes written to be
+read once and deleted. **Don't reintroduce the step to make a plain FASTA
+available.** Nothing wants one.
 
-**The `gc` denominator is the five counters' sum, not the sequence
-length.** Python divides each nucleotide's tally by
-`sum(nucleotides.values())`, so an IUPAC ambiguity code contributes to
-neither the numerator nor the denominator and the five shares still total
-one. Dividing by the line length instead reports every share low by the
-same factor, which looks plausible and matches nothing. The rounding is
-`roundHalfEven` from `@virtool/bio` rather than `Math.round`, because
-Python's `round` breaks a tie toward the even digit: `round(0.0625, 3)` is
-`0.062` where `Math.round(62.5)` is `63`.
+The same rule runs through `finalize`. An already-gzipped upload — which
+almost every upload is — is stored exactly as it arrived, so a run that
+compressed here would be decompressing a genome and gzipping it back to
+produce the file the user already sent. Only a plain upload is
+compressed, and to a **sibling** path rather than in place, since writing
+in place truncates the file being read.
 
-The scan is also **not** a FASTA parse. A line beginning `>` bumps the
-count and every other line is tallied character by character, with no
-record ever assembled — which is both what makes the figures identical to
-Python's and what keeps a chromosome off the heap, since a parser joins
-each record into one string.
+### `seqkit`'s figures and this scan's are the same
+
+Python computes `gc` and `count` by driving `seqkit fx2tab --name
+--only-id --base-count a/t/g/c/n` and summing the per-record columns.
+This side scans in-process instead, and the two agree — which is what
+makes running no tool the cheaper of two identical answers rather than an
+approximation of one. Taking `seqkit` would mean a
+`COPY --from=ghcr.io/virtool/tools` and a Debian base for an image that
+otherwise runs no binary at all.
+
+Three things make them agree, and each is pinned by a test:
+
+- **Case is ignored.** `--base-count` ignores it and the scan lowercases
+  each line. Python's own fixture,
+  `>seq_1\nATGCATGCNN\n>seq_2\natgcatgcat\n`, mixes the two
+  deliberately for this reason.
+- **The denominator is the five counters' sum, not the sequence length.**
+  Python divides each tally by `sum(nucleotides.values())`, so an IUPAC
+  ambiguity code contributes to neither side and the five shares still
+  total one. Dividing by the line length reports every share low by the
+  same factor, which looks plausible and matches nothing.
+- **Rounding is half-to-even**, through `roundHalfEven` from
+  `@virtool/bio` rather than `Math.round`, because Python's `round`
+  breaks a tie toward the even digit: `round(0.0625, 3)` is `0.062` where
+  `Math.round(62.5)` is `63`.
+
+The scan is **not** a FASTA parse. A line beginning `>` bumps the count
+and every other line is tallied character by character, with no record
+ever assembled — which keeps a chromosome off the heap, since a parser
+joins each record into one string.
+
+Python raises separately for a FASTA with no sequences and one whose
+sequences hold none of the five bases, in that order, rather than
+dividing by zero. Both are reproduced with Python's messages.
 
 **The input and output `subtraction.fa.gz` are different paths.** The
 upload is downloaded to `{work_path}/subtractions/{id}/subtraction.fa.gz`

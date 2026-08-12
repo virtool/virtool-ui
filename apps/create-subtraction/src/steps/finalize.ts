@@ -31,10 +31,15 @@ const FASTA_NAME = "subtraction.fa.gz";
  * One call, carrying the figures and the manifest together, so a run cannot end
  * with the subtraction flipped ready and its file row missing.
  *
- * **There is no delete on failure.** Python registered an `on_failure` hook that
- * issued `DELETE /subtractions/{id}`; a failed run now leaves an unfinalized row
- * for the user to remove, and the jobs API exposes no destructive route a job
- * key could reach.
+ * **An already-gzipped upload is uploaded as it stands.** Almost every one is,
+ * so compressing here would mean decompressing a genome and gzipping it back to
+ * produce a file the user already sent — tens of gigabytes of pointless IO on a
+ * large reference. Python takes the same branch.
+ *
+ * **There is no delete on failure.** Python registers an `on_failure` hook that
+ * issues `DELETE /subtractions/{id}`; a failed run here leaves an unfinalized
+ * row for the user to remove, and the jobs API exposes no destructive route a
+ * job key could reach.
  */
 export const finalizeStep: CreateSubtractionStep = {
 	id: "finalize",
@@ -48,15 +53,17 @@ export const finalizeStep: CreateSubtractionStep = {
 			throw new Error("Genome composition was not computed before finalize");
 		}
 
-		await compressFile(data.paths.fasta, data.paths.compressedFasta);
+		let path = data.paths.upload;
+
+		if (!data.uploadIsGzipped) {
+			path = data.paths.compressedFasta;
+
+			await compressFile(data.paths.upload, path);
+		}
 
 		const storageKey = mintStorageKey("subtractions", data.subtractionId);
 
-		const size = await uploadFromPath(
-			storage,
-			storageKey,
-			data.paths.compressedFasta,
-		);
+		const size = await uploadFromPath(storage, storageKey, path);
 
 		logger.info({ size, storageKey }, "uploaded compressed genome");
 
