@@ -1003,9 +1003,9 @@ whole scrape rather than just the pool gauges.
 because a static import would drag prom-client and its `node:*` reads
 into the client graph.
 
-See [docs/metrics.md](docs/metrics.md) for the exported series, the
-token check, cardinality rules, and what deeper instrumentation would
-take.
+See [apps/web/README.md](apps/web/README.md#metrics) for the exported
+series, the token check, cardinality rules, and what deeper
+instrumentation would take.
 
 ### Tasks
 
