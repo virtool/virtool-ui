@@ -1,5 +1,6 @@
-# The reference index artifact
+# Indexes 
 
+## SQLite Artifact
 A reference index reaches a workflow as one SQLite file,
 `virtool-index-sqlite-v1.sqlite`, built by Python's
 `virtool/workflow/data/index_sqlite.py`. `packages/workflow/src/index/` reads it,
@@ -22,7 +23,7 @@ the `SELECT_OTUS`/`checkOtu` comments cover ordering and streaming;
 there first — this file holds only what isn't already on the code: the
 measurements behind those decisions.
 
-## Measurements
+### Measurements
 
 Measured on a synthetic 300 MB artifact — 20,000 OTUs, 60,000 sequences of
 5 kb — scanning the whole index to a 287 MB FASTA moved peak RSS not at all:
