@@ -856,14 +856,18 @@ them, each at Python's own resource path with no prefix.
 | `GET /refs/{id}` | `getReference` | `WorkflowReference` |
 | `GET /settings` | `getSettings` | `WorkflowSettings` |
 
-Every one calls the data function `apps/web` already calls. None adds a
-query for a table one of those reads, and none keeps a private copy of
-one. A missing row is a 404 through the handler's own mapping of the
-domain's `NotFoundError`, never a 500, and a path segment that is not a
-positive integer is a 404 before the database is touched. That same
-`parseRowId` is what keeps `GET /jobs/counts` — still Python's, and
-KEDA's scale trigger — from resolving here as a job read: `counts` is
-not a positive integer, so it 404s rather than matching `/jobs/{jobId}`.
+Every one calls the data functions `apps/web` already calls, and none
+keeps a private copy of one. The subtraction read calls two —
+`getSubtractionUpload` alongside `getSubtraction`, for the genome
+`create_subtraction` reads — and they must stay two: `getSubtraction`
+returns the shape the SPA is served, and an upload's `storage_key` has no
+business crossing that wire. A missing row is a 404 through the handler's
+own mapping of the domain's `NotFoundError`, never a 500, and a path
+segment that is not a positive integer is a 404 before the database is
+touched. That same `parseRowId` is what keeps `GET /jobs/counts` — still
+Python's, and KEDA's scale trigger — from resolving here as a job read:
+`counts` is not a positive integer, so it 404s rather than matching
+`/jobs/{jobId}`.
 
 The path for a reference is `/refs/{id}`, matching Python, not the
 spelled-out `/references` the package name suggests.

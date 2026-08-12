@@ -85,20 +85,37 @@ This is a **pnpm monorepo**:
   staged rollout to buy. Everything is built inside `bootstrap()`; this app has no
   module-scope singleton of any kind, not config, not the pool, not the
   registry. See [docs/tasks.md](docs/tasks.md).
-- `apps/create-subtraction/` — `@virtool/create-subtraction`, the first workflow
-  executor: a one-shot process that starts, works, exits. Only its object
-  storage half is wired so far. It ports Python's `create_subtraction`
-  **without `build_index`**: nothing consumes a subtraction's bowtie2 shards,
-  and the jobs API's finalize route accepts only `subtraction.fa.gz`, so the
-  run decompresses the FASTA, computes `gc`/`count`, compresses and finalizes.
-  Don't port the step or the `*.bt2` upload loop back. That leaves it running
-  no external tool at all — the gzip is `@virtool/workflow`'s, in-process — so
-  the image, `ghcr.io/virtool/ts-create-subtraction`, is **Alpine** and copies
-  nothing from `ghcr.io/virtool/tools`. Reintroducing a tools binary means
-  moving the stage to Debian in the same edit, because they are built against
-  `python:3.13-bookworm` and musl cannot load them. The remaining workflow
-  executors get a directory, a Dockerfile stage and a CI matrix entry when
-  their port lands.
+- `apps/create-subtraction/` — `@virtool/create-subtraction`, the
+  create-subtraction workflow executor and its image
+  (`ghcr.io/virtool/ts-create-subtraction`). A user uploads a genome; this turns
+  it into a subtraction an analysis can eliminate reads against. Three steps —
+  `decompress`, `compute_gc_and_count`, `finalize` — and **no external tool at
+  all**, which is why the image is **Alpine** and copies nothing from
+  `ghcr.io/virtool/tools`; the gzip either way is `@virtool/workflow`'s
+  `node:zlib` helpers, in-process. Unlike the two analysis workflows it **is**
+  published, so a released image carries a real `APP_VERSION`. Four rules it
+  carries: Python's fourth step, `build_index`, is deliberately **not ported** —
+  nothing consumes a subtraction's bowtie2 shards and the finalize route
+  whitelists `subtraction.fa.gz` alone, so a port that kept it could not
+  finalize; reintroducing it means moving the image to Debian in the same edit.
+  **Python's extension check in `compute_gc_and_count` is unreachable** — `not
+  path.suffix != "fa"` is inverted twice — and the dead branch is replicated
+  rather than fixed, so this step never rejects a path; writing the check as
+  intended would refuse inputs nothing refuses today. **The `gc` denominator is
+  the five nucleotide counters' sum, not the sequence length**, so an IUPAC
+  ambiguity code is on neither side of the ratio, and the rounding is
+  `roundHalfEven` from `@virtool/bio` because Python's `round` breaks a tie
+  toward the even digit where `Math.round` goes up. And **the input and output
+  `subtraction.fa.gz` are different paths** — the upload lands under
+  `subtractions/{id}/` and the recompressed genome at the work-path root —
+  because collapsing them has `finalize` overwrite the file it read. As with the
+  analysis workflows, **nothing deletes a subtraction on failure**: Python's
+  `on_failure` hook is not ported and the jobs API has no delete route. Its
+  input reaches it as `WorkflowSubtraction.upload`, which the jobs API's
+  `GET /subtractions/{id}` carries — a subtraction it is running has no
+  `subtraction_files` rows yet, so the upload is the only file it has.
+  `create_sample`, the one workflow still unported, gets a directory, a
+  Dockerfile stage and a CI matrix entry when its port lands.
 - `apps/nuvs/` — `@virtool/nuvs`, the NuVs workflow executor and its image
   (`ghcr.io/virtool/ts-nuvs`). Ten steps and five external tools — skewer,
   bowtie2, SPAdes, `hmmpress` and `hmmscan`. It finds viruses the reference

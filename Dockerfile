@@ -24,6 +24,7 @@ COPY packages/logger ./packages/logger
 COPY packages/sentry ./packages/sentry
 COPY packages/service ./packages/service
 COPY packages/storage ./packages/storage
+COPY packages/workflow ./packages/workflow
 
 # The Node-app tsconfig base every non-Vite app extends. A fixed path, so it
 # needs no edit when an app is added — unlike the per-workspace manifest list it

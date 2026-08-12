@@ -147,13 +147,15 @@ Dockerfile stage and a CI matrix entry — the one deliberate exception.
   readiness probe folds `checkPostgres` through `summarizeReadiness`, the
   same pair `apps/web` uses. `postgres` and `pino` are its externals.
   Image: `ghcr.io/virtool/jobs-api`.
-- **`apps/create-subtraction`** — `@virtool/create-subtraction`, the first
-  workflow executor. One-shot: the pod starts, does its work, exits. Only
-  its object-storage half is wired; claiming a job arrives with the
-  workflow runtime core. Image: `ghcr.io/virtool/ts-create-subtraction`.
+- **`apps/create-subtraction`** — `@virtool/create-subtraction`, the
+  create-subtraction workflow executor. One-shot: the pod starts, does its
+  work, exits. Three steps, no external tool, and the only workflow
+  executor that is published — CI stamps a real version into it, where
+  `apps/pathoscope` and `apps/nuvs` stay at `0.0.0` until the repos that
+  release them retire. Image: `ghcr.io/virtool/ts-create-subtraction`.
 
-The remaining three workflow executors get their directory, Dockerfile
-stage and matrix entry when their port lands.
+The remaining workflow executor gets its directory, Dockerfile stage and
+matrix entry when its port lands.
 
 ### `create_subtraction` is ported without `build_index`
 
@@ -182,6 +184,39 @@ taken over decompressed content, so the gzip bytes need not match. The
 That is the whole reason this image is Alpine rather than Debian, and it
 is the chain to re-check before reintroducing a step: a workflow that
 runs a tool binary needs the glibc base back.
+
+### Three details the port pins
+
+**Python's extension check cannot fire, and the dead branch is
+replicated.** `compute_gc_and_count` guards itself with `if not
+path.suffix != "fa": raise ValueError(...)`. `Path.suffix` returns `".fa"`
+*with* the leading dot, so `path.suffix != "fa"` is always true and `not`
+of it is always false. The TypeScript step therefore accepts any input
+path and never raises on the extension. Writing the check the way it was
+evidently intended would reject inputs nothing rejects today, on a path
+where a user's upload is the input — that is a behaviour change, and it
+belongs to its own issue.
+
+**The `gc` denominator is the five counters' sum, not the sequence
+length.** Python divides each nucleotide's tally by
+`sum(nucleotides.values())`, so an IUPAC ambiguity code contributes to
+neither the numerator nor the denominator and the five shares still total
+one. Dividing by the line length instead reports every share low by the
+same factor, which looks plausible and matches nothing. The rounding is
+`roundHalfEven` from `@virtool/bio` rather than `Math.round`, because
+Python's `round` breaks a tie toward the even digit: `round(0.0625, 3)` is
+`0.062` where `Math.round(62.5)` is `63`.
+
+The scan is also **not** a FASTA parse. A line beginning `>` bumps the
+count and every other line is tallied character by character, with no
+record ever assembled — which is both what makes the figures identical to
+Python's and what keeps a chromosome off the heap, since a parser joins
+each record into one string.
+
+**The input and output `subtraction.fa.gz` are different paths.** The
+upload is downloaded to `{work_path}/subtractions/{id}/subtraction.fa.gz`
+and the recompressed genome is written at `{work_path}/subtraction.fa.gz`.
+Collapsing them would have `finalize` overwrite the file it is reading.
 
 ## Images
 
