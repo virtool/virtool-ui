@@ -37,6 +37,13 @@ export class ForbiddenError extends Error {
  * Throw `ForbiddenError` (and 403) if the session user lacks the required
  * administrator role. Reads the user's `administrator_role` from the upstream
  * users table; users with a null role are always rejected.
+ *
+ * A policy states the floor a call has to clear before the handler runs. This is
+ * for the rule that cannot be stated at the door because it depends on the row
+ * being touched — an administrator editing another administrator needs the
+ * `full` role, and that is only knowable after the target user is read.
+ * `updateUserFn` is the worked example. A role check never belongs in `data.ts`,
+ * which is in `@virtool/data` and has no notion of a session at all.
  */
 export const requireAdminRole = createServerOnlyFn(
 	async (
@@ -64,6 +71,10 @@ export const requireAdminRole = createServerOnlyFn(
  * Resolve the session for the active server-function request or reject with
  * 401. Sets the HTTP response status as a side effect so the serialized error
  * reaches the client as a real 401.
+ *
+ * Handlers do **not** call this. They read `context.session`, which their policy
+ * put there; calling this in a handler buys a second Postgres lookup for a
+ * session that has already been resolved.
  */
 // createServerOnlyFn keeps the getRequest / db / verifyRequest references
 // behind a server boundary so import-protection doesn't pin
@@ -120,6 +131,14 @@ export type LoadAuthenticationExceptions = () => Promise<
 	ReadonlyArray<{ url: string }>
 >;
 
+// A server function's `url` is the server-fn base with its id appended, and an
+// id is base64url, so the last segment is the id `serverFnMeta` carries.
+// `middleware.test.ts` pins that against the metadata Start actually hands the
+// middleware.
+export function serverFnIdFromUrl(url: string): string {
+	return url.slice(url.lastIndexOf("/") + 1);
+}
+
 // The exception list holds server-function references, and reaching them means
 // reaching their modules — which carry zod validators and the auth request
 // layer. `start.ts` is part of the browser program (routeTree.gen.ts imports
@@ -138,34 +157,47 @@ const loadAuthenticationExceptions = createServerOnlyFn(
  * every server function except those in `./exceptions`. Resolved sessions are
  * exposed to downstream handlers as `context.session`.
  *
+ * Authentication is enforced here rather than by a `requireSession()` call in
+ * each handler, because forgetting that call is silent — the function would
+ * simply be publicly callable. Default-on with an explicit opt-out flips the
+ * failure mode: forgetting to list a function in `./exceptions` produces a 401
+ * the moment it is called, not a hole.
+ *
+ * This answers *who is calling*, never *what they may do*. That second question
+ * belongs to a policy declared on the function itself (`./policy`).
+ *
  * `loadExceptions` exists so tests can supply their own list; production passes
  * nothing and gets the real one.
  */
-// Server fn IDs are unique per fn and each fn binds to exactly one method, so
-// matching on pathname alone is sufficient to identify the call.
+// Never identify the call from `getRequest()`. That is the *incoming* request,
+// which is the function's own URL only for an RPC call from the browser: during
+// SSR a server function is invoked in-process, so the incoming request is the
+// page being rendered and no exception matches. `serverFnMeta` names the
+// function on both paths.
 export function createAuthenticationMiddleware(
 	loadExceptions: LoadAuthenticationExceptions = loadAuthenticationExceptions,
 ) {
-	// Resolved on the first call and cached: the paths never change.
-	let exceptionPaths: Set<string> | null = null;
+	// Resolved on the first call and cached: the ids never change.
+	let exceptionIds: Set<string> | null = null;
 
-	return createMiddleware({ type: "function" }).server(async ({ next }) => {
-		exceptionPaths ??= new Set(
-			(await loadExceptions()).map(
-				(fn) => new URL(fn.url, "http://x").pathname,
-			),
-		);
+	return createMiddleware({ type: "function" }).server(
+		async ({ next, serverFnMeta }) => {
+			exceptionIds ??= new Set(
+				(await loadExceptions()).map((fn) => serverFnIdFromUrl(fn.url)),
+			);
 
-		const pathname = new URL(getRequest().url).pathname;
-		const session: AuthenticatedSession | null = exceptionPaths.has(pathname)
-			? null
-			: await requireSession();
-		// Attach the user to the request's isolation scope so errors and logs
-		// from this handler are tied to the acting user. Id-only here — the
-		// handle isn't on the session and isn't worth a per-request lookup.
-		if (session) {
-			Sentry.setUser({ id: session.userId });
-		}
-		return next({ context: { session } });
-	});
+			const session: AuthenticatedSession | null = exceptionIds.has(
+				serverFnMeta.id,
+			)
+				? null
+				: await requireSession();
+			// Attach the user to the request's isolation scope so errors and logs
+			// from this handler are tied to the acting user. Id-only here — the
+			// handle isn't on the session and isn't worth a per-request lookup.
+			if (session) {
+				Sentry.setUser({ id: session.userId });
+			}
+			return next({ context: { session } });
+		},
+	);
 }
