@@ -1327,37 +1327,6 @@ own:
   taking none, so a run holding hundreds of objects cannot outlive the
   drain and delete rows for a runner that has already released the claim.
 
-`timeout_jobs` is the first body to move a job's state. Its body is one
-call to `timeoutStalledJobs` (`@virtool/data/jobs/data`), which fails
-every running job whose runner has stopped pinging; four rules are its
-own:
-
-- **The threshold is a constant, not configuration.**
-  `JOB_TIMEOUT_SECONDS` is 300, Python's hard-coded five minutes, and it
-  is passed as an argument so a test need not wait them out. It is
-  **unrelated to the 600 s at which the spawner creates the row** — the
-  two are not two views of one interval and must never be collapsed.
-- **One conditional `UPDATE ... RETURNING`**, where Python takes a
-  `SELECT ... FOR UPDATE` *without* `SKIP LOCKED` and then writes each
-  row it read. A concurrent sweep re-evaluates `state = 'running'` once
-  the first commits and matches nothing, rather than blocking on its row
-  locks, so there is no transaction and no lock reasoning here at all.
-  That predicate is also the whole of its idempotency.
-- **Both the `finished_at` write and the cutoff use
-  `timezone('utc', clock_timestamp())`** — never `now()`, which freezes
-  at transaction start, and never a JS `Date`. A cutoff and a stamp taken
-  on different clocks time out either everything or nothing. **A job with
-  no `pinged_at` is never timed out**, the comparison being NULL and so
-  falsy exactly as Python's is; that is deliberate, so don't `COALESCE`
-  it.
-- **A timed-out job is an ordinary failure.** No new `JobState` member,
-  no appended step, no error string, and `claim` / `claimed_at` are left
-  as the dead runner wrote them — indistinguishable from any other
-  failure, which is what Python writes. `timeoutStalledJobs` is
-  deliberately the narrowest thing that satisfies the task and is
-  expected to be subsumed by the TypeScript jobs control plane; do not
-  grow it into a general `setJobState`.
-
 See [docs/tasks.md](docs/tasks.md) for the full config table, the
 `AppContext` contract, the shutdown ordering and its guarantees, the
 probe and metrics surface including the five task series and their

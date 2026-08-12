@@ -495,7 +495,7 @@ describe("timeoutStalledJobs", () => {
 	});
 
 	// `pinged_at < ...` is NULL for a job that has never been pinged, and so
-	// falsy. Python's comparison behaves the same way; this pins it.
+	// falsy. Deliberate, and pinned here so it is not "fixed" into a COALESCE.
 	it("never times out a job that has never been pinged", async () => {
 		const running = await seedPingedJob("running", null);
 		const pending = await seedPingedJob("pending", null);
@@ -553,9 +553,8 @@ describe("timeoutStalledJobs", () => {
 		expect(Math.abs(finishedAt.getTime() - Date.now())).toBeLessThan(60_000);
 	});
 
-	// The assertion that stops someone "tidying up" a dead runner's claim. Python
-	// leaves both columns exactly as they were, and a timed-out job has to stay
-	// indistinguishable from any other failure.
+	// The assertion that stops someone "tidying up" a dead runner's claim. A
+	// timed-out job has to stay indistinguishable from any other failure.
 	it("leaves claim and claimed_at as the dead runner wrote them", async () => {
 		const stale = await seedPingedJob("running", 600);
 		const before = await readJobRow(stale);

@@ -8,17 +8,16 @@ import {
 	createTestDatabase,
 	type TestDatabase,
 } from "@virtool/data/db/test/fixtures";
-import { acquireTask, type ClaimedTask } from "@virtool/data/tasks/data";
+import type { ClaimedTask } from "@virtool/data/tasks/data";
 import { collectFrames } from "@virtool/data/test/frames";
 import { createLogger, type Logger } from "@virtool/logger";
 import { MemoryStorage } from "@virtool/storage";
 import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runTask } from "../framework/run";
+import { claimTask, readTaskRow } from "../testing/tasks";
 import type { TaskContext } from "./registry";
 import { timeoutJobsTask } from "./timeout-jobs";
-
-const RUNNER = "ts-runner-a-1";
 
 const logger: Logger = createLogger({ name: "test", level: "silent" });
 
@@ -68,33 +67,8 @@ async function seedJob(
 	return job.id;
 }
 
-/**
- * Insert a `timeout_jobs` row and claim it, as the spawner and the runner do.
- *
- * Written directly rather than through `createTask`, whose `TaskType` lists only
- * the four the web app spawns.
- */
-async function claim(): Promise<ClaimedTask> {
-	await db.insert(tasks).values({
-		complete: false,
-		context: {},
-		count: 0,
-		created_at: new Date(),
-		progress: 0,
-		step: timeoutJobsTask.type,
-		type: timeoutJobsTask.type,
-	});
-
-	const claimed = await acquireTask(db, {
-		runnerId: RUNNER,
-		allowedTypes: [timeoutJobsTask.type],
-	});
-
-	if (claimed === null) {
-		throw new Error("the task under test was not claimable");
-	}
-
-	return claimed;
+function claim(): Promise<ClaimedTask> {
+	return claimTask(db, timeoutJobsTask);
 }
 
 function run(task: ClaimedTask) {
@@ -106,14 +80,6 @@ function run(task: ClaimedTask) {
 		logger,
 		signal: new AbortController().signal,
 	});
-}
-
-function readRow(taskId: number) {
-	return db
-		.select()
-		.from(tasks)
-		.where(eq(tasks.id, taskId))
-		.then(([row]) => row);
 }
 
 function readJobState(jobId: number) {
@@ -134,7 +100,7 @@ describe("timeoutJobsTask", () => {
 
 		expect(await run(task)).toEqual({ status: "completed" });
 
-		expect(await readRow(task.id)).toMatchObject({
+		expect(await readTaskRow(db, task.id)).toMatchObject({
 			complete: true,
 			error: null,
 			progress: 100,
@@ -155,7 +121,7 @@ describe("timeoutJobsTask", () => {
 
 		expect(await run(task)).toEqual({ status: "completed" });
 
-		expect(await readRow(task.id)).toMatchObject({
+		expect(await readTaskRow(db, task.id)).toMatchObject({
 			complete: true,
 			error: null,
 			progress: 100,

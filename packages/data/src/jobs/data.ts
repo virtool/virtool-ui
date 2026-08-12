@@ -584,12 +584,12 @@ export async function finishJob(db: Db, jobId: number): Promise<Job> {
 /**
  * How long a running job may go without a ping before it is timed out.
  *
- * Not a config key. Python hard-codes the same five minutes, and the two sweeps
- * run side by side until the cutover completes — a threshold only one of them
- * knows about would have them disagree about which rows are stale.
+ * Not a config key: every sweep has to agree on which rows are stale, so this
+ * is fleet-wide application state rather than a fact about the pod reading it.
  *
- * Unrelated to the 600 s at which the spawner creates a `timeout_jobs` row. The
- * two numbers are not two views of one interval and must not be collapsed.
+ * Unrelated to the interval at which the spawner creates a `timeout_jobs` row.
+ * One is how long a job may go silent, the other how often the sweep runs; the
+ * two are not views of one interval and must not be collapsed.
  */
 export const JOB_TIMEOUT_SECONDS = 300;
 
@@ -599,26 +599,27 @@ export const JOB_TIMEOUT_SECONDS = 300;
  *
  * A timed-out job is written as an ordinary failure — no distinct state, no
  * appended step, no error string, and `claim` / `claimed_at` left exactly as
- * the dead runner wrote them. It is indistinguishable from any other failure,
- * which is what Python writes and so what this must keep writing while both
- * services still fail jobs.
+ * the dead runner wrote them. It is indistinguishable from any other failure
+ * and must stay so: `JobState` is a five-member union consumed on both sides of
+ * the wire, so a sixth member is a change to the client contract rather than a
+ * tidy-up. `computeJobProgress` returns 100 for `failed`, so a timed-out job's
+ * progress bar snaps to full the moment the state flips.
  *
- * **Deliberately minimal, and expected to be subsumed.** The TypeScript jobs
- * control plane will own job state transitions properly — the runner-side
- * lifecycle, `claim` / `claimed_at`, ping writes and cancellation — and will
- * absorb this or replace it outright. Do not grow it into a general
- * `setJobState`.
+ * **Deliberately minimal, and expected to be subsumed.** The jobs control plane
+ * will own job state transitions properly — the runner-side lifecycle, `claim`
+ * / `claimed_at`, ping writes and cancellation — and will absorb this or
+ * replace it outright. Do not grow it into a general `setJobState`, and do not
+ * add a ping writer to it.
  *
- * One conditional statement, where Python takes a `SELECT ... FOR UPDATE`
- * *without* `SKIP LOCKED` and then writes each row it read. A second sweep
- * arriving concurrently re-evaluates `state = 'running'` once the first commits
- * and matches nothing, rather than blocking on its row locks — so this needs no
- * explicit transaction and no lock reasoning at all.
+ * One conditional statement, so a concurrent sweep re-evaluates
+ * `state = 'running'` once the first commits and matches nothing rather than
+ * blocking on its row locks. That leaves no transaction to manage and no lock
+ * reasoning to get wrong.
  *
- * That predicate is also what makes it idempotent, as a reclaimed task
- * requires: a re-run matches only rows still running and still stale, so a body
- * restarted from step zero neither re-fails a job nor moves a `finished_at` it
- * already wrote.
+ * The same predicate is what makes it idempotent, as a reclaimed task requires:
+ * a re-run matches only rows still running and still stale, so a body restarted
+ * from step zero neither re-fails a job nor moves a `finished_at` it already
+ * wrote.
  *
  * `thresholdSeconds` exists so a test need not wait five real minutes.
  */
@@ -635,8 +636,8 @@ export async function timeoutStalledJobs(
 	   different clocks times out either everything or nothing.
 
 	   A job that has never been pinged is never timed out — `pinged_at < ...` is
-	   NULL for it, and so falsy. Python's comparison is NULL in the same way and
-	   this is deliberate rather than an oversight, so do not COALESCE it. */
+	   NULL for it, and so falsy. That is deliberate rather than an oversight: a
+	   queued job is not pinging by definition, so do not COALESCE it. */
 	const timedOut = await db
 		.update(jobs)
 		.set({
