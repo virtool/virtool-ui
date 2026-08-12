@@ -962,6 +962,25 @@ reports zero rather than its last backlog. The workflow list is
 `JobWorkflow.options` from `@virtool/contracts` — the one definition;
 don't mint a second.
 
+**The same read also serves `GET /jobs/counts`**, which is not a metric
+but the endpoint a KEDA `ScaledJob` scales workflow pods on — Python's
+route, ported to Python's shape (state → workflow → count, every pair
+present, zeros written rather than omitted, because a `metrics-api`
+trigger addresses one figure by a fixed path). It is **public**, listed
+in `PUBLIC_ROUTES`: the scaler holds no job key and could not, a key
+being minted by the very claim it is deciding whether to start a pod to
+make. Two rules are its own: the **three terminal states are always
+zero**, since the bounded read covers `pending` and `running` alone and
+nothing scales on a finished job; and an unrecognised `workflow` is
+**dropped rather than folded onto `other`**, the response shape having
+no such key and Python's carrying none. A failed read is not caught —
+zeros would read as a drained queue and scale the fleet to nothing, so
+it answers 500 and the scaler holds its last decision. Don't remove it
+on the grounds that `/metrics` already carries the figures: before it
+existed, a poll for `/jobs/counts` matched `/jobs/:jobId`, was refused
+by the job guard, and reported to the scaler as `api returned 401` — a
+credential problem where the truth was a missing endpoint.
+
 **Task and queue visibility is `apps/tasks`'s.**
 `virtool_task_spawn_total{type,outcome}`,
 `virtool_task_runs_total{type,outcome}`,
