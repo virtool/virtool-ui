@@ -38,8 +38,14 @@ export const runFastqcStep: CreateSampleStep = {
 				command: buildFastqcCommand(read.upload, read.fastqcOutput),
 			});
 
-			// The run is being torn down and this process was killed, so whatever
-			// is on disk covers part of a read file at best.
+			/* The run is being torn down and this process was killed, so whatever
+			 * is on disk covers part of a read file at best.
+			 *
+			 * Returning here cannot leave `finalize` to fail on a null quality:
+			 * `cancelled` is only ever true with the run's signal already
+			 * aborted, so the run loop breaks before the next step rather than
+			 * carrying on. Nor is it silent — the subprocess runner has already
+			 * logged the SIGTERM, and the loop logs the cancellation. */
 			if (cancelled) {
 				return;
 			}
