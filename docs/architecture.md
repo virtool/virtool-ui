@@ -1,38 +1,6 @@
 # Architecture
 
-## Two backend surfaces
 
-Virtool's backend lives in two processes. The SPA talks to only one of
-them:
-
-- **This repo** — TanStack Start server functions under
-  `apps/web/src/server/<feature>/`, called from the SPA via the React
-  Query hooks that wrap them, plus a few raw routes for what a server
-  function cannot do (uploads, downloads, SSE, metrics). They read and
-  write through `@virtool/data`, the workspace package that holds the
-  Drizzle schema and every domain's `data.ts`. Every read and write the
-  browser makes goes through here; there is no HTTP client in the SPA and
-  no direct call to Python.
-- **The Python service** — still runs the job runner and owns the
-  Postgres schema and its Alembic migration history. It reaches the same
-  database and the same object storage bucket this repo does, so the two
-  processes cooperate through shared state rather than through the
-  browser.
-
-There is no Express SSR layer anymore — `src/server/` is exclusively
-TanStack Start, served by Nitro in production. Page rendering goes
-through the TanStack Start / TanStack Router pipeline.
-
-**Schema and migrations stay in Python.** The Python repo owns the
-Alembic migration history and is the only process that applies schema
-changes to Postgres. TS server features read and write through Drizzle
-against the schema Python defines; they don't ship their own
-migrations. When a migrating endpoint needs a schema change, the
-change lands in Python's Alembic tree first and the TS code follows.
-
-Everything below — the three-file layering, the import-direction
-invariant, the auth carve-out — governs a server feature, which spans
-`packages/data/src/<feature>/` and `apps/web/src/server/<feature>/`.
 
 ### Types are inferred from the schema, not hand-copied
 
