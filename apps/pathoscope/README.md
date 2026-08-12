@@ -84,6 +84,7 @@ The Rust crate is not a pnpm workspace — run `cargo test` in
 ## Documentation
 
 `docs/workflow-runtime.md` covers the runtime every executor runs on,
-`docs/pathoscope-core.md` the Rust crate, `docs/index-artifact.md` the SQLite
-reference index it reads, `docs/apps.md` the bundling and `pnpm deploy`
-pipeline every non-Vite app shares, and `docs/images.md` the image pipeline.
+[`packages/pathoscope-core/README.md`](../../packages/pathoscope-core/README.md)
+the Rust crate, `docs/index-artifact.md` the SQLite reference index it reads,
+`docs/apps.md` the bundling and `pnpm deploy` pipeline every non-Vite app
+shares, and `docs/images.md` the image pipeline.

@@ -1,28 +1,9 @@
 # pathoscope-core
 
-`packages/pathoscope-core` is a Rust crate — the only one in this repo. It is
-pathoscope's expectation-maximization core, built as a standalone command-line
-binary that the pathoscope workflow invokes as a subprocess.
-
-It was moved here from the `workflow-pathoscope` Python repo, where it built a
-PyO3 extension module. That repo is being retired.
-
-## There is no FFI
-
-The binary is a subprocess, not a native addon. Every heavy step in every
-workflow already shells out — `bowtie2`, `bowtie2-build`, `samtools`,
-`cd-hit-est` — and this is a fifth subprocess on the same path, with the same
-logging, cancellation and error surface.
-
-napi-rs was evaluated and dropped. Its advantage is multi-platform artifact
-distribution, and our images are single-platform, so that machinery would go
-unused. What would remain is in-process calling convenience, paid for with a
-panic unwinding across the C-ABI boundary into `rust-htslib`'s C code — which
-presents as a segfault taking down the whole Node process, not a catchable
-error. In a diagnostic setting, losing a run to a segfault is strictly worse
-than a child process exiting non-zero with a message on stderr.
-
-Do not reintroduce an FFI layer.
+The only Rust crate in this repo — pathoscope's expectation-maximization
+core, built as a standalone command-line binary that
+[`@virtool/pathoscope`](../../apps/pathoscope/README.md) invokes as a
+subprocess.
 
 ## Results are byte-identical to the Python build, and pinned that way
 
@@ -102,12 +83,25 @@ Other contracts:
 - **`proc` is `u32`** and rejected at parse time if below 1, rather than being
   taken as `i32` and clamped with `proc.max(1)`.
 
+## Commands
+
+Run from this directory — the crate is not a pnpm workspace, so `pnpm test`
+and `pnpm typecheck` do not reach it.
+
+| Command | Action |
+| --- | --- |
+| `cargo test` | Run the suite, golden vectors included |
+| `cargo fmt` | Format (`rustfmt.toml`, `max_width = 88`) |
+| `cargo clippy` | Lint — advisory only, see below |
+
+Building needs `libclang-dev` installed, because `hts-sys` runs bindgen against
+htslib's headers.
+
 ## Rust is formatted but not clippy-gated
 
 This is a recorded decision, not an oversight.
 
-`cargo fmt --check` runs in CI, with `rustfmt.toml` (`max_width = 88`) carried
-over from the old repo. The code already satisfied it.
+`cargo fmt --check` runs in CI. The code already satisfied it.
 
 `cargo clippy -- -D warnings` is **not** a gate. The five frozen modules are
 2,511 lines of inherited code that would need edits inside them to satisfy it —
@@ -176,8 +170,8 @@ reports `CACHED`.
 against htslib's headers for `x86_64-unknown-linux-gnu` and does not fall back
 to the pre-generated bindings that ship for some targets. Dropping the package
 fails the build with `Unable to find libclang`. This was verified empirically,
-and the same requirement applies to the `pathoscope-test` CI job and to any developer
-machine.
+and the same requirement applies to the `pathoscope-test` CI job and to any
+developer machine.
 
 The runtime stage installs `libcurl4`, `libgomp1`, `libncursesw6` and `perl`.
 Each backs a specific `ldd ... => not found` against the slim base: perl and
