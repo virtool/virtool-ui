@@ -160,16 +160,8 @@ describe("<ReferenceList />", () => {
 			mockGetAccount(createFakeAccount({ permissions }));
 
 			const created = createFakeReferenceMinimal({ name: "Fresh Reference" });
-			let items = [references];
 
-			referenceServerFnMocks.findReferencesFn.mockImplementation(async () => ({
-				foundCount: items.length,
-				totalCount: items.length,
-				page: 1,
-				pageCount: 1,
-				perPage: 25,
-				items,
-			}));
+			mockFindReferences([references]);
 			mockCreateReference(createFakeReference({ name: created.name }));
 
 			await renderWithRouter(<ReferenceListHarness />);
@@ -187,7 +179,10 @@ describe("<ReferenceList />", () => {
 				created.name,
 			);
 
-			items = [references, created];
+			// The list the invalidated query will refetch. Nothing but a refetch
+			// can put this reference on screen.
+			mockFindReferences([references, created]);
+
 			await userEvent.click(
 				within(dialog).getByRole("button", { name: "Create" }),
 			);
@@ -202,16 +197,8 @@ describe("<ReferenceList />", () => {
 			mockGetAccount(createFakeAccount({ permissions }));
 
 			const clone = createFakeReferenceMinimal({ name: "Cloned Reference" });
-			let items = [references];
 
-			referenceServerFnMocks.findReferencesFn.mockImplementation(async () => ({
-				foundCount: items.length,
-				totalCount: items.length,
-				page: 1,
-				pageCount: 1,
-				perPage: 25,
-				items,
-			}));
+			mockFindReferences([references]);
 			mockCreateReference(createFakeReference({ name: clone.name }));
 
 			await renderWithRouter(<ReferenceListHarness />);
@@ -223,7 +210,10 @@ describe("<ReferenceList />", () => {
 				await screen.findByRole("button", { name: "clone" }),
 			);
 
-			items = [references, clone];
+			// The list the invalidated query will refetch. Nothing but a refetch
+			// can put this reference on screen.
+			mockFindReferences([references, clone]);
+
 			await userEvent.click(screen.getByRole("button", { name: "Clone" }));
 
 			expect(await screen.findByText(clone.name)).toBeInTheDocument();
