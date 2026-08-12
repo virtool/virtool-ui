@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
@@ -154,7 +154,81 @@ describe("<ReferenceList />", () => {
 		});
 	});
 
+	describe("<CreateReference />", () => {
+		it("should show a newly created reference without a reload", async () => {
+			const permissions = createFakePermissions({ create_ref: true });
+			mockGetAccount(createFakeAccount({ permissions }));
+
+			const created = createFakeReferenceMinimal({ name: "Fresh Reference" });
+			let items = [references];
+
+			referenceServerFnMocks.findReferencesFn.mockImplementation(async () => ({
+				foundCount: items.length,
+				totalCount: items.length,
+				page: 1,
+				pageCount: 1,
+				perPage: 25,
+				items,
+			}));
+			mockCreateReference(createFakeReference({ name: created.name }));
+
+			await renderWithRouter(<ReferenceListHarness />);
+
+			expect(await screen.findByText("References")).toBeInTheDocument();
+			expect(screen.queryByText(created.name)).not.toBeInTheDocument();
+
+			await userEvent.click(
+				await screen.findByRole("button", { name: "Create" }),
+			);
+
+			const dialog = await screen.findByRole("dialog");
+			await userEvent.type(
+				within(dialog).getByRole("textbox", { name: "Name" }),
+				created.name,
+			);
+
+			items = [references, created];
+			await userEvent.click(
+				within(dialog).getByRole("button", { name: "Create" }),
+			);
+
+			expect(await screen.findByText(created.name)).toBeInTheDocument();
+		});
+	});
+
 	describe("<CloneReference />", () => {
+		it("should show the clone without a reload", async () => {
+			const permissions = createFakePermissions({ create_ref: true });
+			mockGetAccount(createFakeAccount({ permissions }));
+
+			const clone = createFakeReferenceMinimal({ name: "Cloned Reference" });
+			let items = [references];
+
+			referenceServerFnMocks.findReferencesFn.mockImplementation(async () => ({
+				foundCount: items.length,
+				totalCount: items.length,
+				page: 1,
+				pageCount: 1,
+				perPage: 25,
+				items,
+			}));
+			mockCreateReference(createFakeReference({ name: clone.name }));
+
+			await renderWithRouter(<ReferenceListHarness />);
+
+			expect(await screen.findByText("References")).toBeInTheDocument();
+			expect(screen.queryByText(clone.name)).not.toBeInTheDocument();
+
+			await userEvent.click(
+				await screen.findByRole("button", { name: "clone" }),
+			);
+
+			items = [references, clone];
+			await userEvent.click(screen.getByRole("button", { name: "Clone" }));
+
+			expect(await screen.findByText(clone.name)).toBeInTheDocument();
+		});
+
 		it("handleSubmit() should mutate with correct input", async () => {
 			const permissions = createFakePermissions({ create_ref: true });
 			const account = createFakeAccount({ permissions: permissions });
