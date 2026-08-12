@@ -468,17 +468,14 @@ route or query errors — those belong in the two tiers above.
 
 ### Styling
 
-- Styling is Tailwind utility classes. There is no CSS-in-JS; styled-components
-  has been removed from the repo.
-- Use `cn()` from `@app/cn` for conditional classes (combines `clsx` +
-  `tailwind-merge`).
+- Use Tailwind utility classes.
+- Use `cn()` from `@app/cn` for conditional classes.
 - Don't use arbitrary Tailwind classes like `max-h-[210px]`.
 - Design tokens — colors, spacing, fonts — are defined in
   `apps/web/src/app/style.css` under `@theme`, with keyframes in
   `apps/web/src/app/animations.css`. Check there before inventing a color or
   spacing value, and add a token rather than hardcoding a hex.
-- The root font size is `100%` — the reader's browser preference. Never put a
-  length back on `html`; `body` carries the app's base size.
+- The root font size is `100%`. 
 - Every rem-valued token Tailwind ships is overridden in `@theme` at 0.875, so
   a class does **not** render its documented px figure: `text-sm` is 12.25px,
   `md:` breaks at 672px.
@@ -486,14 +483,10 @@ route or query errors — those belong in the two tiers above.
   Where a size has to be a number — a threshold compared against a measured
   width — write it as a rem multiple and resolve it with `useRootFontSize`
   (`@app/hooks`), never as a px constant.
-- A `color` prop on a `src/base/` component takes the shared `PaletteColor`
-  from `@base/types` (`blue`, `green`, `gray`, `orange`, `purple`, `red`), or
-  `IconColor` — `PaletteColor | "black"` — for the icon-based ones (`Icon`,
-  `IconButton`, `Circle`). Don't redeclare the union locally, add a one-off
-  color, or trim the set per component.
+- A `color` prop on a `src/base/` component takes the shared `PaletteColor`.
+  Don't redeclare this.
 - Where a component has variants (`solid` / `soft`), `color` works in every
-  one. A variant that silently ignores it is a footgun: honor it across the
-  board or drop the prop for that variant.
+  one.
 
 See [docs/type-scale.md](docs/type-scale.md) for which token families are
 overridden and why they move together, the class-to-px table, and the px
@@ -609,11 +602,6 @@ failure it already completed. A deletion returns `null` and answers 200;
 the RPC client reads the body and never the status.
 `server/__tests__/responseStatus.test.ts` fails the build on any of the
 three.
-
-See [docs/architecture.md](docs/architecture.md) for the import-direction
-invariant in full, the labels (minimal) and auth (carve-out) shapes,
-the pure-policy-vs-framework-shell principle, and when to introduce
-`service.ts`.
 
 ### Client-reachable files import server modules via `@server/*`
 
