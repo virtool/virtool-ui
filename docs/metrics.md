@@ -266,21 +266,3 @@ Queries queued **client-side**, waiting for a free pool slot. That is
 the true saturation signal, and it lives entirely in the postgres.js
 closure. Recovering it means wrapping every query with an in-flight
 counter — real instrumentation, not a read of existing state.
-
-## Testing
-
-`server/metrics/__tests__/data.test.ts` runs against the shared Postgres
-container. It needs no schema, because `pg_stat_activity` is a system
-view — so it opens its own clients rather than calling
-`createTestDatabase()`. Test files run in parallel against one
-container, so the suite generates a unique `application_name` per run;
-that is also what the filter under test is for.
-
-The middleware is called directly through `metricsMiddleware.options.server`,
-which is where `createStartHandler` reads the handler from when it builds
-the chain. `createServerOnlyFn` is the identity function at runtime — the
-Vite plugin does the stripping — so the body runs normally under Vitest.
-
-Assertions read rendered exposition text rather than poking at metric
-internals, which is what actually pins the label names and values a
-dashboard depends on.

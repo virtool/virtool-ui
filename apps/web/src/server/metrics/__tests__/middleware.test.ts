@@ -18,6 +18,9 @@ type ServerFn = (options: {
 
 // `createMiddleware().server(fn)` parks the handler on `options.server`, which
 // is exactly where `createStartHandler` reads it from to build the chain.
+// `createServerOnlyFn` is the identity function at runtime — only the Vite
+// plugin strips it, client-side, at build time — so the body runs unmodified
+// under Vitest with no need to mock it away.
 const run = metricsMiddleware.options.server as unknown as ServerFn;
 
 function call(
