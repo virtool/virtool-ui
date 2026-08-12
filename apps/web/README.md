@@ -21,8 +21,9 @@ reverse proxy.
 `GET /metrics` serves the Prometheus text exposition format from a single
 process-wide registry. It is one of three scrape targets — `apps/web`,
 `apps/jobs-api`, `apps/tasks` — each with its own process and its own
-registry; see [docs/metrics.md](../../docs/metrics.md) for how series stay
-told apart across them.
+registry; see [docs/metrics.md](../../docs/metrics.md) for the handful of
+things only visible by comparing this implementation against the jobs
+API's.
 
 ### Layout
 
@@ -118,10 +119,18 @@ caused it.
 
 Counter over every handled request.
 
-`status` is the response status as a string, or `"error"` when the
-downstream handler threw instead of producing a response. `"error"`
-rather than a fabricated `500`, because no response was ever produced —
-the distinction matters when reading a spike.
+`status` is the response status as a string, with one exception:
+`"error"` for the rare non-`Error` throw that escapes the whole request
+middleware chain. An `Error` that escapes it is recorded as `"500"`, not
+`"error"` — h3's `toResponse`, outside this middleware's visibility,
+wraps an escaping `Error` as an `HTTPError` and answers 500 by default
+(the one way it wouldn't is a `.status` set on the error itself, which is
+the server-function-only `ClientError` pattern, and `handleServerAction`
+resolves that to a response itself rather than rethrowing — so it never
+reaches this middleware's catch). A non-`Error` throw gets no such
+treatment from h3 — it is read as a response *body* instead of an error —
+so no status this middleware could report would be accurate for that
+case, and `"error"` is reserved for it.
 
 #### `virtool_http_request_duration_seconds{handler_type, method, server_fn}`
 

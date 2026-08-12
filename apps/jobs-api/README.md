@@ -828,7 +828,9 @@ worth knowing rather than discovering.
 **own registry**, built by `createMetrics`. It is a separate registry in a
 separate process from the web app's; the series names deliberately match so
 one dashboard covers both, and the two are told apart by the scrape's target
-labels and by `application_name`, not by renaming the metrics.
+labels and by `application_name`, not by renaming the metrics. See
+[docs/metrics.md](../../docs/metrics.md) for the handful of things only
+visible by comparing this implementation against the web app's.
 
 Prometheus needs a **second scrape job** for this service, and an
 authenticated one — the endpoint requires a bearer token.
@@ -953,15 +955,17 @@ index to add to rescue it. Terminal totals are also the wrong instrument: a
 gauge over accumulated history is a counter wearing the wrong hat, and
 failure rate belongs on a `_total` counter incremented when a job finishes.
 
-`createJobQueueReader` memoizes the result for ten seconds — well under a
-typical 15–60s scrape interval, so a scrape still sees a fresh queue. The
-bound matters in the other direction: two Prometheus replicas, or a human
-curling the endpoint in a loop, would otherwise multiply an unindexed scan
-across the very pool this service claims jobs from. In-flight reads are
-shared as well as settled ones, so two scrapes arriving together cost one
-query. A **rejection is not cached** — the read is bounded already, and
-holding a failure for the full TTL would keep these series dark for ten
-seconds past a blip that lasted one.
+`createJobQueueReader` memoizes the result for ten seconds through
+`createMemoizedReader` (`@virtool/data/metrics/memoize`) — the same helper
+`apps/tasks` builds its task-queue reader on, rather than each service
+declaring its own TTL cache. Ten seconds is well under a typical 15–60s
+scrape interval, so a scrape still sees a fresh queue. The bound matters in
+the other direction: two Prometheus replicas, or a human curling the endpoint
+in a loop, would otherwise multiply an unindexed scan across the very pool
+this service claims jobs from. In-flight reads are shared as well as settled
+ones, so two scrapes arriving together cost one query. A **rejection is not
+cached** — the read is bounded already, and holding a failure for the full
+TTL would keep these series dark for ten seconds past a blip that lasted one.
 
 Both reads go out concurrently under one `readJobQueueBounded` deadline,
 matched to the pool probe's two seconds for the same reason. A failure logs
