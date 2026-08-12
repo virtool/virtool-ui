@@ -8,14 +8,13 @@ import { createTestDatabase, type TestDatabase } from "../db/test/fixtures";
 import {
 	createAuthenticatedSession,
 	createResetSession,
+	deleteExpiredSessions,
 	invalidateSession,
 	invalidateUserSessions,
 } from "./session";
 import { seedSession, seedUser } from "./test/fixtures";
 import { hashToken } from "./tokens";
 
-// The Python lifetimes in `virtool/sessions/data.py`, which these rows must be
-// indistinguishable from.
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 const SIXTY_MINUTES_MS = 60 * 60 * 1000;
 const TEN_MINUTES_MS = 10 * 60 * 1000;
@@ -210,5 +209,136 @@ describe("invalidateUserSessions", () => {
 		expect(
 			await db.select({ id: users.id }).from(users).where(eq(users.id, userId)),
 		).toEqual([{ id: userId }]);
+	});
+});
+
+describe("deleteExpiredSessions", () => {
+	const FIVE_MINUTES_MS = 5 * 60 * 1000;
+
+	function minutesFromNow(minutes: number): Date {
+		return new Date(Date.now() + minutes * 60 * 1000);
+	}
+
+	async function remainingSessionIds(): Promise<string[]> {
+		const rows = await db
+			.select({ sessionId: sessions.sessionId })
+			.from(sessions)
+			.orderBy(sessions.id);
+
+		return rows.map((row) => row.sessionId);
+	}
+
+	it("deletes an expired session and leaves a live one", async () => {
+		const userId = await seedUser(db);
+
+		await seedSession(db, userId, { expiresAt: minutesFromNow(-30) });
+		const live = await seedSession(db, userId, {
+			expiresAt: minutesFromNow(30),
+		});
+
+		expect(await deleteExpiredSessions(db)).toBe(1);
+		expect(await remainingSessionIds()).toEqual([live.sessionId]);
+	});
+
+	// `expires_at` is `timestamp without time zone` holding naive UTC. A cutoff
+	// bound as a `Date` casts through the session `TimeZone`, which is unset here,
+	// so a wrong cutoff is out by whole hours rather than by seconds. Five minutes
+	// either side of now catches that in both directions: an hour early would keep
+	// the expired row, an hour late would take the live one.
+	it("puts the cutoff at now, not an hour either side of it", async () => {
+		const userId = await seedUser(db);
+
+		await seedSession(db, userId, {
+			expiresAt: new Date(Date.now() - FIVE_MINUTES_MS),
+		});
+		const live = await seedSession(db, userId, {
+			expiresAt: new Date(Date.now() + FIVE_MINUTES_MS),
+		});
+
+		expect(await deleteExpiredSessions(db)).toBe(1);
+		expect(await remainingSessionIds()).toEqual([live.sessionId]);
+	});
+
+	it("deletes every session type", async () => {
+		const userId = await seedUser(db);
+
+		for (const sessionType of [
+			"anonymous",
+			"authenticated",
+			"reset",
+		] as const) {
+			await seedSession(db, userId, {
+				expiresAt: minutesFromNow(-30),
+				sessionType,
+			});
+		}
+
+		expect(await deleteExpiredSessions(db)).toBe(3);
+		expect(await remainingSessionIds()).toEqual([]);
+	});
+
+	it("loops past the batch size until nothing expired is left", async () => {
+		const userId = await seedUser(db);
+
+		for (let index = 0; index < 7; index++) {
+			await seedSession(db, userId, { expiresAt: minutesFromNow(-30) });
+		}
+
+		const live = await seedSession(db, userId, {
+			expiresAt: minutesFromNow(30),
+		});
+
+		expect(await deleteExpiredSessions(db, { batchSize: 2 })).toBe(7);
+		expect(await remainingSessionIds()).toEqual([live.sessionId]);
+	});
+
+	it("returns zero when nothing has expired", async () => {
+		const userId = await seedUser(db);
+		await seedSession(db, userId, { expiresAt: minutesFromNow(30) });
+
+		expect(await deleteExpiredSessions(db)).toBe(0);
+		expect(await remainingSessionIds()).toHaveLength(1);
+	});
+
+	// Deleting a live session logs a user out early, which is the only harm this
+	// can do — so the surviving row is compared whole rather than counted.
+	it("leaves a live session's row untouched", async () => {
+		const userId = await seedUser(db);
+
+		const live = await seedSession(db, userId, {
+			expiresAt: minutesFromNow(30),
+		});
+
+		const before = await db
+			.select()
+			.from(sessions)
+			.where(eq(sessions.sessionId, live.sessionId));
+
+		await seedSession(db, userId, { expiresAt: minutesFromNow(-30) });
+
+		await deleteExpiredSessions(db);
+
+		expect(
+			await db
+				.select()
+				.from(sessions)
+				.where(eq(sessions.sessionId, live.sessionId)),
+		).toEqual(before);
+	});
+
+	// The signal is checked between batches, so a run on a table that has never
+	// been cleared cannot outlive the drain. Whatever earlier batches committed
+	// stands: each is its own transaction.
+	it("throws and deletes nothing when the signal is already aborted", async () => {
+		const userId = await seedUser(db);
+		const expired = await seedSession(db, userId, {
+			expiresAt: minutesFromNow(-30),
+		});
+
+		await expect(
+			deleteExpiredSessions(db, { signal: AbortSignal.abort() }),
+		).rejects.toThrow();
+
+		expect(await remainingSessionIds()).toEqual([expired.sessionId]);
 	});
 });
