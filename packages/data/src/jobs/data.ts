@@ -581,6 +581,83 @@ export async function finishJob(db: Db, jobId: number): Promise<Job> {
 	return getJob(db, jobId);
 }
 
+/**
+ * How long a running job may go without a ping before it is timed out.
+ *
+ * Not a config key. Python hard-codes the same five minutes, and the two sweeps
+ * run side by side until the cutover completes — a threshold only one of them
+ * knows about would have them disagree about which rows are stale.
+ *
+ * Unrelated to the 600 s at which the spawner creates a `timeout_jobs` row. The
+ * two numbers are not two views of one interval and must not be collapsed.
+ */
+export const JOB_TIMEOUT_SECONDS = 300;
+
+/**
+ * Fail every running job whose runner has stopped pinging, stamping
+ * `finished_at`, and return the ids in no particular order.
+ *
+ * A timed-out job is written as an ordinary failure — no distinct state, no
+ * appended step, no error string, and `claim` / `claimed_at` left exactly as
+ * the dead runner wrote them. It is indistinguishable from any other failure,
+ * which is what Python writes and so what this must keep writing while both
+ * services still fail jobs.
+ *
+ * **Deliberately minimal, and expected to be subsumed.** The TypeScript jobs
+ * control plane will own job state transitions properly — the runner-side
+ * lifecycle, `claim` / `claimed_at`, ping writes and cancellation — and will
+ * absorb this or replace it outright. Do not grow it into a general
+ * `setJobState`.
+ *
+ * One conditional statement, where Python takes a `SELECT ... FOR UPDATE`
+ * *without* `SKIP LOCKED` and then writes each row it read. A second sweep
+ * arriving concurrently re-evaluates `state = 'running'` once the first commits
+ * and matches nothing, rather than blocking on its row locks — so this needs no
+ * explicit transaction and no lock reasoning at all.
+ *
+ * That predicate is also what makes it idempotent, as a reclaimed task
+ * requires: a re-run matches only rows still running and still stale, so a body
+ * restarted from step zero neither re-fails a job nor moves a `finished_at` it
+ * already wrote.
+ *
+ * `thresholdSeconds` exists so a test need not wait five real minutes.
+ */
+export async function timeoutStalledJobs(
+	db: Db,
+	options: { thresholdSeconds?: number } = {},
+): Promise<number[]> {
+	const { thresholdSeconds = JOB_TIMEOUT_SECONDS } = options;
+
+	/* `timezone('utc', clock_timestamp())` on both the write and the cutoff.
+	   `finished_at` is a naive `timestamp` holding UTC, so a value read through
+	   the session `TimeZone` is wrong by that offset, and `now()` freezes at
+	   transaction start. The pair has to match: a cutoff and a stamp taken on
+	   different clocks times out either everything or nothing.
+
+	   A job that has never been pinged is never timed out — `pinged_at < ...` is
+	   NULL for it, and so falsy. Python's comparison is NULL in the same way and
+	   this is deliberate rather than an oversight, so do not COALESCE it. */
+	const timedOut = await db
+		.update(jobs)
+		.set({
+			finished_at: sql`timezone('utc', clock_timestamp())`,
+			state: "failed",
+		})
+		.where(
+			and(
+				eq(jobs.state, "running"),
+				sql`${jobs.pinged_at} < timezone('utc', clock_timestamp()) - make_interval(secs => ${thresholdSeconds}::double precision)`,
+			),
+		)
+		.returning({ id: jobs.id });
+
+	for (const { id } of timedOut) {
+		await emit("jobs", id, "update");
+	}
+
+	return timedOut.map(({ id }) => id);
+}
+
 /** A count of jobs sharing one workflow and state. */
 export type JobCount = { workflow: string; state: string; count: number };
 

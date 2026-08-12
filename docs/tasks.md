@@ -988,11 +988,85 @@ Idempotency comes free: a re-run selects whatever is still over budget, and
 `storage.delete` is idempotent on its own, so an interrupted run is finished by
 the next one rather than repaired by it.
 
+### `timeout_jobs`, the first body to move a job's state
+
+`timeout_jobs` fails every running job whose runner has stopped pinging. Its
+body is one call to `timeoutStalledJobs` (`@virtool/data/jobs/data`) inside one
+step, `timeout_jobs` — Python's method name, which happens to match the type —
+and it reports no progress: the sweep is a single round trip and the count is
+not known until it returns.
+
+**The threshold is a constant, not configuration.** `JOB_TIMEOUT_SECONDS` is
+300, the five minutes Python hard-codes as an `arrow` shift, and there is no
+`VT_` key behind it: the two sweeps run side by side until the cutover
+completes, and a threshold only one of them knows about would have them disagree
+about which rows are stale. It is passed as an argument, defaulted, so a test
+need not wait five real minutes out.
+
+**It is unrelated to the 600 s at which the spawner creates the row.** One is
+how long a job may go silent, the other is how often the sweep runs. They are
+not two views of one interval and must never be collapsed into one constant.
+
+**Candidate selection and the write are one conditional statement.** Python
+takes a `SELECT ... FOR UPDATE` — *without* `SKIP LOCKED` — and then writes each
+row it read in a Python loop, so a second sweep reaching the same statement
+blocks on the row locks rather than skipping them. This side is one
+`UPDATE ... RETURNING id`: a concurrent sweep re-evaluates `state = 'running'`
+once the first commits and matches nothing. That removes the blocking behaviour
+entirely, needs no explicit transaction, and leaves no lock reasoning to get
+wrong.
+
+That same predicate is the whole of its idempotency, which a reclaim requires. A
+re-run matches only rows still running and still stale, so a body restarted from
+step zero neither re-fails a job nor moves a `finished_at` it already wrote.
+
+**Both the `finished_at` write and the cutoff arithmetic use
+`timezone('utc', clock_timestamp())`.** `finished_at` is a naive `timestamp`
+holding UTC, so a value read through the session `TimeZone` is wrong by that
+offset, and `now()` would freeze at transaction start. The pair has to match: a
+cutoff and a stamp taken on different clocks time out either everything or
+nothing. A test runs the sweep under a non-UTC session `TimeZone`, which is the
+only way that requirement is pinned rather than passing by accident on a UTC
+box — it asserts the session zone actually took, so it cannot pass by the `SET`
+having failed.
+
+**A job with no `pinged_at` is never timed out.** `pinged_at < ...` is NULL for
+it, and so falsy — exactly as Python's comparison is. That is inherited
+behaviour rather than an oversight, so do not `COALESCE` it into a timeout: a
+queued job is not pinging by definition.
+
+**A timed-out job is written as an ordinary failure.** It lands in `failed` with
+a `finished_at` and nothing else — no distinct state, no appended step, no error
+string, and `claim` / `claimed_at` left exactly as the dead runner wrote them. It
+is indistinguishable from any other failure, which is what Python writes and so
+what this must keep writing while both services still fail jobs. `JobState` is a
+five-member union consumed on both sides of the wire; inventing a sixth member
+mid-cutover is a change to the client contract, not a tidy-up. One consequence
+worth knowing rather than discovering: `computeJobProgress` returns 100 for
+`failed`, so a timed-out job's progress bar snaps to full the moment the state
+flips. Python's `compute_progress` does the same, so that is a match rather than
+a divergence.
+
+`timeoutStalledJobs` is deliberately the narrowest thing that satisfies this
+task, and is expected to be subsumed. The TypeScript jobs control plane will own
+job state transitions properly — the runner-side lifecycle, `claim` /
+`claimed_at`, ping writes and cancellation — and will absorb it or replace it
+outright. Do not grow it into a general `setJobState`, and do not add a ping
+writer to it.
+
 ### Frames are the framework's, never a body's
 
 A body never emits. `updateTaskProgress`, `completeTask` and `failTask` publish
 the `tasks` frames, and they are reached only through the framework. A body that
 called `emit` would publish a frame for a row it may no longer hold.
+
+This is about the body, not about the frames its work provokes. A domain
+function still emits beside its own write, as every other write in
+`packages/data/src/jobs/data.ts` does — `timeoutStalledJobs` publishes one
+`jobs` update frame per id it failed, from inside itself, and its body neither
+knows nor arranges that. A sweep failing thirty jobs at once therefore produces
+thirty frames; `jobs/refresh.ts` on the client coalesces them into one or two
+batched reads, so nothing throttles on the emit side.
 
 ### Every body must be idempotent
 
