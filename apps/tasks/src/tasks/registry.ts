@@ -1,7 +1,9 @@
 import type { Db } from "@virtool/data/db/pg";
 import type { StorageBackend } from "@virtool/storage";
 import type { TaskRegistry } from "../framework/define";
+import { cleanupSessionsTask } from "./cleanup-sessions";
 import { createIndexTask } from "./create-index";
+import { evictCachesLruTask } from "./evict-caches-lru";
 import { refreshHmmsTask } from "./refresh-hmms";
 
 /**
@@ -31,6 +33,8 @@ export type TaskContext = {
  * another; `registry.test.ts` fails on any that do.
  */
 export const taskRegistry: TaskRegistry<TaskContext> = {
+	cleanup_sessions: cleanupSessionsTask,
 	create_index: createIndexTask,
+	evict_caches_lru: evictCachesLruTask,
 	refresh_hmms: refreshHmmsTask,
 };
