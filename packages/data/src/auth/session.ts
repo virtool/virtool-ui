@@ -184,10 +184,18 @@ export type DeleteExpiredSessionsOptions = {
  * unset in this pool, so the offset is silent and hour-scale. Deleting a live
  * session logs a user out early, which is the only harm this can do.
  *
+ * **The expiry test is repeated on the outer `delete`**, where it looks
+ * redundant against the subquery that already applied it. Under Read Committed
+ * a row updated by a transaction that commits mid-statement is re-checked
+ * against the outer `where` alone — the subquery is not re-run — so a predicate
+ * naming only the id passes on a row whose `expires_at` has since moved
+ * forward, and a session Python's sliding refresh just extended is deleted out
+ * from under its user.
+ *
  * The loop stops on a batch shorter than the limit. A concurrent logout that
- * removes an expired row between the select and the delete can end a run one
- * batch early; the next run takes what is left, and no run deletes a row it
- * should not have.
+ * removes an expired row between the select and the delete, or a refresh the
+ * re-check then spares, can end a run one batch early; the next run takes what
+ * is left, and no run deletes a row it should not have.
  */
 export async function deleteExpiredSessions(
 	db: DbOrTx,
@@ -196,6 +204,12 @@ export async function deleteExpiredSessions(
 		signal,
 	}: DeleteExpiredSessionsOptions = {},
 ): Promise<number> {
+	if (!Number.isInteger(batchSize) || batchSize < 1) {
+		throw new RangeError(
+			`batchSize must be a positive integer, got ${batchSize}`,
+		);
+	}
+
 	let total = 0;
 
 	for (;;) {
@@ -204,7 +218,7 @@ export async function deleteExpiredSessions(
 		const deleted = await db
 			.delete(sessions)
 			.where(
-				sql`${sessions.id} in (
+				sql`${sessions.expiresAt} < ${nowUtc()} and ${sessions.id} in (
 					select id from ${sessions}
 					where expires_at < ${nowUtc()}
 					limit ${batchSize}

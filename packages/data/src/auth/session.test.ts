@@ -1,5 +1,14 @@
+import { setTimeout as delay } from "node:timers/promises";
 import { eq } from "drizzle-orm";
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+	afterAll,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	onTestFinished,
+} from "vitest";
 
 import type { Db } from "../db/pg";
 import { sessions } from "../db/schema/sessions";
@@ -324,6 +333,80 @@ describe("deleteExpiredSessions", () => {
 				.from(sessions)
 				.where(eq(sessions.sessionId, live.sessionId)),
 		).toEqual(before);
+	});
+
+	/**
+	 * The refresh race the outer `where`'s repeated expiry test exists for.
+	 *
+	 * A second session extends the row and holds its lock, so the delete's
+	 * subquery still sees it expired and the delete itself parks on the lock.
+	 * Once that commits, Postgres re-checks the outer predicate alone — a
+	 * predicate naming only the id would pass, and the refreshed session would
+	 * go.
+	 */
+	it("spares a session refreshed between the select and the delete", async () => {
+		const refresher = database.connect();
+		const observer = database.connect();
+
+		onTestFinished(async () => {
+			await Promise.all([refresher.close(), observer.close()]);
+		});
+
+		const userId = await seedUser(db);
+		const refreshed = await seedSession(db, userId, {
+			expiresAt: minutesFromNow(-30),
+		});
+
+		let commit: () => void = () => undefined;
+		const committed = new Promise<void>((resolve) => {
+			commit = resolve;
+		});
+
+		let extended: () => void = () => undefined;
+		const holds = new Promise<void>((resolve) => {
+			extended = resolve;
+		});
+
+		const holding = refresher.client.begin(async (tx) => {
+			await tx`
+				update sessions
+				set expires_at = timezone('utc', clock_timestamp()) + interval '30 minutes'
+				where session_id = ${refreshed.sessionId}
+			`;
+
+			extended();
+
+			await committed;
+		});
+
+		await holds;
+
+		const deleting = deleteExpiredSessions(db);
+
+		for (let attempt = 0; attempt < 100; attempt++) {
+			const rows = await observer.client.unsafe(
+				`select 1 from pg_stat_activity
+				 where datname = current_database() and wait_event_type = 'Lock'`,
+			);
+
+			if (rows.length > 0) {
+				break;
+			}
+
+			await delay(25);
+		}
+
+		commit();
+		await holding;
+
+		expect(await deleting).toBe(0);
+		expect(await remainingSessionIds()).toEqual([refreshed.sessionId]);
+	}, 15_000);
+
+	it("rejects a batch size that would never advance the loop", async () => {
+		await expect(deleteExpiredSessions(db, { batchSize: 0 })).rejects.toThrow(
+			RangeError,
+		);
 	});
 
 	// The signal is checked between batches, so a run on a table that has never
