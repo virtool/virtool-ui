@@ -68,12 +68,28 @@ export type Metrics = {
 
 /**
  * Build this process's Prometheus registry and the handles that write to it.
+ *
+ * A factory rather than a module-scope singleton, so a test gets its own
+ * registry and cannot see what another suite happened to register. It is also
+ * why nothing here reads configuration: `poolMax` and `version` arrive as
+ * arguments, the way `@virtool/data` and `@virtool/storage` take theirs.
+ *
+ * This is a *separate registry from the web app's*, in a separate process. The
+ * series names deliberately match, so one dashboard works for both; the two are
+ * told apart by the scrape's target labels and by `application_name` in
+ * `pg_stat_activity`, not by renaming the metrics.
  */
 export function createMetrics(poolMax: number, version: string): Metrics {
 	const registry = new Registry();
 
+	// Standard `process_*` and `nodejs_*` series: RSS, heap, CPU, GC, open
+	// handles, and event loop lag. Left unprefixed on purpose — off-the-shelf
+	// Node dashboards and alerting rules match these names exactly.
 	collectDefaultMetrics({ register: registry });
 
+	// The conventional `_info` shape: a gauge pinned at 1 whose labels carry the
+	// facts. Joining it onto other series in a query is what correlates a change
+	// in behaviour with the deploy that caused it.
 	new Gauge({
 		name: "virtool_app_info",
 		help: "Build information for the running process, always set to 1.",
@@ -103,6 +119,9 @@ export function createMetrics(poolMax: number, version: string): Metrics {
 		registers: [registry],
 	});
 
+	// Static, but it is the denominator: pool saturation is only legible as
+	// `virtool_postgres_connections / virtool_postgres_pool_max`.
+	new Gauge({
 		name: "virtool_postgres_pool_max",
 		help: "Maximum size of this process's Postgres connection pool.",
 		registers: [registry],
