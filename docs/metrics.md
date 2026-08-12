@@ -3,20 +3,20 @@
 The web app exposes Prometheus metrics at `GET /metrics`, in the text
 exposition format, from a single process-wide registry.
 
-This describes `apps/web`. The jobs API is a separate process with its
-own registry and its own `/metrics`, scraped as a second Prometheus
-target; the series names deliberately match so one dashboard covers
-both.
+This describes `apps/web`. Each Virtool service — `apps/web`,
+`apps/jobs-api`, `apps/tasks` — is a separate process with its own
+registry and its own `/metrics`, scraped as its own Prometheus target.
+Series names deliberately match across services so one dashboard covers
+all of them, and a series is told apart by the scrape's target labels
+and by `application_name`, **never** by renaming it.
 
-Two series belong to that second target alone and are **not** exposed
-here: `virtool_jobs{workflow,state}` and
-`virtool_jobs_oldest_pending_age_seconds{workflow}`, the job queue as
-seen from the jobs API. They report on workflow pods, which are
-one-shot Kubernetes Jobs and so cannot be scraped directly — one may run
-for hours and vanish between scrapes, and a pod-name label would be
-unbounded. Adding them here instead would put the same numbers behind a
-second credential for no gain, and behind a pool that has no part in
-running the jobs.
+A series belongs on the registry of the process that can answer for it
+cheaply and completely, not on every process that might find it useful.
+See [apps/jobs-api/README.md](../apps/jobs-api/README.md#metrics) for
+what that service emits — including the job-queue series, reported
+there rather than by the workflow pods themselves, which are one-shot
+Kubernetes Jobs and a poor scrape target — and [tasks.md](tasks.md) for
+`apps/tasks`.
 
 ## Layout
 

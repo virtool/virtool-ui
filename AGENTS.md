@@ -924,7 +924,8 @@ dashboard covers them all; they are told apart by the scrape's target
 labels and by `application_name`, **never by renaming a metric**. All three
 gate the endpoint with `isBearerTokenValid` (`@virtool/contracts/bearer`) —
 constant-time, so don't reimplement it or reduce it to `===`. The rest of
-this section is `apps/web`; see [docs/jobs-api.md](docs/jobs-api.md) and
+this section is `apps/web`; see
+[apps/jobs-api/README.md](apps/jobs-api/README.md#metrics) and
 [docs/tasks.md](docs/tasks.md) for the others.
 
 **Job-queue visibility is `apps/jobs-api`'s, not `apps/web`'s.**
