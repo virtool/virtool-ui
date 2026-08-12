@@ -149,13 +149,14 @@ Dockerfile stage and a CI matrix entry — the one deliberate exception.
   Image: `ghcr.io/virtool/jobs-api`.
 - **`apps/create-subtraction`** — `@virtool/create-subtraction`, the
   create-subtraction workflow executor. One-shot: the pod starts, does its
-  work, exits. Two steps, no external tool, and the only workflow
-  executor that is published — CI stamps a real version into it, where
-  `apps/pathoscope` and `apps/nuvs` stay at `0.0.0` until the repos that
-  release them retire. Image: `ghcr.io/virtool/ts-create-subtraction`.
+  work, exits. Two steps, one external tool (`seqkit`), and the only
+  workflow executor that is published — CI stamps a real version into it,
+  where `apps/pathoscope` and `apps/nuvs` stay at `0.0.0` until the repos
+  that release them retire. Built from the repo root with its own
+  Dockerfile. Image: `ghcr.io/virtool/ts-create-subtraction`.
 
-The remaining workflow executor gets its directory, Dockerfile stage and
-matrix entry when its port lands.
+The remaining workflow executor gets its directory, its own Dockerfile
+and a CI job when its port lands.
 
 ### `create_subtraction` is ported without `build_index`
 
@@ -173,10 +174,10 @@ and read by none. The jobs API's `PATCH /subtractions/{id}` whitelists
 `subtraction.fa.gz` and nothing else, so a manifest carrying a shard is
 refused: a port that kept the step could not finalize.
 
-What is left runs **no external process**, which is the whole reason this
-image is Alpine rather than Debian. It is also the chain to re-check
-before reintroducing a step: a workflow that runs a tool binary needs the
-glibc base back.
+What is left runs one binary, `seqkit`, which is why this image is Debian
+and has its own Dockerfile rather than a stage in the repo-root one —
+that file's shared `base` is Alpine, and the tools binaries are built
+against `python:3.13-bookworm`.
 
 ### The genome is never decompressed to disk
 
@@ -198,40 +199,47 @@ produce the file the user already sent. Only a plain upload is
 compressed, and to a **sibling** path rather than in place, since writing
 in place truncates the file being read.
 
-### `seqkit`'s figures and this scan's are the same
+### `gc` and `count` come from `seqkit`
 
-Python computes `gc` and `count` by driving `seqkit fx2tab --name
---only-id --base-count a/t/g/c/n` and summing the per-record columns.
-This side scans in-process instead, and the two agree — which is what
-makes running no tool the cheaper of two identical answers rather than an
-approximation of one. Taking `seqkit` would mean a
-`COPY --from=ghcr.io/virtool/tools` and a Debian base for an image that
-otherwise runs no binary at all.
+Python drives `seqkit fx2tab --name --only-id --threads N` with five
+`--base-count` flags and sums the per-record columns in a stdout handler.
+This side runs the same command with the same flags through the runtime's
+subprocess runner and accumulates the same way, so the two report the
+same figures for the same genome — which is what the cutover needs.
 
-Three things make them agree, and each is pinned by a test:
+`buildSeqkitCommand` and `createBaseCountAccumulator` are kept apart from
+the step so both are testable without spawning anything: the command line
+is asserted directly, and the arithmetic is driven with the rows seqkit
+would have produced.
 
-- **Case is ignored.** `--base-count` ignores it and the scan lowercases
-  each line. Python's own fixture,
+Four things the parser depends on, each pinned by a test:
+
+- **The five `--base-count` flags decide the column order.** Output is
+  the id followed by the counts in flag order, so reordering the flags
+  silently relabels them. A row whose column count disagrees is rejected
+  rather than allowed to produce a composition built from `NaN`.
+- **`--base-count` ignores case.** Python's fixture,
   `>seq_1\nATGCATGCNN\n>seq_2\natgcatgcat\n`, mixes the two
   deliberately for this reason.
 - **The denominator is the five counters' sum, not the sequence length.**
-  Python divides each tally by `sum(nucleotides.values())`, so an IUPAC
-  ambiguity code contributes to neither side and the five shares still
-  total one. Dividing by the line length reports every share low by the
-  same factor, which looks plausible and matches nothing.
+  seqkit reports no column for an IUPAC ambiguity code, so it is on
+  neither side and the five shares still total one.
 - **Rounding is half-to-even**, through `roundHalfEven` from
   `@virtool/bio` rather than `Math.round`, because Python's `round`
   breaks a tie toward the even digit: `round(0.0625, 3)` is `0.062` where
   `Math.round(62.5)` is `63`.
 
-The scan is **not** a FASTA parse. A line beginning `>` bumps the count
-and every other line is tallied character by character, with no record
-ever assembled — which keeps a chromosome off the heap, since a parser
-joins each record into one string.
+Python guards the call with an explicit `if process.returncode: raise`,
+because its runner treats termination by SIGTERM as success and a seqkit
+killed part way through would leave the composition computed from a
+fraction of the sequences. This runtime needs no such guard — a non-zero
+exit throws `SubprocessFailedError`, exit code 15 included. The one
+outcome that resolves is a cancellation-driven kill, and the step checks
+`cancelled` and records nothing for exactly that case.
 
-Python raises separately for a FASTA with no sequences and one whose
-sequences hold none of the five bases, in that order, rather than
-dividing by zero. Both are reproduced with Python's messages.
+An empty FASTA produces no rows and a FASTA of ambiguity codes produces a
+row of zeroes; both are refused, in that order, with Python's messages
+rather than dividing by zero.
 
 **The input and output `subtraction.fa.gz` are different paths.** The
 upload is downloaded to `{work_path}/subtractions/{id}/subtraction.fa.gz`
@@ -266,10 +274,9 @@ install layer stays untouched when an app is added.
 **The runtime base is decided by one question: does the app run a
 binary from `ghcr.io/virtool/tools`?**
 
-- **No** — `node:24-alpine`. `apps/jobs-api`, `apps/tasks` and
-  `apps/create-subtraction` all copy nothing from the tools image, so
-  none of them pays Debian's size. Do not move one to Debian for
-  uniformity with a workflow image.
+- **No** — `node:24-alpine`. `apps/jobs-api` and `apps/tasks` copy
+  nothing from the tools image, so neither pays Debian's size. Do not
+  move one to Debian for uniformity with a workflow image.
 - **Yes** — `node:24-bookworm-slim`. Those binaries are built against
   `python:3.13-bookworm` and dynamically linked against glibc; Alpine is
   musl and could not load them. `apps/pathoscope`, which has its

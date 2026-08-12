@@ -1,22 +1,40 @@
-import { computeComposition } from "../composition";
-import { readLines } from "../lines";
+import { buildSeqkitCommand, createBaseCountAccumulator } from "../seqkit";
 import type { CreateSubtractionStep } from "./types";
 
 /**
- * Count the genome's sequences and nucleotides.
+ * Count the genome's sequences and nucleotides with `seqkit fx2tab`.
  *
- * Reads the upload where it lies, gunzipping through a stream rather than
- * writing a plain FASTA first. Python reaches the same property by handing the
- * compressed file to `seqkit`, which decompresses internally.
+ * seqkit reads gzip natively, so this runs against the upload as it lies and
+ * the run never writes a decompressed genome.
+ *
+ * Python guards this call with an explicit `if process.returncode: raise`,
+ * because its runner treats termination by SIGTERM as success and a seqkit
+ * killed part way through would otherwise leave the composition computed from a
+ * fraction of the sequences. This runtime needs no such guard: a non-zero exit
+ * throws `SubprocessFailedError`, exit code 15 included. The one outcome that
+ * resolves is a cancellation-driven kill, and that is what the check below is
+ * for.
  */
 export const computeGcAndCountStep: CreateSubtractionStep = {
 	id: "compute_gc_and_count",
 	description:
 		"Compute the genome's nucleotide composition and sequence count.",
-	async run({ data, logger, state }) {
-		const { count, gc } = await computeComposition(
-			readLines(data.paths.upload, { gzipped: data.uploadIsGzipped }),
-		);
+	async run({ data, logger, proc, runSubprocess, state }) {
+		const accumulator = createBaseCountAccumulator();
+
+		const { cancelled } = await runSubprocess({
+			command: buildSeqkitCommand(data.paths.upload, proc),
+			stdout: accumulator.handleLine,
+		});
+
+		// The run is being torn down and this process was killed, so the totals
+		// cover only the records that arrived first. Writing them would hand
+		// `finalize` a composition for part of a genome.
+		if (cancelled) {
+			return;
+		}
+
+		const { count, gc } = accumulator.result();
 
 		state.count = count;
 		state.gc = gc;

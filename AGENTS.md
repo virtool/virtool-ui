@@ -89,23 +89,22 @@ This is a **pnpm monorepo**:
   create-subtraction workflow executor and its image
   (`ghcr.io/virtool/ts-create-subtraction`). A user uploads a genome; this turns
   it into a subtraction an analysis can eliminate reads against. Two steps —
-  `compute_gc_and_count` and `finalize` — and **no external tool at all**, which
-  is why the image is **Alpine** and copies nothing from
-  `ghcr.io/virtool/tools`. Unlike the two analysis workflows it **is**
-  published, so a released image carries a real `APP_VERSION`. Five rules it
-  carries: Python's third step, `build_index`, is deliberately **not ported** —
-  nothing consumes a subtraction's bowtie2 shards and the finalize route
-  whitelists `subtraction.fa.gz` alone, so a port that kept it could not
-  finalize; reintroducing it means moving the image to Debian in the same edit.
-  **Nothing decompresses the genome to disk.** Python once had a `decompress`
-  step and dropped it: `seqkit` and `bowtie2-build` read gzip natively, and this
-  side gunzips through a stream (`lines.ts`), so no step needs a plain FASTA and
-  reintroducing one writes tens of gigabytes to read them once. **Python
-  computes `gc` with `seqkit fx2tab --base-count` and this side scans
-  in-process** — the figures are identical, which is what makes running no tool
-  the cheaper of two equal answers; taking `seqkit` would mean a tools copy and
-  a Debian base for an image that otherwise runs no binary. **The `gc`
-  denominator is the five nucleotide counters' sum, not the sequence length**,
+  `compute_gc_and_count` and `finalize` — and one external tool, `seqkit`, so
+  it has **its own Debian Dockerfile** like the two analysis workflows rather
+  than a stage in the root one. Built from the **repo root**
+  (`docker build -f apps/create-subtraction/Dockerfile .`). Unlike those two it
+  **is** published, so a released image carries a real `APP_VERSION`. Five rules
+  it carries: Python's third step, `build_index`, is deliberately **not
+  ported** — nothing consumes a subtraction's bowtie2 shards and the finalize
+  route whitelists `subtraction.fa.gz` alone, so a port that kept it could not
+  finalize. **Nothing decompresses the genome to disk.** Python once had a
+  `decompress` step and dropped it once `seqkit` and `bowtie2-build` were
+  reading gzip natively; this side follows, so no step needs a plain FASTA and
+  reintroducing one writes tens of gigabytes to read them once. **`gc` and
+  `count` come from `seqkit fx2tab --base-count`**, the same subcommand and
+  flags Python runs, and the **five `--base-count` flags decide the column
+  order** the accumulator reads — reordering them silently relabels the counts.
+  **The `gc` denominator is the five counters' sum, not the sequence length**,
   so an IUPAC ambiguity code is on neither side of the ratio, and the rounding
   is `roundHalfEven` from `@virtool/bio` because Python's `round` breaks a tie
   toward the even digit where `Math.round` goes up. And **an already-gzipped
@@ -118,8 +117,8 @@ This is a **pnpm monorepo**:
   `WorkflowSubtraction.upload`, which the jobs API's `GET /subtractions/{id}`
   carries — a subtraction it is running has no `subtraction_files` rows yet, so
   the upload is the only file it has. `create_sample`, the one workflow still
-  unported, gets a directory, a Dockerfile stage and a CI matrix entry when its
-  port lands.
+  unported, gets a directory, a Dockerfile and a CI matrix entry when its port
+  lands.
 - `apps/nuvs/` — `@virtool/nuvs`, the NuVs workflow executor and its image
   (`ghcr.io/virtool/ts-nuvs`). Ten steps and five external tools — skewer,
   bowtie2, SPAdes, `hmmpress` and `hmmscan`. It finds viruses the reference

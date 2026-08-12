@@ -40,6 +40,7 @@ jobs:
         permissions:
             pull-requests: read
         outputs:
+            create-subtraction-image: ${{ steps.filter.outputs.create-subtraction-image }}
             nuvs-image: ${{ steps.filter.outputs.nuvs-image }}
             pathoscope-crate: ${{ steps.filter.outputs.pathoscope-crate }}
             pathoscope-image: ${{ steps.filter.outputs.pathoscope-image }}
@@ -76,6 +77,23 @@ jobs:
                   # a rule that excluded the crate would fail the build on main
                   # with nothing having caught it on the PR.
                   filters: |
+                      create-subtraction-image:
+                        - '.github/workflows/ci.yaml'
+                        - 'apps/create-subtraction/**'
+                        - 'packages/bio/**'
+                        - 'packages/contracts/**'
+                        - 'packages/logger/**'
+                        - 'packages/sentry/**'
+                        - 'packages/storage/**'
+                        - 'packages/workflow/**'
+                        - 'packages/tsconfig.base.json'
+                        - 'apps/tsconfig.node.json'
+                        - 'apps/*/package.json'
+                        - 'packages/*/package.json'
+                        - 'package.json'
+                        - 'pnpm-workspace.yaml'
+                        - 'pnpm-lock.yaml'
+                        - '.dockerignore'
                       nuvs-image:
                         - '.github/workflows/ci.yaml'
                         - 'apps/nuvs/**'
@@ -134,8 +152,12 @@ jobs:
               run: pnpm typecheck
 
     # -------------------------------------------------------------------------
-    # Docker images (apps/web, apps/jobs-api, apps/tasks, apps/create-subtraction,
-    # apps/pathoscope)
+    # Docker images (apps/web, apps/jobs-api, apps/tasks)
+    #
+    # The workflow images are not here. Each carries a binary from
+    # ghcr.io/virtool/tools and so has to be Debian, where this Dockerfile's
+    # shared `base` is Alpine — so each has its own Dockerfile and its own
+    # path-filtered job below.
     # -------------------------------------------------------------------------
     build:
         name: ${{ matrix.area }} / Build
@@ -161,10 +183,6 @@ jobs:
                       target: tasks
                       workspace: apps/tasks
                       area: Tasks
-                    - image: ts-create-subtraction
-                      target: create-subtraction
-                      workspace: apps/create-subtraction
-                      area: Create Subtraction
         steps:
             - name: Checkout
               uses: actions/checkout@v7
@@ -353,6 +371,30 @@ jobs:
                   cache-to: type=gha,mode=max,scope=nuvs
 
     # -------------------------------------------------------------------------
+    # Create Subtraction (apps/create-subtraction)
+    # -------------------------------------------------------------------------
+    build-create-subtraction:
+        name: Create Subtraction / Build
+        runs-on: ubuntu-24.04
+        timeout-minutes: 20
+        needs: [changes]
+        # See the note on `build-pathoscope`: filtered on pull requests,
+        # unconditional on `push` so the `release-tag` gate stays complete.
+        if: github.event_name == 'push' || needs.changes.outputs.create-subtraction-image == 'true'
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+            - name: Setup Buildx
+              uses: docker/setup-buildx-action@v3
+            - name: Build
+              uses: docker/build-push-action@v7
+              with:
+                  context: .
+                  file: apps/create-subtraction/Dockerfile
+                  cache-from: type=gha,scope=create-subtraction
+                  cache-to: type=gha,mode=max,scope=create-subtraction
+
+    # -------------------------------------------------------------------------
     # Pathoscope (apps/pathoscope, packages/pathoscope-core)
     # -------------------------------------------------------------------------
     pathoscope-test:
@@ -481,6 +523,7 @@ jobs:
         needs:
             [
                 build,
+                build-create-subtraction,
                 build-nuvs,
                 build-pathoscope,
                 checks,
@@ -542,6 +585,7 @@ jobs:
                     - image: ts-create-subtraction
                       target: create-subtraction
                       workspace: apps/create-subtraction
+                      file: apps/create-subtraction/Dockerfile
         steps:
             - name: Checkout
               uses: actions/checkout@v7
@@ -570,6 +614,10 @@ jobs:
               with:
                   context: .
                   push: true
+                  # Most images are stages in the repo-root Dockerfile; a
+                  # tools-carrying workflow has its own, because that one is
+                  # Alpine and those have to be Debian.
+                  file: ${{ matrix.file || './Dockerfile' }}
                   tags: ${{ steps.meta.outputs.tags }}
                   target: ${{ matrix.target }}
                   labels: ${{ steps.meta.outputs.labels }}

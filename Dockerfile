@@ -24,7 +24,6 @@ COPY packages/logger ./packages/logger
 COPY packages/sentry ./packages/sentry
 COPY packages/service ./packages/service
 COPY packages/storage ./packages/storage
-COPY packages/workflow ./packages/workflow
 
 # The Node-app tsconfig base every non-Vite app extends. A fixed path, so it
 # needs no edit when an app is added — unlike the per-workspace manifest list it
@@ -107,26 +106,3 @@ ENV VT_TASKS_PROBE_PORT="9900"
 # `<KEY>_FILE`-backed config and cannot be read any earlier, so late init is
 # safe only because of this.
 CMD ["node", "--import", "@sentry/node/preload", "dist/index.mjs"]
-
-FROM base AS build-create-subtraction
-COPY apps/create-subtraction ./apps/create-subtraction
-RUN pnpm --filter @virtool/create-subtraction build \
-    && pnpm deploy --filter @virtool/create-subtraction --prod /prod/create-subtraction
-
-# Alpine, like the two services above, because this workflow runs no external
-# tool. It decompresses the source FASTA, counts nucleotides and gzips the
-# result, and all three happen in-process through `@virtool/workflow`'s
-# node:zlib helpers. `build_index` is deliberately not ported — nothing consumes
-# a subtraction's bowtie2 shards — so there is no `bowtie2-build` to satisfy,
-# and with it go the glibc base, `perl`, `python3` and the tools copy. Do not
-# add a `COPY --from=ghcr.io/virtool/tools` line back without moving the base to
-# Debian in the same edit: those binaries are built against
-# `python:3.13-bookworm` and musl cannot load them.
-#
-# The deploy tree is built on the Alpine `base` above, which is safe only
-# because it carries no native addon — check `find /prod/<app> -name '*.node'`
-# before adding a dependency that might.
-FROM node:24-alpine AS create-subtraction
-WORKDIR /workflow
-COPY --from=build-create-subtraction /prod/create-subtraction ./
-CMD ["node", "dist/index.mjs"]

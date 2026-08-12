@@ -33,10 +33,9 @@ export type CreateSubtractionData = {
 	/**
 	 * Whether the upload is actually gzipped.
 	 *
-	 * The name never says: it is `subtraction.fa.gz` either way. Resolved once,
-	 * here, because both steps branch on it and reading the file twice invites
-	 * them to disagree — the scan would gunzip what finalize then uploads as
-	 * plain.
+	 * The name never says: it is `subtraction.fa.gz` either way. `finalize`
+	 * branches on it to decide whether there is anything to compress — seqkit
+	 * reads either form, so no other step asks.
 	 */
 	uploadIsGzipped: boolean;
 
