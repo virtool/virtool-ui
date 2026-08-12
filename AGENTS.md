@@ -888,10 +888,10 @@ logger.warn({ err }, "postgres health check failed");
 ```
 
 `@virtool/data` cannot reach that singleton — it carries the Sentry
-forwarding stream, which is the app's. The six data functions that log
-take a `Logger` as an argument instead, after `db` and `storage`, and the
-web app's `functions.ts` passes `@server/logger` in. `emit` is the one
-exception: its logger is bound once by `createEmitter`.
+forwarding stream, which is the app's. Its data functions that log take a
+`Logger` as an argument instead, after `db`/`storage` where those are
+present, and the web app's `functions.ts` passes `@server/logger` in.
+`emit` is the one exception: its logger is bound once by `createEmitter`.
 
 Pass structured fields as the first arg and the message as the second —
 never interpolate values into the message string, that defeats the
@@ -902,19 +902,14 @@ attaching scoped context, but nothing in the server currently uses it and
 no `context.logger` exists — don't write code that assumes one.
 
 When a Sentry DSN is configured, server logs at `info` and above are
-forwarded to Sentry automatically (via a pino destination stream, not
-`Sentry.pinoIntegration()`); redaction still applies and dev does not
-forward. That holds for **all three** server processes — `apps/web`,
-`apps/jobs-api` and `apps/tasks` — which share one stream,
-`createSentryLogStream` from `@virtool/sentry/log`. It takes the SDK's
-`logger` as an argument rather than importing one, because each process
-initialises a different SDK and only the one it called `init` on sends
-anything. Attach it only when a DSN is present, so the SDK graph stays
-unloaded in dev and tests.
+forwarded to Sentry automatically, through a shared pino destination
+stream — `createSentryLogStream` from `@virtool/sentry/log` — rather than
+`Sentry.pinoIntegration()`. All three server processes (`apps/web`,
+`apps/jobs-api`, `apps/tasks`) attach it only when a DSN is present, so
+the SDK graph stays unloaded in dev and tests.
 
-See [docs/logging.md](docs/logging.md) for the redaction
-defaults, `VT_LOG_LEVEL` resolution, where the logger singleton lives, and
-the Sentry forwarding wiring.
+See [packages/logger/README.md](packages/logger/README.md) for the
+redaction defaults, `VT_LOG_LEVEL` resolution, and usage conventions.
 
 ### Metrics
 
