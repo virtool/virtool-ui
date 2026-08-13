@@ -10,7 +10,7 @@
 			"**",
 			"!packages/pathoscope-core",
 			"!apps/site/**",
-			"!packages/workflow/src/index/fixtures/**",
+			"!packages/sqlite/src/fixtures/**",
 			"!**/routeTree.gen.ts",
 			"!**/node_modules",
 			"!**/dist",

@@ -146,6 +146,13 @@ This is a **pnpm monorepo**:
     out of what the rest divide. It is **not** a home for the probe
     server or the metrics registries, however alike those look across
     the three services.
+  - `@virtool/sqlite` — the reference index SQLite artifact: the schema
+    mirror, the reads a workflow makes against one, and the writer that
+    produces one. Depended on by both `@virtool/data`, which writes the
+    snapshot a finished build publishes, and the workflow executors, which
+    read it — that second consumer is why it is not part of
+    `@virtool/workflow`. `node:sqlite` and the filesystem are its whole
+    dependency surface; it has no runtime dependencies at all.
 
   `@virtool/data` and `@virtool/storage` are server-side only. Browser code
   must never import them; they reach `apps/web` through `src/server/**`. A
@@ -1429,9 +1436,19 @@ runs both.** `createIndex` (`@virtool/data/indexes/data`) inserts the
 pending `indexes` row, stamps every unbuilt `legacy_history` row with it,
 and creates a `create_index` task; `generateTaskIndex`, in the same
 module, is what the runner that claims it executes — patching the
-manifest's OTUs, streaming `reference-v2.json.gz` to a minted key,
-recording the `index_files` row with that key, stamping
-`last_indexed_version` and flipping `ready`. Python's `CreateIndexTask`
+manifest's OTUs, writing **both** artifacts to minted keys, recording an
+`index_files` row for each, stamping `last_indexed_version` and flipping
+`ready`.
+
+**A build publishes `reference-snapshot.v1.sqlite` and
+`reference-v2.json.gz`, or it publishes neither.** The snapshot is the
+only one an analysis can read — a real reference is past the maximum
+string length `JSON.parse` can return — so a build that registers the
+gzipped JSON alone is `ready` and unusable, and every workflow claimed
+against it dies in `buildContext`. Both rows are written in the
+transaction that flips `ready`. The manifest is walked once per artifact
+rather than held for both: the whole point of the chunked patch loop is
+that no reference is ever in the heap. Python's `CreateIndexTask`
 does the same work and both runners are live until the cutover, so the
 two must stay interchangeable. The
 insert runs under
@@ -1724,11 +1741,20 @@ that converts a caught divergence into a permanent one.
 
 ### The reference index is a SQLite file, read with `node:sqlite` and no ORM
 
-An index reaches a workflow as one file, `virtool-index-sqlite-v1.sqlite`,
-built by Python's `index_sqlite.py`. `packages/workflow/src/index/` mirrors
-that schema (`schema.ts`), reads it (`queries.ts`) and writes the collapsed
-artifact pathoscope produces (`create.ts`). JSON was abandoned because a real
-reference exceeds V8's maximum string length.
+An index reaches a workflow as one file, `reference-snapshot.v1.sqlite`,
+written by a finished build. `@virtool/sqlite` mirrors that schema
+(`schema.ts`), reads it (`queries.ts`) and writes one (`create.ts`) — the
+snapshot itself, and the collapsed artifact pathoscope produces, which is named
+`index.v1.sqlite` because a partial reference must not be mistakable for a whole
+one. Both carry `format = virtool-reference-sqlite` in their `metadata` table.
+JSON was abandoned because a real reference exceeds V8's maximum string
+length.
+
+It is a package rather than part of `@virtool/workflow` because both sides
+need it: making `@virtool/data` depend on the workflow runtime would drag
+execa, undici and tar-stream into `apps/tasks` and the jobs API, and a
+second copy of the DDL would be two opinions about a binary format two
+languages have to agree on.
 
 **There is no Drizzle here**, against the original plan: it ships no
 `node:sqlite` driver, and the three alternatives all fail — `sqlite-proxy`
@@ -1752,12 +1778,12 @@ Four rules it carries:
   generator over `StatementSync.iterate()` that yields to the event loop each
   batch, so the ping loop survives a long scan. Id sets bind through
   `json_each`, never one `?` per id.
-- **The fixture is Python's.** `src/index/fixtures/` holds an artifact Python
-  built plus the golden results of every query; `generate.py` is the
-  provenance record. **Never edit a golden to match this implementation's
-  output.**
+- **The fixture is Python's.** `packages/sqlite/src/fixtures/` holds an
+  artifact Python built plus the golden results of every query; `generate.py`
+  is the provenance record. **Never edit a golden to match this
+  implementation's output.**
 
-See [docs/index-artifact.md](docs/index-artifact.md).
+See [docs/indexes.md](docs/indexes.md).
 
 ### Workflow tests stand on `@virtool/workflow/testing`
 

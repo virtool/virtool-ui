@@ -25,6 +25,7 @@ COPY packages/data ./packages/data
 COPY packages/logger ./packages/logger
 COPY packages/sentry ./packages/sentry
 COPY packages/service ./packages/service
+COPY packages/sqlite ./packages/sqlite
 COPY packages/storage ./packages/storage
 COPY packages/workflow ./packages/workflow
 COPY apps/tsconfig.node.json ./apps/
