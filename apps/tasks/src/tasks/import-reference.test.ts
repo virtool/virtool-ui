@@ -440,6 +440,45 @@ describe("import_reference", () => {
 		expect(await db.select().from(legacySequences)).toHaveLength(1);
 	});
 
+	it("reports an abort during the read as aborted, not failed", async () => {
+		await seedGzippedUpload(sourceData());
+
+		const controller = new AbortController();
+		const task = await claim();
+
+		controller.abort();
+
+		// An abort is the process going away, so the task is released rather
+		// than failed against a file that is perfectly good.
+		expect(await run(task, controller.signal)).toEqual({ status: "aborted" });
+
+		expect(await readTaskRow(db, task.id)).toMatchObject({
+			complete: false,
+			error: null,
+		});
+	});
+
+	it("surfaces a storage failure instead of hanging on the gunzip stream", async () => {
+		await seedUpload(NAME_ON_DISK);
+
+		// `.pipe()` would leave the consumer waiting on a gunzip stream nothing
+		// ends; the source's rejection has to reach it.
+		storage.read = () => {
+			async function* fail(): AsyncIterable<Uint8Array> {
+				yield gzipSync(Buffer.from("{"));
+
+				throw new Error("storage went away mid-download");
+			}
+
+			return fail();
+		};
+
+		expect(await run(await claim())).toMatchObject({
+			status: "failed",
+			error: expect.stringContaining("storage went away mid-download"),
+		});
+	});
+
 	it("fails a payload the schema rejects", async () => {
 		await seedTaskRow(db, importReferenceTask.type, {
 			name_on_disk: "",

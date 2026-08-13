@@ -149,30 +149,36 @@ async function readGzippedJson(
 	key: string,
 	signal: AbortSignal,
 ): Promise<unknown> {
-	const stream = Readable.from(storage.read(key), { signal }).pipe(
-		createGunzip(),
-	);
-
 	const chunks: Buffer[] = [];
 
 	let inflated = 0;
 
 	try {
-		for await (const chunk of stream) {
-			inflated += chunk.length;
+		/* Assembled with `pipeline` rather than `.pipe()`. A source that rejects
+		   part-way — storage failing mid-download, or the signal aborting — does
+		   not reach a `.pipe()`d destination, so the consumer would wait on a
+		   gunzip stream nothing is going to end and the source's error would go
+		   unhandled. `pipeline` destroys every stage with it and rethrows here. */
+		await pipeline(
+			Readable.from(storage.read(key)),
+			createGunzip(),
+			async (source: AsyncIterable<Buffer>) => {
+				for await (const chunk of source) {
+					inflated += chunk.length;
 
-			if (inflated > MAX_INFLATED_BYTES) {
-				stream.destroy();
+					if (inflated > MAX_INFLATED_BYTES) {
+						throw new ReferenceImportError(
+							`Reference file exceeds the ${MAX_INFLATED_BYTES / (1024 * 1024)} MB decompressed limit`,
+						);
+					}
 
-				throw new ReferenceImportError(
-					`Reference file exceeds the ${MAX_INFLATED_BYTES / (1024 * 1024)} MB decompressed limit`,
-				);
-			}
-
-			chunks.push(chunk);
-		}
+					chunks.push(chunk);
+				}
+			},
+			{ signal },
+		);
 	} catch (err) {
-		throw describeDecompressionFailure(err);
+		throw describeDecompressionFailure(err, signal);
 	}
 
 	try {
@@ -200,10 +206,9 @@ async function readSqliteSnapshot(
 	const path = join(workPath, "reference-snapshot.v1.sqlite");
 
 	try {
-		await pipeline(
-			Readable.from(storage.read(key), { signal }),
-			createWriteStream(path),
-		);
+		await pipeline(Readable.from(storage.read(key)), createWriteStream(path), {
+			signal,
+		});
 
 		const snapshot = openWorkflowIndex({ id: referenceId, path });
 
@@ -232,14 +237,27 @@ async function readSqliteSnapshot(
 }
 
 /**
- * Name a decompression failure the way Python's caller does.
+ * Name a decompression failure the way Python's caller does, leaving an abort
+ * alone.
  *
  * Python matches `"Not a gzipped file"` out of the text `zlib` raises; Node's
  * message for the same condition is `incorrect header check`, so the check is
  * on the condition rather than on the wording, and the string is reproduced so
  * both runners put the same sentence in front of a user.
  */
-function describeDecompressionFailure(err: unknown): Error {
+function describeDecompressionFailure(
+	err: unknown,
+	signal: AbortSignal,
+): Error {
+	/* An abort is the process going away, not a bad upload, and it is returned
+	   untranslated so `runTask` reports `aborted` and the task is released for
+	   another runner to re-run from step zero. Calling it a decompression
+	   failure would fail the task and record an error against a file that is
+	   perfectly good. */
+	if (signal.aborted || (err instanceof Error && err.name === "AbortError")) {
+		return err instanceof Error ? err : new Error(String(err));
+	}
+
 	if (err instanceof ReferenceImportError) {
 		return err;
 	}
