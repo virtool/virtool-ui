@@ -7,11 +7,7 @@ subprocess.
 
 One of two Rust crates here; the other is
 [`quality-core`](../quality-core/README.md). Neither is a pnpm workspace
-member, so `pnpm test` does not reach them. This one alone needs
-`libclang-dev` to build — `hts-sys` runs bindgen against htslib's headers
-rather than shipping pre-generated bindings — which is why the root
-`Dockerfile` installs it in a `chef-pathoscope` stage rather than in the
-`chef` stage both crates share.
+member, so `pnpm test` does not reach them.
 
 ## Results are byte-identical to the Python build, and pinned that way
 

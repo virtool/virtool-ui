@@ -88,7 +88,4 @@ The tests here use small blobs built inline; nothing in this app parses a
 FastQC report any more.
 
 The statistics are pinned in the crate, against real FastQC 0.11.9 output —
-see `packages/quality-core/tests/fixtures/`. `parseFastqcData` and its own
-fixtures moved to `packages/bio`, which owns that parser and still needs it:
-it is what turns a FastQC report into an expected blob when the crate's
-goldens are regenerated.
+see `packages/quality-core/tests/fixtures/`.

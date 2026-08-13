@@ -71,27 +71,20 @@ of the coarser one rather than a different measurement.
 ## The goldens come from FastQC, and must keep coming from FastQC
 
 `tests/fixtures/*.json` are blobs the *old* path produced: real FastQC 0.11.9
-wrote the report, and `parseFastqcData` — the parser `apps/create-sample`
-called until this crate replaced it — turned it into what a sample stored.
-**Never edit a golden to match this crate's output**, and never regenerate one
-from this crate. That converts a caught divergence into a permanent one, and
-leaves a test that asserts only that the code still does what it did.
+wrote the report, and the field table above records exactly how each one maps
+onto `Quality`. **Never edit a golden to match this crate's output**, and never
+regenerate one from this crate. That converts a caught divergence into a
+permanent one, and leaves a test that asserts only that the code still does
+what it did.
 
-They are frozen, and there is no script here that writes them. If one ever has
-to change, it comes from FastQC again:
-
-1. Install **FastQC 0.11.9** — the version Python's `create_sample` runs, and
-   the only version these goldens mean anything against. It needs a JRE and
-   the full `perl`, not `perl-base`: its launcher opens with `use FindBin`.
-2. Run it over the `.fastq`/`.fastq.gz` input beside the golden, with
-   `-f fastq --extract`.
-3. Feed the resulting `fastqc_data.txt` through `parseFastqcData` from
-   `@virtool/bio` — the parser `apps/create-sample` used until this crate
-   replaced it, which is what makes a golden exactly what the old path
-   stored — and record its output as `quality`.
-4. Record the `#Base` labels of the per-base quality section as
-   `baseGroups`. The blob alone cannot say where FastQC's bins fell, because
-   the parser expands each one across its positions.
+They are frozen, and there is no script here that writes them and no
+supported way to regenerate one. If a golden is ever found to be wrong, treat
+it the same as any other bug report against Python's `create_sample`: install
+FastQC 0.11.9 (a JRE and the full `perl`, not `perl-base` — its launcher opens
+with `use FindBin`), run it over the input with `-f fastq --extract`, and
+re-derive the expected `quality` and `baseGroups` from the raw report by hand
+against the field table above, rather than trusting a parser that has not
+been exercised since the port.
 
 The inputs are synthetic and are committed alongside the goldens, so nothing
 has to be reconstructed to do this. The script that first produced all of it
