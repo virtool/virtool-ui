@@ -1,6 +1,8 @@
 import { Quality } from "@virtool/contracts";
 import { describe, expect, it } from "vitest";
 import { compositeQuality, parseFastqcData, roundHalfEven } from "./fastqc";
+import pairedOne from "./fixtures/paired_1.fastqc_data.txt?raw";
+import pairedTwo from "./fixtures/paired_2.fastqc_data.txt?raw";
 
 function section(name: string, status: string, lines: string[]): string[] {
 	return [`>>${name}\t${status}`, ...lines, ">>END_MODULE"];
@@ -403,5 +405,54 @@ describe("compositeQuality", () => {
 		});
 
 		expect(composite.bases).toEqual([[30.5, 31]]);
+	});
+});
+
+/**
+ * Genuine FastQC 0.11.9 reports, unlike the hand-built sections above — the
+ * only check on the parser against real tool output.
+ */
+describe("parseFastqcData against real FastQC 0.11.9 output", () => {
+	it("parses a full report", () => {
+		const quality = parseFastqcData(pairedOne);
+
+		expect(quality.count).toBe(20000);
+		expect(quality.encoding).toBe("Sanger / Illumina 1.9");
+		expect(quality.gc).toBe(41);
+		expect(quality.length).toStrictEqual([50, 301]);
+
+		// The reads are binned past position 9, and every bin is expanded to one
+		// row per position — so there is a row for each of the 301 positions.
+		expect(quality.bases).toHaveLength(301);
+		expect(quality.composition).toHaveLength(301);
+		expect(quality.sequences).toHaveLength(50);
+
+		expect(Quality.safeParse(quality).success).toBe(true);
+	});
+
+	/** A bin's row is repeated across every position it covers. */
+	it("expands a binned range across its positions", () => {
+		const quality = parseFastqcData(pairedOne);
+
+		// `10-14`, zero-based 9 through 13.
+		expect(quality.bases[9]).toStrictEqual(quality.bases[13]);
+		expect(quality.bases[8]).not.toStrictEqual(quality.bases[9]);
+	});
+
+	it("composites a real pair", () => {
+		const left = parseFastqcData(pairedOne);
+		const right = parseFastqcData(pairedTwo);
+
+		const composite = compositeQuality(left, right);
+
+		expect(composite.count).toBe(40000);
+		expect(composite.encoding).toBe(left.encoding);
+		expect(composite.gc).toBe((left.gc + right.gc) / 2);
+		expect(composite.length).toStrictEqual([
+			Math.min(...left.length, ...right.length),
+			Math.max(...left.length, ...right.length),
+		]);
+
+		expect(Quality.safeParse(composite).success).toBe(true);
 	});
 });

@@ -9,6 +9,18 @@ the bytes and hand over text — locating a FastQC file, walking a results
 directory, or joining an HMM hit to its annotation belongs to the workflow that
 does the IO.
 
+**`parseFastqcData` has no production caller and is kept deliberately.**
+`packages/quality-core` replaced FastQC in `apps/create-sample`, so nothing
+runs the tool in a pod any more. The parser is what turned a real FastQC
+report into the expected blob each of that crate's goldens is, and it is what
+any future golden would have to go through to be comparable with them — a
+parser that drifted would quietly move the expectations the crate is held to.
+It is tested here against genuine 0.11.9 output in
+`src/fixtures/paired_{1,2}.fastqc_data.txt`: real FastQC reports over the
+first 20,000 reads of `reads/paired_large_{1,2}.fastq.gz` from
+`ghcr.io/virtool/examples`. They are frozen — if one has to change it comes
+from FastQC, never from `parseFastqcData`.
+
 ## Byte-identity with Python is the governing constraint
 
 Virtool runs in certified lab settings. A ported parser that produces
