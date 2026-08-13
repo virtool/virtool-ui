@@ -36,6 +36,9 @@
 		"packages/service": {
 			"entry": ["src/**/*.test.ts"]
 		},
+		"packages/archive": {
+			"entry": ["src/**/*.test.ts"]
+		},
 		"packages/sqlite": {
 			"entry": ["src/**/*.test.ts"]
 		},

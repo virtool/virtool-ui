@@ -4,20 +4,17 @@
  * One metadata read and one download per upload, all before step 1. Python
  * resolved fixtures lazily by parameter name, so an upload whose object is
  * missing surfaced at whichever step first touched the file; here it fails
- * before FastQC is spawned.
+ * before the first subprocess is spawned.
  *
  * Every value below survives a JSON round trip. `createWorkflowContext` asserts
  * that on every run, so nothing here may be a handle, a closure, or a class
  * instance.
  */
 
+import { isGzipped } from "@virtool/archive/compression";
 import type { WorkflowSampleUpload } from "@virtool/contracts";
 import { WorkflowSample } from "@virtool/contracts";
-import {
-	type BuildContextInput,
-	downloadToPath,
-	isGzipped,
-} from "@virtool/workflow";
+import { type BuildContextInput, downloadToPath } from "@virtool/workflow";
 import { type CreateSamplePaths, workPaths } from "./paths";
 
 /** The eagerly resolved data half of a create_sample run's context. */
@@ -39,8 +36,8 @@ export type CreateSampleData = {
 	 *
 	 * The name never says: a user may upload `reads.fastq.gz` that is plain
 	 * text, or `reads.fastq` that is not. `finalize` branches on this to decide
-	 * whether a read is renamed or compressed — FastQC reads either form, so no
-	 * other step asks.
+	 * whether a read is renamed or compressed — `quality-core` reads either
+	 * form, so no other step asks.
 	 */
 	uploadsAreGzipped: boolean[];
 

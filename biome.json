@@ -9,6 +9,7 @@
 		"includes": [
 			"**",
 			"!packages/pathoscope-core",
+			"!packages/quality-core/tests/fixtures/*.json",
 			"!apps/site/**",
 			"!packages/sqlite/src/fixtures/**",
 			"!**/routeTree.gen.ts",
