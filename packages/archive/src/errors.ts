@@ -12,22 +12,10 @@ export class ArchiveError extends Error {
 	}
 }
 
-/**
- * A tar archive is malformed, or holds a member that must not be extracted.
- *
- * Covers Python's two `ValueError` cases in `_check_archive` — an empty archive
- * and one with more than a single top-level entry — as well as the members
- * `filter="data"` refuses.
- */
+/** A tar archive is malformed, or holds a member that must not be extracted. */
 export class TarArchiveError extends ArchiveError {}
 
-/**
- * A tar archive's top-level entry already exists at the restore target.
- *
- * Python's `FileExistsError`. Kept distinct from {@link TarArchiveError}
- * because it says nothing is wrong with the archive — the destination is
- * occupied.
- */
+/** A tar archive's top-level entry already exists at the restore target. */
 export class TarTargetExistsError extends ArchiveError {
 	constructor(path: string) {
 		super(`${path} already exists`);

@@ -94,9 +94,8 @@ function hmmMinimal(row: HmmRow): HmmMinimal {
 	};
 }
 
-// Mirror of the Python `_compose_hmm_search_filter`: `names` is a JSONB array,
-// so the match succeeds when any element contains the term. LIKE wildcards in
-// the term are escaped so it matches literally.
+// `names` is a JSONB array, so the match succeeds when any element contains the
+// term. LIKE wildcards in the term are escaped so it matches literally.
 function nameMatches(term: string) {
 	const escaped = term
 		.replace(/\\/g, "\\\\")
@@ -239,8 +238,7 @@ type ManifestRelease = {
 	size: number;
 };
 
-// Compare two `vX.Y.Z` release names numerically, mirroring the semver ordering
-// Python applies with `VersionInfo.parse`. Missing components sort as 0.
+// Compare two `vX.Y.Z` release names numerically. Missing components sort as 0.
 function isNewer(candidate: string, current: string): boolean {
 	const parse = (name: string) =>
 		name
@@ -262,8 +260,8 @@ function isNewer(candidate: string, current: string): boolean {
 	return false;
 }
 
-// Mirror of the Python `format_hmm_release`: a release is "newer" when there is
-// no stored release or nothing installed, or when it outranks the installed one.
+// A release is "newer" when there is no stored release or nothing installed, or
+// when it outranks the installed one.
 function formatRelease(
 	updated: ManifestRelease,
 	release: HmmRelease | null,
@@ -294,9 +292,8 @@ function formatRelease(
  *
  * **Do not add a `304` branch.** Nothing here sends `If-None-Match` or
  * `If-Modified-Since`, so the server has nothing to compare against and cannot
- * answer `304`. Python carries such a branch and it has never been reachable
- * either; a conditional request would need an ETag stored on the status row,
- * and `legacy_hmm_status` has no column for one.
+ * answer `304`. A conditional request would need an ETag stored on the status
+ * row, and `legacy_hmm_status` has no column for one.
  */
 async function fetchManifestRelease(
 	signal?: AbortSignal,
@@ -361,19 +358,14 @@ async function upsertStatus(
 /**
  * Refresh the stored HMM release from the www.virtool.ca manifest and return it.
  *
- * Mirrors the Python `fetch_and_update_release`: the latest manifest entry
- * replaces the stored release, `retrieved_at` is stamped, and the status
- * singleton is upserted.
+ * The latest manifest entry replaces the stored release, `retrieved_at` is
+ * stamped, and the status singleton is upserted.
  *
- * **A fetch failure records the message on the status row and rethrows**, which
- * Python does not do. Its handler builds `errors` by substring-matching the
- * exception's `str()` against `"ClientConnectorError"` and `"404"`, neither of
- * which any exception it catches ever contains — so `errors` is always `[]`,
- * the `raise` that guards on it is unreachable, and a refresh that reached
- * nothing finishes as a success. Deciding between a stale release and a current
- * one is the whole point of the call, so failing is the honest outcome: the
- * caller sees the error, the row carries it on `errors`, and a task running
- * this is recorded failed rather than complete.
+ * **A fetch failure records the message on the status row and rethrows.**
+ * Deciding between a stale release and a current one is the whole point of the
+ * call, so failing is the honest outcome: the caller sees the error, the row
+ * carries it on `errors`, and a task running this is recorded failed rather
+ * than complete.
  *
  * Nothing renders `errors` today — `HmmInstall` reads the status row for its
  * task's progress and step alone. It is recorded because the row is what the
@@ -427,11 +419,8 @@ export async function fetchAndUpdateRelease(
 	return release;
 }
 
-// Mirror of the Python `create_update_subdocument`: strip the transport-only
-// fields off the release and stamp the install metadata.
-//
-// Python strips four fields where this strips three. `etag` is absent from
-// `HmmRelease` altogether, so the two lists agree in effect.
+// Strip the transport-only fields off the release and stamp the install
+// metadata.
 function createUpdateSubdocument(
 	release: HmmRelease,
 	ready: boolean,
@@ -496,15 +485,14 @@ export type InstallHmmsValues = {
 	userId: number;
 };
 
-/** How many `hmms` rows are inserted per statement. Python adds one at a time. */
+/** How many `hmms` rows are inserted per statement. */
 const ANNOTATION_INSERT_BATCH = 500;
 
 /**
  * Whether an update subdocument describes `releaseId`.
  *
- * Compared as strings: an entry migrated from Mongo can carry the id as one,
- * and Python guards the same comparison with `int()`-and-`except TypeError`. A
- * miss here is silent — everything is written and `ready` is never flipped.
+ * Compared as strings because a stored entry can carry the id as one. A miss is
+ * silent: everything is written and `ready` is never flipped.
  */
 function updateMatchesRelease(update: HmmUpdate, releaseId: number): boolean {
 	return String(update.id) === String(releaseId);
@@ -513,9 +501,8 @@ function updateMatchesRelease(update: HmmUpdate, releaseId: number): boolean {
 /**
  * Install an HMM release: its annotations as rows, its profiles as a blob.
  *
- * The port of Python's `HmmsData.install`. Returns `false` when the status
- * singleton already records this release as installed and the call did
- * nothing.
+ * Returns `false` when the status singleton already records this release as
+ * installed and the call did nothing.
  *
  * **The profiles write goes inside the transaction, before the commit, gated on
  * `wroteProfiles`.** Hoisting the delete out of that flag makes a failure
@@ -523,8 +510,8 @@ function updateMatchesRelease(update: HmmUpdate, releaseId: number): boolean {
  * server has.
  *
  * **It does not truncate, upsert or deduplicate**, so a second release appends a
- * second full set of rows, as Python does. `analyses.results` references
- * `hmms.id`, so reclaiming the old rows would orphan historical analyses.
+ * second full set of rows. `analyses.results` references `hmms.id`, so
+ * reclaiming the old rows would orphan historical analyses.
  */
 export async function installHmms(
 	db: Db,
@@ -589,8 +576,7 @@ export async function installHmms(
 					})),
 				);
 
-				// Python's progress wrapper divides by the total unguarded, which is
-				// a ZeroDivisionError on a release with no annotations.
+				// Guarded: a release carrying no annotations would divide by zero.
 				if (annotations.length > 0) {
 					await onProgress?.(
 						((start + batch.length) / annotations.length) * 100,
@@ -601,8 +587,8 @@ export async function installHmms(
 				await setImmediate();
 			}
 
-			// Python records nothing when no entry matches, writing the rows and
-			// profiles regardless. Matched here.
+			// Nothing is recorded when no entry matches; the rows and profiles are
+			// written regardless.
 			if (updates.some((update) => updateMatchesRelease(update, releaseId))) {
 				await tx
 					.update(legacyHmmStatus)
@@ -654,17 +640,14 @@ export async function installHmms(
 /**
  * Rebuild `hmm/annotations.json.gz` from the installed rows.
  *
- * **Python does not do this** — its install deletes the key and
- * `download_annotations` rebuilds it on request. NuVs reads the blob straight
- * from storage with no route to warm it, and that lazy rebuild is the half
- * being retired, so this is the only writer left.
+ * NuVs reads this blob straight from storage and there is no route to warm it,
+ * so an install is its only writer.
  *
  * Called **after** the commit. Any earlier reads the rows the install replaced,
  * and a write inside the `wroteProfiles` window could delete the profiles of an
  * install that already committed.
  *
- * Rows are paged into a `createGzip()` stream; Python holds the whole dataset
- * and its gzip in memory at once.
+ * Rows are paged into a `createGzip()` stream rather than held in memory.
  */
 export async function writeHmmAnnotations(
 	db: Db,
@@ -689,8 +672,8 @@ export async function writeHmmAnnotations(
 			}
 
 			for (const row of rows) {
-				// Python's `annotation_from_row`. Annotated rather than inferred, so
-				// a dropped or renamed column fails here and not in a reader.
+				// Annotated rather than inferred, so a dropped or renamed column
+				// fails here and not in a reader.
 				const record: HmmAnnotationRecord = {
 					id: row.id,
 					cluster: row.cluster,
@@ -720,7 +703,6 @@ export async function writeHmmAnnotations(
 
 	const source = Readable.from(iterJson(), { objectMode: false });
 
-	// Explicit because Python passes `compresslevel=6`; Node's default agrees.
 	const gzip = createGzip({ level: 6 });
 
 	// `pipe` does not forward a source error, so a read failing part-way would
@@ -734,15 +716,15 @@ export async function writeHmmAnnotations(
 /**
  * Clear the status singleton's install record.
  *
- * The port of Python's `clean_status`, run when an install **fails**. It is
- * also the only thing that unwedges the install button afterwards, because
- * `isInstallInProgress` reads the pending entry this removes.
+ * Run when an install **fails**. It is also the only thing that unwedges the
+ * install button afterwards, because `isInstallInProgress` reads the pending
+ * entry this removes.
  *
  * **It clears `installed` unconditionally**, so a failed install of release N
- * erases the record of a good N-1 whose rows and profiles are untouched. That
- * is Python's behaviour, kept while both runners write this row. Any repair has
- * to keep making `isInstallInProgress` false, which is what unwedges the
- * install button.
+ * erases the record of a good N-1 whose rows and profiles are untouched. Left
+ * that way while the Python runner still writes this row; any repair has to
+ * keep making `isInstallInProgress` false, which is what unwedges the install
+ * button.
  */
 export async function cleanHmmStatus(db: DbOrTx): Promise<void> {
 	await db

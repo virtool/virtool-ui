@@ -1,36 +1,28 @@
 /**
  * Tar reading and writing.
  *
- * {@link extractTarToDir} and {@link writePathAsTar} are ported from
- * `virtool/workflow/data/tar.py`. Cache archives cross the runtime boundary in
- * both directions — a TypeScript workflow must read what Python's `tarfile`
- * wrote, and Python must extract what this writes — so that format is a
- * contract, not an implementation detail. Those two archives are
- * **uncompressed** (Python's `mode="w"`), so there is no compressor variance to
- * worry about.
- *
- * {@link extractTarMembers} is not a port of anything. It reads named members
- * out of an archive whose other contents are of no interest, and it is where a
- * caller that wants gzip goes.
+ * The cache archives {@link extractTarToDir} and {@link writePathAsTar} handle
+ * are also read and written by the Python runtime, so their format is a
+ * contract. They are **uncompressed**, leaving no compressor variance to worry
+ * about. {@link extractTarMembers} is the other shape: named members out of an
+ * archive whose other contents are of no interest, and the one that takes gzip.
  *
  * `tar-stream` is used rather than `node-tar` because it is a pure stream
  * parser: payloads here are trimmed reads, Bowtie2 indexes and HMM profile
  * databases, and nothing may hold one in memory.
  *
- * ## Two deliberate divergences from Python
+ * ## Extraction stages, then renames
  *
- * **Extraction stages, then renames.** Python calls `getmembers()` to validate
- * the whole archive before extracting a byte, which is cheap for it because
- * `tarfile` seeks past data blocks on a seekable file. A stream parser cannot
- * seek, so the equivalent would mean reading a multi-gigabyte archive twice.
- * Entries are extracted into a staging directory alongside the target and
- * renamed into place only once the archive has validated, which gives the same
- * all-or-nothing guarantee in one pass.
+ * A stream parser cannot seek, so validating the whole archive before writing a
+ * byte would mean reading a multi-gigabyte file twice. Entries land in a
+ * staging directory alongside the target and are renamed into place once the
+ * archive has validated, which is all-or-nothing in one pass.
  *
- * **Links and device nodes are rejected outright**, where Python's
- * `filter="data"` admits a symlink that stays inside the destination. Cache
- * payloads are regular files and directories, so the stricter rule costs
- * nothing and cannot silently restore a tree that points somewhere unintended.
+ * ## Links and device nodes are rejected outright
+ *
+ * Payloads here are regular files and directories, so refusing everything else
+ * costs nothing and cannot silently restore a tree that points somewhere
+ * unintended.
  *
  * ## Every entry must be drained
  *
@@ -51,8 +43,8 @@ import {
 	TarTargetExistsError,
 } from "./errors";
 
-// Everything a `filter="data"` extraction refuses, plus the link types Python
-// would admit conditionally. Anything not a file or a directory lands here.
+// Anything that is not a plain file or a directory — links and device nodes
+// included — is refused.
 const ALLOWED_ENTRY_TYPES = new Set(["file", "directory"]);
 
 async function pathExists(path: string): Promise<boolean> {

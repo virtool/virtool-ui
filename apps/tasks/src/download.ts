@@ -1,10 +1,4 @@
-/**
- * Downloading a large file to disk, for task bodies that install a release.
- *
- * The port of Python's `virtool/data/http.py`, plus the retry and stall guards
- * it lacks. A connection that accepts and goes quiet leaves Python waiting
- * forever, which under a lease holds the claim until it expires.
- */
+/** Downloading a large file to disk, for task bodies that install a release. */
 
 import { createWriteStream } from "node:fs";
 import { pipeline } from "node:stream/promises";

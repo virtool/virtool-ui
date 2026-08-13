@@ -111,11 +111,8 @@ describe("extractTarMembers", () => {
 		);
 	});
 
-	/*
-	 * The drain regression. An entry that is neither piped nor resumed stalls
-	 * `tar-stream` forever rather than failing, so this asserts completion under
-	 * a timeout — without the `entry.resume()` in the skip branch it hangs.
-	 */
+	// The timeout is the assertion: an entry that is neither piped nor resumed
+	// stalls `tar-stream` forever rather than failing.
 	it("does not stall on entries it was not asked for", {
 		timeout: 5000,
 	}, async () => {
