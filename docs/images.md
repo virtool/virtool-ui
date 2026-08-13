@@ -35,13 +35,11 @@ create-sample builds `packages/quality-core`. Exactly one binary out of
 each Rust build reaches a runtime stage.
 
 **Each crate gets its own planner/builder pair, over a shared `chef`.**
-The shared stage carries `cargo-chef` and nothing else; `libclang-dev` is
-installed in a `chef-pathoscope` stage on top of it, because it is
-pathoscope-core's alone — `hts-sys` runs bindgen against htslib's headers
-rather than shipping pre-generated bindings, and quality-core links
-nothing native. Putting it in the shared stage would make every
-create-sample build pay for an apt install it has no use for. This is the
-one-stage-per-tool rule below, applied to the crates.
+`libclang-dev` goes in a `chef-pathoscope` stage rather than the shared
+one, because only `pathoscope-core` needs it — putting it in the shared
+stage would make every create-sample build pay for an apt install it has
+no use for. This is the one-stage-per-tool rule below, applied to the
+crates.
 
 The nuvs image compiles SPAdes 4.2.0 from source, on `python:3.13-bookworm`,
 because it ships no binary release this base can use — the recipe is
@@ -75,15 +73,9 @@ install layer stays untouched when an app is added.
 `bowtie2`, `cd-hit`, `hmmer`, `pigz`, `samtools`, `seqkit` and `skewer`
 each get a stage near the top of the `Dockerfile`, installing to
 `/tools/<tool>/<version>/`, and the workflow runtime stages copy out of
-them. They were `ghcr.io/virtool/tools`, a separate repo built and
-released on its own; the recipes here are that repo's `install_*.sh`
-scripts verbatim, down to the upstream URLs and the layout.
-
-There was an eighth, `fastqc`, and it is gone: `packages/quality-core`
-replaced FastQC in the create-sample image and is pinned bit-for-bit
-against it, so nothing in the repo runs the tool at all. Every fixture
-taken from it — the crate's goldens and `packages/bio`'s parser
-fixtures — is frozen and checked in.
+them. They were `ghcr.io/virtool/tools`, a separate repo; the recipes
+here are that repo's `install_*.sh` scripts verbatim, down to the
+upstream URLs and the layout.
 
 **One stage per tool, never one combined stage.** BuildKit builds only
 the stages the requested target reaches, so `--target create-subtraction`
@@ -91,19 +83,6 @@ compiles nothing but seqkit. A combined stage would have every workflow
 image build every tool. None of these stages depends on `base` or reads
 the build context, so — exactly like the SPAdes stage — a warm layer
 cache skips all of them regardless of what changed in the repo.
-
-**Only what a stage in this file copies is built.** The tools repo also
-carried fastp, bowtie2 2.5.3 and hmmer 3.2.1, and none of them came
-across.
-
-**A version bump is a change to these stages**, and it lands as `fix` or
-`chore` depending on whether the tool decides analysis output — the same
-rule the pinned SPAdes version follows.
-
-Cold, on a 16-core machine, the seven together take about six minutes:
-HMMER ~145 s (mostly `bioperl`), bowtie2 ~80 s, samtools ~45 s, and the
-other four under 40 s each. No image builds more than four of them, and
-`create-sample` now builds none at all.
 
 Two conventions inside the block differ from the rest of the file and are
 deliberate: recommended packages are *not* suppressed, because these
@@ -131,14 +110,10 @@ image needs is that app's business; `apps/pathoscope/README.md` carries
 the worked example.
 
 **An interpreter being present is not the same as being complete.** The
-worked example used to be create-sample's: `fastqc` is a Perl launcher
-around a Java program, so that image installed a JRE *and* `perl`,
-because the `perl-base` this base already carries has no `FindBin`, which
-is the launcher's first statement — and the failure was again at exec
-rather than at build. Replacing FastQC with `packages/quality-core` took
-both back out, and with them ~395 MB: the create-sample image went from
-886 MB to 491 MB, and now installs nothing at all. `nuvs` still carries
-the live version of the same trap, in `python3` for SPAdes.
+`perl-base` this base carries has no `FindBin`, and the JRE a Java tool
+needs is not there at all — a launcher script can name several things,
+and each missing one fails at exec rather than at build. `nuvs` is the
+live example, installing `python3` for SPAdes.
 
 ## Building and publishing
 
@@ -168,13 +143,9 @@ path-filtered jobs in `ci.yaml`, and they take a filter each because
 their inputs differ: the two crate jobs run cargo and read no TypeScript,
 while `build-pathoscope` and `build-nuvs` bundle their app on the shared
 `base` and so take every workspace package their build stage copies.
+`pathoscope-test` also carries `Dockerfile`, because it builds the
+`bowtie2` target to get the binary its golden vectors shell out to.
 
-Three of the four carry `Dockerfile`. `pathoscope-test` does because it
-builds the `bowtie2` target to get the binary its golden vectors shell
-out to, which is how that job and the workflow images are held to one
-build of one version. **`quality-test` deliberately does not**: its
-goldens are checked in and frozen, and nothing in that file is involved
-in producing them.
 **Everything a build stage `COPY`s must appear under that image's
 filter** — a missing path skips the build on the pull request that breaks
 it and fails on the push to `main`, where nothing gates it. The two image
@@ -182,10 +153,6 @@ filters are nearly identical and are kept separate rather than merged,
 because nuvs copies `packages/bio` and pathoscope copies
 `packages/pathoscope-core`, and folding them into one would rebuild each
 image for the other's inputs.
-
-`create-sample` is not filtered at all — it is in the unfiltered `build`
-matrix — so `packages/quality-core` needs no entry there even though its
-stage now copies the crate.
 
 Build a single image locally by naming its target:
 
