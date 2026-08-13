@@ -23,7 +23,8 @@ of scope by decision.
 
 Its stages in the root `Dockerfile` are a cargo-chef build of
 `packages/pathoscope-core`, a Node build on the shared `base`, and a runtime
-layering the `bowtie2`, `cd-hit`, `pigz` and `samtools` tool stages over both:
+layering the `bowtie2`, `cd-hit` and `samtools` tool stages over both, with
+`pigz` from apt:
 
 ```
 docker build --target pathoscope .

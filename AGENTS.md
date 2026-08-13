@@ -93,7 +93,7 @@ This is a **pnpm monorepo**:
   no FFI here and adding one is out of scope by decision. Its stages in the
   root `Dockerfile` are a cargo-chef build of `packages/pathoscope-core`, a
   Node build on the shared `base`, and a runtime layering the `bowtie2`,
-  `cd-hit`, `pigz` and `samtools` tool stages over both.
+  `cd-hit` and `samtools` tool stages over both, with `pigz` from apt.
   Two rules it carries: it writes **no result file** — Python uploaded a
   `report.tsv` whose every figure is already in the `results` blob, so the
   finalize manifest is empty and `FinalizeAnalysisRequest.files` allows that
@@ -209,13 +209,19 @@ publishing an image takes. Each app's own `README.md` covers what that
 app is, its port, image and commands.
 
 **The bioinformatics tools are built in the root `Dockerfile`, one stage
-per tool** — `bowtie2`, `cd-hit`, `hmmer`, `pigz`, `samtools`, `seqkit`
-and `skewer`, each installing to `/tools/<tool>/<version>/` for a
-workflow runtime stage to copy out of. Never fold them into one stage:
-BuildKit builds only the stages the requested target reaches, which is
-what keeps `--target create-subtraction` from compiling bowtie2. Each
-Rust crate gets its own cargo-chef pair over a shared `chef` for the same
-reason.
+per tool** — `bowtie2`, `cd-hit`, `hmmer`, `samtools`, `seqkit` and
+`skewer`, each installing to `/tools/<tool>/<version>/` for a workflow
+runtime stage to copy out of. **`pigz` is the exception and comes from
+apt**, because zlib.net is the only source for its tarball and it is
+down often enough to hang every build queued behind it; nothing depends
+on its exact output bytes, so Debian's older version costs nothing.
+Never fold the rest into one stage: BuildKit builds only the stages the
+requested target reaches, which is what keeps `--target
+create-subtraction` from compiling bowtie2. Each Rust crate gets its own
+cargo-chef pair over a shared `chef` for the same reason. **Every `wget`
+carries `--tries` and `--timeout`** — the defaults are 20 tries at a
+900-second read timeout, so an unreachable mirror hangs the job for
+hours instead of failing it.
 
 Use `pnpm` for all install, run, and exec commands — not `npm` or `bun`.
 
