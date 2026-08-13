@@ -35,32 +35,24 @@ not when you want a directory back.
 
 ## Two rules the extractors carry so callers cannot get them wrong
 
-**Every entry is drained.** `tar-stream`'s parser will not advance past an entry
-that is neither piped nor `resume()`d — it stalls, silently and forever, with no
-error and no exit. Under a task lease that means a process sitting on a half-read
-archive while its supervisor faithfully renews the claim. Both extraction loops
-resume every entry they skip, and both have a regression test that asserts
-completion under a timeout rather than asserting an error.
+**Every entry is drained.** `tar-stream` will not advance past an entry that is
+neither piped nor `resume()`d — it stalls silently and forever, no error, no
+exit. Both loops resume what they skip, and both have a regression test that
+asserts completion under a timeout rather than asserting an error.
 
-**Every entry is validated, whether or not it was wanted.** Absolute paths, `..`
-segments, and anything that is not a plain file or directory fail the
-extraction. Links and device nodes are refused outright, where Python's
-`filter="data"` would admit a symlink that stays inside the destination.
-`extractTarMembers` checks members it is going to skip for the same reason
-Python's `safely_extract_tgz` walks every member before extracting any: a guard
-that only looks at what the caller asked for never looks at the payload.
+**Every entry is validated, wanted or not.** Absolute paths, `..` segments and
+anything that is not a plain file or directory fail the extraction. A guard that
+only looks at what the caller asked for never looks at the payload.
 
 ## Divergences from Python
 
-Two, both in `extractTarToDir` and both deliberate. Python validates the whole
-archive with `getmembers()` before extracting a byte, which is cheap on a
-seekable file; a stream parser cannot seek, so this stages into a sibling
-directory and renames on success rather than reading a multi-gigabyte archive
-twice. And the link and device-node rejection above is stricter than
-`filter="data"`.
+`extractTarToDir` stages and renames rather than pre-validating with
+`getmembers()`, which would mean reading a multi-gigabyte archive twice on a
+stream parser. Links and device nodes are refused outright, where
+`filter="data"` admits a symlink that stays inside the destination.
 
-`compressFile` drops Python's `pigz` branch. It exists for parallelism, and
-checksums are taken over decompressed content, so the gzip bytes need not match.
+`compressFile` drops the `pigz` branch: checksums are taken over decompressed
+content, so the gzip bytes need not match Python's.
 
 ## Testing
 

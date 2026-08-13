@@ -1,11 +1,9 @@
 /**
  * Downloading a large file to disk, for task bodies that install a release.
  *
- * The port of Python's `virtool/data/http.py`, with the three guards it does
- * not have. Python's `download_file` streams a response to a path and raises on
- * a status above 399; a connection that accepts and then goes quiet leaves it
- * waiting forever, which under a lease means the claim is held until it expires
- * and the reclaim starts a second stalled download behind the first.
+ * The port of Python's `virtool/data/http.py`, plus the retry and stall guards
+ * it lacks. A connection that accepts and goes quiet leaves Python waiting
+ * forever, which under a lease holds the claim until it expires.
  */
 
 import { createWriteStream } from "node:fs";
@@ -16,10 +14,8 @@ import type { Logger } from "@virtool/logger";
 /**
  * How long the transfer may go without delivering a byte.
  *
- * An **idle** timeout rather than an overall deadline. A release archive is
- * hundreds of megabytes and a slow but healthy link can legitimately spend many
- * minutes on one; the thing worth failing on is a connection that has stopped
- * producing, and only an idle timer can tell the two apart.
+ * **Idle**, not an overall deadline: a healthy link can legitimately spend many
+ * minutes on a release archive, and only an idle timer separates slow from dead.
  */
 const STALL_TIMEOUT_MS = 60_000;
 
@@ -67,13 +63,8 @@ async function attemptDownload(
 
 	const stalled = new AbortController();
 
-	/*
-	 * Composed rather than chosen between: the run's signal ends the transfer on
-	 * a drain, and the stall controller ends it when the connection goes quiet.
-	 * Passing it to `fetch` covers the body as well as the request — aborting it
-	 * destroys the response stream, which is what makes the loop below reject
-	 * instead of waiting on bytes that are not coming.
-	 */
+	// Passed to `fetch`, which covers the body as well as the request: aborting
+	// destroys the response stream, so the loop below rejects rather than waits.
 	const composed = signal
 		? AbortSignal.any([signal, stalled.signal])
 		: stalled.signal;
@@ -93,9 +84,8 @@ async function attemptDownload(
 	try {
 		const response = await fetch(url, { signal: composed });
 
-		// Checked before a byte is read, as Python does. An HTML error page fed to
-		// a gunzip stream fails two steps later with a message about compression
-		// rather than about the 404 that caused it.
+		// Before a byte is read, as Python does. An error page fed to gunzip fails
+		// two steps later complaining about compression, not about the 404.
 		if (response.status > 399) {
 			throw new DownloadStatusError(url, response.status);
 		}
@@ -106,13 +96,8 @@ async function attemptDownload(
 
 		let received = 0;
 
-		/*
-		 * `createWriteStream` truncates, so a retry rewrites from zero rather than
-		 * appending to what the failed attempt left behind. Nothing here resumes a
-		 * partial transfer; the archive is verified only by being a readable tar,
-		 * and a resumed download that silently spliced two responses would pass
-		 * that check on a corrupt file.
-		 */
+		// `createWriteStream` truncates, so a retry rewrites from zero. Nothing
+		// resumes a partial transfer: a spliced download would still untar.
 		await pipeline(async function* () {
 			for await (const chunk of response.body as AsyncIterable<Uint8Array>) {
 				arm();
@@ -135,14 +120,9 @@ async function attemptDownload(
  *
  * Returns the number of bytes written.
  *
- * **Only transport failures are retried.** A status the server chose is
- * reported as it stands: a 404 on a release URL will be a 404 on the next
- * attempt too, and retrying it turns a clear diagnostic into the same
- * diagnostic four minutes later. This is in-process retry only — the task row
- * is never requeued, which stays out of scope.
- *
- * An abort is never retried and is rethrown untranslated. The process is going
- * away, and the framework records that as `aborted` rather than a failure.
+ * **Only transport failures are retried.** A 404 on a release URL will be a 404
+ * on the next attempt, so retrying it just delays the diagnostic. In-process
+ * only; the task row is never requeued. An abort is rethrown untranslated.
  */
 export async function downloadToFile(
 	url: string,

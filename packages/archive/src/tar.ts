@@ -34,11 +34,8 @@
  *
  * ## Every entry must be drained
  *
- * `tar-stream`'s parser hands the loop an entry stream and will not advance
- * until it has ended. An entry that is neither piped nor `resume()`d **stalls
- * the read forever** — no error, no exit, just a process sitting on a half-read
- * archive while whatever supervises it faithfully renews a lease. Every path
- * through every loop below either pipes an entry or resumes it.
+ * An entry that is neither piped nor `resume()`d **stalls the read forever** —
+ * no error, no exit. Every path through every loop below pipes or resumes.
  */
 
 import { randomUUID } from "node:crypto";
@@ -188,27 +185,20 @@ export type ExtractTarMembersOptions = {
 	gzip?: boolean;
 	/** Aborts the read between entries and destroys the stream. */
 	signal?: AbortSignal;
-	/**
-	 * Members named in the map that the archive may omit. Anything else in the
-	 * map is required, and its absence throws {@link TarMemberMissingError}.
-	 */
+	/** Members the archive may omit. Anything else in the map is required. */
 	optional?: readonly string[];
 };
 
 /**
  * Extract named members of `archivePath` to the paths `members` maps them to.
  *
- * `members` is keyed by the member name as it appears in the archive — the
- * caller chooses every destination, so an archive can never decide where a byte
- * lands. Parent directories are created; an existing destination is
- * overwritten. Members the map does not name are skipped.
+ * `members` is keyed by the member name as it appears in the archive; the caller
+ * chooses every destination, so an archive never decides where a byte lands.
+ * Parent directories are created and an existing destination is overwritten.
  *
- * The whole archive is still read, and **every** entry is validated on the way
- * past, whether or not it was wanted: a member that escapes its directory or is
- * not a plain file fails the extraction, matching Python's `safely_extract_tgz`,
- * which walks every member before extracting any. Refusing only the members a
- * caller happened to ask for would let an archive carry a payload the guard
- * never looked at.
+ * **Every** entry is validated on the way past, wanted or not, matching Python's
+ * `safely_extract_tgz`. Checking only what the caller asked for would let an
+ * archive carry a payload the guard never looked at.
  *
  * @throws {TarArchiveError} when any member escapes the archive root or is not
  *   a plain file or directory.
@@ -227,11 +217,9 @@ export async function extractTarMembers(
 	const entries = extract();
 	const source = createReadStream(archivePath);
 
-	// `pipe` does not forward a source error to its destination, and an `error`
-	// on a stream nothing listens to is an uncaught exception — so a missing
-	// archive, or gzip data that does not decode, would take the process down
-	// rather than reject this call. Destroying the extractor with the error makes
-	// the loop below reject with it instead.
+	// `pipe` does not forward a source error, and an unlistened `error` is an
+	// uncaught exception — a missing archive would take the process down rather
+	// than reject this call.
 	source.on("error", (err) => entries.destroy(err));
 
 	if (gzip) {
@@ -251,8 +239,7 @@ export async function extractTarMembers(
 			const target = wanted.get(name);
 
 			if (target === undefined || type === "directory") {
-				// Resumed rather than left alone. A skipped entry that is not drained
-				// stalls the parser on the next iteration that never comes.
+				// Resumed, not left alone: an undrained entry stalls the parser.
 				entry.resume();
 				continue;
 			}
@@ -263,9 +250,8 @@ export async function extractTarMembers(
 			found.add(name);
 		}
 	} catch (err) {
-		// Destroyed rather than left to finish: an abort or a rejected write has
-		// already stopped the loop, and the file handle behind `source` would
-		// otherwise stay open until the archive had been read to its end.
+		// Otherwise the handle behind `source` stays open until the archive has
+		// been read to its end.
 		source.destroy();
 		entries.destroy();
 

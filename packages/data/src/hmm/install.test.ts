@@ -422,13 +422,9 @@ describe("installHmms", () => {
 		expect(await listKeys(storage)).toContain(HMM_ANNOTATIONS_KEY);
 	});
 
-	/*
-	 * The install itself committed. Failing the task over a cache artifact that
-	 * regenerates would run `cleanHmmStatus` and erase the record of a
-	 * successful install, so the write is best-effort and the key is dropped so
-	 * nothing stale survives.
-	 */
-	it("does not fail the install when the annotations blob cannot be written", async () => {
+	// Nothing else writes this key, so a swallowed failure would report a
+	// successful install and leave NuVs with a blob nothing can recreate.
+	it("fails when the annotations blob cannot be written", async () => {
 		const storage = new MemoryStorage();
 		await seedPendingStatus();
 
@@ -452,11 +448,13 @@ describe("installHmms", () => {
 				release: createRelease(),
 				userId: 1,
 			}),
-		).resolves.toBe(true);
+		).rejects.toThrow("bucket exploded");
 
 		write.mockRestore();
 
-		expect((await readStatus())?.updates[0]?.ready).toBe(true);
+		// The rows and profiles committed before the blob was attempted, so the
+		// failure does not roll them back — only the partial blob is dropped.
+		expect(await db.select().from(hmms)).toHaveLength(1);
 		expect(await listKeys(storage)).not.toContain(HMM_ANNOTATIONS_KEY);
 	});
 });
