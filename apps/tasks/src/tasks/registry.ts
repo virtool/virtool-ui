@@ -9,6 +9,7 @@ import { importReferenceTask } from "./import-reference";
 import { installHmmsTask } from "./install-hmms";
 import { reapOrphanedUploadsTask } from "./reap-orphaned-uploads";
 import { refreshHmmsTask } from "./refresh-hmms";
+import { sweepBlastTask } from "./sweep-blast";
 import { timeoutJobsTask } from "./timeout-jobs";
 
 /**
@@ -46,5 +47,6 @@ export const taskRegistry: TaskRegistry<TaskContext> = {
 	install_hmms: installHmmsTask,
 	reap_orphaned_uploads: reapOrphanedUploadsTask,
 	refresh_hmms: refreshHmmsTask,
+	sweep_blast: sweepBlastTask,
 	timeout_jobs: timeoutJobsTask,
 };
