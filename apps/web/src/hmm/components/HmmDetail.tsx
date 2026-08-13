@@ -20,9 +20,18 @@ const routeApi = getRouteApi("/_authenticated/hmms/$hmmId");
  */
 export default function HmmDetail() {
 	const { hmmId } = routeApi.useParams();
-	const { data, isPending, isError } = useFetchHmm(Number(hmmId));
+	const id = Number(hmmId);
 
-	if (isError) {
+	/*
+	 * The path segment is whatever the URL carried, so it need not be a row id
+	 * at all. Fetching on a `NaN` reaches the server function's validator, which
+	 * rejects it as an unhandled 500 rather than the not-found this is.
+	 */
+	const isRowId = Number.isSafeInteger(id) && id > 0;
+
+	const { data, isPending, isError } = useFetchHmm(id, isRowId);
+
+	if (!isRowId || isError) {
 		return <NotFound />;
 	}
 

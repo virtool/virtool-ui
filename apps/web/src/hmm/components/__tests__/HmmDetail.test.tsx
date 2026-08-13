@@ -21,6 +21,13 @@ describe("<HmmDetail />", () => {
 			expect(screen.getByText("Not found")).toBeInTheDocument();
 		});
 
+		it("should render not found when the path carries a non-numeric id", async () => {
+			await renderRoute("/hmms/abc123");
+
+			expect(await screen.findByText("404")).toBeInTheDocument();
+			expect(screen.getByText("Not found")).toBeInTheDocument();
+		});
+
 		it("should render loading when props.detail = null", async () => {
 			await renderRoute(path);
 

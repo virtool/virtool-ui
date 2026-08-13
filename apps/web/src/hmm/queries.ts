@@ -55,12 +55,14 @@ export function useSuspenseHmms(page: number, perPage: number, term?: string) {
  * Fetches a single HMM
  *
  * @param hmmId - The id of the hmm to fetch
+ * @param enabled - Whether to fetch at all
  * @returns A single HMM
  */
-export function useFetchHmm(hmmId: number) {
+export function useFetchHmm(hmmId: number, enabled = true) {
 	return useQuery({
 		queryKey: hmmQueryKeys.detail(hmmId),
 		queryFn: () => getHmmFn({ data: { hmmId } }),
+		enabled,
 	});
 }
 
