@@ -638,6 +638,30 @@ A throwing `cleanup` is caught and logged and never rethrown. Losing the
 failure that provoked it to a secondary error in the handler meant to tidy up
 after it is how an original cause disappears.
 
+#### `reason` tells the two outcomes apart
+
+`cleanup` receives a `reason` of `"failed"` or `"aborted"` alongside everything
+`run` gets. The broad rule above — cleanup on every non-success outcome — is a
+strict improvement for a body whose teardown is idempotent, and a bug for one
+whose teardown removes state a re-run reads. A failed task is over; an aborted
+one is about to be released and claimed again by another runner, from step
+zero. **A body that tears down anything its own next attempt depends on must
+branch on `reason`.**
+
+`install_hmms` is the case that forced it, and the failure was silent: a
+SIGTERM lands mid-install, the handler observes the abort, `cleanHmmStatus`
+empties `status.updates`, the runner releases the claim, and the re-run finds
+no entry for its release — so it writes every annotation row and every profile
+byte and records none of it. A user sees an install that finished and left no
+trace.
+
+**Never read `signal.aborted` inside a cleanup instead.** `runTask` samples the
+signal *before* the progress flush and the lease renewal that precede the hook,
+and the terminal write acts on what it sampled. An abort arriving inside that
+window leaves the live signal saying "aborted" while the row is recorded
+`failed`, so a body reading the signal skips teardown on a task that is over.
+`reason` carries the sampled value, which is the one that matches the row.
+
 ### A reclaimed task re-runs from step zero
 
 The claim query deliberately dropped Python's `progress = 0` filter, so a task

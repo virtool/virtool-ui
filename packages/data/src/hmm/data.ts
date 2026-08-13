@@ -1,11 +1,22 @@
+import { Readable } from "node:stream";
+import { setImmediate } from "node:timers/promises";
+import { createGzip } from "node:zlib";
 import type {
 	Hmm,
+	HmmAnnotation,
+	HmmAnnotationRecord,
 	HmmMinimal,
 	HmmSearchResult,
 	HmmStatus,
 	Task,
 } from "@virtool/contracts";
-import { and, asc, count, eq, sql } from "drizzle-orm";
+import type { Logger } from "@virtool/logger";
+import {
+	HMM_ANNOTATIONS_KEY,
+	HMM_PROFILES_KEY,
+	type StorageBackend,
+} from "@virtool/storage";
+import { and, asc, count, eq, gt, sql } from "drizzle-orm";
 import type { Db, DbOrTx } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import {
@@ -418,8 +429,12 @@ export async function fetchAndUpdateRelease(
 
 // Mirror of the Python `create_update_subdocument`: strip the transport-only
 // fields off the release and stamp the install metadata.
+//
+// Python strips four fields where this strips three. `etag` is absent from
+// `HmmRelease` altogether, so the two lists agree in effect.
 function createUpdateSubdocument(
 	release: HmmRelease,
+	ready: boolean,
 	userId: number,
 ): HmmUpdate {
 	const { content_type, download_url, retrieved_at, ...rest } = release;
@@ -427,7 +442,7 @@ function createUpdateSubdocument(
 	return {
 		...rest,
 		created_at: new Date().toISOString(),
-		ready: false,
+		ready,
 		user: { id: userId },
 	};
 }
@@ -444,7 +459,7 @@ export async function attachInstallTask(
 	release: HmmRelease,
 	userId: number,
 ): Promise<HmmUpdate> {
-	const update = createUpdateSubdocument(release, userId);
+	const update = createUpdateSubdocument(release, false, userId);
 
 	const [row] = await db
 		.select({ updates: legacyHmmStatus.updates })
@@ -467,4 +482,319 @@ export async function getUserHandle(db: Db, userId: number): Promise<string> {
 		.where(eq(users.id, userId));
 
 	return row?.handle ?? "";
+}
+
+/** What {@link installHmms} needs to install a release. */
+export type InstallHmmsValues = {
+	annotations: HmmAnnotation[];
+	/**
+	 * Opens the profiles database for streaming to object storage.
+	 *
+	 * A factory rather than the stream itself, because the idempotency
+	 * short-circuit below never writes: handed a live stream, a re-run that
+	 * short-circuits would leave the file handle behind it open.
+	 */
+	profiles: () => AsyncIterable<Uint8Array>;
+	release: HmmRelease;
+	userId: number;
+};
+
+/**
+ * How many `hmms` rows are inserted per statement.
+ *
+ * Python adds one row at a time through the session. Nothing about a release
+ * makes that necessary, and a real one runs to tens of thousands of
+ * annotations.
+ */
+const ANNOTATION_INSERT_BATCH = 500;
+
+/**
+ * Whether an update subdocument describes `releaseId`.
+ *
+ * Compared as strings. `HmmRelease.id` is typed `number` and the manifest
+ * serves one, but Python guards the same comparison with an
+ * `int()`-and-`except TypeError` because an entry migrated from Mongo can carry
+ * the id as a string. Getting this wrong is silent in the worst way: the
+ * install writes every row and every byte, finds no matching entry, and never
+ * flips `ready` — which wedges `isInstallInProgress` on and refuses every
+ * install after it.
+ */
+function updateMatchesRelease(update: HmmUpdate, releaseId: number): boolean {
+	return String(update.id) === String(releaseId);
+}
+
+/**
+ * Install an HMM release: its annotations as rows, its profiles as a blob.
+ *
+ * The port of Python's `HmmsData.install`. Returns `false` when the status
+ * singleton already records this release as installed and the call did
+ * nothing.
+ *
+ * **The ordering inside the transaction is load-bearing.** The profiles write
+ * happens inside it, immediately before the commit, and `wroteProfiles` gates
+ * the delete that follows a failure. `write` is not atomic from a caller's
+ * perspective — a failure can leave an incomplete multipart upload on S3 — and
+ * a commit-time failure rolls Postgres back while leaving a fully written blob
+ * orphaned ahead of it. The gate is what stops a failure *before* the write
+ * deleting the **previous** install's profiles, which is the only copy the
+ * server has. A refactor that hoists the delete out of the flag destroys that
+ * copy on an unrelated failure, and nothing about the code shape would say so.
+ *
+ * **It does not truncate, upsert or deduplicate**, so installing a second
+ * release appends a second complete set of rows, exactly as Python does.
+ * `analyses.results` references `hmms.id` values, and reclaiming the old rows
+ * would orphan every historical analysis's annotations — which is also what
+ * `hmms.legacy_id` exists for. Whether that history has to be preserved, and
+ * what an install would have to do to reclaim the old rows safely, is an open
+ * question; do not answer it with an upsert here.
+ */
+export async function installHmms(
+	db: Db,
+	storage: StorageBackend,
+	logger: Logger,
+	{ annotations, profiles, release, userId }: InstallHmmsValues,
+	onProgress?: (percent: number) => Promise<void>,
+): Promise<boolean> {
+	const releaseId = release.id;
+	const installed = createUpdateSubdocument(release, true, userId);
+
+	let wroteProfiles = false;
+	let performed = false;
+
+	try {
+		await db.transaction(async (tx) => {
+			const [status] = await tx
+				.select()
+				.from(legacyHmmStatus)
+				.where(eq(legacyHmmStatus.id, HMM_STATUS_ID));
+
+			const updates = status?.updates ?? [];
+
+			/*
+			 * A lease that expires is reclaimed, and the body restarts from step
+			 * zero with everything the previous attempt committed still in place —
+			 * so without this a reclaim appends a second full set of rows. Keyed on
+			 * the release this task row's own payload names, it can only ever
+			 * suppress a repeat of this install and never collapses two distinct
+			 * releases into one.
+			 */
+			if (
+				updates.some(
+					(update) => updateMatchesRelease(update, releaseId) && update.ready,
+				)
+			) {
+				return;
+			}
+
+			performed = true;
+
+			for (
+				let start = 0;
+				start < annotations.length;
+				start += ANNOTATION_INSERT_BATCH
+			) {
+				const batch = annotations.slice(start, start + ANNOTATION_INSERT_BATCH);
+
+				await tx.insert(hmms).values(
+					batch.map((annotation) => ({
+						cluster: annotation.cluster,
+						count: annotation.count,
+						entries: annotation.entries,
+						families: annotation.families,
+						genera: annotation.genera,
+						// Passed explicitly, as Python does. The column's
+						// `.$defaultFn` agrees, so this is belt and braces.
+						hidden: false,
+						length: annotation.length,
+						mean_entropy: annotation.mean_entropy,
+						names: annotation.names,
+						total_entropy: annotation.total_entropy,
+					})),
+				);
+
+				// Guarded rather than divided blind. Python's
+				// `AccumulatingProgressHandlerWrapper` divides by the total with no
+				// check, so a release carrying an empty array is a ZeroDivisionError.
+				if (annotations.length > 0) {
+					await onProgress?.(
+						((start + batch.length) / annotations.length) * 100,
+					);
+				}
+
+				// The runner's heartbeat shares this event loop. A long insert loop
+				// that never yields starves it, and the task is reclaimed out from
+				// under itself.
+				await setImmediate();
+			}
+
+			/*
+			 * Python records nothing at all when the singleton carries no entry for
+			 * this release — no `installed`, no flipped flag — and this matches it.
+			 * The rows and the profiles are still written; only the status is left
+			 * alone.
+			 */
+			if (updates.some((update) => updateMatchesRelease(update, releaseId))) {
+				await tx
+					.update(legacyHmmStatus)
+					.set({
+						installed,
+						updates: updates.map((update) =>
+							updateMatchesRelease(update, releaseId)
+								? { ...update, ready: true }
+								: update,
+						),
+					})
+					.where(eq(legacyHmmStatus.id, HMM_STATUS_ID));
+			}
+
+			wroteProfiles = true;
+			await storage.write(HMM_PROFILES_KEY, profiles());
+		});
+	} catch (err) {
+		if (wroteProfiles) {
+			await storage.delete(HMM_PROFILES_KEY);
+		}
+
+		throw err;
+	}
+
+	/*
+	 * Attempted on the short-circuit path too. A reclaimed re-run whose install
+	 * already committed is the one case where the rows are right and the blob
+	 * may not be, so the repair has to happen on the path that skips everything
+	 * else.
+	 */
+	try {
+		await writeHmmAnnotations(db, storage);
+	} catch (err) {
+		/*
+		 * Logged rather than thrown. The install itself committed — every row and
+		 * every profile byte is in place — and failing the task here would run
+		 * `cleanHmmStatus` and erase the record of a successful install over a
+		 * cache artifact that regenerates. The key is dropped so nothing stale
+		 * survives, which puts the store back in exactly the state Python's
+		 * install leaves it in, with its lazy rebuild as the fallback.
+		 */
+		logger.warn(
+			{ err, release_id: releaseId },
+			"could not write the HMM annotations blob after installing",
+		);
+
+		await storage.delete(HMM_ANNOTATIONS_KEY);
+	}
+
+	return performed;
+}
+
+/**
+ * Rebuild `hmm/annotations.json.gz` from the installed rows.
+ *
+ * **Python does not do this.** Its install *deletes* the key and
+ * `HmmsData.download_annotations` regenerates it on the next request, so the
+ * blob is cold from the moment an install commits until someone asks for it.
+ * NuVs reads it straight out of the bucket with no route to warm it, and fails
+ * by name when it is absent — so a run scheduled against a freshly installed
+ * dataset fails for no reason a user could act on. Writing it here closes that
+ * window.
+ *
+ * Called **after** the install transaction commits, never inside it. Generating
+ * any earlier would read the rows the install replaced and pair a stale blob
+ * with fresh profiles, and a write inside the `wroteProfiles` window would put
+ * a failure here in a position to delete the profiles of an install that
+ * already committed.
+ *
+ * The rows are paged and serialized straight into a `createGzip()` stream: a
+ * real dataset is tens of thousands of annotations, and Python's
+ * `json.dumps(...).encode()` holds all of it plus its gzip in memory at once.
+ */
+export async function writeHmmAnnotations(
+	db: Db,
+	storage: StorageBackend,
+): Promise<void> {
+	async function* iterJson(): AsyncGenerator<string> {
+		yield "[";
+
+		let lastId = 0;
+		let first = true;
+
+		for (;;) {
+			const rows = await db
+				.select()
+				.from(hmms)
+				.where(gt(hmms.id, lastId))
+				.orderBy(asc(hmms.id))
+				.limit(ANNOTATION_INSERT_BATCH);
+
+			if (rows.length === 0) {
+				break;
+			}
+
+			for (const row of rows) {
+				// Python's `annotation_from_row`. The integer primary key is exposed
+				// as `id`, which is the field NuVs maps each vFam cluster onto.
+				// Annotated rather than inferred, so a column this drops or renames
+				// fails here instead of in whatever reads the blob next.
+				const record: HmmAnnotationRecord = {
+					id: row.id,
+					cluster: row.cluster,
+					count: row.count,
+					length: row.length,
+					mean_entropy: row.mean_entropy,
+					total_entropy: row.total_entropy,
+					hidden: row.hidden,
+					names: row.names,
+					families: row.families,
+					genera: row.genera,
+					entries: row.entries,
+				};
+
+				yield `${first ? "" : ","}${JSON.stringify(record)}`;
+
+				first = false;
+			}
+
+			lastId = rows[rows.length - 1]?.id ?? lastId;
+
+			await setImmediate();
+		}
+
+		yield "]";
+	}
+
+	const source = Readable.from(iterJson(), { objectMode: false });
+
+	// Level 6 because Python passes `compresslevel=6` explicitly. Node's default
+	// happens to agree, but the two are pinned together rather than by accident.
+	const gzip = createGzip({ level: 6 });
+
+	// `pipe` does not forward a source error to its destination, so a read that
+	// fails part-way would otherwise end the gzip stream cleanly and store a
+	// truncated blob as though it were the whole dataset.
+	source.on("error", (err) => gzip.destroy(err));
+	source.pipe(gzip);
+
+	await storage.write(HMM_ANNOTATIONS_KEY, gzip);
+}
+
+/**
+ * Clear the status singleton's install record.
+ *
+ * The port of Python's `clean_status`, run when an install **fails**. It is
+ * also the only thing that unwedges the install button afterwards, because
+ * `isInstallInProgress` reads the pending entry this removes.
+ *
+ * **It sets `installed` to null unconditionally**, so a failed install of
+ * release N erases the record of a successfully installed release N-1 whose
+ * rows and profiles are untouched and still usable. That is Python's
+ * behaviour and it is preserved deliberately, because both runners write this
+ * row until the cutover completes. Clearing only the failed release's pending
+ * entry is the obvious repair, but it has to keep clearing enough for
+ * `isInstallInProgress` to go false — that is the only thing that unwedges the
+ * install button after a failure.
+ */
+export async function cleanHmmStatus(db: DbOrTx): Promise<void> {
+	await db
+		.update(legacyHmmStatus)
+		.set({ installed: null, task_id: null, updates: [] })
+		.where(eq(legacyHmmStatus.id, HMM_STATUS_ID));
 }

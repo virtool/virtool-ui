@@ -128,15 +128,24 @@ This is a **pnpm monorepo**:
   deletes an analysis on failure**, as with pathoscope.
   It reads `hmm/profiles.hmm` and `hmm/annotations.json.gz` **straight from
   storage** — there is no jobs API HMM route — and checks both keys before step
-  one. The annotations blob is written **lazily** by Python, on the first
-  request for it, and cleared whenever an HMM install commits, so it is cold on
-  a fresh install and a run says so by name rather than failing at `vfam`.
+  one. Python writes that blob **lazily**, on the first request for it, and
+  deletes it whenever an install commits, so it is cold after a Python install
+  and a run says so by name rather than failing at `vfam`; the TypeScript
+  `install_hmms` task rewrites it after its commit instead. Its shape is
+  `HmmAnnotationRecord` in `@virtool/contracts`, written and read by three
+  implementations that cannot see each other, so no end restates it.
   **CI builds it but must not publish it**, exactly as for pathoscope:
   `virtool/workflow-nuvs` still releases the NuVs workflow, so `APP_VERSION`
   stays `0.0.0` and the `workflow_version` in all three of its cache keys with
   it.
 - `packages/` — shared, framework-agnostic libraries published as workspace
   packages, plus one Rust crate:
+  - `@virtool/archive` — tar and gzip, `tar-stream` plus `node:zlib` and
+    nothing else. Both extractors **drain every entry** and validate
+    **every** member, wanted or not; a skipped entry that is not
+    `resume()`d stalls `tar-stream` forever with no error. Consumers
+    import from it directly — `@virtool/workflow` re-exports none of it.
+    See [packages/archive/README.md](packages/archive/README.md).
   - `@virtool/service` — the process-lifecycle pieces every long-lived
     service shares. Today that is `createShutdownController`
     (`./shutdown`) alone: readiness flip, LIFO hooks, listener, pool,
@@ -1183,7 +1192,10 @@ declaration (`define.ts`), the debounced progress writer
   another runner owns the task, and the claim is **renewed and checked**
   first rather than inferred from whatever progress write happened to be
   outstanding. A throwing cleanup is logged and never masks the original
-  error.
+  error. It is told which outcome it is through **`reason`**
+  (`"failed" | "aborted"`), and a body tearing down anything a re-run
+  reads **must** branch on it. Never read `signal.aborted` inside a
+  cleanup instead — it can disagree with the row.
 - **An error is `` `${err.name}: ${err.message}` ``**, not Python's
   `"<class 'ValueError'>: boom"`. A payload the schema rejects fails the
   task before any handler code runs.
@@ -1350,6 +1362,12 @@ own:
 - **The signal is checked between deletes**, `StorageBackend.delete`
   taking none, so a run holding hundreds of objects cannot outlive the
   drain and delete rows for a runner that has already released the claim.
+
+`install_hmms` is the fourth, the first to read an archive and the only
+consumer of the `cleanup` hook. Its rules are documented where it lives —
+`apps/tasks/src/tasks/install-hmms.ts` for the steps and the cleanup
+branch, `installHmms` in `@virtool/data/hmm/data` for the transaction
+ordering, and `apps/tasks/src/download.ts` for the download guards.
 
 See [docs/tasks.md](docs/tasks.md) for the full config table, the
 `AppContext` contract, the shutdown ordering and its guarantees, the
@@ -1688,11 +1706,12 @@ still have `bowtie2` rows, `GET /subtractions/{id}` keeps serving them, and
 `SubtractionFileType` keeps both members. See
 [docs/jobs-api.md](docs/jobs-api.md).
 
-`tar.ts` is `tar-stream`, not `node-tar`, because it is a pure stream
-parser. It diverges from Python's `tar.py` twice, deliberately: extraction
-stages into a sibling directory and renames on success rather than reading
-the archive twice to pre-validate it, and links and device nodes are
-rejected outright rather than admitted when they stay inside the target.
+Tar and gzip are **`@virtool/archive`**, not this package — `cache.ts` imports
+`extractTarToDir` and `writePathAsTar` from `@virtool/archive/tar`, and the
+workflow apps import `compressFile` / `decompressFile` / `isGzipped` from
+`@virtool/archive/compression`. Nothing here re-exports them. See that
+package's README for the drain rule, the traversal guards and the two
+deliberate divergences from Python's `tar.py`.
 
 `deriveCacheKey` (`cache/key.ts`) reproduces `json.dumps(..., sort_keys=True,
 separators=(",", ":"), ensure_ascii=True)`, which `JSON.stringify` does not.
