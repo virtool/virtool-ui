@@ -16,6 +16,7 @@
 		"@virtool/archive": "workspace:*",
 		"@virtool/contracts": "workspace:*",
 		"@virtool/logger": "workspace:*",
+		"@virtool/sqlite": "workspace:*",
 		"@virtool/storage": "workspace:*",
 		"bcrypt": "^6.0.0",
 		"drizzle-orm": "^0.45.2",
