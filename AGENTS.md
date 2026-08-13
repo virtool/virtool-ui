@@ -136,9 +136,10 @@ This is a **pnpm monorepo**:
   it.
 - `packages/` — shared, framework-agnostic libraries published as workspace
   packages, plus one Rust crate:
-  - `@virtool/archive` — compression and tarball utilities. Anything
-    that reads or writes an archive goes through it; never duplicate what
-    it exports. See
+  - `@virtool/archive` — compression, tarball and zip utilities.
+    Anything that reads or writes an archive goes through it; never
+    duplicate what it exports. The tar side streams; `./zip` does not
+    and must not be pointed at anything a user uploaded. See
     [packages/archive/README.md](packages/archive/README.md).
   - `@virtool/service` — the process-lifecycle pieces every long-lived
     service shares. Today that is `createShutdownController`
@@ -1353,6 +1354,56 @@ own:
 - **The signal is checked between deletes**, `StorageBackend.delete`
   taking none, so a run holding hundreds of objects cannot outlive the
   drain and delete rows for a runner that has already released the claim.
+
+`sweep_blast` is the fourth, and the only one a user watches in real
+time — it advances the NuVs BLAST searches somebody has just clicked for,
+which is why it alone runs on a thirty-second period. Its body is one
+call to `sweepBlasts` (`@virtool/data/blast/data`), over the client in
+`@virtool/data/blast/ncbi`. Six rules are its own:
+
+- **The `nuvs_blast` row is the whole state machine.** No `rid` means
+  submit, a `rid` means check, `ready` or `error` means finished and
+  invisible to the read. `task_id` is neither read nor written; the
+  sweep does not filter on it and Python's does not either.
+- **Two concurrency caps, not one**, because NCBI polices submissions
+  far harder than status checks: one submission at a time, three checks.
+  A row's kind picks its pool, so the two never contend. A row that
+  fails against NCBI is logged and backed off —
+  `interval = min((interval ?? 3) + 5, 75)` plus a `last_checked_at`
+  stamp — and never takes its neighbours down with it. A failed advance
+  otherwise writes nothing, so without that stamp the next sweep would
+  retry it thirty seconds later for the whole half-hour it has left.
+- **Both writes are guarded against a re-BLAST.** A submission lands
+  only `WHERE rid IS NULL` and a result only `WHERE rid = <the rid
+  checked>`; re-BLASTing a contig deletes its row and inserts a
+  replacement, so a zero rowcount means the answer in hand addresses a
+  search nobody is waiting for. It is logged and dropped. For the same
+  reason an **expired row is deleted by primary key**, never by
+  `(analysis_id, sequence_index)` — that pair is unique and would
+  destroy the replacement.
+- **`interval` is not advanced by a successful submission**, only
+  `last_checked_at` and `updated_at`. A submission is not a check, so
+  the first status check lands three seconds later rather than eight.
+- **Three hardenings diverge from Python deliberately.** `Status=FAILED`
+  and `Status=UNKNOWN` set `error` where Python reads them as ready and
+  stores an empty result, which the SPA draws as "No BLAST hits found"
+  with no retry offered; the result fetch checks its HTTP status, where
+  Python hands a refusal to a zip reader and records a transient outage
+  as a permanent error; and every request carries an
+  `AbortSignal.timeout`, where Python has no deadline at all. Nothing
+  else diverges — in particular the RID is still screen-scraped out of
+  an HTML comment, because the per-row back-off contains that fragility.
+- **A frame goes out on a terminal transition only** — RID stored,
+  result stored, error set, expired row deleted — never on an interval
+  bump. A pending search is checked as often as every three seconds and
+  each one on screen holds its own analysis query, so a frame per bump
+  is a full analysis refetch in every connected browser for a countdown.
+  `analyses.updated_at` is still bumped on every outcome, as Python
+  does.
+
+The row-creating endpoint is **not** ported: `blastNuvs`
+(`@virtool/data/analyses/data`) already serves it from this side, and
+the sweep is the only thing that advances what it inserts.
 
 See [docs/tasks.md](docs/tasks.md) for the full config table, the
 `AppContext` contract, the shutdown ordering and its guarantees, the
