@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Without pipefail a failing curl is masked by the jq and sed that follow it,
+# and the tag check below reports a missing release where the truth is a dead
+# network or a spent rate limit.
+set -o pipefail
+
 # Manifest paths are resolved from this script's own location rather than the
 # working directory. Tilt's Pull button runs it from dev/, a person running it
 # by hand is as likely to be at the repo root.
@@ -11,24 +16,50 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
+# The API is called unauthenticated, so it is rate limited at 60 requests an
+# hour and answers a spent budget with a JSON error object and a 403. `curl -s`
+# reports that as success and `.tag_name` comes back `null`, so without `-f` and
+# the checks below a rate-limited run rewrites every manifest to `null`.
 fetch_latest_tag() {
     local repo=$1
     local url="https://api.github.com/repos/${repo}/releases/latest"
-    curl -s "$url" | jq -r '.tag_name' | sed 's/^v//'
+    local tag
+
+    if ! tag=$(curl -fsS "$url" | jq -r '.tag_name' | sed 's/^v//'); then
+        echo "Error: could not fetch the latest release of $repo." >&2
+        exit 1
+    fi
+
+    if [[ -z "$tag" || "$tag" == "null" ]]; then
+        echo "Error: $repo reported no latest release tag." >&2
+        exit 1
+    fi
+
+    echo "$tag"
 }
 
+# The old tag is matched as a run of non-space characters rather than as
+# `[0-9.]+`. jobs-api and tasks ship pinned to `latest`, which has no digits in
+# it, so a numeric pattern left them there while still reporting success — and
+# the whole point of this script is that every service runs one release.
 update_tag() {
     local file=$1
     local prefix=$2
     local tag=$3
 
-    if [[ -f "$file" ]]; then
-        sed -i.bak "s|${prefix}[0-9.]\+|${prefix}${tag}|" "$file" && rm "${file}.bak"
-        echo "Using tag '$tag' for $file"
-    else
-        echo "Error: File $file not found."
+    if [[ ! -f "$file" ]]; then
+        echo "Error: File $file not found." >&2
         exit 1
     fi
+
+    sed -i.bak "s|${prefix}[^[:space:]]\+|${prefix}${tag}|" "$file" && rm "${file}.bak"
+
+    if ! grep -qF "${prefix}${tag}" "$file"; then
+        echo "Error: no '${prefix}' tag to rewrite in $file." >&2
+        exit 1
+    fi
+
+    echo "Using tag '$tag' for $file"
 }
 
 echo "Server"
