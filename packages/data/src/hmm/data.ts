@@ -541,10 +541,17 @@ export async function installHmms(
 
 	try {
 		await db.transaction(async (tx) => {
+			// Locked, because the read below is the whole of the idempotency guard
+			// and an unlocked one does not hold it. A reclaim can put a second
+			// runner in here while the first is still inserting; both would read
+			// `ready: false` and write a full set of rows each. Under Read
+			// Committed the blocked reader re-reads the committed row once the lock
+			// is granted, so the second sees the flip and short-circuits.
 			const [status] = await tx
 				.select()
 				.from(legacyHmmStatus)
-				.where(eq(legacyHmmStatus.id, HMM_STATUS_ID));
+				.where(eq(legacyHmmStatus.id, HMM_STATUS_ID))
+				.for("update");
 
 			const updates = status?.updates ?? [];
 

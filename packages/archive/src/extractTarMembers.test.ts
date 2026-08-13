@@ -240,6 +240,28 @@ describe("extractTarMembers", () => {
 		);
 	});
 
+	/*
+	 * The signal is checked on every entry and not only where one is written.
+	 * `pipeline` observes it for a wanted member, so an archive whose remaining
+	 * entries are all skipped would otherwise drain to the end and resolve.
+	 */
+	it("stops when its signal aborts and every entry is skipped", async () => {
+		const archive = join(workPath, "hmm.tar.gz");
+
+		await writeArchive(archive, [
+			{ name: "hmm/", type: "directory" },
+			{ name: "hmm/README.md", body: "not wanted" },
+		]);
+
+		await expect(
+			extractTarMembers(archive, targets(), {
+				gzip: true,
+				optional: [ANNOTATIONS, PROFILES],
+				signal: AbortSignal.abort(),
+			}),
+		).rejects.toThrow();
+	});
+
 	it("stops when its signal aborts", async () => {
 		const archive = join(workPath, "hmm.tar.gz");
 

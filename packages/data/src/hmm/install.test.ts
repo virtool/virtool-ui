@@ -1,4 +1,5 @@
 import { Readable } from "node:stream";
+import { setTimeout as delay } from "node:timers/promises";
 import { gunzipSync } from "node:zlib";
 import type { HmmAnnotation, HmmAnnotationRecord } from "@virtool/contracts";
 import {
@@ -14,6 +15,7 @@ import {
 	describe,
 	expect,
 	it,
+	onTestFinished,
 	vi,
 } from "vitest";
 import type { Db } from "../db/pg";
@@ -356,6 +358,45 @@ describe("installHmms", () => {
 
 		// The reclaim: the same task row runs again from step zero.
 		expect(await installHmms(db, storage, testLogger, values)).toBe(false);
+		expect(await db.select().from(hmms)).toHaveLength(2);
+	});
+
+	/*
+	 * Two runners on one release, which a reclaim can produce while the first is
+	 * still inserting. The status read is the whole of the idempotency guard, so
+	 * unlocked both would see `ready: false` and write a full set of rows each.
+	 */
+	it("serializes a concurrent install of the same release", async () => {
+		const storage = new MemoryStorage();
+		await seedPendingStatus();
+
+		const second = database.connect();
+		onTestFinished(() => second.close());
+
+		const values = {
+			annotations: [createAnnotation(1), createAnnotation(2)],
+			profiles: profilesOf("profiles"),
+			release: createRelease(),
+			userId: 1,
+		};
+
+		let concurrent: Promise<boolean> | undefined;
+
+		// Started from inside the first transaction, after its inserts, and given
+		// long enough to reach the locked row.
+		const performed = await installHmms(
+			db,
+			storage,
+			testLogger,
+			values,
+			async () => {
+				concurrent ??= installHmms(second.db, storage, testLogger, values);
+				await delay(250);
+			},
+		);
+
+		expect(performed).toBe(true);
+		expect(await concurrent).toBe(false);
 		expect(await db.select().from(hmms)).toHaveLength(2);
 	});
 

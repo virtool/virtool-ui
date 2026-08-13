@@ -232,6 +232,11 @@ export async function extractTarMembers(
 
 	try {
 		for await (const entry of entries) {
+			// Every iteration, not only the ones that write: `pipeline` observes the
+			// signal for a wanted member, but an archive whose tail is all skipped
+			// entries would otherwise drain to the end and resolve during a drain.
+			signal?.throwIfAborted();
+
 			const { name, type } = entry.header;
 
 			checkMemberIsSafe(name, type);
