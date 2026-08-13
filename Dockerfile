@@ -151,16 +151,17 @@ WORKDIR /workflow
 
 # The tools binaries are built against python:3.13-bookworm, which carries more
 # than this slim base does. Each package here backs a specific `ldd ... => not
-# found`: perl and libgomp1 for bowtie2 (a set of Perl wrappers around the
-# bowtie2-align-* binaries, compiled with OpenMP), libcurl4 and libncursesw6
-# for samtools. pathoscope-core itself needs none of them — hts-sys links
-# htslib statically.
+# found` or shebang: libgomp1 for the OpenMP-compiled bowtie2-align-* binaries,
+# libcurl4 and libncursesw6 for samtools, perl for the `bowtie2` wrapper and
+# python3 for the `bowtie2-build` one — both wrappers, different interpreters.
+# pathoscope-core itself needs none of them — hts-sys links htslib statically.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libcurl4 \
         libgomp1 \
         libncursesw6 \
         perl \
+        python3 \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -208,12 +209,14 @@ FROM node:24-bookworm-slim AS nuvs
 WORKDIR /workflow
 
 # Each package here backs a specific runtime dependency of a copied binary.
-# perl and libgomp1 are for bowtie2, a set of Perl wrappers around
-# OpenMP-compiled binaries. libbz2-1.0 is for SPAdes, which links it.
+# libgomp1 is for the OpenMP-compiled bowtie2-align-* binaries and libbz2-1.0
+# for SPAdes, which links it.
 #
-# python3 is for SPAdes, not for us: `spades.py` is a Python script that
-# drives the compiled assembler binaries — dropping it leaves an image whose
-# `assemble` step fails at exec with no clue why.
+# perl and python3 are interpreters rather than libraries, and each is needed
+# twice over: perl runs the `bowtie2` wrapper, python3 runs the
+# `bowtie2-build` one and `spades.py`, which drives the compiled assembler
+# binaries. Dropping either leaves an image whose steps fail at exec with no
+# clue why.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libbz2-1.0 \
