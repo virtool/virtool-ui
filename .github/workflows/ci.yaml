@@ -603,29 +603,31 @@ jobs:
             matrix:
                 include:
                     # Published under both names while the cluster migrates off
-                    # `ui` — drop the first line once nothing pulls it.
+                    # `ui` — drop the first line once nothing pulls it. Matrix
+                    # values are evaluated before the job's `env` context
+                    # exists, so these are literal `ghcr.io`, not `${{ env.REGISTRY }}`.
                     - image: ui
                       target: dist
                       workspace: apps/web
                       images: |
-                          ${{ env.REGISTRY }}/virtool/ui
-                          ${{ env.REGISTRY }}/virtool/web
+                          ghcr.io/virtool/ui
+                          ghcr.io/virtool/web
                     - image: jobs-api
                       target: jobs-api
                       workspace: apps/jobs-api
-                      images: ${{ env.REGISTRY }}/virtool/jobs-api
+                      images: ghcr.io/virtool/jobs-api
                     - image: tasks
                       target: tasks
                       workspace: apps/tasks
-                      images: ${{ env.REGISTRY }}/virtool/tasks
+                      images: ghcr.io/virtool/tasks
                     - image: ts-create-sample
                       target: create-sample
                       workspace: apps/create-sample
-                      images: ${{ env.REGISTRY }}/virtool/ts-create-sample
+                      images: ghcr.io/virtool/ts-create-sample
                     - image: ts-create-subtraction
                       target: create-subtraction
                       workspace: apps/create-subtraction
-                      images: ${{ env.REGISTRY }}/virtool/ts-create-subtraction
+                      images: ghcr.io/virtool/ts-create-subtraction
         steps:
             - name: Checkout
               uses: actions/checkout@v7
