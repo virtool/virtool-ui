@@ -1351,6 +1351,45 @@ own:
   taking none, so a run holding hundreds of objects cannot outlive the
   drain and delete rows for a runner that has already released the claim.
 
+`clone_reference` is the fourth, and the first whose failure destroys
+something. Its body is one call to `populateClonedReference`
+(`@virtool/data/references/populate`), which lives beside `references/data.ts`
+rather than in it — everything it does reads OTUs and writes history, and
+`otus/data.ts` already imports this domain's errors, so folding it in would
+close a cycle. It is also the layer `import_reference` (VIR-2898) will
+stand on. Five rules are its own:
+
+- **A failure deletes the reference**, its OTUs, sequences, history,
+  diffs and membership rows, in one transaction, before the error is
+  rethrown. The user watches a clone vanish with nothing to retry. That
+  is Python's `_rollback_insert_only_reference` and both runners are live
+  until the cutover, so it is not this side's to soften. An **abort** is
+  the exception and rolls back nothing: the process is going away, the
+  task will be released and re-run, and destroying a reference because a
+  pod restarted is not a cleanup.
+- **A re-run clears before it writes.** Ids are minted fresh every time,
+  so nothing would stop a reclaimed attempt landing a second complete set
+  of OTUs beside the first — silently, since neither set is malformed. The
+  clear is the rollback's deletions minus the reference row itself.
+- **A chunk is patched, prepared and committed before the next is read**,
+  a thousand OTUs at a time, so peak memory is bounded by the chunk and
+  not by the reference. A chunk carries **whole OTUs**: `position` counts
+  a sequence within its OTU, so splitting one across two inserts would
+  start its second half at zero and reorder it. The prepare loop yields
+  between chunks — a deep copy and reshape of a thousand documents is a
+  synchronous stretch long enough to starve the heartbeat.
+- **The progress split is Python's**, patching running to 1/1.3 of the bar
+  and the insert covering the rest. The two runners' progress is compared
+  during the cutover; do not round it off.
+- **Ids are minted without a collision check**, as Python's are, and the
+  unique constraints are what a collision fails on. They stay the
+  mixed-case 62-character alphabet every id written from this side uses,
+  where Python's `random_alphanumeric` defaults to lowercase-only —
+  nothing keys on the case, and the wider alphabet is the safer of the two
+  against the collision neither side checks for. `randomId(length)` in
+  `otus/data.ts` is the one generator; the OTU takes 8 characters and its
+  isolates and sequences 12.
+
 See [docs/tasks.md](docs/tasks.md) for the full config table, the
 `AppContext` contract, the shutdown ordering and its guarantees, the
 probe and metrics surface including the five task series and their
