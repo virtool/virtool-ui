@@ -1148,7 +1148,7 @@ row's failure cannot abandon another mid-write.
 row and inserts a replacement, so an answer obtained from NCBI may belong to a
 search nobody is waiting for by the time it arrives. A submission lands only
 `WHERE id = :id AND rid IS NULL`; a result lands only `WHERE id = :id AND rid =
-:the_rid_checked`. A zero rowcount is logged and dropped rather than forced. For
+:the_rid_checked`. A zero row count is logged and dropped rather than forced. For
 the same reason an **expired row is deleted by primary key**, never by
 `(analysis_id, sequence_index)` — that pair is unique, which makes it a
 tempting key and a wrong one: it would destroy the replacement.

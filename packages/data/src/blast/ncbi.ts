@@ -257,7 +257,13 @@ export async function fetchBlastResult(
 	);
 
 	if (response.status !== 200) {
-		throw new NcbiBlastError(`BLAST result fetch returned ${response.status}`);
+		// Read as text only here. A 200 carries a zip, and decoding that as text
+		// to build an error nobody throws would corrupt the archive.
+		const body = await response.text();
+
+		throw new NcbiBlastError(
+			`BLAST result fetch returned ${response.status}: ${body.slice(0, MAX_LOGGED_BODY)}`,
+		);
 	}
 
 	const archive = new Uint8Array(await response.arrayBuffer());

@@ -193,6 +193,9 @@ describe("fetchBlastResult", () => {
 
 		expect(error).toBeInstanceOf(NcbiBlastError);
 		expect(error).not.toBeInstanceOf(BlastResultUnreadableError);
+		expect(error.message).toBe(
+			"BLAST result fetch returned 503: service unavailable",
+		);
 	});
 
 	it("throws an unreadable error when the body is not a zip", async () => {
