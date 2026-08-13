@@ -321,8 +321,11 @@ async function insertPreparedOtus(
 		const diffRows = insertions.map(({ history }) => {
 			const historyId = historyIds.get(history.changeId);
 
+			/* Not a manifest failure: the ids are minted in this function and the
+			   insert above is what wrote them, so a miss here is this side's own
+			   invariant breaking rather than anything the manifest said. */
 			if (historyId === undefined) {
-				throw new ReferenceManifestError(
+				throw new Error(
 					`no history row was written for change ${history.changeId}`,
 				);
 			}
@@ -528,6 +531,13 @@ export async function populateClonedReference(
 			   timer. Without a macrotask boundary here a large reference starves it
 			   and the task is reclaimed out from under itself. */
 			await setImmediate();
+
+			/* Checked again on this side of the yield, and not only at the top of
+			   the loop: the yield is exactly where a lost lease is noticed, and the
+			   last chunk has no next iteration to notice it in. Another runner may
+			   already have cleared the reference and started rebuilding it, and this
+			   insert is fenced on nothing. */
+			signal?.throwIfAborted();
 
 			await insertPreparedOtus(db, referenceId, insertions);
 
