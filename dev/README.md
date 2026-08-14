@@ -81,10 +81,10 @@ shorthand, so `--w` is as short as it gets:
 | `--web` | `--w` | `ghcr.io/virtool/ui` | `dev` |
 | `--jobs-api` | `--j` | `ghcr.io/virtool/jobs-api` | `jobs-api` |
 | `--tasks` | `--t` | `ghcr.io/virtool/tasks` | `tasks` |
-| `--create-sample` | `--m` | `ghcr.io/virtool/create-sample` | `create-sample` |
-| `--create-subtraction` | `--b` | `ghcr.io/virtool/create-subtraction` | `create-subtraction` |
-| `--nuvs` | `--n` | `ghcr.io/virtool/nuvs` | `nuvs` |
-| `--pathoscope` | `--p` | `ghcr.io/virtool/pathoscope` | `pathoscope` |
+| `--create-sample` | `--m` | `ghcr.io/virtool/ts-create-sample` | `create-sample` |
+| `--create-subtraction` | `--b` | `ghcr.io/virtool/ts-create-subtraction` | `create-subtraction` |
+| `--nuvs` | `--n` | `ghcr.io/virtool/ts-nuvs` | `nuvs` |
+| `--pathoscope` | `--p` | `ghcr.io/virtool/ts-pathoscope` | `pathoscope` |
 
 Flags combine: `tilt up -- --w --j`.
 

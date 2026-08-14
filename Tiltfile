@@ -182,7 +182,7 @@ k8s_resource(
 """Workflows"""
 if edit_create_sample:
     docker_build(
-        'ghcr.io/virtool/create-sample',
+        'ghcr.io/virtool/ts-create-sample',
         '.',
         target='create-sample',
         ignore=ui_monorepo_ignore,
@@ -190,7 +190,7 @@ if edit_create_sample:
 
 if edit_create_subtraction:
     docker_build(
-        'ghcr.io/virtool/create-subtraction',
+        'ghcr.io/virtool/ts-create-subtraction',
         '.',
         target='create-subtraction',
         ignore=ui_monorepo_ignore,
@@ -198,7 +198,7 @@ if edit_create_subtraction:
 
 if edit_nuvs:
     docker_build(
-        'ghcr.io/virtool/nuvs',
+        'ghcr.io/virtool/ts-nuvs',
         '.',
         target='nuvs',
         ignore=ui_monorepo_ignore,
@@ -206,7 +206,7 @@ if edit_nuvs:
 
 if edit_pathoscope:
     docker_build(
-        'ghcr.io/virtool/pathoscope',
+        'ghcr.io/virtool/ts-pathoscope',
         '.',
         target='pathoscope',
         ignore=ui_monorepo_ignore,
