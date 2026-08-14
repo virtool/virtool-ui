@@ -17,6 +17,7 @@ import {
 	integer,
 	jsonb,
 	pgTable,
+	primaryKey,
 	serial,
 	text,
 	timestamp,
@@ -75,7 +76,7 @@ export const legacyHistory = pgTable(
 export const legacyHistoryDiff = pgTable(
 	"legacy_history_diff",
 	{
-		id: serial("id").primaryKey(),
+		id: serial("id"),
 		// The change's public id, duplicating `legacy_history.legacy_id`. It predates
 		// `history_id` and Python still writes it, so an insert from here must too —
 		// the column is NOT NULL upstream.
@@ -89,7 +90,10 @@ export const legacyHistoryDiff = pgTable(
 	},
 	(table) => [
 		/* `history_diffs_*` rather than `legacy_history_diff_*`: the constraint
-		   predates the table's rename and production never renamed it. */
+		   predates the table's rename and production never renamed it. The primary
+		   key is named for the same reason — an inferred one would be
+		   `legacy_history_diff_pkey`, which production does not have. */
+		primaryKey({ name: "history_diffs_pkey", columns: [table.id] }),
 		unique("history_diffs_change_id_key").on(table.change_id),
 		unique("legacy_history_diff_history_id_key").on(table.history_id),
 	],

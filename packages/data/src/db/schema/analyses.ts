@@ -4,8 +4,9 @@
 // `../../../../../../virtool/virtool/analyses/sql.py` and
 // `../../../../../../virtool/virtool/blast/sql.py`.
 //
-// Python's `analysis_results` / `SQLAnalysisResult` table is deliberately not
-// mirrored: its own docstring calls it temporary and nothing reads it.
+// Python's `analysis_results` / `SQLAnalysisResult` table is mirrored in
+// `./vestigial.ts` instead — nothing reads it and its own docstring calls it
+// temporary, so it is declared for snapshot fidelity alone.
 //
 // `reference` and `index` are dead, superseded by `reference_id` and
 // `index_id`. They are declared anyway: a column missing from this schema is
