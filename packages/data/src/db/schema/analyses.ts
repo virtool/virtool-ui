@@ -13,9 +13,11 @@
 // that drops it.
 
 import { AnalysisFormat } from "@virtool/contracts";
+import { sql } from "drizzle-orm";
 import {
 	bigint,
 	boolean,
+	check,
 	integer,
 	json,
 	jsonb,
@@ -32,27 +34,38 @@ export const analysisFormat = pgEnum(
 	AnalysisFormat.options as [AnalysisFormat, ...AnalysisFormat[]],
 );
 
-export const analyses = pgTable("analyses", {
-	id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
-	legacy_id: text("legacy_id").unique(),
-	created_at: timestamp("created_at").notNull(),
-	updated_at: timestamp("updated_at").notNull(),
-	workflow: text("workflow").notNull(),
-	ready: boolean("ready").notNull(),
-	// The workflow's raw output, written by the jobs API. Opaque here: its
-	// internals are the worker's contract, not this server's.
-	results: jsonb("results").$type<Record<string, unknown>>(),
-	// The legacy `sample` string column is still written by Python and is needed
-	// to locate a migrated analysis's slug-prefixed objects in storage.
-	sample: text("sample").notNull(),
-	sample_id: bigint("sample_id", { mode: "number" }),
-	reference: text("reference"),
-	reference_id: bigint("reference_id", { mode: "number" }),
-	index: text("index"),
-	index_id: bigint("index_id", { mode: "number" }).notNull(),
-	user_id: integer("user_id").notNull(),
-	job_id: integer("job_id"),
-});
+export const analyses = pgTable(
+	"analyses",
+	{
+		id: bigint("id", { mode: "number" })
+			.primaryKey()
+			.generatedAlwaysAsIdentity(),
+		legacy_id: text("legacy_id").unique(),
+		created_at: timestamp("created_at").notNull(),
+		updated_at: timestamp("updated_at").notNull(),
+		workflow: text("workflow").notNull(),
+		ready: boolean("ready").notNull(),
+		// The workflow's raw output, written by the jobs API. Opaque here: its
+		// internals are the worker's contract, not this server's.
+		results: jsonb("results").$type<Record<string, unknown>>(),
+		// The legacy `sample` string column is still written by Python and is needed
+		// to locate a migrated analysis's slug-prefixed objects in storage.
+		sample: text("sample").notNull(),
+		sample_id: bigint("sample_id", { mode: "number" }),
+		reference: text("reference"),
+		reference_id: bigint("reference_id", { mode: "number" }),
+		index: text("index"),
+		index_id: bigint("index_id", { mode: "number" }).notNull(),
+		user_id: integer("user_id").notNull(),
+		job_id: integer("job_id"),
+	},
+	(table) => [
+		check(
+			"ck_analyses_reference_present",
+			sql`num_nonnulls(${table.reference}, ${table.reference_id}) >= 1`,
+		),
+	],
+);
 
 export const analysisSubtractions = pgTable("analysis_subtractions", {
 	analysis_id: bigint("analysis_id", { mode: "number" }).notNull(),

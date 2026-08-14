@@ -20,35 +20,46 @@ import {
 	unique,
 } from "drizzle-orm/pg-core";
 
-export const indexes = pgTable("indexes", {
-	id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
-	legacy_id: text("legacy_id").unique(),
-	version: integer("version").notNull(),
-	created_at: timestamp("created_at").notNull(),
-	// `{otuId: otuVersion}` — the OTU versions the build is pinned to, captured
-	// when the build starts.
-	manifest: jsonb("manifest").$type<Record<string, number>>().notNull(),
-	ready: boolean("ready")
-		.$defaultFn(() => false)
-		.notNull(),
-	// Dead. Keys were once composed as `indexes/{storage_key}/{file name}`; each
-	// file now records its own complete key. Python retains the column until a
-	// later cleanup revision so a rolling deploy never has readers of a dropped
-	// column, and still requires it on insert.
-	storage_key: text("storage_key").unique().notNull(),
-	// The exception to files recording their own keys. The compressed OTU JSON is
-	// materialized on demand and deliberately has no `index_files` row, because
-	// such a row would publish it in the index's file listing. Nullable: an index
-	// that has never been asked for its OTU JSON has not written one, and the key
-	// is minted on first write.
-	otus_json_storage_key: text("otus_json_storage_key").unique(),
-	reference_id: bigint("reference_id", { mode: "number" }).notNull(),
-	user_id: integer("user_id").notNull(),
-	// A build is backed by at most one of these: `job_id` for a legacy
-	// workflow-run build, `task_id` for one started from either service today.
-	job_id: integer("job_id"),
-	task_id: integer("task_id"),
-});
+export const indexes = pgTable(
+	"indexes",
+	{
+		id: bigint("id", { mode: "number" })
+			.primaryKey()
+			.generatedAlwaysAsIdentity(),
+		legacy_id: text("legacy_id").unique(),
+		version: integer("version").notNull(),
+		created_at: timestamp("created_at").notNull(),
+		// `{otuId: otuVersion}` — the OTU versions the build is pinned to, captured
+		// when the build starts.
+		manifest: jsonb("manifest").$type<Record<string, number>>().notNull(),
+		ready: boolean("ready")
+			.$defaultFn(() => false)
+			.notNull(),
+		// Dead. Keys were once composed as `indexes/{storage_key}/{file name}`; each
+		// file now records its own complete key. Python retains the column until a
+		// later cleanup revision so a rolling deploy never has readers of a dropped
+		// column, and still requires it on insert.
+		storage_key: text("storage_key").unique().notNull(),
+		// The exception to files recording their own keys. The compressed OTU JSON is
+		// materialized on demand and deliberately has no `index_files` row, because
+		// such a row would publish it in the index's file listing. Nullable: an index
+		// that has never been asked for its OTU JSON has not written one, and the key
+		// is minted on first write.
+		otus_json_storage_key: text("otus_json_storage_key").unique(),
+		reference_id: bigint("reference_id", { mode: "number" }).notNull(),
+		user_id: integer("user_id").notNull(),
+		// A build is backed by at most one of these: `job_id` for a legacy
+		// workflow-run build, `task_id` for one started from either service today.
+		job_id: integer("job_id"),
+		task_id: integer("task_id"),
+	},
+	(table) => [
+		check(
+			"ck_indexes_job_or_task",
+			sql`num_nonnulls(${table.job_id}, ${table.task_id}) <= 1`,
+		),
+	],
+);
 
 /** The kind of artifact an index file holds. */
 export type IndexFileType = "json" | "fasta" | "bowtie2" | "sqlite";

@@ -19,8 +19,10 @@ import type {
 	StoredJobClaim,
 	StoredJobStep,
 } from "@virtool/contracts";
+import { sql } from "drizzle-orm";
 import {
 	boolean,
+	check,
 	integer,
 	jsonb,
 	pgTable,
@@ -28,30 +30,36 @@ import {
 	timestamp,
 } from "drizzle-orm/pg-core";
 
-export const jobs = pgTable("jobs", {
-	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-	// `.default()`, not `$defaultFn()`: this is the one column here that really
-	// does carry a server default upstream, so the generated test DDL has to
-	// carry it too or a raw insert omitting it fails only under test.
-	acquired: boolean("acquired").default(false).notNull(),
-	claim: jsonb("claim").$type<StoredJobClaim>(),
-	claimed_at: timestamp("claimed_at"),
-	created_at: timestamp("created_at").notNull(),
-	finished_at: timestamp("finished_at"),
-	key: text("key"),
-	legacy_id: text("legacy_id").unique(),
-	pinged_at: timestamp("pinged_at"),
-	// `text`, closed by the `ck_jobs_state` CHECK constraint. `$type` asserts
-	// rather than validates, which is what that constraint makes safe: a value
-	// outside the union cannot reach the column without a Python-side migration.
-	state: text("state").$type<JobState>().notNull(),
-	steps: jsonb("steps").$type<StoredJobStep[]>(),
-	user_id: integer("user_id").notNull(),
-	// Deliberately left open. Python's `Workflow` is an application-level enum
-	// with no CHECK constraint behind it, so a row can hold a workflow this
-	// build has never heard of.
-	workflow: text("workflow").notNull(),
-});
+export const jobs = pgTable(
+	"jobs",
+	{
+		id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+		// `.default()`, not `$defaultFn()`: this is the one column here that really
+		// does carry a server default upstream, so the generated test DDL has to
+		// carry it too or a raw insert omitting it fails only under test.
+		acquired: boolean("acquired").default(false).notNull(),
+		claim: jsonb("claim").$type<StoredJobClaim>(),
+		claimed_at: timestamp("claimed_at"),
+		created_at: timestamp("created_at").notNull(),
+		finished_at: timestamp("finished_at"),
+		key: text("key"),
+		legacy_id: text("legacy_id").unique(),
+		pinged_at: timestamp("pinged_at"),
+		state: text("state").$type<JobState>().notNull(),
+		steps: jsonb("steps").$type<StoredJobStep[]>(),
+		user_id: integer("user_id").notNull(),
+		// Deliberately left open. Python's `Workflow` is an application-level enum
+		// with no CHECK constraint behind it, so a row can hold a workflow this
+		// build has never heard of.
+		workflow: text("workflow").notNull(),
+	},
+	(table) => [
+		check(
+			"ck_jobs_state",
+			sql`${table.state} in ('pending', 'running', 'cancelled', 'failed', 'succeeded')`,
+		),
+	],
+);
 
 /** A row from the `jobs` table. */
 export type JobRow = typeof jobs.$inferSelect;

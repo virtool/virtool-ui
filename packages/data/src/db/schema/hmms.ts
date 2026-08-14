@@ -9,9 +9,11 @@
 // formatter resolves them through this column.
 
 import type { HmmEntry } from "@virtool/contracts";
+import { sql } from "drizzle-orm";
 import {
 	bigint,
 	boolean,
+	check,
 	doublePrecision,
 	integer,
 	jsonb,
@@ -76,14 +78,18 @@ export const hmms = pgTable("hmms", {
 /** A row from the `hmms` table. */
 export type HmmRow = typeof hmms.$inferSelect;
 
-export const legacyHmmStatus = pgTable("legacy_hmm_status", {
-	id: integer("id").primaryKey(),
-	errors: jsonb("errors").$type<string[]>().notNull(),
-	release: jsonb("release").$type<HmmRelease>(),
-	installed: jsonb("installed").$type<HmmUpdate>(),
-	task_id: integer("task_id").references(() => tasks.id),
-	updates: jsonb("updates").$type<HmmUpdate[]>().notNull(),
-});
+export const legacyHmmStatus = pgTable(
+	"legacy_hmm_status",
+	{
+		id: integer("id").primaryKey(),
+		errors: jsonb("errors").$type<string[]>().notNull(),
+		release: jsonb("release").$type<HmmRelease>(),
+		installed: jsonb("installed").$type<HmmUpdate>(),
+		task_id: integer("task_id").references(() => tasks.id),
+		updates: jsonb("updates").$type<HmmUpdate[]>().notNull(),
+	},
+	(table) => [check("ck_legacy_hmm_status_singleton", sql`${table.id} = 1`)],
+);
 
 /** A row from the `legacy_hmm_status` singleton table. */
 export type HmmStatusRow = typeof legacyHmmStatus.$inferSelect;
