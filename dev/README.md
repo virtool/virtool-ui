@@ -88,8 +88,10 @@ Flags combine: `tilt up -- --web --jobs-api`.
 
 `--web` runs Vite in the pod and syncs `apps/web/src` and `packages` into it,
 so an edit shows up without a rebuild. The rest rebuild the image on change,
-and `jobs-api`, `tasks` and `pathoscope` are on manual trigger — update them
-from the Tilt UI when you want the build.
+and `jobs-api`, `tasks` and every workflow are on manual trigger — update them
+from the Tilt UI when you want the build. A workflow's pods are one-shot and
+only start when something claims work, so nothing waits on a rebuild and an
+automatic one would rebuild a large image on every edit.
 
 There is no migration target. Migrations are Python's, and the migration Job
 runs the published `ghcr.io/virtool/virtool` image.

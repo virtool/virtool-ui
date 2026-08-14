@@ -11,16 +11,20 @@ SERVICE_TARGETS = [
     ('tasks', 'ghcr.io/virtool/tasks'),
 ]
 
-# `ts-nuvs` and `ts-pathoscope` publish on release like the other two, so their
-# ScaledJobs have a `latest` to pull. Until the first release that carries them,
-# `ts-nuvs` has no registry package and `ts-pathoscope:latest` is a tools-only
-# leftover with no workflow code in it, so build them locally in the meantime
-# with `tilt up -- --nuvs`.
+# Every workflow is on manual trigger. A ScaledJob's pods are one-shot and only
+# start when something claims work, so nothing is waiting on a rebuild — and an
+# automatic one would rebuild a large image on every edit. Deploy them from the
+# Tilt UI.
+#
+# All four images publish on release, but `ts-nuvs` has no registry package
+# until the first release that carries it and `ts-pathoscope:latest` is a
+# tools-only leftover with no workflow code in it, so build those two locally
+# meanwhile with `tilt up -- --nuvs`.
 WORKFLOW_TARGETS = [
-    ('create-sample', 'ghcr.io/virtool/ts-create-sample', TRIGGER_MODE_AUTO),
-    ('create-subtraction', 'ghcr.io/virtool/ts-create-subtraction', TRIGGER_MODE_AUTO),
-    ('nuvs', 'ghcr.io/virtool/ts-nuvs', TRIGGER_MODE_AUTO),
-    ('pathoscope', 'ghcr.io/virtool/ts-pathoscope', TRIGGER_MODE_MANUAL),
+    ('create-sample', 'ghcr.io/virtool/ts-create-sample'),
+    ('create-subtraction', 'ghcr.io/virtool/ts-create-subtraction'),
+    ('nuvs', 'ghcr.io/virtool/ts-nuvs'),
+    ('pathoscope', 'ghcr.io/virtool/ts-pathoscope'),
 ]
 
 config.define_bool('web', usage='live edit web')
@@ -28,7 +32,7 @@ config.define_bool('web', usage='live edit web')
 for target, image in SERVICE_TARGETS:
     config.define_bool(target, usage='live edit ' + target)
 
-for target, image, trigger_mode in WORKFLOW_TARGETS:
+for target, image in WORKFLOW_TARGETS:
     config.define_bool(target, usage='live edit the ' + target + ' workflow')
 
 cfg = config.parse()
@@ -177,7 +181,7 @@ k8s_kind(
 
 k8s_yaml(kustomize('dev/manifests/workflows'))
 
-for target, image, trigger_mode in WORKFLOW_TARGETS:
+for target, image in WORKFLOW_TARGETS:
     if cfg.get(target, False):
         docker_build(image, '.', target=target, ignore=ui_monorepo_ignore)
 
@@ -186,5 +190,5 @@ for target, image, trigger_mode in WORKFLOW_TARGETS:
         labels=["workflows"],
         new_name=target,
         resource_deps=['config', 'keda', 'jobs-api'],
-        trigger_mode=trigger_mode
+        trigger_mode=TRIGGER_MODE_MANUAL
     )
