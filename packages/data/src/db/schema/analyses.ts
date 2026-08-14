@@ -18,6 +18,7 @@ import {
 	bigint,
 	boolean,
 	check,
+	index,
 	integer,
 	json,
 	jsonb,
@@ -77,6 +78,8 @@ export const analyses = pgTable(
 		job_id: integer("job_id").references(() => jobs.id),
 	},
 	(table) => [
+		index("ix_analyses_sample").on(table.sample),
+		index("ix_analyses_sample_id_workflow").on(table.sample_id, table.workflow),
 		check(
 			"ck_analyses_reference_present",
 			sql`num_nonnulls(${table.reference}, ${table.reference_id}) >= 1`,
@@ -96,6 +99,7 @@ export const analysisSubtractions = pgTable(
 	},
 	(table) => [
 		primaryKey({ columns: [table.analysis_id, table.subtraction_id] }),
+		index("ix_analysis_subtractions_subtraction_id").on(table.subtraction_id),
 	],
 );
 

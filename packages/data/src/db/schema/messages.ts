@@ -10,6 +10,7 @@ import {
 	pgTable,
 	text,
 	timestamp,
+	uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
@@ -38,6 +39,9 @@ export const instanceMessages = pgTable(
 		userId: integer("user_id").references(() => users.id),
 	},
 	(table) => [
+		uniqueIndex("instance_messages_one_active")
+			.on(table.active)
+			.where(sql`${table.active} = true`),
 		check(
 			"ck_instance_messages_color",
 			sql`${table.color} in ('red', 'yellow', 'blue', 'purple', 'orange', 'grey')`,

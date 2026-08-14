@@ -6,11 +6,13 @@ import { sql } from "drizzle-orm";
 import {
 	boolean,
 	check,
+	index,
 	integer,
 	pgTable,
 	serial,
 	text,
 	timestamp,
+	uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 import { users } from "./users";
@@ -35,6 +37,10 @@ export const sessions = pgTable(
 		sessionType: text("session_type").$type<SessionType>().notNull(),
 	},
 	(table) => [
+		index("idx_sessions_expires_at").on(table.expiresAt),
+		uniqueIndex("idx_sessions_session_id").on(table.sessionId),
+		index("idx_sessions_type").on(table.sessionType),
+		index("idx_sessions_user_id").on(table.userId),
 		check(
 			"session_type_valid",
 			sql`${table.sessionType} in ('anonymous', 'authenticated', 'reset')`,

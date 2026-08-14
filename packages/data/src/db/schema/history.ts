@@ -13,6 +13,7 @@
 
 import {
 	bigint,
+	index,
 	integer,
 	jsonb,
 	pgTable,
@@ -23,30 +24,48 @@ import { indexes } from "./indexes";
 import { legacyReferences } from "./references";
 import { users } from "./users";
 
-export const legacyHistory = pgTable("legacy_history", {
-	id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
-	legacy_id: text("legacy_id").unique(),
-	created_at: timestamp("created_at").notNull(),
-	description: text("description").notNull(),
-	method_name: text("method_name").notNull(),
-	user_id: integer("user_id")
-		.notNull()
-		.references(() => users.id),
-	// A bare string column with no foreign key by design: `legacy_otus` keys on
-	// the 8-character Mongo id and has no `legacy_id`, so this already holds the
-	// OTU's primary key.
-	otu: text("otu").notNull(),
-	otu_name: text("otu_name").notNull(),
-	// A stringified integer. `NULL` is the `"removed"` sentinel, normalised on
-	// write upstream — the column never stores the sentinel itself.
-	otu_version: text("otu_version"),
-	reference: text("reference"),
-	reference_id: bigint("reference_id", { mode: "number" }).references(
-		() => legacyReferences.id,
-	),
-	index: text("index"),
-	index_id: bigint("index_id", { mode: "number" }).references(() => indexes.id),
-});
+export const legacyHistory = pgTable(
+	"legacy_history",
+	{
+		id: bigint("id", { mode: "number" })
+			.primaryKey()
+			.generatedAlwaysAsIdentity(),
+		legacy_id: text("legacy_id").unique(),
+		created_at: timestamp("created_at").notNull(),
+		description: text("description").notNull(),
+		method_name: text("method_name").notNull(),
+		user_id: integer("user_id")
+			.notNull()
+			.references(() => users.id),
+		// A bare string column with no foreign key by design: `legacy_otus` keys on
+		// the 8-character Mongo id and has no `legacy_id`, so this already holds the
+		// OTU's primary key.
+		otu: text("otu").notNull(),
+		otu_name: text("otu_name").notNull(),
+		// A stringified integer. `NULL` is the `"removed"` sentinel, normalised on
+		// write upstream — the column never stores the sentinel itself.
+		otu_version: text("otu_version"),
+		reference: text("reference"),
+		reference_id: bigint("reference_id", { mode: "number" }).references(
+			() => legacyReferences.id,
+		),
+		index: text("index"),
+		index_id: bigint("index_id", { mode: "number" }).references(
+			() => indexes.id,
+		),
+	},
+	(table) => [
+		index("ix_legacy_history_index").on(table.index),
+		index("ix_legacy_history_index_id").on(table.index_id),
+		index("ix_legacy_history_otu_otu_version").on(
+			table.otu,
+			table.otu_version.desc().nullsFirst(),
+		),
+		index("ix_legacy_history_reference").on(table.reference),
+		index("ix_legacy_history_reference_id").on(table.reference_id),
+		index("ix_legacy_history_user_id").on(table.user_id),
+	],
+);
 
 // The change's diff, held 1:1 with its history row. Upstream calls this a
 // temporary table to be dropped once history is renormalized.

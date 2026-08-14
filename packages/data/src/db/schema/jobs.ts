@@ -23,6 +23,7 @@ import { sql } from "drizzle-orm";
 import {
 	boolean,
 	check,
+	index,
 	integer,
 	jsonb,
 	pgTable,
@@ -57,6 +58,9 @@ export const jobs = pgTable(
 		workflow: text("workflow").notNull(),
 	},
 	(table) => [
+		index("ix_jobs_state_created_at").on(table.state, table.created_at),
+		index("ix_jobs_user_id_state").on(table.user_id, table.state),
+		index("ix_jobs_workflow_state").on(table.workflow, table.state),
 		check(
 			"ck_jobs_state",
 			sql`${table.state} in ('pending', 'running', 'cancelled', 'failed', 'succeeded')`,

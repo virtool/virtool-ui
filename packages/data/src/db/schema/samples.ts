@@ -3,9 +3,11 @@
 // migrations from this side. Keep the columns in sync with
 // `../../../../../../virtool/virtool/samples/sql.py`.
 
+import { sql } from "drizzle-orm";
 import {
 	bigint,
 	boolean,
+	index,
 	integer,
 	jsonb,
 	pgTable,
@@ -36,58 +38,76 @@ export type SampleQuality = {
 // never `.default()`: the real columns carry no server default, so the value has
 // to be supplied on insert from this side too. `name`, `library_type`, and
 // `created_at` have no Python default and stay required.
-export const legacySamples = pgTable("legacy_samples", {
-	id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
-	legacy_id: text("legacy_id").unique(),
-	name: text("name").notNull(),
-	host: text("host")
-		.$defaultFn(() => "")
-		.notNull(),
-	isolate: text("isolate")
-		.$defaultFn(() => "")
-		.notNull(),
-	locale: text("locale")
-		.$defaultFn(() => "")
-		.notNull(),
-	notes: text("notes")
-		.$defaultFn(() => "")
-		.notNull(),
-	library_type: text("library_type").notNull(),
-	format: text("format")
-		.$defaultFn(() => "fastq")
-		.notNull(),
-	group_id: integer("group_id").references(() => groups.id),
-	quality: jsonb("quality").$type<SampleQuality>(),
-	created_at: timestamp("created_at").notNull(),
-	paired: boolean("paired")
-		.$defaultFn(() => false)
-		.notNull(),
-	ready: boolean("ready")
-		.$defaultFn(() => false)
-		.notNull(),
-	hold: boolean("hold")
-		.$defaultFn(() => true)
-		.notNull(),
-	is_legacy: boolean("is_legacy")
-		.$defaultFn(() => false)
-		.notNull(),
-	all_read: boolean("all_read")
-		.$defaultFn(() => false)
-		.notNull(),
-	all_write: boolean("all_write")
-		.$defaultFn(() => false)
-		.notNull(),
-	group_read: boolean("group_read")
-		.$defaultFn(() => false)
-		.notNull(),
-	group_write: boolean("group_write")
-		.$defaultFn(() => false)
-		.notNull(),
-	user_id: integer("user_id").references(() => users.id),
-	job_id: integer("job_id")
-		.unique()
-		.references(() => jobs.id),
-});
+export const legacySamples = pgTable(
+	"legacy_samples",
+	{
+		id: bigint("id", { mode: "number" })
+			.primaryKey()
+			.generatedAlwaysAsIdentity(),
+		legacy_id: text("legacy_id").unique(),
+		name: text("name").notNull(),
+		host: text("host")
+			.$defaultFn(() => "")
+			.notNull(),
+		isolate: text("isolate")
+			.$defaultFn(() => "")
+			.notNull(),
+		locale: text("locale")
+			.$defaultFn(() => "")
+			.notNull(),
+		notes: text("notes")
+			.$defaultFn(() => "")
+			.notNull(),
+		library_type: text("library_type").notNull(),
+		format: text("format")
+			.$defaultFn(() => "fastq")
+			.notNull(),
+		group_id: integer("group_id").references(() => groups.id),
+		quality: jsonb("quality").$type<SampleQuality>(),
+		created_at: timestamp("created_at").notNull(),
+		paired: boolean("paired")
+			.$defaultFn(() => false)
+			.notNull(),
+		ready: boolean("ready")
+			.$defaultFn(() => false)
+			.notNull(),
+		hold: boolean("hold")
+			.$defaultFn(() => true)
+			.notNull(),
+		is_legacy: boolean("is_legacy")
+			.$defaultFn(() => false)
+			.notNull(),
+		all_read: boolean("all_read")
+			.$defaultFn(() => false)
+			.notNull(),
+		all_write: boolean("all_write")
+			.$defaultFn(() => false)
+			.notNull(),
+		group_read: boolean("group_read")
+			.$defaultFn(() => false)
+			.notNull(),
+		group_write: boolean("group_write")
+			.$defaultFn(() => false)
+			.notNull(),
+		user_id: integer("user_id").references(() => users.id),
+		job_id: integer("job_id")
+			.unique()
+			.references(() => jobs.id),
+	},
+	(table) => [
+		index("ix_legacy_samples_all_read")
+			.on(table.all_read)
+			.where(sql`${table.all_read} = true`),
+		index("ix_legacy_samples_group_id").on(table.group_id),
+		index("ix_legacy_samples_group_read")
+			.on(table.group_read)
+			.where(sql`${table.group_read} = true`),
+		index("ix_legacy_samples_user_id_created_at").on(
+			table.user_id,
+			table.created_at.desc().nullsFirst(),
+		),
+	],
+);
 
 // Join table linking a sample to its labels.
 export const legacySampleLabels = pgTable(

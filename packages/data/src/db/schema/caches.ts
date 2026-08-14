@@ -5,6 +5,7 @@
 import type { JsonObject } from "@virtool/contracts";
 import {
 	bigint,
+	index,
 	integer,
 	jsonb,
 	pgTable,
@@ -30,12 +31,15 @@ export const caches = pgTable(
 		created_at: timestamp("created_at").notNull(),
 		last_accessed_at: timestamp("last_accessed_at").notNull(),
 	},
-	// Named, not inferred. Python pins `cache_key` in three places so the
-	// expected duplicate-key race is distinguishable from any other integrity
-	// violation. It also has to exist here for tests to exercise the conflict
-	// path at all: `createTestDatabase()` derives its DDL from these mirrors, so
-	// an undeclared constraint is simply absent from a test database.
-	(table) => [unique("cache_key").on(table.key)],
+	(table) => [
+		index("ix_caches_last_accessed_at_id").on(table.last_accessed_at, table.id),
+		// Named, not inferred. Python pins `cache_key` in three places so the
+		// expected duplicate-key race is distinguishable from any other integrity
+		// violation. It also has to exist here for tests to exercise the conflict
+		// path at all: `createTestDatabase()` derives its DDL from these mirrors, so
+		// an undeclared constraint is simply absent from a test database.
+		unique("cache_key").on(table.key),
+	],
 );
 
 /** A row from the `caches` table. */
