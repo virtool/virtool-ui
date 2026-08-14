@@ -6,9 +6,9 @@ import type { JsonObject } from "@virtool/contracts";
 import {
 	bigint,
 	index,
-	integer,
 	jsonb,
 	pgTable,
+	serial,
 	text,
 	timestamp,
 	unique,
@@ -17,7 +17,7 @@ import {
 export const caches = pgTable(
 	"caches",
 	{
-		id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+		id: serial("id").primaryKey(),
 		key: text("key").notNull(),
 		// A per-write UUID under `caches/v1/`, stored verbatim rather than derived
 		// from the row id, so two writers racing on the same `key` never target the

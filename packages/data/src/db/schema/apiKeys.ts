@@ -8,6 +8,7 @@ import {
 	integer,
 	jsonb,
 	pgTable,
+	serial,
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
@@ -16,7 +17,7 @@ import { users } from "./users";
 export const apiKeys = pgTable(
 	"api_keys",
 	{
-		id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+		id: serial("id").primaryKey(),
 		hashed: text("hashed").notNull().unique(),
 		name: text("name").notNull(),
 		createdAt: timestamp("created_at").notNull(),

@@ -15,6 +15,7 @@ import {
 	jsonb,
 	pgEnum,
 	pgTable,
+	serial,
 	text,
 	timestamp,
 	unique,
@@ -70,7 +71,7 @@ export const subtractions = pgTable("subtractions", {
 export const subtractionFiles = pgTable(
 	"subtraction_files",
 	{
-		id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+		id: serial("id").primaryKey(),
 		name: text("name"),
 		subtraction_id: bigint("subtraction_id", { mode: "number" })
 			.notNull()

@@ -11,9 +11,9 @@ import {
 	boolean,
 	check,
 	customType,
-	integer,
 	jsonb,
 	pgTable,
+	serial,
 	text,
 	timestamp,
 	uniqueIndex,
@@ -32,7 +32,7 @@ function lower(column: AnyPgColumn): SQL {
 export const users = pgTable(
 	"users",
 	{
-		id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+		id: serial("id").primaryKey(),
 		active: boolean("active")
 			.$defaultFn(() => true)
 			.notNull(),

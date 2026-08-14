@@ -2,10 +2,10 @@
 // via Alembic. Do not generate or push migrations from this side. Keep the
 // columns in sync with `../../../../../../virtool/virtool/labels/sql.py`.
 
-import { integer, pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, varchar } from "drizzle-orm/pg-core";
 
 export const labels = pgTable("labels", {
-	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+	id: serial("id").primaryKey(),
 	color: varchar("color", { length: 7 }),
 	description: text("description").$defaultFn(() => ""),
 	name: text("name").unique(),

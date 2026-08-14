@@ -25,6 +25,7 @@ import {
 	pgEnum,
 	pgTable,
 	primaryKey,
+	serial,
 	text,
 	timestamp,
 	unique,
@@ -106,7 +107,7 @@ export const analysisSubtractions = pgTable(
 // Result files retained by a workflow and offered for download. Written only by
 // the jobs API, which is out of scope here — this side reads them.
 export const analysisFiles = pgTable("analysis_files", {
-	id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+	id: serial("id").primaryKey(),
 	analysis_id: bigint("analysis_id", { mode: "number" })
 		.notNull()
 		.references(() => analyses.id, { onDelete: "cascade" }),
@@ -128,7 +129,7 @@ export const analysisFiles = pgTable("analysis_files", {
 export const nuvsBlast = pgTable(
 	"nuvs_blast",
 	{
-		id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+		id: serial("id").primaryKey(),
 		analysis_id: bigint("analysis_id", { mode: "number" })
 			.notNull()
 			.references(() => analyses.id, { onDelete: "cascade" }),

@@ -15,6 +15,7 @@ import {
 	integer,
 	jsonb,
 	pgTable,
+	serial,
 	text,
 	timestamp,
 	unique,
@@ -79,7 +80,7 @@ export type IndexFileType = "json" | "fasta" | "bowtie2" | "sqlite";
 export const indexFiles = pgTable(
 	"index_files",
 	{
-		id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+		id: serial("id").primaryKey(),
 		name: text("name").notNull(),
 		// The owning build's id as a string, predating `index_id` and dropped by a
 		// later cleanup revision. Nullable, so nothing has to fill it, but Python

@@ -8,6 +8,7 @@ import {
 	check,
 	integer,
 	pgTable,
+	serial,
 	text,
 	timestamp,
 	uniqueIndex,
@@ -26,7 +27,7 @@ export type MessageColor =
 export const instanceMessages = pgTable(
 	"instance_messages",
 	{
-		id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+		id: serial("id").primaryKey(),
 		active: boolean("active").$defaultFn(() => true),
 		color: text("color").$type<MessageColor>().notNull(),
 		message: text("message"),

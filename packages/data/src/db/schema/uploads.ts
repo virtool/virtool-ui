@@ -10,6 +10,7 @@ import {
 	check,
 	integer,
 	pgTable,
+	serial,
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
@@ -18,7 +19,7 @@ import { users } from "./users";
 export const uploads = pgTable(
 	"uploads",
 	{
-		id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+		id: serial("id").primaryKey(),
 		createdAt: timestamp("created_at"),
 		name: text("name"),
 		nameOnDisk: text("name_on_disk").unique(),

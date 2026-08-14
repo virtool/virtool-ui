@@ -17,6 +17,7 @@ import {
 	integer,
 	jsonb,
 	pgTable,
+	serial,
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
@@ -70,7 +71,7 @@ export const legacyHistory = pgTable(
 // The change's diff, held 1:1 with its history row. Upstream calls this a
 // temporary table to be dropped once history is renormalized.
 export const legacyHistoryDiff = pgTable("legacy_history_diff", {
-	id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+	id: serial("id").primaryKey(),
 	// The change's public id, duplicating `legacy_history.legacy_id`. It predates
 	// `history_id` and Python still writes it, so an insert from here must too —
 	// the column is NOT NULL upstream.

@@ -27,6 +27,7 @@ import {
 	integer,
 	jsonb,
 	pgTable,
+	serial,
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
@@ -35,7 +36,7 @@ import { users } from "./users";
 export const jobs = pgTable(
 	"jobs",
 	{
-		id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+		id: serial("id").primaryKey(),
 		// `.default()`, not `$defaultFn()`: this is the one column here that really
 		// does carry a server default upstream, so the generated test DDL has to
 		// carry it too or a raw insert omitting it fails only under test.

@@ -12,13 +12,14 @@ import {
 	jsonb,
 	pgTable,
 	primaryKey,
+	serial,
 	text,
 	uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
 export const groups = pgTable("groups", {
-	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+	id: serial("id").primaryKey(),
 	legacyId: text("legacy_id").unique(),
 	name: text("name").unique().notNull(),
 	permissions: jsonb("permissions").$type<Permissions>().notNull(),
