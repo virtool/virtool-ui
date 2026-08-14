@@ -2,46 +2,48 @@
 // the upstream Python service via Alembic — do not generate or push migrations
 // from this side.
 
+import { sql } from "drizzle-orm";
 import {
 	boolean,
+	check,
 	integer,
-	pgEnum,
 	pgTable,
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
-// Not a Postgres enum in the real schema. The `messagecolor` type was dropped
-// upstream and `color` is now `text` closed by the `ck_instance_messages_color`
-// CHECK constraint. The declaration is kept because the values are right and
-// nothing generates migrations from this side, so the mismatch never reaches a
-// real database.
-export const messageColor = pgEnum("messagecolor", [
-	"red",
-	"yellow",
-	"blue",
-	"purple",
-	"orange",
-	"grey",
-]);
+/** One of the allowed instance-message colors stored in `instance_messages.color`. */
+export type MessageColor =
+	| "red"
+	| "yellow"
+	| "blue"
+	| "purple"
+	| "orange"
+	| "grey";
 
-export const instanceMessages = pgTable("instance_messages", {
-	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-	active: boolean("active").$defaultFn(() => true),
-	color: messageColor("color").notNull(),
-	message: text("message"),
-	createdAt: timestamp("created_at"),
-	updatedAt: timestamp("updated_at"),
-	user: text("user"),
-	// Nullable upstream: a row migrated from Mongo carries its author in the
-	// legacy `user` column, and a trigger resolves `user_id` from it. Every
-	// read joins on it, so a row that predates the backfill is simply invisible.
-	userId: integer("user_id").references(() => users.id),
-});
+export const instanceMessages = pgTable(
+	"instance_messages",
+	{
+		id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+		active: boolean("active").$defaultFn(() => true),
+		color: text("color").$type<MessageColor>().notNull(),
+		message: text("message"),
+		createdAt: timestamp("created_at"),
+		updatedAt: timestamp("updated_at"),
+		user: text("user"),
+		// Nullable upstream: a row migrated from Mongo carries its author in the
+		// legacy `user` column, and a trigger resolves `user_id` from it. Every
+		// read joins on it, so a row that predates the backfill is simply invisible.
+		userId: integer("user_id").references(() => users.id),
+	},
+	(table) => [
+		check(
+			"ck_instance_messages_color",
+			sql`${table.color} in ('red', 'yellow', 'blue', 'purple', 'orange', 'grey')`,
+		),
+	],
+);
 
 /** A row from the `instance_messages` table. */
 export type InstanceMessageRow = typeof instanceMessages.$inferSelect;
-
-/** One of the allowed instance-message colors stored in `instance_messages.color`. */
-export type MessageColor = (typeof messageColor.enumValues)[number];

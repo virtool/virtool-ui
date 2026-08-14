@@ -4,14 +4,15 @@
 // `last_password_change`) in sync with
 // `../../../../../../virtool/virtool/users/pg.py`.
 
+import type { AdministratorRoleName } from "@virtool/contracts";
 import { type SQL, sql } from "drizzle-orm";
 import {
 	type AnyPgColumn,
 	boolean,
+	check,
 	customType,
 	integer,
 	jsonb,
-	pgEnum,
 	pgTable,
 	text,
 	timestamp,
@@ -28,14 +29,6 @@ function lower(column: AnyPgColumn): SQL {
 	return sql`lower(${column})`;
 }
 
-export const administratorRole = pgEnum("administratorrole", [
-	"full",
-	"settings",
-	"spaces",
-	"users",
-	"base",
-]);
-
 export const users = pgTable(
 	"users",
 	{
@@ -43,7 +36,11 @@ export const users = pgTable(
 		active: boolean("active")
 			.$defaultFn(() => true)
 			.notNull(),
-		administratorRole: administratorRole("administrator_role"),
+		// `AdministratorRoleName` carries `spaces` and the constraint does not.
+		// Python still serves the role, so the union is the wider of the two and
+		// writing `spaces` fails against a real database.
+		administratorRole:
+			text("administrator_role").$type<AdministratorRoleName>(),
 		email: text("email")
 			.$defaultFn(() => "")
 			.notNull(),
@@ -56,7 +53,13 @@ export const users = pgTable(
 		password: bytea("password").notNull(),
 		settings: jsonb("settings").$type<Record<string, unknown>>().notNull(),
 	},
-	(table) => [uniqueIndex("users_handle_lower_unique").on(lower(table.handle))],
+	(table) => [
+		uniqueIndex("users_handle_lower_unique").on(lower(table.handle)),
+		check(
+			"administrator_role_valid",
+			sql`${table.administratorRole} in ('full', 'settings', 'users', 'base')`,
+		),
+	],
 );
 
 /** A row from the `users` table. */

@@ -12,16 +12,25 @@
 // missing from the migration snapshot, so nothing could generate the migration
 // that drops it.
 
+import { AnalysisFormat } from "@virtool/contracts";
 import {
 	bigint,
 	boolean,
 	integer,
 	json,
 	jsonb,
+	pgEnum,
 	pgTable,
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
+
+// `z.enum().options` widens to an array, losing the non-empty tuple `pgEnum`
+// takes. Cast rather than restate the members, which would be free to disagree.
+export const analysisFormat = pgEnum(
+	"analysisformat",
+	AnalysisFormat.options as [AnalysisFormat, ...AnalysisFormat[]],
+);
 
 export const analyses = pgTable("analyses", {
 	id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
@@ -56,9 +65,7 @@ export const analysisFiles = pgTable("analysis_files", {
 	id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
 	analysis_id: bigint("analysis_id", { mode: "number" }).notNull(),
 	description: text("description"),
-	// A real Postgres enum (`analysisformat`) upstream. Read as text: this side
-	// never writes the column, and the enumerated values are the worker's.
-	format: text("format"),
+	format: analysisFormat("format"),
 	name: text("name"),
 	name_on_disk: text("name_on_disk").unique(),
 	size: bigint("size", { mode: "number" }),
