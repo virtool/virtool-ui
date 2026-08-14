@@ -296,7 +296,7 @@ Three rules it carries:
 
 - **A `docker_build` context is `'.'`, the repo root.** Everything else the
   Tiltfile names is relative to the root too, so a manifest is
-  `'dev/manifests/ingress.yaml'` and a script `'dev/scripts/pull.sh'`.
+  `'dev/manifests/ingress.yaml'` and a script `'dev/scripts/wipe.sh'`.
 - **`.dockerignore` excludes both `Tiltfile` and `dev`.** The Tiltfile builds
   with the repo root as its context and Tilt reads that file to decide what it
   watches, so without those rules an edit to a manifest rebuilds every
