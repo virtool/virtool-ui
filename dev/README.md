@@ -88,8 +88,8 @@ Flags combine: `tilt up -- --web --jobs-api`.
 
 `--web` runs Vite in the pod and syncs `apps/web/src` and `packages` into it,
 so an edit shows up without a rebuild. The rest rebuild the image on change,
-and `jobs-api` and `tasks` are on manual trigger — update them from the Tilt UI
-when you want the build.
+and `jobs-api`, `tasks` and `pathoscope` are on manual trigger — update them
+from the Tilt UI when you want the build.
 
 There is no migration target. Migrations are Python's, and the migration Job
 runs the published `ghcr.io/virtool/virtool` image.
@@ -103,12 +103,12 @@ migration Job is the exception and stays pinned to an explicit
 schema, so an unrelated Python release must not migrate the dev database
 without someone choosing it.
 
-`ts-nuvs` and `ts-pathoscope` are built by CI but never published — those
-workflows still release from `virtool/workflow-nuvs` and
-`virtool/workflow-pathoscope`. `ts-nuvs` has no registry package at all, and
-`ts-pathoscope:latest` is the leftover of a short-lived publish job and carries
-the tools with no workflow code. Both ScaledJobs are on manual trigger and are
-only usable under `--nuvs` / `--pathoscope`, which build the image locally.
+`ts-nuvs` and `ts-pathoscope` publish on release like the other two, but
+neither has a usable `latest` until the first release that carries them:
+`ts-nuvs` has no registry package at all, and `ts-pathoscope:latest` is the
+leftover of a short-lived publish job and carries the tools with no workflow
+code. Until then, run those two under `--nuvs` / `--pathoscope`, which build
+the image locally.
 
 ## Labels
 
