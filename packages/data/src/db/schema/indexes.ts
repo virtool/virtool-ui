@@ -19,6 +19,10 @@ import {
 	timestamp,
 	unique,
 } from "drizzle-orm/pg-core";
+import { jobs } from "./jobs";
+import { legacyReferences } from "./references";
+import { tasks } from "./tasks";
+import { users } from "./users";
 
 export const indexes = pgTable(
 	"indexes",
@@ -46,14 +50,22 @@ export const indexes = pgTable(
 		// that has never been asked for its OTU JSON has not written one, and the key
 		// is minted on first write.
 		otus_json_storage_key: text("otus_json_storage_key").unique(),
-		reference_id: bigint("reference_id", { mode: "number" }).notNull(),
-		user_id: integer("user_id").notNull(),
+		reference_id: bigint("reference_id", { mode: "number" })
+			.notNull()
+			.references(() => legacyReferences.id),
+		user_id: integer("user_id")
+			.notNull()
+			.references(() => users.id),
 		// A build is backed by at most one of these: `job_id` for a legacy
 		// workflow-run build, `task_id` for one started from either service today.
-		job_id: integer("job_id"),
-		task_id: integer("task_id"),
+		job_id: integer("job_id").references(() => jobs.id),
+		task_id: integer("task_id").references(() => tasks.id),
 	},
 	(table) => [
+		unique("uq_indexes_reference_id_version").on(
+			table.reference_id,
+			table.version,
+		),
 		check(
 			"ck_indexes_job_or_task",
 			sql`num_nonnulls(${table.job_id}, ${table.task_id}) <= 1`,
@@ -74,7 +86,9 @@ export const indexFiles = pgTable(
 		// writes `str(index_id)` and this side writes the same — a row is then
 		// identical whichever runner built it.
 		index: text("index"),
-		index_id: bigint("index_id", { mode: "number" }).notNull(),
+		index_id: bigint("index_id", { mode: "number" })
+			.notNull()
+			.references(() => indexes.id, { onDelete: "cascade" }),
 		type: text("type").$type<IndexFileType>(),
 		size: bigint("size", { mode: "number" }),
 		// The file's complete object-storage key, superseding the per-index

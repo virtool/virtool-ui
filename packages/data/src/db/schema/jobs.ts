@@ -29,6 +29,7 @@ import {
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
+import { users } from "./users";
 
 export const jobs = pgTable(
 	"jobs",
@@ -47,7 +48,9 @@ export const jobs = pgTable(
 		pinged_at: timestamp("pinged_at"),
 		state: text("state").$type<JobState>().notNull(),
 		steps: jsonb("steps").$type<StoredJobStep[]>(),
-		user_id: integer("user_id").notNull(),
+		user_id: integer("user_id")
+			.notNull()
+			.references(() => users.id),
 		// Deliberately left open. Python's `Workflow` is an application-level enum
 		// with no CHECK constraint behind it, so a row can hold a workflow this
 		// build has never heard of.

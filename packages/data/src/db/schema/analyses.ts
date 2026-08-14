@@ -23,9 +23,18 @@ import {
 	jsonb,
 	pgEnum,
 	pgTable,
+	primaryKey,
 	text,
 	timestamp,
+	unique,
 } from "drizzle-orm/pg-core";
+import { indexes } from "./indexes";
+import { jobs } from "./jobs";
+import { legacyReferences } from "./references";
+import { legacySamples } from "./samples";
+import { subtractions } from "./subtractions";
+import { tasks } from "./tasks";
+import { users } from "./users";
 
 // `z.enum().options` widens to an array, losing the non-empty tuple `pgEnum`
 // takes. Cast rather than restate the members, which would be free to disagree.
@@ -51,13 +60,21 @@ export const analyses = pgTable(
 		// The legacy `sample` string column is still written by Python and is needed
 		// to locate a migrated analysis's slug-prefixed objects in storage.
 		sample: text("sample").notNull(),
-		sample_id: bigint("sample_id", { mode: "number" }),
+		sample_id: bigint("sample_id", { mode: "number" }).references(
+			() => legacySamples.id,
+		),
 		reference: text("reference"),
-		reference_id: bigint("reference_id", { mode: "number" }),
+		reference_id: bigint("reference_id", { mode: "number" }).references(
+			() => legacyReferences.id,
+		),
 		index: text("index"),
-		index_id: bigint("index_id", { mode: "number" }).notNull(),
-		user_id: integer("user_id").notNull(),
-		job_id: integer("job_id"),
+		index_id: bigint("index_id", { mode: "number" })
+			.notNull()
+			.references(() => indexes.id),
+		user_id: integer("user_id")
+			.notNull()
+			.references(() => users.id),
+		job_id: integer("job_id").references(() => jobs.id),
 	},
 	(table) => [
 		check(
@@ -67,16 +84,28 @@ export const analyses = pgTable(
 	],
 );
 
-export const analysisSubtractions = pgTable("analysis_subtractions", {
-	analysis_id: bigint("analysis_id", { mode: "number" }).notNull(),
-	subtraction_id: bigint("subtraction_id", { mode: "number" }).notNull(),
-});
+export const analysisSubtractions = pgTable(
+	"analysis_subtractions",
+	{
+		analysis_id: bigint("analysis_id", { mode: "number" })
+			.notNull()
+			.references(() => analyses.id, { onDelete: "cascade" }),
+		subtraction_id: bigint("subtraction_id", { mode: "number" })
+			.notNull()
+			.references(() => subtractions.id),
+	},
+	(table) => [
+		primaryKey({ columns: [table.analysis_id, table.subtraction_id] }),
+	],
+);
 
 // Result files retained by a workflow and offered for download. Written only by
 // the jobs API, which is out of scope here — this side reads them.
 export const analysisFiles = pgTable("analysis_files", {
 	id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-	analysis_id: bigint("analysis_id", { mode: "number" }).notNull(),
+	analysis_id: bigint("analysis_id", { mode: "number" })
+		.notNull()
+		.references(() => analyses.id, { onDelete: "cascade" }),
 	description: text("description"),
 	format: analysisFormat("format"),
 	name: text("name"),
@@ -92,21 +121,32 @@ export const analysisFiles = pgTable("analysis_files", {
 // A BLAST request against one NuVs contig. Unique on
 // (`analysis_id`, `sequence_index`): requesting a BLAST for a sequence that
 // already has one replaces the previous row.
-export const nuvsBlast = pgTable("nuvs_blast", {
-	id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-	analysis_id: bigint("analysis_id", { mode: "number" }).notNull(),
-	sequence_index: integer("sequence_index").notNull(),
-	created_at: timestamp("created_at").notNull(),
-	updated_at: timestamp("updated_at").notNull(),
-	last_checked_at: timestamp("last_checked_at").notNull(),
-	error: text("error"),
-	interval: integer("interval").$defaultFn(() => 3),
-	rid: text("rid"),
-	ready: boolean("ready").notNull(),
-	// `json`, not `jsonb` — the upstream column is `JSON`.
-	result: json("result").$type<Record<string, unknown>>(),
-	task_id: integer("task_id"),
-});
+export const nuvsBlast = pgTable(
+	"nuvs_blast",
+	{
+		id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+		analysis_id: bigint("analysis_id", { mode: "number" })
+			.notNull()
+			.references(() => analyses.id, { onDelete: "cascade" }),
+		sequence_index: integer("sequence_index").notNull(),
+		created_at: timestamp("created_at").notNull(),
+		updated_at: timestamp("updated_at").notNull(),
+		last_checked_at: timestamp("last_checked_at").notNull(),
+		error: text("error"),
+		interval: integer("interval").$defaultFn(() => 3),
+		rid: text("rid"),
+		ready: boolean("ready").notNull(),
+		// `json`, not `jsonb` — the upstream column is `JSON`.
+		result: json("result").$type<Record<string, unknown>>(),
+		task_id: integer("task_id").references(() => tasks.id),
+	},
+	(table) => [
+		unique("nuvs_blast_analysis_id_sequence_index_key").on(
+			table.analysis_id,
+			table.sequence_index,
+		),
+	],
+);
 
 /** A row from the `analyses` table. */
 export type AnalysisRow = typeof analyses.$inferSelect;

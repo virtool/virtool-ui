@@ -1,9 +1,9 @@
 import type { JobState } from "@virtool/contracts";
 import { MemoryStorage, type StorageBackend } from "@virtool/storage";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { seedUser } from "../auth/test/fixtures";
-import type { Db } from "../db/pg";
+import type { Db, DbOrTx } from "../db/pg";
 import { takeFirstOrThrow } from "../db/rows";
 import {
 	analyses,
@@ -99,7 +99,7 @@ async function seedIndex(values: {
 				ready: values.ready,
 				reference_id: values.referenceId,
 				storage_key: `index-${values.referenceId}-${values.version}`,
-				user_id: 1,
+				user_id: ownerId,
 				version: values.version,
 			})
 			.returning({ id: indexes.id }),
@@ -155,11 +155,12 @@ async function seedJob(
 
 async function seedAnalysis(
 	overrides: Partial<typeof analyses.$inferInsert> = {},
+	handle: DbOrTx = db,
 ): Promise<number> {
 	const now = new Date();
 
 	return takeFirstOrThrow(
-		await db
+		await handle
 			.insert(analyses)
 			.values({
 				created_at: now,
@@ -184,6 +185,21 @@ async function seedAnalysisOnNewSample(
 	overrides: Partial<typeof analyses.$inferInsert> = {},
 ): Promise<number> {
 	return seedAnalysis({ sample_id: await seedSample(), ...overrides });
+}
+
+/*
+ * An analysis whose `index_id` names no build. The foreign key forbids the row,
+ * so the insert runs with referential triggers off — nothing else can produce
+ * the corruption the read path is asserted to refuse.
+ */
+async function seedAnalysisWithMissingIndex(): Promise<number> {
+	const sampleId = await seedSample();
+
+	return db.transaction(async (tx) => {
+		await tx.execute(sql`set local session_replication_role = replica`);
+
+		return seedAnalysis({ sample_id: sampleId, index_id: 987654 }, tx);
+	});
 }
 
 async function* oneChunk(): AsyncIterable<Uint8Array> {
@@ -391,7 +407,7 @@ describe("findAnalyses", () => {
 	});
 
 	it("raises rather than dropping an analysis whose index does not resolve", async () => {
-		await seedAnalysisOnNewSample({ index_id: 987654 });
+		await seedAnalysisWithMissingIndex();
 
 		await expect(findAnalyses(db, page, adminActor)).rejects.toBeInstanceOf(
 			AnalysisIntegrityError,

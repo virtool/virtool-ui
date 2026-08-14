@@ -19,6 +19,9 @@ import {
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
+import { indexes } from "./indexes";
+import { legacyReferences } from "./references";
+import { users } from "./users";
 
 export const legacyHistory = pgTable("legacy_history", {
 	id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
@@ -26,7 +29,9 @@ export const legacyHistory = pgTable("legacy_history", {
 	created_at: timestamp("created_at").notNull(),
 	description: text("description").notNull(),
 	method_name: text("method_name").notNull(),
-	user_id: integer("user_id").notNull(),
+	user_id: integer("user_id")
+		.notNull()
+		.references(() => users.id),
 	// A bare string column with no foreign key by design: `legacy_otus` keys on
 	// the 8-character Mongo id and has no `legacy_id`, so this already holds the
 	// OTU's primary key.
@@ -36,9 +41,11 @@ export const legacyHistory = pgTable("legacy_history", {
 	// write upstream — the column never stores the sentinel itself.
 	otu_version: text("otu_version"),
 	reference: text("reference"),
-	reference_id: bigint("reference_id", { mode: "number" }),
+	reference_id: bigint("reference_id", { mode: "number" }).references(
+		() => legacyReferences.id,
+	),
 	index: text("index"),
-	index_id: bigint("index_id", { mode: "number" }),
+	index_id: bigint("index_id", { mode: "number" }).references(() => indexes.id),
 });
 
 // The change's diff, held 1:1 with its history row. Upstream calls this a
@@ -49,7 +56,9 @@ export const legacyHistoryDiff = pgTable("legacy_history_diff", {
 	// `history_id` and Python still writes it, so an insert from here must too —
 	// the column is NOT NULL upstream.
 	change_id: text("change_id").unique().notNull(),
-	history_id: bigint("history_id", { mode: "number" }).unique(),
+	history_id: bigint("history_id", { mode: "number" })
+		.unique()
+		.references(() => legacyHistory.id),
 	// A dictdiffer diff: an array of `[action, path, changes]` triples, shaped by
 	// `@server/history/dictdiffer` and opaque to the database.
 	diff: jsonb("diff").$type<unknown>().notNull(),

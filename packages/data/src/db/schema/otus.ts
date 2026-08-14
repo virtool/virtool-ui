@@ -24,6 +24,7 @@ import {
 	pgTable,
 	text,
 } from "drizzle-orm/pg-core";
+import { legacyReferences } from "./references";
 
 export const legacyOtus = pgTable("legacy_otus", {
 	// The upstream primary key is the 8-character Mongo id, a plain string with
@@ -35,7 +36,9 @@ export const legacyOtus = pgTable("legacy_otus", {
 		.$defaultFn(() => "")
 		.notNull(),
 	last_indexed_version: integer("last_indexed_version"),
-	reference_id: bigint("reference_id", { mode: "number" }).notNull(),
+	reference_id: bigint("reference_id", { mode: "number" })
+		.notNull()
+		.references(() => legacyReferences.id),
 	verified: boolean("verified").notNull(),
 	version: integer("version").notNull(),
 });
@@ -52,7 +55,9 @@ export const legacyOtus = pgTable("legacy_otus", {
 export const legacySequences = pgTable("legacy_sequences", {
 	id: text("id").primaryKey(),
 	data: jsonb("data").$type<Record<string, unknown>>().notNull(),
-	otu_id: text("otu_id").notNull(),
+	otu_id: text("otu_id")
+		.notNull()
+		.references(() => legacyOtus.id, { onDelete: "cascade" }),
 	isolate_id: text("isolate_id").notNull(),
 	segment: text("segment"),
 	position: bigint("position", { mode: "number" }),

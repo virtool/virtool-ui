@@ -17,7 +17,11 @@ import {
 	pgTable,
 	text,
 	timestamp,
+	unique,
 } from "drizzle-orm/pg-core";
+import { jobs } from "./jobs";
+import { uploads } from "./uploads";
+import { users } from "./users";
 
 // `z.enum().options` widens to an array, losing the non-empty tuple `pgEnum`
 // takes. Cast rather than restate the members, which would be free to disagree.
@@ -56,24 +60,37 @@ export const subtractions = pgTable("subtractions", {
 	ready: boolean("ready")
 		.$defaultFn(() => false)
 		.notNull(),
-	user_id: integer("user_id"),
-	job_id: integer("job_id").unique(),
-	upload_id: integer("upload_id"),
+	user_id: integer("user_id").references(() => users.id),
+	job_id: integer("job_id")
+		.unique()
+		.references(() => jobs.id),
+	upload_id: integer("upload_id").references(() => uploads.id),
 });
 
-export const subtractionFiles = pgTable("subtraction_files", {
-	id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-	name: text("name"),
-	subtraction_id: bigint("subtraction_id", { mode: "number" }).notNull(),
-	type: subtractionType("type"),
-	// Files routinely exceed 2 GiB, past the range of a 32-bit integer, so this
-	// mirrors Python's BigInteger. `mode: "number"` is safe up to 2^53.
-	size: bigint("size", { mode: "number" }),
-	// The file's complete object-storage key. Nullable because it was backfilled
-	// from `name`, which is itself nullable: a row without one names no
-	// retrievable object.
-	storage_key: text("storage_key").unique(),
-});
+export const subtractionFiles = pgTable(
+	"subtraction_files",
+	{
+		id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+		name: text("name"),
+		subtraction_id: bigint("subtraction_id", { mode: "number" })
+			.notNull()
+			.references(() => subtractions.id),
+		type: subtractionType("type"),
+		// Files routinely exceed 2 GiB, past the range of a 32-bit integer, so this
+		// mirrors Python's BigInteger. `mode: "number"` is safe up to 2^53.
+		size: bigint("size", { mode: "number" }),
+		// The file's complete object-storage key. Nullable because it was backfilled
+		// from `name`, which is itself nullable: a row without one names no
+		// retrievable object.
+		storage_key: text("storage_key").unique(),
+	},
+	(table) => [
+		unique("subtraction_files_subtraction_id_name_key").on(
+			table.subtraction_id,
+			table.name,
+		),
+	],
+);
 
 /** A row from the `subtractions` table. */
 export type SubtractionRow = typeof subtractions.$inferSelect;

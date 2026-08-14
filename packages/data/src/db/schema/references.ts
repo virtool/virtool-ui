@@ -4,6 +4,7 @@
 // in sync with `../../../../../../virtool/virtool/references/sql.py`.
 
 import {
+	type AnyPgColumn,
 	bigint,
 	boolean,
 	integer,
@@ -13,6 +14,10 @@ import {
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
+import { groups } from "./groups";
+import { tasks } from "./tasks";
+import { uploads } from "./uploads";
+import { users } from "./users";
 
 export const legacyReferences = pgTable("legacy_references", {
 	id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
@@ -37,17 +42,25 @@ export const legacyReferences = pgTable("legacy_references", {
 		.$type<string[]>()
 		.$defaultFn(() => [])
 		.notNull(),
-	user_id: integer("user_id").notNull(),
-	upload_id: integer("upload_id"),
-	cloned_from_id: bigint("cloned_from_id", { mode: "number" }),
-	task_id: integer("task_id"),
+	user_id: integer("user_id")
+		.notNull()
+		.references(() => users.id),
+	upload_id: integer("upload_id").references(() => uploads.id),
+	cloned_from_id: bigint("cloned_from_id", { mode: "number" }).references(
+		(): AnyPgColumn => legacyReferences.id,
+	),
+	task_id: integer("task_id").references(() => tasks.id),
 });
 
 export const legacyReferenceUsers = pgTable(
 	"legacy_reference_users",
 	{
-		reference_id: bigint("reference_id", { mode: "number" }).notNull(),
-		user_id: integer("user_id").notNull(),
+		reference_id: bigint("reference_id", { mode: "number" })
+			.notNull()
+			.references(() => legacyReferences.id),
+		user_id: integer("user_id")
+			.notNull()
+			.references(() => users.id),
 		build: boolean("build")
 			.$defaultFn(() => false)
 			.notNull(),
@@ -64,8 +77,12 @@ export const legacyReferenceUsers = pgTable(
 export const legacyReferenceGroups = pgTable(
 	"legacy_reference_groups",
 	{
-		reference_id: bigint("reference_id", { mode: "number" }).notNull(),
-		group_id: integer("group_id").notNull(),
+		reference_id: bigint("reference_id", { mode: "number" })
+			.notNull()
+			.references(() => legacyReferences.id),
+		group_id: integer("group_id")
+			.notNull()
+			.references(() => groups.id),
 		build: boolean("build")
 			.$defaultFn(() => false)
 			.notNull(),
