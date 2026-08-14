@@ -37,9 +37,6 @@ export const users = pgTable(
 		active: boolean("active")
 			.$defaultFn(() => true)
 			.notNull(),
-		// `AdministratorRoleName` carries `spaces` and the constraint does not.
-		// Python still serves the role, so the union is the wider of the two and
-		// writing `spaces` fails against a real database.
 		administratorRole:
 			text("administrator_role").$type<AdministratorRoleName>(),
 		email: text("email")
