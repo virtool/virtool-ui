@@ -1,7 +1,6 @@
-# `ghcr.io/virtool/ts-nuvs` is not published from this repository — CI builds
-# the image but has no publish job, because `virtool/workflow-nuvs` still
-# releases the NuVs workflow. No tag of this name exists in the registry, so
-# this ScaledJob only runs under `tilt up -- --nuvs`, which builds the image
+# `ghcr.io/virtool/ts-nuvs` is published on release, but no tag of this name
+# exists in the registry until the first release that carries it. Run this
+# ScaledJob under `tilt up -- --nuvs` meanwhile, which builds the image
 # locally. The same holds for pathoscope.
 apiVersion: keda.sh/v1alpha1
 kind: ScaledJob

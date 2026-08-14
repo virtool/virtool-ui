@@ -1,9 +1,8 @@
-# `ghcr.io/virtool/ts-pathoscope` is not published from this repository — CI
-# builds the image but has no publish job, because `virtool/workflow-pathoscope`
-# still releases the pathoscope workflow. The `:latest` tag below does resolve,
-# but it is the leftover of a short-lived publish job from before the port
-# landed and carries the tools with no workflow code. This ScaledJob is only
-# usable under `tilt up -- --pathoscope`, which builds the image locally.
+# `ghcr.io/virtool/ts-pathoscope` is published on release. The `:latest` tag
+# below resolves today regardless, but it is the leftover of a short-lived
+# publish job from before the port landed and carries the tools with no
+# workflow code — so until a release has run since publishing was restored,
+# use `tilt up -- --pathoscope`, which builds the image locally.
 apiVersion: keda.sh/v1alpha1
 kind: ScaledJob
 metadata:

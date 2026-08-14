@@ -11,15 +11,15 @@ SERVICE_TARGETS = [
     ('tasks', 'ghcr.io/virtool/tasks'),
 ]
 
-# `ts-nuvs` and `ts-pathoscope` are built by CI but never published — the
-# workflows are still released from `virtool/workflow-nuvs` and
-# `virtool/workflow-pathoscope`. Their ScaledJobs therefore have no image to
-# pull and stay on manual trigger; run them with `tilt up -- --nuvs`, which
-# builds the image locally.
+# `ts-nuvs` and `ts-pathoscope` publish on release like the other two, so their
+# ScaledJobs have a `latest` to pull. Until the first release that carries them,
+# `ts-nuvs` has no registry package and `ts-pathoscope:latest` is a tools-only
+# leftover with no workflow code in it, so build them locally in the meantime
+# with `tilt up -- --nuvs`.
 WORKFLOW_TARGETS = [
     ('create-sample', 'ghcr.io/virtool/ts-create-sample', TRIGGER_MODE_AUTO),
     ('create-subtraction', 'ghcr.io/virtool/ts-create-subtraction', TRIGGER_MODE_AUTO),
-    ('nuvs', 'ghcr.io/virtool/ts-nuvs', TRIGGER_MODE_MANUAL),
+    ('nuvs', 'ghcr.io/virtool/ts-nuvs', TRIGGER_MODE_AUTO),
     ('pathoscope', 'ghcr.io/virtool/ts-pathoscope', TRIGGER_MODE_MANUAL),
 ]
 
