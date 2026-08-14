@@ -7,6 +7,7 @@
 // column the real tables require is declared, the legacy `index` string column
 // on `index_files` included.
 
+import type { IndexFileType } from "@virtool/contracts";
 import { sql } from "drizzle-orm";
 import {
 	bigint,
@@ -76,9 +77,6 @@ export const indexes = pgTable(
 		),
 	],
 );
-
-/** The kind of artifact an index file holds. */
-export type IndexFileType = "json" | "fasta" | "bowtie2" | "sqlite";
 
 export const indexFiles = pgTable(
 	"index_files",

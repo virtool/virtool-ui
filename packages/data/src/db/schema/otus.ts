@@ -16,9 +16,7 @@
 // a write from here must produce the same document shape, `data` included, or
 // the diffs already recorded against it stop applying.
 
-import { type SQL, sql } from "drizzle-orm";
 import {
-	type AnyPgColumn,
 	bigint,
 	boolean,
 	index,
@@ -28,10 +26,7 @@ import {
 	text,
 } from "drizzle-orm/pg-core";
 import { legacyReferences } from "./references";
-
-function lower(column: AnyPgColumn): SQL {
-	return sql`lower(${column})`;
-}
+import { lower } from "./sql";
 
 export const legacyOtus = pgTable(
 	"legacy_otus",

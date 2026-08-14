@@ -2,6 +2,7 @@
 // the upstream Python service via Alembic — do not generate or push migrations
 // from this side.
 
+import type { BannerColor } from "@virtool/contracts";
 import { sql } from "drizzle-orm";
 import {
 	boolean,
@@ -15,21 +16,12 @@ import {
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
-/** One of the allowed instance-message colors stored in `instance_messages.color`. */
-export type MessageColor =
-	| "red"
-	| "yellow"
-	| "blue"
-	| "purple"
-	| "orange"
-	| "grey";
-
 export const instanceMessages = pgTable(
 	"instance_messages",
 	{
 		id: serial("id").primaryKey(),
 		active: boolean("active").$defaultFn(() => true),
-		color: text("color").$type<MessageColor>().notNull(),
+		color: text("color").$type<BannerColor>().notNull(),
 		message: text("message"),
 		createdAt: timestamp("created_at"),
 		updatedAt: timestamp("updated_at"),

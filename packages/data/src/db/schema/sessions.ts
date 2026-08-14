@@ -2,6 +2,7 @@
 // service via Alembic. Do not generate or push migrations from this side. Keep
 // columns in sync with `../../../../../../virtool/virtool/sessions/models.py`.
 
+import type { SessionType } from "@virtool/contracts";
 import { sql } from "drizzle-orm";
 import {
 	boolean,
@@ -17,9 +18,6 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { users } from "./users";
-
-/** One of the session kinds stored in `sessions.session_type`. */
-export type SessionType = "anonymous" | "authenticated" | "reset";
 
 export const sessions = pgTable(
 	"sessions",

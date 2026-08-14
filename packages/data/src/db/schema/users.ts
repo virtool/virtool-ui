@@ -5,9 +5,8 @@
 // `../../../../../../virtool/virtool/users/pg.py`.
 
 import type { AdministratorRoleName } from "@virtool/contracts";
-import { type SQL, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import {
-	type AnyPgColumn,
 	boolean,
 	check,
 	customType,
@@ -19,16 +18,13 @@ import {
 	unique,
 	uniqueIndex,
 } from "drizzle-orm/pg-core";
+import { lower } from "./sql";
 
 const bytea = customType<{ data: Buffer; default: false }>({
 	dataType() {
 		return "bytea";
 	},
 });
-
-function lower(column: AnyPgColumn): SQL {
-	return sql`lower(${column})`;
-}
 
 export const users = pgTable(
 	"users",
