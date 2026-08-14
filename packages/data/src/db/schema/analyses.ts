@@ -52,7 +52,7 @@ export const analyses = pgTable(
 		id: bigint("id", { mode: "number" })
 			.primaryKey()
 			.generatedAlwaysAsIdentity(),
-		legacy_id: text("legacy_id").unique(),
+		legacy_id: text("legacy_id"),
 		created_at: timestamp("created_at").notNull(),
 		updated_at: timestamp("updated_at").notNull(),
 		workflow: text("workflow").notNull(),
@@ -80,6 +80,7 @@ export const analyses = pgTable(
 		job_id: integer("job_id").references(() => jobs.id),
 	},
 	(table) => [
+		unique("analyses_legacy_id_key").on(table.legacy_id),
 		index("ix_analyses_sample").on(table.sample),
 		index("ix_analyses_sample_id_workflow").on(table.sample_id, table.workflow),
 		check(
@@ -100,29 +101,39 @@ export const analysisSubtractions = pgTable(
 			.references(() => subtractions.id),
 	},
 	(table) => [
-		primaryKey({ columns: [table.analysis_id, table.subtraction_id] }),
+		primaryKey({
+			name: "analysis_subtractions_pkey",
+			columns: [table.analysis_id, table.subtraction_id],
+		}),
 		index("ix_analysis_subtractions_subtraction_id").on(table.subtraction_id),
 	],
 );
 
 // Result files retained by a workflow and offered for download. Written only by
 // the jobs API, which is out of scope here — this side reads them.
-export const analysisFiles = pgTable("analysis_files", {
-	id: serial("id").primaryKey(),
-	analysis_id: bigint("analysis_id", { mode: "number" })
-		.notNull()
-		.references(() => analyses.id, { onDelete: "cascade" }),
-	description: text("description"),
-	format: analysisFormat("format"),
-	name: text("name"),
-	name_on_disk: text("name_on_disk").unique(),
-	size: bigint("size", { mode: "number" }),
-	// The file's complete object-storage key. Nullable because it was backfilled
-	// from `name_on_disk`, which is itself nullable: a row without one names no
-	// retrievable object.
-	storage_key: text("storage_key").unique(),
-	uploaded_at: timestamp("uploaded_at"),
-});
+export const analysisFiles = pgTable(
+	"analysis_files",
+	{
+		id: serial("id").primaryKey(),
+		analysis_id: bigint("analysis_id", { mode: "number" })
+			.notNull()
+			.references(() => analyses.id, { onDelete: "cascade" }),
+		description: text("description"),
+		format: analysisFormat("format"),
+		name: text("name"),
+		name_on_disk: text("name_on_disk"),
+		size: bigint("size", { mode: "number" }),
+		// The file's complete object-storage key. Nullable because it was backfilled
+		// from `name_on_disk`, which is itself nullable: a row without one names no
+		// retrievable object.
+		storage_key: text("storage_key"),
+		uploaded_at: timestamp("uploaded_at"),
+	},
+	(table) => [
+		unique("analysis_files_name_on_disk_key").on(table.name_on_disk),
+		unique("uq_analysis_files_storage_key").on(table.storage_key),
+	],
+);
 
 // A BLAST request against one NuVs contig. Unique on
 // (`analysis_id`, `sequence_index`): requesting a BLAST for a sequence that

@@ -11,6 +11,7 @@ import {
 	serial,
 	text,
 	timestamp,
+	unique,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
@@ -18,7 +19,7 @@ export const apiKeys = pgTable(
 	"api_keys",
 	{
 		id: serial("id").primaryKey(),
-		hashed: text("hashed").notNull().unique(),
+		hashed: text("hashed").notNull(),
 		name: text("name").notNull(),
 		createdAt: timestamp("created_at").notNull(),
 		userId: integer("user_id")
@@ -26,7 +27,10 @@ export const apiKeys = pgTable(
 			.references(() => users.id, { onDelete: "cascade" }),
 		permissions: jsonb("permissions").$type<Permissions>().notNull(),
 	},
-	(table) => [index("idx_api_keys_user_id").on(table.userId)],
+	(table) => [
+		unique("api_keys_hashed_key").on(table.hashed),
+		index("idx_api_keys_user_id").on(table.userId),
+	],
 );
 
 /** A row from the `api_keys` table. */

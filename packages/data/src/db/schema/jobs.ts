@@ -30,6 +30,7 @@ import {
 	serial,
 	text,
 	timestamp,
+	unique,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
@@ -46,7 +47,7 @@ export const jobs = pgTable(
 		created_at: timestamp("created_at").notNull(),
 		finished_at: timestamp("finished_at"),
 		key: text("key"),
-		legacy_id: text("legacy_id").unique(),
+		legacy_id: text("legacy_id"),
 		pinged_at: timestamp("pinged_at"),
 		state: text("state").$type<JobState>().notNull(),
 		steps: jsonb("steps").$type<StoredJobStep[]>(),
@@ -59,6 +60,7 @@ export const jobs = pgTable(
 		workflow: text("workflow").notNull(),
 	},
 	(table) => [
+		unique("jobs_legacy_id_key").on(table.legacy_id),
 		index("ix_jobs_state_created_at").on(table.state, table.created_at),
 		index("ix_jobs_user_id_state").on(table.user_id, table.state),
 		index("ix_jobs_workflow_state").on(table.workflow, table.state),

@@ -22,7 +22,7 @@ export const caches = pgTable(
 		// A per-write UUID under `caches/v1/`, stored verbatim rather than derived
 		// from the row id, so two writers racing on the same `key` never target the
 		// same object and the loser can delete its own orphan.
-		storage_key: text("storage_key").unique().notNull(),
+		storage_key: text("storage_key").notNull(),
 		params: jsonb("params").$type<JsonObject>().notNull(),
 		// Cache payloads routinely exceed 2 GiB, past the range of a 32-bit
 		// integer, so this mirrors Python's BigInteger — the same reasoning as
@@ -39,6 +39,7 @@ export const caches = pgTable(
 		// path at all: `createTestDatabase()` derives its DDL from these mirrors, so
 		// an undeclared constraint is simply absent from a test database.
 		unique("cache_key").on(table.key),
+		unique("caches_storage_key_key").on(table.storage_key),
 	],
 );
 

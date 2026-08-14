@@ -31,7 +31,7 @@ export const indexes = pgTable(
 		id: bigint("id", { mode: "number" })
 			.primaryKey()
 			.generatedAlwaysAsIdentity(),
-		legacy_id: text("legacy_id").unique(),
+		legacy_id: text("legacy_id"),
 		version: integer("version").notNull(),
 		created_at: timestamp("created_at").notNull(),
 		// `{otuId: otuVersion}` — the OTU versions the build is pinned to, captured
@@ -44,13 +44,13 @@ export const indexes = pgTable(
 		// file now records its own complete key. Python retains the column until a
 		// later cleanup revision so a rolling deploy never has readers of a dropped
 		// column, and still requires it on insert.
-		storage_key: text("storage_key").unique().notNull(),
+		storage_key: text("storage_key").notNull(),
 		// The exception to files recording their own keys. The compressed OTU JSON is
 		// materialized on demand and deliberately has no `index_files` row, because
 		// such a row would publish it in the index's file listing. Nullable: an index
 		// that has never been asked for its OTU JSON has not written one, and the key
 		// is minted on first write.
-		otus_json_storage_key: text("otus_json_storage_key").unique(),
+		otus_json_storage_key: text("otus_json_storage_key"),
 		reference_id: bigint("reference_id", { mode: "number" })
 			.notNull()
 			.references(() => legacyReferences.id),
@@ -63,6 +63,9 @@ export const indexes = pgTable(
 		task_id: integer("task_id").references(() => tasks.id),
 	},
 	(table) => [
+		unique("indexes_legacy_id_key").on(table.legacy_id),
+		unique("indexes_storage_key_key").on(table.storage_key),
+		unique("uq_indexes_otus_json_storage_key").on(table.otus_json_storage_key),
 		unique("uq_indexes_reference_id_version").on(
 			table.reference_id,
 			table.version,
@@ -94,9 +97,10 @@ export const indexFiles = pgTable(
 		size: bigint("size", { mode: "number" }),
 		// The file's complete object-storage key, superseding the per-index
 		// `indexes.storage_key` slug keys were previously composed from.
-		storage_key: text("storage_key").unique().notNull(),
+		storage_key: text("storage_key").notNull(),
 	},
 	(table) => [
+		unique("uq_index_files_storage_key").on(table.storage_key),
 		// `index_files_index_id_name_key`. Declared because a build's registration
 		// of its artifact upserts on it, and an `ON CONFLICT` naming columns no
 		// constraint covers is an error rather than an insert.

@@ -14,17 +14,22 @@ import {
 	primaryKey,
 	serial,
 	text,
+	unique,
 	uniqueIndex,
 	varchar,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
-export const groups = pgTable("groups", {
-	id: serial("id").primaryKey(),
-	legacyId: text("legacy_id").unique(),
-	name: varchar("name", { length: 255 }).unique().notNull(),
-	permissions: jsonb("permissions").$type<Permissions>().notNull(),
-});
+export const groups = pgTable(
+	"groups",
+	{
+		id: serial("id").primaryKey(),
+		legacyId: text("legacy_id"),
+		name: varchar("name", { length: 255 }).unique().notNull(),
+		permissions: jsonb("permissions").$type<Permissions>().notNull(),
+	},
+	(table) => [unique("groups_legacy_id_key").on(table.legacyId)],
+);
 
 /** A row from the `groups` table. */
 export type GroupRow = typeof groups.$inferSelect;
@@ -43,7 +48,10 @@ export const userGroups = pgTable(
 			.notNull(),
 	},
 	(table) => [
-		primaryKey({ columns: [table.groupId, table.userId] }),
+		primaryKey({
+			name: "user_groups_pkey",
+			columns: [table.groupId, table.userId],
+		}),
 		/* `WHERE false` indexes no row, so this enforces nothing. It is what
 		   upstream created and is mirrored as-is; narrowing the predicate to what
 		   the name implies would start rejecting rows the real database accepts. */

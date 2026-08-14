@@ -13,44 +13,51 @@ import {
 	primaryKey,
 	text,
 	timestamp,
+	unique,
 } from "drizzle-orm/pg-core";
 import { groups } from "./groups";
 import { tasks } from "./tasks";
 import { uploads } from "./uploads";
 import { users } from "./users";
 
-export const legacyReferences = pgTable("legacy_references", {
-	id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
-	legacy_id: text("legacy_id").unique(),
-	name: text("name").notNull(),
-	description: text("description")
-		.$defaultFn(() => "")
-		.notNull(),
-	organism: text("organism")
-		.$defaultFn(() => "")
-		.notNull(),
-	created_at: timestamp("created_at")
-		.$defaultFn(() => new Date())
-		.notNull(),
-	archived: boolean("archived")
-		.$defaultFn(() => false)
-		.notNull(),
-	restrict_source_types: boolean("restrict_source_types")
-		.$defaultFn(() => false)
-		.notNull(),
-	source_types: jsonb("source_types")
-		.$type<string[]>()
-		.$defaultFn(() => [])
-		.notNull(),
-	user_id: integer("user_id")
-		.notNull()
-		.references(() => users.id),
-	upload_id: integer("upload_id").references(() => uploads.id),
-	cloned_from_id: bigint("cloned_from_id", { mode: "number" }).references(
-		(): AnyPgColumn => legacyReferences.id,
-	),
-	task_id: integer("task_id").references(() => tasks.id),
-});
+export const legacyReferences = pgTable(
+	"legacy_references",
+	{
+		id: bigint("id", { mode: "number" })
+			.primaryKey()
+			.generatedAlwaysAsIdentity(),
+		legacy_id: text("legacy_id"),
+		name: text("name").notNull(),
+		description: text("description")
+			.$defaultFn(() => "")
+			.notNull(),
+		organism: text("organism")
+			.$defaultFn(() => "")
+			.notNull(),
+		created_at: timestamp("created_at")
+			.$defaultFn(() => new Date())
+			.notNull(),
+		archived: boolean("archived")
+			.$defaultFn(() => false)
+			.notNull(),
+		restrict_source_types: boolean("restrict_source_types")
+			.$defaultFn(() => false)
+			.notNull(),
+		source_types: jsonb("source_types")
+			.$type<string[]>()
+			.$defaultFn(() => [])
+			.notNull(),
+		user_id: integer("user_id")
+			.notNull()
+			.references(() => users.id),
+		upload_id: integer("upload_id").references(() => uploads.id),
+		cloned_from_id: bigint("cloned_from_id", { mode: "number" }).references(
+			(): AnyPgColumn => legacyReferences.id,
+		),
+		task_id: integer("task_id").references(() => tasks.id),
+	},
+	(table) => [unique("legacy_references_legacy_id_key").on(table.legacy_id)],
+);
 
 export const legacyReferenceUsers = pgTable(
 	"legacy_reference_users",
@@ -71,7 +78,12 @@ export const legacyReferenceUsers = pgTable(
 			.$defaultFn(() => false)
 			.notNull(),
 	},
-	(table) => [primaryKey({ columns: [table.reference_id, table.user_id] })],
+	(table) => [
+		primaryKey({
+			name: "legacy_reference_users_pkey",
+			columns: [table.reference_id, table.user_id],
+		}),
+	],
 );
 
 export const legacyReferenceGroups = pgTable(
@@ -93,7 +105,12 @@ export const legacyReferenceGroups = pgTable(
 			.$defaultFn(() => false)
 			.notNull(),
 	},
-	(table) => [primaryKey({ columns: [table.reference_id, table.group_id] })],
+	(table) => [
+		primaryKey({
+			name: "legacy_reference_groups_pkey",
+			columns: [table.reference_id, table.group_id],
+		}),
+	],
 );
 
 /** A row from the `legacy_references` table. */

@@ -16,6 +16,7 @@ import {
 	serial,
 	text,
 	timestamp,
+	unique,
 	uniqueIndex,
 } from "drizzle-orm/pg-core";
 
@@ -49,11 +50,12 @@ export const users = pgTable(
 			.notNull(),
 		handle: text("handle").notNull(),
 		lastPasswordChange: timestamp("last_password_change").notNull(),
-		legacyId: text("legacy_id").unique(),
+		legacyId: text("legacy_id"),
 		password: bytea("password").notNull(),
 		settings: jsonb("settings").$type<Record<string, unknown>>().notNull(),
 	},
 	(table) => [
+		unique("users_legacy_id_key").on(table.legacyId),
 		uniqueIndex("users_handle_lower_unique").on(lower(table.handle)),
 		check(
 			"administrator_role_valid",

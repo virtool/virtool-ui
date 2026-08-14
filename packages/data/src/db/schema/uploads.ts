@@ -13,6 +13,7 @@ import {
 	serial,
 	text,
 	timestamp,
+	unique,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
@@ -22,7 +23,7 @@ export const uploads = pgTable(
 		id: serial("id").primaryKey(),
 		createdAt: timestamp("created_at"),
 		name: text("name"),
-		nameOnDisk: text("name_on_disk").unique(),
+		nameOnDisk: text("name_on_disk"),
 		ready: boolean("ready")
 			.$defaultFn(() => false)
 			.notNull(),
@@ -39,7 +40,7 @@ export const uploads = pgTable(
 		// The upload's complete object-storage key. Nullable because it was
 		// backfilled from `name_on_disk`, which is itself nullable: a row without one
 		// names no retrievable object.
-		storageKey: text("storage_key").unique(),
+		storageKey: text("storage_key"),
 		// The `hmm` member the old `uploadtype` enum carried is gone: the migration
 		// that replaced the enum deleted those rows.
 		type: text("type").$type<UploadType>(),
@@ -49,6 +50,8 @@ export const uploads = pgTable(
 			.references(() => users.id),
 	},
 	(table) => [
+		unique("uploads_name_on_disk_key").on(table.nameOnDisk),
+		unique("uq_uploads_storage_key").on(table.storageKey),
 		check(
 			"ck_uploads_type",
 			sql`${table.type} in ('reference', 'reads', 'subtraction')`,

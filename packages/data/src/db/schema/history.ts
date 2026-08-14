@@ -20,6 +20,7 @@ import {
 	serial,
 	text,
 	timestamp,
+	unique,
 } from "drizzle-orm/pg-core";
 import { indexes } from "./indexes";
 import { legacyReferences } from "./references";
@@ -31,7 +32,7 @@ export const legacyHistory = pgTable(
 		id: bigint("id", { mode: "number" })
 			.primaryKey()
 			.generatedAlwaysAsIdentity(),
-		legacy_id: text("legacy_id").unique(),
+		legacy_id: text("legacy_id"),
 		created_at: timestamp("created_at").notNull(),
 		description: text("description").notNull(),
 		method_name: text("method_name").notNull(),
@@ -56,6 +57,7 @@ export const legacyHistory = pgTable(
 		),
 	},
 	(table) => [
+		unique("legacy_history_legacy_id_key").on(table.legacy_id),
 		index("ix_legacy_history_index").on(table.index),
 		index("ix_legacy_history_index_id").on(table.index_id),
 		index("ix_legacy_history_otu_otu_version").on(
@@ -70,19 +72,28 @@ export const legacyHistory = pgTable(
 
 // The change's diff, held 1:1 with its history row. Upstream calls this a
 // temporary table to be dropped once history is renormalized.
-export const legacyHistoryDiff = pgTable("legacy_history_diff", {
-	id: serial("id").primaryKey(),
-	// The change's public id, duplicating `legacy_history.legacy_id`. It predates
-	// `history_id` and Python still writes it, so an insert from here must too —
-	// the column is NOT NULL upstream.
-	change_id: text("change_id").unique().notNull(),
-	history_id: bigint("history_id", { mode: "number" })
-		.unique()
-		.references(() => legacyHistory.id),
-	// A dictdiffer diff: an array of `[action, path, changes]` triples, shaped by
-	// `@server/history/dictdiffer` and opaque to the database.
-	diff: jsonb("diff").$type<unknown>().notNull(),
-});
+export const legacyHistoryDiff = pgTable(
+	"legacy_history_diff",
+	{
+		id: serial("id").primaryKey(),
+		// The change's public id, duplicating `legacy_history.legacy_id`. It predates
+		// `history_id` and Python still writes it, so an insert from here must too —
+		// the column is NOT NULL upstream.
+		change_id: text("change_id").notNull(),
+		history_id: bigint("history_id", { mode: "number" }).references(
+			() => legacyHistory.id,
+		),
+		// A dictdiffer diff: an array of `[action, path, changes]` triples, shaped by
+		// `@server/history/dictdiffer` and opaque to the database.
+		diff: jsonb("diff").$type<unknown>().notNull(),
+	},
+	(table) => [
+		/* `history_diffs_*` rather than `legacy_history_diff_*`: the constraint
+		   predates the table's rename and production never renamed it. */
+		unique("history_diffs_change_id_key").on(table.change_id),
+		unique("legacy_history_diff_history_id_key").on(table.history_id),
+	],
+);
 
 /** A row from the `legacy_history` table. */
 export type HistoryRow = typeof legacyHistory.$inferSelect;

@@ -46,7 +46,7 @@ export const legacySamples = pgTable(
 		id: bigint("id", { mode: "number" })
 			.primaryKey()
 			.generatedAlwaysAsIdentity(),
-		legacy_id: text("legacy_id").unique(),
+		legacy_id: text("legacy_id"),
 		name: text("name").notNull(),
 		host: text("host")
 			.$defaultFn(() => "")
@@ -92,11 +92,11 @@ export const legacySamples = pgTable(
 			.$defaultFn(() => false)
 			.notNull(),
 		user_id: integer("user_id").references(() => users.id),
-		job_id: integer("job_id")
-			.unique()
-			.references(() => jobs.id),
+		job_id: integer("job_id").references(() => jobs.id),
 	},
 	(table) => [
+		unique("legacy_samples_legacy_id_key").on(table.legacy_id),
+		unique("legacy_samples_job_id_key").on(table.job_id),
 		index("ix_legacy_samples_all_read")
 			.on(table.all_read)
 			.where(sql`${table.all_read} = true`),
@@ -122,7 +122,12 @@ export const legacySampleLabels = pgTable(
 			.notNull()
 			.references(() => labels.id),
 	},
-	(table) => [primaryKey({ columns: [table.sample_id, table.label_id] })],
+	(table) => [
+		primaryKey({
+			name: "legacy_sample_labels_pkey",
+			columns: [table.sample_id, table.label_id],
+		}),
+	],
 );
 
 // Join table linking a sample to its default subtractions. Read from the
@@ -137,7 +142,12 @@ export const legacySampleSubtractions = pgTable(
 			.notNull()
 			.references(() => subtractions.id),
 	},
-	(table) => [primaryKey({ columns: [table.sample_id, table.subtraction_id] })],
+	(table) => [
+		primaryKey({
+			name: "legacy_sample_subtractions_pkey",
+			columns: [table.sample_id, table.subtraction_id],
+		}),
+	],
 );
 
 // Reads files that make up a sample.
@@ -153,29 +163,35 @@ export const sampleReads = pgTable(
 		name_on_disk: text("name_on_disk").notNull(),
 		size: bigint("size", { mode: "number" }),
 		// The reads file's complete object-storage key.
-		storage_key: text("storage_key").unique().notNull(),
+		storage_key: text("storage_key").notNull(),
 		upload: integer("upload").references(() => uploads.id),
 		uploaded_at: timestamp("uploaded_at"),
 	},
 	(table) => [
+		unique("uq_sample_reads_storage_key").on(table.storage_key),
 		unique("sample_reads_sample_id_name_key").on(table.sample_id, table.name),
 		unique("sample_reads_sample_name_key").on(table.sample, table.name),
 	],
 );
 
 // Join table linking a sample to its input uploads, ordered by `index`.
-export const sampleUploads = pgTable("sample_uploads", {
-	id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
-	sample: text("sample").notNull(),
-	sample_id: bigint("sample_id", { mode: "number" }).references(
-		() => legacySamples.id,
-	),
-	upload_id: integer("upload_id")
-		.notNull()
-		.unique()
-		.references(() => uploads.id),
-	index: integer("index").notNull(),
-});
+export const sampleUploads = pgTable(
+	"sample_uploads",
+	{
+		id: bigint("id", { mode: "number" })
+			.primaryKey()
+			.generatedAlwaysAsIdentity(),
+		sample: text("sample").notNull(),
+		sample_id: bigint("sample_id", { mode: "number" }).references(
+			() => legacySamples.id,
+		),
+		upload_id: integer("upload_id")
+			.notNull()
+			.references(() => uploads.id),
+		index: integer("index").notNull(),
+	},
+	(table) => [unique("sample_uploads_upload_id_key").on(table.upload_id)],
+);
 
 /** A row from the `legacy_samples` table. */
 export type LegacySampleRow = typeof legacySamples.$inferSelect;

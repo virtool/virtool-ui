@@ -12,6 +12,7 @@ import {
 	serial,
 	text,
 	timestamp,
+	unique,
 	uniqueIndex,
 } from "drizzle-orm/pg-core";
 
@@ -24,7 +25,7 @@ export const sessions = pgTable(
 	"sessions",
 	{
 		id: serial("id").primaryKey(),
-		sessionId: text("session_id").notNull().unique(),
+		sessionId: text("session_id").notNull(),
 		userId: integer("user_id").references(() => users.id, {
 			onDelete: "cascade",
 		}),
@@ -37,6 +38,7 @@ export const sessions = pgTable(
 		sessionType: text("session_type").$type<SessionType>().notNull(),
 	},
 	(table) => [
+		unique("sessions_session_id_key").on(table.sessionId),
 		index("idx_sessions_expires_at").on(table.expiresAt),
 		uniqueIndex("idx_sessions_session_id").on(table.sessionId),
 		index("idx_sessions_type").on(table.sessionType),
