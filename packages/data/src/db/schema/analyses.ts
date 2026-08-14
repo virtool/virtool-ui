@@ -29,6 +29,7 @@ import {
 	text,
 	timestamp,
 	unique,
+	varchar,
 } from "drizzle-orm/pg-core";
 import { indexes } from "./indexes";
 import { jobs } from "./jobs";
@@ -139,7 +140,7 @@ export const nuvsBlast = pgTable(
 		last_checked_at: timestamp("last_checked_at").notNull(),
 		error: text("error"),
 		interval: integer("interval").$defaultFn(() => 3),
-		rid: text("rid"),
+		rid: varchar("rid", { length: 24 }),
 		ready: boolean("ready").notNull(),
 		// `json`, not `jsonb` — the upstream column is `JSON`.
 		result: json("result").$type<Record<string, unknown>>(),

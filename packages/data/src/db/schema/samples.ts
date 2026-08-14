@@ -16,6 +16,7 @@ import {
 	text,
 	timestamp,
 	unique,
+	varchar,
 } from "drizzle-orm/pg-core";
 import { groups } from "./groups";
 import { jobs } from "./jobs";
@@ -148,7 +149,7 @@ export const sampleReads = pgTable(
 		sample_id: bigint("sample_id", { mode: "number" }).references(
 			() => legacySamples.id,
 		),
-		name: text("name").notNull(),
+		name: varchar("name", { length: 13 }).notNull(),
 		name_on_disk: text("name_on_disk").notNull(),
 		size: bigint("size", { mode: "number" }),
 		// The reads file's complete object-storage key.

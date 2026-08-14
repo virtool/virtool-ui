@@ -15,13 +15,14 @@ import {
 	serial,
 	text,
 	uniqueIndex,
+	varchar,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
 export const groups = pgTable("groups", {
 	id: serial("id").primaryKey(),
 	legacyId: text("legacy_id").unique(),
-	name: text("name").unique().notNull(),
+	name: varchar("name", { length: 255 }).unique().notNull(),
 	permissions: jsonb("permissions").$type<Permissions>().notNull(),
 });
 
