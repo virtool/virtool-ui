@@ -7,9 +7,10 @@
 // Python's `analysis_results` / `SQLAnalysisResult` table is deliberately not
 // mirrored: its own docstring calls it temporary and nothing reads it.
 //
-// The legacy `sample` / `reference` / `index` string columns are likewise not
-// mirrored. They are the Mongo-era half of a string+FK column pair that Python
-// drops in a later cleanup revision; only the integer foreign key is read here.
+// `reference` and `index` are dead, superseded by `reference_id` and
+// `index_id`. They are declared anyway: a column missing from this schema is
+// missing from the migration snapshot, so nothing could generate the migration
+// that drops it.
 
 import {
 	bigint,
@@ -36,13 +37,14 @@ export const analyses = pgTable("analyses", {
 	// to locate a migrated analysis's slug-prefixed objects in storage.
 	sample: text("sample").notNull(),
 	sample_id: bigint("sample_id", { mode: "number" }),
+	reference: text("reference"),
 	reference_id: bigint("reference_id", { mode: "number" }),
+	index: text("index"),
 	index_id: bigint("index_id", { mode: "number" }).notNull(),
 	user_id: integer("user_id").notNull(),
 	job_id: integer("job_id"),
 });
 
-// Association between an analysis and a subtraction it was run against.
 export const analysisSubtractions = pgTable("analysis_subtractions", {
 	analysis_id: bigint("analysis_id", { mode: "number" }).notNull(),
 	subtraction_id: bigint("subtraction_id", { mode: "number" }).notNull(),

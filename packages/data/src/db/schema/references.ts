@@ -2,10 +2,6 @@
 // `legacy_reference_groups` tables managed by the upstream Python service via
 // Alembic. Do not generate or push migrations from this side. Keep the columns
 // in sync with `../../../../../../virtool/virtool/references/sql.py`.
-//
-// The `legacy_id` column (the Mongo `_id`) is intentionally omitted: every
-// reference served from this side is Postgres-native and keyed by its integer
-// id, so nothing here reads or writes it.
 
 import {
 	bigint,
@@ -20,6 +16,7 @@ import {
 
 export const legacyReferences = pgTable("legacy_references", {
 	id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
+	legacy_id: text("legacy_id").unique(),
 	name: text("name").notNull(),
 	description: text("description")
 		.$defaultFn(() => "")

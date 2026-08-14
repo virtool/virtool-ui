@@ -1,8 +1,6 @@
 // Mirror of the `instance_messages` table. Schema and migrations are owned by
 // the upstream Python service via Alembic — do not generate or push migrations
-// from this side. The legacy `"user"` VARCHAR column still exists in the DB
-// during the upstream cleanup window but is not declared here; Drizzle ignores
-// columns it does not know about.
+// from this side.
 
 import {
 	boolean,
@@ -35,8 +33,9 @@ export const instanceMessages = pgTable("instance_messages", {
 	message: text("message"),
 	createdAt: timestamp("created_at"),
 	updatedAt: timestamp("updated_at"),
+	user: text("user"),
 	// Nullable upstream: a row migrated from Mongo carries its author in the
-	// legacy `"user"` column, and a trigger resolves `user_id` from it. Every
+	// legacy `user` column, and a trigger resolves `user_id` from it. Every
 	// read joins on it, so a row that predates the backfill is simply invisible.
 	userId: integer("user_id").references(() => users.id),
 });

@@ -4,11 +4,12 @@
 // `../../../../../../virtool/virtool/history/sql.py`.
 //
 // Both tables are written from here now that OTU mutations are served from this
-// side — every OTU change records a history row and its diff. The two legacy
-// string columns Python no longer writes, `legacy_history.reference` and
-// `legacy_history.index`, are deliberately not declared: they are superseded by
-// the `reference_id` and `index_id` foreign keys and an insert that omits them
-// leaves them NULL, exactly as Python's does.
+// side — every OTU change records a history row and its diff. `reference` and
+// `index` are dead, superseded by the `reference_id` and `index_id` foreign
+// keys; an insert omits them and leaves them NULL, exactly as Python's does.
+// They are declared anyway: a column missing from this schema is missing from
+// the migration snapshot, so nothing could generate the migration that drops
+// it.
 
 import {
 	bigint,
@@ -34,7 +35,9 @@ export const legacyHistory = pgTable("legacy_history", {
 	// A stringified integer. `NULL` is the `"removed"` sentinel, normalised on
 	// write upstream — the column never stores the sentinel itself.
 	otu_version: text("otu_version"),
+	reference: text("reference"),
 	reference_id: bigint("reference_id", { mode: "number" }),
+	index: text("index"),
 	index_id: bigint("index_id", { mode: "number" }),
 });
 
