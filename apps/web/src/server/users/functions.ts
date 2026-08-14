@@ -28,13 +28,7 @@ import { db } from "../composition";
 import { ClientError } from "../errors";
 import { pageSchema, perPageSchema, rowIdSchema } from "../validation";
 
-const administratorRoleSchema = z.enum([
-	"full",
-	"settings",
-	"spaces",
-	"users",
-	"base",
-]);
+const administratorRoleSchema = z.enum(["full", "settings", "users", "base"]);
 
 const userIdSchema = z.object({
 	userId: rowIdSchema,
