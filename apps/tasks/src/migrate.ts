@@ -37,7 +37,7 @@ const MigrateEnv = z.object({
 	// The seam that lets this run outside the image, against a scratch database
 	// and the working tree's own `packages/data/drizzle`.
 	VT_MIGRATIONS_PATH: z.preprocess(
-		(value) => (value === "" ? undefined : value),
+		(value) => (typeof value === "string" ? value.trim() || undefined : value),
 		z.string().optional(),
 	),
 });
