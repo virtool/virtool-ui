@@ -757,7 +757,7 @@ importers:
         version: 12.33.0
     devDependencies:
       testcontainers:
-        specifier: ^12.0.4
+        specifier: ^12.1.0
         version: 12.1.0
       vitest:
         specifier: ^4.1.10
